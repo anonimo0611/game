@@ -1,0 +1,38 @@
+html, body {
+	margin:  0;
+	padding: 0;
+	width:  100%;
+	height: 100%;
+}
+html {
+	user-select: none;
+	cursor: default;
+	touch-action: manipulation;
+}
+::selection{color:inherit;background:0 0}
+
+body {
+	color: white;
+	background: black;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+canvas {
+}
+#phase {
+	position: fixed;
+	top: .5em;
+	left: .5em;
+}
+
+#fc2_footer {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	z-index: 2000;
+}
+#fc2_footer a {
+	color: #9CF;
+}

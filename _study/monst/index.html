@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>Monst</title>
+	<link rel="icon" href="data:,">
+	<link rel="preload" as="font" type="font/woff2" href="res/Atari.woff2" crossorigin>
+	<link rel="preload" as="font" type="font/woff2" href="res/EnigmaDigit.woff2" crossorigin>
+	<link rel="stylesheet" href="style.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.slim.min.js"></script>
+	<script src="lib/__util.js"></script>
+	<script src="lib/_extjq.js"></script>
+	<script src="lib/vec2.js"></script>
+	<style>
+	@font-face {font-family:Atari; src:url(res/Atari.woff2) format('woff2')}
+	@font-face {font-family:Digit; src:url(res/EnigmaDigit.woff2) format('woff2')}
+	</style>
+</head>
+
+<body>
+
+<div id="phase"></div>
+
+<canvas id="canvas" style="background:rgb(50%,75%,50%)" width="512" height="640"></canvas>
+<script src="src/_main.js" type="module"></script>
+
+</body>
+</html>
