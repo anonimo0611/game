@@ -2,8 +2,8 @@ import {State} from '../lib/state.js';
 import {Grid}  from './_grid.js';
 import {Orb,Orbs,OrbType} from './orb.js';
 
-const FallDuration    =  8;
-const FadeOutDuration = 30;
+const FadeSpeed = 1/30;
+const FallSpeed = Grid.Size/16;
 
 export const Phase = freeze(new class extends State {
 	isIdle   = true;
@@ -32,7 +32,7 @@ export const Phase = freeze(new class extends State {
 		Orbs.flat().forEach(orb=> {
 			if (orb.fadeOut <= 0) return;
 			removing = true;
-			orb.fadeOut -= 1 / FadeOutDuration;
+			orb.fadeOut -= FadeSpeed;
 			if (orb.fadeOut <= 0) {
 				orb.fadeOut =  0;
 				orb.type = OrbType.None;
@@ -47,8 +47,8 @@ export const Phase = freeze(new class extends State {
 		Orbs.flat().forEach(orb=> {
 			if (orb.fallY >= 0) return;
 			falling = true;
-			orb.fallY += Grid.Size/FallDuration;
-			if (orb.fallY+(Grid.Size/FallDuration) >= Grid.Size)
+			orb.fallY += FallSpeed;
+			if (orb.fallY >= 0)
 				orb.fallY = 0;
 		});
 		if (!falling && !Orb.fall()) {

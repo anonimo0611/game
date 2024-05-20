@@ -5,12 +5,12 @@ import {ctx}     from './_canvas.js';
 import {Phase}   from './phase.js';
 import {Pointer} from './pointer.js';
 
-const MinNumOfMatches =   3;
-const ComboScaleMin   =   1;
-const ComboScaleMax   =  10;
-const ComboSpeed      = .90;
-const RotateDuration  =  10;
-const OrbRadius = Grid.Size*.95 / 2;
+const MatchesMin = 3;
+const OrbRadius  = Grid.Size*.95 / 2;
+
+const RotateSpeed = PI/20;
+const ComboScaleMin =  1;
+const ComboScaleMax = 10;
 
 export const OrbType = freeze({
 	None:   -1,
@@ -111,6 +111,8 @@ export class Orb {
 			(orb.rotate >= orb.rotateMax)
 				? orb.#draw()
 				: orb.#rotation();
+		});
+		Orbs.flat().forEach(orb=> {
 			orb.#comboEffect();
 		});
 		if (Phase.isSwap)
@@ -129,9 +131,9 @@ export class Orb {
 	}
 	#update() {
 		if (this.rotate < this.rotateMax)
-			this.rotate += PI / RotateDuration;
+			this.rotate += RotateSpeed;
 		if (this.comboScale > ComboScaleMin) {
-			this.comboScale *= ComboSpeed;
+			this.comboScale *= 0.92;
 			if (this.comboScale < ComboScaleMin)
 				this.comboScale = ComboScaleMin;
 		}
@@ -149,7 +151,7 @@ export class Orb {
 					|| Orbs[pos.y][pos.x].type != this.type
 				) break;
 			}
-			if (count >= MinNumOfMatches) {
+			if (count >= MatchesMin) {
 				let pos = vec2(this);
 				for (let i=0; i<count; i++) {
 					matchedMap[pos.y*Grid.Cols+pos.x] = true;
@@ -177,6 +179,12 @@ export class Orb {
 			temp.shift();
 		}
 	}
+	#rotation() {
+		const alpha = Phase.isSwap && this == Pointer.swappingOrb ? .25 : 1;
+		const pos   = vec2(this.rotCenter);
+		const rotV  = vec2(-cos(this.rotate),sin(this.rotate)).mul(Grid.Size/2);
+		this.#drawOrb(pos.add(rotV), {alpha});
+	}
 	#draw() {
 		const alpha = (_=> {
 			if (Phase.isSwap && this == Pointer.swappingOrb)
@@ -186,51 +194,51 @@ export class Orb {
 			return 1;
 		})();
 		const pos = vec2(this).add(.5).mul(Grid.Size);
-		if (Phase.isFall && this.fallY <= 0) pos.add(0, this.fallY);
+		if (Phase.isFall && this.fallY < 0)
+			pos.y += this.fallY;
 		this.#drawOrb(pos, {alpha});
-	}
-	#rotation() {
-		const alpha = Phase.isSwap && this == Pointer.swappingOrb ? .25 : 1;
-		const pos   = vec2(this.rotCenter);
-		const rotV  = vec2(-cos(this.rotate),sin(this.rotate)).mul(Grid.Size/2);
-		this.#drawOrb(pos.add(rotV), {alpha});
 	}
 	#drawOrb({x, y}, {alpha=1,scale=1}={}) {
 		if (this.type == OrbType.None) return;
 		ctx.save();
-			ctx.globalAlpha = alpha;
-			ctx.translate(x, y);
-			ctx.scale(scale, scale);
-			// Outside
-			ctx.beginPath();
-			ctx.arc(0,0, OrbRadius, 0, PI*2);
+
+		ctx.globalAlpha = alpha;
+		ctx.translate(x, y);
+		ctx.scale(scale, scale);
+
+		// Outside
+		ctx.beginPath();
 			ctx.fillStyle = Edging;
-			ctx.fill();
-			// Inner
-			ctx.beginPath();
-			ctx.arc(0,0, OrbRadius*.9, 0, PI*2);
+			ctx.arc(0,0, OrbRadius, 0, PI*2);
+		ctx.fill();
+
+		// Inner
+		ctx.beginPath();
 			ctx.fillStyle = Gradients[this.type];
-			ctx.fill();
+			ctx.arc(0,0, OrbRadius*.9, 0, PI*2);
+		ctx.fill();
+
 		ctx.restore();
 	}
 	#comboEffect() {
-		if (this.combo <= 1) return;
+		if (this.combo < 2) return;
 		const text  = `Combo ${this.combo}`;
-		const fSize = int(Grid.Size / 7) * this.comboScale;
-		const maxW  = Grid.Size*.9 * this.comboScale;
-		const pos   = vec2(this).add(.5).mul(Grid.Size);
+		const fSize = int(Grid.Size/8);
 		ctx.save();
-		ctx.translate(pos.x, pos.y);
+		ctx.translate(...vec2(this).add(.5).mul(Grid.Size).vals);
+		ctx.scale(this.comboScale, this.comboScale);
 		ctx.font = `${fSize}px Atari`;
 		ctx.lineWidth   = 4;
-		ctx.textAlign   = 'center';
-		ctx.strokeStyle = 'rgba(0,0,0,.5)';
+		ctx.textAlign   ='center';
+		ctx.strokeStyle ='rgba(40,40,40,.7)';
 		ctx.fillStyle   = ComboColors[Orb.#comboColor];
-		ctx.strokeText(text, 0, fSize/2, maxW);
-		ctx.fillText(text, 0, fSize/2, maxW);
+		ctx.strokeText(text, 0, fSize/2);
+		ctx.fillText(text, 0, fSize/2);
 		ctx.restore();
 	}
 } freeze(Orb);
 
-export const Orbs = Array(Grid.Rows).fill()
-    .map((_,y)=> Array(Grid.Cols).fill().map((_,x)=> new Orb(x, y)));
+export const Orbs =
+	Array(Grid.Rows).fill().map((_,y)=>
+		Array(Grid.Cols).fill().map((_,x)=> new Orb(x, y))
+	);
