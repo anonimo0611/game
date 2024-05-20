@@ -334,19 +334,3 @@ input#copyTemp {
 	right: .5em;
 }
 #log:empty {display: none}
-
-/*--- fc2 ---*/
-#fc2_footer {
-	position: fixed;
-	z-index: 2000;
-	font: 12px/1 sans-serif !important;
-	width:  auto !important;
-	bottom: auto;
-	top:   0;
-	right: 0;
-}
-body[data-loaded=false] #fc2_footer {
-	display: none;
-}
-#fc2_footer br {display: none}
-#fc2_footer a[href] {color: #CCF}
