@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>Arkanoid like game</title>
+	<link rel="icon" href="data:,">
+	<link rel="preload" as="font"  type="font/woff2"    href="res/Atari.woff2" crossorigin>
+	<link rel="preload" as="image" type="image/svg+xml" href="res/caret.svg">
+	<link rel="preload" as="image" type="image/jpeg"    href="res/vol.png">
+	<link rel="stylesheet" href="styles/main.css">
+	<link rel="stylesheet" href="styles/ui.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/SoundJS/1.0.2/soundjs.min.js"></script>
+	<script src="lib/__util.js"></script>
+	<script src="lib/_extjq.js"></script>
+	<script src="lib/_extdom.js"></script>
+	<script src="lib/vec2.js"></script>
+	<script src="lib/canvas.js"></script>
+	<style>
+	@font-face {font-family:Atari; src:url(res/Atari.woff2) format('woff2')}
+	</style>
+</head>
+
+<body>
+
+<div id="debug"></div>
+<script>
+const debug = document.querySelector('#debug');
+function log(d) {debug.textContent = JSON.stringify(d)}
+</script>
+
+<div id="board">
+	<div id="menus">
+		<div class="slidemenu-wrapper" id="SelectStage-wrapper"><label>Stage:</label>
+			<div class="slidemenu menu menu-focusable range" id="SelectStage"  tabindex="0">
+				<menu class="slidemenu-list"></menu>
+			</div>
+		</div>
+		<div class="slidemenu-wrapper" id="SelectLives-wrapper"><label>Lives:</label>
+			<div class="slidemenu menu menu-focusable range" id="SelectLives"  tabindex="0">
+				<menu class="slidemenu-list">
+				<li data-val="2">3</li>
+				<li data-val="3">4</li>
+				<li data-val="4">5</li>
+				<li data-val="5">6</li>
+				</menu>
+			</div>
+		</div>
+	</div>
+	<div id="volCtrl" class="volCtrl">
+		<label id="speaker" for="volRng" style="--w:3" title="Mute On/Off (M)">Volume:</label>
+		<span class="volCtrlWrapper">
+			<input type="range" id="volRng" data-orient="vertical" tabindex="-1" value="10" step="1" min="0" max="10">
+		</span>
+	</div>
+	<canvas id="canvas" width="630" height="700"></canvas>
+</div>
+
+<template id="confirm_temp">
+	<dialog style="opacity:0" class="dialog" id="confirm">
+		<div class="content"></div>
+		<div class="buttons">
+		</div>
+	</dialog>
+</template>
+<script src="src/_main.js" type="module"></script>
+
+</body>
+</html>

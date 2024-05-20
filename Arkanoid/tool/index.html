@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.slim.min.js"></script>
+	<link rel="icon" href="data:,">
+	<link rel="stylesheet" href="test.css">
+	<title>230617-ArkanoidTool</title>
+	<script src="test.js" defer></script>
+ 	<style>
+	@font-face {font-family:Atari; src:url(res/Atari.woff2) format('woff2')}
+	</style>
+</head>
+
+<body>
+
+<output id="log"></output>
+
+<script src="../lib/__util.js"></script>
+<script src="../lib/_extjq.js"></script>
+<script src="../lib/_extdom.js"></script>
+<script src="../lib/vec2.js"></script>
+
+<div id="tool">
+
+<div id="io">
+	<textarea cols="400" rows="300" id="output"></textarea>
+	<div>
+		<button onclick="fromArray()">From array</button>
+	</div>
+</div>
+
+</body>
+</html>
