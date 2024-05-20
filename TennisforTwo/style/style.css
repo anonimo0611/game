@@ -26,13 +26,3 @@ canvas {
 	top:  .5em;
 	left: .5em
 }
-
-#fc2_footer {
-	position: fixed;
-	left: 0;
-	bottom: 0;
-	z-index: 2000;
-}
-#fc2_footer a{
-	color: cyan !important;
-}
