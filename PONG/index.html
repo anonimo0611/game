@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>PONG</title>
+	<link rel="icon" href="data:,">
+	<link rel="preload" as="font" type="font/woff2" href="res/VectorBold.woff2" crossorigin>
+	<link rel="stylesheet" href="styles/main.css">
+	<link rel="stylesheet" href="styles/ui.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/SoundJS/1.0.2/soundjs.min.js"></script>
+	<script src="lib/_extjq.js"></script>
+	<style>
+	@font-face {font-family:Vector; src:url(res/VectorBold.woff2) format('woff2')}
+	</style>
+</head>
+
+<body data-loading="true">
+
+<script src="lib/__util.js"></script>
+<script src="lib/vec2.js"></script>
+
+<div id="debug"></div>
+<script>
+const debug = document.querySelector('#debug');
+function log(d) {debug.textContent = JSON.stringify(d)}
+</script>
+
+<div id="volCtrl" class="volCtrl">
+	<label id="speaker" for="volRng" style="--w:3" title="Mute On/Off (M)">Volume:</label>
+	<span class="volCtrlWrapper">
+		<input type="range" id="volRng" data-orient="vertical" tabindex="-1" value="10" step="1" min="0" max="10">
+	</span>
+</div>
+
+<canvas style="background:rgb(10%,10%,10%)" id="canvas" width="800" height="500"></canvas>
+<script src="src/_main.js" type="module"></script>
+
+</body>
+</html>
