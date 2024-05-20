@@ -31,41 +31,18 @@ p + ul a[href] {
 	display: inline-block;
 }
 
-h1 {
-	justify-content: center;
-	margin-left:  0 !important;
-	margin-right: 0 !important;
-	font-size: 2.5em;
-}
-h2 {
-	font-size: 1.7em;
-}
-h2, h3 {
-	border-left: solid 0.4em #354863;
-	padding-left: 0.3em;
-	margin-left: -.2em;
-}
-h1 + p {
-	text-align: center;
-	margin-left: -2em;
-}
-
 /* Block-level */
-p {
-	font-size: 1rem;
-	margin: .6em 0;
-}
-p + section > h2 {
-	padding-top: 0;
-}
-
 blockquote {
 	font-size: 90%;
 	padding: .5em .7em;
 }
-
+p, dl {
+	margin: .5em 0;
+}
 p, ul {
 	line-height: 1.4;
+	margin-top: .8em;
+	margin-bottom: .8em;
 }
 ul + section {
 	margin-top: 1em;
@@ -79,13 +56,6 @@ dl, dt, dd {
 }
 dl dl dd {
 	margin-left: 1em;
-}
-dl {
-	font-size: 120%;
-	margin: 1.5rem 0 2rem;
-}
-dd {
-	padding-left: .5em;
 }
 
 /* Tables */
@@ -309,6 +279,55 @@ kbd {
 	}
 }
 
+/* Cruise Elroy */
+#spurt table {
+	font-size: 120%;
+}
+#spurt tbody th,
+#spurt tbody td {
+	text-align: left;
+	border-top: none;
+	border-bottom: none;
+}
+#spurt tbody td {
+	text-align: right;
+}
+
+@media screen { /* Fruit icon */
+	th {--fruits-url: url('../_imgs/fruits.png')}
+	th.fruit::before {
+		--size: 1em;
+		content: '';
+		background: no-repeat center/calc(var(--size) * 8) 100% var(--fruits-url);
+		display: inline-block;
+		margin-right: .1em;
+		vertical-align: -.1em;
+		width:  var(--size);
+		height: var(--size);
+	}
+	#frightened-mode thead th {
+		line-height: 1;
+		padding: .1em .2em .2em;
+	}
+	#frightened-mode thead th::before {
+		text-align: center;
+		margin: 0 auto;
+		font-size: 120%;
+		display: block;
+	}
+	#frightened-mode thead tr:first-child th {
+		vertical-align: bottom;
+	}
+	#frightened-mode th,
+	#frightened-mode td {
+		text-align: center;
+		padding: .2em;
+	}
+	#frightened-mode th sub {
+		display: block;
+		margin-left: 0;
+	}
+}
 @media screen and (min-width: 50em) {
 	h1 {
 		font-size: 170%;
@@ -361,11 +380,4 @@ kbd {
 		border: none;
 		display: block;
 	}
-}
-
-#main {
-	max-width: 60rem;
-}
-#main-content {
-	padding-left: 2em;
 }

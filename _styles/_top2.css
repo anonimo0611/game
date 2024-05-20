@@ -1,0 +1,38 @@
+#main {
+	max-width: 60rem;
+}
+#main-content {
+	padding-left: 2em;
+}
+h1 {
+	justify-content: center;
+	margin-left:  0 !important;
+	margin-right: 0 !important;
+	font-size: 2.5em;
+}
+h2 {
+	font-size: 1.7em;
+}
+h2, h3 {
+	border-left: solid 0.4em #354863;
+	padding-left: 0.3em;
+	margin-left: -.2em;
+}
+h1 + p {
+	text-align: center;
+	margin-left: -2em;
+}
+p {
+	font-size: 1rem;
+	margin: .6em 0;
+}
+p + section > h2 {
+	padding-top: 0;
+}
+dl {
+	font-size: 120%;
+	margin: 1.5rem 0 2rem;
+}
+dd {
+	padding-left: .5em;
+}
