@@ -48,13 +48,3 @@ body, dialog::backdrop {
 	padding-top: 1rem;
 	padding-bottom: 14px;
 }
-#fc2_footer{
-	width: auto !important;
-	position: fixed;
-	right: 0;
-	bottom: 0;
-	z-index: 2000;
-}
-#fc2_footer a[href]{
-	color: cyan !important;
-}
