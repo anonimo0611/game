@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>Games like "Tennis for Two"</title>
+	<link rel="icon"       href="data:,">
+	<link rel="preload"    href="res/VectorNums.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload"    href="res/VectorBold.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="stylesheet" href="style/style.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/SoundJS/1.0.2/soundjs.min.js"></script>
+	<script src="lib/canvas.js"></script>
+	<style>
+	@font-face {font-family:VectorNums;src:url(res/VectorNums.woff2) format('woff2')}
+	@font-face {font-family:VectorBold;src:url(res/VectorBold.woff2) format('woff2')}
+	</style>
+</head>
+
+<body>
+
+<div id="debug"></div>
+
+<canvas id="canvas" width="1280" height="720">
+	<button id="pauseBtn" disabled>Pause</button>
+	<button id="resetBtn">Reset</button>
+	<button id="volSubBtn"  disabled>-</button>
+	<button id="volAddBtn"  disabled>+</button>
+	<button id="speakerBtn" disabled>Mute/Unmute</button>
+</canvas>
+
+<script src="lib/__util.js"></script>
+<script src="lib/_extjq.js"></script>
+<script src="src/_main.js" type="module"></script>
+
+</body>
+</html>
