@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" data-cursor="hidden">
+<head>
+	<meta charset="UTF-8">
+	<title>Random Maze Pac-MAN</title>
+	<link rel="preload" as="font"  type="font/woff2"    href="res/Atari.woff2" crossorigin>
+	<link rel="preload" as="font"  type="font/woff2"    href="res/EnigmaDigit.woff2" crossorigin>
+	<link rel="preload" as="image" type="image/png"     href="res/link.png">
+	<link rel="preload" as="image" type="image/svg+xml" href="res/help.svg">
+	<link rel="icon" href="data:,">
+	<style>
+	@font-face {font-family:Atari;src:url(res/Atari.woff2) format('woff2')}
+	@font-face {font-family:Digit;src:url(res/EnigmaDigit.woff2) format('woff2')}
+	</style>
+	<link rel="stylesheet" href="style/form.css">
+	<link rel="stylesheet" href="style/main.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/SoundJS/1.0.2/soundjs.min.js"></script>
+	<script src="src/_lib/_extjq.js"></script>
+	<script src="src/_lib/canvas.js"></script>
+</head>
+
+<body id="Title"
+	data-loaded="false"
+	data-paused="false"
+	data-infobox="false"
+	data-transition="true">
+
+<div id="loading">Loading</div>
+
+<div id="board">
+	<div id="sizeSelect">
+		<label>Grid</label>
+			<div id="sizeButtons">
+				<button id="sizeBtn0" class="ctrl sizeBtn" data-idx="0" accesskey="S">S</button>
+				<button id="sizeBtn1" class="ctrl sizeBtn" data-idx="1" accesskey="M">M</button>
+				<button id="sizeBtn2" class="ctrl sizeBtn" data-idx="2" accesskey="L">L</button>
+			</div>
+	</div>
+	<div id="container" tabindex="-1">
+		<form id="scoreForm">
+			<output id="score" tabindex="-1">00</output>
+			<output id="high"  tabindex="-1">00</output>
+			<output id="lifeBonus" tabindex="-1"></output>
+		</form>
+		<div id="gameCanvases">
+			<canvas class="main" id="bgCvs"></canvas>
+			<canvas class="main" id="obCvs"></canvas>
+		</div>
+		<div id="infoBox">
+			<div id="seedContainer">
+				<label>
+					RandSeed <input type="number" id="seedInput" min="0" max="4294967295" onfocus="this.select()">
+				</label>
+				<a href="#" id="link"><img src="res/link.png" alt=""></a>
+				<input type="text" id="copyTemp" tabindex="-1" readonly>
+			</div>
+			<dl id="keyCtrls">
+				<dt>Contorols:</dt>
+				<dd><kbd>M</kbd>   Mute/Unmute</dd>
+				<dd><kbd>+/-</kbd> Volume control</dd>
+				<dd><kbd>R</kbd>   Retry the current maze</dd>
+				<dd><kbd>G</kbd>   Regenerate random maze</dd>
+				<dd><kbd>ESC</kbd> Pause/Resume the game</dd>
+				<dd><kbd>Arrows/AWSD</kbd> Steer PacMan</dd>
+			</dl>
+		</div>
+		<div id="buttons">
+			<button type="button" id="helpBtn" class="ctrl btn" title="InfoBox toggle (Esc)">Help</button>
+			<div id="volume">
+				<label for="volRng" id="speaker" class="ctrl btn" tabindex="0" title="Mute/Unmute (M)">
+					<canvas id="speakerCvs"></canvas>
+				</label>
+				<input type="range" id="volRng" class="ctrl" value="10" step="1" min="0" max="10">
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="log"></div>
+<script src="src/_lib/debug.js"></script>
+<script src="src/_lib/__util.js"></script>
+<script src="src/_main.js" type="module"></script>
+
+</body>
+</html>

@@ -1,0 +1,219 @@
+/*--- input[type=number] ---*/
+input[type=number] {
+	color: black;
+	background: white;
+	font: 1em/1.2 var(--fontFamily);
+	border: none;
+	padding: 2px 2px 0;
+	width: 17ex;
+	-moz-appearance: textfield;
+}
+input[type=number]:focus {
+	outline: solid 3px var(--color-light);
+}
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+	margin: 0;
+	-webkit-appearance: none;
+}
+
+/*--- input[type=range] ---*/
+[type=range] {
+	--tn: 5px;
+	--tbumb-bg: #FFF;
+	--tbumb-border: 1px solid #717171;
+	--tbumb-size: .35rem;
+	background: #0B93D5;
+	border-radius: var(--tn);
+	height: var(--tn);
+	vertical-align: middle;
+	outline: none;
+	appearance: none;
+}
+[type=range]:focus {
+	background: var(--color-title);
+}
+label:hover [type=range] {
+	background: #0B93D5;
+}
+
+::-webkit-slider-thumb {
+	background: var(--tbumb-bg);
+	border: var(--tbumb-border);
+	width:  var(--tbumb-size);
+	height: var(--tbumb-size);
+	border-radius: 50%;
+	position: relative;
+	display: block;
+	appearance: none;
+}
+::-moz-range-thumb {
+	background: var(--tbumb-bg);
+	border: var(--tbumb-border);
+	width:  var(--tbumb-size);
+	height: var(--tbumb-size);
+	border-radius: 50%;
+	position:relative;
+	display: block;
+	appearance: none;
+}
+
+/*--- Size select ---*/
+#sizeSelect {
+	font: .7rem/1 var(--fontFamily);
+	margin: 0 1rem;
+	display: flex;
+	align-items: center;
+}
+body:not(#Title) #sizeSelect {
+	visibility: hidden;
+}
+#sizeButtons {
+	display: flex;
+}
+#sizeSelect label {
+	font-size: 110%;
+	font-variant: small-caps;
+}
+#sizeSelect label::after {
+	content: ':';
+	display: inline-block;
+	width: .7em;
+}
+#sizeSelect button {
+	text-align: center;
+	color: #333;
+	background: var(--color-wall);
+	font: inherit;
+	border: none;
+	padding: .2em .3em .2em;
+	width: 1.5em;
+	cursor: pointer;
+	outline: none;
+	transform-origin: center;
+	will-change: transform;
+}
+#sizeSelect button:first-child {
+	border-radius: .3em 0 0 .3em;
+}
+#sizeSelect button:last-child {
+	border-radius: 0 .3em .3em 0 ;
+}
+#sizeSelect button:disabled {
+	color: var(--color-title);
+	background: #333;
+	width: 1.8em;
+	transform: scale(1, 1.1);
+	transform-origin: center;
+	cursor: default;
+}
+#sizeSelect button:not(:disabled):focus,
+#sizeSelect button:not(:disabled):hover {
+	color: var(--color-body);
+	background: var(--color-title);
+	transform: scale(1.2, 1.1);
+	transform-origin: center;
+	z-index: 1000;
+}
+#sizeSelect button:not(:disabled):active {
+	color: var(--color-light);
+	background: #000;
+}
+
+/*--- Buttons ---*/
+#buttons {
+	position: absolute;
+	z-index: 10000;
+	top: calc(var(--cvsSize) - 1.3rem);
+	right: 1.3rem;
+	display: flex;
+	gap: 0;
+}
+#buttons .btn {
+	padding: 0;
+	box-sizing: border-box;
+	width:  1.2rem;
+	height: 1.2rem;
+	align-self: stretch;
+	transform: scale(.9);
+}
+#buttons .btn:focus {
+	border-radius: 0.2em;
+	outline: solid var(--outline) var(--color-title);
+}
+#buttons .btn:focus:active {
+	outline: none;
+}
+
+/*--- Help button ---*/
+#helpBtn {
+	color: white;
+	text-indent: -5em;
+	font-size: inherit;
+	background: no-repeat center/110% url(../res/help.svg);
+	border: none;
+	padding: 0;
+	width:  .9rem !important;
+	vertical-align: middle;
+	display: none;
+	overflow: hidden;
+	cursor: help;
+	appearance: none;
+}
+#Title #helpBtn {
+	display: block;
+}
+
+/*--- Volume ---*/
+#volume {
+	white-space: nowrap;
+	width:  calc(1.23rem + .3rem);
+	height: 1.23rem;
+	position: relative;
+	overflow: hidden;
+}
+#volume label {
+	display: block;
+}
+#volume input {
+	font-size: inherit;
+	position: absolute;
+	z-index: -1;
+	top:  0;
+	left: 0;
+	--h: 1.25rem;
+	--x: calc(-1 * var(--h) + var(--tn) - var(--outline)/2);
+	--y: calc(-1 * var(--tn));
+	width: var(--h);
+	transform: translate(var(--x), var(--y)) rotate(-90deg);
+	transform-origin: right center;
+	opacity: 0;
+	will-change: transform, opacity;
+}
+#volume input:focus {
+	opacity: 1;
+	z-index: 1;
+}
+
+#volume input.show,
+#volume:hover input,
+#volume:focus input {
+	z-index: 1;
+	opacity: 1;
+}
+#volume:hover input {
+	transition: all .2s .4s;
+}
+#volume:focus input {
+	transition: none;
+}
+#speaker {
+	position: absolute;
+	top:   0;
+	right: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	z-index: 10000;
+}

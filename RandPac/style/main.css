@@ -1,0 +1,352 @@
+html, body {
+	margin:  0;
+	padding: 0;
+	width:  100%;
+	height: 100%;
+	overflow: hidden;
+}
+html {
+	--outline: 0.1rem;
+	--middle:  var(--cvsSize)/2;
+	--fontFamily: 'Atari','Arial Black',sans-serif;
+	--messageFont: calc(1000px / 16)/1 var(--fontFamily);
+	font-size: var(--tileSize);
+	cursor: default;
+}
+body {
+	color: white;
+	background: var(--color-body,black);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#board {
+	min-width: var(--cvsSize);
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	gap: .4em;
+	transform: scale(var(--scale));
+	will-change: transform;
+}
+body[data-loaded=false] #board {
+	visibility: hidden;
+}
+
+#container {
+	background: #000;
+	border-radius: .5rem;
+	width:  var(--cvsSize);
+	height: var(--cvsSize);
+	position: relative;
+	overflow: hidden;
+	outline: none;
+}
+canvas.main {
+	position: absolute;
+	top:  0;
+	left: 0;
+	pointer-events: none;
+}
+
+/*--- selection ---*/
+#loading, #sizeSelect, #buttons, #scoreForm {
+	user-select: none;
+	-webkit-user-select: none;
+}
+::selection {
+	color: white;
+	background: var(--color-dark, #888);
+}
+
+/*--- Hide cursor ---*/
+[data-cursor=hidden]    #container,
+[data-cursor=stayStill] #container  {
+	cursor: none;
+}
+
+/*--- Loading ---*/
+#loading {
+	font: 4vmax/1.2 var(--fontFamily);
+	position: absolute;
+	z-index: 10001;
+	top:  50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	pointer-events: none;
+}
+#loading::after {
+	content: '...';
+	font-family: 'Digit';
+}
+
+/*--- Message effects ---*/
+#lifeBonus,
+#container::before,
+#container::after {
+	content: '';
+	text-align: center;
+	text-shadow: .15em .15em 0 var(--color-dark);
+	background: var(--color-darkA);
+	font: var(--messageFont);
+	position: absolute;
+	z-index: 3;
+	top:  50%;
+	left: 50%;
+	width: calc(100% - 4.5em);
+	transition: transform .8s ease-out;
+	will-change: transform, opacity;
+	pointer-events: none;
+}
+#container::before { /* Paused */
+	transform: translate3d(-50%, calc(-50% + 3rem), 0);
+}
+#container::after { /* Other */
+	transform: translate3d(-50%, calc(-50% + .2rem), 0);
+}
+
+/* Title scene */
+#Title #container::after {
+	content: 'PRESS ARROWS to START';
+	white-space: nowrap;
+	color: var(--color-title);
+	background: transparent;
+	font-size: .72rem;
+	margin-left: .17rem;
+	--y: calc(var(--middle) - 1.25rem/2 - .72rem/2 + .05rem);
+	transform: translate3d(-50%, var(--y), 0);
+}
+
+/* Ready scene */
+#Start   #container::after,
+#Respawn #container::after {
+	content: 'Ready!';
+	color: var(--color-ready);
+	padding-left: var(--excl-offset);
+	border-radius: .2em;
+	transform: translate3d(-50%, calc(-50% + 1.6rem), 0);
+	transition:
+		color      .8s ease-out,
+		font-size  .8s ease-out,
+		transform  .8s ease-out,
+		background .2s .6s;
+}
+#Respawn #container::after {
+	transition: unset;
+}
+
+/* Playing scene */
+#lifeBonus,
+#Playing #container::after {
+	--init-y: calc(-1 * var(--middle) - 2em);
+	background: transparent;
+	transform: translate3d(-50%, var(--init-y), 0);
+}
+/* Paused */
+#Playing[data-paused=true] #container::before {
+	content: 'PAUSED';
+	color: var(--color-ready);
+	font-size: 1.25rem;
+	width: auto;
+	opacity: 1;
+	animation: paused-kf 1s step-end infinite;
+}
+@keyframes paused-kf {
+	70% {opacity: 0}
+}
+
+/* Clear / GameOver scene */
+#Clear #container::after {
+	content: 'CLEAR!';
+	color: var(--color-light);
+	padding-left: var(--excl-offset);
+	transition: transform .8s ease-out, background .2s .6s;
+}
+#GameOver #container::after {
+	white-space: pre;
+	content: 'GAME　OVER';
+	color: var(--color-light);
+	transition: transform .8s 2.2s ease-out, background .2s 2.8s;
+}
+
+/* Life bonus */
+#lifeBonus:empty {
+	visibility: hidden;
+}
+#lifeBonus {
+	white-space: nowrap;
+	font-size: .8rem;
+	color: var(--color-light);
+	background: var(--color-dark);
+	padding: .4em .3em;
+	width: auto;
+	transform: translate3d(-50%, calc(-50% + .2rem + 2.8rem), 0);
+	opacity: 0;
+}
+#lifeBonus small {
+	font-size: .4rem;
+}
+#Clear #lifeBonus {
+	opacity: 1;
+	transition: .5s opacity;
+}
+
+/* Not apply */
+#Title #lifeBonus,
+#Title[data-loaded=false]     #container::after,
+#Title[data-transition=false] #container::after {
+	transition: unset !important;
+}
+
+/*--- Score ---*/
+#scoreForm #score,
+#scoreForm #high {
+	font: 1rem/1 var(--fontFamily);
+	position: absolute;
+	z-index: 1000;
+	top:  0.23em;
+	pointer-events: none;
+}
+#score {left: 1.5rem}
+#high  {left: 50%}
+#high::before {
+	content: 'HI';
+	margin-right: 1em;
+}
+
+/*--- Info Box ---*/
+#infoBox {
+	--s: 2.4vmin;
+	--l: 1.7;
+	--h: calc(var(--s) * var(--l));
+	--y: calc(-1 * var(--h) * 9);
+	white-space: nowrap;
+	color: var(--color-light);
+	background: rgba(0,0,0,.9);
+	font: var(--s)/var(--l) var(--fontFamily);
+	border: solid 3px;
+	border-radius: .7em;
+	padding: .4em 1em;
+	position: absolute;
+	z-index: 2000;
+	top:  0;
+	left: 50%;
+	display: table;
+	visibility: hidden;
+	transform: translate3d(-50%, var(--y), 0) rotate3d(1,0,0,180deg);
+	transition: all .7s ease-out;
+	will-change: transform;
+}
+#infoBox.show {
+	visibility: visible;
+	top: 50%;
+	transform: translate3d(-50%, -50%, 0);
+}
+
+/*--- Key Controls ---*/
+dl#keyCtrls {
+	margin: .8em auto 0;
+	display: table;
+}
+dl#keyCtrls > dt {
+	margin-bottom: .2em;
+}
+dl#keyCtrls > dd {
+	margin-left: 0;
+	padding-left: 1em;
+	display: flex;
+	gap: 1em;
+}
+dl#keyCtrls > dd kbd {
+	text-align: center;
+	font: inherit;
+}
+dl#keyCtrls > dd:not(:last-child) kbd {
+	width: 3.7em;
+}
+
+/*--- Random seed ---*/
+#seedContainer {
+	line-height: 1;
+	margin-top: .5em;
+	height: 1em;
+	display: flex;
+	gap: .5em;
+	align-items: center;
+}
+input#seedInput {
+	vertical-align: text-bottom;
+}
+input#copyTemp {
+	position: absolute;
+	z-index: -10000;
+	top:  -1000px;
+	left: -1000px;
+	pointer-events: none;
+}
+
+#link {
+	text-decoration: none;
+	line-height: 1.1;
+	padding: 0 .1em;
+	width: 4.5em;
+	display: inline-flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+#link:focus {
+	border-radius: 0.2em;
+	outline: solid 2px var(--color-light) !important;
+}
+#link::after {
+	content: 'COPY\A LINK';
+	white-space: pre-wrap;
+	color: var(--color-light);
+	font-size: 76%;
+	padding: .2em .25em 0;
+}
+#link.copied img {
+	display: none;
+}
+#link.copied::after {
+	content: 'COPIED!';
+	font-size: 80%;
+	align-self: center;
+}
+#link img {
+	margin-right: .1em;
+	width:  1em;
+	height: 1em;
+}
+
+/*--- Debug ---*/
+#log {
+	background: rgba(0 0 0 /.8);
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+	font: 16px/1.2 monospace;
+	border-radius: .7em;
+	padding: .3em .7em;
+	width: 20%;
+	position: fixed;
+	top:   .5em;
+	right: .5em;
+}
+#log:empty {display: none}
+
+/*--- fc2 ---*/
+#fc2_footer {
+	position: fixed;
+	z-index: 2000;
+	font: 12px/1 sans-serif !important;
+	width:  auto !important;
+	bottom: auto;
+	top:   0;
+	right: 0;
+}
+body[data-loaded=false] #fc2_footer {
+	display: none;
+}
+#fc2_footer br {display: none}
+#fc2_footer a[href] {color: #CCF}
