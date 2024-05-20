@@ -1,0 +1,73 @@
+@media screen {
+	h1 + p.author cite {
+		font: italic 130%/1.2 serif !important;
+		margin: 0 !important;
+	}
+	section p:first-of-type {
+		margin-top: 0;
+	}
+	#main-content h1 ~ .note{
+		margin-top:    -.6em;
+		margin-bottom: 1.1em;
+	}
+	#about-orginal-author > h2 {
+		font-size: 130%;
+	}
+	#foreword p {
+		margin: 1.1em 0;
+	}
+	#foreword p:first-of-type {
+		font-size: 120%;
+		margin-top: 0;
+	}
+	#toc  {
+		border: solid 1px var(--border-color);
+		border-radius: .5em;
+		margin:  1.7em 0   1.5em 0;
+		padding: 0.5em 1em 0.5em 0;
+		display: table;
+		overflow: hidden;
+	}
+	#toc h2 {
+		font-size: 120%;
+		border-bottom: double 6px;
+		display: block;
+		margin: -.5em -1em .5em 0;
+		padding: .3em .7em .1em .7em;
+	}
+	#toc > ul {
+		padding-left: 1.5em;
+		column-count: 2;
+		column-width: 16em;
+		column-gap: 1.5em;
+		column-rule: 2px dashed var(--border-color);
+	}
+	#toc li {
+		padding-bottom: .2em;
+	}
+	#toc li a {
+		padding: 0;
+	}
+}
+@media print {
+	#toc {
+		break-inside: avoid;
+	}
+	#introduction {
+		break-before: page;
+	}
+	#toc ul {
+		margin:  0 !important;
+		padding: 0 !important;
+	}
+	#toc ul {
+		float: none;
+		margin-left: 2em !important;
+	}
+	#toc li {
+		list-style-type: unset;
+		line-height: 1.3;
+		margin:  0;
+		padding: 0;
+	}
+}

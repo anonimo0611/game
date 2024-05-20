@@ -1,0 +1,333 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<script src="../_lib/navi.js" defer></script>
+	<link rel="icon"          href="../icon.svg" type="image/svg+xml">
+	<link rel="preload"       href="imgs/fruits.png" as="image" type="image/png">
+	<link rel="author"	      href="https://forms.gle/7gVSN3o1pHuR1AEY9" title="あのにも">
+	<link rel="top" 	        href="../index.html" title="トップページ">
+	<link rel="contents"      href="01.html#toc" title="全体の目次">
+	<link rel="prev appendix"	href="06.html" title="付録">
+	<link rel="appendix"      href="table_a1.html" title="付録：表Ａ.１ レベルの仕様">
+	<link rel="stylesheet"    href="../_styles/_index.css">
+	<link rel="stylesheet"    href="styles/headings.css">
+	<link rel="stylesheet"    href="styles/07-glossary_faq.css">
+	<title>用語集およびFAQ - The Pac-Man Dossier邦訳</title>
+</head>
+
+<body>
+
+<a href="#main-content" id="skip-nav">本文へジャンプ</a>
+<header>
+	<nav>
+		<div class="nav">
+			<ul>
+				<li><a href="00.html">はじめに</a> &amp; <a href="00.html#toc" rel="contents" title="資料の総目次">総目次</a></li>
+				<li><a href="01.html">1.マシンへようこそ</a></li>
+				<li><a href="02.html">2.ゲームプレイ詳細</a></li>
+				<li><a href="03.html">3.迷路ロジック</a></li>
+				<li><a href="04.html">4.ゴーストとの戦い</a></li>
+				<li><a href="05.html">5.分割画面</a></li>
+			</ul>
+			<ul class="flex">
+				<li><a href="06.html" rel="appendix" title="付録：参照表、イースターエッグなど">付録</a></li>
+				<li class="current">用語集&amp;FAQ</li>
+			</ul>
+		</div>
+		<ul class="toc">
+			<li class="to-top"><a href="#main-content">ページの先頭</a></li>
+			<li><a href="#glossary">用語集</a></li>
+			<li><a href="#faq">よくある質問</a></li>
+		</ul>
+	</nav>
+</header>
+<main id="main">
+	<nav id="rel-top" class="rel">
+		<ul>
+			<li><a href="index.html" rel="about" accesskey="a" title="邦訳概説"><kbd>A</kbd>bout</a></li>
+			<li><a href="06.html" rel="prev appendix" accesskey="p" title="前へ - 付録"><kbd>P</kbd>rev</a></li>
+			<li><a href="00.html#toc" rel="contents" accesskey="t" title="資料の総目次"><kbd>T</kbd>oC</a></li>
+			<li class="none next">Next</li>
+		</ul>
+	</nav>
+	<section id="main-content">
+		<section id="glossary">
+			<h1 class="f1 hn-icon"><a href="#glossary" class="fragment">用語集</a></h1>
+			<dl class="glossary">
+				<dt id="apple"><dfn lang="en">apple</dfn>；アップル</dt>
+				<dd>
+				レベル５～６のボーナスシンボルで、700ポイントが得られます。
+				</dd>
+
+				<dt id="bell"><dfn lang="en">bell</dfn>；ベル</dt>
+				<dd>
+				レベル11～12のボーナスシンボルで、3,000ポイントが得られます。
+				</dd>
+
+				<dt id="blinky"><dfn lang="en">Blinky</dfn>；ブリンキー；アカベエ</dt>
+				<dd>
+				赤いゴーストです。<cite>Puck-Man</cite>では“<dfn>アカベエ</dfn>”や“Macky”と呼ばれます。
+				</dd>
+
+				<dt id="bonus-symbol"><dfn lang="en">bonus symbol</dfn>；ボーナスシンボル；フルーツターゲット</dt>
+				<dd>
+				レベルごとにゴーストハウスの真下に２回出現する、多くのばあいフルーツに関連しているシンボルのことです。食べると追加得点になります。ポイントは特定のシンボルによって異なり、それぞれ100～5,000ポイントまでの範囲に設定されています。<dfn>フルーツ</dfn>とも呼ばれます。
+				</dd>
+
+				<dt id="cherries"><dfn lang="en">cherries</dfn>；チェリー</dt>
+				<dd>
+				レベル１のボーナスシンボルで、700ポイントが得られます。
+				</dd>
+
+				<dt id="clyde"><dfn lang="en">Clyde</dfn>；クライド；グズタ</dt>
+				<dd>
+				オレンジのゴーストです。<cite>Puck-Man</cite>では“<dfn>グズタ</dfn>”や“Mocky”と呼ばれます。
+				</dd>
+
+				<dt id="cornering"><dfn lang="en">cornering</dfn>；コーナリング</dt>
+				<dd>
+				曲がり角の中心に到達する前に、レバーを進みたい方向に倒しておくテクニックのことで、パックマンをできるだけ早くターンし始めるようにします。
+				</dd>
+
+				<dt id="cruise-elroy"><dfn lang="en">Cruise Elroy</dfn>；クルーズエルロイ；スパート</dt>
+				<dd>
+				迷路の残りドットが一定数になると、赤いゴーストであるブリンキー（アカベエ）は“ギア”を上げて、縄張モードであっても速度を上げてパックマンを常に追いかけます。
+				</dd>
+				<dd>
+				１回目の残りドットからその半数が残っているとき、彼はもう一度速度を上げます。
+				</dd>
+
+				<dt id="dots"><dfn lang="en">dots</dfn>；ドット；クッキー</dt>
+				<dd>
+				迷路には244個のオブジェクトがあり、パックマンがすべて食べると次のラウンドに進めます。240個の小さなドットは10ポイント、４個のパワークッキーは50ポイントが得られます。<dfn lang="en">pills</dfn>とも呼ばれます。
+				</dd>
+
+				<dt id="energizer"><dfn lang="en">energizer</dfn>；パワークッキー</dt>
+				<dd>
+				迷路の四隅近くにある４つの大きな点滅するドットのひとつで、それぞれ50ポイントが得られます。パックマンがパワークッキーを食べると、ゴーストはみな進行方向を反転し、初期レベルでは濃い青色に変わります。パックマンが青いゴーストに噛みつくと追加得点となり、ひとつのパワークッキーにつき４体のゴーストに連続で噛みつくと、それぞれ200、400、800、1,600ポイントが得られます。
+				</dd>
+				<dd>
+				<dfn lang="en">power pills</dfn>、<dfn lang="en">fuel tanks</dfn>、<dfn lang="en">vitamins</dfn>とも呼ばれます。
+				</dd>
+
+				<dt id="flipping"><dfn lang="en">flipping</dfn></dt>
+				<dd>
+				<dfn lang="en">Flipping the machine</dfn>とは、プレイヤーが100万ポイントを獲得したことを指します。このゲームは999,999を超えるスコアを表示できないため、スコアの読取り値はゼロに“とんぼ返り（flips）”してカウントを続けます。<dfn lang="en">rolling the machine</dfn>とも呼ばれます。
+				</dd>
+
+				<dt id="fruit"><dfn lang="en">fruit</dfn>；フルーツ；フルーツターゲット</dt>
+				<dd><a href="#bonus-symbol">bonus symbol</a>を参照。</dd>
+
+				<dt id="galaxian"><dfn lang="en">galaxian</dfn>；ボス･ギャラクシアン；ギャラボス</dt>
+				<dd>
+				レベル９～10のボーナスシンボルで、2,000ポイントが得られます。<br><dfn lang="en">tulip</dfn>や<dfn lang="en">thunderbird</dfn>とも呼ばれます。
+				</dd>
+
+				<dt id="ghost-house"><dfn lang="en">ghost house</dfn>；ゴーストハウス；巣</dt>
+				<dd>
+				迷路の中央にある矩形領域のことで、新しいレベル、または新しいライフの開始時にゴーストのいる場所です。パックマンに噛みつかれるたびに巣に戻ってきます。<dfn lang="en">monster pen</dfn>とも呼ばれます。
+				</dd>
+
+				<dt id="ghosts"><dfn lang="en">ghosts</dfn>；ゴースト</dt>
+				<dd>
+				<cite>Pac-Man</cite>の迷路上にいる４体の敵は一般に、<dfn>ゴースト</dfn>または<dfn>モンスター</dfn>と呼ばれます。
+				</dd>
+
+				<dt id="grapes"><dfn lang="en">grapes</dfn>；メロン</dt>
+				<dd>
+				レベル７～８のボーナスシンボルで、1,000ポイントが得られます。
+				</dd>
+				<dd>
+				<dfn>メロン</dfn>や<dfn lang="en">grenade</dfn>とも呼ばれます。
+				</dd>
+				<dd class="note">
+				（<em>訳注：</em>公式にはメロンですが、海外ではグレープに見えたようです。）
+				</dd>
+
+				<dt id="grenade"><dfn lang="en">grenade</dfn>；手榴弾</dt>
+				<dd><a href="#grapes">grapes</a>を参照。</dd>
+
+				<dt id="head-faking"><dfn lang="en">head faking</dfn>；ヘッド･フェイキング</dt>
+				<dd>
+				パックマンの向きを前後に素早く動かして、プレイ中に１体以上のゴーストに対し、ターンロジックに影響を与えようとすることです。ブリンキー（アカベエ）とクライド（グズタ）は、追跡ロジックにおいてパックマンの向きを使用しないので、ヘッド･フェイキングの影響を受けません。
+				</dd>
+
+				<dt id="inky"><dfn lang="en">Inky</dfn>；インキー；アオスケ</dt>
+				<dd>
+				水色のゴーストです。<cite>Puck-Man</cite>では“<dfn>アオスケ</dfn>”や“Mucky”と呼ばれます。
+				</dd>
+
+				<dt id="intersection"><dfn lang="en">intersection</dfn>；交差点</dt>
+				<dd>
+				迷路の経路が交差する場所であれば、進む方向は複数の選択肢があります。
+				</dd>
+
+				<dt id="key"><dfn lang="en">key</dfn>；キー；カギ</dt>
+				<dd>
+				レベル13以降のボーナスシンボルで、5,000ポイントが得られます。
+				</dd>
+
+				<dt id="melon"><dfn lang="en">melon</dfn>；メロン</dt>
+				<dd>
+				<a href="#grapes">grapes</a>を参照。
+				</dd>
+
+				<dt id="monster-pen"><dfn lang="en">monster pen</dfn>；モンスターの囲い</dt>
+				<dd>
+				<a href="#ghost-house">ghost house</a>を参照。
+				</dd>
+
+				<dt id="monsters"><dfn lang="en">monsters</dfn></dt>
+				<dd>
+				<a href="#ghosts">ghosts</a>を参照。
+				</dd>
+
+				<dt id="orange"><dfn lang="en">orange</dfn>；オレンジ</dt>
+				<dd>
+				<a href="#peach">peach</a>を参照。
+				</dd>
+
+				<dt id="pattern"><dfn lang="en">pattern</dfn>；パターン</dt>
+				<dd>
+				特定のレベルまたは複数のレベルに関連づけられた、記憶された一連のターン。これを繰り返すと、ゴーストに捕まることなく迷路上のドットを回収できます。<dfn>ルーチン</dfn>とも呼ばれます。
+				</dd>
+
+				<dt id="peach"><dfn lang="en">peach</dfn>；ピーチ</dt>
+				<dd>
+				レベル３～４のボーナスシンボルで、500ポイントが得られます。<dfn>オレンジ</dfn>とも呼ばれます。
+				</dd>
+				<dd class="note">
+				（<em>訳注：</em>公式にはオレンジであり、日本では一般にそのように呼びます。）
+				</dd>
+
+				<dt id="pills"><dfn lang="en">pills</dfn>；ピル</dt>
+				<dd>
+				<a href="#dots">dots</a>を参照。
+				</dd>
+
+				<dt id="pinky"><dfn lang="en">Pinky</dfn>；ピンキー</dt>
+				<dd>
+				ピンクのゴーストです。<cite>Puck-Man</cite>では“Micky”とも呼ばれます。
+				</dd>
+
+				<dt id="power-pill"><dfn lang="en">power pill</dfn>；パワーピル</dt>
+				<dd>
+				<a href="#energizer">energizer</a>を参照。
+				</dd>
+
+				<dt id="routine"><dfn lang="en">routine</dfn>；ルーチン</dt>
+				<dd>
+				<a href="#pattern">pattern</a>を参照。
+				</dd>
+
+				<dt id="side-tunnel"><dfn lang="en">side tunnel</dfn>；ワープトンネル</dt>
+				<dd>
+				画面の右端と左端をつなぐトンネル。このトンネルに入ると、プレイヤーは画面の反対側へ“回り込む”ことができます。モンスターはトンネルにいるとき常に速度ペナルティを受けますが、パックマンには影響がありません。<dfn lang="en">The Tube</dfn>、<dfn lang="en">The Time Warp</dfn>、<dfn lang="en">The Scoot</dfn>とも呼ばれます。
+				</dd>
+
+				<dt id="split-screen"><dfn lang="en">split screen</dfn>；分割画面</dt>
+				<dd>
+				ゲームのレベル256。通常の迷路ではなく、画面の右半分がごちゃ混ぜになっています。
+				</dd>
+
+				<dt id="strawberry"><dfn lang="en">strawberry</dfn>；ストロベリー</dt>
+				<dd>
+				レベル２のボーナスシンボルで、300ポイントが得られます
+				</dd>
+
+				<dt id="thunderbird"><dfn lang="en">thunderbird</dfn></dt>
+				<dd>
+				<a href="#galaxian">galaxian</a>を参照。
+				</dd>
+
+				<dt id="tulip"><dfn lang="en">tulip</dfn></dt>
+				<dd>
+				<a href="#galaxian">galaxian</a>を参照。
+				</dd>
+			</dl>
+		</section>
+		<section id="faq">
+			<h1 class="f2 hn-icon"><a href="#faq" class="fragment">よくある質問</a></h1>
+			<dl class="faq">
+				<dt>分割画面を突破するにはどうすればよいの？</dt>
+				<dd>分割画面を突破する唯一の知られた方法は、一部の<cite>Pac-Man</cite> ROMに搭載されている“<dfn>ラックテスト</dfn>”機能を利用することです（<a href="05.html#believe-it-or-not" title="第５章：分割画面の解読">第５章</a>を参照）。
+				</dd>
+
+				<dt>“パーフェクトスコア”とは？</dt>
+				<dd><cite>Pac-Man</cite>におけるパーフェクトスコアは3,333,360ポイントであり、これはパーフェクトゲームによってのみ達成されます。すなわち、レベル256まで一度もライフを失わず連続クリアし、すべてのパワークッキーを食べて４体のゴーストにすべて噛みつき、すべてのボーナスフルーツを獲得しなければなりません。
+				</dd>
+				<dd>
+				画面の右半分に隠れている９つのドットを最多回数食べるために、分割画面に到達した時点で残りライフが最大である必要があります——ライフが失われるたびにこれらのドットは復活します。これは1999年、フロリダ州ハリウッドに住むビリー・ミッチェルによって初めて達成されました。
+				</dd>
+
+				<dt>ゴーストのＡＩルーチンは、レバーの操作を直接調べて決定するって本当？</dt>
+				<dd>これは誤りです。メモリマップドIN0ジョイスティックポートは、コード内の経路探索およびロジックルーチンから完全に分離しています。
+				</dd>
+
+				<dt>このゴーストのロジックは、<cite>Pac-Man</cite>ファミリーのどのゲームに応用できるの？</dt>
+				<dd><cite>Pac-Man Plus</cite>と<cite>Ms. Pac-Man</cite>はどちらも、オリジナルの<cite>Pac-Man</cite>と同じ基本的な経路探索/ターゲットロジックを使用しています。Atlantic City Chip や Hanglyman などの人気のある海賊盤でも同様です。
+				</dd>
+
+				<dt><cite>Pac-Man</cite> ROMはどこでダウンロードできますか？</dt>
+				<dd><cite>Pac-Man</cite> ROMは株式会社バンダイナムコの著作権下にあり、その知的財産です。私は法的にそれらを提供することはできません。それに、少し探せばすぐに見つかるでしょうから、Googleで“pacman puckman ROMs MAME32”と検索することは確実にお薦めできません。
+				</dd>
+
+				<dt>ギャラボス、ベル、カギを除く、すべてのボーナスシンボルが食べ物に関連しているのはなぜ？</dt>
+				<dd>ギャラボスは、<cite>Pac-Man</cite>と同時に開発中だったナムコのシューティングゲーム“<cite>ギャラクシアン</cite>”にちなんで追加されました。岩谷徹が最後の２つのシンボルにベルとカギを選んだ理由は誰にもわかりません。
+				</dd>
+				<dd>
+				ベルは実際にはアジアのカシューナッツ、デザートのブランマンジェといった食べ物の一種である可能性があり、それによって食べ物のテーマと一致するようになると理論づけられます。少なくともベルは、なにか他のものである<em>可能性</em>があります。カギは誰もなんであるか理論を持っておらず、うーんまあカギですね…
+				</dd>
+				<dd>
+				<div class="note">
+					<p>
+					<em>訳注：</em>岩谷氏がなぜギャラボス･ベル･カギを選んだのか？ それはフルーツの種類がネタ切れしてしまったからです。ギャラボスは思いつきで、ベルは同氏が好きなスロットマシンの図柄に由来し、実はチェリーも同様でした。同氏は細かい造形が好きで、高校生の頃には鍵を作れるようになっていたそうです。カギには“未来を拓く鍵”という意味もあるとのこと。ちなみに日本ではベルを“カキ氷”であると誤認していました。
+					</p>
+					<ul class="ref simple">
+						<li>cf. <a href="https://twitter.com/BNEI_PACMAN_JP/status/1512347995345682433" class="ref br">パックマン公式_JP
+							@BNEI_PACMAN_JP Apr 8, 2022 on Twitter</a></li>
+						<li>cf. <a href="https://econpapers.repec.org/paper/hitiirwps/19-08.htm" class="ref br">EconPapers: 岩谷徹第3回インタビュー後半<small>『キューティQ』『パックマン』におけるゲーム開発･企画の手法</small></a></li>
+					</ul>
+				</div>
+				</dd>
+
+				<dt>ナムコの開発チームのうち、一部のメンバーしか第１章に名前が記載されていないのはなぜ？</dt>
+				<dd>それら人物の名前を発見できずにいて、どこかに文書化されている筈ですが、まだその情報にたどり着けていません。ナムコ開発チーム全員の信頼できる情報源をご存知なら<a title="Jamey Pittman" rel="author" href="https://pacman.holenet.info/#AboutTheAuthor" data-cite="jamey.pittman@yahoo.com">著者</a>までご連絡ください。
+				</dd>
+				<dd>
+				<div class="note" id="development-team">
+					<p><em>訳注：</em>近ごろの資料によると、開発メンバーは以下のとおりです：</p>
+					<table>
+					<tr><th scope="row">企画</th><td>岩谷 徹</td></tr>
+					<tr><th scope="row">プログラム</th><td>船木 茂雄</td></tr>
+					<tr><th scope="row">基盤設計</th><td>石村 繁一</td></tr>
+					<tr><th scope="row">筐体設計</th><td>大杉 章</td></tr>
+					<tr><th scope="row">音楽</th><td>甲斐 敏夫</td></tr>
+					<tr><th scope="row">効果音</th><td>石村 繁一</td></tr>
+					<tr><th scope="row">キャラクターデザイン</th><td>山下 正</td></tr>
+					<tr><th scope="row">筐体デザイン・看板</th><td>小野 浩</td></tr>
+					</table>
+					<p>cf. <a href="https://funfare.bandainamcoent.co.jp/7116/" class="ref br">バンダイナムコ知新 第7回『パックマン』誕生秘話</a></p>
+				</div>
+				</dd>
+			</dl>
+		</section>
+		<nav id="rel-bottom" class="rel">
+			<ul>
+				<li><a href="index.html" rel="about" title="邦訳概説"><kbd>A</kbd>bout</a></li>
+				<li><a href="06.html" rel="prev appendix" title="前へ - 付録"><kbd>P</kbd>rev</a></li>
+				<li><a href="00.html#toc" rel="contents" title="資料の総目次"><kbd>T</kbd>oC</a></li>
+				<li class="none next">Next</li>
+			</ul>
+		</nav>
+	</section>
+	<footer>
+		<address>訳者：あのにも &lt;<a href="https://forms.gle/7gVSN3o1pHuR1AEY9" rel="author">お問い合わせ</a>&gt;</address>
+	</footer>
+</main>
+
+</body>
+</html>

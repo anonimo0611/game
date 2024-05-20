@@ -1,0 +1,104 @@
+﻿#main-content {
+	padding-bottom: 3em;
+}
+ul.ref {
+	margin: .2em 0 .3em;
+	padding: 0;
+}
+ul.ref li {
+	line-height: 1.3;
+	margin: 0;
+}
+dt dfn {
+	color: inherit;
+}
+dd dfn {
+	font-weight: bold;
+}
+
+/* Glossary */
+dl.glossary {
+	margin: 1em 0;
+}
+dl.glossary dt {
+	margin: 1em 0 .5em 0;
+}
+dl.glossary dd {
+	line-height: 1.4;
+	margin: 0 0 0 2em;
+	padding: 0;
+}
+dl.glossary .note {
+	color: gray;
+}
+dl.glossary dd.note {
+	color: var(--color);
+	margin-top: .5em;
+}
+
+/* FAQ */
+dl.faq {
+	margin: 1.5em -.5em 0 .5em;
+}
+dl.faq > dt,
+dl.faq > dd {
+	margin:  0;
+	padding: 0 0 0 1em;
+}
+dl.faq > dt {
+	font-weight: inherit;
+	margin: 1em 0 0 0;
+}
+dl.faq > dt:not(:first-child) {
+	border-top: dashed 1px;
+	padding-top: 1em;
+}
+dl.faq > dt + dd {
+	margin-top: .2em;
+}
+dl.faq > dt + dd + dd {
+	margin-top: .7em;
+}
+
+dl.faq > dt::before,
+dl.faq > dt + dd::before {
+	text-align: right;
+	font-weight: bold;
+	display: inline-block;
+	padding-right: .3em;
+	margin-left: -3.3em;
+	width: 3em;
+}
+dl.faq > dt::before {
+	content: 'Ｑ：';
+	color: var(--Q-color);
+}
+dl.faq > dt + dd::before {
+	content: 'Ａ：';
+	color: var(--A-color);
+}
+dl.faq > dd {
+	line-height: 1.45;
+}
+
+.note#development-team {
+	display: table;
+}
+.note#development-team p {
+	margin: .5em 0;
+}
+.note#development-team table {
+	margin: .5em 0;
+}
+.note#development-team th {
+	text-align: center;
+}
+
+@media print {
+	h1 {
+		margin: 1.5em 0 !important;
+	}
+	.note li {
+		display: block;
+	}
+}

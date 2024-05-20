@@ -1,0 +1,25 @@
+#main-content h1 ~ .note{
+	margin-top:    1em;
+	margin-bottom: 1.5em;
+}
+@media screen {
+	#main-content {
+		padding-bottom: 2em;
+	}
+	ul.flex {
+		gap: .5em;
+	}
+	dl.ref ul {
+		margin-top: .2em;
+		padding-left: 0 !important;
+	}
+	dl.ref ul li {
+		margin-bottom: .2em !important;
+	}
+	#main-content h1 {
+		margin-top: 2rem !important;
+	}
+	#rel-top{
+		display: block !important;
+	}
+}

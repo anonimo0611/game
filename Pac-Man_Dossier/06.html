@@ -1,0 +1,823 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<script src="../_lib/navi.js" defer></script>
+	<script src="../_lib/lite-yt-embed.js" defer></script>
+	<script src="../_lib/util.js"></script>
+	<link rel="icon"          href="../icon.svg" type="image/svg+xml">
+	<link rel="preload"       href="imgs/fruits.png" as="image" type="image/png">
+	<link rel="author"	      href="https://forms.gle/7gVSN3o1pHuR1AEY9" title="あのにも">
+	<link rel="top" 	        href="../index.html" title="トップページ">
+	<link rel="contents"      href="01.html#toc" title="全体の目次">
+	<link rel="prev"		      href="05.html" title="第５章：分割画面">
+	<link rel="next glossary" href="07.html" title="用語集およびFAQ">
+	<link rel="appendix"      href="table_a1.html" title="付録：表Ａ.１ レベルの仕様">
+	<link rel="stylesheet"    href="../_lib/lite-yt-embed.css">
+	<link rel="stylesheet"    href="../_styles/_index.css">
+	<link rel="stylesheet"    href="styles/headings.css">
+	<link rel="stylesheet"    href="styles/06-appendix.css">
+	<script src="js-table-a1/index.js" type="module"></script>
+	<title>付録 - The Pac-Man Dossier邦訳</title>
+</head>
+
+<body id="appendix">
+
+<a href="#main-content" id="skip-nav">本文へジャンプ</a>
+<header>
+	<nav>
+		<div class="nav">
+			<ul>
+				<li><a href="00.html">はじめに</a> &amp; <a href="00.html#toc" rel="contents" title="資料の総目次">総目次</a></li>
+				<li><a href="01.html">1.マシンへようこそ</a></li>
+				<li><a href="02.html">2.ゲームプレイ詳細</a></li>
+				<li><a href="03.html">3.迷路ロジック</a></li>
+				<li><a href="04.html">4.ゴーストとの戦い</a></li>
+				<li><a href="05.html">5.分割画面</a></li>
+			</ul>
+			<ul class="flex">
+				<li class="current">付録</li>
+				<li><a href="07.html" rel="glossary">用語集&amp;FAQ</a></li>
+			</ul>
+		</div>
+		<ul class="toc">
+			<li class="to-top"><a href="#main-content">ページの先頭</a></li>
+			<li><a href="#references">参考文献と資料</a></li>
+			<li><a href="#appendix-a">Ａ:参照表</a></li>
+			<li><a href="#easter-eggs_tricks">Ｂ:イースターエッグ</a></li>
+			<li><a href="#hardware">Ｃ:ハードウエア情報</a></li>
+			<li><a href="#vintage-guides">Ｄ:年代物のガイド</a></li>
+		</ul>
+	</nav>
+</header>
+<main id="main">
+	<nav id="rel-top" class="rel">
+		<ul>
+			<li><a href="index.html" rel="about" accesskey="a" title="邦訳概説"><kbd>A</kbd>bout</a></li>
+			<li><a href="05.html" rel="prev" accesskey="p" title="前へ - 第５章：分割画面"><kbd>P</kbd>rev</a></li>
+			<li><a href="00.html#toc" rel="contents" accesskey="t" title="資料の総目次"><kbd>T</kbd>oC</a></li>
+			<li><a href="07.html" rel="next glossary" accesskey="n" title="次へ - 用語集およびFAQ"><kbd>N</kbd>ext</a></li>
+		</ul>
+	</nav>
+	<section id="main-content">
+		<h1>付録</h1>
+		<section id="references">
+			<h2 class="f5 hn-icon"><a href="#references" class="fragment">参考文献および参考資料</a></h2>
+			<div class="right no-print" lang="en">
+				<img src="imgs/09-01_pacmanadmidway.png" alt="" width="200" height="259">
+			</div>
+			<ul class="appendix ref">
+				<li data-cite="http://donhodges.com/how_high_can_you_get2.htm">
+					<a href="http://donhodges.com/how_high_can_you_get2.htm">Splitting
+						Apart The Split Screen</a>, Don Hodges
+				</li>
+				<li data-cite="http://donhodges.com/pacman_pinky_explanation.htm">
+					<a href="http://donhodges.com/pacman_pinky_explanation.htm">Pac-Man's
+						Ghost Behavior Analyzed And Fixed</a>, Don Hodges
+				</li>
+				<li data-cite="http://web.archive.org/web/20091003171028/http://www.lomont.org/Software/Games/PacMan/PacmanASM.html">
+					<!-- http://www.lomont.org/Software/Games/PacMan/PacmanASM.html -->
+					<a href="http://web.archive.org/web/20091003171028/http://www.lomont.org/Software/Games/PacMan/PacmanASM.html">Pac-Man
+						Source Code With Comments</a>, Chris Lomont
+				</li>
+				<li data-cite="https://www.lomont.org/software/games/pacman/PacmanEmulation.pdf">
+					<a href="https://www.lomont.org/software/games/pacman/PacmanEmulation.pdf">Pac-Man
+						Emulation Guide</a>, Chris Lomont
+				</li>
+				<li data-cite="http://www.zutco.com/pacman.htm">
+					<a href="http://www.zutco.com/pacman.htm">The
+						Virtual Pac-Man Museum</a>, Chuck and Vicki Gill
+				</li>
+				<li data-cite="https://web.archive.org/web/20071016203822/http://classicgaming.gamespy.com/View.php?view=Articles.Detail&id=249">
+					<!-- http://classicgaming.gamespy.com/View.php?view=Articles.Detail&amp;id=249 -->
+					<a href="https://web.archive.org/web/20071016203822/http://classicgaming.gamespy.com/View.php?view=Articles.Detail&id=249">
+					Pacman: The Phenomenon - Part 1</a>, Marty Goldberg
+				</li>
+				<li data-cite="https://www.mameworld.info/net/pacman/history/p1_01.htm">
+					<a href="https://www.mameworld.info/net/pacman/history/p1_01.htm">The
+						History of Pac-Man</a>, Doug Trueman
+				</li>
+				<li data-cite="http://www.arcade-history.com/?n=pac-man&amp;page=detail&amp;id=1914">
+					<a href="http://www.arcade-history.com/?n=pac-man&amp;page=detail&amp;id=1914">Pac-Man
+						Entry At Arcade History</a>, Alexis Bousiges
+				</li>
+				<li data-cite="https://www.twingalaxies.com/showthread.php/119946-Pac-Man-ghost-behavior-revealed">
+					<a href="https://www.twingalaxies.com/showthread.php/119946-Pac-Man-ghost-behavior-revealed">Pac-Man
+						ghost behavior revealed</a>, Twin Galaxies forum topic
+				</li>
+				<li data-cite="http://www.atariage.com/forums/index.php?showtopic=68707&amp;st=50">
+					<a href="http://www.atariage.com/forums/index.php?showtopic=68707&amp;st=50">Pac-Man
+						ghost AI question</a>, AtariAge forum topic
+				</li>
+				<li data-cite="https://www.gamedeveloper.com/design/reawakening-the-sleeping-giant-the-pac-man-ce-interview">
+					<a href="https://www.gamedeveloper.com/design/reawakening-the-sleeping-giant-the-pac-man-ce-interview">Reawakening
+						The Sleeping Giant: The Pac-Man CE Interview</a>, Christian Nutt
+				</li>
+			</ul>
+		</section>
+		<section id="appendix-a">
+			<h2 class="f6 hn-icon"><a href="#appendix-a" class="fragment">付録Ａ：参照表</a></h2>
+			<section id="a1">
+				<h3><a href="#a1" class="fragment">参照表 Ａ.１ - レベルの仕様</a></h3>
+				<p>※100%の速度 = 75.75757625 pixels/sec；チルダつきは近似値</p>
+				<div id="a1-wrapper">
+					<table id="table-a1">
+						<thead>
+							<tr>
+								<th scope="col">レベル</th>
+								<th scope="col">フルーツ</th>
+								<th scope="col">ボーナス<br>ポイント</th>
+								<th scope="col">パックマン<br>速度</th>
+								<th scope="col">パックマン<br>ドット速度</th>
+								<th scope="col">ゴースト<br>速度</th>
+								<th scope="col">ゴースト<br>トンネル速度</th>
+								<th scope="col">スパート1<br>残りドット</th>
+								<th scope="col">スパート1<br>速度</th>
+								<th scope="col">スパート2<br>残りドット</th>
+								<th scope="col">スパート2<br>速度</th>
+								<th scope="col">イジケ時<br>パック速度</th>
+								<th scope="col">イジケ時<br><small>パックドット速度</small></th>
+								<th scope="col">イジケ時<br>ゴースト速度</th>
+								<th scope="col">イジケ<br>タイム（秒）</th>
+								<th scope="col">イジケ<br>点滅回数</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row" class="pad">1</th>
+								<td class="fruit"><span class="f1">チェリー</span></td>
+								<td>100</td>
+								<td>80%</td>
+								<td>~71%</td>
+								<td>75%</td>
+								<td>40%</td>
+								<td>20</td>
+								<td>80%</td>
+								<td>10</td>
+								<td>85%</td>
+								<td>90%</td>
+								<td>~79%</td>
+								<td>50%</td>
+								<td>6</td>
+								<td>5</td>
+							</tr>
+							<tr>
+								<th scope="row" class="pad">2</th>
+								<td class="fruit"><span class="f2">ストロベリー</span></td>
+								<td>300</td>
+								<td>90%</td>
+								<td>~79%</td>
+								<td>85%</td>
+								<td>45%</td>
+								<td>30</td>
+								<td>90%</td>
+								<td>15</td>
+								<td>95%</td>
+								<td>95%</td>
+								<td>~83%</td>
+								<td>55%</td>
+								<td>5</td>
+								<td>5</td>
+							</tr>
+							<tr>
+								<th scope="row" class="pad">3</th>
+								<td class="fruit"><span class="f3">オレンジ</span></td>
+								<td>500</td>
+								<td>90%</td>
+								<td>~79%</td>
+								<td>85%</td>
+								<td>45%</td>
+								<td>40</td>
+								<td>90%</td>
+								<td>20</td>
+								<td>95%</td>
+								<td>95%</td>
+								<td>~83%</td>
+								<td>55%</td>
+								<td>4</td>
+								<td>5</td>
+							</tr>
+							<tr>
+								<th scope="row" class="pad">4</th>
+								<td class="fruit"><span class="f3">オレンジ</span></td>
+								<td>500</td>
+								<td>90%</td>
+								<td>~79%</td>
+								<td>85%</td>
+								<td>45%</td>
+								<td>40</td>
+								<td>90%</td>
+								<td>20</td>
+								<td>95%</td>
+								<td>95%</td>
+								<td>~83%</td>
+								<td>55%</td>
+								<td>3</td>
+								<td>5</td>
+							</tr>
+							<tr>
+								<th scope="row" class="pad">5</th>
+								<td class="fruit"><span class="f4">アップル</span></td>
+								<td>700</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>95%</td>
+								<td>50%</td>
+								<td>40</td>
+								<td>100%</td>
+								<td>20</td>
+								<td>105%</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>60%</td>
+								<td>2</td>
+								<td>5</td>
+							</tr>
+							<tr>
+								<th scope="row" class="pad">6</th>
+								<td class="fruit"><span class="f4">アップル</span></td>
+								<td>700</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>95%</td>
+								<td>50%</td>
+								<td>50</td>
+								<td>100%</td>
+								<td>25</td>
+								<td>105%</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>60%</td>
+								<td>5</td>
+								<td>5</td>
+							</tr>
+							<tr>
+								<th scope="row" class="pad">7</th>
+								<td class="fruit"><span class="f5">メロン</span></td>
+								<td>1000</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>95%</td>
+								<td>50%</td>
+								<td>50</td>
+								<td>100%</td>
+								<td>25</td>
+								<td>105%</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>60%</td>
+								<td>2</td>
+								<td>5</td>
+							</tr>
+							<tr>
+								<th scope="row" class="pad">8</th>
+								<td class="fruit"><span class="f5">メロン<br></span></td>
+								<td>1000</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>95%</td>
+								<td>50%</td>
+								<td>50</td>
+								<td>100%</td>
+								<td>25</td>
+								<td>105%</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>60%</td>
+								<td>2</td>
+								<td>5</td>
+							</tr>
+							<tr>
+								<th scope="row" class="pad">9</th>
+								<td class="fruit"><span class="f6">ギャラボス</span></td>
+								<td>2000</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>95%</td>
+								<td>50%</td>
+								<td>60</td>
+								<td>100%</td>
+								<td>30</td>
+								<td>105%</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>60%</td>
+								<td>1</td>
+								<td>3</td>
+							</tr>
+							<tr>
+								<th scope="row">10</th>
+								<td class="fruit"><span class="f6">ギャラボス</span></td>
+								<td>2000</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>95%</td>
+								<td>50%</td>
+								<td>60</td>
+								<td>100%</td>
+								<td>30</td>
+								<td>105%</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>60%<br></td>
+								<td>5</td>
+								<td>5</td>
+							</tr>
+							<tr>
+								<th scope="row">11</th>
+								<td class="fruit"><span class="f7">ベル</span></td>
+								<td>3000</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>95%</td>
+								<td>50%</td>
+								<td>60</td>
+								<td>100%</td>
+								<td>30</td>
+								<td>105%</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>60%</td>
+								<td>2</td>
+								<td>5</td>
+							</tr>
+							<tr>
+								<th scope="row">12</th>
+								<td class="fruit"><span class="f7">ベル</span></td>
+								<td>3000</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>95%</td>
+								<td>50%</td>
+								<td>80</td>
+								<td>100%</td>
+								<td>40</td>
+								<td>105%</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>60%</td>
+								<td>1</td>
+								<td>3</td>
+							</tr>
+							<tr>
+								<th scope="row">13</th>
+								<td class="fruit"><span class="f8">カギ</span></td>
+								<td>5000</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>95%</td>
+								<td>50%</td>
+								<td>80</td>
+								<td>100%</td>
+								<td>40</td>
+								<td>105%</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>60%</td>
+								<td>1</td>
+								<td>3</td>
+							</tr>
+							<tr>
+								<th scope="row">14</th>
+								<td class="fruit"><span class="f8">カギ</span></td>
+								<td>5000</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>95%</td>
+								<td>50%</td>
+								<td>80</td>
+								<td>100%</td>
+								<td>40</td>
+								<td>105%</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>60%</td>
+								<td>3</td>
+								<td>5</td>
+							</tr>
+							<tr>
+								<th scope="row">15</th>
+								<td class="fruit"><span class="f8">カギ</span></td>
+								<td>5000</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>95%</td>
+								<td>50%</td>
+								<td>100</td>
+								<td>100%</td>
+								<td>50</td>
+								<td>105%</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>60%</td>
+								<td>1</td>
+								<td>3</td>
+							</tr>
+							<tr>
+								<th scope="row">16</th>
+								<td class="fruit"><span class="f8">カギ</span></td>
+								<td>5000</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>95%</td>
+								<td>50%</td>
+								<td>100</td>
+								<td>100%</td>
+								<td>50</td>
+								<td>105%</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>60%</td>
+								<td>1</td>
+								<td>3</td>
+							</tr>
+							<tr>
+								<th scope="row">17</th>
+								<td class="fruit"><span class="f8">カギ</span></td>
+								<td>5000</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>95%</td>
+								<td>50%</td>
+								<td>100</td>
+								<td>100%</td>
+								<td>50</td>
+								<td>105%</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<th scope="row">18</th>
+								<td class="fruit"><span class="f8">カギ</span></td>
+								<td>5000</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>95%</td>
+								<td>50%</td>
+								<td>100</td>
+								<td>100%</td>
+								<td>50</td>
+								<td>105%</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>60%</td>
+								<td>1</td>
+								<td>3</td>
+							</tr>
+							<tr>
+								<th scope="row">19</th>
+								<td class="fruit"><span class="f8">カギ</span></td>
+								<td>5000</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>95%</td>
+								<td>50%</td>
+								<td>120</td>
+								<td>100%</td>
+								<td>60</td>
+								<td>105%</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<th scope="row">20</th>
+								<td class="fruit"><span class="f8">カギ</span></td>
+								<td>5000</td>
+								<td>100%</td>
+								<td>~87%</td>
+								<td>95%</td>
+								<td>50%</td>
+								<td>120</td>
+								<td>100%</td>
+								<td>60</td>
+								<td>105%</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<th scope="row">21+</th>
+								<td class="fruit"><span class="f8">カギ</span></td>
+								<td>5000</td>
+								<td>90%</td>
+								<td>~79%</td>
+								<td>95%</td>
+								<td>50%</td>
+								<td>120</td>
+								<td>100%</td>
+								<td>60</td>
+								<td>105%</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<p class="ref no-print"><a href="table_a1.html" rel="alternate">参照表 Ａ.１を別ページで閲覧</a></p>
+			</section>
+			<section id="a2">
+				<h3><a href="#a2" class="fragment">参照表 Ａ.２ - 難易度の仕様</a></h3>
+				<p>
+				Pac-Man PCBには２つの端子がハンダ付けされており、ゲームを“<dfn>Hard</dfn>”という難易度に設定できる小さなスポットがあります。Hardの唯一の違いは５つのレベル（１、２、６、19および20）がプレイから除外されることです。しかしシステムはボーナスシンボルを除外しないため、自分がどのレベルで遊んでいるのか混乱を招きます。
+				</p>
+				<p>
+				たとえばレベル２はHardにおける最初の盤面ですが、ストロベリーの代わりに、チェリーのシンボルが使用されています。ゲームプレイとしてはレベル２のままですが、通常のストロベリーの代わりにチェリーが使用されるのです。また、ボーナスポイントの値は現在のシンボルに一致するように変更されます。
+				</p>
+				<p>
+				アトラクトモードのデモゲームにおいて、パックマンがどのゴーストにつかまるのか観察すると、マシンの難易度設定を確認できます。Normalのばあい、パックマンは迷路の左下の領域でアオスケにつかまりますが、難易度ジャンパーが接続されていると同じ場所の近くでグズタにつかまります。
+				</p>
+				<table>
+					<caption>Normalのレベルに対応するHardのシンボル</caption>
+					<col class="normal">
+					<col class="normal-bonus">
+					<col class="hard">
+					<col class="hard-bonus">
+					<thead>
+						<tr>
+							<th scope="col">Normal</th>
+							<th scope="col">Normal Bonus</th>
+							<th scope="col">Hard</th>
+							<th scope="col">Hard Bonus</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="lv pad">1</td>
+							<td class="f1 fruit">チェリー</td>
+							<td class="lv"></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="lv pad">2</td>
+							<td class="f2 fruit">ストロベリー</td>
+							<td class="lv pad">2</td>
+							<td class="f1 fruit">チェリー</td>
+						</tr>
+						<tr>
+							<td class="lv pad">3</td>
+							<td class="f3 fruit">オレンジ１</td>
+							<td class="lv"></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="lv pad">4</td>
+							<td class="f3 fruit">オレンジ２</td>
+							<td class="lv pad">4</td>
+							<td class="f2 fruit">ストロベリー</td>
+						</tr>
+						<tr>
+							<td class="lv pad">5</td>
+							<td class="f4 fruit">アップル１</td>
+							<td class="lv pad">5</td>
+							<td class="f3 fruit">オレンジ１</td>
+						</tr>
+						<tr>
+							<td class="lv pad">6</td>
+							<td class="f4 fruit">アップル２</td>
+							<td class="lv"></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="lv pad">7</td>
+							<td class="f5 fruit">メロン１</td>
+							<td class="lv pad">7</td>
+							<td class="f3 fruit">オレンジ２</td>
+						</tr>
+						<tr>
+							<td class="lv pad">8</td>
+							<td class="f5 fruit">メロン２</td>
+							<td class="lv pad">8</td>
+							<td class="f4 fruit">アップル１</td>
+						</tr>
+						<tr>
+							<td class="lv pad">9</td>
+							<td class="f6 fruit">ギャラボス１</td>
+							<td class="lv pad">9</td>
+							<td class="f4 fruit">アップル２</td>
+						</tr>
+						<tr>
+							<td class="lv">10</td>
+							<td class="f6 fruit">ギャラボス２</td>
+							<td class="lv">10</td>
+							<td class="f5 fruit">メロン１</td>
+						</tr>
+						<tr>
+							<td class="lv">11</td>
+							<td class="f7 fruit">ベル１</td>
+							<td class="lv">11</td>
+							<td class="f5 fruit">メロン２</td>
+						</tr>
+						<tr>
+							<td class="lv">12</td>
+							<td class="f7 fruit">ベル２</td>
+							<td class="lv">12</td>
+							<td class="f6 fruit">ギャラボス１</td>
+						</tr>
+						<tr>
+							<td class="lv">13</td>
+							<td class="f8 fruit">カギ１</td>
+							<td class="lv">13</td>
+							<td class="f6 fruit">ギャラボス２</td>
+						</tr>
+						<tr>
+							<td class="lv">14</td>
+							<td class="f8 fruit">カギ２</td>
+							<td class="lv">14</td>
+							<td class="f7 fruit">ベル１</td>
+						</tr>
+						<tr>
+							<td class="lv">15</td>
+							<td class="f8 fruit">カギ３</td>
+							<td class="lv">15</td>
+							<td class="f7 fruit">ベル２</td>
+						</tr>
+						<tr>
+							<td class="lv">16</td>
+							<td class="f8 fruit">カギ４</td>
+							<td class="lv">16</td>
+							<td class="f8 fruit">カギ１</td>
+						</tr>
+						<tr>
+							<td class="lv">17</td>
+							<td class="f8 fruit">カギ５</td>
+							<td class="lv">17</td>
+							<td class="f8 fruit">カギ２</td>
+						</tr>
+						<tr>
+							<td class="lv">18</td>
+							<td class="f8 fruit">カギ６</td>
+							<td class="lv">18</td>
+							<td class="f8 fruit">カギ３</td>
+						</tr>
+						<tr>
+							<td class="lv">19</td>
+							<td class="f8 fruit">カギ７</td>
+							<td class="lv"></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="lv">20</td>
+							<td class="f8 fruit">カギ８</td>
+							<td class="lv"></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="lv">21+</td>
+							<td class="f8 fruit">カギ９</td>
+							<td class="lv">21+</td>
+							<td class="f8 fruit">カギ４</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+		</section>
+		<section id="easter-eggs_tricks">
+			<h2 class="f7 hn-icon page-break"><a href="#easter-eggs_tricks" class="fragment">付録Ｂ：イースターエッグおよびトリック</a></h2>
+			<section id="namco-easter-egg">
+				<h3><a href="#namco-easter-egg" class="fragment">NAMCOのイースターエッグ</a></h3>
+				<p>
+				ナムコの開発者によって<cite>Pac-Man</cite>に隠された秘密のメッセージがあります。確認するにはマシンをサービスモードにして、設定画面が表示されるのを待ちます。ここでサービスモードのオフとオンをすばやく切り替えると、画面に配置グリッドが表示されます。
+				</p>
+				<p>
+				プレイヤー１と２のボタンを押したまま、サービスモードのオンとオフを<em>すばやく</em>切り替えて（適切に実行するとグリッドは画面に表示されたまま）、４方向レバーを次の手順で倒します： 上×４,左×４,右×４,下×４。すると、画面に“MADE BY NAMCO”が横倒しで表示され、パワークッキーを使用してつづられます。
+				</p>
+				<figure class="center">
+					<img src="imgs/09-01_0008.png" alt="画面に表示された“MADE BY NAMCO”" width="224" height="288">
+				</figure>
+			</section>
+			<section id="ghost-bug">
+				<h3><a href="#ghost-bug" class="fragment">ゴーストのバグ</a></h3>
+				<p>
+				ハウスからゴーストが出発するタイミングに合せて、パックマンがそのゴーストに噛みつくと、奇妙なバグが生じる可能性があります（オレンジ色のゴーストは、ここで捕獲するのが最も簡単です）。
+				</p>
+				<p>
+				タイミングが重要なので、これには数回の試行が必要かもしれません。ゴーストの底辺が、ハウス上辺のドアを通過するときに捕まえてみてください。正しく行われると目玉が直接ハウスに戻り、再生されたゴーストはまっすぐ上へと移動し始め、<em>迷路の壁を通り抜けます！</em> 画面の上端に近づくとボードの下端へと回り込んで再出現し、壁を無視して上方向へ進みます。ゴーストは最終的にハウスに戻り、その時点で通常の行動を再開します。
+				</p>
+				<p>
+				ただし、その前にパックマンが別のパワークッキーを食べてゴーストを捕獲できたばあい、目玉が動き回りますが迷路とはわずかに同期せず、ハウスに戻るのが困難になります。目玉は最終的に自身を修正し、帰り道を見つける（元に戻る）こともありますが、レベルが完了するまで見失ったままの事もあります。
+				</p>
+				<p>この奇妙な行動のデモンストレーションを見るには、以下のYouTubeビデオを参照してください：</p>
+				<lite-youtube title="Pac-Man Ghost Movement Bug - YouTube" videoid="JLfugsoU3d0" playlabel="Play">
+					<noscript>
+						<iframe style="margin-bottom:1.5em" width="560" height="315" src="https://www.youtube.com/embed/JLfugsoU3d0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+					</noscript>
+				</lite-youtube>
+			</section>
+		</section>
+		<section id="hardware">
+			<h2 class="f8 hn-icon"><a href="#hardware" class="fragment">付録Ｃ：ハードウエア情報</a></h2>
+			<section id="spec">
+				<h3><a href="#spec" class="fragment">仕様</a></h3>
+				<table>
+					<tbody>
+						<tr>
+							<th scope="row">Platform</th>
+							<td>NAMCO 8-bit PCB</td>
+						</tr>
+						<tr>
+							<th>CPU</th>
+							<td>Z80A at 3.072 MHz</td>
+						</tr>
+						<tr>
+							<th scope="row">ROM</th>
+							<td>16K in four, 4K chips</td>
+						</tr>
+						<tr>
+							<th scope="row">RAM</th>
+							<td>Almost 2K</td>
+						</tr>
+						<tr>
+							<th scope="row">Display</th>
+							<td>Raster</td>
+						</tr>
+						<tr>
+							<th scope="row">Orientation</th>
+							<td>Vertical</td>
+						</tr>
+						<tr>
+							<th scope="row">Resolution</th>
+							<td>224x288</td>
+						</tr>
+						<tr>
+							<th scope="row">Colors</th>
+							<td>16</td>
+						</tr>
+						<tr>
+							<th scope="row">Attributes</th>
+							<td>Eight 16x16 hardware sprites</td>
+						</tr>
+						<tr>
+							<th scope="row">Refresh rate</th>
+							<td>60.61 Hz</td>
+						</tr>
+						<tr>
+							<th scope="row">Sound</th>
+							<td>Custom monophonic 3-voice waveform sound generator chip</td>
+						</tr>
+						<tr>
+							<th scope="row">Controls - One</th>
+							<td>4-way leaf joystick, 1P/2P buttons</td>
+						</tr>
+						<tr>
+							<th scope="row">Models</th>
+							<td>Upright, Mini, and Cocktail</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+			<section id="operators-bools">
+				<h3><a href="#operators-bools" class="fragment" lang="en">Midway Operator's Reference Books:</a></h3>
+				<ul class="appendix ref" lang="en">
+					<li data-cite="https://pacman.holenet.info/pacman_opmanual.pdf"><a
+						href="https://pacman.holenet.info/pacman_opmanual.pdf"><cite>Pac-Man</cite>
+						Operator's Manual</a></li>
+					<li data-cite="https://www.arcade-museum.com/manuals-videogames/P/Pacman-MsPacman-Troubleshooting-Guide-Part1.pdf"><a
+						href="https://www.arcade-museum.com/manuals-videogames/P/Pacman-MsPacman-Troubleshooting-Guide-Part1.pdf">Troubleshooting
+						Logic Board Part I for <cite>Pac-Man</cite> and <cite>Ms. Pac-Man</cite></a>
+					</li>
+				</ul>
+			</section>
+		</section>
+		<section id="vintage-guides">
+			<h2><a href="#vintage-guides" class="fragment">付録Ｄ：年代物のPAC-MANガイド</a></h2>
+			<ul class="appendix ref">
+				<li lang="en" data-cite="https://www.digitpress.com/library/books/book_break_a_million_at_pac-man.pdf"><a
+					href="https://www.digitpress.com/library/books/book_break_a_million_at_pac-man.pdf">Break
+					A Million At Pac-Man</a> - Ernest
+					Zavisca, Ph.D. and Gary Beltowski.
+				</li>
+				<li lang="en" data-cite="https://www.digitpress.com/library/books/book_how_to_win_at_pac-man.pdf"><a
+					href="https://www.digitpress.com/library/books/book_how_to_win_at_pac-man.pdf">How
+					To Win At Pac-Man</a> - Penguin Books.
+				</li>
+			</ul>
+		</section>
+		<nav id="rel-bottom" class="rel">
+			<ul>
+				<li><a href="index.html" rel="about" title="邦訳概説"><kbd>A</kbd>bout</a></li>
+				<li><a href="05.html" rel="prev" title="前へ - 第５章：分割画面"><kbd>P</kbd>rev</a></li>
+				<li><a href="00.html#toc" rel="contents" title="資料の総目次"><kbd>T</kbd>oC</a></li>
+				<li><a href="07.html" rel="next glossary" title="次へ - 用語集およびFAQ"><kbd>N</kbd>ext</a></li>
+			</ul>
+		</nav>
+	</section>
+	<footer>
+		<address>訳者：あのにも &lt;<a href="https://forms.gle/7gVSN3o1pHuR1AEY9" rel="author">お問い合わせ</a>&gt;</address>
+	</footer>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,237 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<script src="../_lib/navi.js" defer></script>
+	<script src="../_lib/lite-yt-embed.js" defer></script>
+	<link rel="icon"       href="../icon.svg" type="image/svg+xml">
+	<link rel="preload"    href="imgs/fruits.png" as="image" type="image/png">
+	<link rel="author"	   href="https://forms.gle/7gVSN3o1pHuR1AEY9" title="あのにも">
+	<link rel="top" 	     href="../index.html" title="トップページ">
+	<link rel="contents"   href="01.html#toc" title="全体の目次">
+	<link rel="prev"		   href="02.html" title="第２章：ゲームプレイの詳細">
+	<link rel="next"		   href="04.html" title="第４章：ゴーストとの戦い">
+	<link rel="glossary"   href="07.html" title="用語集およびFAQ">
+	<link rel="appendix"   href="06.html" title="付録">
+	<link rel="appendix"   href="table_a1.html" title="付録：表Ａ.１ レベルの仕様">
+	<link rel="stylesheet" href="../_lib/lite-yt-embed.css">
+	<link rel="stylesheet" href="../_styles/_index.css">
+	<link rel="stylesheet" href="styles/headings.css">
+	<title>第３章：迷路ロジックの初歩 - The Pac-Man Dossier邦訳</title>
+</head>
+
+<body>
+
+<a href="#main-content" id="skip-nav">本文へジャンプ</a>
+<header>
+	<nav>
+		<div class="nav">
+			<ul>
+				<li><a href="00.html">はじめに</a> &amp; <a href="00.html#toc" rel="contents" title="資料の総目次">総目次</a></li>
+				<li><a href="01.html">1.マシンへようこそ</a></li>
+				<li><a href="02.html">2.ゲームプレイ詳細</a></li>
+				<li class="current">3.迷路ロジック</li>
+				<li><a href="04.html">4.ゴーストとの戦い</a></li>
+				<li><a href="05.html">5.分割画面</a></li>
+			</ul>
+			<ul class="flex">
+				<li><a href="06.html" rel="appendix" title="付録：参照表、イースターエッグなど">付録</a></li>
+				<li><a href="07.html" rel="glossary">用語集&amp;FAQ</a></li>
+			</ul>
+		</div>
+		<ul class="toc">
+			<li class="to-top"><a href="#main-content">ページの先頭</a></li>
+			<li><a href="#what-tile-am-i-in" class="condensed">どのタイルにいるの？</a></li>
+			<li><a href="#passing-through" class="condensed">ぴったしのすれ違い</a></li>
+			<li><a href="#target-tiles">ターゲットタイル</a></li>
+			<li><a href="#looking-ahead">将来の展望</a></li>
+			<li><a href="#intersections">交差点</a></li>
+			<li><a href="#fixed-target-tiles" class="condensed">固定されたターゲット</a></li>
+		</ul>
+	</nav>
+</header>
+<main id="main">
+	<nav id="rel-top" class="rel">
+		<ul>
+			<li><a href="index.html" rel="about" accesskey="a" title="邦訳概説"><kbd>A</kbd>bout</a></li>
+			<li><a href="02.html" rel="prev" accesskey="p" title="前へ - 第２章：ゲームプレイの詳細"><kbd>P</kbd>rev</a></li>
+			<li><a href="00.html#toc" rel="contents" accesskey="t" title="資料の総目次"><kbd>T</kbd>oC</a></li>
+			<li><a href="04.html" rel="next" accesskey="n" title="次へ - 第４章：ゴーストとの戦い"><kbd>N</kbd>ext</a></li>
+		</ul>
+	</nav>
+	<section id="main-content">
+		<h1 class="f3 hn-icon">第３章：迷路ロジックの初歩</h1>
+		<p>
+		手始めとして、ゴーストが目標を遂行するために迷路でどのように移動できるのか、見ていく必要があります。本章で説明するすべての経路探索ロジックは、４体のゴーストに共通しています。ゴーストごとの違いはさておき、まずはゴーストの共通点を理解することが重要です。
+		</p>
+		<p>
+		先へ進む前にこのゲームにおける<dfn>アクター</dfn>（パックマンと４体のゴースト）の位置がどのように追跡されるのか見てみましょう。ゲーム画面は８×８ピクセルのタイルを敷き詰めたグリッドであると考えてください。
+		</p>
+		<p>
+		画面の実サイズは224×288ピクセルであり、８で割ると28×36タイルのグリッドが生成されます：
+		</p>
+		<figure class="center">
+			<img src="imgs/05-01_tiles.png" alt="タイルグリッドの図" width="448" height="576">
+		</figure>
+		<p>
+		各タイルは<dfn>リーガルスペース</dfn>または<dfn>デッドスペース</dfn>の何れかに属しています。上記の図では、リーガルスペースは灰色のタイルとして、他のすべてのタイルはデッドスペースとして見なされます。
+		</p>
+		<p>
+		アクターが移動するのはリーガルスペースのタイル間だけです。各ドットはタイルの中央に配置されるので、正確に８ピクセル（１タイルぶん）離れています。これは、ゲームプレイ中に距離を推定するのに役立ちます。
+		</p>
+		<section id="what-tile-am-i-in">
+			<h2 class="page-break"><a href="#what-tile-am-i-in" class="fragment">どのタイルにいるの？</a></h2>
+			<p class="as-follows">
+			アクターが迷路を移動するさい、ゲームは彼らの<dfn>占有タイル</dfn>を常に追跡しています。アクターは同時に１つのタイルにしか関連づけられませんが、そのグラフィックは周囲のタイルと重なり合っています。アクターの中心点は常にその時々でアクターの占有タイルを決定づけます。アクターはピクセル単位の精度で移動できるため、多くのばあいアクターのいるタイルの真上で中央に配置されていません。次の例で考えてください：
+			</p>
+			<figure class="center">
+				<img src="imgs/05-02_tilemove2.png" alt="６フレームの間に切り替わってゆく占有タイル" width="620" height="300">
+			</figure>
+			<p>
+			半透明な赤いゴーストが、リガールスペースのタイル列を左から右へ移動しています。フレーム１では、占有タイル（明るい赤で表示）は図の左寄りにあります。ゴーストのグラフィックの一部がタイル上にないことは問題ではありません。重要なのはゴーストの<em>中心点が</em>タイル上にあることです。
+			</p>
+			<p>
+			フレーム２までに中心点が右隣のタイルに乗る十分な距離まで移動し、それに応じて占有タイルが更新されます。ゴーストの中心点が次のタイルに乗るフレーム６までのあいだ、同じタイルに結びつけられます。
+			</p>
+			<p>
+			ゴーストの経路探索ロジックを理解するためには、タイルの基本概念が不可欠です。これはアクターの占有タイルのみを考慮し、そのタイルにおけるピクセル単位の位置は考慮していません。
+			</p>
+			<p>
+			ロジック・ルーチンから見ると、５体のアクターは下図のように見えます。
+			</p>
+			<p class="as-follows">各アクターは現在の進行方向と占有タイルによって定義され、アクター間の距離もタイルで測定されます（たとえばピンクのゴーストは、パックマンから水平方向に５タイル、垂直方向に１タイル離れています）。
+			</p>
+			<figure class="center">
+				<img src="imgs/05-03_tilegame.png" alt="ロジック・ルーチンの図" height="360">
+			</figure>
+		</section>
+		<section id="passing-through">
+			<h2><a href="#passing-through" class="fragment">ぴったしのすれ違い</a></h2>
+			<p>
+			<cite>Pac-Man</cite>がリリースされてから程なく、プレイヤーのあいだで“時おり無傷でゴーストとすれ違う”という噂が広まり始め、それは一見するとランダムにみえます。多くの粘り強い<cite>Pac-Man</cite>プレイヤーが証明しているように、この噂は完全に真実であることが判明しました。
+			</p>
+			<p>
+			ゲームをじゅうぶん長くプレイすると、パックマンがゴーストのある一体と衝突しても、向こう側へ無傷ですり抜ける現象を体験します。それほど頻繁には発生しないので喜んでください！ 一部のプレイヤーはこの神秘的かつ奇妙なすれ違いをパターンに組み込むことさえしました。
+			</p>
+			<p>
+			この捉えどころのない特異性の根本原因は、パックマンとゴーストの当たり判定を検出する方法にあります。パックマンがゴーストと同じタイルを占有していれば、常にゴーストと衝突したと見なされライフが失われます。
+			</p>
+			<p>
+			ゴーストのタイルにパックマンが移動したのか、パックマンのタイルにゴーストが移動したのかは関係がありません。結果はどちらでも同じです。このロジックは、ゲームプレイ中に99％以上のばあい衝突を処理するのに十分であることが証明されていますが、ある１つの非常に特殊なケースを考慮していません。
+			</p>
+			<div class="as-follows center">
+				<img src="imgs/05-04_passthrubug.png" alt="アカベエとパックマンがすれ違う場面" width="507" height="263">
+			</div>
+			<p>
+			上記の図は、この奇妙なふるまいを生み出す必要条件を示しています。アカベエとパックマンがすれ違うことを示す５つの連続したフレームがあり、下側には現在の占有タイルおよび中心点（ピクセル単位での位置）で表される同じシーンがあります。この両者は、互いのタイルを同時に交換する丁度いい位置と速度にいます。
+			</p>
+			<p>
+			つまり、パックマンの中心点がアカベエのタイルへ上向きに移動するのと同じ1/60秒の間に、アカベエの中心点がパックマンのタイルへ下向きに移動するため、結果として両者はぶつかることなくすれ違うことになります。パックマンの中心点がフレーム４のタイル上辺にあることに注目してください。これはまだ下のタイルの内側にあると見なされますが、さらに１ピクセル上へ移動するとパックマンは境界を越えて次のタイルへ押し出されます。
+			</p>
+			<p>
+			パックマンとアカベエはフレーム５で互いにタイルを交換し、アカベエとまったく“衝突”（つまり同じタイルを共有）しなかったので、パックマンはわが道を行くことができるのです！ 以下のYouTubeビデオではパススルー・バグの例を見ることができます（再生開始から40秒後に発生します）：
+			</p>
+			<lite-youtube title="Pac-Man: Cherry Pattern with Ghost Pass-Thru Bug - YouTube" videoid="VbzW6iNDx9U" playlabel="Play">
+				<noscript>
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/VbzW6iNDx9U" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</noscript>
+			</lite-youtube>
+		</section>
+		<section id="target-tiles">
+			<h2><a href="#target-tiles" class="fragment">ターゲットタイル</a></h2>
+			<p>
+			ゴーストが追跡モードまたは縄張モードのときは常に画面のどこか（または画面外）の<dfn>ターゲットタイル</dfn>に到達しようとしています。これはゴーストがある時点での占有したいタイルを説明する方法にすぎません。
+			</p>
+			<p>
+			このタイルは所定の位置に固定したり、頻繁に場所を更新したりできます。たとえば、ゴーストが迷路の四隅へ散らばるとき、各ゴーストは常に縄張ちかくの固定ターゲットタイルに到達しようと努めています。
+			</p>
+			<p>
+			追跡モードでのターゲットタイルは通常（常にではありませんが）、パックマンのいる現在のタイルに関連して頻繁に変更されます。最初は理解しづらいかもしれませんが、ゴーストにとっての追跡/縄張モードの唯一の違いは、ターゲットタイルが配置されている場所です。どちらも同じ経路探索ロジックが適用されます。
+			</p>
+		</section>
+		<section id="looking-ahead">
+			<h2><a href="#looking-ahead" class="fragment">将来の展望</a></h2>
+			<p>
+			ゴーストは迷路上を移動するさい、常に未来への一歩を考えています。ゴーストが新しいタイルに入ると現在の進行方向に沿って次のタイルを先読みし、そこに到着したときにどちらへ進むのか決定します。
+			</p>
+			<p>
+			最終的にそのタイルに到着すると、事前のタイルで決定した進行方向に変更します。そして同様のプロセスが以後も繰り返され、進行方向に沿ってさらに次のタイルを先読みし、次の進行方向を決定します。
+			</p>
+			<p>
+			ゴーストが次のタイルを先読みする際にはそのタイルの出口を調べて、進める方向を決定する必要があります。下の図では赤いゴーストがタイルＡに到着したばかりで、右から左へ移動しているところです。
+			</p>
+			<p>
+			そして、直ちにタイルＢ（進行方向に沿った次のタイル）を先読みします。
+			</p>
+			<p>
+			各タイルには考慮すべき４方向（左､右､上､下）の出口がありますが、タイルＢのばあい上下の出口は壁で塞がれているため候補として破棄する必要があります。右の出口も除外されます。これはゴーストが再びタイルＡに戻るだけであり、ゴーストは自発的に進行方向を反転することはないためです。タイルＢでは４つの出口のうち３つが除外されているため、残っている選択肢は左へ移動することだけです。
+			</p>
+			<figure class="center">
+				<img src="imgs/06-01_aisimple.png" alt="ゴーストがタイルを先読みする場面、この例では左にしか進めない" width="192" height="128">
+			</figure>
+			<p>
+			この例ではゴーストは一方向にしか正しく進めないので、説明は最も簡潔です。そのため、ターゲットタイルがどこにあるのか考慮する必要はありませんでした。リーガルスペースにあるタイルの大部分はこれに似ていますが、ゴーストがより多くの出口を選択できるタイルに近づくと、事態はより興味深いものになります。
+			</p>
+		</section>
+		<section id="intersections">
+			<h2><a href="#intersections" class="fragment">交差点</a></h2>
+			<p class="as-follows">
+			ゴーストが次の交差点から１タイル離れたところに到着すると、先へ進むためにいくつかの進める方向からひとつを選ぶ必要があります。次の例を考えてみましょう：
+			</p>
+			<figure class="center">
+				<img src="imgs/06-02_intersectall.png" alt="十字路の交差点で進む方法を決めるプロセス" width="672" height="160">
+			</figure>
+			<p>
+			最初の図では、赤いゴーストがタイルＡに到着し、ターゲットを探しています（緑のタイル）。現在の進行方向（上）に沿ってすぐに次のタイルを先読みします。この場合、そのタイルは十字の交差点です。この交差点タイルには出口をふさぐ壁がないのでゴーストは逆方向（下）のみを破棄し、３つの出口を開いたまま移動できます。
+			</p>
+			<p>
+			残りの３方向でそれぞれ交差点を越えた１つ先の“<dfn>テストタイル</dfn>”（白い破線タイル）を収集します。中央の図ではゴーストが各テストタイルからターゲットタイルまでの二点間の距離を求めています。
+			</p>
+			<p>
+			交差点タイルに到着したゴーストの進行方向はターゲットまでの距離が最も近いテストタイル、この例では右側が最短であり、それに応じてゴーストは交差点タイルで選択方向を更新します。
+			</p>
+			<p>
+			ときおり、ゴーストに対してターゲットタイルまでの距離が等しい複数のテストタイルが提示されることがあります。以下の例では、赤いゴーストは次の交差点タイルで下へ移動するのか？ 左へ移動するのか？ 選択を迫られますが、あいにく両者のテストタイルはターゲットまでの距離が等価です（左側の図）。
+			</p>
+			<p class="as-follows">
+			この均衡を破るためにゴーストは<em>上、左、下、右</em>の順で方向を優先します。上が最優先される方向であり、右は最も後回しになります。したがって、優先リストでは左が下より先行するために、ゴーストは交差点で左へ移動することを選択します。ターゲットを捕捉するには下へ進むべきなのは人には明らかですが、ゴーストはそれほど賢くはありません。彼らは前方の数タイルを見ることしかできず、両者の差異を見分けることは出来ません。
+			</p>
+			<figure class="center">
+				<img src="imgs/06-03_tiebreakall.png"
+				alt="２つのテストタイルは距離が等しいが、優先リストによって左に進む" width="605" height="192">
+			</figure>
+		</section>
+		<section id="fixed-target-tiles">
+			<h2><a href="#scatter-targets" class="fragment">固定されたターゲット</a></h2>
+			<p>各ゴーストには、縄張モードで到達しようとする<dfn>固定ターゲットタイル</dfn>があります。下の図は、各ゴーストが縄張モードで使用するターゲットの物理的な位置を示しています（配色は各ゴーストに合わせたもの）。
+			</p>
+			<p>
+			各ターゲットタイルは、実際には迷路の上端または下端のデッドスペースにあり、ゴーストが到達することは不可能であることに注目してください。このため、各ゴーストはそれぞれの縄張対象にもっとも近い迷路の隅へと向かい、別のモードが発生するまでこの領域で輪を描き続けます。
+			</p>
+			<p>これが縄張モードの正体です。ゴーストが迷路の“お気に入りの縄張”を持っているのは、決して到達することのない固定ターゲットタイルの位置によるものなのです。
+			</p>
+			<p>
+			パックマンに噛みつかれたゴーストの目玉が迷路の中央にあるゴーストハウスに戻るさいには、もう１枚の固定ターゲットタイルが使用されています。このターゲットタイルは、ゴーストハウスにある左側の“ドア”の真上にあり、下の図では緑色のタイルとして示されています。
+			</p>
+			<figure class="center">
+				<img src="imgs/scatter.png" alt="縄張モードのターゲットによって各ゴーストは輪を描く" width="358" height="474">
+			</figure>
+		</section>
+		<nav id="rel-bottom" class="rel">
+			<ul>
+				<li><a href="index.html" rel="about" title="邦訳概説"><kbd>A</kbd>bout</a></li>
+				<li><a href="02.html" rel="prev" title="第２章：ゲームプレイの詳細"><kbd>P</kbd>rev</a></li>
+				<li><a href="00.html#toc" rel="contents" accesskey="t" title="資料の総目次"><kbd>T</kbd>oC</a></li>
+				<li><a href="04.html" rel="next" title="第４章：ゴーストとの戦い"><kbd>N</kbd>ext</a></li>
+			</ul>
+		</nav>
+	</section>
+	<footer>
+		<address>訳者：あのにも &lt;<a href="https://forms.gle/7gVSN3o1pHuR1AEY9" rel="author">お問い合わせ</a>&gt;</address>
+	</footer>
+</main>
+
+</body>
+</html>

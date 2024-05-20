@@ -1,0 +1,445 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<script src="../_lib/util.js"></script>
+	<script src="js-table-a1/index.js" type="module"></script>
+	<link rel="icon" href="../icon.svg" type="image/svg+xml">
+	<link rel="preload"     href="imgs/fruits.png" as="image" type="image/png">
+	<link rel="author"			href="https://forms.gle/7gVSN3o1pHuR1AEY9" title="あのにも">
+	<link rel="top" 		    href="../index.html" title="トップページ">
+	<link rel="appendix up" href="06.html" title="付録">
+	<link rel="glossary"		href="07.html" title="用語集およびFAQ">
+	<link rel="alternate" 	href="https://docs.google.com/spreadsheets/d/16Q_4lsw1qMGbw2RM8dAN8eoZ9wtupSWLuVIxuN0NowI/edit?usp=sharing" title="スプレッドシート版">
+	<link rel="stylesheet"	href="../_styles/_index.css" type="text/css">
+	<link rel="stylesheet"	href="styles/06-appendix-a1.css" type="text/css">
+	<title>表Ａ.１ レベルの仕様 - The Pac-Man Dossier邦訳</title>
+</head>
+
+<body id="appendix-a1">
+
+<div id="a1-wrapper">
+	<main>
+		<div class="header">
+			<h1>表Ａ.１——レベルの仕様</h1>
+			<p>※100%の速度 = 75.75757625 pixels/sec；チルダつきは近似値</p>
+		</div>
+		<table id="table-a1">
+			<thead>
+				<tr>
+						<th scope="col">レベル</th>
+						<th scope="col">フルーツ</th>
+						<th scope="col">ボーナス<br>ポイント</th>
+						<th scope="col">パックマン<br>速度</th>
+						<th scope="col">パックマン<br>ドット速度</th>
+						<th scope="col">ゴースト<br>速度</th>
+						<th scope="col">ゴースト<br>トンネル速度</th>
+						<th scope="col">スパート1<br>残りドット</th>
+						<th scope="col">スパート1<br>速度</th>
+						<th scope="col">スパート2<br>残りドット</th>
+						<th scope="col">スパート2<br>速度</th>
+						<th scope="col">イジケ時<br>パック速度</th>
+						<th scope="col">イジケ時<br><small>パックドット速度</small></th>
+						<th scope="col">イジケ時<br>ゴースト速度</th>
+						<th scope="col">イジケ<br>タイム（秒）</th>
+						<th scope="col">イジケ<br>点滅回数</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row" class="pad">1</th>
+					<td class="fruit"><span class="f1">チェリー</span></td>
+					<td>100</td>
+					<td>80%</td>
+					<td>~71%</td>
+					<td>75%</td>
+					<td>40%</td>
+					<td>20</td>
+					<td>80%</td>
+					<td>10</td>
+					<td>85%</td>
+					<td>90%</td>
+					<td>~79%</td>
+					<td>50%</td>
+					<td>6</td>
+					<td>5</td>
+				</tr>
+				<tr>
+					<th scope="row" class="pad">2</th>
+					<td class="fruit"><span class="f2">ストロベリー</span></td>
+					<td>300</td>
+					<td>90%</td>
+					<td>~79%</td>
+					<td>85%</td>
+					<td>45%</td>
+					<td>30</td>
+					<td>90%</td>
+					<td>15</td>
+					<td>95%</td>
+					<td>95%</td>
+					<td>~83%</td>
+					<td>55%</td>
+					<td>5</td>
+					<td>5</td>
+				</tr>
+				<tr>
+					<th scope="row" class="pad">3</th>
+					<td class="fruit"><span class="f3">オレンジ</span></td>
+					<td>500</td>
+					<td>90%</td>
+					<td>~79%</td>
+					<td>85%</td>
+					<td>45%</td>
+					<td>40</td>
+					<td>90%</td>
+					<td>20</td>
+					<td>95%</td>
+					<td>95%</td>
+					<td>~83%</td>
+					<td>55%</td>
+					<td>4</td>
+					<td>5</td>
+				</tr>
+				<tr>
+					<th scope="row" class="pad">4</th>
+					<td class="fruit"><span class="f3">オレンジ</span></td>
+					<td>500</td>
+					<td>90%</td>
+					<td>~79%</td>
+					<td>85%</td>
+					<td>45%</td>
+					<td>40</td>
+					<td>90%</td>
+					<td>20</td>
+					<td>95%</td>
+					<td>95%</td>
+					<td>~83%</td>
+					<td>55%</td>
+					<td>3</td>
+					<td>5</td>
+				</tr>
+				<tr>
+					<th scope="row" class="pad">5</th>
+					<td class="fruit"><span class="f4">アップル</span></td>
+					<td>700</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>95%</td>
+					<td>50%</td>
+					<td>40</td>
+					<td>100%</td>
+					<td>20</td>
+					<td>105%</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>60%</td>
+					<td>2</td>
+					<td>5</td>
+				</tr>
+				<tr>
+					<th scope="row" class="pad">6</th>
+					<td class="fruit"><span class="f4">アップル</span></td>
+					<td>700</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>95%</td>
+					<td>50%</td>
+					<td>50</td>
+					<td>100%</td>
+					<td>25</td>
+					<td>105%</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>60%</td>
+					<td>5</td>
+					<td>5</td>
+				</tr>
+				<tr>
+					<th scope="row" class="pad">7</th>
+					<td class="fruit"><span class="f5">メロン</span></td>
+					<td>1000</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>95%</td>
+					<td>50%</td>
+					<td>50</td>
+					<td>100%</td>
+					<td>25</td>
+					<td>105%</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>60%</td>
+					<td>2</td>
+					<td>5</td>
+				</tr>
+				<tr>
+					<th scope="row" class="pad">8</th>
+					<td class="fruit"><span class="f5">メロン<br></span></td>
+					<td>1000</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>95%</td>
+					<td>50%</td>
+					<td>50</td>
+					<td>100%</td>
+					<td>25</td>
+					<td>105%</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>60%</td>
+					<td>2</td>
+					<td>5</td>
+				</tr>
+				<tr>
+					<th scope="row" class="pad">9</th>
+					<td class="fruit"><span class="f6">ギャラボス</span></td>
+					<td>2000</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>95%</td>
+					<td>50%</td>
+					<td>60</td>
+					<td>100%</td>
+					<td>30</td>
+					<td>105%</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>60%</td>
+					<td>1</td>
+					<td>3</td>
+				</tr>
+				<tr>
+					<th scope="row">10</th>
+					<td class="fruit"><span class="f6">ギャラボス</span></td>
+					<td>2000</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>95%</td>
+					<td>50%</td>
+					<td>60</td>
+					<td>100%</td>
+					<td>30</td>
+					<td>105%</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>60%<br></td>
+					<td>5</td>
+					<td>5</td>
+				</tr>
+				<tr>
+					<th scope="row">11</th>
+					<td class="fruit"><span class="f7">ベル</span></td>
+					<td>3000</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>95%</td>
+					<td>50%</td>
+					<td>60</td>
+					<td>100%</td>
+					<td>30</td>
+					<td>105%</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>60%</td>
+					<td>2</td>
+					<td>5</td>
+				</tr>
+				<tr>
+					<th scope="row">12</th>
+					<td class="fruit"><span class="f7">ベル</span></td>
+					<td>3000</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>95%</td>
+					<td>50%</td>
+					<td>80</td>
+					<td>100%</td>
+					<td>40</td>
+					<td>105%</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>60%</td>
+					<td>1</td>
+					<td>3</td>
+				</tr>
+				<tr>
+					<th scope="row">13</th>
+					<td class="fruit"><span class="f8">カギ</span></td>
+					<td>5000</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>95%</td>
+					<td>50%</td>
+					<td>80</td>
+					<td>100%</td>
+					<td>40</td>
+					<td>105%</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>60%</td>
+					<td>1</td>
+					<td>3</td>
+				</tr>
+				<tr>
+					<th scope="row">14</th>
+					<td class="fruit"><span class="f8">カギ</span></td>
+					<td>5000</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>95%</td>
+					<td>50%</td>
+					<td>80</td>
+					<td>100%</td>
+					<td>40</td>
+					<td>105%</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>60%</td>
+					<td>3</td>
+					<td>5</td>
+				</tr>
+				<tr>
+					<th scope="row">15</th>
+					<td class="fruit"><span class="f8">カギ</span></td>
+					<td>5000</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>95%</td>
+					<td>50%</td>
+					<td>100</td>
+					<td>100%</td>
+					<td>50</td>
+					<td>105%</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>60%</td>
+					<td>1</td>
+					<td>3</td>
+				</tr>
+				<tr>
+					<th scope="row">16</th>
+					<td class="fruit"><span class="f8">カギ</span></td>
+					<td>5000</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>95%</td>
+					<td>50%</td>
+					<td>100</td>
+					<td>100%</td>
+					<td>50</td>
+					<td>105%</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>60%</td>
+					<td>1</td>
+					<td>3</td>
+				</tr>
+				<tr>
+					<th scope="row">17</th>
+					<td class="fruit"><span class="f8">カギ</span></td>
+					<td>5000</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>95%</td>
+					<td>50%</td>
+					<td>100</td>
+					<td>100%</td>
+					<td>50</td>
+					<td>105%</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th scope="row">18</th>
+					<td class="fruit"><span class="f8">カギ</span></td>
+					<td>5000</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>95%</td>
+					<td>50%</td>
+					<td>100</td>
+					<td>100%</td>
+					<td>50</td>
+					<td>105%</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>60%</td>
+					<td>1</td>
+					<td>3</td>
+				</tr>
+				<tr>
+					<th scope="row">19</th>
+					<td class="fruit"><span class="f8">カギ</span></td>
+					<td>5000</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>95%</td>
+					<td>50%</td>
+					<td>120</td>
+					<td>100%</td>
+					<td>60</td>
+					<td>105%</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th scope="row">20</th>
+					<td class="fruit"><span class="f8">カギ</span></td>
+					<td>5000</td>
+					<td>100%</td>
+					<td>~87%</td>
+					<td>95%</td>
+					<td>50%</td>
+					<td>120</td>
+					<td>100%</td>
+					<td>60</td>
+					<td>105%</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th scope="row">21+</th>
+					<td class="fruit"><span class="f8">カギ</span></td>
+					<td>5000</td>
+					<td>90%</td>
+					<td>~79%</td>
+					<td>95%</td>
+					<td>50%</td>
+					<td>120</td>
+					<td>100%</td>
+					<td>60</td>
+					<td>105%</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+	</main>
+	<footer>
+		<nav>
+			<ul class="flex">
+				<li><a href="../index.html" rel="top" title="トップページ" accesskey="h"><kbd>A</kbd>bout</a></li>
+				<li><a href="00.html#toc" rel="contents" title="資料の総目次" accesskey="t"><kbd>T</kbd>oc</a></li>
+				<li><a href="06.html#a1" rel="up" title="付録 表A.1 - The Pac-Man Dossier邦訳" accesskey="b"><kbd>B</kbd>ack</a></li>
+				<li><a href="https://docs.google.com/spreadsheets/d/16Q_4lsw1qMGbw2RM8dAN8eoZ9wtupSWLuVIxuN0NowI/edit?usp=sharing" rel="alternate">スプレッドシート版</a></li>
+			</ul>
+		</nav>
+		<address>訳者：あのにも &lt;<a href="https://forms.gle/7gVSN3o1pHuR1AEY9" rel="author">お問い合わせ</a>&gt;</address>
+	</footer>
+</div>
+
+</body>
+</html>

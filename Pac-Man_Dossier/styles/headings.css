@@ -1,0 +1,42 @@
+@media screen { /* Fruit icons */
+	.hn-icon {
+		--fruits-url: url('../imgs/fruits.png');
+		display: inline-flex;
+		align-items: center;
+		position: relative;
+	}
+	.hn-icon::before,
+	.hn-icon::after {
+		content: '';
+		--size: 1em;
+		background: no-repeat center/calc(var(--size) * 8) 100% var(--fruits-url);
+		display: inline-block;
+		transform: scale(1.2);
+		transform-origin: center;
+		width:  var(--size);
+		height: var(--size);
+	}
+	.hn-icon::before {
+		margin-right: .1em;
+	}
+	.hn-icon::after {
+		margin-left: .1em;
+	}
+	.hn-icon:not(h1.pac):after {content: unset}
+
+	.hn-icon.pac::before,
+	.hn-icon.pac::after {
+		background: no-repeat center/var(--size) 100% url('../imgs/pac-icon.png');
+	}
+	.hn-icon.pac::before{transform: scale(-1,1) translate(0,.05em)}
+	.hn-icon.pac::after {transform: scale(+1,1) translate(.05em,0)}
+
+	.f1::before {background-position-x:0 !important}
+	.f2::before {background-position-x:calc(var(--size) * -1) !important}
+	.f3::before {background-position-x:calc(var(--size) * -2) !important}
+	.f4::before {background-position-x:calc(var(--size) * -3) !important}
+	.f5::before {background-position-x:calc(var(--size) * -4) !important}
+	.f6::before {background-position-x:calc(var(--size) * -5) !important}
+	.f7::before {background-position-x:calc(var(--size) * -6) !important}
+	.f8::before {background-position-x:calc(var(--size) * -7) !important}
+}

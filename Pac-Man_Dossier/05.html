@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<script src="../_lib/navi.js" defer></script>
+	<script src="../_lib/lite-yt-embed.js" defer></script>
+	<link rel="icon"       href="../icon.svg" type="image/svg+xml">
+	<link rel="preload"    href="imgs/fruits.png" as="image" type="image/png">
+	<link rel="author"	   href="https://forms.gle/7gVSN3o1pHuR1AEY9" title="あのにも">
+	<link rel="top" 	     href="../index.html" title="トップページ">
+	<link rel="contents"   href="01.html#toc" title="全体の目次">
+	<link rel="prev"		   href="04.html" title="第４章：ゴーストとの戦い">
+	<link rel="next"		   href="06.html" title="付録">
+	<link rel="glossary"   href="07.html" title="用語集およびFAQ">
+	<link rel="appendix"   href="06.html" title="付録">
+	<link rel="appendix"   href="table_a1.html" title="付録：表Ａ.１ レベルの仕様">
+	<link rel="stylesheet" href="../_lib/lite-yt-embed.css">
+	<link rel="stylesheet" href="../_styles/_index.css">
+	<link rel="stylesheet" href="styles/headings.css">
+	<title>第５章：分割画面の解読 - The Pac-Man Dossier邦訳</title>
+</head>
+
+<body>
+
+<a href="#main-content" id="skip-nav">本文へジャンプ</a>
+<header>
+	<nav>
+		<div class="nav">
+			<ul>
+				<li><a href="00.html">はじめに</a> &amp; <a href="00.html#toc" rel="contents" title="資料の総目次">総目次</a></li>
+				<li><a href="01.html">1.マシンへようこそ</a></li>
+				<li><a href="02.html">2.ゲームプレイ詳細</a></li>
+				<li><a href="03.html">3.迷路ロジック</a></li>
+				<li><a href="04.html">4.ゴーストとの戦い</a></li>
+				<li class="current">5.分割画面</li>
+			</ul>
+			<ul class="flex">
+				<li><a href="06.html" rel="appendix" title="付録：参照表、イースターエッグなど">付録</a></li>
+				<li><a href="07.html" rel="glossary">用語集&amp;FAQ</a></li>
+			</ul>
+		</div>
+		<ul class="toc">
+			<li class="to-top"><a href="#main-content">ページの先頭</a></li>
+			<li><a href="#on-the-edge-of-forever">永遠の果てに</a></li>
+			<li><a href="#playing-the-level">遊んでみる</a></li>
+			<li><a href="#believe-it-or-not" class="condensed">信じようが信じまいが</a></li>
+		</ul>
+	</nav>
+</header>
+<main id="main">
+	<nav id="rel-top" class="rel">
+		<ul>
+			<li><a href="index.html" rel="about" accesskey="a" title="邦訳概説"><kbd>A</kbd>bout</a></li>
+			<li><a href="04.html" rel="prev" accesskey="p" title="前へ - 第４章：ゴーストとの戦い"><kbd>P</kbd>rev</a></li>
+			<li><a href="00.html#toc" rel="contents" accesskey="t" title="資料の総目次"><kbd>T</kbd>oC</a></li>
+			<li><a href="06.html" rel="next appendix" accesskey="n" title="次へ - 付録"><kbd>N</kbd>ext</a></li>
+		</ul>
+	</nav>
+	<section id="main-content">
+		<h1 class="f4 hn-icon">第５章：分割画面の解読</h1>
+		<div class="quote">
+			<blockquote>
+				<p>
+					こんなふうに 世界は終わる<br>
+					こんなふうに 世界は終わる<br>
+					世界の終りは<br>
+					爆発音ではなく すすり泣く声で
+				</p>
+			</blockquote>
+			<p class="cite"><cite>T. S. エリオット</cite></p>
+		</div>
+		<section id="on-the-edge-of-forever">
+			<h2><a href="#on-the-edge-of-forever" class="fragment">永遠の果てに</a></h2>
+			<p>
+			<cite>Pac-Man</cite>は当初から、意図的に終わりのないゲームでした。難易度を上昇させていけば、誰も遊び続けられないだろうとナムコの開発者は思い違いをしていたのです。もちろん<cite>Pac-Man</cite>のリリースから数年内には、レベル21以降のすべてが同一であるとプレイヤーは気づいていました。
+			</p>
+			<p>
+			この事実を利用したパターンが次々と生み出され、レベル20を超えられるプレイヤーにとってゲームは、集中力を切らしてミスを犯す前にどれだけ得点を積み上げられるかを試す持久力テストと化しました。ハイスコアは数百万に急上昇し、ほとんどのプレイヤーはゲームが永久に続くものと単純に受け止めました。
+			</p>
+			<p>
+			最終的に、一部の高度なスキルを持つプレイヤーがレベル255までの連続クリアを達成し（300万点以上のスコアを獲得し、到達するのに数時間かかりましたが）、レベル256で彼らを待っているサプライズを見つけました。ナムコの開発者でさえ誰も知らなかったサプライズです。
+			</p>
+			<p>
+			<img src="imgs/08-01_level256.png" alt="[分割画面の盤面]" style="width:11em;height:14.1426em" class="left">レベル256では迷路の左半分は正しく表示されますが、右半分はランダムに色付けされた文字や数字、記号がごちゃ混ぜになっています。 画面右下のボーナスカウンターが機能不全を起こしていることにも注目してください。
+			</p>
+			<p>
+			迷路の左側は正常に描かれますが、右側は別です。プレイヤー/ゴーストの双方が画面の右半分へ行けますが、元々あった迷路の壁は適用されなくなります。
+			</p>
+			<p>
+			その代わりに、プレイヤーには<em>目視できない</em>入り組んだ一連の空き地、トンネル、一方通行の交差点、孤立した壁を通り抜けるために、熱心な４体のゴーストに追われながらパックマンを導く必要があります。
+			</p>
+			<hr>
+			<p>
+			そもそもなぜこの壊れたラウンドが発生するのでしょうか？ 元凶は画面の下端に沿ってボーナスシンボルを描く責任のあるルーチンです。レベル256に達すると内部レベルカウンターが255にインクリメントされ（レベルカウンターは1ではなく0から始まります）、ボーナスシンボルを描画するためのルーチンが呼び出されます。
+			</p>
+			<p>
+			このルーチンは現在のレベルカウンタ値（255）をCPUレジスタにロードし、そのレジスタを１つインクリメントします。 残念ながら255はZ-80 CPUレジスタのサイズである１バイトに収まる最大数であるため、値がインクリメントされるとオーバーフローは破棄され、期待値の256ではなく0がレジスタに残ります。このゼロ値はその値が７未満であるため、これが初期レベルであるとルーチンに信じ込ませます。
+			</p>
+			<p>
+			ルーチンは混乱したレジスタをカウンタとしてボーナスシンボルの描画を開始します。すべての描画ループの終わりにレジスタは１ずつ減少し<em>それが</em>0であるか確認します（ルーチンがシンボルの描画を停止するための信号）。レジスタには開始時すでに0が含まれているため、最初のデクリメントは値を255にロールバックします。レジスタが再び0になるまでレジスタのデクリメントとシンボルの描画が続き、ループは合計256回実行されます。
+			</p>
+			<p>
+			すなわち、ボーナスシンボルのテーブルをこえた範囲外のメモリ位置が、ビデオメモリの位置を増加しながら画面に描画されるということです。この半壊したラウンドは、プレイヤーによって“<dfn>split screen（分割画面）</dfn>”と名づけられ、開発者はこれを“<dfn>キルスクリーン</dfn>”と呼んでいます。
+			</p>
+			<p>
+			Don Hodges氏のサイトには、このバグのソースコードと修正案を含む詳細な分析記事があります：<br>
+			<a href="http://donhodges.com/how_high_can_you_get2.htm"class="ref br">PAC MAN'S SPLIT SCREEN LEVEL ANALYZED AND FIXED</a>
+			</p>
+		</section>
+		<section id="playing-the-level">
+			<h2><a href="#playing-the-level" class="fragment">遊んでみる</a></h2>
+			<figure class="left">
+				<a href="imgs/08-02_level256hiddendots-zoom.png">
+					<img src="imgs/08-02_level256hiddendots.png"
+					alt="[迷路右側に９個あるドットの位置を示す図]" style="width:12.9997em;height:14.6818em">
+					<span class="no-print"><br>（リンク先は拡大画像）</span></a>
+			</figure>
+			<p>
+			画面の左半分に114個、右半分に９個のドット、そしてボーナスのカギが１つあり、合計6,310ポイントを獲得できますが、これらをすべて獲得しても何も起こりません。ゲームは244個のドットを食べつくすまで現在のラウンドを完了したとは見なさないので、あとは飢えたゴーストにパックマンを差し出すしかありません。
+			</p>
+			<p>
+			興味深いことに、ライフが失われるたびに画面の右半分にある９個のドットがリセットされて再び食べることができるため、ライフひとつにつき90ポイントが追加されます。最良のシナリオ（残りライフ５個）での6,760ポイントが獲得可能な最高スコアになりますが、収集できるドットは168個しかなく——次のレベルに進むには不十分なため——ここで手詰りとなります。もはや、むさぼる小さいドットやパワークッキーはありません。
+			</p>
+			<p>
+			パックマンを待っている最終的な勝利はなく、ゴーストがうろつく空虚な半分の迷路だけです。結局のところゲームには終わりがありますが、愉快なものでも興奮するものでもありません。
+			</p>
+			<p>
+			画面右半分にある９個のドットのうち４個は見えませんが、食べれば音は鳴ります。前述の画像は９個あるドットの位置を示しています。ドット１、５、８、９は不可視で残りは見えますが、数個は通常の色と異なります。
+			</p>
+			<hr>
+			<p>
+			このレベルに到達した人はゴーストをどうにかして、画面右側を安全にマッピングする方法はないか考え始めます。そして試行錯誤の結果、ゴーストが画面右端に近づくとそこで“罠にかかる”ことが発見されました。
+			</p>
+			<p>
+			罠にかかったゴーストは上下移動のみ可能で、左右移動ができなくなります。熟練プレイヤーはドットの回収に専念するために画面右端へゴーストを誘導し、邪魔されずに迷路の右半分を探索します。
+			</p>
+			<p>
+			ゴーストを罠にはめる方法は多くあります。３体の重要なゴーストをはめる最も簡単な方法のひとつは、次の画像のとおりです。黄色い線はラウンド開始から右下のスポットまでパックマンを導くパスを示しています。
+			</p>
+			<figure class="right">
+				<a href="imgs/08-03_level256waitingspotpath-zoom.png">
+					<img src="imgs/08-03_level256waitingspotpath.png"
+					alt="[３体のゴーストを罠にはめるために、パックマンを導くパス]" style="width:10.9994em;height:14.1415em">
+					<span class="no-print"><br>（リンク先は拡大画像）</span></a>
+			</figure>
+			<p>
+			正確な手順は： まず青い“Ｎ”まで右へ進み、次に下にある青い“Ｆ”まで進み、そして右にある黄色い“Ｂ”まで進み、最後に再び下へ向かいます。適切に実行されると、パックマンは最後のターンが行われた直後に見えない壁にぶつかるので、しばらく待ちます。
+			</p>
+			<p>
+			アカベエが最初にかかり、その数秒後にピンキーが続きます。アオスケは次の縄張モードが始まるまでは自由ですが、やがて右端に近づいて３体もろとも閉じ込められます。
+			</p>
+			<p>
+			グズタは逃亡中ですが脅威ではありません。彼はパックマンが近づくと自身の縄張へ向かうので（<a href="04.html#GUZUTA" title="グズタ - 第４章：ゴーストとの戦い">第４章</a>）、ドットの回収はわりと容易です。迷路の左下はグズタの逃げ場がなく、危険性が高まるので注意が必要です。
+			</p>
+			<p>
+			この方法を実際に見るには、以下のYouTube動画を参照してください。
+			</p>
+			<lite-youtube title="Pac-Man: Level 256 Split Screen Trick - YouTube" videoid="2K7orNZNGU8" playlabel="Play">
+				<noscript>
+					<iframe style="margin-bottom:1.5em" width="560" height="315" src="https://www.youtube.com/embed/2K7orNZNGU8" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</noscript>
+			</lite-youtube>
+		</section>
+		<section id="believe-it-or-not">
+			<h2><a href="#believe-it-or-not" class="fragment">信じようが信じまいが</a></h2>
+			<p>
+			<cite>Pac-Man</cite> ROMの一部のバージョンには“<dfn>ラックテスト</dfn>”機能が搭載されており、筺体の所有者であれば、好きな時にいつでも次のレベルへ進むことができます。今のところレベル256を合法的に突破する唯一の知られた方法は、これらマシン内のラックテストスイッチを使用することです。
+			</p>
+			<p>
+			その結果、ゲームは最初のボードにループバックしますが、スコアはそのままで、ゴーストたちはレベル21以降のように行動します。MAMEエミュレータで使用できる<cite>Pac-Man</cite> ROMの多くにはこのラックテスト機能もあり、アーケード版を持っていない人でも分割画面の以降にすばやくアクセスできます。
+			</p>
+			<p>
+			何十年ものあいだ世界中の<cite>Pac-Man</cite>愛好家は、前述のラックテストを使用せずにレベル256を突破してプレイし続けられる“秘密のトリック”のささやきを耳にしてきました。いくらかのプレイヤーはこの<cite>Pac-Man</cite>の聖杯を何年にもわたって獲得したと自慢していますが、彼らの主張のとおり再現できた人は誰もいません。
+			</p>
+			<p>
+			このトピックはアーケードゲーム･コミュニティの上層部で非常に熱く議論されたため、不可能だと確信していたビリー･ミッチェルは１年にわったてチャレンジを開き、レベル256を合法的に超えたことを証明できた最初のプレイヤーに10万ドルの賞金を提供しました。しかし、この賞金は請求されませんでした。
+			</p>
+			<p>
+			レベル256を突破する方法の反証が挙げられても噂はいまだ根強く、オンラインのクラシックゲームフォーラムで時おり見かけますが、誰も議論の余地のない証拠でその言葉を裏づけることができていません。合法的に突破した人がなぜミッチェル氏に賞金を要求しなかったのか、想像しがたいことです。
+			</p>
+			<p>
+			それでも時おりささやき声が聞こえます。おそらくはサンタクロースやイースターバニーのように、可能性を信じたい人とそうではない人がいるのは、単純に人として自然なことなのかもしれません。もしかしたら、数十年前のアミューズメント機器の秘密を彼（または彼女）自身の計り知れない理由で差し控えている中年の<cite>Pac-Man</cite>中毒者がそこにいるかもしれません。こんなことがあるとは？と思ったらあなたの判断にお任せします。
+			</p>
+		</section>
+		<nav id="rel-bottom" class="rel">
+			<ul>
+				<li><a href="index.html" rel="about" title="邦訳概説"><kbd>A</kbd>bout</a></li>
+				<li><a href="04.html" rel="prev" title="前へ - 第４章：ゴーストとの戦い"><kbd>P</kbd>rev</a></li>
+				<li><a href="00.html#toc" rel="contents" title="資料の総目次"><kbd>T</kbd>oC</a></li>
+				<li><a href="06.html" rel="next appendix" title="次へ - 付録"><kbd>N</kbd>ext</a></li>
+			</ul>
+		</nav>
+	</section>
+	<footer>
+		<address>訳者：あのにも &lt;<a href="https://forms.gle/7gVSN3o1pHuR1AEY9" rel="author">お問い合わせ</a>&gt;</address>
+	</footer>
+</main>
+
+</body>
+</html>
