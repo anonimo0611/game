@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="_lib/navi.js" defer></script>
+	<link rel="author"		 href="https://forms.gle/7gVSN3o1pHuR1AEY9" title="あのにも">
+ 	<link rel="stylesheet" href="_styles/_index.css">
+	<link rel="stylesheet" href="_styles/_top.css">
+	<title>あのにも の自作ゲーム</title>
+</head>
+
+<body>
+
+<a href="#main-content" id="skip-nav">本文へジャンプ</a>
+<header>
+	<nav>
+		<ul class="toc">
+			<li class="to-top"><a href="#main-content">ページの先頭</a></li>
+			<li><a href="#pacman-clone">パックマン クローン</a></li>
+			<li><a href="#pacman-dossier">パックマンの資料</a></li>
+			<li><a href="#random-pacman">Random PAC-MAN</a></li>
+			<li><a href="#arkanoid">アルカノイド</a></li>
+			<li><a href="#space-invaders">スペースインベーダー</a></li>
+			<li><a href="#tennis-for-two">Tennis for Two</a></li>
+			<li><a href="#pong">PONG</a></li>
+			<li><a href="#study">習作ゲーム</a></li>
+		</ul>
+	</nav>
+</header>
+<main id="main">
+	<section id="main-content">
+		<h1>あのにも の自作ゲーム</h1>
+		<p>主にJavaScript + Canvas APIを使用した２Ｄゲームを公開しています。</p>
+		<section id="pacman-clone">
+			<h2><a href="#pacman-clone" class="fragment">パックマン クローン</a></h2>
+			<div><img src="_thumbs/pac-man.png" alt="" class="right" width="245" height="300"></div>
+			<p>1981年にナムコからリリースされたアーケード版を参考にアレンジしました。</p>
+			<p>こちらはCanvas APIを使用せずに、DOM操作で実装する謎の縛りに拘りました</p>
+			<p>四体いるゴーストの挙動はそれぞれ本家に倣ったもので、個性を再現しています。</p>
+			<p>パックマンの操作に使用するのは上下左右(またはAWSD)のキーだけです。</p>
+			<dl>
+				<dt>遊んでみる</dt>
+				<dd>
+				<ul>
+					<li><a href="https://anonimo0611.github.io/pacman/" title="PAC-MANのクローンゲーム">PAC-MAN</a>
+					  / <a href="https://github.com/anonimo0611/pacman" title="パックマン クローンの詳細な説明">詳細な説明</a></li>
+				</ul>
+				</dd>
+			</dl>
+		</section>
+		<section id="pacman-dossier">
+			<h2><a href="#pacman-dossier" class="fragment">パックマン・ドシエの邦訳</a></h2>
+			<p>パックマンの仕様について詳しい<a href="https://pacman.holenet.info/">The Pac-Man Dossier</a>を翻訳したものです。</p>
+			<div class="quote">
+				<blockquote cite="Pac-Man_Dossier/00.html">
+					<p> このガイドの目的は、パターンを使わずともプレイできるよう、パックマンについて理解をより深めてもらうことにあり、ゲームの流れ、迷路ロジック、ゴーストの個性、神秘的な“split screen”レベルについて詳しくみていきます。...提供するすべての情報は、オリジナルのPac-ManコードROMからの逆アセンブル出力と、実際にゲームプレイの実験的観察から抽出/検証されたものです。よって著者は、その精度に高い自信を持っています。 </p>
+				</blockquote>
+				<p class="cite"><cite><a rel="author" href="https://pacman.holenet.info/#AboutTheAuthor">Jamey Pittman</a></cite></p>
+			</div>
+			<dl>
+				<dt>読んでみる</dt>
+				<dd>
+				<ul>
+					<li><a href="http://anonimo0611.web.fc2.com/Pac-Man_Dossier/00.html">The Pac-Man Dossier邦訳</a></li>
+				</ul>
+				</dd>
+			</dl>
+		</section>
+		<section id="random-pacman">
+			<h2><a href="#random-pacman" class="fragment">ランダム迷路のパックマン</a></h2>
+			<div><img src="_thumbs/randpac.png" alt="" class="right" width="278" height="300"></div>
+			<p>ランダム迷路のパックマンです。</p>
+			<p>毎回異なる迷路を生成できるので飽きずに長く遊べます。</p>
+			<p><kbd>G</kbd>キーで新しい迷路の生成、<kbd>R</kbd>キーで同じ迷路のリトライになります。</p>
+			<p>左上のボタンでグリッドの広さを大・中・小から選べます。</p>
+			<p>迷路とカラーリングの乱数は、シード値から生成されるので再現性があります。</p>
+			<p>？を押すと操作方法を確認したり、シード値のコピペ、現状のURLをコピーできます。</p>
+			<p>迷路は本家に倣って袋小路ががなく通り抜けられる構造になっています。</p>
+			<p>A*法のライブラリを拝借して、ゴーストたちは最短経路を選ぶようにしました。</p>
+			<p>ただし、ゴーストが選択したターゲットタイルが通路ではないばあいはA*法で辿りつけないので、本家と同様のアルゴリズム（単純な２点間の距離）で探索するようになっています。</p>
+			<p>パックマン、四種のゴースト、迷路には画像を使用せず、Canvas APIで描きました。</p>
+			<p>ゴーストたちをリアルタイムに可愛く描けたと自負しております。</p>
+			<p>こちらもパックマンの操作に使用するのは上下左右(またはAWSD)のキーだけです。</p>
+			<dl>
+				<dt>遊んでみる</dt>
+				<dd>
+				<ul>
+					<li><a href="https://anonimo0611.github.io/game/RandPac/">Random Maze Pac-MAN</a></li>
+				</ul>
+				</dd>
+			</dl>
+		</section>
+		<section id="arkanoid">
+			<h2><a href="#arkanoid" class="fragment">アルカノイド</a></h2>
+			<div><img src="_thumbs/arkanoid.png" alt="" class="right" width="254" height="284"></div>
+			<p>1986年にタイトーからリリースされたアルカノイドに似せたクローンゲームです。</p>
+			<p>ハームフルアーミー(敵)の挙動にこだわりました。本家と違って一種類だけですが…</p>
+			<p>アルカノイドの特徴といえるパワーアップ・アイテムも再現しています：</p>
+			<ul>
+				<li>キャッチ</li>
+				<li>レーザー</li>
+				<li>ディスラプション</li>
+				<li>エクスパンド</li>
+				<li>エクステンド</li>
+				<li>スピードダウン</li>
+			</ul>
+			<p>背景画像を除いてすべてCanvas APIで描きました。</p>
+			<p>自機のパドル操作はマウスで行ないます。</p>
+			<p>左クリックでレーザーの発射、右クリックでダイアログがでます。</p>
+			<dl>
+				<dt>遊んでみる</dt>
+				<dd>
+				<ul>
+					<li><a href="https://anonimo0611.github.io/game/Arkanoid/">Arkanoid</a></li>
+				</ul>
+				</dd>
+			</dl>
+		</section>
+		<section id="space-invaders">
+			<h2><a href="#space-invaders" class="fragment">スペースインベーダー</a></h2>
+			<div><img src="_thumbs/Space-invaders.png" alt="" class="right" loading="lazy" width="266" height="300"></div>
+			<p>1978年にタイトーからリリースされた、スペースインベーダーのクローンです。</p>
+			<p>画像を一切読み込まず、すべてCanvas APIで描いています。</p>
+			<p>エイリアンが釣り目で本家よりワルにみえます。ドットの絵のほうが愛嬌がありますね。</p>
+			<p>ラインで色を替えたり、UFOの出現タイミングなど、細かいところは再現していません。</p>
+			<p>砲台の移動には←または→キーを使用して、スペースキーで弾を撃ちます。</p>
+			<p>本家と違って２連射までできるようになっています。</p>
+			<dl>
+				<dt>参考にしたプログラミング実況</dt>
+				<dd>
+				<ul>
+					<li><a href="https://www.youtube.com/@Gamedokan">ゲヱム道館</a> &gt; <a href="https://www.youtube.com/playlist?list=PL8_ASIpg7ciEKxStzvx0Xg-TF51P1hfto">スペースインベーダーを作ってみた</a></li>
+				</ul>
+				<p>ロジックの面で参考にさせていただきました。</p>
+			</dd>
+			</dl>
+			<dl>
+				<dt>遊んでみる</dt>
+				<dd>
+				<ul>
+					<li><a href="https://anonimo0611.github.io/game/SpaceInvaders/">SpaceInvaders</a></li>
+				</ul>
+				</dd>
+			</dl>
+		</section>
+		<section id="tennis-for-two">
+			<h2><a href="#tennis-for-two" class="fragment">Tennis for Two</a></h2>
+			<div><img src="_thumbs/tennis.png" alt="" loading="lazy" class="left" width="430" height="247"></div>
+			<p>本家は1958年に開発されたアナログコンピュータを使ったゲームです。詳しくは<a href="https://ja.wikipedia.org/wiki/Tennis_for_Two">Tennis for Two - Wikipedia</a>を参照してみてください。</p>
+			<p>ベクタースキャンのゲームのような雰囲気を醸し出してみました。球の残像効果はオシロスコープでの表示を模したものです。</p>
+			<p>本家は対戦専用ですが、COMとの対決ゲームになります。COMの挙動にこだわり、ボレーやスマッシュなど多彩な攻撃を仕掛けてきます。</p>
+			<p>デモ画面では、COM同士の激しいバトルを観覧できます。</p>
+			<p style="clear:both">操作はつまみの代わりにマウスを使用します（一応、タッチにも対応）</p>
+			<p>マウスではクリックで打ち返しとなり、球に近いと弱く、遠いと強く打ちます。</p>
+			<p>タッチではドラッグで角度と強さを決めて、離したときに打ちます。</p>
+			<p>カーソルが球より下だと打ち上げ、球より上だとスマッシュになります。</p>
+			<p>ちなみに打つことができる領域は、描画領域に限られずウィンドウ全体です。</p>
+			<p>コートの下にある四角（１Ｐ側は緑、２Ｐ側はピンク）は、COMの現在位置を示しています。</p>
+			<dl>
+				<dt>参考にしたプログラミング実況</dt>
+				<dd>
+				<ul>
+					<li><a href="https://www.youtube.com/@Gamedokan">ゲヱム道館</a> &gt; <a href="https://www.youtube.com/playlist?list=PL8_ASIpg7ciGTO9a5SqPia1_6PUW9Lfi4">Tennis for Two を作ってみた</a></li>
+					<li><a href="https://www.youtube.com/@Gamedokan">ゲヱム道館</a> &gt; <a href="https://www.youtube.com/watch?v=LPKggypnn6">Tennis for Two を小一時間で作ってみたGL</a></li>
+				</ul>
+				<p>館長さんの敵アルゴリズムは単純なものだったので、強化したくなりました。</p>
+				</dd>
+			</dl>
+			<dl>
+				<dt>遊んでみる</dt>
+				<dd>
+				<ul>
+					<li><a href="https://anonimo0611.github.io/game/TennisforTwo/">Games like "Tennis for Two"</a></li>
+				</ul>
+				</dd>
+			</dl>
+		</section>
+		<section id="pong">
+			<h2><a href="#pong" class="fragment">PONG</a></h2>
+			<div><img src="_thumbs/pong.png" alt="" loading="lazy" class="right" width="300" height="188"></div>
+			<p>1972年にアタリから発表されたポンを真似たありがちなゲームです。</p>
+			<p>こちらも２人対戦ではなくCOMとの対決になります。</p>
+			<p>前述のテニスほど敵の挙動に工夫がなく面白みがありません。</p>
+			<p>こちらにもテニスで使用した残像効果の演出をつけています。</p>
+			<p>パドルの操作にはマウスを使用します（一応、タッチにも対応してます）。</p>
+			<dl>
+				<dt>遊んでみる</dt>
+				<dd>
+				<ul>
+					<li><a href="https://anonimo0611.github.io/game/PONG/">PONG</a></li>
+				</ul>
+				</dd>
+			</dl>
+		</section>
+		<section id="study">
+			<h2><a href="#study" class="fragment">習作：小一時間で作ってみた@ゲヱム道館 の移植</a></h2>
+			<div><img src="_thumbs/dragon.png" alt="" class="right" width="250" height="167"></div>
+			<p><a href="https://www.youtube.com/watch?v=yH_vRtErDtU">ドラクエの竜王戦を小一時間で作ってみた</a>をJSで移植しました：</p>
+			<dl>
+				<dt>遊んでみる</dt>
+				<dd>
+				<ul>
+					<li><a href="https://anonimo0611.github.io/game/_study/DragonWarrior-Dragonlord/">ドラクエ 竜王戦</a></li>
+				</ul>
+				<p>館長さん作はＣ言語によるコンソールですが、ビジュアルを無駄にこりました。</p>
+				<p>_getch関数の同期処理を非同期関数(async,await)で代替してみる練習です。</p>
+				<p>エンターキーで読み進めて、上下キーでコマンドを選択します。</p>
+				</dd>
+			</dl>
+			<p><a href="https://www.youtube.com/playlist?list=PL8_ASIpg7ciG_nX1BXkjqCevfAgzFc2Nv">小一時間で作ってみたGL</a>のうち２作をJSで移植しました：</p>
+			<div><img src="_thumbs/pazzdra.png" alt="" class="right" width="200" height="168"></div>
+			<div><img src="_thumbs/monst.png" alt="" class="right" width="200" height="250" style="clear:both"></div>
+			<dl>
+				<dt>遊んでみる</dt>
+				<dd>
+				<ul>
+					<li><a href="https://anonimo0611.github.io/game/_study/pazzdra/">パズドラ</a></li>
+					<li><a href="https://anonimo0611.github.io/game/_study/monst/">モンスト</a></li>
+				</ul>
+				<p>特に視覚演出がこっているこの２つを作ってみたくなりました。</p>
+				<p>ほぼそのままの移植です。バズドラのオーブはグラデーションを綺麗にしてます。</p>
+				<p>どちらもマウスで操作します（一応、タッチにも対応）。</p>
+				<p>パズドラはオーブを入れ替えて同じ色のものを３つ以上揃えて連鎖させるゲームです。</p>
+				<p>モンストはプレイヤーをドラッグで引いて離したときに飛び放ち、敵に攻撃を与えます。</p>
+				</dd>
+			</dl>
+		</section>
+	</section>
+	<footer>
+		<address>&copy; あのにも &lt;<a href="https://forms.gle/7gVSN3o1pHuR1AEY9" rel="author">お問い合わせフォーム</a>&gt;</address>
+	</footer>
+</main>
+
+</body>
+</html>
