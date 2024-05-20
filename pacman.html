@@ -1,0 +1,701 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="_lib/navi.js" defer></script>
+	<link rel="icon" href="icon.svg" type="image/svg+xml">
+	<link rel="preload" as="image" type="image/png" href="_imgs/pac-icon.png" >
+	<link rel="preload" as="image" type="image/png" href="_imgs/fruits.png">
+	<link rel="preload" as="image" type="image/png" href="_imgs/burger.png">
+	<link rel="preload" as="image" type="image/png" href="_imgs/maximize.png">
+	<link rel="preload" as="image" type="image/png" href="_imgs/restore.png">
+	<link rel="author"		 href="https://forms.gle/7gVSN3o1pHuR1AEY9" title="あのにも">
+	<link rel="top"        href="./index.html" title="トップページ">
+ 	<link rel="stylesheet" href="_styles/_index.css">
+	<link rel="stylesheet" href="_styles/_top.css">
+	<title>パックマン(1980)の資料と自作ゲーム</title>
+</head>
+
+<body>
+
+<a href="#main-content" id="skip-nav">本文へジャンプ</a>
+<header>
+	<nav>
+		<div class="nav">
+			<ul>
+				<li><a href="./">トップページ</a></li>
+				<li><a href="Pac-Man_Dossier/00.html" title="The Pac-Man Dossier邦訳">ドシエ邦訳を読む</a></li>
+				<li><a href="https://anonimo0611.github.io/pacman/">Pac-Manを遊ぶ</a></li>
+			</ul>
+		</div>
+		<ul class="toc">
+			<li><a href="#dossier" class="condensed">ドシエの邦訳について</a></li>
+		</ul>
+		<ul class="toc">
+			<li><a href="#pacman-game" class="condensed">自作Pac-Manについて</a>
+				<ul>
+					<li><a href="#requirements">推奨環境</a></li>
+					<li><a href="#config">設定項目/操作</a></li>
+					<li><a href="#practive-mode">練習モード</a></li>
+					<li><a href="#play-mode">２人交互プレイ</a></li>
+					<li><a href="#demo">アトラクト デモ</a></li>
+					<li><a href="#level">ゲームレベル</a></li>
+					<li><a href="#scatter-chase">縄張と追跡</a></li>
+					<li><a href="#release-ghosts">巣からの開放</a></li>
+					<li><a href="#frightened-mode">イジケモード</a></li>
+					<li><a href="#path-character">経路探索と個性</a></li>
+					<li><a href="#tile">当たり判定</a></li>
+					<li><a href="#cornering">コーナリング</a></li>
+					<li><a href="#speed">移動速度</a></li>
+					<li><a href="#spurt">スパート</a></li>
+					<li><a href="#pattern">攻略パターン</a></li>
+				</ul>
+			</li>
+		</ul>
+	</nav>
+</header>
+<main id="main">
+	<section id="main-content">
+		<section id="dossier">
+			<h1><a href="#dossier" class="fragment">パックマン・ドシエの邦訳について</a></h1>
+			<p class="as-follows">英語圏ではその筋で有名な<a href="https://pacman.holenet.info/">The
+					Pac-Man Dossier</a>という興味深い資料があります：</p>
+			<div class="quote">
+				<blockquote cite="Pac-Man_Dossier/00.html">
+					<p>
+					このガイドの目的は、パターンを使わずともプレイできるよう、パックマンについて理解をより深めてもらうことにあり、ゲームの流れ、迷路ロジック、ゴーストの個性、神秘的な“split screen”レベルについて詳しくみていきます。...提供するすべての情報は、オリジナルのPac-ManコードROMからの逆アセンブル出力と、実際にゲームプレイの実験的観察から抽出/検証されたものです。よって著者は、その精度に高い自信を持っています。
+					</p>
+				</blockquote>
+				<p class="cite"><cite><a rel="author" href="https://pacman.holenet.info/#AboutTheAuthor">Jamey Pittman</a></cite></p>
+			</div>
+			<p class="as-follows">日本発祥の有名なゲームながら、国内ではこのような資料は見つけることはできず、そこで私は翻訳を試みようと思い立ちました。英語が得意ではないため、機械翻翻にかけた訳文を修正したものですが…</p>
+			<ul>
+				<li><a href="Pac-Man_Dossier/00.html"
+				data-cite="http://anonimo0611.web.fc2.com/Pac-Man_Dossier/00.html">The Pac-Man Dossier邦訳</a></li>
+			</ul>
+			<dl class="ref">
+				<dt>そのほかの興味深い資料：</dt>
+				<dd>
+					<ul>
+						<li><a href="https://www.jstage.jst.go.jp/article/jjsai/34/1/34_86/_article/-char/ja" class="ref br">ゲームAIの原点『パックマン』はいかにして生み出されたのか？:岩谷 徹インタビュー</a></li>
+						<li><a href="https://econpapers.repec.org/paper/hitiirwps/19-07.htm" class="ref br">EconPapers: 岩谷徹第3回インタビュー前半<small>『キューティQ』『パックマン』におけるゲーム開発･企画の手法</small></a></li>
+						<li><a href="https://econpapers.repec.org/paper/hitiirwps/19-08.htm" class="ref br">EconPapers: 岩谷徹第3回インタビュー後半<small>『キューティQ』『パックマン』におけるゲーム開発･企画の手法</small></a></li>
+					</ul>
+				</dd>
+			</dl>
+			<p>上記のAI学会誌で仕様書が公開されていますが、実際と食い違う部分があります。</p>
+		</section>
+		<section id="pacman-game">
+			<h1><a href="#pacman-game" class="fragment">自作パックマン<small>（HTML5+CSS3+JS/ES2022）</small></a></h1>
+			<p>上述の資料を参考に、<cite>PAC-MAN</cite>をアレンジしたクローンゲームを作ってみました。</p>
+			<p>視覚的要素を<abbr title="Cascading Style Sheets">CSS</abbr>に委ねて、簡潔なスクリプトで実装する試みです。</p>
+			<p><abbr title="Document Object Model">DOM</abbr>ベースでの実装で、Canvas APIはほとんど使用していません。</p>
+			<p>16×16のドット絵ではなく、<abbr title="High Definition">HD</abbr>画面に堪える<a href="game/PACMAN/_sprites/sprite-image.html">スプライトシート（PNG）</a>を制作しました。</p>
+			<p>ラスター画像ですが、CSSの 'transform' は良い感じにスケーリングしてくれます。</p>
+			<p>また、CSSはアニメーション、フィルター、そしてトランジションの効果を容易に表現可能であり、なるべく再描画処理を発生させずにGPUで処理しています。要するにスクリプトですべきことを少なくできます。
+			</p>
+			<ul class="no-print">
+				<li><a href="game/PACMAN/_sprites/">アクターおよびフルーツの一覧</a></li>
+				<li><a href="https://anonimo0611.github.io/pacman/">パックマンをプレイしてみる</a></li>
+			</ul>
+			<p>パックマンの消滅アニメーションのみ、Canvas APIを使用しています。</p>
+			<p>フルーツ類の一部は<a href="https://github.com/masonicGIT/pacman" class="ref" title="GitHub - masonicGIT/pacman: Remake of Pacman by Shaun Williams">Shaun Williams氏</a>のスプライトを少し改変して使用しています。</p>
+			<section id="requirements">
+				<h2><a href="#requirements" class="fragment">推奨環境</a></h2>
+				<p>最新のPC向けChromium系ブラウザを推奨します。スマホは非対応です。</p>
+				<p>後方互換性を無視しているので、旧いブラウザでは動作しません。</p>
+				<p>開発者ツールを起動していると動作が重くなることがあります。</p>
+				<p>もっさりする場合は、“ハードウェア アクセラレーション”を有効にしてください。</p>
+				<p class="as-follows">それでも重いなら <code>chrome://flags</code> <small>（スキーム名はブラウザごとに異なる）</small>の設定で：</p>
+				<ul>
+					<li>Over&shy;ride soft&shy;ware rendering list</li>
+				</ul>
+				<p>これをEnableにしてみてください。設定の変更は自己責任でお願いします。</p>
+				<p>ユーザスタイルシートは適用されないようにしてください。</p>
+			</section>
+			<section id="config">
+				<h2><a href="#config" class="fragment">設定項目/操作</a></h2>
+				<div id="cfg-tbl" class="table">
+					<section>
+						<h3>Only this level</h3>
+						<div class="cfg-desc">
+				 			<p>オフであれば<em>連続プレイ</em>になる<br>オンなら選択されたレベルをクリア後、タイトル画面に戻る</p>
+						</div>
+					</section>
+					<section>
+						<h3>Power cookies</h3>
+						<div class="cfg-desc">
+					 		<p>パワークッキーの有無</p>
+						</div>
+					</section>
+					<section>
+						<h3>Always chase mode</h3>
+						<div class="cfg-desc">
+							<p>常に追跡モード（縄張モードなし）</p>
+						</div>
+					</section>
+					<section>
+						<h3>Clear storage</h3>
+						<div class="cfg-desc">
+							<p>ローカルストレージを消すかどうかの確認<br>設定状態やハイスコアがクリアされます</p>
+						</div>
+					</section>
+					<section>
+						<h3>About keys</h3>
+						<div class="cfg-desc">
+							<p>プレイ中の操作説明：</p>
+							<table class="keys plain">
+							<tr>
+								<th><kbd>M</kbd></th> 
+								<td>ミュート</td>
+							</tr>
+							<tr>
+								<th><kbd>Esc</kbd></th>
+								<td>一時停止</td>
+							</tr>
+							<tr>
+								<th><kbd>Del</kbd></th>
+								<td>終了するかどうかの確認ダイアログを表示</td>
+							</tr>
+							<tr>
+								<th><kbd>Ctrl</kbd>+<kbd>Del</kbd></th>
+								<td>強制的にリセットしてタイトル画面に戻る</td>
+							</tr>
+							<tr>
+								<th class="arrow"><kbd
+								class="← arrow">←</kbd><kbd
+								class="↑ arrow">↑</kbd><kbd
+								class="↓ arrow">↓</kbd><kbd
+								class="→ arrow">→</kbd>
+								</th>
+								<td>パックマンを導く方向（<kbd>A</kbd><kbd>W</kbd><kbd>S</kbd><kbd>D</kbd>でも操作可能）</td>
+							</tr>
+						 	</table>
+						</div>
+					</section>
+					<section>
+						<h3>
+							<img src="_imgs/maximize.png" class="button" alt="拡大" title="拡大">
+							<img src="_imgs/restore.png"  class="button" alt="縮小" title="縮小">トグル
+						</h3>
+						<div class="cfg-desc">
+					 		<p>ヴューポートにフィット／実サイズに戻す</p>
+						</div>
+					</section>
+					<section>
+						<h3><img src="_imgs/burger.png" class="button" alt="設定" title="ハンバーガー">パネル</h3>
+						<div class="cfg-desc">
+					 		<p>設定パネルを開きます：</p>
+							<table class="plain">
+							<tr>
+								<th>Volume</th>
+								<td>音量調整</td>
+							</tr>
+							<tr>
+								<th>Speed</th>
+								<td>ゲームの進行速度 0.5～1.2倍</td>
+							</tr>
+							<tr>
+								<th>PacLives</th>
+								<td>ライフ 1～5（迷路にいるぶんも含む）</td>
+							</tr>
+							<tr>
+								<th>Extend</th>
+								<td>ライフがひとつ増えるスコア</td>
+							</tr>
+							<tr>
+								<th>Invincible</th>
+								<td>無敵モード</td>
+							</tr>
+							<tr>
+								<th>Unrestricted ghosts</th>
+								<td><a href="Pac-Man_Dossier/02.html#areas-to-exploit"
+								title="第２章：ゲームプレイの詳細 最大限活用すべきエリア - The Pac-Man Dossier邦訳">
+								ゴーストのターン制限</a>をなくす</td>
+							</tr>
+							<tr>
+								<th>Show targets</th>
+								<td>ゴーストが目指すターゲットタイルの表示</td>
+							</tr>
+							<tr>
+								<th>Show tile grid</th>
+								<td>タイルのグリッドを表示</td>
+							</tr>
+							<tr>
+								<th>Attract demo</th>
+								<td>アトラクト デモの再生</td>
+							</tr>
+							<tr>
+								<th>Coffee Break 1-3</th>
+								<td>コーヒーブレイクの再生</td>
+							</tr>
+							<tr>
+								<th>Return to Default</th>
+								<td>デフォルト設定に戻す</td>
+							</tr>
+							</table>
+						</div>
+					</section>
+				</div>
+				<p>Unrestricted ghostsを有効にすると極端に難しくなるので、あまりお奨めはしません。岩谷氏率いるナムコの開発チームがバランス調整に労力を費やした結果、ゴーストの進入禁止エリアがあるのです。</p>
+			</section>
+			<section id="practive-mode">
+				<h2><a href="#practive-mode" class="fragment">練習モード（PRACTICE）について</a></h2>
+				<p>練習モードでは、上端にあるハイスコア表示の代わりに<em>PRACTICE</em>と表示されます。</p>
+				<p class="as-follows">切り替わる条件は以下のとおりです：</p>
+				<ul>
+					<li><em>連続プレイではない</em>（すなわち Only this level がオンの）とき</li>
+					<li>または連続プレイにおいて<em>途中のレベルから始める</em>とき</li>
+					<li>Speedが0.6以下、Invincible または Show targetsがオンのとき</li>
+				</ul>
+				<p>練習モードではレベル間のコーヒーブレイクは実行されません。</p>
+			</section>
+			<section id="play-mode">
+				<h2><a href="#play-mode" class="fragment">２人交互プレイ</a></h2>
+				<p>２人交互プレイは実装してません。スコアは１ＵＰだけの１行表示です。</p>
+				<p>横画面（16：9など）で可能なかぎり縦長の盤面を大きく表示したかったのです。</p>
+				<p>クレジットの概念はありません。</p>
+				<p>ゲームを開始するには矢印キーを押してください。</p>
+			</section>
+			<section id="demo">
+				<h2><a href="#demo" class="fragment">アトラクト デモ</a></h2>
+				<p>タイトル画面でなにも操作せず放置すると、30秒ほどで始まるようにしています。</p>
+				<p>ページを読み込んで毎回すぐに動き出すと煩わしいからです。</p>
+				<p>すぐにご覧になりたいときは <img src="_imgs/burger.png" class="button" alt="ハンバーガーボタン" title="ハンバーガーボタン">を押してください。コーヒーブレイクも観れます。</p>
+				<p>プレイデモはありません。ウェブでは必要不可欠ではないでしょう。</p>
+			</section>
+			<section id="level">
+				<h2><a href="#level" class="fragment">ゲームレベル</a></h2>
+				<p>難易度はレベル１～13まで13段階としており、13以後は同じ難易度の繰り返しです。</p>
+				<p>レベル255をクリアすると一周してレベル１に戻ります（誰も続けないと思いますが…）。</p>
+				<p>原作ではレベル21まで難易度が上昇します（cf. <a href="Pac-Man_Dossier/table_a1.html" title="付録の表A.1 - The Pac-Man Dossier邦訳 ">付録の表A.1</a>）。</p>
+				<p>メニュー選択でお好みのレベルから始められますが、途中からだと<a href="#practive-mode">練習モード</a>になります。</p>
+				<p>“Only this level”をオンにすると、次のレベルに進まずタイトル画面に戻ります。</p>
+			</section>
+			<section id="scatter-chase">
+				<h2><a href="#scatter-chase" class="fragment">縄張/追跡モード</a></h2>
+				<p>“常に追跡モード”がオフのときは、おおむね原作のとおりです。</p>
+				<p>しかし原作より移動が速いため、縄張/追跡モードの各期間は短めです。</p>
+				<p class="as-follows">次の表は各期間の長さをまとめたものです（単位は秒）：</p>
+				<table>
+					<thead>
+						<tr>
+							<th></th>
+							<th scope="col">モード</th>
+							<th scope="col" class="level">レベル<br>1</th>
+							<th scope="col" class="level">レベル<br>2-4</th>
+							<th scope="col" class="level">レベル<br>5+</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th rowspan="2" scope="rowgroup">1</th>
+							<th scope="row">縄張</th>
+							<td>4.5</td>
+							<td>4.5</td>
+							<td>3.5</td>
+						</tr>
+						<tr>
+							<th scope="row">追跡</th>
+							<td>15.0</td>
+							<td>15.0</td>
+							<td>15.0</td>
+						</tr>
+					</tbody>
+					<tbody>
+						<tr>
+							<th rowspan="2" scope="rowgroup">2</th>
+							<th scope="row">縄張</th>
+							<td>4.5</td>
+							<td>4.5</td>
+							<td>3.5</td>
+						</tr>
+						<tr>
+							<th scope="row">追跡</th>
+							<td>15.0</td>
+							<td>15.0</td>
+							<td>15.0</td>
+						</tr>
+					</tbody>
+					<tbody>
+						<tr>
+							<th rowspan="2" scope="rowgroup">3</th>
+							<th scope="row">縄張</th>
+							<td>3.5</td>
+							<td>3.5</td>
+							<td>3.5</td>
+						</tr>
+						<tr>
+							<th scope="row">追跡</th>
+							<td>15.0</td>
+							<td>780</td>
+							<td>780</td>
+						</tr>
+					</tbody>
+					<tbody>
+						<tr>
+							<th rowspan="2" scope="rowgroup">4</th>
+							<th scope="row">縄張</th>
+							<td>3.0</td>
+							<td>1/60</td>
+							<td>1/60</td>
+						</tr>
+						<tr>
+							<th scope="row">追跡</th>
+							<td>無限</td>
+							<td>無限</td>
+							<td>無限</td>
+						</tr>
+					</tbody>
+				</table>
+				<p>このゲームはフレーム数で時間を計算しているため、時間はすべて目安です。</p>
+				<p>原作の仕様は<a href="Pac-Man_Dossier/02.html#scatter-chase" title="第２章：ゲームプレイの詳細 縄張り、追いかけ、その繰り返し… - The Pac-Man Dossier邦訳">Dossierの第２章</a>を参照のこと。</p>
+			</section>
+			<section id="release-ghosts">
+				<h2><a href="#release-ghosts" class="fragment">巣からの開放</a></h2>
+				<p><a href="Pac-Man_Dossier/02.html#home-sweet-home" title="第２章：ゲームプレイの詳細 ホームスイートホーム - The Pac-Man Dossier邦訳">ドットカウンター/グローバル･ドットカウンター</a>を原作のとおり実装しています。</p>
+				<p>したがって<a href="https://www.youtube.com/watch?v=GI_kHYAUZOU" title="Pac-Man Ghost House Trick - YouTube">ハウストリック</a>を再現できます。</p>
+				<p>タイマー制限も原作同様にレベル１～４までは４秒、レベル５以降では３秒です。</p>
+				<p>これはドットを食べたり、優先ゴーストを開放するごとにゼロにリセットされます。</p>
+				<p class="as-follows">ただし“常に追跡モード”では次の表のとおり、時間で開放されます（単位はミリ秒）：</p>
+				<table>
+					<col>
+					<col class="light-bg-Pinky">
+					<col class="light-bg-Aosuke">
+					<col class="light-bg-Guzuta">
+					<thead>
+						<tr>
+							<th>レベル</th>
+							<th scope="col" class="bg-Pinky">ピンキー</th>
+							<th scope="col" class="bg-Aosuke">アオスケ</th>
+							<th scope="col" class="bg-Guzuta">グズタ</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="miss">
+							<th scope="row">ミス</th>
+							<td>1000</td>
+							<td>500</td>
+							<td>500</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f1 fruit">01</th>
+							<td>1000</td>
+							<td>4000</td>
+							<td>4000</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f2 fruit">02</th>
+							<td>800</td>
+							<td>2200</td>
+							<td>4000</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f3 fruit">03</th>
+							<td>600</td>
+							<td>1900</td>
+							<td>3500</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f3 fruit">04</th>
+							<td>600</td>
+							<td>1900</td>
+							<td>1500</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f4 fruit">05</th>
+							<td>500</td>
+							<td>1300</td>
+							<td>1200</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f4 fruit">06</th>
+							<td>500</td>
+							<td>1300</td>
+							<td>1200</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f5 fruit">07</th>
+							<td>300</td>
+							<td>700</td>
+							<td>800</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f5 fruit">08</th>
+							<td>300</td>
+							<td>700</td>
+							<td>800</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f6 fruit">09</th>
+							<td>200</td>
+							<td>800</td>
+							<td>200</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f6 fruit">10</th>
+							<td>200</td>
+							<td>800</td>
+							<td>200</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f7 fruit">11</th>
+							<td>100</td>
+							<td>700</td>
+							<td>200</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f7 fruit">12</th>
+							<td>100</td>
+							<td>700</td>
+							<td>200</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f8 fruit">13+</th>
+							<td>0</td>
+							<td>900</td>
+							<td>0</td>
+						</tr>
+					</tbody>
+				</table>
+				<p>それぞれの時間があらわす意味は以下の通りです：</p>
+				<ul class="release-time">
+					<li><span class="ghs-name bg-Pinky ">ピンキー</span>……ラウンド開始時からの経過時間</li>
+					<li><span class="ghs-name bg-Aosuke">アオスケ</span>……<span class="ghs-name bg-Pinky">ピンキー</span>が開放されてからの経過時間</li>
+					<li><span class="ghs-name bg-Guzuta">グズタ</span>……<span class="ghs-name bg-Aosuke">アオスケ</span>が開放されてからの経過時間</li>
+				</ul>
+			</section>
+			<section id="frightened-mode">
+				<h2><a href="#frightened-mode" class="fragment">イジケモード</a></h2>
+				<p class="as-follows">下記の表は各レベルのイジケタイム（秒）です：</p>
+				<table>
+					<thead>
+						<tr>
+							<th scope="row">レベル</th>
+							<th scope="col" class="f1 fruit">1</th>
+							<th scope="col" class="f2 fruit">2</th>
+							<th scope="col" class="f3 fruit">3</th>
+							<th scope="col" class="f3 fruit">4</th>
+							<th scope="col" class="f4 fruit">5</th>
+							<th scope="col" class="f4 fruit">6</th>
+							<th scope="col" class="f5 fruit">7</th>
+							<th scope="col" class="f5 fruit">8</th>
+							<th scope="col" class="f6 fruit">9</th>
+							<th scope="col" class="f6 fruit">10</th>
+							<th scope="col" class="f7 fruit">11</th>
+							<th scope="col" class="f7 fruit">12</th>
+							<th scope="col" class="f8 fruit">13+</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="row">秒</th>
+							<td>6</td>
+							<td>5</td>
+							<td>4</td>
+							<td>3</td>
+							<td>2</td>
+							<td>5</td>
+							<td>2</td>
+							<td>2</td>
+							<td>1</td>
+							<td>5</td>
+							<td>2</td>
+							<td>1</td>
+							<td>0</td>
+						</tr>
+					</tbody>
+				</table>
+				<p>レベル５、９をクリアしたあと、コーヒーブレイクを挟んだ６、10は５秒に延長されます。</p>
+				<p>レベル13以降ではイジケなくなり、進行方向を反転するだけです（原作での17、19以降に相当）。</p>
+				<p>ただしゼロ秒のときは400ミリ秒のあいだ、パックマンから遠ざかるようにしています。</p>
+				<p>原作のレベル仕様は<a href="Pac-Man_Dossier/table_a1.html" title="付録の表A.1 - The Pac-Man Dossier邦訳 ">付録の表A.1</a>を参照のこと。</p>
+			</section>
+			<section id="path-character">
+				<h2><a href="#path-character" class="fragment">ゴーストの経路探索と個性</a></h2>
+				<p>おおむね原作のとおりゴーストの経路探索と個性を再現しています。</p>
+				<p>ただし<a href="Pac-Man_Dossier/04.html#PINKY" title="第４章：ゴーストとの戦い ピンキー - The Pac-Man Dossier邦訳">ピンキー</a>は“待ちぶせ”という個性を活かして、<br>
+				パックマンがトンネルに入ると目標を彼から反対側の出口に切り替えて先回りします。</p>
+				<p>また、迷路の右上端にターゲットがあるときは、巣の周囲にいるゴーストを左へ出すようにしています。</p>
+				<p>巣の上部では左右方向にしか進めず、そのせいで巣の周囲を回り続けるのを回避するためです。</p>
+				<p>イジケゴーストの曲がる方向を決める擬似乱数ジェネレータは再現していません。</p>
+			</section>
+			<section id="tile">
+				<h2><a href="#tile" class="fragment">占有タイルと当たり判定</a></h2>
+				<p>当たり判定は<a href="Pac-Man_Dossier/03.html#what-tile-am-i-in" title="第３章：迷路ロジックの初歩 どのタイルにいるの？ - The Pac-Man Dossier邦訳">占有タイル</a>ではなく、円の当たり判定を採用しています。</p>
+				<p>追跡中のゴーストは小さめの半径、逆にイジケに対して判定を大きくしています。</p>
+				<p>ターン中などに稀にすり抜けますが、あえて小さい判定にしています。</p>
+			</section>
+			<section id="cornering">
+				<h2><a href="#cornering" class="fragment">コーナリング</a></h2>
+				<p>パックマンの<a href="Pac-Man_Dossier/02.html#cornering" title="第２章：ゲームプレイの詳細 コーナリング - The Pac-Man Dossier邦訳">プリターン/ポストターン</a>をそれっぽく実装しています。</p>
+				<p>壁のある方向に矢印キーあるいはAWSDを押すと次のターンを予約でき、曲がれる交差点のタイルに達するとパックマンが自動的に曲がります（原作とは異なりますが、操作しやすいので）。</p>
+				<p>ただし、ターンの開始位置と終了位置のタイミングは大雑把で、曲がり角の中心から前後に２、３歩程度しかありません。標準設定では原作のパックマンより歩幅が広く、移動が速いからです。</p>
+			</section>
+			<section id="speed">
+				<h2><a href="#speed" class="fragment">移動速度</a></h2>
+				<p>標準設定ではすべてのレベルを通して原作より移動速度が速くなっています。</p>
+			 	<p>レベル１～13までの13段階で徐々に速くなります(原作では４段階)。</p>
+				<p>通常時のゴーストはパックマンに対して102％の速度で移動します。</p>
+				<p>レベル13以降では、パックマンの速度はゴーストに対して約93％に落ちます。</p>
+				<p>無理ゲーにならいようにバランス調整している積もりです。ゴーストとの当たり判定が小さいのでギリギリかわせたり、プリターンを連続すると引き離せます。<a href="Pac-Man_Dossier/02.html#areas-to-exploit" title="第２章：ゲームプレイの詳細 最大限活用すべきエリア - The Pac-Man Dossier邦訳">緊急回避用通路</a>に逃げ込むのも手です。
+				</p>
+				<p>慣れてくるとゴーストの行動を先読みしたり、誘導することもできます。</p>
+				<p class="as-follows">状況による相対的な速度変化は下記のとおりです：</p>
+				<div id="relative-speed">
+					<dl>
+						<dt><em>パックマン</em></dt>
+						<dd>
+							<dl>
+								<dt>ドットを食べる</dt>
+								<dd>0.86倍</dd>
+								<dt>イジケタイム</dt>
+								<dd>1.10倍</dd>
+								<dt>イジケ＋ドット</dt>
+								<dd>0.95倍</dd>
+							</dl>
+						</dd>
+					</dl>
+					<dl>
+						<dt><em>ゴースト</em></dt>
+						<dd>
+							<dl>
+								<dt>イジケゴースト</dt>
+								<dd>0.65倍</dd>
+								<dt>トンネル通過中</dt>
+								<dd>0.60倍</dd>
+								<dt>巣にもどる目玉</dt>
+								<dd>およそ1.40倍</dd>
+							</dl>
+						</dd>
+					</dl>
+				</div>
+				<p>忠実な再現にはこだわらず、個人的に遊んで楽しい速度/バランスにしています。</p>
+				<p>シンプルなゲーム内容に反して、細かいバランス調整が施されている奥の深いゲームであるため、JavaScriptのようなスクリプト言語で忠実にエミュレーションするのは不可能に近いと思います。</p>
+				<p>原作のレベル仕様は<a href="Pac-Man_Dossier/table_a1.html" title="付録の表A.1 - The Pac-Man Dossier邦訳 ">付録の表A.1</a>を参照のこと。</p>
+			</section>
+			<section id="spurt">
+				<h2><a href="#spurt" class="fragment">アカベエのスパート</a></h2>
+				<p>アカベエはレベルごとに３回速度を上げます（原作は２段階）。</p>
+				<p>後のレベルほど、より多くの残りドットで<a href="Pac-Man_Dossier/04.html#AKABEI" title="第４章：ゴーストとの戦い アカベエ - The Pac-Man Dossier邦訳">スパート</a>が発動します。</p>
+				<p class="as-follows">次の表に発動するドットの残り数と速度の係数をまとめたした：</p>
+				<table>
+					<thead>
+						<tr>
+							<th scope="col">Lv.</th>
+							<th scope="col">第１</th>
+							<th scope="col">第２</th>
+							<th scope="col">第３</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="row" class="f1 fruit">01</th>
+							<td>30</td>
+							<td>20</td>
+							<td>10</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f2 fruit">02</th>
+							<td>30</td>
+							<td>20</td>
+							<td>10</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f3 fruit">03</th>
+							<td>45</td>
+							<td>30</td>
+							<td>15</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f3 fruit">04</th>
+							<td>60</td>
+							<td>40</td>
+							<td>20</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f4 fruit">05</th>
+							<td>75</td>
+							<td>50</td>
+							<td>25</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f4 fruit">06</th>
+							<td>90</td>
+							<td>60</td>
+							<td>30</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f5 fruit">07</th>
+							<td>105</td>
+							<td>70</td>
+							<td>35</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f5 fruit">08</th>
+							<td>105</td>
+							<td>70</td>
+							<td>35</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f6 fruit">09</th>
+							<td>120</td>
+							<td>80</td>
+							<td>40</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f6 fruit">10</th>
+							<td>135</td>
+							<td>90</td>
+							<td>45</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f7 fruit">11</th>
+							<td>150</td>
+							<td>100</td>
+							<td>50</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f7 fruit">12</th>
+							<td>165</td>
+							<td>110</td>
+							<td>55</td>
+						</tr>
+						<tr>
+							<th scope="row" class="f8 fruit">13+</th>
+							<td>180</td>
+							<td>120</td>
+							<td>60</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<th scope="row">速度</th>
+							<td>1.02</td>
+							<td>1.05</td>
+							<td>1.10</td>
+						</tr>
+					</tfoot>
+				</table>
+				<p>第２段階以上ではアカベエは発光し、縄張モードでもプレイヤーを追跡します。</p>
+				<p>ただし縄張/追跡モードの切り替え時には進行方向を反転します。</p>
+				<p>発動後にミスすると、再開後はグズタが巣を出るまでスパートは発動しません。</p>
+				<p>原作のレベル仕様は<a href="Pac-Man_Dossier/table_a1.html" title="付録の表A.1 - The Pac-Man Dossier邦訳 ">付録の表A.1</a>を参照のこと。</p>
+			</section>
+			<section id="pattern">
+				<h2><a href="#pattern" class="fragment">攻略パターン</a></h2>
+				<p>原作のパターンは使えませんが、別の攻略パターンがあるかもしれません。しかし、原作の開発者が想定外だったように、私も想定していません。仕様変更でパターンが変わる可能性もあります。</p>
+				<p>また、ゲームスピードを変更するとパターンが変化します。フレーム数を間引いたりせず、滑らかに移動させるために歩幅の大きさで速度調整しているため微妙な誤差が生じます。</p>
+				<p>パターンを実行するだけなら忍耐力を競うだけになり、ゲーム性が失われてしまいます。それよりも思い思いに操作し、その場その場でゴーストの行動を読むほうが面白いと私は思っています。</p>
+			</section>
+		</section>
+	</section>
+	<footer>
+		<address>&copy; あのにも &lt;<a href="https://forms.gle/7gVSN3o1pHuR1AEY9" rel="author">お問い合わせフォーム</a>&gt;</address>
+	</footer>
+</main>
+
+</body>
+</html>
