@@ -38,13 +38,3 @@ canvas {
 	bottom: 0;
 	z-index: 2000;
 }
-
-#fc2_footer {
-	position: fixed;
-	left: 0;
-	bottom: 0;
-	z-index: 2000;
-}
-#fc2_footer a {
-	color: #9CF;
-}
