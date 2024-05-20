@@ -29,6 +29,7 @@ export const Pointer = freeze(new class {
 	#onDown(e) {
 		switch (Phase.current) {
 		case Phase.enum.Idle:
+			Pointer.#setPos(e);
 			Phase.switch(Phase.enum.Hold);
 			break;
 		case Phase.enum.Over:
@@ -47,12 +48,15 @@ export const Pointer = freeze(new class {
 			break;
 		}
 	}
-	#onMove(e) {
+	#setPos(e) {
 		const rect = cvs.getBoundingClientRect();
-		e.preventDefault();
 		e = e.touches?.[0] || e;
 		Pointer.Pos.x = (e.pageX - rect.left) / scale;
 		Pointer.Pos.y = (e.pageY - rect.top)  / scale;
+	}
+	#onMove(e) {
+		e.preventDefault();
+		Pointer.#setPos(e);
 	}
 	update() {
 		Pointer.#Power = Vec2.distance(Player.current.position, Pointer.Pos);
