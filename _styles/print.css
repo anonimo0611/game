@@ -1,0 +1,148 @@
+html {
+	color: black !important;
+	background-color: white !important;
+	font-size: 10pt !important;
+	display: block !important;
+}
+body {
+	color: inherit !important;
+	background-color: inherit !important;
+	display: block !important;
+}
+body * {
+	text-decoration-color: unset !important;
+	color: inherit !important;
+	background-color: transparent !important;
+	border-color: currentColor !important;
+}
+
+/* Line height */
+li, dd, p {
+	line-height: 1.5 !important;
+}
+
+/* No display */
+header, nav, .no-print {
+	display: none !important;
+}
+
+/* Container */
+#main {
+	max-width: none;
+}
+#main-content {
+	margin-left:  0;
+	margin-right: 0;
+	padding: 0;
+	max-width: none;
+}
+#main-content hr {
+	margin: unset;
+	visibility: hidden;
+}
+
+/* Footer */
+footer {
+	border: solid 1px;
+	border-radius: .2em;
+	margin: 3em 1em;
+	padding: .4em 0;
+}
+footer address {
+	margin:  0;
+	padding: 0;
+}
+
+/* Headings */
+h1 {
+	font-size: 150%;
+	margin: 0;
+}
+h1 + p.author {
+	margin: 0 0 0 2em;
+}
+h2 {font-size: 140%}
+h3 {font-size: 130%}
+h4 {font-size: 120%}
+h5 {font-size: 110%}
+h2,h3,h4,h5,h6,dt {
+	break-after: avoid;
+	border-width: 1px !important;
+	margin: 1.5rem 0;
+}
+
+/* Long quote */
+blockquote {
+	margin-left: .7em;
+}
+
+/* List */
+ul {
+	margin: 1em 0 !important;
+	padding: 0 !important;
+}
+ul li {
+	list-style-type: unset !important;
+	margin:  0;
+	padding: 0;
+}
+
+/* Break page */
+p, li, dd, blockquote, table, .quote, .note,
+#main-content section section {
+	break-inside: avoid;
+}
+.page-break {
+	break-before: page;
+}
+.as-follows {
+	break-after: avoid;
+}
+
+/* Anchors */
+a[href] {
+	color: inherit !important;
+	font-weight: inherit;
+	text-decoration: none;
+}
+a[href].ref-block {
+	display: block !important;
+}
+li a[href].ref.br {
+	display: inline-block;
+	vertical-align: top;
+}
+
+[data-cite]::after {
+	display: block;
+	content: '(' attr(data-cite) ')';
+}
+a[href].ref::after,
+address a[href]::after {
+	content: ' (' attr(href) ')';
+}
+a[href].ref-block::after,
+a[href].ref.br::after {
+	display: block;
+	content: '(' attr(href) ')';
+}
+a[href][data-cite]::after {
+	display: inline;
+}
+:not(:last-child) > a[href].ref.br::after,
+:not(:last-child) > [data-cite]::after {
+	margin-bottom: .5em;
+}
+
+/* Etc. */
+abbr[title] {
+	text-decoration: none !important;
+}
+img.button {
+	font-size: 150%;
+}
+
+/* fc2 */
+#fc2_footer {
+	position: static !important;
+}
