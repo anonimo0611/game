@@ -1,0 +1,396 @@
+html, body {
+	margin:  0;
+	padding: 0;
+}
+html {
+	font: 100%/1.2 '源ノ角ゴシック', sans-serif;
+	font-feature-settings: 'palt';
+	-webkit-text-size-adjust: 100%;
+}
+body {
+	padding: 1.4em 0 0 0;
+	display: flex;
+	justify-content: center;
+	gap: 1em;
+}
+#main {
+	max-width: 53rem;
+	position: relative;
+	flex: 1;
+}
+#main-content {
+	margin: 0 .5em 0 .25em;
+	padding: .5em 2em 10em;
+	border-radius: 1.5em 1.5em 1.5em 1em;
+	box-sizing: border-box;
+	display: block;
+	position: relative;
+}
+#main-content hr {
+	margin: -.5em 20%;
+	border: solid 2px var(--border-color,black);
+	border-bottom: none;
+}
+
+/* Footer, Address */
+footer, address {
+	text-align: center;
+	font-style: normal;
+	padding: 0;
+}
+footer {
+	margin: 0;
+	padding-bottom: 1em;
+}
+footer address {
+	margin: .6em 0 0;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+	display: table;
+	padding-right: 1em;
+}
+h1, h2, h3, h4 {
+	margin-top: .5em;
+	margin-bottom: .5em;
+}
+h1 {
+	font-size: 200%;
+	line-height: 1;
+	margin-top: 2.5rem;
+	margin-bottom: 0;
+}
+h2 {font-size: 170%}
+h3 {font-size: 140%}
+h4 {font-size: 130%}
+h5 {font-size: 110%}
+
+/* Paragraph */
+p {
+	text-align: justify;
+	line-height: 1.45;
+	margin: 1.6em 0;
+}
+p.clear {
+	clear: both;
+}
+
+/* Unordered list */
+ul {
+	line-height: 1.3;
+	margin: 0;
+	margin-left: -.5em;
+}
+:not(.rel) > ul:not(.simple) > li {
+	line-height: 1.2;
+	box-sizing: border-box;
+ 	padding: 0 0 0 .5em;
+ 	display: list-item;
+}
+@media screen {
+	ul > li {
+		list-style: none;
+		position: relative;
+	}
+	:not(.rel) > ul:not(.simple) > li::before {
+		content: '';
+		line-height: 1;
+		margin-left: -.71rem;
+		--h: .6rem;
+		width:  .7rem;
+		height: var(--h);
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%) scale(1.3,1);
+	}
+	:not(.rel) > ul:not(.simple) > li:has(ul)::before {
+		top: .25em;
+		transform: scale(1.3,1);
+	}
+}
+#main-content ul > li a {
+	line-height: 1.2;
+}
+
+/* Definition list */
+dl {
+	margin: 1.5em 0;
+	padding: 0;
+}
+dt {
+	font-weight: bold;
+	margin: 0;
+	padding: 0;
+}
+dd + dt {
+	margin-top: .3em;
+}
+dd {
+	text-align: justify;
+	margin: 0 0 0 1.5em;
+	padding: .1em 0;
+}
+dd ul {
+	text-align: justify;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+/* Long quotation */
+blockquote {
+	margin: 1em 1em 1em 2em;
+	padding: .4em .5em .4em 1em;
+	border-left: solid .4em var(--border-color,black);
+	border-radius: 0 .5em .5em 0;
+}
+blockquote p {
+	margin: .5em 0;
+}
+blockquote + p.cite {
+	margin: -1.8em 1.5em 1em auto;
+	padding: .1em .2em;
+	border-radius: .3em;
+	display: table;
+}
+blockquote + p.cite cite {
+	font-style: normal;
+	quotes: '【''】';
+}
+blockquote + p.cite cite::before {
+	content: open-quote;
+}
+blockquote + p.cite cite::after {
+	content: close-quote;
+}
+section > :first-child + .quote {
+	margin-top: 1.2em;
+}
+.quote + section {
+	margin-top: -.5em;
+}
+
+/* Tables */
+table {
+	border-collapse: collapse;
+	margin-bottom: 2em;
+}
+caption {
+	text-align: left;
+	font-weight: bold;
+	padding: 0 .2em .2em;
+}
+th {
+	padding: .5em;
+}
+th, td {
+	background-color: transparent;
+	border: solid 1px var(--border-color,black);
+	padding: .5em;
+}
+thead td {
+	background-color: transparent;
+}
+table.plain,
+table.plain th,
+table.plain td {
+	text-align: left;
+	background: transparent;
+	border: hidden;
+}
+
+/* Notes */
+div.note {
+	border-style: solid;
+	border-color: var(--border-color,black);
+	border-width: 0 0 0 .22em;
+	border-radius: 0 .5em .5em 0;
+	margin: -.7em 1em 1.5em;
+	padding: .5em .8em;
+}
+p.note {
+	color: var(--color);
+	padding: .3em;
+}
+p.note {
+	padding-left: 3em;
+}
+
+span.note {
+	color: var(--color);
+	line-height: 1.3;
+}
+
+section > p + p.note {
+	margin: -.5em .5em;
+}
+div.note p {
+	margin: 0;
+}
+dd div.note {
+	margin: .9em 0;
+}
+
+/* Note section */
+section.note {
+	border-radius: .9em;
+	margin: 0 0 1.5em auto;
+	padding: .2rem .7rem 1rem .7rem;
+	border: none;
+	display: table;
+	overflow: hidden;
+}
+section.note h2,
+section.note h3 {
+	display: block;
+	border-bottom: double .2em var(--border-color,black);
+	margin: -.2rem -.7rem .6rem -.7rem;
+	padding: .3rem 1rem .2rem;
+}
+section.note ul {
+	border-radius: .5em;
+	margin: 0 .3em;
+	padding: .5em 1em;
+}
+section.note ul + ul {
+	margin-top: .7em;
+}
+section.note li {
+ 	margin-bottom: .4em;
+ 	padding: 0;
+}
+
+/* Alignment */
+.center {
+	text-align: center;
+}
+.left {
+	float: left;
+	margin: 0 1em .7em 0;
+	padding: 0;
+}
+.right {
+	float: right;
+	margin: 0 0 .7em 1em;
+	padding: 0;
+}
+
+/* Figure */
+figure.left,
+figure.right {
+	text-align: center;
+	font-size: 80%;
+}
+figure.left  {
+	margin-right: 1em;
+}
+figure.right  {
+	margin-left: 1em;
+}
+figure.left  + p,
+figure.right + p {
+	margin-top: 0;
+}
+
+/* Emphasis */
+em {
+	font-style: normal;
+	font-weight: bolder;
+}
+strong {
+	font-weight: bolder;
+}
+a[href] em {
+	color: inherit;
+}
+.note em:first-of-type {
+	color: inherit !important;
+	font-weight: bold;
+}
+
+/* Definition */
+dfn {
+	font-weight: bold;
+	font-style: normal;
+	margin: 0 1px;
+}
+
+/* Title of a creative work */
+cite {
+	font-weight: bold;
+	font-style: normal;
+	margin: 0 0.2ex;
+}
+p.author cite,
+p.cite cite {
+	color: inherit;
+	background: transparent;
+	font-weight: normal;
+}
+p.cite cite {
+	font-style: normal;
+}
+
+/* Abbreviation */
+abbr[title] {
+	cursor: help;
+	text-decoration: underline dotted .2em var(--border-color);
+	text-underline-offset: .15em;
+	margin: 0 .1em;
+}
+
+/* Anchor */
+a[href] {
+	text-decoration-line: underline;
+	text-underline-offset: 3px;
+	text-decoration-thickness: 3px;
+	padding: 0 .1em;
+}
+a[href]:hover {
+	text-decoration: none;
+	border-radius: .3em;
+}
+a[href]:focus {
+	border-radius: .3em;
+	position: relative;
+	z-index: 10;
+}
+a[href]:focus:hover {
+	text-decoration: none;
+}
+em a[href] {
+	text-decoration-thickness: 4px;
+}
+
+span.ghs-name {
+	white-space: nowrap;
+	text-align: justify;
+	text-align-last: justify;
+	border-radius: .3em;
+	padding: .15em .1em;
+	width: 4em;
+	line-height: 1;
+	display: inline-block;
+}
+li.ghs > a[href] {
+	display: inline-flex;
+	transform: scale(.9, 1);
+	transform-origin: 0 0;
+}
+li.ghs a[href] > .name {
+	text-align: justify;
+	text-align-last: justify;
+	width: 4em;
+}
+
+/* fc2 */
+@media screen {
+	img[width="0"][height="0"]{display:none}
+	#fc2_footer {
+		text-align: left !important;
+		position: fixed  !important;
+		left:   0 !important;
+		bottom: 0 !important;
+		z-index: 2000;
+	}
+}

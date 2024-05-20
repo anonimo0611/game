@@ -1,0 +1,240 @@
+@import url('../_imgs/svg.css');
+
+body {
+	color: #000;
+	background: #fbf9fd;
+	--border-color: #b1b7c3;
+}
+#main-content {
+	background: #e5e7eb;
+}
+#main-content hr {
+	--border-color: #a3a9b9;
+}
+
+/* Headings */
+h1 {
+	color: #43436f;
+}
+h2,h3,h4,h5,h6 {
+	color: #333;
+}
+
+/* Unordered list */
+li {
+	--marker-color: #8f59af;
+}
+:not(.rel) > ul:not(.simple) > li::before {
+	background-color: var(--marker-color);
+	-webkit-mask: no-repeat 0 center/.7em .6em var(--marker-url);
+	mask: no-repeat 0 center/.7em .6em var(--marker-url);
+}
+:not(.rel) > ul:not(.simple) ul > li::before {
+	background-color: #1a84d0;
+}
+:not(.rel) > ul:not(.simple) ul ul > li::before {
+	background-color: #57b57c;
+}
+
+/* Definition list */
+dl {
+	--Q-color: #2c7ec2; 
+	--A-color: #e31a94
+}
+
+/* Long quotation */
+blockquote {
+	color: #444;
+	background: #d1dce5;
+	--border-color: #888;
+}
+blockquote + p.cite {
+	background: #cecde1;
+}
+
+/* Tables */
+body {
+	--table-bgcolor: white;
+}
+table {
+	background-color: var(--table-bgcolor);
+	--group-bg1: #dbffec;
+	--group-bg2: #affdd4;
+	--border-color: #bababa;
+}
+.table  {
+	--th-color:   #333;
+	--th-bgcolor: #dfdfed;
+	--td-color:   #333;
+	--td-bgcolor: #f6f5ff;
+}
+thead,
+tbody th,
+tfoot {
+	background-color: #e6e6e6;
+}
+td:empty::before {
+	color: #555;
+}
+
+colgroup.hlight {
+	background-color: #efeff9;
+}
+thead th.hlight {
+	background-color: #ccccda;
+}
+tbody tr:hover {
+	--hilight-bgcolor: #ddebf5; 
+}
+th:hover, td:hover {
+	--hilight-bgcolor: #ddc1e5; 
+}
+
+/* Notes */
+.note {
+	--color: #02697e;
+}
+div.note {
+	color: #523836;
+	background: #e2dcea;
+	--border-color: #a88;
+}
+
+section.note {
+	color: #444;
+	background: #ced7e4;
+}
+section.note h2,
+section.note h3 {
+	color: #444;
+	background: #cad0de;
+	--border-color: #7e8bb6;
+}
+section.note ul {
+	background: #e3ebf3;
+}
+
+/* Phrase elements */
+em {
+	color: #2c7ec2;
+}
+dfn {
+	color: #9c5555;
+	background: linear-gradient(transparent 70%, #e2bded 70%);
+}
+cite {
+	color: #55b;
+	background: linear-gradient(transparent 70%, #b5d8eb 70%);
+}
+abbr[title] {
+	--border-color: #d51f85;
+}
+kbd {
+	color: #333;
+	background: #eee;
+	--border-color: #aaa;
+}
+
+/* Anchor */
+a:link, a:visited {
+	color: #bd2cc2;
+}
+a[href] {
+	text-decoration-color: #e497e9;
+}
+a[href]:hover {
+	color: #7926c8;
+	background-color: #e6d7f7;
+}
+a[href]:focus {
+	outline: solid 2px #b0a0ab;
+}
+a[href]:active {
+	color: #38ae84 !important;
+}
+
+/* Ghost colors */
+.bg-Akabei{background-color:#ff8d8e}
+.bg-Pinky {background-color:#ffc3d5}
+.bg-Aosuke{background-color:#96e1fa}
+.bg-Guzuta{background-color:#ffde9d}
+
+.light-bg-Pinky {background:#ffeff3}
+.light-bg-Aosuke{background:#e0f6fe}
+.light-bg-Guzuta{background:#fff0d3}
+
+/* Balloon colors */
+.balloon {
+	--color:        #333;
+	--bgcolor:      #efe;
+	--border-color: #888;
+}
+
+/* Navigation */
+header > nav, #toc {
+	color: #666;
+	background: #e8e4ee;
+}
+div.nav::before,
+header ul.toc:first-of-type::before  {
+	color: #73639d;
+}
+
+/* Toggle button */
+#nav-toggle {
+	background: #fbf9fd no-repeat var(--toc-svg-url) 0 0/100% 100%;
+	--border-color: #888;
+}
+#nav-toggle:hover {
+	background-color: #ede4f6;
+}
+
+/* Table of contents */
+#toc h2 {
+	color: #394385;
+	background-color: #d7d7e7;
+}
+nav a[href], main .toc a[href] {
+	text-decoration-color: #eab1ef;
+}
+
+/* Relationship navigation */
+nav.rel#rel-top,
+nav.rel#rel-bottom {
+	background: #e4dbe7;
+}
+nav.rel a[href]::before,
+nav.rel a[href]::after {
+	color: var(--marker-color);
+}
+nav.rel a[href] kbd {
+	text-decoration-color: #e497e9;
+}
+
+/* Current page / section */
+nav li.current {
+	color: #2563e2;
+	background: linear-gradient(transparent 85%, #b3dded 85%);
+}
+a[href].current {
+	color: #2563e2;
+	background: linear-gradient(transparent 85%, #b3dded 85%);
+}
+a[href].current:hover {
+	color: #38ae84;
+	background: #deebf8;
+}
+
+/* Heading anchor */
+a[href].fragment {
+	text-decoration-color: transparent !important;
+}
+a[href].fragment:hover {
+	text-decoration-color: #b398c0 !important;
+}
+:is(h2,h3,h4,h5,h6) > a[href].fragment::after {
+	background: #fff no-repeat center/70% var(--link-svg-url);
+}
+a[href].fragment:focus {
+	outline-color: #aaa;
+}

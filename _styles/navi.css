@@ -1,0 +1,256 @@
+﻿header {
+	white-space: nowrap;
+	position: sticky;
+	top: 1.8em;
+	left: 1em;
+	z-index: 100;
+	display: block;
+	width: 11em;
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+header > nav, #toc {
+	border-radius: .5em;
+}
+header > nav {
+	border-right:  solid 1px var(--border-color);
+	border-bottom: solid 1px var(--border-color);
+	margin: 0 auto;
+	padding: .4em .4em .6em .5em;
+	position: relative;
+	box-sizing: border-box;
+}
+
+/* Navigation list */
+nav ul {
+	margin-left: -5px;
+	padding: 0 10px;
+}
+nav ul ul {
+	margin-top: .2em;
+}
+nav li {
+	list-style-type: none;
+	margin: 0 0 .3em 0;
+}
+header nav li:last-child {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+header nav a[href]  {
+	padding: 0;
+}
+
+div.nav::before,
+header ul.toc:first-of-type::before  {
+	letter-spacing: 1px;
+	font: small-caps 1.2rem/1.2 'Arial', sans-serif;
+	font-weight: bold;
+	font-variant: small-caps;
+	margin: 0 .3em .2em .5em;
+	display: block;
+}
+header div.nav::before {
+	content: 'Navigation';
+}
+
+/* Table of contents */
+header ul.toc:first-of-type::before  {
+	content: 'Contents';
+}
+header  div.nav + ul.toc {
+	margin-top: 0;
+}
+li.to-top {
+	margin-bottom: .3em;
+}
+
+/* Flex list */
+ul.flex {
+	display: flex;
+	align-items: center;
+}
+ul.flex li {
+	margin: .3em 0;
+}
+ul.flex li + li {
+	margin-left: .3em;
+}
+
+/* Skip navigation */
+#skip-nav {
+	position: fixed;
+	top:  .5em;
+	left: .5em;
+	height: 1em;
+}
+#skip-nav:not(:focus) {
+	display: block;
+	clip: rect(1px,1px,1px,1px);
+	width:  1px;
+	height: 1px;
+	margin: -1px;
+	border:  0;
+	padding: 0;
+	overflow: hidden;
+}
+
+/* Toggle button */
+#nav-toggle {
+	text-indent: -100em;
+	box-sizing: border-box;
+	border: solid 1px var(--border-color);
+	border-radius: .3em;
+	width:  1.5rem;
+	height: 1.5rem;
+	display: none;
+}
+#nav-toggle:hover {
+	cursor: pointer;
+}
+
+/* Relationship navigation */
+nav.rel {
+	margin: 0;
+	position: absolute;
+	z-index: 3;
+}
+nav.rel ul {
+	display: flex;
+	align-items: center;
+	gap: .6em;
+}
+nav.rel li {
+	margin: 0;
+	line-height: 1;
+}
+nav.rel a[href] {
+	text-decoration: none;
+	line-height: 1 !important;
+	padding: 0;
+}
+nav.rel#rel-top,
+nav.rel#rel-bottom {
+	border: solid 1px var(--border-color);
+	box-sizing: border-box;
+}
+nav.rel#rel-top {
+	top: 0;
+	left: .25em;
+	border-left: none;
+	border-top: none;
+	border-radius: 1.5em 0 1.5em 0;
+	padding: .4em 1.2em;
+}
+nav.rel#rel-bottom {
+	right: 0;
+	bottom: 0;
+	border-bottom: none;
+	border-right: none;
+	border-radius: 1.5em 0 1.5em 0;
+	padding: .3em 1.2em .4em;
+}
+nav.rel .none,
+nav.rel a[href] {
+	display: flex;
+	align-items: baseline;
+}
+nav.rel .none.prev::before,
+nav.rel .none.next::after,
+nav.rel a[href]::before,
+nav.rel a[href]::after {
+	content: '';
+	font-size: 50%;
+}
+nav.rel .none {
+	color: gray;
+}
+nav.rel .none.prev::before,
+nav.rel a[href][rel~=prev]::before {
+	padding-right: .1em;
+	margin-left: -.5em;
+	position: relative;
+	top: -.5ex;
+	content: '◀';
+}
+nav.rel .none.next::after,
+nav.rel a[href][rel~=next]::after {
+	padding-left: .1em;
+	margin-right: -.5em;
+	position: relative;
+	top: -.5ex;
+	content: '▶';
+}
+li.none kbd, a[href] kbd {
+	color: inherit;
+	background: transparent;
+	text-align: center;
+	text-decoration: 2px underline;
+	text-underline-offset: 2px;
+	font-family: inherit;
+	font-weight: bold;
+	line-height: 1;
+	display: inline-block;
+}
+
+/* Current page / section */
+nav li.current {
+	font-weight: bolder;
+}
+a[href].current {
+	font-weight: bolder;
+}
+a[href].current:hover {
+}
+
+/* Anchor */
+nav a[href], main .toc a[href] {
+}
+nav a[href].current {
+	text-decoration: none;
+}
+
+/* Condensed */
+nav ul.condensed li + li {
+	margin-left: 0;
+}
+nav a[href].condensed {
+	display: inline-block;
+	transform: scale(.9, 1);
+	transform-origin: 0 center;
+}
+
+/* Heading anchor */
+a[href].fragment {
+	text-decoration: none;
+	color: inherit;
+	background: transparent;
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+}
+a[href].fragment:hover {
+	text-decoration: underline;
+	text-decoration-thickness: .1em;
+	text-underline-offset: .15em;
+}
+:is(h2,h3,h4,h5,h6) > a[href].fragment::after {
+	content: '';
+	border-radius: 100%;
+	margin-left: .2em;
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	opacity: 0;
+}
+:is(h2,h3,h4,h5,h6) > a[href].fragment:hover {
+	transition: text-decoration-color .2s .3s;
+}
+:is(h2,h3,h4,h5,h6) > a[href].fragment:hover::after {
+	opacity: 1;
+	transition: opacity .2s .3s;
+}
+a[href].fragment:focus {
+	text-decoration: none;
+}
