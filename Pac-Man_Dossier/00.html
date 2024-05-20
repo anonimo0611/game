@@ -1,0 +1,225 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<script src="../_lib/navi.js" defer></script>
+	<link rel="icon"       href="../icon.svg" type="image/svg+xml">
+	<link rel="preload"    href="imgs/pac-icon.png" as="image" type="image/png">
+	<link rel="preload"    href="imgs/fruits.png" as="image" type="image/png">
+	<link rel="author"     href="https://forms.gle/7gVSN3o1pHuR1AEY9" title="あのにも">
+	<link rel="top"        href="../index.html" title="トップページ">
+	<link rel="contents"   href="01.html#toc" title="全体の目次">
+	<link rel="next"       href="01.html" title="第１章：マシンへようこそ">
+	<link rel="glossary"   href="07.html" title="用語集およびFAQ">
+	<link rel="appendix"   href="06.html" title="付録">
+	<link rel="appendix"   href="table_a1.html" title="付録：表Ａ.１ レベルの仕様">
+	<link rel="stylesheet" href="../_styles/_index.css">
+	<link rel="stylesheet" href="styles/headings.css">
+	<link rel="stylesheet" href="styles/00-foreword_intro.css">
+	<title>はじめに - The Pac-Man Dossier邦訳</title>
+</head>
+
+<body>
+
+<a href="#main-content" id="skip-nav">本文へジャンプ</a>
+<header>
+	<nav>
+		<div class="nav">
+			<ul>
+				<li class="current">はじめに &amp; 総目次</li>
+				<li><a href="01.html">1.マシンへようこそ</a></li>
+				<li><a href="02.html">2.ゲームプレイ詳細</a></li>
+				<li><a href="03.html">3.迷路ロジック</a></li>
+				<li><a href="04.html">4.ゴーストとの戦い</a></li>
+				<li><a href="05.html">5.分割画面</a></li>
+			</ul>
+			<ul class="flex">
+				<li><a href="06.html" rel="appendix" title="付録：参照表、イースターエッグなど">付録</a></li>
+				<li><a href="07.html" rel="glossary">用語集&amp;FAQ</a></li>
+			</ul>
+		</div>
+		<ul class="toc">
+			<li class="to-top"><a href="#main-content">ページの先頭</a></li>
+			<li><a href="#about-orginal-author">原典の著者について</a></li>
+		</ul>
+		<ul class="toc flex condensed">
+			<li><a href="#foreword" class="condensed">前書き</a></li>
+			<li><a href="#toc" class="condensed" title="資料の総目次">総目次</a></li>
+			<li><a href="#introduction" class="condensed">序論</a></li>
+		</ul>
+	</nav>
+</header>
+<main id="main">
+	<nav id="rel-top" class="rel">
+		<ul>
+			<li><a href="index.html" rel="about" accesskey="a" title="邦訳概説"><kbd>A</kbd>bout</a></li>
+			<li class="none prev"><kbd>P</kbd>rev</li>
+			<li><a href="#toc" rel="contents" accesskey="t" title="資料の総目次"><kbd>T</kbd>oC</a></li>
+			<li><a href="01.html" rel="next" accesskey="n" title="次へ - 第１章：マシンへようこそ"><kbd>N</kbd>ext</a></li>
+		</ul>
+	</nav>
+	<section id="main-content">
+		<h1 class="hn-icon pac">The Pac-Man Dossier</h1>
+		<p class="author" lang="en"><cite><a href="https://pacman.holenet.info/#AboutTheAuthor" rel="author" title="About the Author - The Pac-Man Dossier" lang="en">Jamey Pittman</a>—version 1.0.27 August 11, 2015</cite></p>
+		<div class="note">
+			<p data-cite="https://pacman.holenet.info/">
+			<em>訳注：</em>この資料は原文の<a href="https://pacman.holenet.info/">The Pac-Man Dossier</a>を機械翻翻にかけ、その翻訳結果に手直しを加えたものです。一連の文書には翻訳上の誤りを含む可能性があり、翻訳の正確性を保証しません。
+			</p>
+		</div>
+		<section id="about-orginal-author">
+			<h2><a href="#about-orginal-author" class="fragment">原典の著者について</a></h2>
+			<p>
+			<a href="https://pacman.holenet.info/#AboutTheAuthor" data-cite="jamey.pittman@yahoo.com" rel="author" title="About the Author - The Pac-Man Dossier" lang="en">Jamey Pittman</a>は、1981年に初めて<cite>Pac-Man</cite>マシンに出合って以来、ビデオゲームに魅了されてきました。やがてコンピュータやビデオゲームに興味を持ち、1990年代を通じて<cite>Cybermage</cite>、<cite>Nox</cite>、<cite>Wizards &amp; Warriors</cite>など様々なPCゲームタイトルのプログラミングで成功を収め、後年は３Ｄエンジン技術を開発しました。余暇には、<cite>Pac-Man</cite>、<cite>Ms. Pac-Man</cite>、<cite>Donkey Kong</cite>、そして<cite>Galaga</cite>などを手首や目が痛くなるまで楽しんでいます。
+			</p>
+		</section>
+		<section id="foreword">
+			<h2><a href="#foreword" class="fragment hn-icon f1">前書き</a></h2>
+			<p>
+			<em>The Pac-Man Dossier</em>へようこそ！
+			</p>
+			<p>
+			この資料が目的とすることは、あらゆるスキル・レベルの<cite>Pac-Man</cite>プレイヤーを対象に、可能なかぎり包括的かつ、詳細なゲームの研究成果を提供することにあります。この資料の探究で新たに発見された、ゲームで実際に使用されるゴーストの挙動や経路探索ロジックについて、現時点での最も明快な見解を考慮に入れました。
+			</p>
+			<p>
+			リンクされた章と節で構成されたこの資料は、下記の<a href="#toc">目次</a>から簡単に読み進めることができます。
+			</p>
+			<p>
+			<a href="01.html">第１章</a>は純粋に、ナムコと<cite>Pac-Man</cite>の設計者である岩谷徹の裏話であり、アーケード・クラシックの開発サイクルと発売までの記録です。しかし、技術的な内容を知りたければ<a href="02.html">第２章</a>から読み進めて構いません。
+			</p>
+			<p>
+			<a href="03.html">第３章</a>と<a href="04.html">第４章</a>では、経路探索ロジックの解説と、ゴースト固有の挙動について解説します。
+			</p>
+			<p>
+			<a href="05.html">第５章</a>は“分割画面（split screen）”レベルに特化しています。
+			</p>
+			<p>
+			付録として<a href="06.html#appendix-a">参照表</a>、<a href="06.html#easter-eggs_tricks">イースターエッグ</a>、<a href="06.html#vintage-guides">年代物のガイド</a>、<a href="07.html">用語集</a>などを提供しています。最後に、もしあなたが探しているものが見つからなかったり、文章中に不明な点があれば、お気軽に<a href="https://pacman.holenet.info/#AboutTheAuthor" data-cite="jamey.pittman@yahoo.com" rel="author" title="About the Author - The Pac-Man Dossier">著者</a>までご連絡ください！
+			</p>
+		</section>
+		<section id="toc">
+			<h2><a href="#toc" class="fragment hn-icon f8">資料の総目次</a></h2>
+			<ul class="toc">
+				<li><a href="#introduction">序論</a></li>
+				<li><a href="01.html">第１章：マシンへようこそ</a></li>
+				<li><a href="02.html">第２章：ゲームプレイの詳細</a>
+					<ul>
+					<li><a href="02.html#basics">基礎</a></li>
+					<li><a href="02.html#modus-operandi">お決まりの手口</a></li>
+					<li><a href="02.html#reversal-of-fortune">運命の逆転</a></li>
+					<li><a href="02.html#scatter-chase">縄張り、追いかけ、その繰り返し…</a></li>
+					<li><a href="02.html#frightening-behavior">イジケのふるまい</a></li>
+					<li><a href="02.html#speed">速さ</a></li>
+					<li><a href="02.html#cornering">コーナリング</a></li>
+					<li><a href="02.html#home-sweet-home">ホームスイートホーム</a>
+						<ul>
+							<li><a href="02.html#house-note">訳者によるまとめ</a></li>
+						</ul>
+					</li>
+					<li><a href="02.html#areas-to-exploit">最大限に活用すべきエリア</a></li>
+					</ul>
+				</li>
+				<li><a href="03.html">第３章：迷路ロジックの初歩</a>
+					<ul>
+					<li><a href="03.html#what-tile-am-i-in">どのタイルにいるの？</a></li>
+					<li><a href="03.html#passing-through">ぴったしのすれ違い</a></li>
+					<li><a href="03.html#target-tiles">ターゲットタイル</a></li>
+					<li><a href="03.html#looking-ahead">将来の展望</a></li>
+					<li><a href="03.html#intersections">交差点</a></li>
+					<li><a href="03.html#fixed-target-tiles">固定されたターゲット</a></li>
+					</ul>
+				</li>
+				<li><a href="04.html">第４章：ゴーストとの戦い</a>
+					<ul>
+					<li style="font-size:95%"><a
+						href="04.html#AKABEI">アカベエ</a>/<a
+						href="04.html#PINKY">ピンキー</a>/<a
+						href="04.html#AOSUKE">アオスケ</a>/<a
+						href="04.html#GUZUTA">グズタ</a>
+					</li>
+					</ul>
+				</li>
+				<li><a href="05.html">第５章：分割画面の解読</a>
+					<ul>
+					<li><a href="05.html#on-the-edge-of-forever">永遠の果てに</a></li>
+					<li><a href="05.html#playing-the-level">遊んでみる</a></li>
+					<li><a href="05.html#believe-it-or-not">信じようが信じまいが</a></li>
+					</ul>
+				</li>
+				<li><a href="06.html" rel="appendix">付録</a>
+					<ul>
+					<li><a href="06.html#references">参考文献と資料</a></li>
+					<li><a href="06.html#appendix-a">Ａ:参照表</a>
+						<ul>
+						<li><a href="06.html#a1">参照表Ａ.１ レベルの仕様</a></li>
+						<li><a href="06.html#a2">参照表Ａ.２ 難易度の仕様</a></li>
+						</ul>
+					</li>
+					<li><a href="06.html#easter-eggs_tricks">Ｂ:イースターエッグ</a>
+						<ul>
+						<li><a href="06.html#namco-easter-egg">NAMCOのイースターエッグ</a></li>
+						<li><a href="06.html#ghost-bug">ゴーストのバグ</a></li>
+						</ul>
+					</li>
+					<li><a href="06.html#hardware">Ｃ:ハードウエア情報</a>
+						<ul>
+						<li><a href="06.html#spec">仕様</a></li>
+						<li><a href="06.html#operators-bools" lang="en" style="display:inline-block">Midway Operator's<br>Reference Books</a></li>
+						</ul>
+					</li>
+					<li><a href="06.html#vintage-guides">Ｄ：年代物のPac-Manガイド</a></li>
+					</ul>
+				</li>
+				<li><a href="07.html#glossary" rel="glossary">用語集</a>・<a href="07.html#faq">よくある質問</a></li>
+			</ul>
+		</section>
+		<section id="introduction">
+			<h2 class="hn-icon pac"><a href="#introduction" class="fragment">序論</a></h2>
+			<p>
+			1999年、フロリダ州ハリウッドに住むビリー･ミッチェルは、<cite>Pac-Man</cite>のパーフェクトスコアとなる3,333,360ポイントを達成した最初の人物となりました。その過程において彼は、全レベルを通してライフをいっさい失わず、可能なかぎりのドット、パワークッキー、ゴースト、ボーナスシンボルを食べつくしました。
+			</p>
+			<p>
+			しかし、最も驚くべきことは彼が“パターン”として広く知られている決まった手順を一切使用せずにプレイできるという事実でしょう。その代わりに、ゴーストが迷路上でどのように行動するのか熟知しており、その知見に基づいてパックマンを常に敵の一歩先へと進めます。
+			</p>
+			<p>
+			ほとんどのプレイヤーはミッチェルとは異なり、ハイスコアを積み上げるためにはゲームの決定論的性質を利用した多数のパターンに頼るほかありません。
+			</p>
+			<p>
+			これらのパターンを実際に使用するには完全な暗記と想起が必要です。実行中に一度でもためらったり、間違ったターンをおこなえば、残りのパターンは役に立たなくなる可能性があります。
+			</p>
+			<p>
+			当然、これらのパターンに頼りすぎると、ミスした途端にどのように効率よくゴーストを回避し、どのように高難度のレベルで残りのドットを回収するのか、多くのプレイヤーは何もわからなくなります。
+			</p>
+			<p>
+			現在、インターネットで入手できる大多数の<cite>Pac-Man</cite>の攻略ガイドは、'80年代初頭に売られていた本と内容がよく似ています。始めにゲームの流れと得点の概要、次に読者が記憶すべきパターンの一覧が提供されますが、ゲームの仕組みやゴーストが決定をくだす方法については、ほとんど何も書かれていません。
+			</p>
+			<p>
+			したがってこのガイドの目的は、パターンを使わずともプレイできるよう、<cite>Pac-Man</cite>についての理解をより深めてもらうことにあり、ゲームの流れ、迷路ロジック、ゴーストの個性、神秘的な“split screen”レベルについて詳しくみていきます。このガイドを読んでもビリー・ミッチェルのように上達するとは限りません。しかし、ゴーストの“思考”をよく理解しておけば、９つめの鍵パターンのミスから立ち直るのがずっと楽になるのは間違いないでしょう。
+			</p>
+			<p>
+			提供するすべての情報は、オリジナルの<cite>Pac-Man</cite>コードROMからの逆アセンブル出力と、実際にゲームプレイの実験的観察から抽出/検証されたものです。よって著者は、その精度に高い自信を持っています。
+			</p>
+			<p>
+			とはいえ、間違いや見落としに気づかれたら早急に修正できるよう、<a href="https://pacman.holenet.info/#AboutTheAuthor" data-cite="jamey.pittman@yahoo.com" rel="author" title="About the Author - The Pac-Man Dossier">著者</a>までご連絡ください。私がこのゲームをより深く理解したのと同じように、皆さんもこの情報を興味深くそして有益に感じて頂ければ幸いです。
+			</p>
+			<p>
+			このガイドへの貴重な貢献がすべての章にある <a href="http://donhodges.com/" title="donhodges.com" class="ref">Don Hodges</a> に深く感謝いたします。
+			</p>
+		</section>
+		<nav id="rel-bottom" class="rel">
+			<ul>
+				<li><a href="index.html" rel="about" title="邦訳概説"><kbd>A</kbd>bout</a></li>
+				<li class="none prev"><kbd>P</kbd>rev</li>
+				<li><a href="#toc" rel="contents" title="資料の総目次"><kbd>T</kbd>oC</a></li>
+				<li><a href="01.html" rel="next" title="次へ - 第１章：マシンへようこそ"><kbd>N</kbd>ext</a></li>
+			</ul>
+		</nav>
+	</section>
+	<footer>
+		<address>訳者：あのにも &lt;<a href="https://forms.gle/7gVSN3o1pHuR1AEY9" rel="author">お問い合わせ</a>&gt;</address>
+	</footer>
+</main>
+
+</body>
+</html>
