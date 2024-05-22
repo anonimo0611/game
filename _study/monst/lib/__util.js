@@ -29,9 +29,7 @@ const splitByBar  = arg=>
 	isStr(arg) && (arg=arg.trim()) && arg.split('|') || [];
 
 const getCircum   = (degree,r=1,{x:cx=0,y:cy=0}={})=> {
-	const x = Math.cos(PI/180*degree) * r + cx
-	const y = Math.sin(PI/180*degree) * r + cy
+	const x = Math.cos(PI/180*degree) * r + cx;
+	const y = Math.sin(PI/180*degree) * r + cy;
 	return {pos:{x, y}, values:[x, y]}
-}
-const setReadonlyProp = (obj, key, value)=>
-	defineProperty(obj, key, {value, writable:false, configurable:true});
+};

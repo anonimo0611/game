@@ -6,6 +6,9 @@ class Vec2 {
 	}
 	static #getXYFromObj(args) {
 		let x=0, y=0
+		if (isArray(args[0])) {
+			return {x:args[0][0], y:args[0][1]};
+		}
 		if (typeof args[0] == 'object') {
 			x = args[0].x || 0
 			y = args[0].y || 0
@@ -34,8 +37,8 @@ class Vec2 {
 	static distance   = (v1, v2)=> Vec2.sub(v1, v2).magnitude
 	static isParallel = (v1, v2)=> Vec2.cross(v1, v2) < 0.000001
 	static isVertical = (v1, v2)=> Vec2.dot(v1, v2) < 0.000001
+	static reflect    = (v,  n) => vec2(v).sub( vec2(n).mul(2*Vec2.dot(v,vec2(n))) )
 	static eq         = (v1, v2)=> abs(v1.x - v2.x) < 0.000001 && abs(v1.y - v2.y) < 0.000001
-	static reflect    = (v, n)  => vec2(v).sub(vec2(n).mul(2*Vec2.dot(v,n)))
 
 	get vals()       {return [this.x, this.y]}
 	get string()     {return this.toString()}

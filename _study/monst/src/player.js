@@ -1,174 +1,197 @@
-import * as Draw  from './draw.js';
-import {cvs}      from './canvas.js';
+import {Ticker}   from '../lib/timer.js';
+import {rgbaPct}  from '../lib/color.js';
+import {Draw}     from './draw.js';
+import {cvs,ctx}  from './canvas.js';
 import {Phase}    from './phase.js';
 import {Monsters} from './monster.js';
 import {Bullet}   from './bullet.js';
 
-const {drawShadow,drawBall,drawNumber,drawBar}= Draw;
+export const Players = [];
+
+const Radius = 24;
+const Colors = [
+	rgbaPct(92,  0,   0),
+	rgbaPct( 0, 50,   0),
+	rgbaPct( 0, 50, 100),
+	rgbaPct(50,  0, 100),
+];
+const CursorGrad = ctx.createRadialGradient(0,0,Radius*3/4, 0,0,Radius*2);
+CursorGrad.addColorStop(0.0, rgbaPct(100, 75, 25, 0.0));
+CursorGrad.addColorStop(1.0, rgbaPct(100, 75, 25, 1.0));
+
+let cursorScale = 0;
+let cursorCount = 0;
 
 export class Player {
 	static Max    =  4;
-	static Radius = 24;
 	static MaxHp  = 1e4;
+	static Radius = Radius;
 	static #hp	  = this.MaxHp;
 	static #lstHp = this.MaxHp;
-	static Colors = [
-		{r: 92, g:	0, b:	0, a: 1},
-		{r:  0, g: 50, b:	0, a: 1},
-		{r:  0, g: 50, b: 100, a: 1},
-		{r: 50, g:	0, b: 100, a: 1}
-	];
 	static #currentIdx = 0;
-	static get hp() {
-		return this.#hp;
-	}
-	static get lstHp() {
-		return this.#lstHp;
-	}
-	static get currentIdx() {
+	static get hp()    {return this.#hp}
+	static get lstHp() {return this.#lstHp}
+	static get currentIndex() {
 		return this.#currentIdx;
 	}
 	static get current() {
-		return Players[this.#currentIdx];
+		return Players[this.currentIndex];
 	}
 	static init() {
+		cursorScale = 0;
+		cursorCount = 0;
 		this.#hp = this.#lstHp = this.MaxHp;
 		this.#currentIdx = 0;
-		Players.forEach((_,i)=>{
+		for (let i=0; i<this.Max; i++) {
 			Players[i] = new Player(i);
-			Players[i].position.set(
-				(1+i) * cvs.width / (Players.length+1),
-				cvs.height - Player.Radius * 3
-			);
-		});
+			Players[i].pos.x = (1+i) * cvs.width / (this.Max+1);
+			Players[i].pos.y = cvs.height - Radius * 3;
+		}
 	}
 	static update() {
-		if (Phase.isMonster)
-			return;
-		Player.#lstHp -= Player.MaxHp / (60*3);
-		Player.#lstHp  = max(Player.#lstHp, Player.hp);
+		for (const p of Players)
+			p.#update();
+		if (Phase.isMonster) {
+			this.#lstHp -= this.MaxHp / (60*3);
+			this.#lstHp  = max(this.#lstHp, this.hp);
+		}
 	}
-	static setIndex(idx) {
-		this.#currentIdx = idx;
+	static setNextTurn() {
+		cursorScale = 0;
+		cursorCount = 0;
+		this.#currentIdx =
+			(this.Max + this.currentIndex+1) % this.Max;
 	}
 	static dropShadow() {
 		for (const p of Players)
-			drawShadow(Player.Radius, p.position, p.color);
-	}
-	static #dropBullets() {
-		for (const p of Players)
-			p.#drawBullet();
+			Draw.shadow(p);
 	}
 	static drawPlayers() {
-		const cP = Player.current;
 		for (const p of Players)
-			p.#drawBall();
-		drawBall(Player.Radius, cP.position, cP.color);
-		this.#dropBullets();
-	}
-	static #drawHp() {
-		drawBar(
-			Player.hp,
-			Player.MaxHp,
-			Player.lstHp,
-			vec2(cvs.width / 2, cvs.height - 18),
-			vec2(cvs.width - 32, 12),
-			'rgb(100%, 75%,0%)', 'rgb(0%,100%,0%)'
-		);
+			p.#draw();
+		Draw.ball(this.current);
+		Bullet.Player.draw();
 	}
 	static drawStatus() {
 		for (const p of Players)
 			p.#drawDamage();
-		Player.#drawHp();
-	}
-	#index	 = 0;
-	damage	 = 0;
-	position = vec2(0, 0);
-	velocity = vec2(0, 0);
-	bullets  = Array(Bullet.Max).fill().map(Bullet.makePlayerBullet);
-	get color() {
-		return Player.Colors[this.#index]
-	}
-	constructor(idx, color) {
-		this.#index = idx;
-	}
-	#drawBall() {
-		if (this != Player.current)
-			drawBall(Player.Radius, this.position, this.color);
-	}
-	#drawDamage() {
-		if (this.damage <= 0)
-			return;
-		drawNumber(
-			this.damage,
-			vec2(this.position).add(0, -Player.Radius),
-			26, 'rgb(100%,50%,50%)'
+		Draw.hpBar(
+			this, {
+			pos:    vec2(cvs.width/2, cvs.height-18),
+			size:   vec2(cvs.width-32, 12),
+			lColor: rgbaPct(100,  75, 0),
+			rColor: rgbaPct(  0, 100, 0)
+			}
 		);
 	}
-	#drawBullet() {
-		for (const b of this.bullets)
-			if (b.velocity.magnitude > 0)
-				drawBall(Bullet.Radius, b.position, this.color);
+	static drawCursor() {
+		if (!Phase.isIdle) return;
+		const pos = vec2(this.current.pos)
+		pos.y += sin(Ticker.count * PI*2 / 60) * Radius/8;
+		cursorScale += sin(cursorCount++ * PI*2 / 45) / 8;
+
+		ctx.save();
+		ctx.translate(...pos.vals);
+		ctx.beginPath();
+			ctx.fillStyle = CursorGrad;
+			ctx.arc(0,0, max(0, Radius*cursorScale), 0, PI*2);
+		ctx.fill();
+		ctx.restore();
 	}
-	rebound() {
-		const lastPos = vec2(this.position);
-		this.position.add(this.velocity);
-		if (this.position.x < Player.Radius) {
-			this.position.set(lastPos);
-			this.velocity.set(Vec2.reflect(this.velocity, vec2(1, 0)));
+	#index	 = 0;
+	#damage	 = 0;
+	#clash   = 0;
+	pos      = vec2();
+	velocity = vec2();
+	radius   = Radius;
+	get x()      {return this.pos.x}
+	get y()      {return this.pos.y}
+	get clash()  {return this.#clash > 0}
+	get damage() {return this.#damage}
+	get color()  {return Colors[this.#index]}
+	constructor(idx) {
+		this.#index = idx;
+		this.#setBullets();
+		freeze(this);
+	}
+	#setBullets() {
+		this.bullets = Array(Bullet.Max).fill()
+			.map(()=> new Bullet.Player(this.color));
+	}
+	#update() {
+		if (this.#clash > 0)
+			this.#clash--;
+	}
+	#draw() {
+		if (this != Player.current)
+			Draw.ball(this);
+	}
+	#drawDamage() {
+		if (this.#damage <= 0) return;
+		Draw.number(
+			this.#damage, 26, rgbaPct(100, 50, 50),
+			vec2(this.pos).add(0, -Radius),
+		);
+	}
+	rebound(lastPos) {
+		const {pos,velocity:v}= this;
+		if (pos.x < Player.Radius) {
+			pos.set(lastPos);
+			v.set( Vec2.reflect(v,[1,0]) );
 		}
-		if (this.position.x > cvs.width - Player.Radius) {
-			this.position.set(lastPos);
-			this.velocity.set(Vec2.reflect(this.velocity, vec2(-1, 0)));
+		if (pos.x > cvs.width - Radius) {
+			pos.set(lastPos);
+			v.set( Vec2.reflect(v,[-1,0]) );
 		}
-		if (this.position.y < Player.Radius) {
-			this.position.set(lastPos);
-			this.velocity.set(Vec2.reflect(this.velocity, vec2(0, 1)));
+		if (pos.y < Radius) {
+			pos.set(lastPos);
+			v.set( Vec2.reflect(v,[0,1]) );
 		}
-		if (this.position.y > cvs.height - Player.Radius) {
-			this.position.set(lastPos);
-			this.velocity.set(Vec2.reflect(this.velocity, vec2(0, -1)));
+		if (pos.y > cvs.height - Radius) {
+			pos.set(lastPos);
+			v.set( Vec2.reflect(v,[0,-1]) );
 		}
 	}
 	friendCombo() {
+		if (this.velocity.magnitude <= 0) return;
 		for (const p of Players) {
-			if (this == p || p.velocity.magnitude > 0)
-				continue;
-
-			if (Vec2.distance(this.position, p.position) < Player.Radius * 2) {
-				const v = Vec2.sub(p.position, this.position).normalized;
+			if (this == p || p.velocity.magnitude > 0) continue;
+			if (Vec2.distance(this.pos, p.pos) < Radius*2) {
+				const v = this.pos.normalized;
 				v.mul(Vec2.dot(this.velocity, v)).mul(.5);
 				p.velocity.set(v);
 				if (!p.bullets.some(b=>b.velocity.magnitude > 0))
-					Bullet.fire(p.bullets, Player.Radius, p.position);
+					Bullet.fire(p.bullets, Radius, p.pos);
 			}
 		}
 	}
-	attack() {
+	attack(lastPos) {
 		for (const m of Monsters) {
-			if (m.hp <= 0)
-				continue;
-			if (Vec2.distance(this.position, m.position) >= Player.Radius + m.radius)
-				continue;
+			const dist = Vec2.distance(this.pos, m.pos);
+			if (m.hp <= 0) continue;
+			if (dist >= Radius+m.radius) continue;
 
-			const v = Vec2.sub(m.position, this.position).normalized;
-			v.mul(Vec2.dot(this.velocity, v));
+			this.pos.set(lastPos);
+			const v = Vec2.sub(m.pos, this.pos).normalized;
+			v.mul( Vec2.dot(this.velocity, v) );
 
 			const h = Vec2.sub(this.velocity, v)
-			this.velocity.set(h.normalized.mul(this.velocity.magnitude));
-			m.shakeVelocity.add(v);
+			this.velocity.set( h.normalized.mul(this.velocity.magnitude) );
+			m.Shake.velocity.add(v);
 
-			const damage = int(v.magnitude * 100);
-			m.damage += damage;
-			m.hp -= damage;
-			m.hp  = max(m.hp, 0);
+			const damage = int(v.magnitude*100);
+			m.takeDamage(damage);
 		}
 	}
+	turnChanged() {
+		this.#clash  = 0;
+		this.#damage = 0;
+	}
 	takeDamage(damage) {
-		this.damage += damage;
-		Player.#hp -= this.damage;
+		this.#clash = 10;
+		this.#damage += damage;
+		Player.#hp -= this.#damage;
 		Player.#hp	= max(Player.#hp, 0);
 	}
 }
 freeze(Player);
-export const Players = Array(Player.Max).fill();

@@ -14,59 +14,55 @@ export const Phase = freeze(new class extends State {
 		super();
 		this.init();
 	}
-	switch(scene) {
-		super.switch(scene);
-	}
 	fire() {
 		let isMoving = false;
 		for (const p of Players) {
 			if (p.velocity.magnitude > 0) {
 				isMoving = true;
+				const lastPos = vec2(p.pos);
 				const lastVelocity = vec2(p.velocity);
-				p.velocity.sub(p.velocity.normalized.mul(.075));
+				p.velocity.sub(p.velocity.normalized.mul(0.075));
 				if (Vec2.dot(p.velocity, lastVelocity) <= 0)
-					p.velocity.set(0, 0);
+					p.velocity.set();
 
-				p.rebound();
+				p.pos.add(p.velocity);
+				p.rebound(lastPos);
 				if (p == Player.current && p.velocity.magnitude > 0)
 					p.friendCombo();
 
-				p.attack();
+				p.attack(lastPos);
 			}
 			if (Bullet.update(p.bullets))
 				isMoving = true;
 		}
-
 		if (isMoving) return;
-		Player.setIndex((Player.Max + Player.currentIdx + 1) % Player.Max);
-		for (const m of Monsters) {
-			m.turnWait--;
-			m.damage = 0;
-		}
-		if (Monster.currentIdx >= 0) {
+		Player.setNextTurn();
+		for (const m of Monsters)
+			m.turnChanged();
+		if (Monster.currentIndex >= 0) {
 			const m = Monster.current;
-			Phase.switch(Phase.enum.Monster);
-			Bullet.fire(m.bullets, m.radius, m.position);
+			Phase.switchToMonster();
+			Bullet.fire(m.bullets, m.radius, m.pos);
 		} else
-			Monsters.every(m=>m.hp == 0)
-				? Phase.switch(Phase.enum.Clear)
-				: Phase.switch(Phase.enum.Idle);
+			Monsters.every(m=> m.hp == 0)
+				? Phase.switchToClear()
+				: Phase.switchToIdle();
 	}
 	monster() {
 		let isMoving = false;
 		let m = Monster.current;
 		isMoving ||= Bullet.update(m.bullets);
 		if (!isMoving) {
-			m.turnWait = m.turnWaitMax;
+			m.resetTurnWait();
 			m = Monster.current;
-			if (Monster.currentIdx >= 0)
-				Bullet.fire(m.bullets, m.radius, m.position);
+			if (Monster.currentIndex >= 0)
+				Bullet.fire(m.bullets, m.radius, m.pos);
 			else {
 				for (const p of Players)
-					p.damage = 0;
-				Player.hp <= 0
-					? Phase.switch(Phase.enum.Over)
-					: Phase.switch(Phase.enum.Idle);
+					p.turnChanged();
+				Player.hp > 0
+					? Phase.switchToIdle()
+					: Phase.switchToOver();
 			}
 		}
 	}
