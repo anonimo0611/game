@@ -20,7 +20,7 @@ export const OrbType = freeze({
 	Blue:    3,
 	Purple:  4,
 	Pink:    5,
-	Max:     6
+	Max:     6,
 });
 const OrbColors = freeze([
 	'#ff0033', // Red
@@ -28,7 +28,7 @@ const OrbColors = freeze([
 	'#339933', // Green
 	'#0085de', // Blue
 	'#6600ff', // Purple
-	'#fd07c3'  // Pink
+	'#fd07c3', // Pink
 ]);
 const ComboColors =
 	freeze('#00f|#f00|#0f0|#00f|#f0f|#0ff'.split('|'));
@@ -41,17 +41,16 @@ const Directions = freeze([
 ]);
 
 const Edging = ctx.createRadialGradient(0,0,0,0,0, OrbRadius);
-      Edging.addColorStop(0.00, 'transparent');
-      Edging.addColorStop(0.89, 'transparent');
-      Edging.addColorStop(0.90, '#666');
-      Edging.addColorStop(1.00, '#fff');
+Edging.addColorStop(0.00, 'transparent');
+Edging.addColorStop(0.89, 'transparent');
+Edging.addColorStop(0.90, '#666');
+Edging.addColorStop(1.00, '#fff');
 
 const Gradients = Array(OrbType.Max).fill().map((_,i)=> {
-	const
-		g = ctx.createRadialGradient(-Grid.Size/6,-Grid.Size/6,0, 0,0,OrbRadius);
-		g.addColorStop(0.00, '#eee');
-		g.addColorStop(0.89, OrbColors[i]);
-		g.addColorStop(1.00, '#fff');
+	const g = ctx.createRadialGradient(-Grid.Size/6,-Grid.Size/6,0, 0,0,OrbRadius);
+	g.addColorStop(0.00, '#eee');
+	g.addColorStop(0.89, OrbColors[i]);
+	g.addColorStop(1.00, '#fff');
 	return g;
 });
 

@@ -27,7 +27,7 @@ export const Pointer = freeze(new class {
 		const {y, x}= Pointer.swappingPos;
 		return Orbs[y][x];
 	}
-	get #inCornerOfTile() {
+	get inCornerOfTile() {
 		const {x, y}= Vec2.remainder(Pointer.Pos, Grid.Size).div(Grid.Size);
 		if (x <  .25 && y <  .25) return true;
 		if (x >= .75 && y <  .25) return true;
@@ -52,29 +52,31 @@ export const Pointer = freeze(new class {
 		Phase.switchToSwap();
 	}
 	#onMove(e) {
+		if (!Phase.isSwap) return;
 		e.preventDefault();
 		Pointer.#setPos(e);
-		if (!Phase.isSwap) return;
-		const swapDest = Vec2.divInt(Pointer.Pos, Grid.Size);
-		const {x:dx,y:dy}= swapDest;
-		const {x:sx,y:sy}= Pointer.swappingPos;
 
-		if (Pointer.swappingOrb != Orbs[dy][dx] && !Pointer.#inCornerOfTile) {
-			const srcCenter = vec2(Pointer.swappingPos).add(.5).mul(Grid.Size);
-			const dstCenter = vec2(swapDest).add(.5).mul(Grid.Size);
+		const swapSrc = Pointer.swappingPos;
+		const swapDst = Vec2.divInt(Pointer.Pos, Grid.Size);
+		const SrcOrb  = Orbs[swapSrc.y][swapSrc.x];
+		const DstOrb  = Orbs[swapDst.y][swapDst.x];
 
-			const center = Vec2.add(srcCenter,dstCenter).div(2);
-			Orbs[sy][sx].rotCenter =
-			Orbs[dy][dx].rotCenter = center;
+		if (Pointer.swappingOrb != DstOrb && !Pointer.inCornerOfTile) {
+			const srcCenter = vec2(swapSrc).add(.5).mul(Grid.Size);
+			const dstCenter = vec2(swapDst).add(.5).mul(Grid.Size);
 
-			const centerToDst = Vec2.sub(dstCenter,center);
-			Orbs[sy][sx].rotateMax = atan2(-centerToDst.y, centerToDst.x);
-			Orbs[sy][sx].rotate    = Orbs[sy][sx].rotateMax - PI;
-			Orbs[dy][dx].rotate    = Orbs[sy][sx].rotateMax;
-			Orbs[dy][dx].rotateMax = Orbs[dy][dx].rotate + PI;
+			const center = Vec2.add(srcCenter, dstCenter).div(2);
+			SrcOrb.rotCenter =
+			DstOrb.rotCenter = center;
 
-			Orb.swapType(Pointer.swappingOrb, Orbs[dy][dx]);
-			Pointer.#swappingPos = swapDest;
+			const centerToDst = Vec2.sub(dstCenter, center);
+			SrcOrb.rotateMax = atan2(-centerToDst.y, centerToDst.x);
+			SrcOrb.rotate    = SrcOrb.rotateMax - PI;
+			DstOrb.rotate    = SrcOrb.rotateMax;
+			DstOrb.rotateMax = DstOrb.rotate + PI;
+
+			Orb.swapType(SrcOrb, DstOrb);
+			Pointer.#swappingPos = swapDst;
 		}
 	}
 	#onUp(e) {
