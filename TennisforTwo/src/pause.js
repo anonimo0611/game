@@ -20,13 +20,13 @@ export const Pause = new class {
 	static {$ready(this.#setup)}
 	static #setup() {
 		$on({
-			Title:     Pause.#reset,
-			blur:      Pause.#onBlur,
-			focus:     Pause.#onFocus,
-			keydown:   Pause.#onKeydown,
-			touchstart:Pause.#onTouchStart,
-			touchend:  Pause.#onDown,
-			mousedown: Pause.#onDown,
+			Title:       Pause.#reset,
+			blur:        Pause.#onBlur,
+			focus:       Pause.#onFocus,
+			keydown:     Pause.#onKeydown,
+			touchstart:  Pause.#onTouchStart,
+			touchend:    Pause.#onDown,
+			pointerdown: Pause.#onDown,
 		});
 	}
 	get paused()      {return $paused}
@@ -45,7 +45,7 @@ export const Pause = new class {
 		Timer.cancel(Pause);
 		Sound.pauseAll(paused);
 	}
-	pause(cfg) {
+	pause() {
 		!$paused
 			? Pause.#set(!$paused, {byCtrl:true})
 		 	: Pause.#resumeTimer(!$paused);
@@ -69,13 +69,14 @@ export const Pause = new class {
 	}
 	#onDown(e) {
 		if (Button.hover) return;
-		if (Pointer.isTouchDevice && e.type == 'mousedown') return;
+		if (Pointer.isTouchDevice && e.type == 'pointerdown') return;
 		if (Timer.has(Pause)) {
 			if ($blurred--) return;
 			Pause.#set(false);
 			$(Pause).trigger('shot');
 		}
-		$paused && !$blurred-- && Pause.pause();
+		$paused && !$blurred && Pause.pause();
+		$blurred = 0;
 	}
 	#onKeydown(e) {
 		if (Pointer.isTouchDevice  || !Scene.isInGame)   return;

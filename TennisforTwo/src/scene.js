@@ -8,8 +8,8 @@ export const Scene = new class extends State {
 		super();
 		this.init();
 	}
-	switch(scene) {
-		super.switch(scene);
+	switchTo(scene) {
+		super.switchTo(scene);
 		$trigger(scene);
 	}
 };
