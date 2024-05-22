@@ -14,7 +14,7 @@ export class Bullet {
 	}
 	static update(bullets) {
 		let isMoving = false;
-		bullets.forEach(b=>{
+		bullets.forEach(b=> {
 			if (b.velocity.magnitude <= 0) return;
 			isMoving = true;
 			b.update();
@@ -46,7 +46,7 @@ export class Bullet {
 		const v   = vec2(getCircum(360/Bullet.Max * i).pos);
 		const pos = vec2(v).mul(r).add(srcPos);
 		this.pos.set(pos);
-		this.velocity.set(v.mul(Bullet.Speed));
+		this.velocity.set( v.mul(Bullet.Speed) );
 	}
 }
 Bullet.Player = class extends Bullet {

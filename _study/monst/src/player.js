@@ -80,7 +80,7 @@ export class Player {
 			pos:    vec2(cvs.width/2, cvs.height-18),
 			size:   vec2(cvs.width-32, 12),
 			lColor: rgbaPct(100,  75, 0),
-			rColor: rgbaPct(  0, 100, 0)
+			rColor: rgbaPct(  0, 100, 0),
 			}
 		);
 	}
@@ -160,7 +160,7 @@ export class Player {
 				const v = this.pos.normalized;
 				v.mul(Vec2.dot(this.velocity, v)).mul(.5);
 				p.velocity.set(v);
-				if (!p.bullets.some(b=>b.velocity.magnitude > 0))
+				if (!p.bullets.some(b=> b.velocity.magnitude > 0))
 					Bullet.fire(p.bullets, Radius, p.pos);
 			}
 		}

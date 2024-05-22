@@ -4,7 +4,7 @@ import {Player,Players}   from './player.js';
 import {Monster,Monsters} from './monster.js';
 
 export const Phase = freeze(new class extends State {
-	isIdle	  = true;
+	isIdle	  = false;
 	isHold	  = false;
 	isFire	  = false;
 	isMonster = false;

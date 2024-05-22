@@ -38,13 +38,15 @@ export const Draw = new class{
 		ctx.font = `${fs}px Digit`;
 		const tw = ctx.measureText(str).width;
 		const dy = y + fs/3;
-
-		ctx.lineWidth	= 4;
-		ctx.strokeStyle = '#333';
-		ctx.strokeText(str, x - tw/2, dy);
-
-		ctx.fillStyle = color;
-		ctx.fillText(str, x - tw/2, dy);
+		{ // outline
+			ctx.lineWidth	= 4;
+			ctx.strokeStyle = '#333';
+			ctx.strokeText(str, x - tw/2, dy);
+		}
+		{ // fill
+			ctx.fillStyle = color;
+			ctx.fillText(str, x - tw/2, dy);
+		}
 		ctx.restore();
 	}
 	hpBar({hp,lstHp,MaxHp}, {pos,size,lColor,rColor})
@@ -90,12 +92,12 @@ export const Draw = new class{
 		ctx.save();
 		ctx.font = font;
 		ctx.textAlign = textAlign;
-		{
+		{ // outline
 			ctx.lineWidth   = lineWidth;
 			ctx.strokeStyle = strokeStyle;
 			ctx.strokeText(text, x, y);
 		}
-		{
+		{ // fill
 			ctx.fillStyle = fillStyle;
 			ctx.fillText(text, x, y);
 		}

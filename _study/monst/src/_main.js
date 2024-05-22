@@ -45,8 +45,8 @@ const Game = new class {
 	}
 	drawMessage(text, fillStyle, strokeStyle) {
 		ctx.save();
-		ctx.fillStyle = rgbaPct(0,0,0, .4);
-		ctx.fillRect(0,0, cvs.width, cvs.height);
+			ctx.fillStyle = rgbaPct(0,0,0, .4);
+			ctx.fillRect(0,0, cvs.width, cvs.height);
 		ctx.restore();
 		Draw.message({text,fillStyle,strokeStyle});
 	}

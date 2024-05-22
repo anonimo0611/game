@@ -29,11 +29,11 @@ export const Pointer = freeze(new class {
 		switch (Phase.current) {
 		case Phase.Enum.Idle:
 			Pointer.#setPos(e);
-			Phase.switchTo(Phase.Enum.Hold);
+			Phase.switchToHold();
 			break;
 		case Phase.Enum.Over:
 		case Phase.Enum.Clear:
-			$trigger('Reset')
+			$trigger('Reset');
 			break;
 		}
 	}
@@ -61,21 +61,21 @@ export const Pointer = freeze(new class {
 	draw() {
 		if (!Phase.isHold) return;
 		ctx.save();
-			const player = Player.current;
-			const playerToMouse = Vec2.sub(PointerPos, player.pos);
-			ctx.fillStyle = ArrowGrad;
-			ctx.translate(...player.pos.vals);
-			ctx.rotate(-atan2(...playerToMouse.vals) + PI/2);
-			ctx.scale(firePower*4, firePower);
-			ctx.beginPath();
-				ctx.moveTo(  -1,  0);
-				ctx.lineTo(   0,  1);
-				ctx.lineTo(-.25, .5);
-				ctx.lineTo(   1,  0);
-				ctx.lineTo(-.25,-.5);
-				ctx.lineTo(   0, -1);
-			ctx.closePath();
-			ctx.fill();
+		const player = Player.current;
+		const playerToMouse = Vec2.sub(PointerPos, player.pos);
+		ctx.fillStyle = ArrowGrad;
+		ctx.translate(...player.pos.vals);
+		ctx.rotate(-atan2(...playerToMouse.vals) + PI/2);
+		ctx.scale(firePower*4, firePower);
+		ctx.beginPath();
+			ctx.moveTo(  -1,  0);
+			ctx.lineTo(   0,  1);
+			ctx.lineTo(-.25, .5);
+			ctx.lineTo(   1,  0);
+			ctx.lineTo(-.25,-.5);
+			ctx.lineTo(   0, -1);
+		ctx.closePath();
+		ctx.fill();
 		ctx.restore();
 	}
 });

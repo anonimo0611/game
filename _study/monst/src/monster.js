@@ -110,7 +110,7 @@ export class Monster {
 			rgbaPct(100, 25,  25),
 			rgbaPct(100, 25,  25),
 			rgbaPct(100, 66,  10),
-			rgbaPct( 25, 80, 100)
+			rgbaPct( 25, 80, 100),
 		];
 		Draw.number(
 			this.#turnWait, 30, colors[this.#turnWait],
