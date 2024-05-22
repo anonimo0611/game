@@ -12,8 +12,8 @@ export const Scene = new class extends State {
 		super();
 		this.init();
 	}
-	switch(scene, data) {
-		super.switch(scene);
+	switchTo(scene, data) {
+		super.switchTo(scene);
 		$trigger(dBody.id=scene, data);
 		$(this).trigger('change', scene);
 	}
