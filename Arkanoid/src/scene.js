@@ -13,12 +13,12 @@ export const Scene = freeze(new class extends State {
 		super();
 		this.init();
 	}
-	switch(scene, delay) {
+	switchTo(scene, delay) {
 		if (isNum(delay)) {
-			Ticker.Timer.set(delay, _=> Scene.switch(scene));
+			Ticker.Timer.set(delay, _=> Scene.switchTo(scene));
 			return;
 		}
-		super.switch(scene);
+		super.switchTo(scene);
 		$trigger(scene);
 		Ticker.resetCount();
 	}

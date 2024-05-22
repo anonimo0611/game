@@ -99,9 +99,9 @@ export const BrickG = freeze(new class {
 		Luster.clear();
 		Disappear.clear();
 		if (Scene.isInGame)
-			Scene.switch(Scene.enum.Clear);
+			Scene.switchToClear();
 		if (Scene.isInDemo)
-			Scene.switch(Scene.enum.Reset, 1000);
+			Scene.switchToReset(1000);
 	}
 	animation() {
 		if (Game.isReadyScene && Ticker.elapsed < 1000)

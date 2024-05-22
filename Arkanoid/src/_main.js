@@ -65,13 +65,13 @@ export const Game = freeze(new class {
 	}
 	#selectStage(_, stageIdx) {
 		Game.#stageIdx = stageIdx;
-		Scene.switch(Scene.enum.Reset);
+		Scene.switchToReset();
 	}
 	#reset() {
 		Game.#stageIdx  = Menu.Stage.index;
 		Game.#respawned = false;
 		Game.#init();
-		Scene.switch(Scene.enum.InDemo, Game.ReadyTime);
+		Scene.switchToInDemo(Game.ReadyTime);
 	}
 	#init() {
 		BallG.init();
@@ -86,33 +86,33 @@ export const Game = freeze(new class {
 		$trigger('Resume');
 	}
 	#restart() {
-		Scene.switch(Scene.enum.Reset);
+		Scene.switchToReset();
 		Game.#start();
 	}
 	#start(e) {
 		if (e?.button > 0 || !Game.isDemoScene)
 			return;
 		$trigger('Start');
-		Scene.switch(Scene.enum.Ready);
+		Scene.switchToReady();
 		Game.#init();
 		Game.#ready();
 	}
 	#ready() {
 		Sound.stop().play('start');
-		Scene.switch(Scene.enum.InGame, Game.ReadyTime);
+		Scene.switchToInGame(Game.ReadyTime);
 	}
 	#respawn() {
-		Scene.switch(Scene.enum.Ready);
+		Scene.switchToReady();
 		Game.#respawned = true;
 		BallG.init();
 		Paddle.init();
-		Scene.switch(Scene.enum.InGame, Game.ReadyTime);
+		Scene.switchToInGame(Game.ReadyTime);
 	}
 	#clear() {
 		if (Game.stageNum == Stages.length) {
 			Ticker.Timer.sequence(
-				[WaitTimeAfterClear*3/4, _=> Scene.switch(Scene.enum.GameOver)],
-				[WaitTimeAfterClear*3/4, _=> Scene.switch(Scene.enum.Reset)]
+				[WaitTimeAfterClear*3/4, _=> Scene.switchToGameOver()],
+				[WaitTimeAfterClear*3/4, _=> Scene.switchToReset()]
 			);
 			return;
 		}
@@ -121,7 +121,7 @@ export const Game = freeze(new class {
 	#setNewStage() {
 		Game.#stageIdx++;
 		Game.#respawned = false;
-		Scene.switch(Scene.enum.Ready);
+		Scene.switchToReady();
 		Game.#init();
 		Game.#ready();
 	}
@@ -146,7 +146,7 @@ export const Game = freeze(new class {
 			autoFocusId:'Resume',
 			funcCfg: {
 				Resume: _=> Game.#resume(),
-				Quit:   _=> Scene.switch('Reset'),
+				Quit:   _=> Scene.switchToReset(),
 				Restart:_=> Game.#restart(),
 			}
 		});Game.draw();

@@ -167,19 +167,19 @@ const Ball = freeze(class extends BrickG.Collider {
 			Sound.stop();
 			BallSet.clear();
 			$trigger('Dropped');
-			Scene.switch(Scene.enum.GameOver);
-			Scene.switch(Scene.enum.Reset, 1500);
+			Scene.switchToGameOver();
+			Scene.switchToReset(1500);
 			return true;
 		}
 		if (Scene.isInDemo) {
-			Scene.switch(Scene.enum.Reset);
+			Scene.switchToReset();
 			return true;
 		}
 		BallSet.delete(this);
 		if (BallSet.size == 0) {
 			Sound.stop();
-			Scene.switch(Scene.enum.Dropped);
-			Scene.switch(Scene.enum.Respawn, 1500);
+			Scene.switchToDropped();
+			Scene.switchToRespawn(1500);
 			return true;
 		}
 	}

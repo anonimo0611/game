@@ -145,20 +145,20 @@ export class Army extends BrickG.Collider {
 		if (Phase.isClimbed) {
 			if (this.#climbedCnt++ <= (Width/2) / abs(this.Velocity.x))
 				return;
-			Phase.switch(Phase.enum.Holizontal);
+			Phase.switchToHolizontal();
 		}
 		if (hitB && (hitL || hitR) != Field) {
 			(Phase.isHolizontal || Phase.isDown) && (hitL || hitR)
-				? this.Velocity.set(Crawl[Phase.switch(Phase.enum.Up)])
+				? this.Velocity.set(Crawl[Phase.switchToUp()])
 				: this.#setHolizontalDir();
 		}
 		if (Phase.isHolizontal && !Phase.isClimbed && !hitLB && !hitRB) {
-			this.Velocity.set(Crawl[Phase.switch(Phase.enum.Down)]);
+			this.Velocity.set(Crawl[Phase.switchToDown()]);
 		}
 		if (Phase.isUp && !hitT && !hitLB && !hitRB) {
 			this.#climbedCnt = 0;
 			this.Velocity.set(Crawl[this.#lastLR]);
-			Phase.switch(Phase.enum.Climbed);
+			Phase.switchToClimbed();
 		}
 		if (Phase.isHolizontal && (hitL || hitR)) {
 			this.Velocity.x *= -1;
@@ -168,7 +168,7 @@ export class Army extends BrickG.Collider {
 			: (this.#downCnt = 0);
 	}
 	#setHolizontalDir() {
-		this.Phase.switch(this.Phase.enum.Holizontal);
+		this.Phase.switchToHolizontal();
 		const gt1StepDown = this.#downCnt / (BrickG.RowHeight/this.Velocity.y) > 1;
 		const dir = (!this.brickExistsOnOneSide && gt1StepDown)
 			? randChoice([L,R])
