@@ -1,6 +1,7 @@
 import {Ticker}     from '../lib/timer.js';
 import {Img}        from './_images.js';
 import {cvs,ctx}    from './_canvas.js';
+import {sleep}      from './_util.js';
 import {FontSize}   from './_canvas.js';
 import {Phase}      from './phase.js';
 import {GameWindow} from './windowSystem.js';
@@ -23,13 +24,14 @@ export const Game = new class {
 		player.update();
 		enemy.update();
 	}
-	draw() {
+	async draw() {
 		ctx.save();
 		ctx.fillStyle = 'black';
 		ctx.fillRect(0,0, cvs.width, cvs.height);
 		ctx.restore();
 		if (Phase.isGameOver) {
-			Phase.change(Phase.Enum.Start, 1000);
+			await sleep(1000);
+			Phase.switchToStart();
 			return;
 		}
 		if (Phase.isClear) {

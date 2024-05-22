@@ -23,7 +23,7 @@ export const Message = new class {
 		if (Phase.isStart) {
 			this.#data = ['りゅうおうが しょうたいを','あらわした！'];
 			await waitEnterKey();
-			Phase.change('Select');
+			Phase.switchToSelect();
 			return;
 		}
 		if (!Phase.isBattle) return;
@@ -48,7 +48,7 @@ export const Message = new class {
 					'せかいに　へいわが　もどったのだ！'
 				];
 				await waitEnterKey();
-				Phase.change('Clear');
+				Phase.switchToClear();
 				return;
 			}
 		}
@@ -56,7 +56,7 @@ export const Message = new class {
 			if (player.mp < SpellCost) {
 				this.#data = ['ＭＰが　たりない！'];
 				await waitEnterKey();
-				Phase.change('Select');
+				Phase.switchToSelect();
 				return;
 			}
 			this.#data = ['ゆうしゃは　ベホイミの','じゅもんを　となえた！'];
@@ -98,10 +98,10 @@ export const Message = new class {
 		if (player.hp <= 0) {
 			this.#data = ['ゆうしゃは　たおれた…'];
 			await waitEnterKey();
-			Phase.change('GameOver');
+			Phase.switchToGameOver();
 			return;
 		}
-		Phase.change('Select');
+		Phase.switchToSelect();
 	}
 	draw() {
 		if (Ticker.count < 60 || Phase.isSelect) return;

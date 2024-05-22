@@ -10,12 +10,8 @@ export const Phase = new class extends State {
 		super();
 		this.init();
 	}
-	change(phase, delay) {
-		if (isNum(delay)) {
-			Ticker.Timer.set(delay, _=> this.change(phase));
-			return;
-		}
-		super.change(phase);
+	switchTo(phase) {
+		super.switchTo(phase);
 		$trigger(phase);
 	}
 }

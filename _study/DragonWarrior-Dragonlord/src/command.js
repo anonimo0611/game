@@ -9,14 +9,14 @@ export const Command = new class {
 	constructor() {$on('keydown', this.#onKeyDown.bind(this))}
 	#onKeyDown(e) {
 		if (Phase.isClear && e.key == 'Enter')
-			Phase.change(Phase.Enum.Start);
+			Phase.switchToStart();
 
 		if (!Phase.isSelect) return;
 		switch (e.key) {
 		case 'ArrowUp':   return this.#up();
 		case 'ArrowDown': return this.#down();
 		case 'Enter':
-			Phase.change(Phase.Enum.Battle);
+			Phase.switchToBattle();
 			Message.set();
 			this.#idx = 0;
 			break;
