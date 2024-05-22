@@ -37,7 +37,7 @@ export const Game = new class {
 	#onKeyDown(e) {
 		switch (e.key) {
 		case '\x20':   return Scene.isTitle && Game.#start();
-		case 'Delete': return Scene.switch(Scene.enum.Title);
+		case 'Delete': return Scene.switchToTitle();
 		case 'Escape': return Game.#pause();
 		}
 	}
@@ -58,19 +58,19 @@ export const Game = new class {
 	}
 	#start() {
 		$trigger('Start');
-		Scene.switch(Scene.enum.Intro);
-		Scene.switch(Scene.enum.InGame, 1500);
+		Scene.switchToIntro();
+		Scene.switchToInGame(1500);
 	}
 	#respawn() {
 		Player.init();
-		Scene.switch(Scene.enum.InGame);
+		Scene.switchToInGame();
 	}
 	#clear() {
 		Timer.set(1500, Game.#setNewRound);
 	}
 	#gameOver() {
 		Sound.stop('ufo_high');
-		Scene.switch(Scene.enum.Title, 3000);
+		Scene.switchToTitle(3000);
 	}
 	#setNewRound() {
 		$trigger('NewRound');
@@ -78,7 +78,7 @@ export const Game = new class {
 		Bunker.init();
 		InvaderMgr.init();
 		Player.init();
-		Scene.switch(Scene.enum.InGame);
+		Scene.switchToInGame();
 	}
 	#update() {
 		Message.update();

@@ -13,10 +13,10 @@ export const Scene = new class extends State {
 		super();
 		this.init();
 	}
-	switch(scene, delay) {
+	switchTo(scene, delay) {
 		if (isNum(delay))
-			return void Timer.set(delay, _=> Scene.switch(scene));
-		super.switch(scene);
+			return void Timer.set(delay, _=> Scene.switchTo(scene));
+		super.switchTo(scene);
 		$trigger(scene);
 		Ticker.resetCount();
 	}

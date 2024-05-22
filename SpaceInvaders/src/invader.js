@@ -76,7 +76,7 @@ export const InvaderMgr = freeze(new class {
 			NextVelocity.set(Speed, Speed);
 
 		if (Pos.y+Height >= Player.Pos.y+Player.Height)
-			Scene.switch(Scene.enum.GameOver);
+			Scene.switchToGameOver();
 	}
 	update() {
 		if (!Scene.isInGame) return;
@@ -90,7 +90,7 @@ export const InvaderMgr = freeze(new class {
 		if (this.Current) this.#move();
 		if (this.Map.size == 0) {
 			Sound.stop('ufo_high');
-			Scene.switch(Scene.enum.Clear);
+			Scene.switchToClear();
 			return;
 		}
 		this.#current = this.#iterator.next();

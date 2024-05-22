@@ -142,11 +142,11 @@ export class InvaderLaser extends Laser {
 			Sound.stop().play('explosion');
 			new Explosion2(Player, {duration:1000});
 			if (Lives.left == 1) {
-				Scene.switch(Scene.enum.GameOver);
+				Scene.switchToGameOver();
 				return;
 			}
-			Scene.switch(Scene.enum.Destroy);
-			Scene.switch(Scene.enum.Respawn, 800);
+			Scene.switchToDestroy();
+			Scene.switchToRespawn(800);
 			return;
 		}
 		if (this.Pos.y + this.Height > Ground.Top) {
