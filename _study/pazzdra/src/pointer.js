@@ -49,7 +49,7 @@ export const Pointer = freeze(new class {
 		if (!Phase.isIdle) return;
 		Pointer.#setPos(e);
 		Pointer.#swappingPos = Vec2.divInt(Pointer.Pos, Grid.Size);
-		Phase.switch(Phase.enum.Swap);
+		Phase.switchToSwap();
 	}
 	#onMove(e) {
 		e.preventDefault();
@@ -81,7 +81,7 @@ export const Pointer = freeze(new class {
 		if (!Phase.isSwap) return;
 		Game.resetComboCount();
 		Orb.remove()
-			? Phase.switch(Phase.enum.Remove)
-			: Phase.switch(Phase.enum.Idle);
+			? Phase.switchToRemove()
+			: Phase.switchToIdle();
 	}
 });

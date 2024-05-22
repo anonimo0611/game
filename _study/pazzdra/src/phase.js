@@ -14,18 +14,9 @@ export const Phase = freeze(new class extends State {
 		super();
 		this.init();
 	}
-	switch(phase) {
-		super.switch(phase);
-	}
 	update() {
-		switch (Phase.current) {
-		case Phase.enum.Remove:
-			Phase.#remove();
-			break;
-		case Phase.enum.Fall:
-			Phase.#fall();
-			break;
-		}
+		Phase.isRemove && Phase.#remove();
+		Phase.isFall   && Phase.#fall();
 	}
 	#remove() {
 		let removing = false;
@@ -40,7 +31,7 @@ export const Phase = freeze(new class extends State {
 		});
 		if (removing || Orb.remove()) return;
 		Orb.fall();
-		Phase.switch(Phase.enum.Fall);
+		Phase.switchToFall();
 	}
 	#fall() {
 		let falling = false;
@@ -53,9 +44,9 @@ export const Phase = freeze(new class extends State {
 		});
 		if (!falling && !Orb.fall()) {
 			if (Orb.remove())
-				return void Phase.switch(Phase.enum.Remove);
+				return void Phase.switchToRemove();
 			Orbs.flat().forEach(orb=> orb.combo = 0);
-			Phase.switch(Phase.enum.Idle);
+			Phase.switchToIdle();
 		}
 	}
 });
