@@ -29,7 +29,7 @@ export const Pointer = freeze(new class {
 		}
 		if (Scene.isDemo) {
 			Score.reset();
-			Scene.switch(Scene.enum.InGame);
+			Scene.switchToInGame();
 			Sound.play('se0');
 		}		
 	}
@@ -50,7 +50,7 @@ const KeyCtrl = freeze(new class {
 			Ticker.pause(false);
 			Sound.play('reset');
 			Score.reset();
-			Scene.switch(Scene.enum.Demo);
+			Scene.switchToDemo();
 		}
 		if (e.key == 'Escape' && Scene.isInGame) {
 			Ticker.pause();
