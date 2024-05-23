@@ -23,3 +23,8 @@ const clamp    = (n, min, max) => Math.min(Math.max(n,min), max)
 const randInt  = (min, max)    => int(random() * (max-min+1) + min)
 const toNumber = (arg, def=NaN)=> !isNum(+arg) || !isNum(arg)
 	&& !isStr(arg) || String(arg).trim() === '' ? def : +arg
+
+const setReadonly = (obj, cfg)=> {
+	for (const [key,v] of entries(cfg))
+		defineProperty(obj, key, {get(){return v}})
+}
