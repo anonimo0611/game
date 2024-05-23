@@ -1,18 +1,13 @@
-import {Ticker}   from '../lib/timer.js';
-import {Grid}     from './_grid.js';
-import {cvs,ctx}  from './_canvas.js';
-import {Phase}    from './phase.js';
-import {Orb,Orbs} from './orb.js';
+import {Ticker}  from '../lib/timer.js';
+import {Grid}    from './_grid.js';
+import {cvs,ctx} from './_canvas.js';
+import {bgImg}   from './_background.js';
+import {Phase}   from './phase.js';
+import {Orb}     from './orb.js';
 
-const BgColorList = ['#201008','#402010'];
 export const Game = new class {
-	static {
-		$on('load', this.#init);
-	}
-	static #init() {
-		Ticker.set(Game.#mainLoop);
-	}
-
+	static {$ready(this.#init)}
+	static #init() {Ticker.set(Game.#mainLoop)}
 	#comboCount = 0;
 	get comboCount() {
 		return Game.#comboCount;
@@ -23,22 +18,15 @@ export const Game = new class {
 	addComboCount() {
 		Game.#comboCount++;
 	}
-
 	#background() {
 		ctx.save();
-		Orbs.flat().forEach(({x, y})=> {
-			const {Size:s}= Grid;
-			ctx.fillStyle = BgColorList[(x+y) % 2];
-			ctx.fillRect(x*s, y*s, s,s);
-		});
 		ctx.restore();
 	}
 	#update() {
-		Phase.update();
 		Orb.update();
 	}
 	#draw() {
-		Game.#background();
+		ctx.drawImage(bgImg, 0,0);
 		Orb.draw();
 		//byId('phase').textContent = Phase.current;
 	}

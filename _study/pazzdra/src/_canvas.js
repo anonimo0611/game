@@ -1,7 +1,7 @@
+export let scale = 1;
 export const cvs = document.getElementById('canvas');
 export const ctx = cvs.getContext('2d');
 
-export let scale = 1;
 function resize(e) { // Fit to the viewport
 	const w = $(window).width()  / cvs.offsetWidth;
 	const h = $(window).height() / cvs.offsetHeight;
