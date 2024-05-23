@@ -29,6 +29,8 @@ class Vec2 {
 	static div        = (v1, n) => vec2(v1).div(n)
 	static divInt     = (v1, n) => vec2(v1).divInt(n)
 	static remainder  = (v1, n) => vec2(v1.x % n, v1.y % n)
+	static fromIdx    = (i, col)=> vec2(i % col, i / col|0);
+	static idx        = (v1,col)=> v1.y * col + v1.x;
 	static dot        = (v1, v2)=> v1.x * v2.x + v1.y * v2.y
 	static cross      = (v1, v2)=> v1.x * v2.y - v1.y * v2.x
 	static distance   = (v1, v2)=> Vec2.sub(v1, v2).magnitude
