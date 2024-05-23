@@ -115,7 +115,7 @@ export class Player {
 		freeze(this);
 	}
 	#setBullets() {
-		this.bullets = Array(Bullet.Max).fill()
+		this.bullets = integers(Bullet.Max)
 			.map(()=> new Bullet.Player(this.color));
 	}
 	#update() {

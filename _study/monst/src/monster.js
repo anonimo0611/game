@@ -82,7 +82,7 @@ export class Monster {
 		freeze(this);
 	}
 	#setBullets() {
-		this.bullets = Array(Bullet.Max).fill()
+		this.bullets = integers(Bullet.Max)
 			.map(()=> new Bullet.Monster(this.color));
 	}
 	#update() {
