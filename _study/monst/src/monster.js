@@ -63,14 +63,14 @@ export class Monster {
 	#lstHp    = 0;
 	#alpha    = 1;
 	#turnWait = 0;
-	#clash    = 0;
+	#crash    = 0;
 	#damage	  = 0;
 	get x()     {return this.pos.x}
 	get y()     {return this.pos.y}
 	get hp()    {return this.#hp}
 	get lstHp() {return this.#lstHp}
 	get alpha() {return this.#alpha}
-	get clash() {return this.#clash > 0}
+	get crash() {return this.#crash > 0}
 	constructor(pos, radius, color, TurnWaitMax, MaxHp, Shake) {
 		this.pos    = vec2(pos).freeze();
 		this.color  = color;
@@ -91,8 +91,8 @@ export class Monster {
 			this.#lstHp -= this.MaxHp / (60*3)
 			this.#lstHp	= max(this.#lstHp, this.hp);
 		}
-		if (this.#clash > 0)
-			this.#clash--;
+		if (this.#crash > 0)
+			this.#crash--;
 		if (this.hp <= 0) {
 			this.#alpha -= 1 / (60*3);
 			this.#alpha  = max(this.#alpha, 0);
@@ -132,11 +132,11 @@ export class Monster {
 	}
 	turnChanged() {
 		this.#turnWait--;
-		this.#clash  = 0;
+		this.#crash  = 0;
 		this.#damage = 0;
 	}
 	takeDamage(damage) {
-		this.#clash = 10;
+		this.#crash = 10;
 		this.#damage += damage;
 		this.#hp -= damage;
 		this.#hp  = max(this.#hp, 0);

@@ -15,12 +15,12 @@ export const Draw = new class{
 		ctx.fill();
 		ctx.restore();
 	}
-	ball({x,y,clash,radius,color,alpha=1}={}, shakePos=vec2(0,0))
+	ball({x,y,crash,radius,color,alpha=1}={}, shakePos=vec2(0,0))
 	{
 		const pos  = vec2(x,y).add(shakePos);
 		const grad = ctx.createRadialGradient(0,0,0, 0,0,radius);
 		grad.addColorStop(0.0, 'white');
-		grad.addColorStop(1.0, clash? '#DA70D6' : color);
+		grad.addColorStop(1.0, crash? '#DA70D6' : color);
 
 		pos.y += sin(Ticker.count * PI*2 / 60) * radius/8;
 		ctx.save();

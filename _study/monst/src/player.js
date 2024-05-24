@@ -15,7 +15,8 @@ const Colors = [
 	rgbaPct( 0, 50, 100),
 	rgbaPct(50,  0, 100),
 ];
-const CursorGrad = ctx.createRadialGradient(0,0,Radius*3/4, 0,0,Radius*2);
+const
+CursorGrad = ctx.createRadialGradient(0,0,Radius*3/4, 0,0,Radius*2);
 CursorGrad.addColorStop(0.0, rgbaPct(100, 75, 25, 0.0));
 CursorGrad.addColorStop(1.0, rgbaPct(100, 75, 25, 1.0));
 
@@ -100,13 +101,13 @@ export class Player {
 	}
 	#index	 = 0;
 	#damage	 = 0;
-	#clash   = 0;
+	#crash   = 0;
 	pos      = vec2();
 	velocity = vec2();
 	radius   = Radius;
 	get x()      {return this.pos.x}
 	get y()      {return this.pos.y}
-	get clash()  {return this.#clash > 0}
+	get crash()  {return this.#crash > 0}
 	get damage() {return this.#damage}
 	get color()  {return Colors[this.#index]}
 	constructor(idx) {
@@ -119,8 +120,8 @@ export class Player {
 			.map(()=> new Bullet.Player(this.color));
 	}
 	#update() {
-		if (this.#clash > 0)
-			this.#clash--;
+		if (this.#crash > 0)
+			this.#crash--;
 	}
 	#draw() {
 		if (this != Player.current)
@@ -184,11 +185,11 @@ export class Player {
 		}
 	}
 	turnChanged() {
-		this.#clash  = 0;
+		this.#crash  = 0;
 		this.#damage = 0;
 	}
 	takeDamage(damage) {
-		this.#clash = 10;
+		this.#crash = 10;
 		this.#damage += damage;
 		Player.#hp -= this.#damage;
 		Player.#hp	= max(Player.#hp, 0);
