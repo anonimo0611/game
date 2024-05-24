@@ -17,17 +17,15 @@ export const Draw = new class{
 	}
 	ball({x,y,crash,radius,color,alpha=1}={}, shakePos=vec2(0,0))
 	{
-		const pos  = vec2(x,y).add(shakePos);
-		const grad = ctx.createRadialGradient(0,0,0, 0,0,radius);
-		grad.addColorStop(0.0, 'white');
-		grad.addColorStop(1.0, crash? '#DA70D6' : color);
-
+		const pos = vec2(x,y).add(shakePos);
 		pos.y += sin(Ticker.count * PI*2 / 60) * radius/8;
 		ctx.save();
 		ctx.globalAlpha = alpha;
 		ctx.translate(...pos.vals);
 		ctx.beginPath();
-			ctx.fillStyle = grad;
+			ctx.fillStyle = ctx.createRadialGradient(0,0,0, 0,0,radius);
+			ctx.fillStyle.addColorStop(0, 'white');
+			ctx.fillStyle.addColorStop(1, crash? '#DA70D6' : color);
 			ctx.arc(0,0, radius, 0, PI*2);
 		ctx.fill();
 		ctx.restore();
@@ -51,10 +49,6 @@ export const Draw = new class{
 	}
 	hpBar({hp,lstHp,MaxHp}, {pos,size,lColor,rColor})
 	{
-		const Grad = ctx.createLinearGradient(0, size.y, ...size.vals);
-		Grad.addColorStop(0.0, lColor);
-		Grad.addColorStop(1.0, rColor);
-
 		ctx.save();
 		ctx.translate(
 			pos.x - size.x/2,
@@ -66,14 +60,14 @@ export const Draw = new class{
 			ctx.fillRect(-lw, -lw, size.x + lw*2, size.y + lw*2);
 		}
 		{ // damaging
-			const sx = lstHp / MaxHp;
 			ctx.fillStyle = '#F66';
-			ctx.fillRect(0,0, size.x*sx, size.y);
+			ctx.fillRect(0,0, size.x*(lstHp/MaxHp), size.y);
 		}
 		{ // current hp
-			const sx = hp / MaxHp;
-			ctx.fillStyle = Grad;
-			ctx.fillRect(0,0, size.x*sx, size.y);
+			ctx.fillStyle = ctx.createLinearGradient(0, size.y, ...size.vals);
+			ctx.fillStyle.addColorStop(0, lColor);
+			ctx.fillStyle.addColorStop(1, rColor);
+			ctx.fillRect(0,0, size.x*(hp/MaxHp), size.y);
 		}
 		ctx.restore();
 	}

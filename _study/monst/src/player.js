@@ -17,8 +17,8 @@ const Colors = [
 ];
 const
 CursorGrad = ctx.createRadialGradient(0,0,Radius*3/4, 0,0,Radius*2);
-CursorGrad.addColorStop(0.0, rgbaPct(100, 75, 25, 0.0));
-CursorGrad.addColorStop(1.0, rgbaPct(100, 75, 25, 1.0));
+CursorGrad.addColorStop(0, rgbaPct(100, 75, 25, 0.0));
+CursorGrad.addColorStop(1, rgbaPct(100, 75, 25, 1.0));
 
 let cursorScale = 0;
 let cursorCount = 0;
@@ -52,7 +52,7 @@ export class Player {
 	static update() {
 		for (const p of Players)
 			p.#update();
-		if (Phase.isMonster) {
+		if (!Phase.isMonster) {
 			this.#lstHp -= this.MaxHp / (60*3);
 			this.#lstHp  = max(this.#lstHp, this.hp);
 		}
@@ -159,7 +159,7 @@ export class Player {
 			if (this == p || p.velocity.magnitude > 0) continue;
 			if (Vec2.distance(this.pos, p.pos) < Radius*2) {
 				const v = this.pos.normalized;
-				v.mul(Vec2.dot(this.velocity, v)).mul(.5);
+				v.mul( Vec2.dot(this.velocity, v) ).mul(.5);
 				p.velocity.set(v);
 				if (!p.bullets.some(b=> b.velocity.magnitude > 0))
 					Bullet.fire(p.bullets, Radius, p.pos);

@@ -4,9 +4,10 @@ import {scale}   from './window.js';
 import {Phase}	 from './phase.js';
 import {Player}  from './player.js';
 
-const ArrowGrad = ctx.createLinearGradient(-.5, 1, .5, 1);
-ArrowGrad.addColorStop(0.0, rgbaPct(100,  10, 0, .75));
-ArrowGrad.addColorStop(1.0, rgbaPct(100, 100, 0, .75));
+const
+ArrowGrad = ctx.createLinearGradient(-.5, 1, .5, 1);
+ArrowGrad.addColorStop(0, rgbaPct(100,  10, 0, .75));
+ArrowGrad.addColorStop(1, rgbaPct(100, 100, 0, .75));
 
 let   firePower  = 0;
 const PointerPos = vec2();
