@@ -38,10 +38,11 @@ const Game = new class {
 		Monster.drawStatus();
 		Player.drawStatus();
 		Player.drawCursor();
+		Pointer.draw();
 
+		if (Player.lstHp != Player.hp) return;
 		Phase.isOver  && Game.drawMessage('GAME OVER',  '#F0F','#606');
 		Phase.isClear && Game.drawMessage('STAGE CLEAR','#FB0','#C00');
-		Pointer.draw();
 	}
 	drawMessage(text, fillStyle, strokeStyle) {
 		ctx.save();
