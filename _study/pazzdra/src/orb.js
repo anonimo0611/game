@@ -287,7 +287,7 @@ export class Orb {
 		ctx.font = `${size}px Atari`;
 		ctx.lineWidth   = 4;
 		ctx.textAlign   = 'center';
-		ctx.strokeStyle = 'rgba(40,40,40,.7)';
+		ctx.strokeStyle = 'rgba(40 40 40 /.7)';
 		ctx.fillStyle   = ComboColorLst[comboColorIdx];
 		ctx.strokeText(text, 0, size/2);
 		ctx.fillText(text, 0, size/2);
