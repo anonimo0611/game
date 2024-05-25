@@ -23,8 +23,7 @@ const Game = new class {
 		Pointer.update();
 		Player.update();
 		Monster.update();
-		Phase.isFire    && Phase.fire();
-		Phase.isMonster && Phase.monster();
+		Phase.update();
 	}
 	draw() {
 		ctx.clearRect(0,0, cvs.width, cvs.height);

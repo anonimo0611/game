@@ -14,7 +14,11 @@ export const Phase = freeze(new class extends State {
 		super();
 		this.init();
 	}
-	fire() {
+	update() {
+		this.isFire    && this.#fire();
+		this.isMonster && this.#monster();
+	}
+	#fire() {
 		let isMoving = false;
 		for (const p of Players) {
 			if (p.velocity.magnitude > 0) {
@@ -48,7 +52,7 @@ export const Phase = freeze(new class extends State {
 				? Phase.switchToClear()
 				: Phase.switchToIdle();
 	}
-	monster() {
+	#monster() {
 		let isMoving = false;
 		let m = Monster.current;
 		isMoving ||= Bullet.update(m.bullets);
