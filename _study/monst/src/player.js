@@ -162,7 +162,7 @@ export class Player {
 				v.mul( Vec2.dot(this.velocity, v) ).mul(.5);
 				p.velocity.set(v);
 				if (!p.bullets.some(b=> b.velocity.magnitude > 0))
-					Bullet.fire(p.bullets, Radius, p.pos);
+					Bullet.fire(p);
 			}
 		}
 	}

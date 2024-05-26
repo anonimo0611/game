@@ -9,8 +9,8 @@ export class Bullet {
 	static Max    = 16;
 	static Radius =  8;
 	static Speed  =  4;
-	static fire(bullets, r, pos) {
-		bullets.forEach((b,i)=> b.#fire(i, r, pos));
+	static fire({bullets,radius,pos}) {
+		bullets.forEach((b,i)=> b.#fire(i, radius, pos));
 	}
 	static update(bullets) {
 		let isMoving = false;
