@@ -46,28 +46,24 @@ export const Phase = freeze(new class extends State {
 		if (Monster.currentIndex >= 0) {
 			const m = Monster.current;
 			Phase.switchToMonster();
-			Bullet.fire(m.bullets, m.radius, m.pos);
+			Bullet.fire(m);
 		} else
 			Monsters.every(m=> m.hp == 0)
 				? Phase.switchToClear()
 				: Phase.switchToIdle();
 	}
 	#monster() {
-		let isMoving = false;
-		let m = Monster.current;
-		isMoving ||= Bullet.update(m.bullets);
-		if (!isMoving) {
-			m.resetTurnWait();
-			m = Monster.current;
-			if (Monster.currentIndex >= 0)
-				Bullet.fire(m.bullets, m.radius, m.pos);
-			else {
-				for (const p of Players)
-					p.turnChanged();
-				Player.hp > 0
-					? Phase.switchToIdle()
-					: Phase.switchToOver();
-			}
+		if (Bullet.update(Monster.current.bullets))
+			return;
+		Monster.current.resetTurnWait();
+		if (Monster.currentIndex >= 0) {
+			Bullet.fire(Monster.current);
+			return;
 		}
+		for (const p of Players)
+			p.turnChanged();
+		Player.hp > 0
+			? Phase.switchToIdle()
+			: Phase.switchToOver();
 	}
 });
