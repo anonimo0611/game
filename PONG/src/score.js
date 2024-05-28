@@ -29,7 +29,7 @@ export const Score = freeze(new class {
 			Ball.respawn();
 		}
 		this.Pts.find(p=> p >= Score.Max)
-			&& Scene.switch(Scene.enum.Demo);
+			&& Scene.switchToDemo();
 	}
 	draw() {
 		for (let i=0; i<PlayerSide.Max; i++) {
