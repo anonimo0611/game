@@ -40,7 +40,7 @@ export const Pointer = freeze(new class {
 	}
 	#onUp(e) {
 		if (!Phase.isHold) return;
-		Phase.switchTo(Phase.Enum.Fire);
+		Phase.switchToFire();
 		const v = Vec2.sub(Player.current.pos, PointerPos)
 			.normalized.mul(firePower).mul(0.1);
 		Player.current.velocity.set(v);
