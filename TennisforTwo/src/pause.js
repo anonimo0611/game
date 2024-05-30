@@ -40,7 +40,7 @@ export const Pause = new class {
 		$paused  = paused;
 		$byCtrl  = byCtrl;
 		$pointer = !paused;
-		$animIdx = $counter;
+		$animIdx = $counter = 0;
 		Timer.frozen = paused;
 		Timer.cancel(Pause);
 		Sound.pauseAll(paused);
