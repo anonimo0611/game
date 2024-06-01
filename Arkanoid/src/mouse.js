@@ -9,4 +9,4 @@ function setPos(e) {
 	const rect = cvs.getBoundingClientRect();
 	x = round((e.clientX - rect.left) / Window.scale);
 }
-$on('mousemove', setPos);
+$on({mousemove:setPos});

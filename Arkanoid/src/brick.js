@@ -15,14 +15,14 @@ const {cvs,ctx,ctxForBrick:ctxB,ctxForShadow:ctxS}= Cvs;
 
 const Cols         = 13;
 const Rows         = 30;
-const Width        = int(Field.Width/Cols);
-const Height       = int(cvs.height /Rows);
+const ColWidth     = int(Field.Width/Cols);
+const RowHeight    = int(cvs.height /Rows);
 const MarginLeft   = Field.Left;
-const MarginTop    = Height * 2.0;
-const ShadowOffset = Width  * 0.2;
+const MarginTop    = RowHeight * 2.0;
+const ShadowOffset = ColWidth  * 0.2;
 const AnimDuration = 300 / Ticker.Interval;
 
-const BrickType = freeze({
+export const BrickType = freeze({
 	None:      -1,
 	Hard:       0,
 	Immortality:1,
@@ -71,12 +71,15 @@ export const BrickG = freeze(new class {
 	Type       = BrickType;
 	Rows       = Rows;
 	Cols       = Cols;
-	ColWidth   = Width;
-	RowHeight  = Height;
+	ColWidth   = ColWidth;
+	RowHeight  = RowHeight;
 	#destroyed = false;
-	get Collider()  {return Collider}
-	get destroyed() {return BrickG.#destroyed}
-
+	get destroyed() {
+		return BrickG.#destroyed;
+	}
+	isBrick(obj) {
+		return obj instanceof Brick;
+	}
 	init() {
 		Item.init();
 		Luster.clear();
@@ -90,6 +93,15 @@ export const BrickG = freeze(new class {
 		BrickG.#destroyed = false;
 		BrickG.#cache();
 	}
+	get canBeDestroyedByLasers() {
+		const data = MapData.flat().reverse();
+		for (const {destroyed,type,x,Width:w} of data) {
+			if (type == BrickType.None || destroyed) continue;
+			if (x   >= Paddle.CenterX-ColWidth*2
+			 && x+w <= Paddle.CenterX+ColWidth*2)
+				return type != BrickType.Immortality;
+		} return false;
+	}
 	update() {
 		if (BrickG.#destroyed)
 			return;
@@ -100,8 +112,10 @@ export const BrickG = freeze(new class {
 		Disappear.clear();
 		if (Scene.isInGame)
 			Scene.switchToClear();
-		if (Scene.isInDemo)
+		if (Scene.isInDemo) {
+			Scene.switchToDemoEnd();
 			Scene.switchToReset(1000);
+		}
 	}
 	animation() {
 		if (Game.isReadyScene && Ticker.elapsed < 1000)
@@ -125,11 +139,12 @@ export const BrickG = freeze(new class {
 		}
 	}
 	#drawShadow({x,y,col}) {
-		const w = (col == Cols-1) ? (Width+ShadowOffset)-Field.Frame : Width;
+		const w = (col == Cols-1)
+			? (ColWidth+ShadowOffset)-Field.Frame : ColWidth;
 		ctxS.save();
-			ctxS.translate(x+ShadowOffset, y+ShadowOffset);
-			ctxS.fillStyle = rgba(0,0,0,.4);
-			ctxS.fillRect(0,0, w,Height);
+		ctxS.translate(x+ShadowOffset, y+ShadowOffset);
+		ctxS.fillStyle = rgba(0,0,0,.4);
+		ctxS.fillRect(0,0, w,RowHeight);
 		ctxS.restore();
 	}
 	#drawBrick(ctx, brick, {effect=false,grad=null}={}) {
@@ -140,37 +155,39 @@ export const BrickG = freeze(new class {
 
 		const {h,s,l}= HSLColors[brick.type];
 		if (!grad) {
-			grad = ctx.createLinearGradient(0,0,Width,Height);
+			grad = ctx.createLinearGradient(0,0,ColWidth,RowHeight);
 			grad.addColorStop(0.0, hsl(h,s,l-20));
 			grad.addColorStop(0.5, hsl(h,s,l+2));
 			grad.addColorStop(1.0, hsl(h,s,l-20));
 		}
 		// Brick surface
 		ctx.fillStyle = grad;
-		ctx.fillRect(3, 3, Width-6, Height-6);
+		ctx.fillRect(3, 3, ColWidth-6, RowHeight-6);
 
 		// Highlight(top left)
 		ctx.beginPath();
-			ctx.moveTo(2,Height-2);
-			ctx.lineTo(2,2);
-			ctx.lineTo(Width-2,2);
 			ctx.lineWidth   = 2;
 			ctx.strokeStyle = hsl(h,s,80);
+			ctx.moveTo(2,RowHeight-2);
+			ctx.lineTo(2,2);
+			ctx.lineTo(ColWidth-2,2);
 		ctx.stroke();
+
 		// Shadow(bottom right)
 		ctx.beginPath();
-			ctx.moveTo(Width-2,2);
-			ctx.lineTo(Width-2,Height-2);
-			ctx.lineTo(2,Height-2);
 			ctx.lineWidth   = 2;
 			ctx.strokeStyle = hsl(h,s,40);
+			ctx.moveTo(ColWidth-2,2);
+			ctx.lineTo(ColWidth-2,RowHeight-2);
+			ctx.lineTo(2,RowHeight-2);
 		ctx.stroke();
 	}
 	#drawLuster(brick,data) {
   		const {x, y}  = brick;
 		const {h,s,l} = brick.color;
 		const {offset}= data;
-		const grad = ctx.createLinearGradient(0,0,Width,Height);
+		const
+		grad = ctx.createLinearGradient(0,0,ColWidth,RowHeight);
 		grad.addColorStop(0, hsl(h,s,l-20));
 		grad.addColorStop(max(offset*.5,0), hsl(h,s,l-20));
 		grad.addColorStop(offset, 'white');
@@ -180,8 +197,8 @@ export const BrickG = freeze(new class {
 
 		// Brick surface
       	ctx.save();
-	       	ctx.translate(x, y);
-			this.#drawBrick(ctx, brick, {grad,effect:true});
+       	ctx.translate(x, y);
+		this.#drawBrick(ctx, brick, {grad,effect:true});
       	ctx.restore();
 
 		// Highlight(bottom right)
@@ -189,11 +206,11 @@ export const BrickG = freeze(new class {
        	ctx.globalAlpha = 1-data.offset;
        	ctx.translate(x, y);
 		ctx.beginPath();
-			ctx.moveTo(Width-4,4);
-			ctx.lineTo(Width-4,Height-4);
-			ctx.lineTo(4,Height-4);
 	 		ctx.lineWidth   = 3;
 			ctx.strokeStyle = 'white';
+			ctx.moveTo(ColWidth-4,4);
+			ctx.lineTo(ColWidth-4,RowHeight-4);
+			ctx.lineTo(4,RowHeight-4);
 		ctx.stroke();
       	ctx.restore();
 	}
@@ -201,7 +218,7 @@ export const BrickG = freeze(new class {
   		const {x, y}= brick;
        	ctx.save();
 		ctx.globalAlpha = scale;
-      	ctx.translate(x+((Width/2)*(1-scale)),y+((Height/1.5)*(1-scale)));
+      	ctx.translate(x+((ColWidth/2)*(1-scale)),y+((RowHeight/1.5)*(1-scale)));
 		ctx.scale(scale,scale);
 		this.#drawBrick(ctx, brick, {effect:true});
        	ctx.restore();
@@ -218,8 +235,8 @@ export const BrickG = freeze(new class {
 	}
 });
 const Brick = freeze(class {
-	Width        = Width;
-	Height       = Height;
+	Width        = ColWidth;
+	Height       = RowHeight;
 	#durability  = 0;
 	#pointRate   = 1;
 	#destroyed   = false;
@@ -228,8 +245,8 @@ const Brick = freeze(class {
 	constructor({row,col}, type=BrickType.None) {
 		this.row   = row;
 		this.col   = col;
-		this.x     = (Width *col) + MarginLeft;
-		this.y     = (Height*row) + MarginTop;
+		this.x     = (ColWidth *col) + MarginLeft;
+		this.y     = (RowHeight*row) + MarginTop;
 		this.type  = type;
 		this.color = HSLColors[type];
 		this.Pos   = vec2(this.x, this.y);
@@ -271,8 +288,8 @@ const Brick = freeze(class {
 		this.#destroyed = true;
 		Luster.delete(this);
 		Disappear.set(this, {scale:1});
-		ctxB.clearRect(x, y, Width,Height);
-		ctxS.clearRect(x+ShadowOffset, y+ShadowOffset, Width,Height);
+		ctxB.clearRect(x, y, ColWidth,RowHeight);
+		ctxS.clearRect(x+ShadowOffset, y+ShadowOffset, ColWidth,RowHeight);
 		Sound.stop('se1').play('se1');
 		if (this.type != BrickType.Hard)
 			Item.appear(this);
@@ -282,20 +299,20 @@ const Brick = freeze(class {
 	getAdjacent(x=0, y=0) {
 		return MapData[this.row+y]?.[this.col+x] || {exists:false};
 	}
-	get exists(){return !this.destroyed}
-	get Left()  {return this.getAdjacent(-1, 0)}
-	get Right() {return this.getAdjacent( 1, 0)}
-	get Up()    {return this.getAdjacent( 0,-1)}
-	get Down()  {return this.getAdjacent( 0, 1)}
+	get exists() {return !this.destroyed}
+	get Left()   {return this.getAdjacent(-1, 0)}
+	get Right()  {return this.getAdjacent( 1, 0)}
+	get Up()     {return this.getAdjacent( 0,-1)}
+	get Down()   {return this.getAdjacent( 0, 1)}
 });
-class Collider {
+export class Collider {
 	constructor({x, y}, radius) {
 		this.Pos    = vec2(x, y);
 		this.Radius = radius;
 	}
 	tilePos({x=0, y=0}={}) {
-		const col = int((this.Pos.x+x - MarginLeft) / Width);
-		const row = int((this.Pos.y+y - MarginTop)  / Height);
+		const col = int((this.Pos.x+x - MarginLeft) / ColWidth);
+		const row = int((this.Pos.y+y - MarginTop)  / RowHeight);
 		return {row,col}
 	}
 	getBrick({row,col}=this.tilePos(), {y=0,x=0}={}) {
@@ -312,21 +329,22 @@ class Collider {
 	#detect(ox=0, oy=0) {
 		const offset = vec2(ox, oy).mul(this.Radius);
 		const point  = vec2(this.Pos).add(offset);
-        if (point.x <  Field.Left
-         || point.x >= Field.Right
-         || point.y <  Field.Top
-         || point.y >  Field.Bottom+this.Radius
-        ) return Field;
-
-        const brick = this.getBrick(this.tilePos(offset));
+        const brick  = this.getBrick(this.tilePos(offset));
+        if (this.constructor.name != 'Ball') {
+	        if (point.x < Field.Left
+	         || point.x > Field.Right
+	         || point.y < Field.Top
+	         || point.y > Field.Bottom+this.Radius
+	        ) return Field;
+		}
 		return brick?.exists ? brick : null;
 	}
-	get hitT() {return this.#detect( 0,-1)}
-	get hitR() {return this.#detect( 1, 0)}
-	get hitB() {return this.#detect( 0, 1)}
-	get hitL() {return this.#detect(-1, 0)}
-	get hitLT(){return this.#detect(-1,-1)}
-	get hitRT(){return this.#detect( 1,-1)}
-	get hitLB(){return this.#detect(-1, 1)}
-	get hitRB(){return this.#detect( 1, 1)}
+	get hitT()  {return this.#detect( 0,-1)}
+	get hitR()  {return this.#detect( 1, 0)}
+	get hitB()  {return this.#detect( 0, 1)}
+	get hitL()  {return this.#detect(-1, 0)}
+	get hitLT() {return this.#detect(-1,-1)}
+	get hitRT() {return this.#detect( 1,-1)}
+	get hitLB() {return this.#detect(-1, 1)}
+	get hitRB() {return this.#detect( 1, 1)}
 }

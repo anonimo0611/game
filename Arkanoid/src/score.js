@@ -4,60 +4,62 @@ import {cvs,ctx}  from './_canvas.js';
 import {scoreRGB} from './background.js';
 import {Scene}    from './scene.js';
 
+const FontSize = 25;
+
+let $score   = 0;
+let $high    = 0;
+let $disp1UP = 1;
+
 export const Score = freeze(new class {
-	static {
-		$on('load', _=> Score.#setup());
+	static {$ready(this.#setup)}
+	static #setup() {
+		$on({Start:   Score.#onStart});
+		$on({GameOver:Score.#onGameOver});
+		$high = int(localStorage.arkanoidHiscore || 0);
 	}
-	#setup() {
-		Score.#high = int(localStorage.arkanoidHiscore || 0);
-		$on('Start',   Score.#onStart);
-		$on('GameOver',Score.#onGameOver);
-	}
-	#score   =  0;
-	#high    =  0;
-	#disp1UP =  1;
-	FontSize = 25;
-	Height   = this.FontSize+1
+	Height   = FontSize+1;
+	FontSize = FontSize;
 	#onStart() {
-		Score.#score = 0;
+		$score = 0;
 	}
 	#onGameOver() {
 		const high = localStorage.arkanoidHiscore || 0;
-		if (Score.#high > high)
-			localStorage.arkanoidHiscore = Score.#high;
+		if ($high > high)
+			localStorage.arkanoidHiscore = $high;
+	}
+	update() {
+		$disp1UP ^= Ticker.count % 30 == 0;
+	}
+	get isShow1UP() {
+		return !Scene.isInGame || (Scene.isInGame && $disp1UP);
 	}
 	add(pts=0) {
 		if (!Scene.isInGame)
 			return;
-
-		pts += Score.#score;
-		Score.#score = pts;
-		if (pts > Score.#high)
-			Score.#high = pts;
-	}
-	update() {
-		if (Ticker.count % 30 == 0) this.#disp1UP = 1;
-		if (Ticker.count % 60 == 0) this.#disp1UP = 0;
+		$score += pts;
+		$high = max($score, $high);
 	}
 	draw() {
-		const fs = Score.FontSize, y = fs+1;
+		const y = FontSize+1;
+		const ScoreStr =   `　${$score || '00'}`;
+		const HighStr  = `HI　${$high  || '00'}`;
+
 		// Backgound color
 		ctx.save();
-			ctx.fillStyle = rgba(...scoreRGB,.2);
-			ctx.fillRect(0,0,cvs.width,fs+6);
+		ctx.fillStyle = rgba(...scoreRGB,.2);
+		ctx.fillRect(0,0, cvs.width, FontSize+6);
 		ctx.restore();
 
 		// Draw score texts
 		ctx.save();
-		ctx.font = `${fs}px/1 Atari`;
-		ctx.shadowColor   = rgba(0,0,0,.5);
+		ctx.font = `${FontSize}px/1 Atari`;
+		ctx.shadowColor   = rgba(0,0,0, 0.5);
 		ctx.shadowOffsetX = 3;
 		ctx.shadowOffsetY = 3;
 		ctx.fillStyle = 'white';
-		if (!Scene.isInGame || Scene.isInGame && this.#disp1UP)
-			ctx.fillText('1UP', fs, y);
-		ctx.fillText(`\u3000${this.#score  || '00'}`, fs*4, y);
-		ctx.fillText(`HI\u3000${this.#high || '00'}`, (cvs.width/2), y);
+		this.isShow1UP && ctx.fillText('1UP', FontSize, y);
+		ctx.fillText(ScoreStr, FontSize* 4, y);
+		ctx.fillText(HighStr,  FontSize*12, y);
 		ctx.restore();
 	}
 });

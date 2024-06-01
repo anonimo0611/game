@@ -1,6 +1,7 @@
 import {Ticker}   from '../lib/timer.js';
 import {hsl,rgba} from '../lib/color.js';
 import {Sound}    from '../snd/sound.js';
+import {Game}     from './_main.js';
 import {cvs,ctx}  from './_canvas.js';
 import {Scene}    from './scene.js';
 import {Score}    from './score.js';
@@ -13,10 +14,9 @@ const AppearedSet = new Set();
 
 let avoid  = false;
 let lstIdx = -1;
+
 export class Item {
-	static {
-		$on('InGame', _=> AppearedSet.clear())
-	}
+	static {$on({InGame:_=> AppearedSet.clear()})}
 	static init() {
 		avoid  = false;
 		lstIdx = -1;
@@ -25,21 +25,25 @@ export class Item {
 	static get apearedItemExists() {
 		return ItemSet.size > 0 || BallG.count > 1;
 	}
+	static get Current() {return ItemSet.values().next().value}
+	
 	static appear({x, y}) {
 		if (this.apearedItemExists)
 			return;
 		if (!avoid && randInt(0,2) != 0)
 			return;
 
-		let idx = randInt(0,SubClasses.length-1);
+		let idx = randInt(0, SubClasses.length-1);
 		if (idx === lstIdx
+		 || idx === ItemType.Catch  && Scene.isInDemo
 		 || idx === ItemType.Extend && AppearedSet.has(idx)
-		 || idx === ItemType.SpeedDown && BallG.speedDownEnabeld
 		) return void (avoid = true);
 
 		if (ExclTypes.includes(idx)) {
-			if (idx === Paddle.exclItem)
-				idx = randChoice(ExclTypes.filter(i=> i != lstIdx && i != idx));
+			if (idx === Paddle.ExclItem)
+				idx = randChoice(ExclTypes
+					.filter(i=> !(Scene.isInDemo && i == ItemType.Catch))
+					.filter(i=> i != lstIdx && i != idx));
 		}
 		avoid = false;
 		AppearedSet.add(idx);
@@ -51,29 +55,31 @@ export class Item {
 	static draw() {
 		ItemSet.forEach(e=> e.draw());
 	}
-	Width     = BrickG.ColWidth;
-	Height    = BrickG.RowHeight*1.2;
 	Speed     = 4;
 	TextAlpha = 0.8;
 	TextColor = rgba(255,204,0,this.TextAlpha);
 
+	Width      = BrickG.ColWidth;
+	Height     = BrickG.RowHeight*1.2;
 	#aIdex     = 0;
 	#textScale = 0;
 	#scaleTbl  = integers(20).map(n=> n>10 ? 20-n : n);
+
+	get CenterX() {return this.Pos.x + this.Width/2}
 
 	constructor({x, y}, hue, nonColor) {
 		const {Width:w,Height:h}= this;
 		const s = nonColor ? 0 : 91;
 		this.Pos  = vec2(x, y);
 		this.grad = ctx.createLinearGradient(w,0,w,h);
-		this.grad.addColorStop(0.00, hsl(hue,s,35));
-		this.grad.addColorStop(0.30, hsl(hue,s,90));
-		this.grad.addColorStop(0.40, hsl(hue,s,35));
-		this.grad.addColorStop(1.00, hsl(hue,s,35));
+		this.grad.addColorStop(0.0, hsl(hue,s,35));
+		this.grad.addColorStop(0.3, hsl(hue,s,90));
+		this.grad.addColorStop(0.4, hsl(hue,s,35));
+		this.grad.addColorStop(1.0, hsl(hue,s,35));
 		this.outlineColor = hsl(hue,s*.7,40);
 	}
 	update() {
-		if (!Scene.isInGame) {
+		if (!Game.isPlayScene) {
 			ItemSet.delete(this);
 			return;
 		}
@@ -91,13 +97,14 @@ export class Item {
 			$trigger('GotItem', this.Type);
 			ItemSet.delete(this);
 		}
-		if (this.Pos.y > cvs.height)
+		if (this.Pos.y > cvs.height) {
 			ItemSet.delete(this);
+		}
 	}
 	draw() {
-		if (!Scene.isInGame) return;
+		if (!Game.isPlayScene) return;
 		const {x,y,Width:w,Height:h}= {...this.Pos,...this};
-		const offsetH  = h * (this.#aIdex / this.#scaleTbl.length);
+		const offsetH  = h * (this.#aIdex/this.#scaleTbl.length);
 		const cornerR  = w/6;
 		const fontSize = h*.8;
 
@@ -119,7 +126,7 @@ export class Item {
 		ctx.save();
 		ctx.translate(x+1, y + offsetH);
 		ctx.scale(1, this.#textScale);
-		ctx.shadowColor   = rgba(0,0,0,.7);
+		ctx.shadowColor   = rgba(0,0,0, .7);
 		ctx.shadowOffsetX = 3;
 		ctx.shadowOffsetY = 3;
 		ctx.font = `${fontSize}px/1 Atari`;

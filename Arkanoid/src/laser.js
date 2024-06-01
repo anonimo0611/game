@@ -1,11 +1,13 @@
-import {Sound}     from '../snd/sound.js';
-import {cvs,ctx}   from './_canvas.js';
-import {Game}      from './_main.js';
-import {Scene}     from './scene.js';
-import {Field}     from './field.js';
-import {Paddle}    from './paddle.js';
-import {Army}      from './army.js';
-import {BrickG}    from './brick.js';
+import {Ticker}   from '../lib/timer.js';
+import {Sound}    from '../snd/sound.js';
+import {cvs,ctx}  from './_canvas.js';
+import {Game}     from './_main.js';
+import {Scene}    from './scene.js';
+import {Field}    from './field.js';
+import {Paddle}   from './paddle.js';
+import {Army}     from './army.js';
+import {BrickG}   from './brick.js';
+import {Collider} from './brick.js'
 
 const Color   = '#CCFF66';
 const Rapid   =  2; // Up to 2 shots in field
@@ -16,17 +18,16 @@ const RadiusY = 14;
 const L = 0;
 const R = 1;
 const Lasers = freeze([new Set(),new Set()]);
+const BurstSet = new Set();
 
-export class Laser extends BrickG.Collider {
-	static {
-		$on('mousedown', Laser.#fire);
-	}
+export class Laser extends Collider {
+	static {$on({mousedown:Laser.#fire})}
 	static #fire(e) {
-		if (!Game.acceptEventInGame(e))
+		if (!Scene.isInDemo && !Game.acceptEventInGame(e))
 			return;
-		if (!Paddle.launched || Paddle.catchEnabeld)
+		if (!Paddle.Launched || Paddle.CatchEnabeld)
 			return;
-		if (!Paddle.laserEnabeld)
+		if (!Paddle.LaserEnabeld)
 			return;
 
 		if (Lasers[L].size < Rapid
@@ -37,17 +38,19 @@ export class Laser extends BrickG.Collider {
 		}
 	}
 	static update() {
-		if (!Scene.isInGame)
+		if (Scene.isInDemo && Ticker.count % 30 == 0)
+			BrickG.canBeDestroyedByLasers && Laser.#fire();
+		if (!Game.isPlayScene)
 			return;
-		Lasers[L].forEach(l=> l.update())
-		Lasers[R].forEach(l=> l.update())
+		Lasers[L].forEach(l=> l.update());
+		Lasers[R].forEach(l=> l.update());
 		Burst.update();
 	}
 	static draw() {
-		if (!Scene.isInGame)
+		if (!Game.isPlayScene)
 			return;
-		Lasers[L].forEach(l=> l.draw())
-		Lasers[R].forEach(l=> l.draw())
+		Lasers[L].forEach(l=> l.draw());
+		Lasers[R].forEach(l=> l.draw());
 		Burst.draw();
 	}
 	Width  = RadiusX * 2;
@@ -56,8 +59,8 @@ export class Laser extends BrickG.Collider {
 		const offset = BrickG.ColWidth / 2;
 		const y = Paddle.Pos.y - RadiusY;
 		super(side == L
-			? vec2(Paddle.centerX-offset, y)
-			: vec2(Paddle.centerX+offset, y),
+			? vec2(Paddle.CenterX-offset, y)
+			: vec2(Paddle.CenterX+offset, y),
 			RadiusX
 		);
 		this.side = side;
@@ -84,23 +87,22 @@ export class Laser extends BrickG.Collider {
 	}
 	draw() {
 		ctx.save();
-			ctx.translate(...this.Pos.vals);
-			ctx.beginPath();
-				ctx.ellipse(0,0, RadiusX,RadiusY, 0,0, PI*2);
-				ctx.fillStyle = Color;
-			ctx.fill();
+		ctx.translate(...this.Pos.vals);
+		ctx.beginPath();
+			ctx.ellipse(0,0, RadiusX,RadiusY, 0,0, PI*2);
+			ctx.fillStyle = Color;
+		ctx.fill();
 		ctx.restore();
 	}
 }
-const BurstSet = new Set();
 class Burst {
 	static set({x, y}) {
 		const v = vec2(x, y);
-		for (let i=0; i<180; i+=10) {
-			const cx = cos(i*PI/180) + randFloat(-2.00,2.00);
-			const cy = sin(i*PI/180) + randFloat(-0.25,2.00);
+		for (let i=90-140/2; i<90+140/2; i+=20) {
+			const cx = cos(i*PI/180);
+			const cy = sin(i*PI/180);
 			const cv = vec2(cx,cy);
-			BurstSet.add(new Burst(x, y, randInt(1,6), cv))
+			BurstSet.add(new Burst(x, y, 6, cv))
 		}
 	}
 	static update() {
@@ -123,17 +125,17 @@ class Burst {
 	}
 	draw() {
 		ctx.save();
-			ctx.translate(...this.Pos.vals);
-			ctx.beginPath();
-			ctx.moveTo(0,0);
-			ctx.lineTo(...vec2(this.v).mul(2).vals);
-			ctx.lineWidth = 3;
+		ctx.translate(...this.Pos.vals);
+		ctx.beginPath();
+			ctx.lineWidth   = 3;
 			ctx.strokeStyle = Color;
-			ctx.stroke();
+			ctx.moveTo(0,0);
+			ctx.lineTo(...vec2(this.v).mul(6).vals);
+		ctx.stroke();
 		ctx.restore();
 	}
 }
-$on('Reset Ready Clear Dropped Respawn',_=> {
+$on('Reset Ready Clear DemoEnd Dropped Respawn', _=> {
 	Lasers.forEach(s=> s.clear());
 	BurstSet.clear();
 });

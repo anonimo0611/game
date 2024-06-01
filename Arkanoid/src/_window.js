@@ -12,8 +12,8 @@ let resizing = false;
 
 export const Window = new class {
 	static {
-		$on('load resize', e=> Window.#onResize(e));
-		dRoot.css('min-height',`${dBoard.height*ScaleMin}px`);
+		$on({'DOMContentLoaded resize': e=> Window.#onResize(e)});
+		$(dRoot).css({'min-height':`${dBoard.height*ScaleMin}px`});
 	}
 	get scale() {
 		return clamp(scale, ScaleMin, ScaleMax);
@@ -31,12 +31,13 @@ export const Window = new class {
 		dBoard.style.transform = `scale(${this.scale})`;
 	}
 	#onResize(e) {
-		if (e.type != 'load') {
+		if (e.type != 'DOMContentLoaded') {
 			clearTimeout(resizeId);
 			resizing = true;
 			resizeId = setTimeout(_=> resizing = false, 2000);
 		}
 		Window.#fit();
+
 		const boardTop = max((innerHeight-dBoard.height)/2, 0);
 		$('body').css({
 			'--scale': Window.scale,

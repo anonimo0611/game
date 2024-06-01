@@ -4,23 +4,23 @@ import {Field}   from './field.js';
 import {Paddle}  from './paddle.js';
 import {Menu}    from './menu.js';
 
-const cvsForLife = document.createElement('canvas');
+const [$cvs] = canvas2D(null).vals;
 const ScaleX = .45;
 const ScaleY = .50;
 
 export const Lives = freeze(new class {
-	static {
-		$on('load',_=> Lives.#setup());
+	static {$ready(this.#setup)}
+	static #setup() {
+		$on({
+			SelLives: Lives.#set,
+			Start:    Lives.#onStart,
+			Extend:   Lives.#onExtend,
+			Respawn:  Lives.#onRespawn,
+		});
 	}
-	#setup() {
-		$on('SelLives',Lives.#set);
-		$on('Start',   Lives.#onStart);
-		$on('Extend',  Lives.#onExtend)
-		$on('Respawn', Lives.#onRespawn);
-	}
-	context = cvsForLife.getContext('2d');
+	context = $cvs.getContext('2d');
 
-	#left = 0;
+	#left = Menu.Lives.value;
 	get left()   {return Lives.#left}
 	#set(_, n)   {Lives.#left = n}
 	#onStart()   {Lives.#left = Menu.Lives.value}
@@ -30,7 +30,6 @@ export const Lives = freeze(new class {
 	draw() {
 		if (Game.isDemoScene)
 			return;
-
 		const w = ScaleX * Paddle.DefaultW;
 		const h = ScaleY * Paddle.Height;
 		const marginLeft = 4;
@@ -39,9 +38,9 @@ export const Lives = freeze(new class {
 		ctx.translate(offsetLeft, cvs.height - h*1.8);
 		for (let i=0; i<Lives.left; i++) {
 			ctx.save();
-				ctx.translate((w*i)+(marginLeft*i), 0);
-				ctx.scale(ScaleX, ScaleY);
-				ctx.drawImage(cvsForLife, 0,0);
+			ctx.translate((w*i)+(marginLeft*i), 0);
+			ctx.scale(ScaleX, ScaleY);
+			ctx.drawImage($cvs, 0,0);
 			ctx.restore();
 		}
 		ctx.restore();

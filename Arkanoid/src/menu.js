@@ -21,7 +21,6 @@ export const Menu = freeze({
 			$trigger('SelStage', idx);
 		}
 	}(SelectStage.id),
-
 	Lives: new class extends MenuBase.SlideMenu {
 		constructor(id, idx) {super(id, idx)};
 		select(idx, {restore=false}={}) {

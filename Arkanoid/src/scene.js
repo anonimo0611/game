@@ -6,6 +6,7 @@ export const Scene = freeze(new class extends State {
 	isInDemo   = false;
 	isInGame   = false;
 	isClear    = false;
+	isDemoEnd  = false;
 	isDropped  = false;
 	isRespawn  = false;
 	isGameOver = false;

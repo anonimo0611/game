@@ -19,26 +19,24 @@ import {Item}    from './item.js';
 import {Laser}   from './laser.js';
 
 const {cvs,ctx,cvsForBrick,cvsForShadow}= Cvs;
-const WaitTimeAfterClear = 2000; // ms
 
 export const Game = freeze(new class {
-	static {
-		$on('load',_=> Game.#setup());
-	}
-	#setup() {
-		this.#reset();
+	static {$ready(this.#setup)}
+	static #setup() {
+		Game.#reset();
+		$(cvs).on({
+			mousedown:   Game.#start,
+			contextmenu: Game.#confirm,
+		});
 		$on({
-			blur:     Game.#confirm,
-			keydown:  Game.#confirm,
 			Reset:    Game.#reset,
 			Clear:    Game.#clear,
 			Respawn:  Game.#respawn,
 			SelStage: Game.#selectStage,
 		});
-		$(cvs).on({
-			mousedown:   Game.#start,
-			contextmenu: Game.#confirm,
-		});
+		$on({focus:   Game.#confirm});
+		$on({blur:    Game.#confirm});
+		$on({keydown: Game.#confirm});
 		document.body.addClass('loaded');
 	}
 	ReadyTime  = 2200; // ms
@@ -54,14 +52,14 @@ export const Game = freeze(new class {
 	get isPlayScene()  {return Scene.isInDemo || Scene.isInGame}
 
 	acceptEventInGame(e) {
-		if (e.button > 0 || !e?.target)
+		if (!e || e.button > 0 || !e.target)
 			return false;
 		if (!Scene.isInGame)
 			return false;
 		return (
-			   e.target == cvs
-		    || e.target == document.body
-		    || e.target == Window.board);
+			e.target == cvs || 
+			e.target == document.body ||
+			e.target == Window.board);
 	}
 	#selectStage(_, stageIdx) {
 		Game.#stageIdx = stageIdx;
@@ -111,12 +109,12 @@ export const Game = freeze(new class {
 	#clear() {
 		if (Game.stageNum == Stages.length) {
 			Ticker.Timer.sequence(
-				[WaitTimeAfterClear*3/4, _=> Scene.switchToGameOver()],
-				[WaitTimeAfterClear*3/4, _=> Scene.switchToReset()]
-			);
+				[1500, Scene.switchToGameOver],
+				[1500, Scene.switchToReset]);
+			BallG.init();
 			return;
 		}
-		Ticker.Timer.set(WaitTimeAfterClear, Game.#setNewStage);
+		Ticker.Timer.set(2000, Game.#setNewStage);
 	}
 	#setNewStage() {
 		Game.#stageIdx++;
@@ -126,8 +124,13 @@ export const Game = freeze(new class {
 		Game.#ready();
 	}
 	#confirm(e) {
-		if (Confirm.opened || Game.isDemoScene)
+		if (Game.isDemoScene) {
+			Ticker.pause(e.type == 'blur');
 			return;
+		}
+		if (Confirm.opened)
+			return;
+
 		if (e.key  != 'Escape'
 		 && e.type != 'blur'
 		 && e.type != 'contextmenu'
@@ -145,11 +148,12 @@ export const Game = freeze(new class {
 			cancelId:   'Resume',
 			autoFocusId:'Resume',
 			funcCfg: {
-				Resume: _=> Game.#resume(),
-				Quit:   _=> Scene.switchToReset(),
-				Restart:_=> Game.#restart(),
+				Resume: Game.#resume,
+				Quit:   Scene.switchToReset,
+				Restart:Game.#restart,
 			}
-		});Game.draw();
+		});
+		Game.draw();
 	}
 	#update() {
 		if (Window.resizing || BrickG.destroyed)
@@ -163,7 +167,7 @@ export const Game = freeze(new class {
 		Paddle.update();
 	}
 	draw() {
-		ctx.clearRect(0,0, cvs.width,cvs.height);
+		ctx.clear();
 		ctx.drawImage(cvsForShadow, 0,0);
 		ctx.drawImage(cvsForBrick,  0,0);
 		BrickG.animation();
@@ -172,6 +176,7 @@ export const Game = freeze(new class {
 		Laser.draw();
 		BallG.draw();
 		Paddle.draw();
+		Army.Explosion.draw();
 		Score.draw();
 		Lives.draw();
 		Message.draw();
