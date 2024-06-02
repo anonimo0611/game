@@ -21,7 +21,7 @@ import {Laser}   from './laser.js';
 const {cvs,ctx,cvsForBrick,cvsForShadow}= Cvs;
 
 export const Game = freeze(new class {
-	static {$ready(this.#setup)}
+	static {$load(this.#setup)}
 	static #setup() {
 		$on({
 			Reset:    Game.#reset,
