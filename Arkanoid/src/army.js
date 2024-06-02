@@ -154,7 +154,7 @@ export class Army extends Collider {
 				return army;
 	}
 	static update() {
-		if (!Game.isPlayScene)
+		if (!Game.isPlayScene || !Paddle.Launched)
 			return;
 		if (Ticker.count % int(Interval/Ticker.Interval) == 0
 		 && ArmySet.size < ArmyMax)

@@ -5,8 +5,8 @@ import {Paddle}  from './paddle.js';
 import {Menu}    from './menu.js';
 
 const [$cvs] = canvas2D(null).vals;
-const ScaleX = .45;
-const ScaleY = .50;
+const ScaleX = 0.45;
+const ScaleY = 0.50;
 
 export const Lives = freeze(new class {
 	static {$ready(this.#setup)}
@@ -20,16 +20,17 @@ export const Lives = freeze(new class {
 	}
 	context = $cvs.getContext('2d');
 
-	#left = Menu.Lives.value;
+	#left = Menu.LivesMenu.value;
 	get left()   {return Lives.#left}
 	#set(_, n)   {Lives.#left = n}
-	#onStart()   {Lives.#left = Menu.Lives.value}
+	#onStart()   {Lives.#left = Menu.LivesMenu.value}
 	#onExtend()  {Lives.#left++}
 	#onRespawn() {Lives.#left--}
 
 	draw() {
 		if (Game.isDemoScene)
 			return;
+
 		const w = ScaleX * Paddle.DefaultW;
 		const h = ScaleY * Paddle.Height;
 		const marginLeft = 4;

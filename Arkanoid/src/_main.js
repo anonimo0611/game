@@ -23,33 +23,32 @@ const {cvs,ctx,cvsForBrick,cvsForShadow}= Cvs;
 export const Game = freeze(new class {
 	static {$ready(this.#setup)}
 	static #setup() {
-		Game.#reset();
-		$(cvs).on({
-			mousedown:   Game.#start,
-			contextmenu: Game.#confirm,
-		});
 		$on({
 			Reset:    Game.#reset,
 			Clear:    Game.#clear,
 			Respawn:  Game.#respawn,
 			SelStage: Game.#selectStage,
+			focus:    Game.#confirm,
+			blur:     Game.#confirm,
+			keydown:  Game.#confirm,
 		});
-		$on({focus:   Game.#confirm});
-		$on({blur:    Game.#confirm});
-		$on({keydown: Game.#confirm});
+		$(cvs).on({
+			mousedown:   Game.#start,
+			contextmenu: Game.#confirm,
+		});
 		document.body.addClass('loaded');
+		Game.#reset();
 	}
 	ReadyTime  = 2200; // ms
+	#stageIdx  = Menu.StageMenu.index;
 	#respawned = false;
+	get stageIdx()  {return this.#stageIdx}
+	get stageNum()  {return this.#stageIdx+1}
 	get respawned() {return this.#respawned}
 
-	#stageIdx = Menu.Stage.index;
-	get stageIdx() {return this.#stageIdx}
-	get stageNum() {return this.#stageIdx+1}
-
-	get isReadyScene() {return Scene.isReset  || Scene.isReady}
-	get isDemoScene()  {return Scene.isReset  || Scene.isInDemo}
-	get isPlayScene()  {return Scene.isInDemo || Scene.isInGame}
+	get isReadyScene() {return Scene.some('Reset|Ready')}
+	get isDemoScene()  {return Scene.some('Reset|InDemo|DemoEnd')}
+	get isPlayScene()  {return Scene.some('InDemo|InGame')}
 
 	acceptEventInGame(e) {
 		if (!e || e.button > 0 || !e.target)
@@ -57,19 +56,19 @@ export const Game = freeze(new class {
 		if (!Scene.isInGame)
 			return false;
 		return (
-			e.target == cvs || 
-			e.target == document.body ||
-			e.target == Window.board);
+			   e.target == cvs
+			|| e.target == document.body
+			|| e.target == Window.Board);
 	}
 	#selectStage(_, stageIdx) {
 		Game.#stageIdx = stageIdx;
 		Scene.switchToReset();
 	}
 	#reset() {
-		Game.#stageIdx  = Menu.Stage.index;
+		Game.#stageIdx  = Menu.StageMenu.index;
 		Game.#respawned = false;
 		Game.#init();
-		Scene.switchToInDemo(Game.ReadyTime);
+		Scene.switchToInDemo(Game.ReadyTime+500);
 	}
 	#init() {
 		BallG.init();
@@ -100,11 +99,11 @@ export const Game = freeze(new class {
 		Scene.switchToInGame(Game.ReadyTime);
 	}
 	#respawn() {
-		Scene.switchToReady();
 		Game.#respawned = true;
+		Scene.switchToReady();
+		Scene.switchToInGame(Game.ReadyTime);
 		BallG.init();
 		Paddle.init();
-		Scene.switchToInGame(Game.ReadyTime);
 	}
 	#clear() {
 		if (Game.stageNum == Stages.length) {
@@ -148,9 +147,9 @@ export const Game = freeze(new class {
 			cancelId:   'Resume',
 			autoFocusId:'Resume',
 			funcCfg: {
-				Resume: Game.#resume,
-				Quit:   Scene.switchToReset,
-				Restart:Game.#restart,
+				Resume:  Game.#resume,
+				Quit:    Scene.switchToReset,
+				Restart: Game.#restart,
 			}
 		});
 		Game.draw();

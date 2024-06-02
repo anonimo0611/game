@@ -55,6 +55,9 @@ export const BallG = freeze(new class {
 	get Ball() {
 		return BallSet.values().next().value;
 	}
+	get NearlyBall() {
+		return [...BallSet].sort((a,b)=> b.Pos.y - a.Pos.y)[0];
+	}
 	get count() {
 		return BallSet.size;
 	}
@@ -125,7 +128,7 @@ export class Ball extends Collider {
 		if (BallSet.size)
 			this.#speed = BallG.Ball.speed;
 		this.Pos.set(x, y);
-		this.Velocity.set(v.normalized.mul(this.speed));
+		this.Velocity.set( v.normalized.mul(this.speed) );
 		freeze(this);
 	}
 	get speed() {
@@ -144,6 +147,7 @@ export class Ball extends Collider {
 
 		if (this.#detectDropped())
 			return;
+
 		this.#reboundAtPaddle();
 		this.#collisionWithArmy();
 		this.#collisionWithBrick();
@@ -177,11 +181,12 @@ export class Ball extends Collider {
 		const x = (this.Pos.x - Paddle.CenterX) / (Paddle.Width/2);
 		this.Velocity.x = clamp(x * 2, -1.5, 1.5);
 		this.Velocity.y = -1;
-		this.Velocity.set(this.Velocity.normalized.mul(this.speed));
+		this.Velocity.set( this.Velocity.normalized.mul(this.speed) );
 	}
 	#reboundAtPaddle() {
 		if (!collisionRect(Paddle,this))
 			return;
+
 		Paddle.catch(this);
 		this.#setPaddleReboundVelocity();
 		Sound.play('se0');
@@ -208,13 +213,13 @@ export class Ball extends Collider {
 		if (brick) {
 			brick.collision();
 			if (brick.type == BrickType.Immortality)
-				this.Pos.add(randChoice(-1,1));
+				this.Pos.add( randChoice(-1,1) );
 		}
 	}
 	draw() {
 		ctx.save();
 		ctx.globalAlpha = Paddle.alpha;
-		ctx.translate(this.Pos.x-Radius, this.Pos.y-Radius);
+		ctx.translate(...vec2(this.Pos).sub(Radius).vals);
 		ctx.drawImage($cvs, 0,0);
 		ctx.restore();
 	}

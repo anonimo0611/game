@@ -26,7 +26,7 @@ const ShadowColor = rgba(0,  0,  0, 0.4);
 
 const [$cvs,$ctx] = canvas2D(null, Width*1.5, Height*1.5).vals;
 
-const BodyGrad = lineGradHSL(0,0,46);
+const BodyGrad = lineGradHSL(0, 0, 46);
 const LineGrad = new Map()
 	.set(undefined,      lineGradHSL( 15,100,40))
 	.set(ItemType.Catch, lineGradHSL( 33,240,29))
@@ -98,7 +98,7 @@ export const Paddle = freeze(new class {
 		Paddle.#updateCache(Lives.context, Width);
 		Paddle.#updateCache($ctx);
 	}
-	#setClamp() {
+	#posClamp() {
 		Paddle.Pos.x = clamp(Paddle.Pos.x, this.MovMin, this.MovMax);
 	}
 	update() {
@@ -114,7 +114,7 @@ export const Paddle = freeze(new class {
 		if (Scene.isInDemo) {
 			Paddle.#demoPlay();
 			Paddle.#setWidth();
-			Paddle.#setClamp();
+			Paddle.#posClamp();
 			return;
 		}
 		if (!Scene.isInGame)
@@ -123,9 +123,9 @@ export const Paddle = freeze(new class {
 		if (AutoMoveAtStart.setPosition()) {
 			Paddle.Pos.x = Mouse.x - (Paddle.Width/2);
 			Paddle.#setWidth();
-			Paddle.#setClamp();
+			Paddle.#posClamp();
 			if (Paddle.CatchX > 0)
-				BallG.Ball.Pos.x = Paddle.ClampedX + Paddle.CatchX;
+				BallG.Ball.Pos.x = round(Paddle.ClampedX + Paddle.CatchX);
 		}
 		if (!Paddle.Launched)
 			BallG.Ball.Pos.x = Paddle.CatchX
@@ -162,7 +162,8 @@ export const Paddle = freeze(new class {
 	#onPowerUp(_, type) {
 		switch (type) {
 		case ItemType.Extend:
-			$trigger('Extend');
+			if (Scene.isInGame)
+				$trigger('Extend');
 			break;
 		case ItemType.Catch:
 		case ItemType.Disruption:
@@ -192,7 +193,7 @@ export const Paddle = freeze(new class {
 	#demoPlay() {
 		if (Paddle.#goForItem(Item.Current)) return;
 		const a = Paddle.#demoRad += PI/94 + randFloat(-0.01, +0.01);
-		const x = BallG.Ball.Pos.x * (sin(a)/10+1);
+		const x = BallG.NearlyBall.Pos.x * (sin(a)/10+1);
 		for (let i=0; i<30; i++) {
 			if (x < Paddle.CenterX) Paddle.Pos.x -= 10/30;
 			if (x > Paddle.CenterX) Paddle.Pos.x += 10/30;

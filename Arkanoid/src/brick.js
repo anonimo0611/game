@@ -190,7 +190,7 @@ export const BrickG = freeze(new class {
 		grad = ctx.createLinearGradient(0,0,ColWidth,RowHeight);
 		grad.addColorStop(0, hsl(h,s,l-20));
 		grad.addColorStop(max(offset*.5,0), hsl(h,s,l-20));
-		grad.addColorStop(offset, 'white');
+		grad.addColorStop(offset, '#FFF');
 		grad.addColorStop(min(offset*.7,1), hsl(h,s,l-20));
 		grad.addColorStop(1, hsl(h,s,l-20));
 		data.offset = min(data.offset+=1/AnimDuration, 1);
@@ -207,7 +207,7 @@ export const BrickG = freeze(new class {
        	ctx.translate(x, y);
 		ctx.beginPath();
 	 		ctx.lineWidth   = 3;
-			ctx.strokeStyle = 'white';
+			ctx.strokeStyle = '#FFF';
 			ctx.moveTo(ColWidth-4,4);
 			ctx.lineTo(ColWidth-4,RowHeight-4);
 			ctx.lineTo(4,RowHeight-4);

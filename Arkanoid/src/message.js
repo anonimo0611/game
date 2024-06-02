@@ -7,8 +7,8 @@ import {Scene}   from './scene.js';
 import {Field}   from './field.js';
 
 const FontSize  = 28;
-const MainColor = '#EA6AAC'; // Pink
-const SubColor  = '#DCC678'; // Light Orange
+const ColorMain = '#EA6AAC'; // Pink
+const ColorSub  = '#DCC678'; // Orange
 
 export const Message = freeze(new class  {
 	#draw(txt, color='#FFF',
@@ -20,8 +20,8 @@ export const Message = freeze(new class  {
 	) {
 		ctx.save();
 		ctx.font = `${fs}px Atari`;
-		ctx.fillStyle     = color;
 		ctx.textAlign     = align;
+		ctx.fillStyle     = color;
 		ctx.shadowColor   = rgba(0,0,0, 0.7);
 		ctx.shadowOffsetX = 3;
 		ctx.shadowOffsetY = 3;
@@ -39,26 +39,30 @@ export const Message = freeze(new class  {
 	draw() {
 		if (Confirm.opened)
 			return;
-		if (Scene.isClear) {
-			this.#draw(`STAGE ${Game.stageNum}`, MainColor)
-			this.#draw('CLEARED!', SubColor, {rows:2.5});
-			return;
-		}
-		if (Game.isDemoScene || Scene.isGameOver) {
-			this.#draw('GAME　OVER', MainColor);
-		}
-		if (Game.isDemoScene) {
-			this.#draw('Click to Start!', SubColor, {rows:2.5})
+
+		switch (Scene.current) {
+		case Scene.Enum.Clear:
+			this.#draw(`STAGE ${Game.stageNum}`, ColorMain)
+			this.#draw('CLEARED!', ColorSub, {rows:2.5});
+			break;
+		case Scene.Enum.GameOver:
+			this.#draw('GAME　OVER', ColorMain);
+			break;
+		case Scene.Enum.Reset:
+		case Scene.Enum.InDemo:
+			this.#draw('GAME　OVER', ColorMain);
+			this.#draw('Click to Start!', ColorSub, {rows:2.5})
 			this.#drawCtrls();
-		}
-		if (Scene.isReady) {
-			if (Game.respawned) {
-				this.#draw('READY!', SubColor, {rows:1.5});
-				return;
+			break;
+		case Scene.Enum.Ready:
+			if (Game.respawned)
+				this.#draw('READY!', ColorSub, {rows:1.5});
+			else {
+				this.#draw(`STAGE ${Game.stageNum}`, ColorMain)
+				if (Ticker.elapsed > Game.ReadyTime - 1000)
+					this.#draw('READY!', ColorSub, {rows:2.5});
 			}
-			this.#draw(`STAGE ${Game.stageNum}`, MainColor)
-			if (Ticker.elapsed > Game.ReadyTime - 1000)
-				this.#draw('READY!', SubColor, {rows:2.5});
+			break;
 		}
 	}
 });
