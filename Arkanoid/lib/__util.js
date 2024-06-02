@@ -14,6 +14,7 @@ const isFun    = arg=> typeof(arg) === 'function'
 const isNum    = arg=> typeof(arg) === 'number' && !isNaN(arg)
 
 const dRoot  = document.documentElement
+const dBody  = document.body
 const dqs    = sel=> document.querySelector(sel)
 const dqsAll = sel=> document.querySelectorAll(sel)
 const byId   = id => document.getElementById(id)
