@@ -1,30 +1,38 @@
-const canvas2D = (id, width, height=width)=> {
+'use strict';
+const canvas2D = (id, w, h=w)=> {
 	const cvs = byId(id) ?? document.createElement('canvas');
 	const ctx = cvs.getContext('2d');
+	if (typeOf(w) == 'HTMLCanvasElement')
+		({width:w,height:h}= w);
+	({w,h}= setCanvasSize(cvs)(w,h));
 	ctx.clear = (x=0,y=0,w=cvs.width,h=cvs.height)=> ctx.clearRect(x,y,w,h);
-	({width,height}= setCanvasSize(cvs)(width,height));
-	return {cvs,ctx,width,height,vals:[cvs,ctx,width,height]};
+	return {cvs,ctx,width:w,height:h,vals:[cvs,ctx,w,h]};
 }
-const setCanvasSize = param=> (width, height=width)=> {
+const setCanvasSize = param=> (w, h=w)=> {
 	const cvs = (isStr(param)? byId(param) : param) || {};
 	if (typeOf(cvs) == 'HTMLCanvasElement') {
-		isNum(width)  && (cvs.width  = width);
-		isNum(height) && (cvs.height = height);
+		isNum(w) && (cvs.width  = w);
+		isNum(h) && (cvs.height = h);
 	}
-	return {width:cvs.width || 0, height:cvs.height || 0}
+	return {
+		width: cvs.width  || 0,
+		height:cvs.height || 0}
 }
 const createRoundRectPath = (ctx, x, y, w, h, r)=> {
+	ctx.save();
+	ctx.translate(x, y);
     ctx.beginPath();
-    ctx.moveTo(x+r, y);
-    ctx.lineTo(x+w-r, y);
-    ctx.arc(x+w-r, y+r, r, Math.PI * (3/2), 0, false);
-    ctx.lineTo(x+w, y+h-r);
-    ctx.arc(x+w-r, y+h-r, r, 0, Math.PI * (1/2), false);
-    ctx.lineTo(x+r, y+h);
-    ctx.arc(x+r, y+h-r, r, Math.PI * (1/2), Math.PI, false);
-    ctx.lineTo(x, y+r);
-    ctx.arc(x+r, y+r, r, Math.PI, Math.PI * (3/2), false);
+    ctx.moveTo(r, 0);
+    ctx.lineTo(w-r, 0);
+    ctx.arc(w-r, r, r, -PI/2, 0);
+    ctx.lineTo(w, h-r);
+    ctx.arc(w-r, h-r, r, 0, PI/2);
+    ctx.lineTo(r, h);
+    ctx.arc(r, h-r, r, PI/2, PI);
+    ctx.lineTo(0, r);
+    ctx.arc(r, r, r, PI, -PI/2);
     ctx.closePath();
+	ctx.restore();
 }
 const fillRoundRect = (ctx, x, y, w, h, r, color)=> {
  	ctx.fillStyle = color;
