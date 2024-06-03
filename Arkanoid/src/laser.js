@@ -6,7 +6,7 @@ import {Scene}    from './scene.js';
 import {Paddle}   from './paddle.js';
 import {Army}     from './army.js';
 import {BrickG}   from './brick.js';
-import {Collider} from './brick.js'
+import {Collider} from './brick.js';
 
 const Color   = '#CCFF66';
 const Rapid   = 2; // Up to 2 shots in field
@@ -97,11 +97,11 @@ export class Laser extends Collider {
 class Burst {
 	static set({x, y}) {
 		const v = vec2(x, y);
-		for (let i=90-140/2; i<90+140/2; i+=20) {
+		for (let i=90-150/2; i<=90+150/2; i+=30) {
 			const cx = cos(i*PI/180);
 			const cy = sin(i*PI/180);
 			const cv = vec2(cx,cy);
-			BurstSet.add(new Burst(x, y, 6, cv))
+			BurstSet.add(new Burst(x, y, cv))
 		}
 	}
 	static update() {
@@ -110,9 +110,9 @@ class Burst {
 	static draw() {
 		BurstSet.forEach(p=> p.draw());
 	}
-	constructor(x, y, r, v) {
+	constructor(x, y, v) {
 		this.Pos = vec2(x, y);
-		this.r   = r;
+		this.r   = RadiusX;
 		this.v   = v.mul(RadiusX / 2);
 		this.cnt = 0;
 	}
