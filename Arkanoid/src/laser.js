@@ -101,7 +101,7 @@ class Burst {
 			const cx = cos(i*PI/180);
 			const cy = sin(i*PI/180);
 			const cv = vec2(cx,cy);
-			BurstSet.add(new Burst(x, y, cv))
+			BurstSet.add(new Burst(x, y, cv));
 		}
 	}
 	static update() {

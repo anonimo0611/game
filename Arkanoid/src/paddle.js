@@ -18,7 +18,7 @@ const Width  = cvs.width / 5;
 const Height = BrickG.RowHeight;
 
 const StretchMax = Width * 1.5;
-const StretchSpd = (StretchMax-Width)/(200/Ticker.Interval);
+const StretchSpd = (StretchMax-Width)/(300/Ticker.Interval);
 const FadeSpeed  = 500 / Ticker.Interval;
 
 const SparkColor  = rgba(0,255,255, 0.7);
@@ -100,14 +100,15 @@ export const Paddle = freeze(new class {
 	get LaserEnabeld()      {return this.ExclItem == ItemType.Laser}
 	get DisruptionEnabeld() {return this.ExclItem == ItemType.Disruption}
 
+	#posClamp() {
+		Paddle.Pos.x = clamp(Paddle.Pos.x, this.MoveMin, this.MoveMax);
+	}
+
 	init() {
 		Paddle.#blink    = 0;
 		Paddle.#CatchX   = 0;
 		Paddle.#alpha    = 0;
 		Paddle.#Launched = false;
-		if (Scene.isReset) {
-			Paddle.#Launched = true;
-		}
 		if (Game.respawned && Paddle.DisruptionEnabeld) {
 			Paddle.#ExclItem = null;
 		}
@@ -120,28 +121,50 @@ export const Paddle = freeze(new class {
 		Paddle.#updateCache(Lives.context, Width);
 		Paddle.#updateCache($ctx);
 	}
-	#posClamp() {
-		Paddle.Pos.x = clamp(Paddle.Pos.x, this.MoveMin, this.MoveMax);
+	catch(ball) {
+		if (!Paddle.CatchEnabeld || Paddle.CatchX)
+			return;
+		if (this.Width != this.#TargetW)
+			return;
+		const {x,y}= Paddle.Pos;
+		ball.Pos.x = clamp(ball.Pos.x, x+1, x+Paddle.Width-1);
+		ball.Pos.y = y - ball.Radius-1; 
+		Paddle.#CatchX = ball.Pos.x - Paddle.Pos.x;
 	}
 	update() {
-		if (BallG.count <= 0 && Ticker.count > 8)
-			this.#alpha = max(this.#alpha-=1/FadeSpeed, 0);
-		else if (Ticker.elapsed > Game.ReadyTime - 1000)
-			this.#alpha = min(this.#alpha+=1/FadeSpeed, 1);
-
-		if (Ticker.elapsed < 50) return;
-
 		this.#blink += PI/120;
 		Paddle.#updateCache($ctx);
-		if (Scene.isInDemo) {
-			Paddle.#demoPlay();
-			Paddle.#setWidth();
-			Paddle.#posClamp();
-			return;
+		switch (Scene.current) {
+			case Scene.Enum.Reset:
+			case Scene.Enum.Ready:
+				Paddle.#ready();
+				break;
+			case Scene.Enum.InDemo:
+				Paddle.#inDemo();
+				return;
+			case Scene.Enum.InGame:
+				Paddle.#inGame();
+				break;
+			default:
+				Paddle.#destory();
 		}
-		if (!Scene.isInGame)
+	}
+	#ready() {
+		if (Ticker.elapsed > Game.ReadyTime - 1000)
+			this.#alpha = min(this.#alpha+=1/FadeSpeed, 1);
+	}
+	#inDemo() {
+		if (Ticker.elapsed >= 50)
+			Paddle.#Launched ||= true;
+		if (Ticker.elapsed < 200)
 			return;
-
+		Paddle.#comPlay();
+		Paddle.#setWidth();
+		Paddle.#posClamp();
+	}
+	#inGame() {
+		if (Ticker.elapsed < 50)
+			return;
 		if (AutoMoveAtStart.setPosition()) {
 			Paddle.Pos.x = Mouse.x - (Paddle.Width/2);
 			Paddle.#setWidth();
@@ -154,15 +177,9 @@ export const Paddle = freeze(new class {
 				? Paddle.ClampedX + Paddle.CatchX
 				: Paddle.ClampedX + Paddle.Width/2;
 	}
-	catch(ball) {
-		if (!Paddle.CatchEnabeld || Paddle.CatchX)
-			return;
-		if (this.Width != this.#TargetW)
-			return;
-		const {x,y}= Paddle.Pos;
-		ball.Pos.x = clamp(ball.Pos.x, x+1, x+Paddle.Width-1);
-		ball.Pos.y = y - ball.Radius-1; 
-		Paddle.#CatchX = ball.Pos.x - Paddle.Pos.x;
+	#destory() {
+		if (BallG.count <= 0 && Ticker.count > 8)
+			this.#alpha = max(this.#alpha-=1/FadeSpeed, 0);
 	}
 	#onLaunch(e) {
 		if (!Game.acceptEventInGame(e))
@@ -203,6 +220,25 @@ export const Paddle = freeze(new class {
 		Paddle.#updateCache($ctx);
 		Sound.play('destroy');
 	}
+	#comPlay() {
+		const a = Paddle.#demoRad += PI/94 + randFloat(-0.01, +0.01);
+		const x = BallG.NearlyBall.Pos.x * (sin(a)/10+1);
+		const m = BallG.NearlyBall.Velocity.magnitude;
+		if (Paddle.#comGoForItem(Item.Current)) return;
+		for (let i=0; i<45; i++) {
+			if (x < Paddle.CenterX) Paddle.Pos.x -= m/45;
+			if (x > Paddle.CenterX) Paddle.Pos.x += m/45;
+		}
+	}
+	#comGoForItem(item) {
+		if (!item || BallG.NearlyBall.Velocity.y > 0) return false;
+		if (Paddle.LaserEnabeld && item.Type == ItemType.Expand) return false;
+		for (let i=0; i<45; i++) {
+			if (item.CenterX < Paddle.CenterX) Paddle.Pos.x -= 15/45;
+			if (item.CenterX > Paddle.CenterX) Paddle.Pos.x += 15/45;
+		}
+		return true;
+	}
 	#setWidth() {
 		if (this.#TargetW > this.#Width) {
 			this.#Width = min(this.#Width+StretchSpd, this.#TargetW);
@@ -212,24 +248,6 @@ export const Paddle = freeze(new class {
 			this.#Width = max(this.#Width-StretchSpd, Width);
 			Paddle.#updateCache($ctx);
 		}
-	}
-	#demoPlay() {
-		if (Paddle.#goForItem(Item.Current)) return;
-		const a = Paddle.#demoRad += PI/94 + randFloat(-0.01, +0.01);
-		const x = BallG.NearlyBall.Pos.x * (sin(a)/10+1);
-		for (let i=0, stepMax=45; i<stepMax; i++) {
-			if (x < Paddle.CenterX) Paddle.Pos.x -= 20/stepMax;
-			if (x > Paddle.CenterX) Paddle.Pos.x += 20/stepMax;
-		}
-	}
-	#goForItem(item) {
-		if (!item || BallG.Ball.Velocity.y > 0) return false;
-		if (Paddle.LaserEnabeld && item.Type == ItemType.Expand) return false;
-		for (let i=0, stepMax=30; i<stepMax; i++) {
-			if (item.CenterX < Paddle.CenterX) Paddle.Pos.x -= 20/stepMax;
-			if (item.CenterX > Paddle.CenterX) Paddle.Pos.x += 20/stepMax;
-		}
-		return true;
 	}
 	#getPaddleType(ctx) {
 		if (ctx != $ctx)

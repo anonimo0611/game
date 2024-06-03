@@ -19,8 +19,8 @@ export const Window = new class {
 	get scale()    {return clamp(scale, ScaleMin, ScaleMax)}
 	get resizing() {return resizing}
 	#fit() {
-		const w = $(window).width()  / dBoard.offsetWidth;
-		const h = $(window).height() / dBoard.offsetHeight;
+		const w = $(window).width()  / dBoard.width;
+		const h = $(window).height() / dBoard.height;
 		scale = min(w*0.98, h*0.9);
 		dBoard.style.transform = `scale(${this.scale})`;
 	}
@@ -34,11 +34,9 @@ export const Window = new class {
 		Window.#setCSSVars();
 	}
 	#setCSSVars() {
-		const marginT = max(($(window).height() - dBoard.height)/2, 0);
-		const dialogY = dBoard.height - (FontSize*16);
 		$(dBody).css({
 			'--scale': Window.scale,
-			'--dialog-top': `${cvs.offsetTop+marginT+dialogY}px`,
+			'--board-top': `${($(window).height() - dBoard.height*scale)/2}px`,
 		});
 	}
 };

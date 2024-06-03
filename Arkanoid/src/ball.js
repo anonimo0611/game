@@ -20,7 +20,7 @@ const BallSet       = new Set();
 const BallSpeed     = cvs.height / 70;
 const DisruptionMax = 10;
 const SpeedRateMax  = 1.25;
-const ArmySpeedDown = 0.80;
+const ArmySpeedDown = 0.70;
 
 const
 Grad = $ctx.createRadialGradient(0,0,0, 0,0,Radius);
@@ -98,7 +98,7 @@ export const BallG = freeze(new class {
 	update() {
 		if (!Game.isReadyScene && !Game.isPlayScene)
 			return;
-		if (Scene.isInGame && !Paddle.Launched)
+		if (!Paddle.Launched)
 			return;
 		BallSet.forEach(ball=> ball.update());
 	}
@@ -123,7 +123,7 @@ export class Ball extends Collider {
 	Velocity   = vec2();
 	InitSpeed  = (BallSpeed*BallG.initialSpeedRate) * BallG.stageSpeedRate;
 	#speed     = this.InitSpeed;
-	Accelerate = 0.01;
+	Accelerate = 0.02;
 	constructor({x,y,v}) {
 		super({x, y}, Radius);
 		if (BallSet.size)
@@ -139,7 +139,7 @@ export class Ball extends Collider {
 		if (Game.isReadyScene || Paddle.CatchX > 0)
 			return;
 
-		const Min = this.InitSpeed * ArmySpeedDown;
+		const Min = this.InitSpeed * 0.5;
 		const Max = BallSpeed   * BallG.stageSpeedRate;
 		const spd = this.#speed * BallG.speedDownRate;
 
