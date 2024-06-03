@@ -49,13 +49,13 @@ dialog {
 	border-radius: .3em;
 	margin: 0;
 	padding: .2rem;
+	display: table;
 	position: absolute;
-	top:  0;
 	left: 50%;
-	transform: scale(var(--scale)) translate(calc(-50% / var(--scale)),var(--dialog-top));
+	top: calc(var(--board-top) + 30em * var(--scale));
+	transform: translateX(-50%) scale(var(--scale));
 	transform-origin: center top;
 	will-change: opacity;
-	overflow: hidden;
 }
 dialog .content {
 	white-space: pre;
@@ -63,6 +63,7 @@ dialog .content {
 	padding: .5em 1em 1em;
 }
 dialog .buttons {
+	white-space: nowrap;
 	text-align: center;
 	margin-top: .5em;
 	padding: .2em .4em .4em .4em;
@@ -130,7 +131,7 @@ label:hover [type=range]{background:#0b93d5}
 .slidemenu button{
 	appearance: none;
 	text-indent: -3em;
-	background: no-repeat center url(../res/caret.svg);
+	background: no-repeat center/100% 100% url(../res/caret.svg);
 	opacity: 1;
 	border: none;
 	padding: 0;
@@ -190,12 +191,11 @@ label:hover + .dropdown .current,
 	width: calc(var(--size) * 1.5);
 	height: var(--size);
 	position: absolute;
-	top: 0;
+	top:   2em;
+	right: 0;
 	visibility: hidden;
 }
 #volCtrl.loaded {
-	top:   1.5em;
-	right: 0;
 	visibility: visible;
 }
 #volCtrl:hover input{

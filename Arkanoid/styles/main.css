@@ -7,7 +7,7 @@ html, body {
 }
 html{
 	user-select:none;cursor:default;
-	font-size: 20px;
+	font-size: 22px;
 }
 body {
 	color: white;
@@ -48,7 +48,8 @@ body {
 	position: relative;
 }
 #menus {
-	font: 20px Atari, sans-serif;
+	font-family: Atari, sans-serif;
+	padding-bottom: .5em;
 	display: flex;
 	justify-content: center;
 	gap: 2em;
