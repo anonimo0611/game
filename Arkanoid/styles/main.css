@@ -1,4 +1,4 @@
-html,body {
+html, body {
 	margin:  0;
 	padding: 0;
 	width:  100%;
@@ -9,8 +9,6 @@ html{
 	user-select:none;cursor:default;
 	font-size: 20px;
 }
-::selection{color:inherit;background:0 0}
-
 body {
 	color: white;
 	background: black;
@@ -20,33 +18,40 @@ body {
 	flex-direction: column;
 }
 div,h1,dd,dl,dt,input,li,menu,ol,td,th,ul,form,output{
-	margin:0;padding:0;list-style-type:none
+	margin:  0;
+	padding: 0;
+	list-style-type: none;
 }
 button,dd,div,dt,li,menu,table,ul,kbd{
-	box-sizing:border-box !important
+	box-sizing: border-box !important;
 }
 
-body, dialog::backdrop {
+body {
 	cursor: url(../res/crosshair.png) 16 16, crosshair;
 }
-#debug {
-	position: fixed;
-	top: 1.5em;
-	left: .5em;
+
+::selection{
+	color: inherit;
+	background: 0 0;
 }
 
+#debug {
+	position: fixed;
+	top:  1.5em;
+	left: 0.5em;
+}
 #board {
 	display: table;
 	transform-origin: center;
 	will-change: transform;
 	padding-top: 1rem;
-	padding-bottom: 14px;
+	position: relative;
 }
 #menus {
-	font-size: 20px;
+	font: 20px Atari, sans-serif;
 	display: flex;
 	justify-content: center;
-	gap: 1em;
+	gap: 2em;
 	margin-top: -1em;
 	margin-bottom: .2em;
 	overflow: hidden;
