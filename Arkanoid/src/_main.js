@@ -18,7 +18,7 @@ import {Army}    from './army.js';
 import {Item}    from './item.js';
 import {Laser}   from './laser.js';
 
-const {cvs,ctx,cvsForBrick,cvsForShadow}= Cvs;
+const {cvs,ctx,cvsBrick,cvsShadow}= Cvs;
 
 export const Game = freeze(new class {
 	static {$load(this.#setup)}
@@ -47,7 +47,7 @@ export const Game = freeze(new class {
 	get respawned() {return this.#respawned}
 
 	get isReadyScene() {return Scene.some('Reset|Ready')}
-	get isDemoScene()  {return Scene.some('Reset|InDemo|DemoEnd')}
+	get isDemoScene()  {return Scene.some('Reset|InDemo|EndDemo')}
 	get isPlayScene()  {return Scene.some('InDemo|InGame')}
 
 	acceptEventInGame(e) {
@@ -106,14 +106,11 @@ export const Game = freeze(new class {
 		Paddle.init();
 	}
 	#clear() {
-		if (Game.stageNum == Stages.length) {
-			Ticker.Timer.sequence(
+		(Game.stageNum == Stages.length)
+			? Ticker.Timer.sequence(
 				[1500, Scene.switchToGameOver],
-				[1500, Scene.switchToReset]);
-			BallG.init();
-			return;
-		}
-		Ticker.Timer.set(2000, Game.#setNewStage);
+				[1500, Scene.switchToReset])
+			: Ticker.Timer.set(2000, Game.#setNewStage);
 	}
 	#setNewStage() {
 		Game.#stageIdx++;
@@ -122,7 +119,7 @@ export const Game = freeze(new class {
 		Game.#init();
 		Game.#ready();
 	}
-	#confirm(e) {
+	#confirm(e) {			
 		if (Game.isDemoScene) {
 			Ticker.pause(e.type == 'blur');
 			return;
@@ -136,8 +133,8 @@ export const Game = freeze(new class {
 		) return;
 
 		const content = e.type == 'blur'
-			? 'Browser window is now inactive!'
-			: 'Are you sure you want to quit the game?';
+			? 'Browser window is\nnow inactive!'
+			: 'You really want to\nquit the game?';
 
 		e.preventDefault();
 		Ticker.pause(true);
@@ -167,8 +164,8 @@ export const Game = freeze(new class {
 	}
 	draw() {
 		ctx.clear();
-		ctx.drawImage(cvsForShadow, 0,0);
-		ctx.drawImage(cvsForBrick,  0,0);
+		ctx.drawImage(cvsShadow, 0,0);
+		ctx.drawImage(cvsBrick,  0,0);
 		BrickG.animation();
 		Army.draw();
 		Item.draw();

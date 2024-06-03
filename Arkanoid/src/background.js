@@ -19,7 +19,7 @@ export let scoreRGB = ScoreRGBList[0];
 function setBgImage() {
 	const idx = Game.stageIdx % ImageMax;
 	const bg1 =`no-repeat 0 0/100% 100% url(${FrameImg.src}),`;
-	const bg2 =`#999 url(${BgImages[idx].src})`;
+	const bg2 =`#999 0 0/80px 80px url(${BgImages[idx].src})`;
 	scoreRGB = ScoreRGBList[idx];
 	cvs.style.background = bg1+bg2;
 	$(dBody).css({'--dialog-color':rgba(...scoreRGB, 0.4)});

@@ -1,3 +1,3 @@
-export const [cvs,ctx] = canvas2D('canvas').vals;
-export const [cvsForBrick, ctxForBrick] = canvas2D(null, cvs.width, cvs.height).vals;
-export const [cvsForShadow,ctxForShadow]= canvas2D(null, cvs.width, cvs.height).vals;
+export const {cvs,ctx}= canvas2D('canvas');
+export const [cvsBrick, ctxBrick] = canvas2D(null, cvs).vals;
+export const [cvsShadow,ctxShadow]= canvas2D(null, cvs).vals;

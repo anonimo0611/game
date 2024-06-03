@@ -11,12 +11,10 @@ import {Paddle}  from './paddle.js';
 import {Item}    from './item.js';
 import * as Cvs  from './_canvas.js';
 
-const {cvs,ctx,ctxForBrick:ctxB,ctxForShadow:ctxS}= Cvs;
+const {cvs,ctx,ctxBrick:ctxB,ctxShadow:ctxS}= Cvs;
+const {Frame,Cols,Rows,ColWidth,RowHeight}= Field;
 
-const Cols         = 13;
-const Rows         = 30;
-const ColWidth     = int(Field.Width/Cols);
-const RowHeight    = int(cvs.height /Rows);
+const LineWidth    = int(cvs.width/315);
 const MarginLeft   = Field.Left;
 const MarginTop    = RowHeight * 2.0;
 const ShadowOffset = ColWidth  * 0.2;
@@ -35,19 +33,19 @@ export const BrickType = freeze({
 	Blue:       8,
 	Pink:       9,
 });
-const HSLColors = [
-	HSL(  0,  0, 70), // Hard
-	HSL( 60, 49, 50), // Immortality
-	HSL(  0,  0,100), // White
-	HSL(  0, 79, 64), // Red
-	HSL( 38, 79, 64), // Orange
-	HSL( 60, 79, 64), // Yellow
-	HSL(120, 79, 64), // Green
-	HSL(170, 79, 64), // Cyan
-	HSL(220, 79, 64), // Blue
-	HSL(300, 79, 64), // Pink
-];
-const Points = [
+const BrickHSLColors = deepFreeze([
+	[212,  0, 70], // Hard
+	[ 60, 49, 50], // Immortality
+	[  0,  0,100], // White
+	[  0, 79, 64], // Red
+	[ 38, 79, 64], // Orange
+	[ 60, 79, 64], // Yellow
+	[120, 79, 64], // Green
+	[170, 79, 64], // Cyan
+	[220, 79, 64], // Blue
+	[300, 79, 64], // Pink
+]);
+const BrickPoints = [
 	 50, // Hard
 	  0, // Immortality
 	 50, // White
@@ -91,7 +89,7 @@ export const BrickG = freeze(new class {
 				MapData[row][col] = new Brick({row,col}, map[row]?.[col]);
 		}
 		BrickG.#destroyed = false;
-		BrickG.#cache();
+		BrickG.cache();
 	}
 	get canBeDestroyedByLasers() {
 		const data = MapData.flat().reverse();
@@ -113,7 +111,7 @@ export const BrickG = freeze(new class {
 		if (Scene.isInGame)
 			Scene.switchToClear();
 		if (Scene.isInDemo) {
-			Scene.switchToDemoEnd();
+			Scene.switchToEndDemo();
 			Scene.switchToReset(1000);
 		}
 	}
@@ -143,7 +141,7 @@ export const BrickG = freeze(new class {
 			? (ColWidth+ShadowOffset)-Field.Frame : ColWidth;
 		ctxS.save();
 		ctxS.translate(x+ShadowOffset, y+ShadowOffset);
-		ctxS.fillStyle = rgba(0,0,0,.4);
+		ctxS.fillStyle = rgba(0,0,0, 0.4);
 		ctxS.fillRect(0,0, w,RowHeight);
 		ctxS.restore();
 	}
@@ -153,7 +151,8 @@ export const BrickG = freeze(new class {
 		if (!effect)
 			this.#drawShadow(brick);
 
-		const {h,s,l}= HSLColors[brick.type];
+		const LW = LineWidth, FO = LW*1.5;
+		const {h,s,l}= brick.color;
 		if (!grad) {
 			grad = ctx.createLinearGradient(0,0,ColWidth,RowHeight);
 			grad.addColorStop(0.0, hsl(h,s,l-20));
@@ -162,24 +161,24 @@ export const BrickG = freeze(new class {
 		}
 		// Brick surface
 		ctx.fillStyle = grad;
-		ctx.fillRect(3, 3, ColWidth-6, RowHeight-6);
+		ctx.fillRect(FO, FO, ColWidth-FO*2, RowHeight-FO*2);
 
 		// Highlight(top left)
 		ctx.beginPath();
-			ctx.lineWidth   = 2;
+			ctx.lineWidth   = LW;
 			ctx.strokeStyle = hsl(h,s,80);
-			ctx.moveTo(2,RowHeight-2);
-			ctx.lineTo(2,2);
-			ctx.lineTo(ColWidth-2,2);
+			ctx.moveTo(LW,RowHeight-LW);
+			ctx.lineTo(LW,LW);
+			ctx.lineTo(ColWidth-LW,LW);
 		ctx.stroke();
 
 		// Shadow(bottom right)
 		ctx.beginPath();
-			ctx.lineWidth   = 2;
+			ctx.lineWidth   = LW;
 			ctx.strokeStyle = hsl(h,s,40);
-			ctx.moveTo(ColWidth-2,2);
-			ctx.lineTo(ColWidth-2,RowHeight-2);
-			ctx.lineTo(2,RowHeight-2);
+			ctx.moveTo(ColWidth-LW,LW);
+			ctx.lineTo(ColWidth-LW,RowHeight-LW);
+			ctx.lineTo(LW,RowHeight-LW);
 		ctx.stroke();
 	}
 	#drawLuster(brick,data) {
@@ -189,9 +188,9 @@ export const BrickG = freeze(new class {
 		const
 		grad = ctx.createLinearGradient(0,0,ColWidth,RowHeight);
 		grad.addColorStop(0, hsl(h,s,l-20));
-		grad.addColorStop(max(offset*.5,0), hsl(h,s,l-20));
+		grad.addColorStop(max(offset*0.5, 0), hsl(h,s,l-20));
 		grad.addColorStop(offset, '#FFF');
-		grad.addColorStop(min(offset*.7,1), hsl(h,s,l-20));
+		grad.addColorStop(min(offset*0.7, 1), hsl(h,s,l-20));
 		grad.addColorStop(1, hsl(h,s,l-20));
 		data.offset = min(data.offset+=1/AnimDuration, 1);
 
@@ -202,15 +201,16 @@ export const BrickG = freeze(new class {
       	ctx.restore();
 
 		// Highlight(bottom right)
+		const LW = LineWidth;
        	ctx.save();
        	ctx.globalAlpha = 1-data.offset;
        	ctx.translate(x, y);
 		ctx.beginPath();
-	 		ctx.lineWidth   = 3;
+	 		ctx.lineWidth   = LW;
 			ctx.strokeStyle = '#FFF';
-			ctx.moveTo(ColWidth-4,4);
-			ctx.lineTo(ColWidth-4,RowHeight-4);
-			ctx.lineTo(4,RowHeight-4);
+			ctx.moveTo(ColWidth-LW, LW);
+			ctx.lineTo(ColWidth-LW, RowHeight-LW);
+			ctx.lineTo(LW, RowHeight-LW);
 		ctx.stroke();
       	ctx.restore();
 	}
@@ -223,9 +223,9 @@ export const BrickG = freeze(new class {
 		this.#drawBrick(ctx, brick, {effect:true});
        	ctx.restore();
 	}
-	#cache() {
-		ctxS.clearRect(0,0, cvs.width,cvs.height);
-		ctxB.clearRect(0,0, cvs.width,cvs.height);
+	cache() {
+		ctxS.clear();
+		ctxB.clear();
 		MapData.flat().forEach(brick=> {
 			ctxB.save();
 			ctxB.translate(brick.x, brick.y);
@@ -247,9 +247,9 @@ const Brick = freeze(class {
 		this.col   = col;
 		this.x     = (ColWidth *col) + MarginLeft;
 		this.y     = (RowHeight*row) + MarginTop;
-		this.type  = type;
-		this.color = HSLColors[type];
 		this.Pos   = vec2(this.x, this.y);
+		this.type  = type;
+		this.color = type >= 0 ? HSL(...BrickHSLColors[type]) : null;
 
 		if (type == BrickType.Hard
 		 || type == BrickType.Immortality)
@@ -257,6 +257,7 @@ const Brick = freeze(class {
 
 		this.#destroyed  = (type == BrickType.None);
 		this.#durability = this.#durabilityMax;
+		this.durabilityMax = this.#durability;
 		freeze(this);
 	}
 	get #durabilityMax() {
@@ -264,10 +265,8 @@ const Brick = freeze(class {
 			return Infinity;
 		if (this.type == BrickType.Hard) {
 			this.#pointRate = Game.stageNum;
-			if (Game.stageNum == 10)
-				return 3;
-			if (Game.stageNum >= 8)
-				return 2;
+			if (Game.stageNum == 10) return 3;
+			if (Game.stageNum >=  8) return 2;
 			return 1;
 		}
 	}
@@ -278,10 +277,13 @@ const Brick = freeze(class {
 		return this;
 	}
 	#holdUp() {
-		if (Luster.has(this))
-			return;
-		if (Luster.size <= 4)
-			Sound.stop('se2').play('se2');
+		if (Luster.has(this)) return;
+		if (Luster.size <= 4) Sound.stop('se2').play('se2');
+		if (this.type == BrickType.Hard) {
+			this.color.s += 10;
+			this.color.l -=  8;
+			BrickG.cache();
+		}
 		Luster.set(this, {offset:0});
 	}
 	#destroy({x, y}) {
@@ -294,16 +296,16 @@ const Brick = freeze(class {
 		if (this.type != BrickType.Hard)
 			Item.appear(this);
 		if (Scene.isInGame)
-			Score.add(Points[this.type*this.#pointRate]);
+			Score.add(BrickPoints[this.type*this.#pointRate]);
 	}
 	getAdjacent(x=0, y=0) {
 		return MapData[this.row+y]?.[this.col+x] || {exists:false};
 	}
-	get exists() {return !this.destroyed}
-	get Left()   {return this.getAdjacent(-1, 0)}
-	get Right()  {return this.getAdjacent( 1, 0)}
-	get Up()     {return this.getAdjacent( 0,-1)}
-	get Down()   {return this.getAdjacent( 0, 1)}
+	get exists()    {return !this.destroyed}
+	get AdjLeft()   {return this.getAdjacent(-1, 0)}
+	get AdjRight()  {return this.getAdjacent( 1, 0)}
+	get AdjUp()     {return this.getAdjacent( 0,-1)}
+	get AdjDown()   {return this.getAdjacent( 0, 1)}
 });
 export class Collider {
 	constructor({x, y}, radius) {
@@ -319,12 +321,12 @@ export class Collider {
 		return MapData[row+y]?.[col+x];
 	}
 	get brickExistsOnBothSides() {
-		const brick = this.getBrick();
-		return brick?.Left?.exists && brick?.Right?.exists;
+		const Brick = this.getBrick();
+		return Brick?.AdjLeft?.exists && Brick?.AdjRight?.exists;
 	}
 	get brickExistsOnOneSide() {
-		const brick = this.getBrick();
-		return brick?.Left?.exists || brick?.Right?.exists;
+		const Brick = this.getBrick();
+		return Brick?.AdjLeft?.exists || Brick?.AdjRight?.exists;
 	}
 	#detect(ox=0, oy=0) {
 		const offset = vec2(ox, oy).mul(this.Radius);

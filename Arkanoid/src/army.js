@@ -23,16 +23,20 @@ const Height   = Radius*2;
 const SpawnL   = int(cvs.width/3 - Radius);
 const SpawnR   = (cvs.width - SpawnL) - Width;
 
-const SphereRedHSL  = HSL(  0, 90,40);
-const SphereLimeHSL = HSL(135,100,40);
-const SphereCyanHSL = HSL(195,100,40);
+const DriftRadiusX = cvs.width/252;
+const DriftRadiusY = cvs.width/315;
+const DriftGravity = 0.3;
+
+const SphereRedHSL  = HSL(  0,  90, 40);
+const SphereLimeHSL = HSL(135, 100, 40);
+const SphereCyanHSL = HSL(195, 100, 40);
 
 const ExplosionSet  = new Set();
-const ExplosionHSL  = HSL(180,400,49);
+const ExplosionHSL  = HSL(180, 400, 49);
 const ParticleColor = '#1BE3B7';
 
 const Crawl = freeze(new class {
-	Speed = 1.5;
+	Speed = cvs.width / 420;
 	get [U]() {return Vec2[U].mul(this.Speed)}
 	get [R]() {return Vec2[R].mul(this.Speed)}
 	get [D]() {return Vec2[D].mul(this.Speed)}
@@ -69,8 +73,8 @@ class Explosion {
 		this.Pos  = vec2(x, y);
 		this.r    = Radius*1.6;
 		this.Grad = ctx.createRadialGradient(0,0,0, 0,0,this.r);
-		this.Grad.addColorStop(0.00, hsl(h,s,70,1));
-		this.Grad.addColorStop(1.00, hsl(h,s,l,.1));
+		this.Grad.addColorStop(0.0, hsl(h,s,70));
+		this.Grad.addColorStop(1.0, hsl(h,s,l,0.1));
 		for (let i=0; i<360; i+=360/12) {
 			const cx = cos(i*PI/180) * Radius;
 			const cy = sin(i*PI/180) * Radius;
@@ -109,7 +113,7 @@ class Particle {
 			const cx = cos(i*PI/180);
 			const cy = sin(i*PI/180);
 			const cv = vec2(cx,cy);
-			this.#ParticleSet.add({x,y,cv,r:2.5})
+			this.#ParticleSet.add({x,y,cv,r:SphereR/7})
 		}
 	}
 	update() {
@@ -132,7 +136,7 @@ class Sphere {
 	constructor(HSL) {
 		const r = SphereR;
 		const {h,s,l}= HSL;
-		this.shadowColor = hsl(h,30,l, .8);
+		this.shadowColor = hsl(h,30,l, 0.8);
 		this.Grad = ctx.createRadialGradient(-r/2,-r/2,0, 0,0,r);
 		this.Grad.addColorStop(0.0,'white');
 		this.Grad.addColorStop(0.2, hsl(h,s,80));
@@ -157,14 +161,12 @@ export class Army extends Collider {
 		if (!Game.isPlayScene || !Paddle.Launched)
 			return;
 		if (Ticker.count % int(Interval/Ticker.Interval) == 0
-		 && ArmySet.size < ArmyMax)
-			new Army();
+			&& ArmySet.size < ArmyMax) new Army();
 		ArmySet.forEach(a=> a.#update());
 		Explosion.update();
 	}
 	static draw() {
-		if (BrickG.destroyed)
-			return;
+		if (BrickG.destroyed) return;
 		ArmySet.forEach(a=> a.#drawSpheres(true)); // shadow
 		ArmySet.forEach(a=> a.#drawSpheres());
 	}
@@ -228,8 +230,8 @@ export class Army extends Collider {
 		this.#animPos.y = sin(this.#animRad+=PI/60);
 	}
 	#moveCircum() {
-		this.Pos.x += cos(this.#moveRad+=PI/1e3) * 2.5;
-		this.Pos.y += sin(this.#moveRad+=PI/200) * 2.0 + 0.2;
+		this.Pos.x += cos(this.#moveRad+=PI/1e3) * DriftRadiusX;
+		this.Pos.y += sin(this.#moveRad+=PI/200) * DriftRadiusY + DriftGravity;
 	}
 	#move() {
 		this.#canDrift
@@ -308,7 +310,7 @@ export class Army extends Collider {
 }
 freeze(Army);
 
-$on('Reset Ready Clear DemoEnd Dropped Respawn', _=> {
+$on('Reset Ready Clear EndDemo Dropped Respawn', _=> {
 	ArmySet.clear();
 	ExplosionSet.clear();
 });

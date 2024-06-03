@@ -71,6 +71,7 @@ export const BallG = freeze(new class {
 		BallSet.add(new Ball({x,y,v}));
 	}
 	#onPowerUp(_, type) {
+		const {Ball}= BallG;
 		switch (type) {
 		case ItemType.SpeedDown:
 			BallG.#speedDownRate *= 0.9;
@@ -81,9 +82,9 @@ export const BallG = freeze(new class {
 		case ItemType.Catch:
 		case ItemType.Expand:
 		case ItemType.Laser:
-			const ball = BallG.Ball;
 			BallSet.clear();
-			BallSet.add(ball);
+			BallSet.add(Ball);
+			break;
 		}
 	}
 	#setDisruption() {
@@ -102,7 +103,7 @@ export const BallG = freeze(new class {
 		BallSet.forEach(ball=> ball.update());
 	}
 	draw() {
-		if (Scene.isClear)
+		if (Scene.isClear || Scene.isGameOver)
 			return;
 		BallSet.forEach(ball=> ball.draw());
 	}
@@ -200,7 +201,7 @@ export class Ball extends Collider {
 			const v = this.Velocity.normalized;
 			v.x *= randChoice(-1, 1);
 			v.y *= randChoice(-1, 1);
-			this.Velocity.set(v.mul(this.#speed*=ArmySpeedDown));
+			this.Velocity.set( v.mul(this.#speed*=ArmySpeedDown) );
 		}
 	}
 	#collisionWithBrick() {

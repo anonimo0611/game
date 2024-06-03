@@ -28,15 +28,37 @@ const [$cvs,$ctx] = canvas2D(null, Width*1.5, Height*1.5).vals;
 
 const BodyGrad = lineGradHSL(0, 0, 46);
 const LineGrad = new Map()
-	.set(undefined,      lineGradHSL( 15,100,40))
-	.set(ItemType.Catch, lineGradHSL( 33,240,29))
-	.set(ItemType.Laser, lineGradHSL(240, 33,29))
+	.set(undefined,      lineGradHSL( 15, 100, 40))
+	.set(ItemType.Catch, lineGradHSL( 33, 240, 29))
+	.set(ItemType.Laser, lineGradHSL(240,  33, 29))
 ;
 const SphereGrad = new Map()
-	.set(undefined,      _=> sphereGradHSL(210,100,38))
-	.set(ItemType.Catch, _=> sphereGradHSL(120,100,29))
-	.set(ItemType.Laser, _=> sphereGradHSL(  0,100,29))
+	.set(undefined,      _=> sphereGradHSL(210, 100, 38))
+	.set(ItemType.Catch, _=> sphereGradHSL(120, 100, 29))
+	.set(ItemType.Laser, _=> sphereGradHSL(  0, 100, 29))
 ;
+function lineGradHSL(h=0,s=0,l=100) {
+	const 
+	gr = $ctx.createLinearGradient(Width,0,Width,Height);
+	gr.addColorStop(0.0, hsl(h,s,l));
+	gr.addColorStop(0.3, hsl(h,s,90));
+	gr.addColorStop(0.4, hsl(h,s,l));
+	gr.addColorStop(1.0, hsl(h,s,l*1.1));
+	return gr;
+}
+function sphereGradHSL(h=0,s=0,l=100) {
+	const radius = Height/2;
+	const lightness = max(abs(sin(Paddle.blink))*(l*1.4), l);
+	return [0,1].map((_,i)=> { // Both sides
+		const sx = (!i ? radius : -radius) / 4;
+		const
+		gr = $ctx.createRadialGradient(sx,-radius/2,0, 0,0,radius);
+		gr.addColorStop(0.0, hsl(h,s,90));
+		gr.addColorStop(0.5, hsl(h,s,lightness));
+		gr.addColorStop(1.0, hsl(h,s,lightness));
+		return gr;
+	});
+}
 
 export const Paddle = freeze(new class {
 	static {$ready(this.#setup)}
@@ -67,9 +89,9 @@ export const Paddle = freeze(new class {
 	get Width()    {return this.#Width}
 	get CatchX()   {return this.#CatchX}
 	get CenterX()  {return this.Pos.x+this.Width/2}
-	get ClampedX() {return clamp(this.Pos.x, this.MovMin, this.MovMax)}
-	get MovMin()   {return Field.Left}
-	get MovMax()   {return Field.Right-this.Width}
+	get ClampedX() {return clamp(this.Pos.x, this.MoveMin, this.MoveMax)}
+	get MoveMin()  {return Field.Left}
+	get MoveMax()  {return Field.Right-this.Width}
 
 	// Exclutive item
 	get ExclItem()          {return this.#ExclItem}
@@ -99,7 +121,7 @@ export const Paddle = freeze(new class {
 		Paddle.#updateCache($ctx);
 	}
 	#posClamp() {
-		Paddle.Pos.x = clamp(Paddle.Pos.x, this.MovMin, this.MovMax);
+		Paddle.Pos.x = clamp(Paddle.Pos.x, this.MoveMin, this.MoveMax);
 	}
 	update() {
 		if (BallG.count <= 0 && Ticker.count > 8)
@@ -107,10 +129,10 @@ export const Paddle = freeze(new class {
 		else if (Ticker.elapsed > Game.ReadyTime - 1000)
 			this.#alpha = min(this.#alpha+=1/FadeSpeed, 1);
 
-		if (Ticker.count % 5 == 0) {
-			this.#blink += 1/4;
-			Paddle.#updateCache($ctx);
-		}
+		if (Ticker.elapsed < 50) return;
+
+		this.#blink += PI/120;
+		Paddle.#updateCache($ctx);
 		if (Scene.isInDemo) {
 			Paddle.#demoPlay();
 			Paddle.#setWidth();
@@ -129,8 +151,8 @@ export const Paddle = freeze(new class {
 		}
 		if (!Paddle.Launched)
 			BallG.Ball.Pos.x = Paddle.CatchX
-				? round(Paddle.ClampedX + Paddle.CatchX)
-				: round(Paddle.ClampedX + Paddle.Width/2);
+				? Paddle.ClampedX + Paddle.CatchX
+				: Paddle.ClampedX + Paddle.Width/2;
 	}
 	catch(ball) {
 		if (!Paddle.CatchEnabeld || Paddle.CatchX)
@@ -140,7 +162,7 @@ export const Paddle = freeze(new class {
 		const {x,y}= Paddle.Pos;
 		ball.Pos.x = clamp(ball.Pos.x, x+1, x+Paddle.Width-1);
 		ball.Pos.y = y - ball.Radius-1; 
-		Paddle.#CatchX = round(ball.Pos.x - Paddle.Pos.x);
+		Paddle.#CatchX = ball.Pos.x - Paddle.Pos.x;
 	}
 	#onLaunch(e) {
 		if (!Game.acceptEventInGame(e))
@@ -172,6 +194,7 @@ export const Paddle = freeze(new class {
 			Paddle.#ExclItem = type;
 			Paddle.#TargetW  = type == ItemType.Expand ? StretchMax : Width;
 			Paddle.#updateCache($ctx);
+			break;
 		}
 		if (ExclTypes.includes(type))
 			Paddle.#CatchX = 0;
@@ -182,11 +205,11 @@ export const Paddle = freeze(new class {
 	}
 	#setWidth() {
 		if (this.#TargetW > this.#Width) {
-			this.#Width = min(this.#Width+=StretchSpd, this.#TargetW);
+			this.#Width = min(this.#Width+StretchSpd, this.#TargetW);
 			Paddle.#updateCache($ctx);
 		}
 		if (this.#TargetW < this.#Width) {
-			this.#Width = max(this.#Width-=StretchSpd, Width);
+			this.#Width = max(this.#Width-StretchSpd, Width);
 			Paddle.#updateCache($ctx);
 		}
 	}
@@ -194,17 +217,17 @@ export const Paddle = freeze(new class {
 		if (Paddle.#goForItem(Item.Current)) return;
 		const a = Paddle.#demoRad += PI/94 + randFloat(-0.01, +0.01);
 		const x = BallG.NearlyBall.Pos.x * (sin(a)/10+1);
-		for (let i=0; i<30; i++) {
-			if (x < Paddle.CenterX) Paddle.Pos.x -= 10/30;
-			if (x > Paddle.CenterX) Paddle.Pos.x += 10/30;
+		for (let i=0, stepMax=45; i<stepMax; i++) {
+			if (x < Paddle.CenterX) Paddle.Pos.x -= 20/stepMax;
+			if (x > Paddle.CenterX) Paddle.Pos.x += 20/stepMax;
 		}
 	}
 	#goForItem(item) {
 		if (!item || BallG.Ball.Velocity.y > 0) return false;
 		if (Paddle.LaserEnabeld && item.Type == ItemType.Expand) return false;
-		for (let i=0; i<20; i++) {
-			if (item.CenterX < Paddle.CenterX) Paddle.Pos.x -= 10/20;
-			if (item.CenterX > Paddle.CenterX) Paddle.Pos.x += 10/20;
+		for (let i=0, stepMax=30; i<stepMax; i++) {
+			if (item.CenterX < Paddle.CenterX) Paddle.Pos.x -= 20/stepMax;
+			if (item.CenterX > Paddle.CenterX) Paddle.Pos.x += 20/stepMax;
 		}
 		return true;
 	}
@@ -218,7 +241,7 @@ export const Paddle = freeze(new class {
 		}
 	}
 	#updateCache(ctx, w=Paddle.Width) {
-		ctx.clearRect(0,0,cvs.width,cvs.height);
+		ctx.clear();
 		Paddle.#cache(ctx, w, ShadowColor); // shadow
 		Paddle.#cache(ctx, w);
 	}
@@ -270,52 +293,28 @@ const AutoMoveAtStart = freeze(new class {
 	static {
 		$on('InGame Resume', _=> AutoMoveAtStart.#reached = false);
 	}
-	MoveSpeed = 10;
+	MoveSpeed = 20;
 	#reached  = false;
 	get reached() {
 		return this.#reached;
 	}
 	setPosition() {
-		if (this.reached)
-			return true;
-		for (let i=0; i<30; i++) {
-			const {MovMin,MovMax,Pos}= Paddle;
+		if (this.reached) return true;
+		for (let i=0, stepMax=50; i<stepMax; i++) {
+			const {MoveMin,MoveMax,Pos}= Paddle;
 			if (Paddle.CenterX > Mouse.x) {
-				Pos.x = max(Pos.x-this.MoveSpeed/30, MovMin);
-				if (Paddle.CenterX < Mouse.x || Pos.x == MovMin)
-					this.#reached = true;
+				Pos.x = max(Pos.x-this.MoveSpeed/stepMax, MoveMin);
+				if (Paddle.CenterX < Mouse.x || Pos.x == MoveMin)
+					return this.#reached = true;
 			} else {
-				Pos.x = min(Pos.x+this.MoveSpeed/30, MovMax);
-				if (Paddle.CenterX > Mouse.x || Pos.x == MovMax)
-					this.#reached = true;
+				Pos.x = min(Pos.x+this.MoveSpeed/stepMax, MoveMax);
+				if (Paddle.CenterX > Mouse.x || Pos.x == MoveMax)
+					return this.#reached = true;
 			}
-		}
-		return this.reached;
+		} return this.reached;
 	}
 });
 
-function lineGradHSL(h=0,s=0,l=100) {
-	const 
-	gr = $ctx.createLinearGradient(Width,0,Width,Height);
-	gr.addColorStop(0.00, hsl(h,s,l));
-	gr.addColorStop(0.30, hsl(h,s,90));
-	gr.addColorStop(0.40, hsl(h,s,l));
-	gr.addColorStop(1.00, hsl(h,s,l*1.1));
-	return gr;
-}
-function sphereGradHSL(h=0,s=0,l=100) {
-	const radius = Height/2;
-	const lightness = max(abs(sin(Paddle.blink))*(l*1.3), l);
-	return [0,1].map((_,i)=> { // Both sides
-		const sx = (!i ? radius : -radius) / 4;
-		const
-		gr = $ctx.createRadialGradient(sx,-radius/2,0, 0,0,radius);
-		gr.addColorStop(0.00, hsl(h,s,90));
-		gr.addColorStop(0.50, hsl(h,s,lightness));
-		gr.addColorStop(1.00, hsl(h,s,lightness));
-		return gr;
-	});
-}
 function spark() {
 	if (Confirm.opened || !Game.isReadyScene)
 		return;
@@ -324,12 +323,12 @@ function spark() {
 
 	for (let i=0; i<=15; i++) {
 		const {Width,Height,Pos}= Paddle;
-		const stPos = [randInt(0, Width),randInt(0, Height+5)];
-		const edVec = stPos.map(c=> c+randChoice(-15,15));
+		const stPos = [randInt(0, Width),randInt(0, Height*1.1)];
+		const edVec = stPos.map(c=> c+randChoice(-15,+15));
 		ctx.save();
 		ctx.translate(...Pos.vals);
 		ctx.beginPath();
-			ctx.lineWidth   = 4;
+			ctx.lineWidth   = cvs.width / 230;
 			ctx.strokeStyle = SparkColor;
 			ctx.moveTo(...stPos);
 			ctx.lineTo(...edVec);

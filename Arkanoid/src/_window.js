@@ -1,10 +1,9 @@
 import {cvs} from './_canvas.js';
 
 const dBoard   = byId('board');
-const ScaleMin = 0.6;
-const ScaleMax = 1.0;
+const ScaleMin = 0;
+const ScaleMax = 2;
 const FontSize = dBody.fontSize();
-const DialogY  = dBoard.height - (FontSize*12.5);
 
 let scale    = 1;
 let resizeId = 0;
@@ -22,7 +21,7 @@ export const Window = new class {
 	#fit() {
 		const w = $(window).width()  / dBoard.offsetWidth;
 		const h = $(window).height() / dBoard.offsetHeight;
-		scale = min(w*.98, h);
+		scale = min(w*0.98, h*0.9);
 		dBoard.style.transform = `scale(${this.scale})`;
 	}
 	#onResize(e) {
@@ -35,13 +34,11 @@ export const Window = new class {
 		Window.#setCSSVars();
 	}
 	#setCSSVars() {
-		const BoardTop = max((innerHeight-dBoard.height)/2, 0);
+		const marginT = max(($(window).height() - dBoard.height)/2, 0);
+		const dialogY = dBoard.height - (FontSize*16);
 		$(dBody).css({
 			'--scale': Window.scale,
-			'--canvas-left': `${cvs.offsetLeft}px`,
-			'--canvas-top':  `${cvs.offsetTop}px`,
-			'--canvas-width':`${cvs.offsetWidth}px`,
-			'--dialog-top':  `${cvs.offsetTop+BoardTop+DialogY}px`,
+			'--dialog-top': `${cvs.offsetTop+marginT+dialogY}px`,
 		});
 	}
 };

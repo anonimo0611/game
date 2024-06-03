@@ -1,14 +1,15 @@
-import {cvs}   from './_canvas.js';
-import {Score} from './score.js';
-
+import {cvs} from './_canvas.js';
 export const Field = freeze(new class {
-	Frame  = 16;
-	Top    = Score.Height + this.Frame;
-	Left   = this.Frame;
-	Bottom = cvs.height;
-	Right  = cvs.width  - this.Frame;
-	Width  = cvs.width  - this.Frame*2;
-	Height = cvs.height - this.Top;
+	Frame     = 24;
+	Cols      = 13;
+	Rows      = 30;
+	Width     = cvs.width - this.Frame*2;
+	ColWidth  = int(this.Width/this.Cols);
+	RowHeight = int(cvs.height/this.Rows);
+	Top       = this.RowHeight + this.Frame;
+	Left      = this.Frame;
+	Bottom    = cvs.height;
+	Right     = cvs.width  - this.Frame;
 	collision() {}
 	rebound({Pos,Velocity,Radius:r}) {
 		const {Top,Left,Right}= this;

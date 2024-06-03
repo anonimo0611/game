@@ -3,17 +3,16 @@ import {Sound}    from '../snd/sound.js';
 import {cvs,ctx}  from './_canvas.js';
 import {Game}     from './_main.js';
 import {Scene}    from './scene.js';
-import {Field}    from './field.js';
 import {Paddle}   from './paddle.js';
 import {Army}     from './army.js';
 import {BrickG}   from './brick.js';
 import {Collider} from './brick.js'
 
 const Color   = '#CCFF66';
-const Rapid   =  2; // Up to 2 shots in field
-const Speed   = 10;
-const RadiusX =  4;
-const RadiusY = 14;
+const Rapid   = 2; // Up to 2 shots in field
+const Speed   = cvs.height /  70 |0;
+const RadiusX = cvs.width  / 157 |0;
+const RadiusY = cvs.width  /  45 |0;
 
 const L = 0;
 const R = 1;
@@ -38,7 +37,7 @@ export class Laser extends Collider {
 		}
 	}
 	static update() {
-		if (Scene.isInDemo && Ticker.count % 30 == 0)
+		if (Scene.isInDemo && Ticker.count % 15 == 0)
 			BrickG.canBeDestroyedByLasers && Laser.#fire();
 		if (!Game.isPlayScene)
 			return;
@@ -89,8 +88,8 @@ export class Laser extends Collider {
 		ctx.save();
 		ctx.translate(...this.Pos.vals);
 		ctx.beginPath();
-			ctx.ellipse(0,0, RadiusX,RadiusY, 0,0, PI*2);
 			ctx.fillStyle = Color;
+			ctx.ellipse(0,0, RadiusX,RadiusY, 0,0, PI*2);
 		ctx.fill();
 		ctx.restore();
 	}
@@ -114,7 +113,7 @@ class Burst {
 	constructor(x, y, r, v) {
 		this.Pos = vec2(x, y);
 		this.r   = r;
-		this.v   = v.mul(2);
+		this.v   = v.mul(RadiusX / 2);
 		this.cnt = 0;
 	}
 	update() {
@@ -127,7 +126,7 @@ class Burst {
 		ctx.save();
 		ctx.translate(...this.Pos.vals);
 		ctx.beginPath();
-			ctx.lineWidth   = 3;
+			ctx.lineWidth   = RadiusX;
 			ctx.strokeStyle = Color;
 			ctx.moveTo(0,0);
 			ctx.lineTo(...vec2(this.v).mul(6).vals);
@@ -135,7 +134,7 @@ class Burst {
 		ctx.restore();
 	}
 }
-$on('Reset Ready Clear DemoEnd Dropped Respawn', _=> {
+$on('Reset Ready Clear EndDemo Dropped Respawn', _=> {
 	Lasers.forEach(s=> s.clear());
 	BurstSet.clear();
 });
