@@ -139,7 +139,7 @@ export class Ball extends Collider {
 		if (Game.isReadyScene || Paddle.CatchX > 0)
 			return;
 
-		const Min = this.InitSpeed * 0.5;
+		const Min = this.InitSpeed * 0.7;
 		const Max = BallSpeed   * BallG.stageSpeedRate;
 		const Spd = this.#speed * BallG.speedDownRate;
 

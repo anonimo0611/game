@@ -34,12 +34,13 @@ export const Demo = new class {
 			 ) return false;
 			for (let i=row+1; i<Rows-row; i++) {
 				const brick = BrickG.MapData[i][col];
+				if (brick.type == Type.Immortality)
+					return false;
 				if (!brick.destroyed
 					&& brick.type != Type.None
-					&& brick.type != Type.Immortality
 				) return false;
 			} return true;
-		}); return randChoice(data) ?? null;
+		}); return data.length ? data : null;
 	}
 	update() {
 		if (!Scene.isInDemo) return;
@@ -90,10 +91,13 @@ export const Demo = new class {
 		);
 	}
 	#setBrickTarget() {
-		if (!$target) $target = null;
-		if (BrickG.remains < 10 && !BrickG.exsists($target ?? {})) {
-			const target = this.#getBrickTarget();
-			if (!target) return;
+		if (!BrickG.exsists($target ?? {})) {
+			const data = this.#getBrickTarget();
+			if (!data || data.length >= 10) {
+				$target = null;
+				return;
+			}
+			const target = randChoice(data);
 			const {Pos,col,row}= target;
 			$target = {col,row,Pos:vec2(Pos).add(ColWidth/2, RowHeight/2)};
 		}
