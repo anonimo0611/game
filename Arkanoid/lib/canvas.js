@@ -52,3 +52,12 @@ const fillCircle = ctx=> (x, y, r, fill)=> {
 	ctx.fill();
 	ctx.restore();
 }
+const strokeCircle = ctx=> (x, y, r, lw, style)=> {
+	ctx.save();
+	ctx.beginPath();
+	style && (ctx.strokeStyle = style);
+	ctx.lineWidth = lw;
+	ctx.arc(x, y, r, 0, PI*2);
+	ctx.stroke();
+	ctx.restore();
+}

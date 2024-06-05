@@ -30,6 +30,8 @@ const byIds  = arg=> {
 	});
 }
 
+const lerp       = (x, y, p)     => x + (y - x) * p
+const norm       = (x, y, p)     => (p - x) / (y - x)
 const between    = (n, min, max) => (n >= min && n <= max)
 const clamp      = (n, min, max) => Math.min(Math.max(n,min), max)
 const randFloat  = (min, max)    => random() * (max-min) + min
@@ -83,4 +85,21 @@ const collisionRect = (a, b)=> {
 	return (
 		abs((ax+a.Width /2)-(bx+b.Width /2)) < (a.Width +b.Width) /2 &&
 		abs((ay+a.Height/2)-(by+b.Height/2)) < (a.Height+b.Height)/2);
+}
+const getIntersection = (a, b, c, d)=> {
+    let deno = Vec2.cross(Vec2.sub(b,a), Vec2.sub(d, c));
+    if (deno == 0.0) {
+        // 線分が平行
+        return;
+    }
+    let s = Vec2.cross(Vec2.sub(c,a), Vec2.sub(d,c)) / deno;
+    let t = Vec2.cross(Vec2.sub(b,a), Vec2.sub(a,c)) / deno;
+    if (s < 0.0 || 1.0 < s || t < 0.0 || 1.0 < t) {
+        // 線分が交差していない
+        return;
+    }
+    return vec2(
+    	a.x + s * Vec2.sub(b,a).x,
+    	a.y + s * Vec2.sub(b,a).y
+    );
 }

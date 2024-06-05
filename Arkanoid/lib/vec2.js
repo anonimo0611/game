@@ -34,6 +34,7 @@ class Vec2 {
 	static distance   = (v1, v2)=> Vec2.sub(v1, v2).magnitude
 	static isParallel = (v1, v2)=> Vec2.cross(v1, v2) < 0.000001
 	static isVertical = (v1, v2)=> Vec2.dot(v1, v2) < 0.000001
+	static angle      = (v1, v2)=> atan2(v1.y - v2.y, v1.x - v2.x);
 	static eq         = (v1, v2)=> abs(v1.x - v2.x) < 0.000001 && abs(v1.y - v2.y) < 0.000001
 	static reflect    = (v, n)  => vec2(v).sub(vec2(n).mul(2*Vec2.dot(v,n)))
 
