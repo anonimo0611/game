@@ -26,7 +26,7 @@ export const Demo = new class {
 		} return false;
 	}
 	#getBrickTarget() {
-		const data = BrickG.MapData.flat().reverse()
+		return BrickG.MapData.flat().reverse()
 		.filter(({type,row,col,destroyed})=> {
 			if (destroyed
 				|| type == Type.None
@@ -40,7 +40,7 @@ export const Demo = new class {
 					&& brick.type != Type.None
 				) return false;
 			} return true;
-		}); return data.length ? data : null;
+		});
 	}
 	update() {
 		if (!Scene.isInDemo) return;
@@ -93,7 +93,7 @@ export const Demo = new class {
 	#setBrickTarget() {
 		if (!BrickG.exsists($target ?? {})) {
 			const data = this.#getBrickTarget();
-			if (!data || data.length >= 10) {
+			if (data.length == 0 || data.length >= 10) {
 				$target = null;
 				return;
 			}
