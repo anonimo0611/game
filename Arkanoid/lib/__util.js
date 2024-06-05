@@ -89,14 +89,14 @@ const collisionRect = (a, b)=> {
 const getIntersection = (a, b, c, d)=> {
     let deno = Vec2.cross(Vec2.sub(b,a), Vec2.sub(d, c));
     if (deno == 0.0) {
-        // 線分が平行
-        return;
+		// Line segments are parallel
+        return null;
     }
     let s = Vec2.cross(Vec2.sub(c,a), Vec2.sub(d,c)) / deno;
     let t = Vec2.cross(Vec2.sub(b,a), Vec2.sub(a,c)) / deno;
     if (s < 0.0 || 1.0 < s || t < 0.0 || 1.0 < t) {
-        // 線分が交差していない
-        return;
+        // Line segments do not intersect
+        return null;
     }
     return vec2(
     	a.x + s * Vec2.sub(b,a).x,
