@@ -4,6 +4,7 @@ import {Confirm}   from '../lib/confirm.js';
 import {hsl,rgba}  from '../lib/color.js';
 import {cvs,ctx}   from './_canvas.js';
 import {Game}      from './_main.js';
+import {Demo}      from './demo.js';
 import {Field}     from './field.js';
 import {Scene}     from './scene.js';
 import {Lives}     from './lives.js';
@@ -11,10 +12,9 @@ import {ItemType}  from './item.js';
 import {ExclTypes} from './item.js';
 import {BrickG}    from './brick.js';
 import {BallG}     from './ball.js';
-import {Item}      from './item.js';
 import {Mouse}     from './mouse.js';
 
-const Width  = cvs.width / 5;
+const Width  = (cvs.width / 5);
 const Height = BrickG.RowHeight;
 
 const StretchMax = Width * 1.5;
@@ -73,7 +73,6 @@ export const Paddle = freeze(new class {
 	}
 	#alpha    = 0;
 	#blink    = 0;
-	#demoRad  = 0;
 	#CatchX   = 0;
 	#ExclItem = null;
 	#Launched = false;
@@ -82,6 +81,9 @@ export const Paddle = freeze(new class {
 	DefaultW  = Width;
 	Height    = Height;
 	Pos = vec2(0, cvs.height-this.Height*3.2);
+
+	ReboundScaleMax = 1.5;
+	ReboundAngleMax = PI/2 - atan2(1, this.ReboundScaleMax);
 
 	get alpha()    {return this.#alpha}
 	get blink()    {return this.#blink}
@@ -133,7 +135,7 @@ export const Paddle = freeze(new class {
 	}
 	update() {
 		this.#blink += PI/120;
-		Paddle.#updateCache($ctx);
+		this.#updateCache($ctx);
 		switch (Scene.current) {
 			case Scene.Enum.Reset:
 			case Scene.Enum.Ready:
@@ -158,14 +160,14 @@ export const Paddle = freeze(new class {
 			Paddle.#Launched ||= true;
 		if (Ticker.elapsed < 200)
 			return;
-		Paddle.#comPlay();
+		Demo.autoPlay();
 		Paddle.#setWidth();
 		Paddle.#posClamp();
 	}
 	#inGame() {
 		if (Ticker.elapsed < 50)
 			return;
-		if (AutoMoveAtStart.setPosition()) {
+		if (AutoMoveToCursorX.setPosition()) {
 			Paddle.Pos.x = Mouse.x - (Paddle.Width/2);
 			Paddle.#setWidth();
 			Paddle.#posClamp();
@@ -184,7 +186,7 @@ export const Paddle = freeze(new class {
 	#onLaunch(e) {
 		if (!Game.acceptEventInGame(e))
 			return;
-		if (!AutoMoveAtStart.reached || Paddle.Launched)
+		if (!AutoMoveToCursorX.reached || Paddle.Launched)
 			return;
 		Paddle.#Launched = true;
 		Sound.play('se0');
@@ -219,25 +221,6 @@ export const Paddle = freeze(new class {
 	#onDropped() {
 		Paddle.#updateCache($ctx);
 		Sound.play('destroy');
-	}
-	#comPlay() {
-		const a = Paddle.#demoRad += PI/94 + randFloat(-0.01, +0.01);
-		const x = BallG.NearlyBall.Pos.x * (sin(a)/10+1);
-		const m = BallG.NearlyBall.Velocity.magnitude;
-		if (Paddle.#comGoForItem(Item.Current)) return;
-		for (let i=0; i<45; i++) {
-			if (x < Paddle.CenterX) Paddle.Pos.x -= m/45;
-			if (x > Paddle.CenterX) Paddle.Pos.x += m/45;
-		}
-	}
-	#comGoForItem(item) {
-		if (!item || BallG.NearlyBall.Velocity.y > 0) return false;
-		if (Paddle.LaserEnabeld && item.Type == ItemType.Expand) return false;
-		for (let i=0; i<45; i++) {
-			if (item.CenterX < Paddle.CenterX) Paddle.Pos.x -= 15/45;
-			if (item.CenterX > Paddle.CenterX) Paddle.Pos.x += 15/45;
-		}
-		return true;
 	}
 	#setWidth() {
 		if (this.#TargetW > this.#Width) {
@@ -307,9 +290,9 @@ export const Paddle = freeze(new class {
 	}
 });
 
-const AutoMoveAtStart = freeze(new class {
+const AutoMoveToCursorX = freeze(new class {
 	static {
-		$on('InGame Resume', _=> AutoMoveAtStart.#reached = false);
+		$on('InGame Resume', _=> AutoMoveToCursorX.#reached = false);
 	}
 	MoveSpeed = 20;
 	#reached  = false;

@@ -42,7 +42,7 @@ export const BallG = freeze(new class {
 		BallG.#cache($ctx, Grad);
 		$on({GotItem:BallG.#onPowerUp});
 	}
-	#speedDownRate = 1;
+	#speedDownRate  = 1;
 	get speedDownRate() {
 		return BallG.#speedDownRate;
 	}
@@ -141,10 +141,10 @@ export class Ball extends Collider {
 
 		const Min = this.InitSpeed * 0.5;
 		const Max = BallSpeed   * BallG.stageSpeedRate;
-		const spd = this.#speed * BallG.speedDownRate;
+		const Spd = this.#speed * BallG.speedDownRate;
 
 		this.#speed = clamp(this.speed+this.Accelerate, Min, Max);
-		this.Pos.add( vec2(this.Velocity).normalized.mul(spd) );
+		this.Pos.add( vec2(this.Velocity).normalized.mul(Spd) );
 
 		if (this.#detectDropped())
 			return;
@@ -179,8 +179,9 @@ export class Ball extends Collider {
 		}
 	}
 	#setPaddleReboundVelocity() {
+		const s = Paddle.ReboundScaleMax;
 		const x = (this.Pos.x - Paddle.CenterX) / (Paddle.Width/2);
-		this.Velocity.x = clamp(x * 2, -1.5, 1.5);
+		this.Velocity.x = clamp(x*2, -s, +s);
 		this.Velocity.y = -1;
 		this.Velocity.set( this.Velocity.normalized.mul(this.speed) );
 	}

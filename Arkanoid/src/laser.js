@@ -2,6 +2,7 @@ import {Ticker}   from '../lib/timer.js';
 import {Sound}    from '../snd/sound.js';
 import {cvs,ctx}  from './_canvas.js';
 import {Game}     from './_main.js';
+import {Demo}     from './demo.js';
 import {Scene}    from './scene.js';
 import {Paddle}   from './paddle.js';
 import {Army}     from './army.js';
@@ -38,7 +39,7 @@ export class Laser extends Collider {
 	}
 	static update() {
 		if (Scene.isInDemo && Ticker.count % 15 == 0)
-			BrickG.canBeDestroyedByLasers && Laser.#fire();
+			Demo.canShootBricksWithLaser && Laser.#fire();
 		if (!Game.isPlayScene)
 			return;
 		Lasers[L].forEach(l=> l.update());

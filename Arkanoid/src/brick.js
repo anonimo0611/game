@@ -66,17 +66,26 @@ const checkDestroyedOrImmortality = b=>
 	b.destroyed || b.type == BrickType.Immortality;
 
 export const BrickG = freeze(new class {
+	MapData    = MapData;
 	Type       = BrickType;
 	Rows       = Rows;
 	Cols       = Cols;
 	ColWidth   = ColWidth;
 	RowHeight  = RowHeight;
 	#destroyed = false;
+	get remains() {
+		return MapData.flat().filter(d=> BrickG.exsists(d)).length;
+	}
 	get destroyed() {
 		return BrickG.#destroyed;
 	}
 	isBrick(obj) {
 		return obj instanceof Brick;
+	}
+	exsists({col, row}={}) {
+		const brick = MapData?.[row]?.[col];
+		if (!brick) return false;
+		return brick.type != BrickType.None && !brick.destroyed;
 	}
 	init() {
 		Item.init();
@@ -90,15 +99,6 @@ export const BrickG = freeze(new class {
 		}
 		BrickG.#destroyed = false;
 		BrickG.cache();
-	}
-	get canBeDestroyedByLasers() {
-		const data = MapData.flat().reverse();
-		for (const {destroyed,type,x,Width:w} of data) {
-			if (type == BrickType.None || destroyed) continue;
-			if (x   >= Paddle.CenterX-ColWidth*2
-			 && x+w <= Paddle.CenterX+ColWidth*2)
-				return type != BrickType.Immortality;
-		} return false;
 	}
 	update() {
 		if (BrickG.#destroyed)
@@ -138,7 +138,7 @@ export const BrickG = freeze(new class {
 	}
 	#drawShadow({x,y,col}) {
 		const w = (col == Cols-1)
-			? (ColWidth+ShadowOffset)-Field.Frame : ColWidth;
+			? (ColWidth+ShadowOffset)-Frame : ColWidth;
 		ctxS.save();
 		ctxS.translate(x+ShadowOffset, y+ShadowOffset);
 		ctxS.fillStyle = rgba(0,0,0, 0.4);
@@ -281,7 +281,7 @@ const Brick = freeze(class {
 		if (Luster.size <= 4) Sound.stop('se2').play('se2');
 		if (this.type == BrickType.Hard) {
 			this.color.s += 10;
-			this.color.l -=  8;
+			this.color.l -= 10;
 			BrickG.cache();
 		}
 		Luster.set(this, {offset:0});
@@ -331,7 +331,7 @@ export class Collider {
 	#detect(ox=0, oy=0) {
 		const offset = vec2(ox, oy).mul(this.Radius);
 		const point  = vec2(this.Pos).add(offset);
-        const brick  = this.getBrick(this.tilePos(offset));
+        const brick  = this.getBrick( this.tilePos(offset) );
         if (this.constructor.name != 'Ball') {
 	        if (point.x < Field.Left
 	         || point.x > Field.Right

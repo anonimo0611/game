@@ -9,7 +9,7 @@ export const Field = freeze(new class {
 	Top       = this.RowHeight + this.Frame;
 	Left      = this.Frame;
 	Bottom    = cvs.height;
-	Right     = cvs.width  - this.Frame;
+	Right     = cvs.width - this.Frame;
 	collision() {}
 	rebound({Pos,Velocity,Radius:r}) {
 		const {Top,Left,Right}= this;

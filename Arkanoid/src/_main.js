@@ -8,6 +8,7 @@ import * as Cvs  from './_canvas.js';
 import {Menu}    from './menu.js';
 import {Scene}   from './scene.js';
 import {Stages}  from './stage.js';
+import {Demo}    from './demo.js';
 import {Message} from './message.js';
 import {Score}   from './score.js';
 import {Lives}   from './lives.js';
@@ -119,7 +120,7 @@ export const Game = freeze(new class {
 		Game.#init();
 		Game.#ready();
 	}
-	#confirm(e) {			
+	#confirm(e) {
 		if (Game.isDemoScene) {
 			Ticker.pause(e.type == 'blur');
 			return;
@@ -161,6 +162,7 @@ export const Game = freeze(new class {
 		Laser.update();
 		BallG.update();
 		Paddle.update();
+		Demo.update();
 	}
 	draw() {
 		ctx.clear();
@@ -173,6 +175,7 @@ export const Game = freeze(new class {
 		BallG.draw();
 		Paddle.draw();
 		Army.Explosion.draw();
+		Demo.draw();
 		Score.draw();
 		Lives.draw();
 		Message.draw();

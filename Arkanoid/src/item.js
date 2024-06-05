@@ -30,9 +30,10 @@ export class Item {
 	static get Current() {return ItemSet.values().next().value}
 	
 	static appear({x, y}) {
+		//return;
 		if (this.apearedItemExists)
 			return;
-		if (!$avoid && randInt(0,2) != 0)
+		if (!$avoid && randInt(0,1) != 0)
 			return;
 
 		let idx = randInt(0, SubClasses.length-1);
