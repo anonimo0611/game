@@ -103,3 +103,12 @@ const getIntersection = (a, b, c, d)=> {
     	a.y + s * Vec2.sub(b,a).y
     );
 }
+const isIntersectionBetween2Points = (v1st, v1ed, v2st, v2ed)=> {
+	const [v1ed_v1st,v2ed_v2st]=[Vec2.sub(v1ed,v1st),Vec2.sub(v2ed,v2st)];
+	const [v2st_v1ed,v2ed_v1ed]=[Vec2.sub(v2st,v1ed),Vec2.sub(v2ed,v1ed)];
+	const [v1st_v2st,v1ed_v2st]=[Vec2.sub(v1st,v2st),Vec2.sub(v1ed,v2st)];
+	return (
+		Vec2.cross(v1ed_v1st,v2st_v1ed) * Vec2.cross(v1ed_v1st,v2ed_v1ed) < 0.000001 &&
+		Vec2.cross(v2ed_v2st,v1st_v2st) * Vec2.cross(v2ed_v2st,v1ed_v2st) < 0.000001
+	);
+}
