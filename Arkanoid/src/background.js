@@ -1,13 +1,14 @@
-import {rgba} from '../lib/color.js';
-import {cvs}  from './_canvas.js';
-import {Game} from './_main.js';
+import {rgba}  from '../lib/color.js';
+import {cvs}   from './_canvas.js';
+import {Game}  from './_main.js';
+import {Field} from './field.js';
 
 const ImageMax = 3;
 const BgImages = Array(ImageMax);
 const FrameImg = $('<img src="./res/frame.png">').get(0);
 
 for (const i of BgImages.keys())
-	BgImages[i] = $(`<img src="./res/bg${i}.jpg">`).get(0);
+	BgImages[i] = $(`<img src="./res/bg${i}.png">`).get(0);
 
 const ScoreRGBList = [
 	[0x51,0x51,0xFF], // Blue

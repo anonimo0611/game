@@ -2,8 +2,9 @@ import {cvs} from './_canvas.js';
 export const Field = freeze(new class {
 	Frame     = 24;
 	Cols      = 13;
-	Rows      = 30;
+	Rows      = 32;
 	Width     = cvs.width - this.Frame*2;
+	Diagonal  = sqrt(cvs.height**2 + cvs.width**2);
 	ColWidth  = int(this.Width/this.Cols);
 	RowHeight = int(cvs.height/this.Rows);
 	Top       = this.RowHeight + this.Frame;

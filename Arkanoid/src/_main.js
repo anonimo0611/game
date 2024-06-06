@@ -172,6 +172,7 @@ export const Game = freeze(new class {
 		Army.draw();
 		Item.draw();
 		Laser.draw();
+		Paddle.drawAimingLine();
 		BallG.draw();
 		Paddle.draw();
 		Army.Explosion.draw();

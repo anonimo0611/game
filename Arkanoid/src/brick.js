@@ -72,6 +72,7 @@ export const BrickG = freeze(new class {
 	Cols       = Cols;
 	ColWidth   = ColWidth;
 	RowHeight  = RowHeight;
+	#hasImmo   = false;
 	#destroyed = false;
 	get remains() {
 		return MapData.flat().filter(d=> BrickG.exsists(d)).length;
@@ -85,7 +86,9 @@ export const BrickG = freeze(new class {
 	exsists({col, row}={}) {
 		const brick = MapData?.[row]?.[col];
 		if (!brick) return false;
-		return brick.type != BrickType.None && !brick.destroyed;
+		return (!brick.destroyed
+			&& brick.type != BrickType.Immortality 
+			&& brick.type != BrickType.None);
 	}
 	init() {
 		Item.init();
@@ -136,12 +139,13 @@ export const BrickG = freeze(new class {
 			this.#drawDisappear(brick,scale);
 		}
 	}
-	#drawShadow({x,y,col}) {
+	#drawShadow({x,y,col,color}) {
 		const w = (col == Cols-1)
 			? (ColWidth+ShadowOffset)-Frame : ColWidth;
 		ctxS.save();
 		ctxS.translate(x+ShadowOffset, y+ShadowOffset);
-		ctxS.fillStyle = rgba(0,0,0, 0.4);
+		ctxS.fillStyle = rgba(0,0,0, color.a*0.5);
+		ctxS.clearRect(0,0, w,RowHeight);
 		ctxS.fillRect(0,0, w,RowHeight);
 		ctxS.restore();
 	}
@@ -152,16 +156,17 @@ export const BrickG = freeze(new class {
 			this.#drawShadow(brick);
 
 		const LW = LineWidth, FO = LW*1.5;
-		const {h,s,l}= brick.color;
+		const {h,s,l,a}= brick.color;
 		if (!grad) {
 			grad = ctx.createLinearGradient(0,0,ColWidth,RowHeight);
-			grad.addColorStop(0.0, hsl(h,s,l-20));
-			grad.addColorStop(0.5, hsl(h,s,l+2));
-			grad.addColorStop(1.0, hsl(h,s,l-20));
+			grad.addColorStop(0.0, hsl(h,s,l-20,a));
+			grad.addColorStop(0.5, hsl(h,s,l+2,a));
+			grad.addColorStop(1.0, hsl(h,s,l-20,a));
 		}
 		// Brick surface
 		ctx.fillStyle = grad;
-		ctx.fillRect(FO, FO, ColWidth-FO*2, RowHeight-FO*2);
+		ctx.clearRect(FO, FO, ColWidth-FO*2, RowHeight-FO*2);
+		ctx.fillRect (FO, FO, ColWidth-FO*2, RowHeight-FO*2);
 
 		// Highlight(top left)
 		ctx.beginPath();
@@ -183,15 +188,15 @@ export const BrickG = freeze(new class {
 	}
 	#drawLuster(brick,data) {
   		const {x, y}  = brick;
-		const {h,s,l} = brick.color;
+		const {h,s,l,a} = brick.color;
 		const {offset}= data;
 		const
 		grad = ctx.createLinearGradient(0,0,ColWidth,RowHeight);
-		grad.addColorStop(0, hsl(h,s,l-20));
-		grad.addColorStop(max(offset*0.5, 0), hsl(h,s,l-20));
+		grad.addColorStop(0, hsl(h,s,l-20,a));
+		grad.addColorStop(max(offset*0.5, 0), hsl(h,s,l-20,a));
 		grad.addColorStop(offset, '#FFF');
-		grad.addColorStop(min(offset*0.7, 1), hsl(h,s,l-20));
-		grad.addColorStop(1, hsl(h,s,l-20));
+		grad.addColorStop(min(offset*0.7, 1), hsl(h,s,l-20,a));
+		grad.addColorStop(1, hsl(h,s,l-20,a));
 		data.offset = min(data.offset+=1/AnimDuration, 1);
 
 		// Brick surface
@@ -235,12 +240,13 @@ export const BrickG = freeze(new class {
 	}
 });
 const Brick = freeze(class {
-	Width        = ColWidth;
-	Height       = RowHeight;
-	#durability  = 0;
-	#pointRate   = 1;
-	#destroyed   = false;
-	get destroyed() {return this.#destroyed}
+	Width       = ColWidth;
+	Height      = RowHeight;
+	#durability = 0;
+	#pointRate  = 1;
+	#destroyed  = false;
+	get destroyed()  {return this.#destroyed}
+	get durability() {return this.#durability}
 
 	constructor({row,col}, type=BrickType.None) {
 		this.row   = row;
@@ -256,11 +262,11 @@ const Brick = freeze(class {
 			Luster.set(this, {offset:0});
 
 		this.#destroyed  = (type == BrickType.None);
-		this.#durability = this.#durabilityMax;
+		this.#durability = this.#getDurabilityMax();
 		this.durabilityMax = this.#durability;
 		freeze(this);
 	}
-	get #durabilityMax() {
+	#getDurabilityMax() {
 		if (this.type == BrickType.Immortality)
 			return Infinity;
 		if (this.type == BrickType.Hard) {
@@ -280,8 +286,10 @@ const Brick = freeze(class {
 		if (Luster.has(this)) return;
 		if (Luster.size <= 4) Sound.stop('se2').play('se2');
 		if (this.type == BrickType.Hard) {
-			this.color.s += 10;
-			this.color.l -= 10;
+			const {durabilityMax:dMax,durability:d}= this;
+			this.color.s += 30 - 30/dMax * d;
+			this.color.l -= 30 - 30/dMax * d;
+			this.color.a = min((1/dMax * d)+0.5, 1);
 			BrickG.cache();
 		}
 		Luster.set(this, {offset:0});

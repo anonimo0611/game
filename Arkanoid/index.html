@@ -14,7 +14,7 @@
 	<link rel="stylesheet" href="styles/ui.css">
 	<script>
 	for (let i=0; i<3; i++)
-		 new Image().src= `res/bg${i}.jpg`;
+		 new Image().src= `res/bg${i}.png`;
 	</script>
 	<style>
 	@font-face {font-family:Atari; src:url(res/Atari.woff2) format('woff2')}
@@ -58,7 +58,7 @@ function putLog(d) {debugArea.textContent = JSON.stringify(d)}
 			<input type="range" id="volRng" data-orient="vertical" tabindex="-1" value="10" step="1" min="0" max="10">
 		</span>
 	</div>
-	<canvas id="canvas" width="945" height="1050"></canvas>
+	<canvas id="canvas" width="945" height="1080"></canvas>
 </div>
 
 <template id="confirm_temp">

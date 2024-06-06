@@ -20,7 +20,7 @@ const BallSet       = new Set();
 const BallSpeed     = cvs.height / 70;
 const DisruptionMax = 10;
 const SpeedRateMax  = 1.25;
-const ArmySpeedDown = 0.70;
+const ArmySpeedDown = 0.85;
 
 const
 Grad = $ctx.createRadialGradient(0,0,0, 0,0,Radius);
@@ -144,7 +144,7 @@ export class Ball extends Collider {
 		const Spd = this.#speed * BallG.speedDownRate;
 
 		this.#speed = clamp(this.speed+this.Accelerate, Min, Max);
-		this.Pos.add( vec2(this.Velocity).normalized.mul(Spd) );
+		this.Pos.add( this.Velocity.normalized.mul(Spd) );
 
 		if (this.#detectDropped())
 			return;
@@ -178,12 +178,13 @@ export class Ball extends Collider {
 			return true;
 		}
 	}
-	#setPaddleReboundVelocity() {
+	get paddleReboundVelocity() {
 		const s = Paddle.ReboundScaleMax;
 		const x = (this.Pos.x - Paddle.CenterX) / (Paddle.Width/2);
-		this.Velocity.x = clamp(x*2, -s, +s);
-		this.Velocity.y = -1;
-		this.Velocity.set( this.Velocity.normalized.mul(this.speed) );
+		return vec2(clamp(x*2, -s, +s), -1);
+	}
+	#setPaddleReboundVelocity() {
+		this.Velocity.set( this.paddleReboundVelocity.mul(this.speed) );
 	}
 	#reboundAtPaddle() {
 		if (!collisionRect(Paddle,this))
@@ -214,8 +215,8 @@ export class Ball extends Collider {
 		const brick = [hitL,hitR,hitB,hitT].find(BrickG.isBrick);
 		if (brick) {
 			brick.collision();
-			if (brick.type == BrickType.Immortality)
-				this.Pos.add( randChoice(-1,1) );
+			if (brick.type == BrickType.Immortality && (hitT || hitB))
+				this.Pos.add( randInt(-2,2) );
 		}
 	}
 	draw() {

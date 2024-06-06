@@ -25,7 +25,7 @@ const SpawnR   = (cvs.width - SpawnL) - Width;
 
 const DriftRadiusX = cvs.width/252;
 const DriftRadiusY = cvs.width/315;
-const DriftGravity = 0.3;
+const DriftGravity = 0.4;
 
 const SphereRedHSL  = HSL(  0,  90, 40);
 const SphereLimeHSL = HSL(135, 100, 40);

@@ -30,7 +30,6 @@ export class Item {
 	static get Current() {return ItemSet.values().next().value}
 	
 	static appear({x, y}) {
-		//return;
 		if (this.apearedItemExists)
 			return;
 		if (!$avoid && randInt(0,1) != 0)
@@ -38,14 +37,12 @@ export class Item {
 
 		let idx = randInt(0, SubClasses.length-1);
 		if (idx === $lstIdx
-		 || idx === ItemType.Catch  && Scene.isInDemo
 		 || idx === ItemType.Extend && AppearedSet.has(idx)
 		) return void ($avoid = true);
 
 		if (ExclTypes.includes(idx)) {
 			if (idx === Paddle.ExclItem)
 				idx = randChoice(ExclTypes
-					.filter(i=> !(Scene.isInDemo && i == ItemType.Catch))
 					.filter(i=> i != $lstIdx && i != idx));
 		}
 		$avoid = false;

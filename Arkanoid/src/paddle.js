@@ -68,8 +68,9 @@ export const Paddle = freeze(new class {
 			GotItem: Paddle.#onPowerUp,
 			Resume:  Paddle.#onResume,
 		});
-		$on({mousedown: Paddle.#onLaunch});
-		$on({mousedown: Paddle.#onRelease});
+		$on({mousedown:   Paddle.#onLaunch});
+		$on({mousedown:   Paddle.#onRelease});
+		$on({ReleaseBall: Paddle.#onRelease});
 	}
 	#alpha    = 0;
 	#blink    = 0;
@@ -132,6 +133,7 @@ export const Paddle = freeze(new class {
 		ball.Pos.x = clamp(ball.Pos.x, x+1, x+Paddle.Width-1);
 		ball.Pos.y = y - ball.Radius-1; 
 		Paddle.#CatchX = ball.Pos.x - Paddle.Pos.x;
+		$trigger('CaughtBall');
 	}
 	update() {
 		this.#blink += PI/120;
@@ -161,6 +163,8 @@ export const Paddle = freeze(new class {
 		if (Ticker.elapsed < 200)
 			return;
 		Demo.autoPlay();
+		if (Paddle.CatchX > 0)
+			BallG.Ball.Pos.x = round(Paddle.ClampedX + Paddle.CatchX);
 		Paddle.#setWidth();
 		Paddle.#posClamp();
 	}
@@ -192,7 +196,7 @@ export const Paddle = freeze(new class {
 		Sound.play('se0');
 	}
 	#onRelease(e) {
-		if (!Game.acceptEventInGame(e) || !Paddle.CatchX)
+		if (Scene.isInGame && !Game.acceptEventInGame(e) || !Paddle.CatchX)
 			return;
 		Sound.play('se0');
 		Paddle.#CatchX = 0;
@@ -278,6 +282,19 @@ export const Paddle = freeze(new class {
 		ctx.fillRect(r*2, 0, w-r*4, h);
 
 		ctx.restore();
+	}
+	get reboundVelocity() {
+		const s = Paddle.ReboundScaleMax;
+		const x = (BallG.Ball.Pos.x - Paddle.CenterX) / (Paddle.Width/2);
+		return vec2(clamp(x*2, -s, +s), -1);
+	}
+	drawAimingLine() {
+		if (!Paddle.CatchX) return;
+		const BallV = Paddle.reboundVelocity.mul(Field.Diagonal);
+		drawLine(ctx, {color:'lime',width:cvs.width/300})(
+			...BallG.Ball.Pos.asInt.vals,
+			...Vec2.add(BallG.Ball.Pos, BallV).asInt.vals
+		);
 	}
 	draw() {
 		const {x, y}= Paddle.Pos;
