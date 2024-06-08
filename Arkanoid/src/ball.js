@@ -14,7 +14,7 @@ import {BrickType} from './brick.js';
 import {Collider}  from './brick.js'
 import {Paddle}    from './paddle.js';
 
-const Radius        = cvs.width / 80;
+const Radius        = 11;
 const [$cvs,$ctx]   = canvas2D(null, Radius*4, Radius*4).vals;
 const BallSet       = new Set();
 const BallSpeed     = cvs.height / 70;
@@ -42,6 +42,7 @@ export const BallG = freeze(new class {
 		BallG.#cache($ctx, Grad);
 		$on({GotItem:BallG.#onPowerUp});
 	}
+	Radius = Radius;
 	#speedDownRate  = 1;
 	get speedDownRate() {
 		return BallG.#speedDownRate;
@@ -178,20 +179,12 @@ export class Ball extends Collider {
 			return true;
 		}
 	}
-	get paddleReboundVelocity() {
-		const s = Paddle.ReboundScaleMax;
-		const x = (this.Pos.x - Paddle.CenterX) / (Paddle.Width/2);
-		return vec2(clamp(x*2, -s, +s), -1);
-	}
-	#setPaddleReboundVelocity() {
-		this.Velocity.set( this.paddleReboundVelocity.mul(this.speed) );
-	}
 	#reboundAtPaddle() {
 		if (!collisionRect(Paddle,this))
 			return;
 
 		Paddle.catch(this);
-		this.#setPaddleReboundVelocity();
+		this.Velocity.set( Paddle.ReboundVelocity.mul(this.speed) );
 		Sound.play('se0');
 		if (Paddle.CatchX)
 			Ticker.Timer.set(200, _=> Sound.stop('se0'));
@@ -207,16 +200,20 @@ export class Ball extends Collider {
 		}
 	}
 	#collisionWithBrick() {
-		const {hitT,hitR,hitB,hitL}= this;
-		if (hitL) this.Velocity.x = +abs(this.Velocity.x);
-		if (hitR) this.Velocity.x = -abs(this.Velocity.x);
-		if (hitB) this.Velocity.y = -abs(this.Velocity.y);
-		if (hitT) this.Velocity.y = +abs(this.Velocity.y);
+		const {Velocity:v,hitT,hitR,hitB,hitL}= this;
+		const {x:vx,y:vy}= v;
+		if (hitL) v.y = +abs(vx);
+		if (hitR) v.y = -abs(vx);
+		if (hitT) v.x = +abs(vy);
+		if (hitB) v.x = -abs(vy);
 		const brick = [hitL,hitR,hitB,hitT].find(BrickG.isBrick);
 		if (brick) {
 			brick.collision();
-			if (brick.type == BrickType.Immortality && (hitT || hitB))
-				this.Pos.add( randInt(-2,2) );
+			if (brick.isImmortality) {
+				if (v.x < 0) v.x += randFloat(0, -0.1);
+				if (v.x > 0) v.x += randFloat(0, +0.1);
+				if (abs(v.normalized.x) < 0.6) v.x *= 1.005;
+			}
 		}
 	}
 	draw() {

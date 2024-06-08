@@ -1,9 +1,9 @@
-import {rgba}     from '../lib/color.js';
-import {Ticker}   from '../lib/timer.js';
-import {cvs,ctx}  from './_canvas.js';
-import {scoreRGB} from './background.js';
-import {Scene}    from './scene.js';
-import {Field}    from './field.js';
+import {rgba}    from '../lib/color.js';
+import {Ticker}  from '../lib/timer.js';
+import {cvs,ctx} from './_canvas.js';
+import {BgRGB}   from './background.js';
+import {Scene}   from './scene.js';
+import {Field}   from './field.js';
 
 const FontSize = Field.RowHeight;
 
@@ -45,7 +45,7 @@ export const Score = freeze(new class {
 
 		// Backgound color
 		ctx.save();
-		ctx.fillStyle = rgba(...scoreRGB, 0.2);
+		ctx.fillStyle = rgba(...BgRGB, 0.2);
 		ctx.fillRect(0,0, cvs.width, FontSize * 1.2);
 		ctx.restore();
 

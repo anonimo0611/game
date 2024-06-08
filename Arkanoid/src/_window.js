@@ -1,4 +1,5 @@
-import {cvs} from './_canvas.js';
+import {Ticker} from '../lib/timer.js';
+import {cvs}    from './_canvas.js';
 
 const dBoard   = byId('board');
 const FontSize = dBody.fontSize();
@@ -10,7 +11,9 @@ let $resizing = false;
 export const Window = new class {
 	static {$ready(this.#setup)}
 	static #setup() {
-		$on({resize:Window.#onResize}).trigger('resize');
+		Window.#fit();
+		Window.#setCSSVars();
+		$on({resize:Window.#onResize});
 	}
 	Board = dBoard;
 	get scale()    {return $scale}
@@ -23,9 +26,9 @@ export const Window = new class {
 	}
 	#onResize(e) {
 		if (e.type == 'resize') {
+			!Ticker.paused && Ticker.pause(true);
 			clearTimeout($resizeId);
-			$resizing = true;
-			$resizeId = setTimeout(_=> $resizing = false, 2000);
+			$resizeId = setTimeout(()=> Ticker.pause(false), 2e3);
 		}
 		Window.#fit();
 		Window.#setCSSVars();

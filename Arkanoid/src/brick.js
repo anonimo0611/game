@@ -22,8 +22,8 @@ const AnimDuration = 300 / Ticker.Interval;
 
 export const BrickType = freeze({
 	None:      -1,
-	Hard:       0,
-	Immortality:1,
+	Immortality:0,
+	Hard:       1,
 	White:      2,
 	Red:        3,
 	Orange:     5,
@@ -34,8 +34,8 @@ export const BrickType = freeze({
 	Pink:       9,
 });
 const BrickHSLColors = deepFreeze([
-	[212,  0, 70], // Hard
 	[ 60, 49, 50], // Immortality
+	[212,  0, 70], // Hard
 	[  0,  0,100], // White
 	[  0, 79, 64], // Red
 	[ 38, 79, 64], // Orange
@@ -46,8 +46,8 @@ const BrickHSLColors = deepFreeze([
 	[300, 79, 64], // Pink
 ]);
 const BrickPoints = [
-	 50, // Hard
 	  0, // Immortality
+	 50, // Hard
 	 50, // White
 	 90, // Red
 	 60, // Orange
@@ -62,9 +62,6 @@ const MapData   = Array(Rows);
 const Luster    = new Map();
 const Disappear = new Map();
 
-const checkDestroyedOrImmortality = b=>
-	b.destroyed || b.type == BrickType.Immortality;
-
 export const BrickG = freeze(new class {
 	MapData    = MapData;
 	Type       = BrickType;
@@ -72,23 +69,18 @@ export const BrickG = freeze(new class {
 	Cols       = Cols;
 	ColWidth   = ColWidth;
 	RowHeight  = RowHeight;
-	#hasImmo   = false;
-	#destroyed = false;
+	#brokenAll = false;
 	get remains() {
-		return MapData.flat().filter(d=> BrickG.exsists(d)).length;
+		return MapData.flat().filter(d=> d.isBreakable).length;
 	}
-	get destroyed() {
-		return BrickG.#destroyed;
+	get brokenAll() {
+		return BrickG.#brokenAll;
 	}
 	isBrick(obj) {
 		return obj instanceof Brick;
 	}
-	exsists({col, row}={}) {
-		const brick = MapData?.[row]?.[col];
-		if (!brick) return false;
-		return (!brick.destroyed
-			&& brick.type != BrickType.Immortality 
-			&& brick.type != BrickType.None);
+	isBreakable({col, row}={}) {
+		return !!MapData?.[row]?.[col]?.isBreakable;
 	}
 	init() {
 		Item.init();
@@ -100,15 +92,16 @@ export const BrickG = freeze(new class {
 			for (const col of MapData[row].keys())
 				MapData[row][col] = new Brick({row,col}, map[row]?.[col]);
 		}
-		BrickG.#destroyed = false;
+		BrickG.#brokenAll = false;
 		BrickG.cache();
 	}
 	update() {
-		if (BrickG.#destroyed)
+		if (BrickG.brokenAll)
 			return;
-		if (!MapData.flat().every(checkDestroyedOrImmortality))
+		if (!MapData.flat().every(b=> !b.isBreakable))
 			return;
-		BrickG.#destroyed = true;
+
+		BrickG.#brokenAll = true;
 		Luster.clear();
 		Disappear.clear();
 		if (Scene.isInGame)
@@ -150,7 +143,7 @@ export const BrickG = freeze(new class {
 		ctxS.restore();
 	}
 	#drawBrick(ctx, brick, {effect=false,grad=null}={}) {
-		if (!effect && brick.destroyed)
+		if (!effect && brick.isNone)
 			return;
 		if (!effect)
 			this.#drawShadow(brick);
@@ -242,11 +235,16 @@ export const BrickG = freeze(new class {
 const Brick = freeze(class {
 	Width       = ColWidth;
 	Height      = RowHeight;
+	#type       = BrickType.None;
 	#durability = 0;
 	#pointRate  = 1;
-	#destroyed  = false;
-	get destroyed()  {return this.#destroyed}
-	get durability() {return this.#durability}
+	get type()          {return this.#type}
+	get durability()    {return this.#durability}
+	get exists()        {return !this.isNone}
+	get isBreakable()   {return this.type > BrickType.Immortality}
+	get isNone()        {return this.type == BrickType.None}
+	get isHard()        {return this.type == BrickType.Hard}
+	get isImmortality() {return this.type == BrickType.Immortality}
 
 	constructor({row,col}, type=BrickType.None) {
 		this.row   = row;
@@ -254,22 +252,22 @@ const Brick = freeze(class {
 		this.x     = (ColWidth *col) + MarginLeft;
 		this.y     = (RowHeight*row) + MarginTop;
 		this.Pos   = vec2(this.x, this.y);
-		this.type  = type;
+		this.#type = type;
 		this.color = type >= 0 ? HSL(...BrickHSLColors[type]) : null;
 
 		if (type == BrickType.Hard
 		 || type == BrickType.Immortality)
 			Luster.set(this, {offset:0});
 
-		this.#destroyed  = (type == BrickType.None);
 		this.#durability = this.#getDurabilityMax();
 		this.durabilityMax = this.#durability;
 		freeze(this);
 	}
 	#getDurabilityMax() {
-		if (this.type == BrickType.Immortality)
+		if (this.isImmortality)
 			return Infinity;
-		if (this.type == BrickType.Hard) {
+
+		if (this.isHard) {
 			this.#pointRate = Game.stageNum;
 			if (Game.stageNum == 10) return 3;
 			if (Game.stageNum >=  8) return 2;
@@ -285,7 +283,7 @@ const Brick = freeze(class {
 	#holdUp() {
 		if (Luster.has(this)) return;
 		if (Luster.size <= 4) Sound.stop('se2').play('se2');
-		if (this.type == BrickType.Hard) {
+		if (this.isHard) {
 			const {durabilityMax:dMax,durability:d}= this;
 			this.color.s += 30 - 30/dMax * d;
 			this.color.l -= 30 - 30/dMax * d;
@@ -295,25 +293,24 @@ const Brick = freeze(class {
 		Luster.set(this, {offset:0});
 	}
 	#destroy({x, y}) {
-		this.#destroyed = true;
 		Luster.delete(this);
 		Disappear.set(this, {scale:1});
 		ctxB.clearRect(x, y, ColWidth,RowHeight);
 		ctxS.clearRect(x+ShadowOffset, y+ShadowOffset, ColWidth,RowHeight);
 		Sound.stop('se1').play('se1');
-		if (this.type != BrickType.Hard)
+		if (this.type > BrickType.Hard)
 			Item.appear(this);
 		if (Scene.isInGame)
 			Score.add(BrickPoints[this.type*this.#pointRate]);
+		this.#type = BrickType.None;
 	}
 	getAdjacent(x=0, y=0) {
 		return MapData[this.row+y]?.[this.col+x] || {exists:false};
 	}
-	get exists()    {return !this.destroyed}
-	get AdjLeft()   {return this.getAdjacent(-1, 0)}
-	get AdjRight()  {return this.getAdjacent( 1, 0)}
-	get AdjUp()     {return this.getAdjacent( 0,-1)}
-	get AdjDown()   {return this.getAdjacent( 0, 1)}
+	get AdjL() {return this.getAdjacent(-1, 0)}
+	get AdjR() {return this.getAdjacent( 1, 0)}
+	get AdjU() {return this.getAdjacent( 0,-1)}
+	get AdjD() {return this.getAdjacent( 0, 1)}
 });
 export class Collider {
 	constructor({x, y}, radius) {
@@ -325,16 +322,21 @@ export class Collider {
 		const row = int((this.Pos.y+y - MarginTop)  / RowHeight);
 		return {row,col}
 	}
-	getBrick({row,col}=this.tilePos(), {y=0,x=0}={}) {
-		return MapData[row+y]?.[col+x];
+	get tilePosFromCenter() {
+		const col = int((this.Pos.x+this.Width /2 - MarginLeft) / ColWidth);
+		const row = int((this.Pos.y+this.Height/2 - MarginTop)  / RowHeight);
+		return {row,col}
 	}
 	get brickExistsOnBothSides() {
-		const Brick = this.getBrick();
-		return Brick?.AdjLeft?.exists && Brick?.AdjRight?.exists;
+		const brick = this.getBrick();
+		return brick?.AdjL?.exists && brick?.AdjRight?.exists;
 	}
 	get brickExistsOnOneSide() {
-		const Brick = this.getBrick();
-		return Brick?.AdjLeft?.exists || Brick?.AdjRight?.exists;
+		const brick = this.getBrick();
+		return brick?.AdjL?.exists || brick?.AdjRight?.exists;
+	}
+	getBrick({row,col}=this.tilePos(), {y=0,x=0}={}) {
+		return MapData[row+y]?.[col+x];
 	}
 	#detect(ox=0, oy=0) {
 		const offset = vec2(ox, oy).mul(this.Radius);

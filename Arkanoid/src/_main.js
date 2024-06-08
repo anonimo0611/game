@@ -13,6 +13,7 @@ import {Message} from './message.js';
 import {Score}   from './score.js';
 import {Lives}   from './lives.js';
 import {Paddle}  from './paddle.js';
+import {Sight}   from './sight.js';
 import {BallG}   from './ball.js';
 import {BrickG}  from './brick.js';
 import {Army}    from './army.js';
@@ -123,6 +124,7 @@ export const Game = freeze(new class {
 	#confirm(e) {
 		if (Game.isDemoScene) {
 			Ticker.pause(e.type == 'blur');
+			Game.draw();
 			return;
 		}
 		if (Confirm.opened)
@@ -153,7 +155,7 @@ export const Game = freeze(new class {
 		Game.draw();
 	}
 	#update() {
-		if (Window.resizing || BrickG.destroyed)
+		if (Window.resizing || BrickG.brokenAll)
 			return;
 		Score.update();
 		BrickG.update();
@@ -162,6 +164,7 @@ export const Game = freeze(new class {
 		Laser.update();
 		BallG.update();
 		Paddle.update();
+		Sight.update();
 		Demo.update();
 	}
 	draw() {
@@ -172,7 +175,7 @@ export const Game = freeze(new class {
 		Army.draw();
 		Item.draw();
 		Laser.draw();
-		Paddle.drawAimingLine();
+		Sight.draw();
 		BallG.draw();
 		Paddle.draw();
 		Army.Explosion.draw();

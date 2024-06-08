@@ -5,6 +5,7 @@ import {cvs,ctx} from './_canvas.js';
 import {Game}    from './_main.js';
 import {Scene}   from './scene.js';
 import {Field}   from './field.js';
+import {Paddle}  from './paddle.js';
 
 const FontSize = Field.RowHeight * 1.2;
 
@@ -68,9 +69,14 @@ export const Message = freeze(new class  {
 				this.#draw('READY!', Color.Sub, {rows:1.5});
 			else {
 				this.#draw(`STAGE ${Game.stageNum}`, Color.Main)
-				if (Ticker.elapsed > Game.ReadyTime - 1000)
+				if (Ticker.elapsed > Game.ReadyTime * 0.4)
 					this.#draw('READY!', Color.Sub, {rows:2.5});
 			}
+			break;
+		case Scene.Enum.InGame:
+			if (Paddle.alpha < 1 || Paddle.Launched)
+				return;
+			this.#draw('Click to Launch!', Color.Sub, {rows:1.5});
 			break;
 		}
 	}

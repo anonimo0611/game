@@ -166,10 +166,11 @@ export class Army extends Collider {
 		Explosion.update();
 	}
 	static draw() {
-		if (BrickG.destroyed) return;
+		if (BrickG.brokenAll) return;
 		ArmySet.forEach(a=> a.#drawSpheres(true)); // shadow
 		ArmySet.forEach(a=> a.#drawSpheres());
 	}
+	static ArmySet = ArmySet;
 	Width       = Radius*2;
 	Height      = Radius*2;
 	#phase      = new Phase();

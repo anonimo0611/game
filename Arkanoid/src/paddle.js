@@ -72,15 +72,15 @@ export const Paddle = freeze(new class {
 		$on({mousedown:   Paddle.#onRelease});
 		$on({ReleaseBall: Paddle.#onRelease});
 	}
-	#alpha    = 0;
-	#blink    = 0;
-	#CatchX   = 0;
-	#ExclItem = null;
-	#Launched = false;
-	#Width    = Width;
-	#TargetW  = Width;
-	DefaultW  = Width;
-	Height    = Height;
+	#alpha     = 0;
+	#blink     = 0;
+	#CatchX    = 0;
+	#ExclItem  = null;
+	#Launched  = false;
+	#Width     = Width;
+	#TargetW   = Width;
+	DefaultW   = Width;
+	Height     = Height;
 	Pos = vec2(0, cvs.height-this.Height*3.2);
 
 	ReboundScaleMax = 1.5;
@@ -103,8 +103,14 @@ export const Paddle = freeze(new class {
 	get LaserEnabeld()      {return this.ExclItem == ItemType.Laser}
 	get DisruptionEnabeld() {return this.ExclItem == ItemType.Disruption}
 
-	#posClamp() {
-		Paddle.Pos.x = clamp(Paddle.Pos.x, this.MoveMin, this.MoveMax);
+	get ReboundVelocity() {
+		const s = this.ReboundScaleMax;
+		const x = (BallG.Ball.Pos.x - this.CenterX) / (this.Width/2);
+		return vec2(clamp(x*2, -s, +s), -1);
+	}
+	get CaughtBallPos() {
+		const x = this.ClampedX + this.CatchX;
+		return vec2(x, this.Pos.y - BallG.Radius-1);
 	}
 
 	init() {
@@ -124,20 +130,9 @@ export const Paddle = freeze(new class {
 		Paddle.#updateCache(Lives.context, Width);
 		Paddle.#updateCache($ctx);
 	}
-	catch(ball) {
-		if (!Paddle.CatchEnabeld || Paddle.CatchX)
-			return;
-		if (this.Width != this.#TargetW)
-			return;
-		const {x,y}= Paddle.Pos;
-		ball.Pos.x = clamp(ball.Pos.x, x+1, x+Paddle.Width-1);
-		ball.Pos.y = y - ball.Radius-1; 
-		Paddle.#CatchX = ball.Pos.x - Paddle.Pos.x;
-		$trigger('CaughtBall');
-	}
 	update() {
-		this.#blink += PI/120;
-		this.#updateCache($ctx);
+		Paddle.#blink += PI/120;
+		Paddle.#updateCache($ctx);
 		switch (Scene.current) {
 			case Scene.Enum.Reset:
 			case Scene.Enum.Ready:
@@ -155,49 +150,73 @@ export const Paddle = freeze(new class {
 	}
 	#ready() {
 		if (Ticker.elapsed > Game.ReadyTime - 1000)
-			this.#alpha = min(this.#alpha+=1/FadeSpeed, 1);
+			Paddle.#alpha = min(Paddle.#alpha+1/FadeSpeed, 1);
 	}
 	#inDemo() {
 		if (Ticker.elapsed >= 50)
 			Paddle.#Launched ||= true;
 		if (Ticker.elapsed < 200)
 			return;
+
 		Demo.autoPlay();
-		if (Paddle.CatchX > 0)
-			BallG.Ball.Pos.x = round(Paddle.ClampedX + Paddle.CatchX);
+		Paddle.#moveCaughtBall();
 		Paddle.#setWidth();
-		Paddle.#posClamp();
+		Paddle.#restrictRangeOfMove();
 	}
 	#inGame() {
 		if (Ticker.elapsed < 50)
 			return;
+
 		if (AutoMoveToCursorX.setPosition()) {
 			Paddle.Pos.x = Mouse.x - (Paddle.Width/2);
 			Paddle.#setWidth();
-			Paddle.#posClamp();
-			if (Paddle.CatchX > 0)
-				BallG.Ball.Pos.x = round(Paddle.ClampedX + Paddle.CatchX);
+			Paddle.#restrictRangeOfMove();
+			Paddle.#moveCaughtBall();
 		}
 		if (!Paddle.Launched)
 			BallG.Ball.Pos.x = Paddle.CatchX
 				? Paddle.ClampedX + Paddle.CatchX
 				: Paddle.ClampedX + Paddle.Width/2;
 	}
+	catch(ball) {
+		if (!Paddle.CatchEnabeld || Paddle.CatchX)
+			return;
+		if (Paddle.Width != Paddle.#TargetW)
+			return;
+
+		const {x,y}= Paddle.Pos;
+		ball.Pos.x = clamp(ball.Pos.x, x+1, x+Paddle.Width-1);
+		ball.Pos.y = y - ball.Radius-1; 
+		Paddle.#CatchX = ball.Pos.x - Paddle.Pos.x;
+		$trigger('CaughtBall');
+	}
+	#restrictRangeOfMove() {
+		const {Pos,MoveMin,MoveMax}= Paddle;
+		Paddle.Pos.x = clamp(Pos.x, MoveMin, MoveMax);
+	}
+	#moveCaughtBall() {
+		if (Paddle.CatchX > 0)
+			BallG.Ball.Pos.x = Paddle.CaughtBallPos.x;
+	}
 	#destory() {
 		if (BallG.count <= 0 && Ticker.count > 8)
-			this.#alpha = max(this.#alpha-=1/FadeSpeed, 0);
+			Paddle.#alpha = max(Paddle.#alpha-1/FadeSpeed, 0);
 	}
 	#onLaunch(e) {
 		if (!Game.acceptEventInGame(e))
 			return;
 		if (!AutoMoveToCursorX.reached || Paddle.Launched)
 			return;
+
 		Paddle.#Launched = true;
 		Sound.play('se0');
 	}
 	#onRelease(e) {
-		if (Scene.isInGame && !Game.acceptEventInGame(e) || !Paddle.CatchX)
+		if (!Paddle.CatchX)
 			return;
+		if (!Scene.isInDemo && !Game.acceptEventInGame(e))
+			return;
+
 		Sound.play('se0');
 		Paddle.#CatchX = 0;
 	}
@@ -227,12 +246,12 @@ export const Paddle = freeze(new class {
 		Sound.play('destroy');
 	}
 	#setWidth() {
-		if (this.#TargetW > this.#Width) {
-			this.#Width = min(this.#Width+StretchSpd, this.#TargetW);
+		if (Paddle.#TargetW > Paddle.#Width) {
+			Paddle.#Width = min(Paddle.#Width+StretchSpd, Paddle.#TargetW);
 			Paddle.#updateCache($ctx);
 		}
-		if (this.#TargetW < this.#Width) {
-			this.#Width = max(this.#Width-StretchSpd, Width);
+		if (Paddle.#TargetW < Paddle.#Width) {
+			Paddle.#Width = max(Paddle.#Width-StretchSpd, Width);
 			Paddle.#updateCache($ctx);
 		}
 	}
@@ -283,24 +302,11 @@ export const Paddle = freeze(new class {
 
 		ctx.restore();
 	}
-	get reboundVelocity() {
-		const s = Paddle.ReboundScaleMax;
-		const x = (BallG.Ball.Pos.x - Paddle.CenterX) / (Paddle.Width/2);
-		return vec2(clamp(x*2, -s, +s), -1);
-	}
-	drawAimingLine() {
-		if (!Paddle.CatchX) return;
-		const BallV = Paddle.reboundVelocity.mul(Field.Diagonal);
-		drawLine(ctx, {color:'lime',width:cvs.width/300})(
-			...BallG.Ball.Pos.asInt.vals,
-			...Vec2.add(BallG.Ball.Pos, BallV).asInt.vals
-		);
-	}
 	draw() {
 		const {x, y}= Paddle.Pos;
 		ctx.save();
 		ctx.globalAlpha = Paddle.alpha;
-		ctx.translate(round(x), round(y));
+		ctx.translate(x, y);
 		ctx.drawImage($cvs, 0,0);
 		ctx.restore();
 		spark();
@@ -318,23 +324,26 @@ const AutoMoveToCursorX = freeze(new class {
 	}
 	setPosition() {
 		if (this.reached) return true;
-		for (let i=0, stepMax=50; i<stepMax; i++) {
-			const {MoveMin,MoveMax,Pos}= Paddle;
-			if (Paddle.CenterX > Mouse.x) {
-				Pos.x = max(Pos.x-this.MoveSpeed/stepMax, MoveMin);
-				if (Paddle.CenterX < Mouse.x || Pos.x == MoveMin)
-					return this.#reached = true;
-			} else {
-				Pos.x = min(Pos.x+this.MoveSpeed/stepMax, MoveMax);
-				if (Paddle.CenterX > Mouse.x || Pos.x == MoveMax)
-					return this.#reached = true;
-			}
-		} return this.reached;
+		for (let i=0, stepMax=50; i<stepMax; i++)
+			if (this.#move(stepMax)) return true;
+		return this.reached;
+	}
+	#move(stepMax) {
+		const {MoveMin,MoveMax,Pos}= Paddle;
+		if (Paddle.CenterX > Mouse.x) {
+			Pos.x = max(Pos.x-this.MoveSpeed/stepMax, MoveMin);
+			if (Paddle.CenterX < Mouse.x || Pos.x == MoveMin)
+				return this.#reached = true;
+		} else {
+			Pos.x = min(Pos.x+this.MoveSpeed/stepMax, MoveMax);
+			if (Paddle.CenterX > Mouse.x || Pos.x == MoveMax)
+				return this.#reached = true;
+		}
 	}
 });
 
 function spark() {
-	if (Confirm.opened || !Game.isReadyScene)
+	if (Ticker.paused || !Game.isReadyScene)
 		return;
 	if (Paddle.alpha == 0 || Paddle.alpha == 1)
 		return;
@@ -342,7 +351,7 @@ function spark() {
 	for (let i=0; i<=15; i++) {
 		const {Width,Height,Pos}= Paddle;
 		const stPos = [randInt(0, Width),randInt(0, Height*1.1)];
-		const edVec = stPos.map(c=> c+randChoice(-15,+15));
+		const edVec = stPos.map(c=> c+randChoice(-15, +15));
 		ctx.save();
 		ctx.translate(...Pos.vals);
 		ctx.beginPath();

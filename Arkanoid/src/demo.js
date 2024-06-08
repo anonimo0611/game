@@ -7,52 +7,60 @@ import {Field}    from './field.js';
 import {BallG}    from './ball.js';
 import {BrickG}   from './brick.js';
 import {Paddle}   from './paddle.js';
+import {Sight}    from './sight.js';
+import {Army}     from './army.js';
 import {Item}     from './item.js';
 import {ItemType} from './item.js';
 
 const {Type,Cols,Rows,ColWidth,RowHeight}= BrickG;
-const isImmo    = b=> b.type == Type.Immortality;
-const isEmpty   = b=> b.type == Type.None || b.destroyed;
-const {Diagonal}= Field;
+const AlwaysAimingStageSet = new Set([5,11]);
+
 let $shakeAngle = 0;
 let $target     = null;
 let $landingPos = null;
 
-function moveTo(dstX, mag, step) {
-	for (let i=0; i<step; i++) {
-		if (dstX < Paddle.CenterX) Paddle.Pos.x -= mag/step;
-		if (dstX > Paddle.CenterX) Paddle.Pos.x += mag/step;
-	}		
-}
 export const Demo = new class {
-	get Ball()         {return BallG.NearlyBall}
-	get BallPos()      {return this.Ball.Pos}
-	get BallVelocity() {return this.Ball.Velocity}
-	get canShootBricksWithLaser() {
+	get Ball() {return BallG.NearlyBall}
+	get canShoot() {
+		return (
+			this.#canShootBricksWithLaser ||
+			this.#canShootArmyWithLaser);
+	}
+	get #canShootBricksWithLaser() {
 		const data = BrickG.MapData.flat().reverse();
-		for (const {destroyed,type,x,Width:w} of data) {
-			if (type == Type.None || destroyed) continue;
-			if (x   >= Paddle.CenterX-ColWidth*2
-			 && x+w <= Paddle.CenterX+ColWidth*2)
+		for (const {isNone,type,x,Width:w} of data) {
+			if (isNone) continue;
+			if (x  >= Paddle.CenterX-ColWidth*2
+			&& x+w <= Paddle.CenterX+ColWidth*2)
 				return type != Type.Immortality;
+		} return false;
+	}
+	get #canShootArmyWithLaser() {
+		for (const {Pos,Width:w,tilePosFromCenter} of Army.ArmySet) {
+			if (Pos.x   >= Paddle.CenterX-w
+			 && Pos.x+w <= Paddle.CenterX+w) {
+				const {row,col}= tilePosFromCenter;
+				for (let i=row+1; i<Rows; i++)
+					if (BrickG.MapData[i]?.[col]?.exists)
+						return false;
+				return true;
+			}
 		} return false;
 	}
 	getBrickTargets() {
 		return BrickG.MapData.flat().reverse().filter(b=> {
-			if (isEmpty(b) || isImmo(b))
-				return false;
+			if (b.isNone || b.isImmortality) return false;
 			for (let i=b.row+1, col=b.col; i<Rows-b.row; i++) {
 				const b = BrickG.MapData[i][col];
-				if (!isEmpty(b) || isImmo(b))
-					return false;
+				if (!b.isNone || b.isImmortality) return false;
 			} return true;
 		});
 	}
 	getEmptiesBetweenImmoWalls() {
 		for (let i=BrickG.MapData.length-1; i>=0; i--) {
 			const row = BrickG.MapData[i];
-			if (row.some(isImmo))
-				return row.filter(isEmpty);
+			if (row.some(b=> b.isImmortality))
+				return row.filter(b=> b.isNone);
 		}
 	}
 	update() {
@@ -62,7 +70,7 @@ export const Demo = new class {
 		this.#setLandingPointOfBall();
 	}
 	autoPlay() {
-		const mag = this.BallVelocity.magnitude;
+		const mag = this.Ball.Velocity.magnitude;
 		if (this.#paddleToItem(Item.Current))
 			return;
 		if (Paddle.CatchEnabeld) {
@@ -72,17 +80,17 @@ export const Demo = new class {
 			return;
 		}	
 		if ($landingPos && $target?.Pos) {
-			this.#aimingAtTargetBrick(mag*0.8);
+			this.#aimingAtTargetBrick(mag);
 			return;
 		}
 		this.#paddleToBall(mag);
 	}
 	#paddleToBall(mag) {
-		const x = this.BallPos.x * (sin($shakeAngle)/10+1);
+		const x = this.Ball.Pos.x * (sin($shakeAngle)/10+1);
 		moveTo(x, mag*1.2, 45);
 	}
 	#paddleToItem(item) {
-		if (!item || this.BallVelocity.y > 0) return false;
+		if (!item || this.Ball.Velocity.y > 0) return false;
 		const {Type}= item;
 		const targetLen = this.getBrickTargets().length;
 		if (Paddle.CatchEnabeld && Type == ItemType.Expand) return false;
@@ -95,37 +103,40 @@ export const Demo = new class {
 		const {ReboundAngleMax:aMax,Width:w}= Paddle;
 		const angle = Vec2.angle($target?.Pos, $landingPos) + PI/2;
 		const pos = $landingPos.x - w * norm(-aMax*2, +aMax*2, angle);
-		moveTo(pos + w/2, mag, 45);
+		if ($target.type.isNone)
+			pos.x += randFloat(-w*0.3, w*0.3); 
+		moveTo(pos + w/2, mag, 60);
 	}
 	#setLandingPointOfBall() {
 		$landingPos = getIntersection(
 			vec2(Field.Left,  Paddle.Pos.y),
 			vec2(Field.Right, Paddle.Pos.y),
-			this.BallPos,
+			this.Ball.Pos,
 			Vec2.add(
-				this.BallPos,
-				this.BallVelocity.normalized.mul(Diagonal)
+				this.Ball.Pos,
+				this.Ball.Velocity.normalized.mul(Field.Diagonal)
 			)
 		);
 	}
 	#setTarget() {
-		if (!BrickG.exsists($target ?? {})) {
-			const data = this.getBrickTargets();
-			if (data.length == 0)
+		if (!BrickG.isBreakable($target ?? {})) {
+			const targets = this.getBrickTargets();
+			if (targets.length == 0)
 				return void this.#setEmptyTarget();
-			if (Game.stageNum == 11 || BrickG.remains <= 15) {
-				const target = randChoice(data);
-				const {Pos:pos,col,row}= target;
+			if (AlwaysAimingStageSet.has(Game.stageNum)
+			 || BrickG.remains <= 15) {
+				const target = randChoice(targets);
+				const {Pos:pos,col,row,type}= target;
 				const Pos = vec2(pos).add(ColWidth/2, RowHeight/2);
-				$target = {col,row,Pos};
+				$target = {col,row,Pos,type};
 			}
 		}
 	}
 	#setEmptyTarget() {
 		if (Ticker.count % 120 != 0) return;
 		const target = this.getEmptiesBetweenImmoWalls();
-		const {Pos,col,row}= randChoice(target);
-		$target = {col,row,Pos:vec2(Pos).add(
+		const {Pos,col,row,type}= randChoice(target);
+		$target = {col,row,type,Pos:vec2(Pos).add(
 			randFloat(0, ColWidth),
 			randFloat(0, RowHeight)
 		)};
@@ -151,33 +162,35 @@ const CatchMode = new class {
 	#aiming = false;
 
 	#onCaught() {
-		if (Scene.isInDemo)
+		if (!Scene.isInDemo) return;
 		Timer.cancel(CatchMode).set(1500, this.#release, {id:CatchMode});
 	}
 	#release() {
 		CatchMode.#dir = 1;
 		CatchMode.#aiming = false;
+		Timer.cancel(CatchMode);
 		$trigger('ReleaseBall');
 	}
+	#releaseTimer() {
+		this.#aiming = true;
+	 	Timer.cancel(CatchMode).set(200, this.#release)
+	}
 	autoPlay() {
-		this.#vector  = Demo.Ball.paddleReboundVelocity.mul(Diagonal);
-		const bricks  = Demo.getBrickTargets();
-		const targets = bricks.length > 0
-			? bricks
-			: Demo.getEmptiesBetweenImmoWalls();
+		const Radius = BallG.Radius;
+		const bricks = Demo.getBrickTargets();
+		this.#vector = Paddle.ReboundVelocity.mul(Field.Diagonal);
 
-		const offsetX = bricks.length? 0 : Demo.Ball.Radius*2;
-		for (const brick of targets)
-			if (isIntersectionBetween2Points(
-				Demo.BallPos,
-				vec2(Demo.BallPos).add(this.#vector),
-				vec2(brick.Pos).add(0+offsetX, RowHeight),
-				vec2(brick.Pos).add(ColWidth-offsetX, RowHeight)
-			)) {
-				this.#aiming = true;
-			 	Timer.cancel(CatchMode);
-			 	Timer.set(50, this.#release)
-			}
+		if (bricks.length) {
+			if (Sight.brick?.isBreakable)
+				this.#releaseTimer();
+		} else for (const empty of Demo.getEmptiesBetweenImmoWalls()) {
+			getIntersection(
+				Demo.Ball.Pos,
+				vec2(Demo.Ball.Pos).add(this.#vector),
+				vec2(empty.Pos).add(Radius*2, RowHeight),
+				vec2(empty.Pos).add(ColWidth-Radius*2, RowHeight)
+			) && this.#releaseTimer();
+		}
 		this.#move();
 	}
 	#move() {
@@ -187,15 +200,19 @@ const CatchMode = new class {
 			moveTo(Field.Right, mag, step);
 			if (Paddle.Pos.x > Paddle.MoveMax)
 				this.#dir *= -1;
-		}
-		if (this.#dir < 0) {
+		} else {
 			moveTo(Field.Left, mag, step);
 			if (Paddle.Pos.x < Paddle.MoveMin)
 				this.#dir *= -1;
 		}
 	}
 };
-
+function moveTo(dstX, mag, step) {
+	for (let i=0; i<step; i++) {
+		if (dstX < Paddle.CenterX) Paddle.Pos.x -= mag/step;
+		if (dstX > Paddle.CenterX) Paddle.Pos.x += mag/step;
+	}		
+}
 $on('Reset Start', function() {
 	Timer.cancel(CatchMode);
 	$shakeAngle = 0;
