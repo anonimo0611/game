@@ -87,14 +87,14 @@ const collisionRect = (a, b)=> {
 		abs((ay+a.Height/2)-(by+b.Height/2)) < (a.Height+b.Height)/2);
 }
 const getIntersection = (a, b, c, d)=> {
-    let deno = Vec2.cross(Vec2.sub(b,a), Vec2.sub(d, c));
-    if (deno == 0.0) {
+    const v = Vec2.cross(Vec2.sub(b,a), Vec2.sub(d,c));
+    if (v == 0) {
 		// Line segments are parallel
         return null;
     }
-    let s = Vec2.cross(Vec2.sub(c,a), Vec2.sub(d,c)) / deno;
-    let t = Vec2.cross(Vec2.sub(b,a), Vec2.sub(a,c)) / deno;
-    if (s < 0.0 || 1.0 < s || t < 0.0 || 1.0 < t) {
+    const s = Vec2.cross(Vec2.sub(c,a), Vec2.sub(d,c)) / v;
+    const t = Vec2.cross(Vec2.sub(b,a), Vec2.sub(a,c)) / v;
+    if (s < 0 || 1 < s || t < 0 || 1 < t) {
         // Line segments do not intersect
         return null;
     }
@@ -102,13 +102,4 @@ const getIntersection = (a, b, c, d)=> {
     	a.x + s * Vec2.sub(b,a).x,
     	a.y + s * Vec2.sub(b,a).y
     );
-}
-const isIntersectionBetween2Points = (v1st, v1ed, v2st, v2ed)=> {
-	const [v1ed_v1st,v2ed_v2st]=[Vec2.sub(v1ed,v1st),Vec2.sub(v2ed,v2st)];
-	const [v2st_v1ed,v2ed_v1ed]=[Vec2.sub(v2st,v1ed),Vec2.sub(v2ed,v1ed)];
-	const [v1st_v2st,v1ed_v2st]=[Vec2.sub(v1st,v2st),Vec2.sub(v1ed,v2st)];
-	return (
-		Vec2.cross(v1ed_v1st,v2st_v1ed) * Vec2.cross(v1ed_v1st,v2ed_v1ed) < 0.000001 &&
-		Vec2.cross(v2ed_v2st,v1st_v2st) * Vec2.cross(v2ed_v2st,v1ed_v2st) < 0.000001
-	);
 }
