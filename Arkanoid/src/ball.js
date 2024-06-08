@@ -202,10 +202,10 @@ export class Ball extends Collider {
 	#collisionWithBrick() {
 		const {Velocity:v,hitT,hitR,hitB,hitL}= this;
 		const {x:vx,y:vy}= v;
-		if (hitL) v.y = +abs(vx);
-		if (hitR) v.y = -abs(vx);
-		if (hitT) v.x = +abs(vy);
-		if (hitB) v.x = -abs(vy);
+		if (hitL) v.x = +abs(vx);
+		if (hitR) v.x = -abs(vx);
+		if (hitT) v.y = +abs(vy);
+		if (hitB) v.y = -abs(vy);
 		const brick = [hitL,hitR,hitB,hitT].find(BrickG.isBrick);
 		if (brick) {
 			brick.collision();
