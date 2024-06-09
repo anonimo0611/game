@@ -90,7 +90,7 @@ export const BallG = freeze(new class {
 	}
 	#setDisruption() {
 		for (let i=0; i<DisruptionMax; i++) {
-			const {x,y}= BallG.Ball.Pos;
+			const {x, y}= BallG.Ball.Pos;
 			const angle = randFloat(270-140/2, 270+140/2) * PI/180;
 			const v = vec2(cos(angle), sin(angle));
 			BallSet.add(new Ball({x,y,v}));
@@ -135,6 +135,13 @@ export class Ball extends Collider {
 	}
 	get speed() {
 		return this.#speed;
+	}
+	get isOnWall() {
+		const {row,col}= this.tilePosFromCenter;
+		for (let i=row+1; i<BrickG.Rows; i++)
+			if (BrickG.MapData[i]?.[col]?.exists)
+				return true;
+		return false;
 	}
 	update() {
 		if (Game.isReadyScene || Paddle.CatchX > 0)

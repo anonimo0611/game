@@ -14,7 +14,7 @@ import {BrickG}    from './brick.js';
 import {BallG}     from './ball.js';
 import {Mouse}     from './mouse.js';
 
-const Width  = (cvs.width / 5);
+const Width  = cvs.width / 5;
 const Height = BrickG.RowHeight;
 
 const StretchMax = Width * 1.5;
@@ -72,19 +72,21 @@ export const Paddle = freeze(new class {
 		$on({mousedown:   Paddle.#onRelease});
 		$on({ReleaseBall: Paddle.#onRelease});
 	}
-	#alpha     = 0;
-	#blink     = 0;
-	#CatchX    = 0;
-	#ExclItem  = null;
-	#Launched  = false;
-	#Width     = Width;
-	#TargetW   = Width;
-	DefaultW   = Width;
-	Height     = Height;
-	Pos = vec2(0, cvs.height-this.Height*3.2);
+	#alpha    = 0;
+	#blink    = 0;
+	#CatchX   = 0;
+	#ExclItem = null;
+	#Launched = false;
+	#Width    = Width;
+	#TargetW  = Width;
+	DefaultW  = Width;
+	Height    = Height;
 
 	ReboundScaleMax = 1.5;
 	ReboundAngleMax = PI/2 - atan2(1, this.ReboundScaleMax);
+
+	Pos = vec2(0, cvs.height-this.Height*3.2);
+	constructor() {setReadonlyProp(this.Pos, 'y', this.Pos.y)}
 
 	get alpha()    {return this.#alpha}
 	get blink()    {return this.#blink}

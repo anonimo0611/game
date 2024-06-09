@@ -9,7 +9,7 @@ import {BrickG}   from './brick.js';
 
 const {ColWidth,RowHeight}= Field;
 
-export const Sight = new class {
+export const Sight = freeze(new class {
 	Pos    = vec2();
 	#brick = null;
 	get brick() {
@@ -85,4 +85,4 @@ export const Sight = new class {
 			ctx.restore();
 		}
 	}
-};
+});

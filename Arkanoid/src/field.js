@@ -1,25 +1,24 @@
 import {cvs} from './_canvas.js';
 export const Field = freeze(new class {
-	Frame     = 24;
-	Cols      = 13;
-	Rows      = 32;
+	Frame = 24;
+	Cols  = 13;
+	Rows  = 32;
 
-	RowHeight = int(cvs.height/this.Rows);
+	ColWidth  = int((cvs.width - this.Frame*2) / this.Cols);
+	RowHeight = int(cvs.height / this.Rows);
+	Width     = this.ColWidth * this.Cols;
 	Height    = cvs.height - (this.RowHeight + this.Frame*1.5);
 
-	Width     = cvs.width - this.Frame*2;
-	ColWidth  = int(this.Width/this.Cols);
-	Diagonal  = sqrt(this.Width**2 + this.Height**2);
+	Top      = cvs.height - this.Height;
+	Right    = cvs.width  - this.Frame;
+	Bottom   = cvs.height;
+	Left     = this.Frame;
+	Diagonal = sqrt(this.Width**2 + this.Height**2);
 
-	Top       = cvs.height - this.Height;
-	Bottom    = cvs.height;
-	Left      = this.Frame;
-	Right     = cvs.width - this.Frame;
-
-	Segments  = deepFreeze([
-		[vec2(this.Left,  this.Top), vec2(this.Right, this.Top)],
-		[vec2(this.Left,  this.Top), vec2(this.Left,  this.Bottom)],
-		[vec2(this.Right, this.Top), vec2(this.Right, this.Bottom)],
+	Segments = deepFreeze([
+		[vec2(this.Left, this.Top), vec2(this.Right,this.Top)],    // top
+		[vec2(this.Left, this.Top), vec2(this.Left, this.Bottom)], // left
+		[vec2(this.Right,this.Top), vec2(this.Right,this.Bottom)], // right
 	]);
 
 	collision() {}

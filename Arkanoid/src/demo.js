@@ -90,12 +90,12 @@ export const Demo = new class {
 		moveTo(x, mag*1.2, 45);
 	}
 	#paddleToItem(item) {
-		if (!item || this.Ball.Velocity.y > 0) return false;
-		const {Type}= item;
-		const targetLen = this.getBrickTargets().length;
+		const {Type} = item;
+		const BallV  = this.Ball.Velocity;
+		const trgLen = this.getBrickTargets().length;
+		if (!item || !this.Ball.isOnWall && BallV > 0)      return false;
 		if (Paddle.CatchEnabeld && Type == ItemType.Expand) return false;
 		if (Paddle.LaserEnabeld && Type == ItemType.Expand) return false;
-		if (targetLen == 0 && Type == ItemType.Laser) return false;
 		moveTo(item.CenterX, 18, 45);
 		return true;
 	}
@@ -104,7 +104,7 @@ export const Demo = new class {
 		const angle = Vec2.angle($target?.Pos, $landingPos) + PI/2;
 		const pos = $landingPos.x - w * norm(-aMax*2, +aMax*2, angle);
 		if ($target.type.isNone)
-			pos.x += randFloat(-w*0.3, w*0.3); 
+			pos.x += randFloat(-w*0.5, w*0.5); 
 		moveTo(pos + w/2, mag, 60);
 	}
 	#setLandingPointOfBall() {
