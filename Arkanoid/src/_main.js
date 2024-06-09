@@ -38,7 +38,6 @@ export const Game = freeze(new class {
 			mousedown:   Game.#start,
 			contextmenu: Game.#confirm,
 		});
-		document.body.addClass('loaded');
 		Game.#reset();
 	}
 	ReadyTime  = 2200; // ms

@@ -1,6 +1,7 @@
-import {Ticker}  from '../lib/timer.js';
+import {Ticker}   from '../lib/timer.js';
 import {rgba}     from '../lib/color.js';
 import {cvs,ctx}  from './_canvas.js';
+import {Game}     from './_main.js';
 import {Field}    from './field.js';
 import {Paddle}   from './paddle.js';
 import {BallG}    from './ball.js';
@@ -14,9 +15,20 @@ export const Sight = new class {
 	get brick() {
 		return this.#brick;
 	}
+	get enabled() {
+		if (Game.isDemoScene && Paddle.CatchX)
+			return true;
+		return (Paddle.LunchInCatchMode || Paddle.CatchX)
+			&& Paddle.AutoMoveReached;
+	}
 	get BallV() {
-		const v = Paddle.ReboundVelocity.mul(Field.Diagonal);
-		return Vec2.add(Paddle.CaughtBallPos, v);
+		const v = Paddle.LunchInCatchMode
+			? BallG.InitV
+			: Paddle.ReboundVelocity;
+		return Vec2.add(
+			Paddle.CaughtBallPos,
+			v.clone.mul(Field.Diagonal)
+		);
 	}
 	#detect(brick) {
 		const positions = [[0,1,1,1], [0,0,0,1], [1,0,1,1]].map(ov=> 
@@ -55,12 +67,12 @@ export const Sight = new class {
 		}
 	}
 	update() {
-		if (!Paddle.CatchX) return false;
+		if (!this.enabled) return;
 		  !this.#detectIntersectionsWithBricks()
 		&& this.#detectIntersectionsWithFields();
 	}
 	draw() {
-		if (!Paddle.CatchX) return;
+		if (!this.enabled) return;
 		drawLine(ctx, {color:rgba(0,225,0, 0.7),width:cvs.width/150})(
 			...Paddle.CaughtBallPos.vals,
 			...this.Pos.vals

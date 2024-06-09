@@ -103,13 +103,19 @@ export const Paddle = freeze(new class {
 	get LaserEnabeld()      {return this.ExclItem == ItemType.Laser}
 	get DisruptionEnabeld() {return this.ExclItem == ItemType.Disruption}
 
+	get AutoMoveReached() {
+		return AutoMoveToCursorX.reached;
+	}
+	get LunchInCatchMode() {
+		return (Paddle.CatchEnabeld && !Paddle.Launched);
+	}
 	get ReboundVelocity() {
 		const s = this.ReboundScaleMax;
 		const x = (BallG.Ball.Pos.x - this.CenterX) / (this.Width/2);
 		return vec2(clamp(x*2, -s, +s), -1);
 	}
 	get CaughtBallPos() {
-		const x = this.ClampedX + this.CatchX;
+		const x = this.CatchX? (this.ClampedX+this.CatchX) : this.CenterX;
 		return vec2(x, this.Pos.y - BallG.Radius-1);
 	}
 
@@ -315,7 +321,7 @@ export const Paddle = freeze(new class {
 
 const AutoMoveToCursorX = freeze(new class {
 	static {
-		$on('InGame Resume', _=> AutoMoveToCursorX.#reached = false);
+		$on('InGame Respawn Resume', _=> AutoMoveToCursorX.#reached = false);
 	}
 	MoveSpeed = 20;
 	#reached  = false;

@@ -3,19 +3,25 @@ export const Field = freeze(new class {
 	Frame     = 24;
 	Cols      = 13;
 	Rows      = 32;
-	Width     = cvs.width - this.Frame*2;
-	Diagonal  = sqrt(cvs.height**2 + cvs.width**2);
-	ColWidth  = int(this.Width/this.Cols);
+
 	RowHeight = int(cvs.height/this.Rows);
-	Top       = this.RowHeight*2;
-	Left      = this.Frame;
+	Height    = cvs.height - (this.RowHeight + this.Frame*1.5);
+
+	Width     = cvs.width - this.Frame*2;
+	ColWidth  = int(this.Width/this.Cols);
+	Diagonal  = sqrt(this.Width**2 + this.Height**2);
+
+	Top       = cvs.height - this.Height;
 	Bottom    = cvs.height;
+	Left      = this.Frame;
 	Right     = cvs.width - this.Frame;
+
 	Segments  = deepFreeze([
 		[vec2(this.Left,  this.Top), vec2(this.Right, this.Top)],
 		[vec2(this.Left,  this.Top), vec2(this.Left,  this.Bottom)],
 		[vec2(this.Right, this.Top), vec2(this.Right, this.Bottom)],
 	]);
+
 	collision() {}
 	rebound({Pos,Velocity,Radius:r}) {
 		const {Top,Left,Right}= this;

@@ -1,3 +1,5 @@
+@font-face {font-family:Atari; src:url(../res/Atari.woff2) format('woff2')}
+
 html, body {
 	margin:  0;
 	padding: 0;
@@ -11,6 +13,7 @@ html{
 	font-size: 22px;
 }
 body {
+	--bg-url: url(../res/bg0.png);
 	color: white;
 	background: black;
 	display: flex;
@@ -33,15 +36,28 @@ button,dd,div,dt,li,menu,table,ul,kbd{
 	background: 0 0;
 }
 
+#board {
+	display: table;
+	transform-origin: center;
+	will-change: transform;
+	padding-top: 1rem;
+	position: relative;
+	visibility: hidden;
+}
+body.loaded #board {
+	visibility: visible;
+}
+
 #canvasWrapper {
 	position: relative;
 }
 #canvasWrapper canvas {
+	background: no-repeat 0 0/100% 100% url(../res/frame.png);
 	position: absolute;
 	top:  0;
 	left: 0;
 }
-body.loaded #canvasWrapper::before {
+#canvasWrapper::before {
 	content: '';
 	position: absolute;
 	width: 100%;
@@ -51,22 +67,13 @@ body.loaded #canvasWrapper::before {
 	background: #999 0 0/80px 80px var(--bg-url);
 	image-rendering: pixelated;
 }
-body.loaded canvas {
-	background: no-repeat 0 0/100% 100% url(../res/frame.png);
-}
 
 #debug {
 	position: fixed;
 	top:  1.5em;
 	left: 0.5em;
 }
-#board {
-	display: table;
-	transform-origin: center;
-	will-change: transform;
-	padding-top: 1rem;
-	position: relative;
-}
+
 #menus {
 	font-family: Atari, sans-serif;
 	padding-bottom: .5em;

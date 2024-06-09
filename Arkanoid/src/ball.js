@@ -14,10 +14,10 @@ import {BrickType} from './brick.js';
 import {Collider}  from './brick.js'
 import {Paddle}    from './paddle.js';
 
-const Radius        = 11;
+const Radius        = int(cvs.width / 85);
 const [$cvs,$ctx]   = canvas2D(null, Radius*4, Radius*4).vals;
 const BallSet       = new Set();
-const BallSpeed     = cvs.height / 70;
+const BallSpeed     = int(cvs.height / 70);
 const DisruptionMax = 10;
 const SpeedRateMax  = 1.25;
 const ArmySpeedDown = 0.85;
@@ -62,14 +62,14 @@ export const BallG = freeze(new class {
 	get count() {
 		return BallSet.size;
 	}
+	InitV = vec2(1, -1).freeze();
 	init() {
 		const x = cvs.width/2;
 		const y = Paddle.Pos.y - Radius;
-		const v = vec2(1, -1);
 		if (!Game.respawned)
 			BallG.#speedDownRate = 1;
 		BallSet.clear();
-		BallSet.add(new Ball({x,y,v}));
+		BallSet.add( new Ball({x,y,v:this.InitV}) );
 	}
 	#onPowerUp(_, type) {
 		const {Ball}= BallG;

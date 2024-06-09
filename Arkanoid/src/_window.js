@@ -9,11 +9,12 @@ let $resizeId = 0;
 let $resizing = false;
 
 export const Window = new class {
-	static {$ready(this.#setup)}
+	static {$load(this.#setup)}
 	static #setup() {
 		Window.#fit();
 		Window.#setCSSVars();
 		$on({resize:Window.#onResize});
+		document.body.addClass('loaded');
 	}
 	Board = dBoard;
 	get scale()    {return $scale}
