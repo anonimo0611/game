@@ -21,6 +21,7 @@ const BallSpeed     = int(cvs.height / 70);
 const DisruptionMax = 10;
 const SpeedRateMax  = 1.25;
 const ArmySpeedDown = 0.85;
+const moveDivisiton = 30;
 
 const
 Grad = $ctx.createRadialGradient(0,0,0, 0,0,Radius);
@@ -152,15 +153,17 @@ export class Ball extends Collider {
 		const Spd = this.#speed * BallG.speedDownRate;
 
 		this.#speed = clamp(this.speed+this.Accelerate, Min, Max);
-		this.Pos.add( this.Velocity.normalized.mul(Spd) );
 
 		if (this.#detectDropped())
 			return;
 
-		this.#reboundAtPaddle();
-		this.#collisionWithArmy();
-		this.#collisionWithBrick();
-		Field.rebound(this);
+		for (let i=0; i<moveDivisiton; i++) {
+			this.Pos.add( this.Velocity.normalized.mul(Spd/moveDivisiton) );
+			this.#reboundAtPaddle();
+			this.#collisionWithArmy();
+			this.#collisionWithBrick();
+			Field.rebound(this);
+		}
 	}
 	#detectDropped() {
 		if (this.Pos.y <= cvs.height || Scene.isClear)
@@ -198,13 +201,12 @@ export class Ball extends Collider {
 	}
 	#collisionWithArmy() {
 		const army = Army.detectCollided(this);
-		if (army) {
+		/*if (army) {
 			army.destroy();
-			const v = this.Velocity.normalized;
-			v.x *= randChoice(-1, 1);
-			v.y *= randChoice(-1, 1);
+			const angle = randChoice(45,135,225,315) * PI/180;
+			const v = vec2(cos(angle), sin(angle));
 			this.Velocity.set( v.mul(this.#speed*=ArmySpeedDown) );
-		}
+		}*/
 	}
 	#collisionWithBrick() {
 		const {Velocity:v,hitT,hitR,hitB,hitL}= this;
@@ -217,9 +219,8 @@ export class Ball extends Collider {
 		if (brick) {
 			brick.collision();
 			if (brick.isImmortality) {
-				if (v.x < 0) v.x += randFloat(0, -0.1);
-				if (v.x > 0) v.x += randFloat(0, +0.1);
-				if (abs(v.normalized.x) < 0.6) v.x *= 1.005;
+				const vx = (v.x < 0 ? -0.1 : 0.1);
+				v.x += randFloat(0, vx/moveDivisiton);
 			}
 		}
 	}

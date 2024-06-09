@@ -47,7 +47,7 @@ export class Item {
 		}
 		$avoid = false;
 		AppearedSet.add(idx);
-		ItemSet.add( new SubClasses[$lstIdx=idx]({x, y}) );
+		ItemSet.add(new SubClasses[$lstIdx=idx]({x, y}));
 	}
 	static update() {
 		ItemSet.forEach(e=> e.update());
@@ -69,11 +69,13 @@ export class Item {
 
 	constructor(pos, {hue,nonColored=false}={}) {
 		const {Width:w,Height:h}= this;
-		const s   = nonColored? 0:91;
+		const s = nonColored? 0:91;
 		this.Pos  = vec2(pos);
-		this.grad = ctx.createRadialGradient(0,0,0, 0,0,h/2);
-		this.grad.addColorStop(0.0, hsl(hue,s,90));
-		this.grad.addColorStop(1.0, hsl(hue,s,35));
+		this.grad = ctx.createLinearGradient(w,0,w,h);
+		this.grad.addColorStop(0.00, hsl(hue,s,36));
+		this.grad.addColorStop(0.20, hsl(hue,s,80));
+		this.grad.addColorStop(0.30, hsl(hue,s,36));
+		this.grad.addColorStop(1.00, hsl(hue,s,50));
 		this.outlineColor = hsl(hue, nonColored? 0:40, 40);
 	}
 	update() {
@@ -123,7 +125,7 @@ export class Item {
 		// Logo text
 		ctx.save();
 		ctx.translate(x+1, y + offsetH);
-		ctx.scale(1, this.#textScale * 0.7);
+		ctx.scale(1, this.#textScale * 0.8);
 		ctx.shadowColor   = rgba(0,0,0,0.7);
 		ctx.shadowOffsetX = fontSize * 0.1;
 		ctx.shadowOffsetY = fontSize * 0.1;

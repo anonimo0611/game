@@ -87,7 +87,7 @@ export const Demo = new class {
 	}
 	#paddleToBall(mag) {
 		const x = this.Ball.Pos.x * (sin($shakeAngle)/10+1);
-		moveTo(x, mag*1.2, 45);
+		moveTo(x, mag*1.2, 40);
 	}
 	#paddleToItem(item) {
 		const Type  = item?.Type;
@@ -95,7 +95,7 @@ export const Demo = new class {
 		if (!item || !this.Ball.isOnWall && BallV > 0)      return false;
 		if (Paddle.CatchEnabeld && Type == ItemType.Expand) return false;
 		if (Paddle.LaserEnabeld && Type == ItemType.Expand) return false;
-		moveTo(item.CenterX, 18, 45);
+		moveTo(item.CenterX, cvs.width/50, 40);
 		return true;
 	}
 	#aimingAtTargetBrick(mag) {
@@ -104,7 +104,7 @@ export const Demo = new class {
 		const pos = $landingPos.x - w * norm(-aMax*2, +aMax*2, angle);
 		if ($target.type.isNone)
 			pos.x += randFloat(-w*0.5, w*0.5); 
-		moveTo(pos + w/2, mag, 60);
+		moveTo(pos + w/2, cvs.width/40, 40);
 	}
 	#setLandingPointOfBall() {
 		$landingPos = getIntersection(
@@ -194,22 +194,22 @@ const CatchMode = new class {
 	}
 	#move() {
 		if (this.#aiming) return;
-		const mag = Field.Width/60, step = 20;
+		const mag = Field.Width/60, div = 20;
 		if (this.#dir > 0) {
-			moveTo(Field.Right, mag, step);
+			moveTo(Field.Right, mag, div);
 			if (Paddle.Pos.x > Paddle.MoveMax)
 				this.#dir *= -1;
 		} else {
-			moveTo(Field.Left, mag, step);
+			moveTo(Field.Left, mag, div);
 			if (Paddle.Pos.x < Paddle.MoveMin)
 				this.#dir *= -1;
 		}
 	}
 };
-function moveTo(dstX, mag, step) {
-	for (let i=0; i<step; i++) {
-		if (dstX < Paddle.CenterX) Paddle.Pos.x -= mag/step;
-		if (dstX > Paddle.CenterX) Paddle.Pos.x += mag/step;
+function moveTo(dstX, mag, div) {
+	for (let i=0; i<div; i++) {
+		if (dstX < Paddle.CenterX) Paddle.Pos.x -= mag/div;
+		if (dstX > Paddle.CenterX) Paddle.Pos.x += mag/div;
 	}		
 }
 $on('Reset Start', function() {

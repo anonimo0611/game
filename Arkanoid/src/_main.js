@@ -121,6 +121,9 @@ export const Game = freeze(new class {
 		Game.#ready();
 	}
 	#confirm(e) {
+		if (e.key == 'Enter')
+			Ticker.pause();
+		return;
 		if (Game.isDemoScene) {
 			Ticker.pause(e.type == 'blur');
 			Game.draw();
@@ -186,5 +189,6 @@ export const Game = freeze(new class {
 	#mainLoop() {
 		Game.#update();
 		Game.draw();
+		//Ticker.pause();
 	}
 });
