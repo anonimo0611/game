@@ -96,6 +96,12 @@ class Vec2 {
 	freeze() {
 		return Object.freeze(this);
 	}
+	xFreeze() {
+		return setReadonlyProp(this, 'x', this.x);
+	}
+	yFreeze() {
+		return setReadonlyProp(this, 'y', this.y);
+	}
 }
 function vec2(...args) {
 	return new Vec2(...args)
