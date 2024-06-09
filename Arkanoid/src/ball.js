@@ -201,12 +201,12 @@ export class Ball extends Collider {
 	}
 	#collisionWithArmy() {
 		const army = Army.detectCollided(this);
-		/*if (army) {
+		if (army) {
 			army.destroy();
 			const angle = randChoice(45,135,225,315) * PI/180;
 			const v = vec2(cos(angle), sin(angle));
 			this.Velocity.set( v.mul(this.#speed*=ArmySpeedDown) );
-		}*/
+		}
 	}
 	#collisionWithBrick() {
 		const {Velocity:v,hitT,hitR,hitB,hitL}= this;
