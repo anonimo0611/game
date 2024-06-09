@@ -90,9 +90,8 @@ export const Demo = new class {
 		moveTo(x, mag*1.2, 45);
 	}
 	#paddleToItem(item) {
-		const {Type} = item;
-		const BallV  = this.Ball.Velocity;
-		const trgLen = this.getBrickTargets().length;
+		const Type  = item?.Type;
+		const BallV = this.Ball.Velocity.y;
 		if (!item || !this.Ball.isOnWall && BallV > 0)      return false;
 		if (Paddle.CatchEnabeld && Type == ItemType.Expand) return false;
 		if (Paddle.LaserEnabeld && Type == ItemType.Expand) return false;

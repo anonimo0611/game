@@ -182,11 +182,11 @@ export class Army extends Collider {
 	#lastLR     = null;
 	#animPos    = vec2();
 	#destroyed  = false;
-	#Sphere     = {
+	#Sphere     = freeze({
 		r: new Sphere(SphereRedHSL),
 		g: new Sphere(SphereLimeHSL),
 		c: new Sphere(SphereCyanHSL),
-	};
+	});
 	constructor() {
 		const x = randInt(0,1) ? SpawnL : SpawnR;
 		const y = Field.Top + Radius;

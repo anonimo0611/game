@@ -4,8 +4,8 @@ export const Field = freeze(new class {
 	Cols  = 13;
 	Rows  = 32;
 
-	ColWidth  = int((cvs.width - this.Frame*2) / this.Cols);
-	RowHeight = int(cvs.height / this.Rows);
+	ColWidth  = round((cvs.width - this.Frame*2) / this.Cols);
+	RowHeight = round(cvs.height / this.Rows);
 	Width     = this.ColWidth * this.Cols;
 	Height    = cvs.height - (this.RowHeight + this.Frame*1.5);
 

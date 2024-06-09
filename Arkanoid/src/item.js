@@ -47,7 +47,7 @@ export class Item {
 		}
 		$avoid = false;
 		AppearedSet.add(idx);
-		ItemSet.add(new SubClasses[$lstIdx=idx]({x, y}));
+		ItemSet.add( new SubClasses[$lstIdx=idx]({x, y}) );
 	}
 	static update() {
 		ItemSet.forEach(e=> e.update());
@@ -69,10 +69,9 @@ export class Item {
 
 	constructor(pos, {hue,nonColored=false}={}) {
 		const {Width:w,Height:h}= this;
-		const s = nonColored? 0:91;
+		const s   = nonColored? 0:91;
 		this.Pos  = vec2(pos);
-
-		this.grad  = ctx.createRadialGradient(0,0,0, 0,0,h/2);
+		this.grad = ctx.createRadialGradient(0,0,0, 0,0,h/2);
 		this.grad.addColorStop(0.0, hsl(hue,s,90));
 		this.grad.addColorStop(1.0, hsl(hue,s,35));
 		this.outlineColor = hsl(hue, nonColored? 0:40, 40);

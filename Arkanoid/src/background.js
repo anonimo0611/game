@@ -19,7 +19,7 @@ function setBgImage() {
 	const idx = Game.stageIdx % ImageMax;
 	BgRGB = BgColorList[idx];
 	$(dBody).css({
-		'--dialog-color':rgba(...BgRGB, 0.4),
+		'--dialog-color': rgba(...BgRGB, 0.4),
 		'--bg-url': `url(${BgImages[idx].src})`
 	});
 }

@@ -81,12 +81,10 @@ export const Paddle = freeze(new class {
 	#TargetW  = Width;
 	DefaultW  = Width;
 	Height    = Height;
+	Pos = vec2(0, cvs.height - this.Height*3.2).yFreeze();
 
 	ReboundScaleMax = 1.5;
 	ReboundAngleMax = PI/2 - atan2(1, this.ReboundScaleMax);
-
-	Pos = vec2(0, cvs.height-this.Height*3.2);
-	constructor() {setReadonlyProp(this.Pos, 'y', this.Pos.y)}
 
 	get alpha()    {return this.#alpha}
 	get blink()    {return this.#blink}
