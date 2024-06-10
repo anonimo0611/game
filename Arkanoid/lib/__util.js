@@ -8,7 +8,7 @@ const integers = len=> [...Array(+len).keys()]
 const hasIter  = arg=> arg !== null && Symbol.iterator in Object(arg)
 const isBool   = arg=> arg === true || arg === false
 const isElm    = arg=> arg instanceof HTMLElement
-const isObj    = arg=> typeof(arg) === 'object' && !isArray(arg)
+const isObj    = arg=> typeof(arg) === 'object' && arg !== null && !isArray(arg);
 const isStr    = arg=> typeof(arg) === 'string'
 const isFun    = arg=> typeof(arg) === 'function'
 const isNum    = arg=> typeof(arg) === 'number' && !isNaN(arg)

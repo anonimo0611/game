@@ -36,41 +36,6 @@ class Menu {
 		this.lis[idx].addClass('selected')
 	}
 }
-export class DorpDownMenu extends Menu {
-	open()   {$(this.menu).show()}
-	close()  {$(this.menu).hide()}
-	toggle() {$(this.menu).toggle()}
-	get closed() {return $(this.menu).is(':hidden') == true}
-	constructor(id, idx) {
-		super(id)
-		this.lis.forEach((li, i)=> li.onclick=()=> {this.select(i),this.current.focus()})
-		this.current = this.root.qs('.current').css('width',`${this.menu.offsetWidth}px`)
-		this.current.on('keydown click', e=> {
-			if (e.type == 'click') return this.toggle()
-			const {size,index}=this, dir=Dir.from(e.key)
-			switch (e.key) {
-			case 'Tab':
-			case 'Escape':
-				return this.close()
-			case '\x20':
-			case 'Enter': 
-				return this.closed ? this.open() : this.select(index)
-			case 'ArrowUp':
-			case 'ArrowDown':
-				this.select((index+Vec2[dir].y+size) % size, {close:false})
-			}
-		})
-		$(this.root).prev('label').on('click', ()=> this.current.focus())
-		$on('click', e=> {!this.closed && !e.target.closest(`#${id}`) && this.select()})
-		freeze(this).close()
-		if (isNum(idx)) this.select(idx, {restore:true});
-	}
-	select(idx=this.index, {restore=false,close=true}={}) {
-		super.select(idx)
-		this.current.attr('data-val', this.value).text(this.selectedItem.text())
-		close && this.close()
-	}
-}
 export class SlideMenu extends Menu {
 	constructor(id, idx) {
 		super(id)
@@ -90,7 +55,7 @@ export class SlideMenu extends Menu {
 			.on('wheel',  e=> {select(e.originalEvent.deltaY > 0 ? L:R)})
 			.on('keydown',e=> {select(Dir.from(e.key))})
 		$(root).prev('label').on('click', _=> root.focus())
-		freeze(this).#setWidth(this.btnL.offsetWidth*2)
+		this.#setWidth(this.btnL.offsetWidth*2)
 			.select(idx ?? this.index, {restore:true})
 	}
 	#width = 0
