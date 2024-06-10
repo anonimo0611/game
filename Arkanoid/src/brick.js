@@ -15,7 +15,7 @@ const {cvs,ctx,ctxBrick:ctxB,ctxShadow:ctxS}= Cvs;
 const {Frame,Cols,Rows,ColWidth,RowHeight}= Field;
 
 const LineWidth    = int(cvs.width/315);
-const MarginLeft   = Field.Left;
+const MarginLeft   = (Field.Left);
 const MarginTop    = Field.Top;
 const ShadowOffset = ColWidth  * 0.2;
 const AnimDuration = 300 / Ticker.Interval;

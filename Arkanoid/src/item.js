@@ -16,7 +16,7 @@ let $spdDowned = 0;
 
 export class Item {
 	static {
-		$on({InGame:_=> $item = null});
+		$on({'InGame Reset':_=> $item = null});
 	}
 	static init() {
 		$item      = null;

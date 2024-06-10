@@ -15,7 +15,7 @@ import {Paddle}   from './paddle.js';
 
 const ArmyMax  = 4;
 const ArmySet  = new Set();
-const Interval = 5000; // ms
+const Interval = 5000 / Ticker.Interval;
 const Radius   = BrickG.ColWidth / 2.3;
 const SphereR  = Radius / (5/3);
 const Width    = Radius*2;
@@ -151,6 +151,10 @@ class Sphere {
 	}
 }
 export class Army extends Collider {
+	static {
+		$on({'InGame InDemo': _=> this.#counter = 0});
+	}
+	static #counter  = 0;
 	static ArmySet   = ArmySet;
 	static Explosion = Explosion;
 	static detectCollided(obj) {
@@ -161,8 +165,10 @@ export class Army extends Collider {
 	static update() {
 		if (!Game.isPlayScene || !Paddle.Launched)
 			return;
-		if (Ticker.count % int(Interval/Ticker.Interval) == 0
-			&& ArmySet.size < ArmyMax) new Army();
+		if (this.#counter++ >= Interval && ArmySet.size < ArmyMax) {
+			this.#counter = 0;
+			new Army();
+		}
 		ArmySet.forEach(a=> a.#update());
 		Explosion.update();
 	}
@@ -280,6 +286,7 @@ export class Army extends Collider {
 		this.Velocity.set(Crawl[dir]);
 	}
 	destroy() {
+		Army.#counter = 0;
 		this.#destroyed = true;
 		new Explosion(this.Pos);
 		ArmySet.delete(this);
