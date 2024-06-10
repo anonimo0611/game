@@ -12,11 +12,10 @@ export const Lives = freeze(new class {
 	static {$ready(this.#setup)}
 	static #setup() {
 		$on({
-			SelLives: Lives.#set,
-			Start:    Lives.#onStart,
-			Extend:   Lives.#onExtend,
-			Respawn:  Lives.#onRespawn,
+			Start:   Lives.#onStart,
+			Respawn: Lives.#onRespawn,
 		});
+		$(Menu.LivesMenu).on({Select:Lives.#set});
 	}
 	context = $cvs.getContext('2d');
 
@@ -24,9 +23,11 @@ export const Lives = freeze(new class {
 	get left()   {return Lives.#left}
 	#set(_, n)   {Lives.#left = n}
 	#onStart()   {Lives.#left = Menu.LivesMenu.value}
-	#onExtend()  {Lives.#left++}
 	#onRespawn() {Lives.#left--}
 
+	extend() {
+		!Game.isDemoScene && Lives.#left++
+	}
 	draw() {
 		if (Game.isDemoScene)
 			return;

@@ -18,7 +18,7 @@ const StageMenu = new class extends MenuBase.SlideMenu {
 	}
 	select(idx, {restore=false}={}) {
 		super.select(idx);
-		$trigger('SelStage', idx);
+		$(this).trigger('Select', idx);
 	}
 };
 const LivesMenu = new class extends MenuBase.SlideMenu {
@@ -28,7 +28,7 @@ const LivesMenu = new class extends MenuBase.SlideMenu {
 	}
 	select(idx, {restore=false}={}) {
 		super.select(idx);
-		$trigger('SelLives', this.value);
+		$(this).trigger('Select', this.value);
 		!restore && (localStorage.arkanoidLives=idx);
 	}
 };

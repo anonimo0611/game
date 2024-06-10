@@ -6,8 +6,8 @@ import {cvs,ctx}  from './_canvas.js';
 import {Scene}    from './scene.js';
 import {Score}    from './score.js';
 import {Paddle}   from './paddle.js';
-import {BrickG}   from './brick.js';
 import {BallG}    from './ball.js';
+import {BrickG}   from './brick.js';
 
 const ItemSet     = new Set();
 const AppearedSet = new Set();
@@ -91,10 +91,11 @@ export class Item {
 		this.#textScale = this.#scaleTbl[idx] / (len/2);
 		this.Pos.y += this.Speed;
 
-		if (collisionRect(Paddle,this)) {
+		if (collisionRect(this,Paddle)) {
 			Score.add(1000);
 			Sound.play('item');
-			$trigger('GotItem', this.Type);
+			BallG.powerUp(this.Type);
+			Paddle.powerUp(this.Type);
 			ItemSet.delete(this);
 		}
 		if (this.Pos.y > cvs.height) {
@@ -135,7 +136,7 @@ export class Item {
 		ctx.fillText(this.Text, w/2+1, h/2 - fontSize/6);
 		ctx.restore();
 	}
-} freeze(Item);
+}
 
 export const ItemType = freeze({
 	Catch:      0,

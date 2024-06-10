@@ -2,6 +2,7 @@ import {Ticker} from '../lib/timer.js';
 import {State}  from '../lib/state.js';
 export const Scene = freeze(new class extends State {
 	isReset    = true;
+	isStart    = false;
 	isReady    = false;
 	isInDemo   = false;
 	isInGame   = false;

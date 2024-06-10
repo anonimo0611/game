@@ -5,6 +5,7 @@ import {Confirm} from '../lib/confirm.js';
 import {Sound}   from '../snd/sound.js';
 import {Window}  from './_window.js';
 import * as Cvs  from './_canvas.js';
+import {Bg}      from './background.js';
 import {Menu}    from './menu.js';
 import {Scene}   from './scene.js';
 import {Stages}  from './stage.js';
@@ -29,7 +30,6 @@ export const Game = freeze(new class {
 			Reset:    Game.#reset,
 			Clear:    Game.#clear,
 			Respawn:  Game.#respawn,
-			SelStage: Game.#selectStage,
 			focus:    Game.#confirm,
 			blur:     Game.#confirm,
 			keydown:  Game.#confirm,
@@ -38,6 +38,7 @@ export const Game = freeze(new class {
 			mousedown:   Game.#start,
 			contextmenu: Game.#confirm,
 		});
+		$(Menu.StageMenu).on({Select:Game.#selectStage});
 		Game.#reset();
 	}
 	ReadyTime  = 2200; // ms
@@ -72,11 +73,11 @@ export const Game = freeze(new class {
 		Scene.switchToInDemo(Game.ReadyTime+500);
 	}
 	#init() {
+		Bg.init();
 		BallG.init();
 		BrickG.init();
 		Paddle.init();
 		Ticker.set(Game.#mainLoop);
-		$trigger('Init');
 	}
 	#resume() {
 		Ticker.pause(false);
@@ -90,7 +91,7 @@ export const Game = freeze(new class {
 	#start(e) {
 		if (e?.button > 0 || !Game.isDemoScene)
 			return;
-		$trigger('Start');
+		Scene.switchToStart();
 		Scene.switchToReady();
 		Game.#init();
 		Game.#ready();
@@ -121,9 +122,6 @@ export const Game = freeze(new class {
 		Game.#ready();
 	}
 	#confirm(e) {
-		if (e.key == 'Enter')
-			Ticker.pause();
-		return;
 		if (Game.isDemoScene) {
 			Ticker.pause(e.type == 'blur');
 			Game.draw();
@@ -165,8 +163,8 @@ export const Game = freeze(new class {
 		Army.update();
 		Laser.update();
 		BallG.update();
-		Paddle.update();
 		Sight.update();
+		Paddle.update();
 		Demo.update();
 	}
 	draw() {
@@ -189,6 +187,5 @@ export const Game = freeze(new class {
 	#mainLoop() {
 		Game.#update();
 		Game.draw();
-		//Ticker.pause();
 	}
 });

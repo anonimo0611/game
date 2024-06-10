@@ -70,7 +70,7 @@ body.loaded #board {
 
 #debug {
 	position: fixed;
-	top:  1.5em;
+	bottom:  1.5em;
 	left: 0.5em;
 }
 

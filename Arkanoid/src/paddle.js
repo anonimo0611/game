@@ -63,14 +63,11 @@ function sphereGradHSL(h=0,s=0,l=100) {
 export const Paddle = freeze(new class {
 	static {$ready(this.#setup)}
 	static #setup() {
-		$on({
-			Dropped: Paddle.#onDropped,
-			GotItem: Paddle.#onPowerUp,
-			Resume:  Paddle.#onResume,
-		});
-		$on({mousedown:   Paddle.#onLaunch});
-		$on({mousedown:   Paddle.#onRelease});
-		$on({ReleaseBall: Paddle.#onRelease});
+		$on({Dropped:   Paddle.#onDropped});
+		$on({Resume:    Paddle.#onResume});
+		$on({mousedown: Paddle.#onLaunch});
+		$on({mousedown: Paddle.#onRelease});
+		$(Demo).on({Release: Paddle.#onRelease});
 	}
 	#alpha    = 0;
 	#blink    = 0;
@@ -97,11 +94,11 @@ export const Paddle = freeze(new class {
 	get MoveMax()  {return Field.Right-this.Width}
 
 	// Exclutive item
-	get ExclItem()          {return this.#ExclItem}
-	get CatchEnabeld()      {return this.ExclItem == ItemType.Catch}
-	get ExpandEnabeld()     {return this.ExclItem == ItemType.Expand}
-	get LaserEnabeld()      {return this.ExclItem == ItemType.Laser}
-	get DisruptionEnabeld() {return this.ExclItem == ItemType.Disruption}
+	get ExclItem()       {return this.#ExclItem}
+	get CatchEnabeld()   {return this.ExclItem == ItemType.Catch}
+	get ExpandEnabeld()  {return this.ExclItem == ItemType.Expand}
+	get LaserEnabeld()   {return this.ExclItem == ItemType.Laser}
+	get DisruptEnabeld() {return this.ExclItem == ItemType.Disruption}
 
 	get AutoMoveReached() {
 		return AutoMoveToCursorX.reached;
@@ -124,7 +121,7 @@ export const Paddle = freeze(new class {
 		Paddle.#CatchX   = 0;
 		Paddle.#alpha    = 0;
 		Paddle.#Launched = false;
-		if (Game.respawned && Paddle.DisruptionEnabeld) {
+		if (Game.respawned && Paddle.DisruptEnabeld) {
 			Paddle.#ExclItem = null;
 		}
 		if (!Game.respawned) {
@@ -192,9 +189,9 @@ export const Paddle = freeze(new class {
 
 		const {x,y}= Paddle.Pos;
 		ball.Pos.x = clamp(ball.Pos.x, x+1, x+Paddle.Width-1);
-		ball.Pos.y = y - ball.Radius-1; 
+		ball.Pos.y = y - ball.Radius; 
 		Paddle.#CatchX = ball.Pos.x - Paddle.Pos.x;
-		$trigger('CaughtBall');
+		Demo.catch();
 	}
 	#restrictRangeOfMove() {
 		const {Pos,MoveMin,MoveMax}= Paddle;
@@ -229,11 +226,10 @@ export const Paddle = freeze(new class {
 	#onResume() {
 		Paddle.CatchX && (Paddle.#Launched = false);
 	}
-	#onPowerUp(_, type) {
+	powerUp(type) {
 		switch (type) {
 		case ItemType.Extend:
-			if (Scene.isInGame)
-				$trigger('Extend');
+			Lives.extend();
 			break;
 		case ItemType.Catch:
 		case ItemType.Disruption:

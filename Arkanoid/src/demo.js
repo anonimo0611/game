@@ -1,5 +1,4 @@
 import {Ticker}   from '../lib/timer.js';
-import {Timer}    from '../lib/timer.js';
 import {cvs,ctx}  from './_canvas.js';
 import {Game}     from './_main.js';
 import {Scene}    from './scene.js';
@@ -69,6 +68,9 @@ export const Demo = new class {
 		this.#setTarget();
 		this.#setLandingPointOfBall();
 	}
+	catch() {
+		Scene.isInDemo && CatchMode.catch();
+	}
 	autoPlay() {
 		const mag = this.Ball.Velocity.magnitude;
 		if (this.#paddleToItem(Item.Current))
@@ -79,7 +81,7 @@ export const Demo = new class {
 				: this.#paddleToBall(mag);
 			return;
 		}	
-		if ($landingPos && $target?.Pos) {
+		if ($landingPos && $target?.Pos && !Paddle.DisruptEnabeld) {
 			this.#aimingAtTargetBrick(mag);
 			return;
 		}
@@ -87,7 +89,7 @@ export const Demo = new class {
 	}
 	#paddleToBall(mag) {
 		const x = this.Ball.Pos.x * (sin($shakeAngle)/10+1);
-		moveTo(x, mag*1.2, 40);
+		moveTo(x, mag*1.2);
 	}
 	#paddleToItem(item) {
 		const Type  = item?.Type;
@@ -95,16 +97,14 @@ export const Demo = new class {
 		if (!item || !this.Ball.isOnWall && BallV > 0)      return false;
 		if (Paddle.CatchEnabeld && Type == ItemType.Expand) return false;
 		if (Paddle.LaserEnabeld && Type == ItemType.Expand) return false;
-		moveTo(item.CenterX, cvs.width/50, 40);
+		moveTo(item.CenterX, cvs.width/50);
 		return true;
 	}
 	#aimingAtTargetBrick(mag) {
 		const {ReboundAngleMax:aMax,Width:w}= Paddle;
 		const angle = Vec2.angle($target?.Pos, $landingPos) + PI/2;
-		const pos = $landingPos.x - w * norm(-aMax*2, +aMax*2, angle);
-		if ($target.type.isNone)
-			pos.x += randFloat(-w*0.5, w*0.5); 
-		moveTo(pos + w/2, cvs.width/40, 40);
+		let pos = $landingPos.x - w * norm(-aMax*2, +aMax*2, angle);
+		moveTo(pos + w/2, cvs.width/60);
 	}
 	#setLandingPointOfBall() {
 		$landingPos = getIntersection(
@@ -125,17 +125,17 @@ export const Demo = new class {
 			if (AlwaysAimingStageSet.has(Game.stageNum)
 			 || BrickG.remains <= 15) {
 				const target = randChoice(targets);
-				const {Pos:pos,col,row,type}= target;
+				const {Pos:pos,col,row}= target;
 				const Pos = vec2(pos).add(ColWidth/2, RowHeight/2);
-				$target = {col,row,Pos,type};
+				$target = {col,row,Pos};
 			}
 		}
 	}
 	#setEmptyTarget() {
 		if (Ticker.count % 120 != 0) return;
 		const target = this.getEmptiesBetweenImmoWalls();
-		const {Pos,col,row,type}= randChoice(target);
-		$target = {col,row,type,Pos:vec2(Pos).add(
+		const {Pos,col,row}= randChoice(target);
+		$target = {col,row,Pos:vec2(Pos).add(
 			randFloat(0, ColWidth),
 			randFloat(0, RowHeight)
 		)};
@@ -152,27 +152,25 @@ export const Demo = new class {
 			this.#drawPoint($landingPos, 10, '#F33');
 	}
 }
+
 const CatchMode = new class {
-	static {
-		$on({CaughtBall: _=> CatchMode.#onCaught()});
-	}
 	#dir    = 1;
 	#vector = vec2();
 	#aiming = false;
-
-	#onCaught() {
-		if (!Scene.isInDemo) return;
-		Timer.cancel(CatchMode).set(1500, this.#release, {id:CatchMode});
-	}
-	#release() {
-		CatchMode.#dir = 1;
-		CatchMode.#aiming = false;
-		Timer.cancel(CatchMode);
-		$trigger('ReleaseBall');
+	catch() {
+		this.#dir = 1;
+		this.#aiming = false;
+	 	Ticker.Timer.cancel(CatchMode)
+	 		.set(1500, this.#release, {id:CatchMode});
 	}
 	#releaseTimer() {
+		if (this.#aiming) return;
 		this.#aiming = true;
-	 	Timer.cancel(CatchMode).set(200, this.#release)
+	 	Ticker.Timer.cancel(CatchMode)
+	 		.set(200, this.#release, {id:CatchMode});
+	}
+	#release() {
+		$(Demo).trigger('Release');
 	}
 	autoPlay() {
 		const Radius = BallG.Radius;
@@ -194,26 +192,25 @@ const CatchMode = new class {
 	}
 	#move() {
 		if (this.#aiming) return;
-		const mag = Field.Width/60, div = 20;
+		const spd = Field.Width/60;
 		if (this.#dir > 0) {
-			moveTo(Field.Right, mag, div);
+			moveTo(Field.Right, spd, spd);
 			if (Paddle.Pos.x > Paddle.MoveMax)
 				this.#dir *= -1;
 		} else {
-			moveTo(Field.Left, mag, div);
+			moveTo(Field.Left, spd, spd);
 			if (Paddle.Pos.x < Paddle.MoveMin)
 				this.#dir *= -1;
 		}
 	}
 };
-function moveTo(dstX, mag, div) {
-	for (let i=0; i<div; i++) {
-		if (dstX < Paddle.CenterX) Paddle.Pos.x -= mag/div;
-		if (dstX > Paddle.CenterX) Paddle.Pos.x += mag/div;
+function moveTo(dstX, spd, mag=Demo.Ball.Velocity.magnitude) {
+	for (let i=0; i<mag; i++) {
+		if (dstX < Paddle.CenterX) Paddle.Pos.x -= spd/mag;
+		if (dstX > Paddle.CenterX) Paddle.Pos.x += spd/mag;
 	}		
 }
 $on('Reset Start', function() {
-	Timer.cancel(CatchMode);
 	$shakeAngle = 0;
 	$target     = null;
 	$landingPos = null;

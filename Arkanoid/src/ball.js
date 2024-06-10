@@ -21,7 +21,6 @@ const BallSpeed     = int(cvs.height / 70);
 const DisruptionMax = 10;
 const SpeedRateMax  = 1.25;
 const ArmySpeedDown = 0.85;
-const moveDivisiton = 30;
 
 const
 Grad = $ctx.createRadialGradient(0,0,0, 0,0,Radius);
@@ -41,7 +40,6 @@ export const BallG = freeze(new class {
 	static #setup() {
 		BallG.#cache($ctx, ...values(ShadowConfig));
 		BallG.#cache($ctx, Grad);
-		$on({GotItem:BallG.#onPowerUp});
 	}
 	Radius = Radius;
 	#speedDownRate  = 1;
@@ -72,7 +70,7 @@ export const BallG = freeze(new class {
 		BallSet.clear();
 		BallSet.add( new Ball({x,y,v:this.InitV}) );
 	}
-	#onPowerUp(_, type) {
+	powerUp(type) {
 		const {Ball}= BallG;
 		switch (type) {
 		case ItemType.SpeedDown:
@@ -151,17 +149,18 @@ export class Ball extends Collider {
 		const Min = this.InitSpeed * 0.7;
 		const Max = BallSpeed   * BallG.stageSpeedRate;
 		const Spd = this.#speed * BallG.speedDownRate;
-
+		const Mag = round(this.Velocity.magnitude);
 		this.#speed = clamp(this.speed+this.Accelerate, Min, Max);
 
 		if (this.#detectDropped())
 			return;
 
-		for (let i=0; i<moveDivisiton; i++) {
-			this.Pos.add( this.Velocity.normalized.mul(Spd/moveDivisiton) );
-			this.#reboundAtPaddle();
+		for (let i=0; i<Mag; i++) {
+			this.#reboundAtPaddle()
+			if (!Paddle.CatchX)
+				this.Pos.add( this.Velocity.normalized.mul(Spd/Mag) );
 			this.#collisionWithArmy();
-			this.#collisionWithBrick();
+			this.#collisionWithBrick(Mag);
 			Field.rebound(this);
 		}
 	}
@@ -172,7 +171,7 @@ export class Ball extends Collider {
 		if (Lives.left <= 0 && BallSet.size == 1) {
 			Sound.stop();
 			BallSet.clear();
-			$trigger('Dropped');
+			Scene.switchToDropped();
 			Scene.switchToGameOver();
 			Scene.switchToReset(1500);
 			return true;
@@ -191,7 +190,7 @@ export class Ball extends Collider {
 	}
 	#reboundAtPaddle() {
 		if (!collisionRect(Paddle,this))
-			return;
+			return false;
 
 		Paddle.catch(this);
 		this.Velocity.set( Paddle.ReboundVelocity.mul(this.speed) );
@@ -208,7 +207,7 @@ export class Ball extends Collider {
 			this.Velocity.set( v.mul(this.#speed*=ArmySpeedDown) );
 		}
 	}
-	#collisionWithBrick() {
+	#collisionWithBrick(mag) {
 		const {Velocity:v,hitT,hitR,hitB,hitL}= this;
 		const {x:vx,y:vy}= v;
 		if (hitL) v.x = +abs(vx);
@@ -220,7 +219,7 @@ export class Ball extends Collider {
 			brick.collision();
 			if (brick.isImmortality) {
 				const vx = (v.x < 0 ? -0.1 : 0.1);
-				v.x += randFloat(0, vx/moveDivisiton);
+				v.x += randFloat(0, vx/mag);
 			}
 		}
 	}

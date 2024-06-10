@@ -10,17 +10,21 @@ const BgColorList = deepFreeze([
 	[0x51,0xFF,0x51], // Green
 	[0xFF,0x51,0xFF], // Red
 ]);
-export let BgRGB = BgColorList[0];
 
 for (const i of BgImages.keys())
 	BgImages[i] = $(`<img src="./res/bg${i}.png">`).get(0);
 
-function setBgImage() {
-	const idx = Game.stageIdx % ImageMax;
-	BgRGB = BgColorList[idx];
-	$(dBody).css({
-		'--dialog-color': rgba(...BgRGB, 0.4),
-		'--bg-url': `url(${BgImages[idx].src})`
-	});
-}
-$on({'Init Ready':setBgImage});
+class Background {
+	#Color = BgColorList[0];
+	get Color() {
+		return this.#Color;
+	}
+	init() {
+		const idx = Game.stageIdx % ImageMax;
+		this.#Color = BgColorList[idx];
+		$(dBody).css({
+			'--dialog-color': rgba(...this.Color, 0.4),
+			'--bg-url': `url(${BgImages[idx].src})`
+		});
+	}
+} export const Bg = new Background;
