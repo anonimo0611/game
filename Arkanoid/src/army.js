@@ -79,7 +79,7 @@ class Explosion {
 			const cx = cos(i*PI/180) * Radius;
 			const cy = sin(i*PI/180) * Radius;
 			const cv = vec2(cx,cy);
-			this.#ParticleSet.add(new Particle(x,y,cv))
+			this.#ParticleSet.add( new Particle(x,y,cv) );
 		}
 		ExplosionSet.add(this);
 	}
@@ -151,6 +151,7 @@ class Sphere {
 	}
 }
 export class Army extends Collider {
+	static ArmySet   = ArmySet;
 	static Explosion = Explosion;
 	static detectCollided(obj) {
 		for (const army of ArmySet)
@@ -170,7 +171,6 @@ export class Army extends Collider {
 		ArmySet.forEach(a=> a.#drawSpheres(true)); // shadow
 		ArmySet.forEach(a=> a.#drawSpheres());
 	}
-	static ArmySet = ArmySet;
 	Width       = Radius*2;
 	Height      = Radius*2;
 	#phase      = new Phase();

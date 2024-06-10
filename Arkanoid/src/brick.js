@@ -153,7 +153,7 @@ export const BrickG = freeze(new class {
 		if (!grad) {
 			grad = ctx.createLinearGradient(0,0,ColWidth,RowHeight);
 			grad.addColorStop(0.0, hsl(h,s,l-20,a));
-			grad.addColorStop(0.5, hsl(h,s,l+2,a));
+			grad.addColorStop(0.5, hsl(h,s,l+2, a));
 			grad.addColorStop(1.0, hsl(h,s,l-20,a));
 		}
 		// Brick surface
@@ -180,9 +180,9 @@ export const BrickG = freeze(new class {
 		ctx.stroke();
 	}
 	#drawLuster(brick,data) {
-  		const {x, y}  = brick;
-		const {h,s,l,a} = brick.color;
-		const {offset}= data;
+  		const {x, y}   = brick;
+		const {h,s,l,a}= brick.color;
+		const {offset} = data;
 		const
 		grad = ctx.createLinearGradient(0,0,ColWidth,RowHeight);
 		grad.addColorStop(0, hsl(h,s,l-20,a));
@@ -245,6 +245,7 @@ const Brick = freeze(class {
 	get isNone()        {return this.type == BrickType.None}
 	get isHard()        {return this.type == BrickType.Hard}
 	get isImmortality() {return this.type == BrickType.Immortality}
+	get isNormal()      {return this.isBreakable && !this.isHard}
 
 	constructor({row,col}, type=BrickType.None) {
 		this.row   = row;

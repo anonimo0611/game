@@ -39,7 +39,7 @@ export class Laser extends Collider {
 	}
 	static update() {
 		if (Scene.isInDemo && Ticker.count % 15 == 0)
-			Demo.canShoot && Laser.#fire();
+			Demo.canFire && Laser.#fire();
 		if (!Game.isPlayScene)
 			return;
 		Lasers[L].forEach(l=> l.update());

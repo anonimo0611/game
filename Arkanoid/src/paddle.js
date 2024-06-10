@@ -113,7 +113,7 @@ export const Paddle = freeze(new class {
 	}
 	get CaughtBallPos() {
 		const x = this.CatchX? (this.ClampedX+this.CatchX) : this.CenterX;
-		return vec2(x, this.Pos.y - BallG.Radius-1);
+		return vec2(x, this.Pos.y - BallG.Radius);
 	}
 
 	init() {

@@ -9,52 +9,50 @@ import {Paddle}   from './paddle.js';
 import {BallG}    from './ball.js';
 import {BrickG}   from './brick.js';
 
-const ItemSet     = new Set();
-const AppearedSet = new Set();
-
-let $avoid  = false;
-let $lstIdx = -1;
+let $item      = null;
+let $lastIndex = -1;
+let $extended  = 0;
+let $spdDowned = 0;
 
 export class Item {
 	static {
-		$on({InGame:_=> AppearedSet.clear()});
+		$on({InGame:_=> $item = null});
 	}
 	static init() {
-		$avoid  = false;
-		$lstIdx = -1;
-		ItemSet.clear();
+		$item      = null;
+		$lastIndex = -1;
+	 	$extended  = 0;
+		$spdDowned = 0;
 	}
 	static get apearedItemExists() {
-		return ItemSet.size > 0 || BallG.count > 1;
+		return $item || BallG.count > 1;
 	}
-	static get Current() {return ItemSet.values().next().value}
-	
-	static appear({x, y}) {
-		if (this.apearedItemExists)
-			return;
-		if (!$avoid && randInt(0,1) != 0)
-			return;
+	static get Current() {return $item}
 
+	static appear({x, y}) {
+		if (this.apearedItemExists) return;
+		if (randInt(0,2) != 0) return;
+		$item = new SubClasses[this.choice()]({x, y});
+	}
+	static choice() {
 		let idx = randInt(0, SubClasses.length-1);
-		if (idx === $lstIdx
-		 || idx === ItemType.Extend && AppearedSet.has(idx)
-		) return void ($avoid = true);
+		if (idx === $lastIndex) return this.choice();
 
 		if (ExclTypes.includes(idx)) {
 			if (idx === Paddle.ExclItem)
 				idx = randChoice(ExclTypes
-					.filter(i=> i != $lstIdx && i != idx));
+					.filter(i=> i != $lastIndex && i != idx));
 		}
-		$avoid = false;
-		AppearedSet.add(idx);
-		ItemSet.add(new SubClasses[$lstIdx=idx]({x, y}));
+		if (idx == ItemType.Extend && $extended)
+			return this.choice();
+		if (idx == ItemType.SpeedDown && $spdDowned > 2)
+			return this.choice();
+
+		return $lastIndex=idx;
 	}
-	static update() {
-		ItemSet.forEach(e=> e.update());
-	}
-	static draw() {
-		ItemSet.forEach(e=> e.draw());
-	}
+	static update() {$item instanceof Item && $item.update()}
+	static draw()   {$item instanceof Item && $item.draw()}
+
 	Speed     = cvs.height / 175;
 	TextAlpha = 0.8;
 	TextColor = rgba(255,204,0,this.TextAlpha);
@@ -80,7 +78,7 @@ export class Item {
 	}
 	update() {
 		if (!Game.isPlayScene) {
-			ItemSet.delete(this);
+			$item = null;
 			return;
 		}
 		if (Ticker.count % 2 == 0)
@@ -96,10 +94,12 @@ export class Item {
 			Sound.play('item');
 			BallG.powerUp(this.Type);
 			Paddle.powerUp(this.Type);
-			ItemSet.delete(this);
+			if (this.Type == ItemType.Extend)    $extended++;
+			if (this.Type == ItemType.SpeedDown) $spdDowned++;
+			$item = null;
 		}
 		if (this.Pos.y > cvs.height) {
-			ItemSet.delete(this);
+			$item = null;
 		}
 	}
 	draw() {
@@ -139,14 +139,22 @@ export class Item {
 }
 
 export const ItemType = freeze({
-	Catch:      0,
-	Disruption: 1,
-	Expand:     2,
-	Extend:     3,
+	Extend:     0,
+	Catch:      1,
+	Disruption: 2,
+	Expand:     3,
 	Laser:      4,
 	SpeedDown:  5,
 });
 const SubClasses = [
+	class extends Item {
+		Text = 'P';
+		Type = ItemType.Extend;
+		constructor(pos) {
+			super(pos, {hue:220, nonColored:true});
+			freeze(this);
+		}
+	},
 	class extends Item {
 		Text = 'C';
 		Type = ItemType.Catch;
@@ -168,14 +176,6 @@ const SubClasses = [
 		Type = ItemType.Expand;
 		constructor(pos) {
 			super(pos, {hue:240});
-			freeze(this);
-		}
-	},
-	class extends Item {
-		Text = 'P';
-		Type = ItemType.Extend;
-		constructor(pos) {
-			super(pos, {hue:220, nonColored:true});
 			freeze(this);
 		}
 	},

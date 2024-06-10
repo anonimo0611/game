@@ -92,7 +92,7 @@ export const BallG = freeze(new class {
 			const {x, y}= BallG.Ball.Pos;
 			const angle = randFloat(270-140/2, 270+140/2) * PI/180;
 			const v = vec2(cos(angle), sin(angle));
-			BallSet.add(new Ball({x,y,v}));
+			BallSet.add( new Ball({x,y,v}) );
 		}
 	}
 	update() {

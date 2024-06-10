@@ -20,12 +20,12 @@ let $landingPos = null;
 
 export const Demo = new class {
 	get Ball() {return BallG.NearlyBall}
-	get canShoot() {
+	get canFire() {
 		return (
-			this.#canShootBricksWithLaser ||
-			this.#canShootArmyWithLaser);
+			this.#canFireBricksWithLaser ||
+			this.#canFireArmyWithLaser);
 	}
-	get #canShootBricksWithLaser() {
+	get #canFireBricksWithLaser() {
 		const data = BrickG.MapData.flat().reverse();
 		for (const {isNone,type,x,Width:w} of data) {
 			if (isNone) continue;
@@ -34,7 +34,7 @@ export const Demo = new class {
 				return type != Type.Immortality;
 		} return false;
 	}
-	get #canShootArmyWithLaser() {
+	get #canFireArmyWithLaser() {
 		for (const {Pos,Width:w,tilePosFromCenter} of Army.ArmySet) {
 			if (Pos.x   >= Paddle.CenterX-w
 			 && Pos.x+w <= Paddle.CenterX+w) {
@@ -82,7 +82,7 @@ export const Demo = new class {
 			return;
 		}	
 		if ($landingPos && $target?.Pos && !Paddle.DisruptEnabeld) {
-			this.#aimingAtTargetBrick(mag);
+			this.#aimingAtTargetBrick();
 			return;
 		}
 		this.#paddleToBall(mag);
@@ -100,7 +100,7 @@ export const Demo = new class {
 		moveTo(item.CenterX, cvs.width/50);
 		return true;
 	}
-	#aimingAtTargetBrick(mag) {
+	#aimingAtTargetBrick() {
 		const {ReboundAngleMax:aMax,Width:w}= Paddle;
 		const angle = Vec2.angle($target?.Pos, $landingPos) + PI/2;
 		let pos = $landingPos.x - w * norm(-aMax*2, +aMax*2, angle);

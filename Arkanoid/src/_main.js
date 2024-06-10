@@ -1,5 +1,4 @@
 import '../lib/wheel.js';
-import './background.js';
 import {Ticker}  from '../lib/timer.js';
 import {Confirm} from '../lib/confirm.js';
 import {Sound}   from '../snd/sound.js';
@@ -41,7 +40,7 @@ export const Game = freeze(new class {
 		$(Menu.StageMenu).on({Select:Game.#selectStage});
 		Game.#reset();
 	}
-	ReadyTime  = 2200; // ms
+	ReadyTime  = 2500; // ms
 	#stageIdx  = Menu.StageMenu.index;
 	#respawned = false;
 	get stageIdx()  {return this.#stageIdx}
