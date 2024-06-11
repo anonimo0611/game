@@ -90,6 +90,10 @@ class Vec2 {
 		this.y = Math.trunc(this.y / y)
 		return this
 	}
+	eq(...args) {
+		const {x, y}= Vec2.#getXYFromObj(args)
+		return Vec2.eq(this, {x, y});
+	}
 	toString() {
 		return `{x: ${this.x}, y: ${this.y}}`
 	}
