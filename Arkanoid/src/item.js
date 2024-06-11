@@ -29,10 +29,9 @@ export const ItemMgr = new class {
 	get Current() {return $current}
 
 	appear({x, y}) {
-		if (Paddle.CatchEnabled) return;
 		if (this.apearedItemExists) return;
 		if (randInt(0,2) != 0) return;
-		$current = new SubClasses[/*this.#choice()*/ItemType.Catch]({x, y});
+		$current = new SubClasses[this.#choice()]({x, y});
 	}
 	#choice() {
 		let idx = randInt(0, SubClasses.length-1);
