@@ -14,8 +14,10 @@ let $disp1UP = 1;
 export const Score = freeze(new class {
 	static {$ready(this.#setup)}
 	static #setup() {
-		$on({Start:   Score.#onStart});
-		$on({GameOver:Score.#onGameOver});
+		$on({
+			Start:    Score.#onStart,
+			GameOver: Score.#onGameOver,
+		});
 		$high = int(localStorage.arkanoidHiscore || 0);
 	}
 	#onStart() {

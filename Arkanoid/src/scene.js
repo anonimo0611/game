@@ -17,7 +17,7 @@ export const Scene = freeze(new class extends State {
 	}
 	switchTo(scene, delay) {
 		if (isNum(delay)) {
-			Ticker.Timer.set(delay, _=> Scene.switchTo(scene));
+			Ticker.Timer.set(delay, ()=> Scene.switchTo(scene));
 			return;
 		}
 		super.switchTo(scene);

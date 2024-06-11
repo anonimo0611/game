@@ -2,12 +2,12 @@ import {cvs,ctx} from './_canvas.js';
 import {Game}    from './_main.js';
 import {Field}   from './field.js';
 import {Paddle}  from './paddle.js';
-import {Menu}    from './menu.js';
+import * as Menu from './menu.js';
 
 const [$cvs] = canvas2D(null).vals;
 const ScaleX = 0.45;
 const ScaleY = 0.50;
-
+let cnt = 0;
 export const Lives = freeze(new class {
 	static {$ready(this.#setup)}
 	static #setup() {
@@ -34,7 +34,7 @@ export const Lives = freeze(new class {
 
 		const w = ScaleX * Paddle.DefaultW;
 		const h = ScaleY * Paddle.Height;
-		const marginLeft = 4;
+		const marginLeft = w * 0.2;
 		const offsetLeft = Field.Left + marginLeft;
 		ctx.save();
 		ctx.translate(offsetLeft, cvs.height - h*1.8);

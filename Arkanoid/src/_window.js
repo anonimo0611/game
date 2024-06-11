@@ -4,40 +4,37 @@ import {cvs}    from './_canvas.js';
 const dBoard   = byId('board');
 const FontSize = dBody.fontSize();
 
-let $scale    = 1;
-let $resizeId = 0;
-let $resizing = false;
-
 export const Window = new class {
 	static {$load(this.#setup)}
 	static #setup() {
 		Window.#fit();
 		Window.#setCSSVars();
-		$on({resize:Window.#onResize});
+		Window.#setResizeEvent();
 		document.body.addClass('loaded');
 	}
-	Board = dBoard;
-	get scale()    {return $scale}
-	get resizing() {return $resizing}
+	Board  = dBoard;
+	#scale = 1;
+	get scale() {return this.#scale}
 	#fit() {
 		const w = $(window).width()  / dBoard.width;
 		const h = $(window).height() / dBoard.height;
-		$scale = min(w*0.98, h*0.9);
-		dBoard.style.transform = `scale(${$scale})`;
+		this.#scale = min(w*0.98, h*0.9);
+		dBoard.style.transform = `scale(${this.scale})`;
 	}
-	#onResize(e) {
-		if (e.type == 'resize') {
+	#setResizeEvent() {
+		let id = 0;
+		$on('resize', ()=> {
 			!Ticker.paused && Ticker.pause(true);
-			clearTimeout($resizeId);
-			$resizeId = setTimeout(()=> Ticker.pause(false), 2e3);
-		}
-		Window.#fit();
-		Window.#setCSSVars();
+			clearTimeout(id);
+			id = setTimeout(()=> Ticker.pause(false), 2e3);
+			Window.#fit();
+			Window.#setCSSVars();
+		});
 	}
 	#setCSSVars() {
-		const boardTop = ($(window).height() - dBoard.height*$scale)/2;
+		const boardTop = ($(window).height() - dBoard.height*this.scale)/2;
 		$(dBody).css({
-			'--scale': $scale,
+			'--scale': this.scale,
 			'--board-top': `${boardTop}px`,
 		});
 	}

@@ -16,13 +16,13 @@ const Color = freeze({
 });
 
 export const Message = freeze(new class  {
-	#draw(txt, color='#FFF',
-		{
-			rows=1, align='center', fontSize=FontSize,
-			x=(cvs.width /2),
-			y=(cvs.height/2)+(fontSize*4)+(fontSize*rows),
-		}={}
-	) {
+	#draw(txt, color='#FFF', {
+		rows     = 1,
+		align    = 'center',
+		fontSize = FontSize,
+		x = (cvs.width /2),
+		y = (cvs.height/2)+(fontSize*4)+(fontSize*rows),
+	}={}) {
 		ctx.save();
 		ctx.font = `${fontSize}px Atari`;
 		ctx.textAlign     = align;
@@ -73,6 +73,7 @@ export const Message = freeze(new class  {
 					this.#draw('READY!', Color.Sub, {rows:2.5});
 			}
 			break;
+
 		case Scene.Enum.InGame:
 			if (Paddle.alpha < 1 || Paddle.Launched)
 				return;

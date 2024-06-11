@@ -3,15 +3,15 @@ import {cvs,ctx}  from './_canvas.js';
 import {Game}     from './_main.js';
 import {Scene}    from './scene.js';
 import {Field}    from './field.js';
-import {BallG}    from './ball.js';
-import {BrickG}   from './brick.js';
+import {BallMgr}  from './ball.js';
+import {BrickMgr} from './brick.js';
 import {Paddle}   from './paddle.js';
 import {Sight}    from './sight.js';
 import {Army}     from './army.js';
-import {Item}     from './item.js';
+import {ItemMgr}  from './item.js';
 import {ItemType} from './item.js';
 
-const {Type,Cols,Rows,ColWidth,RowHeight}= BrickG;
+const {Type,Cols,Rows,ColWidth,RowHeight}= BrickMgr;
 const AlwaysAimingStageSet = new Set([5,11]);
 
 let $shakeAngle = 0;
@@ -19,14 +19,14 @@ let $target     = null;
 let $landingPos = null;
 
 export const Demo = new class {
-	get Ball() {return BallG.NearlyBall}
+	get Ball() {return BallMgr.NearlyBall}
 	get canFire() {
 		return (
 			this.#canFireBricksWithLaser ||
 			this.#canFireArmyWithLaser);
 	}
 	get #canFireBricksWithLaser() {
-		const data = BrickG.MapData.flat().reverse();
+		const data = BrickMgr.MapData.flat().reverse();
 		for (const {isNone,type,x,Width:w} of data) {
 			if (isNone) continue;
 			if (x  >= Paddle.CenterX-ColWidth*2
@@ -40,24 +40,24 @@ export const Demo = new class {
 			 && Pos.x+w <= Paddle.CenterX+w) {
 				const {row,col}= tilePosFromCenter;
 				for (let i=row+1; i<Rows; i++)
-					if (BrickG.MapData[i]?.[col]?.exists)
+					if (BrickMgr.MapData[i]?.[col]?.exists)
 						return false;
 				return true;
 			}
 		} return false;
 	}
 	getBrickTargets() {
-		return BrickG.MapData.flat().reverse().filter(b=> {
+		return BrickMgr.MapData.flat().reverse().filter(b=> {
 			if (b.isNone || b.isImmortality) return false;
 			for (let i=b.row+1, col=b.col; i<Rows-b.row; i++) {
-				const b = BrickG.MapData[i][col];
+				const b = BrickMgr.MapData[i][col];
 				if (!b.isNone || b.isImmortality) return false;
 			} return true;
 		});
 	}
 	getEmptiesBetweenImmoWalls() {
-		for (let i=BrickG.MapData.length-1; i>=0; i--) {
-			const row = BrickG.MapData[i];
+		for (let i=BrickMgr.MapData.length-1; i>=0; i--) {
+			const row = BrickMgr.MapData[i];
 			if (row.some(b=> b.isImmortality))
 				return row.filter(b=> b.isNone);
 		}
@@ -68,20 +68,17 @@ export const Demo = new class {
 		this.#setTarget();
 		this.#setLandingPointOfBall();
 	}
-	catch() {
-		Scene.isInDemo && CatchMode.catch();
-	}
 	autoPlay() {
 		const mag = this.Ball.Velocity.magnitude;
-		if (this.#paddleToItem(Item.Current))
+		if (this.#paddleToItem(ItemMgr.Current))
 			return;
-		if (Paddle.CatchEnabeld) {
+		if (Paddle.CatchEnabled) {
 			Paddle.CatchX
 				? CatchMode.autoPlay()
 				: this.#paddleToBall(mag);
 			return;
 		}	
-		if ($landingPos && $target?.Pos && !Paddle.DisruptEnabeld) {
+		if ($landingPos && $target?.Pos && !Paddle.DisruptEnabled) {
 			this.#aimingAtTargetBrick();
 			return;
 		}
@@ -95,8 +92,8 @@ export const Demo = new class {
 		const Type  = item?.Type;
 		const BallV = this.Ball.Velocity.y;
 		if (!item || !this.Ball.isOnWall && BallV > 0)      return false;
-		if (Paddle.CatchEnabeld && Type == ItemType.Expand) return false;
-		if (Paddle.LaserEnabeld && Type == ItemType.Expand) return false;
+		if (Paddle.CatchEnabled && Type == ItemType.Expand) return false;
+		if (Paddle.LaserEnabled && Type == ItemType.Expand) return false;
 		moveTo(item.CenterX, cvs.width/50);
 		return true;
 	}
@@ -118,12 +115,12 @@ export const Demo = new class {
 		);
 	}
 	#setTarget() {
-		if (!BrickG.isBreakable($target ?? {})) {
+		if (!BrickMgr.isBreakable($target ?? {})) {
 			const targets = this.getBrickTargets();
 			if (targets.length == 0)
 				return void this.#setEmptyTarget();
 			if (AlwaysAimingStageSet.has(Game.stageNum)
-			 || BrickG.remains <= 15) {
+			 || BrickMgr.remains <= 15) {
 				const target = randChoice(targets);
 				const {Pos:pos,col,row}= target;
 				const Pos = vec2(pos).add(ColWidth/2, RowHeight/2);
@@ -154,10 +151,15 @@ export const Demo = new class {
 }
 
 const CatchMode = new class {
+	static {$ready(this.#setup)}
+	static #setup() {
+		$(BallMgr).on({Cought: ()=> CatchMode.#onCatch()});
+	}
 	#dir    = 1;
 	#vector = vec2();
 	#aiming = false;
-	catch() {
+	#onCatch() {
+		if (!Scene.isInDemo) return;
 		this.#dir = 1;
 		this.#aiming = false;
 	 	Ticker.Timer.cancel(CatchMode)
@@ -173,7 +175,7 @@ const CatchMode = new class {
 		$(Demo).trigger('Release');
 	}
 	autoPlay() {
-		const Radius = BallG.Radius;
+		const Radius = BallMgr.Radius;
 		const bricks = Demo.getBrickTargets();
 		this.#vector = Paddle.ReboundVelocity.mul(Field.Diagonal);
 

@@ -8,14 +8,15 @@ import {Demo}      from './demo.js';
 import {Field}     from './field.js';
 import {Scene}     from './scene.js';
 import {Lives}     from './lives.js';
+import {ItemMgr}   from './item.js';
 import {ItemType}  from './item.js';
 import {ExclTypes} from './item.js';
-import {BrickG}    from './brick.js';
-import {BallG}     from './ball.js';
+import {BallMgr}   from './ball.js';
+import {BrickMgr}  from './brick.js';
 import {Mouse}     from './mouse.js';
 
 const Width  = cvs.width / 5;
-const Height = BrickG.RowHeight;
+const Height = BrickMgr.RowHeight;
 
 const StretchMax = Width * 1.5;
 const StretchSpd = (StretchMax-Width)/(300/Ticker.Interval);
@@ -33,9 +34,9 @@ const LineGrad = new Map()
 	.set(ItemType.Laser, lineGradHSL(240,  33, 29))
 ;
 const SphereGrad = new Map()
-	.set(undefined,      _=> sphereGradHSL(210, 100, 38))
-	.set(ItemType.Catch, _=> sphereGradHSL(120, 100, 29))
-	.set(ItemType.Laser, _=> sphereGradHSL(  0, 100, 29))
+	.set(undefined,      ()=> sphereGradHSL(210, 100, 38))
+	.set(ItemType.Catch, ()=> sphereGradHSL(120, 100, 29))
+	.set(ItemType.Laser, ()=> sphereGradHSL(  0, 100, 29))
 ;
 function lineGradHSL(h=0,s=0,l=100) {
 	const 
@@ -67,7 +68,9 @@ export const Paddle = freeze(new class {
 		$on({Resume:    Paddle.#onResume});
 		$on({mousedown: Paddle.#onLaunch});
 		$on({mousedown: Paddle.#onRelease});
-		$(Demo).on({Release: Paddle.#onRelease});
+		$(Demo)   .on({Release:  Paddle.#onRelease});
+		$(BallMgr).on({Cought:   Paddle.#onCatch});
+		$(ItemMgr).on({Obtained: Paddle.#onPowerUp});
 	}
 	#alpha    = 0;
 	#blink    = 0;
@@ -95,25 +98,32 @@ export const Paddle = freeze(new class {
 
 	// Exclutive item
 	get ExclItem()       {return this.#ExclItem}
-	get CatchEnabeld()   {return this.ExclItem == ItemType.Catch}
-	get ExpandEnabeld()  {return this.ExclItem == ItemType.Expand}
-	get LaserEnabeld()   {return this.ExclItem == ItemType.Laser}
-	get DisruptEnabeld() {return this.ExclItem == ItemType.Disruption}
+	get CatchEnabled()   {return this.ExclItem == ItemType.Catch}
+	get ExpandEnabled()  {return this.ExclItem == ItemType.Expand}
+	get LaserEnabled()   {return this.ExclItem == ItemType.Laser}
+	get DisruptEnabled() {return this.ExclItem == ItemType.Disruption}
 
 	get AutoMoveReached() {
 		return AutoMoveToCursorX.reached;
 	}
-	get LunchInCatchMode() {
-		return (Paddle.CatchEnabeld && !Paddle.Launched);
+	get controllable() {
+		return Paddle.alpha == 1 && Paddle.AutoMoveReached;
 	}
 	get ReboundVelocity() {
 		const s = this.ReboundScaleMax;
-		const x = (BallG.Ball.Pos.x - this.CenterX) / (this.Width/2);
+		const x = (BallMgr.Ball.Pos.x - this.CenterX) / (this.Width/2);
 		return vec2(clamp(x*2, -s, +s), -1);
+	}
+	get canCatch() {
+		if (!Paddle.CatchEnabled || Paddle.CatchX)
+			return false;
+		if (Paddle.Width != Paddle.#TargetW)
+			return false;
+		return true;
 	}
 	get CaughtBallPos() {
 		const x = this.CatchX? (this.ClampedX+this.CatchX) : this.CenterX;
-		return vec2(x, this.Pos.y - BallG.Radius);
+		return vec2(x, this.Pos.y - BallMgr.Radius);
 	}
 
 	init() {
@@ -121,7 +131,7 @@ export const Paddle = freeze(new class {
 		Paddle.#CatchX   = 0;
 		Paddle.#alpha    = 0;
 		Paddle.#Launched = false;
-		if (Game.respawned && Paddle.DisruptEnabeld) {
+		if (Game.respawned && Paddle.DisruptEnabled) {
 			Paddle.#ExclItem = null;
 		}
 		if (!Game.respawned) {
@@ -177,21 +187,15 @@ export const Paddle = freeze(new class {
 			Paddle.#moveCaughtBall();
 		}
 		if (!Paddle.Launched)
-			BallG.Ball.Pos.x = Paddle.CatchX
+			BallMgr.Ball.Pos.x = Paddle.CatchX
 				? Paddle.ClampedX + Paddle.CatchX
 				: Paddle.ClampedX + Paddle.Width/2;
 	}
-	catch(ball) {
-		if (!Paddle.CatchEnabeld || Paddle.CatchX)
-			return;
-		if (Paddle.Width != Paddle.#TargetW)
-			return;
-
+	#onCatch(_, ball) {
 		const {x,y}= Paddle.Pos;
 		ball.Pos.x = clamp(ball.Pos.x, x+1, x+Paddle.Width-1);
 		ball.Pos.y = y - ball.Radius; 
 		Paddle.#CatchX = ball.Pos.x - Paddle.Pos.x;
-		Demo.catch();
 	}
 	#restrictRangeOfMove() {
 		const {Pos,MoveMin,MoveMax}= Paddle;
@@ -199,10 +203,10 @@ export const Paddle = freeze(new class {
 	}
 	#moveCaughtBall() {
 		if (Paddle.CatchX > 0)
-			BallG.Ball.Pos.x = Paddle.CaughtBallPos.x;
+			BallMgr.Ball.Pos.x = Paddle.CaughtBallPos.x;
 	}
 	#destory() {
-		if (BallG.count <= 0 && Ticker.count > 8)
+		if (BallMgr.count <= 0 && Ticker.count > 8)
 			Paddle.#alpha = max(Paddle.#alpha-1/FadeSpeed, 0);
 	}
 	#onLaunch(e) {
@@ -226,7 +230,7 @@ export const Paddle = freeze(new class {
 	#onResume() {
 		Paddle.CatchX && (Paddle.#Launched = false);
 	}
-	powerUp(type) {
+	#onPowerUp(_, type) {
 		switch (type) {
 		case ItemType.Extend:
 			Lives.extend();
@@ -272,13 +276,13 @@ export const Paddle = freeze(new class {
 		Paddle.#cache(ctx, w);
 	}
 	#cache(ctx, w, shadowColor) {
-		const {Height:h}= Paddle, r = Height/2;
-		const type = Paddle.#getPaddleType(ctx) ?? undefined;
+		const type  = Paddle.#getPaddleType(ctx) ?? undefined;
+		const lineW = Width*0.05, r = Height/2;
 
 		ctx.save();
 		if (shadowColor)
 			ctx.translate(r, r);
-		if (BallG.count <= 0)
+		if (BallMgr.count <= 0)
 			ctx.filter = 'grayscale(100%)';
 
 		// Both side spheres
@@ -288,19 +292,19 @@ export const Paddle = freeze(new class {
 			ctx.beginPath();
 				ctx.fillStyle = shadowColor ?? SphereGrad.get(type)()[i];
 				ctx.arc(0,0, r, PI/2,-PI/2, !!i);
-				ctx.lineTo((!i ? r-4 : -r+4), -r);
-				ctx.lineTo((!i ? r-4 : -r+4), +r);
+				ctx.lineTo((!i ? r-lineW : -r+lineW), -r);
+				ctx.lineTo((!i ? r-lineW : -r+lineW), +r);
 			ctx.fill();
 			ctx.restore();
 		}
 		// Both side vertical lines
 		ctx.fillStyle = shadowColor ?? LineGrad.get(type);
 		for (let i=0; i<2; i++)
-			ctx.fillRect(!i ? (r*2 - 4) : (w - r*2), 0, 4, h);
+			ctx.fillRect(!i ? (r*2 - lineW) : (w - r*2), 0, lineW, Height);
 
 		// Horizontal bar
 		ctx.fillStyle = shadowColor ?? BodyGrad;
-		ctx.fillRect(r*2, 0, w-r*4, h);
+		ctx.fillRect(r*2, 0, w-r*4, Height);
 
 		ctx.restore();
 	}
@@ -317,9 +321,10 @@ export const Paddle = freeze(new class {
 
 const AutoMoveToCursorX = freeze(new class {
 	static {
-		$on('InGame Respawn Resume', _=> AutoMoveToCursorX.#reached = false);
+		$on('InGame Respawn Resume',
+			()=> AutoMoveToCursorX.#reached = false);
 	}
-	MoveSpeed = 20;
+	MoveSpeed = cvs.width/45;
 	#reached  = false;
 	get reached() {
 		return this.#reached;

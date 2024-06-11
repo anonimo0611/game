@@ -8,15 +8,13 @@ import {Game}    from './_main.js';
 import {Score}   from './score.js';
 import {Stages}  from './stage.js';
 import {Paddle}  from './paddle.js';
-import {Item}    from './item.js';
+import {ItemMgr} from './item.js';
 import * as Cvs  from './_canvas.js';
 
 const {cvs,ctx,ctxBrick:ctxB,ctxShadow:ctxS}= Cvs;
 const {Frame,Cols,Rows,ColWidth,RowHeight}= Field;
 
 const LineWidth    = int(cvs.width/315);
-const MarginLeft   = (Field.Left);
-const MarginTop    = Field.Top;
 const ShadowOffset = ColWidth  * 0.2;
 const AnimDuration = 300 / Ticker.Interval;
 
@@ -62,7 +60,7 @@ const MapData   = Array(Rows);
 const Luster    = new Map();
 const Disappear = new Map();
 
-export const BrickG = freeze(new class {
+export const BrickMgr = freeze(new class {
 	MapData    = MapData;
 	Type       = BrickType;
 	Rows       = Rows;
@@ -74,7 +72,7 @@ export const BrickG = freeze(new class {
 		return MapData.flat().filter(d=> d.isBreakable).length;
 	}
 	get brokenAll() {
-		return BrickG.#brokenAll;
+		return this.#brokenAll;
 	}
 	isBrick(obj) {
 		return obj instanceof Brick;
@@ -83,7 +81,7 @@ export const BrickG = freeze(new class {
 		return !!MapData?.[row]?.[col]?.isBreakable;
 	}
 	init() {
-		Item.init();
+		ItemMgr.init();
 		Luster.clear();
 		Disappear.clear();
 		const map = Stages[Game.stageIdx];
@@ -92,16 +90,16 @@ export const BrickG = freeze(new class {
 			for (const col of MapData[row].keys())
 				MapData[row][col] = new Brick({row,col}, map[row]?.[col]);
 		}
-		BrickG.#brokenAll = false;
-		BrickG.cache();
+		this.#brokenAll = false;
+		this.cache();
 	}
 	update() {
-		if (BrickG.brokenAll)
+		if (this.brokenAll)
 			return;
 		if (!MapData.flat().every(b=> !b.isBreakable))
 			return;
 
-		BrickG.#brokenAll = true;
+		this.#brokenAll = true;
 		Luster.clear();
 		Disappear.clear();
 		if (Scene.isInGame)
@@ -250,8 +248,8 @@ const Brick = freeze(class {
 	constructor({row,col}, type=BrickType.None) {
 		this.row   = row;
 		this.col   = col;
-		this.x     = (ColWidth *col) + MarginLeft;
-		this.y     = (RowHeight*row) + MarginTop;
+		this.x     = (ColWidth *col) + Field.Left;
+		this.y     = (RowHeight*row) + Field.Top;
 		this.Pos   = vec2(this.x, this.y);
 		this.#type = type;
 		this.color = type >= 0 ? HSL(...BrickHSLColors[type]) : null;
@@ -289,7 +287,7 @@ const Brick = freeze(class {
 			this.color.s += 30 - 30/dMax * d;
 			this.color.l -= 30 - 30/dMax * d;
 			this.color.a = min((1/dMax * d)+0.5, 1);
-			BrickG.cache();
+			BrickMgr.cache();
 		}
 		Luster.set(this, {offset:0});
 	}
@@ -300,7 +298,7 @@ const Brick = freeze(class {
 		ctxS.clearRect(x+ShadowOffset, y+ShadowOffset, ColWidth,RowHeight);
 		Sound.stop('se1').play('se1');
 		if (this.type > BrickType.Hard)
-			Item.appear(this);
+			ItemMgr.appear(this);
 		if (Scene.isInGame)
 			Score.add(BrickPoints[this.type*this.#pointRate]);
 		this.#type = BrickType.None;
@@ -319,13 +317,13 @@ export class Collider {
 		this.Radius = radius;
 	}
 	tilePos({x=0, y=0}={}) {
-		const col = int((this.Pos.x+x - MarginLeft) / ColWidth);
-		const row = int((this.Pos.y+y - MarginTop)  / RowHeight);
+		const col = int((this.Pos.x+x - Field.Left) / ColWidth);
+		const row = int((this.Pos.y+y - Field.Top)  / RowHeight);
 		return {row,col}
 	}
 	get tilePosFromCenter() {
-		const col = int((this.Pos.x+this.Width /2 - MarginLeft) / ColWidth);
-		const row = int((this.Pos.y+this.Height/2 - MarginTop)  / RowHeight);
+		const col = int((this.Pos.x+this.Width /2 - Field.Left) / ColWidth);
+		const row = int((this.Pos.y+this.Height/2 - Field.Top)  / RowHeight);
 		return {row,col}
 	}
 	get brickExistsOnBothSides() {
@@ -335,6 +333,12 @@ export class Collider {
 	get brickExistsOnOneSide() {
 		const brick = this.getBrick();
 		return brick?.AdjL?.exists || brick?.AdjRight?.exists;
+	}
+	contains({x, y}={}) {
+		return (
+			between(x+this.Radius, this.Pos.x, this.Pos.x+this.Width) &&
+			between(y+this.Radius, this.Pos.y, this.Pos.y+this.Height)
+		);
 	}
 	getBrick({row,col}=this.tilePos(), {y=0,x=0}={}) {
 		return MapData[row+y]?.[col+x];

@@ -1,24 +1,24 @@
 import '../lib/wheel.js';
-import {Ticker}  from '../lib/timer.js';
-import {Confirm} from '../lib/confirm.js';
-import {Sound}   from '../snd/sound.js';
-import {Window}  from './_window.js';
-import * as Cvs  from './_canvas.js';
-import {Bg}      from './background.js';
-import {Menu}    from './menu.js';
-import {Scene}   from './scene.js';
-import {Stages}  from './stage.js';
-import {Demo}    from './demo.js';
-import {Message} from './message.js';
-import {Score}   from './score.js';
-import {Lives}   from './lives.js';
-import {Paddle}  from './paddle.js';
-import {Sight}   from './sight.js';
-import {BallG}   from './ball.js';
-import {BrickG}  from './brick.js';
-import {Army}    from './army.js';
-import {Item}    from './item.js';
-import {Laser}   from './laser.js';
+import {Ticker}   from '../lib/timer.js';
+import {Confirm}  from '../lib/confirm.js';
+import {Sound}    from '../snd/sound.js';
+import {Window}   from './_window.js';
+import * as Cvs   from './_canvas.js';
+import * as Menu  from './menu.js';
+import {Bg}       from './background.js';
+import {Scene}    from './scene.js';
+import {Stages}   from './stage.js';
+import {Demo}     from './demo.js';
+import {Message}  from './message.js';
+import {Score}    from './score.js';
+import {Lives}    from './lives.js';
+import {Paddle}   from './paddle.js';
+import {Sight}    from './sight.js';
+import {BallMgr}  from './ball.js';
+import {BrickMgr} from './brick.js';
+import {Army}     from './army.js';
+import {ItemMgr}  from './item.js';
+import {Laser}    from './laser.js';
 
 const {cvs,ctx,cvsBrick,cvsShadow}= Cvs;
 
@@ -73,8 +73,8 @@ export const Game = freeze(new class {
 	}
 	#init() {
 		Bg.init();
-		BallG.init();
-		BrickG.init();
+		BallMgr.init();
+		BrickMgr.init();
 		Paddle.init();
 		Ticker.set(Game.#mainLoop);
 	}
@@ -103,7 +103,7 @@ export const Game = freeze(new class {
 		Game.#respawned = true;
 		Scene.switchToReady();
 		Scene.switchToInGame(Game.ReadyTime);
-		BallG.init();
+		BallMgr.init();
 		Paddle.init();
 	}
 	#clear() {
@@ -154,14 +154,14 @@ export const Game = freeze(new class {
 		Game.draw();
 	}
 	#update() {
-		if (Window.resizing || BrickG.brokenAll)
+		if (BrickMgr.brokenAll)
 			return;
 		Score.update();
-		BrickG.update();
-		Item.update();
+		BrickMgr.update();
+		ItemMgr.update();
 		Army.update();
 		Laser.update();
-		BallG.update();
+		BallMgr.update();
 		Sight.update();
 		Paddle.update();
 		Demo.update();
@@ -170,12 +170,12 @@ export const Game = freeze(new class {
 		ctx.clear();
 		ctx.drawImage(cvsShadow, 0,0);
 		ctx.drawImage(cvsBrick,  0,0);
-		BrickG.animation();
+		BrickMgr.animation();
 		Army.draw();
-		Item.draw();
+		ItemMgr.draw();
 		Laser.draw();
 		Sight.draw();
-		BallG.draw();
+		BallMgr.draw();
 		Paddle.draw();
 		Army.Explosion.draw();
 		Demo.draw();

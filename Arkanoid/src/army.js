@@ -9,14 +9,14 @@ import {Game}     from './_main.js';
 import {Field}    from './field.js'
 import {Scene}    from './scene.js';
 import {Score}    from './score.js';
-import {BrickG}   from './brick.js';
+import {BrickMgr} from './brick.js';
 import {Collider} from './brick.js'
 import {Paddle}   from './paddle.js';
 
 const ArmyMax  = 4;
 const ArmySet  = new Set();
 const Interval = 5000 / Ticker.Interval;
-const Radius   = BrickG.ColWidth / 2.3;
+const Radius   = BrickMgr.ColWidth / 2.3;
 const SphereR  = Radius / (5/3);
 const Width    = Radius*2;
 const Height   = Radius*2;
@@ -133,26 +133,41 @@ class Particle {
 freeze(Explosion);
 
 class Sphere {
+	#animIdx = 0;
+	#shake   = 0;
+	#counter = 0;
 	constructor(HSL) {
-		const r = SphereR;
-		const {h,s,l}= HSL;
-		this.shadowColor = hsl(h,30,l, 0.8);
-		this.Grad = ctx.createRadialGradient(-r/2,-r/2,0, 0,0,r);
-		this.Grad.addColorStop(0.0,'white');
-		this.Grad.addColorStop(0.2, hsl(h,s,80));
-		this.Grad.addColorStop(1.0, hsl(h,s,l));
+		this.HSL = HSL;
+		freeze(this);
 	}
-	draw(x, y, isShadow=false) {
-		const offset = isShadow ? Radius/1.9 : 0;
+	#color({h,s,l}, damaging=false) {
+		const r = SphereR;
+		if (damaging) {
+			this.#animIdx ^= this.#counter++ % 10 == 0;
+			h = this.#animIdx? h :  0;
+			l = this.#animIdx? l : 80;
+		}
+		const
+		Grad = ctx.createRadialGradient(-r/2,-r/2,0, 0,0,r);
+		Grad.addColorStop(0.0,'white');
+		Grad.addColorStop(0.2, hsl(h,s,80));
+		Grad.addColorStop(1.0, hsl(h,s,l));
+		return {h,s,l,Grad};
+	}
+	draw(x, y, {damaging=false,isShadow=false}) {
 		ctx.save();
-		ctx.translate(x+offset, y+offset);
-		fillCircle(ctx)(0,0, SphereR, isShadow? this.shadowColor : this.Grad);
+		const {h,l,Grad}= this.#color(this.HSL, damaging && !isShadow);
+		const color = isShadow? hsl(h,30,l, 0.8) : Grad;
+		const ofst  = isShadow? Radius/1.9 : 0;
+		const shake = damaging? sin(this.#shake+=PI/8)*(SphereR*0.3) : 0;
+		ctx.translate(x+ofst+shake, y+ofst+shake);
+		fillCircle(ctx)(0,0, SphereR, color);
 		ctx.restore();
 	}
 }
 export class Army extends Collider {
 	static {
-		$on({'InGame InDemo': _=> this.#counter = 0});
+		$on({'InGame InDemo': ()=> this.#counter = 0});
 	}
 	static #counter  = 0;
 	static ArmySet   = ArmySet;
@@ -167,23 +182,26 @@ export class Army extends Collider {
 			return;
 		if (this.#counter++ >= Interval && ArmySet.size < ArmyMax) {
 			this.#counter = 0;
-			new Army();
+			ArmySet.add(new Army);
 		}
 		ArmySet.forEach(a=> a.#update());
 		Explosion.update();
 	}
 	static draw() {
-		if (BrickG.brokenAll) return;
+		if (BrickMgr.brokenAll) return;
 		ArmySet.forEach(a=> a.#drawSpheres(true)); // shadow
 		ArmySet.forEach(a=> a.#drawSpheres());
 	}
 	Width       = Radius*2;
 	Height      = Radius*2;
+	MaxHp       = 30;
+	#hp         = this.MaxHp;
 	#phase      = new Phase();
 	#alpha      = 0;
 	#animRad    = 0;
 	#moveRad    = 0;
 	#downCnt    = 0;
+	#damageCnt  = 0;
 	#climbedCnt = 0;
 	#lastLR     = null;
 	#animPos    = vec2();
@@ -198,11 +216,13 @@ export class Army extends Collider {
 		const y = Field.Top + Radius;
 		super({x, y}, Radius);
 		this.Velocity = Crawl.Down;
-		ArmySet.add(this);
 		freeze(this);
 	}
 	get Phase() {
 		return this.#phase;
+	}
+	get damaging() {
+		return this.#damageCnt > 0;
 	}
 	get destroyed() {
 		return this.#destroyed;
@@ -219,13 +239,16 @@ export class Army extends Collider {
 		if (this.destroyed || this.#alpha < 1)
 			return;
 
+		if (this.#damageCnt > 0)
+			this.#damageCnt--;
+
 		this.Pos.x = clamp(this.Pos.x, Field.Left+Radius, Field.Right-Radius);
 		this.#move();
 		if (this.Velocity.x)
 			this.#lastLR = this.Velocity.x < 0 ? L : R;
 
 		if (collisionRect(Paddle,this)) {
-			this.destroy();
+			this.takeDamage(this.MaxHp);
 			return;
 		}
 		if (this.Pos.y-Radius > cvs.height)
@@ -279,46 +302,51 @@ export class Army extends Collider {
 	}
 	#setHolizontalDir() {
 		this.Phase.switchToHolizontal();
-		const gt1StepDown = this.#downCnt/(BrickG.RowHeight/this.Velocity.y) > 1;
+		const gt1StepDown = this.#downCnt/(BrickMgr.RowHeight/this.Velocity.y) > 1;
 		const dir = (!this.brickExistsOnOneSide && gt1StepDown)
 			? randChoice(L,R)
 			: this.#lastLR ?? randChoice(L,R);
 		this.Velocity.set(Crawl[dir]);
 	}
-	destroy() {
-		Army.#counter = 0;
-		this.#destroyed = true;
-		new Explosion(this.Pos);
-		ArmySet.delete(this);
-		Score.add(100);
-		Sound.stop('bomb').play('bomb');
+	takeDamage(damage) {
+		this.#hp -= damage;
+		if (this.#hp <= 0) {
+			Army.#counter = 0;
+			this.#destroyed = true;
+			new Explosion(this.Pos);
+			ArmySet.delete(this);
+			Score.add(100);
+			Sound.stop('bomb').play('bomb');
+		} else
+			this.#damageCnt = 30;
 	}
 	#drawSpheres(isShadow=false) {
 		if (this.destroyed) return;
+		const {damaging}= this;
 		const {x,y}= this.#animPos;
 		const r = SphereR * 0.75;
 		ctx.save();
 		ctx.globalAlpha = this.#alpha;
 		ctx.translate(...this.Pos.vals);
 		if (x < -.25) {
-			this.#Sphere.g.draw(-x*r,-y*r, isShadow);
-			this.#Sphere.r.draw(-x*r, y*r, isShadow);
-			this.#Sphere.c.draw( x*r,-y*r, isShadow);
+			this.#Sphere.g.draw(-x*r,-y*r, {damaging,isShadow});
+			this.#Sphere.r.draw(-x*r, y*r, {damaging,isShadow});
+			this.#Sphere.c.draw( x*r,-y*r, {damaging,isShadow});
 		} else if (x > .75 ) {
-			this.#Sphere.c.draw( x*r,-y*r, isShadow);
-			this.#Sphere.g.draw(-x*r,-y*r, isShadow);
-			this.#Sphere.r.draw(-x*r, y*r, isShadow);
+			this.#Sphere.c.draw( x*r,-y*r, {damaging,isShadow});
+			this.#Sphere.g.draw(-x*r,-y*r, {damaging,isShadow});
+			this.#Sphere.r.draw(-x*r, y*r, {damaging,isShadow});
 		} else {
-			this.#Sphere.r.draw(-x*r, y*r, isShadow);
-			this.#Sphere.c.draw( x*r,-y*r, isShadow);
-			this.#Sphere.g.draw(-x*r,-y*r, isShadow);
+			this.#Sphere.r.draw(-x*r, y*r, {damaging,isShadow});
+			this.#Sphere.c.draw( x*r,-y*r, {damaging,isShadow});
+			this.#Sphere.g.draw(-x*r,-y*r, {damaging,isShadow});
 		}
 		ctx.restore();
 	}
 }
 freeze(Army);
 
-$on('Reset Ready Clear EndDemo Dropped Respawn', _=> {
+$on('Reset Ready Clear EndDemo Dropped Respawn', ()=> {
 	ArmySet.clear();
 	ExplosionSet.clear();
 });

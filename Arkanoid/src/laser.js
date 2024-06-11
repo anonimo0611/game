@@ -6,7 +6,7 @@ import {Demo}     from './demo.js';
 import {Scene}    from './scene.js';
 import {Paddle}   from './paddle.js';
 import {Army}     from './army.js';
-import {BrickG}   from './brick.js';
+import {BrickMgr} from './brick.js';
 import {Collider} from './brick.js';
 
 const Color   = '#CCFF66';
@@ -25,9 +25,9 @@ export class Laser extends Collider {
 	static #fire(e) {
 		if (!Scene.isInDemo && !Game.acceptEventInGame(e))
 			return;
-		if (!Paddle.Launched || Paddle.CatchEnabeld)
+		if (!Paddle.Launched || Paddle.CatchEnabled)
 			return;
-		if (!Paddle.LaserEnabeld)
+		if (!Paddle.LaserEnabled)
 			return;
 
 		if (Lasers[L].size < Rapid
@@ -56,7 +56,7 @@ export class Laser extends Collider {
 	Width  = RadiusX * 2;
 	Height = RadiusY * 2;
 	constructor(side) {
-		const offset = BrickG.ColWidth / 2;
+		const offset = BrickMgr.ColWidth / 2;
 		const y = Paddle.Pos.y - RadiusY;
 		super(side == L
 			? vec2(Paddle.CenterX-offset, y)
@@ -73,7 +73,7 @@ export class Laser extends Collider {
 	#collisionWithArmy() {
 		const army = Army.detectCollided(this);
 		if (army) {
-			army.destroy();
+			army.takeDamage(army.MaxHp);
 			Lasers[this.side].delete(this);
 		}
 	}
@@ -135,7 +135,7 @@ class Burst {
 		ctx.restore();
 	}
 }
-$on('Reset Ready Clear EndDemo Dropped Respawn', _=> {
+$on('Reset Ready Clear EndDemo Dropped Respawn', ()=> {
 	Lasers.forEach(s=> s.clear());
 	BurstSet.clear();
 });

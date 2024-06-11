@@ -1,10 +1,10 @@
-import {Stages} from './stage.js';
-import * as MenuBase from '../lib/menu.js';
+import {Stages}  from './stage.js';
+import * as Menu from '../lib/menu.js';
 
 const SelectStage = byId('SelectStage');
 const SelectLives = byId('SelectLives');
 
-const StageMenu = new class extends MenuBase.SlideMenu {
+export const StageMenu = new class extends Menu.SlideMenu {
 	static {
 		for (let i=0; i<Stages.length; i++) { // Initialize
 			const num = String(i+1).padStart(2, 0);
@@ -21,7 +21,7 @@ const StageMenu = new class extends MenuBase.SlideMenu {
 		$(this).trigger('Select', idx);
 	}
 };
-const LivesMenu = new class extends MenuBase.SlideMenu {
+export const LivesMenu = new class extends Menu.SlideMenu {
 	constructor() {
 		const idx = +localStorage.arkanoidLives;
 		super(SelectLives.id, idx);
@@ -32,4 +32,3 @@ const LivesMenu = new class extends MenuBase.SlideMenu {
 		!restore && (localStorage.arkanoidLives=idx);
 	}
 };
-export const Menu = freeze({StageMenu,LivesMenu});

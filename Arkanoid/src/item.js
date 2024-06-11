@@ -6,37 +6,37 @@ import {cvs,ctx}  from './_canvas.js';
 import {Scene}    from './scene.js';
 import {Score}    from './score.js';
 import {Paddle}   from './paddle.js';
-import {BallG}    from './ball.js';
-import {BrickG}   from './brick.js';
+import {BallMgr}  from './ball.js';
+import {BrickMgr} from './brick.js';
 
-let $item      = null;
+let $current   = null;
 let $lastIndex = -1;
 let $extended  = 0;
 let $spdDowned = 0;
 
-export class Item {
-	static {
-		$on({'InGame Reset':_=> $item = null});
-	}
-	static init() {
-		$item      = null;
+$on({'InGame Reset': ()=> $current = null});
+
+export const ItemMgr = new class {
+	init() {
+		$current   = null;
 		$lastIndex = -1;
 	 	$extended  = 0;
 		$spdDowned = 0;
 	}
-	static get apearedItemExists() {
-		return $item || BallG.count > 1;
+	get apearedItemExists() {
+		return $current || BallMgr.count > 1;
 	}
-	static get Current() {return $item}
+	get Current() {return $current}
 
-	static appear({x, y}) {
+	appear({x, y}) {
+		if (Paddle.CatchEnabled) return;
 		if (this.apearedItemExists) return;
 		if (randInt(0,2) != 0) return;
-		$item = new SubClasses[this.choice()]({x, y});
+		$current = new SubClasses[/*this.#choice()*/ItemType.Catch]({x, y});
 	}
-	static choice() {
+	#choice() {
 		let idx = randInt(0, SubClasses.length-1);
-		if (idx === $lastIndex) return this.choice();
+		if (idx === $lastIndex) return this.#choice();
 
 		if (ExclTypes.includes(idx)) {
 			if (idx === Paddle.ExclItem)
@@ -44,21 +44,23 @@ export class Item {
 					.filter(i=> i != $lastIndex && i != idx));
 		}
 		if (idx == ItemType.Extend && $extended)
-			return this.choice();
+			return this.#choice();
 		if (idx == ItemType.SpeedDown && $spdDowned > 2)
-			return this.choice();
+			return this.#choice();
 
 		return $lastIndex=idx;
 	}
-	static update() {$item instanceof Item && $item.update()}
-	static draw()   {$item instanceof Item && $item.draw()}
+	update() {$current instanceof Item && $current.update()}
+	draw()   {$current instanceof Item && $current.draw()}
+};
 
+class Item {
 	Speed     = cvs.height / 175;
 	TextAlpha = 0.8;
 	TextColor = rgba(255,204,0,this.TextAlpha);
 
-	Width      = BrickG.ColWidth;
-	Height     = BrickG.RowHeight * 1.25;
+	Width      = BrickMgr.ColWidth;
+	Height     = BrickMgr.RowHeight * 1.25;
 	#aIdex     = 0;
 	#textScale = 0;
 	#scaleTbl  = integers(30).map(n=> n>15 ? 30-n : n);
@@ -78,7 +80,7 @@ export class Item {
 	}
 	update() {
 		if (!Game.isPlayScene) {
-			$item = null;
+			$current = null;
 			return;
 		}
 		if (Ticker.count % 2 == 0)
@@ -92,14 +94,13 @@ export class Item {
 		if (collisionRect(this,Paddle)) {
 			Score.add(1000);
 			Sound.play('item');
-			BallG.powerUp(this.Type);
-			Paddle.powerUp(this.Type);
+			$(ItemMgr).trigger('Obtained', this.Type);
 			if (this.Type == ItemType.Extend)    $extended++;
 			if (this.Type == ItemType.SpeedDown) $spdDowned++;
-			$item = null;
+			$current = null;
 		}
 		if (this.Pos.y > cvs.height) {
-			$item = null;
+			$current = null;
 		}
 	}
 	draw() {

@@ -30,9 +30,9 @@ export const Field = freeze(new class {
         }
     	if (Pos.x+r > Right) {
 			Pos.x = Right-r;
-        	Velocity.x = -abs(Velocity.x);
-       }
-    	if (Pos.y-r < Top) {
+			Velocity.x = -abs(Velocity.x);
+		}
+		if (Pos.y-r < Top) {
 			Pos.y = Top+r;
         	Velocity.y *= -1;
     	}

@@ -7,9 +7,10 @@ import {Field}     from './field.js';
 import {Stages}    from './stage.js';
 import {Lives}     from './lives.js';
 import {Scene}     from './scene.js';
+import {ItemMgr}   from './item.js';
 import {ItemType}  from './item.js';
 import {Army}      from './army.js';
-import {BrickG}    from './brick.js';
+import {BrickMgr}  from './brick.js';
 import {BrickType} from './brick.js';
 import {Collider}  from './brick.js'
 import {Paddle}    from './paddle.js';
@@ -35,16 +36,23 @@ const ShadowConfig = {
 	scale:  [1, 0.7],
 };
 
-export const BallG = freeze(new class {
+export const BallMgr = new class {
 	static {$ready(this.#setup)}
 	static #setup() {
-		BallG.#cache($ctx, ...values(ShadowConfig));
-		BallG.#cache($ctx, Grad);
+		BallMgr.#cache($ctx, ...values(ShadowConfig));
+		BallMgr.#cache($ctx, Grad);
+		$(ItemMgr).on({Obtained: BallMgr.#onPowerUp});
 	}
-	Radius = Radius;
 	#speedDownRate  = 1;
+	get InitV()  {return vec2(1, -1)}
+	get count()  {return BallSet.size}
+	get Radius() {return Radius}
+	get Ball()   {return BallSet.values().next().value}
+	get NearlyBall() {
+		return [...BallSet].sort((a,b)=> b.Pos.y - a.Pos.y)[0];
+	}
 	get speedDownRate() {
-		return BallG.#speedDownRate;
+		return BallMgr.#speedDownRate;
 	}
 	get stageSpeedRate() {
 		return 1+(((SpeedRateMax-1)/(Stages.length-1))*Game.stageIdx);
@@ -52,32 +60,22 @@ export const BallG = freeze(new class {
 	get initialSpeedRate() {
 		return Game.stageNum <= 8 ? [6,6,7,7,8,8,9,9][Game.stageIdx]/10 : 1;
 	}
-	get Ball() {
-		return BallSet.values().next().value;
-	}
-	get NearlyBall() {
-		return [...BallSet].sort((a,b)=> b.Pos.y - a.Pos.y)[0];
-	}
-	get count() {
-		return BallSet.size;
-	}
-	InitV = vec2(1, -1).freeze();
 	init() {
 		const x = cvs.width/2;
 		const y = Paddle.Pos.y - Radius;
 		if (!Game.respawned)
-			BallG.#speedDownRate = 1;
+			BallMgr.#speedDownRate = 1;
 		BallSet.clear();
 		BallSet.add( new Ball({x,y,v:this.InitV}) );
 	}
-	powerUp(type) {
-		const {Ball}= BallG;
+	#onPowerUp(_, type) {
+		const {Ball}= BallMgr;
 		switch (type) {
 		case ItemType.SpeedDown:
-			BallG.#speedDownRate *= 0.9;
+			BallMgr.#speedDownRate *= 0.9;
 			break;
 		case ItemType.Disruption:
-			BallG.#setDisruption();
+			BallMgr.#setDisruption();
 			break;
 		case ItemType.Catch:
 		case ItemType.Expand:
@@ -89,22 +87,19 @@ export const BallG = freeze(new class {
 	}
 	#setDisruption() {
 		for (let i=0; i<DisruptionMax; i++) {
-			const {x, y}= BallG.Ball.Pos;
+			const {x, y}= BallMgr.Ball.Pos;
 			const angle = randFloat(270-140/2, 270+140/2) * PI/180;
 			const v = vec2(cos(angle), sin(angle));
 			BallSet.add( new Ball({x,y,v}) );
 		}
 	}
 	update() {
-		if (!Game.isReadyScene && !Game.isPlayScene)
-			return;
-		if (!Paddle.Launched)
-			return;
+		if (!Game.isReadyScene && !Game.isPlayScene) return;
+		if (!Paddle.Launched) return;
 		BallSet.forEach(ball=> ball.update());
 	}
 	draw() {
-		if (Scene.isClear || Scene.isGameOver)
-			return;
+		if (Scene.isClear || Scene.isGameOver) return;
 		BallSet.forEach(ball=> ball.draw());
 	}
 	#cache(ctx, color, [offsetX=0,offsetY=0]=[], [scaleX=1,scaleY=1]=[]) {
@@ -114,31 +109,35 @@ export const BallG = freeze(new class {
 		fillCircle(ctx)(offsetX, offsetY, Radius, color);
 		ctx.restore();
 	}
-});
+};
 export class Ball extends Collider {
 	Radius     = Radius;
 	Width      = Radius * 2;
 	Height     = Radius * 2;
 	Pos        = vec2();
 	Velocity   = vec2();
-	InitSpeed  = (BallSpeed*BallG.initialSpeedRate) * BallG.stageSpeedRate;
+	InitSpeed  = (BallSpeed*BallMgr.initialSpeedRate) * BallMgr.stageSpeedRate;
 	#speed     = this.InitSpeed;
+	#launched  = false;
 	Accelerate = 0.02;
 	constructor({x,y,v}) {
 		super({x, y}, Radius);
 		if (BallSet.size)
-			this.#speed = BallG.Ball.speed;
+			this.#speed = BallMgr.Ball.speed;
 		this.Pos.set(x, y);
 		this.Velocity.set( v.normalized.mul(this.speed) );
 		freeze(this);
+	}
+	get launched() {
+		return this.#launched;
 	}
 	get speed() {
 		return this.#speed;
 	}
 	get isOnWall() {
 		const {row,col}= this.tilePosFromCenter;
-		for (let i=row+1; i<BrickG.Rows; i++)
-			if (BrickG.MapData[i]?.[col]?.exists)
+		for (let i=row+1; i<BrickMgr.Rows; i++)
+			if (BrickMgr.MapData[i]?.[col]?.exists)
 				return true;
 		return false;
 	}
@@ -147,9 +146,11 @@ export class Ball extends Collider {
 			return;
 
 		const Min = this.InitSpeed * 0.7;
-		const Max = BallSpeed   * BallG.stageSpeedRate;
-		const Spd = this.#speed * BallG.speedDownRate;
+		const Max = BallSpeed   * BallMgr.stageSpeedRate;
+		const Spd = this.#speed * BallMgr.speedDownRate;
 		const Mag = round(this.Velocity.magnitude);
+
+		this.#launched ||= true;
 		this.#speed = clamp(this.speed+this.Accelerate, Min, Max);
 
 		if (this.#detectDropped())
@@ -191,17 +192,18 @@ export class Ball extends Collider {
 	#reboundAtPaddle() {
 		if (!collisionRect(Paddle,this))
 			return false;
+		if (Paddle.canCatch) 
+			$(BallMgr).trigger('Cought',this);
 
-		Paddle.catch(this);
 		this.Velocity.set( Paddle.ReboundVelocity.mul(this.speed) );
 		Sound.play('se0');
 		if (Paddle.CatchX)
-			Ticker.Timer.set(200, _=> Sound.stop('se0'));
+			Ticker.Timer.set(200, ()=> Sound.stop('se0'));
 	}
 	#collisionWithArmy() {
 		const army = Army.detectCollided(this);
 		if (army) {
-			army.destroy();
+			army.takeDamage(army.MaxHp);
 			const angle = randChoice(45,135,225,315) * PI/180;
 			const v = vec2(cos(angle), sin(angle));
 			this.Velocity.set( v.mul(this.#speed*=ArmySpeedDown) );
@@ -214,7 +216,7 @@ export class Ball extends Collider {
 		if (hitR) v.x = -abs(vx);
 		if (hitT) v.y = +abs(vy);
 		if (hitB) v.y = -abs(vy);
-		const brick = [hitL,hitR,hitB,hitT].find(BrickG.isBrick);
+		const brick = [hitL,hitR,hitB,hitT].find(BrickMgr.isBrick);
 		if (brick) {
 			brick.collision();
 			if (brick.isImmortality) {
