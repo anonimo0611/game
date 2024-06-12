@@ -297,7 +297,7 @@ const Brick = freeze(class {
 		ctxB.clearRect(x, y, ColWidth,RowHeight);
 		ctxS.clearRect(x+ShadowOffset, y+ShadowOffset, ColWidth,RowHeight);
 		Sound.stop('se1').play('se1');
-		if (this.type > BrickType.Hard)
+		if (this.isNormal)
 			ItemMgr.appear(this);
 		if (Scene.isInGame)
 			Score.add(BrickPoints[this.type*this.#pointRate]);

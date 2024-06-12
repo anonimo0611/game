@@ -30,23 +30,22 @@ Grad.addColorStop(0.70, '#55BBFF');
 Grad.addColorStop(0.98, '#55BBFF');
 Grad.addColorStop(1.00, '#FFFFFF');
 
-const ShadowConfig = {
-	color:  rgba(0,0,0, 0.4),
-	offset: [Radius*3/4, Radius*2],
-	scale:  [1, 0.7],
-};
-
 export const BallMgr = new class {
 	static {$ready(this.#setup)}
 	static #setup() {
-		BallMgr.#cache($ctx, ...values(ShadowConfig));
+		const shadowCfg = {
+			color:  rgba(0,0,0, 0.4),
+			offset: [Radius*3/4, Radius*2],
+			scale:  [1, 0.7],
+		};
+		BallMgr.#cache($ctx, ...values(shadowCfg));
 		BallMgr.#cache($ctx, Grad);
 		$(ItemMgr).on({Obtained: BallMgr.#onPowerUp});
 	}
 	#speedDownRate  = 1;
 	get InitV()  {return vec2(1, -1)}
-	get count()  {return BallSet.size}
 	get Radius() {return Radius}
+	get count()  {return BallSet.size}
 	get Ball()   {return BallSet.values().next().value}
 	get NearlyBall() {
 		return [...BallSet].sort((a,b)=> b.Pos.y - a.Pos.y)[0];
@@ -94,12 +93,15 @@ export const BallMgr = new class {
 		}
 	}
 	update() {
-		if (!Game.isReadyScene && !Game.isPlayScene) return;
-		if (!Paddle.Launched) return;
+		if (!Game.isReadyScene && !Game.isPlayScene)
+			return;
+		if (!Paddle.Launched)
+			return;
 		BallSet.forEach(ball=> ball.update());
 	}
 	draw() {
-		if (Scene.isClear || Scene.isGameOver) return;
+		if (Scene.isClear || Scene.isGameOver)
+			return;
 		BallSet.forEach(ball=> ball.draw());
 	}
 	#cache(ctx, color, [offsetX=0,offsetY=0]=[], [scaleX=1,scaleY=1]=[]) {

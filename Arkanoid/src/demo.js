@@ -196,20 +196,18 @@ const CatchMode = new class {
 		if (this.#aiming) return;
 		const spd = Field.Width/60;
 		if (this.#dir > 0) {
-			moveTo(Field.Right, spd, spd);
-			if (Paddle.Pos.x > Paddle.MoveMax)
-				this.#dir *= -1;
+			moveTo(Field.Right, spd);
+			(Paddle.Pos.x > Paddle.MoveMax) && (this.#dir *= -1);
 		} else {
-			moveTo(Field.Left, spd, spd);
-			if (Paddle.Pos.x < Paddle.MoveMin)
-				this.#dir *= -1;
+			moveTo(Field.Left, spd);
+			(Paddle.Pos.x < Paddle.MoveMin) && (this.#dir *= -1);
 		}
 	}
 };
-function moveTo(dstX, spd, mag=Demo.Ball.Velocity.magnitude) {
-	for (let i=0; i<mag; i++) {
-		if (dstX < Paddle.CenterX) Paddle.Pos.x -= spd/mag;
-		if (dstX > Paddle.CenterX) Paddle.Pos.x += spd/mag;
+function moveTo(dstX, spd) {
+	for (let i=0; i<int(spd); i++) {
+		if (dstX < Paddle.CenterX) Paddle.Pos.x--;
+		if (dstX > Paddle.CenterX) Paddle.Pos.x++;
 	}		
 }
 $on('Reset Start', function() {

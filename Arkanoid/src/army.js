@@ -25,7 +25,7 @@ const SpawnR   = (cvs.width - SpawnL) - Width;
 
 const DriftRadiusX = cvs.width/252;
 const DriftRadiusY = cvs.width/315;
-const DriftGravity = 0.4;
+const DriftGravity = 0.3;
 
 const SphereRedHSL  = HSL(  0,  90, 40);
 const SphereLimeHSL = HSL(135, 100, 40);
@@ -96,7 +96,8 @@ class Explosion {
 		this.#ParticleSet.forEach(p=> p.update());
 	}
 	draw() {
-		if (!ExplosionSet.has(this)) return;
+		if (!ExplosionSet.has(this))
+			return;
 		ctx.save();
 		ctx.globalAlpha = this.#alpha;
 		this.#ParticleSet.forEach(p=> p.draw());
@@ -133,6 +134,7 @@ class Particle {
 freeze(Explosion);
 
 class Sphere {
+	#Grad = null;
 	#animIdx = 0;
 	#shake   = 0;
 	#counter = 0;
@@ -140,27 +142,28 @@ class Sphere {
 		this.HSL = HSL;
 		freeze(this);
 	}
-	#color({h,s,l}, damaging=false) {
-		const r = SphereR;
-		if (damaging) {
+	#color({h,s,l}, damaging, isShadow) {
+		if (damaging && !isShadow) {
 			this.#animIdx ^= this.#counter++ % 10 == 0;
 			h = this.#animIdx? h :  0;
 			l = this.#animIdx? l : 80;
 		}
-		const
-		Grad = ctx.createRadialGradient(-r/2,-r/2,0, 0,0,r);
-		Grad.addColorStop(0.0,'white');
-		Grad.addColorStop(0.2, hsl(h,s,80));
-		Grad.addColorStop(1.0, hsl(h,s,l));
-		return {h,s,l,Grad};
+		this.#setGrad(h,s,l,SphereR);
+		return {h,s,l};
 	}
-	draw(x, y, {damaging=false,isShadow=false}) {
+	#setGrad(h,s,l,r) {
+		this.#Grad = ctx.createRadialGradient(-r/2,-r/2,0, 0,0,r);
+		this.#Grad.addColorStop(0.0,'#FFF');
+		this.#Grad.addColorStop(0.2, hsl(h,s,80));
+		this.#Grad.addColorStop(1.0, hsl(h,s,l));
+	}
+	draw(x, y, damaging=false, isShadow=false) {
+		const {h,l}  = this.#color(this.HSL, damaging, isShadow);
+		const color  = isShadow? hsl(h,30,l, 0.8) : this.#Grad;
+		const offset = isShadow? Radius/1.9 : 0;
+		const shake  = damaging? cos(this.#shake+=PI/8)*(SphereR*0.3) : 0;
 		ctx.save();
-		const {h,l,Grad}= this.#color(this.HSL, damaging && !isShadow);
-		const color = isShadow? hsl(h,30,l, 0.8) : Grad;
-		const ofst  = isShadow? Radius/1.9 : 0;
-		const shake = damaging? sin(this.#shake+=PI/8)*(SphereR*0.3) : 0;
-		ctx.translate(x+ofst+shake, y+ofst+shake);
+		ctx.translate(x+offset+shake, y+offset);
 		fillCircle(ctx)(0,0, SphereR, color);
 		ctx.restore();
 	}
@@ -188,7 +191,8 @@ export class Army extends Collider {
 		Explosion.update();
 	}
 	static draw() {
-		if (BrickMgr.brokenAll) return;
+		if (BrickMgr.brokenAll)
+			return;
 		ArmySet.forEach(a=> a.#drawSpheres(true)); // shadow
 		ArmySet.forEach(a=> a.#drawSpheres());
 	}
@@ -321,25 +325,26 @@ export class Army extends Collider {
 			this.#damageCnt = 30;
 	}
 	#drawSpheres(isShadow=false) {
-		if (this.destroyed) return;
-		const {damaging}= this;
-		const {x,y}= this.#animPos;
-		const r = SphereR * 0.75;
+		if (this.destroyed)
+			return;
+
+		const {x,y}= this.#animPos, r = SphereR*0.75;
+		const cfg = [this.damaging, isShadow];
 		ctx.save();
 		ctx.globalAlpha = this.#alpha;
 		ctx.translate(...this.Pos.vals);
 		if (x < -.25) {
-			this.#Sphere.g.draw(-x*r,-y*r, {damaging,isShadow});
-			this.#Sphere.r.draw(-x*r, y*r, {damaging,isShadow});
-			this.#Sphere.c.draw( x*r,-y*r, {damaging,isShadow});
+			this.#Sphere.g.draw(-x*r,-y*r, ...cfg);
+			this.#Sphere.r.draw(-x*r, y*r, ...cfg);
+			this.#Sphere.c.draw( x*r,-y*r, ...cfg);
 		} else if (x > .75 ) {
-			this.#Sphere.c.draw( x*r,-y*r, {damaging,isShadow});
-			this.#Sphere.g.draw(-x*r,-y*r, {damaging,isShadow});
-			this.#Sphere.r.draw(-x*r, y*r, {damaging,isShadow});
+			this.#Sphere.c.draw( x*r,-y*r, ...cfg);
+			this.#Sphere.g.draw(-x*r,-y*r, ...cfg);
+			this.#Sphere.r.draw(-x*r, y*r, ...cfg);
 		} else {
-			this.#Sphere.r.draw(-x*r, y*r, {damaging,isShadow});
-			this.#Sphere.c.draw( x*r,-y*r, {damaging,isShadow});
-			this.#Sphere.g.draw(-x*r,-y*r, {damaging,isShadow});
+			this.#Sphere.r.draw(-x*r, y*r, ...cfg);
+			this.#Sphere.c.draw( x*r,-y*r, ...cfg);
+			this.#Sphere.g.draw(-x*r,-y*r, ...cfg);
 		}
 		ctx.restore();
 	}

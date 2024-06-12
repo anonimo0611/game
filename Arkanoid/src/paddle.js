@@ -324,25 +324,24 @@ const AutoMoveToCursorX = freeze(new class {
 		$on('InGame Respawn Resume',
 			()=> AutoMoveToCursorX.#reached = false);
 	}
-	MoveSpeed = cvs.width/45;
 	#reached  = false;
 	get reached() {
 		return this.#reached;
 	}
 	setPosition() {
 		if (this.reached) return true;
-		for (let i=0, stepMax=50; i<stepMax; i++)
-			if (this.#move(stepMax)) return true;
+		for (let i=0; i<int(cvs.width/30); i++)
+			if (this.#move()) return true;
 		return this.reached;
 	}
-	#move(stepMax) {
+	#move() {
 		const {MoveMin,MoveMax,Pos}= Paddle;
 		if (Paddle.CenterX > Mouse.x) {
-			Pos.x = max(Pos.x-this.MoveSpeed/stepMax, MoveMin);
+			Pos.x = max(Pos.x-1, MoveMin);
 			if (Paddle.CenterX < Mouse.x || Pos.x == MoveMin)
 				return this.#reached = true;
 		} else {
-			Pos.x = min(Pos.x+this.MoveSpeed/stepMax, MoveMax);
+			Pos.x = min(Pos.x+1, MoveMax);
 			if (Paddle.CenterX > Mouse.x || Pos.x == MoveMax)
 				return this.#reached = true;
 		}

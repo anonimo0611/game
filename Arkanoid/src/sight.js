@@ -17,16 +17,21 @@ export const Sight = freeze(new class {
 		return this.#brick;
 	}
 	get enabled() {
-		if (!BallMgr.count) return false;
-		return Paddle.CatchEnabled && (!BallMgr.Ball.launched || Paddle.CatchX);
+		return BallMgr.count > 0 && Paddle.CatchEnabled
+			&& (!BallMgr.Ball.launched || Paddle.CatchX > 0);
 	}
-	get BallVector() {
-		const v = !BallMgr.Ball.launched
+	get canDraw() {
+		return (this.enabled && (Game.isDemoScene || Paddle.controllable));
+	}
+	get BallVelocity() {
+		return !BallMgr.Ball.launched
 			? BallMgr.InitV
 			: Paddle.ReboundVelocity;
+	}
+	get BallVector() {
 		return Vec2.add(
 			Paddle.CaughtBallPos,
-			v.clone.mul(Field.Diagonal)
+			this.BallVelocity.clone.mul(Field.Diagonal)
 		);
 	}
 	#detectBrick(brick) {
@@ -45,7 +50,7 @@ export const Sight = freeze(new class {
 		}
 		return positions;
 	}
-	#detectArmy(point) {
+	#attackArmy(point) {
 		for (const army of Army.ArmySet) {
 			if (army.contains(point)) {
 				army.takeDamage(1);
@@ -61,7 +66,7 @@ export const Sight = freeze(new class {
 			const [b,l,r]= this.#detectBrick(brick);
 			if (b || l || r) {
 				if (brick.isNone) {
-					if (this.#detectArmy(b || l || r))
+					if (this.#attackArmy(b || l || r))
 						return true;
 					continue;
 				}
@@ -72,32 +77,36 @@ export const Sight = freeze(new class {
 		}
 		return false;
 	}
-	#detectIntersectionsWithField() {
-		for (const pos of Field.Segments) {
-			const endPos = getIntersection(pos[0],pos[1],
-				Paddle.CaughtBallPos, this.BallVector);
-			if (endPos) return this.Pos.set(endPos);
-		}
-	}
 	update() {
-		if (!this.enabled) return;
-		  !this.#detectIntersectionsWithArmyOrBrick()
-		&& this.#detectIntersectionsWithField();
-		if (this.brick.isNone) this.#brick = null;
+		if (!this.enabled)
+			return;
+
+		if (!this.#detectIntersectionsWithArmyOrBrick())
+			this.Pos.set(this.BallVector);
+
+		if (this.brick.isNone)
+			this.#brick = null;
 	}
-	draw() {
-		if (!this.enabled) return;
-		if (!Game.isDemoScene && !Paddle.controllable) return;
-		drawLine(ctx, {color:rgba(0,225,0, 0.7),width:cvs.width/150})(
+	drawLine() {
+		if (!this.canDraw)
+			return;
+		ctx.save();
+		ctx.lineCap     = 'square';
+		ctx.lineWidth   = BallMgr.Radius*2;
+		ctx.strokeStyle = rgba(0,225,0, 0.5);
+		drawLine(ctx)(
 			...Paddle.CaughtBallPos.vals,
 			...this.Pos.vals
 		);
-		if (this.brick) {
-			ctx.save();
-			ctx.lineWidth   = cvs.width/150;
-			ctx.strokeStyle = '#99FFCC';
-			ctx.strokeRect(...this.brick.Pos.vals, ColWidth, RowHeight)
-			ctx.restore();
-		}
+		ctx.restore();
+	}
+	drawTarget() {
+		if (!this.canDraw || !this.brick)
+			return;
+		ctx.save();
+		ctx.lineWidth   = cvs.width/150;
+		ctx.strokeStyle = '#9FC';
+		ctx.strokeRect(...this.brick.Pos.vals, ColWidth, RowHeight)
+		ctx.restore();
 	}
 });

@@ -29,13 +29,16 @@ export const ItemMgr = new class {
 	get Current() {return $current}
 
 	appear({x, y}) {
-		if (this.apearedItemExists) return;
-		if (randInt(0,2) != 0) return;
+		if (this.apearedItemExists)
+			return;
+		if (randInt(0,2) != 0)
+			return;
 		$current = new SubClasses[this.#choice()]({x, y});
 	}
 	#choice() {
 		let idx = randInt(0, SubClasses.length-1);
-		if (idx === $lastIndex) return this.#choice();
+		if (idx === $lastIndex)
+			return this.#choice();
 
 		if (ExclTypes.includes(idx)) {
 			if (idx === Paddle.ExclItem)

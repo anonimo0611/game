@@ -52,7 +52,6 @@ body.loaded #board {
 	position: relative;
 }
 #canvasWrapper canvas {
-	background: no-repeat 0 0/100% 100% url(../res/frame.png);
 	position: absolute;
 	top:  0;
 	left: 0;

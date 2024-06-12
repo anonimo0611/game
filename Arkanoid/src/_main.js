@@ -26,18 +26,18 @@ export const Game = freeze(new class {
 	static {$load(this.#setup)}
 	static #setup() {
 		$on({
-			Reset:    Game.#reset,
-			Clear:    Game.#clear,
-			Respawn:  Game.#respawn,
-			focus:    Game.#confirm,
-			blur:     Game.#confirm,
-			keydown:  Game.#confirm,
+			Reset:   Game.#reset,
+			Clear:   Game.#clear,
+			Respawn: Game.#respawn,
+			focus:   Game.#confirm,
+			blur:    Game.#confirm,
+			keydown: Game.#confirm,
 		});
 		$(cvs).on({
 			mousedown:   Game.#start,
 			contextmenu: Game.#confirm,
 		});
-		$(Menu.StageMenu).on({Select:Game.#selectStage});
+		$(Menu.StageMenu).on({Select: Game.#selectStage});
 		Game.#reset();
 	}
 	ReadyTime  = 2500; // ms
@@ -88,8 +88,7 @@ export const Game = freeze(new class {
 		Game.#start();
 	}
 	#start(e) {
-		if (e?.button > 0 || !Game.isDemoScene)
-			return;
+		if (e?.button > 0 || !Game.isDemoScene) return;
 		Scene.switchToStart();
 		Scene.switchToReady();
 		Game.#init();
@@ -128,23 +127,20 @@ export const Game = freeze(new class {
 		}
 		if (Confirm.opened)
 			return;
-
 		if (e.key  != 'Escape'
 		 && e.type != 'blur'
-		 && e.type != 'contextmenu'
-		) return;
-
-		const content = e.type == 'blur'
-			? 'Browser window is\nnow inactive!'
-			: 'You really want to\nquit the game?';
+		 && e.type != 'contextmenu')
+			return;
 
 		e.preventDefault();
 		Ticker.pause(true);
 		Sound.pause();
 		Confirm.open({
-			content,
-			cancelId:   'Resume',
-			autoFocusId:'Resume',
+			cancelId:    'Resume',
+			autoFocusId: 'Resume',
+			content: e.type == 'blur'
+				? 'Browser window is\nnow inactive!'
+				: 'You really want to\nquit the game?',
 			funcCfg: {
 				Resume:  Game.#resume,
 				Quit:    Scene.switchToReset,
@@ -169,12 +165,14 @@ export const Game = freeze(new class {
 	draw() {
 		ctx.clear();
 		ctx.drawImage(cvsShadow, 0,0);
-		ctx.drawImage(cvsBrick,  0,0);
+		Sight.drawLine();
+		ctx.drawImage(Bg.FrameImg, 0,0, cvs.width, cvs.height);
+		ctx.drawImage(cvsBrick, 0,0);
 		BrickMgr.animation();
+		Sight.drawTarget();
 		Army.draw();
 		ItemMgr.draw();
 		Laser.draw();
-		Sight.draw();
 		BallMgr.draw();
 		Paddle.draw();
 		Army.Explosion.draw();

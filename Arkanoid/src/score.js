@@ -41,14 +41,15 @@ export const Score = freeze(new class {
 		$high = max($score, $high);
 	}
 	draw() {
-		const y = FontSize+1;
+		const y = FontSize*1.125;
 		const ScoreStr =   `　${$score || '00'}`;
 		const HighStr  = `HI　${$high  || '00'}`;
 
 		// Backgound color
 		ctx.save();
 		ctx.fillStyle = rgba(...Bg.Color, 0.2);
-		ctx.fillRect(0,0, cvs.width, FontSize * 1.2);
+		ctx.clearRect(0,0, cvs.width, FontSize * 1.5);
+		ctx.fillRect (0,0, cvs.width, FontSize * 1.5);
 		ctx.restore();
 
 		// Draw score texts

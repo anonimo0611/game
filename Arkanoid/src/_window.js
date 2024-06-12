@@ -10,11 +10,13 @@ export const Window = new class {
 		Window.#fit();
 		Window.#setCSSVars();
 		Window.#setResizeEvent();
-		document.body.addClass('loaded');
+		dBody.addClass('loaded');
 	}
 	Board  = dBoard;
 	#scale = 1;
-	get scale() {return this.#scale}
+	get scale() {
+		return this.#scale;
+	}
 	#fit() {
 		const w = $(window).width()  / dBoard.width;
 		const h = $(window).height() / dBoard.height;
@@ -38,5 +40,4 @@ export const Window = new class {
 			'--board-top': `${boardTop}px`,
 		});
 	}
-};
-freeze(Window);
+};freeze(Window);
