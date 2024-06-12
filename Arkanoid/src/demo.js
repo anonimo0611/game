@@ -35,10 +35,11 @@ export const Demo = new class {
 		} return false;
 	}
 	get #canFireArmyWithLaser() {
-		for (const {Pos,Width:w,tilePosFromCenter} of Army.ArmySet) {
+		for (const army of Army.ArmySet) {
+			const {Pos,Width:w}= army;
 			if (Pos.x   >= Paddle.CenterX-w
 			 && Pos.x+w <= Paddle.CenterX+w) {
-				const {row,col}= tilePosFromCenter;
+				const {row,col}= army.tilePos();
 				for (let i=row+1; i<Rows; i++)
 					if (BrickMgr.MapData[i]?.[col]?.exists)
 						return false;
@@ -100,8 +101,8 @@ export const Demo = new class {
 	#aimingAtTargetBrick() {
 		const {ReboundAngleMax:aMax,Width:w}= Paddle;
 		const angle = Vec2.angle($target?.Pos, $landingPos) + PI/2;
-		let pos = $landingPos.x - w * norm(-aMax*2, +aMax*2, angle);
-		moveTo(pos + w/2, cvs.width/60);
+		let pos = $landingPos.x - w * norm(-aMax/2, +aMax/2, angle);
+		moveTo(pos + w/2, cvs.width/70);
 	}
 	#setLandingPointOfBall() {
 		$landingPos = getIntersection(

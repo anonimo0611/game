@@ -76,7 +76,7 @@ export const Game = freeze(new class {
 		BallMgr.init();
 		BrickMgr.init();
 		Paddle.init();
-		Ticker.set(Game.#mainLoop);
+		Ticker.set(Game.#mainLoop)
 	}
 	#resume() {
 		Ticker.pause(false);

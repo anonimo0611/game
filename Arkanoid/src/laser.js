@@ -38,7 +38,7 @@ export class Laser extends Collider {
 		}
 	}
 	static update() {
-		if (Scene.isInDemo && Ticker.count % 15 == 0)
+		if (Scene.isInDemo && Ticker.count % 8 == 0)
 			Demo.canFire && Laser.#fire();
 		if (!Game.isPlayScene)
 			return;

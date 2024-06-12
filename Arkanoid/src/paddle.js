@@ -83,9 +83,10 @@ export const Paddle = freeze(new class {
 	Height    = Height;
 	Pos = vec2(0, cvs.height - this.Height*3.2).yFreeze();
 
-	ReboundScaleMax = 1.5;
-	ReboundAngleMax = PI/2 - atan2(1, this.ReboundScaleMax);
+	ReboundAngleMax = (112 * PI/180);
 
+	get x()        {return this.Pos.x}
+	get y()        {return this.Pos.y}
 	get alpha()    {return this.#alpha}
 	get blink()    {return this.#blink}
 	get Launched() {return this.#Launched}
@@ -110,9 +111,10 @@ export const Paddle = freeze(new class {
 		return Paddle.alpha == 1 && Paddle.AutoMoveReached;
 	}
 	get ReboundVelocity() {
-		const s = this.ReboundScaleMax;
-		const x = (BallMgr.Ball.Pos.x - this.CenterX) / (this.Width/2);
-		return vec2(clamp(x*2, -s, +s), -1);
+		const {x,CenterX:cx,Width:w}= this;
+		const ballX = clamp(BallMgr.Ball.Pos.x, x, x+w);
+		const angle = PI/2 + ((ballX - cx) / w) * this.ReboundAngleMax;
+		return vec2(-cos(angle), -sin(angle));
 	}
 	get canCatch() {
 		if (!Paddle.CatchEnabled || Paddle.CatchX)
@@ -125,7 +127,6 @@ export const Paddle = freeze(new class {
 		const x = this.CatchX? (this.ClampedX+this.CatchX) : this.CenterX;
 		return vec2(x, this.Pos.y - BallMgr.Radius);
 	}
-
 	init() {
 		Paddle.#blink    = 0;
 		Paddle.#CatchX   = 0;
@@ -199,7 +200,7 @@ export const Paddle = freeze(new class {
 	}
 	#restrictRangeOfMove() {
 		const {Pos,MoveMin,MoveMax}= Paddle;
-		Paddle.Pos.x = clamp(Pos.x, MoveMin, MoveMax);
+		Pos.x = clamp(Pos.x, MoveMin, MoveMax);
 	}
 	#moveCaughtBall() {
 		if (Paddle.CatchX > 0)

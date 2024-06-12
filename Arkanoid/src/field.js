@@ -16,19 +16,4 @@ export const Field = freeze(new class {
 	Diagonal = sqrt(cvs.width**2 + cvs.height**2);
 
 	collision() {}
-	rebound({Pos,Velocity,Radius:r}) {
-		const {Top,Left,Right}= this;
-    	if (Pos.x-r < Left) {
-			Pos.x = Left+r;
-        	Velocity.x = abs(Velocity.x);
-        }
-    	if (Pos.x+r > Right) {
-			Pos.x = Right-r;
-			Velocity.x = -abs(Velocity.x);
-		}
-		if (Pos.y-r < Top) {
-			Pos.y = Top+r;
-        	Velocity.y *= -1;
-    	}
-	}
 });

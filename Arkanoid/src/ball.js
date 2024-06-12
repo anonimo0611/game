@@ -137,7 +137,7 @@ export class Ball extends Collider {
 		return this.#speed;
 	}
 	get isOnWall() {
-		const {row,col}= this.tilePosFromCenter;
+		const {row,col}= this.tilePos();
 		for (let i=row+1; i<BrickMgr.Rows; i++)
 			if (BrickMgr.MapData[i]?.[col]?.exists)
 				return true;
@@ -164,7 +164,6 @@ export class Ball extends Collider {
 				this.Pos.add( this.Velocity.normalized.mul(Spd/Mag) );
 			this.#collisionWithArmy();
 			this.#collisionWithBrick(Mag);
-			Field.rebound(this);
 		}
 	}
 	#detectDropped() {
@@ -213,16 +212,15 @@ export class Ball extends Collider {
 	}
 	#collisionWithBrick(mag) {
 		const {Velocity:v,hitT,hitR,hitB,hitL}= this;
-		const {x:vx,y:vy}= v;
-		if (hitL) v.x = +abs(vx);
-		if (hitR) v.x = -abs(vx);
-		if (hitT) v.y = +abs(vy);
-		if (hitB) v.y = -abs(vy);
+		if (hitL) v.x = +abs(v.x);
+		if (hitR) v.x = -abs(v.x);
+		if (hitT) v.y = +abs(v.y);
+		if (hitB) v.y = -abs(v.y);
 		const brick = [hitL,hitR,hitB,hitT].find(BrickMgr.isBrick);
 		if (brick) {
 			brick.collision();
 			if (brick.isImmortality) {
-				const vx = (v.x < 0 ? -0.1 : 0.1);
+				const vx = (v.x < 0 ? -0.2 : 0.2);
 				v.x += randFloat(0, vx/mag);
 			}
 		}

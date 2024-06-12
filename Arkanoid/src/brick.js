@@ -16,7 +16,7 @@ const {Frame,Cols,Rows,ColWidth,RowHeight}= Field;
 
 const LineWidth    = int(cvs.width/315);
 const ShadowOffset = ColWidth  * 0.2;
-const AnimDuration = 300 / Ticker.Interval;
+const AnimDuration = 200 / Ticker.Interval;
 
 export const BrickType = freeze({
 	None:      -1,
@@ -321,10 +321,14 @@ export class Collider {
 		const row = int((this.Pos.y+y - Field.Top)  / RowHeight);
 		return {row,col}
 	}
-	get tilePosFromCenter() {
-		const col = int((this.Pos.x+this.Width /2 - Field.Left) / ColWidth);
-		const row = int((this.Pos.y+this.Height/2 - Field.Top)  / RowHeight);
-		return {row,col}
+	getBrick({row,col}=this.tilePos(), {y=0,x=0}={}) {
+		return MapData[row+y]?.[col+x];
+	}
+	contains({x, y}={}) {
+		return (
+			between(x+this.Radius, this.Pos.x, this.Pos.x+this.Width) &&
+			between(y+this.Radius, this.Pos.y, this.Pos.y+this.Height)
+		);
 	}
 	get brickExistsOnBothSides() {
 		const brick = this.getBrick();
@@ -334,26 +338,14 @@ export class Collider {
 		const brick = this.getBrick();
 		return brick?.AdjL?.exists || brick?.AdjRight?.exists;
 	}
-	contains({x, y}={}) {
-		return (
-			between(x+this.Radius, this.Pos.x, this.Pos.x+this.Width) &&
-			between(y+this.Radius, this.Pos.y, this.Pos.y+this.Height)
-		);
-	}
-	getBrick({row,col}=this.tilePos(), {y=0,x=0}={}) {
-		return MapData[row+y]?.[col+x];
-	}
 	#detect(ox=0, oy=0) {
 		const offset = vec2(ox, oy).mul(this.Radius);
 		const point  = vec2(this.Pos).add(offset);
         const brick  = this.getBrick( this.tilePos(offset) );
-        if (this.constructor.name != 'Ball') {
-	        if (point.x < Field.Left
-	         || point.x > Field.Right
-	         || point.y < Field.Top
-	         || point.y > Field.Bottom+this.Radius
-	        ) return Field;
-		}
+        if (point.x < Field.Left
+         || point.x > Field.Right
+         || point.y < Field.Top
+        ) return Field;
 		return brick?.exists ? brick : null;
 	}
 	get hitT()  {return this.#detect( 0,-1)}

@@ -134,20 +134,15 @@ class Particle {
 freeze(Explosion);
 
 class Sphere {
-	#Grad = null;
-	#animIdx = 0;
-	#shake   = 0;
-	#counter = 0;
+	#Grad  = null;
+	#shake = 0;
 	constructor(HSL) {
 		this.HSL = HSL;
 		freeze(this);
 	}
-	#color({h,s,l}, damaging, isShadow) {
-		if (damaging && !isShadow) {
-			this.#animIdx ^= this.#counter++ % 10 == 0;
-			h = this.#animIdx? h :  0;
-			l = this.#animIdx? l : 80;
-		}
+	#color({h,s,l}, damaging) {
+		damaging && (h =  0);
+		damaging && (l = 80);
 		this.#setGrad(h,s,l,SphereR);
 		return {h,s,l};
 	}
@@ -158,7 +153,7 @@ class Sphere {
 		this.#Grad.addColorStop(1.0, hsl(h,s,l));
 	}
 	draw(x, y, damaging=false, isShadow=false) {
-		const {h,l}  = this.#color(this.HSL, damaging, isShadow);
+		const {h,l}  = this.#color(this.HSL, damaging && !isShadow);
 		const color  = isShadow? hsl(h,30,l, 0.8) : this.#Grad;
 		const offset = isShadow? Radius/1.9 : 0;
 		const shake  = damaging? cos(this.#shake+=PI/8)*(SphereR*0.3) : 0;
@@ -322,7 +317,7 @@ export class Army extends Collider {
 			Score.add(100);
 			Sound.stop('bomb').play('bomb');
 		} else
-			this.#damageCnt = 30;
+			this.#damageCnt = 1;
 	}
 	#drawSpheres(isShadow=false) {
 		if (this.destroyed)
