@@ -45,7 +45,7 @@ export const ItemMgr = new class {
 				idx = randChoice(ExclTypes
 					.filter(i=> i != $lastIndex && i != idx));
 		}
-		if (idx == ItemType.Extend && $extended)
+		if (idx == ItemType.Extend && (randInt(0,3) || $extended))
 			return this.#choice();
 		if (idx == ItemType.SpeedDown && $spdDowned > 2)
 			return this.#choice();

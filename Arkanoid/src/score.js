@@ -61,7 +61,7 @@ export const Score = freeze(new class {
 		ctx.fillStyle = 'white';
 		this.isShow1UP && ctx.fillText('1UP', FontSize, y);
 		ctx.fillText(ScoreStr, FontSize *  4, y);
-		ctx.fillText(HighStr,  FontSize * 12, y);
+		ctx.fillText(HighStr,  FontSize * 13, y);
 		ctx.restore();
 	}
 });
