@@ -35,12 +35,12 @@ export const Sight = freeze(new class {
 		);
 	}
 	#detectBrick(brick) {
-		const positions = [[0,1,1,1], [0,0,0,1], [1,0,1,1]].map(ov=> 
+		const positions = [[0,1,1,1], [0,0,0,1], [1,0,1,1]].map(ov=>
 			getIntersection(
 				Paddle.CaughtBallPos, this.BallVector,
 				vec2(brick.Pos).add(ColWidth*ov[0], RowHeight*ov[1]),
 				vec2(brick.Pos).add(ColWidth*ov[2], RowHeight*ov[3])
-			)	
+			)
 		);
 		const [bottom,left,right]= positions;
 		const pos = bottom || left || right;

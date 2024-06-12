@@ -39,7 +39,7 @@ const SphereGrad = new Map()
 	.set(ItemType.Laser, ()=> sphereGradHSL(  0, 100, 29))
 ;
 function lineGradHSL(h=0,s=0,l=100) {
-	const 
+	const
 	gr = $ctx.createLinearGradient(Width,0,Width,Height);
 	gr.addColorStop(0.0, hsl(h,s,l));
 	gr.addColorStop(0.3, hsl(h,s,90));
@@ -194,7 +194,7 @@ export const Paddle = freeze(new class {
 	#onCatch(_, ball) {
 		const {x,y}= Paddle.Pos;
 		ball.Pos.x = clamp(ball.Pos.x, x+1, x+Paddle.Width-1);
-		ball.Pos.y = y - ball.Radius; 
+		ball.Pos.y = y - ball.Radius;
 		Paddle.#CatchX = ball.Pos.x - Paddle.Pos.x;
 	}
 	#restrictRangeOfMove() {

@@ -194,7 +194,7 @@ export class Ball extends Collider {
 	#reboundAtPaddle() {
 		if (!collisionRect(Paddle,this))
 			return false;
-		if (Paddle.canCatch) 
+		if (Paddle.canCatch)
 			$(BallMgr).trigger('Cought',this);
 
 		this.Velocity.set( Paddle.ReboundVelocity.mul(this.speed) );

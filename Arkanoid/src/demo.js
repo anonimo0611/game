@@ -77,7 +77,7 @@ export const Demo = new class {
 				? CatchMode.autoPlay()
 				: this.#paddleToBall(mag);
 			return;
-		}	
+		}
 		if ($landingPos && $target?.Pos && !Paddle.DisruptEnabled) {
 			this.#aimingAtTargetBrick();
 			return;
@@ -205,10 +205,10 @@ const CatchMode = new class {
 	}
 };
 function moveTo(dstX, spd) {
-	for (let i=0; i<int(spd); i++) {
+	for (let i=0; i<spd; i++) {
 		if (dstX < Paddle.CenterX) Paddle.Pos.x--;
 		if (dstX > Paddle.CenterX) Paddle.Pos.x++;
-	}		
+	}
 }
 $on('Reset Start', function() {
 	$shakeAngle = 0;
