@@ -52,7 +52,7 @@ dialog {
 	display: table;
 	position: absolute;
 	left: 50%;
-	top: calc(var(--board-top) + 30em * var(--scale));
+	top: calc(var(--board-top) + 32em * var(--scale));
 	transform: translateX(-50%) scale(var(--scale));
 	transform-origin: center top;
 	will-change: opacity;
