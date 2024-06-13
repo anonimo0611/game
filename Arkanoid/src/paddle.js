@@ -18,48 +18,12 @@ import {Mouse}     from './mouse.js';
 const Width  = cvs.width / 5;
 const Height = BrickMgr.RowHeight;
 
-const StretchMax = Width * 1.5;
-const StretchSpd = (StretchMax-Width)/(300/Ticker.Interval);
-const FadeSpeed  = 500 / Ticker.Interval;
-
+const StretchMax  = Width * 1.5;
+const StretchSpd  = (StretchMax-Width)/(300/Ticker.Interval);
+const FadeSpeed   = 500 / Ticker.Interval;
 const SparkColor  = rgba(0,255,255, 0.7);
 const ShadowColor = rgba(0,  0,  0, 0.4);
-
 const [$cvs,$ctx] = canvas2D(null, Width*1.5, Height*1.5).vals;
-
-const BodyGrad = lineGradHSL(0, 0, 46);
-const LineGrad = new Map()
-	.set(undefined,      lineGradHSL( 15, 100, 40))
-	.set(ItemType.Catch, lineGradHSL( 33, 240, 29))
-	.set(ItemType.Laser, lineGradHSL(240,  33, 29))
-;
-const SphereGrad = new Map()
-	.set(undefined,      ()=> sphereGradHSL(210, 100, 38))
-	.set(ItemType.Catch, ()=> sphereGradHSL(120, 100, 29))
-	.set(ItemType.Laser, ()=> sphereGradHSL(  0, 100, 29))
-;
-function lineGradHSL(h=0,s=0,l=100) {
-	const
-	gr = $ctx.createLinearGradient(Width,0,Width,Height);
-	gr.addColorStop(0.0, hsl(h,s,l));
-	gr.addColorStop(0.3, hsl(h,s,90));
-	gr.addColorStop(0.4, hsl(h,s,l));
-	gr.addColorStop(1.0, hsl(h,s,l*1.1));
-	return gr;
-}
-function sphereGradHSL(h=0,s=0,l=100) {
-	const radius = Height/2;
-	const lightness = max(abs(sin(Paddle.blink))*(l*1.4), l);
-	return [0,1].map((_,i)=> { // Both sides
-		const sx = (!i ? radius : -radius) / 4;
-		const
-		gr = $ctx.createRadialGradient(sx,-radius/2,0, 0,0,radius);
-		gr.addColorStop(0.0, hsl(h,s,90));
-		gr.addColorStop(0.5, hsl(h,s,lightness));
-		gr.addColorStop(1.0, hsl(h,s,lightness));
-		return gr;
-	});
-}
 
 export const Paddle = freeze(new class {
 	static {$ready(this.#setup)}
@@ -92,8 +56,8 @@ export const Paddle = freeze(new class {
 	get Launched() {return this.#Launched}
 	get Width()    {return this.#Width}
 	get CatchX()   {return this.#CatchX}
-	get CenterX()  {return this.Pos.x+this.Width/2}
-	get ClampedX() {return clamp(this.Pos.x, this.MoveMin, this.MoveMax)}
+	get CenterX()  {return this.x+this.Width/2}
+	get ClampedX() {return clamp(this.x, this.MoveMin, this.MoveMax)}
 	get MoveMin()  {return Field.Left}
 	get MoveMax()  {return Field.Right-this.Width}
 
@@ -112,7 +76,7 @@ export const Paddle = freeze(new class {
 	}
 	get ReboundVelocity() {
 		const {x,CenterX:cx,Width:w}= this;
-		const ballX = clamp(BallMgr.Ball.Pos.x, x, x+w);
+		const ballX = clamp(BallMgr.Ball.x, x, x+w);
 		const angle = PI/2 + ((ballX - cx) / w) * this.ReboundAngleMax;
 		return vec2(-cos(angle), -sin(angle));
 	}
@@ -125,7 +89,7 @@ export const Paddle = freeze(new class {
 	}
 	get CaughtBallPos() {
 		const x = this.CatchX? (this.ClampedX+this.CatchX) : this.CenterX;
-		return vec2(x, this.Pos.y - BallMgr.Radius);
+		return vec2(x, this.y - BallMgr.Radius);
 	}
 	init() {
 		Paddle.#blink    = 0;
@@ -194,9 +158,9 @@ export const Paddle = freeze(new class {
 	}
 	#onCatch(_, ball) {
 		const {x,y}= Paddle.Pos;
-		ball.Pos.x = clamp(ball.Pos.x, x+1, x+Paddle.Width-1);
+		ball.Pos.x = clamp(ball.x, x+1, x+Paddle.Width-1);
 		ball.Pos.y = y - ball.Radius;
-		Paddle.#CatchX = ball.Pos.x - Paddle.Pos.x;
+		Paddle.#CatchX = ball.x - Paddle.x;
 	}
 	#restrictRangeOfMove() {
 		const {Pos,MoveMin,MoveMax}= Paddle;
@@ -291,7 +255,7 @@ export const Paddle = freeze(new class {
 			ctx.save();
 			ctx.translate((!i ? r*2 - r : w-r*2 + r), r);
 			ctx.beginPath();
-				ctx.fillStyle = shadowColor ?? SphereGrad.get(type)()[i];
+				ctx.fillStyle = shadowColor ?? Grad.Sphere.get(type)()[i];
 				ctx.arc(0,0, r, PI/2,-PI/2, !!i);
 				ctx.lineTo((!i ? r-lineW : -r+lineW), -r);
 				ctx.lineTo((!i ? r-lineW : -r+lineW), +r);
@@ -299,18 +263,18 @@ export const Paddle = freeze(new class {
 			ctx.restore();
 		}
 		// Both side vertical lines
-		ctx.fillStyle = shadowColor ?? LineGrad.get(type);
+		ctx.fillStyle = shadowColor ?? Grad.Line.get(type);
 		for (let i=0; i<2; i++)
 			ctx.fillRect(!i ? (r*2 - lineW) : (w - r*2), 0, lineW, Height);
 
 		// Horizontal bar
-		ctx.fillStyle = shadowColor ?? BodyGrad;
+		ctx.fillStyle = shadowColor ?? Grad.Body;
 		ctx.fillRect(r*2, 0, w-r*4, Height);
 
 		ctx.restore();
 	}
 	draw() {
-		const {x, y}= Paddle.Pos;
+		const {x, y}= Paddle;
 		ctx.save();
 		ctx.globalAlpha = Paddle.alpha;
 		ctx.translate(x, y);
@@ -346,6 +310,42 @@ const AutoMoveToCursorX = freeze(new class {
 			if (Paddle.CenterX > Mouse.x || Pos.x == MoveMax)
 				return this.#reached = true;
 		}
+	}
+});
+
+const Grad = freeze(new class {
+	Body = this.lineHSL(0, 0, 46);
+	Line = new Map()
+		.set(undefined,      this.lineHSL( 15, 100, 40))
+		.set(ItemType.Catch, this.lineHSL( 33, 240, 29))
+		.set(ItemType.Laser, this.lineHSL(240,  33, 29))
+	;
+	Sphere = new Map()
+		.set(undefined,      ()=> this.sphereHSL(210, 100, 38))
+		.set(ItemType.Catch, ()=> this.sphereHSL(120, 100, 29))
+		.set(ItemType.Laser, ()=> this.sphereHSL(  0, 100, 29))
+	;
+	lineHSL(h=0,s=0,l=100) {
+		const
+		gr = $ctx.createLinearGradient(Width,0,Width,Height);
+		gr.addColorStop(0.0, hsl(h,s,l));
+		gr.addColorStop(0.3, hsl(h,s,90));
+		gr.addColorStop(0.4, hsl(h,s,l));
+		gr.addColorStop(1.0, hsl(h,s,l*1.1));
+		return gr;
+	}
+	sphereHSL(h=0,s=0,l=100) {
+		const radius = Height/2;
+		const lightness = max(abs(sin(Paddle.blink))*(l*1.4), l);
+		return [0,1].map((_,i)=> { // Both sides
+			const sx = (!i ? radius : -radius) / 4;
+			const
+			gr = $ctx.createRadialGradient(sx,-radius/2,0, 0,0,radius);
+			gr.addColorStop(0.0, hsl(h,s,90));
+			gr.addColorStop(0.5, hsl(h,s,lightness));
+			gr.addColorStop(1.0, hsl(h,s,lightness));
+			return gr;
+		});
 	}
 });
 

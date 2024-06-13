@@ -26,20 +26,20 @@ export const Demo = new class {
 			this.#canFireArmyWithLaser);
 	}
 	get #canFireBricksWithLaser() {
-		const data = BrickMgr.MapData.flat().reverse();
-		for (const {isNone,type,x,Width:w} of data) {
-			if (isNone) continue;
-			if (x  >= Paddle.CenterX-ColWidth*2
-			&& x+w <= Paddle.CenterX+ColWidth*2)
-				return type != Type.Immortality;
-		} return false;
+		return [-ColWidth/2, ColWidth/2].flatMap(offset=> {
+			for (const brick of BrickMgr.MapData.flat().reverse()) {
+				if (brick.isNone)
+					continue;
+				if (brick.containsX(Paddle.CenterX+offset))
+					return brick.isBreakable || [];
+			} return [];
+		}).length > 0;
 	}
 	get #canFireArmyWithLaser() {
-		for (const army of Army.ArmySet) {
-			const {Pos,Width:w}= army;
-			if (Pos.x   >= Paddle.CenterX-w
-			 && Pos.x+w <= Paddle.CenterX+w) {
-				const {row,col}= army.tilePos();
+		for (const {x,Width:w,tilePos} of Army.ArmySet) {
+			if (x   >= Paddle.CenterX-w
+			 && x+w <= Paddle.CenterX+w) {
+				const {row,col}= tilePos;
 				for (let i=row+1; i<Rows; i++)
 					if (BrickMgr.MapData[i]?.[col]?.exists)
 						return false;
@@ -47,24 +47,58 @@ export const Demo = new class {
 			}
 		} return false;
 	}
-	getBrickTargets() {
+	get brickTargets() {
 		return BrickMgr.MapData.flat().reverse().filter(b=> {
 			if (b.isNone || b.isImmortality) return false;
 			for (let i=b.row+1, col=b.col; i<Rows-b.row; i++) {
 				const b = BrickMgr.MapData[i][col];
-				if (!b.isNone || b.isImmortality) return false;
+				if (!b.isNone || b.isImmortality)
+					return false;
 			} return true;
 		});
 	}
-	getEmptiesBetweenImmoWalls() {
+	get emptiesBetweenImmoWalls() {
 		for (let i=BrickMgr.MapData.length-1; i>=0; i--) {
 			const row = BrickMgr.MapData[i];
 			if (row.some(b=> b.isImmortality))
 				return row.filter(b=> b.isNone);
 		}
 	}
+	#setLandingPointOfBall() {
+		const ballVector = Vec2.add(
+			this.Ball.Pos,
+			this.Ball.Velocity.normalized.mul(Field.Diagonal)
+		);
+		$landingPos = getIntersection(
+			vec2(Field.Left,  Paddle.y),
+			vec2(Field.Right, Paddle.y),
+			this.Ball.Pos, ballVector
+		);
+	}
+	#setTarget() {
+		if (!BrickMgr.isBreakable($target ?? {})) {
+			const targets = this.brickTargets;
+			if (targets.length == 0)
+				return void this.#setEmptyTarget();
+			if (AlwaysAimingStageSet.has(Game.stageNum)
+			 || BrickMgr.remains <= 15) {
+				const {x,y,col,row}= randChoice(targets);
+				const ox = ColWidth /2 + randFloat(-2, 2);
+				const oy = RowHeight/2 + randFloat(-2, 2);
+				$target = {col,row,Pos:vec2(x,y).add(ox,oy)};
+			}
+		}
+	}
+	#setEmptyTarget() {
+		if (Ticker.count % 120 != 0) return;
+		const {x,y,col,row}= randChoice(this.emptiesBetweenImmoWalls);
+		const ox = randFloat(0, ColWidth);
+		const oy = randFloat(0, RowHeight);
+		$target = {col,row,Pos:vec2(x,y).add(ox,oy)};
+	}
 	update() {
-		if (!Scene.isInDemo) return;
+		if (!Scene.isInDemo)
+			return;
 		$shakeAngle += PI/94 + randFloat(-0.01, +0.01);
 		this.#setTarget();
 		this.#setLandingPointOfBall();
@@ -79,14 +113,14 @@ export const Demo = new class {
 				: this.#paddleToBall(mag);
 			return;
 		}
-		if ($landingPos && $target?.Pos && !Paddle.DisruptEnabled) {
+		if ($landingPos && $target?.Pos) {
 			this.#aimingAtTargetBrick();
 			return;
 		}
 		this.#paddleToBall(mag);
 	}
 	#paddleToBall(mag) {
-		const x = this.Ball.Pos.x * (sin($shakeAngle)/10+1);
+		const x = this.Ball.x * (sin($shakeAngle)/10+1);
 		moveTo(x, mag*1.2);
 	}
 	#paddleToItem(item) {
@@ -103,40 +137,6 @@ export const Demo = new class {
 		const angle = Vec2.angle($target?.Pos, $landingPos) + PI/2;
 		let pos = $landingPos.x - w * norm(-aMax/2, +aMax/2, angle);
 		moveTo(pos + w/2, cvs.width/70);
-	}
-	#setLandingPointOfBall() {
-		$landingPos = getIntersection(
-			vec2(Field.Left,  Paddle.Pos.y),
-			vec2(Field.Right, Paddle.Pos.y),
-			this.Ball.Pos,
-			Vec2.add(
-				this.Ball.Pos,
-				this.Ball.Velocity.normalized.mul(Field.Diagonal)
-			)
-		);
-	}
-	#setTarget() {
-		if (!BrickMgr.isBreakable($target ?? {})) {
-			const targets = this.getBrickTargets();
-			if (targets.length == 0)
-				return void this.#setEmptyTarget();
-			if (AlwaysAimingStageSet.has(Game.stageNum)
-			 || BrickMgr.remains <= 15) {
-				const target = randChoice(targets);
-				const {Pos:pos,col,row}= target;
-				const Pos = vec2(pos).add(ColWidth/2, RowHeight/2);
-				$target = {col,row,Pos};
-			}
-		}
-	}
-	#setEmptyTarget() {
-		if (Ticker.count % 120 != 0) return;
-		const target = this.getEmptiesBetweenImmoWalls();
-		const {Pos,col,row}= randChoice(target);
-		$target = {col,row,Pos:vec2(Pos).add(
-			randFloat(0, ColWidth),
-			randFloat(0, RowHeight)
-		)};
 	}
 	#drawPoint(pos, r, color) {
 		fillCircle  (ctx)(...pos.vals, r, color);
@@ -160,30 +160,32 @@ const CatchMode = new class {
 	#vector = vec2();
 	#aiming = false;
 	#onCatch() {
-		if (!Scene.isInDemo) return;
+		if (!Scene.isInDemo)
+			return;
 		this.#dir = 1;
 		this.#aiming = false;
 	 	Ticker.Timer.cancel(CatchMode)
 	 		.set(1500, this.#release, {id:CatchMode});
 	}
-	#releaseTimer() {
-		if (this.#aiming) return;
-		this.#aiming = true;
-	 	Ticker.Timer.cancel(CatchMode)
-	 		.set(200, this.#release, {id:CatchMode});
-	}
 	#release() {
 		$(Demo).trigger('Release');
 	}
+	#releaseTimer() {
+		if (this.#aiming)
+			return;
+		this.#aiming = true;
+	 	Ticker.Timer.cancel(CatchMode)
+	 		.set(200, this.#release);
+	}
 	autoPlay() {
 		const Radius = BallMgr.Radius;
-		const bricks = Demo.getBrickTargets();
+		const bricks = Demo.brickTargets;
 		this.#vector = Paddle.ReboundVelocity.mul(Field.Diagonal);
 
 		if (bricks.length) {
 			if (Sight.brick?.isBreakable)
 				this.#releaseTimer();
-		} else for (const empty of Demo.getEmptiesBetweenImmoWalls()) {
+		} else for (const empty of Demo.emptiesBetweenImmoWalls) {
 			getIntersection(
 				Demo.Ball.Pos,
 				vec2(Demo.Ball.Pos).add(this.#vector),
@@ -198,10 +200,10 @@ const CatchMode = new class {
 		const spd = Field.Width/60;
 		if (this.#dir > 0) {
 			moveTo(Field.Right, spd);
-			(Paddle.Pos.x > Paddle.MoveMax) && (this.#dir *= -1);
+			Paddle.x > Paddle.MoveMax && (this.#dir *= -1);
 		} else {
 			moveTo(Field.Left, spd);
-			(Paddle.Pos.x < Paddle.MoveMin) && (this.#dir *= -1);
+			Paddle.x < Paddle.MoveMin && (this.#dir *= -1);
 		}
 	}
 };

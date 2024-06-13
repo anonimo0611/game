@@ -72,7 +72,7 @@ class Item {
 	constructor(pos, {hue,nonColored=false}={}) {
 		const {Width:w,Height:h}= this;
 		const s = nonColored? 0:91;
-		this.Pos  = vec2(pos);
+		this.Pos  = vec2(pos).xFreeze();
 		this.grad = ctx.createLinearGradient(w,0,w,h);
 		this.grad.addColorStop(0.00, hsl(hue,s,36));
 		this.grad.addColorStop(0.20, hsl(hue,s,80));

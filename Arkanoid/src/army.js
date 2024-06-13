@@ -156,7 +156,7 @@ class Sphere {
 		const {h,l}  = this.#color(this.HSL, damaging && !isShadow);
 		const color  = isShadow? hsl(h,30,l, 0.8) : this.#Grad;
 		const offset = isShadow? Radius/1.9 : 0;
-		const shake  = damaging? cos(this.#shake+=PI/8)*(SphereR*0.3) : 0;
+		const shake  = damaging? sin(this.#shake+=PI/8)*(SphereR*0.3) : 0;
 		ctx.save();
 		ctx.translate(x+offset+shake, y+offset);
 		fillCircle(ctx)(0,0, SphereR, color);
@@ -227,7 +227,7 @@ export class Army extends Collider {
 		return this.#destroyed;
 	}
 	get #canDrift() {
-		const {row,col} = this.tilePos();
+		const {row,col} = this.tilePos;
 		return row > 6 && [
 			[0,-1],[0,-2],[-1, 0],[-2, 0],[-1,-1],[1,-1],
 			[1, 0],[2, 0],[ 0, 1],[ 0, 2],[-1, 1],[1, 1]
@@ -241,7 +241,7 @@ export class Army extends Collider {
 		if (this.#damageCnt > 0)
 			this.#damageCnt--;
 
-		this.Pos.x = clamp(this.Pos.x, Field.Left+Radius, Field.Right-Radius);
+		this.Pos.x = clamp(this.x, Field.Left+Radius, Field.Right-Radius);
 		this.#move();
 		if (this.Velocity.x)
 			this.#lastLR = this.Velocity.x < 0 ? L : R;
@@ -250,7 +250,7 @@ export class Army extends Collider {
 			this.takeDamage(this.MaxHp);
 			return;
 		}
-		if (this.Pos.y-Radius > cvs.height)
+		if (this.y-Radius > cvs.height)
 			ArmySet.delete(this);
 	}
 	#updateAnim() {

@@ -137,7 +137,7 @@ export const BrickMgr = freeze(new class {
 		ctxS.translate(x+ShadowOffset, y+ShadowOffset);
 		ctxS.fillStyle = rgba(0,0,0, color.a*0.5);
 		ctxS.clearRect(0,0, w,RowHeight);
-		ctxS.fillRect(0,0, w,RowHeight);
+		ctxS.fillRect (0,0, w,RowHeight);
 		ctxS.restore();
 	}
 	#drawBrick(ctx, brick, {effect=false,grad=null}={}) {
@@ -273,6 +273,15 @@ const Brick = freeze(class {
 			return 1;
 		}
 	}
+	containsX(x) {
+		return between(x, this.x, this.x+this.Width);
+	}
+	containsY(y) {
+		return between(y, this.y, this.y+this.Height);
+	}
+	contains({x, y}={}) {
+		return this.containsX(x) && this.containsX(y);
+	}
 	collision() {
 		this.#durability-- > 0
 			? this.#holdUp()
@@ -300,7 +309,7 @@ const Brick = freeze(class {
 		if (this.isNormal)
 			ItemMgr.appear(this);
 		if (Scene.isInGame)
-			Score.add(BrickPoints[this.type*this.#pointRate]);
+			Score.add(BrickPoints[this.type] * this.#pointRate);
 		this.#type = BrickType.None;
 	}
 	getAdjacent(x=0, y=0) {
@@ -316,18 +325,22 @@ export class Collider {
 		this.Pos    = vec2(x, y);
 		this.Radius = radius;
 	}
-	tilePos({x=0, y=0}={}) {
-		const col = int((this.Pos.x+x - Field.Left) / ColWidth);
-		const row = int((this.Pos.y+y - Field.Top)  / RowHeight);
+	get x() {return this.Pos.x}
+	get y() {return this.Pos.y}
+	get tilePos() {return this.offsetTilePos()}
+
+	offsetTilePos({x=0, y=0}={}) {
+		const col = int((this.x+x - Field.Left) / ColWidth);
+		const row = int((this.y+y - Field.Top)  / RowHeight);
 		return {row,col}
 	}
-	getBrick({row,col}=this.tilePos(), {y=0,x=0}={}) {
+	getBrick({row,col}=this.tilePos, {y=0,x=0}={}) {
 		return MapData[row+y]?.[col+x];
 	}
 	contains({x, y}={}) {
 		return (
-			between(x+this.Radius, this.Pos.x, this.Pos.x+this.Width) &&
-			between(y+this.Radius, this.Pos.y, this.Pos.y+this.Height)
+			between(x+this.Radius, this.x, this.x+this.Width) &&
+			between(y+this.Radius, this.y, this.y+this.Height)
 		);
 	}
 	get brickExistsOnBothSides() {
@@ -341,7 +354,7 @@ export class Collider {
 	#detect(ox=0, oy=0) {
 		const offset = vec2(ox, oy).mul(this.Radius);
 		const point  = vec2(this.Pos).add(offset);
-        const brick  = this.getBrick( this.tilePos(offset) );
+        const brick  = this.getBrick( this.offsetTilePos(offset) );
         if (point.x < Field.Left
          || point.x > Field.Right
          || point.y < Field.Top

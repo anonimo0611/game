@@ -48,7 +48,7 @@ export const BallMgr = new class {
 	get count()  {return BallSet.size}
 	get Ball()   {return BallSet.values().next().value}
 	get NearlyBall() {
-		return [...BallSet].sort((a,b)=> b.Pos.y - a.Pos.y)[0];
+		return [...BallSet].sort((a,b)=> b.y - a.y)[0];
 	}
 	get speedDownRate() {
 		return BallMgr.#speedDownRate;
@@ -61,7 +61,7 @@ export const BallMgr = new class {
 	}
 	init() {
 		const x = cvs.width/2;
-		const y = Paddle.Pos.y - Radius;
+		const y = Paddle.y - Radius;
 		if (!Game.respawned)
 			BallMgr.#speedDownRate = 1;
 		BallSet.clear();
@@ -86,9 +86,9 @@ export const BallMgr = new class {
 	}
 	#setDisruption() {
 		for (let i=0; i<DisruptionMax; i++) {
-			const {x, y}= BallMgr.Ball.Pos;
-			const angle = randFloat(270-140/2, 270+140/2) * PI/180;
-			const v = vec2(cos(angle), sin(angle));
+			const {x, y}= BallMgr.Ball;
+			const angle = randFloat(90-140/2, 90+140/2) * PI/180;
+			const v = vec2(-cos(angle), -sin(angle));
 			BallSet.add( new Ball({x,y,v}) );
 		}
 	}
@@ -137,7 +137,7 @@ export class Ball extends Collider {
 		return this.#speed;
 	}
 	get isOnWall() {
-		const {row,col}= this.tilePos();
+		const {row,col}= this.tilePos;
 		for (let i=row+1; i<BrickMgr.Rows; i++)
 			if (BrickMgr.MapData[i]?.[col]?.exists)
 				return true;
@@ -167,7 +167,7 @@ export class Ball extends Collider {
 		}
 	}
 	#detectDropped() {
-		if (this.Pos.y <= cvs.height || Scene.isClear)
+		if (this.y <= cvs.height || Scene.isClear)
 			return false;
 
 		if (Lives.left <= 0 && BallSet.size == 1) {

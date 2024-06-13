@@ -57,10 +57,10 @@ export class Laser extends Collider {
 	Height = RadiusY * 2;
 	constructor(side) {
 		const offset = BrickMgr.ColWidth / 2;
-		const y = Paddle.Pos.y - RadiusY;
+		const y = Paddle.y - RadiusY;
 		super(side == L
-			? vec2(Paddle.CenterX-offset, y)
-			: vec2(Paddle.CenterX+offset, y),
+			? vec2(Paddle.CenterX-offset, y).xFreeze()
+			: vec2(Paddle.CenterX+offset, y).xFreeze(),
 			RadiusX
 		);
 		this.side = side;
