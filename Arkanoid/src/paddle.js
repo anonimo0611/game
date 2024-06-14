@@ -47,6 +47,7 @@ export const Paddle = freeze(new class {
 	Height    = Height;
 	Pos = vec2(0, cvs.height - this.Height*3.2).yFreeze();
 
+	LaunchVelocity  = Vec2.fromAngle((90+25) * PI/180).inverse;
 	ReboundAngleMax = (112 * PI/180);
 
 	get x()        {return this.Pos.x}
@@ -68,17 +69,8 @@ export const Paddle = freeze(new class {
 	get LaserEnabled()   {return this.ExclItem == ItemType.Laser}
 	get DisruptEnabled() {return this.ExclItem == ItemType.Disruption}
 
-	get AutoMoveReached() {
-		return AutoMoveToCursorX.reached;
-	}
 	get controllable() {
 		return Paddle.alpha == 1 && Paddle.AutoMoveReached;
-	}
-	get ReboundVelocity() {
-		const {x,CenterX:cx,Width:w}= this;
-		const ballX = clamp(BallMgr.Ball.x, x, x+w);
-		const angle = PI/2 + ((ballX - cx) / w) * this.ReboundAngleMax;
-		return vec2(-cos(angle), -sin(angle));
 	}
 	get canCatch() {
 		if (!Paddle.CatchEnabled || Paddle.CatchX)
@@ -86,6 +78,15 @@ export const Paddle = freeze(new class {
 		if (Paddle.Width != Paddle.#TargetW)
 			return false;
 		return true;
+	}
+	get AutoMoveReached() {
+		return AutoMoveToCursorX.reached;
+	}
+	get ReboundVelocity() {
+		const {x,CenterX:cx,Width:w}= this;
+		const ballX = clamp(BallMgr.Ball.x, x, x+w);
+		const angle = PI/2 + ((ballX - cx) / w) * this.ReboundAngleMax;
+		return Vec2.fromAngle(angle).inverse;
 	}
 	get CaughtBallPos() {
 		const x = this.CatchX? (this.ClampedX+this.CatchX) : this.CenterX;

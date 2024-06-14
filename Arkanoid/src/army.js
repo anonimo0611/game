@@ -4,8 +4,8 @@ import {Ticker}   from '../lib/timer.js';
 import {HSL,hsl}  from '../lib/color.js';
 import {rgba}     from '../lib/color.js';
 import {Sound}    from '../snd/sound.js';
-import {cvs,ctx}  from './_canvas.js';
 import {Game}     from './_main.js';
+import {cvs,ctx}  from './_canvas.js';
 import {Field}    from './field.js'
 import {Scene}    from './scene.js';
 import {Score}    from './score.js';
@@ -13,10 +13,12 @@ import {BrickMgr} from './brick.js';
 import {Collider} from './brick.js'
 import {Paddle}   from './paddle.js';
 
+const {ColWidth,RowHeight}= Field;
+
 const ArmyMax  = 4;
 const ArmySet  = new Set();
 const Interval = 5000 / Ticker.Interval;
-const Radius   = BrickMgr.ColWidth / 2.3;
+const Radius   = ColWidth / 2.3;
 const SphereR  = Radius / (5/3);
 const Width    = Radius*2;
 const Height   = Radius*2;
@@ -67,7 +69,7 @@ class Explosion {
 	}
 	#cnt   = 0;
 	#alpha = 1;
-	#ParticleSet = new Set();
+	ParticleSet = new Set();
 	constructor({x, y}) {
 		const {h,s,l}= ExplosionHSL;
 		this.Pos  = vec2(x, y);
@@ -76,16 +78,13 @@ class Explosion {
 		this.Grad.addColorStop(0.0, hsl(h,s,70));
 		this.Grad.addColorStop(1.0, hsl(h,s,l,0.1));
 		for (let i=0; i<360; i+=360/12) {
-			const cx = cos(i*PI/180) * Radius;
-			const cy = sin(i*PI/180) * Radius;
-			const cv = vec2(cx,cy);
-			this.#ParticleSet.add( new Particle(x,y,cv) );
+			const cv = Vec2.fromAngle(i*PI/180).mul(Radius);
+			this.ParticleSet.add( new Particle(x,y,cv) );
 		}
-		ExplosionSet.add(this);
 	}
 	update() {
 		if (this.#cnt >= Explosion.Duration) {
-			this.#ParticleSet.clear();
+			this.ParticleSet.clear();
 			ExplosionSet.delete(this);
 			return;
 		}
@@ -93,32 +92,31 @@ class Explosion {
 			this.#alpha -= max(1/Explosion.FadeoutDuration, 0);
 		}
 		this.#cnt++;
-		this.#ParticleSet.forEach(p=> p.update());
+		this.ParticleSet.forEach(p=> p.update());
 	}
 	draw() {
 		if (!ExplosionSet.has(this))
 			return;
 		ctx.save();
 		ctx.globalAlpha = this.#alpha;
-		this.#ParticleSet.forEach(p=> p.draw());
+		this.ParticleSet.forEach(p=> p.draw());
 		ctx.translate(...this.Pos.vals);
 		fillCircle(ctx)(0,0, this.r, this.Grad);
 		ctx.restore();
 	}
-}
+} freeze(Explosion);
+
 class Particle {
-	#ParticleSet = new Set();
+	ParticleSet = new Set();
 	constructor(x, y, v) {
 		this.Pos = vec2(x, y).add(v);
 		for (let i=0; i<360; i+=360/6) {
-			const cx = cos(i*PI/180);
-			const cy = sin(i*PI/180);
-			const cv = vec2(cx,cy);
-			this.#ParticleSet.add({x,y,cv,r:SphereR/7})
+			const cv = Vec2.fromAngle(i*PI/180);
+			this.ParticleSet.add({x,y,cv,r:SphereR/7});
 		}
 	}
 	update() {
-		for (const p of this.#ParticleSet) {
+		for (const p of this.ParticleSet) {
 			p.cv.mul(1.13);
 			p.r -= 1/60;
 		}
@@ -126,12 +124,11 @@ class Particle {
 	draw() {
 		ctx.save();
 		ctx.translate(...this.Pos.vals);
-		for (const {cv,r} of this.#ParticleSet)
+		for (const {cv,r} of this.ParticleSet)
 			fillCircle(ctx)(...cv.vals, r, ParticleColor);
 		ctx.restore();
 	}
 }
-freeze(Explosion);
 
 class Sphere {
 	#Grad  = null;
@@ -191,8 +188,8 @@ export class Army extends Collider {
 		ArmySet.forEach(a=> a.#drawSpheres(true)); // shadow
 		ArmySet.forEach(a=> a.#drawSpheres());
 	}
-	Width       = Radius*2;
-	Height      = Radius*2;
+	Width       = ColWidth;
+	Height      = ColWidth;
 	MaxHp       = 30;
 	#hp         = this.MaxHp;
 	#phase      = new Phase();
@@ -205,7 +202,7 @@ export class Army extends Collider {
 	#lastLR     = null;
 	#animPos    = vec2();
 	#destroyed  = false;
-	#Sphere     = freeze({
+	Sphere      = freeze({
 		r: new Sphere(SphereRedHSL),
 		g: new Sphere(SphereLimeHSL),
 		c: new Sphere(SphereCyanHSL),
@@ -217,15 +214,9 @@ export class Army extends Collider {
 		this.Velocity = Crawl.Down;
 		freeze(this);
 	}
-	get Phase() {
-		return this.#phase;
-	}
-	get damaging() {
-		return this.#damageCnt > 0;
-	}
-	get destroyed() {
-		return this.#destroyed;
-	}
+	get Phase()     {return this.#phase}
+	get damaging()  {return this.#damageCnt > 0}
+	get destroyed() {return this.#destroyed}
 	get #canDrift() {
 		const {row,col} = this.tilePos;
 		return row > 6 && [
@@ -255,8 +246,7 @@ export class Army extends Collider {
 	}
 	#updateAnim() {
 		this.#alpha = min(this.#alpha+=1/30, 1);
-		this.#animPos.x = cos(this.#animRad+=PI/60);
-		this.#animPos.y = sin(this.#animRad+=PI/60);
+		this.#animPos.set( Vec2.fromAngle(this.#animRad+=PI/60) )
 	}
 	#moveCircum() {
 		this.Pos.x += cos(this.#moveRad+=PI/1e3) * DriftRadiusX;
@@ -270,9 +260,9 @@ export class Army extends Collider {
 		const {Phase,hitT,hitR,hitB,hitL,hitLB,hitRB}= this;
 
 		if (Phase.isNone && (hitLB || hitRB))
-			this.#setHolizontalDir();
+			this.#setHolizontalDir(this);
 		if (Phase.isUp && hitT)
-			this.#setHolizontalDir();
+			this.#setHolizontalDir(this);
 
 		if (Phase.isClimbed) {
 			if (this.#climbedCnt++ <= (Width/2) / abs(this.Velocity.x))
@@ -282,7 +272,7 @@ export class Army extends Collider {
 		if (hitB && (hitL || hitR) != Field) {
 			(Phase.isHolizontal || Phase.isDown) && (hitL || hitR)
 				? this.Velocity.set(Crawl[Phase.switchToUp()])
-				: this.#setHolizontalDir();
+				: this.#setHolizontalDir(this);
 		}
 		if (Phase.isHolizontal && !Phase.isClimbed && !hitLB && !hitRB) {
 			this.Velocity.set(Crawl[Phase.switchToDown()]);
@@ -299,21 +289,21 @@ export class Army extends Collider {
 			? (this.#downCnt++)
 			: (this.#downCnt = 0);
 	}
-	#setHolizontalDir() {
+	#setHolizontalDir({Velocity:v}) {
 		this.Phase.switchToHolizontal();
-		const gt1StepDown = this.#downCnt/(BrickMgr.RowHeight/this.Velocity.y) > 1;
-		const dir = (!this.brickExistsOnOneSide && gt1StepDown)
+		const twoStepsDowned = this.#downCnt/(RowHeight/v.y) > 1;
+		const dir = twoStepsDowned && !this.hitLB3Q && !this.hitRB3Q
 			? randChoice(L,R)
 			: this.#lastLR ?? randChoice(L,R);
-		this.Velocity.set(Crawl[dir]);
+		v.set(Crawl[dir]);
 	}
 	takeDamage(damage) {
 		this.#hp -= damage;
 		if (this.#hp <= 0) {
-			Army.#counter = 0;
 			this.#destroyed = true;
-			new Explosion(this.Pos);
+			Army.#counter = 0;
 			ArmySet.delete(this);
+			ExplosionSet.add( new Explosion(this.Pos) );
 			Score.add(100);
 			Sound.stop('bomb').play('bomb');
 		} else
@@ -329,22 +319,21 @@ export class Army extends Collider {
 		ctx.globalAlpha = this.#alpha;
 		ctx.translate(...this.Pos.vals);
 		if (x < -.25) {
-			this.#Sphere.g.draw(-x*r,-y*r, ...cfg);
-			this.#Sphere.r.draw(-x*r, y*r, ...cfg);
-			this.#Sphere.c.draw( x*r,-y*r, ...cfg);
+			this.Sphere.g.draw(-x*r,-y*r, ...cfg);
+			this.Sphere.r.draw(-x*r, y*r, ...cfg);
+			this.Sphere.c.draw( x*r,-y*r, ...cfg);
 		} else if (x > .75 ) {
-			this.#Sphere.c.draw( x*r,-y*r, ...cfg);
-			this.#Sphere.g.draw(-x*r,-y*r, ...cfg);
-			this.#Sphere.r.draw(-x*r, y*r, ...cfg);
+			this.Sphere.c.draw( x*r,-y*r, ...cfg);
+			this.Sphere.g.draw(-x*r,-y*r, ...cfg);
+			this.Sphere.r.draw(-x*r, y*r, ...cfg);
 		} else {
-			this.#Sphere.r.draw(-x*r, y*r, ...cfg);
-			this.#Sphere.c.draw( x*r,-y*r, ...cfg);
-			this.#Sphere.g.draw(-x*r,-y*r, ...cfg);
+			this.Sphere.r.draw(-x*r, y*r, ...cfg);
+			this.Sphere.c.draw( x*r,-y*r, ...cfg);
+			this.Sphere.g.draw(-x*r,-y*r, ...cfg);
 		}
 		ctx.restore();
 	}
-}
-freeze(Army);
+} freeze(Army);
 
 $on('Reset Ready Clear EndDemo Dropped Respawn', ()=> {
 	ArmySet.clear();

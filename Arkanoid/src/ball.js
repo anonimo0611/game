@@ -42,11 +42,10 @@ export const BallMgr = new class {
 		BallMgr.#cache($ctx, Grad);
 		$(ItemMgr).on({Obtained: BallMgr.#onPowerUp});
 	}
-	#speedDownRate  = 1;
-	get InitV()  {return vec2(1, -1)}
-	get Radius() {return Radius}
-	get count()  {return BallSet.size}
-	get Ball()   {return BallSet.values().next().value}
+	#speedDownRate = 1;
+	get Ball()    {return BallSet.values().next().value}
+	get count()   {return BallSet.size}
+	get Radius()  {return Radius}
 	get NearlyBall() {
 		return [...BallSet].sort((a,b)=> b.y - a.y)[0];
 	}
@@ -65,7 +64,7 @@ export const BallMgr = new class {
 		if (!Game.respawned)
 			BallMgr.#speedDownRate = 1;
 		BallSet.clear();
-		BallSet.add( new Ball({x,y,v:this.InitV}) );
+		BallSet.add( new Ball({x,y,v:Paddle.LaunchVelocity}) );
 	}
 	#onPowerUp(_, type) {
 		const {Ball}= BallMgr;
@@ -88,7 +87,7 @@ export const BallMgr = new class {
 		for (let i=0; i<DisruptionMax; i++) {
 			const {x, y}= BallMgr.Ball;
 			const angle = randFloat(90-140/2, 90+140/2) * PI/180;
-			const v = vec2(-cos(angle), -sin(angle));
+			const v = Vec2.fromAngle(angle).inverse;
 			BallSet.add( new Ball({x,y,v}) );
 		}
 	}

@@ -99,10 +99,8 @@ class Burst {
 	static set({x, y}) {
 		const v = vec2(x, y);
 		for (let i=90-150/2; i<=90+150/2; i+=30) {
-			const cx = cos(i*PI/180);
-			const cy = sin(i*PI/180);
-			const cv = vec2(cx,cy);
-			BurstSet.add(new Burst(x, y, cv));
+			const cv = Vec2.fromAngle(i*PI/180);
+			BurstSet.add( new Burst(x, y, cv) );
 		}
 	}
 	static update() {

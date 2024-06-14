@@ -43,7 +43,7 @@ const BrickHSLColors = deepFreeze([
 	[220, 79, 64], // Blue
 	[300, 79, 64], // Pink
 ]);
-const BrickPoints = [
+const BrickPoints = freeze([
 	  0, // Immortality
 	 50, // Hard
 	 50, // White
@@ -54,7 +54,7 @@ const BrickPoints = [
 	 70, // Cyan
 	100, // Blue
 	110, // Pink
-];
+]);
 
 const MapData   = Array(Rows);
 const Luster    = new Map();
@@ -134,8 +134,8 @@ export const BrickMgr = freeze(new class {
 		const w = (col == Cols-1)
 			? (ColWidth+ShadowOffset)-Frame : ColWidth;
 		ctxS.save();
+		ctxS.fillStyle = rgba(0,0,0, color.a*0.4);
 		ctxS.translate(x+ShadowOffset, y+ShadowOffset);
-		ctxS.fillStyle = rgba(0,0,0, color.a*0.5);
 		ctxS.clearRect(0,0, w,RowHeight);
 		ctxS.fillRect (0,0, w,RowHeight);
 		ctxS.restore();
@@ -234,8 +234,8 @@ const Brick = freeze(class {
 	Width       = ColWidth;
 	Height      = RowHeight;
 	#type       = BrickType.None;
-	#durability = 0;
 	#pointRate  = 1;
+	#durability = 0;
 	get type()          {return this.#type}
 	get durability()    {return this.#durability}
 	get exists()        {return !this.isNone}
@@ -258,8 +258,8 @@ const Brick = freeze(class {
 		 || type == BrickType.Immortality)
 			Luster.set(this, {offset:0});
 
-		this.#durability = this.#getDurabilityMax();
-		this.durabilityMax = this.#durability;
+		this.#durability   =
+		this.durabilityMax = this.#getDurabilityMax();
 		freeze(this);
 	}
 	#getDurabilityMax() {
@@ -273,15 +273,10 @@ const Brick = freeze(class {
 			return 1;
 		}
 	}
-	containsX(x) {
-		return between(x, this.x, this.x+this.Width);
-	}
-	containsY(y) {
-		return between(y, this.y, this.y+this.Height);
-	}
-	contains({x, y}={}) {
-		return this.containsX(x) && this.containsX(y);
-	}
+	containsX(v)    {return between(v, this.x, this.x+this.Width) }
+	containsY(v)    {return between(v, this.y, this.y+this.Height)}
+	contains({x,y}) {return this.containsX(x) && this.containsX(y)}
+
 	collision() {
 		this.#durability-- > 0
 			? this.#holdUp()
@@ -289,7 +284,8 @@ const Brick = freeze(class {
 		return this;
 	}
 	#holdUp() {
-		if (Luster.has(this)) return;
+		if (Luster.has(this))
+			return;
 		if (Luster.size <= 4) Sound.stop('se2').play('se2');
 		if (this.isHard) {
 			const {durabilityMax:dMax,durability:d}= this;
@@ -327,8 +323,9 @@ export class Collider {
 	}
 	get x() {return this.Pos.x}
 	get y() {return this.Pos.y}
-	get tilePos() {return this.offsetTilePos()}
-
+	get tilePos() {
+		return this.offsetTilePos();
+	}
 	offsetTilePos({x=0, y=0}={}) {
 		const col = int((this.x+x - Field.Left) / ColWidth);
 		const row = int((this.y+y - Field.Top)  / RowHeight);
@@ -337,19 +334,9 @@ export class Collider {
 	getBrick({row,col}=this.tilePos, {y=0,x=0}={}) {
 		return MapData[row+y]?.[col+x];
 	}
-	contains({x, y}={}) {
-		return (
-			between(x+this.Radius, this.x, this.x+this.Width) &&
-			between(y+this.Radius, this.y, this.y+this.Height)
-		);
-	}
-	get brickExistsOnBothSides() {
-		const brick = this.getBrick();
-		return brick?.AdjL?.exists && brick?.AdjRight?.exists;
-	}
-	get brickExistsOnOneSide() {
-		const brick = this.getBrick();
-		return brick?.AdjL?.exists || brick?.AdjRight?.exists;
+	contains({x:_x, y:_y}) {
+		const {x,y,Radius:r,Width:w,Height:h}= this;
+		return between(_x+r, x, x+w) && between(_y+r, y, y+h);
 	}
 	#detect(ox=0, oy=0) {
 		const offset = vec2(ox, oy).mul(this.Radius);
@@ -361,12 +348,14 @@ export class Collider {
         ) return Field;
 		return brick?.exists ? brick : null;
 	}
-	get hitT()  {return this.#detect( 0,-1)}
-	get hitR()  {return this.#detect( 1, 0)}
-	get hitB()  {return this.#detect( 0, 1)}
-	get hitL()  {return this.#detect(-1, 0)}
-	get hitLT() {return this.#detect(-1,-1)}
-	get hitRT() {return this.#detect( 1,-1)}
-	get hitLB() {return this.#detect(-1, 1)}
-	get hitRB() {return this.#detect( 1, 1)}
+	get hitT()    {return this.#detect( 0, -1)}
+	get hitR()    {return this.#detect( 1,  0)}
+	get hitB()    {return this.#detect( 0,  1)}
+	get hitL()    {return this.#detect(-1,  0)}
+	get hitLT()   {return this.#detect(-1, -1)}
+	get hitRT()   {return this.#detect( 1, -1)}
+	get hitLB()   {return this.#detect(-1,  1)}
+	get hitRB()   {return this.#detect( 1,  1)}
+	get hitLB3Q() {return this.#detect(-1.10, 0.75)}
+	get hitRB3Q() {return this.#detect( 1.10, 0.75)}
 }

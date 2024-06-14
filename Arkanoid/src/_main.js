@@ -166,7 +166,7 @@ export const Game = freeze(new class {
 		ctx.clear();
 		ctx.drawImage(cvsShadow, 0,0);
 		Sight.drawLine();
-		ctx.drawImage(Bg.FrameImg, 0,0, cvs.width, cvs.height);
+		ctx.drawImage(Bg.FrameImg, 0,0);
 		ctx.drawImage(cvsBrick, 0,0);
 		BrickMgr.animation();
 		Sight.drawTarget();
