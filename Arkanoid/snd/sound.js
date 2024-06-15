@@ -15,7 +15,7 @@ export const Sound = new class {
 		$on('keydown', e=> {/^M$/i.test(e.key) && Sound.#mute(e)})
 		$('#volRng') .on('input',Sound.#applyVol).eq(0).trigger('input')
 		$('#speaker').on('click',Sound.#mute)
-		Ctrl.css('--width',`${Ctrl.width}px`).addClass('loaded')
+		$(Ctrl).css('--width',`${Ctrl.width}px`).addClass('loaded')
 	}
 	#lstVol = null;
 	get vol(){

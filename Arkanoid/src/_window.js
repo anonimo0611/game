@@ -1,8 +1,7 @@
 import {Ticker} from '../lib/timer.js';
 import {cvs}    from './_canvas.js';
 
-const dBoard   = byId('board');
-const FontSize = dBody.fontSize();
+const dBoard = byId('board');
 
 export const Window = new class {
 	static {$load(this.#setup)}
@@ -10,7 +9,7 @@ export const Window = new class {
 		Window.#fit();
 		Window.#setCSSVars();
 		Window.#setResizeEvent();
-		dBody.addClass('loaded');
+		dBody.classList.add('loaded');
 	}
 	Board  = dBoard;
 	#scale = 1;
@@ -18,8 +17,8 @@ export const Window = new class {
 		return this.#scale;
 	}
 	#fit() {
-		const w = $(window).width()  / dBoard.width;
-		const h = $(window).height() / dBoard.height;
+		const w = $(window).width()  / dBoard.offsetWidth;
+		const h = $(window).height() / dBoard.offsetHeight;
 		this.#scale = min(w*0.98, h*0.9);
 		dBoard.style.transform = `scale(${this.scale})`;
 	}
@@ -34,7 +33,7 @@ export const Window = new class {
 		});
 	}
 	#setCSSVars() {
-		const boardTop = ($(window).height() - dBoard.height*this.scale)/2;
+		const boardTop = ($(window).height() - dBoard.offsetHeight*this.scale)/2;
 		$(dBody).css({
 			'--scale': this.scale,
 			'--board-top': `${boardTop}px`,

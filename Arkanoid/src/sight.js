@@ -18,7 +18,7 @@ export const Sight = freeze(new class {
 	}
 	get enabled() {
 		return BallMgr.count > 0 && Paddle.CatchEnabled
-			&& (!BallMgr.Ball.launched || Paddle.CatchX > 0);
+			&& (!BallMgr.Ball.launched || Paddle.catchX > 0);
 	}
 	get canDraw() {
 		return (this.enabled && (Game.isDemoScene || Paddle.controllable));
@@ -34,10 +34,28 @@ export const Sight = freeze(new class {
 			this.BallVelocity.clone.mul(Field.Diagonal)
 		);
 	}
+	get #intersectionWithField() {
+		return this.#getIntersection(
+			vec2(0, Field.Top), 
+			vec2(cvs.width, Field.Top)
+		) ?? this.BallVector;
+	}
+	#getIntersection(stV2, edV2) {
+		return getIntersection(
+			Paddle.CaughtBallPos, this.BallVector, stV2, edV2);
+	}
+	#attackArmy(point) {
+		for (const army of Army.ArmySet) {
+			if (army.contains(point)) {
+				army.crash(1);
+				this.Pos.set(point);
+				return true;
+			}
+		} return false;
+	}
 	#detectBrick(brick) {
 		const positions = [[0,1,1,1], [0,0,0,1], [1,0,1,1]].map(ov=>
-			getIntersection(
-				Paddle.CaughtBallPos, this.BallVector,
+			this.#getIntersection(
 				vec2(brick.Pos).add(ColWidth*ov[0], RowHeight*ov[1]),
 				vec2(brick.Pos).add(ColWidth*ov[2], RowHeight*ov[3])
 			)
@@ -50,17 +68,7 @@ export const Sight = freeze(new class {
 		}
 		return positions;
 	}
-	#attackArmy(point) {
-		for (const army of Army.ArmySet) {
-			if (army.contains(point)) {
-				army.takeDamage(1);
-				this.Pos.set(point);
-				return true;
-			}
-		}
-		return false;
-	}
-	#detectIntersectionsWithArmyOrBrick() {
+	#intersectionsWithArmyOrBrick() {
 		this.#brick = null;
 		for (const brick of BrickMgr.MapData.flat().reverse()) {
 			const [b,l,r]= this.#detectBrick(brick);
@@ -81,8 +89,8 @@ export const Sight = freeze(new class {
 		if (!this.enabled)
 			return;
 
-		if (!this.#detectIntersectionsWithArmyOrBrick())
-			this.Pos.set(this.BallVector);
+		if (!this.#intersectionsWithArmyOrBrick())
+			this.Pos.set(this.#intersectionWithField);
 
 		if (this.brick.isNone)
 			this.#brick = null;

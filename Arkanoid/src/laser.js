@@ -25,7 +25,7 @@ export class Laser extends Collider {
 	static #fire(e) {
 		if (!Scene.isInDemo && !Game.acceptEventInGame(e))
 			return;
-		if (!Paddle.Launched || Paddle.CatchEnabled)
+		if (!Paddle.launched || Paddle.CatchEnabled)
 			return;
 		if (!Paddle.LaserEnabled)
 			return;
@@ -39,7 +39,7 @@ export class Laser extends Collider {
 	}
 	static update() {
 		if (Scene.isInDemo && Ticker.count % 8 == 0)
-			Demo.canFire && Laser.#fire();
+			Demo.canFireLaser && Laser.#fire();
 		if (!Game.isPlayScene)
 			return;
 		Lasers[L].forEach(l=> l.update());
@@ -53,14 +53,12 @@ export class Laser extends Collider {
 		Lasers[R].forEach(l=> l.draw());
 		Burst.draw();
 	}
-	Width  = RadiusX * 2;
-	Height = RadiusY * 2;
 	constructor(side) {
 		const offset = BrickMgr.ColWidth / 2;
 		const y = Paddle.y - RadiusY;
 		super(side == L
-			? vec2(Paddle.CenterX-offset, y).xFreeze()
-			: vec2(Paddle.CenterX+offset, y).xFreeze(),
+			? vec2(Paddle.centerX-offset, y).xFreeze()
+			: vec2(Paddle.centerX+offset, y).xFreeze(),
 			RadiusX
 		);
 		this.side = side;
@@ -73,14 +71,14 @@ export class Laser extends Collider {
 	#collisionWithArmy() {
 		const army = Army.detectCollided(this);
 		if (army) {
-			army.takeDamage(army.MaxHp);
+			army.crash(army.MaxHp);
 			Lasers[this.side].delete(this);
 		}
 	}
 	#collisionWithBrickOrFeild() {
 		const object = this.hitT;
 		if (object) {
-			object.collision();
+			object.crash();
 			Lasers[this.side].delete(this);
 			Burst.set(this.Pos);
 		}

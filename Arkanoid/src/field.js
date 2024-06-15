@@ -15,5 +15,5 @@ export const Field = freeze(new class {
 	Left     = this.Frame;
 	Diagonal = sqrt(cvs.width**2 + cvs.height**2);
 
-	collision() {}
+	crash() {}
 });

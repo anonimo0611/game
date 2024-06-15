@@ -1,6 +1,6 @@
 const manifest = [
 {src:'./res/sound.ogg', data:{channels:6, audioSprite:[
-	{id:'start',  startTime:     0, duration: 2054},
+	{id:'start',  startTime:     0, duration: 2100},
 	{id:'se0',    startTime:  2127, duration: 1056},
 	{id:'se1',    startTime:  3699, duration: 1776},
 	{id:'se2',    startTime:  5478, duration: 1772},

@@ -75,7 +75,7 @@ export const Message = freeze(new class  {
 			break;
 
 		case Scene.Enum.InGame:
-			if (Paddle.alpha < 1 || Paddle.Launched)
+			if (Paddle.alpha < 1 || Paddle.launched)
 				return;
 			this.#draw('Click to Launch!', Color.Sub, {offsetRow:1.5});
 			break;

@@ -31,7 +31,7 @@ Grad.addColorStop(0.98, '#55BBFF');
 Grad.addColorStop(1.00, '#FFFFFF');
 
 export const BallMgr = new class {
-	static {$ready(this.#setup)}
+	static {$load(this.#setup)}
 	static #setup() {
 		const shadowCfg = {
 			color:  rgba(0,0,0, 0.4),
@@ -94,7 +94,7 @@ export const BallMgr = new class {
 	update() {
 		if (!Game.isReadyScene && !Game.isPlayScene)
 			return;
-		if (!Paddle.Launched)
+		if (!Paddle.launched)
 			return;
 		BallSet.forEach(ball=> ball.update());
 	}
@@ -113,8 +113,6 @@ export const BallMgr = new class {
 };
 export class Ball extends Collider {
 	Radius     = Radius;
-	Width      = Radius * 2;
-	Height     = Radius * 2;
 	Pos        = vec2();
 	Velocity   = vec2();
 	InitSpeed  = (BallSpeed*BallMgr.initialSpeedRate) * BallMgr.stageSpeedRate;
@@ -136,14 +134,14 @@ export class Ball extends Collider {
 		return this.#speed;
 	}
 	get isOnWall() {
-		const {row,col}= this.tilePos;
+		const {row,col}= this.TilePos;
 		for (let i=row+1; i<BrickMgr.Rows; i++)
 			if (BrickMgr.MapData[i]?.[col]?.exists)
 				return true;
 		return false;
 	}
 	update() {
-		if (Game.isReadyScene || Paddle.CatchX > 0)
+		if (Game.isReadyScene || Paddle.catchX > 0)
 			return;
 
 		const Min = this.InitSpeed * 0.7;
@@ -159,15 +157,18 @@ export class Ball extends Collider {
 
 		for (let i=0; i<Mag; i++) {
 			this.#reboundAtPaddle()
-			if (!Paddle.CatchX)
+			if (!Paddle.catchX)
 				this.Pos.add( this.Velocity.normalized.mul(Spd/Mag) );
 			this.#collisionWithArmy();
-			this.#collisionWithBrick(Mag);
+			this.#collisionWithBrickOrField(Mag);
 		}
 	}
 	#detectDropped() {
 		if (this.y <= cvs.height || Scene.isClear)
 			return false;
+
+		//this.Velocity.y *= -1;
+		//return;
 
 		if (Lives.left <= 0 && BallSet.size == 1) {
 			Sound.stop();
@@ -190,26 +191,26 @@ export class Ball extends Collider {
 		}
 	}
 	#reboundAtPaddle() {
-		if (!collisionRect(Paddle,this))
+		if (!Paddle.collisionRect(this))
 			return false;
 		if (Paddle.canCatch)
 			$(BallMgr).trigger('Cought',this);
 
 		this.Velocity.set( Paddle.ReboundVelocity.mul(this.speed) );
 		Sound.play('se0');
-		if (Paddle.CatchX)
+		if (Paddle.catchX)
 			Ticker.Timer.set(200, ()=> Sound.stop('se0'));
 	}
 	#collisionWithArmy() {
 		const army = Army.detectCollided(this);
 		if (army) {
-			army.takeDamage(army.MaxHp);
-			const angle = randChoice(45,135,225,315) * PI/180;
-			const v = vec2(cos(angle), sin(angle));
-			this.Velocity.set( v.mul(this.#speed*=ArmySpeedDown) );
+			army.crash(army.MaxHp);
+			const randAngle = randChoice(45,135,225,315) * PI/180;
+			const reboundV  = Vec2.fromAngle(randAngle);
+			this.Velocity.set( reboundV.mul(this.#speed*=ArmySpeedDown) );
 		}
 	}
-	#collisionWithBrick(mag) {
+	#collisionWithBrickOrField(mag) {
 		const {Velocity:v,hitT,hitR,hitB,hitL}= this;
 		if (hitL) v.x = +abs(v.x);
 		if (hitR) v.x = -abs(v.x);
@@ -217,7 +218,7 @@ export class Ball extends Collider {
 		if (hitB) v.y = -abs(v.y);
 		const brick = [hitL,hitR,hitB,hitT].find(BrickMgr.isBrick);
 		if (brick) {
-			brick.collision();
+			brick.crash();
 			if (brick.isImmortality) {
 				const vx = (v.x < 0 ? -0.2 : 0.2);
 				v.x += randFloat(0, vx/mag);

@@ -18,28 +18,34 @@ let $shakeAngle = 0;
 let $target     = null;
 let $landingPos = null;
 
+$on('Reset Start', function() {
+	$shakeAngle = 0;
+	$target     = null;
+	$landingPos = null;
+});
+
 export const Demo = new class {
 	get Ball() {return BallMgr.NearlyBall}
-	get canFire() {
+	get canFireLaser() {
 		return (
-			this.#canFireBricksWithLaser ||
-			this.#canFireArmyWithLaser);
+			this.#canShootBricksWithLaser ||
+			this.#canShootArmyWithLaser);
 	}
-	get #canFireBricksWithLaser() {
+	get #canShootBricksWithLaser() {
 		return [-ColWidth/2, ColWidth/2].flatMap(offset=> {
 			for (const brick of BrickMgr.MapData.flat().reverse()) {
 				if (brick.isNone)
 					continue;
-				if (brick.containsX(Paddle.CenterX+offset))
+				if (brick.containsX(Paddle.centerX+offset))
 					return brick.isBreakable || [];
 			} return [];
 		}).length > 0;
 	}
-	get #canFireArmyWithLaser() {
-		for (const {x,Width:w,tilePos} of Army.ArmySet) {
-			if (x   >= Paddle.CenterX-w
-			 && x+w <= Paddle.CenterX+w) {
-				const {row,col}= tilePos;
+	get #canShootArmyWithLaser() {
+		for (const {x,Width:w,TilePos} of Army.ArmySet) {
+			if (x   >= Paddle.centerX-w
+			 && x+w <= Paddle.centerX+w) {
+				const {row,col}= TilePos;
 				for (let i=row+1; i<Rows; i++)
 					if (BrickMgr.MapData[i]?.[col]?.exists)
 						return false;
@@ -57,7 +63,7 @@ export const Demo = new class {
 			} return true;
 		});
 	}
-	get emptiesBetweenImmoWalls() {
+	get emptiesBetweenImmortality() {
 		for (let i=BrickMgr.MapData.length-1; i>=0; i--) {
 			const row = BrickMgr.MapData[i];
 			if (row.some(b=> b.isImmortality))
@@ -83,53 +89,53 @@ export const Demo = new class {
 			if (AlwaysAimingStageSet.has(Game.stageNum)
 			 || BrickMgr.remains <= 15) {
 				const {x,y,col,row}= randChoice(targets);
-				const ox = ColWidth /2 + randFloat(-2, 2);
-				const oy = RowHeight/2 + randFloat(-2, 2);
+				const ox = randFloat(0, ColWidth);
+				const oy = randFloat(0, RowHeight);
 				$target = {col,row,Pos:vec2(x,y).add(ox,oy)};
 			}
 		}
 	}
 	#setEmptyTarget() {
-		if (Ticker.count % 120 != 0) return;
-		const {x,y,col,row}= randChoice(this.emptiesBetweenImmoWalls);
-		const ox = randFloat(0, ColWidth);
-		const oy = randFloat(0, RowHeight);
-		$target = {col,row,Pos:vec2(x,y).add(ox,oy)};
+		if (Ticker.count % 120 == 0) {
+			const {x,y,col,row}= randChoice(this.emptiesBetweenImmortality);
+			const ox = randFloat(0, ColWidth);
+			const oy = randFloat(0, RowHeight);
+			$target = {col,row,Pos:vec2(x,y).add(ox,oy)};
+		}
 	}
 	update() {
-		if (!Scene.isInDemo)
-			return;
-		$shakeAngle += PI/94 + randFloat(-0.01, +0.01);
-		this.#setTarget();
-		this.#setLandingPointOfBall();
+		if (Scene.isInDemo) {
+			$shakeAngle += PI/94 + randFloat(-0.01, +0.01);
+			this.#setTarget();
+			this.#setLandingPointOfBall();
+		}
 	}
 	autoPlay() {
-		const mag = this.Ball.Velocity.magnitude;
-		if (this.#paddleToItem(ItemMgr.Current))
+		if (this.#paddleMoveToItem(ItemMgr.Current))
 			return;
 		if (Paddle.CatchEnabled) {
-			Paddle.CatchX
+			Paddle.catchX
 				? CatchMode.autoPlay()
-				: this.#paddleToBall(mag);
+				: this.#paddleMoveToBall();
 			return;
 		}
 		if ($landingPos && $target?.Pos) {
 			this.#aimingAtTargetBrick();
 			return;
 		}
-		this.#paddleToBall(mag);
+		this.#paddleMoveToBall();
 	}
-	#paddleToBall(mag) {
+	#paddleMoveToBall() {
 		const x = this.Ball.x * (sin($shakeAngle)/10+1);
-		moveTo(x, mag*1.2);
+		moveTo(x, this.Ball.Velocity.magnitude*1.2);
 	}
-	#paddleToItem(item) {
+	#paddleMoveToItem(item) {
 		const Type  = item?.Type;
 		const BallV = this.Ball.Velocity.y;
 		if (!item || !this.Ball.isOnWall && BallV > 0)      return false;
 		if (Paddle.CatchEnabled && Type == ItemType.Expand) return false;
 		if (Paddle.LaserEnabled && Type == ItemType.Expand) return false;
-		moveTo(item.CenterX, cvs.width/50);
+		moveTo(item.centerX, cvs.width/50);
 		return true;
 	}
 	#aimingAtTargetBrick() {
@@ -138,7 +144,7 @@ export const Demo = new class {
 		let pos = $landingPos.x - w * norm(-aMax/2, +aMax/2, angle);
 		moveTo(pos + w/2, cvs.width/70);
 	}
-	#drawPoint(pos, r, color) {
+	#drawPoint(pos, r, color) { // for debug
 		fillCircle  (ctx)(...pos.vals, r, color);
 		strokeCircle(ctx)(...pos.vals, r, 3, '#FFF');
 	}
@@ -162,6 +168,7 @@ const CatchMode = new class {
 	#onCatch() {
 		if (!Scene.isInDemo)
 			return;
+	
 		this.#dir = 1;
 		this.#aiming = false;
 	 	Ticker.Timer.cancel(CatchMode)
@@ -173,6 +180,7 @@ const CatchMode = new class {
 	#releaseTimer() {
 		if (this.#aiming)
 			return;
+
 		this.#aiming = true;
 	 	Ticker.Timer.cancel(CatchMode)
 	 		.set(200, this.#release);
@@ -185,7 +193,7 @@ const CatchMode = new class {
 		if (bricks.length) {
 			if (Sight.brick?.isBreakable)
 				this.#releaseTimer();
-		} else for (const empty of Demo.emptiesBetweenImmoWalls) {
+		} else for (const empty of Demo.emptiesBetweenImmortality) {
 			getIntersection(
 				Demo.Ball.Pos,
 				vec2(Demo.Ball.Pos).add(this.#vector),
@@ -193,28 +201,23 @@ const CatchMode = new class {
 				vec2(empty.Pos).add(ColWidth-Radius*2, RowHeight)
 			) && this.#releaseTimer();
 		}
-		this.#move();
+		this.#searchMove();
 	}
-	#move() {
+	#searchMove() {
 		if (this.#aiming) return;
-		const spd = Field.Width/60;
+		const speed = Field.Width/60;
 		if (this.#dir > 0) {
-			moveTo(Field.Right, spd);
+			moveTo(Field.Right, speed);
 			Paddle.x > Paddle.MoveMax && (this.#dir *= -1);
 		} else {
-			moveTo(Field.Left, spd);
+			moveTo(Field.Left, speed);
 			Paddle.x < Paddle.MoveMin && (this.#dir *= -1);
 		}
 	}
 };
-function moveTo(dstX, spd) {
-	for (let i=0; i<spd; i++) {
-		if (dstX < Paddle.CenterX) Paddle.Pos.x--;
-		if (dstX > Paddle.CenterX) Paddle.Pos.x++;
+function moveTo(dstX, speed) {
+	for (let i=0; i<speed; i++) {
+		if (dstX < Paddle.centerX) Paddle.Pos.x--;
+		if (dstX > Paddle.centerX) Paddle.Pos.x++;
 	}
 }
-$on('Reset Start', function() {
-	$shakeAngle = 0;
-	$target     = null;
-	$landingPos = null;
-});

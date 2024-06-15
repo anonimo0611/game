@@ -25,8 +25,8 @@ const Height   = Radius*2;
 const SpawnL   = int(cvs.width/3 - Radius);
 const SpawnR   = (cvs.width - SpawnL) - Width;
 
-const DriftRadiusX = cvs.width/252;
-const DriftRadiusY = cvs.width/315;
+const DriftRadiusX = cvs.width/200;
+const DriftRadiusY = cvs.width/300;
 const DriftGravity = 0.3;
 
 const SphereRedHSL  = HSL(  0,  90, 40);
@@ -169,11 +169,11 @@ export class Army extends Collider {
 	static Explosion = Explosion;
 	static detectCollided(obj) {
 		for (const army of ArmySet)
-			if (army.#alpha == 1 && collisionRect(obj,army))
+			if (army.#alpha == 1 && army.collisionRect(obj))
 				return army;
 	}
 	static update() {
-		if (!Game.isPlayScene || !Paddle.Launched)
+		if (!Game.isPlayScene || !Paddle.launched)
 			return;
 		if (this.#counter++ >= Interval && ArmySet.size < ArmyMax) {
 			this.#counter = 0;
@@ -188,21 +188,19 @@ export class Army extends Collider {
 		ArmySet.forEach(a=> a.#drawSpheres(true)); // shadow
 		ArmySet.forEach(a=> a.#drawSpheres());
 	}
-	Width       = ColWidth;
-	Height      = ColWidth;
 	MaxHp       = 30;
 	#hp         = this.MaxHp;
 	#phase      = new Phase();
 	#alpha      = 0;
-	#animRad    = 0;
-	#moveRad    = 0;
+	#animAngle  = 0;
+	#moveAngle  = 0;
 	#downCnt    = 0;
-	#damageCnt  = 0;
 	#climbedCnt = 0;
+	#damaging   = 0;
 	#lastLR     = null;
 	#animPos    = vec2();
 	#destroyed  = false;
-	Sphere      = freeze({
+	Sphere = freeze({
 		r: new Sphere(SphereRedHSL),
 		g: new Sphere(SphereLimeHSL),
 		c: new Sphere(SphereCyanHSL),
@@ -215,10 +213,10 @@ export class Army extends Collider {
 		freeze(this);
 	}
 	get Phase()     {return this.#phase}
-	get damaging()  {return this.#damageCnt > 0}
+	get damaging()  {return this.#damaging > 0}
 	get destroyed() {return this.#destroyed}
 	get #canDrift() {
-		const {row,col} = this.tilePos;
+		const {row,col}= this.TilePos;
 		return row > 6 && [
 			[0,-1],[0,-2],[-1, 0],[-2, 0],[-1,-1],[1,-1],
 			[1, 0],[2, 0],[ 0, 1],[ 0, 2],[-1, 1],[1, 1]
@@ -229,28 +227,28 @@ export class Army extends Collider {
 		if (this.destroyed || this.#alpha < 1)
 			return;
 
-		if (this.#damageCnt > 0)
-			this.#damageCnt--;
+		if (this.#damaging > 0)
+			this.#damaging--;
 
 		this.Pos.x = clamp(this.x, Field.Left+Radius, Field.Right-Radius);
 		this.#move();
 		if (this.Velocity.x)
 			this.#lastLR = this.Velocity.x < 0 ? L : R;
 
-		if (collisionRect(Paddle,this)) {
-			this.takeDamage(this.MaxHp);
+		if (Paddle.collisionRect(this)) {
+			this.crash(this.MaxHp);
 			return;
 		}
 		if (this.y-Radius > cvs.height)
 			ArmySet.delete(this);
 	}
 	#updateAnim() {
-		this.#alpha = min(this.#alpha+=1/30, 1);
-		this.#animPos.set( Vec2.fromAngle(this.#animRad+=PI/60) )
+		this.#alpha = min(this.#alpha+1/30, 1);
+		this.#animPos.set( Vec2.fromAngle(this.#animAngle+=PI/60) )
 	}
 	#moveCircum() {
-		this.Pos.x += cos(this.#moveRad+=PI/1e3) * DriftRadiusX;
-		this.Pos.y += sin(this.#moveRad+=PI/200) * DriftRadiusY + DriftGravity;
+		this.Pos.x += cos(this.#moveAngle+=PI/1e3) * DriftRadiusX;
+		this.Pos.y += sin(this.#moveAngle+=PI/200) * DriftRadiusY + DriftGravity;
 	}
 	#move() {
 		this.#canDrift
@@ -297,8 +295,8 @@ export class Army extends Collider {
 			: this.#lastLR ?? randChoice(L,R);
 		v.set(Crawl[dir]);
 	}
-	takeDamage(damage) {
-		this.#hp -= damage;
+	crash(damagePoints) {
+		this.#hp -= damagePoints;
 		if (this.#hp <= 0) {
 			this.#destroyed = true;
 			Army.#counter = 0;
@@ -307,29 +305,29 @@ export class Army extends Collider {
 			Score.add(100);
 			Sound.stop('bomb').play('bomb');
 		} else
-			this.#damageCnt = 1;
+			this.#damaging = 1;
 	}
 	#drawSpheres(isShadow=false) {
 		if (this.destroyed)
 			return;
 
-		const {x,y}= this.#animPos, r = SphereR*0.75;
+		const {x,y}= this.#animPos, r = SphereR*0.8;
 		const cfg = [this.damaging, isShadow];
 		ctx.save();
 		ctx.globalAlpha = this.#alpha;
 		ctx.translate(...this.Pos.vals);
-		if (x < -.25) {
+		if (x < -.33) {
 			this.Sphere.g.draw(-x*r,-y*r, ...cfg);
 			this.Sphere.r.draw(-x*r, y*r, ...cfg);
 			this.Sphere.c.draw( x*r,-y*r, ...cfg);
-		} else if (x > .75 ) {
+		} else if (y > .66 ) {
+			this.Sphere.r.draw(-x*r, y*r, ...cfg);
 			this.Sphere.c.draw( x*r,-y*r, ...cfg);
 			this.Sphere.g.draw(-x*r,-y*r, ...cfg);
-			this.Sphere.r.draw(-x*r, y*r, ...cfg);
 		} else {
-			this.Sphere.r.draw(-x*r, y*r, ...cfg);
 			this.Sphere.c.draw( x*r,-y*r, ...cfg);
 			this.Sphere.g.draw(-x*r,-y*r, ...cfg);
+			this.Sphere.r.draw(-x*r, y*r, ...cfg);
 		}
 		ctx.restore();
 	}

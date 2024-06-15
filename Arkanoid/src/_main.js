@@ -37,7 +37,7 @@ export const Game = freeze(new class {
 			mousedown:   Game.#start,
 			contextmenu: Game.#confirm,
 		});
-		$(Menu.StageMenu).on({Select: Game.#selectStage});
+		$(Menu.StageMenu).on({change: Game.#selectStage});
 		Game.#reset();
 	}
 	ReadyTime  = 2500; // ms
@@ -88,7 +88,8 @@ export const Game = freeze(new class {
 		Game.#start();
 	}
 	#start(e) {
-		if (e?.button > 0 || !Game.isDemoScene) return;
+		if (e?.button > 0 || !Game.isDemoScene)
+			return;
 		Scene.switchToStart();
 		Scene.switchToReady();
 		Game.#init();
@@ -122,7 +123,7 @@ export const Game = freeze(new class {
 	#confirm(e) {
 		if (Game.isDemoScene) {
 			Ticker.pause(e.type == 'blur');
-			Game.draw();
+			Game.#draw();
 			return;
 		}
 		if (Confirm.opened)
@@ -147,7 +148,7 @@ export const Game = freeze(new class {
 				Restart: Game.#restart,
 			}
 		});
-		Game.draw();
+		Game.#draw();
 	}
 	#update() {
 		if (BrickMgr.brokenAll)
@@ -162,7 +163,7 @@ export const Game = freeze(new class {
 		Paddle.update();
 		Demo.update();
 	}
-	draw() {
+	#draw() {
 		ctx.clear();
 		ctx.drawImage(cvsShadow, 0,0);
 		Sight.drawLine();
@@ -183,6 +184,6 @@ export const Game = freeze(new class {
 	}
 	#mainLoop() {
 		Game.#update();
-		Game.draw();
+		Game.#draw();
 	}
 });

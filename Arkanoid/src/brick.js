@@ -15,7 +15,7 @@ const {cvs,ctx,ctxBrick:ctxB,ctxShadow:ctxS}= Cvs;
 const {Frame,Cols,Rows,ColWidth,RowHeight}= Field;
 
 const LineWidth    = int(cvs.width/315);
-const ShadowOffset = ColWidth  * 0.2;
+const ShadowOffset = ColWidth * 0.2;
 const AnimDuration = 200 / Ticker.Interval;
 
 export const BrickType = freeze({
@@ -56,9 +56,9 @@ const BrickPoints = freeze([
 	110, // Pink
 ]);
 
-const MapData   = Array(Rows);
-const Luster    = new Map();
-const Disappear = new Map();
+const MapData = Array(Rows);
+const LusterMap    = new Map();
+const DisappearMap = new Map();
 
 export const BrickMgr = freeze(new class {
 	MapData    = MapData;
@@ -82,8 +82,8 @@ export const BrickMgr = freeze(new class {
 	}
 	init() {
 		ItemMgr.init();
-		Luster.clear();
-		Disappear.clear();
+		LusterMap.clear();
+		DisappearMap.clear();
 		const map = Stages[Game.stageIdx];
 		for (const row of MapData.keys()) {
 			MapData[row] = Array(Cols);
@@ -91,7 +91,7 @@ export const BrickMgr = freeze(new class {
 				MapData[row][col] = new Brick({row,col}, map[row]?.[col]);
 		}
 		this.#brokenAll = false;
-		this.cache();
+		this.#cache();
 	}
 	update() {
 		if (this.brokenAll)
@@ -100,8 +100,8 @@ export const BrickMgr = freeze(new class {
 			return;
 
 		this.#brokenAll = true;
-		Luster.clear();
-		Disappear.clear();
+		LusterMap.clear();
+		DisappearMap.clear();
 		if (Scene.isInGame)
 			Scene.switchToClear();
 		if (Scene.isInDemo) {
@@ -112,50 +112,48 @@ export const BrickMgr = freeze(new class {
 	animation() {
 		if (Game.isReadyScene && Ticker.elapsed < 1000)
 			return;
-		for (const [brick,data] of Luster) {
+		for (const [brick,data] of LusterMap) {
 			if (!Game.isReadyScene && !Game.isPlayScene)
 				break;
           	if (data.offset >= 1) {
-        		Luster.delete(brick);
+        		LusterMap.delete(brick);
         		continue;
         	}
 	      	this.#drawLuster(brick,data);
 		}
-		for (const [brick,data] of Disappear) {
+		for (const [brick,data] of DisappearMap) {
            	const scale = max(data.scale-=1/AnimDuration, 0);
          	if (scale == 0) {
-				Disappear.delete(brick);
+				DisappearMap.delete(brick);
 				continue;
 			}
 			this.#drawDisappear(brick,scale);
 		}
 	}
 	#drawShadow({x,y,col,color}) {
-		const w = (col == Cols-1)
-			? (ColWidth+ShadowOffset)-Frame : ColWidth;
 		ctxS.save();
 		ctxS.fillStyle = rgba(0,0,0, color.a*0.4);
 		ctxS.translate(x+ShadowOffset, y+ShadowOffset);
-		ctxS.clearRect(0,0, w,RowHeight);
-		ctxS.fillRect (0,0, w,RowHeight);
+		ctxS.clearRect(0,0, ColWidth,RowHeight);
+		ctxS.fillRect (0,0, ColWidth,RowHeight);
 		ctxS.restore();
 	}
-	#drawBrick(ctx, brick, {effect=false,grad=null}={}) {
-		if (!effect && brick.isNone)
+	#drawBrick(ctx, brick, {effective=false,Grad=null}={}) {
+		if (!effective && brick.isNone)
 			return;
-		if (!effect)
+		if (!effective)
 			this.#drawShadow(brick);
 
 		const LW = LineWidth, FO = LW*1.5;
 		const {h,s,l,a}= brick.color;
-		if (!grad) {
-			grad = ctx.createLinearGradient(0,0,ColWidth,RowHeight);
-			grad.addColorStop(0.0, hsl(h,s,l-20,a));
-			grad.addColorStop(0.5, hsl(h,s,l+2, a));
-			grad.addColorStop(1.0, hsl(h,s,l-20,a));
+		if (!Grad) {
+			Grad = ctx.createLinearGradient(0,0,ColWidth,RowHeight);
+			Grad.addColorStop(0.0, hsl(h,s,l-20,a));
+			Grad.addColorStop(0.5, hsl(h,s,l+2, a));
+			Grad.addColorStop(1.0, hsl(h,s,l-20,a));
 		}
 		// Brick surface
-		ctx.fillStyle = grad;
+		ctx.fillStyle = Grad;
 		ctx.clearRect(FO, FO, ColWidth-FO*2, RowHeight-FO*2);
 		ctx.fillRect (FO, FO, ColWidth-FO*2, RowHeight-FO*2);
 
@@ -182,18 +180,18 @@ export const BrickMgr = freeze(new class {
 		const {h,s,l,a}= brick.color;
 		const {offset} = data;
 		const
-		grad = ctx.createLinearGradient(0,0,ColWidth,RowHeight);
-		grad.addColorStop(0, hsl(h,s,l-20,a));
-		grad.addColorStop(max(offset*0.5, 0), hsl(h,s,l-20,a));
-		grad.addColorStop(offset, '#FFF');
-		grad.addColorStop(min(offset*0.7, 1), hsl(h,s,l-20,a));
-		grad.addColorStop(1, hsl(h,s,l-20,a));
-		data.offset = min(data.offset+=1/AnimDuration, 1);
+		Grad = ctx.createLinearGradient(0,0,ColWidth,RowHeight);
+		Grad.addColorStop(0, hsl(h,s,l-20,a));
+		Grad.addColorStop(max(offset*0.5, 0), hsl(h,s,l-20,a));
+		Grad.addColorStop(offset, '#FFF');
+		Grad.addColorStop(min(offset*0.7, 1), hsl(h,s,l-20,a));
+		Grad.addColorStop(1, hsl(h,s,l-20,a));
+		data.offset = min(data.offset+1/AnimDuration, 1);
 
 		// Brick surface
       	ctx.save();
        	ctx.translate(x, y);
-		this.#drawBrick(ctx, brick, {grad,effect:true});
+		this.#drawBrick(ctx, brick, {Grad,effective:true});
       	ctx.restore();
 
 		// Highlight(bottom right)
@@ -210,24 +208,25 @@ export const BrickMgr = freeze(new class {
 		ctx.stroke();
       	ctx.restore();
 	}
-	#drawDisappear(brick,scale) {
+	#drawDisappear(brick, scale) {
   		const {x, y}= brick;
        	ctx.save();
 		ctx.globalAlpha = scale;
-      	ctx.translate(x+((ColWidth/2)*(1-scale)),y+((RowHeight/1.5)*(1-scale)));
-		ctx.scale(scale,scale);
-		this.#drawBrick(ctx, brick, {effect:true});
+      	ctx.translate(ColWidth/2*(1-scale)+x, RowHeight/1.5*(1-scale)+y);
+		ctx.scale(scale, scale);
+		this.#drawBrick(ctx, brick, {effective:true});
        	ctx.restore();
 	}
-	cache() {
+	drawBrick(brick) {
+		ctxB.save();
+		ctxB.translate(brick.x, brick.y);
+		this.#drawBrick(ctxB, brick);
+		ctxB.restore();
+	}
+	#cache() {
 		ctxS.clear();
 		ctxB.clear();
-		MapData.flat().forEach(brick=> {
-			ctxB.save();
-			ctxB.translate(brick.x, brick.y);
-			this.#drawBrick(ctxB, brick);
-			ctxB.restore();
-		});
+		MapData.flat().forEach(this.drawBrick.bind(this));
 	}
 });
 const Brick = freeze(class {
@@ -240,9 +239,9 @@ const Brick = freeze(class {
 	get durability()    {return this.#durability}
 	get exists()        {return !this.isNone}
 	get isBreakable()   {return this.type > BrickType.Immortality}
+	get isImmortality() {return this.type == BrickType.Immortality}
 	get isNone()        {return this.type == BrickType.None}
 	get isHard()        {return this.type == BrickType.Hard}
-	get isImmortality() {return this.type == BrickType.Immortality}
 	get isNormal()      {return this.isBreakable && !this.isHard}
 
 	constructor({row,col}, type=BrickType.None) {
@@ -256,7 +255,7 @@ const Brick = freeze(class {
 
 		if (type == BrickType.Hard
 		 || type == BrickType.Immortality)
-			Luster.set(this, {offset:0});
+			LusterMap.set(this, {offset:0});
 
 		this.#durability   =
 		this.durabilityMax = this.#getDurabilityMax();
@@ -275,31 +274,32 @@ const Brick = freeze(class {
 	}
 	containsX(v)    {return between(v, this.x, this.x+this.Width) }
 	containsY(v)    {return between(v, this.y, this.y+this.Height)}
-	contains({x,y}) {return this.containsX(x) && this.containsX(y)}
+	contains({x,y}) {return this.containsX(x) && this.containsY(y)}
 
-	collision() {
+	crash() {
 		this.#durability-- > 0
 			? this.#holdUp()
 			: this.#destroy(this.Pos);
 		return this;
 	}
 	#holdUp() {
-		if (Luster.has(this))
+		if (LusterMap.has(this))
 			return;
-		if (Luster.size <= 4) Sound.stop('se2').play('se2');
+		if (LusterMap.size <= 4)
+			Sound.stop('se2').play('se2');
 		if (this.isHard) {
 			const {durabilityMax:dMax,durability:d}= this;
 			this.color.s += 30 - 30/dMax * d;
 			this.color.l -= 30 - 30/dMax * d;
 			this.color.a = min((1/dMax * d)+0.5, 1);
-			BrickMgr.cache();
+			BrickMgr.drawBrick(this);
 		}
-		Luster.set(this, {offset:0});
+		LusterMap.set(this, {offset:0});
 	}
 	#destroy({x, y}) {
-		Luster.delete(this);
-		Disappear.set(this, {scale:1});
-		ctxB.clearRect(x, y, ColWidth,RowHeight);
+		LusterMap.delete(this);
+		DisappearMap.set(this, {scale:1});
+		ctxB.clearRect(x,y, ColWidth,RowHeight);
 		ctxS.clearRect(x+ShadowOffset, y+ShadowOffset, ColWidth,RowHeight);
 		Sound.stop('se1').play('se1');
 		if (this.isNormal)
@@ -316,32 +316,52 @@ const Brick = freeze(class {
 	get AdjU() {return this.getAdjacent( 0,-1)}
 	get AdjD() {return this.getAdjacent( 0, 1)}
 });
-export class Collider {
-	constructor({x, y}, radius) {
+export class Rect {
+	#width = 0;
+	constructor({x, y}, width, height, radius=0) {
 		this.Pos    = vec2(x, y);
+		this.#width = width;
+		this.Height = height;
 		this.Radius = radius;
 	}
-	get x() {return this.Pos.x}
-	get y() {return this.Pos.y}
-	get tilePos() {
-		return this.offsetTilePos();
-	}
-	offsetTilePos({x=0, y=0}={}) {
+	get x()       {return this.Pos.x}
+	get y()       {return this.Pos.y}
+	get Width()   {return this.#width}
+	get TilePos() {return this.OffsetTilePos()}
+
+	OffsetTilePos({x=0, y=0}={}) {
 		const col = int((this.x+x - Field.Left) / ColWidth);
 		const row = int((this.y+y - Field.Top)  / RowHeight);
 		return {row,col}
 	}
-	getBrick({row,col}=this.tilePos, {y=0,x=0}={}) {
+	getBrick({row,col}=this.TilePos, {y=0,x=0}={}) {
 		return MapData[row+y]?.[col+x];
 	}
 	contains({x:_x, y:_y}) {
 		const {x,y,Radius:r,Width:w,Height:h}= this;
 		return between(_x+r, x, x+w) && between(_y+r, y, y+h);
 	}
+	collisionRect(obj) {
+		if (obj instanceof Rect === false)
+			return false;
+
+		const {x:aX,y:aY,Width:aW,Height:aH,Radius:aR}= this;
+		const {x:bX,y:bY,Width:bW,Height:bH,Radius:bR}= obj;
+		const aPos = vec2(aX, aY).sub(aR);
+		const bPos = vec2(bX, bY).sub(bR);
+		return (
+			abs((aPos.x+aW/2)-(bPos.x+bW/2)) < (aW+bW)/2 &&
+			abs((aPos.y+aH/2)-(bPos.y+bH/2)) < (aH+bH)/2);
+	}
+}
+export class Collider extends Rect {
+	constructor(pos, radius) {
+		super(pos, radius*2, radius*2, radius);
+	}
 	#detect(ox=0, oy=0) {
 		const offset = vec2(ox, oy).mul(this.Radius);
 		const point  = vec2(this.Pos).add(offset);
-        const brick  = this.getBrick( this.offsetTilePos(offset) );
+        const brick  = this.getBrick( this.OffsetTilePos(offset) );
         if (point.x < Field.Left
          || point.x > Field.Right
          || point.y < Field.Top

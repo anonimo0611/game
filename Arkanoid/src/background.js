@@ -12,7 +12,6 @@ const BgColors = deepFreeze([
 ]);
 
 const FrameImg = $(`<img src="./res/frame.png">`).get(0);
-
 for (const i of BgImages.keys())
 	BgImages[i] = $(`<img src="./res/bg${i}.png">`).get(0);
 

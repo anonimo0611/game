@@ -2,20 +2,22 @@ import {cvs,ctx} from './_canvas.js';
 import {Game}    from './_main.js';
 import {Field}   from './field.js';
 import {Paddle}  from './paddle.js';
+import {ItemMgr} from './item.js';
 import * as Menu from './menu.js';
 
 const [$cvs] = canvas2D(null).vals;
-const ScaleX = 0.45;
-const ScaleY = 0.50;
+const ScaleX = 0.40;
+const ScaleY = 0.60;
 
 export const Lives = freeze(new class {
-	static {$ready(this.#setup)}
+	static {$load(this.#setup)}
 	static #setup() {
 		$on({
 			Start:   Lives.#onStart,
 			Respawn: Lives.#onRespawn,
 		});
-		$(Menu.LivesMenu).on({Select:Lives.#set});
+		$(ItemMgr).on({Obtained: Lives.#extend});
+		$(Menu.LivesMenu).on({change: Lives.#set});
 	}
 	context = $cvs.getContext('2d');
 
@@ -25,16 +27,17 @@ export const Lives = freeze(new class {
 	#onStart()   {Lives.#left = Menu.LivesMenu.value}
 	#onRespawn() {Lives.#left--}
 
-	extend() {
-		!Game.isDemoScene && Lives.#left++
+	#extend(_, type) {
+		if (Game.isDemoScene) return;
+		type == ItemMgr.Type.Extend && Lives.#left++
 	}
 	draw() {
 		if (Game.isDemoScene)
 			return;
 
-		const w = ScaleX * Paddle.DefaultW;
+		const w = ScaleX * Paddle.InitWidth;
 		const h = ScaleY * Paddle.Height;
-		const marginLeft = w * 0.2;
+		const marginLeft = w * 0.15;
 		const offsetLeft = Field.Left + marginLeft;
 		ctx.save();
 		ctx.translate(offsetLeft, cvs.height - h*1.8);

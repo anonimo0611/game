@@ -12,7 +12,7 @@ let $high    = 0;
 let $disp1UP = 1;
 
 export const Score = freeze(new class {
-	static {$ready(this.#setup)}
+	static {$load(this.#setup)}
 	static #setup() {
 		$on({
 			Start:    Score.#onStart,
@@ -48,8 +48,7 @@ export const Score = freeze(new class {
 		// Backgound color
 		ctx.save();
 		ctx.fillStyle = rgba(...Bg.Color, 0.2);
-		ctx.clearRect(0,0, cvs.width, FontSize * 1.5);
-		ctx.fillRect (0,0, cvs.width, FontSize * 1.5);
+		ctx.fillRect(0,0, cvs.width, FontSize * 1.5);
 		ctx.restore();
 
 		// Draw score texts

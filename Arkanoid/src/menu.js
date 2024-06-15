@@ -8,9 +8,9 @@ export const StageMenu = new class extends Menu.SlideMenu {
 	static {
 		for (let i=0; i<Stages.length; i++) { // Initialize
 			const num = String(i+1).padStart(2, 0);
-			const cLI = makeElm(`li[data-val=${i}]`).text(num);
-			if (i == 0) cLI.addClass('selected');
-			SelectStage.qs('menu').append(cLI);
+			const $LI = $(`<li data-val="${i}"></li>`).text(num);
+			if (i == 0) $LI.addClass('selected');
+			$(SelectStage).find('menu').append($LI);
 		}
 	}
 	constructor() {
@@ -18,7 +18,7 @@ export const StageMenu = new class extends Menu.SlideMenu {
 	}
 	select(idx, {restore=false}={}) {
 		super.select(idx);
-		$(this).trigger('Select', idx);
+		$(this).trigger('change', idx);
 	}
 };
 export const LivesMenu = new class extends Menu.SlideMenu {
@@ -28,7 +28,7 @@ export const LivesMenu = new class extends Menu.SlideMenu {
 	}
 	select(idx, {restore=false}={}) {
 		super.select(idx);
-		$(this).trigger('Select', this.value);
+		$(this).trigger('change', this.value);
 		!restore && (localStorage.arkanoidLives=idx);
 	}
 };

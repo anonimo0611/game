@@ -8,6 +8,19 @@ import {Score}    from './score.js';
 import {Paddle}   from './paddle.js';
 import {BallMgr}  from './ball.js';
 import {BrickMgr} from './brick.js';
+import {Rect}     from './brick.js';
+
+const Width  = BrickMgr.ColWidth;
+const Height = BrickMgr.RowHeight * 1.25;
+
+export const ItemType = freeze({
+	Extend:     0,
+	Catch:      1,
+	Disruption: 2,
+	Expand:     3,
+	Laser:      4,
+	SpeedDown:  5,
+});
 
 let $current   = null;
 let $lastIndex = -1;
@@ -22,6 +35,9 @@ export const ItemMgr = new class {
 		$lastIndex = -1;
 	 	$extended  = 0;
 		$spdDowned = 0;
+	}
+	get Type() {
+		return ItemType;
 	}
 	get apearedItemExists() {
 		return $current || BallMgr.count > 1;
@@ -41,7 +57,7 @@ export const ItemMgr = new class {
 			return this.#choice();
 
 		if (ExclTypes.includes(idx)) {
-			if (idx === Paddle.ExclItem)
+			if (idx === Paddle.ExclType)
 				idx = randChoice(ExclTypes
 					.filter(i=> i != $lastIndex && i != idx));
 		}
@@ -56,28 +72,25 @@ export const ItemMgr = new class {
 	draw()   {$current instanceof Item && $current.draw()}
 };
 
-class Item {
-	Speed     = cvs.height / 175;
-	TextAlpha = 0.8;
-	TextColor = rgba(255,204,0,this.TextAlpha);
-
-	Width      = BrickMgr.ColWidth;
-	Height     = BrickMgr.RowHeight * 1.25;
+class Item extends Rect {
+	Speed      = cvs.height / 175;
+	TextAlpha  = 0.8;
+	TextColor  = rgba(255,204,0, this.TextAlpha);
 	#aIdex     = 0;
 	#textScale = 0;
 	#scaleTbl  = integers(30).map(n=> n>15 ? 30-n : n);
 
-	get CenterX() {return this.Pos.x + this.Width/2}
+	get centerX() {return this.Pos.x + Width/2}
 
 	constructor(pos, {hue,nonColored=false}={}) {
-		const {Width:w,Height:h}= this;
+		super(pos, Width, Height);
 		const s = nonColored? 0:91;
 		this.Pos  = vec2(pos).xFreeze();
-		this.grad = ctx.createLinearGradient(w,0,w,h);
-		this.grad.addColorStop(0.00, hsl(hue,s,36));
-		this.grad.addColorStop(0.20, hsl(hue,s,80));
-		this.grad.addColorStop(0.30, hsl(hue,s,36));
-		this.grad.addColorStop(1.00, hsl(hue,s,50));
+		this.Grad = ctx.createLinearGradient(Width,0,Width,Height);
+		this.Grad.addColorStop(0.00, hsl(hue,s,36));
+		this.Grad.addColorStop(0.20, hsl(hue,s,80));
+		this.Grad.addColorStop(0.30, hsl(hue,s,36));
+		this.Grad.addColorStop(1.00, hsl(hue,s,50));
 		this.outlineColor = hsl(hue, nonColored? 0:40, 40);
 	}
 	update() {
@@ -93,7 +106,7 @@ class Item {
 		this.#textScale = this.#scaleTbl[idx] / (len/2);
 		this.Pos.y += this.Speed;
 
-		if (collisionRect(this,Paddle)) {
+		if (Paddle.collisionRect(this)) {
 			Score.add(1000);
 			Sound.play('item');
 			$(ItemMgr).trigger('Obtained', this.Type);
@@ -107,7 +120,7 @@ class Item {
 	}
 	draw() {
 		if (!Game.isPlayScene) return;
-		const {x,y,Width:w,Height:h}= {...this.Pos,...this};
+		const {x,y,Width:w,Height:h}= this;
 		const offsetH  = h * (this.#aIdex/this.#scaleTbl.length);
 		const cornerR  = h/3;
 		const fontSize = h;
@@ -122,7 +135,7 @@ class Item {
 		ctx.save();
 		ctx.translate(x, y);
 		ctx.lineWidth = cvs.width / 200 | 0;
-		fillRoundRect  (ctx, 0,0, w,h, cornerR, this.grad);
+		fillRoundRect  (ctx, 0,0, w,h, cornerR, this.Grad);
 		strokeRoundRect(ctx, 0,0, w,h, cornerR, this.outlineColor)
 		ctx.restore();
 
@@ -140,15 +153,6 @@ class Item {
 		ctx.restore();
 	}
 }
-
-export const ItemType = freeze({
-	Extend:     0,
-	Catch:      1,
-	Disruption: 2,
-	Expand:     3,
-	Laser:      4,
-	SpeedDown:  5,
-});
 const SubClasses = [
 	class extends Item {
 		Text = 'P';
