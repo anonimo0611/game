@@ -55,7 +55,8 @@ export const Demo = new class {
 	}
 	get brickTargets() {
 		return BrickMgr.MapData.flat().reverse().filter(b=> {
-			if (b.isNone || b.isImmortality) return false;
+			if (b.isNone || b.isImmortality)
+				return false;
 			for (let i=b.row+1, col=b.col; i<Rows-b.row; i++) {
 				const b = BrickMgr.MapData[i][col];
 				if (!b.isNone || b.isImmortality)
@@ -140,15 +141,15 @@ export const Demo = new class {
 	}
 	#aimingAtTargetBrick() {
 		const {ReboundAngleMax:aMax,Width:w}= Paddle;
-		const angle = Vec2.angle($target?.Pos, $landingPos) + PI/2;
-		let pos = $landingPos.x - w * norm(-aMax/2, +aMax/2, angle);
+		const angle = Vec2.toRadians($target?.Pos, $landingPos) + PI/2;
+		let pos = $landingPos.x - w * norm(-aMax, +aMax, angle);
 		moveTo(pos + w/2, cvs.width/70);
 	}
-	#drawPoint(pos, r, color) { // for debug
+	#drawPoint(pos, r, color) { // For debug
 		fillCircle  (ctx)(...pos.vals, r, color);
 		strokeCircle(ctx)(...pos.vals, r, 3, '#FFF');
 	}
-	draw() {
+	draw() { // For debug
 		return;
 		if ($target)
 			this.#drawPoint($target.Pos, 10, '#F33');

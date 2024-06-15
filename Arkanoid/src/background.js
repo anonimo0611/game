@@ -3,8 +3,7 @@ import {cvs}   from './_canvas.js';
 import {Game}  from './_main.js';
 import {Field} from './field.js';
 
-const ImageMax = 3;
-const BgImages = Array(ImageMax);
+const BgImages = Array(3);
 const BgColors = deepFreeze([
 	[0x51,0x51,0xFF], // Blue
 	[0x51,0xFF,0x51], // Green
@@ -22,7 +21,7 @@ class Background {
 		return this.#Color;
 	}
 	init() {
-		const idx = Game.stageIdx % ImageMax;
+		const idx = Game.stageIdx % BgImages.length;
 		this.#Color = BgColors[idx];
 		$(dBody).css({
 			'--dialog-color': rgba(...this.Color, 0.4),

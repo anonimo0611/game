@@ -7,7 +7,7 @@ import {Scene}    from './scene.js';
 import {Paddle}   from './paddle.js';
 import {Army}     from './army.js';
 import {BrickMgr} from './brick.js';
-import {Collider} from './brick.js';
+import {Collider} from './rect.js';
 
 const Color   = '#CCFF66';
 const Rapid   = 2; // Up to 2 shots in field
@@ -97,7 +97,7 @@ class Burst {
 	static set({x, y}) {
 		const v = vec2(x, y);
 		for (let i=90-150/2; i<=90+150/2; i+=30) {
-			const cv = Vec2.fromAngle(i*PI/180);
+			const cv = Vec2.fromDegrees(i);
 			BurstSet.add( new Burst(x, y, cv) );
 		}
 	}

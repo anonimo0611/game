@@ -12,7 +12,7 @@ import {ItemType}  from './item.js';
 import {Army}      from './army.js';
 import {BrickMgr}  from './brick.js';
 import {BrickType} from './brick.js';
-import {Collider}  from './brick.js'
+import {Collider}  from './rect.js'
 import {Paddle}    from './paddle.js';
 
 const Radius        = int(cvs.width / 85);
@@ -86,8 +86,8 @@ export const BallMgr = new class {
 	#setDisruption() {
 		for (let i=0; i<DisruptionMax; i++) {
 			const {x, y}= BallMgr.Ball;
-			const angle = randFloat(90-140/2, 90+140/2) * PI/180;
-			const v = Vec2.fromAngle(angle).inverse;
+			const angle = randFloat(90-140/2, 90+140/2);
+			const v = Vec2.fromDegrees(angle).inverse;
 			BallSet.add( new Ball({x,y,v}) );
 		}
 	}
@@ -205,8 +205,8 @@ export class Ball extends Collider {
 		const army = Army.detectCollided(this);
 		if (army) {
 			army.crash(army.MaxHp);
-			const randAngle = randChoice(45,135,225,315) * PI/180;
-			const reboundV  = Vec2.fromAngle(randAngle);
+			const randDeg  = randChoice(45,135,225,315);
+			const reboundV = Vec2.fromDegrees(randDeg);
 			this.Velocity.set( reboundV.mul(this.#speed*=ArmySpeedDown) );
 		}
 	}

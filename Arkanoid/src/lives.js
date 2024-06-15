@@ -7,7 +7,7 @@ import * as Menu from './menu.js';
 
 const [$cvs] = canvas2D(null).vals;
 const ScaleX = 0.40;
-const ScaleY = 0.60;
+const ScaleY = 0.50;
 
 export const Lives = freeze(new class {
 	static {$load(this.#setup)}

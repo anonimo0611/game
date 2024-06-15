@@ -31,7 +31,7 @@ export const Score = freeze(new class {
 	update() {
 		$disp1UP ^= Ticker.count % 30 == 0;
 	}
-	get isShow1UP() {
+	get display1UP() {
 		return !Scene.isInGame || (Scene.isInGame && $disp1UP);
 	}
 	add(pts=0) {
@@ -58,7 +58,7 @@ export const Score = freeze(new class {
 		ctx.shadowOffsetX = FontSize * 0.1;
 		ctx.shadowOffsetY = FontSize * 0.1;
 		ctx.fillStyle = 'white';
-		this.isShow1UP && ctx.fillText('1UP', FontSize, y);
+		this.display1UP && ctx.fillText('1UP', FontSize, y);
 		ctx.fillText(ScoreStr, FontSize *  4, y);
 		ctx.fillText(HighStr,  FontSize * 13, y);
 		ctx.restore();

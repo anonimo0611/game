@@ -13,7 +13,7 @@ import {ItemType}  from './item.js';
 import {ExclTypes} from './item.js';
 import {BallMgr}   from './ball.js';
 import {BrickMgr}  from './brick.js';
-import {Rect}      from './brick.js';
+import {Rect}      from './rect.js';
 import {MouseX}    from './mouse.js';
 
 const Width  = cvs.width / 5;
@@ -47,8 +47,11 @@ export const Paddle = freeze(new class extends Rect {
 	InitWidth = Width;
 	Height    = Height;
 
-	LaunchVelocity  = Vec2.fromAngle((90+25) * PI/180).inverse;
-	ReboundAngleMax = (112 * PI/180);
+	// Launch angle at the beginning of the stage or at respawn
+	LaunchVelocity  = Vec2.fromDegrees(90+25).inverse;
+
+	// Ball rebound angle based on distance from paddle center
+	ReboundAngleMax = toRadians(56); // -56 to +56 degrees
 
 	constructor() {
 		super(vec2(0, cvs.height - Height*3.2), Width, Height);
@@ -84,8 +87,8 @@ export const Paddle = freeze(new class extends Rect {
 	get ReboundVelocity() {
 		const {x,centerX:cx,Width:w}= this;
 		const ballX = clamp(BallMgr.Ball.x, x, x+w);
-		const angle = PI/2 + ((ballX - cx) / w) * this.ReboundAngleMax;
-		return Vec2.fromAngle(angle).inverse;
+		const angle = PI/2 + ((ballX - cx) / w) * this.ReboundAngleMax*2;
+		return Vec2.fromRadians(angle).inverse;
 	}
 	get CaughtBallPos() {
 		const x = this.catchX? (this.clampedX+this.catchX) : this.centerX;
@@ -156,12 +159,6 @@ export const Paddle = freeze(new class extends Rect {
 				? Paddle.clampedX + Paddle.catchX
 				: Paddle.clampedX + Paddle.Width/2;
 	}
-	#onCatch(_, ball) {
-		const {x,y}= Paddle.Pos;
-		ball.Pos.x = clamp(ball.x, x+1, x+Paddle.Width-1);
-		ball.Pos.y = y - ball.Radius;
-		Paddle.#catchX = ball.x - Paddle.x;
-	}
 	#restrictRangeOfMove() {
 		const {Pos,MoveMin,MoveMax}= Paddle;
 		Pos.x = clamp(Pos.x, MoveMin, MoveMax);
@@ -172,7 +169,7 @@ export const Paddle = freeze(new class extends Rect {
 	}
 	#destory() {
 		if (BallMgr.count <= 0 && Ticker.count > 8)
-			Paddle.#alpha = max(Paddle.#alpha-1/FadeSpeed, 0);
+			Paddle.#alpha = max(Paddle.#alpha-1/FadeDuration, 0);
 	}
 	#onLaunch(e) {
 		if (!Game.acceptEventInGame(e))
@@ -182,6 +179,12 @@ export const Paddle = freeze(new class extends Rect {
 
 		Paddle.#launched = true;
 		Sound.play('se0');
+	}
+	#onCatch(_, ball) {
+		const {x,y}= Paddle.Pos;
+		ball.Pos.x = clamp(ball.x, x+1, x+Paddle.Width-1);
+		ball.Pos.y = y - ball.Radius;
+		Paddle.#catchX = ball.x - Paddle.x;
 	}
 	#onRelease(e) {
 		if (!Paddle.catchX)
@@ -307,7 +310,7 @@ const AutoMoveToCursorX = freeze(new class {
 		$on('InGame Respawn Resume',
 			()=> AutoMoveToCursorX.#reached = false);
 	}
-	#reached  = false;
+	#reached = false;
 	get reached() {
 		return this.#reached;
 	}

@@ -10,7 +10,7 @@ import {Field}    from './field.js'
 import {Scene}    from './scene.js';
 import {Score}    from './score.js';
 import {BrickMgr} from './brick.js';
-import {Collider} from './brick.js'
+import {Collider} from './rect.js'
 import {Paddle}   from './paddle.js';
 
 const {ColWidth,RowHeight}= Field;
@@ -78,7 +78,7 @@ class Explosion {
 		this.Grad.addColorStop(0.0, hsl(h,s,70));
 		this.Grad.addColorStop(1.0, hsl(h,s,l,0.1));
 		for (let i=0; i<360; i+=360/12) {
-			const cv = Vec2.fromAngle(i*PI/180).mul(Radius);
+			const cv = Vec2.fromDegrees(i).mul(Radius);
 			this.ParticleSet.add( new Particle(x,y,cv) );
 		}
 	}
@@ -111,7 +111,7 @@ class Particle {
 	constructor(x, y, v) {
 		this.Pos = vec2(x, y).add(v);
 		for (let i=0; i<360; i+=360/6) {
-			const cv = Vec2.fromAngle(i*PI/180);
+			const cv = Vec2.fromDegrees(i);
 			this.ParticleSet.add({x,y,cv,r:SphereR/7});
 		}
 	}
@@ -244,7 +244,7 @@ export class Army extends Collider {
 	}
 	#updateAnim() {
 		this.#alpha = min(this.#alpha+1/30, 1);
-		this.#animPos.set( Vec2.fromAngle(this.#animAngle+=PI/60) )
+		this.#animPos.set( Vec2.fromRadians(this.#animAngle+=PI/60) )
 	}
 	#moveCircum() {
 		this.Pos.x += cos(this.#moveAngle+=PI/1e3) * DriftRadiusX;

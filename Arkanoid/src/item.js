@@ -8,7 +8,7 @@ import {Score}    from './score.js';
 import {Paddle}   from './paddle.js';
 import {BallMgr}  from './ball.js';
 import {BrickMgr} from './brick.js';
-import {Rect}     from './brick.js';
+import {Rect}     from './rect.js';
 
 const Width  = BrickMgr.ColWidth;
 const Height = BrickMgr.RowHeight * 1.25;

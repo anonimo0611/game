@@ -138,10 +138,10 @@ export const BrickMgr = freeze(new class {
 		ctxS.fillRect (0,0, ColWidth,RowHeight);
 		ctxS.restore();
 	}
-	#drawBrick(ctx, brick, {effective=false,Grad=null}={}) {
-		if (!effective && brick.isNone)
+	#drawBrick(ctx, brick, {effect=false,Grad=null}={}) {
+		if (!effect && brick.isNone)
 			return;
-		if (!effective)
+		if (!effect)
 			this.#drawShadow(brick);
 
 		const LW = LineWidth, FO = LW*1.5;
@@ -152,12 +152,12 @@ export const BrickMgr = freeze(new class {
 			Grad.addColorStop(0.5, hsl(h,s,l+2, a));
 			Grad.addColorStop(1.0, hsl(h,s,l-20,a));
 		}
-		// Brick surface
+		// Surface
 		ctx.fillStyle = Grad;
 		ctx.clearRect(FO, FO, ColWidth-FO*2, RowHeight-FO*2);
 		ctx.fillRect (FO, FO, ColWidth-FO*2, RowHeight-FO*2);
 
-		// Highlight(top left)
+		// Top and left edges
 		ctx.beginPath();
 			ctx.lineWidth   = LW;
 			ctx.strokeStyle = hsl(h,s,80);
@@ -166,7 +166,7 @@ export const BrickMgr = freeze(new class {
 			ctx.lineTo(ColWidth-LW,LW);
 		ctx.stroke();
 
-		// Shadow(bottom right)
+		// Bottom and right edges
 		ctx.beginPath();
 			ctx.lineWidth   = LW;
 			ctx.strokeStyle = hsl(h,s,40);
@@ -191,7 +191,7 @@ export const BrickMgr = freeze(new class {
 		// Brick surface
       	ctx.save();
        	ctx.translate(x, y);
-		this.#drawBrick(ctx, brick, {Grad,effective:true});
+		this.#drawBrick(ctx, brick, {Grad,effect:true});
       	ctx.restore();
 
 		// Highlight(bottom right)
@@ -214,7 +214,7 @@ export const BrickMgr = freeze(new class {
 		ctx.globalAlpha = scale;
       	ctx.translate(ColWidth/2*(1-scale)+x, RowHeight/1.5*(1-scale)+y);
 		ctx.scale(scale, scale);
-		this.#drawBrick(ctx, brick, {effective:true});
+		this.#drawBrick(ctx, brick, {effect:true});
        	ctx.restore();
 	}
 	drawBrick(brick) {
@@ -283,8 +283,6 @@ const Brick = freeze(class {
 		return this;
 	}
 	#holdUp() {
-		if (LusterMap.has(this))
-			return;
 		if (LusterMap.size <= 4)
 			Sound.stop('se2').play('se2');
 		if (this.isHard) {
@@ -294,7 +292,7 @@ const Brick = freeze(class {
 			this.color.a = min((1/dMax * d)+0.5, 1);
 			BrickMgr.drawBrick(this);
 		}
-		LusterMap.set(this, {offset:0});
+		!LusterMap.has(this) && LusterMap.set(this, {offset:0});
 	}
 	#destroy({x, y}) {
 		LusterMap.delete(this);
@@ -316,66 +314,3 @@ const Brick = freeze(class {
 	get AdjU() {return this.getAdjacent( 0,-1)}
 	get AdjD() {return this.getAdjacent( 0, 1)}
 });
-export class Rect {
-	#width = 0;
-	constructor({x, y}, width, height, radius=0) {
-		this.Pos    = vec2(x, y);
-		this.#width = width;
-		this.Height = height;
-		this.Radius = radius;
-	}
-	get x()       {return this.Pos.x}
-	get y()       {return this.Pos.y}
-	get Width()   {return this.#width}
-	get TilePos() {return this.OffsetTilePos()}
-
-	OffsetTilePos({x=0, y=0}={}) {
-		const col = int((this.x+x - Field.Left) / ColWidth);
-		const row = int((this.y+y - Field.Top)  / RowHeight);
-		return {row,col}
-	}
-	getBrick({row,col}=this.TilePos, {y=0,x=0}={}) {
-		return MapData[row+y]?.[col+x];
-	}
-	contains({x:_x, y:_y}) {
-		const {x,y,Radius:r,Width:w,Height:h}= this;
-		return between(_x+r, x, x+w) && between(_y+r, y, y+h);
-	}
-	collisionRect(obj) {
-		if (obj instanceof Rect === false)
-			return false;
-
-		const {x:aX,y:aY,Width:aW,Height:aH,Radius:aR}= this;
-		const {x:bX,y:bY,Width:bW,Height:bH,Radius:bR}= obj;
-		const aPos = vec2(aX, aY).sub(aR);
-		const bPos = vec2(bX, bY).sub(bR);
-		return (
-			abs((aPos.x+aW/2)-(bPos.x+bW/2)) < (aW+bW)/2 &&
-			abs((aPos.y+aH/2)-(bPos.y+bH/2)) < (aH+bH)/2);
-	}
-}
-export class Collider extends Rect {
-	constructor(pos, radius) {
-		super(pos, radius*2, radius*2, radius);
-	}
-	#detect(ox=0, oy=0) {
-		const offset = vec2(ox, oy).mul(this.Radius);
-		const point  = vec2(this.Pos).add(offset);
-        const brick  = this.getBrick( this.OffsetTilePos(offset) );
-        if (point.x < Field.Left
-         || point.x > Field.Right
-         || point.y < Field.Top
-        ) return Field;
-		return brick?.exists ? brick : null;
-	}
-	get hitT()    {return this.#detect( 0, -1)}
-	get hitR()    {return this.#detect( 1,  0)}
-	get hitB()    {return this.#detect( 0,  1)}
-	get hitL()    {return this.#detect(-1,  0)}
-	get hitLT()   {return this.#detect(-1, -1)}
-	get hitRT()   {return this.#detect( 1, -1)}
-	get hitLB()   {return this.#detect(-1,  1)}
-	get hitRB()   {return this.#detect( 1,  1)}
-	get hitLB3Q() {return this.#detect(-1.10, 0.75)}
-	get hitRB3Q() {return this.#detect( 1.10, 0.75)}
-}
