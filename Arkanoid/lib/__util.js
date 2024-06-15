@@ -32,6 +32,7 @@ const byIds  = arg=> {
 
 const lerp       = (x, y, p)     => x + (y - x) * p
 const norm       = (x, y, p)     => (p - x) / (y - x)
+const toRadians  = (deglee)      => deglee * PI/180
 const between    = (n, min, max) => (n >= min && n <= max)
 const clamp      = (n, min, max) => Math.min(Math.max(n,min), max)
 const randFloat  = (min, max)    => random() * (max-min) + min

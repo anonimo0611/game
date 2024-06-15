@@ -23,21 +23,23 @@ class Vec2 {
 	static get Left()  {return vec2(-1, 0)}
 	static get Up()    {return vec2(0, -1)}
 	static get Down()  {return vec2(0, +1)}
-	static add        = (v1, v2)=> vec2(v1).add(v2)
-	static sub        = (v1, v2)=> vec2(v1).sub(v2)
-	static mul        = (v1, n) => vec2(v1).mul(n)
-	static div        = (v1, n) => vec2(v1).div(n)
-	static divInt     = (v1, n) => vec2(v1).divInt(n)
-	static remainder  = (v1, n) => vec2(v1.x % n, v1.y % n)
-	static dot        = (v1, v2)=> v1.x * v2.x + v1.y * v2.y
-	static cross      = (v1, v2)=> v1.x * v2.y - v1.y * v2.x
-	static distance   = (v1, v2)=> Vec2.sub(v1, v2).magnitude
-	static isParallel = (v1, v2)=> Vec2.cross(v1, v2) < 0.000001
-	static isVertical = (v1, v2)=> Vec2.dot(v1, v2) < 0.000001
-	static angle      = (v1, v2)=> atan2(v1.y - v2.y, v1.x - v2.x);
-	static fromAngle  = (radian)=> vec2(cos(radian), sin(radian));
-	static eq         = (v1, v2)=> abs(v1.x - v2.x) < 0.000001 && abs(v1.y - v2.y) < 0.000001
-	static reflect    = (v,  n) => vec2(v).sub(vec2(n).mul(2*Vec2.dot(v,n)))
+	static add         = (v1, v2)=> vec2(v1).add(v2)
+	static sub         = (v1, v2)=> vec2(v1).sub(v2)
+	static mul         = (v1, n) => vec2(v1).mul(n)
+	static div         = (v1, n) => vec2(v1).div(n)
+	static divInt      = (v1, n) => vec2(v1).divInt(n)
+	static remainder   = (v1, n) => vec2(v1.x % n, v1.y % n)
+	static dot         = (v1, v2)=> v1.x * v2.x + v1.y * v2.y
+	static cross       = (v1, v2)=> v1.x * v2.y - v1.y * v2.x
+	static distance    = (v1, v2)=> Vec2.sub(v1, v2).magnitude
+	static isParallel  = (v1, v2)=> Vec2.cross(v1, v2) < 0.000001
+	static isVertical  = (v1, v2)=> Vec2.dot(v1, v2) < 0.000001
+	static toRadians   = (v1, v2)=> atan2(v1.y - v2.y, v1.x - v2.x);
+	static toDegrees   = (v1, v2)=> atan2(v1.y - v2.y, v1.x - v2.x) * 180/PI;
+	static fromRadians = (radian)=> vec2(cos(radian), sin(radian));
+	static fromDegrees = (degree)=> vec2(cos(degree * PI/180), sin(degree * PI/180));
+	static eq          = (v1, v2)=> abs(v1.x - v2.x) < 0.000001 && abs(v1.y - v2.y) < 0.000001
+	static reflect     = (v,  n) => vec2(v).sub(vec2(n).mul(2*Vec2.dot(v,n)))
 
 	get vals()         {return [this.x, this.y]}
 	get string()       {return this.toString()}
