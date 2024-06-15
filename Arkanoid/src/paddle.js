@@ -50,10 +50,10 @@ export const Paddle = freeze(new class extends Rect {
 	LaunchVelocity  = Vec2.fromDegrees(90+25).inverse;
 
 	// Ball rebound angle based on distance from paddle center
-	ReboundAngleMax = toRadians(56); // -56 to +56 degrees
+	ReboundAngleMax = toRadians(60); // -60 to +60 degrees
 
 	constructor() {
-		super(vec2(0, cvs.height - Height*3.2), Width, Height);
+		super(vec2(cvs.width/2, cvs.height - Height*3), Width, Height);
 		this.Pos.yFreeze();
 	}
 	get alpha()    {return this.#alpha}
