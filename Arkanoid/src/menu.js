@@ -23,12 +23,10 @@ export const StageMenu = new class extends Menu.SlideMenu {
 };
 export const LivesMenu = new class extends Menu.SlideMenu {
 	constructor() {
-		const idx = +localStorage.arkanoidLives;
-		super(SelectLives.id, idx);
+		super(SelectLives.id);
 	}
 	select(idx, {restore=false}={}) {
 		super.select(idx);
 		$(this).trigger('change', this.value);
-		!restore && (localStorage.arkanoidLives=idx);
 	}
 };
