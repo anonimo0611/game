@@ -8,7 +8,8 @@ export class State {
 			if (this.#state === '' && val === true) this.#state = state
 			defineProperty(this, key, {get(){return this.#state === state}})
 			this['switchTo'+state] = data=> this.switchTo(state, data);
-		} freeze(this.Enum)
+		}
+		freeze(this.Enum)
 		this.Enum[state] && this.switchTo(state);
 	}
 	get current() {return String(this.#state)}

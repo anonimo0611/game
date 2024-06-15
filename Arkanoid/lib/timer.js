@@ -4,7 +4,7 @@ export const Ticker = freeze(class {
 	static #count   = 0
 	static #ticker  = null
 	static #paused  = false
-	static Interval  = 1000/60
+	static Interval = 1000/60
 	static get Timer()   {return Timer}
 	static get paused()  {return this.#paused}
 	static get count()   {return this.#count}
@@ -33,7 +33,7 @@ export const Ticker = freeze(class {
 		this.fn?.(), Ticker.#count++
 	}
 	timer(t, id) {
-		if (Timer.frozen && !t.ignoreFrozen)  return
+		if (Timer.frozen && !t.ignoreFrozen)   return
 		if (Ticker.Interval*t.amount++ < t.ms) return
 		t.fn(), TimerMap.delete(id)
 	}
@@ -69,7 +69,7 @@ export const Timer = freeze(new class {
 			;(s=seq[++idx]) ? Timer.set(s.ms, fire) : fire=null
 		} seq.length && Timer.set(s.ms, fire)
 	}
-	stop() {Ticker.stop();return this}
+	stop()      {Ticker.stop();return this}
 	cancel(id)  {TimerMap.delete(id);return this}
 	cancelAll() {TimerMap.clear();return this}
 })

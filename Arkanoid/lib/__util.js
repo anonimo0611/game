@@ -61,45 +61,20 @@ const deepFreeze = obj=> {
 		} return Object.freeze(o)
 	} return freeze(obj)
 }
-
-const makeDiv = (selector='')=> makeElm(`div${selector}`)
-const makeElm = (selector='')=> { // The attribute value should be alphanumerical
-	if (!isStr(selector)) throw TypeError(`'${selector}' is not a string`)
-	if (!/^\s*[\w-]+/.test(selector)) throw SyntaxError('Element type is invalid')
-	const atRE  = /\[([a-z][a-z\d_-]+)=[\x27\x22]?([^#\.\[\]\x27\x22]+?)[\x27\x22]?\]/i
-	const cElm  = document.createElement(selector.trim().match(/^[\w-]+/)[0])
-	const ids   = selector.match(/#[a-z][a-z\d_-]+/gi)
-	const cls   = selector.match(/(\.[^#\.\[\]]+)+/gi)?.join('')
-	const attrs = selector.match(RegExp(atRE,'gi')) || []
-	if (ids) cElm.id = ids.at(-1).slice(1)
-	if (cls) cElm.className = cls.split('.').join('\x20').trim()
-	attrs.forEach(attr=> cElm.setAttribute(...atRE.exec(attr).slice(1)))
-	return cElm
-}
-const collisionRect = (a, b)=> {
-	if (!isObj(a) || !isObj(b)) return false;
-	const ax = a.Pos?.x - (a.Radius ?? 0);
-	const ay = a.Pos?.y - (a.Radius ?? 0);
-	const bx = b.Pos?.x - (b.Radius ?? 0);
-	const by = b.Pos?.y - (b.Radius ?? 0);
-	return (
-		abs((ax+a.Width /2)-(bx+b.Width /2)) < (a.Width +b.Width) /2 &&
-		abs((ay+a.Height/2)-(by+b.Height/2)) < (a.Height+b.Height)/2);
-}
 const getIntersection = (a, b, c, d)=> {
-    const v = Vec2.cross(Vec2.sub(b,a), Vec2.sub(d,c));
+    const v = Vec2.cross(Vec2.sub(b,a), Vec2.sub(d,c))
     if (v == 0) {
 		// Line segments are parallel
-        return null;
+        return null
     }
-    const s = Vec2.cross(Vec2.sub(c,a), Vec2.sub(d,c)) / v;
-    const t = Vec2.cross(Vec2.sub(b,a), Vec2.sub(a,c)) / v;
+    const s = Vec2.cross(Vec2.sub(c,a), Vec2.sub(d,c)) / v
+    const t = Vec2.cross(Vec2.sub(b,a), Vec2.sub(a,c)) / v
     if (s < 0 || 1 < s || t < 0 || 1 < t) {
         // Line segments do not intersect
-        return null;
+        return null
     }
     return vec2(
     	a.x + s * Vec2.sub(b,a).x,
     	a.y + s * Vec2.sub(b,a).y
-    );
+    )
 }

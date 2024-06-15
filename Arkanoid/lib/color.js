@@ -5,6 +5,10 @@ class _HSL {
 		this.l = l;
 		this.a = 1;
 	}
+	get vals() {
+		const  {h,s,l,a}= this;
+		return [h,s,l,a];
+	}
 	get string() {
 		return this.toString();
 	}
@@ -19,6 +23,10 @@ class _RGBA {
 		this.g = g;
 		this.b = b;
 		this.a = 1;
+	}
+	get vals() {
+		const  {r,g,b,a}= this;
+		return [r,g,b,a];
 	}
 	get string() {
 		return this.toString();
