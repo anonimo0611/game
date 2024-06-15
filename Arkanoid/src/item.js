@@ -21,6 +21,12 @@ export const ItemType = freeze({
 	Laser:      4,
 	SpeedDown:  5,
 });
+const ExclTypeSet = new Set([
+	ItemType.Catch,
+	ItemType.Disruption,
+	ItemType.Expand,
+	ItemType.Laser,
+]);
 
 let $current   = null;
 let $lastIndex = -1;
@@ -39,6 +45,9 @@ export const ItemMgr = new class {
 	get Type() {
 		return ItemType;
 	}
+	get ExclTypeSet() {
+		return ExclTypeSet;
+	}
 	get apearedItemExists() {
 		return $current || BallMgr.count > 1;
 	}
@@ -56,9 +65,9 @@ export const ItemMgr = new class {
 		if (idx === $lastIndex)
 			return this.#choice();
 
-		if (ExclTypes.includes(idx)) {
+		if (ExclTypeSet.has(idx)) {
 			if (idx === Paddle.ExclType)
-				idx = randChoice(ExclTypes
+				idx = randChoice([...ExclTypeSet]
 					.filter(i=> i != $lastIndex && i != idx));
 		}
 		if (idx == ItemType.Extend && (randInt(0,3) || $extended))
@@ -71,7 +80,6 @@ export const ItemMgr = new class {
 	update() {$current instanceof Item && $current.update()}
 	draw()   {$current instanceof Item && $current.draw()}
 };
-
 class Item extends Rect {
 	Speed      = cvs.height / 175;
 	TextAlpha  = 0.8;
@@ -203,9 +211,3 @@ const SubClasses = [
 		}
 	},
 ];
-export const ExclTypes = freeze([
-	ItemType.Catch,
-	ItemType.Disruption,
-	ItemType.Expand,
-	ItemType.Laser,
-]);

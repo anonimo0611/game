@@ -10,7 +10,6 @@ import {Scene}     from './scene.js';
 import {Lives}     from './lives.js';
 import {ItemMgr}   from './item.js';
 import {ItemType}  from './item.js';
-import {ExclTypes} from './item.js';
 import {BallMgr}   from './ball.js';
 import {BrickMgr}  from './brick.js';
 import {Rect}      from './rect.js';
@@ -209,7 +208,7 @@ export const Paddle = freeze(new class extends Rect {
 			Paddle.#updateCache($ctx);
 			break;
 		}
-		if (ExclTypes.includes(type))
+		if (ItemMgr.ExclTypeSet.has(type))
 			Paddle.#catchX = 0;
 	}
 	#onDropped() {
