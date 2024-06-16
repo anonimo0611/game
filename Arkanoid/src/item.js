@@ -1,3 +1,4 @@
+import {Vec2}     from '../lib/vec2.js';
 import {Ticker}   from '../lib/timer.js';
 import {hsl,rgba} from '../lib/color.js';
 import {Sound}    from '../snd/sound.js';
@@ -33,7 +34,11 @@ let $lastIndex = -1;
 let $extended  = 0;
 let $spdDowned = 0;
 
-$on({'InGame Reset': ()=> $current = null});
+$on({
+	InGame:  ()=> $current  = null,
+	Reset:   ()=> $current  = null,
+	Respawn: ()=> $extended = 0,
+});
 
 export const ItemMgr = new class {
 	init() {
@@ -70,7 +75,7 @@ export const ItemMgr = new class {
 				idx = randChoice([...ExclTypeSet]
 					.filter(i=> i != $lastIndex && i != idx));
 		}
-		if (idx == ItemType.Extend && (randInt(0,3) || $extended))
+		if (idx == ItemType.Extend && (randInt(0,1) || $extended))
 			return this.#choice();
 		if (idx == ItemType.SpeedDown && $spdDowned > 2)
 			return this.#choice();
@@ -93,7 +98,7 @@ class Item extends Rect {
 	constructor(pos, {hue,nonColored=false}={}) {
 		super(pos, Width, Height);
 		const s = nonColored? 0:91;
-		this.Pos  = vec2(pos).xFreeze();
+		this.Pos  = Vec2(pos).xFreeze();
 		this.Grad = ctx.createLinearGradient(Width,0,Width,Height);
 		this.Grad.addColorStop(0.00, hsl(hue,s,36));
 		this.Grad.addColorStop(0.20, hsl(hue,s,80));
@@ -167,6 +172,7 @@ const SubClasses = [
 		Type = ItemType.Extend;
 		constructor(pos) {
 			super(pos, {hue:220, nonColored:true});
+			this.TextColor = rgba(0,255,255, this.TextAlpha);
 			freeze(this);
 		}
 	},

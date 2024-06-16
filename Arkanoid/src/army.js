@@ -1,3 +1,4 @@
+import {Vec2}     from '../lib/vec2.js';
 import {U,R,D,L}  from '../lib/direction.js';
 import {State}    from '../lib/state.js';
 import {Ticker}   from '../lib/timer.js';
@@ -72,7 +73,7 @@ class Explosion {
 	ParticleSet = new Set();
 	constructor({x, y}) {
 		const {h,s,l}= ExplosionHSL;
-		this.Pos  = vec2(x, y);
+		this.Pos  = Vec2(x, y);
 		this.r    = Radius*1.6;
 		this.Grad = ctx.createRadialGradient(0,0,0, 0,0,this.r);
 		this.Grad.addColorStop(0.0, hsl(h,s,70));
@@ -109,7 +110,7 @@ class Explosion {
 class Particle {
 	ParticleSet = new Set();
 	constructor(x, y, v) {
-		this.Pos = vec2(x, y).add(v);
+		this.Pos = Vec2(x, y).add(v);
 		for (let i=0; i<360; i+=360/6) {
 			const cv = Vec2.fromDegrees(i);
 			this.ParticleSet.add({x,y,cv,r:SphereR/7});
@@ -198,7 +199,7 @@ export class Army extends Collider {
 	#climbedCnt = 0;
 	#damaging   = 0;
 	#lastLR     = null;
-	#animPos    = vec2();
+	#animPos    = Vec2();
 	#destroyed  = false;
 	Sphere = freeze({
 		r: new Sphere(SphereRedHSL),

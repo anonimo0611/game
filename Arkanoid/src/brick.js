@@ -1,3 +1,4 @@
+import {Vec2}    from '../lib/vec2.js';
 import {Sound}   from '../snd/sound.js';
 import {rgba}    from '../lib/color.js';
 import {HSL,hsl} from '../lib/color.js';
@@ -249,7 +250,7 @@ const Brick = freeze(class {
 		this.col   = col;
 		this.x     = (ColWidth *col) + Field.Left;
 		this.y     = (RowHeight*row) + Field.Top;
-		this.Pos   = vec2(this.x, this.y);
+		this.Pos   = Vec2(this.x, this.y);
 		this.#type = type;
 		this.color = type >= 0 ? HSL(...BrickHSLColors[type]) : null;
 

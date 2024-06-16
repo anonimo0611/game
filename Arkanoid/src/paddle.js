@@ -1,3 +1,4 @@
+import {Vec2}      from '../lib/vec2.js';
 import {Sound}     from '../snd/sound.js';
 import {Ticker}    from '../lib/timer.js';
 import {Confirm}   from '../lib/confirm.js';
@@ -53,7 +54,7 @@ export const Paddle = freeze(new class extends Rect {
 	ReboundAngleMax = toRadians(60); // -60 to +60 degrees
 
 	constructor() {
-		super(vec2(cvs.width/2, cvs.height - Height*3), Width, Height);
+		super(Vec2(cvs.width/2, cvs.height - Height*3), Width, Height);
 		this.Pos.yFreeze();
 	}
 	get alpha()    {return this.#alpha}
@@ -91,7 +92,7 @@ export const Paddle = freeze(new class extends Rect {
 	}
 	get CaughtBallPos() {
 		const x = this.catchX? (this.clampedX+this.catchX) : this.centerX;
-		return vec2(x, this.y - BallMgr.Radius);
+		return Vec2(x, this.y - BallMgr.Radius);
 	}
 	init() {
 		Paddle.#blink    = 0;
@@ -141,7 +142,7 @@ export const Paddle = freeze(new class extends Rect {
 		Demo.autoPlay();
 		Paddle.#moveCaughtBall();
 		Paddle.#setWidth();
-		Paddle.#restrictRangeOfMove();
+		Paddle.#constrain();
 	}
 	#inGame() {
 		if (Ticker.elapsed < 50)
@@ -150,7 +151,7 @@ export const Paddle = freeze(new class extends Rect {
 		if (AutoMoveToCursorX.setPosition()) {
 			Paddle.Pos.x = MouseX - (Paddle.Width/2);
 			Paddle.#setWidth();
-			Paddle.#restrictRangeOfMove();
+			Paddle.#constrain();
 			Paddle.#moveCaughtBall();
 		}
 		if (!Paddle.launched)
@@ -158,7 +159,7 @@ export const Paddle = freeze(new class extends Rect {
 				? Paddle.clampedX + Paddle.catchX
 				: Paddle.clampedX + Paddle.Width/2;
 	}
-	#restrictRangeOfMove() {
+	#constrain() {
 		const {Pos,MoveMin,MoveMax}= Paddle;
 		Pos.x = clamp(Pos.x, MoveMin, MoveMax);
 	}

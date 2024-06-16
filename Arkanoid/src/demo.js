@@ -1,3 +1,4 @@
+import {Vec2}     from '../lib/vec2.js';
 import {Ticker}   from '../lib/timer.js';
 import {cvs,ctx}  from './_canvas.js';
 import {Game}     from './_main.js';
@@ -76,14 +77,16 @@ export const Demo = new class {
 			this.Ball.Pos,
 			this.Ball.Velocity.normalized.mul(Field.Diagonal)
 		);
-		$landingPos = getIntersection(
-			vec2(Field.Left,  Paddle.y),
-			vec2(Field.Right, Paddle.y),
+		$landingPos = Vec2.getIntersection(
+			Vec2(Field.Left,  Paddle.y),
+			Vec2(Field.Right, Paddle.y),
 			this.Ball.Pos, ballVector
 		);
 	}
 	#setTarget() {
-		if (!BrickMgr.isBreakable($target ?? {})) {
+		if (Ticker.count % 120 == 0
+			|| !BrickMgr.isBreakable($target ?? {}))
+		{
 			const targets = this.brickTargets;
 			if (targets.length == 0)
 				return void this.#setEmptyTarget();
@@ -92,7 +95,7 @@ export const Demo = new class {
 				const {x,y,col,row}= randChoice(targets);
 				const ox = randFloat(0, ColWidth);
 				const oy = randFloat(0, RowHeight);
-				$target = {col,row,Pos:vec2(x,y).add(ox,oy)};
+				$target = {col,row,Pos:Vec2(x,y).add(ox,oy)};
 			}
 		}
 	}
@@ -101,7 +104,7 @@ export const Demo = new class {
 			const {x,y,col,row}= randChoice(this.emptiesBetweenImmortality);
 			const ox = randFloat(0, ColWidth);
 			const oy = randFloat(0, RowHeight);
-			$target = {col,row,Pos:vec2(x,y).add(ox,oy)};
+			$target = {col,row,Pos:Vec2(x,y).add(ox,oy)};
 		}
 	}
 	update() {
@@ -141,9 +144,9 @@ export const Demo = new class {
 	}
 	#aimingAtTargetBrick() {
 		const {ReboundAngleMax:aMax,Width:w}= Paddle;
-		const angle = Vec2.toRadians($target?.Pos, $landingPos) + PI/2;
-		let pos = $landingPos.x - w * norm(-aMax, +aMax, angle);
-		moveTo(pos + w/2, cvs.width/70);
+		const angle = Vec2.toRadians($target.Pos, $landingPos) + PI/2;
+		const destX = $landingPos.x - w * norm(-aMax, +aMax, angle) + w/2;
+		moveTo(destX, cvs.width/70);
 	}
 	#drawPoint(pos, r, color) { // For debug
 		fillCircle  (ctx)(...pos.vals, r, color);
@@ -164,7 +167,7 @@ const CatchMode = new class {
 		$(BallMgr).on({Cought: ()=> CatchMode.#onCatch()});
 	}
 	#dir    = 1;
-	#vector = vec2();
+	#vector = Vec2();
 	#aiming = false;
 	#onCatch() {
 		if (!Scene.isInDemo)
@@ -195,11 +198,11 @@ const CatchMode = new class {
 			if (Sight.brick?.isBreakable)
 				this.#releaseTimer();
 		} else for (const empty of Demo.emptiesBetweenImmortality) {
-			getIntersection(
+			Vec2.getIntersection(
 				Demo.Ball.Pos,
-				vec2(Demo.Ball.Pos).add(this.#vector),
-				vec2(empty.Pos).add(Radius*2, RowHeight),
-				vec2(empty.Pos).add(ColWidth-Radius*2, RowHeight)
+				Vec2(Demo.Ball.Pos).add(this.#vector),
+				Vec2(empty.Pos).add(Radius*2, RowHeight),
+				Vec2(empty.Pos).add(ColWidth-Radius*2, RowHeight)
 			) && this.#releaseTimer();
 		}
 		this.#searchMove();

@@ -1,3 +1,4 @@
+import {Vec2}     from '../lib/vec2.js';
 import {Ticker}   from '../lib/timer.js';
 import {rgba}     from '../lib/color.js';
 import {cvs,ctx}  from './_canvas.js';
@@ -11,7 +12,7 @@ import {Army}     from './army.js';
 const {ColWidth,RowHeight}= Field;
 
 export const Sight = freeze(new class {
-	Pos    = vec2();
+	Pos    = Vec2();
 	#brick = null;
 	get brick() {
 		return this.#brick;
@@ -36,13 +37,13 @@ export const Sight = freeze(new class {
 	}
 	get #intersectionWithField() {
 		return this.#getIntersection(
-			vec2(0, Field.Top), 
-			vec2(cvs.width, Field.Top)
+			Vec2(0, Field.Top), 
+			Vec2(cvs.width, Field.Top)
 		) ?? this.BallVector;
 	}
-	#getIntersection(stV2, edV2) {
-		return getIntersection(
-			Paddle.CaughtBallPos, this.BallVector, stV2, edV2);
+	#getIntersection(v2St, v2Ed) {
+		return Vec2.getIntersection(
+			Paddle.CaughtBallPos, this.BallVector, v2St, v2Ed);
 	}
 	#attackArmy(point) {
 		for (const army of Army.ArmySet) {
@@ -56,8 +57,8 @@ export const Sight = freeze(new class {
 	#detectBrick(brick) {
 		const positions = [[0,1,1,1], [0,0,0,1], [1,0,1,1]].map(ov=>
 			this.#getIntersection(
-				vec2(brick.Pos).add(ColWidth*ov[0], RowHeight*ov[1]),
-				vec2(brick.Pos).add(ColWidth*ov[2], RowHeight*ov[3])
+				Vec2(brick.Pos).add(ColWidth*ov[0], RowHeight*ov[1]),
+				Vec2(brick.Pos).add(ColWidth*ov[2], RowHeight*ov[3])
 			)
 		);
 		const [bottom,left,right]= positions;

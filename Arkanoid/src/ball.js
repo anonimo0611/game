@@ -1,3 +1,4 @@
+import {Vec2}      from '../lib/vec2.js';
 import {rgba}      from '../lib/color.js';
 import {Sound}     from '../snd/sound.js';
 import {Ticker}    from '../lib/timer.js';
@@ -113,8 +114,8 @@ export const BallMgr = new class {
 };
 export class Ball extends Collider {
 	Radius     = Radius;
-	Pos        = vec2();
-	Velocity   = vec2();
+	Pos        = Vec2();
+	Velocity   = Vec2();
 	InitSpeed  = (BallSpeed*BallMgr.initialSpeedRate) * BallMgr.stageSpeedRate;
 	#speed     = this.InitSpeed;
 	#launched  = false;
@@ -228,7 +229,7 @@ export class Ball extends Collider {
 	draw() {
 		ctx.save();
 		ctx.globalAlpha = Paddle.alpha;
-		ctx.translate(...vec2(this.Pos).sub(Radius).vals);
+		ctx.translate(...Vec2(this.Pos).sub(Radius).vals);
 		ctx.drawImage($cvs, 0,0);
 		ctx.restore();
 	}

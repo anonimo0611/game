@@ -1,3 +1,4 @@
+import {Vec2}     from '../lib/vec2.js';
 import {Ticker}   from '../lib/timer.js';
 import {Sound}    from '../snd/sound.js';
 import {cvs,ctx}  from './_canvas.js';
@@ -57,8 +58,8 @@ export class Laser extends Collider {
 		const offset = BrickMgr.ColWidth / 2;
 		const y = Paddle.y - RadiusY;
 		super(side == L
-			? vec2(Paddle.centerX-offset, y).xFreeze()
-			: vec2(Paddle.centerX+offset, y).xFreeze(),
+			? Vec2(Paddle.centerX-offset, y).xFreeze()
+			: Vec2(Paddle.centerX+offset, y).xFreeze(),
 			RadiusX
 		);
 		this.side = side;
@@ -95,7 +96,7 @@ export class Laser extends Collider {
 }
 class Burst {
 	static set({x, y}) {
-		const v = vec2(x, y);
+		const v = Vec2(x, y);
 		for (let i=90-150/2; i<=90+150/2; i+=30) {
 			const cv = Vec2.fromDegrees(i);
 			BurstSet.add( new Burst(x, y, cv) );
@@ -108,7 +109,7 @@ class Burst {
 		BurstSet.forEach(p=> p.draw());
 	}
 	constructor(x, y, v) {
-		this.Pos = vec2(x, y);
+		this.Pos = Vec2(x, y);
 		this.r   = RadiusX;
 		this.v   = v.mul(RadiusX / 2);
 		this.cnt = 0;
@@ -126,7 +127,7 @@ class Burst {
 			ctx.lineWidth   = RadiusX;
 			ctx.strokeStyle = Color;
 			ctx.moveTo(0,0);
-			ctx.lineTo(...vec2(this.v).mul(6).vals);
+			ctx.lineTo(...Vec2(this.v).mul(6).vals);
 		ctx.stroke();
 		ctx.restore();
 	}
