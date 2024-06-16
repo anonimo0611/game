@@ -1,3 +1,4 @@
+import {Vec2} from './vec2.js'
 import {Dir,U,R,D,L} from './direction.js'
 class Menu {
 	constructor(id) {

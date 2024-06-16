@@ -37,7 +37,6 @@ const between    = (n, min, max) => (n >= min && n <= max)
 const clamp      = (n, min, max) => Math.min(Math.max(n,min), max)
 const randFloat  = (min, max)    => random() * (max-min) + min
 const randInt    = (min, max)    => int(random() * (max-min+1) + min)
-const getDist    = (v1={}, v2={})=> sqrt((v1.x-v2.x)**2 + (v1.y-v2.y)**2)
 const toNumber   = (arg, def=NaN)=> !isNum(+arg) || !isNum(arg)
 	&& !isStr(arg) || String(arg).trim() === '' ? def : +arg
 
@@ -45,13 +44,12 @@ const randChoice = (...args)=> {
 	if (args.length == 1 && isArray(args[0])) args = args[0];
 	return isArray(args) ? args[randInt(0, args.length-1)] : []
 }
-const splitByBar  = arg=>
-	isStr(arg) && (arg=arg.trim()) && arg.split('|') || [];
-
+const splitByBar  = arg=> {
+	return isStr(arg) && (arg=arg.trim()) && arg.split('|') || []
+}
 const setReadonlyProp = (obj, key, val)=> {
 	return defineProperty(obj, key, {value:val, writable:false, configurable:true})
 }
-
 const deepFreeze = obj=> {
 	function freeze(o) {
 		if (isElm(o)) return o
@@ -61,21 +59,4 @@ const deepFreeze = obj=> {
 			if (o[key] && typeof o[key] === 'object') freeze(o[key])
 		} return Object.freeze(o)
 	} return freeze(obj)
-}
-const getIntersection = (a, b, c, d)=> {
-    const v = Vec2.cross(Vec2.sub(b,a), Vec2.sub(d,c))
-    if (v == 0) {
-		// Line segments are parallel
-        return null
-    }
-    const s = Vec2.cross(Vec2.sub(c,a), Vec2.sub(d,c)) / v
-    const t = Vec2.cross(Vec2.sub(b,a), Vec2.sub(a,c)) / v
-    if (s < 0 || 1 < s || t < 0 || 1 < t) {
-        // Line segments do not intersect
-        return null
-    }
-    return vec2(
-    	a.x + s * Vec2.sub(b,a).x,
-    	a.y + s * Vec2.sub(b,a).y
-    )
 }
