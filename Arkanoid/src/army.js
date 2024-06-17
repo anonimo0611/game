@@ -21,10 +21,8 @@ const ArmySet  = new Set();
 const Interval = 5000 / Ticker.Interval;
 const Radius   = ColWidth / 2.3;
 const SphereR  = Radius / (5/3);
-const Width    = Radius*2;
-const Height   = Radius*2;
 const SpawnL   = int(cvs.width/3 - Radius);
-const SpawnR   = (cvs.width - SpawnL) - Width;
+const SpawnR   = (cvs.width - SpawnL) - Radius*2;
 
 const DriftRadiusX = cvs.width/200;
 const DriftRadiusY = cvs.width/300;
@@ -264,7 +262,7 @@ export class Army extends Collider {
 			this.#setHolizontalDir(this);
 
 		if (Phase.isClimbed) {
-			if (this.#climbedCnt++ <= (Width/2) / abs(this.Velocity.x))
+			if (this.#climbedCnt++ <= Radius / abs(this.Velocity.x))
 				return;
 			Phase.switchToHolizontal();
 		}
