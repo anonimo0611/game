@@ -5,7 +5,7 @@ class Menu {
 		this.root = byId(this.id=id)
 		this.menu = this.root.querySelector('menu')
 		this.lis  = this.menu.querySelectorAll('li')
-		this.size = this.lis.length |0
+		this.size = this.lis.length
 		this.defaultIndex = this.index
 		$(this.root).closest('form').on('reset', _=> this.reset())
 		$(this.selectedItem).addClass('selected')

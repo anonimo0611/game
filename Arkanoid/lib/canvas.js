@@ -64,7 +64,7 @@ const strokeCircle = ctx=> (x, y, r, lw, style)=> {
 const drawLine = (ctx,{color,width}={})=> (x1,y1, x2,y2)=> {
 	ctx.save();
 	color && (ctx.strokeStyle=color);
-	isNum(width) && width>=0 && (ctx.lineWidth=width);
+	isNum(width) && width >= 0 && (ctx.lineWidth=width);
 	ctx.beginPath();
 	ctx.moveTo(x1, y1);
 	ctx.lineTo(x2, y2);

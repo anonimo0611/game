@@ -6,11 +6,7 @@ class _HSL {
 		this.a = 1;
 	}
 	get vals() {
-		const  {h,s,l,a}= this;
-		return [h,s,l,a];
-	}
-	get string() {
-		return this.toString();
+		return Object.values(this);
 	}
 	toString() {
 		const {h,s,l,a}= this;
@@ -25,26 +21,14 @@ class _RGBA {
 		this.a = 1;
 	}
 	get vals() {
-		const  {r,g,b,a}= this;
-		return [r,g,b,a];
-	}
-	get string() {
-		return this.toString();
+		return Object.values(this);
 	}
 	toString() {
 		const {r,g,b,a}= this;
 		return `rgba(${r} ${g} ${b} /${a})`;
 	}
 }
-export function HSL(...args) {
-	return new _HSL(...args);
-}
-export function RGBA(...args) {
-	return new _RGBA(...args);
-}
-export function hsl(h,s,l,a=1) {
-	return `hsl(${h} ${s}% ${l}% /${a})`;
-}
-export function rgba(r,g,b,a=1) {
-	return `rgba(${r} ${g} ${b} /${a})`;
-}
+export const HSL  = (...args)=> new _HSL (...args);
+export const RGBA = (...args)=> new _RGBA(...args);
+export const hsl  = (h,s,l,a=1)=> `hsl(${h} ${s}% ${l}% /${a})`;
+export const rgba = (r,g,b,a=1)=> `rgba(${r} ${g} ${b} /${a})`;
