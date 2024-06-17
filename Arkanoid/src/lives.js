@@ -16,7 +16,7 @@ export const Lives = freeze(new class {
 			Start:   Lives.#onStart,
 			Respawn: Lives.#onRespawn,
 		});
-		$(ItemMgr).on({Obtained: Lives.#extend});
+		$(ItemMgr).on({Obtained: Lives.#onExtend});
 		$(Menu.LivesMenu).on({change: Lives.#set});
 	}
 	context = $cvs.getContext('2d');
@@ -27,7 +27,7 @@ export const Lives = freeze(new class {
 	#onStart()   {Lives.#left = Menu.LivesMenu.value}
 	#onRespawn() {Lives.#left--}
 
-	#extend(_, type) {
+	#onExtend(_, type) {
 		if (Game.isDemoScene) return;
 		type == ItemMgr.Type.Extend && Lives.#left++
 	}

@@ -17,7 +17,7 @@ const {Frame,Cols,Rows,ColWidth,RowHeight}= Field;
 
 const LineWidth    = int(cvs.width/315);
 const ShadowOffset = ColWidth * 0.2;
-const AnimDuration = 200 / Ticker.Interval;
+const AnimDuration = 300 / Ticker.Interval;
 
 export const BrickType = freeze({
 	None:      -1,
@@ -191,7 +191,8 @@ export const BrickMgr = freeze(new class {
 
 		// Brick surface
       	ctx.save();
-       	ctx.translate(x, y);
+       	ctx.translate(x+ColWidth, y);
+      	ctx.scale(-1, 1);
 		this.#drawBrick(ctx, brick, {Grad,effect:true});
       	ctx.restore();
 

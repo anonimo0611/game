@@ -26,16 +26,15 @@ export const Game = freeze(new class {
 	static {$load(this.#setup)}
 	static #setup() {
 		$on({
-			Reset:   Game.#reset,
-			Clear:   Game.#clear,
-			Respawn: Game.#respawn,
-			focus:   Game.#confirm,
-			blur:    Game.#confirm,
-			keydown: Game.#confirm,
+			Reset:     Game.#reset,
+			Clear:     Game.#clear,
+			Respawn:   Game.#respawn,
+			blur:      Game.#pause,
+			keydown:   Game.#pause,
 		});
 		$(cvs).on({
 			mousedown:   Game.#start,
-			contextmenu: Game.#confirm,
+			contextmenu: Game.#pause,
 		});
 		$(Menu.StageMenu).on({change: Game.#selectStage});
 		Game.#reset();
@@ -76,7 +75,7 @@ export const Game = freeze(new class {
 		BallMgr.init();
 		BrickMgr.init();
 		Paddle.init();
-		Ticker.set(Game.#mainLoop)
+		Ticker.set(Game.#mainLoop);
 	}
 	#resume() {
 		Ticker.pause(false);
@@ -120,7 +119,7 @@ export const Game = freeze(new class {
 		Game.#init();
 		Game.#ready();
 	}
-	#confirm(e) {
+	#pause(e) {
 		if (Game.isDemoScene) {
 			Ticker.pause(e.type == 'blur');
 			Game.#draw();
@@ -132,20 +131,17 @@ export const Game = freeze(new class {
 		 && e.type != 'blur'
 		 && e.type != 'contextmenu')
 			return;
-
 		e.preventDefault();
 		Ticker.pause(true);
 		Sound.pause();
 		Confirm.open({
-			cancelId:    'Resume',
-			autoFocusId: 'Resume',
 			content: e.type == 'blur'
 				? 'Browser window is\nnow inactive!'
 				: 'You really want to\nquit the game?',
-			funcCfg: {
-				Resume:  Game.#resume,
-				Quit:    Scene.switchToReset,
-				Restart: Game.#restart,
+			buttons: {
+				Resume:  {fn:Game.#resume, cancel:true, autoFocus:true},
+				Quit:    {fn:Scene.switchToReset},
+				Restart: {fn:Game.#restart},
 			}
 		});
 		Game.#draw();

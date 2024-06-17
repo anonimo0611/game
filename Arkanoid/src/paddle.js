@@ -87,7 +87,7 @@ export const Paddle = freeze(new class extends Rect {
 	get ReboundVelocity() {
 		const {x,centerX:cx,Width:w}= this;
 		const ballX = clamp(BallMgr.Ball.x, x, x+w);
-		const angle = PI/2 + ((ballX - cx) / w) * this.ReboundAngleMax*2;
+		const angle = PI/2 + ((ballX-cx) / w) * this.ReboundAngleMax*2;
 		return Vec2.fromRadians(angle).inverse;
 	}
 	get CaughtBallPos() {
@@ -146,7 +146,7 @@ export const Paddle = freeze(new class extends Rect {
 	}
 	#inGame() {
 		if (Ticker.elapsed < 50)
-			return;
+			return;			
 
 		if (AutoMoveToCursorX.setPosition()) {
 			Paddle.Pos.x = MouseX - (Paddle.Width/2);

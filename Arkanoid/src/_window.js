@@ -1,5 +1,5 @@
-import {Ticker} from '../lib/timer.js';
-import {cvs}    from './_canvas.js';
+import {Ticker}  from '../lib/timer.js';
+import {Confirm} from '../lib/confirm.js';
 
 const dBoard = byId('board');
 
@@ -27,7 +27,7 @@ export const Window = new class {
 		$on('resize', ()=> {
 			!Ticker.paused && Ticker.pause(true);
 			clearTimeout(id);
-			id = setTimeout(()=> Ticker.pause(false), 2e3);
+			id = setTimeout(()=> !Confirm.opened && Ticker.pause(false), 2e3);
 			Window.#fit();
 			Window.#setCSSVars();
 		});
