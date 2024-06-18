@@ -143,7 +143,7 @@ export const Demo = new class {
 		return true;
 	}
 	#aimingAtTargetBrick() {
-		const {ReboundAngleMax:aMax,Width:w}= Paddle;
+		const {BounceAngleMax:aMax,Width:w}= Paddle;
 		const angle = Vec2.toRadians($target.Pos, $landingPos) + PI/2;
 		const destX = $landingPos.x - w * norm(-aMax, +aMax, angle) + w/2;
 		moveTo(destX, cvs.width/70);
@@ -192,7 +192,7 @@ const CatchMode = new class {
 	autoPlay() {
 		const Radius = BallMgr.Radius;
 		const bricks = Demo.brickTargets;
-		this.#vector = Paddle.ReboundVelocity.mul(Field.Diagonal);
+		this.#vector = Paddle.BounceVelocity.mul(Field.Diagonal);
 
 		if (bricks.length) {
 			if (Sight.brick?.isBreakable)

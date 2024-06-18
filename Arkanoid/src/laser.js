@@ -22,7 +22,7 @@ const Lasers = freeze([new Set(),new Set()]);
 const BurstSet = new Set();
 
 export class Laser extends Collider {
-	static {$on({mousedown:Laser.#fire})}
+	static {$on({mousedown: Laser.#fire})}
 	static #fire(e) {
 		if (!Scene.isInDemo && !Game.acceptEventInGame(e))
 			return;

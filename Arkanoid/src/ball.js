@@ -157,7 +157,7 @@ export class Ball extends Collider {
 			return;
 
 		for (let i=0; i<Mag; i++) {
-			this.#reboundAtPaddle()
+			this.#bounceAtPaddle()
 			if (!Paddle.catchX)
 				this.Pos.add( this.Velocity.normalized.mul(Spd/Mag) );
 			this.#collisionWithArmy();
@@ -191,13 +191,13 @@ export class Ball extends Collider {
 			return true;
 		}
 	}
-	#reboundAtPaddle() {
+	#bounceAtPaddle() {
 		if (!Paddle.collisionRect(this))
 			return false;
 		if (Paddle.canCatch)
 			$(BallMgr).trigger('Cought',this);
 
-		this.Velocity.set( Paddle.ReboundVelocity.mul(this.speed) );
+		this.Velocity.set( Paddle.BounceVelocity.mul(this.speed) );
 		Sound.play('se0');
 		if (Paddle.catchX)
 			Ticker.Timer.set(200, ()=> Sound.stop('se0'));
@@ -206,9 +206,9 @@ export class Ball extends Collider {
 		const army = Army.detectCollided(this);
 		if (army) {
 			army.crash(army.MaxHp);
-			const randDeg  = randChoice(45,135,225,315);
-			const reboundV = Vec2.fromDegrees(randDeg);
-			this.Velocity.set( reboundV.mul(this.#speed*=ArmySpeedDown) );
+			const randDeg = randChoice(45,135,225,315);
+			const bounceV = Vec2.fromDegrees(randDeg);
+			this.Velocity.set( bounceV.mul(this.#speed*=ArmySpeedDown) );
 		}
 	}
 	#collisionWithBrickOrField(mag) {

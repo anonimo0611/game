@@ -26,18 +26,19 @@ export const Game = freeze(new class {
 	static {$load(this.#setup)}
 	static #setup() {
 		$on({
-			Reset:     Game.#reset,
-			Clear:     Game.#clear,
-			Respawn:   Game.#respawn,
-			blur:      Game.#pause,
-			keydown:   Game.#pause,
+			Start:   Game.#onStart,
+			Reset:   Game.#onReset,
+			Clear:   Game.#onClear,
+			Respawn: Game.#onRespawn,
+			blur:    Game.#onPause,
+			keydown: Game.#onPause,
 		});
 		$(cvs).on({
-			mousedown:   Game.#start,
-			contextmenu: Game.#pause,
+			mousedown:   Game.#onMousedown,
+			contextmenu: Game.#onPause,
 		});
-		$(Menu.StageMenu).on({change: Game.#selectStage});
-		Game.#reset();
+		$(Menu.StageMenu).on({change: Game.#onSelectStage});
+		Scene.switchToReset();
 	}
 	ReadyTime  = 2500; // ms
 	#stageIdx  = Menu.StageMenu.index;
@@ -60,16 +61,6 @@ export const Game = freeze(new class {
 			|| e.target == document.body
 			|| e.target == Window.Board);
 	}
-	#selectStage(_, stageIdx) {
-		Game.#stageIdx = stageIdx;
-		Scene.switchToReset();
-	}
-	#reset() {
-		Game.#stageIdx  = Menu.StageMenu.index;
-		Game.#respawned = false;
-		Game.#init();
-		Scene.switchToInDemo(Game.ReadyTime+500);
-	}
 	#init() {
 		Bg.init();
 		BallMgr.init();
@@ -77,49 +68,40 @@ export const Game = freeze(new class {
 		Paddle.init();
 		Ticker.set(Game.#mainLoop);
 	}
-	#resume() {
-		Ticker.pause(false);
-		Sound.resume();
-		$trigger('Resume');
-	}
-	#restart() {
+	#onSelectStage(_, stageIdx) {
+		Game.#stageIdx = stageIdx;
 		Scene.switchToReset();
-		Game.#start();
 	}
-	#start(e) {
-		if (e?.button > 0 || !Game.isDemoScene)
-			return;
+	#onMousedown(e) {
+		if (e.button > 0 || !Game.isDemoScene) return;
 		Scene.switchToStart();
+	}
+	#onReset() {
+		Game.#stageIdx  = Menu.StageMenu.index;
+		Game.#respawned = false;
+		Game.#init();
+		Scene.switchToInDemo(Game.ReadyTime+500);
+	}
+	#onStart(e) {
 		Scene.switchToReady();
 		Game.#init();
 		Game.#ready();
 	}
-	#ready() {
-		Sound.stop().play('start');
-		Scene.switchToInGame(Game.ReadyTime);
-	}
-	#respawn() {
+	#onRespawn() {
 		Game.#respawned = true;
 		Scene.switchToReady();
 		Scene.switchToInGame(Game.ReadyTime);
 		BallMgr.init();
 		Paddle.init();
 	}
-	#clear() {
+	#onClear() {
 		(Game.stageNum == Stages.length)
 			? Ticker.Timer.sequence(
 				[1500, Scene.switchToGameOver],
 				[1500, Scene.switchToReset])
 			: Ticker.Timer.set(2000, Game.#setNewStage);
 	}
-	#setNewStage() {
-		Game.#stageIdx++;
-		Game.#respawned = false;
-		Scene.switchToReady();
-		Game.#init();
-		Game.#ready();
-	}
-	#pause(e) {
+	#onPause(e) {
 		if (Game.isDemoScene) {
 			Ticker.pause(e.type == 'blur');
 			Game.#draw();
@@ -145,6 +127,26 @@ export const Game = freeze(new class {
 			}
 		});
 		Game.#draw();
+	}
+	#restart() {
+		Scene.switchToReset();
+		Scene.switchToStart();
+	}
+	#ready() {
+		Sound.stop().play('start');
+		Scene.switchToInGame(Game.ReadyTime);
+	}
+	#resume() {
+		Ticker.pause(false);
+		Sound.resume();
+		$trigger('Resume');
+	}
+	#setNewStage() {
+		Game.#stageIdx++;
+		Game.#respawned = false;
+		Scene.switchToReady();
+		Game.#init();
+		Game.#ready();
 	}
 	#update() {
 		if (BrickMgr.brokenAll)

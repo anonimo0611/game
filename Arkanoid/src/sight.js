@@ -27,7 +27,7 @@ export const Sight = freeze(new class {
 	get BallVelocity() {
 		return !BallMgr.Ball.launched
 			? Paddle.LaunchVelocity
-			: Paddle.ReboundVelocity;
+			: Paddle.BounceVelocity;
 	}
 	get BallVector() {
 		return Vec2.add(

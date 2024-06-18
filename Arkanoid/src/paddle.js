@@ -50,8 +50,8 @@ export const Paddle = freeze(new class extends Rect {
 	// Launch angle at the beginning of the stage or at respawn
 	LaunchVelocity  = Vec2.fromDegrees(90+25).inverse;
 
-	// Ball rebound angle based on distance from paddle center
-	ReboundAngleMax = toRadians(60); // -60 to +60 degrees
+	// Ball bounce angle based on distance from paddle center
+	BounceAngleMax = toRadians(60); // -60 to +60 degrees
 
 	constructor() {
 		super(Vec2(cvs.width/2, cvs.height - Height*3), Width, Height);
@@ -84,10 +84,10 @@ export const Paddle = freeze(new class extends Rect {
 			return false;
 		return true;
 	}
-	get ReboundVelocity() {
+	get BounceVelocity() {
 		const {x,centerX:cx,Width:w}= this;
 		const ballX = clamp(BallMgr.Ball.x, x, x+w);
-		const angle = PI/2 + ((ballX-cx) / w) * this.ReboundAngleMax*2;
+		const angle = PI/2 + ((ballX-cx) / w) * this.BounceAngleMax*2;
 		return Vec2.fromRadians(angle).inverse;
 	}
 	get CaughtBallPos() {
