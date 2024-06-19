@@ -11,8 +11,8 @@ import {BallMgr}  from './ball.js';
 import {BrickMgr} from './brick.js';
 import {Rect}     from './rect.js';
 
-const Width   = BrickMgr.ColWidth;
-const Height  = BrickMgr.RowHeight * 1.25;
+const Width  = BrickMgr.ColWidth;
+const Height = BrickMgr.RowHeight * 1.25;
 
 export const ItemType = freeze({
 	PlayerExtend: 0,
