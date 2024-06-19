@@ -64,6 +64,7 @@ export const Game = freeze(new class {
 	#init() {
 		Bg.init();
 		BallMgr.init();
+		ItemMgr.init();
 		BrickMgr.init();
 		Paddle.init();
 		Ticker.set(Game.#mainLoop);

@@ -166,14 +166,14 @@ const CatchMode = new class {
 	static #setup() {
 		$(BallMgr).on({Cought: ()=> CatchMode.#onCatch()});
 	}
-	#dir    = 1;
+	#dirX   = 1;
 	#vector = Vec2();
 	#aiming = false;
 	#onCatch() {
 		if (!Scene.isInDemo)
 			return;
 	
-		this.#dir = 1;
+		this.#dirX = 1;
 		this.#aiming = false;
 	 	Ticker.Timer.cancel(CatchMode)
 	 		.set(1500, this.#release, {id:CatchMode});
@@ -210,12 +210,12 @@ const CatchMode = new class {
 	#searchMove() {
 		if (this.#aiming) return;
 		const speed = Field.Width/60;
-		if (this.#dir > 0) {
+		if (this.#dirX > 0) {
 			moveTo(Field.Right, speed);
-			Paddle.x > Paddle.MoveMax && (this.#dir *= -1);
+			Paddle.x > Paddle.MoveMax && (this.#dirX *= -1);
 		} else {
 			moveTo(Field.Left, speed);
-			Paddle.x < Paddle.MoveMin && (this.#dir *= -1);
+			Paddle.x < Paddle.MoveMin && (this.#dirX *= -1);
 		}
 	}
 };

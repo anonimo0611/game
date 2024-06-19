@@ -29,7 +29,7 @@ export const Lives = freeze(new class {
 
 	#onExtend(_, type) {
 		if (Game.isDemoScene) return;
-		type == ItemMgr.Type.Extend && Lives.#left++
+		type == ItemMgr.Type.PlayerExtend && Lives.#left++
 	}
 	draw() {
 		if (Game.isDemoScene)

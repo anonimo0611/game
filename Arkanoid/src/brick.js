@@ -82,7 +82,6 @@ export const BrickMgr = freeze(new class {
 		return !!MapData?.[row]?.[col]?.isBreakable;
 	}
 	init() {
-		ItemMgr.init();
 		LusterMap.clear();
 		DisappearMap.clear();
 		const map = Stages[Game.stageIdx];

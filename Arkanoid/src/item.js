@@ -11,111 +11,109 @@ import {BallMgr}  from './ball.js';
 import {BrickMgr} from './brick.js';
 import {Rect}     from './rect.js';
 
-const Width  = BrickMgr.ColWidth;
-const Height = BrickMgr.RowHeight * 1.25;
+const Width   = BrickMgr.ColWidth;
+const Height  = BrickMgr.RowHeight * 1.25;
 
 export const ItemType = freeze({
-	Extend:     0,
-	Catch:      1,
-	Disruption: 2,
-	Expand:     3,
-	Laser:      4,
-	SpeedDown:  5,
+	PlayerExtend: 0,
+	Catch:        1,
+	Disruption:   2,
+	Expand:       3,
+	Laser:        4,
+	SpeedDown:    5,
+	Max:          6,
 });
+const ItemColors = freeze([
+	{hue:220,sat: 0,textColor:rgba(0,255,255)}, // PlayerExtend
+	{hue:120,sat:91}, // Catch    
+	{hue:206,sat:91}, // Disruption
+	{hue:240,sat:91}, // Expand 
+	{hue:  0,sat:91}, // Laser 
+	{hue: 16,sat:91}, // SpeedDown
+]);
 const ExclTypeSet = new Set([
 	ItemType.Catch,
 	ItemType.Disruption,
 	ItemType.Expand,
 	ItemType.Laser,
 ]);
-
-let $current   = null;
-let $lastIndex = -1;
-let $extended  = 0;
-let $spdDowned = 0;
-
-$on({
-	InGame:  ()=> $current  = null,
-	Reset:   ()=> $current  = null,
-	Respawn: ()=> $extended = 0,
-});
+const ItemSet = new Set();
 
 export const ItemMgr = new class {
-	init() {
-		$current   = null;
-		$lastIndex = -1;
-	 	$extended  = 0;
-		$spdDowned = 0;
+	static {$ready(this.#setup)}
+	static #setup() {
+		$on({Respawn: ()=> ItemMgr.#extendCnt = 0});
+		$(ItemMgr).on({Obtained: ItemMgr.#onObtained});
 	}
-	get Type() {
-		return ItemType;
-	}
-	get ExclTypeSet() {
-		return ExclTypeSet;
-	}
-	get apearedItemExists() {
-		return $current || BallMgr.count > 1;
-	}
-	get Current() {return $current}
+	get Current()     {return ItemSet.values().next().value}
+	get ItemApeared() {return ItemSet.size > 0 || BallMgr.count > 1}
+	get Type()        {return ItemType}
+	get ExclTypeSet() {return ExclTypeSet}
 
+	#lastItemType = -1;
+	#extendCnt    =  0;
+	#speedDownCnt =  0;
+	init() {
+		ItemSet.clear();
+		this.#lastItemType  = -1;
+		this.#extendCnt     =  0;
+		this.#speedDownCnt  =  0;
+	}
 	appear({x, y}) {
-		if (this.apearedItemExists)
+		if (this.ItemApeared)
 			return;
 		if (randInt(0,2) != 0)
 			return;
-		$current = new SubClasses[this.#choice()]({x, y});
+		const type = this.#choice();
+		ItemSet.add( new Item(type, {x, y}, ItemColors[type]) );
 	}
-	#choice() {
-		let idx = randInt(0, SubClasses.length-1);
-		if (idx === $lastIndex)
-			return this.#choice();
+	#choice() {			
+		let type = randInt(0, ItemType.Max-1);
+		if (type === this.#lastItemType
+		 || type === ItemType.SpeedDown && this.#speedDownCnt > 2
+		 || type === ItemType.PlayerExtend && (randInt(0,1) || this.#extendCnt)
+		) return this.#choice();
 
-		if (ExclTypeSet.has(idx)) {
-			if (idx === Paddle.ExclType)
-				idx = randChoice([...ExclTypeSet]
-					.filter(i=> i != $lastIndex && i != idx));
-		}
-		if (idx == ItemType.Extend && (randInt(0,1) || $extended))
-			return this.#choice();
-		if (idx == ItemType.SpeedDown && $spdDowned > 2)
-			return this.#choice();
+		if (ExclTypeSet.has(type) && type === Paddle.ExclType)
+			type = randChoice([...ExclTypeSet]
+				.filter(i=> i != this.#lastItemType && i != type));
 
-		return $lastIndex=idx;
+		return (this.#lastItemType = type);
 	}
-	update() {$current instanceof Item && $current.update()}
-	draw()   {$current instanceof Item && $current.draw()}
+	#onObtained(_, type) {
+		type == ItemType.SpeedDown    && this.#speedDownCnt++;
+		type == ItemType.PlayerExtend && this.#extendCnt++;
+	}
+	update() {this.Current?.update()}
+	draw()   {this.Current?.draw()}
 };
 class Item extends Rect {
 	Speed      = cvs.height / 175;
-	TextAlpha  = 0.8;
-	TextColor  = rgba(255,204,0, this.TextAlpha);
-	#aIdex     = 0;
+	#animIdex  = 0;
 	#textScale = 0;
 	#scaleTbl  = integers(30).map(n=> n>15 ? 30-n : n);
 
 	get centerX() {return this.Pos.x + Width/2}
 
-	constructor(pos, {hue,nonColored=false}={}) {
+	constructor(type, pos, {hue,sat,textColor}={}) {
 		super(pos, Width, Height);
-		const s = nonColored? 0:91;
+		this.Type = type;
+		this.Text = keys(ItemType)[type][0];
 		this.Pos  = Vec2(pos).xFreeze();
 		this.Grad = ctx.createLinearGradient(Width,0,Width,Height);
-		this.Grad.addColorStop(0.00, hsl(hue,s,36));
-		this.Grad.addColorStop(0.20, hsl(hue,s,80));
-		this.Grad.addColorStop(0.30, hsl(hue,s,36));
-		this.Grad.addColorStop(1.00, hsl(hue,s,50));
-		this.outlineColor = hsl(hue, nonColored? 0:40, 40);
+		this.Grad.addColorStop(0.00, hsl(hue,sat,36));
+		this.Grad.addColorStop(0.20, hsl(hue,sat,80));
+		this.Grad.addColorStop(0.30, hsl(hue,sat,36));
+		this.Grad.addColorStop(1.00, hsl(hue,sat,50));
+		this.TextColor = textColor ?? rgba(255,204,0);
+		this.OutlineColor = hsl(hue, (sat == 0 ? 0:40), 40);
 	}
 	update() {
-		if (!Game.isPlayScene) {
-			$current = null;
-			return;
-		}
 		if (Ticker.count % 2 == 0)
-			++this.#aIdex;
+			++this.#animIdex;
 
 		const len = this.#scaleTbl.length;
-		const idx = this.#aIdex = this.#aIdex % len;
+		const idx = this.#animIdex = this.#animIdex % len;
 		this.#textScale = this.#scaleTbl[idx] / (len/2);
 		this.Pos.y += this.Speed;
 
@@ -123,18 +121,15 @@ class Item extends Rect {
 			Score.add(1000);
 			Sound.play('item');
 			$(ItemMgr).trigger('Obtained', this.Type);
-			if (this.Type == ItemType.Extend)    $extended++;
-			if (this.Type == ItemType.SpeedDown) $spdDowned++;
-			$current = null;
+			ItemSet.clear();
 		}
-		if (this.Pos.y > cvs.height) {
-			$current = null;
-		}
+		if (this.Pos.y > cvs.height)
+			ItemSet.clear();
 	}
 	draw() {
 		if (!Game.isPlayScene) return;
 		const {x,y,Width:w,Height:h}= this;
-		const offsetH  = h * (this.#aIdex/this.#scaleTbl.length);
+		const offsetH  = h * (this.#animIdex/this.#scaleTbl.length);
 		const cornerR  = h/3;
 		const fontSize = h;
 
@@ -149,13 +144,14 @@ class Item extends Rect {
 		ctx.translate(x, y);
 		ctx.lineWidth = cvs.width / 200 | 0;
 		fillRoundRect  (ctx, 0,0, w,h, cornerR, this.Grad);
-		strokeRoundRect(ctx, 0,0, w,h, cornerR, this.outlineColor)
+		strokeRoundRect(ctx, 0,0, w,h, cornerR, this.OutlineColor)
 		ctx.restore();
 
 		// Logo text
 		ctx.save();
 		ctx.translate(x+1, y + offsetH);
 		ctx.scale(1, this.#textScale * 0.8);
+		ctx.globalAlpha   = 0.8;
 		ctx.shadowColor   = rgba(0,0,0,0.7);
 		ctx.shadowOffsetX = fontSize * 0.1;
 		ctx.shadowOffsetY = fontSize * 0.1;
@@ -166,54 +162,3 @@ class Item extends Rect {
 		ctx.restore();
 	}
 }
-const SubClasses = [
-	class extends Item {
-		Text = 'P';
-		Type = ItemType.Extend;
-		constructor(pos) {
-			super(pos, {hue:220, nonColored:true});
-			this.TextColor = rgba(0,255,255, this.TextAlpha);
-			freeze(this);
-		}
-	},
-	class extends Item {
-		Text = 'C';
-		Type = ItemType.Catch;
-		constructor(pos) {
-			super(pos, {hue:120});
-			freeze(this);
-		}
-	},
-	class extends Item {
-		Text = 'D';
-		Type = ItemType.Disruption;
-		constructor(pos) {
-			super(pos, {hue:206});
-			freeze(this);
-		}
-	},
-	class extends Item {
-		Text = 'E';
-		Type = ItemType.Expand;
-		constructor(pos) {
-			super(pos, {hue:240});
-			freeze(this);
-		}
-	},
-	class extends Item {
-		Text = 'L';
-		Type = ItemType.Laser;
-		constructor(pos) {
-			super(pos, {hue:0});
-			freeze(this);
-		}
-	},
-	class extends Item {
-		Text = 'S';
-		Type = ItemType.SpeedDown;
-		constructor(pos) {
-			super(pos, {hue:16});
-			freeze(this);
-		}
-	},
-];
