@@ -5,7 +5,7 @@ import {Sound}    from '../snd/sound.js';
 import {Window}   from './_window.js';
 import * as Cvs   from './_canvas.js';
 import * as Menu  from './menu.js';
-import {Bg}       from './background.js';
+import {BgMgr}    from './background.js';
 import {Scene}    from './scene.js';
 import {Stages}   from './stage.js';
 import {Demo}     from './demo.js';
@@ -27,9 +27,11 @@ export const Game = freeze(new class {
 	static #setup() {
 		$on({
 			Start:   Game.#onStart,
+			Ready:   Game.#onReady,
 			Reset:   Game.#onReset,
 			Clear:   Game.#onClear,
 			Respawn: Game.#onRespawn,
+			focus:   Game.#onPause,
 			blur:    Game.#onPause,
 			keydown: Game.#onPause,
 		});
@@ -52,17 +54,14 @@ export const Game = freeze(new class {
 	get isPlayScene()  {return Scene.some('InDemo|InGame')}
 
 	acceptEventInGame(e) {
-		if (!e || e.button > 0 || !e.target)
+		if (!e || !e.target || e.button == 1 || !Scene.isInGame)
 			return false;
-		if (!Scene.isInGame)
-			return false;
-		return (
-			   e.target == cvs
+		return(e.target == cvs
 			|| e.target == document.body
 			|| e.target == Window.Board);
 	}
 	#init() {
-		Bg.init();
+		BgMgr.init();
 		BallMgr.init();
 		ItemMgr.init();
 		BrickMgr.init();
@@ -74,8 +73,8 @@ export const Game = freeze(new class {
 		Scene.switchToReset();
 	}
 	#onMousedown(e) {
-		if (e.button > 0 || !Game.isDemoScene) return;
-		Scene.switchToStart();
+		if (Game.isDemoScene && e.button == 0)
+			Scene.switchToStart();
 	}
 	#onReset() {
 		Game.#stageIdx  = Menu.StageMenu.index;
@@ -84,16 +83,18 @@ export const Game = freeze(new class {
 		Scene.switchToInDemo(Game.ReadyTime+500);
 	}
 	#onStart(e) {
-		Scene.switchToReady();
 		Game.#init();
-		Game.#ready();
+		Sound.stop().play('start');
+		Scene.switchToReady();
 	}
 	#onRespawn() {
 		Game.#respawned = true;
-		Scene.switchToReady();
-		Scene.switchToInGame(Game.ReadyTime);
 		BallMgr.init();
 		Paddle.init();
+		Scene.switchToReady();
+	}
+	#onReady() {
+		Scene.switchToInGame(Game.ReadyTime);
 	}
 	#onClear() {
 		(Game.stageNum == Stages.length)
@@ -114,9 +115,10 @@ export const Game = freeze(new class {
 		 && e.type != 'blur'
 		 && e.type != 'contextmenu')
 			return;
+
 		e.preventDefault();
 		Ticker.pause(true);
-		Sound.pause();
+		Sound.pauseAll(true);
 		Confirm.open({
 			content: e.type == 'blur'
 				? 'Browser window is\nnow inactive!'
@@ -133,25 +135,21 @@ export const Game = freeze(new class {
 		Scene.switchToReset();
 		Scene.switchToStart();
 	}
-	#ready() {
-		Sound.stop().play('start');
-		Scene.switchToInGame(Game.ReadyTime);
-	}
 	#resume() {
 		Ticker.pause(false);
-		Sound.resume();
+		Sound.pauseAll(false);
 		$trigger('Resume');
 	}
 	#setNewStage() {
 		Game.#stageIdx++;
 		Game.#respawned = false;
-		Scene.switchToReady();
 		Game.#init();
-		Game.#ready();
+		Scene.switchToReady();
 	}
 	#update() {
 		if (BrickMgr.brokenAll)
 			return;
+
 		Score.update();
 		BrickMgr.update();
 		ItemMgr.update();
@@ -166,7 +164,7 @@ export const Game = freeze(new class {
 		ctx.clear();
 		ctx.drawImage(cvsShadow, 0,0);
 		Sight.drawLine();
-		ctx.drawImage(Bg.FrameImg, 0,0);
+		ctx.drawImage(BgMgr.FrameImg, 0,0);
 		ctx.drawImage(cvsBrick, 0,0);
 		BrickMgr.animation();
 		Sight.drawTarget();

@@ -14,7 +14,7 @@ const FrameImg = $(`<img src="./res/frame.png">`).get(0);
 for (const i of BgImages.keys())
 	BgImages[i] = $(`<img src="./res/bg${i}.png">`).get(0);
 
-class Background {
+class BackgroundMgr {
 	#Color   = BgColors[0];
 	FrameImg = FrameImg;
 	get Color() {
@@ -28,4 +28,4 @@ class Background {
 			'--bg-url': `url(${BgImages[idx].src})`
 		});
 	}
-} export const Bg = freeze(new Background);
+} export const BgMgr = freeze(new BackgroundMgr);

@@ -19,7 +19,7 @@ let $shakeAngle = 0;
 let $target     = null;
 let $landingPos = null;
 
-$on('Reset Start', function() {
+$on('Reset InGame', function() {
 	$shakeAngle = 0;
 	$target     = null;
 	$landingPos = null;
@@ -108,11 +108,10 @@ export const Demo = new class {
 		}
 	}
 	update() {
-		if (Scene.isInDemo) {
-			$shakeAngle += PI/94 + randFloat(-0.01, +0.01);
-			this.#setTarget();
-			this.#setLandingPointOfBall();
-		}
+		if (!Scene.isInDemo)
+			return;
+		this.#setTarget();
+		this.#setLandingPointOfBall();
 	}
 	autoPlay() {
 		if (this.#paddleMoveToItem(ItemMgr.Current))
@@ -130,7 +129,7 @@ export const Demo = new class {
 		this.#paddleMoveToBall();
 	}
 	#paddleMoveToBall() {
-		const x = this.Ball.x * (sin($shakeAngle)/10+1);
+		const x = this.Ball.x * (sin($shakeAngle+=PI/100)/10+1);
 		moveTo(x, this.Ball.Velocity.magnitude*1.2);
 	}
 	#paddleMoveToItem(item) {
@@ -172,7 +171,7 @@ const CatchMode = new class {
 	#onCatch() {
 		if (!Scene.isInDemo)
 			return;
-	
+
 		this.#dirX = 1;
 		this.#aiming = false;
 	 	Ticker.Timer.cancel(CatchMode)

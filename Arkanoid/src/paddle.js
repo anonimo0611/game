@@ -112,7 +112,7 @@ export const Paddle = freeze(new class extends Rect {
 		Paddle.#updateCache($ctx);
 	}
 	update() {
-		Paddle.#blink += PI/120;
+		Paddle.#blink += PI/60;
 		Paddle.#updateCache($ctx);
 		switch (Scene.current) {
 			case Scene.Enum.Reset:
@@ -146,7 +146,7 @@ export const Paddle = freeze(new class extends Rect {
 	}
 	#inGame() {
 		if (Ticker.elapsed < 50)
-			return;			
+			return;
 
 		if (AutoMoveToCursorX.setPosition()) {
 			Paddle.Pos.x = MouseX - (Paddle.Width/2);
@@ -229,6 +229,7 @@ export const Paddle = freeze(new class extends Rect {
 	#getPaddleType(ctx) {
 		if (ctx != $ctx)
 			return;
+
 		switch (Paddle.ExclType) {
 		case ItemType.Catch:
 		case ItemType.Laser:
@@ -315,10 +316,13 @@ const AutoMoveToCursorX = freeze(new class {
 		return this.#reached;
 	}
 	setPosition() {
-		if (this.reached) return true;
+		if (this.reached)
+			return true;
+
 		for (let i=0; i<int(cvs.width/30); i++)
-			if (this.#move()) return true;
-		return this.reached;
+			if (this.#move())
+				return true;
+		return false;
 	}
 	#move() {
 		const {MoveMin,MoveMax,Pos}= Paddle;
@@ -346,7 +350,7 @@ const Grad = freeze(new class {
 		.set(ItemType.Catch, ()=> this.#sphereHSL(120, 100, 29))
 		.set(ItemType.Laser, ()=> this.#sphereHSL(  0, 100, 29))
 	;
-	#lineHSL(h=0,s=0,l=100) {
+	#lineHSL(h,s,l) {
 		const
 		g = $ctx.createLinearGradient(Width,0,Width,Height);
 		g.addColorStop(0.0, hsl(h,s,l));
@@ -355,16 +359,15 @@ const Grad = freeze(new class {
 		g.addColorStop(1.0, hsl(h,s,l*1.1));
 		return g;
 	}
-	#sphereHSL(h=0,s=0,l=100) {
-		const radius = Height/2;
-		const lightness = max(abs(sin(Paddle.blink))*(l*1.4), l);
+	#sphereHSL(h,s,l) {
+		l = lerp(l, l*1.4, max(0, sin(Paddle.blink)));
 		return [0,1].map((_,i)=> { // Both sides
-			const sx = (!i ? radius : -radius) / 4;
+			const sx = (i == 0 ? Height/2 : -Height/2) / 4;
 			const
-			g = $ctx.createRadialGradient(sx,-radius/2,0, 0,0,radius);
+			g = $ctx.createRadialGradient(sx,-Height/4,0, 0,0,Height/2);
 			g.addColorStop(0.0, hsl(h,s,90));
-			g.addColorStop(0.5, hsl(h,s,lightness));
-			g.addColorStop(1.0, hsl(h,s,lightness));
+			g.addColorStop(0.5, hsl(h,s,l));
+			g.addColorStop(1.0, hsl(h,s,l));
 			return g;
 		});
 	}

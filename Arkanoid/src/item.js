@@ -25,10 +25,10 @@ export const ItemType = freeze({
 });
 const ItemColors = freeze([
 	{hue:220,sat: 0,textColor:rgba(0,255,255)}, // PlayerExtend
-	{hue:120,sat:91}, // Catch    
+	{hue:120,sat:91}, // Catch
 	{hue:206,sat:91}, // Disruption
-	{hue:240,sat:91}, // Expand 
-	{hue:  0,sat:91}, // Laser 
+	{hue:240,sat:91}, // Expand
+	{hue:  0,sat:91}, // Laser
 	{hue: 16,sat:91}, // SpeedDown
 ]);
 const ExclTypeSet = new Set([
@@ -60,6 +60,7 @@ export const ItemMgr = new class {
 		this.#speedDownCnt  =  0;
 	}
 	appear({x, y}) {
+		return;
 		if (this.ItemApeared)
 			return;
 		if (randInt(0,2) != 0)
@@ -67,7 +68,7 @@ export const ItemMgr = new class {
 		const type = this.#choice();
 		ItemSet.add( new Item(type, {x, y}, ItemColors[type]) );
 	}
-	#choice() {			
+	#choice() {
 		let type = randInt(0, ItemType.Max-1);
 		if (type === this.#lastItemType
 		 || type === ItemType.SpeedDown && this.#speedDownCnt > 2
@@ -84,8 +85,12 @@ export const ItemMgr = new class {
 		type == ItemType.SpeedDown    && this.#speedDownCnt++;
 		type == ItemType.PlayerExtend && this.#extendCnt++;
 	}
-	update() {this.Current?.update()}
-	draw()   {this.Current?.draw()}
+	update() {
+		this.Current?.update();
+	}
+	draw() {
+		this.Current?.draw();
+	}
 };
 class Item extends Rect {
 	Speed      = cvs.height / 175;
@@ -101,10 +106,10 @@ class Item extends Rect {
 		this.Text = keys(ItemType)[type][0];
 		this.Pos  = Vec2(pos).xFreeze();
 		this.Grad = ctx.createLinearGradient(Width,0,Width,Height);
-		this.Grad.addColorStop(0.00, hsl(hue,sat,36));
-		this.Grad.addColorStop(0.20, hsl(hue,sat,80));
-		this.Grad.addColorStop(0.30, hsl(hue,sat,36));
-		this.Grad.addColorStop(1.00, hsl(hue,sat,50));
+		this.Grad.addColorStop(0.0, hsl(hue,sat,36));
+		this.Grad.addColorStop(0.2, hsl(hue,sat,80));
+		this.Grad.addColorStop(0.3, hsl(hue,sat,36));
+		this.Grad.addColorStop(1.0, hsl(hue,sat,50));
 		this.TextColor = textColor ?? rgba(255,204,0);
 		this.OutlineColor = hsl(hue, (sat == 0 ? 0:40), 40);
 	}
@@ -130,7 +135,7 @@ class Item extends Rect {
 		if (!Game.isPlayScene) return;
 		const {x,y,Width:w,Height:h}= this;
 		const offsetH  = h * (this.#animIdex/this.#scaleTbl.length);
-		const cornerR  = h/3;
+		const cornerR  = h / 3;
 		const fontSize = h;
 
 		// Item shadow
@@ -142,7 +147,7 @@ class Item extends Rect {
 		// Item itself
 		ctx.save();
 		ctx.translate(x, y);
-		ctx.lineWidth = cvs.width / 200 | 0;
+		ctx.lineWidth = int(cvs.width / 200);
 		fillRoundRect  (ctx, 0,0, w,h, cornerR, this.Grad);
 		strokeRoundRect(ctx, 0,0, w,h, cornerR, this.OutlineColor)
 		ctx.restore();
@@ -152,7 +157,7 @@ class Item extends Rect {
 		ctx.translate(x+1, y + offsetH);
 		ctx.scale(1, this.#textScale * 0.8);
 		ctx.globalAlpha   = 0.8;
-		ctx.shadowColor   = rgba(0,0,0,0.7);
+		ctx.shadowColor   = rgba(0,0,0, 0.7);
 		ctx.shadowOffsetX = fontSize * 0.1;
 		ctx.shadowOffsetY = fontSize * 0.1;
 		ctx.font = `${fontSize}px Atari`;

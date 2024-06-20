@@ -16,7 +16,7 @@ export const StageMenu = new class extends Menu.SlideMenu {
 	constructor() {
 		super(SelectStage.id);
 	}
-	select(idx, {restore=false}={}) {
+	select(idx) {
 		super.select(idx);
 		$(this).trigger('change', idx);
 	}
@@ -25,7 +25,7 @@ export const LivesMenu = new class extends Menu.SlideMenu {
 	constructor() {
 		super(SelectLives.id);
 	}
-	select(idx, {restore=false}={}) {
+	select(idx) {
 		super.select(idx);
 		$(this).trigger('change', this.value);
 	}

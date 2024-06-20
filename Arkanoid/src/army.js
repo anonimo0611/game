@@ -152,7 +152,7 @@ class Sphere {
 		const {h,l}  = this.#color(this.HSL, damaging && !isShadow);
 		const color  = isShadow? hsl(h,30,l, 0.8) : this.#Grad;
 		const offset = isShadow? Radius/1.9 : 0;
-		const shake  = damaging? sin(this.#shake+=PI/8)*(SphereR*0.3) : 0;
+		const shake  = damaging? cos(this.#shake+=PI/8)*(SphereR*0.3) : 0;
 		ctx.save();
 		ctx.translate(x+offset+shake, y+offset);
 		fillCircle(ctx)(0,0, SphereR, color);

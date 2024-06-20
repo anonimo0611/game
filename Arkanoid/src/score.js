@@ -1,7 +1,7 @@
 import {rgba}    from '../lib/color.js';
 import {Ticker}  from '../lib/timer.js';
 import {cvs,ctx} from './_canvas.js';
-import {Bg}      from './background.js';
+import {BgMgr}   from './background.js';
 import {Scene}   from './scene.js';
 import {Field}   from './field.js';
 
@@ -47,7 +47,7 @@ export const Score = freeze(new class {
 
 		// Backgound color
 		ctx.save();
-		ctx.fillStyle = rgba(...Bg.Color, 0.2);
+		ctx.fillStyle = rgba(...BgMgr.Color, 0.2);
 		ctx.fillRect(0,0, cvs.width, FontSize * 1.5);
 		ctx.restore();
 

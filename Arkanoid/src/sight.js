@@ -22,7 +22,7 @@ export const Sight = freeze(new class {
 			&& (!BallMgr.Ball.launched || Paddle.catchX > 0);
 	}
 	get canDraw() {
-		return (this.enabled && (Game.isDemoScene || Paddle.controllable));
+		return this.enabled && (Game.isDemoScene || Paddle.controllable);
 	}
 	get BallVelocity() {
 		return !BallMgr.Ball.launched
@@ -37,7 +37,7 @@ export const Sight = freeze(new class {
 	}
 	get #intersectionWithField() {
 		return this.#getIntersection(
-			Vec2(0, Field.Top), 
+			Vec2(0, Field.Top),
 			Vec2(cvs.width, Field.Top)
 		) ?? this.BallVector;
 	}
