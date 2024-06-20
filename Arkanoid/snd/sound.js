@@ -1,70 +1,72 @@
-import Loader   from './_loader.js'
-import {Scene}  from '../src/scene.js';
-import {Ticker} from '../lib/timer.js'
+import {Loader}   from './_loader.js'
+import {Instance} from './_loader.js'
+import {Ticker}   from '../lib/timer.js'
+import {Game}     from '../src/_main.js';
 
-const Instance = new Map();
-const Ctrl = byId('volCtrl');
+export const Sound = new class extends Loader {
+	static {this.#setup()}
+	static async #setup() {
+		if (!await Loader.setup())
+			return
 
-export const Sound = new class {
-	static {
-		$(window).one('SoundLoaded',this.setup)
+		Sound.vol = +localStorage.ArkanoidVolume ?? 10
+		Sound.#setCtrlEvents(Sound.vol);
+		addEventListener('keydown', Sound.#onKeydown)
 	}
-	static setup() {
-		Loader.ids.forEach(id=> Instance.set(id, createjs.Sound.createInstance(id)))
-		Sound.#restore()
-		$on('keydown', e=> {/^M$/i.test(e.key) && Sound.#mute(e)})
-		$('#volRng') .on('input',Sound.#applyVol).eq(0).trigger('input')
-		$('#speaker').on('click',Sound.#mute)
-		$(Ctrl).css('--width',`${Ctrl.width}px`).addClass('loaded')
+	#setCtrlEvents(vol) {
+		$('#volRng') .on('input', Sound.#onInput).attr({value:vol})
+		$('#speaker').on('click', Sound.mute)
+		$('#volCtrl').addClass('loaded')
+	}
+	#onKeydown(e) {
+		!e.repeat && /^M$/i.test(e.key) && Sound.mute()
+	}
+	#onInput(e) {
+		Sound.vol = e.target.valueAsNumber;
 	}
 	#lstVol = null;
-	get vol(){
-		return createjs.Sound.volume * 10
-	}
-	get disabled(){
-		return Loader.failed
-	}
-	#setVol(vol) {
-		if (Sound.disabled) return;
-		createjs.Sound.volume = vol / 10;
+	get vol() {return super.vol}
+	set vol(vol) {
+		if (Sound.failed)
+			return
+
+		vol = clamp(+vol, 0, 10);
 		$('#speaker').css('--w', (v=> {
 			if (v == 0) return 0;
 			if (between(v, 8, 10)) return 3;
 			if (between(v, 4,  7)) return 2;
 			if (between(v, 1,  3)) return 1;
 		})(vol))
-		localStorage.ArkanoidVolume = vol;
-	}
-	#restore() {
-		volRng.value = localStorage.ArkanoidVolume ?? 10;
-	}
-	#applyVol(e) {
-		Sound.#setVol((e.type == 'input' ? e.target : volRng).valueAsNumber)
-	}
-	#mute(e) {
-		e.stopPropagation();
-		Sound.#lstVol = Sound.vol || (Sound.#lstVol ?? +volRng.max)
-		Sound.#setVol(Sound.vol ? 0 : Sound.#lstVol)
+		localStorage.ArkanoidVolume = super.vol = vol
 	}
 	play(id, cfg={}) {
-		if (Sound.disabled || !isStr(id)) return
-		if (!Scene.some('Ready|InGame|Dropped|GameOver')) return
-		cfg = Loader.configMerged(id, cfg)
-		if (cfg.duration) Instance.get(id)?.setDuration(cfg.duration)
-		Instance.has(id)? Instance.get(id).play(cfg) : createjs.Sound.play(id, cfg)
+		if (!Sound.failed && !Game.isDemoScene)
+			Instance.get(id)?.play(Sound.configMerge(id, cfg))
 	}
 	stop(...ids) {
-		if (Sound.disabled) return this
-		if (!ids.length) createjs.Sound.stop()
-		ids.forEach(id=> {Instance.get(id)?.stop()})
+		if (Sound.failed)
+			return this
+
+		ids.length == 0 && super.stop()
+		ids.forEach(id=> Instance.get(id)?.stop())
 		return this
 	}
 	pause(id) {
-		if (!arguments.length) Instance.forEach(i=> i.paused = true)
-		else Instance.has(id) && (Instance.get(id).paused = true)
+		!arguments.length
+			? Instance.forEach(i=> i.paused=true)
+			: Instance.get(id)?.setPaused(true)
 	}
 	resume(id) {
-		if (Sound.disabled || Ticker.paused) return
-		if (!arguments.length) Instance.forEach(i=> i.paused = false)
+		!arguments.length
+			? Instance.forEach(i=> i.paused=false)
+			: Instance.get(id)?.setPaused(false)
 	}
-}; freeze(Sound)
+	pauseAll(bool) {
+		bool? Sound.pause()
+		    : Sound.resume()
+	}
+	mute() {
+		Sound.#lstVol = Sound.vol || (Sound.#lstVol ?? 10)
+		Sound.vol = Sound.vol? 0 : Sound.#lstVol
+	}
+};
