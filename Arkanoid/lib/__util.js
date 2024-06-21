@@ -30,14 +30,14 @@ const byIds  = arg => {
 	});
 }
 
-const lerp       = (x, y, p)     => x + (y - x) * p
-const norm       = (x, y, p)     => (p - x) / (y - x)
-const toRadians  = (deglee)      => deglee * PI/180
-const between    = (n, min, max) => (n >= min && n <= max)
-const clamp      = (n, min, max) => Math.min(Math.max(n,min), max)
-const randInt    = (min, max)    => int(random() * (max-min+1) + min)
-const randFloat  = (min, max)    => random() * (max-min) + min
-const toNumber   = (arg, def=NaN)=> !isNum(+arg) || !isNum(arg)
+const lerp      = (x, y, p)     => x + (y - x) * p
+const norm      = (x, y, p)     => (p - x) / (y - x)
+const toRadians = (deglee)      => deglee * PI/180
+const between   = (n, min, max) => (n >= min && n <= max)
+const clamp     = (n, min, max) => Math.min(Math.max(n,min), max)
+const randInt   = (min, max)    => int(random() * (max-min+1) + min)
+const randFloat = (min, max)    => random() * (max-min) + min
+const toNumber  = (arg, def=NaN)=> !isNum(+arg) || !isNum(arg)
 	&& !isStr(arg) || String(arg).trim() === '' ? def : +arg
 
 const randChoice = (...args)=> {

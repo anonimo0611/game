@@ -120,7 +120,7 @@ Vec2.getIntersection = (a, b, c, d)=> {
 	}
 	const s = cross(sub(c,a), sub(d,c)) / v
 	const t = cross(sub(b,a), sub(a,c)) / v
-	if (s < 1e-6 || 1 < s || t < 1e-6 || 1 < t) {
+	if (s < 1e-6 || s > 1 || t < 1e-6 || t > 1) {
 		// Line segments do not intersect
 		return null
 	}

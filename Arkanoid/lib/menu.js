@@ -41,8 +41,8 @@ export class SlideMenu extends Menu {
 	constructor(id, idx) {
 		super(id)
 		const root = this.root
-		this.btnR = $('<button class=r tabindex="-1">></button>').prependTo(root).get(0)
-		this.btnL = $('<button class=l tabindex="-1"><</button>').prependTo(root).get(0)
+		this.btnR = $('<button class=r tabindex="-1">&gt;</button>').prependTo(root).get(0)
+		this.btnL = $('<button class=l tabindex="-1">&lt;</button>').prependTo(root).get(0)
 		$(this.menu).css({display:'inline-flex'})
 		const select = dir=> {
 			if (!dir) return
@@ -72,6 +72,6 @@ export class SlideMenu extends Menu {
 	}
 	select(idx,{restore=false}={}) {
 		super.select(idx)
-		this.menu.style.transform = `translateX(${-this.#width*idx}px)`
+		this.menu.style.transform = `translateX(${-this.#width * idx}px)`
 	}
 }

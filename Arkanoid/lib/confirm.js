@@ -7,22 +7,22 @@ export const Confirm = freeze(new class {
 		$(byId('confirm_temp').content.cloneNode(true)).appendTo('body');
 		Object.entries(buttons).forEach(this.#appendButton);
 		$('#confirm')
-			.on('keydown',   Confirm.#onKeydown)
-			.on('mousedown', Confirm.#onMousedown)
+			.on('keydown',  Confirm.#onKeydown)
+			.on('mousedown',Confirm.#onMousedown)
 			.find('.content').text(content)
 			.end().opacity(1, 400)
 			.get(0).showModal();
 	}
 	#appendButton([key, {fn,cancel=false,autoFocus=false}]) {
-		const evnet  = ()=> Confirm.#close(fn);
+		const event  = ()=> Confirm.#close(fn);
 		const button = $(`<button type=button class=${key}>${key}</button>`)
-			.on('click', evnet)
+			.on('click', event)
 			.on('keydown', e=> {
 				e.key == 'ArrowLeft'  && $(e.target).prev().focus();
 				e.key == 'ArrowRight' && $(e.target).next().focus();
 			})
 			.appendTo(Confirm.buttons);
-		cancel && (Confirm.#escFn = evnet);
+		cancel && (Confirm.#escFn = event);
 		autoFocus && button.focus();
 	}
 	#onKeydown(e) {
