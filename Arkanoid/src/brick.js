@@ -239,7 +239,7 @@ const Brick = freeze(class {
 	get type()          {return this.#type}
 	get durability()    {return this.#durability}
 	get exists()        {return !this.isNone}
-	get isBreakable()   {return this.type > BrickType.Immortality}
+	get isBreakable()   {return this.type >  BrickType.Immortality}
 	get isImmortality() {return this.type == BrickType.Immortality}
 	get isNone()        {return this.type == BrickType.None}
 	get isHard()        {return this.type == BrickType.Hard}
@@ -284,8 +284,6 @@ const Brick = freeze(class {
 		return this;
 	}
 	#holdUp() {
-		if (LusterMap.size <= 4)
-			Sound.stop('se2').play('se2');
 		if (this.isHard) {
 			const {durabilityMax:dMax,durability:d}= this;
 			this.color.s += 30 - 30/dMax * d;
@@ -293,7 +291,10 @@ const Brick = freeze(class {
 			this.color.a = min((1/dMax * d)+0.5, 1);
 			BrickMgr.drawBrick(this);
 		}
-		!LusterMap.has(this) && LusterMap.set(this, {offset:0});
+		if (!LusterMap.has(this)) {
+			LusterMap.set(this, {offset:0});
+			Sound.stop('se2').play('se2');
+		}
 	}
 	#destroy({x, y}) {
 		LusterMap.delete(this);

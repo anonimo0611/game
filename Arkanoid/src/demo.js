@@ -207,15 +207,12 @@ const CatchMode = new class {
 		this.#searchMove();
 	}
 	#searchMove() {
-		if (this.#aiming) return;
-		const speed = Field.Width/60;
-		if (this.#dirX > 0) {
-			moveTo(Field.Right, speed);
-			Paddle.x > Paddle.MoveMax && (this.#dirX *= -1);
-		} else {
-			moveTo(Field.Left, speed);
-			Paddle.x < Paddle.MoveMin && (this.#dirX *= -1);
-		}
+		if (this.#aiming)
+			return;
+		Paddle.Pos.x += (Field.Width/60) * this.#dirX;
+		if (Paddle.x < Paddle.MoveMin
+		 || Paddle.x > Paddle.MoveMax)
+			this.#dirX *= -1;
 	}
 };
 function moveTo(dstX, speed) {

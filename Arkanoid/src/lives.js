@@ -28,7 +28,8 @@ export const Lives = freeze(new class {
 	#onRespawn() {Lives.#left--}
 
 	#onExtend(_, type) {
-		if (Game.isDemoScene) return;
+		if (Game.isDemoScene)
+			return;
 		type == ItemMgr.Type.PlayerExtend && Lives.#left++
 	}
 	draw() {

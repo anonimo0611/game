@@ -54,7 +54,9 @@ export const Game = freeze(new class {
 	get isPlayScene()  {return Scene.some('InDemo|InGame')}
 
 	acceptEventInGame(e) {
-		if (!e || !e.target || e.button == 1 || !Scene.isInGame)
+		if (!e || !e.target || e.button == 1)
+			return false;
+		if (!Scene.isInGame)
 			return false;
 		return(e.target == cvs
 			|| e.target == document.body
@@ -131,14 +133,14 @@ export const Game = freeze(new class {
 		});
 		Game.#draw();
 	}
-	#restart() {
-		Scene.switchToReset();
-		Scene.switchToStart();
-	}
 	#resume() {
 		Ticker.pause(false);
 		Sound.pauseAll(false);
 		$trigger('Resume');
+	}
+	#restart() {
+		Scene.switchToReset();
+		Scene.switchToStart();
 	}
 	#setNewStage() {
 		Game.#stageIdx++;

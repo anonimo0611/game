@@ -117,23 +117,23 @@ export const Paddle = freeze(new class extends Rect {
 		switch (Scene.current) {
 			case Scene.Enum.Reset:
 			case Scene.Enum.Ready:
-				Paddle.#ready();
+				Paddle.#readyScene();
 				break;
 			case Scene.Enum.InDemo:
-				Paddle.#inDemo();
-				return;
+				Paddle.#demoScene();
+				break;
 			case Scene.Enum.InGame:
-				Paddle.#inGame();
+				Paddle.#gameScene();
 				break;
 			default:
-				Paddle.#destory();
+				Paddle.#destoryScene();
 		}
 	}
-	#ready() {
+	#readyScene() {
 		if (Ticker.elapsed > Game.ReadyTime - 1000)
 			Paddle.#alpha = min(Paddle.#alpha+1/FadeDuration, 1);
 	}
-	#inDemo() {
+	#demoScene() {
 		if (Ticker.elapsed >= 50)
 			Paddle.#launched ||= true;
 		if (Ticker.elapsed < 200)
@@ -144,7 +144,7 @@ export const Paddle = freeze(new class extends Rect {
 		Paddle.#setWidth();
 		Paddle.#constrain();
 	}
-	#inGame() {
+	#gameScene() {
 		if (Ticker.elapsed < 50)
 			return;
 
@@ -159,6 +159,10 @@ export const Paddle = freeze(new class extends Rect {
 				? Paddle.clampedX + Paddle.catchX
 				: Paddle.clampedX + Paddle.Width/2;
 	}
+	#destoryScene() {
+		if (BallMgr.count <= 0 && Ticker.count > 8)
+			Paddle.#alpha = max(Paddle.#alpha-1/FadeDuration, 0);
+	}
 	#constrain() {
 		const {Pos,MoveMin,MoveMax}= Paddle;
 		Pos.x = clamp(Pos.x, MoveMin, MoveMax);
@@ -166,10 +170,6 @@ export const Paddle = freeze(new class extends Rect {
 	#moveCaughtBall() {
 		if (Paddle.catchX > 0)
 			BallMgr.Ball.Pos.x = Paddle.CaughtBallPos.x;
-	}
-	#destory() {
-		if (BallMgr.count <= 0 && Ticker.count > 8)
-			Paddle.#alpha = max(Paddle.#alpha-1/FadeDuration, 0);
 	}
 	#onLaunch(e) {
 		if (!Game.acceptEventInGame(e))
@@ -292,7 +292,7 @@ export const Paddle = freeze(new class extends Rect {
 		for (let i=0; i<=15; i++) {
 			const {Width,Height,Pos}= Paddle;
 			const stPos = [randInt(0, Width), randInt(0, Height*1.1)];
-			const edVec = stPos.map(c=> c+randChoice(-15, +15));
+			const edVec = stPos.map(c=> c+randChoice(-Width/12|0, Width/12|0));
 			ctx.save();
 			ctx.translate(...Pos.vals);
 			ctx.beginPath();
@@ -319,22 +319,18 @@ const AutoMoveToCursorX = freeze(new class {
 		if (this.reached)
 			return true;
 
-		for (let i=0; i<int(cvs.width/30); i++)
+		for (let i=0; i<cvs.width/30; i++)
 			if (this.#move())
 				return true;
 		return false;
 	}
 	#move() {
-		const {MoveMin,MoveMax,Pos}= Paddle;
-		if (Paddle.centerX > MouseX) {
-			Pos.x = max(Pos.x-1, MoveMin);
-			if (Paddle.centerX < MouseX || Pos.x == MoveMin)
-				return this.#reached = true;
-		} else {
-			Pos.x = min(Pos.x+1, MoveMax);
-			if (Paddle.centerX > MouseX || Pos.x == MoveMax)
-				return this.#reached = true;
-		}
+		const step = Paddle.centerX > MouseX ? -1 : +1;
+		const {centerX,MoveMin,MoveMax,Pos}= Paddle;
+		Pos.x = clamp(Pos.x+step, MoveMin, MoveMax);
+		if (step < 0 && (centerX < MouseX || Pos.x == MoveMin)
+		|| (step > 0 && (centerX > MouseX || Pos.x == MoveMax)))
+			return this.#reached = true;
 	}
 });
 
@@ -361,7 +357,7 @@ const Grad = freeze(new class {
 	}
 	#sphereHSL(h,s,l) {
 		l = lerp(l, l*1.4, max(0, sin(Paddle.blink)));
-		return [0,1].map((_,i)=> { // Both sides
+		return [0,1].map(i=> { // Both sides
 			const sx = (i == 0 ? Height/2 : -Height/2) / 4;
 			const
 			g = $ctx.createRadialGradient(sx,-Height/4,0, 0,0,Height/2);

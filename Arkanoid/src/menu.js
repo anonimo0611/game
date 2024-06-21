@@ -1,10 +1,10 @@
-import {Stages}  from './stage.js';
-import * as Menu from '../lib/menu.js';
+import {Stages}    from './stage.js';
+import {SlideMenu} from '../lib/menu.js';
 
 const SelectStage = byId('SelectStage');
 const SelectLives = byId('SelectLives');
 
-export const StageMenu = new class extends Menu.SlideMenu {
+export const StageMenu = new class extends SlideMenu {
 	static {
 		for (let i=0; i<Stages.length; i++) { // Initialize
 			const num = String(i+1).padStart(2, 0);
@@ -21,7 +21,7 @@ export const StageMenu = new class extends Menu.SlideMenu {
 		$(this).trigger('change', idx);
 	}
 };
-export const LivesMenu = new class extends Menu.SlideMenu {
+export const LivesMenu = new class extends SlideMenu {
 	constructor() {
 		super(SelectLives.id);
 	}
