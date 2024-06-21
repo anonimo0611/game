@@ -325,11 +325,11 @@ const AutoMoveToCursorX = freeze(new class {
 		return false;
 	}
 	#move() {
-		const step = Paddle.centerX > MouseX ? -1 : +1;
 		const {centerX,MoveMin,MoveMax,Pos}= Paddle;
-		Pos.x = clamp(Pos.x+step, MoveMin, MoveMax);
-		if (step < 0 && (centerX < MouseX || Pos.x == MoveMin)
-		|| (step > 0 && (centerX > MouseX || Pos.x == MoveMax)))
+		const step = centerX > MouseX ? -1 : +1;
+		Pos.x += step;
+		if (step < 0 && (centerX-step < MouseX || Pos.x == MoveMin)
+		 || step > 0 && (centerX+step > MouseX || Pos.x == MoveMax))
 			return this.#reached = true;
 	}
 });
