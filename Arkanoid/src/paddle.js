@@ -48,7 +48,7 @@ export const Paddle = freeze(new class extends Rect {
 	Height    = Height;
 
 	// Launch angle at the beginning of the stage or at respawn
-	LaunchVelocity  = Vec2.fromDegrees(90+25).inverse;
+	LaunchVelocity = Vec2.fromDegrees(90+25).inverse;
 
 	// Ball bounce angle based on distance from paddle center
 	BounceAngleMax = toRadians(60); // -60 to +60 degrees
@@ -160,6 +160,8 @@ export const Paddle = freeze(new class extends Rect {
 				: Paddle.clampedX + Paddle.Width/2;
 	}
 	#destoryScene() {
+		if (Game.isDemoScene)
+			return;
 		if (BallMgr.count <= 0 && Ticker.count > 8)
 			Paddle.#alpha = max(Paddle.#alpha-1/FadeDuration, 0);
 	}
@@ -291,8 +293,9 @@ export const Paddle = freeze(new class extends Rect {
 
 		for (let i=0; i<=15; i++) {
 			const {Width,Height,Pos}= Paddle;
-			const stPos = [randInt(0, Width), randInt(0, Height*1.1)];
-			const edVec = stPos.map(c=> c+randChoice(-Width/12|0, Width/12|0));
+			const radius = int(Width/12);
+			const stPos  = [randInt(0, Width), randInt(0, Height*1.1)];
+			const edVec  = stPos.map(c=> c+randChoice(-radius, radius));
 			ctx.save();
 			ctx.translate(...Pos.vals);
 			ctx.beginPath();
@@ -316,13 +319,11 @@ const AutoMoveToCursorX = freeze(new class {
 		return this.#reached;
 	}
 	setPosition() {
-		if (this.reached)
-			return true;
-
-		for (let i=0; i<cvs.width/30; i++)
-			if (this.#move())
-				return true;
-		return false;
+		if (!this.reached)
+			for (let i=0; i<cvs.width/30; i++)
+				if (this.#move())
+					return true;
+		return this.reached;
 	}
 	#move() {
 		const {centerX,MoveMin,MoveMax,Pos}= Paddle;

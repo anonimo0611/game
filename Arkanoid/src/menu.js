@@ -9,7 +9,7 @@ export const StageMenu = new class extends SlideMenu {
 		for (let i=0; i<Stages.length; i++) { // Initialize
 			const num = String(i+1).padStart(2, 0);
 			const $LI = $(`<li data-val="${i}">${num}</li>`);
-			if (i == 0) $LI.addClass('selected');
+			!i && $LI.addClass('selected');
 			$(SelectStage).find('menu').append($LI);
 		}
 	}

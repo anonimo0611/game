@@ -42,16 +42,17 @@ export const Game = freeze(new class {
 		$(Menu.StageMenu).on({change: Game.#onSelectStage});
 		Scene.switchToReset();
 	}
-	ReadyTime  = 2500; // ms
-	#stageIdx  = Menu.StageMenu.index;
-	#respawned = false;
+	ReadyTime    = 2500; // ms
+	#stageIdx    = Menu.StageMenu.index;
+	#respawned   = false;
+	#isDemoScene = false;
 	get stageIdx()  {return this.#stageIdx}
 	get stageNum()  {return this.#stageIdx+1}
 	get respawned() {return this.#respawned}
 
-	get isReadyScene() {return Scene.some('Reset|Ready')}
-	get isDemoScene()  {return Scene.some('Reset|InDemo|EndDemo')}
-	get isPlayScene()  {return Scene.some('InDemo|InGame')}
+	get isDemoScene()  {return this.#isDemoScene}
+	get isReadyScene() {return Scene.isReset  || Scene.isReady}
+	get isPlayScene()  {return Scene.isInDemo || Scene.isInGame}
 
 	acceptEventInGame(e) {
 		if (!e || !e.target || e.button == 1)
@@ -79,12 +80,14 @@ export const Game = freeze(new class {
 			Scene.switchToStart();
 	}
 	#onReset() {
-		Game.#stageIdx  = Menu.StageMenu.index;
-		Game.#respawned = false;
+		Game.#stageIdx    = Menu.StageMenu.index;
+		Game.#respawned   = false;
+		Game.#isDemoScene = true;
 		Game.#init();
 		Scene.switchToInDemo(Game.ReadyTime+500);
 	}
 	#onStart(e) {
+		Game.#isDemoScene = false;
 		Game.#init();
 		Sound.stop().play('start');
 		Scene.switchToReady();
@@ -107,8 +110,9 @@ export const Game = freeze(new class {
 	}
 	#onPause(e) {
 		if (Game.isDemoScene) {
-			Ticker.pause(e.type == 'blur');
-			Game.#draw();
+			/blur|focus/.test(e.type)
+			 && Ticker.pause(e.type == 'blur')
+			 && Game.#draw();
 			return;
 		}
 		if (Confirm.opened)

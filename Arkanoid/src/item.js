@@ -60,13 +60,11 @@ export const ItemMgr = new class {
 		this.#speedDownCnt  =  0;
 	}
 	appear({x, y}) {
-		if (Paddle.CatchEnabled)
-			 return;
 		if (this.ItemApeared)
 			return;
 		if (randInt(0,2) != 0)
 			return;
-		const type = 1//this.#choice();
+		const type = this.#choice();
 		ItemSet.add( new Item(type, {x, y}, ItemColors[type]) );
 	}
 	#choice() {
