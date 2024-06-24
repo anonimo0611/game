@@ -18,13 +18,14 @@ import {MouseX}    from './mouse.js';
 
 const Width  = cvs.width / 5;
 const Height = BrickMgr.RowHeight;
+const Radius = Height / 2;
 
 const StretchMax   = Width * 1.5;
 const StretchSpeed = (StretchMax-Width)/(300/Ticker.Interval);
 const FadeDuration = 500 / Ticker.Interval;
 const SparkColor   = rgba(0,255,255, 0.7);
 const ShadowColor  = rgba(0,  0,  0, 0.4);
-const [$cvs,$ctx]  = canvas2D(null, Width*1.5, Height*1.5).vals;
+const [$cvs,$ctx]  = canvas2D(null, StretchMax+Radius, Height*1.5).vals;
 
 export const Paddle = freeze(new class extends Rect {
 	static {$ready(this.#setup)}
@@ -48,7 +49,7 @@ export const Paddle = freeze(new class extends Rect {
 	Height    = Height;
 
 	// Launch angle at the beginning of the stage or at respawn
-	LaunchVelocity = Vec2.fromDegrees(90+25).inverse;
+	LaunchVelocity = Vec2.fromDegrees(-90+25);
 
 	// Ball bounce angle based on distance from paddle center
 	BounceAngleMax = toRadians(60); // -60 to +60 degrees
@@ -245,7 +246,7 @@ export const Paddle = freeze(new class extends Rect {
 	}
 	#cache(ctx, w, shadowColor) {
 		const type  = Paddle.#getPaddleType(ctx) ?? undefined;
-		const lineW = Width*0.05, r = Height/2;
+		const lineW = Width*0.05, r = Radius;
 
 		ctx.save();
 		if (shadowColor)

@@ -23,7 +23,7 @@ export const ItemType = freeze({
 	SpeedDown:    5,
 	Max:          6,
 });
-const ItemColors = freeze([
+const ColorTable = freeze([
 	{hue:220,sat: 0,textColor:rgba(0,255,255)}, // PlayerExtend
 	{hue:120,sat:91}, // Catch
 	{hue:206,sat:91}, // Disruption
@@ -65,7 +65,7 @@ export const ItemMgr = new class {
 		if (randInt(0,2) != 0)
 			return;
 		const type = this.#choice();
-		ItemSet.add( new Item(type, {x, y}, ItemColors[type]) );
+		ItemSet.add( new Item(type, {x, y}, ColorTable[type]) );
 	}
 	#choice() {
 		let type = randInt(0, ItemType.Max-1);

@@ -32,7 +32,7 @@ export const BrickType = freeze({
 	Blue:       8,
 	Pink:       9,
 });
-const BrickHSLColors = deepFreeze([
+const BrickHSLTable = deepFreeze([
 	[ 60, 49, 50], // Immortality
 	[212,  0, 70], // Hard
 	[  0,  0,100], // White
@@ -44,7 +44,7 @@ const BrickHSLColors = deepFreeze([
 	[220, 79, 64], // Blue
 	[300, 79, 64], // Pink
 ]);
-const BrickPoints = freeze([
+const BrickPointsTable = freeze([
 	  0, // Immortality
 	 50, // Hard
 	 50, // White
@@ -252,7 +252,7 @@ const Brick = freeze(class {
 		this.y     = (RowHeight*row) + Field.Top;
 		this.Pos   = Vec2(this.x, this.y);
 		this.#type = type;
-		this.color = type >= 0 ? HSL(...BrickHSLColors[type]) : null;
+		this.color = type >= 0 ? HSL(...BrickHSLTable[type]) : null;
 
 		if (type == BrickType.Hard
 		 || type == BrickType.Immortality)
@@ -305,7 +305,7 @@ const Brick = freeze(class {
 		if (this.isNormal)
 			ItemMgr.appear(this);
 		if (Scene.isInGame)
-			Score.add(BrickPoints[this.type] * this.#pointRate);
+			Score.add(BrickPointsTable[this.type] * this.#pointRate);
 		this.#type = BrickType.None;
 	}
 	getAdjacent(x=0, y=0) {
