@@ -1,6 +1,6 @@
 'use strict'
 const {isArray}= Array
-const {assign,defineProperty,entries,freeze,getOwnPropertyNames,hasOwn,keys,values}= Object
+const {assign,defineProperty,entries,freeze,hasOwn,keys,values}= Object
 const {abs,atan2,ceil,cos,floor,max,min,PI,random,round,sign,sin,sqrt,trunc:int}= Math
 
 const typeOf   = arg => String(Object.prototype.toString.call(arg).slice(8,-1))
@@ -50,7 +50,7 @@ const splitByBar  = arg=> {
 const deepFreeze = obj=> {
 	function freeze(o) {
 		if (isElm(o)) return o
-		for (const key of getOwnPropertyNames(o)) {
+		for (const key of Object.getOwnPropertyNames(o)) {
 			const desc = Object.getOwnPropertyDescriptor(o, key)
 			if (desc.get || desc.set)
 				continue

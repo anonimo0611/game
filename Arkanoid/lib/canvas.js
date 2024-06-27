@@ -61,8 +61,9 @@ const strokeCircle = ctx=> (x, y, r, lw, style)=> {
 	ctx.stroke();
 	ctx.restore();
 }
-const drawLine = (ctx,{color,width}={})=> (x1,y1, x2,y2)=> {
+const drawLine = (ctx,{color,width=1,cap}={})=> (x1,y1, x2,y2)=> {
 	ctx.save();
+	cap   && (ctx.lineCap=cap);
 	color && (ctx.strokeStyle=color);
 	isNum(width) && width >= 0 && (ctx.lineWidth=width);
 	ctx.beginPath();
