@@ -6,13 +6,14 @@ import {Scene}   from './scene.js';
 import {Field}   from './field.js';
 
 const FontSize = Field.RowHeight;
+const TextPosY = FontSize * 1.125;
 
 let $score   = 0;
 let $high    = 0;
 let $disp1UP = 1;
 
 export const Score = freeze(new class {
-	static {$load(this.#setup)}
+	static {$ready(this.#setup)}
 	static #setup() {
 		$on({
 			Start:    Score.#onStart,
@@ -28,20 +29,18 @@ export const Score = freeze(new class {
 		if ($high > high)
 			localStorage.arkanoidHiscore = $high;
 	}
-	update() {
-		$disp1UP ^= Ticker.count % 30 == 0;
-	}
-	get display1UP() {
-		return !Scene.isInGame || (Scene.isInGame && $disp1UP);
-	}
 	add(pts=0) {
 		if (!Scene.isInGame)
 			return;
 		$score += pts;
 		$high = max($score, $high);
 	}
+	display1UP() {
+		$disp1UP ^= Ticker.count % 30 == 0;
+		if (!Scene.isInGame || (Scene.isInGame && $disp1UP))
+			ctx.fillText('1UP', FontSize, TextPosY);
+	}
 	draw() {
-		const y = FontSize*1.125;
 		const ScoreStr =   `　${$score || '00'}`;
 		const HighStr  = `HI　${$high  || '00'}`;
 
@@ -58,9 +57,9 @@ export const Score = freeze(new class {
 		ctx.shadowOffsetX = FontSize * 0.1;
 		ctx.shadowOffsetY = FontSize * 0.1;
 		ctx.fillStyle = 'white';
-		this.display1UP && ctx.fillText('1UP', FontSize, y);
-		ctx.fillText(ScoreStr, FontSize *  4, y);
-		ctx.fillText(HighStr,  FontSize * 13, y);
+		this.display1UP();
+		ctx.fillText(ScoreStr, FontSize *  4, TextPosY);
+		ctx.fillText(HighStr,  FontSize * 13, TextPosY);
 		ctx.restore();
 	}
 });

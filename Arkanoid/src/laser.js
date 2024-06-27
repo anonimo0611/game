@@ -3,6 +3,7 @@ import {Ticker}   from '../lib/timer.js';
 import {Sound}    from '../snd/sound.js';
 import {cvs,ctx}  from './_canvas.js';
 import {Game}     from './_main.js';
+import {Mouse}    from './mouse.js';
 import {Demo}     from './demo.js';
 import {Scene}    from './scene.js';
 import {Paddle}   from './paddle.js';
@@ -24,11 +25,9 @@ const BurstSet = new Set();
 export class Laser extends Collider {
 	static {$on({mousedown: Laser.#fire})}
 	static #fire(e) {
-		if (!Scene.isInDemo && !Game.acceptEventInGame(e))
-			return;
 		if (!Paddle.launched || Paddle.CatchEnabled)
 			return;
-		if (!Paddle.LaserEnabled)
+		if (!Paddle.LaserEnabled || !Mouse.acceptEvent(e))
 			return;
 
 		if (Lasers[L].size < Rapid

@@ -12,14 +12,14 @@ import {Army}     from './army.js';
 import {ItemMgr}  from './item.js';
 import {ItemType} from './item.js';
 
-const {Type,Cols,Rows,ColWidth,RowHeight}= BrickMgr;
+const {Cols,Rows,ColWidth,RowHeight}= BrickMgr;
 const AlwaysAimingStageSet = new Set([5,11]);
 
 let $shakeAngle = 0;
 let $target     = null;
 let $landingPos = null;
 
-$on('Reset InGame', function() {
+$on('Reset InGame', ()=> {
 	$shakeAngle = 0;
 	$target     = null;
 	$landingPos = null;
@@ -55,12 +55,12 @@ export const Demo = new class {
 		} return false;
 	}
 	get brickTargets() {
-		return BrickMgr.MapData.flat().reverse().filter(b=> {
-			if (b.isNone || b.isImmortality)
+		return BrickMgr.MapData.flat().reverse().filter(brick=> {
+			const {row,col}= brick;
+			if (!brick.isBreakable)
 				return false;
-			for (let i=b.row+1, col=b.col; i<Rows-b.row; i++) {
-				const b = BrickMgr.MapData[i][col];
-				if (!b.isNone || b.isImmortality)
+			for (let y=row+1; y<Rows-row; y++) {
+				if (!BrickMgr.MapData[y][col].isNone)
 					return false;
 			} return true;
 		});
@@ -142,10 +142,10 @@ export const Demo = new class {
 		return true;
 	}
 	#aimingAtTargetBrick() {
-		const {BounceAngleMax:aMax,Width:w}= Paddle;
+		const {BounceAngleMax:aMax,Width:w,centerX}= Paddle;
 		const angle = Vec2.toRadians($target.Pos, $landingPos) + PI/2;
 		const destX = $landingPos.x - w * norm(-aMax, +aMax, angle) + w/2;
-		moveTo(destX, cvs.width/70);
+		moveTo(destX, this.Ball.Velocity.magnitude);
 	}
 	#drawPoint(pos, r, color) { // For debug
 		fillCircle  (ctx)(...pos.vals, r, color);
@@ -159,14 +159,12 @@ export const Demo = new class {
 			this.#drawPoint($landingPos, 10, '#F33');
 	}
 }
-
 const CatchMode = new class {
 	static {$ready(this.#setup)}
 	static #setup() {
 		$(BallMgr).on({Cought: ()=> CatchMode.#onCatch()});
 	}
 	#dirX   = 1;
-	#vector = Vec2();
 	#aiming = false;
 	#onCatch() {
 		if (!Scene.isInDemo)
@@ -191,7 +189,7 @@ const CatchMode = new class {
 	autoPlay() {
 		const Radius = BallMgr.Radius;
 		const bricks = Demo.brickTargets;
-		this.#vector = Paddle.BounceVelocity.mul(Field.Diagonal);
+		const vector = Paddle.BounceVelocity.mul(Field.Diagonal);
 
 		if (bricks.length) {
 			if (Sight.brick?.isBreakable)
@@ -199,7 +197,7 @@ const CatchMode = new class {
 		} else for (const empty of Demo.emptiesBetweenImmortality) {
 			Vec2.getIntersection(
 				Demo.Ball.Pos,
-				Vec2(Demo.Ball.Pos).add(this.#vector),
+				Vec2(Demo.Ball.Pos).add(vector),
 				Vec2(empty.Pos).add(Radius*2, RowHeight),
 				Vec2(empty.Pos).add(ColWidth-Radius*2, RowHeight)
 			) && this.#releaseTimer();
@@ -209,6 +207,7 @@ const CatchMode = new class {
 	#searchMove() {
 		if (this.#aiming)
 			return;
+
 		Paddle.Pos.x += (Field.Width/60) * this.#dirX;
 		if (Paddle.x < Paddle.MoveMin
 		 || Paddle.x > Paddle.MoveMax)

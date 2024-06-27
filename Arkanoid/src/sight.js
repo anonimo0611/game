@@ -99,19 +99,20 @@ export const Sight = freeze(new class {
 	drawLine() {
 		if (!this.canDraw)
 			return;
-		ctx.save();
-		ctx.lineCap     = 'square';
-		ctx.lineWidth   = BallMgr.Radius*2;
-		ctx.strokeStyle = rgba(0,225,0, 0.5);
-		drawLine(ctx)(
+
+		drawLine(ctx, {
+			cap:  'square',
+			color: rgba(0,225,0, 0.5),
+			width: BallMgr.Radius*2,
+		})(
 			...Paddle.CaughtBallPos.vals,
 			...this.Pos.vals
 		);
-		ctx.restore();
 	}
 	drawTarget() {
 		if (!this.canDraw || !this.brick)
 			return;
+
 		ctx.save();
 		ctx.lineWidth   = cvs.width/150;
 		ctx.strokeStyle = '#9FC';

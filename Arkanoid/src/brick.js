@@ -1,12 +1,12 @@
-import {Vec2}    from '../lib/vec2.js';
-import {Sound}   from '../snd/sound.js';
-import {rgba}    from '../lib/color.js';
+import {Vec2}	 from '../lib/vec2.js';
+import {Sound}	 from '../snd/sound.js';
+import {rgba}	 from '../lib/color.js';
 import {HSL,hsl} from '../lib/color.js';
 import {Ticker}  from '../lib/timer.js';
-import {Field}   from './field.js';
-import {Scene}   from './scene.js';
-import {Game}    from './_main.js';
-import {Score}   from './score.js';
+import {Field}	 from './field.js';
+import {Scene}	 from './scene.js';
+import {Game}	 from './_main.js';
+import {Score}	 from './score.js';
 import {Stages}  from './stage.js';
 import {Paddle}  from './paddle.js';
 import {ItemMgr} from './item.js';
@@ -17,20 +17,20 @@ const {Frame,Cols,Rows,ColWidth,RowHeight}= Field;
 
 const LineWidth    = int(cvs.width/315);
 const ShadowOffset = ColWidth * 0.2;
-const AnimDuration = 300 / Ticker.Interval;
+const AnimDuration = 200 / Ticker.Interval;
 
 export const BrickType = freeze({
-	None:      -1,
+	None:	   -1,
 	Immortality:0,
-	Hard:       1,
-	White:      2,
-	Red:        3,
-	Orange:     5,
-	Yellow:     5,
-	Green:      6,
-	Cyan:       7,
-	Blue:       8,
-	Pink:       9,
+	Hard:		1,
+	White:		2,
+	Red:		3,
+	Orange: 	5,
+	Yellow: 	5,
+	Green:		6,
+	Cyan:		7,
+	Blue:		8,
+	Pink:		9,
 });
 const BrickHSLTable = deepFreeze([
 	[ 60, 49, 50], // Immortality
@@ -57,15 +57,15 @@ const BrickPointsTable = freeze([
 	110, // Pink
 ]);
 
-const MapData = Array(Rows);
+const MapData = [...Array(Rows)].map(_=> Array(Cols));
 const LusterMap    = new Map();
 const DisappearMap = new Map();
 
 export const BrickMgr = freeze(new class {
 	MapData    = MapData;
-	Type       = BrickType;
-	Rows       = Rows;
-	Cols       = Cols;
+	Type	   = BrickType;
+	Rows	   = Rows;
+	Cols	   = Cols;
 	ColWidth   = ColWidth;
 	RowHeight  = RowHeight;
 	#brokenAll = false;
@@ -78,18 +78,16 @@ export const BrickMgr = freeze(new class {
 	isBrick(obj) {
 		return obj instanceof Brick;
 	}
-	isBreakable({col, row}={}) {
+	isBreakable({col,row}={}) {
 		return !!MapData?.[row]?.[col]?.isBreakable;
 	}
 	init() {
 		LusterMap.clear();
 		DisappearMap.clear();
 		const map = Stages[Game.stageIdx];
-		for (const row of MapData.keys()) {
-			MapData[row] = Array(Cols);
-			for (const col of MapData[row].keys())
-				MapData[row][col] = new Brick({row,col}, map[row]?.[col]);
-		}
+		for (const row of integers(Rows))
+			for (const col of integers(Cols))
+				MapData[row][col] =	new Brick(row, col, map[row]?.[col]);
 		this.#brokenAll = false;
 		this.#cache();
 	}
@@ -110,20 +108,20 @@ export const BrickMgr = freeze(new class {
 		}
 	}
 	animation() {
-		if (Game.isReadyScene && Ticker.elapsed < 1000)
+		if (Game.isReadyScene && Ticker.elapsed < 300)
 			return;
 		for (const [brick,data] of LusterMap) {
 			if (!Game.isReadyScene && !Game.isPlayScene)
 				break;
-          	if (data.offset >= 1) {
-        		LusterMap.delete(brick);
-        		continue;
-        	}
-	      	this.#drawLuster(brick,data);
+		  	if (data.offset >= 1) {
+				LusterMap.delete(brick);
+				continue;
+			}
+		  	this.#drawLuster(brick,data);
 		}
 		for (const [brick,data] of DisappearMap) {
-           	const scale = max(data.scale-=1/AnimDuration, 0);
-         	if (scale == 0) {
+		   	const scale = max(data.scale-=1/AnimDuration, 0);
+		 	if (scale == 0) {
 				DisappearMap.delete(brick);
 				continue;
 			}
@@ -159,7 +157,7 @@ export const BrickMgr = freeze(new class {
 
 		// Top and left edges
 		ctx.beginPath();
-			ctx.lineWidth   = LW;
+			ctx.lineWidth	= LW;
 			ctx.strokeStyle = hsl(h,s,80);
 			ctx.moveTo(LW,RowHeight-LW);
 			ctx.lineTo(LW,LW);
@@ -168,7 +166,7 @@ export const BrickMgr = freeze(new class {
 
 		// Bottom and right edges
 		ctx.beginPath();
-			ctx.lineWidth   = LW;
+			ctx.lineWidth	= LW;
 			ctx.strokeStyle = hsl(h,s,40);
 			ctx.moveTo(ColWidth-LW,LW);
 			ctx.lineTo(ColWidth-LW,RowHeight-LW);
@@ -189,34 +187,34 @@ export const BrickMgr = freeze(new class {
 		data.offset = min(data.offset+1/AnimDuration, 1);
 
 		// Brick surface
-      	ctx.save();
-       	ctx.translate(x+ColWidth, y);
-      	ctx.scale(-1, 1);
+	  	ctx.save();
+	   	ctx.translate(x+ColWidth, y);
+	  	ctx.scale(-1, 1);
 		this.#drawBrick(ctx, brick, {Grad,effect:true});
-      	ctx.restore();
+	  	ctx.restore();
 
 		// Highlight(bottom right)
 		const LW = LineWidth;
-       	ctx.save();
-       	ctx.globalAlpha = 1-data.offset;
-       	ctx.translate(x, y);
+	   	ctx.save();
+	   	ctx.globalAlpha = 1-data.offset;
+	   	ctx.translate(x, y);
 		ctx.beginPath();
-	 		ctx.lineWidth   = LW;
+	 		ctx.lineWidth	= LW;
 			ctx.strokeStyle = '#FFF';
 			ctx.moveTo(ColWidth-LW, LW);
 			ctx.lineTo(ColWidth-LW, RowHeight-LW);
 			ctx.lineTo(LW, RowHeight-LW);
 		ctx.stroke();
-      	ctx.restore();
+	  	ctx.restore();
 	}
 	#drawDisappear(brick, scale) {
   		const {x, y}= brick;
-       	ctx.save();
+	   	ctx.save();
 		ctx.globalAlpha = scale;
-      	ctx.translate(ColWidth/2*(1-scale)+x, RowHeight/1.5*(1-scale)+y);
+	  	ctx.translate(ColWidth/2*(1-scale)+x, RowHeight/1.5*(1-scale)+y);
 		ctx.scale(scale, scale);
 		this.#drawBrick(ctx, brick, {effect:true});
-       	ctx.restore();
+	   	ctx.restore();
 	}
 	drawBrick(brick) {
 		ctxB.save();
@@ -231,25 +229,25 @@ export const BrickMgr = freeze(new class {
 	}
 });
 const Brick = freeze(class {
-	Width       = ColWidth;
-	Height      = RowHeight;
-	#type       = BrickType.None;
-	#pointRate  = 1;
+	Width		= ColWidth;
+	Height		= RowHeight;
+	#type		= BrickType.None;
+	#pointRate	= 1;
 	#durability = 0;
-	get type()          {return this.#type}
-	get durability()    {return this.#durability}
-	get exists()        {return !this.isNone}
-	get isBreakable()   {return this.type >  BrickType.Immortality}
+	get type()			{return this.#type}
+	get durability()	{return this.#durability}
+	get exists()		{return !this.isNone}
+	get isBreakable()	{return this.type >  BrickType.Immortality}
 	get isImmortality() {return this.type == BrickType.Immortality}
-	get isNone()        {return this.type == BrickType.None}
-	get isHard()        {return this.type == BrickType.Hard}
-	get isNormal()      {return this.isBreakable && !this.isHard}
+	get isNone()		{return this.type == BrickType.None}
+	get isHard()		{return this.type == BrickType.Hard}
+	get isNormal()		{return this.isBreakable && !this.isHard}
 
-	constructor({row,col}, type=BrickType.None) {
+	constructor(row, col, type=BrickType.None) {
 		this.row   = row;
 		this.col   = col;
-		this.x     = (ColWidth *col) + Field.Left;
-		this.y     = (RowHeight*row) + Field.Top;
+		this.x	   = (ColWidth *col) + Field.Left;
+		this.y	   = (RowHeight*row) + Field.Top;
 		this.Pos   = Vec2(this.x, this.y);
 		this.#type = type;
 		this.color = type >= 0 ? HSL(...BrickHSLTable[type]) : null;
@@ -273,8 +271,8 @@ const Brick = freeze(class {
 			return 1;
 		}
 	}
-	containsX(v)    {return between(v, this.x, this.x+this.Width) }
-	containsY(v)    {return between(v, this.y, this.y+this.Height)}
+	containsX(v)	{return between(v, this.x, this.x+this.Width) }
+	containsY(v)	{return between(v, this.y, this.y+this.Height)}
 	contains({x,y}) {return this.containsX(x) && this.containsY(y)}
 
 	crash() {
@@ -292,8 +290,8 @@ const Brick = freeze(class {
 			BrickMgr.drawBrick(this);
 		}
 		if (!LusterMap.has(this)) {
+			Sound.stop('se1').stop('se2').play('se2');
 			LusterMap.set(this, {offset:0});
-			Sound.stop('se2').play('se2');
 		}
 	}
 	#destroy({x, y}) {
@@ -301,7 +299,7 @@ const Brick = freeze(class {
 		DisappearMap.set(this, {scale:1});
 		ctxB.clearRect(x,y, ColWidth,RowHeight);
 		ctxS.clearRect(x+ShadowOffset, y+ShadowOffset, ColWidth,RowHeight);
-		Sound.stop('se1').play('se1');
+		Sound.stop('se1').stop('se2').play('se1');
 		if (this.isNormal)
 			ItemMgr.appear(this);
 		if (Scene.isInGame)

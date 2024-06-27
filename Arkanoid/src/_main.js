@@ -5,6 +5,7 @@ import {Sound}    from '../snd/sound.js';
 import {Window}   from './_window.js';
 import * as Cvs   from './_canvas.js';
 import * as Menu  from './menu.js';
+import {Mouse}    from './mouse.js';
 import {BgMgr}    from './background.js';
 import {Scene}    from './scene.js';
 import {Stages}   from './stage.js';
@@ -42,10 +43,11 @@ export const Game = freeze(new class {
 		$(Menu.StageMenu).on({change: Game.#onSelectStage});
 		Scene.switchToReset();
 	}
-	ReadyTime    = 2500; // ms
 	#stageIdx    = Menu.StageMenu.index;
 	#respawned   = false;
 	#isDemoScene = false;
+
+	get ReadyTime() {return Game.respawned? 1500 : 2200} // ms
 	get stageIdx()  {return this.#stageIdx}
 	get stageNum()  {return this.#stageIdx+1}
 	get respawned() {return this.#respawned}
@@ -54,15 +56,6 @@ export const Game = freeze(new class {
 	get isReadyScene() {return Scene.isReset  || Scene.isReady}
 	get isPlayScene()  {return Scene.isInDemo || Scene.isInGame}
 
-	acceptEventInGame(e) {
-		if (!e || !e.target || e.button == 1)
-			return false;
-		if (!Scene.isInGame)
-			return false;
-		return(e.target == cvs
-			|| e.target == document.body
-			|| e.target == Window.Board);
-	}
 	#init() {
 		BgMgr.init();
 		BallMgr.init();
@@ -76,7 +69,7 @@ export const Game = freeze(new class {
 		Scene.switchToReset();
 	}
 	#onMousedown(e) {
-		if (Game.isDemoScene && e.button == 0)
+		if (Game.isDemoScene && Mouse.isMainButton(e))
 			Scene.switchToStart();
 	}
 	#onReset() {
@@ -84,12 +77,11 @@ export const Game = freeze(new class {
 		Game.#respawned   = false;
 		Game.#isDemoScene = true;
 		Game.#init();
-		Scene.switchToInDemo(Game.ReadyTime+500);
+		Scene.switchToInDemo(Game.ReadyTime);
 	}
 	#onStart(e) {
 		Game.#isDemoScene = false;
 		Game.#init();
-		Sound.stop().play('start');
 		Scene.switchToReady();
 	}
 	#onRespawn() {
@@ -99,6 +91,7 @@ export const Game = freeze(new class {
 		Scene.switchToReady();
 	}
 	#onReady() {
+		!Game.respawned && Sound.stop().play('start');
 		Scene.switchToInGame(Game.ReadyTime);
 	}
 	#onClear() {
@@ -156,7 +149,6 @@ export const Game = freeze(new class {
 		if (BrickMgr.brokenAll)
 			return;
 
-		Score.update();
 		BrickMgr.update();
 		ItemMgr.update();
 		Army.update();

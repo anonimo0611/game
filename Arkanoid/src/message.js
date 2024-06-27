@@ -6,6 +6,7 @@ import {Game}    from './_main.js';
 import {Scene}   from './scene.js';
 import {Field}   from './field.js';
 import {Paddle}  from './paddle.js';
+import {BallMgr} from './ball.js';
 
 const FontSize = Field.RowHeight * 1.2;
 
@@ -75,7 +76,7 @@ export const Message = freeze(new class  {
 			break;
 
 		case Scene.Enum.InGame:
-			if (Paddle.alpha < 1 || Paddle.launched)
+			if (Paddle.alpha < 1 || BallMgr.Ball.launched)
 				return;
 			this.#draw('Click to Launch!', Color.Sub, {offsetRow:1.5});
 			break;

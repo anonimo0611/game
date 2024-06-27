@@ -71,8 +71,8 @@ class Explosion {
 	ParticleSet = new Set();
 	constructor({x, y}) {
 		const {h,s,l}= ExplosionHSL;
-		this.Pos  = Vec2(x, y);
 		this.r    = Radius*1.6;
+		this.Pos  = Vec2(x, y);
 		this.Grad = ctx.createRadialGradient(0,0,0, 0,0,this.r);
 		this.Grad.addColorStop(0.0, hsl(h,s,70));
 		this.Grad.addColorStop(1.0, hsl(h,s,l,0.1));
@@ -172,7 +172,7 @@ export class Army extends Collider {
 				return army;
 	}
 	static update() {
-		if (!Game.isPlayScene || !Paddle.launched)
+		if (!Game.isPlayScene)
 			return;
 		if (this.#counter++ >= Interval && ArmySet.size < ArmyMax) {
 			this.#counter = 0;

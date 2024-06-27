@@ -54,6 +54,16 @@ export class Collider extends Rect {
         ) return Field;
 		return brick?.exists ? brick : null;
 	}
+	#collidedWith(fn) {
+		const  {hitT,hitR,hitB,hitL}= this;
+		return [hitL,hitR,hitB,hitT].find(fn);
+	}
+	get collidedWall() {
+		return this.#collidedWith(BrickMgr.isBrick);
+	}
+	get collidedField() {
+		return this.#collidedWith(obj=> obj == Field);
+	}
 	get hitT()    {return this.#detect( 0, -1)}
 	get hitR()    {return this.#detect( 1,  0)}
 	get hitB()    {return this.#detect( 0,  1)}

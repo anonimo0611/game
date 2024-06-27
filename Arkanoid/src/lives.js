@@ -10,7 +10,7 @@ const ScaleX = 0.40;
 const ScaleY = 0.50;
 
 export const Lives = freeze(new class {
-	static {$load(this.#setup)}
+	static {$ready(this.#setup)}
 	static #setup() {
 		$on({
 			Start:   Lives.#onStart,
@@ -30,6 +30,7 @@ export const Lives = freeze(new class {
 	#onExtend(_, type) {
 		if (Game.isDemoScene)
 			return;
+
 		type == ItemMgr.Type.PlayerExtend && Lives.#left++
 	}
 	draw() {

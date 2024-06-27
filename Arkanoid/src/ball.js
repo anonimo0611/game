@@ -32,7 +32,7 @@ Grad.addColorStop(0.98, '#55BBFF');
 Grad.addColorStop(1.00, '#FFFFFF');
 
 export const BallMgr = new class {
-	static {$load(this.#setup)}
+	static {$ready(this.#setup)}
 	static #setup() {
 		const shadowCfg = {
 			color:  rgba(0,0,0, 0.4),
@@ -44,9 +44,9 @@ export const BallMgr = new class {
 		$(ItemMgr).on({Obtained: BallMgr.#onPowerUp});
 	}
 	#speedDownRate = 1;
-	get Ball()    {return BallSet.values().next().value}
-	get count()   {return BallSet.size}
-	get Radius()  {return Radius}
+	get Ball()   {return BallSet.values().next().value}
+	get count()  {return BallSet.size}
+	get Radius() {return Radius}
 	get NearlyBall() {
 		return [...BallSet].sort((a,b)=> b.y - a.y)[0];
 	}
@@ -141,6 +141,11 @@ export class Ball extends Collider {
 				return true;
 		return false;
 	}
+	#constrain({x,y,Radius:r}) {
+		const {Top,Left,Right}= Field;
+		this.Pos.x = clamp(x, Left+r, Right-r);
+		this.Pos.y = max(y, Top);
+	}
 	update() {
 		if (Game.isReadyScene || Paddle.catchX > 0)
 			return;
@@ -157,11 +162,11 @@ export class Ball extends Collider {
 			return;
 
 		for (let i=0; i<Mag; i++) {
-			this.#bounceAtPaddle()
+			this.#bounceAtPaddle();
 			if (!Paddle.catchX)
 				this.Pos.add( this.Velocity.normalized.mul(Spd/Mag) );
 			this.#collisionWithArmy();
-			this.#collisionWithBrickOrField(Mag);
+			this.#collisionWithBrickOrField();
 		}
 	}
 	#detectDropped() {
@@ -171,7 +176,15 @@ export class Ball extends Collider {
 		//this.Velocity.y *= -1;
 		//return;
 
-		if (Lives.left <= 0 && BallSet.size == 1) {
+		BallSet.delete(this);
+		if (BallSet.size > 0)
+			return false;
+
+		if (Game.isDemoScene) {
+			Scene.switchToReset();
+			return true;
+		}
+		if (Lives.left <= 0) {
 			Sound.stop();
 			BallSet.clear();
 			Scene.switchToDropped();
@@ -179,21 +192,14 @@ export class Ball extends Collider {
 			Scene.switchToReset(1500);
 			return true;
 		}
-		if (Scene.isInDemo && BallSet.size == 1) {
-			Scene.switchToReset();
-			return true;
-		}
-		BallSet.delete(this);
-		if (BallSet.size == 0) {
-			Sound.stop();
-			Scene.switchToDropped();
-			Scene.switchToRespawn(1500);
-			return true;
-		}
+		Sound.stop();
+		Scene.switchToDropped();
+		Scene.switchToRespawn(1500);
+		return true;
 	}
 	#bounceAtPaddle() {
 		if (!Paddle.collisionRect(this))
-			return false;
+			return;
 		if (Paddle.canCatch)
 			$(BallMgr).trigger('Cought',this);
 
@@ -211,20 +217,22 @@ export class Ball extends Collider {
 			this.Velocity.set( bounceV.mul(this.#speed*=ArmySpeedDown) );
 		}
 	}
-	#collisionWithBrickOrField(mag) {
+	#collisionWithBrickOrField() {
 		const {Velocity:v,hitT,hitR,hitB,hitL}= this;
 		if (hitL) v.x = +abs(v.x);
 		if (hitR) v.x = -abs(v.x);
 		if (hitT) v.y = +abs(v.y);
 		if (hitB) v.y = -abs(v.y);
-		const brick = [hitL,hitR,hitB,hitT].find(BrickMgr.isBrick);
+		const brick = this.collidedWall;
 		if (brick) {
 			brick.crash();
 			if (brick.isImmortality) {
-				const vx = (v.x < 0 ? -0.2 : 0.2);
-				v.x += randFloat(0, vx/mag);
+				const vx = (v.x < 0 ? -0.1 : 0.1);
+				v.x += randFloat(0, vx);
 			}
 		}
+		if (this.collidedField)
+			this.#constrain(this);
 	}
 	draw() {
 		ctx.save();
