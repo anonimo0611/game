@@ -32,8 +32,9 @@ export class Loader {
 		Sound.registerSounds(Manifest)
 		Sound.on('fileerror', reject)
 		Sound.on('fileload', _=> {
-			if (++amount < Manifest.length)
+			if (++amount < Manifest.length) {
 				return
+			}
 			Loader.#failed = false
 			Ids.forEach(id=> Instance.set(id, Sound.createInstance(id)))
 			Instance.forEach(i=> i.setPaused = bool=> i.paused = bool)

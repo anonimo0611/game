@@ -6,9 +6,9 @@ import {Game}     from '../src/_main.js';
 export const Sound = new class extends Loader {
 	static {this.#setup()}
 	static async #setup() {
-		if (!await Loader.setup())
+		if (!await Loader.setup()) {
 			return
-
+		}
 		Sound.vol = +localStorage.ArkanoidVolume ?? 10
 		Sound.#setCtrlEvents(Sound.vol);
 		addEventListener('keydown', Sound.#onKeydown)
@@ -27,9 +27,9 @@ export const Sound = new class extends Loader {
 	#lstVol = null;
 	get vol() {return super.vol}
 	set vol(vol) {
-		if (Sound.failed)
+		if (Sound.failed) {
 			return
-
+		}
 		vol = clamp(+vol, 0, 10);
 		$('#speaker').css('--w', (v=> {
 			if (v == 0) return 0;
@@ -44,9 +44,9 @@ export const Sound = new class extends Loader {
 			Instance.get(id)?.play(Sound.configMerge(id, cfg))
 	}
 	stop(...ids) {
-		if (Sound.failed)
+		if (Sound.failed) {
 			return this
-
+		}
 		ids.length == 0 && super.stop()
 		ids.forEach(id=> Instance.get(id)?.stop())
 		return this
