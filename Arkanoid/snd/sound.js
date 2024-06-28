@@ -40,8 +40,9 @@ export const Sound = new class extends Loader {
 		localStorage.ArkanoidVolume = super.vol = vol
 	}
 	play(id, cfg={}) {
-		if (!Sound.failed && !Game.isDemoScene)
+		if (!Sound.failed && !Game.isDemoScene) {
 			Instance.get(id)?.play(Sound.configMerge(id, cfg))
+		}
 	}
 	stop(...ids) {
 		if (Sound.failed) {
