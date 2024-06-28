@@ -62,8 +62,7 @@ export const BallMgr = new class {
 	init() {
 		const x = cvs.width/2;
 		const y = Paddle.y - Radius;
-		if (!Game.respawned)
-			BallMgr.#speedDownRate = 1;
+		!Game.respawned && (BallMgr.#speedDownRate = 1);
 		BallSet.clear();
 		BallSet.add( new Ball({x,y,v:Paddle.LaunchVelocity}) );
 	}
@@ -93,15 +92,18 @@ export const BallMgr = new class {
 		}
 	}
 	update() {
-		if (!Game.isReadyScene && !Game.isPlayScene)
+		if (!Game.isReadyScene && !Game.isPlayScene) {
 			return;
-		if (!Paddle.launched)
+		}
+		if (!Paddle.launched) {
 			return;
+		}
 		BallSet.forEach(ball=> ball.update());
 	}
 	draw() {
-		if (Scene.isClear || Scene.isGameOver)
+		if (Scene.isClear || Scene.isGameOver) {
 			return;
+		}
 		BallSet.forEach(ball=> ball.draw());
 	}
 	#cache(ctx, color, [offsetX=0,offsetY=0]=[], [scaleX=1,scaleY=1]=[]) {
@@ -122,8 +124,7 @@ export class Ball extends Collider {
 	Accelerate = 0.02;
 	constructor({x,y,v}) {
 		super({x, y}, Radius);
-		if (BallSet.size)
-			this.#speed = BallMgr.Ball.speed;
+		BallSet.size && (this.#speed = BallMgr.Ball.speed);
 		this.Pos.set(x, y);
 		this.Velocity.set( v.normalized.mul(this.speed) );
 		freeze(this);
@@ -136,9 +137,11 @@ export class Ball extends Collider {
 	}
 	get isOnWall() {
 		const {row,col}= this.TilePos;
-		for (let i=row+1; i<BrickMgr.Rows; i++)
-			if (BrickMgr.MapData[i]?.[col]?.exists)
+		for (let i=row+1; i<BrickMgr.Rows; i++) {
+			if (BrickMgr.MapData[i]?.[col]?.exists) {
 				return true;
+			}
+		}
 		return false;
 	}
 	#constrain({x,y,Radius:r}) {
@@ -147,9 +150,9 @@ export class Ball extends Collider {
 		this.Pos.y = max(y, Top);
 	}
 	update() {
-		if (Game.isReadyScene || Paddle.catchX > 0)
+		if (Game.isReadyScene || Paddle.catchX > 0) {
 			return;
-
+		}
 		const Min = this.InitSpeed * 0.7;
 		const Max = BallSpeed   * BallMgr.stageSpeedRate;
 		const Spd = this.#speed * BallMgr.speedDownRate;
@@ -158,28 +161,29 @@ export class Ball extends Collider {
 		this.#launched ||= true;
 		this.#speed = clamp(this.speed+this.Accelerate, Min, Max);
 
-		if (this.#detectDropped())
+		if (this.#detectDropped()) {
 			return;
-
+		}
 		for (let i=0; i<Mag; i++) {
 			this.#bounceAtPaddle();
-			if (!Paddle.catchX)
+			if (!Paddle.catchX) {
 				this.Pos.add( this.Velocity.normalized.mul(Spd/Mag) );
+			}
 			this.#collisionWithArmy();
 			this.#collisionWithBrickOrField();
 		}
 	}
 	#detectDropped() {
-		if (this.y <= cvs.height || Scene.isClear)
+		if (this.y <= cvs.height || Scene.isClear) {
 			return false;
-
+		}
 		//this.Velocity.y *= -1;
 		//return;
 
 		BallSet.delete(this);
-		if (BallSet.size > 0)
+		if (BallSet.size > 0) {
 			return false;
-
+		}
 		if (Game.isDemoScene) {
 			Scene.switchToReset();
 			return true;
@@ -198,15 +202,17 @@ export class Ball extends Collider {
 		return true;
 	}
 	#bounceAtPaddle() {
-		if (!Paddle.collisionRect(this))
+		if (!Paddle.collisionRect(this)) {
 			return;
-		if (Paddle.canCatch)
+		}
+		if (Paddle.canCatch) {
 			$(BallMgr).trigger('Cought',this);
-
+		}
 		this.Velocity.set( Paddle.BounceVelocity.mul(this.speed) );
 		Sound.play('se0');
-		if (Paddle.catchX)
+		if (Paddle.catchX) {
 			Ticker.Timer.set(200, ()=> Sound.stop('se0'));
+		}
 	}
 	#collisionWithArmy() {
 		const army = Army.detectCollided(this);
@@ -231,8 +237,9 @@ export class Ball extends Collider {
 				v.x += randFloat(0, vx);
 			}
 		}
-		if (this.collidedField)
+		if (this.collidedField) {
 			this.#constrain(this);
+		}
 	}
 	draw() {
 		ctx.save();

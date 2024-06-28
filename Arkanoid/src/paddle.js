@@ -1,20 +1,20 @@
-import {Vec2}      from '../lib/vec2.js';
-import {Sound}     from '../snd/sound.js';
-import {Ticker}    from '../lib/timer.js';
-import {Confirm}   from '../lib/confirm.js';
-import {hsl,rgba}  from '../lib/color.js';
-import {cvs,ctx}   from './_canvas.js';
-import {Mouse}     from './mouse.js';
-import {Game}      from './_main.js';
-import {Demo}      from './demo.js';
-import {Field}     from './field.js';
-import {Scene}     from './scene.js';
-import {Lives}     from './lives.js';
-import {ItemMgr}   from './item.js';
-import {ItemType}  from './item.js';
-import {BallMgr}   from './ball.js';
-import {BrickMgr}  from './brick.js';
-import {Rect}      from './rect.js';
+import {Vec2}     from '../lib/vec2.js';
+import {Sound}    from '../snd/sound.js';
+import {Ticker}   from '../lib/timer.js';
+import {Confirm}  from '../lib/confirm.js';
+import {hsl,rgba} from '../lib/color.js';
+import {cvs,ctx}  from './_canvas.js';
+import {Game}     from './_main.js';
+import {Mouse}    from './mouse.js';
+import {Demo}     from './demo.js';
+import {Field}    from './field.js';
+import {Scene}    from './scene.js';
+import {Lives}    from './lives.js';
+import {ItemMgr}  from './item.js';
+import {ItemType} from './item.js';
+import {BallMgr}  from './ball.js';
+import {BrickMgr} from './brick.js';
+import {Rect}     from './rect.js';
 
 const Width  = cvs.width / 5;
 const Height = BrickMgr.RowHeight;
@@ -79,10 +79,12 @@ export const Paddle = freeze(new class extends Rect {
 		return Scene.isInGame && this.alpha == 1 && AutoMove.reached;
 	}
 	get canCatch() {
-		if (!this.CatchEnabled || this.catchX)
+		if (!this.CatchEnabled || this.catchX) {
 			return false;
-		if (this.Width != this.#targetW)
+		}
+		if (this.Width != this.#targetW) {
 			return false;
+		}
 		return true;
 	}
 	get BounceVelocity() {
@@ -116,66 +118,64 @@ export const Paddle = freeze(new class extends Rect {
 		this.#blink += PI/60;
 		this.#updateCache($ctx);
 		switch (Scene.current) {
-			case Scene.Enum.Reset:
-			case Scene.Enum.Ready:
-				this.#readyScene();
-				break;
-			case Scene.Enum.InDemo:
-				this.#demoScene();
-				break;
-			case Scene.Enum.InGame:
-				this.#playingScene();
-				break;
-			default:
-				this.#destoryScene();
+		case Scene.Enum.Reset:
+		case Scene.Enum.Ready:  return void this.#ready();
+		case Scene.Enum.InDemo: return void this.#demo();
+		case Scene.Enum.InGame: return void this.#playing();
+		default: this.#destory();
 		}
 	}
-	#readyScene() {
-		if (Ticker.elapsed > 500)
+	#ready() {
+		if (Ticker.elapsed > 500) {
 			this.#alpha = min(this.#alpha+1/FadeDuration, 1);
+		}
 	}
-	#demoScene() {
+	#demo() {
 		this.#launched ||= true;
-		if (Ticker.elapsed < 200)
+		if (Ticker.elapsed < 200) {
 			return;
-
+		}
 		Demo.autoPlay();
 		this.#moveCaughtBall();
 		this.#setWidth();
 		this.#constrain();
 	}
-	#playingScene() {
+	#playing() {
 		if (AutoMove.setPosition()) {
 			this.Pos.x = Mouse.x - (this.Width/2);
 			this.#setWidth();
-			this.#constrain();
 			this.#moveCaughtBall();
+			this.#constrain();
 		}
 		if (!this.launched)
 			BallMgr.Ball.Pos.x = this.catchX
 				? this.clampedX + this.catchX
 				: this.clampedX + this.Width/2;
 	}
-	#destoryScene() {
-		if (Game.isDemoScene)
+	#destory() {
+		if (Game.isDemoScene) {
 			return;
-		if (BallMgr.count <= 0 && Ticker.count > 8)
+		}
+		if (BallMgr.count <= 0 && Ticker.count > 8) {
 			this.#alpha = max(this.#alpha-1/FadeDuration, 0);
+		}
 	}
 	#constrain() {
 		const {Pos,MoveMin,MoveMax}= this;
 		Pos.x = clamp(Pos.x, MoveMin, MoveMax);
 	}
 	#moveCaughtBall() {
-		if (this.catchX > 0)
+		if (this.catchX > 0) {
 			BallMgr.Ball.Pos.x = this.CaughtBallPos.x;
+		}
 	}
 	#onLaunch(e) {
-		if (!AutoMove.reached || !Mouse.acceptEvent(e))
+		if (!AutoMove.reached || !Mouse.acceptEvent(e)) {
 			return;
-		if (Paddle.alpha < 1 || Paddle.launched)
+		}
+		if (Paddle.alpha < 1 || Paddle.launched) {
 			return;
-
+		}
 		Sound.play('se0');
 		Paddle.#launched = true;
 	}
@@ -186,9 +186,9 @@ export const Paddle = freeze(new class extends Rect {
 		Paddle.#catchX = ball.x - Paddle.x;
 	}
 	#onRelease(e) {
-		if (!Paddle.catchX || !Mouse.acceptEvent(e))
+		if (!Paddle.catchX || !Mouse.acceptEvent(e)) {
 			return;
-
+		}
 		Sound.play('se0');
 		Paddle.#catchX = 0;
 	}
@@ -202,12 +202,12 @@ export const Paddle = freeze(new class extends Rect {
 		case ItemType.Expand:
 		case ItemType.Laser:
 			Paddle.#exclType = type;
-			Paddle.#targetW  = type == ItemType.Expand ? StretchMax : Width;
+			Paddle.#targetW  = Paddle.ExpandEnabled? StretchMax : Width;
 			Paddle.#updateCache($ctx);
-			break;
 		}
-		if (ItemMgr.ExclTypeSet.has(type))
+		if (ItemMgr.ExclTypeSet.has(type)) {
 			Paddle.#catchX = 0;
+		}
 	}
 	#onDropped() {
 		Paddle.#updateCache($ctx);
@@ -229,21 +229,25 @@ export const Paddle = freeze(new class extends Rect {
 		this.#cache(ctx, w);
 	}
 	#getPaddleColorType(ctx) {
-		if (ctx != $ctx)
+		if (ctx != $ctx) {
 			return;
+		}
 		if (Paddle.LaserEnabled
-		 || Paddle.CatchEnabled)
+		 || Paddle.CatchEnabled) {
 			return this.ExclType;
+		}
 	}
 	#cache(ctx, w, shadowColor) {
 		const color = this.#getPaddleColorType(ctx);
 		const lineW = Width*0.05, r = Radius;
 
 		ctx.save();
-		if (shadowColor)
+		if (shadowColor) {
 			ctx.translate(r, r);
-		if (BallMgr.count <= 0)
+		}
+		if (BallMgr.count <= 0) {
 			ctx.filter = 'grayscale(100%)';
+		}
 
 		// Both side spheres
 		for (let i=0; i<2; i++) {
@@ -257,10 +261,12 @@ export const Paddle = freeze(new class extends Rect {
 			ctx.fill();
 			ctx.restore();
 		}
+
 		// Both side vertical lines
 		ctx.fillStyle = shadowColor ?? Grad.LineMap.get(color);
-		for (let i=0; i<2; i++)
+		for (let i=0; i<2; i++) {
 			ctx.fillRect(!i ? (r*2 - lineW) : (w - r*2), 0, lineW, Height);
+		}
 
 		// Horizontal bar
 		ctx.fillStyle = shadowColor ?? Grad.Body;
@@ -278,11 +284,13 @@ export const Paddle = freeze(new class extends Rect {
 		this.#spark();
 	}
 	#spark() {
-		if (Ticker.paused || !Game.isReadyScene)
+		if (Ticker.paused || !Game.isReadyScene) {
 			return;
-		if (this.alpha == 0 || this.alpha == 1)
+		}
+		if (this.alpha == 0
+		 || this.alpha == 1) {
 			return;
-
+		}
 		const {Width,Height,Pos}= this;
 		const radius = int(Width/12);
 		const config = {color:SparkColor, width:cvs.width/230};
@@ -302,23 +310,27 @@ const AutoMove = freeze(new class {
 		$on('InGame Respawn Resume', ()=> AutoMove.#reached = false);
 	}
 	#reached = false;
-	get reached() {
-		return this.#reached;
-	}
+	get reached() {return this.#reached}
+
 	setPosition() {
-		if (!this.reached)
-			for (let i=0; i<cvs.width/30; i++)
-				if (this.#move())
-					return true;
-		return this.reached;
+		if (this.reached) {
+			return true;
+		}
+		for (let i=0; i<cvs.width/30; i++) {
+			if (this.#move()) {
+				return true;
+			}
+		}
+		return false;
 	}
 	#move() {
 		const {centerX,MoveMin,MoveMax,Pos}= Paddle;
 		const step = centerX > Mouse.x ? -1 : +1;
 		Pos.x += step;
 		if (step < 0 && (centerX-step < Mouse.x || Pos.x == MoveMin)
-		 || step > 0 && (centerX+step > Mouse.x || Pos.x == MoveMax))
+		 || step > 0 && (centerX+step > Mouse.x || Pos.x == MoveMax)) {
 			return this.#reached = true;
+		}
 	}
 });
 

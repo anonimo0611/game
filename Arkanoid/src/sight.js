@@ -47,59 +47,61 @@ export const Sight = freeze(new class {
 	}
 	#attackArmy(point) {
 		for (const army of Army.ArmySet) {
-			if (army.contains(point)) {
+			if (army.contains(point ?? {})) {
 				army.crash(1);
 				this.Pos.set(point);
 				return true;
 			}
 		} return false;
 	}
-	#detectBrick(brick) {
+	#detect(brick) {
+		// Get the intersection with bottom, left and right side
 		const positions = [[0,1,1,1], [0,0,0,1], [1,0,1,1]].map(ov=>
 			this.#getIntersection(
 				Vec2(brick.Pos).add(ColWidth*ov[0], RowHeight*ov[1]),
 				Vec2(brick.Pos).add(ColWidth*ov[2], RowHeight*ov[3])
 			)
 		);
-		const [bottom,left,right]= positions;
-		const pos = bottom || left || right;
-		if (pos) {
+		const intersectPos = positions.find(pos=> pos != null);
+		if (intersectPos) {
 			this.#brick = brick;
-			this.Pos.set(pos)
+			this.Pos.set(intersectPos);
 		}
 		return positions;
 	}
 	#intersectionsWithArmyOrBrick() {
 		this.#brick = null;
 		for (const brick of BrickMgr.MapData.flat().reverse()) {
-			const [b,l,r]= this.#detectBrick(brick);
-			if (b || l || r) {
-				if (brick.isNone) {
-					if (this.#attackArmy(b || l || r))
-						return true;
-					continue;
+			const [bottom,left,right]= this.#detect(brick);
+			if (brick.isNone) {
+				if (this.#attackArmy(bottom || left || right)) {
+					return true;
 				}
-				!b && l && brick.AdjL?.exists && this.#detectBrick(brick.AdjL);
-				 b && l && brick.AdjR?.exists && this.#detectBrick(brick.AdjR);
+				continue;
+			}
+			if (bottom || left || right) {
+				 bottom && left && brick.AdjR?.exists && this.#detect(brick.AdjR);
+				!bottom && left && brick.AdjL?.exists && this.#detect(brick.AdjL);
 				return true;
 			}
 		}
 		return false;
 	}
 	update() {
-		if (!this.enabled)
+		if (!this.enabled) {
 			return;
-
-		if (!this.#intersectionsWithArmyOrBrick())
+		}
+		if (!this.#intersectionsWithArmyOrBrick()) {
 			this.Pos.set(this.#intersectionWithField);
-
-		if (this.brick.isNone)
+		}
+		if (this.brick.isNone) {
 			this.#brick = null;
+		}
 	}
 	drawLine() {
-		if (!this.canDraw)
+		if (!this.canDraw) {
 			return;
-
+		}
 		drawLine(ctx, {
 			cap:  'square',
 			color: rgba(0,225,0, 0.5),
@@ -110,9 +112,9 @@ export const Sight = freeze(new class {
 		);
 	}
 	drawTarget() {
-		if (!this.canDraw || !this.brick)
+		if (!this.canDraw || !this.brick) {
 			return;
-
+		}
 		ctx.save();
 		ctx.lineWidth   = cvs.width/150;
 		ctx.strokeStyle = '#9FC';

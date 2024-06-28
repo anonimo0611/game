@@ -69,8 +69,9 @@ export const Game = freeze(new class {
 		Scene.switchToReset();
 	}
 	#onMousedown(e) {
-		if (Game.isDemoScene && Mouse.isMainButton(e))
+		if (Game.isDemoScene && Mouse.isMainButton(e)) {
 			Scene.switchToStart();
+		}
 	}
 	#onReset() {
 		Game.#stageIdx    = Menu.StageMenu.index;
@@ -104,17 +105,18 @@ export const Game = freeze(new class {
 	#onPause(e) {
 		if (Game.isDemoScene) {
 			/blur|focus/.test(e.type)
-			 && Ticker.pause(e.type == 'blur')
-			 && Game.#draw();
+				&& Ticker.pause(e.type == 'blur')
+				&& Game.#draw();
 			return;
 		}
-		if (Confirm.opened)
+		if (Confirm.opened) {
 			return;
+		}
 		if (e.key  != 'Escape'
 		 && e.type != 'blur'
-		 && e.type != 'contextmenu')
+		 && e.type != 'contextmenu') {
 			return;
-
+		}
 		e.preventDefault();
 		Ticker.pause(true);
 		Sound.pauseAll(true);
@@ -146,9 +148,9 @@ export const Game = freeze(new class {
 		Scene.switchToReady();
 	}
 	#update() {
-		if (BrickMgr.brokenAll)
+		if (BrickMgr.brokenAll) {
 			return;
-
+		}
 		BrickMgr.update();
 		ItemMgr.update();
 		Army.update();

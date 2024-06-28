@@ -25,10 +25,12 @@ const BurstSet = new Set();
 export class Laser extends Collider {
 	static {$on({mousedown: Laser.#fire})}
 	static #fire(e) {
-		if (!Paddle.launched || Paddle.CatchEnabled)
+		if (!Paddle.launched || Paddle.CatchEnabled) {
 			return;
-		if (!Paddle.LaserEnabled || !Mouse.acceptEvent(e))
+		}
+		if (!Paddle.LaserEnabled || !Mouse.acceptEvent(e)) {
 			return;
+		}
 
 		if (Lasers[L].size < Rapid
 		 || Lasers[R].size < Rapid) {
@@ -38,17 +40,20 @@ export class Laser extends Collider {
 		}
 	}
 	static update() {
-		if (Scene.isInDemo && Ticker.count % 8 == 0)
+		if (Scene.isInDemo && Ticker.count % 8 == 0) {
 			Demo.canFireLaser && Laser.#fire();
-		if (!Game.isPlayScene)
+		}
+		if (!Game.isPlayScene) {
 			return;
+		}
 		Lasers[L].forEach(l=> l.update());
 		Lasers[R].forEach(l=> l.update());
 		Burst.update();
 	}
 	static draw() {
-		if (!Game.isPlayScene)
+		if (!Game.isPlayScene) {
 			return;
+		}
 		Lasers[L].forEach(l=> l.draw());
 		Lasers[R].forEach(l=> l.draw());
 		Burst.draw();
@@ -115,8 +120,9 @@ class Burst {
 	}
 	update() {
 		this.cnt++;
-		if (this.cnt >= 8)
+		if (this.cnt >= 8) {
 			BurstSet.delete(this);
+		}
 		this.Pos.add(this.v);
 	}
 	draw() {

@@ -12,11 +12,9 @@ const FrameImg = $('<img src="./res/frame.png">')[0];
 const BgImages = integers(3).map(i=> $(`<img src="./res/bg${i}.png">`)[0]);
 
 class BackgroundMgr {
-	#Color   = BgColors[0];
 	FrameImg = FrameImg;
-	get Color() {
-		return this.#Color;
-	}
+	#Color = BgColors[0];
+	get Color() {return this.#Color}
 	init() {
 		const idx = Game.stageIdx % BgImages.length;
 		this.#Color = BgColors[idx];

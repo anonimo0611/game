@@ -25,7 +25,7 @@ export const Message = freeze(new class  {
 		y = (cvs.height/2)+(fontSize*4)+(fontSize*offsetRow),
 	}={}) {
 		ctx.save();
-		ctx.font = `${fontSize}px Atari`;
+		ctx.font          = `${fontSize}px Atari`;
 		ctx.textAlign     = align;
 		ctx.fillStyle     = color;
 		ctx.shadowColor   = Color.Shadow;
@@ -45,9 +45,9 @@ export const Message = freeze(new class  {
 		ctx.restore();
 	}
 	draw() {
-		if (Confirm.opened)
+		if (Confirm.opened) {
 			return;
-
+		}
 		switch (Scene.current) {
 		case Scene.Enum.Clear:
 			this.#draw(`STAGE ${Game.stageNum}`, Color.Main)
@@ -66,9 +66,9 @@ export const Message = freeze(new class  {
 			break;
 
 		case Scene.Enum.Ready:
-			if (Game.respawned)
+			if (Game.respawned) {
 				this.#draw('READY!', Color.Sub, {offsetRow:1.5});
-			else {
+			} else {
 				this.#draw(`STAGE ${Game.stageNum}`, Color.Main)
 				if (Ticker.elapsed > Game.ReadyTime * 0.4)
 					this.#draw('READY!', Color.Sub, {offsetRow:2.5});
@@ -76,8 +76,9 @@ export const Message = freeze(new class  {
 			break;
 
 		case Scene.Enum.InGame:
-			if (Paddle.alpha < 1 || BallMgr.Ball.launched)
+			if (Paddle.alpha < 1 || BallMgr.Ball.launched) {
 				return;
+			}
 			this.#draw('Click to Launch!', Color.Sub, {offsetRow:1.5});
 			break;
 		}

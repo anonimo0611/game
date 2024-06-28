@@ -22,23 +22,27 @@ export const Score = freeze(new class {
 		$high = int(localStorage.arkanoidHiscore || 0);
 	}
 	#onStart() {
-		$score = 0;
+		$score   = 0;
+		$disp1UP = 1;
 	}
 	#onGameOver() {
 		const high = localStorage.arkanoidHiscore || 0;
-		if ($high > high)
+		if ($high > high) {
 			localStorage.arkanoidHiscore = $high;
+		}
 	}
 	add(pts=0) {
-		if (!Scene.isInGame)
+		if (!Scene.isInGame) {
 			return;
+		}
 		$score += pts;
 		$high = max($score, $high);
 	}
 	display1UP() {
 		$disp1UP ^= Ticker.count % 30 == 0;
-		if (!Scene.isInGame || (Scene.isInGame && $disp1UP))
+		if (!Scene.isInGame || (Scene.isInGame && $disp1UP)) {
 			ctx.fillText('1UP', FontSize, TextPosY);
+		}
 	}
 	draw() {
 		const ScoreStr =   `　${$score || '00'}`;
@@ -52,7 +56,7 @@ export const Score = freeze(new class {
 
 		// Draw score texts
 		ctx.save();
-		ctx.font = `${FontSize}px Atari`;
+		ctx.font          = `${FontSize}px Atari`;
 		ctx.shadowColor   = rgba(0,0,0, 0.5);
 		ctx.shadowOffsetX = FontSize * 0.1;
 		ctx.shadowOffsetY = FontSize * 0.1;

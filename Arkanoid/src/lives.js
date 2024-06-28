@@ -28,15 +28,14 @@ export const Lives = freeze(new class {
 	#onRespawn() {Lives.#left--}
 
 	#onExtend(_, type) {
-		if (Game.isDemoScene)
-			return;
-
-		type == ItemMgr.Type.PlayerExtend && Lives.#left++
+		if (!Game.isDemoScene) {
+			type === ItemMgr.Type.PlayerExtend && Lives.#left++
+		}
 	}
 	draw() {
-		if (Game.isDemoScene)
+		if (Game.isDemoScene) {
 			return;
-
+		}
 		const w = ScaleX * Paddle.InitWidth;
 		const h = ScaleY * Paddle.Height;
 		const marginLeft = w * 0.15;

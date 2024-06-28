@@ -23,14 +23,14 @@ export class Rect {
 	getBrick({row,col}=this.TilePos, {y=0,x=0}={}) {
 		return BrickMgr.MapData[row+y]?.[col+x];
 	}
-	contains({x:_x, y:_y}) {
+	contains({x:_x, y:_y}={}) {
 		const {x,y,Radius:r,Width:w,Height:h}= this;
 		return between(_x+r, x, x+w) && between(_y+r, y, y+h);
 	}
 	collisionRect(obj) {
-		if (obj instanceof Rect === false)
+		if (obj instanceof Rect === false) {
 			return false;
-
+		}
 		const {x:aX,y:aY,Width:aW,Height:aH,Radius:aR}= this;
 		const {x:bX,y:bY,Width:bW,Height:bH,Radius:bR}= obj;
 		const aPos = Vec2(aX, aY).sub(aR);
@@ -51,7 +51,9 @@ export class Collider extends Rect {
         if (point.x < Field.Left
          || point.x > Field.Right
          || point.y < Field.Top
-        ) return Field;
+        ) {
+			return Field;
+		}
 		return brick?.exists ? brick : null;
 	}
 	#collidedWith(fn) {

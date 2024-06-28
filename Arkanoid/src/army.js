@@ -94,8 +94,9 @@ class Explosion {
 		this.ParticleSet.forEach(p=> p.update());
 	}
 	draw() {
-		if (!ExplosionSet.has(this))
+		if (!ExplosionSet.has(this)) {
 			return;
+		}
 		ctx.save();
 		ctx.globalAlpha = this.#alpha;
 		this.ParticleSet.forEach(p=> p.draw());
@@ -123,8 +124,9 @@ class Particle {
 	draw() {
 		ctx.save();
 		ctx.translate(...this.Pos.vals);
-		for (const {cv,r} of this.ParticleSet)
+		for (const {cv,r} of this.ParticleSet) {
 			fillCircle(ctx)(...cv.vals, r, ParticleColor);
+		}
 		ctx.restore();
 	}
 }
@@ -167,13 +169,16 @@ export class Army extends Collider {
 	static ArmySet   = ArmySet;
 	static Explosion = Explosion;
 	static detectCollided(obj) {
-		for (const army of ArmySet)
-			if (army.#alpha == 1 && army.collisionRect(obj))
+		for (const army of ArmySet) {
+			if (army.#alpha == 1 && army.collisionRect(obj)) {
 				return army;
+			}
+		}
 	}
 	static update() {
-		if (!Game.isPlayScene)
+		if (!Game.isPlayScene) {
 			return;
+		}
 		if (this.#counter++ >= Interval && ArmySet.size < ArmyMax) {
 			this.#counter = 0;
 			ArmySet.add(new Army);
@@ -182,8 +187,9 @@ export class Army extends Collider {
 		Explosion.update();
 	}
 	static draw() {
-		if (BrickMgr.brokenAll)
+		if (BrickMgr.brokenAll) {
 			return;
+		}
 		ArmySet.forEach(a=> a.#drawSpheres(true)); // shadow
 		ArmySet.forEach(a=> a.#drawSpheres());
 	}
@@ -223,23 +229,25 @@ export class Army extends Collider {
 	}
 	#update() {
 		this.#updateAnim();
-		if (this.destroyed || this.#alpha < 1)
+		if (this.destroyed || this.#alpha < 1) {
 			return;
-
-		if (this.#damaging > 0)
+		}
+		if (this.#damaging > 0) {
 			this.#damaging--;
+		}
 
 		this.Pos.x = clamp(this.x, Field.Left+Radius, Field.Right-Radius);
 		this.#move();
-		if (this.Velocity.x)
+		if (this.Velocity.x) {
 			this.#lastLR = this.Velocity.x < 0 ? L : R;
-
+		}
 		if (Paddle.collisionRect(this)) {
 			this.crash(this.MaxHp);
 			return;
 		}
-		if (this.y-Radius > cvs.height)
+		if (this.y-Radius > cvs.height) {
 			ArmySet.delete(this);
+		}
 	}
 	#updateAnim() {
 		this.#alpha = min(this.#alpha+1/30, 1);
@@ -256,15 +264,17 @@ export class Army extends Collider {
 
 		const {Phase,hitT,hitR,hitB,hitL,hitLB,hitRB}= this;
 
-		if (Phase.isNone && (hitLB || hitRB))
+		if (Phase.isNone && (hitLB || hitRB)) {
 			this.#setHolizontalDir(this);
-		if (Phase.isUp && hitT)
+		}
+		if (Phase.isUp && hitT) {
 			this.#setHolizontalDir(this);
+		}
 
 		if (Phase.isClimbed) {
-			if (this.#climbedCnt++ <= Radius / abs(this.Velocity.x))
-				return;
-			Phase.switchToHolizontal();
+			if (this.#climbedCnt++ > Radius / abs(this.Velocity.x)) {
+				Phase.switchToHolizontal();
+			}
 		}
 		if (hitB && (hitL || hitR) != Field) {
 			(Phase.isHolizontal || Phase.isDown) && (hitL || hitR)
@@ -303,13 +313,14 @@ export class Army extends Collider {
 			ExplosionSet.add( new Explosion(this.Pos) );
 			Score.add(100);
 			Sound.stop('bomb').play('bomb');
-		} else
+		} else {
 			this.#damaging = 1;
+		}
 	}
 	#drawSpheres(isShadow=false) {
-		if (this.destroyed)
+		if (this.destroyed) {
 			return;
-
+		}
 		const {x,y}= this.#animPos, r = SphereR*0.8;
 		const cfg = [this.damaging, isShadow];
 		ctx.save();

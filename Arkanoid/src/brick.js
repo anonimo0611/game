@@ -85,34 +85,40 @@ export const BrickMgr = freeze(new class {
 		LusterMap.clear();
 		DisappearMap.clear();
 		const map = Stages[Game.stageIdx];
-		for (const row of integers(Rows))
-			for (const col of integers(Cols))
+		for (const row of integers(Rows)) {
+			for (const col of integers(Cols)) {
 				MapData[row][col] =	new Brick(row, col, map[row]?.[col]);
+			}
+		}
 		this.#brokenAll = false;
 		this.#cache();
 	}
 	update() {
-		if (this.brokenAll)
+		if (this.brokenAll) {
 			return;
-		if (!MapData.flat().every(b=> !b.isBreakable))
+		}
+		if (!MapData.flat().every(b=> !b.isBreakable)) {
 			return;
-
+		}
 		this.#brokenAll = true;
 		LusterMap.clear();
 		DisappearMap.clear();
-		if (Scene.isInGame)
+		if (Scene.isInGame) {
 			Scene.switchToClear();
+		}
 		if (Scene.isInDemo) {
 			Scene.switchToEndDemo();
 			Scene.switchToReset(1000);
 		}
 	}
 	animation() {
-		if (Game.isReadyScene && Ticker.elapsed < 300)
+		if (Game.isReadyScene && Ticker.elapsed < 300) {
 			return;
+		}
 		for (const [brick,data] of LusterMap) {
-			if (!Game.isReadyScene && !Game.isPlayScene)
+			if (!Game.isReadyScene && !Game.isPlayScene) {
 				break;
+			}
 		  	if (data.offset >= 1) {
 				LusterMap.delete(brick);
 				continue;
@@ -137,11 +143,12 @@ export const BrickMgr = freeze(new class {
 		ctxS.restore();
 	}
 	#drawBrick(ctx, brick, {effect=false,Grad=null}={}) {
-		if (!effect && brick.isNone)
+		if (!effect && brick.isNone) {
 			return;
-		if (!effect)
+		}
+		if (!effect) {
 			this.#drawShadow(brick);
-
+		}
 		const LW = LineWidth, FO = LW*1.5;
 		const {h,s,l,a}= brick.color;
 		if (!Grad) {
@@ -228,7 +235,7 @@ export const BrickMgr = freeze(new class {
 		MapData.flat().forEach(this.drawBrick.bind(this));
 	}
 });
-const Brick = freeze(class {
+class Brick {
 	Width		= ColWidth;
 	Height		= RowHeight;
 	#type		= BrickType.None;
@@ -253,17 +260,17 @@ const Brick = freeze(class {
 		this.color = type >= 0 ? HSL(...BrickHSLTable[type]) : null;
 
 		if (type == BrickType.Hard
-		 || type == BrickType.Immortality)
+		 || type == BrickType.Immortality) {
 			LusterMap.set(this, {offset:0});
-
+		}
 		this.#durability   =
 		this.durabilityMax = this.#getDurabilityMax();
 		freeze(this);
 	}
 	#getDurabilityMax() {
-		if (this.isImmortality)
+		if (this.isImmortality) {
 			return Infinity;
-
+		}
 		if (this.isHard) {
 			this.#pointRate = Game.stageNum;
 			if (Game.stageNum == 10) return 3;
@@ -300,10 +307,12 @@ const Brick = freeze(class {
 		ctxB.clearRect(x,y, ColWidth,RowHeight);
 		ctxS.clearRect(x+ShadowOffset, y+ShadowOffset, ColWidth,RowHeight);
 		Sound.stop('se1').stop('se2').play('se1');
-		if (this.isNormal)
+		if (this.isNormal) {
 			ItemMgr.appear(this);
-		if (Scene.isInGame)
+		}
+		if (Scene.isInGame) {
 			Score.add(BrickPointsTable[this.type] * this.#pointRate);
+		}
 		this.#type = BrickType.None;
 	}
 	getAdjacent(x=0, y=0) {
@@ -313,4 +322,5 @@ const Brick = freeze(class {
 	get AdjR() {return this.getAdjacent( 1, 0)}
 	get AdjU() {return this.getAdjacent( 0,-1)}
 	get AdjD() {return this.getAdjacent( 0, 1)}
-});
+}
+freeze(Brick);

@@ -11,10 +11,12 @@ $on('mousemove', e=> {
 export const Mouse = freeze(new class {
 	get x() {return mouseX}
 	acceptEvent(e) {
-		if (Game.isDemoScene && !isNum(e?.button))
+		if (Game.isDemoScene && !isNum(e?.button)) {
 			return true;
-		if (!Mouse.isMainButton(e))
+		}
+		if (!Mouse.isMainButton(e)) {
 			return false;
+		}
 		return(e.target == cvs
 			|| e.target == document.body
 			|| e.target == Window.Board);

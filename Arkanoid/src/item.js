@@ -60,10 +60,12 @@ export const ItemMgr = new class {
 		this.#speedDownCnt  =  0;
 	}
 	appear({x, y}) {
-		if (this.ItemApeared)
+		if (this.ItemApeared) {
 			return;
-		if (randInt(0,2) != 0)
+		}
+		if (randInt(0,2) != 0) {
 			return;
+		}
 		const type = this.#choice();
 		ItemSet.add( new Item(type, {x, y}, ColorTable[type]) );
 	}
@@ -72,12 +74,14 @@ export const ItemMgr = new class {
 		if (type === this.#lastItemType
 		 || type === ItemType.SpeedDown && this.#speedDownCnt > 2
 		 || type === ItemType.PlayerExtend && (randInt(0,1) || this.#extendCnt)
-		) return this.#choice();
+		) {
+			return this.#choice();
+		}
 
-		if (ExclTypeSet.has(type) && type === Paddle.ExclType)
+		if (ExclTypeSet.has(type) && type === Paddle.ExclType) {
 			type = randChoice([...ExclTypeSet]
 				.filter(i=> i != this.#lastItemType && i != type));
-
+		}
 		return (this.#lastItemType = type);
 	}
 	#onObtained(_, type) {
@@ -113,9 +117,9 @@ class Item extends Rect {
 		this.OutlineColor = hsl(hue, (sat == 0 ? 0:40), 40);
 	}
 	update() {
-		if (Ticker.count % 2 == 0)
+		if (Ticker.count % 2 == 0) {
 			++this.#animIdex;
-
+		}
 		if (!Game.isPlayScene) {
 			ItemSet.clear();
 			return;
@@ -132,8 +136,9 @@ class Item extends Rect {
 			$(ItemMgr).trigger('Obtained', this.Type);
 			ItemSet.clear();
 		}
-		if (this.Pos.y > cvs.height)
+		if (this.Pos.y > cvs.height) {
 			ItemSet.clear();
+		}
 	}
 	draw() {
 		if (!Game.isPlayScene) return;
@@ -164,7 +169,7 @@ class Item extends Rect {
 		ctx.shadowColor   = rgba(0,0,0, 0.7);
 		ctx.shadowOffsetX = fontSize * 0.1;
 		ctx.shadowOffsetY = fontSize * 0.1;
-		ctx.font = `${fontSize}px Atari`;
+		ctx.font      = `${fontSize}px Atari`;
 		ctx.textAlign = 'center';
 		ctx.fillStyle = this.TextColor;
 		ctx.fillText(this.Text, w/2+1, h/2 - fontSize/6);
