@@ -114,7 +114,7 @@ export const BallMgr = new class {
 		ctx.restore();
 	}
 };
-export class Ball extends Collider {
+class Ball extends Collider {
 	Radius     = Radius;
 	Pos        = Vec2();
 	Velocity   = Vec2();
