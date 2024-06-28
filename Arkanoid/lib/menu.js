@@ -45,7 +45,9 @@ export class SlideMenu extends Menu {
 		this.btnL = $('<button class=l tabindex="-1">&lt;</button>').prependTo(root).get(0)
 		$(this.menu).css({display:'inline-flex'})
 		const select = dir=> {
-			if (!dir) return
+			if (!dir) {
+				return
+			}
 			const val = this.index+Vec2[{[U]:R,[D]:L}[dir] || dir].x
 			this.select((val+this.size) % this.size);
 		}

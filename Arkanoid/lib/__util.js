@@ -19,10 +19,12 @@ const dqs    = sel => document.querySelector(sel)
 const dqsAll = sel => document.querySelectorAll(sel)
 const byId   = id  => document.getElementById(id)
 const byIds  = arg => {
-	if (!hasIter(arg))
+	if (!hasIter(arg)) {
 		return []
-	if (isStr(arg))
+	}
+	if (isStr(arg)) {
 		arg = [arg.trim().split('|')].flat()
+	}
 	return [...arg].map(id=> {
 		if (!byId(id))
 			throw ReferenceError(`The element with id '${id}' not found`)
@@ -41,7 +43,9 @@ const toNumber  = (arg, def=NaN)=> !isNum(+arg) || !isNum(arg)
 	&& !isStr(arg) || String(arg).trim() === '' ? def : +arg
 
 const randChoice = (...args)=> {
-	if (args.length == 1 && isArray(args[0])) args = args[0];
+	if (args.length == 1 && isArray(args[0])) {
+		args = args[0];
+	}
 	return isArray(args) ? args[randInt(0, args.length-1)] : []
 }
 const splitByBar  = arg=> {
@@ -49,13 +53,17 @@ const splitByBar  = arg=> {
 }
 const deepFreeze = obj=> {
 	function freeze(o) {
-		if (isElm(o)) return o
+		if (isElm(o)) {
+			return o
+		}
 		for (const key of Object.getOwnPropertyNames(o)) {
 			const desc = Object.getOwnPropertyDescriptor(o, key)
-			if (desc.get || desc.set)
+			if (desc.get || desc.set) {
 				continue
-			if (o[key] && typeof o[key] === 'object')
+			}
+			if (o[key] && typeof o[key] === 'object') {
 				freeze(o[key])
+			}
 		} return Object.freeze(o)
 	} return freeze(obj)
 }

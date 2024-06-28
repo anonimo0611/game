@@ -3,7 +3,9 @@ export const Confirm = freeze(new class {
 	get opened()  {return byId('confirm') != null}
 	get buttons() {return byId('confirm').querySelector('.buttons')}
 	open({content,buttons}) {
-		if (Confirm.opened) return;
+		if (Confirm.opened) {
+			return;
+		}
 		$(byId('confirm_temp').content.cloneNode(true)).appendTo('body');
 		Object.entries(buttons).forEach(this.#appendButton);
 		$('#confirm')
@@ -27,7 +29,7 @@ export const Confirm = freeze(new class {
 	}
 	#onKeydown(e) {
 		if (e.key == 'Escape') {
-			e.preventDefault()
+			e.preventDefault();
 			Confirm.#escFn?.();
 		}
 	}

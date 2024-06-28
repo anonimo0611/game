@@ -29,9 +29,9 @@ export const Ticker = freeze(class {
 	}
 
 	constructor(symbol, fn=null) {
-		if (symbol != Ticker.#symbol)
+		if (symbol != Ticker.#symbol) {
 			throw TypeError('The constructor is not visible')
-
+		}
 		Ticker.#ticker?.stop()
 		Ticker.#ticker = this
 		this.fn     = isFun(fn)? fn : null
@@ -40,8 +40,9 @@ export const Ticker = freeze(class {
 		requestAnimationFrame(this.update)
 	}
 	update(ts) {
-		if (this.stopped)
+		if (this.stopped) {
 			return
+		}
 		requestAnimationFrame(this.update)
 		;(ts - (this.start ||= ts)) / Ticker.Interval > Ticker.count
 			&& !Ticker.paused && this.tick()
@@ -52,10 +53,12 @@ export const Ticker = freeze(class {
 		Ticker.#count++
 	}
 	timer(t, id) {
-		if (Timer.frozen && !t.ignoreFrozen)
+		if (Timer.frozen && !t.ignoreFrozen) {
 			return
-		if (Ticker.Interval * t.amount++ < t.ms)
+		}
+		if (Ticker.Interval * t.amount++ < t.ms) {
 			return
+		}
 		t.fn()
 		TimerMap.delete(id)
 	}
@@ -82,15 +85,23 @@ export const Timer = freeze(new class {
 		return this
 	}
 	set(ms, fn, {id=null,ignoreFrozen=Timer.frozen}={}) {
-		if (!isNum(ms)) throw TypeError(`'${ms}' is not a number`)
-		if (!isFun(fn)) throw TypeError(`'${fn}' is not a function`)
+		if (!isNum(ms)) {
+			throw TypeError(`'${ms}' is not a number`)
+		}
+		if (!isFun(fn)) {
+			throw TypeError(`'${fn}' is not a function`)
+		}
 		!Ticker.running && Ticker.set()
 		TimerMap.set(id ?? Symbol(), {ms,fn,ignoreFrozen,amount:0})
 	}
 	sequence(...seq) {
 		(seq=seq.flatMap(s=> isArray(s)? {ms:s[0],fn:s[1]} : [])).forEach(s=> {
-			if (!isNum(s.ms)) throw TypeError(`'${s.ms}' is not a number`)
-			if (!isFun(s.fn)) throw TypeError(`'${s.fn}' is not a function`)
+			if (!isNum(s.ms)) {
+				throw TypeError(`'${s.ms}' is not a number`)
+			}
+			if (!isFun(s.fn)) {
+				throw TypeError(`'${s.fn}' is not a function`)
+			}
 		})
 		let idx=0, s=seq[idx]
 		function fire() {

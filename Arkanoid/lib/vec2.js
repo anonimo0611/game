@@ -81,8 +81,9 @@ function xyFrom(args) {
 	} else {
 		x = args[0] || 0
 		y = args[1] || 0
-		if (args.length == 1)
+		if (args.length == 1) {
 			y = x;
+		}
 	}
 	return {x, y}
 }
