@@ -75,7 +75,7 @@ class Vector2 {
 }
 function xyFrom(args) {
 	let x=0, y=0
-	if (typeof args[0] == 'object') {
+	if (args[0] && typeof args[0] == 'object') {
 		x = args[0].x || 0
 		y = args[0].y || 0
 	} else {
