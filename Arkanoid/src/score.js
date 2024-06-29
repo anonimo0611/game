@@ -15,10 +15,8 @@ let $disp1UP = 1;
 export const Score = freeze(new class {
 	static {$ready(this.#setup)}
 	static #setup() {
-		$on({
-			Start:    Score.#onStart,
-			GameOver: Score.#onGameOver,
-		});
+		$on({Start:    Score.#onStart});
+		$on({GameOver: Score.#onGameOver});
 		$high = int(localStorage.arkanoidHiscore || 0);
 	}
 	#onStart() {
@@ -26,22 +24,19 @@ export const Score = freeze(new class {
 		$disp1UP = 1;
 	}
 	#onGameOver() {
-		const high = localStorage.arkanoidHiscore || 0;
-		if ($high > high) {
-			localStorage.arkanoidHiscore = $high;
-		}
+		const high = (localStorage.arkanoidHiscore || 0);
+		$high > high && (localStorage.arkanoidHiscore = $high);
 	}
 	add(pts=0) {
-		if (!Scene.isInGame) {
-			return;
+		if (Scene.isInGame) {
+			$score += pts;
+			$high = max($score, $high);
 		}
-		$score += pts;
-		$high = max($score, $high);
 	}
-	display1UP() {
+	display1UP(x, y) {
 		$disp1UP ^= Ticker.count % 30 == 0;
 		if (!Scene.isInGame || (Scene.isInGame && $disp1UP)) {
-			ctx.fillText('1UP', FontSize, TextPosY);
+			ctx.fillText('1UP', x, y);
 		}
 	}
 	draw() {
@@ -61,7 +56,7 @@ export const Score = freeze(new class {
 		ctx.shadowOffsetX = FontSize * 0.1;
 		ctx.shadowOffsetY = FontSize * 0.1;
 		ctx.fillStyle = 'white';
-		this.display1UP();
+		this.display1UP(FontSize, TextPosY);
 		ctx.fillText(ScoreStr, FontSize *  4, TextPosY);
 		ctx.fillText(HighStr,  FontSize * 13, TextPosY);
 		ctx.restore();

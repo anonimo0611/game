@@ -32,13 +32,13 @@ export const Game = freeze(new class {
 			Reset:   Game.#onReset,
 			Clear:   Game.#onClear,
 			Respawn: Game.#onRespawn,
-			focus:   Game.#onPause,
-			blur:    Game.#onPause,
-			keydown: Game.#onPause,
+			blur:    Game.#onBlurOrFocus,
+			focus:   Game.#onBlurOrFocus,
+			keydown: Game.#onKeydown,
 		});
 		$(cvs).on({
 			mousedown:   Game.#onMousedown,
-			contextmenu: Game.#onPause,
+			contextmenu: Game.#confirm,
 		});
 		$(Menu.StageMenu).on({change: Game.#onSelectStage});
 		Scene.switchToReset();
@@ -73,6 +73,16 @@ export const Game = freeze(new class {
 			Scene.switchToStart();
 		}
 	}
+	#onKeydown(e) {
+		if (!Game.isDemoScene && e.key == 'Escape') {
+			Game.#confirm(e);
+		}
+	}
+	#onBlurOrFocus(e) {
+		Game.isDemoScene
+			? Ticker.pause(e.type == 'blur') && Game.#draw()
+			: Game.#confirm(e);
+	}
 	#onReset() {
 		Game.#stageIdx    = Menu.StageMenu.index;
 		Game.#respawned   = false;
@@ -102,19 +112,18 @@ export const Game = freeze(new class {
 				[1500, Scene.switchToReset])
 			: Ticker.Timer.set(2000, Game.#setNewStage);
 	}
-	#onPause(e) {
-		if (Game.isDemoScene) {
-			/blur|focus/.test(e.type)
-				&& Ticker.pause(e.type == 'blur')
-				&& Game.#draw();
-			return;
-		}
+	#restart() {
+		Scene.switchToReset();
+		Scene.switchToStart();
+	}
+	#setNewStage() {
+		Game.#stageIdx++;
+		Game.#respawned = false;
+		Game.#init();
+		Scene.switchToReady();
+	}
+	#confirm(e) {
 		if (Confirm.opened) {
-			return;
-		}
-		if (e.key  != 'Escape'
-		 && e.type != 'blur'
-		 && e.type != 'contextmenu') {
 			return;
 		}
 		e.preventDefault();
@@ -136,16 +145,6 @@ export const Game = freeze(new class {
 		Ticker.pause(false);
 		Sound.pauseAll(false);
 		$trigger('Resume');
-	}
-	#restart() {
-		Scene.switchToReset();
-		Scene.switchToStart();
-	}
-	#setNewStage() {
-		Game.#stageIdx++;
-		Game.#respawned = false;
-		Game.#init();
-		Scene.switchToReady();
 	}
 	#update() {
 		if (BrickMgr.brokenAll) {

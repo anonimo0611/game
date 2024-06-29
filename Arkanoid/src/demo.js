@@ -15,17 +15,20 @@ import {ItemType} from './item.js';
 const {Cols,Rows,ColWidth,RowHeight,isBreakable}= BrickMgr;
 const AlwaysAimingStageSet = new Set([5,11]);
 
-let $shakeAngle = 0;
-let $target     = null;
-let $landingPos = null;
+class Main {
+	#shakeAngle = 0;
+	#target     = null;
+	#landingPos = null;
+	#CatchMode  = null;
 
-$on('Reset InGame', ()=> {
-	$shakeAngle = 0;
-	$target     = null;
-	$landingPos = null;
-});
-
-export const Demo = new class {
+	constructor() {
+		$(BallMgr).offon('Cought.Demo', ()=> this.#onCatch());
+	}
+	#onCatch() {
+		if (Scene.isInDemo) {
+			this.#CatchMode = new CatchMode(this);
+		}
+	}
 	get Ball() {
 		return BallMgr.NearlyBall
 	}
@@ -87,14 +90,14 @@ export const Demo = new class {
 			this.Ball.Pos,
 			this.Ball.Velocity.normalized.mul(Field.Diagonal)
 		);
-		$landingPos = Vec2.getIntersection(
+		this.#landingPos = Vec2.getIntersection(
 			Vec2(Field.Left,  Paddle.y),
 			Vec2(Field.Right, Paddle.y),
 			this.Ball.Pos, ballVector
 		);
 	}
 	#setTarget() {
-		if (!isBreakable($target ?? {}) || Ticker.count % 120 == 0) {
+		if (!isBreakable(this.#target ?? {}) || Ticker.count % 120 == 0) {
 			const {brickTargets}= this;
 			const alwaysAiming = AlwaysAimingStageSet.has(Game.stageNum);
 			if (brickTargets.length == 0) {
@@ -104,7 +107,7 @@ export const Demo = new class {
 				const {x,y,col,row}= randChoice(brickTargets);
 				const ox = randFloat(0, ColWidth);
 				const oy = randFloat(0, RowHeight);
-				$target = {col,row,Pos:Vec2(x,y).add(ox,oy)};
+				this.#target = {col,row,Pos:Vec2(x,y).add(ox,oy)};
 			}
 		}
 	}
@@ -113,7 +116,7 @@ export const Demo = new class {
 			const {x,y,col,row}= randChoice(this.emptiesBetweenImmortality);
 			const ox = randFloat(0, ColWidth);
 			const oy = randFloat(0, RowHeight);
-			$target = {col,row,Pos:Vec2(x,y).add(ox,oy)};
+			this.#target = {col,row,Pos:Vec2(x,y).add(ox,oy)};
 		}
 	}
 	update() {
@@ -129,18 +132,18 @@ export const Demo = new class {
 		}
 		if (Paddle.CatchEnabled) {
 			Paddle.catchX
-				? CatchMode.autoPlay()
+				? this.#CatchMode.autoPlay()
 				: this.#paddleMoveToBall();
 			return;
 		}
-		if ($landingPos && $target?.Pos) {
+		if (this.#landingPos && this.#target?.Pos) {
 			this.#aimingAtTargetBrick();
 			return;
 		}
 		this.#paddleMoveToBall();
 	}
 	#paddleMoveToBall() {
-		const x = this.Ball.x * (sin($shakeAngle+=PI/100)/10+1);
+		const x = this.Ball.x * (sin(this.#shakeAngle+=PI/100)/10+1);
 		moveTo(x, this.Ball.Velocity.magnitude*1.2);
 	}
 	#paddleMoveToItem(item) {
@@ -160,8 +163,8 @@ export const Demo = new class {
 	}
 	#aimingAtTargetBrick() {
 		const {BounceAngleMax:aMax,Width:w,centerX}= Paddle;
-		const angle = Vec2.toRadians($target.Pos, $landingPos) + PI/2;
-		const destX = $landingPos.x - w * norm(-aMax, +aMax, angle) + w/2;
+		const angle = Vec2.toRadians(this.#target.Pos, this.#landingPos) + PI/2;
+		const destX = this.#landingPos.x - w * norm(-aMax, +aMax, angle) + w/2;
 		moveTo(destX, this.Ball.Velocity.magnitude);
 	}
 	#drawPoint(pos, r, color) { // For debug
@@ -170,27 +173,21 @@ export const Demo = new class {
 	}
 	draw() { // For debug
 		return;
-		$target     && this.#drawPoint($target.Pos, 10, '#F33');
-		$landingPos && this.#drawPoint($landingPos, 10, '#F33');
+		this.#target     && this.#drawPoint(this.#target.Pos, 10, '#F33');
+		this.#landingPos && this.#drawPoint(this.#landingPos, 10, '#F33');
 	}
 }
-const CatchMode = new class {
-	static {$ready(this.#setup)}
-	static #setup() {
-		$(BallMgr).on({Cought: ()=> CatchMode.#onCatch()});
-	}
+class CatchMode {
 	#dirX   = 1;
 	#aiming = false;
-	#onCatch() {
-		if (!Scene.isInDemo) {
-			return;
-		}
-		this.#dirX   = 1;
-		this.#aiming = false;
-	 	Ticker.Timer.cancel(CatchMode).set(1500, this.#release, {id:CatchMode});
+	constructor(main) {
+		this.Main = main;
+		Ticker.Timer.cancel(CatchMode);
+		Ticker.Timer.set(1500, this.#release, {id:CatchMode});
+		freeze(this);
 	}
 	#release() {
-		$(Demo).trigger('Release');
+		$trigger('mousedown');
 	}
 	#releaseTimer() {
 		if (this.#aiming) {
@@ -200,18 +197,19 @@ const CatchMode = new class {
 	 	Ticker.Timer.cancel(CatchMode).set(200, this.#release);
 	}
 	autoPlay() {
+		const bricks = this.Main.brickTargets;
 		const Radius = BallMgr.Radius;
-		const bricks = Demo.brickTargets;
 		const vector = Paddle.BounceVelocity.mul(Field.Diagonal);
 
 		if (bricks.length) {
 			if (Sight.brick?.isBreakable) {
 				this.#releaseTimer();
 			}
-		} else for (const empty of Demo.emptiesBetweenImmortality) {
+		} else for (const empty of this.Main.emptiesBetweenImmortality) {
+			const {Ball}= this.Main;
 			Vec2.getIntersection(
-				Demo.Ball.Pos,
-				Vec2(Demo.Ball.Pos).add(vector),
+				Ball.Pos,
+				Vec2(Ball.Pos) .add(vector),
 				Vec2(empty.Pos).add(Radius*2, RowHeight),
 				Vec2(empty.Pos).add(ColWidth-Radius*2, RowHeight)
 			) && this.#releaseTimer();
@@ -227,10 +225,12 @@ const CatchMode = new class {
 		 || Paddle.x > Paddle.MoveMax)
 			this.#dirX *= -1;
 	}
-};
+}
 function moveTo(dstX, speed) {
 	for (let i=0; i<speed; i++) {
 		dstX < Paddle.centerX && Paddle.Pos.x--;
 		dstX > Paddle.centerX && Paddle.Pos.x++;
 	}
 }
+export let Demo = new Main;
+$on('Reset InGame', ()=> Demo = new Main);

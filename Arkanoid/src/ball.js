@@ -229,7 +229,7 @@ class Ball extends Collider {
 		if (hitR) v.x = -abs(v.x);
 		if (hitT) v.y = +abs(v.y);
 		if (hitB) v.y = -abs(v.y);
-		const brick = this.collidedWall;
+		const brick = this.collidedBrick;
 		if (brick) {
 			brick.crash();
 			if (brick.isImmortality) {

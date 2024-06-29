@@ -70,8 +70,9 @@ export const Message = freeze(new class  {
 				this.#draw('READY!', Color.Sub, {offsetRow:1.5});
 			} else {
 				this.#draw(`STAGE ${Game.stageNum}`, Color.Main)
-				if (Ticker.elapsed > Game.ReadyTime * 0.4)
+				if (Ticker.elapsed > Game.ReadyTime * 0.4) {
 					this.#draw('READY!', Color.Sub, {offsetRow:2.5});
+				}
 			}
 			break;
 

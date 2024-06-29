@@ -60,7 +60,7 @@ export class Collider extends Rect {
 		const  {hitT,hitR,hitB,hitL}= this;
 		return [hitL,hitR,hitB,hitT].find(fn);
 	}
-	get collidedWall() {
+	get collidedBrick() {
 		return this.#collidedWith(BrickMgr.isBrick);
 	}
 	get collidedField() {

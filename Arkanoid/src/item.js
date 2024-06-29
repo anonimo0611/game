@@ -141,7 +141,9 @@ class Item extends Rect {
 		}
 	}
 	draw() {
-		if (!Game.isPlayScene) return;
+		if (!Game.isPlayScene) {
+			return;
+		}
 		const {x,y,Width:w,Height:h}= this;
 		const offsetH  = h * (this.#animIdex/this.#scaleTbl.length);
 		const cornerR  = h / 3;

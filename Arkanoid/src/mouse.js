@@ -11,8 +11,8 @@ $on('mousemove', e=> {
 export const Mouse = freeze(new class {
 	get x() {return mouseX}
 	acceptEvent(e) {
-		if (Game.isDemoScene && !isNum(e?.button)) {
-			return true;
+		if (Game.isDemoScene) {
+			return !isNum(e?.button);
 		}
 		if (!Mouse.isMainButton(e)) {
 			return false;

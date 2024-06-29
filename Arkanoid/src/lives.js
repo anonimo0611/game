@@ -12,10 +12,8 @@ const ScaleY = 0.50;
 export const Lives = freeze(new class {
 	static {$ready(this.#setup)}
 	static #setup() {
-		$on({
-			Start:   Lives.#onStart,
-			Respawn: Lives.#onRespawn,
-		});
+		$on({Start:   Lives.#onStart});
+		$on({Respawn: Lives.#onRespawn});
 		$(ItemMgr).on({Obtained: Lives.#onExtend});
 		$(Menu.LivesMenu).on({change: Lives.#set});
 	}

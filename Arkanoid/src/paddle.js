@@ -34,7 +34,6 @@ export const Paddle = freeze(new class extends Rect {
 		$on({Resume:    Paddle.#onResume});
 		$on({mousedown: Paddle.#onLaunch});
 		$on({mousedown: Paddle.#onRelease});
-		$(Demo)   .on({Release:  Paddle.#onRelease});
 		$(BallMgr).on({Cought:   Paddle.#onCatch});
 		$(ItemMgr).on({Obtained: Paddle.#onPowerUp});
 	}
@@ -185,7 +184,7 @@ export const Paddle = freeze(new class extends Rect {
 		ball.Pos.y = y - ball.Radius;
 		Paddle.#catchX = ball.x - Paddle.x;
 	}
-	#onRelease(e) {
+	#onRelease(e, isDemo) {
 		if (!Paddle.catchX || !Mouse.acceptEvent(e)) {
 			return;
 		}
