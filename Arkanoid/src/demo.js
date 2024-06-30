@@ -30,7 +30,7 @@ class Main {
 		}
 	}
 	get Ball() {
-		return BallMgr.NearlyBall
+		return BallMgr.NearlyBall;
 	}
 	get canFireLaser() {
 		return (

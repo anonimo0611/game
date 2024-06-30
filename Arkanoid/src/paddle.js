@@ -78,13 +78,7 @@ export const Paddle = freeze(new class extends Rect {
 		return Scene.isInGame && this.alpha == 1 && AutoMove.reached;
 	}
 	get canCatch() {
-		if (!this.CatchEnabled || this.catchX) {
-			return false;
-		}
-		if (this.Width != this.#targetW) {
-			return false;
-		}
-		return true;
+		return this.Width == this.InitWidth && this.CatchEnabled;
 	}
 	get BounceVelocity() {
 		const {x,centerX:cx,Width:w}= this;
