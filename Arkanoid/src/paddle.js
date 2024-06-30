@@ -112,9 +112,9 @@ export const Paddle = freeze(new class extends Rect {
 		this.#updateCache($ctx);
 		switch (Scene.current) {
 		case Scene.Enum.Reset:
-		case Scene.Enum.Ready:  return void this.#ready();
-		case Scene.Enum.InDemo: return void this.#demo();
-		case Scene.Enum.InGame: return void this.#playing();
+		case Scene.Enum.Ready:  return this.#ready();
+		case Scene.Enum.InDemo: return this.#demo();
+		case Scene.Enum.InGame: return this.#playing();
 		default: this.#destory();
 		}
 	}
@@ -241,7 +241,6 @@ export const Paddle = freeze(new class extends Rect {
 		if (BallMgr.count <= 0) {
 			ctx.filter = 'grayscale(100%)';
 		}
-
 		// Both side spheres
 		for (let i=0; i<2; i++) {
 			ctx.save();
@@ -254,13 +253,11 @@ export const Paddle = freeze(new class extends Rect {
 			ctx.fill();
 			ctx.restore();
 		}
-
 		// Both side vertical lines
 		ctx.fillStyle = shadowColor ?? Grad.LineMap.get(color);
 		for (let i=0; i<2; i++) {
 			ctx.fillRect(!i ? (r*2 - lineW) : (w - r*2), 0, lineW, Height);
 		}
-
 		// Horizontal bar
 		ctx.fillStyle = shadowColor ?? Grad.Body;
 		ctx.fillRect(r*2, 0, w-r*4, Height);

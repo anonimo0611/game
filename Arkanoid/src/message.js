@@ -1,3 +1,4 @@
+import {Vec2}    from '../lib/vec2.js';
 import {Ticker}  from '../lib/timer.js';
 import {Confirm} from '../lib/confirm.js';
 import {rgba}    from '../lib/color.js';
@@ -15,33 +16,32 @@ const Color = freeze({
 	Sub:    '#DCC678', // Orange
 	Shadow: '#222222',
 });
-
 export const Message = freeze(new class  {
-	#draw(txt, color='#FFF', {
-		offsetRow = 1,
-		align     = 'center',
-		fontSize  = FontSize,
+	#draw(offsetRow, color, text, {
+		align    = 'center',
+		fontSize = FontSize,
 		x = (cvs.width /2),
 		y = (cvs.height/2)+(fontSize*4)+(fontSize*offsetRow),
 	}={}) {
 		ctx.save();
-		ctx.font          = `${fontSize}px Atari`;
+		ctx.font          =`${fontSize}px Atari`;
 		ctx.textAlign     = align;
 		ctx.fillStyle     = color;
 		ctx.shadowColor   = Color.Shadow;
 		ctx.shadowBlur    = fontSize * 0.2;
 		ctx.shadowOffsetX = fontSize * 0.1;
 		ctx.shadowOffsetY = fontSize * 0.1;
-		ctx.fillText(txt, x, y);
+		ctx.fillText(text, x, y);
 		ctx.restore();
 	}
 	#drawCtrls() {
-		const fontSize = FontSize/1.8;
-		const [m1,m2]  = ['Press M to mute','Press ESC to pause'];
+		const fS = FontSize/1.8;
+		const [txt1,txt2]= ['Press M to mute','Press ESC to pause'];
+		const [pos1,pos2]= [Vec2(0, -fS*1.2),Vec2(0, 0)]; 
 		ctx.save();
-		ctx.translate(Field.Left+fontSize/2, Field.Bottom-fontSize/2);
-		this.#draw(m1, '#FFF', {fontSize, align:'left', x:0, y:-fontSize*1.2})
-		this.#draw(m2, '#FFF', {fontSize, align:'left', x:0, y:0});
+		ctx.translate(Field.Left+fS/2, Field.Bottom-fS/2);
+		this.#draw(0, '#FFF', txt1, {fontSize:fS, align:'left', ...pos1});
+		this.#draw(0, '#FFF', txt2, {fontSize:fS, align:'left', ...pos2});
 		ctx.restore();
 	}
 	draw() {
@@ -50,38 +50,31 @@ export const Message = freeze(new class  {
 		}
 		switch (Scene.current) {
 		case Scene.Enum.Clear:
-			this.#draw(`STAGE ${Game.stageNum}`, Color.Main)
-			this.#draw('CLEARED!', Color.Sub, {offsetRow:2.5});
-			break;
+			this.#draw(1.0, Color.Main, `STAGE ${Game.stageNum}`);
+			this.#draw(2.5, Color.Sub,  'CLEARED!');
+			return;
 
 		case Scene.Enum.GameOver:
-			this.#draw('GAME　OVER', Color.Main);
-			break;
+			this.#draw(1.0, Color.Main, 'GAME　OVER');
+			return;
 
 		case Scene.Enum.Reset:
 		case Scene.Enum.InDemo:
-			this.#draw('GAME　OVER', Color.Main);
-			this.#draw('Click to Start!', Color.Sub, {offsetRow:2.5})
+			this.#draw(1.0, Color.Main, 'GAME　OVER');
+			this.#draw(2.5, Color.Sub,  'Click to Start!');
 			this.#drawCtrls();
-			break;
+			return;
 
 		case Scene.Enum.Ready:
-			if (Game.respawned) {
-				this.#draw('READY!', Color.Sub, {offsetRow:1.5});
-			} else {
-				this.#draw(`STAGE ${Game.stageNum}`, Color.Main)
-				if (Ticker.elapsed > Game.ReadyTime * 0.4) {
-					this.#draw('READY!', Color.Sub, {offsetRow:2.5});
-				}
-			}
-			break;
+			this.#draw(1.0, Color.Main, `STAGE ${Game.stageNum}`);
+			(Ticker.elapsed > Game.ReadyTime*0.4)
+				&& this.#draw(2.5, Color.Sub, 'READY!');
+			return;
 
 		case Scene.Enum.InGame:
-			if (Paddle.alpha < 1 || BallMgr.Ball.launched) {
-				return;
-			}
-			this.#draw('Click to Launch!', Color.Sub, {offsetRow:1.5});
-			break;
+			(Paddle.alpha == 1 && !BallMgr.Ball.launched)
+				&& this.#draw(1.5, Color.Sub, 'Click to Launch!');
+			return;
 		}
 	}
 });

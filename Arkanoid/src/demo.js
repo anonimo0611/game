@@ -101,7 +101,7 @@ class Main {
 			const {brickTargets}= this;
 			const alwaysAiming = AlwaysAimingStageSet.has(Game.stageNum);
 			if (brickTargets.length == 0) {
-				return void this.#setEmptyTarget();
+				return this.#setEmptyTarget();
 			}
 			if (alwaysAiming || BrickMgr.remains <= 15) {
 				const {x,y,col,row}= randChoice(brickTargets);

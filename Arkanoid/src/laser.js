@@ -31,7 +31,6 @@ export class Laser extends Collider {
 		if (!Paddle.LaserEnabled || !Mouse.acceptEvent(e)) {
 			return;
 		}
-
 		if (Lasers[L].size < Rapid
 		 || Lasers[R].size < Rapid) {
 			Lasers[L].add(new Laser(L));

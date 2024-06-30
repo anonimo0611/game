@@ -181,16 +181,17 @@ export const BrickMgr = freeze(new class {
 		ctx.stroke();
 	}
 	#drawLuster(brick,data) {
-  		const {x, y}   = brick;
-		const {h,s,l,a}= brick.color;
-		const {offset} = data;
+  		const {x, y}    = brick;
+		const {h,s,l,a} = brick.color;
+		const {offset}  = data;
+		const gradColor = hsl(h,s,l-20,a);
 		const
 		Grad = ctx.createLinearGradient(0,0,ColWidth,RowHeight);
-		Grad.addColorStop(0, hsl(h,s,l-20,a));
-		Grad.addColorStop(max(offset*0.5, 0), hsl(h,s,l-20,a));
-		Grad.addColorStop(offset, '#FFF');
-		Grad.addColorStop(min(offset*0.7, 1), hsl(h,s,l-20,a));
-		Grad.addColorStop(1, hsl(h,s,l-20,a));
+		Grad.addColorStop(0,                  gradColor);
+		Grad.addColorStop(max(offset*0.5, 0), gradColor);
+		Grad.addColorStop(offset,            '#FFF');
+		Grad.addColorStop(min(offset*0.7, 1), gradColor);
+		Grad.addColorStop(1,                  gradColor);
 		data.offset = min(data.offset+1/AnimDuration, 1);
 
 		// Brick surface
@@ -264,7 +265,7 @@ class Brick {
 			LusterMap.set(this, {offset:0});
 		}
 		this.#durability   =
-		this.durabilityMax = this.#getDurabilityMax();
+		this.DurabilityMax = this.#getDurabilityMax();
 		freeze(this);
 	}
 	#getDurabilityMax() {
@@ -290,10 +291,10 @@ class Brick {
 	}
 	#holdUp() {
 		if (this.isHard) {
-			const {durabilityMax:dMax,durability:d}= this;
-			this.color.s += 30 - 30/dMax * d;
-			this.color.l -= 30 - 30/dMax * d;
-			this.color.a = min((1/dMax * d)+0.5, 1);
+			const {DurabilityMax,durability:d}= this;
+			this.color.s += 30 - 30/DurabilityMax * d;
+			this.color.l -= 30 - 30/DurabilityMax * d;
+			this.color.a = min((1/DurabilityMax * d)+0.5, 1);
 			BrickMgr.drawBrick(this);
 		}
 		if (!LusterMap.has(this)) {

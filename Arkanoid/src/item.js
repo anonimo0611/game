@@ -55,9 +55,9 @@ export const ItemMgr = new class {
 	#speedDownCnt =  0;
 	init() {
 		ItemSet.clear();
-		this.#lastItemType  = -1;
-		this.#extendCnt     =  0;
-		this.#speedDownCnt  =  0;
+		this.#lastItemType = -1;
+		this.#extendCnt    =  0;
+		this.#speedDownCnt =  0;
 	}
 	appear({x, y}) {
 		if (this.ItemApeared) {

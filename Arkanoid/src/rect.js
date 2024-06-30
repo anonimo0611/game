@@ -57,8 +57,7 @@ export class Collider extends Rect {
 		return brick?.exists ? brick : null;
 	}
 	#collidedWith(fn) {
-		const  {hitT,hitR,hitB,hitL}= this;
-		return [hitL,hitR,hitB,hitT].find(fn);
+		return [this.hitL,this.hitR,this.hitB,this.hitT].find(fn);
 	}
 	get collidedBrick() {
 		return this.#collidedWith(BrickMgr.isBrick);

@@ -251,7 +251,7 @@ export class Army extends Collider {
 	}
 	#updateAnim() {
 		this.#alpha = min(this.#alpha+1/30, 1);
-		this.#animPos.set( Vec2.fromRadians(this.#animAngle+=PI/60) )
+		this.#animPos.set( Vec2.fromRadians(this.#animAngle+=PI/60) );
 	}
 	#moveCircum() {
 		this.Pos.x += cos(this.#moveAngle+=PI/1e3) * DriftRadiusX;
@@ -263,18 +263,13 @@ export class Army extends Collider {
 			: this.Pos.add(this.Velocity);
 
 		const {Phase,hitT,hitR,hitB,hitL,hitLB,hitRB}= this;
-
-		if (Phase.isNone && (hitLB || hitRB)) {
+		if ((Phase.isNone && (hitLB || hitRB))
+		  || Phase.isUp && hitT) {
 			this.#setHolizontalDir(this);
 		}
-		if (Phase.isUp && hitT) {
-			this.#setHolizontalDir(this);
-		}
-
 		if (Phase.isClimbed) {
-			if (this.#climbedCnt++ > Radius / abs(this.Velocity.x)) {
-				Phase.switchToHolizontal();
-			}
+			this.#climbedCnt++ > Radius/abs(this.Velocity.x)
+				&& Phase.switchToHolizontal();
 		}
 		if (hitB && (hitL || hitR) != Field) {
 			(Phase.isHolizontal || Phase.isDown) && (hitL || hitR)
