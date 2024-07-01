@@ -321,7 +321,7 @@ const View = freeze(new class {
 		ctx.restore();
 	}
 	drawSpark() {
-		if (Ticker.paused) {return}
+		if (Ticker.paused || !Game.isReadyScene) {return}
 		if (Number.isInteger(Paddle.alpha)) {return}
 
 		const {Width,Height,Pos}= Paddle;
