@@ -25,9 +25,8 @@ class Main {
 		$(BallMgr).offon('Cought.Demo', ()=> this.#onCatch());
 	}
 	#onCatch() {
-		if (Scene.isInDemo) {
-			this.#CatchMode = new CatchMode(this);
-		}
+		if (!Scene.isInDemo) {return}
+		this.#CatchMode = new CatchMode(this);
 	}
 	get Ball() {
 		return BallMgr.NearlyBall;
@@ -40,9 +39,7 @@ class Main {
 	get #canShootBricksWithLaser() {
 		return [-ColWidth/2, ColWidth/2].flatMap(offset=> {
 			for (const brick of BrickMgr.MapData.flat().reverse()) {
-				if (brick.isNone) {
-					continue;
-				}
+				if (brick.isNone) {continue}
 				if (brick.containsX(Paddle.centerX+offset)) {
 					return brick.isBreakable || [];
 				}
@@ -58,23 +55,19 @@ class Main {
 					if (BrickMgr.MapData[i]?.[col]?.exists) {
 						return false;
 					}
-				}
-				return true;
+				} return true;
 			}
 		} return false;
 	}
 	get brickTargets() {
 		return BrickMgr.MapData.flat().reverse().filter(brick=> {
 			const {row,col}= brick;
-			if (!brick.isBreakable) {
-				return false;
-			}
+			if (!brick.isBreakable) {return false}
 			for (let y=row+1; y<Rows-row; y++) {
 				if (!BrickMgr.MapData[y][col].isNone) {
 					return false;
 				}
-			}
-			return true;
+			} return true;
 		});
 	}
 	get emptiesBetweenImmortality() {
@@ -120,16 +113,12 @@ class Main {
 		}
 	}
 	update() {
-		if (!Scene.isInDemo) {
-			return;
-		}
+		if (!Scene.isInDemo) {return}
 		this.#setTarget();
 		this.#setLandingPointOfBall();
 	}
 	autoPlay() {
-		if (this.#paddleMoveToItem(ItemMgr.Current)) {
-			return;
-		}
+		if (this.#paddleMoveToItem(ItemMgr.Current)) {return}
 		if (Paddle.CatchEnabled) {
 			Paddle.catchX
 				? this.#CatchMode.autoPlay()
@@ -149,14 +138,10 @@ class Main {
 	#paddleMoveToItem(item) {
 		const Type  = item?.Type;
 		const BallV = this.Ball.Velocity.y;
-		if (!item || !this.Ball.isOnWall && BallV > 0) {
-			return false;
-		}
+		if (!item || !this.Ball.isOnWall && BallV > 0) {return false}
 		if (Paddle.CatchEnabled
 		 || Paddle.LaserEnabled) {
-			if (Type == ItemType.Expand) {
-				return false;
-			}
+			if (Type == ItemType.Expand) {return false}
 		}
 		moveTo(item.centerX, cvs.width/50);
 		return true;
@@ -190,9 +175,7 @@ class CatchMode {
 		$trigger('mousedown');
 	}
 	#releaseTimer() {
-		if (this.#aiming) {
-			return;
-		}
+		if (this.#aiming) {return}
 		this.#aiming = true;
 	 	Ticker.Timer.cancel(CatchMode).set(200, this.#release);
 	}
@@ -217,13 +200,10 @@ class CatchMode {
 		this.#searchMove();
 	}
 	#searchMove() {
-		if (this.#aiming) {
-			return;
-		}
+		if (this.#aiming) {return}
 		Paddle.Pos.x += (Field.Width/60) * this.#dirX;
 		if (Paddle.x < Paddle.MoveMin
-		 || Paddle.x > Paddle.MoveMax)
-			this.#dirX *= -1;
+		 || Paddle.x > Paddle.MoveMax) {this.#dirX *= -1}
 	}
 }
 function moveTo(dstX, speed) {

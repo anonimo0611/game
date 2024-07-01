@@ -33,7 +33,7 @@ export const Score = freeze(new class {
 			$high = max($score, $high);
 		}
 	}
-	display1UP(x, y) {
+	#display1UP(x, y) {
 		$disp1UP ^= Ticker.count % 30 == 0;
 		if (!Scene.isInGame || (Scene.isInGame && $disp1UP)) {
 			ctx.fillText('1UP', x, y);
@@ -55,8 +55,8 @@ export const Score = freeze(new class {
 		ctx.shadowColor   = rgba(0,0,0, 0.5);
 		ctx.shadowOffsetX = FontSize * 0.1;
 		ctx.shadowOffsetY = FontSize * 0.1;
-		ctx.fillStyle = 'white';
-		this.display1UP(FontSize, TextPosY);
+		ctx.fillStyle     = 'white';
+		this.#display1UP(FontSize, TextPosY);
 		ctx.fillText(ScoreStr, FontSize *  4, TextPosY);
 		ctx.fillText(HighStr,  FontSize * 13, TextPosY);
 		ctx.restore();

@@ -45,9 +45,7 @@ export const Message = freeze(new class  {
 		ctx.restore();
 	}
 	draw() {
-		if (Confirm.opened) {
-			return;
-		}
+		if (Confirm.opened) {return}
 		switch (Scene.current) {
 		case Scene.Enum.Clear:
 			this.#draw(1.0, Color.Main, `STAGE ${Game.stageNum}`);

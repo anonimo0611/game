@@ -17,7 +17,7 @@ const {Frame,Cols,Rows,ColWidth,RowHeight}= Field;
 
 const LineWidth    = int(cvs.width/315);
 const ShadowOffset = ColWidth * 0.2;
-const AnimDuration = 200 / Ticker.Interval;
+const AnimDuration = 250 / Ticker.Interval;
 
 export const BrickType = freeze({
 	None:	   -1,
@@ -91,15 +91,32 @@ export const BrickMgr = freeze(new class {
 			}
 		}
 		this.#brokenAll = false;
-		this.#cache();
+		View.cache();
+	}
+	animation() {
+		if (Game.isReadyScene && Ticker.elapsed < 300) {return}
+		for (const [brick,data] of LusterMap) {
+			if (!Game.isReadyScene && !Game.isPlayScene) {
+				break;
+			}
+		  	if (data.offset >= 1) {
+				LusterMap.delete(brick);
+				continue;
+			}
+		  	View.drawLuster(brick,data);
+		}
+		for (const [brick,data] of DisappearMap) {
+		   	const scale = max(data.scale-=1/AnimDuration, 0);
+		 	if (scale == 0) {
+				DisappearMap.delete(brick);
+				continue;
+			}
+			View.drawDisappear(brick,scale);
+		}
 	}
 	update() {
-		if (this.brokenAll) {
-			return;
-		}
-		if (!MapData.flat().every(b=> !b.isBreakable)) {
-			return;
-		}
+		if (this.brokenAll) {return}
+		if (!MapData.flat().every(b=> !b.isBreakable)) {return}
 		this.#brokenAll = true;
 		LusterMap.clear();
 		DisappearMap.clear();
@@ -110,130 +127,6 @@ export const BrickMgr = freeze(new class {
 			Scene.switchToEndDemo();
 			Scene.switchToReset(1000);
 		}
-	}
-	animation() {
-		if (Game.isReadyScene && Ticker.elapsed < 300) {
-			return;
-		}
-		for (const [brick,data] of LusterMap) {
-			if (!Game.isReadyScene && !Game.isPlayScene) {
-				break;
-			}
-		  	if (data.offset >= 1) {
-				LusterMap.delete(brick);
-				continue;
-			}
-		  	this.#drawLuster(brick,data);
-		}
-		for (const [brick,data] of DisappearMap) {
-		   	const scale = max(data.scale-=1/AnimDuration, 0);
-		 	if (scale == 0) {
-				DisappearMap.delete(brick);
-				continue;
-			}
-			this.#drawDisappear(brick,scale);
-		}
-	}
-	#drawShadow({x,y,col,color}) {
-		ctxS.save();
-		ctxS.fillStyle = rgba(0,0,0, color.a*0.4);
-		ctxS.translate(x+ShadowOffset, y+ShadowOffset);
-		ctxS.clearRect(0,0, ColWidth,RowHeight);
-		ctxS.fillRect (0,0, ColWidth,RowHeight);
-		ctxS.restore();
-	}
-	#drawBrick(ctx, brick, {effect=false,Grad=null}={}) {
-		if (!effect && brick.isNone) {
-			return;
-		}
-		if (!effect) {
-			this.#drawShadow(brick);
-		}
-		const LW = LineWidth, FO = LW*1.5;
-		const {h,s,l,a}= brick.color;
-		if (!Grad) {
-			Grad = ctx.createLinearGradient(0,0,ColWidth,RowHeight);
-			Grad.addColorStop(0.0, hsl(h,s,l-20,a));
-			Grad.addColorStop(0.5, hsl(h,s,l+2, a));
-			Grad.addColorStop(1.0, hsl(h,s,l-20,a));
-		}
-		// Surface
-		ctx.fillStyle = Grad;
-		ctx.clearRect(FO, FO, ColWidth-FO*2, RowHeight-FO*2);
-		ctx.fillRect (FO, FO, ColWidth-FO*2, RowHeight-FO*2);
-
-		// Top and left edges
-		ctx.beginPath();
-			ctx.lineWidth	= LW;
-			ctx.strokeStyle = hsl(h,s,80);
-			ctx.moveTo(LW,RowHeight-LW);
-			ctx.lineTo(LW,LW);
-			ctx.lineTo(ColWidth-LW,LW);
-		ctx.stroke();
-
-		// Bottom and right edges
-		ctx.beginPath();
-			ctx.lineWidth	= LW;
-			ctx.strokeStyle = hsl(h,s,40);
-			ctx.moveTo(ColWidth-LW,LW);
-			ctx.lineTo(ColWidth-LW,RowHeight-LW);
-			ctx.lineTo(LW,RowHeight-LW);
-		ctx.stroke();
-	}
-	#drawLuster(brick,data) {
-  		const {x, y}    = brick;
-		const {h,s,l,a} = brick.color;
-		const {offset}  = data;
-		const gradColor = hsl(h,s,l-20,a);
-		const
-		Grad = ctx.createLinearGradient(0,0,ColWidth,RowHeight);
-		Grad.addColorStop(0,                  gradColor);
-		Grad.addColorStop(max(offset*0.5, 0), gradColor);
-		Grad.addColorStop(offset,            '#FFF');
-		Grad.addColorStop(min(offset*0.7, 1), gradColor);
-		Grad.addColorStop(1,                  gradColor);
-		data.offset = min(data.offset+1/AnimDuration, 1);
-
-		// Brick surface
-	  	ctx.save();
-	   	ctx.translate(x+ColWidth, y);
-	  	ctx.scale(-1, 1);
-		this.#drawBrick(ctx, brick, {Grad,effect:true});
-	  	ctx.restore();
-
-		// Highlight(bottom right)
-		const LW = LineWidth;
-	   	ctx.save();
-	   	ctx.globalAlpha = 1-data.offset;
-	   	ctx.translate(x, y);
-		ctx.beginPath();
-	 		ctx.lineWidth	= LW;
-			ctx.strokeStyle = '#FFF';
-			ctx.moveTo(ColWidth-LW, LW);
-			ctx.lineTo(ColWidth-LW, RowHeight-LW);
-			ctx.lineTo(LW, RowHeight-LW);
-		ctx.stroke();
-	  	ctx.restore();
-	}
-	#drawDisappear(brick, scale) {
-  		const {x, y}= brick;
-	   	ctx.save();
-		ctx.globalAlpha = scale;
-	  	ctx.translate(ColWidth/2*(1-scale)+x, RowHeight/1.5*(1-scale)+y);
-		ctx.scale(scale, scale);
-		this.#drawBrick(ctx, brick, {effect:true});
-	   	ctx.restore();
-	}
-	drawBrick(brick) {
-		ctxB.save();
-		ctxB.translate(brick.x, brick.y);
-		this.#drawBrick(ctxB, brick);
-		ctxB.restore();
-	}
-	#cache() {
-		ctxS.clear();
-		ctxB.clear();
-		MapData.flat().forEach(this.drawBrick.bind(this));
 	}
 });
 class Brick {
@@ -295,7 +188,7 @@ class Brick {
 			this.color.s += 30 - 30/DurabilityMax * d;
 			this.color.l -= 30 - 30/DurabilityMax * d;
 			this.color.a = min((1/DurabilityMax * d)+0.5, 1);
-			BrickMgr.drawBrick(this);
+			View.drawBrick(this);
 		}
 		if (!LusterMap.has(this)) {
 			Sound.stop('se1').stop('se2').play('se2');
@@ -305,8 +198,7 @@ class Brick {
 	#destroy({x, y}) {
 		LusterMap.delete(this);
 		DisappearMap.set(this, {scale:1});
-		ctxB.clearRect(x,y, ColWidth,RowHeight);
-		ctxS.clearRect(x+ShadowOffset, y+ShadowOffset, ColWidth,RowHeight);
+		View.destroy(x, y);
 		Sound.stop('se1').stop('se2').play('se1');
 		if (this.isNormal) {
 			ItemMgr.appear(this);
@@ -325,3 +217,107 @@ class Brick {
 	get AdjD() {return this.getAdjacent( 0, 1)}
 }
 freeze(Brick);
+
+const View = freeze(new class {
+	#drawShadow({x,y,col,color}) {
+		ctxS.save();
+		ctxS.fillStyle = rgba(0,0,0, color.a*0.4);
+		ctxS.translate(x+ShadowOffset, y+ShadowOffset);
+		ctxS.clearRect(0,0, ColWidth,RowHeight);
+		ctxS.fillRect (0,0, ColWidth,RowHeight);
+		ctxS.restore();
+	}
+	#drawBrick(ctx, brick, {effect=false,Grad=null}={}) {
+		if (!effect && brick.isNone) {return}
+		if (!effect) {this.#drawShadow(brick)}
+		const LW = LineWidth, FO = LW*1.5;
+		const {h,s,l,a}= brick.color;
+		if (!Grad) {
+			Grad = ctx.createLinearGradient(0,0,ColWidth,RowHeight);
+			Grad.addColorStop(0.0, hsl(h,s,l-20,a));
+			Grad.addColorStop(0.5, hsl(h,s,l+2, a));
+			Grad.addColorStop(1.0, hsl(h,s,l-20,a));
+		}
+		// Surface
+		ctx.fillStyle = Grad;
+		ctx.clearRect(FO, FO, ColWidth-FO*2, RowHeight-FO*2);
+		ctx.fillRect (FO, FO, ColWidth-FO*2, RowHeight-FO*2);
+
+		// Top and left edges
+		ctx.beginPath();
+			ctx.lineWidth	= LW;
+			ctx.strokeStyle = hsl(h,s,80);
+			ctx.moveTo(LW,RowHeight-LW);
+			ctx.lineTo(LW,LW);
+			ctx.lineTo(ColWidth-LW,LW);
+		ctx.stroke();
+
+		// Bottom and right edges
+		ctx.beginPath();
+			ctx.lineWidth	= LW;
+			ctx.strokeStyle = hsl(h,s,40);
+			ctx.moveTo(ColWidth-LW,LW);
+			ctx.lineTo(ColWidth-LW,RowHeight-LW);
+			ctx.lineTo(LW,RowHeight-LW);
+		ctx.stroke();
+	}
+	drawLuster(brick,data) {
+  		const {x, y}    = brick;
+		const {h,s,l,a} = brick.color;
+		const {offset}  = data;
+		const gradColor = hsl(h,s,l-20,a);
+		const
+		Grad = ctx.createLinearGradient(0,0,ColWidth,RowHeight);
+		Grad.addColorStop(0,                  gradColor);
+		Grad.addColorStop(max(offset*0.5, 0), gradColor);
+		Grad.addColorStop(offset,            '#FFF');
+		Grad.addColorStop(min(offset*0.7, 1), gradColor);
+		Grad.addColorStop(1,                  gradColor);
+		data.offset = min(data.offset+1/AnimDuration, 1);
+
+		// Brick surface
+	  	ctx.save();
+	   	ctx.translate(x+ColWidth, y);
+	  	ctx.scale(-1, 1);
+		this.#drawBrick(ctx, brick, {Grad,effect:true});
+	  	ctx.restore();
+
+		// Highlight(bottom right)
+		const LW = LineWidth;
+	   	ctx.save();
+	   	ctx.globalAlpha = 1-data.offset;
+	   	ctx.translate(x, y);
+		ctx.beginPath();
+	 		ctx.lineWidth	= LW;
+			ctx.strokeStyle = '#FFF';
+			ctx.moveTo(ColWidth-LW, LW);
+			ctx.lineTo(ColWidth-LW, RowHeight-LW);
+			ctx.lineTo(LW, RowHeight-LW);
+		ctx.stroke();
+	  	ctx.restore();
+	}
+	drawDisappear(brick, scale) {
+  		const {x, y}= brick;
+	   	ctx.save();
+		ctx.globalAlpha = scale;
+	  	ctx.translate(ColWidth/2*(1-scale)+x, RowHeight/1.5*(1-scale)+y);
+		ctx.scale(scale, scale);
+		this.#drawBrick(ctx, brick, {effect:true});
+	   	ctx.restore();
+	}
+	drawBrick(brick) {
+		ctxB.save();
+		ctxB.translate(brick.x, brick.y);
+		this.#drawBrick(ctxB, brick);
+		ctxB.restore();
+	}
+	destroy(x, y) {
+		ctxB.clearRect(x,y, ColWidth,RowHeight);
+		ctxS.clearRect(x+ShadowOffset, y+ShadowOffset, ColWidth,RowHeight);
+	}
+	cache() {
+		ctxS.clear();
+		ctxB.clear();
+		MapData.flat().forEach(this.drawBrick.bind(this));
+	}
+});

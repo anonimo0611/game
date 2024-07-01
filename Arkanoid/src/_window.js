@@ -13,9 +13,8 @@ export const Window = new class {
 	}
 	Board  = dBoard;
 	#scale = 1;
-	get scale() {
-		return this.#scale;
-	}
+	get scale() {return this.#scale}
+
 	#fit() {
 		const w = $(window).width()  / dBoard.offsetWidth;
 		const h = $(window).height() / dBoard.offsetHeight;

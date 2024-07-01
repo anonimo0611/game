@@ -43,7 +43,8 @@ export const Sight = freeze(new class {
 	}
 	#getIntersection(v2St, v2Ed) {
 		return Vec2.getIntersection(
-			Paddle.CaughtBallPos, this.BallVector, v2St, v2Ed);
+			Paddle.CaughtBallPos,
+			this.BallVector, v2St, v2Ed);
 	}
 	#attackArmy(point) {
 		for (const army of Army.ArmySet) {
@@ -74,9 +75,7 @@ export const Sight = freeze(new class {
 		for (const brick of BrickMgr.MapData.flat().reverse()) {
 			const [bottom,left,right]= this.#detect(brick);
 			if (brick.isNone) {
-				if (this.#attackArmy(bottom || left || right)) {
-					return true;
-				}
+				if (this.#attackArmy(bottom || left || right)) {return true}
 				continue;
 			}
 			if (bottom || left || right) {
@@ -88,9 +87,7 @@ export const Sight = freeze(new class {
 		return false;
 	}
 	update() {
-		if (!this.enabled) {
-			return;
-		}
+		if (!this.enabled) {return}
 		if (!this.#intersectionsWithArmyOrBrick()) {
 			this.Pos.set(this.#intersectionWithField);
 		}
@@ -99,9 +96,7 @@ export const Sight = freeze(new class {
 		}
 	}
 	drawLine() {
-		if (!this.canDraw) {
-			return;
-		}
+		if (!this.canDraw) {return}
 		drawLine(ctx, {
 			cap:  'square',
 			color: rgba(0,225,0, 0.5),
@@ -112,9 +107,7 @@ export const Sight = freeze(new class {
 		);
 	}
 	drawTarget() {
-		if (!this.canDraw || !this.brick) {
-			return;
-		}
+		if (!this.canDraw || !this.brick) {return}
 		ctx.save();
 		ctx.lineWidth   = cvs.width/150;
 		ctx.strokeStyle = '#9FC';

@@ -104,12 +104,12 @@ export const Paddle = freeze(new class extends Rect {
 			this.#exclType = null;
 		}
 		this.Pos.x = (cvs.width - this.Width) / 2;
-		this.#updateCache(Lives.context, Width);
-		this.#updateCache($ctx);
+		View.updateCache(Lives.context, Width);
+		View.updateCache($ctx);
 	}
 	update() {
 		this.#blink += PI/60;
-		this.#updateCache($ctx);
+		View.updateCache($ctx);
 		switch (Scene.current) {
 		case Scene.Enum.Reset:
 		case Scene.Enum.Ready:  return this.#ready();
@@ -119,15 +119,12 @@ export const Paddle = freeze(new class extends Rect {
 		}
 	}
 	#ready() {
-		if (Ticker.elapsed > 500) {
-			this.#alpha = min(this.#alpha+1/FadeDuration, 1);
-		}
+		if (Ticker.elapsed < 500) {return}
+		this.#alpha = min(this.#alpha+1/FadeDuration, 1);
 	}
 	#demo() {
+		if (Ticker.elapsed < 200) {return}
 		this.#launched ||= true;
-		if (Ticker.elapsed < 200) {
-			return;
-		}
 		Demo.autoPlay();
 		this.#moveCaughtBall();
 		this.#setWidth();
@@ -146,9 +143,7 @@ export const Paddle = freeze(new class extends Rect {
 				: this.clampedX + this.Width/2;
 	}
 	#destory() {
-		if (Game.isDemoScene) {
-			return;
-		}
+		if (Game.isDemoScene) {return}
 		if (BallMgr.count <= 0 && Ticker.count > 8) {
 			this.#alpha = max(this.#alpha-1/FadeDuration, 0);
 		}
@@ -158,19 +153,15 @@ export const Paddle = freeze(new class extends Rect {
 		Pos.x = clamp(Pos.x, MoveMin, MoveMax);
 	}
 	#moveCaughtBall() {
-		if (this.catchX > 0) {
-			BallMgr.Ball.Pos.x = this.CaughtBallPos.x;
-		}
+		if (!this.catchX) {return}
+		BallMgr.Ball.Pos.x = this.CaughtBallPos.x;
 	}
 	#onLaunch(e) {
-		if (!AutoMove.reached || !Mouse.acceptEvent(e)) {
-			return;
+		if (Paddle.alpha < 1 || Paddle.launched) {return}
+		if (AutoMove.reached && Mouse.acceptEvent(e)) {
+			Sound.play('se0');
+			Paddle.#launched = true;
 		}
-		if (Paddle.alpha < 1 || Paddle.launched) {
-			return;
-		}
-		Sound.play('se0');
-		Paddle.#launched = true;
 	}
 	#onCatch(_, ball) {
 		const {x,y}= Paddle.Pos;
@@ -179,9 +170,7 @@ export const Paddle = freeze(new class extends Rect {
 		Paddle.#catchX = ball.x - Paddle.x;
 	}
 	#onRelease(e, isDemo) {
-		if (!Paddle.catchX || !Mouse.acceptEvent(e)) {
-			return;
-		}
+		if (!Paddle.catchX || !Mouse.acceptEvent(e)) {return}
 		Sound.play('se0');
 		Paddle.#catchX = 0;
 	}
@@ -196,73 +185,25 @@ export const Paddle = freeze(new class extends Rect {
 		case ItemType.Laser:
 			Paddle.#exclType = type;
 			Paddle.#targetW  = Paddle.ExpandEnabled? StretchMax : Width;
-			Paddle.#updateCache($ctx);
+			View.updateCache($ctx);
 		}
 		if (ItemMgr.ExclTypeSet.has(type)) {
 			Paddle.#catchX = 0;
 		}
 	}
 	#onDropped() {
-		Paddle.#updateCache($ctx);
+		View.updateCache($ctx);
 		Sound.play('destroy');
 	}
 	#setWidth() {
 		if (this.#targetW > this.#width) {
 			this.#width = min(this.#width+StretchSpeed, this.#targetW);
-			this.#updateCache($ctx);
+			View.updateCache($ctx);
 		}
 		if (this.#targetW < this.#width) {
 			this.#width = max(this.#width-StretchSpeed, Width);
-			this.#updateCache($ctx);
+			View.updateCache($ctx);
 		}
-	}
-	#updateCache(ctx, w=this.Width) {
-		ctx.clear();
-		this.#cache(ctx, w, ShadowColor); // shadow
-		this.#cache(ctx, w);
-	}
-	#getPaddleColorType(ctx) {
-		if (ctx != $ctx) {
-			return;
-		}
-		if (Paddle.LaserEnabled
-		 || Paddle.CatchEnabled) {
-			return this.ExclType;
-		}
-	}
-	#cache(ctx, w, shadowColor) {
-		const color = this.#getPaddleColorType(ctx);
-		const lineW = Width*0.05, r = Radius;
-
-		ctx.save();
-		if (shadowColor) {
-			ctx.translate(r, r);
-		}
-		if (BallMgr.count <= 0) {
-			ctx.filter = 'grayscale(100%)';
-		}
-		// Both side spheres
-		for (let i=0; i<2; i++) {
-			ctx.save();
-			ctx.translate((!i ? r*2 - r : w-r*2 + r), r);
-			ctx.beginPath();
-				ctx.fillStyle = shadowColor ?? Grad.SphereMap.get(color)()[i];
-				ctx.arc(0,0, r, PI/2,-PI/2, !!i);
-				ctx.lineTo((!i ? r-lineW : -r+lineW), -r);
-				ctx.lineTo((!i ? r-lineW : -r+lineW), +r);
-			ctx.fill();
-			ctx.restore();
-		}
-		// Both side vertical lines
-		ctx.fillStyle = shadowColor ?? Grad.LineMap.get(color);
-		for (let i=0; i<2; i++) {
-			ctx.fillRect(!i ? (r*2 - lineW) : (w - r*2), 0, lineW, Height);
-		}
-		// Horizontal bar
-		ctx.fillStyle = shadowColor ?? Grad.Body;
-		ctx.fillRect(r*2, 0, w-r*4, Height);
-
-		ctx.restore();
 	}
 	draw() {
 		const {x, y}= this;
@@ -271,27 +212,7 @@ export const Paddle = freeze(new class extends Rect {
 		ctx.translate(x, y);
 		ctx.drawImage($cvs, 0,0);
 		ctx.restore();
-		this.#spark();
-	}
-	#spark() {
-		if (Ticker.paused || !Game.isReadyScene) {
-			return;
-		}
-		if (this.alpha == 0
-		 || this.alpha == 1) {
-			return;
-		}
-		const {Width,Height,Pos}= this;
-		const radius = int(Width/12);
-		const config = {color:SparkColor, width:cvs.width/230};
-		for (let i=0; i<=15; i++) {
-			const stPos = [randInt(0, Width), randInt(0, Height*1.1)];
-			const edVec = stPos.map(c=> c+randChoice(-radius, radius));
-			ctx.save();
-			ctx.translate(...Pos.vals);
-			drawLine(ctx, config)(...stPos, ...edVec);
-			ctx.restore();
-		}
+		View.drawSpark();
 	}
 });
 
@@ -303,13 +224,9 @@ const AutoMove = freeze(new class {
 	get reached() {return this.#reached}
 
 	setPosition() {
-		if (this.reached) {
-			return true;
-		}
+		if (this.reached) {return true}
 		for (let i=0; i<cvs.width/30; i++) {
-			if (this.#move()) {
-				return true;
-			}
+			if (this.#move()) {return true}
 		}
 		return false;
 	}
@@ -324,19 +241,19 @@ const AutoMove = freeze(new class {
 	}
 });
 
-const Grad = freeze(new class {
-	Body = this.#lineHSL(0, 0, 46);
-	LineMap = new Map()
-		.set(undefined,      this.#lineHSL( 15, 100, 40))
-		.set(ItemType.Catch, this.#lineHSL( 33, 240, 29))
-		.set(ItemType.Laser, this.#lineHSL(240,  33, 29))
+const View = freeze(new class {
+	BodyStyle = this.getLineStyle(0, 0, 46);
+	LineStyleMap = new Map()
+		.set(ItemType.None,  this.getLineStyle( 15, 100, 40))
+		.set(ItemType.Catch, this.getLineStyle( 33, 240, 29))
+		.set(ItemType.Laser, this.getLineStyle(240,  33, 29))
 	;
-	SphereMap = new Map()
-		.set(undefined,      ()=> this.#sphereHSL(210, 100, 38))
-		.set(ItemType.Catch, ()=> this.#sphereHSL(120, 100, 29))
-		.set(ItemType.Laser, ()=> this.#sphereHSL(  0, 100, 29))
+	SphereStyleMap = new Map()
+		.set(ItemType.None,  ()=> this.getSphereStyle(210, 100, 38))
+		.set(ItemType.Catch, ()=> this.getSphereStyle(120, 100, 29))
+		.set(ItemType.Laser, ()=> this.getSphereStyle(  0, 100, 29))
 	;
-	#lineHSL(h,s,l) {
+	getLineStyle(h,s,l) {
 		const
 		g = $ctx.createLinearGradient(Width,0,Width,Height);
 		g.addColorStop(0.0, hsl(h,s,l));
@@ -345,16 +262,78 @@ const Grad = freeze(new class {
 		g.addColorStop(1.0, hsl(h,s,l*1.1));
 		return g;
 	}
-	#sphereHSL(h,s,l) {
+	getSphereStyle(h,s,l) {
 		l = lerp(l, l*1.4, max(0, sin(Paddle.blink)));
 		return [0,1].map(i=> { // Both sides
-			const sx = (i == 0 ? Height/2 : -Height/2) / 4;
+			const sx = (i == 0 ? Radius : -Radius) / 4;
 			const
-			g = $ctx.createRadialGradient(sx,-Height/4,0, 0,0,Height/2);
+			g = $ctx.createRadialGradient(sx,-Radius/2,0, 0,0,Radius);
 			g.addColorStop(0.0, hsl(h,s,90));
 			g.addColorStop(0.5, hsl(h,s,l));
 			g.addColorStop(1.0, hsl(h,s,l));
 			return g;
 		});
+	}
+	getColorType(ctx) {
+		if (ctx == $ctx) {
+			switch (Paddle.ExclType) {
+			case ItemType.Laser:
+			case ItemType.Catch:
+				return Paddle.ExclType;
+			}
+		} return ItemType.None;
+	}
+	updateCache(ctx, w=Paddle.Width) {
+		ctx.clear();
+		this.cache(ctx, w, ShadowColor);
+		this.cache(ctx, w);
+	}
+	cache(ctx, w, shadow) {
+		const type   = this.getColorType(ctx);
+		const lineW  = Width*0.05, r = Radius;
+		const offset = (shadow ? r : 0);
+
+		ctx.save();
+		ctx.translate(offset, offset);
+		ctx.filter = (BallMgr.count <= 0) ? 'grayscale(100%)' : '';
+
+		// Both side spheres
+		for (let i=0; i<2; i++) {
+			ctx.save();
+			ctx.translate((!i ? r*2 - r : w-r*2 + r), r);
+			ctx.beginPath();
+				ctx.fillStyle = shadow ?? this.SphereStyleMap.get(type)()[i];
+				ctx.arc(0,0, r, PI/2,-PI/2, !!i);
+				ctx.lineTo(lineW+(!i ? r : -r), -r);
+				ctx.lineTo(lineW+(!i ? r : -r), +r);
+			ctx.fill();
+			ctx.restore();
+		}
+		// Both side vertical lines
+		ctx.fillStyle = shadow ?? this.LineStyleMap.get(type);
+		for (let i=0; i<2; i++) {
+			ctx.fillRect(!i ? (r*2 - lineW) : (w - r*2), 0, lineW, Height);
+		}
+		// Horizontal bar
+		ctx.fillStyle = shadow ?? this.BodyStyle;
+		ctx.fillRect(r*2, 0, w-r*4, Height);
+
+		ctx.restore();
+	}
+	drawSpark() {
+		if (Ticker.paused) {return}
+		if (Number.isInteger(Paddle.alpha)) {return}
+
+		const {Width,Height,Pos}= Paddle;
+		const radius = int(Width/12);
+		const config = {color:SparkColor, width:cvs.width/230};
+		for (let i=0; i<=15; i++) {
+			const stPos = [randInt(0, Width), randInt(0, Height*1.1)];
+			const edVec = stPos.map(c=> c+randChoice(-radius, radius));
+			ctx.save();
+			ctx.translate(...Pos.vals);
+			drawLine(ctx, config)(...stPos, ...edVec);
+			ctx.restore();
+		}
 	}
 });

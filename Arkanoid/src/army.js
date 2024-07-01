@@ -94,9 +94,7 @@ class Explosion {
 		this.ParticleSet.forEach(p=> p.update());
 	}
 	draw() {
-		if (!ExplosionSet.has(this)) {
-			return;
-		}
+		if (!ExplosionSet.has(this)) {return}
 		ctx.save();
 		ctx.globalAlpha = this.#alpha;
 		this.ParticleSet.forEach(p=> p.draw());
@@ -170,15 +168,13 @@ export class Army extends Collider {
 	static Explosion = Explosion;
 	static detectCollided(obj) {
 		for (const army of ArmySet) {
-			if (army.#alpha == 1 && army.collisionRect(obj)) {
+			if (army.View.alpha == 1 && army.collisionRect(obj)) {
 				return army;
 			}
 		}
 	}
 	static update() {
-		if (!Game.isPlayScene) {
-			return;
-		}
+		if (!Game.isPlayScene) {return}
 		if (this.#counter++ >= Interval && ArmySet.size < ArmyMax) {
 			this.#counter = 0;
 			ArmySet.add(new Army);
@@ -187,37 +183,26 @@ export class Army extends Collider {
 		Explosion.update();
 	}
 	static draw() {
-		if (BrickMgr.brokenAll) {
-			return;
-		}
-		ArmySet.forEach(a=> a.#drawSpheres(true)); // shadow
-		ArmySet.forEach(a=> a.#drawSpheres());
+		if (BrickMgr.brokenAll) {return}
+		ArmySet.forEach(a=> a.#draw());
 	}
+	Phase       = new Phase();
+	View        = freeze(new View);
+	Velocity    = Crawl.Down;
 	MaxHp       = 30;
 	#hp         = this.MaxHp;
-	#phase      = new Phase();
-	#alpha      = 0;
-	#animAngle  = 0;
 	#moveAngle  = 0;
 	#downCnt    = 0;
 	#climbedCnt = 0;
 	#damaging   = 0;
 	#lastLR     = null;
-	#animPos    = Vec2();
 	#destroyed  = false;
-	Sphere = freeze({
-		r: new Sphere(SphereRedHSL),
-		g: new Sphere(SphereLimeHSL),
-		c: new Sphere(SphereCyanHSL),
-	});
 	constructor() {
 		const x = randInt(0,1) ? SpawnL : SpawnR;
 		const y = Field.Top + Radius;
 		super({x, y}, Radius);
-		this.Velocity = Crawl.Down;
 		freeze(this);
 	}
-	get Phase()     {return this.#phase}
 	get damaging()  {return this.#damaging > 0}
 	get destroyed() {return this.#destroyed}
 	get #canDrift() {
@@ -228,13 +213,9 @@ export class Army extends Collider {
 		].every(([x,y])=> !this.getBrick({row,col},{x,y})?.exists);
 	}
 	#update() {
-		this.#updateAnim();
-		if (this.destroyed || this.#alpha < 1) {
-			return;
-		}
-		if (this.#damaging > 0) {
-			this.#damaging--;
-		}
+		this.View.update();
+		if (this.destroyed || this.View.alpha < 1) {return}
+		if (this.#damaging > 0) {this.#damaging--}
 
 		this.Pos.x = clamp(this.x, Field.Left+Radius, Field.Right-Radius);
 		this.#move();
@@ -248,10 +229,6 @@ export class Army extends Collider {
 		if (this.y-Radius > cvs.height) {
 			ArmySet.delete(this);
 		}
-	}
-	#updateAnim() {
-		this.#alpha = min(this.#alpha+1/30, 1);
-		this.#animPos.set( Vec2.fromRadians(this.#animAngle+=PI/60) );
 	}
 	#moveCircum() {
 		this.Pos.x += cos(this.#moveAngle+=PI/1e3) * DriftRadiusX;
@@ -312,15 +289,35 @@ export class Army extends Collider {
 			this.#damaging = 1;
 		}
 	}
-	#drawSpheres(isShadow=false) {
-		if (this.destroyed) {
-			return;
-		}
-		const {x,y}= this.#animPos, r = SphereR*0.8;
-		const cfg = [this.damaging, isShadow];
+	#draw() {
+		this.View.draw(this, true);
+		this.View.draw(this);
+	}
+} freeze(Army);
+
+class View {
+	#alpha  = 0;
+	#angle  = 0;
+	AnimPos = Vec2();
+	Sphere  = freeze({
+		r: new Sphere(SphereRedHSL),
+		g: new Sphere(SphereLimeHSL),
+		c: new Sphere(SphereCyanHSL),
+	});
+	get alpha() {
+		return this.#alpha;
+	}
+	update() {
+		this.#alpha = min(this.#alpha+1/30, 1);
+		this.AnimPos.set( Vec2.fromRadians(this.#angle+=PI/60) );
+	}
+	draw({damaging,Pos}, isShadow=false) {
+		if (this.destroyed) {return}
+		const {x,y}= this.AnimPos, r = SphereR*0.8;
+		const cfg = [damaging, isShadow];
 		ctx.save();
-		ctx.globalAlpha = this.#alpha;
-		ctx.translate(...this.Pos.vals);
+		ctx.globalAlpha = this.alpha;
+		ctx.translate(...Pos.vals);
 		if (x < -.33) {
 			this.Sphere.g.draw(-x*r,-y*r, ...cfg);
 			this.Sphere.r.draw(-x*r, y*r, ...cfg);
@@ -336,7 +333,7 @@ export class Army extends Collider {
 		}
 		ctx.restore();
 	}
-} freeze(Army);
+}
 
 $on('Reset Ready Clear EndDemo Dropped Respawn', ()=> {
 	ArmySet.clear();

@@ -123,9 +123,7 @@ export const Game = freeze(new class {
 		Scene.switchToReady();
 	}
 	#confirm(e) {
-		if (Confirm.opened) {
-			return;
-		}
+		if (Confirm.opened) {return}
 		e.preventDefault();
 		Ticker.pause(true);
 		Sound.pauseAll(true);
@@ -147,9 +145,7 @@ export const Game = freeze(new class {
 		$trigger('Resume');
 	}
 	#update() {
-		if (BrickMgr.brokenAll) {
-			return;
-		}
+		if (BrickMgr.brokenAll) {return}
 		BrickMgr.update();
 		ItemMgr.update();
 		Army.update();
