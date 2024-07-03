@@ -32,15 +32,3 @@ const randChoice = (...args)=> {
 	}
 	return isArray(args) ? args[randInt(0, args.length-1)] : []
 }
-
-const collisionRect = (a, b)=> {
-	if (!isObj(a) || !isObj(b))
-		return false;
-	const ax = a.Pos?.x;
-	const ay = a.Pos?.y;
-	const bx = b.Pos?.x;
-	const by = b.Pos?.y;
-	return (
-		abs((ax+a.Width /2)-(bx+b.Width /2)) < (a.Width +b.Width) /2 &&
-		abs((ay+a.Height/2)-(by+b.Height/2)) < (a.Height+b.Height)/2);
-}
