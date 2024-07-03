@@ -51,9 +51,7 @@ export class Collider extends Rect {
         if (point.x < Field.Left
          || point.x > Field.Right
          || point.y < Field.Top
-        ) {
-			return Field;
-		}
+        ) {return Field}
 		return brick?.exists ? brick : null;
 	}
 	#collidedWith(fn) {

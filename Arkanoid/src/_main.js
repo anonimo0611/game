@@ -47,7 +47,7 @@ export const Game = freeze(new class {
 	#respawned   = false;
 	#isDemoScene = false;
 
-	get ReadyTime() {return Game.respawned? 1500 : 2200} // ms
+	get readyTime() {return Game.respawned? 1500 : 2200} // ms
 	get stageIdx()  {return this.#stageIdx}
 	get stageNum()  {return this.#stageIdx+1}
 	get respawned() {return this.#respawned}
@@ -88,7 +88,7 @@ export const Game = freeze(new class {
 		Game.#respawned   = false;
 		Game.#isDemoScene = true;
 		Game.#init();
-		Scene.switchToInDemo(Game.ReadyTime);
+		Scene.switchToInDemo(Game.readyTime);
 	}
 	#onStart(e) {
 		Game.#isDemoScene = false;
@@ -103,14 +103,14 @@ export const Game = freeze(new class {
 	}
 	#onReady() {
 		!Game.respawned && Sound.stop().play('start');
-		Scene.switchToInGame(Game.ReadyTime);
+		Scene.switchToInGame(Game.readyTime);
 	}
 	#onClear() {
-		(Game.stageNum == Stages.length)
-			? Ticker.Timer.sequence(
+		(Game.stageNum != Stages.length)
+			? Ticker.Timer.set(2000, Game.#setNewStage)
+			: Ticker.Timer.sequence(
 				[1500, Scene.switchToGameOver],
-				[1500, Scene.switchToReset])
-			: Ticker.Timer.set(2000, Game.#setNewStage);
+				[1500, Scene.switchToReset]);
 	}
 	#restart() {
 		Scene.switchToReset();

@@ -124,25 +124,27 @@ class Ball extends Collider {
 	}
 	update() {
 		if (Game.isReadyScene || Paddle.catchX > 0) {return}
-		const Min = this.InitSpeed * 0.7;
-		const Max = BallSpeed   * BallMgr.stageSpeedRate;
-		const Spd = this.#speed * BallMgr.speedDownRate;
-		const Mag = round(this.Velocity.magnitude);
+		const min = this.InitSpeed * 0.7;
+		const max = BallSpeed   * BallMgr.stageSpeedRate;
+		const spd = this.#speed * BallMgr.speedDownRate;
+		const mag = round(this.Velocity.magnitude);
 
 		this.#launched ||= true;
-		this.#speed = clamp(this.speed+this.Accelerate, Min, Max);
+		this.#speed = clamp(this.speed+this.Accelerate, min, max);
 
 		if (this.#detectDropped()) {return}
-		for (let i=0; i<Mag; i++) {
+		for (let i=0; i<mag; i++) {
 			this.#bounceAtPaddle();
-			!Paddle.catchX
-				&& this.Pos.add( this.Velocity.normalized.mul(Spd/Mag) );
+			if (!Paddle.catchX) {
+				this.Pos.add( this.Velocity.normalized.mul(spd/mag) );
+			}
 			this.#collisionWithArmy();
 			this.#collisionWithBrickOrField();
 		}
 	}
 	#detectDropped() {
 		if (this.y <= cvs.height || Scene.isClear) {return false}
+
 		//this.Velocity.y *= -1;
 		//return false;
 
@@ -169,14 +171,10 @@ class Ball extends Collider {
 	}
 	#bounceAtPaddle() {
 		if (!Paddle.collisionRect(this)) {return}
-		if (Paddle.canCatch) {
-			$(BallMgr).trigger('Cought',this);
-		}
-		this.Velocity.set( Paddle.BounceVelocity.mul(this.speed) );
+		if (Paddle.canCatch) {$(BallMgr).trigger('Cought',this)}
 		Sound.play('se0');
-		if (Paddle.catchX) {
-			Ticker.Timer.set(200, ()=> Sound.stop('se0'));
-		}
+		this.Velocity.set( Paddle.BounceVelocity.mul(this.speed) );
+		Paddle.catchX && Ticker.Timer.set(200, ()=> Sound.stop('se0'));
 	}
 	#collisionWithArmy() {
 		const army = Army.detectCollided(this);
@@ -201,9 +199,7 @@ class Ball extends Collider {
 				v.x += randFloat(0, vx);
 			}
 		}
-		if (this.collidedField) {
-			this.#constrain(this);
-		}
+		this.collidedField && this.#constrain(this);
 	}
 	draw() {
 		ctx.save();

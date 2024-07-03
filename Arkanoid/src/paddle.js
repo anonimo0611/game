@@ -62,7 +62,7 @@ export const Paddle = freeze(new class extends Rect {
 	get launched() {return this.#launched}
 	get Width()    {return this.#width}
 	get catchX()   {return this.#catchX}
-	get centerX()  {return this.x+this.Width/2}
+	get centerX()  {return this.x + this.Width/2}
 	get clampedX() {return clamp(this.x, this.MoveMin, this.MoveMax)}
 	get MoveMin()  {return Field.Left}
 	get MoveMax()  {return Field.Right-this.Width}
@@ -149,8 +149,7 @@ export const Paddle = freeze(new class extends Rect {
 		}
 	}
 	#constrain() {
-		const {Pos,MoveMin,MoveMax}= this;
-		Pos.x = clamp(Pos.x, MoveMin, MoveMax);
+		this.Pos.x = clamp(this.Pos.x, this.MoveMin, this.MoveMax);
 	}
 	#moveCaughtBall() {
 		if (!this.catchX) {return}
@@ -275,13 +274,9 @@ const View = freeze(new class {
 		});
 	}
 	getColorType(ctx) {
-		if (ctx == $ctx) {
-			switch (Paddle.ExclType) {
-			case ItemType.Laser:
-			case ItemType.Catch:
-				return Paddle.ExclType;
-			}
-		} return ItemType.None;
+		if (ctx == Lives.context) {return ItemType.None}
+		return (Paddle.LaserEnabled || Paddle.CatchEnabled)
+			? Paddle.ExclType : ItemType.None;
 	}
 	updateCache(ctx, w=Paddle.Width) {
 		ctx.clear();
@@ -291,7 +286,7 @@ const View = freeze(new class {
 	cache(ctx, w, shadow) {
 		const type   = this.getColorType(ctx);
 		const lineW  = Width*0.05, r = Radius;
-		const offset = (shadow ? r : 0);
+		const offset = shadow ? r : 0;
 
 		ctx.save();
 		ctx.translate(offset, offset);

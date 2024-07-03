@@ -24,9 +24,9 @@ const SphereR  = Radius / (5/3);
 const SpawnL   = int(cvs.width/3 - Radius);
 const SpawnR   = (cvs.width - SpawnL) - Radius*2;
 
-const DriftRadiusX = cvs.width/200;
-const DriftRadiusY = cvs.width/300;
-const DriftGravity = 0.3;
+const Gravity      = cvs.height / 1800;
+const DriftRadiusX = cvs.width  /  200;
+const DriftRadiusY = cvs.width  /  300;
 
 const SphereRedHSL  = HSL(  0,  90, 40);
 const SphereLimeHSL = HSL(135, 100, 40);
@@ -148,7 +148,7 @@ class Sphere {
 		this.#Grad.addColorStop(0.2, hsl(h,s,80));
 		this.#Grad.addColorStop(1.0, hsl(h,s,l));
 	}
-	draw(x, y, damaging=false, isShadow=false) {
+	draw(x, y, {damaging=false, isShadow=false}) {
 		const {h,l}  = this.#color(this.HSL, damaging && !isShadow);
 		const color  = isShadow? hsl(h,30,l, 0.8) : this.#Grad;
 		const offset = isShadow? Radius/1.9 : 0;
@@ -187,9 +187,10 @@ export class Army extends Collider {
 		ArmySet.forEach(a=> a.#draw());
 	}
 	Phase       = new Phase();
-	View        = freeze(new View);
+	View        = new View();
 	Velocity    = Crawl.Down;
 	MaxHp       = 30;
+	CircumDirX  = randChoice(-1, 1);
 	#hp         = this.MaxHp;
 	#moveAngle  = 0;
 	#downCnt    = 0;
@@ -208,8 +209,8 @@ export class Army extends Collider {
 	get #canDrift() {
 		const {row,col}= this.TilePos;
 		return row > 6 && [
-			[0,-1],[0,-2],[-1, 0],[-2, 0],[-1,-1],[1,-1],
-			[1, 0],[2, 0],[ 0, 1],[ 0, 2],[-1, 1],[1, 1]
+			[ 1, 0],[ 1, 1],[0, 1],[-1,1],
+			[-1, 0],[-1,-1],[0,-1],[1,-1]			
 		].every(([x,y])=> !this.getBrick({row,col},{x,y})?.exists);
 	}
 	#update() {
@@ -231,8 +232,9 @@ export class Army extends Collider {
 		}
 	}
 	#moveCircum() {
-		this.Pos.x += cos(this.#moveAngle+=PI/1e3) * DriftRadiusX;
-		this.Pos.y += sin(this.#moveAngle+=PI/200) * DriftRadiusY + DriftGravity;
+		const {CircumDirX}= this;
+		this.Pos.x += (cos(this.#moveAngle+=PI/1e3) * DriftRadiusX) * CircumDirX;
+		this.Pos.y += (sin(this.#moveAngle+=PI/200) * DriftRadiusY) + Gravity;
 	}
 	#move() {
 		this.#canDrift
@@ -296,6 +298,7 @@ export class Army extends Collider {
 } freeze(Army);
 
 class View {
+	constructor() {freeze(this)}
 	#alpha  = 0;
 	#angle  = 0;
 	AnimPos = Vec2();
@@ -314,22 +317,22 @@ class View {
 	draw({damaging,Pos}, isShadow=false) {
 		if (this.destroyed) {return}
 		const {x,y}= this.AnimPos, r = SphereR*0.8;
-		const cfg = [damaging, isShadow];
+		const cfg = {damaging, isShadow};
 		ctx.save();
 		ctx.globalAlpha = this.alpha;
 		ctx.translate(...Pos.vals);
 		if (x < -.33) {
-			this.Sphere.g.draw(-x*r,-y*r, ...cfg);
-			this.Sphere.r.draw(-x*r, y*r, ...cfg);
-			this.Sphere.c.draw( x*r,-y*r, ...cfg);
+			this.Sphere.g.draw(-x*r,-y*r, cfg);
+			this.Sphere.r.draw(-x*r, y*r, cfg);
+			this.Sphere.c.draw( x*r,-y*r, cfg);
 		} else if (y > .66 ) {
-			this.Sphere.r.draw(-x*r, y*r, ...cfg);
-			this.Sphere.c.draw( x*r,-y*r, ...cfg);
-			this.Sphere.g.draw(-x*r,-y*r, ...cfg);
+			this.Sphere.r.draw(-x*r, y*r, cfg);
+			this.Sphere.c.draw( x*r,-y*r, cfg);
+			this.Sphere.g.draw(-x*r,-y*r, cfg);
 		} else {
-			this.Sphere.c.draw( x*r,-y*r, ...cfg);
-			this.Sphere.g.draw(-x*r,-y*r, ...cfg);
-			this.Sphere.r.draw(-x*r, y*r, ...cfg);
+			this.Sphere.c.draw( x*r,-y*r, cfg);
+			this.Sphere.g.draw(-x*r,-y*r, cfg);
+			this.Sphere.r.draw(-x*r, y*r, cfg);
 		}
 		ctx.restore();
 	}

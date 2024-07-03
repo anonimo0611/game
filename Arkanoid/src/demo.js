@@ -12,7 +12,7 @@ import {Army}     from './army.js';
 import {ItemMgr}  from './item.js';
 import {ItemType} from './item.js';
 
-const {Cols,Rows,ColWidth,RowHeight,isBreakable}= BrickMgr;
+const {MapData,Cols,Rows,ColWidth,RowHeight,isBreakable}= BrickMgr;
 const AlwaysAimingStageSet = new Set([5,11]);
 
 class Main {
@@ -38,7 +38,7 @@ class Main {
 	}
 	get #canShootBricksWithLaser() {
 		return [-ColWidth/2, ColWidth/2].flatMap(offset=> {
-			for (const brick of BrickMgr.MapData.flat().reverse()) {
+			for (const brick of MapData.flat().reverse()) {
 				if (brick.isNone) {continue}
 				if (brick.containsX(Paddle.centerX+offset)) {
 					return brick.isBreakable || [];
@@ -47,34 +47,26 @@ class Main {
 		}).length > 0;
 	}
 	get #canShootArmyWithLaser() {
-		for (const {x,Width:w,TilePos} of Army.ArmySet) {
-			if (x   >= Paddle.centerX-w
-			 && x+w <= Paddle.centerX+w) {
-				const {row,col}= TilePos;
-				for (let i=row+1; i<Rows; i++) {
-					if (BrickMgr.MapData[i]?.[col]?.exists) {
-						return false;
-					}
-				} return true;
-			}
+		for (const {x,Width:w,TilePos:pos} of Army.ArmySet) {
+			if (x   < Paddle.centerX-w
+			 || x+w > Paddle.centerX+w) {continue}
+			for (let i=pos.row+1; i<Rows; i++) {
+				if (MapData[i]?.[pos.col]?.exists) {return false}
+			} return true;
 		} return false;
 	}
 	get brickTargets() {
-		return BrickMgr.MapData.flat().reverse().filter(brick=> {
-			const {row,col}= brick;
+		return MapData.flat().reverse().filter(brick=> {
 			if (!brick.isBreakable) {return false}
-			for (let y=row+1; y<Rows-row; y++) {
-				if (!BrickMgr.MapData[y][col].isNone) {
-					return false;
-				}
+			for (let row=brick.row+1; row<Rows; row++) {
+				if (!MapData[row][brick.col].isNone) {return false}
 			} return true;
 		});
 	}
 	get emptiesBetweenImmortality() {
-		for (let i=BrickMgr.MapData.length-1; i>=0; i--) {
-			const row = BrickMgr.MapData[i];
-			if (row.some(b=> b.isImmortality)) {
-				return row.filter(b=> b.isNone);
+		for (let row=MapData.length-1; row>=0; row--) {
+			if (MapData[row].some(b=> b.isImmortality)) {
+				return MapData[row].filter(b=> b.isNone);
 			}
 		}
 	}
@@ -147,7 +139,7 @@ class Main {
 		return true;
 	}
 	#aimingAtTargetBrick() {
-		const {BounceAngleMax:aMax,Width:w,centerX}= Paddle;
+		const {BounceAngleMax:aMax,Width:w}= Paddle;
 		const angle = Vec2.toRadians(this.#target.Pos, this.#landingPos) + PI/2;
 		const destX = this.#landingPos.x - w * norm(-aMax, +aMax, angle) + w/2;
 		moveTo(destX, this.Ball.Velocity.magnitude);

@@ -43,8 +43,7 @@ export const Sight = freeze(new class {
 	}
 	#getIntersection(v2St, v2Ed) {
 		return Vec2.getIntersection(
-			Paddle.CaughtBallPos,
-			this.BallVector, v2St, v2Ed);
+			Paddle.CaughtBallPos, this.BallVector, v2St, v2Ed);
 	}
 	#attackArmy(point) {
 		for (const army of Army.ArmySet) {
@@ -110,7 +109,7 @@ export const Sight = freeze(new class {
 		if (!this.canDraw || !this.brick) {return}
 		ctx.save();
 		ctx.lineWidth   = cvs.width/150;
-		ctx.strokeStyle = '#9FC';
+		ctx.strokeStyle ='#9FC';
 		ctx.strokeRect(...this.brick.Pos.vals, ColWidth, RowHeight)
 		ctx.restore();
 	}

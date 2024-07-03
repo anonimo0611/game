@@ -38,7 +38,7 @@ const ExclTypeSet = new Set([
 	ItemType.Expand,
 	ItemType.Laser,
 ]);
-const ItemSet = new Set();
+const ItemMap = new Map();
 
 export const ItemMgr = new class {
 	static {$ready(this.#setup)}
@@ -46,8 +46,8 @@ export const ItemMgr = new class {
 		$on({Respawn: ()=> ItemMgr.#extendCnt = 0});
 		$(ItemMgr).on({Obtained: ItemMgr.#onObtained});
 	}
-	get Current()     {return ItemSet.values().next().value}
-	get ItemApeared() {return ItemSet.size > 0 || BallMgr.count > 1}
+	get Current()     {return ItemMap.get(Item)}
+	get ItemApeared() {return ItemMap.size > 0 || BallMgr.count > 1}
 	get Type()        {return ItemType}
 	get ExclTypeSet() {return ExclTypeSet}
 
@@ -55,7 +55,7 @@ export const ItemMgr = new class {
 	#speedDownCnt = 0;
 	#lastItemType = ItemType.None;
 	init() {
-		ItemSet.clear();
+		ItemMap.clear();
 		this.#extendCnt    = 0;
 		this.#speedDownCnt = 0;
 		this.#lastItemType = ItemType.None;
@@ -63,14 +63,13 @@ export const ItemMgr = new class {
 	appear({x, y}) {
 		if (this.ItemApeared)  {return}
 		if (randInt(0,2) != 0) {return}
-		const type = this.#choice();
-		ItemSet.add( new Item(type, {x, y}) );
+		ItemMap.set(Item, new Item(this.#choice(), {x, y}));
 	}
 	#choice() {
 		let type = randInt(0, ItemType.Max-1);
-		if (type === this.#lastItemType
-		 || type === ItemType.SpeedDown && this.#speedDownCnt > 2
-		 || type === ItemType.PlayerExtend && (randInt(0,1) || this.#extendCnt)
+		if (type == this.#lastItemType
+		 || type == ItemType.SpeedDown && this.#speedDownCnt > 2
+		 || type == ItemType.PlayerExtend && (randInt(0,1) || this.#extendCnt)
 		) {return this.#choice()}
 
 		if (ExclTypeSet.has(type) && type === Paddle.ExclType) {
@@ -107,7 +106,7 @@ class Item extends Rect {
 	}
 	update() {
 		if (!Game.isPlayScene) {
-			ItemSet.clear();
+			ItemMap.clear();
 			return;
 		}
 		this.View.update();
@@ -117,10 +116,10 @@ class Item extends Rect {
 			Score.add(1000);
 			Sound.play('item');
 			$(ItemMgr).trigger('Obtained', this.Type);
-			ItemSet.clear();
+			ItemMap.clear();
 		}
 		if (this.Pos.y > cvs.height) {
-			ItemSet.clear();
+			ItemMap.clear();
 		}
 	}
 }
@@ -150,7 +149,7 @@ class View {
 	draw({x,y,Width:w,Height:h}) {
 		if (!Game.isPlayScene) {return}
 		const cornerR = h / 3;
-		const offsetH = h * (this.#animIdex/this.#scaleTbl.length);
+		const offsetH = h * (this.#animIdex / this.#scaleTbl.length);
 
 		// Item shadow
 		ctx.save();
@@ -171,12 +170,12 @@ class View {
 		ctx.translate(x+1, y + offsetH);
 		ctx.scale(1, this.#textScale * 0.8);
 		ctx.globalAlpha   = 0.8;
+		ctx.font          =`${h}px Atari`;
+		ctx.textAlign     ='center';
+		ctx.fillStyle     = this.TextColor;
 		ctx.shadowColor   = rgba(0,0,0, 0.7);
 		ctx.shadowOffsetX = h * 0.1;
 		ctx.shadowOffsetY = h * 0.1;
-		ctx.font      = `${h}px Atari`;
-		ctx.textAlign = 'center';
-		ctx.fillStyle = this.TextColor;
 		ctx.fillText(this.Text, w/2+1, h/2 - h/6);
 		ctx.restore();
 	}

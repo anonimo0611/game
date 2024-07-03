@@ -44,7 +44,7 @@ const BrickHSLTable = deepFreeze([
 	[220, 79, 64], // Blue
 	[300, 79, 64], // Pink
 ]);
-const BrickPointsTable = freeze([
+const BrickPtsTable = freeze([
 	  0, // Immortality
 	 50, // Hard
 	 50, // White
@@ -96,14 +96,11 @@ export const BrickMgr = freeze(new class {
 	animation() {
 		if (Game.isReadyScene && Ticker.elapsed < 300) {return}
 		for (const [brick,data] of LusterMap) {
-			if (!Game.isReadyScene && !Game.isPlayScene) {
-				break;
-			}
 		  	if (data.offset >= 1) {
 				LusterMap.delete(brick);
 				continue;
 			}
-		  	View.drawLuster(brick,data);
+		  	View.drawLuster(brick, data);
 		}
 		for (const [brick,data] of DisappearMap) {
 		   	const scale = max(data.scale-=1/AnimDuration, 0);
@@ -111,7 +108,7 @@ export const BrickMgr = freeze(new class {
 				DisappearMap.delete(brick);
 				continue;
 			}
-			View.drawDisappear(brick,scale);
+			View.drawDisappear(brick, scale);
 		}
 	}
 	update() {
@@ -161,6 +158,18 @@ class Brick {
 		this.DurabilityMax = this.#getDurabilityMax();
 		freeze(this);
 	}
+	containsX(v)	{return between(v, this.x, this.x+this.Width) }
+	containsY(v)	{return between(v, this.y, this.y+this.Height)}
+	contains({x,y}) {return this.containsX(x) && this.containsY(y)}
+
+	getAdjacent(x=0, y=0) {
+		return MapData[this.row+y]?.[this.col+x] || {exists:false};
+	}
+	get AdjL() {return this.getAdjacent(-1, 0)}
+	get AdjR() {return this.getAdjacent( 1, 0)}
+	get AdjU() {return this.getAdjacent( 0,-1)}
+	get AdjD() {return this.getAdjacent( 0, 1)}
+
 	#getDurabilityMax() {
 		if (this.isImmortality) {
 			return Infinity;
@@ -172,22 +181,18 @@ class Brick {
 			return 1;
 		}
 	}
-	containsX(v)	{return between(v, this.x, this.x+this.Width) }
-	containsY(v)	{return between(v, this.y, this.y+this.Height)}
-	contains({x,y}) {return this.containsX(x) && this.containsY(y)}
-
 	crash() {
 		this.#durability-- > 0
 			? this.#holdUp()
-			: this.#destroy(this.Pos);
+			: this.#destroy(this);
 		return this;
 	}
 	#holdUp() {
 		if (this.isHard) {
-			const {DurabilityMax,durability:d}= this;
-			this.color.s += 30 - 30/DurabilityMax * d;
-			this.color.l -= 30 - 30/DurabilityMax * d;
-			this.color.a = min((1/DurabilityMax * d)+0.5, 1);
+			const {durability:d}= this;
+			this.color.s += 30 - 30/this.DurabilityMax * d;
+			this.color.l -= 30 - 30/this.DurabilityMax * d;
+			this.color.a = min((1/this.DurabilityMax * d)+0.5, 1);
 			View.drawBrick(this);
 		}
 		if (!LusterMap.has(this)) {
@@ -195,28 +200,20 @@ class Brick {
 			LusterMap.set(this, {offset:0});
 		}
 	}
-	#destroy({x, y}) {
+	#destroy({Pos,type}) {
 		LusterMap.delete(this);
 		DisappearMap.set(this, {scale:1});
-		View.destroy(x, y);
+		View.destroy(Pos);
 		Sound.stop('se1').stop('se2').play('se1');
 		if (this.isNormal) {
 			ItemMgr.appear(this);
 		}
 		if (Scene.isInGame) {
-			Score.add(BrickPointsTable[this.type] * this.#pointRate);
+			Score.add(BrickPtsTable[type] * this.#pointRate);
 		}
 		this.#type = BrickType.None;
 	}
-	getAdjacent(x=0, y=0) {
-		return MapData[this.row+y]?.[this.col+x] || {exists:false};
-	}
-	get AdjL() {return this.getAdjacent(-1, 0)}
-	get AdjR() {return this.getAdjacent( 1, 0)}
-	get AdjU() {return this.getAdjacent( 0,-1)}
-	get AdjD() {return this.getAdjacent( 0, 1)}
-}
-freeze(Brick);
+} freeze(Brick);
 
 const View = freeze(new class {
 	#drawShadow({x,y,col,color}) {
@@ -230,49 +227,48 @@ const View = freeze(new class {
 	#drawBrick(ctx, brick, {effect=false,Grad=null}={}) {
 		if (!effect && brick.isNone) {return}
 		if (!effect) {this.#drawShadow(brick)}
-		const LW = LineWidth, FO = LW*1.5;
-		const {h,s,l,a}= brick.color;
-		if (!Grad) {
-			Grad = ctx.createLinearGradient(0,0,ColWidth,RowHeight);
-			Grad.addColorStop(0.0, hsl(h,s,l-20,a));
-			Grad.addColorStop(0.5, hsl(h,s,l+2, a));
-			Grad.addColorStop(1.0, hsl(h,s,l-20,a));
-		}
+		const {h,s,l,a}= brick.color, LW = LineWidth;
+
+		Grad ??= ctx.createLinearGradient(0,0,ColWidth,RowHeight);
+		Grad.addColorStop(0.0, hsl(h,s,l-20,a));
+		Grad.addColorStop(0.5, hsl(h,s,l+2, a));
+		Grad.addColorStop(1.0, hsl(h,s,l-20,a));
+
 		// Surface
+		ctx.lineWidth = LW;
 		ctx.fillStyle = Grad;
-		ctx.clearRect(FO, FO, ColWidth-FO*2, RowHeight-FO*2);
-		ctx.fillRect (FO, FO, ColWidth-FO*2, RowHeight-FO*2);
+		ctx.clearRect(LW*1.5, LW*1.5, ColWidth-LW*3, RowHeight-LW*3);
+		ctx.fillRect (LW*1.5, LW*1.5, ColWidth-LW*3, RowHeight-LW*3);
 
 		// Top and left edges
 		ctx.beginPath();
-			ctx.lineWidth	= LW;
 			ctx.strokeStyle = hsl(h,s,80);
-			ctx.moveTo(LW,RowHeight-LW);
-			ctx.lineTo(LW,LW);
-			ctx.lineTo(ColWidth-LW,LW);
+			ctx.moveTo(LW, RowHeight-LW);
+			ctx.lineTo(LW, LW);
+			ctx.lineTo(ColWidth-LW, LW);
 		ctx.stroke();
 
 		// Bottom and right edges
 		ctx.beginPath();
-			ctx.lineWidth	= LW;
 			ctx.strokeStyle = hsl(h,s,40);
-			ctx.moveTo(ColWidth-LW,LW);
-			ctx.lineTo(ColWidth-LW,RowHeight-LW);
-			ctx.lineTo(LW,RowHeight-LW);
+			ctx.moveTo(ColWidth-LW, LW);
+			ctx.lineTo(ColWidth-LW, RowHeight-LW);
+			ctx.lineTo(LW, RowHeight-LW);
 		ctx.stroke();
 	}
 	drawLuster(brick,data) {
   		const {x, y}    = brick;
 		const {h,s,l,a} = brick.color;
 		const {offset}  = data;
-		const gradColor = hsl(h,s,l-20,a);
+		const faceColor = hsl(h,s,l-20,a);
+
 		const
 		Grad = ctx.createLinearGradient(0,0,ColWidth,RowHeight);
-		Grad.addColorStop(0,                  gradColor);
-		Grad.addColorStop(max(offset*0.5, 0), gradColor);
+		Grad.addColorStop(0,                  faceColor);
+		Grad.addColorStop(max(offset*0.5, 0), faceColor);
 		Grad.addColorStop(offset,            '#FFF');
-		Grad.addColorStop(min(offset*0.7, 1), gradColor);
-		Grad.addColorStop(1,                  gradColor);
+		Grad.addColorStop(min(offset*0.7, 1), faceColor);
+		Grad.addColorStop(1,                  faceColor);
 		data.offset = min(data.offset+1/AnimDuration, 1);
 
 		// Brick surface
@@ -288,8 +284,8 @@ const View = freeze(new class {
 	   	ctx.globalAlpha = 1-data.offset;
 	   	ctx.translate(x, y);
 		ctx.beginPath();
-	 		ctx.lineWidth	= LW;
-			ctx.strokeStyle = '#FFF';
+	 		ctx.lineWidth   = LW;
+			ctx.strokeStyle ='#FFF';
 			ctx.moveTo(ColWidth-LW, LW);
 			ctx.lineTo(ColWidth-LW, RowHeight-LW);
 			ctx.lineTo(LW, RowHeight-LW);
@@ -300,7 +296,9 @@ const View = freeze(new class {
   		const {x, y}= brick;
 	   	ctx.save();
 		ctx.globalAlpha = scale;
-	  	ctx.translate(ColWidth/2*(1-scale)+x, RowHeight/1.5*(1-scale)+y);
+	  	ctx.translate(
+	  		ColWidth /2.0*(1-scale)+x,
+	  		RowHeight/1.5*(1-scale)+y);
 		ctx.scale(scale, scale);
 		this.#drawBrick(ctx, brick, {effect:true});
 	   	ctx.restore();
@@ -311,13 +309,13 @@ const View = freeze(new class {
 		this.#drawBrick(ctxB, brick);
 		ctxB.restore();
 	}
-	destroy(x, y) {
+	destroy({x, y}) {
 		ctxB.clearRect(x,y, ColWidth,RowHeight);
 		ctxS.clearRect(x+ShadowOffset, y+ShadowOffset, ColWidth,RowHeight);
 	}
 	cache() {
 		ctxS.clear();
 		ctxB.clear();
-		MapData.flat().forEach(this.drawBrick.bind(this));
+		MapData.flat().forEach( this.drawBrick.bind(this) );
 	}
 });

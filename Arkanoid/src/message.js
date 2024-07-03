@@ -37,7 +37,7 @@ export const Message = freeze(new class  {
 	#drawCtrls() {
 		const fS = FontSize/1.8;
 		const [txt1,txt2]= ['Press M to mute','Press ESC to pause'];
-		const [pos1,pos2]= [Vec2(0, -fS*1.2),Vec2(0, 0)]; 
+		const [pos1,pos2]= [Vec2(0, -fS*1.2),Vec2.Zero]; 
 		ctx.save();
 		ctx.translate(Field.Left+fS/2, Field.Bottom-fS/2);
 		this.#draw(0, '#FFF', txt1, {fontSize:fS, align:'left', ...pos1});
