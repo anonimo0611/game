@@ -6,7 +6,7 @@ import {Player}  from './player.js';
 import {Ground}  from './ground.js';
 
 export const Lives = freeze(new class {
-	static {$on('load',_=> Lives.#setup())}
+	static {$on('load', ()=> Lives.#setup())}
 	#setup() {
 		$on('Start',    Lives.#onStart);
 		$on('Extend',   Lives.#onExtend);
@@ -21,22 +21,20 @@ export const Lives = freeze(new class {
 	#onRemove() {Lives.#left--}
 
 	draw() {
-		const mL = 6;
-		const fs = Window.FontSize;
-		const w  = Player.Width;
-		const h  = Player.Height;
+		const marginL  = 6;
+		const fontSize = Window.FontSize;
 
 		ctx.save();
 		ctx.fillStyle = 'white';
-		ctx.fillText(Lives.left, fs, Ground.Bottom + fs);
+		ctx.fillText(Lives.left, fontSize, Ground.Bottom+fontSize);
 		ctx.restore();
 
 		ctx.save();
-		ctx.translate(fs*2.5, Ground.Bottom);
+		ctx.translate(fontSize*2.5, Ground.Bottom);
 		for (let i=0; i<Lives.left-1; i++) {
 			ctx.save();
-				ctx.translate((w*i)+(mL*i), 0);
-				ctx.drawImage(Player.cvs, 0,0);
+			ctx.translate((Player.Width*i)+(marginL*i), 0);
+			ctx.drawImage(Player.cvs, 0,0);
 			ctx.restore();
 		}
 		ctx.restore();

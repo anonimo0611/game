@@ -22,8 +22,9 @@ export class Explosion1 {
 		Explosion1Set.add(freeze(this));
 	}
 	update() {
-		if (this.#counter++ >= 10)
+		if (this.#counter++ >= 10) {
 			Explosion1Set.delete(this);
+		}
 	}
 	draw() {
 		for (const {Pos,cv} of this.LineSet) {
@@ -66,10 +67,12 @@ export class Explosion2 {
 	}
 	update() {
 		//this.#alpha = max(this.#alpha-= 1/this.duration,0);
-		if (this.#counter++ >= this.duration)
+		if (this.#counter++ >= this.duration) {
 			return void Explosion2Set.clear();
-		if (Ticker.count % 4 == 0)
+		}
+		if (Ticker.count % 4 == 0) {
 			this.#setParticles();
+		}
 	}
 	draw() {
 		for (const cv of this.ParticleSet) {

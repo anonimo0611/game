@@ -13,14 +13,21 @@ export class Bunker {
 	static Top    = cvs.height * 3/4;
 	static Bottom = this.Top + this.Height;
 	static collision(obj, fromUpper) {
-		return !!Bunkers.find(b=> collisionRect(obj, b)
-			&& b.collision(obj.tipPos, fromUpper));
+		return Bunkers.some(b=> collisionRect(obj, b)
+			&& b.collision(obj.tipPos, fromUpper)
+		);
+	}
+	static contains({x:_x, y:_y}) {
+		return Bunkers.some(b=> 
+			between(_x, b.x, b.x+Width) && between(_y, b.y, b.y+Height)
+		);
 	}
 	static init() {
 		Bunker.ctx.clearRect(0,0,cvs.width,cvs.height);
 		Bunker.ctx.globalCompositeOperation = 'source-over';
-		for (const i of Bunkers.keys())		
+		for (const i of Bunkers.keys())	{
 			Bunkers[i] = new Bunker(i);
+		}
 		Bunker.ctx.globalCompositeOperation = 'destination-out';
 	}
 	static draw() {
@@ -37,14 +44,14 @@ export class Bunker {
 	}
 	collision({x, y}, fromUpper) {
 		const range   = 6;
-		const imgData = Bunker.ctx.getImageData(x-range/2,y, range, 1);
+		const imgData = Bunker.ctx.getImageData(x-range/2, y, range, 1);
 		return imgData.data.filter(d=> d > 0).length >= range
 			&& this.#destroy(Bunker.ctx, {x, y}, fromUpper);
 	}
 	#cache({ctx,x,y,Width:w,Height:h}) {
 		const hw = w/2;
 		ctx.save();
-		ctx.translate(x,y);
+		ctx.translate(x, y);
 		ctx.beginPath();
 			ctx.moveTo(hw/4, 0);
 			ctx.lineTo(w-(hw/4), 0);
@@ -62,23 +69,24 @@ export class Bunker {
 		ctx.restore();
 	}
 	#destroy(ctx, {x, y}, fromUpper) {
-		const dy1 = fromUpper ? -4 :  15;
-		const dy2 = fromUpper ? 25 : -10;
-		const by1 = fromUpper ? -4 : -20;
-		const by2 = fromUpper ? 30 :   0;
+		const ly1 = fromUpper ? -4 :  15;
+		const ly2 = fromUpper ? 25 : -10;
+		const py1 = fromUpper ? -4 : -20;
+		const py2 = fromUpper ? 30 :   0;
 		ctx.save();
 		ctx.translate(x, y);
 		ctx.beginPath();
-			ctx.moveTo(0, dy1);
-			ctx.lineTo(0, dy2);
+			ctx.moveTo(0, ly1);
+			ctx.lineTo(0, ly2);
+			ctx.lineCap   = 'round';
 			ctx.lineWidth = 12;
 		ctx.stroke();
-		for (let i=0; i<250; i++) {
-			const s  = 2.5;
-			const ox = randInt(-8,+8);
-			const oy = randInt(by1, by2);
-			const cx = cos(randInt(0,PI*2)) * 4 + ox;
-			const cy = sin(randInt(0,PI*2)) * 4 + oy;
+		for (let i=0; i<80; i++) {
+			const s  = 2;
+			const ox = randChoice(randFloat(-9, -7), randFloat(7, 9));
+			const oy = randFloat(py1, py2);
+			const cx = cos(randInt(0, PI*2)) * 2 + ox;
+			const cy = sin(randInt(0, PI*2)) * 2 + oy;
 			ctx.fillRect(cx-(s/2), cy-(s/2), s,s);
 		}
 		ctx.restore();

@@ -9,10 +9,9 @@ import {InvaderMgr}  from './invader.js';
 import {Bunker}      from './bunker.js';
 
 const PressedKeySet = new Set();
+const InvMap = InvaderMgr.Map;
 
 export const Player = freeze(new class {
-	cvs      = document.createElement('canvas');
-	ctx      = this.cvs.getContext('2d');
 	Color    = '#68FC76';
 	Pos      = vec2();
 	Speed    = cvs.width / (60*3);
@@ -23,8 +22,7 @@ export const Player = freeze(new class {
 	constructor() {
 		$on('keydown', this.#onKeyDown.bind(this));
 		$on('keyup',   this.#onKeyUp.bind(this));
-		this.cvs.width  = this.Width;
-		this.cvs.height = this.Height;
+		[this.cvs,this.ctx]= canvas2D(null, this.Width, this.Height).vals;
 	}
 	init() {
 		PressedKeySet.clear();
@@ -37,11 +35,11 @@ export const Player = freeze(new class {
 		this.cache(this.ctx);
 	}
 	#onKeyDown(e) {
-		if (!Scene.isInGame || e.repeat) return
+		if (!Scene.isInGame || e.repeat) {return}
 		PressedKeySet.add(e.key);
 	}
 	#onKeyUp(e) {
-		if (!Scene.isInGame) return;
+		if (!Scene.isInGame) {return}
 		PressedKeySet.delete(e.key);
 	}
 	#shoot() {
@@ -49,28 +47,28 @@ export const Player = freeze(new class {
 			&& this.LaserSet.size < PlayerLaser.Rapid
 		) {
 			Sound.stop('shoot').play('shoot');
-			this.LaserSet.add(new PlayerLaser(this.Pos));
+			this.LaserSet.add( new PlayerLaser(this.Pos) );
 			this.#lstShot = Ticker.count;
 		}
 	}
 	update() {
-		if (!Scene.isInGame) return;
-		if (Scene.isInGame && Ticker.count < InvaderMgr.Map.size) return;
+		if (!Scene.isInGame) {return}
+		if (Ticker.count < InvMap.size) {return}
 		const {Speed,Pos,Width}= this;
 		this.LaserSet.forEach(l=> l.update());
-		if (PressedKeySet.has('\x20')) Player.#shoot();
-		if (PressedKeySet.has('ArrowLeft'))  Pos.x -= Speed;
-		if (PressedKeySet.has('ArrowRight')) Pos.x += Speed;
+		PressedKeySet.has('\x20')       && Player.#shoot();
+		PressedKeySet.has('ArrowLeft')  && (Pos.x -= Speed);
+		PressedKeySet.has('ArrowRight') && (Pos.x += Speed);
 		Pos.x = clamp(Pos.x, 0, cvs.width-Width);
 	}
 	draw() {
-		if (Scene.isDestroy || Scene.isGameOver) return;
-		if (Scene.isInGame && Ticker.count < InvaderMgr.Map.size) return;
-		this.LaserSet.forEach(l=> l.draw());
+		if (Scene.isDestroy || Scene.isGameOver) {return}
+		if (Scene.isInGame && Ticker.count < InvMap.size) {return}
 		ctx.save();
-			ctx.translate(...this.Pos.asInt.vals);
-			ctx.drawImage(this.cvs, 0,0);
+		ctx.translate(...this.Pos.asInt.vals);
+		ctx.drawImage(this.cvs, 0,0);
 		ctx.restore();
+		this.LaserSet.forEach(l=> l.draw());
 	}
 	cache(ctx) {
 		const {Width:w, Height:h}= this;
@@ -95,4 +93,4 @@ export const Player = freeze(new class {
 		ctx.restore();
 	}
 });
-$on('Respawn Clear', _=> Player.LaserSet.clear());
+$on('Respawn Clear', ()=> Player.LaserSet.clear());

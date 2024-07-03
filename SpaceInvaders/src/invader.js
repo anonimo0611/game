@@ -26,7 +26,7 @@ export const InvaderMgr = freeze(new class {
 	#iterator  = this.Map.values();
 	#current   = this.#iterator.next();
 
-	Speed = this.ColWidth / 4;
+	Step = this.ColWidth / 4;
 	Velocity     = vec2();
 	NextVelocity = vec2();
 
@@ -36,7 +36,7 @@ export const InvaderMgr = freeze(new class {
 	#reset() {
 		this.Map.clear();
 		this.LaserMap.clear();
-		this.Velocity.set(this.Speed, 0);
+		this.Velocity.set(this.Step, 0);
 		this.NextVelocity.set(this.Velocity);
 		this.#bgmCnt   = 0;
 		this.#bgmIndex = 2;
@@ -45,9 +45,12 @@ export const InvaderMgr = freeze(new class {
 		for (let y=this.Rows-1; y>=0; y--)
 			for (let x=0; x<this.Cols; x++) {
 				const idx = y * this.Cols + x;
-				y == 0 && this.Map.set(idx, new Squid(idx));
-				between(y, 1,2) && this.Map.set(idx, new Crab(idx));
-				between(y, 3,4) && this.Map.set(idx, new Octpus(idx));
+				const instance = (()=> {
+					if (y == 0) return new Squid(idx);
+					if (y <= 2) return new Crab(idx);
+					if (y >= 3) return new Octpus(idx);
+				})();
+				this.Map.set(idx, instance);
 			}
 	}
 	init() {
@@ -66,27 +69,28 @@ export const InvaderMgr = freeze(new class {
 	}
 	#move() {
 		const {Pos,Width,Height}= this.Current;
-		const {Speed,Velocity,NextVelocity}= this;
+		const {Step,Velocity,NextVelocity}= this;
 		this.Current.addTurn();
 		Pos.add(Velocity);
-		if (Pos.x >= cvs.width-Width-Speed && Velocity.x > 0)
-			NextVelocity.set(-Speed, Speed);
-
-		if (Pos.x < Speed && Velocity.x < 0)
-			NextVelocity.set(Speed, Speed);
-
-		if (Pos.y+Height >= Player.Pos.y+Player.Height)
+		if (Pos.x >= cvs.width-Width-Step && Velocity.x > 0) {
+			NextVelocity.set(-Step, Step);
+		}
+		if (Pos.x < Step && Velocity.x < 0) {
+			NextVelocity.set(Step, Step);
+		}
+		if (Pos.y+Height >= Player.Pos.y+Player.Height) {
 			Scene.switchToGameOver();
+		}
 	}
 	update() {
-		if (!Scene.isInGame) return;
+		if (!Scene.isInGame) {return}
 		if (++this.#bgmCnt >= this.Map.size) {
 			this.#bgmCnt = 0;
 			Sound.play(`se${this.#bgmIndex = ++this.#bgmIndex % 4}`);
 		}
 		UfoMgr.update();
 		InvaderMgr.LaserMap.forEach(l=> l.update());
-		if (Explosion1.exisits) return;
+		if (Explosion1.exisits) {return}
 		if (this.Current) this.#move();
 		if (this.Map.size == 0) {
 			Sound.stop('ufo_high');
@@ -110,11 +114,11 @@ export const InvaderMgr = freeze(new class {
 	}
 });
 export class Invader {
+	#turn   = 0;
+	#aIndex = 1;
 	Pos     = vec2();
 	Width   = BaseSize;
 	Height  = BaseSize;
-	#turn   = 0;
-	#aIndex = 1;
 	constructor(i) {this.index = i}
 	get turn()   {return this.#turn}
 	get aIndex() {return this.#aIndex}
@@ -123,7 +127,7 @@ export class Invader {
 		this.#aIndex ^= 1;
 	}
 	draw(ctx, idx) {
-		if (this.turn < 1) return;
+		if (this.turn < 1) {return}
 		const {Width:w,Height:h}= this;
 		ctx.save();
 		ctx.translate(...this.Pos.asInt.vals);
@@ -165,6 +169,6 @@ class Squid extends Invader {
 	}
 }
 Sprite.setup(Octpus,Crab,Squid,Ufo);
-$on('Title Respawn Clear', _=> {
+$on('Title Respawn Clear', ()=> {
 	InvaderMgr.LaserMap.clear();
 });

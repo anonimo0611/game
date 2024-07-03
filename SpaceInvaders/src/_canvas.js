@@ -1,10 +1,5 @@
-export const cvs = document.getElementById('canvas');
-export const ctx = cvs.getContext('2d');
-export const
-	cvsForBunker = document.createElement('canvas');
-	cvsForBunker.width  = cvs.width;
-	cvsForBunker.height = cvs.height;
-export const
-	cvsForGround = document.createElement('canvas');
-	cvsForGround.width  = cvs.width;
-	cvsForGround.height = 3;
+export const {cvs,ctx}= canvas2D('canvas');
+export const {cvs:cvsForBunker}= canvas2D(null, cvs);
+export const {cvs:cvsForGround}= canvas2D(null, cvs.width, 3);
+
+ctx.font = `${26}px Vector`;

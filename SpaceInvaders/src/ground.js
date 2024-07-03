@@ -1,8 +1,9 @@
 import {Player} from './player.js';
 import {Scene}  from './scene.js';
 import {cvs,ctx,cvsForGround} from './_canvas.js';
+
 export const Ground = freeze(new class {
-	static {$on('load Title NewRound', _=> Ground.#cache(Ground.ctx))}
+	static {$on('load Title NewRound', ()=> Ground.#cache(Ground.ctx))}
 	cvs    = cvsForGround;
 	ctx    = this.cvs.getContext('2d');
 	Width  = this.cvs.width;
@@ -16,9 +17,10 @@ export const Ground = freeze(new class {
 		ctx.restore();
 	}
 	crack({x}) {
-		const [w, h]= [4, this.Height];
-		for (let i=-1; i<=1; i++)
-			this.ctx.clearRect(x-w*(i*w/2), 0, w, h);
+		const [w, h]= [2, this.Height];
+		for (let i=-1; i<=1; i++) {
+			this.ctx.clearRect(x-w*(i*w), 0, w, h);
+		}
 	}
 	#cache(ctx) {
 		ctx.fillStyle = '#66FF66';

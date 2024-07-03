@@ -13,18 +13,30 @@ const MarginV  = FontSize *.7;
 const InvType  = Sprite.InvaderType;
 const UfoSize  = Sprite.getSize(InvType.Ufo);
 
-const Lines = [
-	{row:0.0, color:'#00FF00',   line:'PLAY'},
-	{row:1.5, color:'#00FF00',   line:'SPACE　INVADERS'},
-	{row:3.5, color:'#68E0FC',   line:`*SCORE${SP}ADVANCE${SP}TABLE*`},
-	{row:4.5, inv:InvType.Ufo,   line:`=?${SP}MYSTERY`},
-	{row:5.5, inv:InvType.Squid, line:`=30${SP}POINTS`},
-	{row:6.5, inv:InvType.Crab,  line:`=20${SP}POINTS`},
-	{row:7.5, inv:InvType.Octpus,line:`=10${SP}POINTS`},
+const HeaderLines = [
+	{row:0.0, color:'#00FF00', line:'PLAY'},
+	{row:1.5, color:'#00FF00', line:'SPACE　INVADERS'},
+	{row:3.5, color:'#68E0FC', line:`*SCORE${SP}ADVANCE${SP}TABLE*`},
 ];
-const getY = row=> (row*FontSize) + (row*MarginV);
-const getTextWidth = (ctx, {line,inv})=>
-	ctx.measureText(inv >= 0 ? Lines[3].line : line).width;
+const InvadersLines = [
+	{row:4.5, invType:InvType.Ufo,    line:`=?${SP}MYSTERY`},
+	{row:5.5, invType:InvType.Squid,  line:`=30${SP}POINTS`},
+	{row:6.5, invType:InvType.Crab,   line:`=20${SP}POINTS`},
+	{row:7.5, invType:InvType.Octpus, line:`=10${SP}POINTS`},
+];
+
+const Lines = [...HeaderLines, ...InvadersLines];
+const InvadersSectionWidth =
+	max(...InvadersLines.map(l=> ctx.measureText(l.line).width));
+
+function getY(row) {
+	return (row*FontSize) + (row*MarginV);
+}
+function getTextWidth(ctx, {line,invType}) {
+	return invType >= 0
+		? InvadersSectionWidth
+		: ctx.measureText(line).width;
+}
 
 const TypeOut = new class {
 	#gen  = this.#generator();
@@ -47,40 +59,41 @@ const TypeOut = new class {
 	}
 }
 export const Title = freeze(new class {
-	#drawInvader({row,color,line,inv}) {
-		const tW = getTextWidth(ctx, {line,inv});
-		const sz = Sprite.getSize(inv);
+	#drawInvader({row,line,invType}) {
+		const tW = getTextWidth(ctx, {line,invType});
+		const sz = Sprite.getSize(invType);
 		const oX = (UfoSize.x/2 - sz.x/2) - UfoSize.x/2;
 		const oY = (FontSize /2 - sz.y/2) + MarginV;
 		ctx.save();
 		ctx.translate((cvs.width/2 - tW/2) + oX, getY(row-1) + oY);
-		Sprite.draw(ctx, inv, 0);
+		Sprite.draw(ctx, invType, 0);
 		ctx.restore();
 	}
-	#drawText({row,color,line,inv}, str=line) {
-		const tW = getTextWidth(ctx, {line,inv});
-		const oX = (inv >= 0) ? UfoSize.x/2 : 0;
-		ctx.fillStyle = Sprite.InvaderColors[inv] ?? color;
+	#drawText({row,color,line,invType}, str=line) {
+		const tW = getTextWidth(ctx, {line,invType});
+		const oX = (invType >= 0) ? UfoSize.x/2 : 0;
+		ctx.fillStyle = Sprite.InvaderColors[invType] ?? color;
 		ctx.fillText(str, (cvs.width/2 - tW/2) + oX, getY(row));
 	}
 	draw() {
 		const data = TypeOut.data;
-		const {line,lineIdx,string,inv}= data;
+		const {line,lineIdx,string,invType}= data;
 		ctx.save();
 		ctx.translate(0, OffsetY)
 
-		if (Ticker.count % 8 == 0 || line?.[0] == '*')
+		if (Ticker.count % 8 == 0 || line?.[0] == '*') {
 			TypeOut.gen.next().done
 				&& Timer.set(1000, TypeOut.reset);
-
-		if (inv >= 0)
-			for (let i=3; i<Lines.length; i++)
+		}
+		if (invType >= 0) {
+			for (let i=3; i<Lines.length; i++) {
 				this.#drawInvader(Lines[i]);
-
+			}
+		}
 		string && this.#drawText(data, string);
-		for (let i=0; i<lineIdx; i++)
+		for (let i=0; i<lineIdx; i++) {
 			this.#drawText(Lines[i]);
-
+		}
 		ctx.restore();
 	}
 });

@@ -18,7 +18,7 @@ import {Explosion2} from './explosion.js';
 import {Bunker}     from './bunker.js';
 
 export const Game = new class {
-	static {$on('load', _=> Game.#setup())}
+	static {$on('load', ()=> Game.#setup())}
 	RoundMax  = 8;
 	#roundIdx = 0;
 	get roundIdx() {return this.#roundIdx}
@@ -27,26 +27,19 @@ export const Game = new class {
 	#setup() {
 		Game.reset();
 		$on('Title',    Game.reset);
+		$on('Start',    Game.#start);
 		$on('Respawn',  Game.#respawn);
 		$on('Clear',    Game.#clear);
+		$on('NewRound', Game.#setNewRound);
 		$on('GameOver', Game.#gameOver);
 		$on('keydown',  Game.#onKeyDown);
-		$on('blur', _=> Game.#pause(true));
-		$on('focus',_=> Game.#pause(false));
+		document.body.dataset.state = 'loaded';
 	}
 	#onKeyDown(e) {
 		switch (e.key) {
-		case '\x20':   return Scene.isTitle && Game.#start();
+		case '\x20':   return Scene.isTitle && Scene.switchToStart();
 		case 'Delete': return Scene.switchToTitle();
-		case 'Escape': return Game.#pause();
 		}
-	}
-	#pause(force) {
-		if (!Scene.isInGame) return;
-		Ticker.pause(force)
-			? Sound.pause()
-			: Sound.resume();
-		Game.#draw();
 	}
 	reset() {
 		Game.#roundIdx = 0;
@@ -57,7 +50,6 @@ export const Game = new class {
 		Ticker.stop().set(Game.#mainLoop);
 	}
 	#start() {
-		$trigger('Start');
 		Scene.switchToIntro();
 		Scene.switchToInGame(1500);
 	}
@@ -66,14 +58,13 @@ export const Game = new class {
 		Scene.switchToInGame();
 	}
 	#clear() {
-		Timer.set(1500, Game.#setNewRound);
+		Timer.set(1500, Scene.switchToNewRound);
 	}
 	#gameOver() {
 		Sound.stop('ufo_high');
 		Scene.switchToTitle(3000);
 	}
 	#setNewRound() {
-		$trigger('NewRound');
 		Game.#roundIdx = ++Game.#roundIdx % Game.RoundMax;
 		Bunker.init();
 		InvaderMgr.init();
@@ -88,17 +79,17 @@ export const Game = new class {
 		Explosion1.update();
 		Explosion2.update();
 	}
-	#draw() {
-		ctx.clearRect(0,0,cvs.width,cvs.height);
+	draw() {
+		ctx.clear();
 		Score.draw();
-		if (Scene.isTitle) {
+		switch (Scene.current) {
+		case Scene.Enum.Title:
 			Title.draw();
 			Message.draw();
 			return;
-		}
-		if (Scene.isIntro) {
-			Message.draw();
+		case Scene.Enum.Intro:
 			Lives.draw();
+			Message.draw();
 			return;
 		}
 		InvaderMgr.draw();
@@ -114,6 +105,6 @@ export const Game = new class {
 	}
 	#mainLoop() {
 		Game.#update();
-		Game.#draw();
+		Game.draw();
 	}
 }

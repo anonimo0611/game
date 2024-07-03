@@ -5,23 +5,24 @@ import {Scene}   from './scene.js';
 
 const SP = '\u2002';
 const FontSize = Window.FontSize;
-const TopMsgY  = FontSize * 4.25;
+const TopMessageY = FontSize * 4.25;
 
 class TypeOutGameOver {
 	#pos = 0;
 	Text = 'GAME　OVER';
 	constructor() {freeze(this)}
 	update() {
-		if (Ticker.count % 8 != 0) return;
-		if (this.#pos <= this.Text.length)
+		if (Ticker.count % 8 != 0) {return}
+		if (this.#pos <= this.Text.length) {
 			this.#pos++;
+		}
 	}
 	draw() {
 		ctx.save();
 		const width  = ctx.measureText(this.Text).width;
 		const string = this.Text.substr(0,this.#pos);
 		Message.drawText('#F03', string,
-			{align:'left', x:(cvs.width-width)/2, y:TopMsgY});
+			{align:'left', x:(cvs.width-width)/2, y:TopMessageY});
 		ctx.restore();
 	}
 } let typeOutGameOver = null;
@@ -41,15 +42,21 @@ export const Message = freeze(new class {
 		typeOutGameOver?.update();
 	}
 	draw() {
-		if (Ticker.paused)
-			this.drawText('#FF0033','PAUSED', {y:TopMsgY});
-		if (Scene.isTitle)
+		if (Ticker.paused) {
+			this.drawText('#FF0033','PAUSED', {y:TopMessageY});
+		}
+		switch (Scene.current) {
+		case Scene.Enum.Title:
+			typeOutGameOver = null;
 			this.drawText('#F1C273',`PRESS${SP}SPACE${SP}TO${SP}START`,
 				{y:cvs.height - FontSize*2});
-		if (Scene.isIntro)
+			break;
+		case Scene.Enum.Intro:
 			this.drawText('#66FF66',`PLAY${SP}PLAYER<1>`);	
-		typeOutGameOver?.draw();
+			break;
+		case Scene.Enum.GameOver:
+			(typeOutGameOver ||= new TypeOutGameOver()).draw();
+			break;
+		}
 	}
 });
-$on('Title',    _=> typeOutGameOver = null);
-$on('GameOver', _=> typeOutGameOver = new TypeOutGameOver);
