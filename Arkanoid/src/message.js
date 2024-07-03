@@ -65,7 +65,7 @@ export const Message = freeze(new class  {
 
 		case Scene.Enum.Ready:
 			this.#draw(1.0, Color.Main, `STAGE ${Game.stageNum}`);
-			(Ticker.elapsed > Game.ReadyTime*0.4)
+			(Ticker.elapsed > Game.readyTime*0.4)
 				&& this.#draw(2.5, Color.Sub, 'READY!');
 			return;
 
