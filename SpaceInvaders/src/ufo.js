@@ -13,7 +13,7 @@ const Interval = 60*20;
 export const UfoMgr = new class {
 	#counter = 0;
 	static {
-		$on('load', ()=> UfoMgr.#setup());
+		$load(()=> UfoMgr.#setup());
 	}
 	#setup() {
 		$on('Respawn', UfoMgr.#onRespawn);

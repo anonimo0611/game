@@ -10,7 +10,7 @@ const ScoreMax  = 1e5 - 1;
 
 export const Score = freeze(new class {
 	static {
-		$on('load', ()=> Score.#setup());
+		$load(()=> Score.#setup());
 	}
 	#setup() {
 		Score.#high = int(localStorage.spaceInvaderHiscore || 0);

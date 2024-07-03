@@ -18,7 +18,7 @@ import {Explosion2} from './explosion.js';
 import {Bunker}     from './bunker.js';
 
 export const Game = new class {
-	static {$on('load', ()=> Game.#setup())}
+	static {$load(()=> Game.#setup())}
 	RoundMax  = 8;
 	#roundIdx = 0;
 	get roundIdx() {return this.#roundIdx}
@@ -33,7 +33,6 @@ export const Game = new class {
 		$on('NewRound', Game.#setNewRound);
 		$on('GameOver', Game.#gameOver);
 		$on('keydown',  Game.#onKeyDown);
-		document.body.dataset.state = 'loaded';
 	}
 	#onKeyDown(e) {
 		switch (e.key) {

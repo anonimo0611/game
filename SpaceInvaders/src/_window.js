@@ -8,13 +8,14 @@ let scale    = 1;
 let resizeId = 0;
 
 export const Window = freeze(new class {
-	static {$ready(this.#setup)}
+	static {$load(this.#setup)}
 	static #setup() {
-		Window.#fit();
 		$on('resize',   Window.#onResize);
 		$on('keydown',  Window.#onKeydown);
 		$on('blur', e=> Window.#pause(e, true));
 		$on('focus',e=> Window.#pause(e, false));
+		document.body.dataset.state = 'loaded';
+		Window.#fit();
 	}
 	FontSize = parseInt(ctx.font);
 	get board() {return dBoard}
