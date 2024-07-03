@@ -6,6 +6,7 @@ const $off     = (...a)=> $(window).off    (...a);
 const $offon   = (...a)=> $(window).offon  (...a);
 const $one     = (...a)=> $(window).one    (...a);
 const $trigger = (...a)=> $(window).trigger(...a);
+const $load    = (func)=> $(window).on('load',func);
 const $ready   = (func)=> $(window).ready(func);
 Object.assign(HTMLElement.prototype, {
 	css    (...a) {return this.style.setProperty(...a),this},
