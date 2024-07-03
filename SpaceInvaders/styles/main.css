@@ -6,26 +6,22 @@ html,body {
 	overflow: hidden;
 }
 html{
-	user-select:none;cursor:default;
+	user-select: none;
+	cursor: default;
 	font-size: 20px;
 }
-::selection{color:inherit;background:0 0}
+::selection{
+	color: inherit;
+	background: 0 0;
+}
 
 body {
 	color: white;
-	background: #666666;
+	background: #666;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	flex-direction: column;
 }
-div,h1,dd,dl,dt,input,li,menu,ol,td,th,ul,form,output{
-	margin:0;padding:0;list-style-type:none
-}
-button,dd,div,dt,li,menu,table,ul,kbd{
-	box-sizing:border-box !important
-}
-
 body[data-state=loading]::before {
 	content: 'Now\2002Loading...';
 	text-align: center;
@@ -38,18 +34,21 @@ body[data-state=loading]::before {
 }
 body[data-state=loading] canvas {
 	width: auto;
-	height: 98%;
+	height: 100%;
+	transform-origin: center;
 }
+
+div,h1,dd,dl,dt,input,li,menu,ol,td,th,ul,form,output{
+	margin:  0;
+	padding: 0;
+	list-style-type: none;
+}
+button,dd,div,dt,li,menu,table,ul,kbd{
+	box-sizing: border-box !important;
+}
+
 #debug {
 	position: fixed;
 	top: 1.5em;
 	left: .5em;
-}
-
-#board {
-	display: table;
-	transform-origin: center;
-	will-change: transform;
-	padding-top: 1rem;
-	padding-bottom: 14px;
 }
