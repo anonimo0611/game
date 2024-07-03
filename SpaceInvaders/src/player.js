@@ -1,5 +1,6 @@
 import {Sound}       from '../snd/sound.js';
 import {Ticker}      from '../lib/timer.js';
+import {Rect}        from '../lib/rect.js';
 import {rgba}        from '../lib/color.js';
 import {cvs,ctx}     from './_canvas.js';
 import {Ground}      from './ground.js';
@@ -11,15 +12,13 @@ import {Bunker}      from './bunker.js';
 const PressedKeySet = new Set();
 const InvMap = InvaderMgr.Map;
 
-export const Player = freeze(new class {
+export const Player = freeze(new class extends Rect {
 	Color    = '#68FC76';
-	Pos      = vec2();
 	Speed    = cvs.width / (60*3);
-	Width    = InvaderMgr.Size;
-	Height   = this.Width / 1.5;
 	LaserSet = new Set();
 	#lstShot = -1;
 	constructor() {
+		super(vec2(), InvaderMgr.Size, InvaderMgr.Size/1.5);
 		$on('keydown', this.#onKeyDown.bind(this));
 		$on('keyup',   this.#onKeyUp.bind(this));
 		[this.cvs,this.ctx]= canvas2D(null, this.Width, this.Height).vals;

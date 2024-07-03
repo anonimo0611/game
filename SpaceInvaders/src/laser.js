@@ -1,5 +1,6 @@
 import {Sound}      from '../snd/sound.js';
 import {Ticker}     from '../lib/timer.js';
+import {Rect}       from '../lib/rect.js';
 import {cvs,ctx}    from './_canvas.js';
 import {Scene}      from './scene.js';
 import {Ground}     from './ground.js';
@@ -15,17 +16,17 @@ import {Explosion2} from './explosion.js';
 
 const BurstSet = new Set();
 
-class Laser {
-	constructor({x, y}, speed=1) {
-		this.Pos      = vec2(x, y);
+class Laser extends Rect {
+	constructor(pos, {width,height,speed=1}) {
+		super(vec2(pos), width, height);
 		this.Velocity = vec2(0, speed);
 	}
 	get tipPos() {
 		const {Owner,Pos,Velocity:v,Width,Height}= this;
-		const bottom = Owner.Pos.y + Owner.Height;
+		const bottom = Owner.y + Owner.Height;
 		const tipPos = vec2(Pos).add(0, v.y < 0 ? 0 : Height);
 		if (v.y > 0 && bottom >= Bunker.Top && Bunker.contains(tipPos)) {
-			pos.y = bottom + Width;
+			tipPos.y = bottom + Width;
 		}
 		return tipPos;
 	}
@@ -36,12 +37,15 @@ class Laser {
 export class PlayerLaser extends Laser {
 	static Rapid = 2;
 	static IntervalMax = 6;
-	Width  = int(cvs.width / 160);
-	Height = Player.Height;
 	get Owner() {return Player}
 
 	constructor({x, y}) {
-		super({x, y}, -cvs.height / 60);
+		super({x, y}, {
+			width:  int(cvs.width / 160),
+			height: Player.Height,
+			speed: -cvs.height / 60,
+			}
+		);
 		this.Pos.x += Player.Width / 2;
 		this.Pos.y -= this.Height;
 		freeze(this);
@@ -54,7 +58,7 @@ export class PlayerLaser extends Laser {
 			return;
 		}
 		for (const [idx,invader] of InvaderMgr.Map) {
-			if (!collisionRect(this, invader)) {continue}
+			if (!this.collisionRect(invader)) {continue}
 			Sound.stop('killed').play('killed');
 			new Explosion1(invader);
 			InvaderMgr.Map.delete(idx);
@@ -63,12 +67,12 @@ export class PlayerLaser extends Laser {
 			return;
 		}
 		const ufo = UfoMgr.currentInstance;
-		if (ufo && !ufo.destroyed && collisionRect(this, ufo)) {
+		if (ufo && !ufo.destroyed && this.collisionRect(ufo)) {
 			ufo.destroy();
 			Player.LaserSet.delete(this);
 			return;
 		}
-		if (this.Pos.y < Score.Bottom) {
+		if (this.y < Score.Bottom) {
 			Player.LaserSet.delete(this);
 			Burst.set(this.tipPos, Player.Color);
 		}
@@ -116,15 +120,18 @@ const InvaderShootMgr = new class {
 }
 export class InvaderLaser extends Laser {
 	static shoot() {InvaderShootMgr.shoot()}
+	#aIdx = -1;
 	#owner;
-	#aIdx  = -1;
-	Width  = int(cvs.width / 160);
-	Height = InvaderMgr.Size * 3/4;
 	get Owner() {return this.#owner}
 
 	constructor(owner) {
 		if (!(owner instanceof Invader)) {return}
-		super(owner.Pos, cvs.height / (60*3));
+		super(owner.Pos, {
+			width:  int(cvs.width / 160),
+			height: InvaderMgr.Size * 3/4,
+			speed:  cvs.height / (60*3),
+			}
+		);
 		this.Pos.x += owner.Width /2;
 		this.Pos.y += owner.Height/2;
 		this.#owner = owner;
@@ -140,14 +147,14 @@ export class InvaderLaser extends Laser {
 			return;
 		}
 		for (const playerLaser of Player.LaserSet) {
-			if (!collisionRect(this, playerLaser)) {continue}
+			if (!this.collisionRect(playerLaser)) {continue}
 			Player.LaserSet.clear();
 			InvaderMgr.LaserMap.delete(this.Owner);
 			Burst.set(this.tipPos.add(0,-2), this.Owner.Color, true);
 			Burst.set(this.tipPos.add(0,+2), Player.Color);
 			return;
 		}
-		if (collisionRect(this, Player)) {
+		if (this.collisionRect(Player)) {
 			Sound.stop().play('explosion');
 			new Explosion2(Player, {duration:1000});
 			if (Lives.left == 1) {
@@ -158,8 +165,8 @@ export class InvaderLaser extends Laser {
 			Scene.switchToRespawn(800);
 			return;
 		}
-		if (this.Pos.y + this.Height > Ground.Top) {
-			const pos = vec2(this.Pos.x, Ground.Top);
+		if (this.y + this.Height > Ground.Top) {
+			const pos = vec2(this.x, Ground.Top);
 			Burst.set(pos, this.Owner.Color, true);
 			Ground.crack(pos.sub(this.Width/2, 0));
 			InvaderMgr.LaserMap.delete(this.Owner);

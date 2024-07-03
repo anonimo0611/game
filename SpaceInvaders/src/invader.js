@@ -1,4 +1,5 @@
 import {Ticker}       from '../lib/timer.js';
+import {Rect}         from '../lib/rect.js';
 import {Sound}        from '../snd/sound.js';
 import {cvs,ctx}      from './_canvas.js';
 import {Game}         from './_main.js';
@@ -113,13 +114,13 @@ export const InvaderMgr = freeze(new class {
 		UfoMgr.draw();
 	}
 });
-export class Invader {
+export class Invader extends Rect {
 	#turn   = 0;
 	#aIndex = 1;
-	Pos     = vec2();
-	Width   = BaseSize;
-	Height  = BaseSize;
-	constructor(i) {this.index = i}
+	constructor(i) {
+		super(vec2(), BaseSize, BaseSize);
+		this.index = i
+	}
 	get turn()   {return this.#turn}
 	get aIndex() {return this.#aIndex}
 	addTurn() {

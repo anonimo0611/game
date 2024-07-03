@@ -1,4 +1,5 @@
 import {Ticker}     from '../lib/timer.js';
+import {Rect}       from '../lib/rect.js';
 import {Sound}      from '../snd/sound.js';
 import {cvs,ctx}    from './_canvas.js';
 import {Scene}      from './scene.js';
@@ -44,12 +45,9 @@ export const UfoMgr = new class {
 		UfoMgr.currentInstance?.draw();
 	}
 };
-export class Ufo {
+export class Ufo extends Rect {
 	Type   = Sprite.InvaderType.Ufo;
-	Width  = InvaderMgr.Size * 1.2;
-	Height = InvaderMgr.Size * 1.2 * .45;
 	Color  = '#FF0033';
-	Pos    = vec2(0, Score.Bottom);
 	Points = randChoice([50,100,150,300]);
 
 	#velocityX   = cvs.width / (60*3);
@@ -59,8 +57,13 @@ export class Ufo {
 	ExplFrames   = this.ExplDuration / Ticker.Interval;
 
 	constructor() {
+		super(
+			vec2(0, Score.Bottom),
+			InvaderMgr.Size * 1.2,
+			InvaderMgr.Size * 1.2 * .45
+		);
 		this.Pos.x = randChoice([-this.Width, cvs.width+this.Width]);
-		if (this.Pos.x > cvs.width/2) {
+		if (this.x > cvs.width/2) {
 			this.#velocityX *= -1;
 		}
 		freeze(this);
@@ -72,8 +75,8 @@ export class Ufo {
 		if (!Scene.isInGame) {return}
 		if (!this.destroyed) {
 			this.Pos.x += this.#velocityX;
-			if (this.#velocityX < 0 && this.Pos.x < -this.Width
-			 || this.#velocityX > 0 && this.Pos.x > cvs.width+this.Width) {
+			if (this.#velocityX < 0 && this.x < -this.Width
+			 || this.#velocityX > 0 && this.x > cvs.width+this.Width) {
 				UfoSet.clear();
 				Sound.stop('ufo_high');
 			}

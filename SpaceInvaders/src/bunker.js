@@ -1,11 +1,12 @@
-﻿import {Scene} from './scene.js';
+﻿import {Rect}  from '../lib/rect.js';
+import {Scene} from './scene.js';
 import {cvs,ctx,cvsForBunker} from './_canvas.js';
 
 const Width   = cvs.width / 8;
 const Height  = Width / 1.5;
 const Bunkers = Array(4).fill();
 
-export class Bunker {
+export class Bunker extends Rect {
 	static cvs    = cvsForBunker;
 	static ctx    = this.cvs.getContext('2d',{willReadFrequently:true});
 	static Width  = Width;
@@ -13,14 +14,12 @@ export class Bunker {
 	static Top    = cvs.height * 3/4;
 	static Bottom = this.Top + this.Height;
 	static collision(obj, fromUpper) {
-		return Bunkers.some(b=> collisionRect(obj, b)
-			&& b.collision(obj.tipPos, fromUpper)
+		return Bunkers.some(b=>
+			b.collisionRect(obj) && b.collisionPixel(obj.tipPos, fromUpper)
 		);
 	}
-	static contains({x:_x, y:_y}) {
-		return Bunkers.some(b=> 
-			between(_x, b.x, b.x+Width) && between(_y, b.y, b.y+Height)
-		);
+	static contains(pos) {
+		return Bunkers.some(b=> b.contains(pos));
 	}
 	static init() {
 		Bunker.ctx.clearRect(0,0,cvs.width,cvs.height);
@@ -34,15 +33,13 @@ export class Bunker {
 		ctx.drawImage(Bunker.cvs, 0,0);
 	}
 	constructor(i) {
-		this.x      = (Width*3/4) + (i*Width) + ((i*Width)*3/4);
-		this.y      = Bunker.Top;
-		this.ctx    = Bunker.ctx;
-		this.Pos    = vec2(this.x, this.y);
-		this.Width  = Width;
-		this.Height = Height;
+		const x = (Width*3/4) + (i*Width) + ((i*Width)*3/4);
+		const y = Bunker.Top;
+		super(vec2(x, y), Width, Height);
+		this.ctx = Bunker.ctx;
 		this.#cache(this);
 	}
-	collision({x, y}, fromUpper) {
+	collisionPixel({x, y}, fromUpper) {
 		const range   = 6;
 		const imgData = Bunker.ctx.getImageData(x-range/2, y, range, 1);
 		return imgData.data.filter(d=> d > 0).length >= range
