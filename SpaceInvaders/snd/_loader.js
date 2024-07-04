@@ -32,7 +32,7 @@ export class Loader {
 		createjs.Sound.registerSounds(Manifest);
 		createjs.Sound.on('fileerror', reject);
 		createjs.Sound.on('fileload', _=> {
-			if (++amount < Manifest.length) return;
+			if (++amount < Manifest.length) {return}
 			Loader.#failed = false;
 			Ids.forEach(id=> Instance.set(id, createjs.Sound.createInstance(id)));
 			Instance.forEach(i=> i.setPaused = bool=> i.paused = bool);

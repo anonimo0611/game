@@ -9,9 +9,9 @@ export const Sound = new class extends Loader {
 	static {this.#setup()}
 	static async #setup() {
 		const result = await Loader.setup().catch(e=> false);
-		if (!result) return;
+		if (!result) {return};
 		Sound.#restore()
-		$on('keydown', e=> {/^M$/i.test(e.key) && Sound.#mute()})
+		$on('keydown', e=> {/^M$/i.test(e.key) && Sound.#mute(e)})
 		$('#volRng') .on('input',Sound.#applyVol).eq(0).trigger('input')
 		$('#speaker').on('click',Sound.#mute)
 		$(Ctrl).addClass('loaded');
@@ -19,12 +19,12 @@ export const Sound = new class extends Loader {
 	#lstVol = null;
 	get vol() {return super.vol}
 	set vol(vol) {
-		if (Sound.failed) return;
+		if (Sound.failed) {return};
 		$('#speaker').css('--w', (v=> {
 			if (v == 0) return 0;
-			if (between(v, 8, 10)) return 3;
-			if (between(v, 4,  7)) return 2;
-			if (between(v, 1,  3)) return 1;
+			if (between(v, 8, 10)) {return 3}
+			if (between(v, 4,  7)) {return 2}
+			if (between(v, 1,  3)) {return 1}
 		})(vol))
 		localStorage.SpaceInvadersVolume = super.vol = vol;
 	}
@@ -41,12 +41,12 @@ export const Sound = new class extends Loader {
 	}
 	play(id, cfg={}) {
 		const instance = Instance.get(id);
-		if (Sound.failed || !instance) return;
+		if (Sound.failed || !instance) {return};
 		isNum(cfg.duration) && (instance._duration=cfg.duration);
 		instance.play(this.configMerge(id, cfg));
 	}
 	stop(...ids) {
-		if (Sound.failed) return this
+		if (Sound.failed) {return this}
 		!ids.length && super.stop()
 		ids.forEach(id=> Instance.get(id)?.stop())
 		return this
@@ -57,7 +57,7 @@ export const Sound = new class extends Loader {
 			: Instance.get(id)?.setPaused(true)
 	}
 	resume(id) {
-		if (Sound.failed || Ticker.paused) return
+		if (Sound.failed || Ticker.paused) {return}
 		!arguments.length
 			? Instance.forEach(i=> i.paused=false)
 			: Instance.get(id)?.setPaused(false)

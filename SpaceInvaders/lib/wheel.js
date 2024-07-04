@@ -7,9 +7,7 @@
 	setupRangeCtrl(ctrl) { // Labels must be block-level
 		const label = ctrl.closest('label') || dqs(`label[for="${ctrl.id}"]`);
 		const onWheel = e=> {
-			if (ctrl.disabled) {
-				return;
-			}
+			if (ctrl.disabled) {return}
 			e.preventDefault();
 			const [val,step,min,max]= this.vals(ctrl);
 			const sigD = String(step).split('.')[1]?.length ?? 0;
