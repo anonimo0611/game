@@ -4,8 +4,9 @@ import {Window}  from './_window.js';
 import {Scene}   from './scene.js';
 
 const SP = '\u2002';
-const FontSize = Window.FontSize;
-const TopMessageY = FontSize * 4.25;
+const FontSize       = Window.FontSize;
+const TopMessageY    = {y:FontSize * 4.25};
+const BottomMessageY = {y:cvs.height - FontSize*2};
 
 class TypeOutGameOver {
 	#pos = 0;
@@ -20,17 +21,15 @@ class TypeOutGameOver {
 	draw() {
 		ctx.save();
 		const width  = ctx.measureText(this.Text).width;
-		const string = this.Text.substr(0,this.#pos);
+		const string = this.Text.substr(0, this.#pos);
 		Message.drawText('#F03', string,
-			{align:'left', x:(cvs.width-width)/2, y:TopMessageY});
+			{align:'left', x:(cvs.width-width)/2, ...TopMessageY});
 		ctx.restore();
 	}
-} let typeOutGameOver = null;
-
+}
 export const Message = freeze(new class {
-	drawText(color='#FFF', text,
-		{align='center', x=cvs.width/2, y=cvs.height/2}={})
-	{
+	#typeOutGameOver = null;
+	drawText(color, text, {align='center', x=cvs.width/2, y=cvs.height/2}={}) {
 		ctx.save();
 		ctx.translate(x, y);
 		ctx.textAlign = align;
@@ -39,23 +38,20 @@ export const Message = freeze(new class {
 		ctx.restore();
 	}
 	update() {
-		typeOutGameOver?.update();
+		this.#typeOutGameOver?.update();
 	}
 	draw() {
-		if (Ticker.paused) {
-			this.drawText('#FF0033','PAUSED', {y:TopMessageY});
-		}
+		Ticker.paused && this.drawText('#F03','PAUSED', TopMessageY);
 		switch (Scene.current) {
 		case Scene.Enum.Title:
-			typeOutGameOver = null;
-			this.drawText('#F1C273',`PRESS${SP}SPACE${SP}TO${SP}START`,
-				{y:cvs.height - FontSize*2});
+			this.#typeOutGameOver = null;
+			this.drawText('#FC6',`PRESS${SP}SPACE${SP}TO${SP}START`, BottomMessageY);
 			break;
 		case Scene.Enum.Intro:
-			this.drawText('#66FF66',`PLAY${SP}PLAYER<1>`);	
+			this.drawText('#6F6',`PLAY${SP}PLAYER<1>`);	
 			break;
 		case Scene.Enum.GameOver:
-			(typeOutGameOver ||= new TypeOutGameOver()).draw();
+			(this.#typeOutGameOver ||= new TypeOutGameOver).draw();
 			break;
 		}
 	}

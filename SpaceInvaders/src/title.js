@@ -86,8 +86,8 @@ export const Title = freeze(new class {
 				&& Timer.set(1000, TypeOut.reset);
 		}
 		if (invType >= 0) {
-			for (let i=3; i<Lines.length; i++) {
-				this.#drawInvader(Lines[i]);
+			for (let i=0; i<InvadersLines.length; i++) {
+				this.#drawInvader(InvadersLines[i]);
 			}
 		}
 		string && this.#drawText(data, string);

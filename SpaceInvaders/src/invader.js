@@ -6,7 +6,7 @@ import {Game}         from './_main.js';
 import {Scene}        from './scene.js';
 import {Player}       from './player.js';
 import {Bunker}       from './bunker.js';
-import {InvaderLaser} from './laser.js';
+import {InvaderShoot} from './laser.js';
 import {UfoMgr,Ufo}   from './ufo.js';
 import * as Sprite    from './invader_sprite.js';
 import {Explosion1}   from './explosion.js';
@@ -43,7 +43,7 @@ export const InvaderMgr = freeze(new class {
 		this.#bgmIndex = 2;
 		this.#iterator = this.Map.values();
 		this.#current  = this.#iterator.next();
-		for (let y=this.Rows-1; y>=0; y--)
+		for (let y=this.Rows-1; y>=0; y--) {
 			for (let x=0; x<this.Cols; x++) {
 				const idx = y * this.Cols + x;
 				const instance = (()=> {
@@ -53,6 +53,7 @@ export const InvaderMgr = freeze(new class {
 				})();
 				this.Map.set(idx, instance);
 			}
+		}
 	}
 	init() {
 		this.#reset();
@@ -92,7 +93,7 @@ export const InvaderMgr = freeze(new class {
 		UfoMgr.update();
 		InvaderMgr.LaserMap.forEach(l=> l.update());
 		if (Explosion1.exisits) {return}
-		if (this.Current) this.#move();
+		if (this.Current) {this.#move()}
 		if (this.Map.size == 0) {
 			Sound.stop('ufo_high');
 			Scene.switchToClear();
@@ -104,7 +105,7 @@ export const InvaderMgr = freeze(new class {
 			this.#current  = this.#iterator.next();
 			this.Velocity.set(this.NextVelocity);
 			this.NextVelocity.y = 0;
-			InvaderLaser.shoot();
+			InvaderShoot.fire();
 		}
 	}
 	draw() {

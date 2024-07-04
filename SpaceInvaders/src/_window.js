@@ -18,7 +18,6 @@ export const Window = freeze(new class {
 		Window.#fit();
 	}
 	FontSize = parseInt(ctx.font);
-	get board() {return dBoard}
 	get scale() {return scale}
 
 	#pause(e, force) {

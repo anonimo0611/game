@@ -10,15 +10,15 @@ export const Lives = freeze(new class {
 	#setup() {
 		$on('Start',    Lives.#onStart);
 		$on('Extend',   Lives.#onExtend);
-		$on('Respawn',  Lives.#onRemove);
-		$on('GameOver', Lives.#onRemove);
+		$on('Respawn',  Lives.#onCrash);
+		$on('GameOver', Lives.#onCrash);
 	}
 	Max   = 3;
 	#left = this.Max;
 	get left()  {return Lives.#left}
 	#onStart()  {Lives.#left = Lives.Max}
 	#onExtend() {Lives.#left++}
-	#onRemove() {Lives.#left--}
+	#onCrash()  {Lives.#left--}
 
 	draw() {
 		const marginL  = 6;

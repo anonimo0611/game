@@ -25,13 +25,13 @@ export const Game = new class {
 	get roundNum() {return this.#roundIdx+1}
 
 	#setup() {
-		Game.reset();
-		$on('Title',    Game.reset);
-		$on('Start',    Game.#start);
-		$on('Respawn',  Game.#respawn);
-		$on('Clear',    Game.#clear);
-		$on('NewRound', Game.#setNewRound);
-		$on('GameOver', Game.#gameOver);
+		Game.#onTitle();
+		$on('Title',    Game.#onTitle);
+		$on('Start',    Game.#onStart);
+		$on('Respawn',  Game.#onRespawn);
+		$on('Clear',    Game.#onClear);
+		$on('NewRound', Game.#onNewRound);
+		$on('GameOver', Game.#onGameOver);
 		$on('keydown',  Game.#onKeyDown);
 	}
 	#onKeyDown(e) {
@@ -40,7 +40,7 @@ export const Game = new class {
 		case 'Delete': return Scene.switchToTitle();
 		}
 	}
-	reset() {
+	#onTitle() {
 		Game.#roundIdx = 0;
 		Sound.stop();
 		Bunker.init();
@@ -48,22 +48,22 @@ export const Game = new class {
 		Player.init();
 		Ticker.stop().set(Game.#mainLoop);
 	}
-	#start() {
+	#onStart() {
 		Scene.switchToIntro();
 		Scene.switchToInGame(1500);
 	}
-	#respawn() {
+	#onRespawn() {
 		Player.init();
 		Scene.switchToInGame();
 	}
-	#clear() {
+	#onClear() {
 		Timer.set(1500, Scene.switchToNewRound);
 	}
-	#gameOver() {
+	#onGameOver() {
 		Sound.stop('ufo_high');
 		Scene.switchToTitle(3000);
 	}
-	#setNewRound() {
+	#onNewRound() {
 		Game.#roundIdx = ++Game.#roundIdx % Game.RoundMax;
 		Bunker.init();
 		InvaderMgr.init();

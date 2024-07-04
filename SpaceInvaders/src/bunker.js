@@ -8,11 +8,9 @@ const Bunkers = Array(4).fill();
 
 export class Bunker extends Rect {
 	static cvs    = cvsForBunker;
-	static ctx    = this.cvs.getContext('2d',{willReadFrequently:true});
-	static Width  = Width;
-	static Height = Height;
+	static ctx    = this.cvs.getContext('2d', {willReadFrequently:true});
 	static Top    = cvs.height * 3/4;
-	static Bottom = this.Top + this.Height;
+	static Bottom = this.Top + Height;
 	static collision(obj, fromUpper) {
 		return Bunkers.some(b=>
 			b.collisionRect(obj) && b.collisionPixel(obj.tipPos, fromUpper)
@@ -22,7 +20,7 @@ export class Bunker extends Rect {
 		return Bunkers.some(b=> b.contains(pos));
 	}
 	static init() {
-		Bunker.ctx.clearRect(0,0,cvs.width,cvs.height);
+		Bunker.ctx.clearRect(0,0, cvs.width,cvs.height);
 		Bunker.ctx.globalCompositeOperation = 'source-over';
 		for (const i of Bunkers.keys())	{
 			Bunkers[i] = new Bunker(i);

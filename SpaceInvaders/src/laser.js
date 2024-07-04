@@ -92,8 +92,8 @@ export class PlayerLaser extends Laser {
 	}
 } freeze(PlayerLaser);
 
-const InvaderShootMgr = new class {
-	shoot() {
+export const InvaderShoot = new class {
+	fire() {
 		const {Max,LaserMap,Map:map}= InvaderMgr;
 		if (Ticker.count < 60) {return}
 		if (LaserMap.size >= (map.size > Max/2 ? 1 : 2)) {return}
@@ -118,8 +118,7 @@ const InvaderShootMgr = new class {
 		} return false;
 	}	
 }
-export class InvaderLaser extends Laser {
-	static shoot() {InvaderShootMgr.shoot()}
+class InvaderLaser extends Laser {
 	#aIdx = -1;
 	#owner;
 	get Owner() {return this.#owner}
@@ -139,8 +138,9 @@ export class InvaderLaser extends Laser {
 	}
 	update() {
 		super.update();
-		if (Ticker.count % 6 == 0)
+		if (Ticker.count % 6 == 0) {
 			this.#aIdx *= -1;
+		}
 		if (Bunker.collision(this, true)) {
 			InvaderMgr.LaserMap.delete(this.Owner);
 			Burst.set(this.tipPos, this.Owner.Color, true);
@@ -183,8 +183,8 @@ export class InvaderLaser extends Laser {
 		ctx.beginPath();
 			ctx.moveTo(0, 0);
 			ctx.lineTo(0, h);
-			ctx.stroke();
-			ctx.beginPath();
+		ctx.stroke();
+		ctx.beginPath();
 			ctx.moveTo(-w * aIdx, 0.00);
 			ctx.lineTo( w * aIdx, 0.25 * h);
 			ctx.lineTo(-w * aIdx, 0.50 * h);
@@ -202,7 +202,7 @@ export class Burst {
 			const cx = cos(i*PI/180) * 1.2;
 			const cy = sin(i*PI/180) * 1.2;
 			const cv = vec2(cx, counterclockwise ? -cy : cy);
-			BurstSet.add(new Burst(color, x+cos(i)*2, y, cv));
+			BurstSet.add( new Burst(color, x+cos(i)*2, y, cv) );
 		}
 	}
 	static update() {

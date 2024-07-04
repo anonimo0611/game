@@ -72,7 +72,7 @@ export const Player = freeze(new class extends Rect {
 	cache(ctx) {
 		const {Width:w, Height:h}= this;
 		ctx.save();
-		ctx.translate(w/2,h/2);
+		ctx.translate(w/2, h/2);
 		ctx.scale(w, h);
 		ctx.beginPath();
 		    ctx.moveTo(   0, -.50);
