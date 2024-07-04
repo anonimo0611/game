@@ -47,7 +47,7 @@ export const UfoMgr = new class {
 };
 export class Ufo extends Rect {
 	Type   = Sprite.InvaderType.Ufo;
-	Color  = '#FF0033';
+	Color  = '#F03';
 	Points = randChoice([50,100,150,300]);
 
 	#velocityX   = cvs.width / (60*3);

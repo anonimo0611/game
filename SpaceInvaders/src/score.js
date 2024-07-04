@@ -56,11 +56,11 @@ export const Score = freeze(new class {
 
 		ctx.save();
 
-		ctx.fillStyle = '#68E0FC';
+		ctx.fillStyle = '#7ED';
 		ctx.fillText(label1.text, label1.x, y);
 		ctx.fillText(label2.text, label2.x, y);
 
-		ctx.fillStyle = 'white';
+		ctx.fillStyle = '#FFF';
 		const label1Width = ctx.measureText(label1.text).width;
 		const label2Width = ctx.measureText(label2.text).width;
 		ctx.fillText(`${this.#zeroPadScore}`,   label1.x + label1Width, y);

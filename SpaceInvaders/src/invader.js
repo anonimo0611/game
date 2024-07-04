@@ -141,7 +141,7 @@ export class Invader extends Rect {
 }
 class Octpus extends Invader {
 	Type   = Sprite.InvaderType.Octpus;
-	Color  = '#FF6699';
+	Color  = '#F69';
 	Points = 10;
 	constructor(i) {
 		super(i);
@@ -152,7 +152,7 @@ class Crab extends Invader {
 	Type   = Sprite.InvaderType.Crab;
 	Width  = BaseSize * .8;
 	Height = this.Width / 1.15;
-	Color  = '#86C3DE';
+	Color  = '#8EF';
 	Points = 20;
 	constructor(i) {
 		super(i);
@@ -163,7 +163,7 @@ class Squid extends Invader {
 	Type   = Sprite.InvaderType.Squid;
 	Width  = BaseSize * .7;
 	Height = BaseSize * .7;
-	Color  = '#FFF9AB';
+	Color  = '#FF9';
 	Points = 30;
 	constructor(i) {
 		super(i);

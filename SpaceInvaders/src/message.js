@@ -3,8 +3,7 @@ import {cvs,ctx} from './_canvas.js';
 import {Window}  from './_window.js';
 import {Scene}   from './scene.js';
 
-const SP = '\u2002';
-const FontSize       = Window.FontSize;
+const [SP,FontSize]  = ['\u2002', Window.FontSize];
 const TopMessageY    = {y:FontSize * 4.25};
 const BottomMessageY = {y:cvs.height - FontSize*2};
 

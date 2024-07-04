@@ -14,9 +14,9 @@ const InvType  = Sprite.InvaderType;
 const UfoSize  = Sprite.getSize(InvType.Ufo);
 
 const HeaderLines = [
-	{row:0.0, color:'#00FF00', line:'PLAY'},
-	{row:1.5, color:'#00FF00', line:'SPACE　INVADERS'},
-	{row:3.5, color:'#68E0FC', line:`*SCORE${SP}ADVANCE${SP}TABLE*`},
+	{row:0.0, color:'#0F0', line:'PLAY'},
+	{row:1.5, color:'#0F0', line:'SPACE　INVADERS'},
+	{row:3.5, color:'#7ED', line:`*SCORE${SP}ADVANCE${SP}TABLE*`},
 ];
 const InvadersLines = [
 	{row:4.5, invType:InvType.Ufo,    line:`=?${SP}MYSTERY`},

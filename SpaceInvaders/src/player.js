@@ -13,7 +13,7 @@ const PressedKeySet = new Set();
 const InvMap = InvaderMgr.Map;
 
 export const Player = freeze(new class extends Rect {
-	Color    = '#68FC76';
+	Color    = '#6F6';
 	Speed    = cvs.width / (60*3);
 	LaserSet = new Set();
 	#lstShot = -1;

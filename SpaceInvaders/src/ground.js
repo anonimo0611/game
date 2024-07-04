@@ -23,7 +23,7 @@ export const Ground = freeze(new class {
 		}
 	}
 	#cache(ctx) {
-		ctx.fillStyle = '#66FF66';
+		ctx.fillStyle = '#6F6';
 		ctx.fillRect(0,0, this.Width, this.Height);
 	}
 });

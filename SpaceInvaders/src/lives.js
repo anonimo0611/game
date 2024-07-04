@@ -25,7 +25,7 @@ export const Lives = freeze(new class {
 		const fontSize = Window.FontSize;
 
 		ctx.save();
-		ctx.fillStyle = 'white';
+		ctx.fillStyle = '#FFF';
 		ctx.fillText(Lives.left, fontSize, Ground.Bottom+fontSize);
 		ctx.restore();
 
