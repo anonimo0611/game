@@ -3,7 +3,7 @@ import {Scene} from './scene.js';
 import {cvs,ctx,cvsForBunker} from './_canvas.js';
 
 const Width   = cvs.width / 8;
-const Height  = Width / 1.5;
+const Height  = ceil(Width / 1.5);
 const Bunkers = Array(4).fill();
 
 export class Bunker extends Rect {
@@ -11,9 +11,9 @@ export class Bunker extends Rect {
 	static ctx    = this.cvs.getContext('2d', {willReadFrequently:true});
 	static Top    = cvs.height * 3/4;
 	static Bottom = this.Top + Height;
-	static collision(obj, fromUpper) {
+	static collision(obj, fromAbove) {
 		return Bunkers.some(b=>
-			b.collisionRect(obj) && b.collisionPixel(obj.tipPos, fromUpper)
+			b.collisionRect(obj) && b.collisionPixel(obj.tipPos, fromAbove)
 		);
 	}
 	static contains(pos) {
@@ -37,11 +37,11 @@ export class Bunker extends Rect {
 		this.ctx = Bunker.ctx;
 		this.#cache(this);
 	}
-	collisionPixel({x, y}, fromUpper) {
+	collisionPixel({x, y}, fromAbove) {
 		const range   = 6;
 		const imgData = Bunker.ctx.getImageData(x-range/2, y, range, 1);
 		return imgData.data.filter(d=> d > 0).length >= range
-			&& this.#destroy(Bunker.ctx, {x, y}, fromUpper);
+			&& this.#destroy(Bunker.ctx, {x, y}, fromAbove);
 	}
 	#cache({ctx,x,y,Width:w,Height:h}) {
 		const hw = w/2;
@@ -53,8 +53,8 @@ export class Bunker extends Rect {
 			ctx.lineTo(w, hw/4);
 			ctx.lineTo(w, h);
 			ctx.lineTo(w-(w/5), h);
-			ctx.lineTo(w-(w/5)-10, h-15);
-			ctx.lineTo((w/5)+10, h-15);
+			ctx.lineTo(w-(w/5)-hw/4, h-h/3.5);
+			ctx.lineTo((w/5)+hw/4, h-h/3.5);
 			ctx.lineTo((w/5), h);
 			ctx.lineTo(0, h);
 			ctx.lineTo(0, hw/4);
@@ -63,28 +63,34 @@ export class Bunker extends Rect {
 		ctx.fill();
 		ctx.restore();
 	}
-	#destroy(ctx, {x, y}, fromUpper) {
-		const ly1 = fromUpper ? -4 :  15;
-		const ly2 = fromUpper ? 25 : -10;
-		const py1 = fromUpper ? -4 : -20;
-		const py2 = fromUpper ? 30 :   0;
+	#destroy(ctx, {x, y}, fromAbove) {
 		ctx.save();
 		ctx.translate(x, y);
-		ctx.beginPath();
-			ctx.moveTo(0, ly1);
-			ctx.lineTo(0, ly2);
-			ctx.lineCap   = 'round';
-			ctx.lineWidth = 12;
-		ctx.stroke();
-		for (let i=0; i<80; i++) {
-			const s  = 2;
-			const ox = randChoice(randFloat(-9, -7), randFloat(7, 9));
-			const oy = randFloat(py1, py2);
-			const cx = cos(randInt(0, PI*2)) * 2 + ox;
-			const cy = sin(randInt(0, PI*2)) * 2 + oy;
-			ctx.fillRect(cx-(s/2), cy-(s/2), s,s);
-		}
+		ctx.lineCap   = 'round';
+		ctx.lineWidth = round(Width/6.6);
+		this.#dig     (ctx, Height, fromAbove);
+		this.#particle(ctx, Height, fromAbove);
 		ctx.restore();
 		return true;
+	}
+	#dig(ctx, h, fromAbove) {
+		ctx.beginPath();
+			ctx.moveTo(0, (fromAbove ? -h/13.5 : +h/3.5)|0);
+			ctx.lineTo(0, (fromAbove ? +h/ 2.0 : -h/5.4)|0);
+		ctx.stroke();
+	}
+	#particle(ctx, h, fromAbove) {
+		const size = 2.3;
+		const xMin = ctx.lineWidth / 2.5;
+		const xMax = ctx.lineWidth / 1.2;
+		const yMin = (fromAbove? -h/13.5 : -h/2.7)|0;
+		const yMax = (fromAbove? +h/ 1.5 : +h/1.0)|0;
+		const dirX = i=> i % 2 ? -1 : 1;
+		for (let y=yMin; y<yMax; y++) {
+			const x  = randFloat(xMin*dirX(y), xMax*dirX(y));
+			const cx = cos(randFloat(0, PI*2)) * 2 + x;
+			const cy = sin(randFloat(0, PI*2)) * 2 + y;
+			ctx.fillRect(cx-(size/2), cy-(size/2), size,size);
+		}
 	}
 } freeze(Bunker);
