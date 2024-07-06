@@ -13,8 +13,7 @@ export class Bunker extends Rect {
 	static Bottom = this.Top + Height;
 	static collision(obj, fromAbove) {
 		return Bunkers.some(b=>
-			b.collisionRect(obj) && b.collisionPixel(obj.tipPos, fromAbove)
-		);
+			b.collisionRect(obj) && b.collisionPixel(obj.tipPos, fromAbove));
 	}
 	static contains(pos) {
 		return Bunkers.some(b=> b.contains(pos));
@@ -22,9 +21,7 @@ export class Bunker extends Rect {
 	static init() {
 		Bunker.ctx.clearRect(0,0, cvs.width,cvs.height);
 		Bunker.ctx.globalCompositeOperation = 'source-over';
-		for (const i of Bunkers.keys())	{
-			Bunkers[i] = new Bunker(i);
-		}
+		for (let i of Bunkers.keys()) {Bunkers[i] = new Bunker(i)}
 		Bunker.ctx.globalCompositeOperation = 'destination-out';
 	}
 	static draw() {
@@ -32,14 +29,13 @@ export class Bunker extends Rect {
 	}
 	constructor(i) {
 		const x = (Width*3/4) + (i*Width) + ((i*Width)*3/4);
-		const y = Bunker.Top;
-		super(vec2(x, y), Width, Height);
+		super(vec2(x, Bunker.Top), Width, Height);
 		this.ctx = Bunker.ctx;
 		this.#cache(this);
 	}
 	collisionPixel({x, y}, fromAbove) {
 		const range   = 6;
-		const imgData = Bunker.ctx.getImageData(x-range/2, y, range, 1);
+		const imgData = Bunker.ctx.getImageData(x - range/2, y, range, 1);
 		return imgData.data.filter(d=> d > 0).length >= range
 			&& this.#destroy(Bunker.ctx, {x, y}, fromAbove);
 	}
@@ -58,7 +54,6 @@ export class Bunker extends Rect {
 			ctx.lineTo((w/5), h);
 			ctx.lineTo(0, h);
 			ctx.lineTo(0, hw/4);
-		ctx.closePath();
 		ctx.fillStyle = '#CC9';
 		ctx.fill();
 		ctx.restore();
@@ -66,30 +61,29 @@ export class Bunker extends Rect {
 	#destroy(ctx, {x, y}, fromAbove) {
 		ctx.save();
 		ctx.translate(x, y);
-		ctx.lineCap   = 'round';
-		ctx.lineWidth = round(Width/6.6);
-		this.#dig     (ctx, Height, fromAbove);
+		this.#laserDig(ctx, Height, fromAbove);
 		this.#particle(ctx, Height, fromAbove);
 		ctx.restore();
 		return true;
 	}
-	#dig(ctx, h, fromAbove) {
+	#laserDig(ctx, h, fromAbove) {
 		ctx.beginPath();
-			ctx.moveTo(0, (fromAbove ? -h/13.5 : +h/3.5)|0);
-			ctx.lineTo(0, (fromAbove ? +h/ 2.0 : -h/5.4)|0);
+			ctx.lineCap   = 'round';
+			ctx.lineWidth = round(Width/6.6);
+			ctx.moveTo(0, (fromAbove? -h/13.5 : +h/3.5)|0);
+			ctx.lineTo(0, (fromAbove? +h/ 2.0 : -h/5.4)|0);
 		ctx.stroke();
 	}
 	#particle(ctx, h, fromAbove) {
 		const size = 2.3;
-		const xMin = ctx.lineWidth / 2.5;
-		const xMax = ctx.lineWidth / 1.2;
+		const xMin = ctx.lineWidth/3.0;
+		const xMax = ctx.lineWidth/1.2;
 		const yMin = (fromAbove? -h/13.5 : -h/2.7)|0;
 		const yMax = (fromAbove? +h/ 1.5 : +h/1.0)|0;
-		const dirX = i=> i % 2 ? -1 : 1;
 		for (let y=yMin; y<yMax; y++) {
-			const x  = randFloat(xMin*dirX(y), xMax*dirX(y));
-			const cx = cos(randFloat(0, PI*2)) * 2 + x;
-			const cy = sin(randFloat(0, PI*2)) * 2 + y;
+			const x  = [randFloat(-xMin, -xMax), randFloat(xMin, xMax)][y % 2];
+			const cx = cos(randFloat(0, PI*2)) + x;
+			const cy = sin(randFloat(0, PI*2)) + y;
 			ctx.fillRect(cx-(size/2), cy-(size/2), size,size);
 		}
 	}
