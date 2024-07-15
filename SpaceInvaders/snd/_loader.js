@@ -5,7 +5,7 @@ const Manifest = [
 	{id:'se2',      startTime: 188.970, duration: 96.407},
 	{id:'se3',      startTime: 284.961, duration:106.588},
 	{id:'killed',   startTime: 392.211, duration:309.847},
-	{id:'shoot',    startTime: 697.316, duration:384.105},
+	{id:'fire',     startTime: 697.316, duration:384.105},
 	{id:'explosion',startTime:1076.315, duration:790},
 	{id:'ufo_high', startTime:1868.346, duration:165.713},
 	{id:'ufo_low',  startTime:2033.557, duration:2034.590},
@@ -19,7 +19,7 @@ const Config = new Map()
 	.set('se2',      {loop: 0, volume:1.00})
 	.set('se3',      {loop: 0, volume:1.00})
 	.set('killed',   {loop: 0, volume:0.50})
-	.set('shoot',    {loop: 0, volume:0.70})
+	.set('fire',     {loop: 0, volume:0.50})
 	.set('explosion',{loop: 0, volume:1.00})
 	.set('ufo_high', {loop:-1, volume:0.30})
 
