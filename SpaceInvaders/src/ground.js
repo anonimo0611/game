@@ -3,12 +3,12 @@ import {Scene}  from './scene.js';
 import {cvs,ctx,cvsForGround} from './_canvas.js';
 
 export const Ground = freeze(new class {
-	static {$on('load Title NewRound', ()=> Ground.#cache(Ground.ctx))}
+	static {$on('load Title NewRound', ()=> Ground.#cache())}
 	cvs    = cvsForGround;
 	ctx    = this.cvs.getContext('2d');
 	Width  = this.cvs.width;
 	Height = this.cvs.height;
-	Top    = cvs.height - Player.Height * 1.4;
+	Top    = cvs.height - (Player.Height*1.4);
 	Bottom = this.Top + this.Height;
 	draw() {
 		ctx.save();
@@ -17,13 +17,13 @@ export const Ground = freeze(new class {
 		ctx.restore();
 	}
 	crack({x}) {
-		const [w, h]= [2, this.Height];
+		const [w, h] = [2, this.Height];
 		for (let i=-1; i<=1; i++) {
-			this.ctx.clearRect(x-w*(i*w), 0, w, h);
+			this.ctx.clearRect(w/2+x+i*(w*2), 0, w, h);
 		}
 	}
-	#cache(ctx) {
-		ctx.fillStyle = '#6F6';
-		ctx.fillRect(0,0, this.Width, this.Height);
+	#cache() {
+		this.ctx.fillStyle = '#6F6';
+		this.ctx.fillRect(0,0, this.Width, this.Height);
 	}
 });

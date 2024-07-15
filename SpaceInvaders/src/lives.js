@@ -6,8 +6,8 @@ import {Player}  from './player.js';
 import {Ground}  from './ground.js';
 
 export const Lives = freeze(new class {
-	static {$load(()=> Lives.#setup())}
-	#setup() {
+	static {$load(this.#setup)}
+	static #setup() {
 		$on('Start',    Lives.#onStart);
 		$on('Extend',   Lives.#onExtend);
 		$on('Respawn',  Lives.#onCrash);

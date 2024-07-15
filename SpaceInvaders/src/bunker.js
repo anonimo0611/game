@@ -44,6 +44,7 @@ export class Bunker extends Rect {
 		ctx.save();
 		ctx.translate(x, y);
 		ctx.beginPath();
+			ctx.fillStyle = '#CC9';
 			ctx.moveTo(hw/4, 0);
 			ctx.lineTo(w-(hw/4), 0);
 			ctx.lineTo(w, hw/4);
@@ -54,7 +55,6 @@ export class Bunker extends Rect {
 			ctx.lineTo((w/5), h);
 			ctx.lineTo(0, h);
 			ctx.lineTo(0, hw/4);
-		ctx.fillStyle = '#CC9';
 		ctx.fill();
 		ctx.restore();
 	}

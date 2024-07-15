@@ -13,9 +13,9 @@ export class Explosion1 {
 	constructor({Pos,Width,Height,Color}) {
 		Pos.add(Width/2, Height/2);
 		for (let i=0; i<=360; i+=20) {
-			const cx  = cos(i*PI/180) * Width /12;
-			const cy  = sin(i*PI/180) * Height/12;
-			const cv  = vec2(cx/2, cy/2);
+			const cx = cos(i*PI/180) * Width /12;
+			const cy = sin(i*PI/180) * Height/12;
+			const cv = vec2(cx/2, cy/2);
 			this.LineSet.add({Pos:Pos.clone,cv});
 		}
 		this.color = Color;
@@ -32,10 +32,10 @@ export class Explosion1 {
 			ctx.save();
 			ctx.translate(...Pos.vals);
 			ctx.beginPath();
-				ctx.moveTo(0,0);
-				ctx.lineTo(...vec2(cv).mul(6).vals);
 				ctx.lineWidth = 4;
 				ctx.strokeStyle = this.color;
+				ctx.moveTo(0,0);
+				ctx.lineTo(...vec2(cv).mul(6).vals);
 			ctx.stroke();
 			ctx.restore();
 		}
@@ -80,8 +80,8 @@ export class Explosion2 {
 			ctx.globalAlpha = this.#alpha;
 			ctx.translate(...this.Pos.vals);
 			ctx.beginPath();
-				ctx.arc(...cv.mul(1.1).vals, randInt(1,2), 0, PI*2);
 				ctx.fillStyle = this.color;
+				ctx.arc(...cv.mul(1.1).vals, randInt(1,2), 0, PI*2);
 			ctx.fill();
 			ctx.restore();
 		}

@@ -48,7 +48,7 @@ export const UfoMgr = new class {
 export class Ufo extends Rect {
 	Type   = Sprite.InvaderType.Ufo;
 	Color  = '#F03';
-	Points = randChoice([50,100,150,300]);
+	Points = randChoice(50,100,150,300);
 
 	#velocityX   = cvs.width / (60*3);
 	#destroyed   = false;
@@ -62,7 +62,7 @@ export class Ufo extends Rect {
 			InvaderMgr.Size * 1.2,
 			InvaderMgr.Size * 1.2 * .45
 		);
-		this.Pos.x = randChoice([-this.Width, cvs.width+this.Width]);
+		this.Pos.x = randChoice(-this.Width, cvs.width+this.Width);
 		if (this.x > cvs.width/2) {
 			this.#velocityX *= -1;
 		}

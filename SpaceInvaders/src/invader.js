@@ -171,6 +171,4 @@ class Squid extends Invader {
 	}
 }
 Sprite.setup(Octpus,Crab,Squid,Ufo);
-$on('Title Respawn Clear', ()=> {
-	InvaderMgr.LaserMap.clear();
-});
+$on('Title Respawn Clear', ()=> {InvaderMgr.LaserMap.clear()});

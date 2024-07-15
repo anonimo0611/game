@@ -6,9 +6,8 @@ import {Window}    from './_window.js';
 import {Scene}     from './scene.js';
 import * as Sprite from './invader_sprite.js';
 
-const SP = '\u2002';
+const SP       = '\u2002';
 const FontSize = Window.FontSize;
-const OffsetY  = FontSize * 6;
 const MarginV  = FontSize *.7;
 const InvType  = Sprite.InvaderType;
 const UfoSize  = Sprite.getSize(InvType.Ufo);
@@ -53,12 +52,15 @@ const TypeOut = new class {
 			const {line}= data;
 			for (let i=0; i<line.length+1; i++) {
 				const string = line.substr(0, line[0] == '*' ? 0 : i);
-				yield this.#data = {...data,string,lineIdx};
+				yield this.#data ={...data,string,lineIdx};
 			}
 		}
 	}
 }
 export const Title = freeze(new class {
+	#drawInvaders() {
+		InvadersLines.forEach(l=> this.#drawInvader(l));
+	}
 	#drawInvader({row,line,invType}) {
 		const tW = getTextWidth(ctx, {line,invType});
 		const sz = Sprite.getSize(invType);
@@ -71,7 +73,7 @@ export const Title = freeze(new class {
 	}
 	#drawText({row,color,line,invType}, str=line) {
 		const tW = getTextWidth(ctx, {line,invType});
-		const oX = (invType >= 0) ? UfoSize.x/2 : 0;
+		const oX = isNum(invType) ? UfoSize.x/2 : 0;
 		ctx.fillStyle = Sprite.InvaderColors[invType] ?? color;
 		ctx.fillText(str, (cvs.width/2 - tW/2) + oX, getY(row));
 	}
@@ -79,20 +81,16 @@ export const Title = freeze(new class {
 		const data = TypeOut.data;
 		const {line,lineIdx,string,invType}= data;
 		ctx.save();
-		ctx.translate(0, OffsetY)
+		ctx.translate(0, FontSize * 6);
 
-		if (Ticker.count % 8 == 0 || line?.[0] == '*') {
-			TypeOut.gen.next().done
-				&& Timer.set(1000, TypeOut.reset);
-		}
-		if (invType >= 0) {
-			for (let i=0; i<InvadersLines.length; i++) {
-				this.#drawInvader(InvadersLines[i]);
-			}
-		}
+		(Ticker.count % 8 == 0 || line?.[0] == '*')
+			&& TypeOut.gen.next().done
+			&& Timer.set(1000, TypeOut.reset);
+
+		isNum(invType) && this.#drawInvaders();
 		string && this.#drawText(data, string);
 		for (let i=0; i<lineIdx; i++) {
-			this.#drawText(Lines[i]);
+			this.#drawText(Lines[i])
 		}
 		ctx.restore();
 	}

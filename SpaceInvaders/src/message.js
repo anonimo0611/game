@@ -3,32 +3,33 @@ import {cvs,ctx} from './_canvas.js';
 import {Window}  from './_window.js';
 import {Scene}   from './scene.js';
 
-const [SP,FontSize]  = ['\u2002', Window.FontSize];
-const TopMessageY    = {y:FontSize * 4.25};
-const BottomMessageY = {y:cvs.height - FontSize*2};
+const TopY    = Window.FontSize * 4;
+const BottomY = cvs.height - (Window.FontSize*2);
 
 class TypeOutGameOver {
-	#pos = 0;
 	Text = 'GAME　OVER';
-	constructor() {freeze(this)}
+	#textPos = 0;
+	constructor() {
+		const textWidth = ctx.measureText(this.Text).width;
+		this.Pos = vec2((cvs.width-textWidth)/2, TopY);
+	}
 	update() {
 		if (Ticker.count % 8 != 0) {return}
-		if (this.#pos <= this.Text.length) {
-			this.#pos++;
-		}
+		this.#textPos = min(this.#textPos+1, this.Text.length);
 	}
-	draw() {
-		ctx.save();
-		const width  = ctx.measureText(this.Text).width;
-		const string = this.Text.substr(0, this.#pos);
-		Message.drawText('#F03', string,
-			{align:'left', x:(cvs.width-width)/2, ...TopMessageY});
-		ctx.restore();
+	get drawValues() {
+		const text = this.Text.substr(0, this.#textPos);
+		return ['#F03', text, {align:'left', ...this.Pos}];
 	}
 }
 export const Message = freeze(new class {
+	static {$load(this.#setup)}
+	static #setup() {
+		$on('Title',    ()=> Message.#typeOutGameOver = null);
+		$on('GameOver', ()=> Message.#typeOutGameOver = new TypeOutGameOver);
+	}
 	#typeOutGameOver = null;
-	drawText(color, text, {align='center', x=cvs.width/2, y=cvs.height/2}={}) {
+	#drawText(color, text, {align='center', x=cvs.width/2, y=cvs.height/2}={}) {
 		ctx.save();
 		ctx.translate(x, y);
 		ctx.textAlign = align;
@@ -40,17 +41,17 @@ export const Message = freeze(new class {
 		this.#typeOutGameOver?.update();
 	}
 	draw() {
-		Ticker.paused && this.drawText('#F03','PAUSED', TopMessageY);
+		const SP = '\u2002';
+		Ticker.paused && this.#drawText('#F03','PAUSED', {y:TopY});
 		switch (Scene.current) {
 		case Scene.Enum.Title:
-			this.#typeOutGameOver = null;
-			this.drawText('#FC6',`PRESS${SP}SPACE${SP}TO${SP}START`, BottomMessageY);
+			this.#drawText('#FC6',`PRESS${SP}SPACE${SP}TO${SP}START`, {y:BottomY});
 			break;
 		case Scene.Enum.Intro:
-			this.drawText('#6F6',`PLAY${SP}PLAYER<1>`);	
+			this.#drawText('#6F6',`PLAY${SP}PLAYER<1>`);	
 			break;
 		case Scene.Enum.GameOver:
-			(this.#typeOutGameOver ||= new TypeOutGameOver).draw();
+			this.#drawText(...this.#typeOutGameOver.drawValues);	
 			break;
 		}
 	}

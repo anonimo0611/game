@@ -8,46 +8,40 @@ const SP = '\u2002';
 const ExtendPts = 1500;
 const ScoreMax  = 1e5 - 1;
 
+let $score = 0;
+let $high  = 0;
+
 export const Score = freeze(new class {
-	static {
-		$load(()=> Score.#setup());
-	}
+	static {$load(()=> Score.#setup())}
 	#setup() {
-		Score.#high = int(localStorage.spaceInvaderHiscore || 0);
+		$high = int(localStorage.spaceInvaderHiscore || 0);
 		$on('Start',   Score.#onStart);
 		$on('GameOver',Score.#onGameOver);
 	}
 	#score = 0;
 	#high  = 0;
-	Top    = Window.FontSize * .5;
+	Top    = Window.FontSize * 0.5;
 	Bottom = (this.Top+Window.FontSize) * 1.5;
 	#onStart() {
-		Score.#score = 0;
+		$score = 0;
 	}
 	#onGameOver() {
 		const high = localStorage.spaceInvaderHiscore || 0;
-		if (Score.#high > high) {
-			localStorage.spaceInvaderHiscore = Score.#high;
-		}
+		$high > high && (localStorage.spaceInvaderHiscore = $high);
 	}
 	add(pts=0) {
 		if (!Scene.isInGame) {return}
-		pts += Score.#score;
-		
-		if (between(ExtendPts, Score.#score+1, pts)) {
-			$trigger('Extend');
-		}
-		if (pts > Score.#high) {
-			Score.#high = pts;
-		}
-		Score.#score = min(pts, ScoreMax);
+		pts += $score;
+		between(ExtendPts, $score+1, pts) && $trigger('Extend');
+		$score = min(pts, ScoreMax);
+		$high  = max($score, $high);
 	}
 	get #zeroPadScore() {
-		return !(Scene.isIntro && int(Ticker.count/5) % 2 != 0)
-			? String(this.#score).padStart(5, 0) : '';
+		return Scene.isIntro && int(Ticker.count/5) % 2 != 0
+			? '' : String($score).padStart(5, 0);
 	}
 	get #zeroPadHiScore() {
-		return String(this.#high).padStart(5, 0);
+		return String($high).padStart(5, 0);
 	}
 	draw() {
 		const y = this.Top + Window.FontSize;
@@ -60,9 +54,9 @@ export const Score = freeze(new class {
 		ctx.fillText(label1.text, label1.x, y);
 		ctx.fillText(label2.text, label2.x, y);
 
-		ctx.fillStyle = '#FFF';
 		const label1Width = ctx.measureText(label1.text).width;
 		const label2Width = ctx.measureText(label2.text).width;
+		ctx.fillStyle = '#FFF';
 		ctx.fillText(`${this.#zeroPadScore}`,   label1.x + label1Width, y);
 		ctx.fillText(`${this.#zeroPadHiScore}`, label2.x + label2Width, y);
 

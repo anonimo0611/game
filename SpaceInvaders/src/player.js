@@ -9,8 +9,8 @@ import {PlayerLaser} from './laser.js';
 import {InvaderMgr}  from './invader.js';
 import {Bunker}      from './bunker.js';
 
-const PressedKeySet = new Set();
 const InvMap = InvaderMgr.Map;
+const PressedSet = new Set();
 
 export const Player = freeze(new class extends Rect {
 	Color    = '#6F6';
@@ -19,33 +19,19 @@ export const Player = freeze(new class extends Rect {
 	#lstShot = -1;
 	constructor() {
 		super(vec2(), InvaderMgr.Size, InvaderMgr.Size/1.5);
-		$on('keydown', this.#onKeyDown.bind(this));
-		$on('keyup',   this.#onKeyUp.bind(this));
 		[this.cvs,this.ctx]= canvas2D(null, this.Width, this.Height).vals;
 	}
 	init() {
-		PressedKeySet.clear();
 		this.LaserSet.clear();
-		this.Pos.set(
-			this.Width/2,
-			Bunker.Bottom + this.Height
-		);
+		this.Pos.set(this.Width/2, Bunker.Bottom+this.Height);
 		this.#lstShot = -1;
-		this.cache(this.ctx);
+		this.#cache(this.ctx);
 	}
-	#onKeyDown(e) {
-		if (!Scene.isInGame || e.repeat) {return}
-		PressedKeySet.add(e.key);
-	}
-	#onKeyUp(e) {
-		if (!Scene.isInGame) {return}
-		PressedKeySet.delete(e.key);
-	}
-	#shoot() {
+	#fire() {
 		if (Ticker.count - this.#lstShot > PlayerLaser.IntervalMax
 			&& this.LaserSet.size < PlayerLaser.Rapid
 		) {
-			Sound.stop('shoot').play('shoot');
+			Sound.stop('fire').play('fire');
 			this.LaserSet.add( new PlayerLaser(this.Pos) );
 			this.#lstShot = Ticker.count;
 		}
@@ -55,26 +41,27 @@ export const Player = freeze(new class extends Rect {
 		if (Ticker.count < InvMap.size) {return}
 		const {Speed,Pos,Width}= this;
 		this.LaserSet.forEach(l=> l.update());
-		PressedKeySet.has('\x20')       && Player.#shoot();
-		PressedKeySet.has('ArrowLeft')  && (Pos.x -= Speed);
-		PressedKeySet.has('ArrowRight') && (Pos.x += Speed);
+		PressedSet.has('\x20')       && Player.#fire();
+		PressedSet.has('ArrowLeft')  && (Pos.x -= Speed);
+		PressedSet.has('ArrowRight') && (Pos.x += Speed);
 		Pos.x = clamp(Pos.x, 0, cvs.width-Width);
 	}
 	draw() {
-		if (Scene.isDestroy || Scene.isGameOver) {return}
-		if (Scene.isInGame && Ticker.count < InvMap.size) {return}
+		if (!Scene.isInGame) {return}
+		if (Ticker.count < InvMap.size) {return}
 		ctx.save();
 		ctx.translate(...this.Pos.asInt.vals);
 		ctx.drawImage(this.cvs, 0,0);
 		ctx.restore();
 		this.LaserSet.forEach(l=> l.draw());
 	}
-	cache(ctx) {
+	#cache(ctx) {
 		const {Width:w, Height:h}= this;
 		ctx.save();
 		ctx.translate(w/2, h/2);
 		ctx.scale(w, h);
 		ctx.beginPath();
+			ctx.fillStyle = Player.Color;
 		    ctx.moveTo(   0, -.50);
 			ctx.lineTo(+.10, -.35);
 			ctx.lineTo(+.12, -.10);
@@ -87,9 +74,10 @@ export const Player = freeze(new class extends Rect {
 			ctx.lineTo(-.12, -.10);
 			ctx.lineTo(-.10, -.35);
 		ctx.closePath();
-		ctx.fillStyle = Player.Color;
 		ctx.fill();
 		ctx.restore();
 	}
 });
 $on('Respawn Clear', ()=> Player.LaserSet.clear());
+$on('keyup',   e=> PressedSet.delete(e.key));
+$on('keydown', e=> !e.repeat && PressedSet.add(e.key));

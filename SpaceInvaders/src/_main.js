@@ -32,9 +32,9 @@ export const Game = new class {
 		$on('Clear',    Game.#onClear);
 		$on('NewRound', Game.#onNewRound);
 		$on('GameOver', Game.#onGameOver);
-		$on('keydown',  Game.#onKeyDown);
+		$on('keydown',  Game.#onKeydown);
 	}
-	#onKeyDown(e) {
+	#onKeydown(e) {
 		switch (e.key) {
 		case '\x20':   return Scene.isTitle && Scene.switchToStart();
 		case 'Delete': return Scene.switchToTitle();
