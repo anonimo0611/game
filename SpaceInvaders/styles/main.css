@@ -1,4 +1,4 @@
-html,body {
+html, body {
 	margin:  0;
 	padding: 0;
 	width:  100%;
@@ -33,6 +33,7 @@ body[data-state=loading]::before {
 	transform: translateY(-50%);
 }
 body[data-state=loading] canvas {
+	background: #000;
 	width: auto;
 	height: 100%;
 	transform-origin: center;

@@ -12,30 +12,25 @@
 	<link rel="stylesheet" href="styles/ui.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.slim.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/SoundJS/1.0.2/soundjs.min.js"></script>
-	<script src="lib/__util.js"></script>
-	<script src="lib/_extjq.js"></script>
-	<script src="lib/vec2.js"></script>
-	<script src="lib/canvas.js"></script>
 </head>
 
 <body data-state="loading">
 
 <div id="debug"></div>
-<script>
-const debug = document.querySelector('#debug');
-function log(d) {debug.textContent = JSON.stringify(d)}
-</script>
+
+<script src="lib/__util.js"></script>
+<script src="lib/_extjq.js"></script>
+<script src="lib/debug.js"></script>
+<script src="lib/canvas.js"></script>
+<script src="src/_main.js" type="module"></script>
 
 <div id="volCtrl" class="volCtrl">
 	<label id="speaker" for="volRng" style="--w:3" title="Mute On/Off (M)">Volume:</label>
 	<span class="volCtrlWrapper">
-		<input type="range" id="volRng" data-orient="vertical"
-			tabindex="-1" value="10" step="1" min="0" max="10">
+		<input type="range" id="volRng" tabindex="-1" value="10" step="1" min="0" max="10">
 	</span>
 </div>
-
-<canvas style="background:black" id="canvas" width="640" height="720"></canvas>
-<script src="src/_main.js" type="module"></script>
+<canvas style="background:#000" id="canvas" width="640" height="720"></canvas>
 
 </body>
 </html>
