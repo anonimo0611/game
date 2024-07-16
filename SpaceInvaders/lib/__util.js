@@ -14,6 +14,7 @@ const isObj    = arg=> typeof(arg) === 'object' && arg !== null && !isArray(arg)
 const isFun    = arg=> typeof(arg) === 'function'
 
 const dRoot  = document.documentElement
+const dBody  = document.body
 const dqs    = sel=> document.querySelector(sel)
 const dqsAll = sel=> document.querySelectorAll(sel)
 const byId   = id => document.getElementById(id)

@@ -1,7 +1,9 @@
+import {Vec2} from './vec2.js';
 export class Rect {
 	#width = 0;
 	constructor({x, y}, width, height) {
-		this.Pos    = vec2(x, y);
+		this.Pos    = Vec2(x, y);
+		this.Size   = Vec2(width, height);
 		this.Width  = width;
 		this.Height = height;
 	}
@@ -12,15 +14,11 @@ export class Rect {
 		return between(_x, x, x+w) && between(_y, y, y+h);
 	}
 	collisionRect(obj) {
-		if (obj instanceof Rect === false) {
-			return false;
-		}
+		if (obj instanceof Rect === false) {return false}
 		const {x:aX,y:aY,Width:aW,Height:aH}= this;
 		const {x:bX,y:bY,Width:bW,Height:bH}= obj;
-		const aPos = vec2(aX, aY);
-		const bPos = vec2(bX, bY);
 		return (
-			abs((aPos.x+aW/2)-(bPos.x+bW/2)) < (aW+bW)/2 &&
-			abs((aPos.y+aH/2)-(bPos.y+bH/2)) < (aH+bH)/2);
+			abs((aX+aW/2)-(bX+bW/2)) < (aW+bW)/2 &&
+			abs((aY+aH/2)-(bY+bH/2)) < (aH+bH)/2);
 	}
 }

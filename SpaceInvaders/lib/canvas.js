@@ -1,6 +1,6 @@
-const canvas2D = (id, w, h=w)=> {
+const canvas2D = (id, w, h, attrs)=> {
 	const cvs = byId(id) ?? document.createElement('canvas');
-	const ctx = cvs.getContext('2d');
+	const ctx = cvs.getContext('2d', attrs);
 	if (typeOf(w) == 'HTMLCanvasElement') {
 		({width:w,height:h}= w);
 	}
@@ -8,7 +8,7 @@ const canvas2D = (id, w, h=w)=> {
 	ctx.clear = (x=0,y=0,w=cvs.width,h=cvs.height)=> ctx.clearRect(x,y,w,h);
 	return {cvs,ctx,width:w,height:h,vals:[cvs,ctx,w,h]};
 }
-const setCanvasSize = param=> (w, h=w)=> {
+const setCanvasSize = param=> (w, h)=> {
 	const cvs = (isStr(param)? byId(param) : param) || {};
 	if (typeOf(cvs) == 'HTMLCanvasElement') {
 		isNum(w) && (cvs.width  = w);
