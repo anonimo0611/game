@@ -21,15 +21,13 @@ export const Lives = freeze(new class {
 	#onCrash()  {Lives.#left--}
 
 	draw() {
+		if (Scene.isTitle) {return}
+
 		const marginL  = 6;
 		const fontSize = Window.FontSize;
-
 		ctx.save();
 		ctx.fillStyle = '#FFF';
 		ctx.fillText(Lives.left, fontSize, Ground.Bottom+fontSize);
-		ctx.restore();
-
-		ctx.save();
 		ctx.translate(fontSize*2.5, Ground.Bottom);
 		for (let i=0; i<Lives.left-1; i++) {
 			ctx.save();

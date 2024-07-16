@@ -1,4 +1,5 @@
 import {Ticker}       from '../lib/timer.js';
+import {Vec2}         from '../lib/vec2.js';
 import {Rect}         from '../lib/rect.js';
 import {Sound}        from '../snd/sound.js';
 import {cvs,ctx}      from './_canvas.js';
@@ -28,8 +29,8 @@ export const InvaderMgr = freeze(new class {
 	#current   = this.#iterator.next();
 
 	Step = this.ColWidth / 4;
-	Velocity     = vec2();
-	NextVelocity = vec2();
+	Velocity     = Vec2();
+	NextVelocity = Vec2();
 
 	get Current() {
 		return this.#current?.value;
@@ -119,7 +120,7 @@ export class Invader extends Rect {
 	#turn   = 0;
 	#aIndex = 1;
 	constructor(i) {
-		super(vec2(), BaseSize, BaseSize);
+		super(Vec2(), BaseSize, BaseSize);
 		this.index = i
 	}
 	get turn()   {return this.#turn}
@@ -130,11 +131,10 @@ export class Invader extends Rect {
 	}
 	draw(ctx, idx) {
 		if (this.turn < 1) {return}
-		const {Width:w,Height:h}= this;
 		ctx.save();
 		ctx.translate(...this.Pos.asInt.vals);
 		ctx == Bunker.ctx
-			? ctx.clearRect(0,0, w,h)
+			? ctx.clear(0,0, ...this.Size.vals)
 			: Sprite.draw(ctx, this.Type, this.aIndex);
 		ctx.restore();
 	}
@@ -150,7 +150,7 @@ class Octpus extends Invader {
 }
 class Crab extends Invader {
 	Type   = Sprite.InvaderType.Crab;
-	Width  = BaseSize * .8;
+	Width  = BaseSize * 0.8;
 	Height = this.Width / 1.15;
 	Color  = '#8EF';
 	Points = 20;
@@ -161,8 +161,8 @@ class Crab extends Invader {
 }
 class Squid extends Invader {
 	Type   = Sprite.InvaderType.Squid;
-	Width  = BaseSize * .7;
-	Height = BaseSize * .7;
+	Width  = BaseSize * 0.7;
+	Height = BaseSize * 0.7;
 	Color  = '#FF9';
 	Points = 30;
 	constructor(i) {

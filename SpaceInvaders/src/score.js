@@ -5,8 +5,8 @@ import {cvs,ctx}  from './_canvas.js';
 import {Scene}    from './scene.js';
 
 const SP = '\u2002';
-const ExtendPts = 1500;
 const ScoreMax  = 1e5 - 1;
+const ExtendPts = 1500;
 
 let $score = 0;
 let $high  = 0;
@@ -18,8 +18,6 @@ export const Score = freeze(new class {
 		$on('Start',   Score.#onStart);
 		$on('GameOver',Score.#onGameOver);
 	}
-	#score = 0;
-	#high  = 0;
 	Top    = Window.FontSize * 0.5;
 	Bottom = (this.Top+Window.FontSize) * 1.5;
 	#onStart() {
@@ -45,21 +43,18 @@ export const Score = freeze(new class {
 	}
 	draw() {
 		const y = this.Top + Window.FontSize;
-		const label1 = {text:`SOCRE<1>${SP}`, x:Window.FontSize};
-		const label2 = {text:`HI-SOCRE${SP}`, x:cvs.width/2};
+		const label1  = {text:`SOCRE<1>${SP}`, x:Window.FontSize};
+		const label2  = {text:`HI-SOCRE${SP}`, x:cvs.width/2};
+		const label1W = ctx.measureText(label1.text).width;
+		const label2W = ctx.measureText(label2.text).width;
 
 		ctx.save();
-
 		ctx.fillStyle = '#7ED';
 		ctx.fillText(label1.text, label1.x, y);
 		ctx.fillText(label2.text, label2.x, y);
-
-		const label1Width = ctx.measureText(label1.text).width;
-		const label2Width = ctx.measureText(label2.text).width;
 		ctx.fillStyle = '#FFF';
-		ctx.fillText(`${this.#zeroPadScore}`,   label1.x + label1Width, y);
-		ctx.fillText(`${this.#zeroPadHiScore}`, label2.x + label2Width, y);
-
+		ctx.fillText(`${this.#zeroPadScore}`,   label1.x+label1W, y);
+		ctx.fillText(`${this.#zeroPadHiScore}`, label2.x+label2W, y);
 		ctx.restore();
 	}
 });

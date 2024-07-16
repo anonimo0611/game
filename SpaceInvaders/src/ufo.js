@@ -1,4 +1,5 @@
 import {Ticker}     from '../lib/timer.js';
+import {Vec2}       from '../lib/vec2.js';
 import {Rect}       from '../lib/rect.js';
 import {Sound}      from '../snd/sound.js';
 import {cvs,ctx}    from './_canvas.js';
@@ -12,10 +13,8 @@ const UfoSet   = new Set();
 const Interval = 60*20;
 
 export const UfoMgr = new class {
+	static {$load(()=> UfoMgr.#setup())}
 	#counter = 0;
-	static {
-		$load(()=> UfoMgr.#setup());
-	}
 	#setup() {
 		$on('Respawn', UfoMgr.#onRespawn);
 		$on('Title Clear', UfoMgr.#reset);
@@ -32,7 +31,8 @@ export const UfoMgr = new class {
 	}
 	update() {
 		if (!Scene.isInGame) {return}
-		if (InvaderMgr.Map.size > 7 && UfoSet.size == 0
+		if (InvaderMgr.Map.size > 7
+			&& UfoSet.size == 0
 			&& UfoMgr.#counter++ >= Interval
 		) {
 			UfoMgr.#counter = 0;
@@ -58,14 +58,12 @@ export class Ufo extends Rect {
 
 	constructor() {
 		super(
-			vec2(0, Score.Bottom),
+			Vec2(0, Score.Bottom),
 			InvaderMgr.Size * 1.2,
-			InvaderMgr.Size * 1.2 * .45
+			InvaderMgr.Size * 1.2 * 0.45
 		);
 		this.Pos.x = randChoice(-this.Width, cvs.width+this.Width);
-		if (this.x > cvs.width/2) {
-			this.#velocityX *= -1;
-		}
+		this.x > cvs.width/2 && (this.#velocityX *= -1);
 		freeze(this);
 	}
 	get destroyed() {
@@ -80,9 +78,9 @@ export class Ufo extends Rect {
 				UfoSet.clear();
 				Sound.stop('ufo_high');
 			}
-		} else if (this.#explCounter++ >= this.ExplFrames) {
-			UfoSet.clear();
+			return;
 		}
+		this.#explCounter++ >= this.ExplFrames && UfoSet.clear();
 	}
 	destroy() {
 		if (this.destroyed) {return}
@@ -102,7 +100,7 @@ export class Ufo extends Rect {
 			ctx.save();
 			ctx.textAlign = 'center';
 			ctx.fillStyle = Color;
-			ctx.fillText(this.Points, Width/2,Height);
+			ctx.fillText(this.Points, Width/2, Height);
 			ctx.restore();
 		}
 		ctx.restore();

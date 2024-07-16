@@ -39,7 +39,7 @@ export const Window = freeze(new class {
 	}
 	#onKeydown(e) {
 		if (!Scene.isInGame) {return}
-		e.key == 'Escape' && Window.#pause(e)
+		e.key == 'Escape' && Window.#pause(e);
 	}
 	#onResize(e) {
 		!Ticker.paused && Ticker.pause(true);

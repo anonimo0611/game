@@ -1,29 +1,30 @@
-import {Player} from './player.js';
-import {Scene}  from './scene.js';
-import {cvs,ctx,cvsForGround} from './_canvas.js';
+import {Player}  from './player.js';
+import {Scene}   from './scene.js';
+import {cvs,ctx} from './_canvas.js';
+
+const [$cvs,$ctx]= canvas2D(null, cvs.width, 3).vals;
 
 export const Ground = freeze(new class {
 	static {$on('load Title NewRound', ()=> Ground.#cache())}
-	cvs    = cvsForGround;
-	ctx    = this.cvs.getContext('2d');
-	Width  = this.cvs.width;
-	Height = this.cvs.height;
+	Width  = $cvs.width;
+	Height = $cvs.height;
 	Top    = cvs.height - (Player.Height*1.4);
 	Bottom = this.Top + this.Height;
 	draw() {
+		if (Scene.isTitle || Scene.isIntro) {return}
 		ctx.save();
 		ctx.translate(0, this.Top);
-		ctx.drawImage(Ground.cvs, 0,0);
+		ctx.drawImage($cvs, 0,0);
 		ctx.restore();
 	}
 	crack({x}) {
 		const [w, h] = [2, this.Height];
 		for (let i=-1; i<=1; i++) {
-			this.ctx.clearRect(w/2+x+i*(w*2), 0, w, h);
+			$ctx.clearRect(w/2+x+i*(w*2), 0, w, h);
 		}
 	}
 	#cache() {
-		this.ctx.fillStyle = '#6F6';
-		this.ctx.fillRect(0,0, this.Width, this.Height);
+		$ctx.fillStyle = '#6F6';
+		$ctx.fillRect(0,0, this.Width, this.Height);
 	}
 });

@@ -189,6 +189,7 @@ function drawUfo(ctx, aIdx, {Width:w,Height:h,Color}) {
 	ctx.save();
 	ctx.scale(w,h);
 	ctx.beginPath();
+		ctx.fillStyle = Color;
 		ctx.moveTo(-.48,.10);
 		ctx.quadraticCurveTo(0, -1.2, .48, .1);
 		ctx.lineTo(+.50,.20);
@@ -202,7 +203,6 @@ function drawUfo(ctx, aIdx, {Width:w,Height:h,Color}) {
 		ctx.quadraticCurveTo(-.30, .7, -.42, .25);
 		ctx.lineTo(-.50,.20);
 	ctx.closePath();
-	ctx.fillStyle = Color;
 	ctx.fill();
 	ctx.restore();
 
@@ -211,7 +211,7 @@ function drawUfo(ctx, aIdx, {Width:w,Height:h,Color}) {
 	ctx.save();
 	ctx.scale(h,h);
 	ctx.translate(-size/2,-size/2);
-	ctx.fillStyle = 'black';
+	ctx.fillStyle = '#000';
 	ctx.fillRect(-.68, -.03, size, size);
 	ctx.fillRect(-.22, +.05, size, size);
 	ctx.fillRect(+.22, +.05, size, size);

@@ -1,17 +1,18 @@
 import {Ticker}  from '../lib/timer.js';
+import {Vec2}    from '../lib/vec2.js';
 import {cvs,ctx} from './_canvas.js';
 import {Window}  from './_window.js';
 import {Scene}   from './scene.js';
 
 const TopY    = Window.FontSize * 4;
-const BottomY = cvs.height - (Window.FontSize*2);
+const BottomY = cvs.height - (Window.FontSize*3);
 
 class TypeOutGameOver {
 	Text = 'GAME　OVER';
 	#textPos = 0;
 	constructor() {
 		const textWidth = ctx.measureText(this.Text).width;
-		this.Pos = vec2((cvs.width-textWidth)/2, TopY);
+		this.Pos = Vec2((cvs.width-textWidth)/2, TopY);
 	}
 	update() {
 		if (Ticker.count % 8 != 0) {return}

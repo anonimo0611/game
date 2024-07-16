@@ -3,6 +3,7 @@ import {Ticker}      from '../lib/timer.js';
 import {Rect}        from '../lib/rect.js';
 import {rgba}        from '../lib/color.js';
 import {cvs,ctx}     from './_canvas.js';
+import {Vec2}        from '../lib/vec2.js';
 import {Ground}      from './ground.js';
 import {Scene}       from './scene.js';
 import {PlayerLaser} from './laser.js';
@@ -18,8 +19,8 @@ export const Player = freeze(new class extends Rect {
 	LaserSet = new Set();
 	#lstShot = -1;
 	constructor() {
-		super(vec2(), InvaderMgr.Size, InvaderMgr.Size/1.5);
-		[this.cvs,this.ctx]= canvas2D(null, this.Width, this.Height).vals;
+		super(Vec2(), InvaderMgr.Size, InvaderMgr.Size/1.5);
+		[this.cvs,this.ctx]= canvas2D(null, ...this.Size.vals).vals;
 	}
 	init() {
 		this.LaserSet.clear();
@@ -78,6 +79,6 @@ export const Player = freeze(new class extends Rect {
 		ctx.restore();
 	}
 });
-$on('Respawn Clear', ()=> Player.LaserSet.clear());
+$on('Title Respawn Clear', ()=> Player.LaserSet.clear());
 $on('keyup',   e=> PressedSet.delete(e.key));
 $on('keydown', e=> !e.repeat && PressedSet.add(e.key));

@@ -1,14 +1,17 @@
-﻿import {Rect}  from '../lib/rect.js';
-import {Scene} from './scene.js';
-import {cvs,ctx,cvsForBunker} from './_canvas.js';
+﻿import {Vec2}    from '../lib/vec2.js';
+import {Rect}    from '../lib/rect.js';
+import {Scene}   from './scene.js';
+import {cvs,ctx} from './_canvas.js';
 
 const Width   = cvs.width / 8;
 const Height  = ceil(Width / 1.5);
 const Bunkers = Array(4).fill();
 
 export class Bunker extends Rect {
-	static cvs    = cvsForBunker;
-	static ctx    = this.cvs.getContext('2d', {willReadFrequently:true});
+	static {
+		const attrs = {willReadFrequently:true};
+		[this.cvs,this.ctx]= canvas2D(null, cvs.width, cvs.height, attrs).vals;
+	}
 	static Top    = cvs.height * 3/4;
 	static Bottom = this.Top + Height;
 	static collision(obj, fromAbove) {
@@ -19,17 +22,18 @@ export class Bunker extends Rect {
 		return Bunkers.some(b=> b.contains(pos));
 	}
 	static init() {
-		Bunker.ctx.clearRect(0,0, cvs.width,cvs.height);
-		Bunker.ctx.globalCompositeOperation = 'source-over';
+		this.ctx.clear();
+		this.ctx.globalCompositeOperation = 'source-over';
 		for (let i of Bunkers.keys()) {Bunkers[i] = new Bunker(i)}
-		Bunker.ctx.globalCompositeOperation = 'destination-out';
+		this.ctx.globalCompositeOperation = 'destination-out';
 	}
 	static draw() {
-		ctx.drawImage(Bunker.cvs, 0,0);
+		if (Scene.isTitle || Scene.isIntro) {return}
+		ctx.drawImage(this.cvs, 0,0);
 	}
 	constructor(i) {
 		const x = (Width*3/4) + (i*Width) + ((i*Width)*3/4);
-		super(vec2(x, Bunker.Top), Width, Height);
+		super(Vec2(x, Bunker.Top), Width, Height);
 		this.ctx = Bunker.ctx;
 		this.#cache(this);
 	}

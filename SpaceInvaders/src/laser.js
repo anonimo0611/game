@@ -1,5 +1,6 @@
 import {Sound}      from '../snd/sound.js';
 import {Ticker}     from '../lib/timer.js';
+import {Vec2}       from '../lib/vec2.js';
 import {Rect}       from '../lib/rect.js';
 import {cvs,ctx}    from './_canvas.js';
 import {Scene}      from './scene.js';
@@ -18,13 +19,13 @@ const BurstSet = new Set();
 
 class Laser extends Rect {
 	constructor(pos, {width,height,speed=1}) {
-		super(vec2(pos), width, height);
-		this.Velocity = vec2(0, speed);
+		super(Vec2(pos), width, height);
+		this.Velocity = Vec2(0, speed);
 	}
 	get tipPos() {
 		const {Owner,Pos,Velocity:v,Width,Height}= this;
 		const bottom = Owner.y + Owner.Height;
-		const tipPos = vec2(Pos).add(0, v.y < 0 ? 0 : Height);
+		const tipPos = Vec2(Pos).add(0, v.y < 0 ? 0 : Height);
 		if (v.y > 0 && bottom >= Bunker.Top && Bunker.contains(tipPos)) {
 			tipPos.y = bottom + Width;
 		}
@@ -83,41 +84,15 @@ export class PlayerLaser extends Laser {
 		ctx.save();
 		ctx.translate(...this.Pos.vals);
 		ctx.beginPath();
-		ctx.moveTo(0, 0);
-		ctx.lineTo(0, h);
-		ctx.lineWidth   = w;
-		ctx.strokeStyle = Player.Color;
+			ctx.lineWidth   = w;
+			ctx.strokeStyle = Player.Color;
+			ctx.moveTo(0, 0);
+			ctx.lineTo(0, h);
 		ctx.stroke();
 		ctx.restore();
 	}
 } freeze(PlayerLaser);
 
-export const InvaderShoot = new class {
-	fire() {
-		const {Max,LaserMap,Map:map}= InvaderMgr;
-		if (Ticker.count < 60) {return}
-		if (LaserMap.size >= (map.size > Max/2 ? 1 : 2)) {return}
-		const inv = randChoice(this.#shootableInvaders);
-		inv && LaserMap.set(inv, new InvaderLaser(inv));
-	}
-	get #shootableInvaders() {
-		const ret = [];
-		for (const [idx,inv] of InvaderMgr.Map) {
-			if (InvaderMgr.LaserMap.has(inv)) {continue}
-			if (this.#lowerColumnExists(idx)) {continue}
-			ret.push(inv)
-		} return ret;
-	}
-	#lowerColumnExists(i) {
-		const {Cols,Rows,Map:map}= InvaderMgr;
-		const col = int(i % Cols);
-		const row = int(i / Cols);
-		for (let y=row; y<=Rows; y++) {
-			const x = col + (y*Cols);
-			if (map.has(x + Cols)) {return true}
-		} return false;
-	}	
-}
 class InvaderLaser extends Laser {
 	#aIdx = -1;
 	#owner;
@@ -166,9 +141,9 @@ class InvaderLaser extends Laser {
 			return;
 		}
 		if (this.y + this.Height > Ground.Top) {
-			const pos = vec2(this.x, Ground.Top);
+			const pos = Vec2(this.x, Ground.Top);
 			Burst.set(pos, this.Owner.Color, true);
-			Ground.crack(pos.sub(this.Width/2, 0));
+			Ground.crack( pos.sub(this.Width/2, 0) );
 			InvaderMgr.LaserMap.delete(this.Owner);
 		}
 	}
@@ -195,13 +170,40 @@ class InvaderLaser extends Laser {
 	}
 } freeze(InvaderLaser);
 
+export const InvaderShoot = new class {
+	fire() {
+		const {Max,LaserMap,Map:InvMap}= InvaderMgr;
+		if (Ticker.count < 60) {return}
+		if (LaserMap.size >= (InvMap.size > Max/2 ? 1 : 2)) {return}
+		const inv = randChoice(this.#shootableInvaders);
+		inv && LaserMap.set(inv, new InvaderLaser(inv));
+	}
+	get #shootableInvaders() {
+		const ret = [];
+		for (const [idx,inv] of InvaderMgr.Map) {
+			if (InvaderMgr.LaserMap.has(inv)) {continue}
+			if (this.#lowerColumnExists(idx)) {continue}
+			ret.push(inv)
+		} return ret;
+	}
+	#lowerColumnExists(i) {
+		const {Cols,Rows,Map:InvMap}= InvaderMgr;
+		const col = int(i % Cols);
+		const row = int(i / Cols);
+		for (let y=row; y<=Rows; y++) {
+			const x = col + (y*Cols);
+			if (InvMap.has(x + Cols)) {return true}
+		} return false;
+	}	
+}
+
 export class Burst {
 	static set({x, y}, color, counterclockwise=false) {
-		const v = vec2(x, y);
+		const v = Vec2(x, y);
 		for (let i=90-30; i<=90+30; i+=2) {
 			const cx = cos(i*PI/180) * 1.2;
 			const cy = sin(i*PI/180) * 1.2;
-			const cv = vec2(cx, counterclockwise ? -cy : cy);
+			const cv = Vec2(cx, counterclockwise ? -cy : cy);
 			BurstSet.add( new Burst(color, x+cos(i)*2, y, cv) );
 		}
 	}
@@ -216,8 +218,8 @@ export class Burst {
 	constructor(color, x, y, v) {
 		this.v     = v.mul(2);
 		this.color = color;
-		this.stPos = vec2(x, y);
-		this.edPos = vec2(x, y);
+		this.stPos = Vec2(x, y);
+		this.edPos = Vec2(x, y);
 	}
 	update() {
 		if (this.#counter++ >= 8) {
@@ -228,10 +230,10 @@ export class Burst {
 	draw(ctx) {
 		ctx.save();
 		ctx.beginPath();
-		ctx.moveTo(...this.stPos.vals);
-		ctx.lineTo(...this.edPos.vals);
-		ctx.lineWidth   = 3;
-		ctx.strokeStyle = this.color;
+			ctx.lineWidth   = 3;
+			ctx.strokeStyle = this.color;
+			ctx.moveTo(...this.stPos.vals);
+			ctx.lineTo(...this.edPos.vals);
 		ctx.stroke();
 		ctx.restore();
 	}

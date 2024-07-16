@@ -1,3 +1,4 @@
+import {Vec2}   from '../lib/vec2.js';
 import {Ticker} from '../lib/timer.js';
 import {ctx}    from './_canvas.js';
 
@@ -15,7 +16,7 @@ export class Explosion1 {
 		for (let i=0; i<=360; i+=20) {
 			const cx = cos(i*PI/180) * Width /12;
 			const cy = sin(i*PI/180) * Height/12;
-			const cv = vec2(cx/2, cy/2);
+			const cv = Vec2(cx/2, cy/2);
 			this.LineSet.add({Pos:Pos.clone,cv});
 		}
 		this.color = Color;
@@ -35,7 +36,7 @@ export class Explosion1 {
 				ctx.lineWidth = 4;
 				ctx.strokeStyle = this.color;
 				ctx.moveTo(0,0);
-				ctx.lineTo(...vec2(cv).mul(6).vals);
+				ctx.lineTo(...Vec2(cv).mul(6).vals);
 			ctx.stroke();
 			ctx.restore();
 		}
@@ -48,25 +49,24 @@ export class Explosion2 {
 	#counter = 0;
 	ParticleSet = new Set();
 	constructor({Pos,Width,Height,Color}, {duration=1000}={}) {
-		this.Pos      = vec2(Pos).add(Width/2, Height/2);
+		this.Pos      = Vec2(Pos).add(Width/2, Height/2);
 		this.color    = Color;
 		this.Width    = Width;
 		this.Height   = Height;
 		this.duration = duration / Ticker.Interval;
 		this.#setParticles();
-		Explosion2Set.add(freeze(this));
+		Explosion2Set.add( freeze(this) );
 	}
 	#setParticles() {
 		this.ParticleSet.clear();
 		for (let i=0; i<=360; i+=5) {
 			const cx = cos(i*PI/180)*randInt(2,this.Width *3/5);
 			const cy = sin(i*PI/180)*randInt(2,this.Height*3/5);
-			const cv = vec2(cx, cy);
-			this.ParticleSet.add(cv)
+			this.ParticleSet.add( Vec2(cx, cy) );
 		}
 	}
 	update() {
-		//this.#alpha = max(this.#alpha-= 1/this.duration,0);
+		this.#alpha = max(this.#alpha-= 1/this.duration, 0);
 		if (this.#counter++ >= this.duration) {
 			return void Explosion2Set.clear();
 		}

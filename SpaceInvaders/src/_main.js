@@ -71,6 +71,7 @@ export const Game = new class {
 		Scene.switchToInGame();
 	}
 	#update() {
+		Title.update();
 		Message.update();
 		InvaderMgr.update();
 		Player.update();
@@ -81,16 +82,7 @@ export const Game = new class {
 	draw() {
 		ctx.clear();
 		Score.draw();
-		switch (Scene.current) {
-		case Scene.Enum.Title:
-			Title.draw();
-			Message.draw();
-			return;
-		case Scene.Enum.Intro:
-			Lives.draw();
-			Message.draw();
-			return;
-		}
+		Title.draw();
 		InvaderMgr.draw();
 		Burst.draw();
 		Player.draw();
