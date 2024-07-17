@@ -12,8 +12,8 @@ let $score = 0;
 let $high  = 0;
 
 export const Score = freeze(new class {
-	static {$load(()=> Score.#setup())}
-	#setup() {
+	static {$load(this.#setup)}
+	static #setup() {
 		$high = int(localStorage.spaceInvaderHiscore || 0);
 		$on('Start',   Score.#onStart);
 		$on('GameOver',Score.#onGameOver);

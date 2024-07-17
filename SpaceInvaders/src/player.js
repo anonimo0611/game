@@ -81,4 +81,4 @@ export const Player = freeze(new class extends Rect {
 });
 $on('Title Respawn Clear', ()=> Player.LaserSet.clear());
 $on('keyup',   e=> PressedSet.delete(e.key));
-$on('keydown', e=> !e.repeat && PressedSet.add(e.key));
+$on('keydown', e=> PressedSet.add(e.key));

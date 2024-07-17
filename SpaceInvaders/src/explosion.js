@@ -14,12 +14,13 @@ export class Explosion1 {
 	constructor({Pos,Width,Height,Color}) {
 		Pos.add(Width/2, Height/2);
 		for (let i=0; i<=360; i+=20) {
-			const cx = cos(i*PI/180) * Width /12;
-			const cy = sin(i*PI/180) * Height/12;
+			const cx = cos(i*PI/180) * Width /13;
+			const cy = sin(i*PI/180) * Height/13;
 			const cv = Vec2(cx/2, cy/2);
 			this.LineSet.add({Pos:Pos.clone,cv});
 		}
 		this.color = Color;
+		this.width = Width * 0.1;
 		Explosion1Set.add(freeze(this));
 	}
 	update() {
@@ -33,7 +34,7 @@ export class Explosion1 {
 			ctx.save();
 			ctx.translate(...Pos.vals);
 			ctx.beginPath();
-				ctx.lineWidth = 4;
+				ctx.lineWidth   = this.width;
 				ctx.strokeStyle = this.color;
 				ctx.moveTo(0,0);
 				ctx.lineTo(...Vec2(cv).mul(6).vals);

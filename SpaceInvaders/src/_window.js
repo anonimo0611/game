@@ -21,6 +21,7 @@ export const Window = freeze(new class {
 	get scale() {return scale}
 
 	#pause(e, force) {
+		if (e.originalEvent.repeat) {return}
 		if (Scene.isInGame) {
 			if (e.type == 'focus') {return}
 			Ticker.pause(force)

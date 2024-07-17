@@ -41,16 +41,18 @@ const TypeOut = new class {
 	static {$on('Title', ()=> TypeOut.#reset())}
 	#gen  = this.#generator();
 	#data = {lineIdx:0};
-	get speed() {return 150/Ticker.Interval}
-	get data()  {return this.#data}
+	get data() {return this.#data}
 
 	#reset() {
-		TypeOut.#gen.return();
-		TypeOut.#gen  = TypeOut.#generator();
-		TypeOut.#data = {lineIdx:0};
+		this.#gen.return();
+		this.#gen  = this.#generator();
+		this.#data = {lineIdx:0};
 	}
-	next() {
-		this.#gen.next().done && Timer.set(1000, TypeOut.#reset);
+	update() {
+		if (!Scene.isTitle) {return}
+		(Ticker.count % 8 == 0 || this.data.lineText?.[0] == '*')
+			&& this.#gen.next().done
+			&& Timer.set(1000, ()=> this.#reset());
 	}
 	*#generator() {
 		for (const [lineIdx,data] of Lines.entries()) {
@@ -73,7 +75,7 @@ export const Title = freeze(new class {
 		Sprite.draw(ctx, invType, 0);
 		ctx.restore();
 	}
-	#drawText({row,color,lineText,invType}, currentText) {
+	#drawText({row,color,lineText,currentText,invType}) {
 		if (currentText != '') {
 			currentText ||= lineText; 
 			const tW = getLineWidth(ctx, {lineText,invType});
@@ -85,13 +87,11 @@ export const Title = freeze(new class {
 	#drawLines(data) {
 		const {lineIdx,invType,currentText}= data;
 		isNum(invType) && InvadersLines.forEach(l=> this.#drawInvader(l));
-		this.#drawText(data, currentText);
+		this.#drawText(data);
 		integers(lineIdx).forEach(i=> this.#drawText(Lines[i]));
 	}
 	update() {
-		Scene.isTitle 
-			&& (Ticker.count % 8 == 0 || TypeOut.data.lineText?.[0] == '*')
-			&& TypeOut.next();
+		TypeOut.update();
 	}
 	draw() {
 		if (!Scene.isTitle) {return}

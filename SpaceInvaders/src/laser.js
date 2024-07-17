@@ -101,7 +101,7 @@ class InvaderLaser extends Laser {
 	constructor(owner) {
 		if (!(owner instanceof Invader)) {return}
 		super(owner.Pos, {
-			width:  int(cvs.width / 160),
+			width:  int(cvs.width / 80),
 			height: InvaderMgr.Size * 3/4,
 			speed:  cvs.height / (60*3),
 			}
@@ -143,7 +143,7 @@ class InvaderLaser extends Laser {
 		if (this.y + this.Height > Ground.Top) {
 			const pos = Vec2(this.x, Ground.Top);
 			Burst.set(pos, this.Owner.Color, true);
-			Ground.crack( pos.sub(this.Width/2, 0) );
+			Ground.crack(pos);
 			InvaderMgr.LaserMap.delete(this.Owner);
 		}
 	}
@@ -153,18 +153,16 @@ class InvaderLaser extends Laser {
 		const aIdx = this.#aIdx;
 		ctx.save();
 		ctx.translate(...this.Pos.vals);
-		ctx.lineWidth   = 2;
+		ctx.lineWidth   = w/4;
 		ctx.strokeStyle = this.Owner.Color;
 		ctx.beginPath();
 			ctx.moveTo(0, 0);
 			ctx.lineTo(0, h);
-		ctx.stroke();
-		ctx.beginPath();
-			ctx.moveTo(-w * aIdx, 0.00);
-			ctx.lineTo( w * aIdx, 0.25 * h);
-			ctx.lineTo(-w * aIdx, 0.50 * h);
-			ctx.lineTo( w * aIdx, 0.75 * h);
-			ctx.lineTo(-w * aIdx, 1.00 * h);
+			ctx.moveTo(-w/2 * aIdx, 0.00);
+			ctx.lineTo( w/2 * aIdx, 0.25 * h);
+			ctx.lineTo(-w/2 * aIdx, 0.50 * h);
+			ctx.lineTo( w/2 * aIdx, 0.75 * h);
+			ctx.lineTo(-w/2 * aIdx, 1.00 * h);
 		ctx.stroke();
 		ctx.restore();
 	}
@@ -199,12 +197,12 @@ export const InvaderShoot = new class {
 
 export class Burst {
 	static set({x, y}, color, counterclockwise=false) {
-		const v = Vec2(x, y);
-		for (let i=90-30; i<=90+30; i+=2) {
+		const v = Vec2(x, y), span = 2;
+		for (let i=90-30; i<=90+30; i+=span) {
 			const cx = cos(i*PI/180) * 1.2;
 			const cy = sin(i*PI/180) * 1.2;
 			const cv = Vec2(cx, counterclockwise ? -cy : cy);
-			BurstSet.add( new Burst(color, x+cos(i)*2, y, cv) );
+			BurstSet.add( new Burst(color, x+cos(i)*2, y, span, cv) );
 		}
 	}
 	static update() {
@@ -215,9 +213,10 @@ export class Burst {
 		BurstSet.forEach(p=> p.draw(Bunker.ctx));
 	}
 	#counter = 0;
-	constructor(color, x, y, v) {
+	constructor(color, x, y, width, v) {
 		this.v     = v.mul(2);
 		this.color = color;
+		this.width = width;
 		this.stPos = Vec2(x, y);
 		this.edPos = Vec2(x, y);
 	}
@@ -230,7 +229,7 @@ export class Burst {
 	draw(ctx) {
 		ctx.save();
 		ctx.beginPath();
-			ctx.lineWidth   = 3;
+			ctx.lineWidth   = this.width;
 			ctx.strokeStyle = this.color;
 			ctx.moveTo(...this.stPos.vals);
 			ctx.lineTo(...this.edPos.vals);

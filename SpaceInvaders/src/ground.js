@@ -20,7 +20,7 @@ export const Ground = freeze(new class {
 	crack({x}) {
 		const [w, h] = [2, this.Height];
 		for (let i=-1; i<=1; i++) {
-			$ctx.clearRect(w/2+x+i*(w*2), 0, w, h);
+			$ctx.clearRect(x+i*(w*2)-w/2, 0, w, h);
 		}
 	}
 	#cache() {

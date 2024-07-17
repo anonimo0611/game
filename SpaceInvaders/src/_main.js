@@ -35,6 +35,7 @@ export const Game = new class {
 		$on('keydown',  Game.#onKeydown);
 	}
 	#onKeydown(e) {
+		if (e.originalEvent.repeat) {return}
 		switch (e.key) {
 		case '\x20':   return Scene.isTitle && Scene.switchToStart();
 		case 'Delete': return Scene.switchToTitle();

@@ -16,7 +16,7 @@ export class Bunker extends Rect {
 	static Bottom = this.Top + Height;
 	static collision(obj, fromAbove) {
 		return Bunkers.some(b=>
-			b.collisionRect(obj) && b.collisionPixel(obj.tipPos, fromAbove));
+			b.collisionRect(obj) && b.collisionPixel(obj, fromAbove));
 	}
 	static contains(pos) {
 		return Bunkers.some(b=> b.contains(pos));
@@ -37,49 +37,48 @@ export class Bunker extends Rect {
 		this.ctx = Bunker.ctx;
 		this.#cache(this);
 	}
-	collisionPixel({x, y}, fromAbove) {
-		const range   = 6;
-		const imgData = Bunker.ctx.getImageData(x - range/2, y, range, 1);
-		return imgData.data.filter(d=> d > 0).length >= range
-			&& this.#destroy(Bunker.ctx, {x, y}, fromAbove);
+	collisionPixel({tipPos,Width}, fromAbove) {
+		const {x, y}  = tipPos;
+		const imgData = Bunker.ctx.getImageData(x - Width/2, y, Width, 1);
+		return imgData.data.filter(d=> d > 0).length >= Width
+			&& this.#destroy(Bunker.ctx, {x,y,Width}, fromAbove);
 	}
 	#cache({ctx,x,y,Width:w,Height:h}) {
-		const hw = w/2;
 		ctx.save();
 		ctx.translate(x, y);
 		ctx.beginPath();
 			ctx.fillStyle = '#CC9';
-			ctx.moveTo(hw/4, 0);
-			ctx.lineTo(w-(hw/4), 0);
-			ctx.lineTo(w, hw/4);
+			ctx.moveTo(w/8, 0);
+			ctx.lineTo(w-(w/8), 0);
+			ctx.lineTo(w, w/8);
 			ctx.lineTo(w, h);
 			ctx.lineTo(w-(w/5), h);
-			ctx.lineTo(w-(w/5)-hw/4, h-h/3.5);
-			ctx.lineTo((w/5)+hw/4, h-h/3.5);
+			ctx.lineTo(w-(w/5)-w/8, h-h/3.5);
+			ctx.lineTo((w/5)+w/8, h-h/3.5);
 			ctx.lineTo((w/5), h);
 			ctx.lineTo(0, h);
-			ctx.lineTo(0, hw/4);
+			ctx.lineTo(0, w/8);
 		ctx.fill();
 		ctx.restore();
 	}
-	#destroy(ctx, {x, y}, fromAbove) {
+	#destroy(ctx, {x,y,Width}, fromAbove) {
 		ctx.save();
 		ctx.translate(x, y);
-		this.#laserDig(ctx, Height, fromAbove);
-		this.#particle(ctx, Height, fromAbove);
+		this.#laserDig(ctx, Width, Height, fromAbove);
+		this.#particle(ctx, Width, Height, fromAbove);
 		ctx.restore();
 		return true;
 	}
-	#laserDig(ctx, h, fromAbove) {
+	#laserDig(ctx, w, h, fromAbove) {
 		ctx.beginPath();
 			ctx.lineCap   = 'round';
-			ctx.lineWidth = round(Width/6.6);
+			ctx.lineWidth = w * 1.5;
 			ctx.moveTo(0, (fromAbove? -h/13.5 : +h/3.5)|0);
 			ctx.lineTo(0, (fromAbove? +h/ 2.0 : -h/5.4)|0);
 		ctx.stroke();
 	}
-	#particle(ctx, h, fromAbove) {
-		const size = 2.3;
+	#particle(ctx, w, h, fromAbove) {
+		const size = w * 0.2875;
 		const xMin = ctx.lineWidth/3.0;
 		const xMax = ctx.lineWidth/1.2;
 		const yMin = (fromAbove? -h/13.5 : -h/2.7)|0;
