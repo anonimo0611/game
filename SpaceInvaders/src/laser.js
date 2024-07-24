@@ -36,7 +36,7 @@ class Laser extends Rect {
 	}
 };
 export class PlayerLaser extends Laser {
-	static Rapid = 1;
+	static Rapid = 2;
 	static IntervalMax = 6;
 	get Owner() {return Player}
 
