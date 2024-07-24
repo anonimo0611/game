@@ -36,7 +36,7 @@ class Laser extends Rect {
 	}
 };
 export class PlayerLaser extends Laser {
-	static Rapid = 2;
+	static Rapid = 1;
 	static IntervalMax = 6;
 	get Owner() {return Player}
 
@@ -64,7 +64,7 @@ export class PlayerLaser extends Laser {
 			new Explosion1(invader);
 			InvaderMgr.Map.delete(idx);
 			Player.LaserSet.delete(this);
-			Score.add(invader.Points);
+			Score.add(invader.Score);
 			return;
 		}
 		const ufo = UfoMgr.currentInstance;
@@ -181,7 +181,7 @@ export const InvaderShoot = new class {
 		for (const [idx,inv] of InvaderMgr.Map) {
 			if (InvaderMgr.LaserMap.has(inv)) {continue}
 			if (this.#lowerColumnExists(idx)) {continue}
-			ret.push(inv)
+			ret.push(inv);
 		} return ret;
 	}
 	#lowerColumnExists(i) {

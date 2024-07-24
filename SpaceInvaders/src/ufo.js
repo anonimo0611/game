@@ -46,9 +46,9 @@ export const UfoMgr = new class {
 	}
 };
 export class Ufo extends Rect {
-	Type   = Sprite.InvaderType.Ufo;
-	Color  = '#F03';
-	Points = randChoice(50,100,150,300);
+	Type  = Sprite.InvaderType.Ufo;
+	Color = '#F03';
+	Score = randChoice(50,100,150,300);
 
 	#velocityX   = cvs.width / (60*3);
 	#destroyed   = false;
@@ -85,7 +85,7 @@ export class Ufo extends Rect {
 	destroy() {
 		if (this.destroyed) {return}
 		new Explosion2(this, {duration:this.ExplDuration/2});
-		Score.add(this.Points);
+		Score.add(this.Score);
 		Sound.stop('ufo_high').play('ufo_low');
 		this.#destroyed = true;
 	}
@@ -100,7 +100,7 @@ export class Ufo extends Rect {
 			ctx.save();
 			ctx.textAlign = 'center';
 			ctx.fillStyle = Color;
-			ctx.fillText(this.Points, Width/2, Height);
+			ctx.fillText(this.Score, Width/2, Height);
 			ctx.restore();
 		}
 		ctx.restore();

@@ -37,11 +37,11 @@ export class Bunker extends Rect {
 		this.ctx = Bunker.ctx;
 		this.#cache(this);
 	}
-	collisionPixel({tipPos,Width}, fromAbove) {
-		const {x, y}  = tipPos;
-		const imgData = Bunker.ctx.getImageData(x - Width/2, y, Width, 1);
-		return imgData.data.filter(d=> d > 0).length >= Width
-			&& this.#destroy(Bunker.ctx, {x,y,Width}, fromAbove);
+	collisionPixel({tipPos}, fromAbove) {
+		const {x, y}  = tipPos, w = int(cvs.width / 80);
+		const imgData = Bunker.ctx.getImageData(x - w/2, y, w, 1);
+		return imgData.data.filter(d=> d > 0).length >= w
+			&& this.#destroy(Bunker.ctx, {x,y,Width:w}, fromAbove);
 	}
 	#cache({ctx,x,y,Width:w,Height:h}) {
 		ctx.save();
@@ -81,12 +81,13 @@ export class Bunker extends Rect {
 		const size = w * 0.2875;
 		const xMin = ctx.lineWidth/3.0;
 		const xMax = ctx.lineWidth/1.2;
-		const yMin = (fromAbove? -h/13.5 : -h/2.7)|0;
-		const yMax = (fromAbove? +h/ 1.5 : +h/1.0)|0;
+		const yMin = (fromAbove? -h/13.5 : -h/3)|0;
+		const yMax = (fromAbove? +h/ 1.5 : +h/1)|0;
 		for (let y=yMin; y<yMax; y++) {
-			const x  = [randFloat(-xMin, -xMax), randFloat(xMin, xMax)][y % 2];
+			const x  = [randFloat(-xMin, -xMax), randFloat(xMin, xMax)][y & 1];
 			const cx = cos(randFloat(0, PI*2)) + x;
 			const cy = sin(randFloat(0, PI*2)) + y;
+			ctx.fillStyle = 'red';
 			ctx.fillRect(cx-(size/2), cy-(size/2), size,size);
 		}
 	}
