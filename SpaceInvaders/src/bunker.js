@@ -87,7 +87,6 @@ export class Bunker extends Rect {
 			const x  = [randFloat(-xMin, -xMax), randFloat(xMin, xMax)][y & 1];
 			const cx = cos(randFloat(0, PI*2)) + x;
 			const cy = sin(randFloat(0, PI*2)) + y;
-			ctx.fillStyle = 'red';
 			ctx.fillRect(cx-(size/2), cy-(size/2), size,size);
 		}
 	}
