@@ -19,15 +19,16 @@ const dqsAll = sel=> document.querySelectorAll(sel);
 const byId   = id => document.getElementById(id);
 const byIds  = arg=> {
 	if (!hasIter(arg)) return [];
-	if (isStr(arg)) arg = splitByBar(arg);
+	if (isStr(arg))
+		arg = splitByBar(arg);
 	const elms = [];
 	for (const id of arg) {
-		if (!byId(id)) throw Error(`Element with ID '${id}' not found`);
+		if (!byId(id))
+			throw Error(`Element with ID '${id}' not found`);
 		elms.push(byId(id));
 	} return elms;
 };
 const integers = len=> [...Array(+len).keys()];
-const norm     = (x, y, p)     => (p - x) / (y - x);
 const range    = (start, end)  => [...Array(end+1).keys()].slice(start);
 const between  = (n, min, max) => (n >= min && n <= max);
 const clamp    = (n,_min,_max) => min(max(n,_min), _max);

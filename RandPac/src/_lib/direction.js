@@ -9,7 +9,8 @@ export const Dir  = freeze(new class {
 		if (!isKeyboardEvent(e)) return null;
 		if (isCombinationKey(e)) return null;
 		const key = e.code.replace(/^(Arrow|Key)/,'');
-		return Dirs.includes(key) ? key
+		return Dirs.includes(key)
+			? key
 			: (awsd && {A:L, W:U, S:D, D:R}[key.toUpperCase()] || null);
 	}
 });

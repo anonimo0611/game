@@ -30,15 +30,17 @@ export class Rect {
 Rect.surround = ({x:sx, y:sy}, n=1)=> {
 	if (n <= 0) return [];
 	const ret = [];
-	const [xmin,xmax,ymin,ymax] = [sx-n,sx+n,sy-n,sy+n];
-	for (let x=xmin; x<=xmax; x++)
-		ret.push(Vec2(x, ymin));
-	for (let y=ymin+1; y<=ymax-1; y++) {
-		ret.push(Vec2(xmin,y));
-		ret.push(Vec2(xmax,y));
+	const [xmin,xmax,ymin,ymax]= [sx-n,sx+n,sy-n,sy+n];
+	for (let x=xmin; x<=xmax; x++) {
+		ret.push( Vec2(x, ymin) );
 	}
-	for (let x=xmin; x<=xmax; x++)
-		ret.push(Vec2(x, ymax));
+	for (let y=ymin+1; y<=ymax-1; y++) {
+		ret.push( Vec2(xmin, y) );
+		ret.push( Vec2(xmax, y) );
+	}
+	for (let x=xmin; x<=xmax; x++) {
+		ret.push( Vec2(x, ymax) );
+	}
 	return ret;
 };
 freeze(Rect);

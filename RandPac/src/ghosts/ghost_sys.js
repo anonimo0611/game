@@ -3,6 +3,7 @@ import {Ticker} from '../_lib/timer.js';
 import {State}  from '../_lib/state.js';
 import {Param}  from '../_param.js';
 import {Actor}  from '../actor.js';
+import {Pacman} from '../pacman/pac.js';
 import {Scene}  from '../scene.js';
 import {Maze}   from '../maze.js';
 import {Ghost}  from './ghost.js';
@@ -12,6 +13,7 @@ export const SysMap    = new Map();
 export const Step      = Param.GhsStep;
 export const WaveType  = freeze({Scatter:0,Chase:1});
 export const GhostType = freeze({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4});
+
 export class GhostMode extends State {
 	isIdle   = true;
 	isGoOut  = false;
@@ -40,19 +42,25 @@ export const Wave = new class {
 		this.#mode = WaveType.Scatter;
 		SysMap.set(Wave, {update});
 	}
-	setReversalSig() {Ghosts.forEach(g=> $(g).trigger('Reverse'))}
+	setReversalSig() {
+		Ghosts.forEach(g=> $(g).trigger('Reverse'));
+	}
 };
 export const Elroy = new class {
-	static {$on('Title', _=> Elroy.#part = 0)}
+	static {
+		$on('Title',    _=> Elroy.#part = 0);
+		$on('DotEaten', _=> Elroy.#dotEaten());
+	}
 	#part = 0;
 	get part() {return this.#part}
 	get step() {return Step.Base * Param.ElroySpdRates[this.part]}
 	get angry() {
-		return Scene.isPlaying && this.part > 1
+		return Scene.isPlaying
+			&& this.part > 1
 			&& Ghosts[GhostType.Akabei]?.frightened === false
 			&& Ghosts[GhostType.Guzuta]?.started === true;
 	}
-	dotEaten() {
+	#dotEaten() {
 		if (Maze.DotMap.size <= Maze.DotMax/Param.ElroyDotRates[this.part]) {
 			++this.#part;
 			Sound.siren();
@@ -64,7 +72,7 @@ export class FrightMode {
 	#spriteIdx  = 0;
 	#captureCnt = 0;
 	#flashedCnt = 0;
-	get points()      {return 100 * (1 << this.#captureCnt)}
+	get score()       {return 100 * (1 << this.#captureCnt)}
 	get spriteIdx()   {return this.#flashedCnt > 0 ? this.#spriteIdx^1 : 0}
 	get allCaptured() {return this.#captureCnt == GhostType.Max}
 	constructor() {
@@ -81,7 +89,8 @@ export class FrightMode {
 	}
 	#toggle(bool) {
 		SysMap.delete(FrightMode);
-		bool? Sound.fright() : Sound.siren();
+		bool? Sound.fright()
+		    : Sound.siren();
 		Ghosts.forEach(g=> $(g).trigger('FrightMode', bool));
 		return this;
 	}

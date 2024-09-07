@@ -1,13 +1,14 @@
+import {Ticker}  from '../_lib/timer.js';
+import {U,R,D,L} from '../_lib/direction.js';
+import {Color}   from '../maze.js';
+import {Losing}  from './losing.js';
+
 const Duration = 150/Ticker.Interval;
 const MouthMax =  90 * PI/180;
 const MouthMin =  20 * PI/180;
 const MouthMid =  60 * PI/180;
 const AngleMap = new Map([[L,0],[U,1],[R,2],[D,3]]);
 
-import {Ticker}  from '../_lib/timer.js';
-import {U,R,D,L} from '../_lib/direction.js';
-import {Color}   from '../maze.js';
-import {Losing}  from './losing.js';
 export class Sprite {
 	#obj     = null;
 	#losing  = null;
@@ -44,5 +45,7 @@ export class Sprite {
 		ctx.fill();
 		ctx.restore();
 	}
-	setLosing() {this.#losing = new Losing}
+	setLosing() {
+		this.#losing = new Losing();
+	}
 }

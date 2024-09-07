@@ -1,4 +1,4 @@
-export class XorShift {
+export class Random {
 	#w;
 	#x = 123456789;
 	#y = 362436069;

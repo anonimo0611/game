@@ -1,5 +1,5 @@
 import {Sound}    from '../_snd/sound.js';
-import {XorShift} from '../_lib/rand.js';
+import {Random}   from '../_lib/rand.js';
 import {Astar}    from '../_lib/astar.js';
 import {Ticker}   from '../_lib/timer.js';
 import {Timer}    from '../_lib/timer.js';
@@ -25,6 +25,7 @@ export class Ghost extends Actor {
 		$on({
 			'Reset Respawn':Ghost.#reset,
 			'Playing':      Ghost.#start,
+			'DotEaten':     Ghost.#dotEaten,
 			'Clear Losing': Ghost.#setFadeOut,
 		});
 	}
@@ -34,10 +35,9 @@ export class Ghost extends Actor {
 	static get Elroy()      {return Sys.Elroy}
 	static get Type()       {return Sys.GhostType}
 	static get frightened() {return SysMap.has(FrightMode)}
-	static get points()     {return SysMap.get(FrightMode)?.points    || 0}
+	static get score()      {return SysMap.get(FrightMode)?.score     || 0}
 	static get spriteIdx()  {return SysMap.get(FrightMode)?.spriteIdx || 0}
 	static get hasEscape()  {return Ghosts.some(g=> g.escaping)}
-	static setFrightMode()  {new FrightMode()}
 	static #reset() {
 		Ghost.#aIdx = 0;
 		Ghosts.splice(0);
@@ -46,7 +46,7 @@ export class Ghost extends Actor {
 	static #start(e) {
 		Sound.siren();
 		Timer.sequence(...Ghosts.slice(1).map(g=>
-			[g.ReleaseTime, _=> g.mode.switchToGoOut()]));
+			[g.ReleaseTime, g.mode.switchToGoOut]));
 	}
 	static update() {
 		if (!Scene.isPlaying) return;
@@ -55,6 +55,9 @@ export class Ghost extends Actor {
 		SysMap.forEach(s=> s.update());
 		Ghosts.forEach(g=> g.#update());
 	}
+	static #dotEaten(_, isPow) {
+		isPow && (new FrightMode);
+	}
 	static #setFadeOut() {
 		Ghosts.forEach(g=> g.sprite.setFadeOut());
 	}
@@ -62,7 +65,7 @@ export class Ghost extends Actor {
 		const radius = g.frightened? A/5 : A/8;
  		collisionCircle(g, Pacman.instance, radius) && g.#crashWithPac();
 	}
-	static #_draw = (_,i,array)=> array.at(-1-i).#draw(Ctx);
+	static #_draw = (_,i,array)=> array.at(-1-i).#draw();
 	static drawFront()  {Ghosts.filter(inFrontOfPac).forEach(this.#_draw)}
 	static drawBehind() {Ghosts.filter(behindThePac).forEach(this.#_draw)}
 	#orient;
@@ -90,18 +93,20 @@ export class Ghost extends Actor {
 		this.pos       = Vec2(this.initPos, row*T);
 		this.mode      = new Sys.GhostMode(this.isInHouse);
 		this.sprite    = new Sprite();
-		this.random    = new XorShift(Maze.Seed+idx);
+		this.random    = new Random(Maze.Seed+idx);
 		this.name      = this.constructor.name;
 		this.#moveDir  = this.initDir;
 		this.#orient   = this.initDir;
 		this.#started  = this.mode.isWalk;
-		[this.cvs, this.ctx]= canvas2D(null, A,A).vals;
+		[this.cvs, this.ctx]= canvas2D(null, A).vals;
 		$(this).on('Reverse',_=> this.#revSig = true);
 		$(this).on('FrightMode', this.#setFrightMode);
 	}
 	get isScatter() {
-		return (Sys.Wave.isScatter && !this.frightened)
-			&& !this.mode.isEscape && !this.angry;
+		return Sys.Wave.isScatter
+			&& !this.frightened
+			&& !this.mode.isEscape
+			&& !this.angry;
 	}
 	get targetTile() {
 		return this.mode.isEscape
@@ -125,7 +130,7 @@ export class Ghost extends Actor {
 		this.#orient = this.#moveDir = dir;
 	}
 	#isAllowDir = dir=> {
-		return !this.hasAdjWall(dir)
+		return !this.hasAdjacentWall(dir)
 			&& !this.collidedWithWall(dir)
 			&& !Dir.isOpposite(dir, this.orient);
 	}
@@ -142,13 +147,13 @@ export class Ghost extends Actor {
 		if (mode.isReturn) return void this.#returnToHome();
 		this.#walk(mode.isEscape);
 	}
-	#draw(ctx) {
-		ctx.save();
-		this.fadeIn?.update(ctx);
-		this.sprite.fadeOut?.update(ctx);
+	#draw() {
+		Ctx.save();
+		this.fadeIn?.update(Ctx);
+		this.sprite.fadeOut?.update(Ctx);
 		if (this.mode.isBitten == false)
-			this.sprite.draw(ctx, this);
-		ctx.restore();
+			this.sprite.draw(this);
+		Ctx.restore();
 	}
 	#idle() {
 		if (Actor.frozen) return;
@@ -223,17 +228,17 @@ export class Ghost extends Actor {
 		return this.frightened
 			?  this.random.choice(dirs)
 			: (this.#getDirWithAstar(dirs)
-			?? this.#getDirWithPythagorean(dirs));
+				?? this.#getDirWithPythagorean(dirs));
 	}
 	#getDirWithAstar(dirs, target=this.targetTile) {
 		const st  = Maze.Graph.nodes[this.tilePos.x]?.[this.tilePos.y];
 		const ed  = Maze.Graph.nodes[target.x]?.[target.y];
 		const pos = Astar.search(Maze.Graph.nodes, st, ed)[0]?.pos;
-		return pos && dirs.find(dir=> this.getAdjTile(dir).eq(pos));
+		return pos && dirs.find(dir=> this.getAdjacentTile(dir).eq(pos));
 	}
 	#getDirWithPythagorean(dirs, target=this.targetTile) {
 		return dirs.map((dir, index)=>
-			({dir,index,dist:this.getAdjTile(dir).distance(target)})
+			({dir,index,dist:this.getAdjacentTile(dir).distance(target)})
 		).sort(compareDist)[0].dir;
 	}
 	#setFrightMode(_, bool) {

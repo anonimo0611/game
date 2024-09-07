@@ -1,18 +1,21 @@
-const PupilsColor       ='#33F';
-const FrightBodyColors  ='#36A|#FFF'.split('|');
-const FrightFaceColors  ='#F9F|#F00'.split('|');
-const EyesIdxFromDirMap = new Map([[U,0],[D,1],[L,2],[R,2]]);
-
 import {Glow}    from './glow.js';
 import {Ghost}   from './ghost.js';
+import {Ctx}     from '../_main.js';
 import {U,R,D,L} from '../_lib/direction.js';
+
+const PupilsColor       = '#33F';
+const FrightBodyColors  = ['#36A','#FFF'];
+const FrightFaceColors  = ['#F9F','#F00'];
+const EyesIdxFromDirMap = new Map([[U,0],[D,1],[L,2],[R,2]]);
+
 export class Sprite {
 	#fadeOut   = null;
 	#resurrect = null;
 	get fadeOut()  {return this.#fadeOut}
 	setFadeOut()   {this.#fadeOut ||= new FadeOut(400)}
 	setResurrect() {this.#resurrect = new FadeIn (600)}
-	draw(Ctx, {cvs,ctx,idx=0,x=0,y=0,Color='#E00',orient=L,
+
+	draw({cvs,ctx,idx=0,x=0,y=0,Color='#E00',orient=L,
 		angry=false,frightened=false,escaping=false,isInHouse=false}={})
 	{
 		ctx.clear();
@@ -20,19 +23,24 @@ export class Sprite {
 		ctx.translate(A/2, A/2);
 		ctx.scale(A/106, A/105);
 		ctx.fillStyle = !frightened
-			? Color : FrightBodyColors[Ghost.spriteIdx];
+			? Color
+			: FrightBodyColors[Ghost.spriteIdx];
+
 		if (!escaping) {
 			ctx.save();
 			this.#resurrect?.update(ctx);
-			this.#angryGlow(Ctx, x, y, angry);
+			this.#angryGlow(x, y, angry);
 			this.#body(ctx);
 			frightened && this.#frightFace(ctx);
 			ctx.restore();
 		}
-		if (!frightened)
+		!frightened &&
 			[this.#eyesUp, this.#eyesDown, this.#eyesLR]
 				[EyesIdxFromDirMap.get(orient)](ctx, orient);
+
 		ctx.restore();
+
+		// Draw on main canvas
 		Ctx.translate(x+T/2, y+T/2);
 		Ctx.drawImage(cvs, -A/2, -A/2);
 	}
@@ -42,7 +50,9 @@ export class Sprite {
 		ctx.lineTo(+42, +11);
 		ctx.bezierCurveTo(+42,-60, -42,-60, -42,11);
 		ctx.lineTo(-42, +26);
-		Ghost.aIdx == 0 ? this.#feet0(ctx) : this.#feet1(ctx);
+		Ghost.aIdx == 0
+			? this.#feet0(ctx)
+			: this.#feet1(ctx);
 		ctx.fill();
 	}
 	#feet0(ctx) {
@@ -67,7 +77,8 @@ export class Sprite {
 		for (let i=0; i<2; i++) {
 			ctx.beginPath(); // Eyeball
 				ctx.fillStyle = '#FFF';
-				ctx.ellipse(19.5*[-1,1][i], -17, 13,17, [8,-8][i]*PI/180, -3*PI/4, -PI/4, true);
+				ctx.ellipse(19.5*[-1,1][i], -17, 13,17,
+					[8,-8][i]*PI/180, -3*PI/4, -PI/4, true);
 			ctx.fill();
 			ctx.beginPath(); // Pupil
 				ctx.fillStyle = PupilsColor;
@@ -104,12 +115,14 @@ export class Sprite {
 		ctx.restore();
 	}
 	#frightFace(ctx) {
-		ctx.fillStyle   =
-		ctx.strokeStyle = FrightFaceColors[Ghost.spriteIdx];
+		ctx.fillStyle = ctx.strokeStyle =
+			FrightFaceColors[Ghost.spriteIdx];
+
 		// Eyes
 		const eyeS = 11;
 		ctx.fillRect(-15-eyeS/2, -11-eyeS/2, eyeS, eyeS);
 		ctx.fillRect(+15-eyeS/2, -11-eyeS/2, eyeS, eyeS);
+
 		// Mouth
 		const mouthPath = [
 			[-39,18],[-30,10],[-24,10],[-15,18],[-11,18],[-3,10],[-2,10],
@@ -121,13 +134,13 @@ export class Sprite {
 			mouthPath.slice(1).forEach(p=> ctx.lineTo(...p));
 		ctx.stroke();
 	}
-	#angryGlow(ctx, x, y, angry) {
+	#angryGlow(x, y, angry) {
 		if (!angry) return;
-		const GW = Glow.cvs.width, GS = (GW * 1.2);
-		ctx.save();
-		ctx.globalAlpha = this.#resurrect?.alpha;
-		ctx.translate(x+T/2, y+T/2);
-		ctx.drawImage(Glow.cvs, 0,0, GW,GW, -GS/2,-GS/2, GS,GS);
-		ctx.restore();
+		const W = Glow.cvs.width, S = W*1.2;
+		Ctx.save();
+		Ctx.globalAlpha = this.#resurrect?.alpha;
+		Ctx.translate(x+T/2, y+T/2);
+		Ctx.drawImage(Glow.cvs, 0,0, W,W, -S/2,-S/2, S,S);
+		Ctx.restore();
 	}
 }

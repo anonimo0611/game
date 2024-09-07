@@ -24,15 +24,18 @@ export const Sound = new class extends Loader {
 			Sound.#setupCtrls();
 		}
 	}
+	#lstVol = null;
+	#setupCompleted = false;
+
 	get sirenId() {
 		return SirenIds[Ghost.Elroy.part];
 	}
-	#setupCompleted = false;
 	get setupCompleted() {
 		return this.#setupCompleted;
 	}
-	#lstVol = null;
-	get vol() {return super.vol}
+	get vol() {
+		return super.vol;
+	}
 	set vol(vol) {
 		if (Sound.failed) return;
 		vol = isNaN(vol) ? 10 : clamp(+vol, 0, 10);
@@ -115,6 +118,8 @@ export const Sound = new class extends Loader {
 			Sound.vol = Sound.vol + Number(e.key+1);
 			volRng.classList.add('show');
 		}
-		function hideRng() {volRng.classList.remove('show')}
+		function hideRng() {
+			volRng.classList.remove('show');
+		}
 	}
 };

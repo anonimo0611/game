@@ -2,7 +2,8 @@ import {Sound}  from '../_snd/sound.js';
 import {Timer}  from '../_lib/timer.js';
 import {Vec2}   from '../_lib/vec2.js';
 import {Dir}    from '../_lib/direction.js';
-import {Bg,Ctx} from '../_main.js';
+import {Ctx}    from '../_main.js';
+import {BgCtx}  from '../_main.js';
 import {Param}  from '../_param.js';
 import {Scene}  from '../scene.js';
 import {Score}  from '../score.js';
@@ -51,24 +52,21 @@ export class Pacman extends Actor {
 	}
 	#onKeydown(e) {
 		const dir = Dir.from(e, {awsd:true});
+		const turnArounded = Dir.isOpposite(dir, this.dir);
 		if (dir == null || e.originalEvent.repeat) return;
 		if (dir == this.dir && !this.turning) return;
 
 		if (Scene.some('Start|Respawn') && Vec2[dir].x) {
-			[this.#moveDir, this.#preDir] = [dir, null];
-			return;
+			return void ([this.#moveDir, this.#preDir] = [dir, null]);
 		}
 		if (this.turning) {
-			this.#nextTurn = dir;
-			return;
+			return void (this.#nextTurn = dir);
 		}
-		if (this.hasAdjWall(dir) && !Dir.isOpposite(dir, this.dir)) {
-			this.#preDir = dir;
-			return;
+		if (this.hasAdjacentWall(dir) && !turnArounded) {
+			return void (this.#preDir = dir);
 		}
-		if (this.#stopped || Dir.isOpposite(dir, this.dir)) {
-			[this.#preDir, this.#moveDir] = [null, dir];
-			return;
+		if (this.#stopped || turnArounded) {
+			return void ([this.#preDir, this.#moveDir] = [null, dir]);
 		}
 		this.#preDir = dir;
 		if (this.inBackwardOfTile && this.isInBoard)
@@ -87,7 +85,8 @@ export class Pacman extends Actor {
 		return !Scene.isPlaying || !DotMap.size || !this.dir;
 	}
 	get #canTurn() {
-		return this.inForwardOfTile && this.#preDir
+		return this.inForwardOfTile
+			&& this.#preDir
 			&& !this.collidedWithWall(this.#preDir);
 	}
 	#getCurrentStep() {
@@ -103,16 +102,18 @@ export class Pacman extends Actor {
 		}
 		if (this.tileCenterReached) {
 			this.snapToCenterline();
-			this.#preDir && !this.hasAdjWall(this.#preDir)
-				&& ([this.#moveDir, this.#preDir] = [this.#preDir, null]);
+			this.#preDir
+				&& !this.hasAdjacentWall(this.#preDir)
+				&&([this.#moveDir, this.#preDir] = [this.#preDir, null]);
 		}
+		this.#orient = this.dir;
+
 		if (!this.turning && this.collidedWithWall()) {
 			this.pos = this.tilePos.mul(T);
 			this.#stopped = true;
-			[this.#preDir, this.#orient] = [null, this.dir];
+			this.#preDir  = null;
 			return;
 		}
-		this.#orient  = this.dir;
 		this.#stopped = false;
 		this.#setCornering();
 		this.setNextPos();
@@ -137,14 +138,14 @@ export class Pacman extends Actor {
 		const dot = DotMap.get(idx);
 		const pow = PowMap.get(idx);
 		Score.add(pow ? 50 : 10);
-		pow && Ghost.setFrightMode();
 		Sound.eat(idx % 2);
-		fillCircle(Bg)(...dot.vals, T/2, null);
 		DotMap.delete(idx);
 		PowMap.delete(idx);
-		Ghost.Elroy.dotEaten();
+		fillCircle(BgCtx)(...dot.vals, T/2, null);
+		$trigger('DotEaten', !!pow);
 		DotMap.size == 0
-			&& Sound.stopLoops() && Scene.switchToClear();
+			&& Sound.stopLoops()
+			&& Scene.switchToClear();
 	}
 	#onLosing() {
 		Timer.set(500, _=> {

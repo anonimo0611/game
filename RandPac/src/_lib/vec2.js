@@ -1,4 +1,3 @@
-const NEARLY_0 = 0.000001;
 class Vector2 {
 	constructor(...args) {
 		const {x, y}=xyFrom(args);
@@ -105,14 +104,14 @@ Vec2.divRound   = (v1,  n)=> Vec2(v1).divRound(n);
 Vec2.remainder  = (v1,  n)=> Vec2(v1.x % n, v1.y % n);
 Vec2.reflect    = (v1,  n)=> Vec2(v1).sub(Vec2(n).mul(2*Vec2.dot(v1,n)));
 Vec2.distance   = (v1, v2)=> Vec2.sub(v1, v2).magnitude;
-Vec2.isVertical = (v1, v2)=> Vec2.dot(v1, v2)   < NEARLY_0;
-Vec2.isParallel = (v1, v2)=> Vec2.cross(v1, v2) < NEARLY_0;
+Vec2.isVertical = (v1, v2)=> Vec2.dot(v1, v2)   < 1e-6;
+Vec2.isParallel = (v1, v2)=> Vec2.cross(v1, v2) < 1e-6;
 Vec2.fromIdx    = (i, col)=> Vec2(i % col, i / col|0);
 Vec2.idx        = (v1,col)=> v1.y * col + v1.x;
 Vec2.dot        = (v1, v2)=> v1.x * v2.x + v1.y * v2.y;
 Vec2.cross      = (v1, v2)=> v1.x * v2.y - v1.y * v2.x;
 Vec2.angle      = (v1, v2)=> atan2(v1.y - v2.y, v1.x - v2.x);
-Vec2.eq         = (v1, v2)=> abs(v1.x - v2.x) < NEARLY_0 && abs(v1.y - v2.y) < NEARLY_0;
+Vec2.eq         = (v1, v2)=> abs(v1.x - v2.x) < 1e-6 && abs(v1.y - v2.y) < 1e-6;
 Object.defineProperties(Vec2, {
 	Zero:  {get() {return Vec2( 0, 0)}},
 	One:   {get() {return Vec2(+1,+1)}},
