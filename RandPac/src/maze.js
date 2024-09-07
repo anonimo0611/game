@@ -1,43 +1,44 @@
 import './wall.js';
-import {Astar}      from './_lib/astar.js';
-import {Rect}       from './_lib/rect.js';
-import {Vec2}       from './_lib/vec2.js';
-import {Dirs}       from './_lib/direction.js';
-import {XorShift}   from './_lib/rand.js';
-import {TileType}   from './_constants.js';
-import {Container}  from './_main.js';
-import {Bg,Ctx}     from './_main.js';
-import {Scene}      from './scene.js';
-import {Pacman}     from './pacman/pac.js';
-import {putGhost}   from './ghosts/ghost_sub.js';
+import {Astar}     from './_lib/astar.js';
+import {Rect}      from './_lib/rect.js';
+import {Vec2}      from './_lib/vec2.js';
+import {Dirs}      from './_lib/direction.js';
+import {Random}    from './_lib/rand.js';
+import {TileType}  from './_constants.js';
+import {Container} from './_main.js';
+import {Ctx,BgCtx} from './_main.js';
+import {Scene}     from './scene.js';
+import {Pacman}    from './pacman/pac.js';
+import {putGhost}  from './ghosts/ghost_sub.js';
 
 const WallMap = new Map();
-const mapExec = ({x,y},m,v)=> WallMap[m](y*GRID+x, v);
-const hasWall = t=> mapExec(t,'has');
-const setWall = t=> mapExec(t,'set', t);
-const delWall = t=> mapExec(t,'delete');
+const setMap  = ({x,y},m,v)=> WallMap[m](y*GRID+x, v);
+const hasWall = t=> setMap(t,'has');
+const setWall = t=> setMap(t,'set', t);
+const delWall = t=> setMap(t,'delete');
 
 export const DotMap = new Map();
 export const PowMap = new Map();
 export {WallMap,hasWall};
 
 const Graph = new class {
-	#data; get data() {return this.#data}
+	#data;
+	get data() {return this.#data}
 	set() {
-		this.#data = Astar.Graph(integers(GRID)
-			.map(x=> integers(GRID).map(y=> +hasWall({x,y}))));
+		const setData = x=> integers(GRID).map(y=> +hasWall({x,y}));
+		this.#data = Astar.Graph( integers(GRID).map(setData) );
 	}
 };
 const Rand = new class {
 	#seed = 0;
 	#hueA = 0;
-	#rand = new XorShift();
+	#rand = new Random();
 	set(seed) {
-		this.#rand = new XorShift(seed);
+		this.#rand = new Random(seed);
 		this.#hueA = this.#rand.nextInt(0,360);
 		// Corrects hues from bluish to purplish
-		this.#hueA = between(this.#hueA, 256,295) ? 295 : this.#hueA;
-		this.#hueA = between(this.#hueA, 195,255) ? 195 : this.#hueA;
+		between(this.#hueA, 256,295) && (this.#hueA = 295);
+		between(this.#hueA, 195,255) && (this.#hueA = 195);
 		setCSSVariables();
 	}
 	get hueA()     {return this.#hueA}
@@ -47,34 +48,36 @@ const Rand = new class {
 };
 
 export const Color = freeze(new class {
-	BgColor = '#000';
-	PacMan  = '#FF0';
+	BgColor = 'black';
+	PacMan  = 'yellow';
 	get Wall()  {return `hsl(${Rand.hueA}      98% 84%)`}
 	get Door()  {return `hsl(${Rand.hueA-180} 100% 80%)`}
 	get Dark()  {return `hsl(${Rand.hueA- 90}  30% 30% /0.8)`}
-	get Pts()   {return `hsl(${Rand.hueA-180} 100% 80%)`}
+	get Score() {return `hsl(${Rand.hueA-180} 100% 80%)`}
 	get Dot()   {return `hsl(${Rand.hueA-190} 100% 88%)`}
 	get Clear() {return `hsl(${Rand.hueA+100}  60% 70%)`}
 });
 function setCSSVariables() {
 	$(dBody).css({
-		'--color-wall'  :  Color.Wall,
-		'--color-body'  : `hsl(${Rand.hueA}      50% 25%)`,
-		'--color-title' : `hsl(${Rand.hueA- 90} 100% 80%)`,
-		'--color-ready' : `hsl(${Rand.hueA-120}  80% 80%)`,
-		'--color-light' : `hsl(${Rand.hueA-180}  80% 78%)`,
-		'--color-dark'  : `hsl(${Rand.hueA-180}  80% 20%)`,
-		'--color-darkA' : `hsl(${Rand.hueA-180}  40% 20% /0.7)`,
+		'--color-wall' :  Color.Wall,
+		'--color-body' : `hsl(${Rand.hueA}      50% 25%)`,
+		'--color-title': `hsl(${Rand.hueA- 90} 100% 80%)`,
+		'--color-ready': `hsl(${Rand.hueA-120}  80% 80%)`,
+		'--color-light': `hsl(${Rand.hueA-180}  80% 78%)`,
+		'--color-dark' : `hsl(${Rand.hueA-180}  80% 20%)`,
+		'--color-darkA': `hsl(${Rand.hueA-180}  40% 20% /0.7)`,
 	});
 }
 
 const Dot = new class {
 	static {$on('Title', _=> Dot.#reset())}
-	#max = 0; get max() {return this.#max}
+	#max = 0;
+	get max() {return this.#max}
 	#reset() {
 		DotMap.clear();
 		for (let y=2; y<GRID-2; y++)
-			for (let x=2; x<GRID-2; x++) this.#set({x,y});
+			for (let x=2; x<GRID-2; x++)
+				this.#set({x,y});
 		this.#max = DotMap.size;
 	}
 	#set(tile) {
@@ -83,7 +86,7 @@ const Dot = new class {
 		const idx = Vec2(tile).idx(GRID);
 		DotMap.set(idx, pos);
 		PowMap.has(idx) == false
-			&& fillCircle(Bg)(...pos.vals, T/12, Color.Dot);
+			&& fillCircle(BgCtx)(...pos.vals, T/12, Color.Dot);
 	}
 };
 class PowDot {
@@ -100,7 +103,9 @@ class PowDot {
 	#drawDot({x, y}) {
 		fillCircle(Ctx)(x, y, T/2.2*this.#scale, Color.Dot);
 	}
-	draw() {PowMap.forEach(pos=> this.#drawDot(pos))}
+	draw() {
+		PowMap.forEach(pos=> this.#drawDot(pos));
+	}
 };
 
 class PenRect {
@@ -137,6 +142,9 @@ export const Maze = freeze(new class {
 	get PowDot() {return PowDot.instance}
 	get Center() {return CVS_SIZE/2}
 
+	isInTunnel({x, y}) {
+		return !between(x, 1, GRID-2);
+	}
 	#generate({seed,isInit=false}={}) {
 		if (!isInit) return;
 		Rand.set(seed);
@@ -173,7 +181,9 @@ export const Maze = freeze(new class {
 	}
 	#canPutWall(pos) {
 		return MAP_DATA[pos.y*GRID+pos.x] != TileType.Pow
-			&& this.#isInField(pos) && !Pen.isAround(pos) && !hasWall(pos);
+			&& this.#isInField(pos)
+			&& !Pen.isAround(pos)
+			&& !hasWall(pos);
 	}
 	#hasSurroundingsBlank(pos, outer=1) {
 		return Rect.surround(pos, outer).every(pos=> !hasWall(pos));

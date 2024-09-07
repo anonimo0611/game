@@ -8,7 +8,7 @@ export class Actor {
 	static {$on('Title', _=> this.frozen = false)}
 	#x = 0;
 	#y = 0;
-	#lstStepPT = 0;
+	#lstCount  = 0;
 	#lstTile   = null;
 	#fadeInObj = Scene.isRespawn? new FadeIn(500) : null;
 	set pos(pos)    {isObj(pos) && this.setPos(pos)}
@@ -17,7 +17,7 @@ export class Actor {
 	get x()         {return this.#x}
 	get y()         {return this.#y}
 	get fadeIn()    {return this.#fadeInObj}
-	get isInBoard() {return this.isInTunnel(this.tilePos) == false}
+	get isInBoard() {return !Maze.isInTunnel(this.tilePos)}
 	get pos()       {return Vec2(this)}
 	get centerPos() {return Vec2(this).add(T/2)}
 	get nextPos()   {return Vec2[this.dir].mul(this.step).add(this)}
@@ -25,9 +25,9 @@ export class Actor {
 	get tileIdx()   {return Vec2.idx(this.tilePos, GRID)}
 	get stepsPerTile() {
 		if (!this.dir) return 0;
-		const {x,y} = this.centerPos, v = Vec2[this.dir];
+		const {x,y,v}= {...this.centerPos, v:Vec2[this.dir]};
 		const count = T - (v.x? x % T : y % T);
-		return abs((v.x || v.y)>0 ? count-T : count);
+		return abs((v.x || v.y) > 0 ? count-T : count);
 	}
 	get inForwardOfTile() {
 		return this.stepsPerTile <= T/2;
@@ -36,34 +36,32 @@ export class Actor {
 		return this.stepsPerTile > T/2;
 	}
 	get newTileReached() {
-		return this.#lstStepPT && (this.stepsPerTile <= this.#lstStepPT);
+		return this.#lstCount && (this.stepsPerTile <= this.#lstCount);
 	}
 	get tileCenterReached() {
-		if (!this.#lstTile) return false;
-		return !this.nextPos.divInt(T).eq(this.#lstTile);
-	}
-	isInTunnel({x, y}={}) {
-		return !(x>0 && x<GRID-1 && y>0 && y<GRID-1);
+		return this.#lstTile
+			? !this.nextPos.divInt(T).eq(this.#lstTile)
+			: false
 	}
 	setPos({x=this.x, y=this.y}={}) {
 		if (x < -this.Radius - T/2) x = CVS_SIZE;
 		if (x > CVS_SIZE) x = -this.Radius - T/2;
-		[this.#x, this.#y] = [x, y];
+		[this.#x,this.#y] = [x,y];
 	}
 	setNextPos() {
-		this.#lstTile = Vec2(this).divInt(T);
-		this.#lstStepPT = this.stepsPerTile;
+		this.#lstTile  = Vec2(this).divInt(T);
+		this.#lstCount = this.stepsPerTile;
 		this.pos = this.nextPos;
 	}
 	snapToCenterline() {
 		const v = Vec2[this.turning? this.orient : this.dir];
-		if (v.x) this.#y = T * this.tilePos.y;
-		if (v.y) this.#x = T * this.tilePos.x;
+		if (v.x) this.#y = this.tilePos.y * T;
+		if (v.y) this.#x = this.tilePos.x * T;
 	}
-	hasAdjWall(dir) {
-		return Maze.hasWall(this.getAdjTile(dir));
+	hasAdjacentWall(dir) {
+		return Maze.hasWall( this.getAdjacentTile(dir) );
 	}
-	getAdjTile(dir, n=1, tile=this.tilePos) {
+	getAdjacentTile(dir, n=1, tile=this.tilePos) {
 		const v = Vec2[dir].mul(n).add(tile);
 		v.x = (v.x+GRID) % GRID;
 		return v;

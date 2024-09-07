@@ -3,14 +3,14 @@ import {Maze}      from './maze.js';
 import {Container} from './_main.js';
 import {updateMap} from './_constants.js';
 
-export let loading = true;
+export let isLoading = true;
 
 const [board,lnkAnchor,copyTemp,infoBox,seedInput,helpBtn]=
 	byIds('board|link|copyTemp|infoBox|seedInput|helpBtn');
 
 const loadingToggle = bool=> {
 	$('#loading').toggle();
-	dBody.dataset.loaded = !(loading=bool);
+	dBody.dataset.loaded = !(isLoading=bool);
 };
 $ready(_=> {
 	$('.sizeBtn').on('click', resizeGrid);
@@ -21,7 +21,7 @@ $ready(_=> {
 	const w = $(window).width()  / board.offsetWidth;
 	const h = $(window).height() / board.offsetHeight;
 	const s = min(w, h) * 0.98;
-	board.style.setProperty('--scale', min(s,1));
+	$(board).css('--scale', min(s, 1));
 })
 .trigger('resize');
 
@@ -30,6 +30,7 @@ export const InfoBox = new class {
 	static #setup() {
 		$(Scene) .on({change: InfoBox.#onChangeScene});
 		lnkAnchor.on({click:  InfoBox.#copyURL});
+		seedInput.on({blur:   InfoBox.#restoreSeedVal});
 		seedInput.on({keydown:InfoBox.#restrictInput});
 	}
 	#displayed = false;
@@ -76,6 +77,9 @@ export const InfoBox = new class {
 		 || InfoBox.displayed && !e.target.closest('#infoBox'))
 			InfoBox.#showToggle();
 	}
+	#restoreSeedVal() {
+		seedInput.value === '' && (seedInput.value = Maze.Seed);
+	}
 	#restrictInput(e) {
 		/^Arrow(Up|Down)$/.test(e.key)
 			&& e.preventDefault();
@@ -84,7 +88,7 @@ export const InfoBox = new class {
 	}
 };
 const resizeGrid = function() {
-	if (loading || !Scene.isTitle) return;
+	if (isLoading || !Scene.isTitle) return;
 	loadingToggle(true);
 	dqs('.sizeBtn:disabled').disabled = !(this.disabled=true);
 	updateMap(+this.dataset.idx).trigger('Resize');

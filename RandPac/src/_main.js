@@ -1,21 +1,21 @@
 ﻿import './_lib/mouse.js';
-import {loading} from './ui.js';
-import {InfoBox} from './ui.js';
-import {Sound}   from './_snd/sound.js';
-import {Vec2}    from './_lib/vec2.js';
-import {Dir}     from './_lib/direction.js';
-import {Ticker}  from './_lib/timer.js';
-import {Timer}   from './_lib/timer.js';
-import {Scene}   from './scene.js';
-import {Lives}   from './lives.js';
-import {Points}  from './points.js';
-import {Maze}    from './maze.js';
-import {Pacman}  from './pacman/pac.js';
-import {Ghost}   from './ghosts/ghost.js';
+import {InfoBox}   from './ui.js';
+import {isLoading} from './ui.js';
+import {Sound}     from './_snd/sound.js';
+import {Vec2}      from './_lib/vec2.js';
+import {Dir}       from './_lib/direction.js';
+import {Ticker}    from './_lib/timer.js';
+import {Timer}     from './_lib/timer.js';
+import {Scene}     from './scene.js';
+import {Lives}     from './lives.js';
+import {Points}    from './points.js';
+import {Maze}      from './maze.js';
+import {Pacman}    from './pacman/pac.js';
+import {Ghost}     from './ghosts/ghost.js';
 
-export const Bg  = canvas2D('bgCvs').ctx;
-export const Ctx = canvas2D('obCvs').ctx;
 export const Container = byId('container');
+export const Ctx   = canvas2D('obCvs').ctx;
+export const BgCtx = canvas2D('bgCvs').ctx;
 
 const Game = new class {
 	static {$ready(this.setup)}
@@ -29,21 +29,27 @@ const Game = new class {
 			Losing:  Game.playEnds,
 			blur:_=> Game.pause(true),
 		});
-		$('#seedInput').on({input:Game.onInput});
+		$('#seedInput').on({input:Game.enterSeed});
 		Game.init(e, paramFromCurrentURL('seed'));
 	}
+ 	enterSeed(e)  {
+		this.value !== '' && Game.init(e, +this.value);
+	}
 	onKeydown(e) {
-		if (loading
+		if (isLoading
 			|| !Sound.setupCompleted
 			|| InfoBox.displayed
 			|| isCombinationKey(e)
 			|| e.originalEvent.repeat
 		) return;
-		switch (e.key.toUpperCase()) {
+		switch ( e.key.toUpperCase() ) {
 		case 'R':
+			dBody.dataset.transition = Scene.isStart;
+			Game.retry()
+			break;
 		case 'G':
 			dBody.dataset.transition = Scene.isStart;
-			/R/i.test(e.key) ? Game.retry() : Game.init(e);
+			Game.init(e);
 			break;
 		case 'TAB':
 			Scene.isPlaying && e.preventDefault();
@@ -55,13 +61,9 @@ const Game = new class {
 		default:
 			if (dqs('input:focus')) break;
 			const v = Vec2[Dir.from(e, {awsd:true})];
-			Scene.isTitle && v && Scene.switchToStart();
-			Ticker.paused && v && Game.pause();
+			v && Scene.isTitle && Scene.switchToStart();
+			v && Ticker.paused && Game.pause();
 		}
-	}
- 	onInput(e)  {
-		this.value === '' && (this.value = Maze.Seed);
-		this.value !== '' && Game.init(e,+this.value);
 	}
 	pause(force) {
 		if (!Scene.isPlaying) return;

@@ -1,10 +1,11 @@
+import {Lives} from './lives.js'
+
 let score  = 0;
 let savedS = 0;
 let high   = 0;
 let savedH = 0;
 const Form = byId('scoreForm');
 
-import {Lives} from './lives.js'
 export const Score = new class {
 	static {$ready(this.#setup)}
 	static #setup() {
