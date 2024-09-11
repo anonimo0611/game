@@ -27,7 +27,7 @@ export class Actor {
 		if (!this.dir) return 0;
 		const {x,y,v}= {...this.centerPos, v:Vec2[this.dir]};
 		const count = T - (v.x? x % T : y % T);
-		return abs((v.x || v.y) > 0 ? count-T : count);
+		return (v.x || v.y) > 0 ? abs(count-T) : abs(count);
 	}
 	get inForwardOfTile() {
 		return this.stepsPerTile <= T/2;
@@ -41,7 +41,7 @@ export class Actor {
 	get tileCenterReached() {
 		return this.#lstTile
 			? !this.nextPos.divInt(T).eq(this.#lstTile)
-			: false
+			: false;
 	}
 	setPos({x=this.x, y=this.y}={}) {
 		if (x < -this.Radius - T/2) x = CVS_SIZE;

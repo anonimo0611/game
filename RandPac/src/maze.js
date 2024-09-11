@@ -108,23 +108,26 @@ class PowDot {
 	}
 };
 
-class PenRect {
-	Tile   = new Rect((GRID>>1)-2, (GRID>>1)-2, 4,4);
-	Pixel  = this.Tile.mul(T);
-	Around = this.Tile.outer(1);
-	Middle = this.Pixel.y + this.Pixel.Height/2;
+class PenArea {
+	TileRect = new Rect((GRID>>1)-2, (GRID>>1)-2, 4,4);
+	Rect     = this.TileRect.mul(T);
+	Around   = this.TileRect.outer(1);
+	Middle   = this.Rect.y + this.Rect.Height/2;
+	Frame    = T/5;
+	Door     = Vec2(GRID>>1, this.TileRect.y);
+	Entrance = Vec2(this.Door).add(0, -1);
 }
 export const Pen = freeze(new class Cls {
-	static Rect = new PenRect;
-	static {$on('Resize', _=> this.Rect = new PenRect)}
-	get Rect()     {return Cls.Rect.Pixel}
-	get TileRect() {return Cls.Rect.Tile}
-	get Middle()   {return Cls.Rect.Middle}
-	get Frame()    {return T/5}
-	get Door()     {return Vec2(GRID>>1, Cls.Rect.Tile.y)}
-	get Entrance() {return Vec2(this.Door).add(0, -1)}
-	isInHouse = pos=> Cls.Rect.Tile.contains(pos);
-	isAround  = pos=> Cls.Rect.Around.contains(pos);
+	static Area = new PenArea;
+	static {$on('Resize', _=> this.Area = new PenArea)}
+	get TileRect() {return Cls.Area.TileRect}
+	get Rect()     {return Cls.Area.Rect}
+	get Middle()   {return Cls.Area.Middle}
+	get Frame()    {return Cls.Area.Frame}
+	get Door()     {return Cls.Area.Door}
+	get Entrance() {return Cls.Area.Entrance}
+	isAround  = pos=> Cls.Area.Around.contains(pos);
+	isInHouse = pos=> Cls.Area.TileRect.contains(pos);
 });
 
 export const Maze = freeze(new class {

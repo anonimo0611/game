@@ -19,11 +19,11 @@ export const Score = new class {
 		});
 		Score.#resetScore();
 	}
-	get storageKey() {
+	get #storageKey() {
 		return 'randPacHiscore'+MAZE_IDX;
 	}
-	get storageData() {
-		return localStorage.getItem(Score.storageKey) ?? 0;
+	get #storageData() {
+		return localStorage.getItem(Score.#storageKey) ?? 0;
 	}
 	#onTitle() {
 		Form.lifeBonus.value = '';
@@ -39,7 +39,7 @@ export const Score = new class {
 	}
 	#resetScore() {
 		Score.#score = score = savedS = 0;
-		Score.#high  = high  = savedH = Score.storageData;
+		Score.#high  = high  = savedH = Score.#storageData;
 	}
 	#restore(e) {
 		if (!/^[RG]$/i.test(e.key)) return;
@@ -49,8 +49,8 @@ export const Score = new class {
 	#setStorage() {
 		savedH = high;
 		savedS = score;
-		high > Score.storageData
-			&& localStorage.setItem(Score.storageKey, high);
+		high > Score.#storageData
+			&& localStorage.setItem(Score.#storageKey, high);
 	}
 	set #high(pts) {
 		Form.high.value = (high = pts) || '00';
