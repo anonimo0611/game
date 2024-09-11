@@ -136,13 +136,13 @@ export class Pacman extends Actor {
 	#eaten(idx) {
 		if (!DotMap.has(idx)) return;
 		const dot = DotMap.get(idx);
-		const pow = PowMap.get(idx);
+		const pow = PowMap.has(idx);
 		Score.add(pow ? 50 : 10);
 		Sound.eat(idx % 2);
 		DotMap.delete(idx);
 		PowMap.delete(idx);
 		fillCircle(BgCtx)(...dot.vals, T/2, null);
-		$trigger('DotEaten', !!pow);
+		$trigger('DotEaten', pow);
 		DotMap.size == 0
 			&& Sound.stopLoops()
 			&& Scene.switchToClear();
