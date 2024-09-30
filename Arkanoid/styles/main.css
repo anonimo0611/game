@@ -63,10 +63,8 @@ body.loaded #board {
 	height: 100%;
 	top:  0;
 	left: 0;
-	background: #999 0 0/80px 80px var(--bg-url);
-	image-rendering: pixelated;
+	background: #999 0 0/78px 78px var(--bg-url);
 }
-
 #debug {
 	position: fixed;
 	bottom:  1.5em;
