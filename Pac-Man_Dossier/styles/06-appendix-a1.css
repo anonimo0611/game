@@ -22,7 +22,7 @@ main {
 	position: relative;
 }
 footer {
-	margin-top: -.3em;
+	margin-top: .3em;
 	padding: 0;
 	display: flex;
 	justify-content: space-between; 
