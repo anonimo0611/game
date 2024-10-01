@@ -131,6 +131,7 @@ export const Paddle = freeze(new class extends Rect {
 		this.#constrain();
 	}
 	#playing() {
+		if (Ticker.elapsed < 200) {return}
 		if (AutoMove.setPosition()) {
 			this.Pos.x = Mouse.x - (this.Width/2);
 			this.#setWidth();
