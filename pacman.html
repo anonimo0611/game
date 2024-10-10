@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 	<meta charset="UTF-8">
@@ -88,30 +88,16 @@
 		<section id="pacman-game">
 			<h1><a href="#pacman-game" class="fragment">自作パックマン<small>（HTML5+CSS3+JS/ES2022）</small></a></h1>
 			<p>上述の資料を参考に、<cite>PAC-MAN</cite>をアレンジしたクローンゲームを作ってみました。</p>
-			<p>視覚的要素を<abbr title="Cascading Style Sheets">CSS</abbr>に委ねて、簡潔なスクリプトで実装する試みです。</p>
-			<p><abbr title="Document Object Model">DOM</abbr>ベースでの実装で、Canvas APIはほとんど使用していません。</p>
+			<p><abbr title="Document Object Model">DOM</abbr>と<abbr title="Cascading Style Sheets">CSS</abbr>による実装で、Canvas APIはほとんど使用していません。</p>
 			<p>16×16のドット絵ではなく、<abbr title="High Definition">HD</abbr>画面に堪える<a href="game/PACMAN/_sprites/sprite-image.html">スプライトシート（PNG）</a>を制作しました。</p>
-			<p>ラスター画像ですが、CSSの 'transform' は良い感じにスケーリングしてくれます。</p>
-			<p>また、CSSはアニメーション、フィルター、そしてトランジションの効果を容易に表現可能であり、なるべく再描画処理を発生させずにGPUで処理しています。要するにスクリプトですべきことを少なくできます。
-			</p>
-			<ul class="no-print">
-				<li><a href="game/PACMAN/_sprites/">アクターおよびフルーツの一覧</a></li>
-				<li><a href="https://anonimo0611.github.io/pacman/">パックマンをプレイしてみる</a></li>
-			</ul>
-			<p>パックマンの消滅アニメーションのみ、Canvas APIを使用しています。</p>
 			<p>フルーツ類の一部は<a href="https://github.com/masonicGIT/pacman" class="ref" title="GitHub - masonicGIT/pacman: Remake of Pacman by Shaun Williams">Shaun Williams氏</a>のスプライトを少し改変して使用しています。</p>
 			<section id="requirements">
 				<h2><a href="#requirements" class="fragment">推奨環境</a></h2>
-				<p>最新のPC向けChromium系ブラウザを推奨します。スマホは非対応です。</p>
+				<p>最新のPC向けChromium系ブラウザを推奨します。</p>
+				<p>タッチデバイスでの操作には対応してません。</p>
 				<p>後方互換性を無視しているので、旧いブラウザでは動作しません。</p>
 				<p>開発者ツールを起動していると動作が重くなることがあります。</p>
-				<p>もっさりする場合は、“ハードウェア アクセラレーション”を有効にしてください。</p>
-				<p class="as-follows">それでも重いなら <code>chrome://flags</code> <small>（スキーム名はブラウザごとに異なる）</small>の設定で：</p>
-				<ul>
-					<li>Over&shy;ride soft&shy;ware rendering list</li>
-				</ul>
-				<p>これをEnableにしてみてください。設定の変更は自己責任でお願いします。</p>
-				<p>ユーザスタイルシートは適用されないようにしてください。</p>
+				<p>ユーザースタイルシートは適用されないようにしてください。</p>
 			</section>
 			<section id="config">
 				<h2><a href="#config" class="fragment">設定項目/操作</a></h2>
