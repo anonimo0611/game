@@ -65,8 +65,8 @@ export class Pacman extends Actor {
 	#ignoreKeys(e, dir) {
 		return Confirm.opened
 			|| e.originalEvent.repeat
-			|| dir == null
-			|| dir == this.dir && !this.turning
+			|| (dir == null)
+			|| (dir == this.dir && !this.turning)
 	}
 	#onKeydown(e) {
 		const dir = Dir.from(e, {awsd:true})
