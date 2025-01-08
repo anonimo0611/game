@@ -61,7 +61,7 @@ dl dl dd {
 /* Tables */
 table {
 	border-collapse: collapse;
-	margin: 1em 0;
+	margin: 1.5em 0;
 }
 th, td {
 	padding: .1em .5em;
@@ -263,12 +263,13 @@ kbd {
 #relative-speed {
 	display: flex;
 	gap: .7em;
+	margin: 1.5em 0;
 }
 #relative-speed > dl {
 	display: table;
 	background: var(--table-bgcolor);
 	border-radius: .5em;
-	padding: .1em .5em;
+	padding: .2em .5em;
 }
 #relative-speed > dl > dt {
 	text-align: center;
