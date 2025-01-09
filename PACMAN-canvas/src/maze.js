@@ -6,8 +6,7 @@ import {Ctx}    from './_canvas.js'
 import {BgCtx}  from './_canvas.js'
 import {State}  from './_state.js'
 import {Form}   from './control.js'
-import {Color,TileSize as T}   from './_constants.js'
-import {DotMax,ColMax,MapData} from './_constants.js'
+import {MapData,ColMax,Color,TileSize as T} from './_constants.js'
 
 const WallSet  = new Set()
 const DotSet   = new Set()
@@ -16,16 +15,15 @@ const PenRect  = new Rect(10,13, 7,4)
 const PenOuter = new Rect( 9,12, 9,6)
 
 class PowDot {
-	static #instance = null
-	static get instance() {return this.#instance ||= new PowDot}
-	constructor() {PowDot.#instance = this}
+	#disp = 1
 	#drawDot(pos) {
 		if (!State.isPlaying
 		 || Ticker.paused
-		 || Ticker.count & 16)
+		 || this.#disp)
 			Maze.drawDot(Ctx, pos, true)
 	}
 	draw() {
+		this.#disp ^= Ticker.count % 15 == 0
 		PowMap.forEach(this.#drawDot.bind(this))
 	}
 }
@@ -48,6 +46,9 @@ export const Maze = new class {
 		$(Form.powChk).on('change', Maze.#resetDots)
 		MapData.forEach((t,i)=> !/[.O\x20]/.test(t) && WallSet.add(i))
 	}
+	get dotsLeft() {return DotSet.size}
+
+	PowDot      = freeze(new PowDot)
 	Tunnel      = freeze(new Tunnel)
 	Width       = ColMax   * T
 	Center      = ColMax/2 * T
@@ -58,10 +59,6 @@ export const Maze = new class {
 	hasWall     = ({x,y})=> WallSet.has(y*ColMax+x)
 	isInHouse   = ({x,y})=> PenRect.contains({x,y})
 
-	get PowDot()    {return PowDot.instance}
-	get numOfDots() {return DotSet.size}
-	get dotsLeft()  {return DotMax-(DotMax-DotSet.size)}
-
 	GhostNotEnterSet = new Set(['12-11','12-23','15-11','15-23'])
 	ghostExitPos({originalTarget:t=Vec2(), tilePos:pos=Vec2()}) {
 		const  x = (pos.x > ColMax/2) && (t.x > ColMax/2) ? 21:6
@@ -70,13 +67,13 @@ export const Maze = new class {
 	#resetDots() {
 		MapData.forEach((t,i)=> /[.O]/.test(t) && Maze.#setDot(t,i))
 	}
-	#setDot(tip, tileIdx) {
-		const tilePos = Vec2.fromIdx(tileIdx, ColMax)
-		Maze.clearDot({tileIdx,tilePos})
-		DotSet.add(tileIdx)
-		!Form.powChk.checked || (tip == '.')
+	#setDot(tipStr, idx) {
+		const tilePos = Vec2(idx%ColMax, idx/ColMax|0)
+		Maze.clearDot({tileIdx:idx,tilePos})
+		DotSet.add(idx)
+		!Form.powChk.checked || (tipStr == '.')
 			? Maze.drawDot(BgCtx, tilePos)
-			: PowMap.set(tileIdx, tilePos)
+			: PowMap.set(idx, tilePos)
 	}
 	clearDot({tileIdx,tilePos}) {
 		DotSet.delete(tileIdx)

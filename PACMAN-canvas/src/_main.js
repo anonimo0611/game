@@ -44,14 +44,15 @@ export const Game = new class {
  	}
 	#level = 1
 	#restarted = false
+	get level()     {return Game.#level}
+	get restarted() {return Game.#restarted}
+
 	// Divide the speed equally with level 13+ as the fastest
 	get clampedLv() {return clamp(Game.level, 1, 13) || 1}
 	get speedByLv() {return 1 - (13-Game.clampedLv) * .01}
 	get speedRate() {return State.isPlaying? Ctrl.speedRate : 1}
 	get interval()  {return Game.speedRate * Ticker.Interval}
 	get moveSpeed() {return Game.speedRate * Game.speedByLv}
-	get level()     {return Game.#level}
-	get restarted() {return Game.#restarted}
 
 	#initStartBtn() {
 		$('#startBtn').on('click', State.switchToStart)

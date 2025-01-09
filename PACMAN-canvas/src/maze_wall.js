@@ -1,4 +1,3 @@
-import {Vec2} from '../_lib/vec2.js'
 import {BgCvs,BgCtx as ctx}   from './_canvas.js'
 import {LineW,TileSize as T}  from './_constants.js'
 import {MapData,Color,ColMax} from './_constants.js'
@@ -32,34 +31,34 @@ export const MazeWall = new class {
 		this.#drawGhostPen()
 		ctx.restore()
 	}
-	#drawTile = (tStr, idx)=> {
-		const tip = toNumber(tStr), C = ColMax-1
-		const {x, y}= Vec2.fromIdx(idx, ColMax)
+	#drawTile = (tipStr, idx)=> {
+		const tip = toNumber(tipStr)
+		const [tx,ty]= [idx%ColMax, idx/ColMax|0]
+		const [px,py]= [tx*T,ty*T], C = ColMax-1
 
-		if (/[ABCD]/.test(tip)) {
-			const cornerIdx = 'ABCD'.indexOf(tip)
+		if (/[ABCD]/.test(tip))
 			for (let i=0; i<=1; i++)
-				this.#drawCorner(cornerIdx, x*T, y*T, i)
-		}
+				this.#drawCorner('ABCD'.indexOf(tip), px, py, i)
+
 		if (/[1234]/.test(tip))
-			this.#drawCorner(tip-1, x*T, y*T)
+			this.#drawCorner(tip-1, px, py)
 
 		if (tip == '|' || tip == '#')
-			cvsStrokeLine(ctx)(x*T+T/2, y*T, x*T+T/2, y*T+T)
+			cvsStrokeLine(ctx)(px+T/2, py, px+T/2, py+T)
 
 		if (tip == '-')
-			cvsStrokeLine(ctx)(x*T, y*T+T/2, x*T+T, y*T+T/2)
+			cvsStrokeLine(ctx)(px, py+T/2, px+T, py+T/2)
 
-		if (tip == '#' || (x == 0 || x == C) && isNum(tip)) {
-			const oX = x < C/2 ? -T/2 : T/2
-			cvsStrokeLine(ctx)(x*T+T/2+oX, y*T, x*T+T/2+oX, y*T+T)
+		if (tip == '#' || (tx == 0 || tx == C) && isNum(tip)) {
+			const oX = tx < C/2 ? -T/2 : T/2
+			cvsStrokeLine(ctx)(px+T/2+oX, py, px+T/2+oX, py+T)
 		}
-		if (tip == '=' || tip == '_' ||  y == 1 && isNum(tip)) {
+		if (tip == '=' || tip == '_' ||  ty == 1 && isNum(tip)) {
 			const oY  = /[=12]/.test(tip) ? -T/2 : T/2
-			const stX = (x == 0 ? -LineW : 0)
-			const edX = (x == C ? +LineW : 0)+T
+			const stX = (tx == 0 ? -LineW : 0)
+			const edX = (tx == C ? +LineW : 0)+T
 			ctx.save()
-			ctx.translate(x*T, y*T+T/2)
+			ctx.translate(px, py+T/2)
 			cvsStrokeLine(ctx)(stX, oY, edX, oY)
 			!isNum(tip) && cvsStrokeLine(ctx)(stX, 0, edX, 0)
 			ctx.restore()
