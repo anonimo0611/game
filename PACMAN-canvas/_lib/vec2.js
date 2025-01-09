@@ -80,13 +80,12 @@ for (const [k,v] of entries(Vec2)) {
 	defineProperty(Vec2, k, {get(){return v.clone}})
 }
 Vec2.isValid  = (pos)   => isObj(pos) && isNum(pos.x) && isNum(pos.y)
+Vec2.eq       = (v1, v2)=> abs(v1.x-v2.x) < 1e-6 && abs(v1.y-v2.y) < 1e-6
+Vec2.idx      = (v, col)=> v.y * col + v.x
 Vec2.add      = (v1, v2)=> Vec2(v1).add(v2)
 Vec2.sub      = (v1, v2)=> Vec2(v1).sub(v2)
 Vec2.mul      = (v, num)=> Vec2(v).mul(num)
 Vec2.div      = (v, num)=> Vec2(v).div(num)
 Vec2.divInt   = (v, num)=> Vec2(v).divInt(num)
 Vec2.distance = (v1, v2)=> Vec2.sub(v1, v2).magnitude
-Vec2.fromIdx  = (i, col)=> Vec2(i % col, i / col|0)
-Vec2.idx      = (v, col)=> v.y * col + v.x
-Vec2.eq       = (v1, v2)=> abs(v1.x-v2.x) < 1e-6 && abs(v1.y-v2.y) < 1e-6
 freeze(Vec2)
