@@ -59,7 +59,7 @@ export class Attract {
 	}
 	update() {
 		if (Ticker.elapsedTime <= 1e4+500) return
-		this.powDisp ^= Ticker.count % 16 == 0
+		this.powDisp ^= Ticker.count % 15 == 0
 		!Timer.frozen && this.updatePacman()
 		!Timer.frozen && this.updateGhosts()
 	}
