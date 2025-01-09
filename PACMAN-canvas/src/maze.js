@@ -67,18 +67,18 @@ export const Maze = new class {
 	#resetDots() {
 		MapData.forEach((t,i)=> /[.O]/.test(t) && Maze.#setDot(t,i))
 	}
-	#setDot(tipStr, idx) {
-		const tilePos = Vec2(idx%ColMax, idx/ColMax|0)
-		Maze.clearDot({tileIdx:idx,tilePos})
-		DotSet.add(idx)
-		!Form.powChk.checked || (tipStr == '.')
-			? Maze.drawDot(BgCtx, tilePos)
-			: PowMap.set(idx, tilePos)
+	#setDot(tip, i) {
+		const v = Vec2(i%ColMax, i/ColMax|0)
+		Maze.clearDot({tileIdx:i,tilePos:v})
+		DotSet.add(i)
+		!Form.powChk.checked || (tip == '.')
+			? Maze.drawDot(BgCtx, v)
+			: PowMap.set(i, v)
 	}
-	clearDot({tileIdx,tilePos}) {
-		DotSet.delete(tileIdx)
-		PowMap.delete(tileIdx)
-		Maze.drawDot(BgCtx, tilePos, true, null)
+	clearDot({tileIdx:i,tilePos:v}) {
+		DotSet.delete(i)
+		PowMap.delete(i)
+		Maze.drawDot(BgCtx, v, true, null)
 	}
 	drawDot(ctx, {x,y}, isLarge=false, color=Color.Dot) {
 		cvsFillCircle(ctx)(x*T+T/2, y*T+T/2, T/(isLarge? 2:8), color)
