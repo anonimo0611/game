@@ -40,7 +40,7 @@ export const Sound = new class extends SoundMgr {
 	get vol()      {return super.vol}
 	get disabled() {return super.disabled || State.isAttract}
 	get sirenId()  {return SirenIds[Ghost.Elroy.part]}
-	get ringing()  {return Sound.isPlaying('extend')}
+	get ringing()  {return Sound.isPlaying('bell')}
 	set vol(vol) {
 		if (Sound.disabled) return
 		vol = isNaN(vol)? 10 : clamp(+vol, 0, 10)
