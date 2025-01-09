@@ -1,0 +1,74 @@
+html, body {
+	margin:  0;
+	padding: 0;
+}
+html {
+	overflow-y: scroll;
+}
+body {
+	color: #fff;
+	background: #000;
+	margin: 0;
+	padding: 25px;
+	opacity: 0;
+	transition: 300ms opacity;
+	cursor: grab;
+	-webkit-user-select: none;
+	user-select: none;
+}
+body:active {
+	cursor: grabbing;
+}
+button {
+	background: transparent !important;
+}
+
+#sliders {
+	display: flex;
+	gap: 1em;
+	font-size: 20px;
+	padding: 0 .2em .2em .2em;
+	border-radius: 0 0 0 .3em;
+	position: fixed;
+	top: 0;
+	right: 0;
+	background: rgba(0 0 0 /.7);
+	z-index: 100;
+	cursor: default;
+}
+#sliders output {
+	text-align: right;
+	display: inline-block;
+	width: 2em;
+	width: 3ch;
+}
+#canvas {
+	background: #000;
+}
+
+#animPreview {
+	width: fit-content;
+	border-radius: .7em;
+	position: relative;
+	margin-bottom: 10px;
+	padding: 0 1em 0 1em;
+	cursor: default;
+}
+#animPreview .ctrls {
+	display: flex;
+	gap: 20px;
+}
+#preview {
+	position: relative;
+	align-self: center;
+}
+#preview canvas {
+	background: #444;
+	border-radius: 10px;
+}
+#select-anim {
+	margin: 1em 0;
+}
+[type=range] {
+	--thumb-size: .8rem !important;
+}
