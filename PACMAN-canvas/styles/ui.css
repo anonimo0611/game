@@ -144,11 +144,12 @@ label:hover [type=range] {
 	position: relative;
 	display: inline-block;
 }
-label:hover {
-	+ .slidemenu,
-	+ .dropdown .current {background:var(--hilight-bg-color)}
+.dropdown:hover > .current,
+label:hover + .slidemenu,
+label:hover + .dropdown > .current {
+	background:var(--hilight-bg-color);
 }
-.dropdown .current:focus,
+.dropdown > .current:focus,
 .slidemenu:focus {
 	background: var(--hilight-bg-color) !important;
 	outline: 0;
@@ -165,7 +166,7 @@ label:hover {
 }
 .dropdown {
 	--bg: rgba(41 41 41 /.8);
-	.current {
+	> .current {
 		background: var(--bg);
 		margin-top: -.1em;
 		padding: .1em .9em .1em .2em;

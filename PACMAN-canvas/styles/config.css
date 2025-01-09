@@ -244,12 +244,15 @@
 
 #LevelMenuLabel {
 	font-size: .8rem;
+	margin: 0;
+	padding: .5em .3em;
 }
 #LevelMenu {
 	--t: 35px;
 	--sprite-w: calc(var(--t)*8);
 	text-transform: uppercase;
 	font: .9rem/1 sans-serif;
+	margin-left: 0;
 	menu > li, .current {
 		padding: .22em .9em .2em .2em;
 		display: flex;
@@ -260,8 +263,8 @@
 		padding-top: 0;
 		padding-bottom: 0;
 	}
-	menu > li::before,
-	.current::before {
+	.current::before,
+	menu > li::before {
 		content: '';
 		background: no-repeat
 			calc(-1*var(--t)*var(--o,0))
