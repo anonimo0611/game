@@ -25,9 +25,9 @@ export class Actor {
 	get tileIdx()   {return Vec2.idx(this.tilePos, GRID)}
 	get stepsPerTile() {
 		if (!this.dir) return 0;
-		const {x,y,v}= {...this.centerPos, v:Vec2[this.dir]};
-		const count = T - (v.x? x % T : y % T);
-		return (v.x || v.y) > 0 ? abs(count-T) : abs(count);
+		const {x,y} = this.centerPos, v = Vec2[this.dir]
+		const count = v.x? x % T : y % T
+		return (v.x || v.y) > 0 ? count : T-count
 	}
 	get inForwardOfTile() {
 		return this.stepsPerTile <= T/2;
