@@ -1,6 +1,5 @@
 import {BgCvs,BgCtx as ctx} from './_canvas.js'
-import * as Constant from './_constants.js'
-const {MapData,Color,TileSize:T,ColMax:W}= Constant
+import {MapData,Color,TileSize as T,ColMax as W} from './_constants.js'
 
 export const MazeWall = new class {
 	#drawCorner(chip, x, y, type=0) {
@@ -52,7 +51,7 @@ export const MazeWall = new class {
 			cvsStrokeLine(ctx)(px+T/2+oX, py, px+T/2+oX, py+T)
 		}
 		if (/[=_]/.test(chip) || ty == 1 && isNum(chip)) {
-			const oY  = /[=12]/.test(chip) ? -T/2+2 : T/2-2
+			const oY = /[=12]/.test(chip) ? -T/2+2 : T/2-2
 			ctx.save()
 			ctx.translate(px, py+T/2)
 			cvsStrokeLine(ctx)(0, oY, T, oY)
