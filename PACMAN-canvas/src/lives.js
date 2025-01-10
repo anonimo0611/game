@@ -4,7 +4,7 @@ import {State} from './_state.js'
 import {Ctrl}  from './control.js'
 import {Form}  from './control.js'
 import Sprite  from './pacman/pac_sprite.js'
-import {LineW,TileSize as T} from './_constants.js'
+import {TileSize as T} from './_constants.js'
 
 export const Lives = new class {
 	static {
@@ -30,7 +30,7 @@ export const Lives = new class {
 		const sprite = new Sprite({Radius}, {closed:false})
 		BgCtx.save()
 		BgCtx.translate(T*2, T*32)
-		BgCtx.clearRect(0, LineW, Size*5, Size)
+		BgCtx.clearRect(0, 0, Size*5, Size)
 		for (let i=0; i<left; i++)
 			sprite.draw(BgCtx, Vec2(Size*i+T, T))
 		BgCtx.restore()

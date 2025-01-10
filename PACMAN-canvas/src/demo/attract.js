@@ -38,7 +38,7 @@ export class Attract {
 	constructor(symbol) {
 		if (symbol != ModSymbol)
 			throw TypeError('The constructor is not visible')
-		$on($evNS('click keydown blur','.Attract'), this.end)
+		$onNS('.Attract','click keydown blur', this.end)
 		this.setActors()
 		State.switchToAttract()
 	}
@@ -59,7 +59,7 @@ export class Attract {
 	}
 	update() {
 		if (Ticker.elapsedTime <= 1e4+500) return
-		this.powDisp ^= Ticker.count % 15 == 0
+		this.powDisp ^= Ticker.count % 16 == 0
 		!Timer.frozen && this.updatePacman()
 		!Timer.frozen && this.updateGhosts()
 	}
@@ -87,7 +87,7 @@ export class Attract {
 			&& Attract.#reset()
 	}
 	draw() {
-		const et = Ticker.elapsedTime, ptsFontSize = T*0.8
+		const et = Ticker.elapsedTime, ptsFontSize = 
 		drawText(7, 5, '#FFF', 'CHARACTOR　/　NICKNAME')
 		et > 1000 && this.drawGhost(CHARA, 0, Vec2(5*T, 6*T))
 		et > 1500 && drawText( 8,  7, Color.Akabei, 'OIKAKE----')

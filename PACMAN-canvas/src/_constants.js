@@ -1,9 +1,8 @@
-import {LineW,ColMax,RowMax} from './_map_data.js'
+import {ColMax,RowMax} from './_map_data.js'
 export * from './_map_data.js'
 
 export const TileSize  = +$(dRoot).css('--tile-size')
-export const MazeWidth = ColMax * TileSize
-export const CvsWidth  = ColMax * TileSize + LineW*2
+export const CvsWidth  = ColMax * TileSize
 export const CvsHeight = RowMax * TileSize
 export const PacRadius = TileSize * 0.9
 export const GhsScale  = 1.1
@@ -12,11 +11,11 @@ export const GhsNames  = freeze(keys(GhsType).slice(0,-1))
 
 export const BaseStep = +(TileSize/4.5).toFixed(1)
 export const PacStep = freeze(new class {
-	Base      = BaseStep
-	SlowRate  = 0.98
-	Eating    = this.Base * 0.86
-	Energized = this.Base * 1.10
-	EneEating = this.Energized * 0.86
+	Base     = BaseStep
+	SlowBase = 0.98
+	Eating   = this.Base * 0.86
+	EneEat   = this.Base * 0.95
+	Energize = this.Base * 1.10
 })
 export const GhsStep = freeze(new class {
 	Base     = BaseStep  * 1.07

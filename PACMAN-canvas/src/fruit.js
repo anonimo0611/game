@@ -9,7 +9,7 @@ import {PtsMgr} from './points.js'
 import {Pacman} from './pacman/pac.js'
 import Sprites  from './fruits_sprite.js'
 import {Ctx,BgCvs,BgCtx} from './_canvas.js'
-import {DotMax,LineW,TileSize as T} from './_constants.js'
+import {DotMax,TileSize as T} from './_constants.js'
 
 // The fruit appear after 70 or 170 dots are cleared
 const appearSet  = new Set([70,170])
@@ -77,12 +77,12 @@ export const Fruit = new class {
 			Fruit.#drawSprite(Ctx, Fruit.number(), Fruit.targetPos)
 	}
 	drawLevelCounter() {
-		const [x,y,w,h]= LevelCounterRect, l = LineW;
-		Ctx.drawImage(BgCvs, x,y+l, w,h, x-l,y+l, w,h)
+		const [x,y,w,h]= LevelCounterRect;
+		Ctx.drawImage(BgCvs, x,y, w,h, x,y, w,h)
 	}
 	#drawLevelCounter() {
 		const [x,y,w,h]= LevelCounterRect
-		BgCtx.clearRect(x, y+LineW, w, h)
+		BgCtx.clearRect(x, y, w, h)
 		for (let i=max(Game.level-7, 0),ofst=1; i<Game.level; i++) {
 			const pos = Vec2(T*26-(T*2*ofst++), y).add(T)
 			Fruit.#drawSprite(BgCtx, Fruit.number(i), pos)

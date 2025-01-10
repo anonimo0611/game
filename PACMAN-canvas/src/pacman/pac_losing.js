@@ -1,6 +1,6 @@
-import {Ticker} from '../../_lib/timer.js'
-import {Ctx}    from '../_canvas.js'
-import {Color,MazeWidth,PacRadius,TileSize} from '../_constants.js'
+import {Ticker}  from '../../_lib/timer.js'
+import {Cvs,Ctx} from '../_canvas.js'
+import {Color,PacRadius,TileSize} from '../_constants.js'
 
 const StRadius = TileSize * 0.5
 const EdRadius = TileSize * 0.9
@@ -16,7 +16,7 @@ export class Losing {
 	#outerR = StRadius
 	draw(ctx=Ctx, x,y, Radius=PacRadius) {
 		if (ctx == Ctx)
-			x = clamp(x, Radius, MazeWidth-Radius)
+			x = clamp(x, Radius, Cvs.width-Radius)
 		this.#angle < PI - PI/DisDur
  			? this.#disappear(ctx, x,y, Radius)
 	 		: this.#drawLines(ctx, x,y)

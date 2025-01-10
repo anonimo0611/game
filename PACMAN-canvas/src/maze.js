@@ -44,7 +44,7 @@ export const Maze = new class {
 	static setup() {
 		$on('Title NewLevel', Maze.#resetDots)
 		$(Form.powChk).on('change', Maze.#resetDots)
-		MapData.forEach((t,i)=> !/[.O\x20]/.test(t) && WallSet.add(i))
+		MapData.forEach((c,i)=> !/[.O\x20]/.test(c) && WallSet.add(i))
 	}
 	get dotsLeft() {return DotSet.size}
 
@@ -65,13 +65,13 @@ export const Maze = new class {
 		return t.y < 10 && PenOuter.contains(pos)? Vec2(t).setX(x) : t
 	}
 	#resetDots() {
-		MapData.forEach((t,i)=> /[.O]/.test(t) && Maze.#setDot(t,i))
+		MapData.forEach((c,i)=> /[.O]/.test(c) && Maze.#setDot(c,i))
 	}
-	#setDot(tip, i) {
+	#setDot(chip, i) {
 		const v = Vec2(i%ColMax, i/ColMax|0)
 		Maze.clearDot({tileIdx:i,tilePos:v})
 		DotSet.add(i)
-		!Form.powChk.checked || (tip == '.')
+		!Form.powChk.checked || (chip == '.')
 			? Maze.drawDot(BgCtx, v)
 			: PowMap.set(i, v)
 	}
@@ -85,6 +85,6 @@ export const Maze = new class {
 	}
 	drawDoor() {
 		if (State.isFlashMaze) return
-		cvsFillRect(Ctx)(13*T, 13.56*T, T*2, T/4, Color.Door)
+		cvsFillRect(Ctx)(13*T, 13.58*T, T*2, T/4, Color.Door)
 	}
 };freeze(Maze)

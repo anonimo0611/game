@@ -3,7 +3,7 @@ import {Dir}     from '../_lib/direction.js'
 import {Cvs,Ctx} from './_canvas.js'
 import {State}   from './_state.js'
 import {Maze}    from './maze.js'
-import {LineW,ColMax,TileSize as T} from './_constants.js'
+import {ColMax,TileSize as T} from './_constants.js'
 
 export class Actor {
 	#x = 0
@@ -49,8 +49,8 @@ export class Actor {
 	}
 	setPos({x=this.x, y=this.y}={}) {
 		if (State.isPlaying) {
-			if (x < -this.Radius - T/2) x = Cvs.width + LineW
-			if (x > Cvs.width + LineW)  x = -this.Radius - T/2
+			if (x < -this.Radius-T/2) x = Cvs.width+T/2
+			if (x > Cvs.width+T/2) x = -this.Radius-T/2
 		}[this.#x,this.#y] = [x,y]
 	}
 	setCenterX(x) {

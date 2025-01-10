@@ -1,66 +1,62 @@
-import {BgCvs,BgCtx as ctx}   from './_canvas.js'
-import {LineW,TileSize as T}  from './_constants.js'
-import {MapData,Color,ColMax} from './_constants.js'
+import {BgCvs,BgCtx as ctx} from './_canvas.js'
+import * as Constant from './_constants.js'
+const {MapData,Color,TileSize:T,ColMax:W}= Constant
 
 export const MazeWall = new class {
-	#drawCorner(cornerIdx, x, y, outer=0) {
+	#drawCorner(chip, x, y, type=0) {
+		const idx = isNum(chip)
+			? chip-1 : 'ABCD'.indexOf(chip.toUpperCase())
 		ctx.save()
 		ctx.translate(x+T/2, y+T/2)
-		ctx.scale(...[[1,1],[-1,1],[-1,-1],[1,-1]][cornerIdx])
+		ctx.scale(...[[1,1],[-1,1],[-1,-1],[1,-1]][idx])
 		ctx.beginPath()
-		ctx.arc(T/2, T/2, T/(outer?1:2), PI, PI*1.5)
+		type == 2
+			? cvsStrokeLine(ctx)(T/2,T/2, T/2-2,T/2-2)
+			: ctx.arc(T/2, T/2, (type? T-2:T/2), PI, PI*1.5)
 		ctx.stroke()
 		ctx.restore()
 	}
 	#drawGhostPen() {
-		const lw = ctx.lineWidth
+		const LH = ctx.lineWidth/2
 		cvsSetNewLinePath(ctx)(
-		[13.0*T-lw/2, 13.5*T],[10.5*T, 13.5*T],[10.5*T,      17.5*T],
-		[17.5*T,      17.5*T],[17.5*T, 13.5*T],[15.0*T+lw/2, 13.5*T],
-		[15.0*T+lw/2, 13.9*T],[17.1*T, 13.9*T],[17.1*T,      17.1*T],
-		[10.9*T,      17.1*T],[10.9*T, 13.9*T],[13.0*T-lw/2, 13.9*T])
+		[13.00*T-LH, 13.55*T],[10.55*T, 13.55*T],[10.55*T,    17.45*T],
+		[17.45*T,    17.45*T],[17.45*T, 13.55*T],[15.00*T+LH, 13.55*T],
+		[15.00*T+LH, 13.90*T],[17.10*T, 13.90*T],[17.10*T,    17.10*T],
+		[10.90*T,    17.10*T],[10.90*T, 13.90*T],[13.00*T-LH, 13.90*T])
 		ctx.closePath()
 		ctx.stroke()
 	}
 	draw(color=Color.Wall) {
 		ctx.save()
-		ctx.clear(-LineW, 0, BgCvs.width, BgCvs.height - T*2 + LineW)
-		ctx.lineWidth   = LineW
+		ctx.clear(0,0, BgCvs.width, BgCvs.height-T*2)
+		ctx.lineWidth   = 3
 		ctx.strokeStyle = color
 		MapData.forEach(this.#drawTile)
 		this.#drawGhostPen()
 		ctx.restore()
 	}
-	#drawTile = (tipStr, idx)=> {
-		const tip = toNumber(tipStr)
-		const [tx,ty]= [idx%ColMax, idx/ColMax|0]
-		const [px,py]= [tx*T,ty*T], C = ColMax-1
+	#drawTile = (chipStr, idx)=> {
+		const chip = toNumber(chipStr)
+		const [tx,ty]= [idx%W, idx/W|0]
+		const [px,py]= [tx*T, ty*T]
 
-		if (/[ABCD]/.test(tip))
-			for (let i=0; i<=1; i++)
-				this.#drawCorner('ABCD'.indexOf(tip), px, py, i)
+		;/[ABCD]/.test(chip) && this.#drawCorner(chip, px, py, 1)
+		;/[abcd]/.test(chip) && this.#drawCorner(chip, px, py, 2)
+		;/[ABCD1234]/i.test(chip) && this.#drawCorner(chip, px, py)
 
-		if (/[1234]/.test(tip))
-			this.#drawCorner(tip-1, px, py)
+		;(chip == '-')     && cvsStrokeLine(ctx)(px, py+T/2, px+T, py+T/2)
+		;/[#|]/.test(chip) && cvsStrokeLine(ctx)(px+T/2, py, px+T/2, py+T)
 
-		if (tip == '|' || tip == '#')
-			cvsStrokeLine(ctx)(px+T/2, py, px+T/2, py+T)
-
-		if (tip == '-')
-			cvsStrokeLine(ctx)(px, py+T/2, px+T, py+T/2)
-
-		if (tip == '#' || (tx == 0 || tx == C) && isNum(tip)) {
-			const oX = tx < C/2 ? -T/2 : T/2
+		if (chip == '#' || (!tx || tx == W-1) && isNum(chip)) {
+			const oX = tx < W/2 ? -T/2+2 : T/2-2
 			cvsStrokeLine(ctx)(px+T/2+oX, py, px+T/2+oX, py+T)
 		}
-		if (tip == '=' || tip == '_' ||  ty == 1 && isNum(tip)) {
-			const oY  = /[=12]/.test(tip) ? -T/2 : T/2
-			const stX = (tx == 0 ? -LineW : 0)
-			const edX = (tx == C ? +LineW : 0)+T
+		if (/[=_]/.test(chip) || ty == 1 && isNum(chip)) {
+			const oY  = /[=12]/.test(chip) ? -T/2+2 : T/2-2
 			ctx.save()
 			ctx.translate(px, py+T/2)
-			cvsStrokeLine(ctx)(stX, oY, edX, oY)
-			!isNum(tip) && cvsStrokeLine(ctx)(stX, 0, edX, 0)
+			cvsStrokeLine(ctx)(0, oY, T, oY)
+			!isNum(chip) && cvsStrokeLine(ctx)(0, 0, T, 0)
 			ctx.restore()
 		}
 	}

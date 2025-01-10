@@ -37,8 +37,8 @@ export class CBreak {
 		this.pacPos.y =
 		this.Akabei.y = Cvs.height/2 - T/2
 		this.Akabei.state.switchToWalk()
-		$on('Quit.CB', this.end)
-		$on('blur.CB focus.CB', this.pause)
+		$onNS('.CB','Quit', this.end)
+		$onNS('.CB','blur focus', this.pause)
 		State.switchToCBreak()
 	}
 	movePacman() {

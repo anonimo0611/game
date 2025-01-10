@@ -97,9 +97,9 @@ export class Pacman extends Actor {
 	#getCurrentStep() {
 		const eating = Maze.hasDot(this.tileIdx)
 		return(!Ghost.frightened
-			? (eating? Step.Eating   :Step.Base)
-			: (eating? Step.EneEating:Step.Energized)
-		) * Game.moveSpeed * (Game.level<13 ? 1 : Step.SlowRate)
+			? (eating? Step.Eating : Step.Base)
+			: (eating? Step.EneEat : Step.Energize)
+		) * Game.moveSpeed * (Game.level<13 ? 1 : Step.SlowBase)
 	}
 	draw() {
 		if (State.isStart || Timer.frozen) return

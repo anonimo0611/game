@@ -5,9 +5,8 @@ import {Ticker}    from '../_lib/timer.js'
 import {Timer}     from '../_lib/timer.js'
 import {Dir}       from '../_lib/direction.js'
 import {Cursor}    from '../_lib/mouse.js'
-import {LineW}     from './_constants.js'
 import {LevelMenu} from './_menu.js'
-import {Cvs,Ctx}   from './_canvas.js'
+import {Ctx}       from './_canvas.js'
 import {State}     from './_state.js'
 import {Ctrl}      from './control.js'
 import {Maze}      from './maze.js'
@@ -167,7 +166,7 @@ export const Game = new class {
 		State.isCBreak  && CBreak.update()
 	}
 	#draw() {
-		Ctx.clear(-LineW, 0, Cvs.width+LineW, Cvs.height)
+		Ctx.clear()
 		if (State.isAttract) return this.#drawAttractMode()
 		if (State.isCBreak)  return this.#drawCoffeeBreak()
 		Maze.drawDoor()

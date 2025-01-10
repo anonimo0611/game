@@ -14,8 +14,8 @@ export const Confirm = freeze(new class {
 			btn.onkeydown = ev=> {ev.key==`Arrow${[R,L][i]}` && btns[1^i].focus()}
 		})
 		byId('confirm').showModal()
-		$on(`keydown${NS}`,  ev=> {ev.key=='Escape' && this.#cancel(ev,cancelIdx)})
-		$on(`mousedown${NS}`,ev=> {ev.preventDefault()})
+		$onNS(NS,'keydown',  ev=> {ev.key=='Escape' && this.#cancel(ev,cancelIdx)})
+		$onNS(NS,'mousedown',ev=> {ev.preventDefault()})
 		$('#confirm').find('.content').text(content).end().opacity(1,500)
 	}
 	#cancel(ev, idx) {

@@ -1,5 +1,4 @@
-import {LineW,TileSize,CvsWidth,CvsHeight} from './_constants.js'
+import {TileSize,CvsWidth,CvsHeight} from './_constants.js'
 export const [Cvs,Ctx]    =canvas2D('cvs',CvsWidth,CvsHeight).vals
 export const [BgCvs,BgCtx]=canvas2D('bgC',CvsWidth,CvsHeight).vals
 setCanvasSize('speakerCvs')(TileSize*1.5|0)
-;[Ctx,BgCtx].forEach(ctx=> ctx.translate(LineW,0))
