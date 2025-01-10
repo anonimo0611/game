@@ -161,11 +161,11 @@ export const Maze = freeze(new class {
 		Pacman.instantiate();
 		MAP_DATA.forEach(this.#setObj);
 	}
-	#setObj(tip, idx) {
+	#setObj(chip, idx) {
 		const tile = Vec2.fromIdx(idx, GRID);
 		const pos  = Vec2.mul(tile, T);
 		const ghs0 = TileType.Ghosts[0];
-		switch (tip) {
+		switch (chip) {
 		case TileType.Wall:
 			Scene.isReset && WallMap.set(idx, tile);
 			break;
@@ -173,7 +173,7 @@ export const Maze = freeze(new class {
 			Scene.isReset && PowMap.set(idx, Vec2.add(pos,T/2));
 			break;
 		default:
-			tip >= ghs0 && putGhost(tip - ghs0, ...tile.vals);
+			chip >= ghs0 && putGhost(chip - ghs0, ...tile.vals);
 		}
 	}
 	#connectLen(num) {
