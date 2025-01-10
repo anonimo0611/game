@@ -30,7 +30,7 @@ export const Lives = new class {
 		const sprite = new Sprite({Radius}, {closed:false})
 		BgCtx.save()
 		BgCtx.translate(T*2, T*32)
-		BgCtx.clearRect(0, 0, Size*5, Size)
+		BgCtx.clearRect(0,0, Size*5, Size)
 		for (let i=0; i<left; i++)
 			sprite.draw(BgCtx, Vec2(Size*i+T, T))
 		BgCtx.restore()

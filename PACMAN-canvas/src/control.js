@@ -77,14 +77,14 @@ export const Ctrl = new class {
 	}
 	drawInfo() {
 		const draw  = (...args)=> drawText(...args, cfg)
-		const cfg   = {size:T*0.68, style:'bold'}, lh = 0.84
+		const cfg   = {size:T*0.68, style:'bold'}, h = 0.84
 		const speed = Ctrl.speedRate.toFixed(1)
 		Ctx.save()
 		if (Ctrl.isCheatMode || speed != '1.0') {
 			Ctx.setTransform(0.7, 0,0, 1, T*0.1, T*18)
-			draw(0, lh*0, Color.InfoList[+(speed != '1.0')],`Speed x${speed}`)
-			draw(0, lh*1, Color.InfoList[+Ctrl.invincible], 'Invincible')
-			draw(0, lh*2, Color.InfoList[+Ctrl.showTargets],'Targets')
+			draw(0, h*0, Color.InfoList[+(speed != '1.0')],`Speed x${speed}`)
+			draw(0, h*1, Color.InfoList[+Ctrl.invincible], 'Invincible')
+			draw(0, h*2, Color.InfoList[+Ctrl.showTargets],'Targets')
 		}
 		if (Ctrl.unrestricted) {
 			Ctx.setTransform(0.7, 0,0, 1, T*23.3, T*18.35)

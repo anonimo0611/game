@@ -82,7 +82,7 @@ export const Fruit = new class {
 	}
 	#drawLevelCounter() {
 		const [x,y,w,h]= LevelCounterRect
-		BgCtx.clearRect(x, y, w, h)
+		BgCtx.clearRect(x,y,w,h)
 		for (let i=max(Game.level-7, 0),ofst=1; i<Game.level; i++) {
 			const pos = Vec2(T*26-(T*2*ofst++), y).add(T)
 			Fruit.#drawSprite(BgCtx, Fruit.number(i), pos)

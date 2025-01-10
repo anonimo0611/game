@@ -60,9 +60,9 @@ export const Maze = new class {
 	isInHouse   = ({x,y})=> PenRect.contains({x,y})
 
 	GhostNotEnterSet = new Set(['12-11','12-23','15-11','15-23'])
-	ghostExitPos({originalTarget:t=Vec2(), tilePos:pos=Vec2()}) {
+	ghostExitPos({originalTarget:t={}, tilePos:pos={}}) {
 		const  x = (pos.x > ColMax/2) && (t.x > ColMax/2) ? 21:6
-		return t.y < 10 && PenOuter.contains(pos)? Vec2(t).setX(x) : t
+		return t.y < 10 && PenOuter.contains(pos)? Vec2(t).setX(x) : Vec2(t)
 	}
 	#resetDots() {
 		MapData.forEach((c,i)=> /[.O]/.test(c) && Maze.#setDot(c,i))

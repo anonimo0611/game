@@ -56,7 +56,7 @@ export const MazeWall = new class {
 			ctx.save()
 			ctx.translate(px, py+T/2)
 			cvsStrokeLine(ctx)(0, oY, T, oY)
-			!isNum(chip) && cvsStrokeLine(ctx)(0, 0, T, 0)
+			!isNum(chip) && cvsStrokeLine(ctx)(0,0, T,0)
 			ctx.restore()
 		}
 	}
