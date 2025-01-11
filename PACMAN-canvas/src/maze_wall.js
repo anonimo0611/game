@@ -37,9 +37,9 @@ export const MazeWall = new class {
 		const [px,py]= [tx*T, ty*T]
 		const ci = +c? c-1 : 'ABCD'.indexOf(c.toUpperCase())
 
-		;/[ABCD]/.test(c) && this.#drawCorner(ci, px, py, 1)
-		;/[abcd]/.test(c) && this.#drawCorner(ci, px, py, 2)
-		;/[ABCD1234]/i.test(c) && this.#drawCorner(ci, px, py)
+		;/[A-D]/.test(c) && this.#drawCorner(ci, px, py, 1)
+		;/[a-d]/.test(c) && this.#drawCorner(ci, px, py, 2)
+		;/[a-d1-4]/i.test(c) && this.#drawCorner(ci, px, py)
 
 		;(c == '-')     && cvsStrokeLine(ctx)(px, py+T/2, px+T, py+T/2)
 		;/[#|]/.test(c) && cvsStrokeLine(ctx)(px+T/2, py, px+T/2, py+T)
