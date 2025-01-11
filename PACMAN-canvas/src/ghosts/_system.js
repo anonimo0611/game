@@ -99,9 +99,9 @@ export const Wave = new class {
 	#mode = WaveType.Scatter
 	get isChase()   {return this.#mode == WaveType.Chase}
 	get isScatter() {return this.#mode == WaveType.Scatter}
-	#reset() {
+	#getTime(idx) {
 		const lv = Game.level
-		const timeTbl = [ // ms
+		return [ // ms
 			lv <= 4 ? 4500 : 4000,
 			15e3,
 			lv <= 4 ? 4500 : 4000,
@@ -110,13 +110,15 @@ export const Wave = new class {
 			lv == 1 ? 15e3 : 78e4,
 			lv == 1 ? 3500 :(1e3/60),
 			Infinity,
-		]
-		let [time, idx] = [-1, 0]
+		][idx]
+	}
+	#reset() {
+		let [time, idx]= [-1, 0]
 		function update() {
-			const duration = timeTbl[idx]/Game.speedRate
+			const dur = Wave.#getTime(idx)/Game.speedRate
 			if (Ghost.frightened
 			 || Timer.frozen
-			 || Ticker.Interval * ++time < duration
+			 || Ticker.Interval * ++time < dur
 			) return
 			[time, Wave.#mode] = [0, (++idx % 2)]
 			Wave.setReversalSig()
@@ -132,7 +134,7 @@ export const Wave = new class {
 	}
 }
 
-export const DotCounter = (function() {
+export const DotCounter = function() {
 	$on('DotEaten',   addCnt)
 	$on('Title Ready',reset)
 	let globalDotCnt = -1
@@ -158,32 +160,34 @@ export const DotCounter = (function() {
 			: counters[Ghosts.findIndex(g=> g.state.isIdle)]++
 	}
 	return {release}
-})()
+}()
 
-export const Elroy = new class {
-	static {
-		$on('DotEaten',      ()=> Elroy.#dotEaten())
-		$on('Title NewLevel',()=> Elroy.#part = 0)
-	}
-	#part = 0
-	#speedRateTbl  = [1, 1.02, 1.05, 1.1]
-	#dotsLeftP2Tbl = [20,20,30,40,50,60,70,70,80,90,100,110,120]
-	get part() {return this.#part}
-	get step() {return Step.Base * this.#speedRateTbl[this.part]}
-	get angry() {
+export const Elroy = function() {
+	$on('DotEaten', dotEaten)
+	$on('Title NewLevel', ()=> part = 0)
+	let part = 0
+	const speedRateTbl  = [1, 1.02, 1.05, 1.1]
+	const dotsLeftP2Tbl = [20,20,30,40,50,60,70,70,80,90,100,110,120]
+	function angry() {
 		return State.isPlaying
-			&& this.part > 1
+			&& part > 1
 			&& Ghosts[GhsType.Akabei]?.frightened === false
 			&& Ghosts[GhsType.Guzuta]?.started === true
 	}
-	#dotEaten() {
-		const elroyP2 = this.#dotsLeftP2Tbl[Game.clampedLv-1]
-		if (Maze.dotsLeft <= elroyP2*([15,10,50][this.part]/10)) {
-			++this.#part
+	function dotEaten() {
+		const elroyP2 = dotsLeftP2Tbl[Game.clampedLv-1]
+		if (Maze.dotsLeft <= elroyP2*([15,10,50][part]/10)) {
+			++part
 			Sound.playSiren()
 		}
 	}
-}
+	return {
+		get part()  {return part},
+		get step()  {return Step.Base * speedRateTbl[part]},
+		get angry() {return angry()},
+		dotEaten
+	}
+}()
 
 export class FrightMode {
 	static #timeTbl = [6,5,4,3,2,5,2,2,1,5,2,1,0] // seconds
