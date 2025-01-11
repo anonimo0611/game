@@ -16,4 +16,4 @@ $.fn.opacity = function(a, ms) {
 })
 const $byId = id=> $('#'+id)
 const $load = fn=> $(window).one('load',fn)
-const $onNS = (ns,ev,fn)=> $on(ev.replace(/(\s+)|$/g,`${ns??''}$1`),fn)
+const $onNS = (ns,ev,fn)=> $on(ev.trim().replace(/(\s+)|$/g,`${ns??''}$1`),fn)
