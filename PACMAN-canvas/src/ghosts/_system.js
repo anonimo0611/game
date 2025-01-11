@@ -12,14 +12,10 @@ import {Maze}    from '../maze.js'
 import {Ghost}   from './ghost.js'
 import {TileSize as T} from '../_constants.js'
 
-const inFrontOfPac = g=> !behindThePac(g)
-const behindThePac = g=> g.frightened
-
 /** @type {Ghost[]} */
-export const Ghosts   = []
-export const SysMap   = new Map()
-export const Step     = GhsStep
-export const WaveType = freeze({Scatter:0,Chase:1})
+export const Ghosts = []
+export const SysMap = new Map()
+export const Step   = GhsStep
 
 /** @param {number} idx */
 export const releaseTime = idx=> ([ // For always chase mode (ms)
@@ -47,17 +43,20 @@ export class GhostState extends StateBase {
 	}
 }
 
+const inFrontOfPac = g=> !behindThePac(g)
+const behindThePac = g=> g.frightened
+
 export const GhostMgr = new class {
-	static {$ready(this.setup)}
-	static setup() {
-		$on('Title Respawn',GhostMgr.#reset)
-		$on('Playing',      GhostMgr.#onPlaying)
-		$on('DotEaten',     GhostMgr.#dotEaten)
-		$on('Clear Losing', GhostMgr.#setFadeOut)
-	}
+	static {$ready(()=> GhostMgr.#setup())}
 	#aidx = 0
 	get aInterval() {return 6}
 	get animIndex() {return this.#aidx}
+	#setup() {
+		$on('Title Respawn',this.#reset)
+		$on('Playing',      this.#onPlaying)
+		$on('DotEaten',     this.#dotEaten)
+		$on('Clear Losing', this.#setFadeOut)
+	}
 	#reset() {
 		GhostMgr.#aidx = 0
 		SysMap.clear()
@@ -94,13 +93,10 @@ export const GhostMgr = new class {
 	drawBehind() {Ghosts.filter(behindThePac).forEach(this.#draw)}
 }
 
-export const Wave = new class {
-	static {$on('Playing', ()=> Wave.#reset())}
-	#mode = WaveType.Scatter
-	get isChase()   {return this.#mode == WaveType.Chase}
-	get isScatter() {return this.#mode == WaveType.Scatter}
-	#getTime(idx) {
-		const lv = Game.level
+export const Wave = function() {
+	let mode = 0
+	function getTime(idx) {
+		const {level:lv}= Game
 		return [ // ms
 			lv <= 4 ? 4500 : 4000,
 			15e3,
@@ -110,61 +106,62 @@ export const Wave = new class {
 			lv == 1 ? 15e3 : 78e4,
 			lv == 1 ? 3500 :(1e3/60),
 			Infinity,
-		][idx]
+		][idx] / Game.speedRate
 	}
-	#reset() {
-		let [time, idx]= [-1, 0]
+	function reset() {
+		let [cnt,idx]= [-1,0]
 		function update() {
-			const dur = Wave.#getTime(idx)/Game.speedRate
-			if (Ghost.frightened
-			 || Timer.frozen
-			 || Ticker.Interval * ++time < dur
-			) return
-			[time, Wave.#mode] = [0, (++idx % 2)]
+			if (Ghost.frightened || Timer.frozen) return
+			if (Ticker.Interval * ++cnt < getTime(idx)) return
+			[cnt,mode]= [0,(++idx % 2)]
 			Wave.setReversalSig()
 		}
-		Wave.#mode = int(Ctrl.isChaseMode)
-		Wave.#mode == WaveType.Scatter && SysMap.set(Wave, {update})
+		!(mode = int(Ctrl.isChaseMode))
+			&& SysMap.set(Wave, {update})
 	}
-	setReversalSig() {
+	function setReversalSig() {
 		Ghosts.forEach(g=> {
 			$(g).trigger('Reverse')
 			FrightMode.time == 0 && $(g).trigger('Runaway')
 		})
 	}
-}
+	$on('Playing',reset)
+	return {
+		get isScatter() {return mode == 0},
+		get isChase()   {return mode == 1},
+		setReversalSig
+	}
+}()
 
 export const DotCounter = function() {
-	$on('DotEaten',   addCnt)
-	$on('Title Ready',reset)
-	let globalDotCnt = -1
+	let globalCnt  = -1
 	const counters = new Uint8Array(GhsType.Max)
 	const limitTbl = [[7, 0,0,0],[17, 30,0,0],[32, 60,50,0]]
 	function reset() {
 		!Game.restarted && counters.fill(0)
-		globalDotCnt = Game.restarted? 0 : -1
+		globalCnt = Game.restarted? 0 : -1
 	}
 	function release(idx, fn) {
 		const timeOut = (Game.level <= 4 ? 4e3:3e3)
 		const gLimit  = limitTbl[idx-1][0] // global
 		const pLimit  = limitTbl[idx-1][min(Game.level,3)] // personal
 		if (Pacman.instance.timeNotEaten >= timeOut) fn()
-		else (!Game.restarted || globalDotCnt < 0)
+		else (!Game.restarted || globalCnt < 0)
 			? counters[idx]>= pLimit && fn()
-			: globalDotCnt == gLimit && fn(idx == GhsType.Guzuta)
-				&& (globalDotCnt = -1)
+			: globalCnt == gLimit && fn(idx == GhsType.Guzuta)
+				&& (globalCnt = -1)
 	}
 	function addCnt() {
-		(Game.restarted && globalDotCnt >= 0)
-			? globalDotCnt++
+		(Game.restarted && globalCnt >= 0)
+			? globalCnt++
 			: counters[Ghosts.findIndex(g=> g.state.isIdle)]++
 	}
+	$on('DotEaten',addCnt)
+	$on('Title Ready',reset)
 	return {release}
 }()
 
 export const Elroy = function() {
-	$on('DotEaten', dotEaten)
-	$on('Title NewLevel', ()=> part = 0)
 	let part = 0
 	const speedRateTbl  = [1, 1.02, 1.05, 1.1]
 	const dotsLeftP2Tbl = [20,20,30,40,50,60,70,70,80,90,100,110,120]
@@ -181,6 +178,8 @@ export const Elroy = function() {
 			Sound.playSiren()
 		}
 	}
+	$on('DotEaten',dotEaten)
+	$on('Title NewLevel',()=> part=0)
 	return {
 		get part()  {return part},
 		get step()  {return Step.Base * speedRateTbl[part]},
