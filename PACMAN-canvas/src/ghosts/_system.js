@@ -125,7 +125,7 @@ export const Wave = function() {
 			FrightMode.time == 0 && $(g).trigger('Runaway')
 		})
 	}
-	$on('Playing',reset)
+	$on('Playing', reset)
 	return {
 		get isScatter() {return mode == 0},
 		get isChase()   {return mode == 1},
@@ -160,8 +160,8 @@ export const DotCounter = function() {
 			? globalDotCnt++
 			: counters[Ghosts.findIndex(g=> g.state.isIdle)]++
 	}
-	$on('Title Ready',reset)
-	$on('DotEaten',addCnt)
+	$on('DotEaten', addCnt)
+	$on('Title Ready', reset)
 	return {release}
 }()
 
@@ -182,13 +182,12 @@ export const Elroy = function() {
 			Sound.playSiren()
 		}
 	}
-	$on('DotEaten',dotEaten)
-	$on('Title NewLevel',()=> part=0)
+	$on('DotEaten', dotEaten)
+	$on('Title NewLevel', ()=> part=0)
 	return {
 		get part()  {return part},
 		get step()  {return Step.Base * speedRateTbl[part]},
 		get angry() {return angry()},
-		dotEaten
 	}
 }()
 
