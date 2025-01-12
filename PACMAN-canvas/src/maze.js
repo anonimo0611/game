@@ -80,7 +80,7 @@ export const Maze = new class {
 		PowMap.delete(i)
 		Maze.drawDot(BgCtx, v, true, null)
 	}
-	drawDot(ctx, {x,y}, isLarge=false, color=Color.Dot) {
+	drawDot(ctx, {x,y}={}, isLarge=false, color=Color.Dot) {
 		cvsFillCircle(ctx)(x*T+T/2, y*T+T/2, T/(isLarge? 2:8), color)
 	}
 	drawDoor() {
