@@ -2,7 +2,7 @@ export const [U,R,D,L]= 'Up|Right|Down|Left'.split('|')
 export const Dir = Object.freeze(new class {
 	Up=U; Right=R; Down=D; Left=L;
 	isValid    = (dir)=> Object.hasOwn(Dir, dir)
-	opposite   = (dir)=> OppositeMap.get(dir) || null
+	opposite   = (dir)=> OppositeMap.get(dir)
 	isOpposite = (a,b)=> this.opposite(a) == b
 	from(e, {awsd=false}={}) {
 		if (!isKeyboardEvent(e)) return null

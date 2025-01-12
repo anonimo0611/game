@@ -1,4 +1,4 @@
-import {L,R} from './direction.js'
+import {Dir,L,R} from './direction.js'
 export const Confirm = freeze(new class {
 	#opened = false
 	get opened() {return this.#opened}
@@ -11,7 +11,7 @@ export const Confirm = freeze(new class {
 		this.#btns.forEach((btn, i, btns)=> {
 			btn.textContent = [btnStr1,btnStr2][i]
 			btn.onclick   = ()=> {$off(NS),this.#close([fn1,fn2][i])}
-			btn.onkeydown = ev=> {ev.key==`Arrow${[R,L][i]}` && btns[1^i].focus()}
+			btn.onkeydown = ev=> {Dir.from(ev)==[R,L][i] && btns[1^i].focus()}
 		})
 		byId('confirm').showModal()
 		$onNS(NS,'keydown',  ev=> {ev.key=='Escape' && this.#cancel(ev,cancelIdx)})
