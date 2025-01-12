@@ -137,6 +137,15 @@ export const DotCounter = function() {
 	let globalCnt  = -1
 	const counters = new Uint8Array(GhsType.Max)
 	const limitTbl = [[7, 0,0,0],[17, 30,0,0],[32, 60,50,0]]
+	function reset() {
+		!Game.restarted && counters.fill(0)
+		globalCnt = Game.restarted? 0 : -1
+	}
+	function addCnt() {
+		(Game.restarted && globalCnt >= 0)
+			? globalCnt++
+			: counters[Ghosts.findIndex(g=> g.state.isIdle)]++
+	}
 	/**
 	 * @param {number} idx Index of Ghost
 	 * @param {(bool:boolean)=> boolean} fn Release ghost
@@ -150,15 +159,6 @@ export const DotCounter = function() {
 			? counters[idx]>= pLimit && fn()
 			: globalCnt == gLimit && fn(idx == GhsType.Guzuta)
 				&& (globalCnt = -1)
-	}
-	function reset() {
-		!Game.restarted && counters.fill(0)
-		globalCnt = Game.restarted? 0 : -1
-	}
-	function addCnt() {
-		(Game.restarted && globalCnt >= 0)
-			? globalCnt++
-			: counters[Ghosts.findIndex(g=> g.state.isIdle)]++
 	}
 	$on('Title Ready',reset)
 	$on('DotEaten',addCnt)
