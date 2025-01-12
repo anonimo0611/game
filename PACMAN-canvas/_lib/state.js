@@ -2,6 +2,9 @@ import {Timer} from './timer.js'
 export default class {
 	#state = ''
 	#last  = ''
+	get last()    {return this.#last}
+	get current() {return this.#state}
+	lastIs(state) {return state === this.last}
 	init(state) {
 		this.Enum = Object.create(null)
 		for (const [key,val] of entries(this)) {
@@ -14,10 +17,6 @@ export default class {
 		freeze(this.Enum)
 		hasOwn(this.Enum, state) && this.switchTo(state)
 	}
-	get last()    {return this.#last}
-	get current() {return this.#state}
-	lastIs(state) {return state === this.last}
-
 	switchTo(state, {delay=-1,fn}={}) {
 		if (!hasOwn(this.Enum, state))
 			throw ReferenceError(`State '${state}' is not defined`)
