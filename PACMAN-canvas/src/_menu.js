@@ -3,7 +3,7 @@ export const LevelMenu = new class extends Menu.DorpDownMenu {
 	constructor() {
 		super('LevelMenu')
 		for (const li of this.lis)
-			$(li).css('--o', +li.dataset.val)
+			$(li).css('--o', li.dataset.val)
 	}
 	select(idx=this.index) {
 		super.select(idx)
