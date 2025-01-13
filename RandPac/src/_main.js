@@ -45,7 +45,7 @@ const Game = new class {
 		switch ( e.key.toUpperCase() ) {
 		case 'R':
 			dBody.dataset.transition = Scene.isStart;
-			Game.retry()
+			Game.retry();
 			break;
 		case 'G':
 			dBody.dataset.transition = Scene.isStart;
@@ -60,7 +60,7 @@ const Game = new class {
 			break;
 		default:
 			if (dqs('input:focus')) break;
-			const v = Vec2[Dir.from(e, {awsd:true})];
+			const v = Vec2[Dir.from(e, {wasd:true})];
 			v && Scene.isTitle && Scene.switchToStart();
 			v && Ticker.paused && Game.pause();
 		}
