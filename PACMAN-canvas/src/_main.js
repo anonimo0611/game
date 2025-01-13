@@ -83,7 +83,7 @@ export const Game = new class {
 			break
 		default:
 			if (dqs(':not(#startBtn):focus')) break
-			if (Dir.from(e, {awsd:true}) || e.key=='\x20') {
+			if (Dir.from(e, {wasd:true}) || e.key=='\x20') {
 				State.isTitle && State.switchToStart()
 				Ticker.paused && Game.#pause()
 			}
