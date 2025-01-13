@@ -51,7 +51,7 @@ export class Pacman extends Actor {
 		return Vec2[this.dir].mul(num).add(this.tilePos).add(offsetX, 0);
 	}
 	#onKeydown(e) {
-		const dir = Dir.from(e, {awsd:true});
+		const dir = Dir.from(e, {wasd:true});
 		const turnArounded = Dir.isOpposite(dir, this.dir);
 		if (dir == null || e.originalEvent.repeat) return;
 		if (dir == this.dir && !this.turning) return;
