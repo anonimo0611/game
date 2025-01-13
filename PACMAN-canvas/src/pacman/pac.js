@@ -69,7 +69,7 @@ export class Pacman extends Actor {
 			|| (dir == this.dir && !this.turning)
 	}
 	#onKeydown(e) {
-		const dir = Dir.from(e, {awsd:true})
+		const dir = Dir.from(e, {wasd:true})
 		if (this.#ignoreKeys(e, dir)) return
 		if ((State.isStart || State.isReady) && Vec2(dir).x)
 			return void ([this.#preDir,this.dir]=[null,dir])
