@@ -5,12 +5,12 @@ export const Dir  = freeze(new class {
 	#Opposite  = new Map([[U,D],[R,L],[D,U],[L,R]]);
 	opposite   = (dir)=> this.#Opposite.get(dir) || null;
 	isOpposite = (a,b)=> this.opposite(a) == b;
-	from(e, {awsd=false}={}) {
+	from(e, {wasd=false}={}) {
 		if (!isKeyboardEvent(e)) return null;
 		if (isCombinationKey(e)) return null;
 		const key = e.code.replace(/^(Arrow|Key)/,'');
 		return Dirs.includes(key)
 			? key
-			: (awsd && {A:L, W:U, S:D, D:R}[key.toUpperCase()] || null);
+			: (wasd && {A:L, W:U, S:D, D:R}[key.toUpperCase()] || null);
 	}
 });
