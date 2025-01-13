@@ -3,8 +3,8 @@ import {Dir,U,R,D,L} from './direction.js'
 
 class Menu {
 	reset() {this.select(this.defaultIndex, {restore:true})}
-	get index()        {return $(this.selectedItem).index() |0}
-	get value()        {return toNumber((this.selectedItem.dataset.val || ''))}
+	get index()        {return $(this.selectedItem).index()}
+	get value()        {return this.selectedItem.dataset.val ?? ''}
 	get selectedItem() {return this.menu.querySelector('.selected') || this.lis[0]}
 	constructor(id) {
 		this.root = byId(this.id=id);

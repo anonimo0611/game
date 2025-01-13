@@ -15,9 +15,6 @@ const randInt = (min, max) => int(random() * (max-min+1) + min)
 const clamp   = (n,min,max)=> Math.min(Math.max(n,min), max)
 const between = (n,min,max)=> (n >= min && n <= max)
 
-const toNumber = (arg, def=arg)=>
-	!isStr(arg) || !isNum(+arg) || String(arg).trim()==='' ? def : +arg
-
 const randChoice = array=>
 	isArray(array) && array[randInt(0, array.length-1)] || undefined
 

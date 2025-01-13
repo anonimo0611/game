@@ -7,7 +7,7 @@ canvas2D = (arg, _w=null, _h=_w)=> {
 	const /** @type {CanvasRenderingContext2D} */
 	ctx = cvs.getContext('2d')
 	ctx.clear = (x=0,y=0,_w=w,_h=h)=> ctx.clearRect(x,y,_w,_h)
-	/** @type {[HTMLCanvasElement,CanvasRenderingContext2D,w:number,h:number]} */
+	/** @type {[cvs,ctx,w:number,h:number]} */
 	const vals = [cvs,ctx,w,h]
 	return {cvs,ctx,w,h,vals}
 },

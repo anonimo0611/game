@@ -4,11 +4,8 @@ $.fn.offon = function(type, ...args) {
 }
 $.fn.opacity = function(a, ms) {
 	return !arguments.length
-	? $(this)
-		.css('opacity')
-	: $(this)
-		.css('opacity', +a)
-		.css('transition', isNum(ms)? `opacity ${ms}ms`:null)
+	? $(this).css('opacity')
+	: $(this).css({opacity:+a,transition:isNum(ms)?`opacity ${ms}ms`:null})
 }
 'on|off|offon|one|trigger|ready'.split('|').forEach(m=> {
 	window['$'+m]= (...a)=> $(window)[m](...a)
@@ -16,4 +13,4 @@ $.fn.opacity = function(a, ms) {
 })
 const $byId = id=> $('#'+id)
 const $load = fn=> $(window).one('load',fn)
-const $onNS = (ns,ev,fn)=> $on(ev.trim().replace(/(\s+)|$/g,`${ns??''}$1`),fn)
+const $onNS = (ns,ev,fn)=> $on(String(ev).trim().replace(/(\s+)|$/g,`${ns}$1`),fn)
