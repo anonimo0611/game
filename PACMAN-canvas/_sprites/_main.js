@@ -5,10 +5,10 @@ import {Color,TileSize}    from '../src/_constants.js'
 import {Cvs,Ctx}           from '../src/_canvas.js'
 import fruitsSprites       from '../src/fruits_sprite.js'
 import pointsSprites       from '../src/points_sprite.js'
+import PacSprite           from '../src/pacman/pac_sprite.js'
 import {MouthMin,MouthMid} from '../src/pacman/pac_sprite.js'
 import {ColMax,RowMax,T,S} from './_constants.js'
-import {Gap,ghost}         from './_constants.js'
-import {cbAkabei,pacman}   from './_constants.js'
+import {Gap,ghost,cbAkabei}from './_constants.js'
 
 const ofst = (idx,x=S)=> (x*idx+Gap*idx)
 export function drawSprites() {
@@ -85,15 +85,15 @@ function drawPoints() {
 	;[1000,2000,3000,5000].forEach(pts2)
 }
 function drawPacman() {
-	pacman.prop({Radius:S/2*0.96}).sprite.draw(Ctx, Vec2(T, S*8.5))
-	const dirs   = [U,U,L,L,D,D,R,R]
-	const angles = [MouthMin,MouthMid]
-	for (let i=1; i<=8; i++)
-		pacman.prop({
-			angle:  angles[i%2],
+	const dirs = [U,U,L,L,D,D,R,R]
+	for (let i=-1; i<=8; i++) {
+		const cfg = {
 			orient: dirs[i-1],
-			Radius: S/2 * 0.96,
-		}).sprite.draw(Ctx, Vec2(T+ofst(i), S*8.5))
+			Radius: S/2*0.96,
+			mouthRad:i>0 ? [MouthMin,MouthMid][i%2] : null,
+		}
+		new PacSprite(cfg).draw(Ctx, Vec2(T+ofst(i), S*8.5))
+	}
 }
 function drawAkabei() {
 	const aka = cbAkabei
