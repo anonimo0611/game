@@ -6,7 +6,7 @@ import {State}        from '../_state.js'
 import {Ctrl}         from '../control.js'
 import {drawText}     from '../message.js'
 import {Maze}         from '../maze.js'
-import PacSprite      from '../pacman/pac_sprite.js'
+import {Pacman}       from './demo_pac.js'
 import {GhostMgr}     from '../ghosts/_system.js'
 import {FrightMode}   from '../ghosts/_system.js'
 import {Ghost}        from '../ghosts/ghost.js'
@@ -29,12 +29,13 @@ export class Attract {
 	static get Timer() {return AttractTimer}
 
 	powDisp = 1
-	pacPos  = Vec2()
+	pacman  = new Pacman
 	pacVelX = -Maze.Width / 180
 	ghsVelX = -Maze.Width / 169
-	pacman  = new PacSprite
+
 	/** * @type {[Ghost[], Ghost[]]} */
-	GhsList = [[],[]]
+	ghsList = [[],[]]
+
 	constructor(symbol) {
 		if (symbol != ModSymbol)
 			throw TypeError('The constructor is not visible')
@@ -43,7 +44,7 @@ export class Attract {
 		State.switchToAttract()
 	}
 	setActors() {
-		for (const i of this.GhsList.keys())
+		for (const i of this.ghsList.keys())
 			for (let j=0; j<Ghost.Type.Max; j++)
 				this.setActor(i, j)
 	}
@@ -52,10 +53,10 @@ export class Attract {
 		if (idx) {
 			g.pos = Vec2(Maze.Width+(T*3)+(T*2*gIdx), T*19)
 			g.state.switchToWalk()
-			gIdx == 0 && this.pacPos.set(g.x - T*2, g.y)
+			!gIdx && (this.pacman.pos = Vec2(g.x-T*2, g.y))
 		}
 		g.orient = [R,L][idx]
-		this.GhsList[idx].push(g)
+		this.ghsList[idx].push(g)
 	}
 	update() {
 		if (Ticker.elapsedTime <= 1e4+500) return
@@ -64,26 +65,26 @@ export class Attract {
 		!Timer.frozen && this.updateGhosts()
 	}
 	updatePacman() {
-		this.pacman.update()
-		this.pacPos.x += this.pacVelX
-		if (this.pacman.orient == L && this.pacPos.x <= T*3) {
+		this.pacman.sprite.update()
+		this.pacman.x += this.pacVelX
+		if (this.pacman.orient == L && this.pacman.x <= T*3) {
 			this.pacVelX *= -1.11
 			this.ghsVelX /= -2.14
 			this.pacman.orient = R
-			new FrightMode(this.GhsList[DEMO])
+			new FrightMode(this.ghsList[DEMO])
 		}
 	}
 	updateGhosts() {
 		if (Ticker.elapsedTime <= 1e4+650) return
-		this.GhsList[DEMO].forEach(g=> {
+		this.ghsList[DEMO].forEach(g=> {
 			g.x += this.ghsVelX
 			const fn = ()=> this.caughtGhost(g)
-			GhostMgr.crashWithPac(g, this.pacPos, {radius:T/4,fn})
+			GhostMgr.crashWithPac(g, this.pacman, {radius:T/4,fn})
 		})
 	}
 	caughtGhost(g) {
 		g.state.switchToBitten()
-		this.GhsList[DEMO].every(g=> g.state.isBitten)
+		this.ghsList[DEMO].every(g=> g.state.isBitten)
 			&& Attract.#reset()
 	}
 	draw() {
@@ -124,16 +125,16 @@ export class Attract {
 		if (et > 1e4+500) {
 			for (let i=0; i<Ghost.Type.Max; i++)
 				this.drawGhost(DEMO, i)
-			this.drawPacman(this.pacPos)
+			this.drawPacman(this.pacman.centerPos)
 		}
 	}
 	drawPacman(pos) {
 		if (Timer.frozen) return
-		this.pacman.draw(Ctx, Vec2(pos).add(T/2))
+		this.pacman.sprite.draw(Ctx, pos)
 	}
 	drawGhost(idx, ghsIdx, pos) {
 		const
-		ghost = this.GhsList[idx][ghsIdx]
+		ghost = this.ghsList[idx][ghsIdx]
 		ghost.pos = pos
 		ghost.sprite.draw(ghost)
 	}

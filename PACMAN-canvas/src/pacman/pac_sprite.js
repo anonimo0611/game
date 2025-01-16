@@ -15,19 +15,16 @@ export default class {
 	#losing  = null
 	#rad     =  0
 	#animDir = -1
-	constructor(obj={}) {
+	constructor(obj={}, openType=0) {
 		this.obj  = obj
-		this.#rad = [Closed,OpenMid,OpenMax][obj?.opening ?? 0]
+		this.#rad = [Closed,OpenMid,OpenMax][openType]
 		freeze(this)
 	}
-	get rad()        {return this.#rad}
-	get mouthAngle() {return this.obj.notPlaying? Closed : this.rad}
-	get orient()     {return this.obj.orient ?? L}
-	set orient(dir)  {this.obj.orient = dir}
-
+	get mouthRad() {
+		return this.obj.mouthClosed? Closed : this.#rad
+	}
 	update() {
-		const {obj,rad}= this
-		if (obj.notPlaying) return
+		const {obj,mouthRad:rad}= this
 		if (obj.stopped  && rad < OpenMid) return
 		if (rad > Closed || rad < OpenMax) this.#animDir *= -1
 		this.#rad += (Closed - OpenMax)/Duration * this.#animDir
@@ -43,7 +40,7 @@ export default class {
 		ctx.rotate(RotateEnum[obj.orient ?? L] * PI/2)
 		ctx.beginPath()
 		ctx.moveTo(Radius*0.35, 0)
-		ctx.arc(0,0, Radius, -PI/2-this.mouthAngle, PI/2+this.mouthAngle)
+		ctx.arc(0,0, Radius, -PI/2-this.mouthRad, PI/2+this.mouthRad)
 		ctx.fillStyle = Color.Pacman
 		ctx.fill()
 		ctx.restore()

@@ -8,7 +8,7 @@ import {State}   from '../_state.js'
 import {Maze}    from '../maze.js'
 import {Ghost}   from '../ghosts/ghost.js'
 import Sprite    from '../ghosts/ghost_sprite_cb.js'
-import PacSprite from '../pacman/pac_sprite.js'
+import {Pacman}  from './demo_pac.js'
 import {TileSize as T} from '../_constants.js'
 
 const ModSymbol = Symbol()
@@ -26,32 +26,30 @@ export class CBreak {
 	static update() {this.#scene?.update(this.#scene)}
 	static draw()   {this.#scene?.draw(this.#scene)}
 
-	pacPos    = Vec2()
-	Pacman    = new PacSprite
-	Akabei    = new Ghost
-	pacPaused = false
-	pacVelX   = -Maze.Width/180
+	pacman  = new Pacman
+	akabei  = new Ghost
+	pacVelX = -Maze.Width/180
 	constructor(symbol) {
 		if (symbol != ModSymbol)
 			throw TypeError('The constructor is not visible')
-		this.pacPos.y =
-		this.Akabei.y = Cvs.height/2 - T/2
-		this.Akabei.state.switchToWalk()
+		this.pacman.y =
+		this.akabei.y = Cvs.height/2 - T/2
+		this.akabei.state.switchToWalk()
 		$onNS('.CB','Quit', this.end)
 		$onNS('.CB','blur focus', this.pause)
 		State.switchToCBreak()
 	}
 	movePacman() {
-		!this.pacPaused && (this.pacPos.x += this.pacVelX)
-		this.Pacman.update()
+		this.pacman.x += this.pacVelX
+		this.pacman.sprite.update()
 	}
 	drawPacman(rScale=1) {
-		this.Pacman.draw(Ctx, Vec2(this.pacPos).add(T/2), rScale)
+		this.pacman.sprite.draw(Ctx, Vec2(this.pacman).add(T/2), rScale)
 	}
 	drawAkabei(cfg={}) {
 		const
-		Aka = this.Akabei, {pos,aIdx}= Aka
-		Aka.sprite.draw({...Aka, ...pos, aIdx, ...cfg})
+		aka = this.akabei, {pos,aIdx}= aka
+		aka.sprite.draw({...aka, ...pos, aIdx, ...cfg})
 	}
 	pause() {
 		Ticker.pause()
@@ -70,33 +68,32 @@ class Scene1 extends CBreak {
 	constructor() {
 		super(ModSymbol)
 		this.akaVelX  = -Maze.Width / 156.4
-		this.pacPos.x =  Maze.Width + T*1
-		this.Akabei.x =  Maze.Width + T*3
+		this.pacman.x =  Maze.Width + T*1
+		this.akabei.x =  Maze.Width + T*3
 	}
 	moveAkabei() {
 		if (Ticker.elapsedTime > 400)
-			this.Akabei.x += this.akaVelX
+			this.akabei.x += this.akaVelX
 	}
-	update({Pacman,Akabei,pacPos}=this) {
-		this.movePacman()
+	update({pacman,akabei}=this) {
 		this.moveAkabei()
-		switch (Pacman.orient) {
+		switch (pacman.orient) {
 		case L:
-			if (pacPos.x >= -T*9) break
-			this.pacPaused = true
+			this.movePacman()
+			if (pacman.x >= -T*9) break
 			this.pacVelX *= -1.08
 			this.akaVelX *= -0.60
-			Pacman.orient = Akabei.orient = R
+			pacman.orient = akabei.orient = R
 			break
 		case R:
-			Akabei.x > T*7 && (this.pacPaused=false)
-			Akabei.x > Maze.Width + T*9 && this.end()
+			akabei.x > T*7.5 && this.movePacman()
+			akabei.x > Maze.Width + T*9 && this.end()
 			break
 		}
 	}
 	draw() {
-		this.drawAkabei({frightened: this.Akabei.orient == R})
-		this.drawPacman(this.Pacman.orient == R ? 4 : 1)
+		this.drawAkabei({frightened: this.akabei.orient == R})
+		this.drawPacman(this.pacman.orient == R ? 4 : 1)
 	}
 }
 class Scene2 extends CBreak {
@@ -106,15 +103,15 @@ class Scene2 extends CBreak {
 		this.akaEyes  = L
 		this.ripped   = false
 		this.sprite   = Sprite.stakeClothes
-		this.AkaVelX  = this.pacVelX
-		this.pacPos.x = Maze.Width + T*3
-		this.Akabei.x = Maze.Width + T*16
+		this.akaVelX  = this.pacVelX
+		this.pacman.x = Maze.Width + T*3
+		this.akabei.x = Maze.Width + T*16
 	}
-	moveAkabei({Akabei:Aka, AkaVelX:vX}=this) {
+	moveAkabei({akabei:aka, akaVelX:vX}=this) {
 		const {CaughtX,AkaMinX}= this.sprite
-		Aka.x + vX    > CaughtX && (Aka.x += vX)
-		Aka.x + vX/10 > AkaMinX ?  (Aka.x += vX/10):(Aka.x = AkaMinX)
-		return Aka.x != AkaMinX
+		aka.x + vX    > CaughtX && (aka.x += vX)
+		aka.x + vX/10 > AkaMinX ?  (aka.x += vX/10):(aka.x = AkaMinX)
+		return aka.x != AkaMinX
 	}
 	update() {
 		this.movePacman()
@@ -122,7 +119,7 @@ class Scene2 extends CBreak {
 			return
 		switch (this.counter++) {
 		case 90:
-			this.Akabei.x -= T/4
+			this.akabei.x -= T/4
 			this.ripped  = true
 			this.akaEyes = U
 			break
@@ -133,15 +130,15 @@ class Scene2 extends CBreak {
 			this.end()
 		}
 	}
-	draw({sprite:sp, Akabei:Aka, AkaVelX,akaEyes,ripped}=this) {
+	draw({sprite:sp, akabei:aka, akaVelX,akaEyes,ripped}=this) {
 		sp.drawStake()
 		ripped && sp.drawOffcut()
-		const aIdx = ripped? 0 : (this.counter? 1 : Aka.aIdx)
+		const aIdx = ripped? 0 : (this.counter? 1 : aka.aIdx)
 		this.drawPacman()
 		this.drawAkabei({aIdx,ripped,orient:akaEyes})
-		if (Aka.x + AkaVelX < sp.CaughtX && !ripped) {
-			const pos  = Aka.centerPos.add(T,0)
-			const rate = norm(sp.CaughtX, sp.AkaMinX, Aka.x)
+		if (aka.x + akaVelX < sp.CaughtX && !ripped) {
+			const pos  = aka.centerPos.add(T,0)
+			const rate = norm(sp.CaughtX, sp.AkaMinX, aka.x)
 			sp.expandClothes(pos, aIdx, rate)
 		}
 	}
@@ -151,13 +148,13 @@ class Scene3 extends CBreak {
 		super(ModSymbol)
 		this.pacVelX  = -Maze.Width / 200
 		this.akaVelX  = -Maze.Width / 200
-		this.pacPos.x =  Maze.Width + T*3
-		this.Akabei.x =  Maze.Width + T*10
+		this.pacman.x =  Maze.Width + T*3
+		this.akabei.x =  Maze.Width + T*10
 	}
-	moveAkabei({Akabei:Aka}=this) {
-		Aka.x += this.akaVelX
-		Aka.x < -T*8 && (Aka.orient = R) && (this.akaVelX *= -1)
-		Aka.x > (T*9 + Maze.Width) && Aka.orient == R && this.end()
+	moveAkabei({akabei:aka}=this) {
+		aka.x += this.akaVelX
+		aka.x < -T*8 && (aka.orient = R) && (this.akaVelX *= -1)
+		aka.x > (T*9 + Maze.Width) && aka.orient == R && this.end()
 	}
 	update() {
 		this.movePacman()
@@ -165,7 +162,7 @@ class Scene3 extends CBreak {
 	}
 	draw() {
 		this.drawPacman()
-		this.Akabei.orient == L
+		this.akabei.orient == L
 			? this.drawAkabei({repaired:true})
 			: this.drawAkabei({isHadake:true})
 	}
