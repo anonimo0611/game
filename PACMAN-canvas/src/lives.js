@@ -24,7 +24,7 @@ export const Lives = new class {
 		}[State.current]
 	}
 	#draw(left=Lives.#setCurrent()) {
-		const sprite = new Sprite({Radius:T*.78},{closed:false})
+		const sprite = new Sprite({Radius:T*.78,opening:1})
 		BgCtx.save()
 		BgCtx.translate(T*2, T*32)
 		BgCtx.clearRect(0,0, T*2*5, T*2)
