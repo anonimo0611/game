@@ -18,7 +18,7 @@ export const State = new class extends StateBase {
 		super()
 		this.init()
 	}
-	get isStandby() {
+	get isSt_Ready() {
 		return this.isStart || this.isReady
 	}
 	#callback(state) {
