@@ -8,8 +8,8 @@ const Duration   = 150/Ticker.Interval
 const RotateEnum = freeze({Left:0,Up:1,Right:2,Down:3})
 
 const Closed  = 90 * PI/180
-const MaxOpen = 20 * PI/180
-const MidOpen = 60 * PI/180
+const OpenMax = 20 * PI/180
+const OpenMid = 60 * PI/180
 
 export default class {
 	#losing  = null
@@ -17,7 +17,7 @@ export default class {
 	#animDir = -1
 	constructor(obj={}) {
 		this.obj  = obj
-		this.#rad = [Closed,MidOpen,MaxOpen][obj?.opening ?? 0]
+		this.#rad = [Closed,OpenMid,OpenMax][obj?.opening ?? 0]
 		freeze(this)
 	}
 	get rad()        {return this.#rad}
@@ -28,9 +28,9 @@ export default class {
 	update() {
 		const {obj,rad}= this
 		if (obj.notPlaying) return
-		if (obj.stopped  && rad < MidOpen) return
-		if (rad > Closed || rad < MaxOpen) this.#animDir *= -1
-		this.#rad += (Closed - MaxOpen)/Duration * this.#animDir
+		if (obj.stopped  && rad < OpenMid) return
+		if (rad > Closed || rad < OpenMax) this.#animDir *= -1
+		this.#rad += (Closed - OpenMax)/Duration * this.#animDir
 	}
 	draw(ctx=Ctx, {x=0,y=0}={}, scale=1) {
 		const {obj}= this, Radius = (obj.Radius ?? PacRadius)*scale
