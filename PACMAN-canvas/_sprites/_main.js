@@ -6,7 +6,6 @@ import {Cvs,Ctx}           from '../src/_canvas.js'
 import fruitsSprites       from '../src/fruits_sprite.js'
 import pointsSprites       from '../src/points_sprite.js'
 import PacSprite           from '../src/pacman/pac_sprite.js'
-import {MouthMin,MouthMid} from '../src/pacman/pac_sprite.js'
 import {ColMax,RowMax,T,S} from './_constants.js'
 import {Gap,ghost,cbAkabei}from './_constants.js'
 
@@ -88,9 +87,9 @@ function drawPacman() {
 	const dirs = [U,U,L,L,D,D,R,R]
 	for (let i=-1; i<=8; i++) {
 		const cfg = {
-			orient: dirs[i-1],
-			Radius: S/2*0.96,
-			mouthRad:i>0 ? [MouthMin,MouthMid][i%2] : null,
+			orient:  dirs[i-1],
+			Radius:  S/2*0.96,
+			opening: i>0 ? (i%2 ? 1:2) : 0
 		}
 		new PacSprite(cfg).draw(Ctx, Vec2(T+ofst(i), S*8.5))
 	}
