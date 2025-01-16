@@ -87,7 +87,7 @@ export class Attract {
 			&& Attract.#reset()
 	}
 	draw() {
-		const et = Ticker.elapsedTime, ptsFontSize = 
+		const et = Ticker.elapsedTime, ptsFontSize = T*.68
 		drawText(7, 5, '#FFF', 'CHARACTOR　/　NICKNAME')
 		et > 1000 && this.drawGhost(CHARA, 0, Vec2(5*T, 6*T))
 		et > 1500 && drawText( 8,  7, Color.Akabei, 'OIKAKE----')
