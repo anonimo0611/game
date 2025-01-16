@@ -79,6 +79,7 @@ export const Maze = new class {
 		DotSet.delete(i)
 		PowMap.delete(i)
 		Maze.drawDot(BgCtx, v, true, null)
+		return DotSet.size
 	}
 	drawDot(ctx, {x,y}={}, isLarge=false, color=Color.Dot) {
 		cvsFillCircle(ctx)(x*T+T/2, y*T+T/2, T/(isLarge? 2:8), color)
