@@ -1,6 +1,5 @@
 import {Sound}   from '../../_snd/sound.js'
 import {Ticker}  from '../../_lib/timer.js'
-import {Vec2}    from '../../_lib/vec2.js'
 import {U,R,L}   from '../../_lib/direction.js'
 import {Cvs,Ctx} from '../_canvas.js'
 import {Game}    from '../_main.js'
@@ -44,7 +43,7 @@ export class CBreak {
 		this.pacman.sprite.update()
 	}
 	drawPacman(rScale=1) {
-		this.pacman.sprite.draw(Ctx, Vec2(this.pacman).add(T/2), rScale)
+		this.pacman.sprite.draw(Ctx, this.pacman.centerPos, rScale)
 	}
 	drawAkabei(cfg={}) {
 		const
