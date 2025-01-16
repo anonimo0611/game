@@ -76,7 +76,7 @@ export class Pacman extends Actor {
 		if (this.hasAdjWall(dir))
 			return void (this.#preDir = dir)
 
-		if (State.isStandby && Vec2(dir).x || this.#stopped)
+		if (State.isSt_Ready && Vec2(dir).x || this.#stopped)
 			return void ([this.#preDir,this.dir]=[null,dir])
 
 		this.#preDir = dir
