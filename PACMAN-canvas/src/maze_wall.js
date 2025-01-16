@@ -25,7 +25,7 @@ export const MazeWall = new class {
 	}
 	draw(color=Color.Wall) {
 		ctx.save()
-		ctx.clear(0,0, BgCvs.width, BgCvs.height-T*2)
+		ctx.clearRect(0,0, BgCvs.width, BgCvs.height-T*2)
 		ctx.lineWidth   = 3.5
 		ctx.strokeStyle = color
 		MapData.forEach(this.#drawTile)
