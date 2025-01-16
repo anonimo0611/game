@@ -69,14 +69,18 @@ export class Pacman extends Actor {
 	#onKeydown(e) {
 		const dir = Dir.from(e, {wasd:true})
 		if (this.#ignoreKeys(e, dir)) return
-		if (this.hasAdjWall(dir))
-			return void (this.#preDir = dir)
 
-		if (State.isStandby && Vec2(dir).x || this.#stopped)
+		if (State.isStandby && Vec2(dir).x)
 			return void ([this.#preDir,this.dir]=[null,dir])
 
 		if (this.turning)
 			return void (this.#nextTurn = dir)
+
+		if (this.hasAdjWall(dir))
+			return void (this.#preDir = dir)
+
+		if (this.#stopped)
+			return void ([this.#preDir,this.dir]=[null,dir])
 
 		this.#preDir = dir
 		if (this.inBackwardOfTile)
