@@ -114,7 +114,7 @@ export const Wave = function() {
 			if (Ghost.frightened || Timer.frozen) return
 			if (Ticker.Interval * ++cnt < getTime(idx)) return
 			[cnt,mode]= [0,(++idx % 2)]
-			Wave.setReversalSig()
+			setReversalSig()
 		}
 		!(mode = int(Ctrl.isChaseMode))
 			&& SysMap.set(Wave, {update})

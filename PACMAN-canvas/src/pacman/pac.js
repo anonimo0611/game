@@ -15,8 +15,6 @@ import {Ghost}   from '../ghosts/ghost.js'
 import Sprite    from './pac_sprite.js'
 import {PacRadius,PacStep as Step,TileSize as T} from '../_constants.js'
 
-const DenomOfMove = 10
-
 export class Pacman extends Actor {
 	static #symbol = Symbol()
 	static #pacman = null
@@ -71,17 +69,14 @@ export class Pacman extends Actor {
 	#onKeydown(e) {
 		const dir = Dir.from(e, {wasd:true})
 		if (this.#ignoreKeys(e, dir)) return
-		if ((State.isStart || State.isReady) && Vec2(dir).x)
+		if (this.hasAdjWall(dir))
+			return void (this.#preDir = dir)
+
+		if (State.isStandby && Vec2(dir).x || this.#stopped)
 			return void ([this.#preDir,this.dir]=[null,dir])
 
 		if (this.turning)
 			return void (this.#nextTurn = dir)
-
-		if (this.hasAdjWall(dir))
-			return void (this.#preDir = dir)
-
-		if (this.#stopped)
-			return void ([this.#preDir,this.dir]=[null,dir])
 
 		this.#preDir = dir
 		if (this.inBackwardOfTile)
@@ -113,10 +108,11 @@ export class Pacman extends Actor {
 		if (Timer.frozen || !State.isPlaying) return
 		this.sprite.update()
 		this.#notEaten++
-		for (let i=0; i<DenomOfMove; i++) this.#move()
+		for (let i=0,denom=ceil(this.step); i<denom; i++)
+			this.#move(denom)
 	}
-	#move() {
-		if (this.newTileReached(DenomOfMove)) {
+	#move(denom=1) {
+		if (this.newTileReached(denom)) {
 			this.#step = this.#getCurrentStep()
 		}
 		if (!this.turning && this.collidedWithWall()) {
@@ -127,16 +123,16 @@ export class Pacman extends Actor {
 		}
 		this.#stopped = false
 		this.#eaten(this.tileIdx)
-		this.#setCornering()
-		this.setNextPos(DenomOfMove)
+		this.#setCornering(denom)
+		this.setNextPos(denom)
 		this.#endCornering()
 		this.#turnAround()
 	}
-	#setCornering() {
+	#setCornering(denom=1) {
 		if (!this.#canTurn) return
 		this.orient = this.#preDir
 		this.#turning ||= true
-		this.pos = this.setNextPos(DenomOfMove, this.orient)
+		this.pos = this.setNextPos(denom, this.orient)
 	}
 	#endCornering() {
 		if (this.turning && this.inBackwardOfTile) {

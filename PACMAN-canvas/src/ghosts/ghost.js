@@ -25,7 +25,6 @@ export class Ghost extends Actor {
 	static get score()      {return SysMap.get(FrightMode)?.score || 0}
 	static get hasEscape()  {return Ghosts.some(g=> g.escaping)}
 
-	Radius      = T
 	#runAway    = -1
 	#started    = false
 	#revSig     = false
@@ -46,8 +45,8 @@ export class Ghost extends Actor {
 
 	constructor({col=0,row=0,idx=0,initAlign=0,orient=L,noAnime=false}={}) {
 		super()
-		this.idx       = idx
 		this.dir       = orient
+		this.idx       = idx
 		this.initX     = col*T
 		this.initAlign = initAlign
 		this.noAnime   = noAnime
@@ -184,7 +183,7 @@ export class Ghost extends Actor {
 	}
 	#walk(isEscape=false) {
 		if (Timer.frozen && !isEscape) return
-		for (let i=0,denom=10; i<denom; i++) {
+		for (let i=0,denom=ceil(this.step); i<denom; i++) {
 			this.setNextPos(denom)
 			this.inBackwardOfTile && this.#setNextDir()
 			this.#setTurn(this)
