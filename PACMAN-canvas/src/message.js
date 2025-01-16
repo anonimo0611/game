@@ -6,7 +6,7 @@ import {State}   from './_state.js'
 import {Color,TileSize as T} from './_constants.js'
 
 export const Message = new class {
-	drawText(col, row, color, text,
+	drawText(col, row, color='', text='',
 		{ctx=Ctx,scale=[1,1],face='Atari',size=T,style=''}={}
 	) {
 		ctx.save()
@@ -39,8 +39,7 @@ export const Message = new class {
 		if (State.isStart) {
 			drawText( 9, 13, Color.Message1, 'PLAYER　ONE')
 		}
-		if (State.isStart
-		 || State.isReady) {
+		if (State.isStandby) {
 			drawText(11, 19, Color.Message2, 'READY!')
 		}
 		if (State.isTitle

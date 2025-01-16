@@ -18,6 +18,9 @@ export const State = new class extends StateBase {
 		super()
 		this.init()
 	}
+	get isStandby() {
+		return this.isStart || this.isReady
+	}
 	#callback(state) {
 		Ticker.resetCount()
 		;/Restart|NewLevel/.test(state) && $trigger('Respawn')

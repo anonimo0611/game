@@ -14,6 +14,7 @@ export class Actor {
 
 	get x()         {return this.#x}
 	get y()         {return this.#y}
+	get Radius()    {return T}
 	get pos()       {return Vec2(this)}
 	get centerPos() {return Vec2(this).add(T/2)}
 	get tilePos()   {return Vec2(this.centerPos).divInt(T)}
@@ -48,10 +49,11 @@ export class Actor {
 		return this.inForwardOfTile && this.stepsPerTile <= this.step/denom
 	}
 	setPos({x=this.x, y=this.y}={}) {
-		if (State.isPlaying) {
-			if (x < -this.Radius-T/2) x = Cvs.width+T/2
-			if (x > Cvs.width+T/2) x = -this.Radius-T/2
-		}[this.#x,this.#y] = [x,y]
+		this.#y = y
+		this.#x = function(r) {
+			if (x < -r-T/2) return Cvs.width+T/2
+			if (x > Cvs.width+T/2) return -r-T/2
+		}(this.Radius) ?? x
 	}
 	setCenterX(x) {
 		this.pos = Vec2(x-T/2, this.y)
@@ -69,7 +71,7 @@ export class Actor {
 	collidedWithWall(dir=this.dir) {
 		const {step,centerPos}= this
 		const {x,y}= Vec2(dir).mul(T/2+step).add(centerPos).divInt(T)
-		return Maze.hasWall({x:clamp(x, 0, ColMax-1), y})
+		return Maze.hasWall({x:(x+ColMax) % ColMax, y})
 	}
 	update() {
 		State.isReady && this.#fadeIn.update(this.maxAlpha)
