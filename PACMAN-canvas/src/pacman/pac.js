@@ -152,8 +152,7 @@ export class Pacman extends Actor {
 		this.#notEaten = 0
 		this.#playSE()
 		Score.add(isPow? 50:10)
-		Maze.clearDot(this)
-		Maze.dotsLeft == 0
+		Maze.clearDot(this) == 0
 			&& Sound.stopLoops()
 			&& State.switchToClear()
 			&& State.switchToFlashMaze(1000)
