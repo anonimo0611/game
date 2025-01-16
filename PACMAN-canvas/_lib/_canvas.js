@@ -6,7 +6,7 @@ canvas2D = (arg, _w=null, _h=_w)=> {
 	const [w,h]= setCanvasSize(cvs)(_w,_h)
 	const /** @type {CanvasRenderingContext2D} */
 	ctx = cvs.getContext('2d')
-	ctx.clear = (x=0,y=0,_w=w,_h=h)=> ctx.clearRect(x,y,_w,_h)
+	ctx.clear = (fill=null)=> cvsFillRect(ctx)(0,0,w,h,fill)
 	/** @type {[cvs,ctx,w:number,h:number]} */
 	const vals = [cvs,ctx,w,h]
 	return {cvs,ctx,w,h,vals}
