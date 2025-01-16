@@ -65,7 +65,7 @@ const [pvCvs,pvCtx]= canvas2D('previewCvs', TileSize*3, TileSize*2).vals
 		pvCtx.save()
 		pvCtx.translate(S*1.5/2, S/2)
 		pvCtx.scale(T/TileSize,  T/TileSize)
-		_sprite.orient = _orient
+		_sprite.obj.orient = _orient
 		_sprite.draw(pvCtx, Vec2())
 		pvCtx.restore()
 	}

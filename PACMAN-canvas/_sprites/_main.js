@@ -88,10 +88,10 @@ function drawPacman() {
 	for (let i=-1; i<=8; i++) {
 		const cfg = {
 			orient:  dirs[i-1],
-			Radius:  S/2*0.96,
-			opening: i>0 ? (i%2 ? 1:2) : 0
+			Radius:  S/2*0.96
 		}
-		new PacSprite(cfg).draw(Ctx, Vec2(T+ofst(i), S*8.5))
+		const openType = i>0 ? (i%2 ? 1:2) : 0
+		new PacSprite(cfg,openType).draw(Ctx, Vec2(T+ofst(i), S*8.5))
 	}
 }
 function drawAkabei() {
