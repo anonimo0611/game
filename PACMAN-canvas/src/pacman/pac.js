@@ -45,7 +45,7 @@ export class Pacman extends Actor {
 	get showCenter()   {return Ctrl.showGridLines}
 	get translucent()  {return this.showCenter || Ctrl.invincible}
 	get maxAlpha()     {return this.translucent? this.cheatAlpha : 1}
-	get mouthClosed()   {return State.isPlaying == false}
+	get mouthClosed()  {return State.isPlaying == false}
 
 	get #canTurn() {
 		return this.inForwardOfTile
