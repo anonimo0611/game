@@ -1,5 +1,5 @@
 import {Vec2}    from '../_lib/vec2.js'
-import {Dir}     from '../_lib/direction.js'
+import {Dir,L}   from '../_lib/direction.js'
 import {Cvs,Ctx} from './_canvas.js'
 import {State}   from './_state.js'
 import {Maze}    from './maze.js'
@@ -8,8 +8,8 @@ import {ColMax,TileSize as T} from './_constants.js'
 export class Actor {
 	#x = 0
 	#y = 0
-	#orient = ''
-	#movDir = ''
+	#orient = L
+	#movDir = L
 	#fadeIn = new FadeIn(500)
 
 	get x()         {return this.#x}
