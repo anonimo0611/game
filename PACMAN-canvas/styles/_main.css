@@ -62,19 +62,9 @@ body[data-loaded=true] #wrapper {
 #board {
 	font: 1rem/1 Atari,sans-serif;
 	position: relative;
-	canvas + canvas {
-		position: absolute;
-		top:  0;
-		left: 0;
-	}
 }
 body:not([data-state=Title]) #titleScr {
 	display: none;
-}
-:is([data-state=Attract],[data-state=CBreak]) {
-	:is(#titleScr, #bgC) {
-		visibility: hidden;
-	}
 }
 
 #startBtn {
