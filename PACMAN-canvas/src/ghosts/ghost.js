@@ -23,7 +23,7 @@ export class Ghost extends Actor {
 	static get frightened() {return SysMap.has(FrightMode)}
 	static get Elroy()      {return Sys.Elroy}
 	static get hasEscape()  {return Sys.GhostMgr.hasEscape}
-	static centerPos(idx=0) {return Sys.GhostMgr.centerPos(idx)}
+	static get centerPos()  {return Sys.GhostMgr.centerPos}
 
 	#runAway    = -1
 	#started    = false
