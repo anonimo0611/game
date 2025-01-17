@@ -25,7 +25,7 @@ export const PacMgr = function() {
 		get dir()        {return pacman.dir},
 		get pos()        {return pacman.pos},
 		get centerPos()  {return pacman.centerPos},
-		forwardPos(n=0)  {return pacman.forwardPos(n)},
+		get forwardPos() {return pacman.forwardPos},
 		bindDotEaten(fn) {$(PacMgr).on('DotEaten',fn)},
 	}
 }()
