@@ -16,7 +16,7 @@ class Menu {
 		$(this.root).closest('form').on('reset', ()=> this.reset())
 		defineProperty(this.root, 'type', {get(){return 'menu'}})
 	}
-	bindEvent(fn) {
+	bindChange(fn) {
 		isFun(fn) && $(this.menu).on('change', fn)
 	}
 	select(idx=0) {
