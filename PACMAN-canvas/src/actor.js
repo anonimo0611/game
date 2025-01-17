@@ -52,8 +52,9 @@ export class Actor {
 	setPos({x=this.x, y=this.y}={}) {
 		this.#y = y
 		this.#x = function(r) {
-			if (State.isPlaying && x < -r-T/2) return CW+T/2
-			if (State.isPlaying && x > CW+T/2) return -r-T/2
+			if (!State.isPlaying) return
+			if (x < -r-T/2) return CW+T/2
+			if (x > CW+T/2) return -r-T/2
 		}(this.Radius) ?? x
 	}
 	setCenterX(x) {
