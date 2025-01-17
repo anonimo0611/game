@@ -21,12 +21,12 @@ export const PacMgr = function() {
 	const instantiate = ()=> pacman = new Pacman()
 	$on('Title Restart NewLevel', ()=> instantiate())
 	return {
-		get instance()  {return pacman ||= instantiate()},
-		get dir()       {return pacman.dir},
-		get pos()       {return pacman.pos},
-		get centerPos() {return pacman.centerPos},
-		forwardPos(n=0) {return pacman.forwardPos(n)},
-		bindEatenFn(fn) {$(PacMgr).on('DotEaten', fn)},
+		get instance()   {return pacman ||= instantiate()},
+		get dir()        {return pacman.dir},
+		get pos()        {return pacman.pos},
+		get centerPos()  {return pacman.centerPos},
+		forwardPos(n=0)  {return pacman.forwardPos(n)},
+		bindDotEaten(fn) {$(PacMgr).on('DotEaten',fn)},
 	}
 }()
 class Pacman extends Actor {
