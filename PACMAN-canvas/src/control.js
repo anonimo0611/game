@@ -110,7 +110,6 @@ export const Ctrl = new class {
 		})
 		$('input')  .on('input', Ctrl.#saveData)
 		$('#defBtn').on('click', Ctrl.#setDefault)
-		for (const menu of values(Menu))
-			menu.bindChange(Ctrl.#saveData)
+		values(Menu).forEach(m=> m.bindChange(Ctrl.#saveData))
 	}
 }, Form = document.forms[0]
