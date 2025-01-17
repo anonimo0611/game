@@ -56,10 +56,10 @@ export const GhostMgr = new class {
 	get hasEscape()  {return Ghosts.some(g=> g.escaping)}
 	centerPos(idx=0) {return Ghosts[idx].centerPos}
 	#setup() {
-		$(this).on('Reset',this.#reset)
-		$on('Playing',     this.#onPlaying)
-		$on('Clear Losing',this.#setFadeOut)
-		PacMgr.bindEatenFn(this.#dotEaten)
+		$(this).on('Reset', this.#reset)
+		$on('Playing',      this.#onPlaying)
+		$on('Clear Losing', this.#setFadeOut)
+		PacMgr.bindDotEaten(this.#dotEaten)
 	}
 	#reset(_, ...subClasses) {
 		GhostMgr.#aidx = 0
@@ -167,7 +167,7 @@ export const DotCounter = function() {
 			: counters[Ghosts.findIndex(g=> g.state.isIdle)]++
 	}
 	$on('Title Ready', reset)
-	$ready(()=> PacMgr.bindEatenFn(addCnt))
+	$ready(()=> PacMgr.bindDotEaten(addCnt))
 	return {release}
 }()
 
@@ -189,7 +189,7 @@ export const Elroy = function() {
 		}
 	}
 	$on('Title NewLevel', ()=> part=0)
-	$ready(()=> PacMgr.bindEatenFn(dotEaten))
+	$ready(()=> PacMgr.bindDotEaten(dotEaten))
 	return {
 		get part()  {return part},
 		get step()  {return Step.Base * speedRateTbl[part]},

@@ -24,9 +24,9 @@ let _tgtDisp = true
 export const Fruit = new class {
 	static {$ready(this.setup)}
 	static setup() {
-		$on('Title Ready', Fruit.#reset)
-		$on('LevelChanged',Fruit.#drawLevelCounter)
-		PacMgr.bindEatenFn(Fruit.#dotEaten)
+		$on('Title Ready',  Fruit.#reset)
+		$on('LevelChanged', Fruit.#drawLevelCounter)
+		PacMgr.bindDotEaten(Fruit.#dotEaten)
 	}
 	get score() {
 		return PointTable[Fruit.number()]
