@@ -14,11 +14,10 @@ import {MazeWall}  from './maze_wall.js'
 import {Message}   from './message.js'
 import {Score}     from './score.js'
 import {Lives}     from './lives.js'
-import {Pacman}    from './pacman/pac.js'
-import {GhostMgr}  from './ghosts/_system.js'
-import {Target}    from './ghosts/show_targets.js'
 import {Fruit}     from './fruit.js'
 import {PtsMgr}    from './points.js'
+import {PacMgr}    from './pacman/pac.js'
+import {GhostMgr}  from './ghosts/_system.js'
 import {Attract}   from './demo/attract.js'
 import {CBreak}    from './demo/coffee_break.js'
 
@@ -36,7 +35,7 @@ export const Game = new class {
 		$on('Restart',  Game.#levelBegins)
 		$on('GameOver', Game.#levelEnds)
 		$on('Quit',     Game.#levelEnds)
-		LevelMenu.bindEvent(Game.#resetLevel)
+		LevelMenu.bindChange(Game.#resetLevel)
 		Game.#resetLevel()
 		Game.#initStartBtn()
 		State.switchToTitle()
@@ -111,7 +110,7 @@ export const Game = new class {
 	#onLosing() {
 		Timer.set(500, ()=> {
 			Sound.play('losing')
-			Pacman.instance.sprite.setLosing()
+			PacMgr.instance.sprite.setLosing()
 			Lives.left > 0
 				? State.switchToRestart(2200)
 				: State.switchToGameOver(2200)
@@ -158,7 +157,7 @@ export const Game = new class {
 	}
 	#update() {
 		PtsMgr.update()
-		Pacman.instance.update()
+		PacMgr.instance.update()
 		GhostMgr.update()
 		Fruit.update()
 		State.isTitle   && Attract.Timer.update()
@@ -178,8 +177,8 @@ export const Game = new class {
 		Fruit.drawTarget()
 		PtsMgr.drawFruitPts()
 		GhostMgr.drawBehind()
-		Pacman.instance.draw()
-		Target.draw()
+		PacMgr.instance.draw()
+		GhostMgr.drawTargets()
 		GhostMgr.drawFront()
 		PtsMgr.drawGhostPts()
 		Message.draw()

@@ -6,7 +6,7 @@ import {Game}   from './_main.js'
 import {State}  from './_state.js'
 import {Maze}   from './maze.js'
 import {PtsMgr} from './points.js'
-import {Pacman} from './pacman/pac.js'
+import {PacMgr} from './pacman/pac.js'
 import Sprites  from './fruits_sprite.js'
 import {Ctx,BgCvs,BgCtx} from './_canvas.js'
 import {DotMax,TileSize as T} from './_constants.js'
@@ -25,8 +25,8 @@ export const Fruit = new class {
 	static {$ready(this.setup)}
 	static setup() {
 		$on('Title Ready', Fruit.#reset)
-		$on('DotEaten',    Fruit.#dotEaten)
 		$on('LevelChanged',Fruit.#drawLevelCounter)
+		PacMgr.bindEatenFn(Fruit.#dotEaten)
 	}
 	get score() {
 		return PointTable[Fruit.number()]
@@ -49,7 +49,7 @@ export const Fruit = new class {
 		Timer.set(randInt(9e3, 1e4-fadeDur)/rate,
 			()=> _fadeOut = new FadeOut(fadeDur/rate), {key:Fruit})
 	}
-	#collideWith(pos=Pacman.centerPos) {
+	#collideWith(pos=PacMgr.centerPos) {
 		if (!collisionCircle(pos, Fruit.targetPos, T/2)) return
 		_tgtDisp = false
 		Timer.cancel(Fruit) && Sound.play('fruit')

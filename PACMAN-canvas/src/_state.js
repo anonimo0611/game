@@ -23,7 +23,6 @@ export const State = new class extends StateBase {
 	}
 	#callback(state) {
 		Ticker.resetCount()
-		;/Restart|NewLevel/.test(state) && $trigger('Respawn')
 		$trigger(document.body.dataset.state = state)
 	}
 	switchTo(state, delay=(state=='Quit') ? -1:0) {

@@ -15,19 +15,21 @@ import {Ghost}   from '../ghosts/ghost.js'
 import Sprite    from './pac_sprite.js'
 import {PacRadius,PacStep as Step,TileSize as T} from '../_constants.js'
 
-export class Pacman extends Actor {
-	static #symbol = Symbol()
-	static #pacman = null
-	static get instance()  {return this.#pacman ||= this.#instantiate()}
-	static get dir()       {return this.instance.dir}
-	static get pos()       {return this.instance.pos}
-	static get centerPos() {return this.instance.centerPos}
-	static forwardPos(num) {return this.instance.forwardPos(num)}
-	static #instantiate()  {return new Pacman(this.#symbol)}
-	static {
-		$on('keydown', e=> this.instance.#onKeydown(e))
-		$on('Title Respawn', ()=> this.#instantiate())
+export const PacMgr = function() {
+	/** @type {Pacman|null} */
+	let pacman = null
+	const instantiate = ()=> pacman = new Pacman()
+	$on('Title Restart NewLevel', ()=> instantiate())
+	return {
+		get instance()  {return pacman ||= instantiate()},
+		get dir()       {return pacman.dir},
+		get pos()       {return pacman.pos},
+		get centerPos() {return pacman.centerPos},
+		forwardPos(n=0) {return pacman.forwardPos(n)},
+		bindEatenFn(fn) {$(PacMgr).on('DotEaten', fn)},
 	}
+}()
+class Pacman extends Actor {
 	Radius    = PacRadius
 	sprite    = new Sprite(this)
 	#step     = this.#getCurrentStep()
@@ -47,18 +49,17 @@ export class Pacman extends Actor {
 	get maxAlpha()     {return this.translucent? this.cheatAlpha : 1}
 	get mouthClosed()  {return State.isPlaying == false}
 
+	constructor() {
+		super()
+		this.dir = Dir.Left
+		this.pos = Vec2(13.5, 24).mul(T)
+		$offon('keydown.Pacman', e=> this.#onKeydown(e))
+		freeze(this)
+	}
 	get #canTurn() {
 		return this.inForwardOfTile
 			&& this.#preDir
 			&& this.collidedWithWall(this.#preDir) == false
-	}
-	constructor(symbol) {
-		if (symbol != Pacman.#symbol)
-			throw TypeError('The constructor is not visible')
-		super()
-		this.dir = Dir.Left
-		this.pos = Vec2(13.5, 24).mul(T)
-		Pacman.#pacman = freeze(this)
 	}
 	#ignoreKeys(e, dir) {
 		return Confirm.opened
@@ -156,7 +157,7 @@ export class Pacman extends Actor {
 			&& Sound.stopLoops()
 			&& State.switchToClear()
 			&& State.switchToFlashMaze(1000)
-		$trigger('DotEaten', isPow)
+		$(PacMgr).trigger('DotEaten', isPow)
 	}
 	#playSE() {
 		const duration = (T/this.step)*Ticker.Interval*0.5

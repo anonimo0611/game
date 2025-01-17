@@ -7,13 +7,15 @@ import {GhsType} from '../_constants.js'
 import {Game}    from '../_main.js'
 import {State}   from '../_state.js'
 import {Ctrl}    from '../control.js'
-import {Pacman}  from '../pacman/pac.js'
+import {PacMgr}  from '../pacman/pac.js'
 import {Maze}    from '../maze.js'
 import {Ghost}   from './ghost.js'
+import {Target}  from './show_targets.js'
 import {TileSize as T} from '../_constants.js'
 
 /** @type {Ghost[]} */
-export const Ghosts = []
+const Ghosts = []
+
 export const SysMap = new Map()
 export const Step   = GhsStep
 
@@ -49,17 +51,20 @@ const behindThePac = g=> g.frightened
 export const GhostMgr = new class {
 	static {$ready(()=> GhostMgr.#setup())}
 	#aidx = 0
-	get aInterval() {return 6}
-	get animIndex() {return this.#aidx}
+	get aInterval()  {return 6}
+	get animIndex()  {return this.#aidx}
+	get hasEscape()  {return Ghosts.some(g=> g.escaping)}
+	centerPos(idx=0) {return Ghosts[idx].centerPos}
 	#setup() {
-		$on('Title Respawn',this.#reset)
-		$on('Playing',      this.#onPlaying)
-		$on('DotEaten',     this.#dotEaten)
-		$on('Clear Losing', this.#setFadeOut)
+		$(this).on('Reset',this.#reset)
+		$on('Playing',     this.#onPlaying)
+		$on('Clear Losing',this.#setFadeOut)
+		PacMgr.bindEatenFn(this.#dotEaten)
 	}
-	#reset() {
+	#reset(_, ...subClasses) {
 		GhostMgr.#aidx = 0
 		SysMap.clear()
+		subClasses.forEach((cls,i)=> Ghosts[i]=new cls.prototype.constructor)
 	}
 	#onPlaying() {
 		Sound.playSiren()
@@ -83,14 +88,15 @@ export const GhostMgr = new class {
 		Ghosts.forEach(g=> g.update())
 		Ghosts.forEach(g=> this.crashWithPac(g))
 	}
-	crashWithPac(g, pacPos=Pacman.pos, {fn,radius}={}) {
+	crashWithPac(g, pacPos=PacMgr.pos, {fn,radius}={}) {
 		if (!(g instanceof Ghost) || !g.state.isWalk) return
 		radius ??= (g.frightened? T/2 : T/3)
 		collisionCircle(g, pacPos, radius) && g.crashWithPac(fn)
 	}
 	#draw = (_,i,array)=> array.at(-1-i).draw()
-	drawFront()  {Ghosts.filter(inFrontOfPac).forEach(this.#draw)}
-	drawBehind() {Ghosts.filter(behindThePac).forEach(this.#draw)}
+	drawTargets() {Target.draw(Ghosts)}
+	drawFront()   {Ghosts.filter(inFrontOfPac).forEach(this.#draw)}
+	drawBehind()  {Ghosts.filter(behindThePac).forEach(this.#draw)}
 }
 
 export const Wave = function() {
@@ -145,7 +151,7 @@ export const DotCounter = function() {
 		const timeOut = (Game.level <= 4 ? 4e3:3e3)
 		const gLimit  = limitTbl[idx-1][0] // global
 		const pLimit  = limitTbl[idx-1][min(Game.level,3)] // personal
-		if (Pacman.instance.timeNotEaten >= timeOut) fn()
+		if (PacMgr.instance.timeNotEaten >= timeOut) fn()
 		else (!Game.restarted || globalDotCnt < 0)
 			? counters[idx]>= pLimit && fn()
 			: globalDotCnt == gLimit && fn(idx == GhsType.Guzuta)
@@ -160,8 +166,8 @@ export const DotCounter = function() {
 			? globalDotCnt++
 			: counters[Ghosts.findIndex(g=> g.state.isIdle)]++
 	}
-	$on('DotEaten', addCnt)
 	$on('Title Ready', reset)
+	$ready(()=> PacMgr.bindEatenFn(addCnt))
 	return {release}
 }()
 
@@ -182,8 +188,8 @@ export const Elroy = function() {
 			Sound.playSiren()
 		}
 	}
-	$on('DotEaten', dotEaten)
 	$on('Title NewLevel', ()=> part=0)
+	$ready(()=> PacMgr.bindEatenFn(dotEaten))
 	return {
 		get part()  {return part},
 		get step()  {return Step.Base * speedRateTbl[part]},

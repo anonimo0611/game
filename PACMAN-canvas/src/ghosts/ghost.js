@@ -10,20 +10,20 @@ import {Ctrl}    from '../control.js'
 import {PtsMgr}  from '../points.js'
 import {Maze}    from '../maze.js'
 import {Actor}   from '../actor.js'
-import {Pacman}  from '../pacman/pac.js'
+import {PacMgr}  from '../pacman/pac.js'
 import * as Sys  from './_system.js'
 import Sprite    from './ghost_sprite.js'
 import {GhsType,TileSize as T} from '../_constants.js'
 
-const {GhostMgr,Ghosts,SysMap,FrightMode,Step}= Sys
+const {GhostMgr,SysMap,FrightMode,Step}= Sys
 const compareDist = (a,b)=> (a.dist == b.dist)? (a.index-b.index):(a.dist-b.dist)
 
 export class Ghost extends Actor {
-	static get Type()       {return GhsType}
-	static get Elroy()      {return Sys.Elroy}
-	static get frightened() {return SysMap.has(FrightMode)}
 	static get score()      {return SysMap.get(FrightMode)?.score || 0}
-	static get hasEscape()  {return Ghosts.some(g=> g.escaping)}
+	static get frightened() {return SysMap.has(FrightMode)}
+	static get Elroy()      {return Sys.Elroy}
+	static get hasEscape()  {return Sys.GhostMgr.hasEscape}
+	static centerPos(idx=0) {return Sys.GhostMgr.centerPos(idx)}
 
 	#runAway    = -1
 	#started    = false
@@ -40,7 +40,7 @@ export class Ghost extends Actor {
 	scatterTile = Vec2(24, 0).freeze()
 	get angry()     {return false}
 	get chaseStep() {return Step.Base}
-	get chasePos()  {return Pacman.centerPos}
+	get chasePos()  {return PacMgr.centerPos}
 	get chaseTile() {return this.chasePos.divInt(T)}
 
 	constructor({col=0,row=0,idx=0,initAlign=0,orient=L,noAnime=false}={}) {
@@ -82,7 +82,7 @@ export class Ghost extends Actor {
 			&& abs(Maze.Center - this.centerPos.x) <= this.step
 	}
 	get distanceToPacman() {
-		return Vec2.distance(this, Pacman.pos)
+		return Vec2.distance(this, PacMgr.pos)
 	}
 	get step() {
 		const spd = Game.moveSpeed, {state}= this
@@ -129,7 +129,7 @@ export class Ghost extends Actor {
 		}
 	}
 	release(deactivate_global_dot_cnt=false) {
-		Pacman.instance.resetTimer()
+		PacMgr.instance.resetTimer()
 		this.state.isIdle && this.state.switchToGoOut()
 		return deactivate_global_dot_cnt
 	}

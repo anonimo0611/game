@@ -5,16 +5,16 @@ import {Ctx}    from '../_canvas.js'
 import {State}  from '../_state.js'
 import {Ctrl}   from '../control.js'
 import {Maze}   from '../maze.js'
-import {Pacman} from '../pacman/pac.js'
+import {PacMgr} from '../pacman/pac.js'
 import {Ghost}  from '../ghosts/ghost.js'
-import {Ghosts} from '../ghosts/_system.js'
 import {Color,GhsType,TileSize as T} from '../_constants.js'
 
 export const Target = new class {
-	draw() {
+	/** @param {Ghost[]} ghosts */
+	draw(ghosts=[]) {
 		if (!Ctrl.showTargets || !State.isPlaying) return
-		Ghosts.forEach(Target.#strokeLines)
-		Ghosts.forEach(Target.#drawTargetMarker)
+		ghosts.forEach(Target.#strokeLines)
+		ghosts.forEach(Target.#drawTargetMarker)
 	}
 	/** @param {Ghost} g */
 	#enabled(g) {
@@ -55,8 +55,8 @@ export const Target = new class {
 	*/
 	#strokeAuxLines(g, ofst) {
 		if (g.isScatter || !g.state.isWalk) return
-		const {dir:pacDir,centerPos:pacPos}= Pacman
-		const fwdVals = Pacman.forwardPos(ofst).vals
+		const {dir:pacDir,centerPos:pacPos}= PacMgr
+		const fwdVals = PacMgr.forwardPos(ofst).vals
 		Ctx.save()
 		Ctx.globalAlpha = 0.8
 		Ctx.lineWidth   = 6
@@ -68,7 +68,7 @@ export const Target = new class {
 		pacDir == Dir.Up && Ctx.lineTo(...fwdVals)
 		Ctx.stroke()
 		if (g.idx == GhsType.Aosuke) {
-			const akaVals = Ghosts[GhsType.Akabei].centerPos.vals
+			const akaVals = Ghost.centerPos(GhsType.Akabei).vals
 			cvsStrokeLine(Ctx)(...fwdVals, ...akaVals)
 			cvsStrokeLine(Ctx)(...fwdVals, ...g.chasePos.vals)
 			cvsFillCircle(Ctx)(...fwdVals, 8, Color[g.name])
@@ -81,7 +81,7 @@ export const Target = new class {
 		if (g.isScatter || !g.state.isWalk) return
 		Ctx.save()
 		Ctx.globalAlpha = g.distanceToPacman < T*8 ? 0.4 : 0.8
-		cvsStrokeCircle(Ctx)(...Pacman.centerPos.vals, T*8, Color[g.name], 6)
+		cvsStrokeCircle(Ctx)(...PacMgr.centerPos.vals, T*8, Color[g.name], 6)
 		Ctx.restore()
 	}
 }
