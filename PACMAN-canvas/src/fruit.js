@@ -34,12 +34,12 @@ export const Fruit = new class {
 	get targetPos() {
 		return Vec2(Maze.Width/2, T*18.5)
 	}
+	number(i=Game.level-1) {
+		return LevelTable.at(i >= LevelTable.length ? -1 : i)
+	}
 	#reset() {
 		_fadeOut = null
 		_tgtDisp = State.isTitle
-	}
-	number(i=Game.level-1) {
-		return LevelTable.at(i >= LevelTable.length ? -1 : i)
 	}
 	#dotEaten() {
 		if (!appearSet.has(DotMax - Maze.dotsLeft)) return
