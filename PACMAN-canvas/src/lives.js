@@ -19,7 +19,7 @@ export const Lives = new class {
 		return this.#left = +{
 			Title:  Max,
 			Start:  Max+1,
-			Ready:  State.isSt_Ready? Max:left,
+			Ready:  State.lastIs('Start')? Max:left,
 			Restart:left-1,
 		}[State.current]
 	}
