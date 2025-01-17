@@ -39,7 +39,6 @@ class Pacman extends Actor {
 	#stopped  = true
 	#preDir   = null
 	#nextTurn = null
-
 	get step()         {return this.#step}
 	get stopped()      {return this.#stopped}
 	get turning()      {return this.#turning}
