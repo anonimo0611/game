@@ -105,9 +105,7 @@ export default class {
 		ctx.quadraticCurveTo(3, -3, 22, -28)
 		cvsSetLineTo(ctx)([51,-28],[51,-11])
 		ctx.quadraticCurveTo(50, -1, 45, 4)
-		cvsSetLineTo(ctx)(
-		[63,  4],[63, 22],[44, 22],
-		[44, 16],[12, 16])
+		cvsSetLineTo(ctx)([63,4],[63,22],[44,22],[44,16],[12,16])
 		ctx.fillStyle = Color.GhostSkin
 		ctx.fill()
 		ctx.restore()
@@ -116,9 +114,7 @@ export default class {
 		ctx.beginPath()
 		cvsSetLinePath(ctx)([-67, 22],[-58, 12])
 		ctx.quadraticCurveTo(-48, 1, -43, 11)
-		cvsSetLineTo(ctx)(
-		[-4, 11],[-4,  5],[22,  4],
-		[28, 12],[24, 15],[18, 22])
+		cvsSetLineTo(ctx)([-4,11],[-4,5],[22,4],[28,12],[24,15],[18,22])
 		ctx.fill()
 		for (let i=1; i>=0; i--) {
 			// Eyeballs
