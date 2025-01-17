@@ -64,7 +64,7 @@ export const GhostMgr = new class {
 	#reset(_, ...subClasses) {
 		GhostMgr.#aidx = 0
 		SysMap.clear()
-		subClasses.forEach((cls,i)=> Ghosts[i]=new cls.prototype.constructor)
+		subClasses.forEach((cls,i)=> Ghosts[i]=new cls)
 	}
 	#onPlaying() {
 		Sound.playSiren()
