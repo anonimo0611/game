@@ -11,7 +11,7 @@ import {GhostMgr}     from '../ghosts/_system.js'
 import {FrightMode}   from '../ghosts/_system.js'
 import {Ghost}        from '../ghosts/ghost.js'
 import {AttractTimer} from './_run_timer.js'
-import {Color,TileSize as T} from '../_constants.js'
+import {Color,GhsType,TileSize as T} from '../_constants.js'
 
 /** @type {Attract|null} */
 let   _attract  = null
@@ -45,7 +45,7 @@ export class Attract {
 	}
 	setActors() {
 		for (const i of this.ghsList.keys())
-			for (let j=0; j<Ghost.Type.Max; j++)
+			for (let j=0; j<GhsType.Max; j++)
 				this.setActor(i, j)
 	}
 	setActor(idx, gIdx) {
@@ -76,7 +76,7 @@ export class Attract {
 	}
 	updateGhosts() {
 		if (Ticker.elapsedTime <= 1e4+650) return
-		this.ghsList[DEMO].forEach(g=> {
+		this.ghsList[DEMO].forEach((g,i)=> {
 			g.x += this.ghsVelX
 			const fn = ()=> this.caughtGhost(g)
 			GhostMgr.crashWithPac(g, this.pacman, {radius:T/4,fn})
@@ -123,7 +123,7 @@ export class Attract {
 			}
 		}
 		if (et > 1e4+500) {
-			for (let i=0; i<Ghost.Type.Max; i++)
+			for (let i=0; i<GhsType.Max; i++)
 				this.drawGhost(DEMO, i)
 			this.drawPacman(this.pacman.centerPos)
 		}
