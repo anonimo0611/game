@@ -1,9 +1,10 @@
-import {Vec2}    from '../_lib/vec2.js'
-import {Dir,L}   from '../_lib/direction.js'
-import {Cvs,Ctx} from './_canvas.js'
-import {State}   from './_state.js'
-import {Maze}    from './maze.js'
-import {ColMax,TileSize as T} from './_constants.js'
+import {Vec2}   from '../_lib/vec2.js'
+import {Dir,L}  from '../_lib/direction.js'
+import {Ctx}    from './_canvas.js'
+import {State}  from './_state.js'
+import {Maze}   from './maze.js'
+import {ColMax} from './_constants.js'
+import {CvsWidth as CW,TileSize as T} from './_constants.js'
 
 export class Actor {
 	#x = 0
@@ -51,8 +52,8 @@ export class Actor {
 	setPos({x=this.x, y=this.y}={}) {
 		this.#y = y
 		this.#x = function(r) {
-			if (x < -r-T/2) return Cvs.width+T/2
-			if (x > Cvs.width+T/2) return -r-T/2
+			if (State.isPlaying && x < -r-T/2) return CW+T/2
+			if (State.isPlaying && x > CW+T/2) return -r-T/2
 		}(this.Radius) ?? x
 	}
 	setCenterX(x) {
