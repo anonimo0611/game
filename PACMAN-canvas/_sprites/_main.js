@@ -25,8 +25,8 @@ export function drawSprites() {
 function drawGridLines() {
 	Ctx.save()
 	Ctx.translate(-Gap/2, 0)
+	Ctx.setLineDash([2,2])
 	Ctx.lineWidth = 2
-	Ctx.setLineDash([2, 2]);
 	Ctx.strokeStyle = '#555'
 	const line = (...args)=> cvsStrokeLine(Ctx)(...args)
 	for (let y=0; y<ColMax;   y++) line(ofst(y), 0, ofst(y), RowMax*S)
