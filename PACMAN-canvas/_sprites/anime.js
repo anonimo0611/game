@@ -107,7 +107,7 @@ const [pvCvs,pvCtx]= canvas2D('previewCvs', TileSize*3, TileSize*2).vals
 		draw()
 	}
 	Ticker.set(loop)
-	animSelect.bindEvent(change)
+	animSelect.bindChange(change)
 	$('input[name=dir]')
 		.on('input',function(){_orient = this.value})
 }())
