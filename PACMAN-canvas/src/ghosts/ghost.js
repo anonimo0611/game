@@ -114,9 +114,9 @@ export class Ghost extends Actor {
 	#behavior() {
 		const {state}= this
 		this.#runAway >= 0 && this.#runAway--
-		if (state.isIdle)   return void this.#idle(this)
-		if (state.isGoOut)  return void this.#goOut(this)
-		if (state.isReturn) return void this.#returnToHome(this)
+		if (state.isIdle)   return this.#idle(this)
+		if (state.isGoOut)  return this.#goOut(this)
+		if (state.isReturn) return this.#returnToHome(this)
 		this.#walk(state.isEscape)
 	}
 	#idle({idx,step,orient,centerPos:pos}=this) {
