@@ -16,7 +16,7 @@ $('#sizeRng').on('input', ()=> {
 	T=size/2, [S,Gap]=[size,T*0.25]
 	ghost    = new Actor.Ghost(T*2)
 	cbAkabei = new Actor.Akabei(T*2)
-	setCanvasSize(Cvs)(ColMax*S, RowMax*S)
+	setCanvasSize(Cvs)(ColMax*S+Gap*2, RowMax*S+Gap)
 	setCanvasSize(pvCvs)(T*3, T*2)
 	drawSprites()
-});setCanvasSize(Cvs)(ColMax*S, RowMax*S)
+});setCanvasSize(Cvs)(ColMax*S+Gap*2, RowMax*S+Gap)

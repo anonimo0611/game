@@ -1,7 +1,7 @@
 import '../_lib/mouse.js'
 import {Vec2}              from '../_lib/vec2.js'
 import {U,R,D,L}           from '../_lib/direction.js'
-import {Color,TileSize}    from '../src/_constants.js'
+import {TileSize}          from '../src/_constants.js'
 import {Cvs,Ctx}           from '../src/_canvas.js'
 import fruitsSprites       from '../src/fruits_sprite.js'
 import pointsSprites       from '../src/points_sprite.js'
@@ -12,8 +12,9 @@ import {Gap,ghost,cbAkabei}from './_constants.js'
 const ofst = (idx,x=S)=> (x*idx+Gap*idx)
 export function drawSprites() {
 	Ctx.save()
+	Ctx.translate(Gap, Gap/2)
 	Ctx.clearRect(0,0, Cvs.width, Cvs.height)
-	//drawGridLines()
+	drawGridLines()
 	drawFruits()
 	drawGhosts()
 	drawPoints()
@@ -25,10 +26,11 @@ function drawGridLines() {
 	Ctx.save()
 	Ctx.translate(-Gap/2, 0)
 	Ctx.lineWidth = 2
-	Ctx.strokeStyle = Color.Grid
+	Ctx.setLineDash([2, 2]);
+	Ctx.strokeStyle = '#555'
 	const line = (...args)=> cvsStrokeLine(Ctx)(...args)
-	for (let y=1; y<ColMax; y++) line(ofst(y), 0, ofst(y), RowMax*S)
-	for (let x=0; x<RowMax; x++) line(0, x*S, ColMax*S, x*S)
+	for (let y=0; y<ColMax;   y++) line(ofst(y), 0, ofst(y), RowMax*S)
+	for (let x=0; x<RowMax+1; x++) line(0, x*S, ColMax*S+Gap, x*S)
 	Ctx.restore()
 }
 function drawFruits() {
@@ -79,7 +81,7 @@ function drawPoints() {
 		Ctx.restore()
 	}
 	const pts1 = (pts,i)=> {draw(pts, ofst(i)+T, S*6+T)}
-	const pts2 = (pts,i)=> {draw(pts, ofst(i,S*1.4)+S/9+T, S*7+S/2)}
+	const pts2 = (pts,i)=> {draw(pts, (S+Gap/2)+S*(2+Gap/T)*i, S*7+S/2)}
 	;[200,400,800,1600,100,300,500,700].forEach(pts1)
 	;[1000,2000,3000,5000].forEach(pts2)
 }
@@ -101,7 +103,7 @@ function drawAkabei() {
 		aka.sprite.draw({...aka, ...pos, ...cfg})
 		Ctx.restore()
 	}
-	Ctx.translate(S/4, S*9+S/4)
+	Ctx.translate(S/4, S*9+S/4-Gap/4)
 	{ // Expand clothes
 		const pos = Vec2.Zero, rates = [0.3, 0.5 ,1]
 		for (let i=0,ofst=0; i<3; i++) {
@@ -116,23 +118,23 @@ function drawAkabei() {
 		const [sx,sy]= Vec2(aka.cbSprite.stake.size).mul(s).vals
 		// Stake
 		Ctx.save()
-		Ctx.translate(S*6.8, S-S/4-sy-3*s)
+		Ctx.translate(S*6.9, S-S/4-sy-3*s)
 		Ctx.scale(s, s)
 		aka.cbSprite.drawStake(Vec2.Zero)
 		Ctx.restore()
 		// Offcut
 		Ctx.save()
-		Ctx.translate(S*6.8+sx, S-S/4-3*s)
+		Ctx.translate(S*6.9+sx, S-S/4-3*s)
 		Ctx.scale(s, s)
 		aka.cbSprite.drawOffcut(Vec2.Zero)
 		Ctx.restore()
 	}
-	draw(Vec2(ofst(4),  0),{ripped:true,orient:U})
-	draw(Vec2(ofst(5),  0),{ripped:true,orient:'LowerR'})
-	draw(Vec2(0,        S),{repaired:true})
-	draw(Vec2(S+Gap,    S),{repaired:true,aIdx:1})
-	draw(Vec2(ofst(2.0),S),{isHadake:true})
-	draw(Vec2(ofst(3.3),S),{isHadake:true,aIdx:1})
+	draw(Vec2(ofst(4),   0),{ripped:true,orient:U})
+	draw(Vec2(ofst(5),   0),{ripped:true,orient:'LowerR'})
+	draw(Vec2(0,         S),{repaired:true})
+	draw(Vec2(S+Gap,     S),{repaired:true,aIdx:1})
+	draw(Vec2(ofst(2.25),S),{isHadake:true})
+	draw(Vec2(ofst(4.25),S),{isHadake:true,aIdx:1})
 }
 drawSprites()
 
