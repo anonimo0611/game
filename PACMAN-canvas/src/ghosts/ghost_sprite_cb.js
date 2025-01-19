@@ -19,10 +19,9 @@ export default class {
 		ctx.fillStyle = Color.GhostSkin
 		ctx.fill()
 	}
-	mendedStitch(spriteIdx) {
+	mendedStitch(idx=0) {
 		const {ctx}= this,
-		coords = [[39,8],[33,14],[24,8],[14,15],[26,20],[14,27],[25,33],[14,38]]
-		spriteIdx == 1 && coords.pop()
+		coords = [[39,8],[33,14],[24,8],[14,15],[26,20],[14,27],[25,33],idx?[]:[14,38]]
 		ctx.lineWidth = 3.5
 		ctx.strokeStyle = '#FFF'
 		cvsSetNewLinePath(ctx)(...coords)
