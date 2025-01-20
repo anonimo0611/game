@@ -83,6 +83,7 @@ class Pacman extends Actor {
 		}
 		this.#preDir = dir
 		if (this.inBackwardOfTile) {
+			this.orient = dir
 			this.movDir = Dir.opposite(this.dir)
 		}
 	}
@@ -114,6 +115,7 @@ class Pacman extends Actor {
 		this.#notEaten++
 		for (let i=0,denom=ceil(this.step)*2; i<denom; i++)
 			this.#move(denom)
+		//console.log(this.inBackwardOfTile)
 	}
 	#move(denom=1) {
 		if (this.newTileReached(denom)) {
