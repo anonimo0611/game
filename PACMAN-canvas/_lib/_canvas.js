@@ -59,8 +59,7 @@ cvsSetNewLinePath = (ctx,fill)=> {
 },
 cvsSetLinePath = (ctx,fill)=> (...c)=> {
 	ctx.moveTo(c[0][0], c[0][1])
-	for (let i=1; i<c.length; i++)
-		ctx.lineTo(c[i][0], c[i][1])
+	cvsSetLineTo(ctx)(...c)
 	if (fill) {
 		ctx.fillStyle = fill
 		ctx.fill()
