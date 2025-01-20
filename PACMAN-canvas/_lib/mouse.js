@@ -14,18 +14,15 @@ export const Cursor = new class {
 		})
 	}
 }
-const dBody = document.body
 !(new class { // Enable mouse wheel on range controls
-	setup(tgt) {
-		tgt == dBody && $('form').on('reset', e=> this.setup(e.target))
-		$(tgt).find('input[type=range]').each((_,i)=> this.setupCtrl(i,tgt))
+	setup(elm) {
+		$(elm).find('input[type=range]').each((_,i)=> this.setupCtrl(i))
 	}
-	setupCtrl(ctrl,root) { // Labels must be block-level
+	setupCtrl(ctrl) { // Labels must be block-level
 		const output = dqs(`output[for~="${ctrl.id}"]`) ?? []
-		if (root != dBody) return $(output).text(+ctrl.defaultValue)
-		const ids   = ctrl.dataset.links?.trim().split(/\s+/) ?? []
-		const label = ctrl.closest('label') || dqs(`label[for="${ctrl.id}"]`)
-		const links = new Set(ids.flatMap(id=> dqs(`input#${id}`) ?? []))
+		const ids    = ctrl.dataset.links?.trim().split(/\s+/) ?? []
+		const label  = ctrl.closest('label') || dqs(`label[for="${ctrl.id}"]`)
+		const links  = new Set(ids.flatMap(id=> dqs(`input#${id}`) ?? []))
 		const onInput = ()=> {
 			const {value,min,max}= ctrl
 			$([ctrl,output, ...links])
@@ -42,4 +39,4 @@ const dBody = document.body
 		$(label || ctrl).on('wheel',onWheel)
 		$(ctrl).on('input',onInput).trigger('input')
 	}
-}).setup(dBody)
+}).setup(document.body)

@@ -6,7 +6,7 @@ canvas2D = (arg, _w=null, _h=_w)=> {
 	const [w,h]= setCanvasSize(cvs)(_w,_h)
 	const /** @type {CanvasRenderingContext2D} */
 	ctx = cvs.getContext('2d')
-	ctx.clear = (fill=null)=> cvsFillRect(ctx)(0,0,w,h,fill)
+	ctx.clear = (fill=null)=> cvsFillRect(ctx)(0,0,cvs.width,cvs.height,fill)
 	/** @type {[cvs,ctx,w:number,h:number]} */
 	const vals = [cvs,ctx,w,h]
 	return {cvs,ctx,w,h,vals}
@@ -53,9 +53,9 @@ cvsStrokeLine = ctx=> (x1,y1,x2,y2)=> {
 	ctx.lineTo(x2, y2)
 	ctx.stroke()
 },
-cvsSetNewLinePath = (ctx,fill)=> (...c)=> {
+cvsSetNewLinePath = (ctx,fill)=> {
 	ctx.beginPath()
-	cvsSetLinePath(ctx,fill)(...c)
+	return cvsSetLinePath(ctx,fill)
 },
 cvsSetLinePath = (ctx,fill)=> (...c)=> {
 	ctx.moveTo(c[0][0], c[0][1])

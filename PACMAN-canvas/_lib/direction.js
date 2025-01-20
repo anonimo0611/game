@@ -9,8 +9,8 @@ export const Dir = Object.freeze(new class {
 		if (isCombinationKey(e)) return null
 		const key = String(e.code).replace(/^(Arrow|Key)/,'')
 		return Dir.isValid(key)? key
-			: (wasd && DirFromAWSD.get(key.toUpperCase()) || null)
+			: (wasd && DirFromWASD.get(key) || null)
 	}
 })
 ,OppositeMap = new Map([[ U, D],[ R, L],[ D, U],[ L, R]])
-,DirFromAWSD = new Map([['W',U],['D',R],['S',D],['A',L]])
+,DirFromWASD = new Map([['W',U],['A',L],['S',D],['D',R]])
