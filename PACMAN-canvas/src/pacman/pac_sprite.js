@@ -27,7 +27,7 @@ export default class {
 		this.#rad += OpenMax/Duration * (this.#animDir*=dir)
 	}
 	draw(ctx=Ctx, {x=0,y=0}={}, scale=1) {
-		const {obj}=this, Radius=(obj.Radius??PacRadius)*scale
+		const {obj}=this, Radius=obj.Radius*scale
 		if (this.#losing) {
 			this.#losing.draw(ctx, x,y, Radius)
 			return
