@@ -112,7 +112,7 @@ class Pacman extends Actor {
 		if (Timer.frozen || !State.isPlaying) return
 		this.sprite.update()
 		this.#notEaten++
-		for (let i=0,denom=ceil(this.step); i<denom; i++)
+		for (let i=0,denom=ceil(this.step)*2; i<denom; i++)
 			this.#move(denom)
 	}
 	#move(denom=1) {
