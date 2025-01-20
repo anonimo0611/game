@@ -4,10 +4,9 @@ import {Color}   from '../maze.js';
 import {Losing}  from './losing.js';
 
 const Duration = 150/Ticker.Interval;
-const MouthMax =  90 * PI/180;
-const MouthMin =  20 * PI/180;
-const MouthMid =  60 * PI/180;
-const AngleMap = new Map([[L,0],[U,1],[R,2],[D,3]]);
+const OpenMid  = 30 * PI/180
+const OpenMax  = 60 * PI/180
+const AngleMap = new Map([[R,0],[D,1],[L,2],[U,3]]);
 
 export class Sprite {
 	#obj     = null;
@@ -16,17 +15,16 @@ export class Sprite {
 	#animDir = -1;
 	constructor(obj, {closed=true}={}) {
 		this.#obj = obj;
-		this.#rad = closed? MouthMax : MouthMid;
+		this.#rad = closed? 0 : OpenMid;
 	}
 	get angle() {
-		return (this.#obj?.stayStill ? MouthMax : this.#rad);
+		return (this.#obj?.stayStill ? 0 : this.#rad);
 	}
 	update() {
 		if (this.#obj?.stayStill
-		 || this.#obj?.stopped && this.#rad < MouthMid) return;
-		if (this.#rad < MouthMin
-		 || this.#rad > MouthMax) this.#animDir *= -1;
-		this.#rad += (MouthMax - MouthMin)/Duration * this.#animDir;
+		 || this.#obj?.stopped && this.#rad > OpenMid) return;
+		 const dir = between(this.angle, 0, OpenMax) ? 1 : -1;
+		 this.#rad += OpenMax/Duration * (this.#animDir*=dir);
 	}
 	draw(ctx, {x,y}) {
 		const {orient=L,Radius,fadeIn}= this.#obj;
@@ -40,8 +38,8 @@ export class Sprite {
 		ctx.rotate(AngleMap.get(orient) * PI/2);
 		ctx.beginPath();
 			ctx.fillStyle = Color.PacMan;
-			ctx.moveTo(Radius*0.35, 0);
-			ctx.arc(0,0, Radius, -PI/2-this.angle, PI/2+this.angle);
+			ctx.moveTo(-Radius*0.35, 0);
+			ctx.arc(0,0, Radius, this.angle, PI*2-this.angle);
 		ctx.fill();
 		ctx.restore();
 	}
