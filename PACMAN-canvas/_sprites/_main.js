@@ -88,10 +88,7 @@ function drawPoints() {
 function drawPacman() {
 	const dirs = [U,U,L,L,D,D,R,R]
 	for (let i=-1; i<=8; i++) {
-		const cfg = {
-			orient:  dirs[i-1],
-			Radius:  S/2*0.96
-		}
+		const cfg = {orient:dirs[i-1], Radius:T*0.9}
 		const openType = i>0 ? (i%2 ? 1:2) : 0
 		new PacSprite(cfg,openType).draw(Ctx, Vec2(T+ofst(i), S*8.5))
 	}
