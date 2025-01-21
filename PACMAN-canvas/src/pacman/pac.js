@@ -56,7 +56,6 @@ class Pacman extends BasePac {
 		this.dir = Dir.Left
 		this.pos = Vec2(13.5, 24).mul(T)
 		$offon('keydown.Pacman', e=> this.#onKeydown(e))
-		freeze(this)
 	}
 	get #canTurn() {
 		return this.inForwardOfTile
