@@ -68,6 +68,11 @@ export const Game = new class {
 		Confirm.open('Are you sure you want to quit the game?',
 			Game.#pause, State.switchToQuit, 'Resume','Quit', 0)
 	}
+	#pause(force) {
+		if (!State.isPlaying) return
+		Ticker.pause(force) && $trigger('Pause')
+		Sound.pauseAll(Ticker.paused)
+	}
 	#onKeydown(e) {
 		if (Confirm.opened) return
 		if (e.originalEvent.repeat) return
@@ -87,11 +92,6 @@ export const Game = new class {
 				Ticker.paused && Game.#pause()
 			}
 		}
-	}
-	#pause(force) {
-		if (!State.isPlaying) return
-		Ticker.pause(force) && $trigger('Pause')
-		Sound.pauseAll(Ticker.paused)
 	}
 	#onTitle() {
 		Cursor.default()

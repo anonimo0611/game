@@ -22,45 +22,45 @@ const coords100_5000 = {
 	 800: [[8,-7.0,-3],[0,-1.0,-3],[0,4.0,-3]],
 	1000: [[1,-8.0,-3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
 	1600: [[  -7.4,-3],[6,-5.3,-3],[0,-.3,-3],[0,4.7,-3]],
-	2000: [[2,-10, -3],[0,-4.0,-3],[0,1,-3],[0,6,-3]],
-	3000: [[3,-10, -3],[0,-4.0,-3],[0,1,-3],[0,6,-3]],
-	5000: [[5,-10, -3],[0,-4.0,-3],[0,1,-3],[0,6,-3]],
+	2000: [[2,-10, -3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
+	3000: [[3,-10, -3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
+	5000: [[5,-10, -3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
 }
 
-class Sprite {
-	constructor(x, y, pts) {
-		const color = [200,400,800,1600].includes(pts)
-			? Color.GhostPts
-			: Color.FruitPts
+const Sprite = function() {
+	function draw(x, y, pts) {
 		Ctx.save()
 		Ctx.translate(x, y)
 		Ctx.lineWidth   = 1.2
 		Ctx.lineCap     ='round'
 		Ctx.lineJoin    ='round'
-		Ctx.strokeStyle = color
+		Ctx.strokeStyle = [200,400,800,1600].includes(pts)
+			? Color.GhostPts
+			: Color.FruitPts
 		coords100_5000[pts]?.forEach((c,i)=> {
-			pts == 1600 && !i
-				? this.#stroke1nw(...c)
-				: this.#stroke(...c)
+			pts == 1600 && i == 0
+				? strokeThin1(...c)
+				: strokeNumber(...c)
 		})
 		Ctx.restore()
 	}
-	#stroke(n, x, y) {
+	function strokeThin1(x, y) {
+		strokeLine([x,y,x,y+6])
+	}
+	function strokeNumber(n, x, y) {
 		Ctx.save()
 		Ctx.translate(x,y)
-		this.#strokeLine(linePaths0_8[n], n==0 || n==8)
+		strokeLine(linePaths0_8[n], n==0 || n==8)
 		Ctx.restore()
 	}
-	#stroke1nw(x, y) {
-		this.#strokeLine([x,y,x,y+6])
-	}
-	#strokeLine(v, isOutline=false) {
+	function strokeLine(v, isClose=false) {
 		Ctx.beginPath()
 		Ctx.moveTo(v[0], v[1])
 		for (let i=2; i<v.length; i+=2)
 			Ctx.lineTo(v[i], v[i+1])
-		isOutline && Ctx.closePath()
+		isClose && Ctx.closePath()
 		Ctx.stroke()
 	}
-}
-export default (...args)=> new Sprite(...args)
+	return {draw}
+}()
+export default Sprite.draw
