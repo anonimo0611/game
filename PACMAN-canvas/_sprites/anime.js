@@ -3,15 +3,13 @@ import {Ticker}    from '../_lib/timer.js'
 import {Timer}     from '../_lib/timer.js'
 import {Vec2}      from '../_lib/vec2.js'
 import {Dir}       from '../_lib/direction.js'
-import {TileSize}  from '../src/_constants.js'
-import {GhsType}   from '../src/_constants.js'
 import PacSprite   from '../src/pacman/pac_sprite.js'
 import {Ghost}     from './actor.js'
 import {T,S,ghost} from './_constants.js'
-export {pvCvs}
+import {TileSize,PacScale,GhsType} from '../src/_constants.js'
 
-const animSelect = new Menu.DorpDownMenu('animSelect')
-const [pvCvs,pvCtx]= canvas2D('previewCvs', TileSize*3, TileSize*2).vals
+export const {cvs:pvCvs}=
+	canvas2D('previewCvs', TileSize*3, TileSize*2)
 
 !(function() { // Preview
 	let _animIdx  = 0
@@ -20,8 +18,12 @@ const [pvCvs,pvCtx]= canvas2D('previewCvs', TileSize*3, TileSize*2).vals
 	let _type     = null
 	let _subType  = null
 	let _orient   = Dir.Left
+
+	const ctx  = pvCvs.getContext('2d')
+	const menu = new Menu.DorpDownMenu('animSelect')
+
 	function change(loop=false) {
-		const [TYPE,SUB]= animSelect.value.split('-')
+		const [TYPE,SUB]= menu.value.split('-')
 		_animIdx  = 0
 		_flashIdx = 0
 		_type     = TYPE
@@ -29,7 +31,7 @@ const [pvCvs,pvCtx]= canvas2D('previewCvs', TileSize*3, TileSize*2).vals
 		!loop && Timer.cancelAll()
 		switch (TYPE) {
 		case 'Pacman':
-			_sprite = new PacSprite()
+			_sprite = new PacSprite({Radius:T*PacScale})
 			if (setDirDisabled(_subType == 'losing')) {
 				_sprite.setLosing()
 				Timer.set(2200, ()=> change(true))
@@ -62,23 +64,23 @@ const [pvCvs,pvCtx]= canvas2D('previewCvs', TileSize*3, TileSize*2).vals
 		return !!bool
 	}
 	function drawPacman() {
-		pvCtx.save()
-		pvCtx.translate(S*1.5/2, S/2)
-		pvCtx.scale(T/TileSize,  T/TileSize)
+		ctx.save()
+		ctx.translate(S*1.5/2, S/2)
+		ctx.scale(T/TileSize,  T/TileSize)
 		_sprite.obj.orient = _orient
-		_sprite.draw(pvCtx, Vec2())
-		pvCtx.restore()
+		_sprite.draw(ctx, Vec2())
+		ctx.restore()
 	}
 	function drawGhost() {
-		pvCtx.save()
+		ctx.save()
 		_subType == 'hadake'
-			? pvCtx.translate(S/4, S/4)
-			: pvCtx.translate(S/2*2/2, S/4)
-		const spriteIdx = animSelect.value == 'frightened-flash'
+			? ctx.translate(S/4, S/4)
+			: ctx.translate(S/2*2/2, S/4)
+		const spriteIdx = menu.value == 'frightened-flash'
 			&& _flashIdx ? 1 : 0
 		_sprite.sprite.draw({
 			...ghost,spriteIdx,
-			mainCtx:    pvCtx,
+			mainCtx:    ctx,
 			idx:        GhsType[_type],
 			aIdx:       _animIdx,
 			orient:     _orient,
@@ -86,7 +88,7 @@ const [pvCvs,pvCtx]= canvas2D('previewCvs', TileSize*3, TileSize*2).vals
 			frightened: _type    == 'frightened',
 			repaired:   _subType == 'repaired',
 		})
-		pvCtx.restore()
+		ctx.restore()
 	}
 	function update() {
 		if (!_type) return
@@ -96,7 +98,7 @@ const [pvCvs,pvCtx]= canvas2D('previewCvs', TileSize*3, TileSize*2).vals
 			_sprite.update()
 	}
 	function draw() {
-		pvCtx.clearRect(0,0, pvCvs.width,pvCvs.height)
+		ctx.clearRect(0,0, pvCvs.width,pvCvs.height)
 		if (!_type) return
 		_type == 'Pacman'
 			? drawPacman()
@@ -107,7 +109,7 @@ const [pvCvs,pvCtx]= canvas2D('previewCvs', TileSize*3, TileSize*2).vals
 		draw()
 	}
 	Ticker.set(loop)
-	animSelect.bindChange(change)
+	menu.bindChange(change)
 	$('input[name=dir]')
 		.on('input',function(){_orient = this.value})
 }())

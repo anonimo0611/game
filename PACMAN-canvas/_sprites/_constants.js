@@ -1,8 +1,8 @@
-import {TileSize}    from '../src/_constants.js'
-import {Cvs}         from '../src/_canvas.js'
-import {pvCvs}       from './anime.js'
-import {drawSprites} from './_main.js'
-import * as Actor    from './actor.js'
+import {TileSize} from '../src/_constants.js'
+import {Cvs}      from '../src/_canvas.js'
+import {pvCvs}    from './anime.js'
+import {View}     from './_main.js'
+import * as Actor from './actor.js'
 
 export const ColMax = 10
 export const RowMax = 11
@@ -18,5 +18,5 @@ $('#sizeRng').on('input', ()=> {
 	cbAkabei = new Actor.Akabei(T*2)
 	setCanvasSize(Cvs)(ColMax*S+Gap*2, RowMax*S+Gap)
 	setCanvasSize(pvCvs)(T*3, T*2)
-	drawSprites()
+	View.draw()
 });setCanvasSize(Cvs)(ColMax*S+Gap*2, RowMax*S+Gap)
