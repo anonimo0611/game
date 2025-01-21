@@ -5,9 +5,9 @@ import {Cvs,Ctx} from '../_canvas.js'
 import {Game}    from '../_main.js'
 import {State}   from '../_state.js'
 import {Maze}    from '../maze.js'
+import {BasePac} from '../pacman/pac.js'
 import {Ghost}   from '../ghosts/ghost.js'
 import Sprite    from '../ghosts/ghost_sprite_cb.js'
-import {BasePac} from '../pacman/pac.js'
 import {TileSize as T} from '../_constants.js'
 
 const ModSymbol = Symbol()
