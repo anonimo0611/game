@@ -56,12 +56,12 @@ export const GhostMgr = new class {
 	get hasEscape()  {return Ghosts.some(g=> g.escaping)}
 	centerPos(idx=0) {return Ghosts[idx].centerPos}
 	#setup() {
-		$(this).on('Reset', this.#reset)
+		$(this).on('Reset', this.#onReset)
 		$on('Playing',      this.#onPlaying)
-		$on('Clear Losing', this.#setFadeOut)
-		PacMgr.bindDotEaten(this.#dotEaten)
+		$on('Clear Losing', this.#onLevelEnds)
+		PacMgr.bindDotEaten(this.#onDotEaten)
 	}
-	#reset(_, ...subClasses) {
+	#onReset(_, ...subClasses) {
 		GhostMgr.#aidx = 0
 		SysMap.clear()
 		subClasses.forEach((cls,i)=> Ghosts[i]=new cls)
@@ -71,13 +71,14 @@ export const GhostMgr = new class {
 		Ctrl.isChaseMode && Timer.sequence(...Ghosts.slice(1).map((g,i)=>
 			[releaseTime(i)/Game.speedRate, ()=> g.release()]))
 	}
-	#dotEaten(_, isPow) {
+	#onLevelEnds() {
+		SysMap.clear()
+		Ghosts.forEach(g=> g.sprite.setFadeOut())
+	}
+	#onDotEaten(_, isPow) {
 		if (!isPow) return
 		Wave.setReversalSig()
 		FrightMode.time && new FrightMode
-	}
-	#setFadeOut() {
-		Ghosts.forEach(g=> g.sprite.setFadeOut())
 	}
 	update() {
 		if (State.isPlaying
@@ -114,10 +115,10 @@ export const Wave = function() {
 			Infinity,
 		][idx] / Game.speedRate
 	}
-	function reset() {
+	function onPlaying() {
 		let [cnt,idx]= [-1,0]
 		function update() {
-			if (Ghost.frightened || Timer.frozen) return
+			if (Timer.frozen || Ghost.frightened) return
 			if (Ticker.Interval * ++cnt < getTime(idx)) return
 			[cnt,mode]= [0,(++idx % 2)]
 			setReversalSig()
@@ -131,7 +132,7 @@ export const Wave = function() {
 			FrightMode.time == 0 && $(g).trigger('Runaway')
 		})
 	}
-	$on('Playing', reset)
+	$on('Playing', onPlaying)
 	return {
 		get isScatter() {return mode == 0},
 		get isChase()   {return mode == 1},
@@ -181,7 +182,7 @@ export const Elroy = function() {
 			&& Ghosts[GhsType.Akabei]?.frightened === false
 			&& Ghosts[GhsType.Guzuta]?.started === true
 	}
-	function dotEaten() {
+	function onDotEaten() {
 		const elroyP2 = dotsLeftP2Tbl[Game.clampedLv-1]
 		if (Maze.dotsLeft <= elroyP2*([15,10,50][part]/10)) {
 			++part
@@ -189,7 +190,7 @@ export const Elroy = function() {
 		}
 	}
 	$on('Title NewLevel', ()=> part=0)
-	$ready(()=> PacMgr.bindDotEaten(dotEaten))
+	$ready(()=> PacMgr.bindDotEaten(onDotEaten))
 	return {
 		get part()  {return part},
 		get step()  {return Step.Base * speedRateTbl[part]},

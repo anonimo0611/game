@@ -63,6 +63,11 @@ export const Fruit = new class {
 		}
 		_tgtDisp && Fruit.#collideWith()
 	}
+	drawTarget() {
+		if (!State.isTitle && !State.isPlaying) return
+		if (!Ticker.paused && _tgtDisp)
+			Fruit.#drawSprite(Ctx, Fruit.number(), Fruit.targetPos)
+	}
 	#drawSprite(ctx=Ctx, idx, {x, y}) {
 		ctx.save()
 		_fadeOut?.setAlpha(ctx)
@@ -70,11 +75,6 @@ export const Fruit = new class {
 		ctx.scale(T/8*1.05, T/8*1.05)
 		Sprites[idx](ctx)
 		ctx.restore()
-	}
-	drawTarget() {
-		if (!State.isTitle && !State.isPlaying) return
-		if (!Ticker.paused && _tgtDisp)
-			Fruit.#drawSprite(Ctx, Fruit.number(), Fruit.targetPos)
 	}
 	drawLevelCounter() {
 		const [x,y,w,h]= LevelCounterRect;

@@ -28,64 +28,33 @@ export class Attract {
 	static #reset() {_attract = new Attract(ModSymbol)}
 	static get Timer() {return AttractTimer}
 
-	powDisp = 1
-	pacman  = new BasePac
-	pacVelX = -Maze.Width / 180
-	ghsVelX = -Maze.Width / 169
-
-	/** * @type {[Ghost[], Ghost[]]} */
+	/** @type {Ghost[][]} */
 	ghsList = [[],[]]
+	pacman  = new BasePac
+	powDisp = 1
+	pacVelX = -Maze.Width/180
+	ghsVelX = -Maze.Width/169
 
 	constructor(symbol) {
 		if (symbol != ModSymbol)
 			throw TypeError('The constructor is not visible')
 		$onNS('.Attract','click keydown blur', this.end)
-		this.setActors()
+		this.setActors(GhsType.Max)
 		State.switchToAttract()
 	}
-	setActors() {
-		for (const i of this.ghsList.keys())
-			for (let j=0; j<GhsType.Max; j++)
-				this.setActor(i, j)
+	setActors(len) {
+		for (let i=0; i<this.ghsList.length*len; i++)
+			this.setActor(i/len|0, i%len)
 	}
 	setActor(idx, gIdx) {
 		const g = new Ghost({idx:gIdx,noAnime:!idx})
 		if (idx) {
-			g.pos = Vec2(Maze.Width+(T*3)+(T*2*gIdx), T*19)
+			g.pos = Vec2(Maze.Width+(T*4)+(T*2*gIdx), T*19)
 			g.state.switchToWalk()
 			!gIdx && (this.pacman.pos = Vec2(g.x-T*2, g.y))
 		}
 		g.orient = [R,L][idx]
 		this.ghsList[idx].push(g)
-	}
-	update() {
-		if (Ticker.elapsedTime <= 1e4+500) return
-		this.powDisp ^= Ticker.count % 15 == 0
-		!Timer.frozen && this.updatePacman()
-		!Timer.frozen && this.updateGhosts()
-	}
-	updatePacman() {
-		this.pacman.sprite.update()
-		this.pacman.x += this.pacVelX
-		if (this.pacman.orient == L && this.pacman.x <= T*3) {
-			this.pacVelX *= -1.11
-			this.ghsVelX /= -2.14
-			this.pacman.orient = R
-			new FrightMode(this.ghsList[DEMO])
-		}
-	}
-	updateGhosts() {
-		if (Ticker.elapsedTime <= 1e4+650) return
-		this.ghsList[DEMO].forEach((g,i)=> {
-			g.x += this.ghsVelX
-			const fn = ()=> this.caughtGhost(g)
-			GhostMgr.crashWithPac(g, this.pacman, {radius:T/4,fn})
-		})
-	}
-	caughtGhost(g) {
-		g.state.switchToBitten()
-		this.ghsList[DEMO].every(g=> g.state.isBitten)
-			&& Attract.#reset()
 	}
 	draw() {
 		const et = Ticker.elapsedTime, ptsFontSize = T*.68
@@ -128,15 +97,43 @@ export class Attract {
 			this.drawPacman(this.pacman.centerPos)
 		}
 	}
-	drawPacman(pos) {
-		if (Timer.frozen) return
-		this.pacman.sprite.draw(Ctx, pos)
+	update() {
+		if (Ticker.elapsedTime <= 1e4+500) return
+		this.powDisp ^= Ticker.count % 15 == 0
+		!Timer.frozen && this.updatePacman()
+		!Timer.frozen && this.updateGhosts()
+	}
+	updateGhosts() {
+		if (Ticker.elapsedTime <= 1e4+500+150) return
+		this.ghsList[DEMO].forEach(g=> {
+			g.x += this.ghsVelX
+			const fn = ()=> this.caughtGhost(g)
+			GhostMgr.crashWithPac(g, this.pacman, {radius:T/4,fn})
+		})
+	}
+	caughtGhost(g) {
+		g.state.switchToBitten()
+		this.ghsList[DEMO].every(g=> g.state.isBitten) && Attract.#reset()
+	}
+	updatePacman() {
+		this.pacman.sprite.update()
+		this.pacman.x += this.pacVelX
+		if (this.pacman.orient == L && this.pacman.x <= T*3) {
+			this.pacVelX *= -1.11
+			this.ghsVelX /= -2.14
+			this.pacman.orient = R
+			new FrightMode(this.ghsList[DEMO])
+		}
 	}
 	drawGhost(idx, ghsIdx, pos) {
 		const
 		ghost = this.ghsList[idx][ghsIdx]
 		ghost.pos = pos
 		ghost.sprite.draw(ghost)
+	}
+	drawPacman(pos) {
+		if (Timer.frozen) return
+		this.pacman.sprite.draw(Ctx, pos)
 	}
 	end(e={}) {
 		if (e.target.tagName == 'BUTTON') return
