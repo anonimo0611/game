@@ -6,7 +6,7 @@ import {State}        from '../_state.js'
 import {Ctrl}         from '../control.js'
 import {drawText}     from '../message.js'
 import {Maze}         from '../maze.js'
-import {Pacman}       from './demo_pac.js'
+import {BasePac}      from '../pacman/pac.js'
 import {GhostMgr}     from '../ghosts/_system.js'
 import {FrightMode}   from '../ghosts/_system.js'
 import {Ghost}        from '../ghosts/ghost.js'
@@ -29,7 +29,7 @@ export class Attract {
 	static get Timer() {return AttractTimer}
 
 	powDisp = 1
-	pacman  = new Pacman
+	pacman  = new BasePac
 	pacVelX = -Maze.Width / 180
 	ghsVelX = -Maze.Width / 169
 

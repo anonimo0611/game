@@ -29,9 +29,12 @@ export const PacMgr = function() {
 		bindDotEaten(fn) {$(PacMgr).on('DotEaten',fn)},
 	}
 }()
-class Pacman extends Actor {
-	Radius    = PacRadius
-	sprite    = new Sprite(this)
+export class BasePac extends Actor {
+	sprite = new Sprite(this)
+	Radius = PacRadius
+	constructor() {super();freeze(this)}
+}
+class Pacman extends BasePac {
 	#step     = this.#getCurrentStep()
 	#eatIdx   = 0
 	#notEaten = 0
@@ -115,7 +118,6 @@ class Pacman extends Actor {
 		this.#notEaten++
 		for (let i=0,denom=ceil(this.step)*2; i<denom; i++)
 			this.#move(denom)
-		//console.log(this.inBackwardOfTile)
 	}
 	#move(denom=1) {
 		if (this.newTileReached(denom)) {

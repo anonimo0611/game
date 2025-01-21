@@ -1,7 +1,7 @@
 import {Sound}   from '../../_snd/sound.js'
 import {Ticker}  from '../../_lib/timer.js'
 import {Timer}   from '../../_lib/timer.js'
-import StateBase from '../../_lib/state.js'
+import BaseState from '../../_lib/state.js'
 import {GhsStep} from '../_constants.js'
 import {GhsType} from '../_constants.js'
 import {Game}    from '../_main.js'
@@ -29,7 +29,7 @@ export const releaseTime = idx=> ([ // For always chase mode (ms)
 	[ 200,  800,  200], [100,  700,  200], [100,  700,  200],
 	[   0,  900,    0]][Game.restarted? 0 : Game.clampedLv][idx])
 
-export class GhostState extends StateBase {
+export class GhostState extends BaseState {
 	isIdle   = true
 	isGoOut  = false
 	isWalk   = false

@@ -7,7 +7,7 @@ import {State}   from '../_state.js'
 import {Maze}    from '../maze.js'
 import {Ghost}   from '../ghosts/ghost.js'
 import Sprite    from '../ghosts/ghost_sprite_cb.js'
-import {Pacman}  from './demo_pac.js'
+import {BasePac} from '../pacman/pac.js'
 import {TileSize as T} from '../_constants.js'
 
 const ModSymbol = Symbol()
@@ -25,7 +25,7 @@ export class CBreak {
 	static update() {this.#scene?.update(this.#scene)}
 	static draw()   {this.#scene?.draw(this.#scene)}
 
-	pacman  = new Pacman
+	pacman  = new BasePac
 	akabei  = new Ghost
 	pacVelX = -Maze.Width/180
 	constructor(symbol) {

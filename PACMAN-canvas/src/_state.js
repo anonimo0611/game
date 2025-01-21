@@ -1,6 +1,6 @@
 import {Ticker}  from '../_lib/timer.js'
-import StateBase from '../_lib/state.js'
-export const State = new class extends StateBase {
+import BaseState from '../_lib/state.js'
+export const State = new class extends BaseState {
 	isTitle     = true
 	isAttract   = false
 	isStart     = false
