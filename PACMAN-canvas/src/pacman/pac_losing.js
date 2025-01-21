@@ -1,6 +1,6 @@
 import {Ticker}  from '../../_lib/timer.js'
 import {Cvs,Ctx} from '../_canvas.js'
-import {Color,PacRadius,TileSize} from '../_constants.js'
+import {Color,TileSize} from '../_constants.js'
 
 const StRadius = TileSize * 0.5
 const EdRadius = TileSize * 0.9
@@ -14,7 +14,7 @@ export class Losing {
 	#lineA  = 1
 	#innerR = TileSize * 0.2
 	#outerR = StRadius
-	draw(ctx=Ctx, x,y, Radius=PacRadius) {
+	draw(ctx=Ctx, x,y, Radius) {
 		if (ctx == Ctx)
 			x = clamp(x, Radius, Cvs.width-Radius)
 		this.#angle < PI - PI/DisDur

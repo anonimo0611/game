@@ -13,7 +13,7 @@ import {Maze}    from '../maze.js'
 import {Actor}   from '../actor.js'
 import {Ghost}   from '../ghosts/ghost.js'
 import Sprite    from './pac_sprite.js'
-import {PacRadius,PacStep as Step,TileSize as T} from '../_constants.js'
+import {PacScale,PacStep as Step,TileSize as T} from '../_constants.js'
 
 export const PacMgr = function() {
 	/** @type {Pacman|null} */
@@ -31,7 +31,7 @@ export const PacMgr = function() {
 }()
 export class BasePac extends Actor {
 	sprite = new Sprite(this)
-	Radius = PacRadius
+	Radius = T*PacScale
 	constructor() {super();freeze(this)}
 }
 class Pacman extends BasePac {
