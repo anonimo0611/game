@@ -79,7 +79,7 @@ export const GhsMgr = new class {
 	}
 	#onDotEaten(_, isPow) {
 		if (!isPow) return
-		Wave.setReversalSig()
+		setReversalSignal()
 		FrightMode.time && new FrightMode
 	}
 	#onLevelEnds() {
@@ -127,24 +127,23 @@ export const Wave = function() {
 			if (Timer.frozen || GhsMgr.frightened) return
 			if (Ticker.Interval * ++cnt < getTime(idx)) return
 			[cnt,mode]= [0,(++idx % 2)]
-			setReversalSig()
+			setReversalSignal()
 		}
 		!(mode = int(Ctrl.isChaseMode))
 			&& SysMap.set(Wave, {update})
-	}
-	function setReversalSig() {
-		Ghosts.forEach(g=> {
-			$(g).trigger('Reverse')
-			FrightMode.time == 0 && $(g).trigger('Runaway')
-		})
 	}
 	$on('Playing', onPlaying)
 	return {
 		get isScatter() {return mode == 0},
 		get isChase()   {return mode == 1},
-		setReversalSig
 	}
 }()
+function setReversalSignal() {
+	Ghosts.forEach(g=> {
+		$(g).trigger('Reverse')
+		FrightMode.time == 0 && $(g).trigger('Runaway')
+	})
+}
 
 export const DotCounter = function() {
 	let globalDotCnt = -1
