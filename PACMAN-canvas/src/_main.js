@@ -112,8 +112,8 @@ export const Game = new class {
 			Sound.play('losing')
 			PacMgr.instance.sprite.setLosing()
 			Lives.left > 0
-				? State.switchToRestart(2200)
-				: State.switchToGameOver(2200)
+				? State.switchToRestart ({delay:2200})
+				: State.switchToGameOver({delay:2200})
 		})
 	}
 	#onFlashMaze() {
@@ -132,7 +132,7 @@ export const Game = new class {
 	#levelBegins() {
 		Game.#restarted = State.isRestart
 		State.switchToReady()
-		State.switchToPlaying(2200)
+		State.switchToPlaying({delay:2200})
 	}
 	#levelEnds() {
 		Game.#restarted = false
@@ -143,7 +143,7 @@ export const Game = new class {
 			return
 		}
 		if (State.isGameOver) {
-			State.switchToTitle(2500)
+			State.switchToTitle({delay:2500})
 			return
 		}
 		if (State.isFlashMaze) {

@@ -21,11 +21,11 @@ export const State = new class extends BaseState {
 	get isSt_Ready() {
 		return this.isStart || this.isReady
 	}
-	#callback(state) {
+	#callback(state, data) {
 		Ticker.resetCount()
-		$trigger(document.body.dataset.state = state)
+		$trigger(document.body.dataset.state=state, data)
 	}
-	switchTo(state, delay=(state=='Quit') ? -1:0) {
-		return super.switchTo(state, {delay,fn:this.#callback})
+	switchTo(state, {delay=(state=='Quit' ? -1:0),data}={}) {
+		return super.switchTo(state, {delay,data,fn:this.#callback})
 	}
 }

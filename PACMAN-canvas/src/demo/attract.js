@@ -40,7 +40,7 @@ export class Attract {
 			throw TypeError('The constructor is not visible')
 		$onNS('.Attract','click keydown blur', this.end)
 		this.setActors(GhsType.Max)
-		State.switchToAttract()
+		State.switchToAttract({data:this.ghsList[DEMO]})
 	}
 	setActors(len) {
 		for (let i=0; i<this.ghsList.length*len; i++)
@@ -122,7 +122,7 @@ export class Attract {
 			this.pacVelX *= -1.11
 			this.ghsVelX /= -2.14
 			this.pacman.orient = R
-			new FrightMode(this.ghsList[DEMO])
+			new FrightMode()
 		}
 	}
 	drawGhost(idx, ghsIdx, pos) {

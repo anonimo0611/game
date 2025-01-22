@@ -161,7 +161,7 @@ class Pacman extends BasePac {
 		Maze.clearDot(this) == 0
 			&& Sound.stopLoops()
 			&& State.switchToClear()
-			&& State.switchToFlashMaze(1000)
+			&& State.switchToFlashMaze({delay:1000})
 		$(PacMgr).trigger('DotEaten', isPow)
 	}
 	#playSE() {

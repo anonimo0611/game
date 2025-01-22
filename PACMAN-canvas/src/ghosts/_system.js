@@ -58,6 +58,7 @@ export const GhsMgr = new class {
 	centerPos(idx=0) {return Ghosts[idx].centerPos}
 	#setup() {
 		$(this).on('Reset', this.#onReset)
+		$on('Attract',      this.#onAttract)
 		$on('Playing',      this.#onPlaying)
 		$on('Clear Losing', this.#onLevelEnds)
 		PacMgr.bindDotEaten(this.#onDotEaten)
@@ -66,6 +67,9 @@ export const GhsMgr = new class {
 		GhsMgr.#aidx = 0
 		SysMap.clear()
 		subClasses.forEach((cls,i)=> Ghosts[i]=new cls)
+	}
+	#onAttract(_, ...ghosts) {
+		ghosts.forEach((g,i)=> Ghosts[i]=g)
 	}
 	#onPlaying() {
 		Sound.playSiren()
@@ -119,7 +123,7 @@ export const Wave = function() {
 	function onPlaying() {
 		let [cnt,idx]= [-1,0]
 		function update() {
-			if (Timer.frozen || Ghost.frightened) return
+			if (Timer.frozen || GhsMgr.frightened) return
 			if (Ticker.Interval * ++cnt < getTime(idx)) return
 			[cnt,mode]= [0,(++idx % 2)]
 			setReversalSig()
@@ -202,26 +206,20 @@ export const Elroy = function() {
 export class FrightMode {
 	static #timeTbl = [6,5,4,3,2,5,2,2,1,5,2,1,0] // seconds
 	static get time() {return this.#timeTbl[Game.clampedLv-1] * 1000}
+	static caught() {SysMap.get(FrightMode)?.caught()}
 	#timeCnt   = 0
 	#flashIdx  = 1
 	#flashCnt  = 0
 	#caughtCnt = 0
 	get score()     {return 100 * (1 << this.#caughtCnt)}
 	get spriteIdx() {return this.#flashCnt? this.#flashIdx^1:0}
-	constructor(ghosts=Ghosts) {
-		ghosts.forEach(this.#setup.bind(this))
+	constructor() {
 		SysMap.set(FrightMode, this.#toggle(true))
-	}
-	#setup(g, i) {
-		if (!(g instanceof Ghost))
-			throw TypeError('Not a ghost instance')
-		$(Ghosts[i]=g).offon('Caught', ()=> this.#caughtCnt++)
 	}
 	#toggle(bool) {
 		SysMap.delete(FrightMode)
 		Sound.toggleFrightMode(bool)
-		for (const g of Ghosts)
-			$(g).trigger('FrightMode', bool)
+		Ghosts.forEach(g=> $(g).trigger('FrightMode', bool))
 		return this
 	}
 	update() {
@@ -234,4 +232,5 @@ export class FrightMode {
 		;(et >= time-2000)  && this.#flashCnt++
 		;(et >= time || ac) && this.#toggle(false)
 	}
+	caught() {this.#caughtCnt++}
 }
