@@ -17,14 +17,15 @@ const Ghosts = []
 const SysMap = new Map()
 
 /** @param {number} idx */
-export const releaseTime = idx=> ([ // For always chase mode (ms)
+const releaseTime = idx=> ([ // For always chase mode (ms)
 	// Pinky->Aosuke->Guzuta
 	[1000,  500,  500], // <-After life is lost
 	[1000, 4000, 4000], [800, 2200, 4000], [600, 1900, 3500],
 	[ 600, 1900, 1500], [500, 1300, 1200], [500, 1300, 1200],
 	[ 300,  700,  800], [300,  700,  800], [200,  800,  200],
 	[ 200,  800,  200], [100,  700,  200], [100,  700,  200],
-	[   0,  900,    0]][Game.restarted? 0 : Game.clampedLv][idx])
+	[   0,  900,    0]
+][Game.restarted? 0 : Game.clampedLv][idx]/Game.speedRate)
 
 export class GhostState extends BaseState {
 	isIdle   = true
@@ -73,17 +74,17 @@ export const GhsMgr = new class {
 	}
 	#onPlaying() {
 		Sound.playSiren()
-		Ctrl.isChaseMode && Timer.sequence(...Ghosts.slice(1).map((g,i)=>
-			[releaseTime(i)/Game.speedRate, ()=> g.release()]))
-	}
-	#onLevelEnds() {
-		SysMap.clear()
-		Ghosts.forEach(g=> g.sprite.setFadeOut())
+		Ctrl.isChaseMode && Timer.sequence(...Ghosts.slice(1)
+			.map((g,i)=> [releaseTime(i), ()=> g.release()]))
 	}
 	#onDotEaten(_, isPow) {
 		if (!isPow) return
 		Wave.setReversalSig()
 		FrightMode.time && new FrightMode
+	}
+	#onLevelEnds() {
+		SysMap.clear()
+		Ghosts.forEach(g=> g.sprite.setFadeOut())
 	}
 	update() {
 		if (State.isPlaying
