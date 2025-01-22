@@ -1,5 +1,5 @@
 import {State}    from '../src/_state.js'
-import {Ghost}    from '../src/ghosts/ghost.js'
+import {GhsMgr}   from '../src/ghosts/_system.js'
 import {SoundMgr} from './loader.js'
 import {Speaker}  from './speaker.js'
 
@@ -39,7 +39,7 @@ export const Sound = new class extends SoundMgr {
 	}
 	get vol()      {return super.vol}
 	get disabled() {return super.disabled || State.isAttract}
-	get sirenId()  {return SirenIds[Ghost.Elroy.part]}
+	get sirenId()  {return SirenIds[GhsMgr.Elroy.part]}
 	get ringing()  {return Sound.isPlaying('bell')}
 	set vol(vol) {
 		if (Sound.disabled) return
@@ -48,11 +48,11 @@ export const Sound = new class extends SoundMgr {
 		Speaker.draw(Sound.vol)
 	}
 	playSiren() {
-		if (!Ghost.frightened && !Ghost.hasEscape)
+		if (!GhsMgr.frightened && !GhsMgr.hasEscape)
 			Sound.stop('fright').stopSiren().play(Sound.sirenId)
 	}
 	playFright() {
-		if (!Ghost.hasEscape)
+		if (!GhsMgr.hasEscape)
 			Sound.stopSiren().play('fright')
 	}
 	stopSiren() {
@@ -69,8 +69,8 @@ export const Sound = new class extends SoundMgr {
 		Sound.stopSiren().stop('fright').play('escape')
 	}
 	ghostArrivedAtHome() {
-		if (Ghost.hasEscape) return
-		const id = Ghost.frightened? 'fright':Sound.sirenId
+		if (GhsMgr.hasEscape) return
+		const id = GhsMgr.frightened? 'fright':Sound.sirenId
 		Sound.stop('escape').play(id)
 	}
 };freeze(Sound)
