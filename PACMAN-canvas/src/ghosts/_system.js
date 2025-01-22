@@ -2,7 +2,6 @@ import {Sound}   from '../../_snd/sound.js'
 import {Ticker}  from '../../_lib/timer.js'
 import {Timer}   from '../../_lib/timer.js'
 import BaseState from '../../_lib/state.js'
-import {GhsStep} from '../_constants.js'
 import {GhsType} from '../_constants.js'
 import {Game}    from '../_main.js'
 import {State}   from '../_state.js'
@@ -11,13 +10,11 @@ import {PacMgr}  from '../pacman/pac.js'
 import {Maze}    from '../maze.js'
 import {Ghost}   from './ghost.js'
 import {Target}  from './show_targets.js'
-import {TileSize as T} from '../_constants.js'
+import {GhsStep,TileSize as T} from '../_constants.js'
 
 /** @type {Ghost[]} */
 const Ghosts = []
-
-export const SysMap = new Map()
-export const Step   = GhsStep
+const SysMap = new Map()
 
 /** @param {number} idx */
 export const releaseTime = idx=> ([ // For always chase mode (ms)
@@ -48,11 +45,15 @@ export class GhostState extends BaseState {
 const inFrontOfPac = g=> !behindThePac(g)
 const behindThePac = g=> g.frightened
 
-export const GhostMgr = new class {
-	static {$ready(()=> GhostMgr.#setup())}
+export const GhsMgr = new class {
+	static {$ready(()=> GhsMgr.#setup())}
 	#aidx = 0
 	get aInterval()  {return 6}
 	get animIndex()  {return this.#aidx}
+	get Elroy()      {return Elroy}
+	get frightened() {return SysMap.has(FrightMode)}
+	get score()      {return SysMap.get(FrightMode)?.score|0}
+	get spriteIdx()  {return SysMap.get(FrightMode)?.spriteIdx|0}
 	get hasEscape()  {return Ghosts.some(g=> g.escaping)}
 	centerPos(idx=0) {return Ghosts[idx].centerPos}
 	#setup() {
@@ -62,7 +63,7 @@ export const GhostMgr = new class {
 		PacMgr.bindDotEaten(this.#onDotEaten)
 	}
 	#onReset(_, ...subClasses) {
-		GhostMgr.#aidx = 0
+		GhsMgr.#aidx = 0
 		SysMap.clear()
 		subClasses.forEach((cls,i)=> Ghosts[i]=new cls)
 	}
@@ -193,7 +194,7 @@ export const Elroy = function() {
 	$ready(()=> PacMgr.bindDotEaten(onDotEaten))
 	return {
 		get part()  {return part},
-		get step()  {return Step.Base * speedRateTbl[part]},
+		get step()  {return GhsStep.Base * speedRateTbl[part]},
 		get angry() {return angry()},
 	}
 }()
@@ -202,14 +203,26 @@ export class FrightMode {
 	static #timeTbl = [6,5,4,3,2,5,2,2,1,5,2,1,0] // seconds
 	static get time() {return this.#timeTbl[Game.clampedLv-1] * 1000}
 	#timeCnt   = 0
-	#spriteIdx = 1
+	#flashIdx  = 1
 	#flashCnt  = 0
 	#caughtCnt = 0
 	get score()     {return 100 * (1 << this.#caughtCnt)}
-	get spriteIdx() {return this.#flashCnt > 0 ? this.#spriteIdx^1:0}
+	get spriteIdx() {return this.#flashCnt? this.#flashIdx^1:0}
 	constructor(ghosts=Ghosts) {
-		ghosts != Ghosts && ghosts.forEach((g,i)=> Ghosts[i]=g)
+		ghosts.forEach(this.#setup.bind(this))
 		SysMap.set(FrightMode, this.#toggle(true))
+	}
+	#setup(g, i) {
+		if (!(g instanceof Ghost))
+			throw TypeError('Not a ghost instance')
+		$(Ghosts[i]=g).offon('Caught', ()=> this.#caughtCnt++)
+	}
+	#toggle(bool) {
+		SysMap.delete(FrightMode)
+		Sound.toggleFrightMode(bool)
+		for (const g of Ghosts)
+			$(g).trigger('FrightMode', bool)
+		return this
 	}
 	update() {
 		if (!State.isPlaying || Timer.frozen) return
@@ -217,15 +230,8 @@ export class FrightMode {
 		const et = (Game.interval * this.#timeCnt++)
 		const fi = (time == 1000 ? 12:14)/Game.speedRate|0
 		const ac = (this.#caughtCnt == GhsType.Max)
-		this.#spriteIdx ^= !(this.#flashCnt % fi)
+		this.#flashIdx ^= !(this.#flashCnt % fi)
 		;(et >= time-2000)  && this.#flashCnt++
 		;(et >= time || ac) && this.#toggle(false)
 	}
-	#toggle(bool) {
-		SysMap.delete(FrightMode)
-		Sound.toggleFrightMode(bool)
-		Ghosts.forEach(g=> $(g).trigger('FrightMode', bool))
-		return this
-	}
-	caught() {this.#caughtCnt++}
 }

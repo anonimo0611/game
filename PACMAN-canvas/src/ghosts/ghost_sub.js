@@ -1,9 +1,9 @@
-import {U,R,D,L}  from '../../_lib/direction.js'
-import {Vec2}     from '../../_lib/vec2.js'
-import {Maze}     from '../maze.js'
-import {PacMgr}   from '../pacman/pac.js'
-import {Ghost}    from './ghost.js'
-import {GhostMgr} from './_system.js'
+import {U,R,D,L} from '../../_lib/direction.js'
+import {Vec2}    from '../../_lib/vec2.js'
+import {Maze}    from '../maze.js'
+import {PacMgr}  from '../pacman/pac.js'
+import {GhsMgr}  from './_system.js'
+import {Ghost}   from './ghost.js'
 import {TileSize as T,GhsType} from '../_constants.js'
 
 class Akabei extends Ghost {
@@ -11,8 +11,8 @@ class Akabei extends Ghost {
 		super({idx:0, col:13.5, row:12, orient:L})
 		freeze(this)
 	}
-	get angry()     {return Ghost.Elroy.angry}
-	get chaseStep() {return Ghost.Elroy.step}
+	get angry()     {return GhsMgr.Elroy.angry}
+	get chaseStep() {return GhsMgr.Elroy.step}
 }
 class Pinky extends Ghost {
 	scatterTile = Vec2(3, 0).freeze()
@@ -37,7 +37,7 @@ class Aosuke extends Ghost {
 	}
 	get chasePos() {
 		const  pos = PacMgr.forwardPos(2)
-		return pos.clone.sub(Ghost.centerPos(GhsType.Akabei)).add(pos)
+		return pos.clone.sub(GhsMgr.centerPos(GhsType.Akabei)).add(pos)
 	}
 }
 class Guzuta extends Ghost {
@@ -53,5 +53,5 @@ class Guzuta extends Ghost {
 	}
 }
 $on('Title Restart NewLevel', ()=> {
-	$(GhostMgr).trigger('Reset', [Akabei,Pinky,Aosuke,Guzuta])
+	$(GhsMgr).trigger('Reset', [Akabei,Pinky,Aosuke,Guzuta])
 })

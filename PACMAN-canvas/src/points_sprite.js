@@ -45,15 +45,15 @@ const Sprite = function() {
 		Ctx.restore()
 	}
 	function strokeThin1(x, y) {
-		strokeLine([x,y,x,y+6])
+		strokeLines([x,y,x,y+6])
 	}
 	function strokeNumber(n, x, y) {
 		Ctx.save()
 		Ctx.translate(x,y)
-		strokeLine(linePaths0_8[n], n==0 || n==8)
+		strokeLines(linePaths0_8[n], n==0 || n==8)
 		Ctx.restore()
 	}
-	function strokeLine(v, isClose=false) {
+	function strokeLines(v, isClose=false) {
 		Ctx.beginPath()
 		Ctx.moveTo(v[0], v[1])
 		for (let i=2; i<v.length; i+=2)

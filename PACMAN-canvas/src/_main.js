@@ -17,7 +17,7 @@ import {Lives}     from './lives.js'
 import {Fruit}     from './fruit.js'
 import {PtsMgr}    from './points.js'
 import {PacMgr}    from './pacman/pac.js'
-import {GhostMgr}  from './ghosts/_system.js'
+import {GhsMgr}    from './ghosts/_system.js'
 import {Attract}   from './demo/attract.js'
 import {CBreak}    from './demo/coffee_break.js'
 
@@ -158,7 +158,7 @@ export const Game = new class {
 	#update() {
 		PtsMgr.update()
 		PacMgr.instance.update()
-		GhostMgr.update()
+		GhsMgr.update()
 		Fruit.update()
 		State.isTitle   && Attract.Timer.update()
 		State.isAttract && Attract.update()
@@ -176,10 +176,10 @@ export const Game = new class {
 		Maze.PowDot.draw()
 		Fruit.drawTarget()
 		PtsMgr.drawFruitPts()
-		GhostMgr.drawBehind()
+		GhsMgr.drawBehind()
 		PacMgr.instance.draw()
-		GhostMgr.drawTargets()
-		GhostMgr.drawFront()
+		GhsMgr.drawTargets()
+		GhsMgr.drawFront()
 		PtsMgr.drawGhostPts()
 		Message.draw()
 	}

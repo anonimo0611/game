@@ -1,13 +1,13 @@
-import {Timer} from '../_lib/timer.js'
-import {Vec2}  from '../_lib/vec2.js'
-import {Ctx}   from './_canvas.js'
-import {Game}  from './_main.js'
-import {State} from './_state.js'
-import {Maze}  from './maze.js'
-import {Score} from './score.js'
-import {Ghost} from './ghosts/ghost.js'
-import {Fruit} from './fruit.js'
-import sprite  from './points_sprite.js'
+import {Timer}  from '../_lib/timer.js'
+import {Vec2}   from '../_lib/vec2.js'
+import {Ctx}    from './_canvas.js'
+import {Game}   from './_main.js'
+import {State}  from './_state.js'
+import {Maze}   from './maze.js'
+import {Score}  from './score.js'
+import {GhsMgr} from './ghosts/_system.js'
+import {Fruit}  from './fruit.js'
+import sprite   from './points_sprite.js'
 import {TileSize as T} from './_constants.js'
 
 /** @type {Map<any, Points>} */
@@ -17,8 +17,8 @@ $on('Title Clear Losing', ()=> PtsMap.clear())
 export const PtsMgr = new class {
 	set(...args)   {new Points(...args)}
 	update()       {PtsMap.forEach(v=> v.update())}
-	drawFruitPts() {PtsMap.get(Fruit)?.draw()}
-	drawGhostPts() {PtsMap.get(Ghost)?.draw()}
+	drawFruitPts() {PtsMap.get(Fruit) ?.draw()}
+	drawGhostPts() {PtsMap.get(GhsMgr)?.draw()}
 }
 class Points {
 	constructor({key={},x=0,y=0,delay=1e3}={}, fn) {
@@ -33,7 +33,7 @@ class Points {
 			isFun(fn) && fn()
 		})
 		State.isPlaying && Score.add(this.score)
-		PtsMap.set(key, this)
+		PtsMap.set(key, freeze(this))
 	}
 	update() {
 		this.fadeOut?.update()

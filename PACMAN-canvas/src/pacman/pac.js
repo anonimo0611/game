@@ -11,7 +11,7 @@ import {Ctrl}    from '../control.js'
 import {Score}   from '../score.js'
 import {Maze}    from '../maze.js'
 import {Actor}   from '../actor.js'
-import {Ghost}   from '../ghosts/ghost.js'
+import {GhsMgr}  from '../ghosts/_system.js'
 import Sprite    from './pac_sprite.js'
 import {PacScale,PacStep as Step,TileSize as T} from '../_constants.js'
 
@@ -98,7 +98,7 @@ class Pacman extends BasePac {
 	}
 	#getCurrentStep() {
 		const eating = Maze.hasDot(this.tileIdx)
-		return(!Ghost.frightened
+		return(!GhsMgr.frightened
 			? (eating? Step.Eating : Step.Base)
 			: (eating? Step.EneEat : Step.Energize)
 		) * Game.moveSpeed * (Game.level<13 ? 1 : Step.SlowBase)

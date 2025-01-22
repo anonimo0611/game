@@ -8,7 +8,7 @@ import {drawText}     from '../message.js'
 import {Maze}         from '../maze.js'
 import {BasePac}      from '../pacman/pac.js'
 import {Ghost}        from '../ghosts/ghost.js'
-import {GhostMgr}     from '../ghosts/_system.js'
+import {GhsMgr}       from '../ghosts/_system.js'
 import {FrightMode}   from '../ghosts/_system.js'
 import {AttractTimer} from './_run_timer.js'
 import {Color,GhsType,TileSize as T} from '../_constants.js'
@@ -47,7 +47,7 @@ export class Attract {
 			this.setActor(i/len|0, i%len)
 	}
 	setActor(idx, gIdx) {
-		const g = new Ghost({idx:gIdx,noAnime:!idx})
+		const g = new Ghost({idx:gIdx,anime:!!idx})
 		if (idx) {
 			g.pos = Vec2(Maze.Width+(T*4)+(T*2*gIdx), T*19)
 			g.state.switchToWalk()
@@ -108,7 +108,7 @@ export class Attract {
 		this.ghsList[DEMO].forEach(g=> {
 			g.x += this.ghsVelX
 			const fn = ()=> this.caughtGhost(g)
-			GhostMgr.crashWithPac(g, this.pacman, {radius:T/4,fn})
+			GhsMgr.crashWithPac(g, this.pacman, {radius:T/4,fn})
 		})
 	}
 	caughtGhost(g) {

@@ -11,26 +11,21 @@ import {PtsMgr}  from '../points.js'
 import {Maze}    from '../maze.js'
 import {Actor}   from '../actor.js'
 import {PacMgr}  from '../pacman/pac.js'
-import * as Sys  from './_system.js'
 import Sprite    from './ghost_sprite.js'
-import {GhsType,TileSize as T} from '../_constants.js'
+import * as Sys  from './_system.js'
+import {GhsMgr}  from './_system.js'
+import {GhsType,GhsStep,TileSize as T} from '../_constants.js'
 
-const {GhostMgr,SysMap,FrightMode,Step}= Sys
-const compareDist = (a,b)=> (a.dist == b.dist)? (a.index-b.index):(a.dist-b.dist)
+const compareDist = (a,b)=>
+	(a.dist == b.dist)? (a.index-b.index) : (a.dist-b.dist)
 
 export class Ghost extends Actor {
-	static get score()      {return SysMap.get(FrightMode)?.score || 0}
-	static get frightened() {return SysMap.has(FrightMode)}
-	static get Elroy()      {return Sys.Elroy}
-	static get hasEscape()  {return Sys.GhostMgr.hasEscape}
-	static get centerPos()  {return Sys.GhostMgr.centerPos}
-
 	#runAway    = -1
 	#started    = false
 	#revSig     = false
 	#frightened = false
-	get aIdx()       {return this.noAnime ? 0 : GhostMgr.animIndex}
-	get spriteIdx()  {return SysMap.get(FrightMode)?.spriteIdx || 0}
+	get spriteIdx()  {return GhsMgr.spriteIdx}
+	get aIdx()       {return GhsMgr.animIndex & this.playAnime}
 	get maxAlpha()   {return Ctrl.showTargets ? this.cheatAlpha : 1}
 	get started()    {return this.#started}
 	get frightened() {return this.#frightened}
@@ -39,17 +34,17 @@ export class Ghost extends Actor {
 	// This section is overridden in subclasses
 	scatterTile = Vec2(24, 0).freeze()
 	get angry()     {return false}
-	get chaseStep() {return Step.Base}
+	get chaseStep() {return GhsStep.Base}
 	get chasePos()  {return PacMgr.centerPos}
 	get chaseTile() {return this.chasePos.divInt(T)}
 
-	constructor({col=0,row=0,idx=0,initAlign=0,orient=L,noAnime=false}={}) {
+	constructor({col=0,row=0,idx=0,initAlign=0,orient=L,anime=true}={}) {
 		super()
 		this.dir       = orient
 		this.idx       = idx
 		this.initX     = col*T
 		this.initAlign = initAlign
-		this.noAnime   = noAnime
+		this.playAnime = anime
 		this.pos       = Vec2(this.initX, row*T)
 		this.name      = this.constructor.name
 		this.sprite    = new Sprite(...canvas2D(null, T*3, T*2).vals)
@@ -86,13 +81,13 @@ export class Ghost extends Actor {
 	}
 	get step() {
 		const spd = Game.moveSpeed, {state}= this
-		if (state.isIdle)    return spd * Step.Idle
-		if (state.isGoOut)   return spd * Step.GoOut
-		if (state.isEscape)  return spd * Step.Escape
-		if (state.isReturn)  return spd * Step.Return
-		if (this.isInTunnel) return spd * Step.InTunnel
-		if (this.frightened) return spd * Step.Fright
-		return spd * (this.isScatter? Step.Base : this.chaseStep)
+		if (state.isIdle)    return spd * GhsStep.Idle
+		if (state.isGoOut)   return spd * GhsStep.GoOut
+		if (state.isEscape)  return spd * GhsStep.Escape
+		if (state.isReturn)  return spd * GhsStep.Return
+		if (this.isInTunnel) return spd * GhsStep.InTunnel
+		if (this.frightened) return spd * GhsStep.Fright
+		return spd * (this.isScatter? GhsStep.Base : this.chaseStep)
 	}
 	draw() {
 		if (State.isStart) return
@@ -239,8 +234,8 @@ export class Ghost extends Actor {
 			Timer.freeze()
 			this.state.switchToBitten()
 			this.#frightened = false
-			SysMap.get(FrightMode).caught()
-			PtsMgr.set({key:Ghost, ...this.centerPos}, fn)
+			$(this).trigger('Caught')
+			PtsMgr.set({key:GhsMgr, ...this.centerPos}, fn)
 			State.isPlaying && Sound.play('bitten')
 		} else {
 			if (Ctrl.invincible) return
