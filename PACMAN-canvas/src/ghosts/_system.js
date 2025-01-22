@@ -157,8 +157,8 @@ export const DotCounter = function() {
 		const timeOut = (Game.level <= 4 ? 4e3:3e3)
 		const gLimit  = limitTbl[idx-1][0] // global
 		const pLimit  = limitTbl[idx-1][min(Game.level,3)] // personal
-		if (PacMgr.instance.timeNotEaten >= timeOut) fn()
-		else (!Game.restarted || globalDotCnt < 0)
+		(PacMgr.instance.timeNotEaten >= timeOut)? fn():
+		(!Game.restarted || globalDotCnt < 0)
 			? counters[idx]>= pLimit && fn()
 			: globalDotCnt == gLimit && fn(idx == GhsType.Guzuta)
 				&& (globalDotCnt = -1)

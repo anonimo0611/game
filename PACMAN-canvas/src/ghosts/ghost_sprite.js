@@ -38,7 +38,14 @@ export default class {
 		isHadake   = false,
 	}={}) {
 		if (state.isBitten) return
-		const {ctx}= this
+		const {ctx,cvs}= this
+		function finalize() {
+			ctx.restore()
+			mainCtx.save()
+			mainCtx.translate(x+size/4, y+size/4)
+			mainCtx.drawImage(cvs, -size/2, -size/2)
+			mainCtx.restore()
+		}
 		ctx.clear()
 		ctx.save()
 		ctx.translate(size/2, size/2)
@@ -49,8 +56,9 @@ export default class {
 
 		if (isHadake) {
 			this.CBSprite.hadake(aIdx)
+			return finalize()
 		}
-		else if (!escaping) {
+		if (!escaping) {
 			ctx.save()
 			this.#resurrect?.setAlpha(ctx)
 			this.#angryGlow(x, y, angry, size)
@@ -58,18 +66,14 @@ export default class {
 			frightened && this.#frightFace(spriteIdx)
 			ctx.restore()
 		}
-		if (!frightened && !isHadake) {
+		if (!frightened) {
 			[this.#eyesLookingUp,
 			 this.#eyesLookingDown,
 			 this.#eyesLookingLR,
 			 this.CBSprite.bracketEyes,
 			][EyesEnum[orient]].bind(this)({orient,ripped,spriteIdx})
 		}
-		ctx.restore()
-		mainCtx.save()
-		mainCtx.translate(x+size/4, y+size/4)
-		mainCtx.drawImage(this.cvs, -size/2, -size/2)
-		mainCtx.restore()
+		finalize()
 	}
 	update() {
 		this.#resurrect?.update()

@@ -237,11 +237,11 @@ export class Ghost extends Actor {
 			Sys.FrightMode.caught()
 			PtsMgr.set({key:GhsMgr, ...this.centerPos}, fn)
 			State.isPlaying && Sound.play('bitten')
-		} else {
-			if (Ctrl.invincible) return
-			Sound.stopLoops()
-			State.isPlaying && State.switchToLosing()
+			return
 		}
+		if (Ctrl.invincible) return
+		Sound.stopLoops()
+		State.isPlaying && State.switchToLosing()
 	}
 	#setEscape() {
 		Sound.ghostEscape()
