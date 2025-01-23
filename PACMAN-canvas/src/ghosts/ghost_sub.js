@@ -53,5 +53,5 @@ class Guzuta extends Ghost {
 	}
 }
 $on('Title Restart NewLevel', ()=> {
-	$(GhsMgr).trigger('Reset', [Akabei,Pinky,Aosuke,Guzuta])
+	$(GhsMgr).trigger('Init', [Akabei,Pinky,Aosuke,Guzuta])
 })

@@ -47,7 +47,18 @@ const inFrontOfPac = g=> !behindThePac(g)
 const behindThePac = g=> g.frightened
 
 export const GhsMgr = new class {
-	static {$ready(()=> GhsMgr.#setup())}
+	static {$ready(()=> this.setup())}
+	static setup() {
+		this.bindEventsToObj()
+		$on('Attract',GhsMgr.#onAttract)
+		$on('Playing',GhsMgr.#onPlaying)
+		$on('Clear',  GhsMgr.#onLevelEnds)
+		$on('Losing', GhsMgr.#onLevelEnds)
+	}
+	static bindEventsToObj() {
+		$(GhsMgr).on('Init',GhsMgr.#initialize)
+		PacMgr.bindDotEaten(GhsMgr.#onDotEaten)
+	}
 	#aidx = 0
 	get aInterval()  {return 6}
 	get animIndex()  {return this.#aidx}
@@ -57,14 +68,7 @@ export const GhsMgr = new class {
 	get spriteIdx()  {return SysMap.get(FrightMode)?.spriteIdx|0}
 	get hasEscape()  {return Ghosts.some(g=> g.escaping)}
 	centerPos(idx=0) {return Ghosts[idx].centerPos}
-	#setup() {
-		$(this).on('Reset', this.#onReset)
-		$on('Attract',      this.#onAttract)
-		$on('Playing',      this.#onPlaying)
-		$on('Clear Losing', this.#onLevelEnds)
-		PacMgr.bindDotEaten(this.#onDotEaten)
-	}
-	#onReset(_, ...subClasses) {
+	#initialize(_, ...subClasses) {
 		GhsMgr.#aidx = 0
 		SysMap.clear()
 		subClasses.forEach((cls,i)=> Ghosts[i]=new cls)
