@@ -27,8 +27,8 @@ const coords100_5000 = {
 	5000: [[5,-10, -3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
 }
 
-const Sprite = function() {
-	function draw(x, y, pts) {
+const Sprite = new class {
+	draw(x, y, pts) {
 		Ctx.save()
 		Ctx.translate(x, y)
 		Ctx.lineWidth   = 1.2
@@ -39,21 +39,21 @@ const Sprite = function() {
 			: Color.FruitPts
 		coords100_5000[pts]?.forEach((c,i)=> {
 			pts == 1600 && i == 0
-				? strokeThin1(...c)
-				: strokeNumber(...c)
+				? this.#strokeThin1(...c)
+				: this.#strokeNumber(...c)
 		})
 		Ctx.restore()
 	}
-	function strokeThin1(x, y) {
-		strokeLines([x,y,x,y+6])
+	#strokeThin1(x, y) {
+		this.#strokeLines([x,y,x,y+6])
 	}
-	function strokeNumber(n, x, y) {
+	#strokeNumber(n, x, y) {
 		Ctx.save()
 		Ctx.translate(x,y)
-		strokeLines(linePaths0_8[n], n==0 || n==8)
+		this.#strokeLines(linePaths0_8[n], n==0 || n==8)
 		Ctx.restore()
 	}
-	function strokeLines(v, isClose=false) {
+	#strokeLines(v, isClose=false) {
 		Ctx.beginPath()
 		Ctx.moveTo(v[0], v[1])
 		for (let i=2; i<v.length; i+=2)
@@ -61,6 +61,5 @@ const Sprite = function() {
 		isClose && Ctx.closePath()
 		Ctx.stroke()
 	}
-	return {draw}
-}()
+}
 export default Sprite.draw
