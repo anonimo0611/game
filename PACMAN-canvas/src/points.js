@@ -44,7 +44,7 @@ class Points {
 		this.fadeOut?.setAlpha(Ctx)
 		Ctx.translate(clamp(x, T, Maze.Width-T), y)
 		Ctx.scale(T/8, T/8)
-		sprite(0,0, this.score)
+		sprite.draw(0,0, this.score)
 		Ctx.restore()
 	}
 }

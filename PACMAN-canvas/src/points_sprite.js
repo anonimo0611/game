@@ -27,7 +27,7 @@ const coords100_5000 = {
 	5000: [[5,-10, -3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
 }
 
-const Sprite = new class {
+export default new class {
 	draw(x, y, pts) {
 		Ctx.save()
 		Ctx.translate(x, y)
@@ -62,4 +62,3 @@ const Sprite = new class {
 		Ctx.stroke()
 	}
 }
-export default Sprite.draw
