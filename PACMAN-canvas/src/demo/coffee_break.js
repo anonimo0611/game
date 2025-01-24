@@ -163,6 +163,6 @@ class Scene3 extends CBreak {
 		this.drawPacman()
 		this.akabei.orient == L
 			? this.drawAkabei({repaired:true})
-			: this.drawAkabei({isHadake:true})
+			: this.drawAkabei({hadaketa:true})
 	}
 }

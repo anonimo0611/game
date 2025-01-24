@@ -29,6 +29,7 @@ export class Ghost extends Actor {
 	get maxAlpha()   {return Ctrl.showTargets ? this.cheatAlpha : 1}
 	get started()    {return this.#started}
 	get frightened() {return this.#frightened}
+	get bitten()     {return this.state.isBitten}
 	get escaping()   {return this.state.isEscaping}
 
 	// This section is overridden in subclasses
@@ -114,19 +115,19 @@ export class Ghost extends Actor {
 		if (state.isReturn) return this.#returnToHome(this)
 		this.#walk(state.isEscape)
 	}
-	#idle({idx,step,orient,centerPos:pos}=this) {
+	#idle({idx,step,orient,centerPos:{y}}=this) {
 		if (!Ctrl.isChaseMode)
 			Sys.DotCounter.release(idx, this.release.bind(this))
 		if (!this.state.isGoOut) {
-			this.dir =(pos.y+T*0.6-step > Maze.PenMiddleY && orient != D)
-				? U : (pos.y-T*0.6+step < Maze.PenMiddleY? D : U)
+			this.dir =(y+T*0.6-step > Maze.PenMiddleY && orient != D)
+				? U : (y-T*0.6+step < Maze.PenMiddleY? D : U)
 			!Timer.frozen && this.setNextPos()
 		}
 	}
-	release(deactivate_global_dot_cnt=false) {
+	release(deactivateGlobalDotCnt=false) {
 		PacMgr.instance.resetTimer()
 		this.state.isIdle && this.state.switchToGoOut()
-		return deactivate_global_dot_cnt
+		return deactivateGlobalDotCnt
 	}
 	#goOut({y,centerPos,step}=this) {
 		if (Timer.frozen) return
@@ -178,7 +179,7 @@ export class Ghost extends Actor {
 	}
 	#walk(isEscape=false) {
 		if (Timer.frozen && !isEscape) return
-		for (let i=0,denom=ceil(this.step); i<denom; i++) {
+		for (let i=0,denom=ceil(this.step)*2; i<denom; i++) {
 			this.setNextPos(denom)
 			this.inBackwardOfTile && this.#setNextDir()
 			this.#setTurn(this)
@@ -191,13 +192,13 @@ export class Ghost extends Actor {
 			this.orient = Dir.opposite(this.dir)
 			return
 		}
-		this.orient = this.#getNextDir(this.targetTile)
+		this.orient = this.#getNextDir()
 	}
-	#getNextDir(target) {
+	#getNextDir() {
 		const testTile  = this.getAdjTile(this.dir)
 		const allowDirs = [U,L,D,R].flatMap((dir,index)=> {
 			const tile = this.getAdjTile(dir,1,testTile)
-			const dist = tile.distance(target)
+			const dist = tile.distance(this.targetTile)
 			return this.#isAllowDir(dir,tile) ? {index,dir,dist} : []
 		})
 		return this.frightened
@@ -209,11 +210,11 @@ export class Ghost extends Actor {
 		    && !Dir.isOpposite(dir,this.orient)
 		    && !this.#notEnterTile(dir,tile) )
 	}
-	#notEnterTile(dir, {x, y}) {
+	#notEnterTile(dir, tile) {
 		return !Ctrl.unrestricted
 			&& (this.state.isWalk && !this.frightened)
 			&& (dir == U)
-			&& Maze.GhostNotEnterSet.has(`${x}-${y}`)
+			&& Maze.GhostNotEnterSet.has(tile.hyphenated)
 	}
 	#setTurn({dir,orient,pos,tilePos:t}=this) {
 		if (dir == orient || this.hasAdjWall(orient)) return
@@ -222,7 +223,7 @@ export class Ghost extends Actor {
 		 || dir == U && pos.y < t.y*T
 		 || dir == D && pos.y > t.y*T) {
 			this.movDir = this.orient
-			this.pos = this.tilePos.mul(T)
+			this.pos = t.mul(T)
 		}
 	}
 	#setFrightMode(_, bool) {
@@ -236,7 +237,7 @@ export class Ghost extends Actor {
 			this.#frightened = false
 			Sys.FrightMode.caught()
 			PtsMgr.set({key:GhsMgr, ...this.centerPos}, fn)
-			State.isPlaying && Sound.play('bitten')
+			Sound.play('bitten')
 			return
 		}
 		if (Ctrl.invincible) return

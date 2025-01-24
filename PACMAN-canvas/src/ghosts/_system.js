@@ -49,13 +49,13 @@ const behindThePac = g=> g.frightened
 export const GhsMgr = new class {
 	static {$ready(()=> this.setup())}
 	static setup() {
-		this.bindEventsToObj()
+		this.bindEventToObjs()
 		$on('Attract',GhsMgr.#onAttract)
 		$on('Playing',GhsMgr.#onPlaying)
 		$on('Clear',  GhsMgr.#onLevelEnds)
 		$on('Losing', GhsMgr.#onLevelEnds)
 	}
-	static bindEventsToObj() {
+	static bindEventToObjs() {
 		$(GhsMgr).on('Init',GhsMgr.#initialize)
 		PacMgr.bindDotEaten(GhsMgr.#onDotEaten)
 	}

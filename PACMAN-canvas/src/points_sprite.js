@@ -26,6 +26,7 @@ const coords100_5000 = {
 	3000: [[3,-10, -3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
 	5000: [[5,-10, -3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
 }
+const GhsPtsSet = new Set([200,400,800,1600])
 
 export default new class {
 	draw(x, y, pts) {
@@ -34,7 +35,7 @@ export default new class {
 		Ctx.lineWidth   = 1.2
 		Ctx.lineCap     ='round'
 		Ctx.lineJoin    ='round'
-		Ctx.strokeStyle = [200,400,800,1600].includes(pts)
+		Ctx.strokeStyle = GhsPtsSet.has(pts)
 			? Color.GhostPts
 			: Color.FruitPts
 		coords100_5000[pts]?.forEach((c,i)=> {

@@ -24,20 +24,21 @@ export default class {
 	setFadeOut()   {this.#fadeOut ||= new FadeOut(400)}
 	setResurrect() {this.#resurrect = new FadeIn (600)}
 	draw({
-		mainCtx=Ctx,x=0,y=0,state={},
+		mainCtx=Ctx,x=0,y=0,
 		idx        = 0,
 		aIdx       = 0,
 		spriteIdx  = 0,
 		orient     = Dir.Left,
 		size       = TileSize*2,
 		frightened = false,
+		bitten     = false,
 		escaping   = false,
 		angry      = false,
 		ripped     = false,
 		repaired   = false,
-		isHadake   = false,
+		hadaketa   = false,
 	}={}) {
-		if (state.isBitten) return
+		if (bitten) return
 		const {ctx,cvs}= this
 		function finalize() {
 			ctx.restore()
@@ -54,7 +55,7 @@ export default class {
 			? Color[GhsNames[idx]]
 			: Color.FrightBodyList[spriteIdx]
 
-		if (isHadake) {
+		if (hadaketa) {
 			this.CBSprite.hadake(aIdx)
 			return finalize()
 		}
