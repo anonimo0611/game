@@ -7,12 +7,12 @@ import {Maze}   from './maze.js'
 import {Score}  from './score.js'
 import {GhsMgr} from './ghosts/_system.js'
 import {Fruit}  from './fruit.js'
-import sprite   from './points_sprite.js'
+import Sprite   from './points_sprite.js'
 import {TileSize as T} from './_constants.js'
 
 /** @type {Map<any, Points>} */
 const PtsMap = new Map()
-$on('Title Clear Losing', ()=> PtsMap.clear())
+$on('Title Clear Collided', ()=> PtsMap.clear())
 
 export const PtsMgr = new class {
 	set(...args)   {new Points(...args)}
@@ -44,7 +44,7 @@ class Points {
 		this.fadeOut?.setAlpha(Ctx)
 		Ctx.translate(clamp(x, T, Maze.Width-T), y)
 		Ctx.scale(T/8, T/8)
-		sprite.draw(0,0, this.score)
+		Sprite.draw(0,0, this.score)
 		Ctx.restore()
 	}
 }
