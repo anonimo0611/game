@@ -240,9 +240,11 @@ export class Ghost extends Actor {
 			Sound.play('bitten')
 			return
 		}
-		if (Ctrl.invincible) return
-		Sound.stopLoops()
-		State.isPlaying && State.switchToLosing()
+		!Ctrl.invincible
+			&& State.isPlaying
+			&& Sound.stopLoops()
+			&& State.switchToCollided()
+			&& State.switchToLosing({delay:500})
 	}
 	#setEscape() {
 		Sound.ghostEscape()

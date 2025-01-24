@@ -13,7 +13,7 @@ import {FrightMode}   from '../ghosts/_system.js'
 import {AttractTimer} from './_run_timer.js'
 import {Color,GhsType,TileSize as T} from '../_constants.js'
 
-/** @type {Attract|null} */
+/** @type {?Attract} */
 let   _attract  = null
 const ModSymbol = Symbol()
 const CHARA=0, DEMO=1
@@ -118,7 +118,7 @@ export class Attract {
 	updatePacman() {
 		this.pacman.sprite.update()
 		this.pacman.x += this.pacVelX
-		if (this.pacman.orient == L && this.pacman.x <= T*3) {
+		if (this.pacman.orient == L && this.pacman.x <= T*4) {
 			this.pacVelX *= -1.11
 			this.ghsVelX /= -2.14
 			this.pacman.orient = R

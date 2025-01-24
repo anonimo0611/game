@@ -70,8 +70,7 @@ export const Game = new class {
 	}
 	#pause(force) {
 		if (!State.isPlaying) return
-		Ticker.pause(force) && $trigger('Pause')
-		Sound.pauseAll(Ticker.paused)
+		Sound.pauseAll(Ticker.pause(force))
 	}
 	#onKeydown(e) {
 		if (Confirm.opened) return
@@ -108,13 +107,11 @@ export const Game = new class {
 		!document.hasFocus() && Game.#pause(true)
 	}
 	#onLosing() {
-		Timer.set(500, ()=> {
-			Sound.play('losing')
-			PacMgr.instance.sprite.setLosing()
-			Lives.left > 0
-				? State.switchToRestart ({delay:2200})
-				: State.switchToGameOver({delay:2200})
-		})
+		Sound.play('losing')
+		PacMgr.instance.sprite.setLosing()
+		Lives.left > 0
+			? State.switchToRestart ({delay:2200})
+			: State.switchToGameOver({delay:2000})
 	}
 	#onFlashMaze() {
 		let count = 0

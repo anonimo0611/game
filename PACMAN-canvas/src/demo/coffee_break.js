@@ -14,7 +14,7 @@ const ModSymbol = Symbol()
 const IntermissionMap = new Map([[2,1], [5,2], [9,3]])
 
 export class CBreak {
-	/** @type {Scene1|Scene2|Scene3|null} */
+	/** @type {?(Scene1|Scene2|Scene3)} */
 	static #scene = null
 	static begin(num=IntermissionMap.get(Game.level)) {
 		if (State.isCBreak || !between(num,1,3)) return false

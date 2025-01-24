@@ -17,7 +17,7 @@ const LevelTable = freeze([0,1,2,2,3,3,4,4,5,5,6,6,7])
 const PointTable = freeze([100,300,500,700,1e3,2e3,3e3,5e3])
 const LevelCounterRect = freeze([T*12, T*32, T*2*8, T*2])
 
-/** @type {FadeOut|null} */
+/** @type {?FadeOut} */
 let _fadeOut = null
 let _tgtDisp = true
 

@@ -50,10 +50,10 @@ export const GhsMgr = new class {
 	static {$ready(()=> this.setup())}
 	static setup() {
 		this.bindEventToObjs()
-		$on('Attract',GhsMgr.#onAttract)
-		$on('Playing',GhsMgr.#onPlaying)
-		$on('Clear',  GhsMgr.#onLevelEnds)
-		$on('Losing', GhsMgr.#onLevelEnds)
+		$on('Attract', GhsMgr.#onAttract)
+		$on('Playing', GhsMgr.#onPlaying)
+		$on('Clear',   GhsMgr.#onLevelEnds)
+		$on('Collided',GhsMgr.#onLevelEnds)
 	}
 	static bindEventToObjs() {
 		$(GhsMgr).on('Init',GhsMgr.#initialize)

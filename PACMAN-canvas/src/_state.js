@@ -10,6 +10,7 @@ export const State = new class extends BaseState {
 	isPlaying   = false
 	isClear     = false
 	isFlashMaze = false
+	isCollided  = false
 	isLosing    = false
 	isGameOver  = false
 	isCBreak    = false
