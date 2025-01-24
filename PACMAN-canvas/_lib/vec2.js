@@ -4,6 +4,7 @@ class Vector2 {
 	y = 0
 	constructor(v1,v2) {this.set(v1,v2)}
 	get vals()         {return [this.x, this.y]}
+	get hyphenated()   {return `${this.x}-${this.y}`}
 	get inverse()      {return this.clone.mul(-1)}
 	get sqrMagnitude() {return this.x**2 + this.y**2}
 	get magnitude()    {return sqrt(this.sqrMagnitude)}
