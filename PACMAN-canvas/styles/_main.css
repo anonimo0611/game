@@ -31,6 +31,7 @@ body[data-loaded=false] {
 		transform: translate(-50%,-50%);
 	}
 }
+
 ::selection {
 	color: inherit;
 	background: 0 0;
@@ -48,6 +49,12 @@ div,ul,menu,li,th,td,form,input,output {
 	}
 }
 
+body[data-loaded=true] #wrapper {
+	opacity: 1;
+}
+body:not([data-state=Title]) #titleScr {
+	display: none;
+}
 #wrapper {
 	background: black;
 	padding-top: 15px;
@@ -56,16 +63,11 @@ div,ul,menu,li,th,td,form,input,output {
 	transform-origin: center;
 	opacity: 0;
 }
-body[data-loaded=true] #wrapper {
-	opacity: 1;
-}
 #board {
 	font: 1rem/1 Atari,sans-serif;
 	position: relative;
 }
-body:not([data-state=Title]) #titleScr {
-	display: none;
-}
+
 
 #startBtn {
 	text-align: center;

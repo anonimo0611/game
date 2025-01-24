@@ -17,7 +17,7 @@ dialog {
 		background-color: rgba(0 0 0 /.48);
 	}
 	.content {
-		border-bottom: solid 1px #555;
+		border-bottom: solid 1px #CCC;
 		padding: .5em 1em 1em;
 	}
 	.buttons {
@@ -166,25 +166,26 @@ label:hover + .dropdown > .current {
 }
 .dropdown {
 	--bg: rgba(41 41 41 /.8);
+	--caret-size: .9em;
 	> .current {
 		background: var(--bg);
 		margin-top: -.1em;
-		padding: .1em .9em .1em .2em;
+		padding: .1em var(--caret-size) .1em .2em;
 		box-sizing: border-box;
-		&::after {
-			content: '';
-			background: no-repeat center right/.9em .9em url(../res/caret.svg);
-			width:  1em;
-			height: 1em;
-			position: absolute;
-			top: 50%;
-			right: .1em;
-			transform: translateY(-50%);
-			transform-origin: center;
-		}
-		&:focus {
-			border-color: var(--focused-border-color);
-		}
+	}
+	> .current::after {
+		content: '';
+		background: no-repeat center right/var(--caret-size) url(../res/caret.svg);
+		width:  1em;
+		height: 1em;
+		position: absolute;
+		top: 50%;
+		right: .1em;
+		transform: translateY(-50%);
+		transform-origin: center;
+	}
+	> .current:focus {
+		border-color: var(--focused-border-color);
 	}
 	menu {
 		border-radius: .2em;
@@ -196,7 +197,7 @@ label:hover + .dropdown > .current {
 		background: var(--bg);
 		border: 1px solid transparent;
 		border-width: 1px 0;
-		padding: .1em .9em .1em .2em;
+		padding: .1em var(--caret-size) .1em .2em;
 		display: block;
 		position: relative;
 		&.selected {
@@ -212,12 +213,6 @@ label:hover + .dropdown > .current {
 	}
 }
 
-.slidemenu-wrapper {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	label {line-height: 1}
-}
 .slidemenu {
 	font-size: 80%;
 	width: 5em;
