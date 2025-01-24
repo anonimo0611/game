@@ -84,8 +84,8 @@ export const {cvs:pvCvs}=
 			idx:        GhsType[_type],
 			aIdx:       _animIdx,
 			orient:     _orient,
-			isHadake:   _subType == 'hadake',
 			frightened: _type    == 'frightened',
+			hadaketa:   _subType == 'hadake',
 			repaired:   _subType == 'repaired',
 		})
 		ctx.restore()

@@ -5,7 +5,7 @@ import {TileSize}     from '../src/_constants.js'
 import {PacScale}     from '../src/_constants.js'
 import {Cvs,Ctx}      from '../src/_canvas.js'
 import  fruitsSprites from '../src/fruits_sprite.js'
-import  pointsSprites from '../src/points_sprite.js'
+import  pointsSprite  from '../src/points_sprite.js'
 import  PacSprite     from '../src/pacman/pac_sprite.js'
 import {ColMax,RowMax,T,S,Gap,ghost,cbAkabei} from './_constants.js'
 
@@ -78,7 +78,7 @@ export const View = function() {
 			Ctx.save()
 			Ctx.translate(x, y)
 			Ctx.scale(S/16, S/16)
-			pointsSprites(0, 0, pts)
+			pointsSprite.draw(0, 0, pts)
 			Ctx.restore()
 		}
 		const pts1 = (pts,i)=> {draw(pts, ofst(i)+T, S*6+T)}
@@ -131,8 +131,8 @@ export const View = function() {
 		draw(Vec2(ofst(5),   0),{ripped:true,orient:'LowerR'})
 		draw(Vec2(0,         S),{repaired:true})
 		draw(Vec2(S+Gap,     S),{repaired:true,aIdx:1})
-		draw(Vec2(ofst(2.25),S),{isHadake:true})
-		draw(Vec2(ofst(4.25),S),{isHadake:true,aIdx:1})
+		draw(Vec2(ofst(2.25),S),{hadaketa:true})
+		draw(Vec2(ofst(4.25),S),{hadaketa:true,aIdx:1})
 	}
 	return {draw}
 }()
