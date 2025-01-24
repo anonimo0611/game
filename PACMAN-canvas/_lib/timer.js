@@ -1,7 +1,7 @@
 const ModSymbol = Symbol()
 const TimerMap  = new Map()
 
-/** @type {Ticker|null} */
+/** @type {?Ticker} */
 let _ticker  = null
 let _paused  = false
 let _counter = 0
