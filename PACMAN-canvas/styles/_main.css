@@ -26,7 +26,7 @@ body[data-loaded=false] {
 		font: bolder 4vmin/1 Atari, Verdana;
 		position: fixed;
 		z-index: 100000;
-		top: 50%;
+		top:  50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
 	}
@@ -44,28 +44,23 @@ div,ul,menu,li,th,td,form,input,output {
 
 [data-cursor=hidden],
 [data-cursor=stayStill] {
-	body:not([data-scene=Title]) #board {
+	body:not([data-scene=Title]) canvas {
 		cursor: none;
 	}
 }
-body[data-loaded=true] #wrapper {
+body[data-loaded=true] #board {
 	opacity: 1;
 }
 body:not([data-state=Title]) #titleScr {
 	display: none;
 }
 
-#wrapper {
+#board {
 	background: black;
 	padding-top: 15px;
-	block-size: fit-content;
 	border-radius: 20px;
 	transform-origin: center;
 	opacity: 0;
-}
-#board {
-	font: 1rem/1 Atari, sans-serif;
-	position: relative;
 }
 #startBtn {
 	text-align: center;

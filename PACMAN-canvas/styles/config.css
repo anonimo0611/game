@@ -5,8 +5,9 @@
 label {
 	color: var(--label-fg)
 }
-label:hover {
-	color: var(--label-fg-hover)
+label:hover,
+label:has(+div:hover) {
+	color: var(--label-fg-hover) !important;
 }
 
 .panel {
@@ -28,9 +29,9 @@ label:hover {
 		content: attr(data-caption);
 		display: block;
 	}
-	&>li,th,td {
+	> li,th,td {
 		font: 1em/1.1 sans-serif;
-		padding: .1rem .2rem;
+		padding: .1rem 0;
 		vertical-align: middle;
 	}
 	th {
@@ -42,8 +43,7 @@ label:hover {
 	}
 	tr:hover th {
 		color: var(--label-fg-hover);
-
-		+td {
+		+ td {
 			background-color: rgba(27 83 143 /.6)
 		}
 	}
@@ -62,8 +62,7 @@ label:hover {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-
-	>* {
+	> * {
 		margin: 0 .2em;
 		align-self: center;
 	}
@@ -91,38 +90,30 @@ label:hover {
 #cfgBtn {
 	background: var(--bc) url(../res/burger.svg) center/120%;
 	text-indent: -20em;
-	font-size: .96rem;
-	line-height: 0;
-	margin:  0 0 0 .25;
-	padding: 0;
-	width: 1rem;
+	width:  1rem;
 	height: 1rem;
 	overflow: hidden;
-	outline: 0;
 }
-
 #cfgPanel {
 	line-height: 1;
 	padding: .2em;
-
-	>li:not(.buttons) {
-		display: flex;
+	> li {
 		padding: .05em 0;
+		display: flex;
 		position: relative;
 	}
-	>li:not(.buttons)> :first-child {
+	> li:not(.one) > :first-child,
+	> li.slidemenu-wrapper::before {
+		content: '';
 		text-align: center;
 		display: inline-block;
 		width: 1.5rem;
 	}
-	.buttons {
-		padding: 0;
+	> li.buttons {
+		display: block;
 		button {
-			font-size: .8rem;
-			line-height: 1;
-			margin: .2em 0 0;
+			margin:  .2em 0 0;
 			padding: .2em 0;
-			border-radius: .2em;
 			width: 100%;
 			display: block;
 		}
@@ -153,13 +144,13 @@ button[data-for=keys] {
 		display: inline-flex;
 	}
 	kbd {
-		display: inline-block;
 		text-align: center;
 		font: 100%/1 Consolas, monospace;
 		position: relative;
+		display: inline-block;
 		&.↑,
 		&.↓ {
-			width: 1em;
+			width:  1em;
 			height: 1em;
 		}
 		&.↑ {
@@ -177,13 +168,11 @@ button[data-for=keys] {
 }
 
 #volume {
-	white-space: nowrap;
-	width:  2.3rem;
+	width: calc(1.5rem + var(--thumb-size) + 2px);
 	height: 1.5rem;
 	position: absolute;
 	top:   .1em;
 	right: .2em;
-	overflow: hidden;
 	label {
 		display: block;
 		outline: none;
@@ -193,12 +182,12 @@ button[data-for=keys] {
 	}
 	input {
 		--thumb-size: 0.5rem;
-		font-size: inherit;
+		--width: 1.3rem;
 		position: absolute;
 		z-index: -1;
-		top:   1.3rem;
-		left:  0.5em;
-		width: 1.3rem;
+		left: var(--thumb-size);
+		top:  var(--width);
+		width:var(--width);
 		transform: rotate(-90deg);
 		transform-origin: left center;
 		opacity: 0;
@@ -208,7 +197,6 @@ button[data-for=keys] {
 		opacity: 1;
 		z-index: 1;
 	}
-	input.show,
 	&:hover input,
 	&:focus input {
 		z-index: 1;
@@ -231,42 +219,39 @@ button[data-for=keys] {
 }
 
 #LevelMenuLabel {
-	color: #FFF !important;
+	color: #FFF;
 	margin: 0;
 	padding: .5em .3em;
 }
-
 #LevelMenu {
-	--t: 35px;
-	--sprite-w: calc(var(--t)*8);
+	--t: 35px; /* tile size */
+	--width: calc(var(--t)*8);
 	text-transform: uppercase;
 	font: .9rem/1 sans-serif;
 	margin-left: 0;
-
-	.current,
-	menu>li {
+	.current {
+		padding: .22em var(--caret-size) .2em .2em;
+	}
+	menu > li, .current {
 		display: flex;
 		align-items: center;
 		gap: .2em;
 	}
-	.current {
-		padding: .22em var(--caret-size) .2em .2em;
-	}
-
-	menu>li {
+	menu > li {
 		padding-top:    0;
 		padding-bottom: 0;
 	}
-	.current::before,
-	menu>li::before {
+	menu > li::before, .current::before {
 		content: '';
 		background: no-repeat
-			calc(-1*var(--t) * var(--o, 0))
-			0/var(--sprite-w) var(--t) var(--url);
-		width: var(--t);
+			calc(-1*var(--t) * var(--ofst-x, 0))
+			0/var(--width) var(--t) var(--url);
+		width:  var(--t);
 		height: var(--t);
 	}
 }
 #ExtendScoreMenu {
+	position: absolute;
+	right: 0;
 	font-size: 80%;
 }
