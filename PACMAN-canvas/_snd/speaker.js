@@ -1,5 +1,4 @@
-﻿import {TileSize} from '../src/_constants.js'
-const  {cvs,ctx}= canvas2D('speakerCvs',TileSize*1.5)
+﻿const  {cvs,ctx}= canvas2D('speakerCvs', $('#volume').height())
 export const Speaker = new class {
 	draw(vol) {
 		const {width,height}= cvs
