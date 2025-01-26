@@ -2,11 +2,16 @@
 	--label-fg: #6CF4E6;
 	--label-fg-hover: #EAB6FA;
 }
-label {
+label, .label {
 	color: var(--label-fg)
 }
-label:hover,
-label:has(+div:hover) {
+label:has(+#LevelMenu)  {
+	color: #FFF;
+	margin: 0;
+	padding: .5em .3em;
+}
+:is(label, .label):hover,
+:is(label, .label):has(+div:hover) {
 	color: var(--label-fg-hover) !important;
 }
 
@@ -100,6 +105,7 @@ label:has(+div:hover) {
 	> li {
 		padding: .05em 0;
 		display: flex;
+		align-items: center;
 		position: relative;
 	}
 	> li:not(.one) > :first-child,
@@ -168,7 +174,8 @@ button[data-for=keys] {
 }
 
 #volume {
-	width: calc(1.5rem + var(--thumb-size) + 2px);
+	--thumb-size: 0.5rem;
+	width: calc(1.5rem + var(--thumb-size) * 1.5);
 	height: 1.5rem;
 	position: absolute;
 	top:   .1em;
@@ -181,7 +188,6 @@ button[data-for=keys] {
 		background: #08F;
 	}
 	input {
-		--thumb-size: 0.5rem;
 		--width: 1.3rem;
 		position: absolute;
 		z-index: -1;
@@ -218,11 +224,6 @@ button[data-for=keys] {
 	cursor: pointer;
 }
 
-#LevelMenuLabel {
-	color: #FFF;
-	margin: 0;
-	padding: .5em .3em;
-}
 #LevelMenu {
 	--t: 35px; /* tile size */
 	--width: calc(var(--t)*8);

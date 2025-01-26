@@ -36,9 +36,9 @@
 	</div>
 	<div id="titleScr">
 		<div id="cfg">
-			<label id="LevelMenuLabel">LEVEL</label>
+			<label for="LevelMenuCurrent">LEVEL</label>
 			<div id="LevelMenu" class="menu dropdown">
-				<output class="current" tabindex="0">01 Beginner</output>
+				<output id="LevelMenuCurrent" class="current" tabindex="0">01 Beginner</output>
 				<menu class="dropdown-list">
 				<li data-val="0" class="selected">01 Beginner</li>
 				<li data-val="1">02 </li>
@@ -84,7 +84,7 @@
 					value="3" step="1" min="1" max="5"></label>
 			</li>
 			<li class="slidemenu-wrapper one">
-				<label>Extend:</label>
+				<span class="label">Extend:</span>
 				<div id="ExtendScoreMenu" class="menu slidemenu" tabindex="0">
 					<menu class="slidemenu-list">
 					<li data-val="-1">Never</li>
