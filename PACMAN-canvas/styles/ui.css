@@ -214,8 +214,6 @@ label:hover + .dropdown > .current {
 }
 
 .slidemenu {
-	font-size: 80%;
-	width: 5em;
 	border: solid 2px transparent;
 	display: inline-block;
 	vertical-align: middle;

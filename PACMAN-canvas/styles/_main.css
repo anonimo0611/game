@@ -68,7 +68,6 @@ body:not([data-state=Title]) #titleScr {
 	position: relative;
 }
 
-
 #startBtn {
 	text-align: center;
 	white-space: nowrap;

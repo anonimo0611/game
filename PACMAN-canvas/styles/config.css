@@ -11,7 +11,8 @@ label:hover {color: var(--label-fg-hover)}
 	table {
 		border-collapse: collapse;
 	}
-	caption {
+	caption,
+	&[data-caption]::before {
 		text-align: center;
 		color: #E5EC34;
 		font-size: 100%;
@@ -19,7 +20,11 @@ label:hover {color: var(--label-fg-hover)}
 		margin: .2em 0 .2em .4rem;
 		padding: 0;
 	}
-	th, td {
+	&[data-caption]::before {
+		content: attr(data-caption);
+		display: block;
+	}
+	&>li, th, td {
 		font: 1em/1.1 sans-serif;
 		padding: .1rem .2rem;
 		vertical-align: middle;
@@ -57,9 +62,9 @@ label:hover {color: var(--label-fg-hover)}
 	}
 	.checkboxes {
 		font-size: 70%;
-		li {
+		label {
 			margin: .3em 0 .3em .3em;
-			display: flex;
+			display: block;
 			align-items: center;
 		}
 	}
@@ -91,17 +96,18 @@ label:hover {color: var(--label-fg-hover)}
 #cfgPanel {
 	line-height: 1;
 	padding: .2em;
-	td {
+	> li:not(.buttons) {
+		display: flex;
 		padding: .05em 0;
 		position: relative;
 	}
-	td:first-child {
+	> li:not(.buttons) > :first-child {
 		text-align: center;
-		color: #FFF;
+		display: inline-block;
 		width: 1.5rem;
-		~ td {text-align: left}
 	}
 	.buttons {
+		padding: 0;
 		button {
 			font-size: .8rem;
 			line-height: 1;
@@ -109,6 +115,7 @@ label:hover {color: var(--label-fg-hover)}
 			padding: .2em 0;
 			border-radius: .2em;
 			width: 100%;
+			display: block;
 		}
 		#defBtn {
 			border-width: 3px;
@@ -244,4 +251,7 @@ button[data-for=keys] {
 		width:  var(--t);
 		height: var(--t);
 	}
+}
+#ExtendScoreMenu {
+	font-size: 80%;
 }
