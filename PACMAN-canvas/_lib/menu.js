@@ -92,8 +92,8 @@ export class SlideMenu extends Menu {
 	#width = 0
 	#setWidth(btnW) {
 		this.#width = max(...[...this.lis].map(li=> li.offsetWidth)) + btnW
-		$(this.lis) .css('min-width', `${this.#width}px`)
-		$(this.root).css('min-width', `${this.#width}px`)
+		$(this.lis) .css('width', `${this.#width}px`)
+		$(this.root).css('width', `${this.#width}px`)
 		return this
 	}
 	select(idx=this.index) {
