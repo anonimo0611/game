@@ -1,9 +1,13 @@
 #titleScr {
 	--label-fg: #6CF4E6;
-	--label-fg-hover:#EAB6FA;
+	--label-fg-hover: #EAB6FA;
 }
-label {color: var(--label-fg)}
-label:hover {color: var(--label-fg-hover)}
+label {
+	color: var(--label-fg)
+}
+label:hover {
+	color: var(--label-fg-hover)
+}
 
 .panel {
 	top: 10.3rem;
@@ -24,7 +28,7 @@ label:hover {color: var(--label-fg-hover)}
 		content: attr(data-caption);
 		display: block;
 	}
-	&>li, th, td {
+	&>li,th,td {
 		font: 1em/1.1 sans-serif;
 		padding: .1rem .2rem;
 		vertical-align: middle;
@@ -38,7 +42,10 @@ label:hover {color: var(--label-fg-hover)}
 	}
 	tr:hover th {
 		color: var(--label-fg-hover);
-		+ td {background-color: rgba(27 83 143 /.6)}
+
+		+td {
+			background-color: rgba(27 83 143 /.6)
+		}
 	}
 }
 
@@ -56,7 +63,7 @@ label:hover {color: var(--label-fg-hover)}
 	justify-content: center;
 	align-items: center;
 
-	> * {
+	>* {
 		margin: 0 .2em;
 		align-self: center;
 	}
@@ -88,20 +95,22 @@ label:hover {color: var(--label-fg-hover)}
 	line-height: 0;
 	margin:  0 0 0 .25;
 	padding: 0;
-	width:  1rem;
+	width: 1rem;
 	height: 1rem;
 	overflow: hidden;
 	outline: 0;
 }
+
 #cfgPanel {
 	line-height: 1;
 	padding: .2em;
-	> li:not(.buttons) {
+
+	>li:not(.buttons) {
 		display: flex;
 		padding: .05em 0;
 		position: relative;
 	}
-	> li:not(.buttons) > :first-child {
+	>li:not(.buttons)> :first-child {
 		text-align: center;
 		display: inline-block;
 		width: 1.5rem;
@@ -111,7 +120,7 @@ label:hover {color: var(--label-fg-hover)}
 		button {
 			font-size: .8rem;
 			line-height: 1;
-			margin:  .2em 0 0;
+			margin: .2em 0 0;
 			padding: .2em 0;
 			border-radius: .2em;
 			width: 100%;
@@ -150,7 +159,7 @@ button[data-for=keys] {
 		position: relative;
 		&.↑,
 		&.↓ {
-			width:  1em;
+			width: 1em;
 			height: 1em;
 		}
 		&.↑ {
@@ -187,8 +196,8 @@ button[data-for=keys] {
 		font-size: inherit;
 		position: absolute;
 		z-index: -1;
-		top:  1.3rem;
-		left: 0.5em;
+		top:   1.3rem;
+		left:  0.5em;
 		width: 1.3rem;
 		transform: rotate(-90deg);
 		transform-origin: left center;
@@ -212,6 +221,7 @@ button[data-for=keys] {
 		transition: none;
 	}
 }
+
 #speaker {
 	position: absolute;
 	z-index: 10000;
@@ -225,13 +235,16 @@ button[data-for=keys] {
 	margin: 0;
 	padding: .5em .3em;
 }
+
 #LevelMenu {
 	--t: 35px;
 	--sprite-w: calc(var(--t)*8);
 	text-transform: uppercase;
 	font: .9rem/1 sans-serif;
 	margin-left: 0;
-	.current, menu > li {
+
+	.current,
+	menu>li {
 		display: flex;
 		align-items: center;
 		gap: .2em;
@@ -239,16 +252,18 @@ button[data-for=keys] {
 	.current {
 		padding: .22em var(--caret-size) .2em .2em;
 	}
-	menu > li {
-		padding-top: 0;
+
+	menu>li {
+		padding-top:    0;
 		padding-bottom: 0;
 	}
-	.current::before, menu > li::before {
+	.current::before,
+	menu>li::before {
 		content: '';
 		background: no-repeat
-			calc(-1*var(--t) * var(--o,0))
+			calc(-1*var(--t) * var(--o, 0))
 			0/var(--sprite-w) var(--t) var(--url);
-		width:  var(--t);
+		width: var(--t);
 		height: var(--t);
 	}
 }

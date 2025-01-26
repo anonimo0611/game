@@ -1,4 +1,4 @@
-html, body {
+html,body {
 	margin:  0;
 	padding: 0;
 	width:  100%;
@@ -14,7 +14,7 @@ html {
 body {
 	color: #FFF;
 	background: #2B2B37;
-	font: 1rem/1 Verdana,sans-serif;
+	font: 1rem/1 Verdana, sans-serif;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -23,12 +23,12 @@ body[data-loaded=false] {
 	background: #000;
 	&::before {
 		content: 'Now Loading…';
-		font: bolder 4vmin/1 Atari,Verdana;
+		font: bolder 4vmin/1 Atari, Verdana;
 		position: fixed;
 		z-index: 100000;
-		top:  50%;
+		top: 50%;
 		left: 50%;
-		transform: translate(-50%,-50%);
+		transform: translate(-50%, -50%);
 	}
 }
 
@@ -48,13 +48,13 @@ div,ul,menu,li,th,td,form,input,output {
 		cursor: none;
 	}
 }
-
 body[data-loaded=true] #wrapper {
 	opacity: 1;
 }
 body:not([data-state=Title]) #titleScr {
 	display: none;
 }
+
 #wrapper {
 	background: black;
 	padding-top: 15px;
@@ -64,21 +64,20 @@ body:not([data-state=Title]) #titleScr {
 	opacity: 0;
 }
 #board {
-	font: 1rem/1 Atari,sans-serif;
+	font: 1rem/1 Atari, sans-serif;
 	position: relative;
 }
-
 #startBtn {
 	text-align: center;
 	white-space: nowrap;
 	color: #EEE;
 	background: rgba(34 34 34 /.7);
-	font: .8rem/1 Atari,sans-serif;
+	font: .8rem/1 Atari, sans-serif;
 	border: solid 1px #777;
 	padding: .4rem 1.5rem .2rem;
 	position: absolute;
 	z-index: 1100;
-	top:  28.8rem;
+	top: 28.8rem;
 	left: 50%;
 	transform: translateX(-50%);
 	transition: color .2s, border-color .2s;
@@ -94,6 +93,7 @@ body:not([data-state=Title]) #titleScr {
 		border-color: currentColor;
 	}
 }
+
 #debug {
 	white-space: pre;
 	position: fixed;

@@ -8,9 +8,9 @@ dialog {
 	padding: .2rem;
 	position: fixed;
 	z-index: 10000;
-	top:  50%;
+	top: 50%;
 	left: 50%;
-	transform: translate(-50%,-50%);
+	transform: translate(-50%, -50%);
 	will-change: opacity;
 
 	&::backdrop {
@@ -25,8 +25,9 @@ dialog {
 		padding: .2em .4em .4em .4em;
 		display: flex;
 		justify-content: flex-end;
+
 		button {
-			margin:  .3em;
+			margin: .3em;
 			padding: .4em 1em;
 		}
 	}
@@ -45,7 +46,8 @@ dialog {
 	z-index: 10001;
 }
 
-button, .dropdown .current {
+button,
+.dropdown .current {
 	--bc: #222;
 	color: #EEE;
 	background: var(--bc);
@@ -53,8 +55,9 @@ button, .dropdown .current {
 	font-weight: 400;
 	border: solid 2px #888;
 	border-radius: .2em;
-	outline: 0;;
+	outline: 0;
 }
+
 button {
 	display: inline-block;
 	cursor: pointer;
@@ -80,7 +83,7 @@ button {
 		cursor: default !important;
 	}
 	&::-moz-focus-inner {
-		border:  0;
+		border: 0;
 		padding: 0;
 	}
 }
@@ -95,9 +98,9 @@ button {
 }
 [type=range] {
 	--thumb-size: 0.6rem;
-	--bg-active:  #63B2D9;
-	--bg-inactive:#74D2C2;
-	--bg-focus:   #00FFFF;
+	--bg-active: #63B2D9;
+	--bg-inactive: #74D2C2;
+	--bg-focus: #00FFFF;
 	--p: var(--ratio, 100%);
 	background: #63B2D9;
 	background: linear-gradient(90deg, var(--bg-inactive) var(--p), #888 var(--p));
@@ -112,9 +115,10 @@ label:hover [type=range] {
 [type=range]:focus {
 	background: linear-gradient(90deg, var(--bg-focus) var(--p), #888 var(--p)) !important;
 }
+
 ::-webkit-slider-thumb {
 	background: #FFF;
-	width:  var(--thumb-size);
+	width: var(--thumb-size);
 	height: var(--thumb-size);
 	border-radius: 50%;
 	position: relative;
@@ -123,38 +127,38 @@ label:hover [type=range] {
 }
 ::-moz-range-thumb {
 	background: #FFF;
-	width:  var(--thumb-size);
+	width: var(--thumb-size);
 	height: var(--thumb-size);
 	border-radius: 50%;
-	position:relative;
+	position: relative;
 	display: block;
 	appearance: none;
 }
-:hover::-moz-range-thumb {background: var(--bg-active)}
-:focus::-moz-range-thumb {background: var(--bg-focus)}
+:hover::-moz-range-thumb     {background: var(--bg-active)}
+:focus::-moz-range-thumb     {background: var(--bg-focus)}
 :hover::-webkit-slider-thumb {background: var(--bg-active)}
 :focus::-webkit-slider-thumb {background: var(--bg-focus)}
 
 .menu {
-	--hilight-bg-color:#18445A;
-	--focused-border-color:#0B93D5;
+	--hilight-bg-color: #18445A;
+	--focused-border-color: #0B93D5;
 	text-align: left;
 	white-space: nowrap;
 	color: #FFF;
 	position: relative;
 	display: inline-block;
 }
-.dropdown:hover > .current,
-label:hover + .slidemenu,
-label:hover + .dropdown > .current {
-	background:var(--hilight-bg-color);
+
+.dropdown:hover>.current,
+label:hover+.slidemenu,
+label:hover+.dropdown>.current {
+	background: var(--hilight-bg-color);
 }
-.dropdown > .current:focus,
+.dropdown>.current:focus,
 .slidemenu:focus {
 	background: var(--hilight-bg-color) !important;
 	outline: 0;
 }
-
 .dropdown,
 .dropdown li,
 .dropdown-list {
@@ -167,13 +171,13 @@ label:hover + .dropdown > .current {
 .dropdown {
 	--bg: rgba(41 41 41 /.8);
 	--caret-size: .9em;
-	> .current {
+	>.current {
 		background: var(--bg);
 		margin-top: -.1em;
 		padding: .1em var(--caret-size) .1em .2em;
 		box-sizing: border-box;
 	}
-	> .current::after {
+	>.current::after {
 		content: '';
 		background: no-repeat center right/var(--caret-size) url(../res/caret.svg);
 		width:  1em;
@@ -184,9 +188,11 @@ label:hover + .dropdown > .current {
 		transform: translateY(-50%);
 		transform-origin: center;
 	}
-	> .current:focus {
+
+	>.current:focus {
 		border-color: var(--focused-border-color);
 	}
+
 	menu {
 		border-radius: .2em;
 		position: absolute;
@@ -203,11 +209,13 @@ label:hover + .dropdown > .current {
 		&.selected {
 			border-color: var(--focused-border-color);
 		}
-		&.selected, &:hover {
+		&.selected,
+		&:hover {
 			background: #385872;
 		}
+
 		&.selected:hover {
-			background:   #3C3971;
+			background: #3C3971;
 			border-color: #6A65B3;
 		}
 	}
@@ -218,12 +226,17 @@ label:hover + .dropdown > .current {
 	display: inline-block;
 	vertical-align: middle;
 	clip-path: inset(0);
-	&:hover {background:  var(--hilight-bg-color)}
-	&:focus {border-color:var(--focused-border-color)}
+	&:hover {
+		background: var(--hilight-bg-color)
+	}
+
+	&:focus {
+		border-color: var(--focused-border-color)
+	}
 	menu {
 		display: inline-block;
-		clip-path :  inset(0);
-		transition:  transform .3s;
+		clip-path: inset(0);
+		transition: transform .3s;
 		will-change: transform;
 	}
 	li {
@@ -246,7 +259,7 @@ label:hover + .dropdown > .current {
 		opacity: 1;
 		transform-origin: center;
 		&.l {
-			left : 0;
+			left: 0;
 			transform: translateY(-50%) rotate(+90deg);
 		}
 		&.r {
