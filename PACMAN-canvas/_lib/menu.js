@@ -78,7 +78,7 @@ export class SlideMenu extends Menu {
 			between(val, 0, this.size-1) && this.select(val)
 		}
 		$(root)
-			.prev('label').on('click', ()=> root.focus())
+			.prev('.label').on('click', ()=> root.focus())
 		$(root)
 			.find('button')
 			.on('click',  e=> {select(e.target == this.btnL ? L:R);root.focus()})
