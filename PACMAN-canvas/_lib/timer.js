@@ -80,9 +80,12 @@ export const Timer = freeze(new class {
 		if (!Ticker.running) Ticker.set();
 		TimerMap.set(key ?? Symbol(), {ms,fn,ignoreFrozen,amount:0})
 	}
-	/** @param {...[timeout:number, handler:function]} seq */
-	sequence(...seq) {
-		(seq=seq.flatMap(s=> isArray(s)?{ms:s[0],fn:s[1]}:[])).forEach(s=> {
+	/** @param {...[timeout:number, handler:function]} sequence */
+	sequence(...sequence) {
+		if (!sequence.length) return
+		const
+		seq = sequence.map(s=> ({ms:s[0],fn:s[1]}))
+		seq.forEach(s=> {
 			if (!isNum(s.ms)) throw TypeError(`'${s.ms}' is not a number`)
 			if (!isFun(s.fn)) throw TypeError(`'${s.fn}' is not a function`)
 		})
@@ -90,7 +93,7 @@ export const Timer = freeze(new class {
 		function fire() {
 			seq[idx].fn()
 			;(s=seq[++idx]) ? Timer.set(s.ms, fire) : (fire=null)
-		} seq.length && Timer.set(s.ms, fire)
+		} Timer.set(s.ms, fire)
 	}
 	stop()      {Ticker.stop(); return this}
 	cancelAll() {TimerMap.clear(); return this}
