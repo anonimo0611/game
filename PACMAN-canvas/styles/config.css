@@ -38,14 +38,14 @@ label:has(+div:hover) {
 		color: var(--label-fg);
 		font-weight: normal;
 	}
-	td {
-		text-align: center;
-	}
 	tr:hover th {
 		color: var(--label-fg-hover);
 		+ td {
 			background-color: rgba(27 83 143 /.6)
 		}
+	}
+	td {
+		text-align: center;
 	}
 }
 

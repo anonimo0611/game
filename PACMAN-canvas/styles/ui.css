@@ -102,12 +102,12 @@ button {
 	--bg-inactive:#74D2C2;
 	--bg-focus:   #00FFFF;
 	--p: var(--ratio, 100%);
+	appearance: none;
 	background: #63B2D9;
 	background: linear-gradient(90deg, var(--bg-inactive) var(--p), #888 var(--p));
 	height: 5px;
 	vertical-align: middle;
 	outline: none;
-	appearance: none;
 }
 label:hover [type=range] {
 	background: linear-gradient(90deg, var(--bg-active) var(--p), #888 var(--p));
@@ -117,22 +117,22 @@ label:hover [type=range] {
 }
 
 ::-webkit-slider-thumb {
+	appearance: none;
 	background: #FFF;
 	width:  var(--thumb-size);
 	height: var(--thumb-size);
 	border-radius: 50%;
 	position: relative;
 	display: block;
-	appearance: none;
 }
 ::-moz-range-thumb {
+	appearance: none;
 	background: #FFF;
 	width:  var(--thumb-size);
 	height: var(--thumb-size);
 	border-radius: 50%;
 	position: relative;
 	display: block;
-	appearance: none;
 }
 :hover::-moz-range-thumb     {background: var(--bg-active)}
 :focus::-moz-range-thumb     {background: var(--bg-focus)}
@@ -188,11 +188,9 @@ label:hover+.dropdown>.current {
 		transform: translateY(-50%);
 		transform-origin: center;
 	}
-
 	> .current:focus {
 		border-color: var(--focused-border-color);
 	}
-
 	menu {
 		border-radius: .2em;
 		position: absolute;
@@ -209,13 +207,11 @@ label:hover+.dropdown>.current {
 		&.selected {
 			border-color: var(--focused-border-color);
 		}
-		&.selected,
-		&:hover {
+		&.selected, &:hover {
 			background: #385872;
 		}
-
 		&.selected:hover {
-			background: #3C3971;
+			background:   #3C3971;
 			border-color: #6A65B3;
 		}
 	}
@@ -226,15 +222,10 @@ label:hover+.dropdown>.current {
 	display: inline-block;
 	vertical-align: middle;
 	clip-path: inset(0);
-	&:hover {
-		background: var(--hilight-bg-color)
-	}
-	&:focus {
-		border-color: var(--focused-border-color)
-	}
+	&:hover {background:   var(--hilight-bg-color)}
+	&:focus {border-color: var(--focused-border-color)}
 	menu {
 		display: inline-block;
-		clip-path: inset(0);
 		transition:  transform .3s;
 		will-change: transform;
 	}
@@ -242,7 +233,6 @@ label:hover+.dropdown>.current {
 		text-align: center;
 		padding: 0;
 		display: inline-block;
-		clip-path: inset(0);
 	}
 	button {
 		appearance: none;
@@ -250,28 +240,15 @@ label:hover+.dropdown>.current {
 		background: no-repeat center url(../res/caret.svg);
 		border: none;
 		padding: 0;
-		width:  0.7em;
+		width:  0.6em;
 		height: 1.0em;
 		position: absolute;
 		z-index: 1000;
 		top: 50%;
 		opacity: 1;
 		transform-origin: center;
-		&.l {
-			left: 0;
-			transform: translateY(-50%) rotate(+90deg);
-		}
-		&.r {
-			right: 0;
-			transform: translateY(-50%) rotate(-90deg);
-		}
-		&:disabled {
-			opacity: .5;
-		}
-		&:focus,
-		&:hover {
-			background-color: transparent;
-			border: none;
-		}
+		&.l {left:  0;transform: translateY(-50%) rotate(+90deg)}
+		&.r {right: 0;transform: translateY(-50%) rotate(-90deg)}
+		&:disabled {opacity: .5}
 	}
 }
