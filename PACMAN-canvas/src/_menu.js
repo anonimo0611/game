@@ -3,11 +3,11 @@ export const LevelMenu = new class extends Menu.DorpDownMenu {
 	constructor() {
 		super('LevelMenu')
 		for (const li of this.lis)
-			$(li).css('--o', li.dataset.val)
+			$(li).css('--ofst-x', li.dataset.val)
 	}
 	select(idx=this.index) {
 		super.select(idx)
-		$(this.current).css('--o', this.value)
+		$(this.current).css('--ofst-x', this.value)
 	}
 }
 ,ExtendScoreMenu = new Menu.SlideMenu('ExtendScoreMenu')
