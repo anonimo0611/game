@@ -1,11 +1,8 @@
-form {
-	--thumb-size: 0.6rem;
-}
 dialog {
 	color: #FFF;
 	background: rgba(0 0 40 /.8);
 	font: 2vmin sans-serif;
-	border: solid 1px #555;
+	border: solid 1px #888;
 	border-radius: 6px;
 	margin: 0;
 	padding: .2rem;
@@ -27,7 +24,6 @@ dialog {
 		padding: .2em .4em .4em .4em;
 		display: flex;
 		justify-content: flex-end;
-
 		button {
 			margin:  .3em;
 			padding: .4em 1em;
@@ -97,7 +93,9 @@ button {
 		outline-offset: -1px;
 	}
 }
+
 [type=range] {
+	--thumb-size: 0.6rem;
 	--bg-active:  #63B2D9;
 	--bg-inactive:#74D2C2;
 	--bg-focus:   #00FFFF;
@@ -112,31 +110,35 @@ button {
 label:hover [type=range] {
 	background: linear-gradient(90deg, var(--bg-active) var(--p), #888 var(--p));
 }
-[type=range]:focus {
-	background: linear-gradient(90deg, var(--bg-focus) var(--p), #888 var(--p)) !important;
+input[type=range]:focus {
+	background: linear-gradient(90deg, var(--bg-focus) var(--p), #888 var(--p));
 }
-
-::-webkit-slider-thumb {
+::-ms-thumb {
 	appearance: none;
 	background: #FFF;
+	border-radius: 50%;
 	width:  var(--thumb-size);
 	height: var(--thumb-size);
-	border-radius: 50%;
-	position: relative;
-	display: block;
 }
 ::-moz-range-thumb {
 	appearance: none;
 	background: #FFF;
+	border-radius: 50%;
 	width:  var(--thumb-size);
 	height: var(--thumb-size);
-	border-radius: 50%;
-	position: relative;
-	display: block;
 }
+::-webkit-slider-thumb {
+	appearance: none;
+	background: #FFF;
+	border-radius: 50%;
+	width:  var(--thumb-size);
+	height: var(--thumb-size);
+}
+:hover::-ms-thumb            {background: var(--bg-active)}
 :hover::-moz-range-thumb     {background: var(--bg-active)}
-:focus::-moz-range-thumb     {background: var(--bg-focus)}
 :hover::-webkit-slider-thumb {background: var(--bg-active)}
+:focus::-ms-thumb            {background: var(--bg-focus)}
+:focus::-moz-range-thumb     {background: var(--bg-focus)}
 :focus::-webkit-slider-thumb {background: var(--bg-focus)}
 
 .menu {
@@ -147,55 +149,32 @@ label:hover [type=range] {
 	color: #FFF;
 	position: relative;
 	display: inline-block;
-}
-
-.dropdown:hover>.current,
-label:hover+.slidemenu,
-label:hover+.dropdown>.current {
-	background: var(--hilight-bg-color);
-}
-.dropdown>.current:focus,
-.slidemenu:focus {
-	background: var(--hilight-bg-color) !important;
-	outline: 0;
-}
-.dropdown,
-.dropdown li,
-.dropdown-list {
-	margin:  0;
-	padding: 0;
-	box-sizing: border-box;
-	list-style: none;
 	cursor: default;
 }
 .dropdown {
 	--bg: rgba(41 41 41 /.8);
 	--caret-size: .9em;
-	> .current {
+	.current {
 		background: var(--bg);
 		margin-top: -.1em;
 		padding: .1em var(--caret-size) .1em .2em;
 		box-sizing: border-box;
 	}
-	> .current::after {
+	.current:focus {
+		border-color: var(--focused-border-color);
+	}
+	.current::after {
 		content: '';
 		background: no-repeat center right/var(--caret-size) url(../res/caret.svg);
 		width:  1em;
 		height: 1em;
 		position: absolute;
-		top: 50%;
 		right: .1em;
-		transform: translateY(-50%);
-		transform-origin: center;
-	}
-	> .current:focus {
-		border-color: var(--focused-border-color);
 	}
 	menu {
 		border-radius: .2em;
 		position: absolute;
 		z-index: 2000;
-		left: 0;
 	}
 	li {
 		background: var(--bg);
@@ -203,7 +182,6 @@ label:hover+.dropdown>.current {
 		border-width: 1px 0;
 		padding: .1em var(--caret-size) .1em .2em;
 		display: block;
-		position: relative;
 		&.selected {
 			border-color: var(--focused-border-color);
 		}
@@ -216,7 +194,6 @@ label:hover+.dropdown>.current {
 		}
 	}
 }
-
 .slidemenu {
 	border: solid 2px transparent;
 	display: inline-block;
@@ -224,15 +201,10 @@ label:hover+.dropdown>.current {
 	clip-path: inset(0);
 	&:hover {background:   var(--hilight-bg-color)}
 	&:focus {border-color: var(--focused-border-color)}
-	menu {
-		display: inline-block;
+	menu, li {
+		text-align: center;
 		transition:  transform .3s;
 		will-change: transform;
-	}
-	li {
-		text-align: center;
-		padding: 0;
-		display: inline-block;
 	}
 	button {
 		appearance: none;
@@ -245,10 +217,16 @@ label:hover+.dropdown>.current {
 		position: absolute;
 		z-index: 1000;
 		top: 50%;
-		opacity: 1;
 		transform-origin: center;
-		&.l {left:  0;transform: translateY(-50%) rotate(+90deg)}
-		&.r {right: 0;transform: translateY(-50%) rotate(-90deg)}
+		&.l {left: 0;transform:translateY(-50%) rotate(+90deg)}
+		&.r {right:0;transform:translateY(-50%) rotate(-90deg)}
 		&:disabled {opacity: .5}
 	}
+}
+.slidemenu:focus,
+.dropdown > :focus,
+.dropdown:hover > .current,
+label:hover + .slidemenu,
+label:hover + .dropdown > .current {
+	background: var(--hilight-bg-color);
 }

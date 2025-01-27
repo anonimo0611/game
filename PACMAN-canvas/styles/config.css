@@ -193,6 +193,7 @@ button[data-for=keys] {
 		background: #08F;
 	}
 	input {
+		--thumb-size: inherit;
 		--width: 1.3rem;
 		position: absolute;
 		z-index: -1;
@@ -220,7 +221,6 @@ button[data-for=keys] {
 		transition: none;
 	}
 }
-
 #speaker {
 	position: absolute;
 	z-index: 10000;
