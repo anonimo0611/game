@@ -5,9 +5,9 @@ import {Rect}   from '../_lib/rect.js'
 import {Ctx}    from './_canvas.js'
 import {BgCtx}  from './_canvas.js'
 import {State}  from './_state.js'
-import {Form}   from './control.js'
 import {MapData,ColMax,Color,TileSize as T} from './_constants.js'
 
+const Form     = document.forms[0]
 const WallSet  = new Set()
 const DotSet   = new Set()
 const PowMap   = new Map()
@@ -42,6 +42,7 @@ class Tunnel {
 export const Maze = new class {
 	static {$ready(this.setup)}
 	static setup() {
+		if (!Form) return
 		$on('Title NewLevel', Maze.#resetDots)
 		$(Form.powChk).on('change', Maze.#resetDots)
 		MapData.forEach((c,i)=> !/[.O\x20]/.test(c) && WallSet.add(i))

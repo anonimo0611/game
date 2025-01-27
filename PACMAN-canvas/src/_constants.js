@@ -1,11 +1,12 @@
 import {ColMax,RowMax} from './_map_data.js'
 export * from './_map_data.js'
 
-export const TileSize  = +$(dRoot).css('--tile-size')
-export const CvsWidth  = ColMax * TileSize
-export const CvsHeight = RowMax * TileSize
 export const PacScale  = 0.9
 export const GhsScale  = 1.1
+export const TileSize  = +$(dRoot).css('--tile-size')
+export const CvsWidth  = ColMax   * TileSize
+export const CvsHeight = RowMax   * TileSize
+export const PacRadius = PacScale * TileSize
 export const GhsType   = freeze({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4})
 export const GhsNames  = freeze(keys(GhsType).slice(0,-1))
 

@@ -273,15 +273,16 @@ const functions = freeze([
 	cherry,strawberry,orange,apple,melon,bossGalaxian,bell,key
 ])
 { // Create a sprite sheet
-	const T = parseInt($('#LevelMenu').css('--t'))
-	const {cvs,ctx}=canvas2D(null, T*8, T)
+	const Menu = $byId('LevelMenu')
+	const Size = parseInt(Menu.css('--t'))
+	const {cvs,ctx}=canvas2D(null, Size*8, Size)
 	functions.forEach((fn,i)=> {
 		ctx.save()
-		ctx.translate(T/2+T*i, T/2)
-		ctx.scale(T/16*1.05, T/16*1.05)
+		ctx.translate(Size/2+Size*i, Size/2)
+		ctx.scale(Size/16*1.05, Size/16*1.05)
 		fn(ctx)
 		ctx.restore()
 	})
-	$('#LevelMenu').css('--url',`url(${cvs.toDataURL()})`)
+	Menu.css('--url',`url(${cvs.toDataURL()})`)
 }
 export default functions
