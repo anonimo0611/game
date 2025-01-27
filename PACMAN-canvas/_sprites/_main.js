@@ -6,7 +6,7 @@ import {PacScale}     from '../src/_constants.js'
 import {Cvs,Ctx}      from '../src/_canvas.js'
 import  fruitsSprites from '../src/fruits_sprite.js'
 import  pointsSprite  from '../src/points_sprite.js'
-import {BasePac}      from '../src/pacman/_basePac.js'
+import PacSprite      from '../src/pacman/pac_sprite.js'
 import {ColMax,RowMax,T,S,Gap,ghost,cbAkabei} from './_constants.js'
 
 export const View = function() {
@@ -89,9 +89,10 @@ export const View = function() {
 	function drawPacman() {
 		const dirs = [U,U,L,L,D,D,R,R]
 		for (let i=-1; i<=8; i++) {
-			const cfg = {orient:dirs[i-1], radius:T*PacScale}
+			const centerPos = Vec2(T+ofst(i), S*8.5)
+			const cfg = {centerPos, orient:dirs[i-1], radius:T*PacScale}
 			const openType = i>0 ? (i%2 ? 1:2) : 0
-			new BasePac(cfg,openType).sprite.draw(Ctx, Vec2(T+ofst(i), S*8.5))
+			new PacSprite({openType}).draw(Ctx, cfg)
 		}
 	}
 	function drawAkabei() {

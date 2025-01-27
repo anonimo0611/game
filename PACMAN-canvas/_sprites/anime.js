@@ -1,12 +1,11 @@
 import * as Menu   from '../_lib/menu.js'
 import {Ticker}    from '../_lib/timer.js'
 import {Timer}     from '../_lib/timer.js'
-import {Vec2}      from '../_lib/vec2.js'
 import {Dir}       from '../_lib/direction.js'
-import {BasePac}   from '../src/pacman/_basePac.js'
+import PacSprite   from '../src/pacman/pac_sprite.js'
 import {Ghost}     from './actor.js'
 import {T,S,ghost} from './_constants.js'
-import {TileSize,PacScale,GhsType} from '../src/_constants.js'
+import {PacScale,GhsType,TileSize} from '../src/_constants.js'
 
 export const {cvs:pvCvs}=
 	canvas2D('previewCvs', TileSize*3, TileSize*2)
@@ -31,7 +30,7 @@ export const {cvs:pvCvs}=
 		!loop && Timer.cancelAll()
 		switch (TYPE) {
 		case 'Pacman':
-			_sprite = new BasePac({radius:TileSize*PacScale}).sprite
+			_sprite = new PacSprite()
 			if (setDirDisabled(_subType == 'losing')) {
 				_sprite.setLosing()
 				Timer.set(2200, ()=> change(true))
@@ -67,8 +66,7 @@ export const {cvs:pvCvs}=
 		ctx.save()
 		ctx.translate(S*1.5/2, S/2)
 		ctx.scale(T/TileSize,  T/TileSize)
-		_sprite.state.orient = _orient
-		_sprite.draw(ctx, Vec2())
+		_sprite.draw(ctx, {orient:_orient,radius:TileSize*PacScale})
 		ctx.restore()
 	}
 	function drawGhost() {
