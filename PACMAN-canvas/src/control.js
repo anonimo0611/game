@@ -61,9 +61,11 @@ export const Ctrl = new class {
 		const data = JSON.parse(localStorage.anopacman || null) || {}
 		for (const [id,val] of entries(data)) {
 			if (!byId(id)) continue
-			if (id.endsWith('Rng'))  byId(id).value   = val
-			if (id.endsWith('Chk'))  byId(id).checked = val
-			if (id.endsWith('Menu')) Menu[id].select(val)
+			switch(id.match(/[A-Z][a-z\d]+$/)[0]) {
+			case 'Rng': byId(id).value  =val;break
+			case 'Chk': byId(id).checked=val;break
+			case 'Menu':Menu[id].select(val);break
+			}
 			$byId(id).trigger('input')
 		}
 	}
