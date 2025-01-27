@@ -1,4 +1,4 @@
-export const U='Up',R='Right',D='Down',L='Left'
+export const [U,R,D,L]='Up|Right|Down|Left'.split('|')
 export const Dir = Object.freeze(new class {
 	Up=U; Right=R; Down=D; Left=L;
 	isValid    = (dir)=> Object.hasOwn(Dir, dir)
