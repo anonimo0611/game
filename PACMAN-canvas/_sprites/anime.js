@@ -67,7 +67,7 @@ export const {cvs:pvCvs}=
 		ctx.save()
 		ctx.translate(S*1.5/2, S/2)
 		ctx.scale(T/TileSize,  T/TileSize)
-		_sprite.obj.orient = _orient
+		_sprite.state.orient = _orient
 		_sprite.draw(ctx, Vec2())
 		ctx.restore()
 	}
