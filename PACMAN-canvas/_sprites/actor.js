@@ -1,7 +1,7 @@
 import {Dir}       from '../_lib/direction.js'
 import {Color}     from '../src/_constants.js'
-import GhsSprite   from '../src/ghosts/ghost_sprite.js'
-import GhsSpriteCb from '../src/ghosts/ghost_sprite_cb.js'
+import GhsSprite   from '../src/ghosts/ghs_sprite.js'
+import GhsSpriteCb from '../src/ghosts/ghs_sprite_cb.js'
 
 export class Ghost {
 	constructor(size) {

@@ -3,7 +3,7 @@ import {Ticker}    from '../_lib/timer.js'
 import {Timer}     from '../_lib/timer.js'
 import {Vec2}      from '../_lib/vec2.js'
 import {Dir}       from '../_lib/direction.js'
-import PacSprite   from '../src/pacman/pac_sprite.js'
+import {BasePac}   from '../src/pacman/_basePac.js'
 import {Ghost}     from './actor.js'
 import {T,S,ghost} from './_constants.js'
 import {TileSize,PacScale,GhsType} from '../src/_constants.js'
@@ -31,7 +31,7 @@ export const {cvs:pvCvs}=
 		!loop && Timer.cancelAll()
 		switch (TYPE) {
 		case 'Pacman':
-			_sprite = new PacSprite({Radius:T*PacScale})
+			_sprite = new BasePac({radius:TileSize*PacScale}).sprite
 			if (setDirDisabled(_subType == 'losing')) {
 				_sprite.setLosing()
 				Timer.set(2200, ()=> change(true))
