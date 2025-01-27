@@ -27,7 +27,7 @@ export class Losing {
 		ctx.translate(x, y)
 		ctx.beginPath()
 		ctx.moveTo(0, Radius*0.35)
-		ctx.arc(0,0, Radius, -PI/2-angle,-PI/2+angle, true)
+		ctx.arc(0,0, Radius, -PI/2+angle,-PI/2-angle)
 		ctx.fillStyle = Color.Pacman
 		ctx.fill()
 		ctx.restore()
