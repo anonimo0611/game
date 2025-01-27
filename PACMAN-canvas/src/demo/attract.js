@@ -6,7 +6,7 @@ import {State}        from '../_state.js'
 import {Ctrl}         from '../control.js'
 import {drawText}     from '../message.js'
 import {Maze}         from '../maze.js'
-import {BasePac}      from '../pacman/_basePac.js'
+import {BasePac}      from '../pacman/_pacman.js'
 import {Ghost}        from '../ghosts/_ghost.js'
 import {GhsMgr}       from '../ghosts/_system.js'
 import {FrightMode}   from '../ghosts/_system.js'
@@ -94,7 +94,7 @@ export class Attract {
 		if (et > 1e4+500) {
 			for (let i=0; i<GhsType.Max; i++)
 				this.drawGhost(DEMO, i)
-			this.drawPacman(this.pacman.centerPos)
+			this.drawPacman()
 		}
 	}
 	update() {
@@ -131,9 +131,9 @@ export class Attract {
 		ghost.pos = pos
 		ghost.sprite.draw(ghost)
 	}
-	drawPacman(pos) {
+	drawPacman() {
 		if (Timer.frozen) return
-		this.pacman.sprite.draw(Ctx, pos)
+		this.pacman.sprite.draw(Ctx, this.pacman)
 	}
 	end(e={}) {
 		if (e.target.tagName == 'BUTTON') return

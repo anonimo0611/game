@@ -9,15 +9,13 @@ import {CvsWidth as CW,TileSize as T} from './_constants.js'
 export class Actor {
 	#x = 0
 	#y = 0
-	#radius = T
 	#orient = L
 	#movDir = L
 	#fadeIn = new FadeIn(500)
 
-	constructor(radius=T) {this.#radius=radius}
 	get x()         {return this.#x}
 	get y()         {return this.#y}
-	get radius()    {return this.#radius}
+	get radius()    {return T}
 	get pos()       {return Vec2(this)}
 	get centerPos() {return Vec2(this).add(T/2)}
 	get tilePos()   {return Vec2(this.centerPos).divInt(T)}

@@ -10,8 +10,9 @@ import {State}   from '../_state.js'
 import {Ctrl}    from '../control.js'
 import {Score}   from '../score.js'
 import {Maze}    from '../maze.js'
+import {Actor}   from '../actor.js'
 import {GhsMgr}  from '../ghosts/_system.js'
-import {BasePac} from './_basePac.js'
+import Sprite    from './pac_sprite.js'
 import {PacRadius,PacStep as Step,TileSize as T} from '../_constants.js'
 
 export const PacMgr = function() {
@@ -28,6 +29,11 @@ export const PacMgr = function() {
 		bindDotEaten(fn) {$(PacMgr).on('DotEaten',fn)},
 	}
 }()
+export class BasePac extends Actor {
+	radius = PacRadius
+	sprite = new Sprite()
+	constructor() {super();freeze(this)}
+}
 class Pacman extends BasePac {
 	#step     = this.#getCurrentStep()
 	#eatIdx   = 0
@@ -37,6 +43,7 @@ class Pacman extends BasePac {
 	#preDir   = null
 	#nextTurn = null
 	get radius()       {return PacRadius}
+	get closed()       {return State.isPlaying == false}
 	get step()         {return this.#step}
 	get stopped()      {return this.#stopped}
 	get turning()      {return this.#turning}
@@ -44,7 +51,6 @@ class Pacman extends BasePac {
 	get showCenter()   {return Ctrl.showGridLines}
 	get translucent()  {return this.showCenter || Ctrl.invincible}
 	get maxAlpha()     {return this.translucent? this.cheatAlpha : 1}
-	get mouthClosed()  {return State.isPlaying == false}
 
 	constructor() {
 		super()
@@ -102,13 +108,13 @@ class Pacman extends BasePac {
 		if (State.isStart || Timer.frozen) return
 		Ctx.save()
 		super.draw()
-		this.sprite.draw(Ctx, this.centerPos)
+		this.sprite.draw(Ctx,this)
 		Ctx.restore()
 	}
 	update() {
 		super.update()
 		if (Timer.frozen || !State.isPlaying) return
-		this.sprite.update()
+		this.sprite.update(this)
 		this.#notEaten++
 		for (let i=0,denom=ceil(this.step)*2; i<denom; i++)
 			this.#move(denom)
