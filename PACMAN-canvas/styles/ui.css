@@ -157,7 +157,7 @@ input[type=range]:focus {
 	.current {
 		background: var(--bg);
 		margin-top: -.1em;
-		padding: .1em var(--caret-size) .1em .2em;
+		padding: .1em .2em;
 		box-sizing: border-box;
 	}
 	.current:focus {
@@ -170,9 +170,13 @@ input[type=range]:focus {
 		height: 1em;
 		position: absolute;
 		right: .1em;
+		top: 50%;
+		transform: translateY(-50%);
 	}
 	menu {
 		border-radius: .2em;
+		margin:  0;
+		padding: 0;
 		position: absolute;
 		z-index: 2000;
 	}
