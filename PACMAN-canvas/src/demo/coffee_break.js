@@ -5,7 +5,7 @@ import {Cvs,Ctx} from '../_canvas.js'
 import {Game}    from '../_main.js'
 import {State}   from '../_state.js'
 import {Maze}    from '../maze.js'
-import {BasePac} from '../pacman/_pacman.js'
+import {Pacman}  from '../pacman/_pacman.js'
 import {Ghost}   from '../ghosts/_ghost.js'
 import Sprite    from '../ghosts/ghs_sprite_cb.js'
 import {TileSize as T} from '../_constants.js'
@@ -25,7 +25,7 @@ export class CBreak {
 	static update() {this.#scene?.update(this.#scene)}
 	static draw()   {this.#scene?.draw(this.#scene)}
 
-	pacman  = new BasePac
+	pacman  = new Pacman
 	akabei  = new Ghost
 	pacVelX = -Maze.Width/180
 	constructor(symbol) {

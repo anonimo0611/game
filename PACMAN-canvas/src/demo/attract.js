@@ -6,7 +6,7 @@ import {State}        from '../_state.js'
 import {Ctrl}         from '../control.js'
 import {drawText}     from '../message.js'
 import {Maze}         from '../maze.js'
-import {BasePac}      from '../pacman/_pacman.js'
+import {Pacman}       from '../pacman/_pacman.js'
 import {Ghost}        from '../ghosts/_ghost.js'
 import {GhsMgr}       from '../ghosts/_system.js'
 import {FrightMode}   from '../ghosts/_system.js'
@@ -30,7 +30,7 @@ export class Attract {
 
 	/** @type {Ghost[][]} */
 	ghsList = [[],[]]
-	pacman  = new BasePac
+	pacman  = new Pacman
 	powDisp = 1
 	pacVelX = -Maze.Width/180
 	ghsVelX = -Maze.Width/169
