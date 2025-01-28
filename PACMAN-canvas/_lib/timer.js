@@ -40,16 +40,16 @@ export const Ticker = freeze(class {
 			this.tick()
 	}
 	tick() {
-		if (!_paused) {
-			TimerMap.forEach(this.timer)
-			this.fn?.()
-			_pausedCounter = 0
-			_counter++
-		} else {
+		this.count++
+		if (_paused) {
 			this.pFn?.()
 			_pausedCounter++
+			return
 		}
-		this.count++
+		TimerMap.forEach(this.timer)
+		this.fn?.()
+		_pausedCounter = 0
+		_counter++
 	}
 	timer(t, key) {
 		if (Timer.frozen && !t.ignoreFrozen)   return

@@ -7,13 +7,13 @@ export default class {
 	lastIs(state) {return state === this.last}
 	init(state) {
 		this.Enum = Object.create(null)
-		for (const [key,val] of entries(this)) {
-			const state = (/^is([A-Z][a-zA-Z\d]*)$/.exec(key) || [])[1]
-			if (state) this.Enum[state] = state; else continue
+		entries(this).forEach(([key,val])=> {
+			const state = key.match(/^is([A-Z][a-zA-Z\d]*)$/)?.[1]
+			if (!state) return; this.Enum[state] = state
 			if (this.#state === '' && val === true) this.#state = state
 			defineProperty(this, key, {get(){return this.#state === state}})
-			this['switchTo'+state] = (...args)=> this.switchTo(state, ...args)
-		}
+			this['switchTo'+state] = cfg=> this.switchTo(state, cfg)
+		})
 		freeze(this.Enum)
 		hasOwn(this.Enum, state) && this.switchTo(state)
 	}
