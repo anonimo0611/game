@@ -27,14 +27,14 @@ function mouseDragScrollable(element) {
 	}
 	document.addEventListener('mousemove', e=> {
 		if (!StateMap.get(target)?.down) return
-		let moveX = StateMap.get(target).x - e.clientX
-		let moveY = StateMap.get(target).y - e.clientY
-		if (moveX !== 0
-		 || moveY !== 0) StateMap.get(target).move = true
-		else return
-		target.scrollLeft = StateMap.get(target).scrL + moveX
-		target.scrollTop  = StateMap.get(target).scrT + moveY
-		e.stopPropagation()
+		const moveX = StateMap.get(target).x - e.clientX
+		const moveY = StateMap.get(target).y - e.clientY
+		if (moveX || moveY) {
+			StateMap.get(target).move = true
+			target.scrollLeft = StateMap.get(target).scrL + moveX
+			target.scrollTop  = StateMap.get(target).scrT + moveY
+			e.stopPropagation()
+		}
 	})
 	document.addEventListener('mouseup', e=> {
 		if (!StateMap.get(target)?.down) return
