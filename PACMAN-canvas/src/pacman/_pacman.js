@@ -18,7 +18,7 @@ import {PacRadius,PacStep as Step,TileSize as T} from '../_constants.js'
 export const PacMgr = function() {
 	/** @type {?Pacman} */
 	let pacman = null
-	const instantiate = ()=> pacman = new Pacman()
+	const instantiate = ()=> pacman = new PlayablePacman()
 	$on('Title Restart NewLevel', ()=> instantiate())
 	return {
 		get instance()   {return pacman ||= instantiate()},
@@ -29,12 +29,12 @@ export const PacMgr = function() {
 		bindDotEaten(fn) {$(PacMgr).on('DotEaten',fn)},
 	}
 }()
-export class BasePac extends Actor {
+export class Pacman extends Actor {
 	radius = PacRadius
 	sprite = new Sprite()
 	constructor() {super();freeze(this)}
 }
-class Pacman extends BasePac {
+class PlayablePacman extends Pacman {
 	#step     = this.#getCurrentStep()
 	#eatIdx   = 0
 	#notEaten = 0

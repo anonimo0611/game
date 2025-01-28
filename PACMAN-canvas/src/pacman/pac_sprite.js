@@ -16,7 +16,6 @@ export default class {
 	#animDir = -1
 	constructor({openType=0}={}) {
 		this.#mAngle = [0,OpenMid,OpenMax][openType]
-		freeze(this)
 	}
 	update({stopped=false}={}) {
 		if (stopped && this.#mAngle > OpenMid) return
@@ -37,13 +36,11 @@ export default class {
 		ctx.rotate(RotateMap.get(orient) * PI/2)
 		ctx.beginPath()
 		ctx.moveTo(-radius*scale*0.35, 0)
-		ctx.arc(0,0, radius*scale, mAngle, PI*2-mAngle)
+		ctx.arc(0,0,radius*scale, mAngle, PI*2-mAngle)
 		ctx.fillStyle = Color.Pacman
 		ctx.fill()
 		ctx.restore()
-		showCenter && cvsFillCircle(ctx)(x, y, 3, '#F00')
+		showCenter && cvsFillCircle(ctx)(x,y, 3, '#F00')
 	}
-	setLosing() {
-		this.#losing = new Losing
-	}
+	setLosing() {this.#losing = new Losing}
 }
