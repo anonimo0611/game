@@ -141,6 +141,10 @@ label:has(+#LevelMenu)  {
 		font-size: 80%;
 		position: absolute;
 		right: 0.5em;
+		small {
+			font: bold 65% sans-serif;
+			margin-left: .1em;
+		}
 	}
 }
 
