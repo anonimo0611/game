@@ -88,7 +88,7 @@ export class Ghost extends Actor {
 		if (state.isReturn)  return spd * GhsStep.Return
 		if (this.isInTunnel) return spd * GhsStep.InTunnel
 		if (this.frightened) return spd * GhsStep.Fright
-		return spd * (this.isScatter? GhsStep.Base : this.chaseStep)
+		return spd * (this.isScatter? GhsStep.Base:this.chaseStep)
 	}
 	draw() {
 		if (State.isStart) return
@@ -102,10 +102,13 @@ export class Ghost extends Actor {
 		super.update()
 		this.sprite.fadeOut?.update()
 		this.sprite.update()
-		if (this.state.isEscape && this.penEntranceArrived)
+		if (this.state.isEscape && this.penEntranceArrived) {
 			this.state.switchToReturn()
-		if (State.isPlaying && Maze.dotsLeft)
+			this.setCenterX(Maze.Center)
+		}
+		if (State.isPlaying && Maze.dotsLeft) {
 			this.#behavior()
+		}
 	}
 	#behavior() {
 		const {state}= this
@@ -116,11 +119,12 @@ export class Ghost extends Actor {
 		this.#walk(state.isEscape)
 	}
 	#idle({idx,step,orient,centerPos:{y}}=this) {
-		if (!Ctrl.isChaseMode)
+		if (!Ctrl.isChaseMode) {
 			Sys.DotCounter.release(idx, this.release.bind(this))
+		}
 		if (!this.state.isGoOut) {
 			this.dir =(y+T*0.6-step > Maze.PenMiddleY && orient != D)
-				? U : (y-T*0.6+step < Maze.PenMiddleY? D : U)
+				? U : (y-T*0.6+step < Maze.PenMiddleY ? D:U)
 			!Timer.frozen && this.setNextPos()
 		}
 	}
@@ -154,7 +158,6 @@ export class Ghost extends Actor {
 		if (y+step <= Maze.PenMiddleY) {
 			this.dir = D
 			this.setNextPos()
-			this.setCenterX(Maze.Center)
 			return
 		}
 		if (this.y != Maze.PenMiddleY) {
@@ -189,26 +192,26 @@ export class Ghost extends Actor {
 		if (this.dir != this.orient) return
 		if (this.#revSig) {
 			this.#revSig = false
-			this.orient = Dir.opposite(this.dir)
+			this.orient  = Dir.opposite(this.dir)
 			return
 		}
 		this.orient = this.#getNextDir()
 	}
-	#getNextDir() {
-		const testTile  = this.getAdjTile(this.dir)
-		const allowDirs = [U,L,D,R].flatMap((dir,index)=> {
-			const tile = this.getAdjTile(dir,1,testTile)
-			const dist = tile.distance(this.targetTile)
-			return this.#isAllowDir(dir,tile) ? {index,dir,dist} : []
+	#getNextDir(target=this.targetTile) {
+		const test = this.getAdjTile(this.dir)
+		const dirs = [U,L,D,R].flatMap((dir,index)=> {
+			const  tile = this.getAdjTile(dir,1,test)
+			const  dist = tile.distance(target)
+			return this.#isAllowDir(dir,tile)? {index,dir,dist}:[]
 		})
 		return this.frightened
-			? randChoice(allowDirs).dir
-			: allowDirs.sort(compareDist).at(this.#runAway<0 ? 0 : -1).dir
+			? randChoice(dirs).dir
+			: dirs.sort(compareDist).at(this.#runAway<0 ? 0:-1).dir
 	}
 	#isAllowDir(dir, tile) {
-		return(!Maze.hasWall(tile)
+		return !Maze.hasWall(tile)
 		    && !Dir.isOpposite(dir,this.orient)
-		    && !this.#notEnterTile(dir,tile) )
+		    && !this.#notEnterTile(dir,tile)
 	}
 	#notEnterTile(dir, tile) {
 		return !Ctrl.unrestricted
