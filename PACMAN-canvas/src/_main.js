@@ -163,11 +163,11 @@ export const Game = new class {
 	}
 	#draw() {
 		Ctx.clear()
+		Ctrl.drawGridLines()
 		if (State.isAttract) return this.#drawAttractMode()
 		if (State.isCBreak)  return this.#drawCoffeeBreak()
 		Ctx.drawImage(BgCvs, 0,0)
 		Maze.drawDoor()
-		Ctrl.drawGridLines()
 		Ctrl.drawInfo()
 		Score.draw()
 		Maze.PowDot.draw()
@@ -182,7 +182,6 @@ export const Game = new class {
 	}
 	#drawAttractMode() {
 		Fruit.drawLevelCounter()
-		Ctrl.drawGridLines()
 		Score.draw()
 		Attract.draw()
 		PtsMgr.drawGhostPts()
@@ -190,7 +189,6 @@ export const Game = new class {
 	#drawCoffeeBreak() {
 		State.lastIs('FlashMaze')
 			&& Fruit.drawLevelCounter()
-		Ctrl.drawGridLines()
 		CBreak.draw()
 	}
 	#pausing() {
