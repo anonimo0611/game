@@ -156,7 +156,7 @@ input[type=range]:focus {
 	--caret-size: .9em;
 	.current {
 		background: var(--bg);
-		margin-top: -.1em;
+		margin-top: -.2em;
 		padding: .1em .2em;
 		box-sizing: border-box;
 	}
@@ -165,13 +165,14 @@ input[type=range]:focus {
 	}
 	.current::after {
 		content: '';
-		background: no-repeat center right/var(--caret-size) url(../res/caret.svg);
-		width:  1em;
-		height: 1em;
+		border: solid;
+		border-width: 0 0 3px 3px;
+		width:  .25em;
+		height: .25em;
 		position: absolute;
-		right: .1em;
-		top: 50%;
-		transform: translateY(-50%);
+		right: .3em;
+		top: calc(50% - 0.125em);
+		transform: translateY(-50%) rotate(-45deg);
 	}
 	menu {
 		border-radius: .2em;
@@ -213,17 +214,17 @@ input[type=range]:focus {
 	button {
 		appearance: none;
 		text-indent: -3em;
-		background: no-repeat center url(../res/caret.svg);
-		border: none;
+		border: solid;
+		border-width: 0 0 3px 3px;
+		width:  .55em;
+		height: .55em;
 		padding: 0;
-		width:  0.6em;
-		height: 1.0em;
 		position: absolute;
 		z-index: 1000;
 		top: 50%;
 		transform-origin: center;
-		&.l {left: 0;transform:translateY(-50%) rotate(+90deg)}
-		&.r {right:0;transform:translateY(-50%) rotate(-90deg)}
+		&.l {left: 0;transform:translateY(-50%) rotate(+45deg)}
+		&.r {right:0;transform:translateY(-50%) rotate(-45deg) scale(-1,1)}
 		&:disabled {opacity: .5}
 	}
 }

@@ -19,7 +19,6 @@ body {
 	align-items: center;
 	justify-content: center;
 }
-
 ::selection {
 	color: inherit;
 	background: 0 0;

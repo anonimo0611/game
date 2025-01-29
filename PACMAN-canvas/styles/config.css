@@ -93,7 +93,7 @@ label:has(+#LevelMenu)  {
 }
 
 #cfgBtn {
-	background: var(--bc) url(../res/burger.svg) center/120%;
+	background: no-repeat var(--bc) var(--url) center /74%;
 	text-indent: -20em;
 	width:  1rem;
 	height: 1rem;
@@ -243,12 +243,9 @@ button[data-for=keys] {
 		align-items: center;
 		gap: .2em;
 	}
-	menu > li {
-		padding-top:    0;
-		padding-bottom: 0;
-	}
 	menu > li::before, .current::before {
 		content: '';
+		margin-top: -.2em;
 		background: no-repeat
 			calc(-1*var(--t) * var(--ofst-x, 0))
 			0/var(--width) var(--t) var(--url);
