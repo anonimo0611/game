@@ -97,8 +97,13 @@ label:has(+#LevelMenu)  {
 
 #cfgBtn {
 	line-height: 0;
-	padding: .2em;
-	canvas {pointer-events: none}
+	padding: 0;
+	width:  1.1rem;
+	height: 1.1rem;
+	svg {
+		fill: #FFF;
+		pointer-events: none;
+	}
 }
 #cfgPanel {
 	line-height: 1;
@@ -125,7 +130,7 @@ label:has(+#LevelMenu)  {
 			display: block;
 		}
 		#defBtn {
-			border-width: 3px;
+			border-width: 4px;
 		}
 	}
 	[for=unrChk] {

@@ -58,9 +58,8 @@ button, .dropdown .current {
 button {
 	display: inline-block;
 	cursor: pointer;
-	border: solid 1px #AAA;
 	&:hover {
-		--bc:  #003147;
+		--bc:  #0a384d;
 		color: #FFF;
 		background-color: var(--bc);
 		border-color: #0B93D5;
