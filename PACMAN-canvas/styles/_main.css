@@ -31,7 +31,7 @@ div,ul,menu,li,th,td,form,input,output {
 
 [data-cursor=hidden],
 [data-cursor=stayStill] {
-	body:not([data-scene=Title]) canvas {
+	body:not([data-state=Title]) canvas {
 		cursor: none;
 	}
 }
@@ -43,7 +43,7 @@ div,ul,menu,li,th,td,form,input,output {
 	position: relative;
 	transform-origin: center;
 	opacity: 0;
-	transition: opacity 0s 1ms;
+	will-change: opacity;
 }
 body[data-loaded=true] #board {
 	opacity: 1;

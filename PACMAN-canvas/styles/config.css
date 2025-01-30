@@ -40,17 +40,20 @@ label:has(+#LevelMenu)  {
 		vertical-align: middle;
 	}
 	th {
+		text-align: center;
 		color: var(--label-fg);
 		font-weight: normal;
+		padding-left: .4em;
+	}
+	td {
+		text-align: center;
+		padding: 0 .4em;
 	}
 	tr:hover th {
 		color: var(--label-fg-hover);
 		+ td {
 			background-color: rgba(27 83 143 /.6)
 		}
-	}
-	td {
-		text-align: center;
 	}
 }
 
