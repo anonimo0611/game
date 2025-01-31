@@ -3,7 +3,7 @@ import {Dir,U,R,D,L} from './direction.js'
 
 class Menu {
 	reset() {this.select(this.defaultIndex, {restore:true})}
-	get index()        {return $(this.selectedItem).index()}
+	get index()        {return +$(this.selectedItem).index()}
 	get value()        {return this.selectedItem.dataset.val ?? ''}
 	get selectedItem() {return this.menu.querySelector('.selected') || this.lis[0]}
 	constructor(id) {
@@ -27,9 +27,9 @@ class Menu {
 	}
 }
 export class DorpDownMenu extends Menu {
-	open()   {$(this.menu).show()}
-	close()  {$(this.menu).hide()}
-	toggle() {$(this.menu).toggle()}
+	open()   {$(this.menu).show();  return this}
+	close()  {$(this.menu).hide();  return this}
+	toggle() {$(this.menu).toggle();return this}
 	get closed() {return $(this.menu).is(':hidden') == true}
 	constructor(id) {
 		super(id)
@@ -57,7 +57,7 @@ export class DorpDownMenu extends Menu {
 		})
 		$(this.root).prev('label').on('click', ()=> this.current.focus())
 		$on('click', e=> {!this.closed && !e.target.closest(`#${id}`) && this.select()})
-		freeze(this).close()
+		freeze(this).close().select(this.index)
 	}
 	select(idx=this.index, {close=true}={}) {
 		super.select(idx)
