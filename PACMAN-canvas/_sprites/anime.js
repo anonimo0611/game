@@ -47,7 +47,7 @@ export const {cvs:pvCvs}=
 			_sprite = new Ghost(T*2)
 			setDirDisabled(true)
 			break
-		case 'default':
+		case 'none':
 			Timer.cancelAll()
 			setDirDisabled(true)
 			_animIdx  = 0

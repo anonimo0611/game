@@ -68,6 +68,13 @@ button {
 }
 #select-anim {
 	margin: 1em 0;
+	.current {
+		text-align: center;
+		text-indent: calc(-1 * var(--caret-size));
+	}
+	li[data-val=none] {
+		text-align: center;
+	}
 }
 [type=range] {
 	--thumb-size: .8rem !important;

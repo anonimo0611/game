@@ -152,7 +152,7 @@ input[type=range]:focus {
 }
 .dropdown {
 	--bg: rgba(41 41 41 /.8);
-	--caret-size: .9em;
+	--caret-size: 1em;
 	.current {
 		background: var(--bg);
 		margin-top: -.2em;
@@ -163,14 +163,15 @@ input[type=range]:focus {
 		border-color: var(--focused-border-color);
 	}
 	.current::after {
+		--size: calc(var(--caret-size)/3);
 		content: '';
 		border: solid;
 		border-width: 0 0 3px 3px;
-		width:  .25em;
-		height: .25em;
+		width:  var(--size);
+		height: var(--size);
 		position: absolute;
-		right: .3em;
-		top: calc(50% - 0.125em);
+		right: var(--size);
+		top: calc(50% - var(--size)/2);
 		transform: translateY(-50%) rotate(-45deg);
 	}
 	menu {
@@ -184,7 +185,7 @@ input[type=range]:focus {
 		background: var(--bg);
 		border: 1px solid transparent;
 		border-width: 1px 0;
-		padding: .1em var(--caret-size) .1em .2em;
+		padding: .1em calc(var(--caret-size) + .2em) .1em .2em;
 		display: block;
 		&.selected {
 			border-color: var(--focused-border-color);
