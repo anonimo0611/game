@@ -1,3 +1,4 @@
+import {Timer}  from '../_lib/timer.js'
 import {Vec2}   from '../_lib/vec2.js'
 import {Dir,L}  from '../_lib/direction.js'
 import {Ctx}    from './_canvas.js'
@@ -34,6 +35,7 @@ export class Actor {
 	get step()       {return 0}
 	get maxAlpha()   {return 1}
 	get cheatAlpha() {return 0.75}
+	get frozen()     {return Timer.frozen}
 	get isInHouse()  {return Maze.isInHouse(this.tilePos)}
 	get isInTunnel() {return Maze.Tunnel.isIn(this.centerPos)}
 

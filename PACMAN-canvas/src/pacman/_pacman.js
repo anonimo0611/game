@@ -105,7 +105,7 @@ class PlayablePacman extends Pacman {
 		) * Game.moveSpeed * (Game.level<13 ? 1 : Step.SlowBase)
 	}
 	draw() {
-		if (State.isStart || Timer.frozen) return
+		if (State.isStart) return
 		Ctx.save()
 		super.draw()
 		this.sprite.draw(Ctx,this)
@@ -140,7 +140,7 @@ class PlayablePacman extends Pacman {
 		if (!this.#canTurn) return
 		this.orient = this.#preDir
 		this.#turning ||= true
-		this.pos = this.setNextPos(denom, this.orient)
+		this.pos = this.setNextPos(denom,this.orient)
 	}
 	#endCornering() {
 		if (this.turning && this.inBackwardOfTile) {

@@ -23,12 +23,12 @@ export default class {
 		this.#mAngle += OpenMax/Duration * (this.#animDir*=dir)
 	}
 	draw(ctx=Ctx, {centerPos:{x,y}={x:0,y:0},
-		orient=L, radius=PacRadius,
+		orient=L, radius=PacRadius, frozen=false,
 		showCenter=false, closed=false}={}, scale=1)
 	{
 		const mAngle = (closed? 0:this.#mAngle)
-		if (this.#losing) {
-			this.#losing.draw(ctx, x,y, radius)
+		if (frozen || this.#losing) {
+			this.#losing?.draw(ctx, x,y, radius)
 			return
 		}
 		ctx.save()

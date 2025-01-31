@@ -49,9 +49,9 @@ export class Attract {
 	setActor(idx, gIdx) {
 		const g = new Ghost({idx:gIdx,anime:!!idx})
 		if (idx) {
-			g.pos = Vec2(Maze.Width+(T*4)+(T*2*gIdx), T*19)
+			g.pos = Vec2(Maze.Width+(T*6)+(T*2*gIdx), T*19)
 			g.state.switchToWalk()
-			!gIdx && (this.pacman.pos = Vec2(g.x-T*2, g.y))
+			!gIdx && (this.pacman.pos = Vec2(g.x-T*3.5, g.y))
 		}
 		g.orient = [R,L][idx]
 		this.ghsList[idx].push(g)
@@ -94,7 +94,7 @@ export class Attract {
 		if (et > 1e4+500) {
 			for (let i=0; i<GhsType.Max; i++)
 				this.drawGhost(DEMO, i)
-			this.drawPacman()
+			this.pacman.sprite.draw(Ctx, this.pacman)
 		}
 	}
 	update() {
@@ -102,18 +102,6 @@ export class Attract {
 		this.powDisp ^= Ticker.count % 15 == 0
 		!Timer.frozen && this.updatePacman()
 		!Timer.frozen && this.updateGhosts()
-	}
-	updateGhosts() {
-		if (Ticker.elapsedTime <= 1e4+500+150) return
-		this.ghsList[DEMO].forEach(g=> {
-			g.x += this.ghsVelX
-			const fn = ()=> this.caughtGhost(g)
-			GhsMgr.crashWithPac(g, this.pacman, {radius:T/4,fn})
-		})
-	}
-	caughtGhost(g) {
-		g.state.switchToBitten()
-		this.ghsList[DEMO].every(g=> g.state.isBitten) && Attract.#reset()
 	}
 	updatePacman() {
 		this.pacman.sprite.update()
@@ -125,15 +113,22 @@ export class Attract {
 			new FrightMode()
 		}
 	}
+	updateGhosts() {
+		this.ghsList[DEMO].forEach(g=> {
+			g.x += this.ghsVelX
+			const fn = ()=> this.caughtGhost(g)
+			GhsMgr.crashWithPac(g, this.pacman, {radius:T/4,fn})
+		})
+	}
+	caughtGhost(g) {
+		g.state.switchToBitten()
+		this.ghsList[DEMO].every(g=> g.state.isBitten) && Attract.#reset()
+	}
 	drawGhost(idx, ghsIdx, pos) {
 		const
 		ghost = this.ghsList[idx][ghsIdx]
 		ghost.pos = pos
 		ghost.sprite.draw(ghost)
-	}
-	drawPacman() {
-		if (Timer.frozen) return
-		this.pacman.sprite.draw(Ctx, this.pacman)
 	}
 	end(e={}) {
 		if (e.target.tagName == 'BUTTON') return
