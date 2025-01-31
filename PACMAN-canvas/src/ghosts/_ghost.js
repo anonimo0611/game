@@ -108,6 +108,7 @@ export class Ghost extends Actor {
 		}
 		if (State.isPlaying && Maze.dotsLeft) {
 			this.#behavior()
+			GhsMgr.crashWithPac(this)
 		}
 	}
 	#behavior() {

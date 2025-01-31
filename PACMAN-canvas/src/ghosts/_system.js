@@ -97,7 +97,6 @@ export const GhsMgr = new class {
 			this.#aidx ^= !Timer.frozen && !(Ticker.count % this.aInterval)
 		SysMap.forEach(s=> s.update())
 		Ghosts.forEach(g=> g.update())
-		Ghosts.forEach(g=> this.crashWithPac(g))
 	}
 	crashWithPac(g, pacPos=PacMgr.pos, {fn,radius}={}) {
 		if (!(g instanceof Ghost) || !g.state.isWalk) return
