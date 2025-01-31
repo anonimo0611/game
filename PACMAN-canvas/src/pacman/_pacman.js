@@ -44,11 +44,11 @@ class PlayablePacman extends Pacman {
 	#nextTurn = null
 	get radius()       {return PacRadius}
 	get closed()       {return State.isPlaying == false}
+	get showCenter()   {return Ctrl.showGridLines}
 	get step()         {return this.#step}
 	get stopped()      {return this.#stopped}
 	get turning()      {return this.#turning}
 	get timeNotEaten() {return this.#notEaten * Game.interval}
-	get showCenter()   {return Ctrl.showGridLines}
 	get translucent()  {return this.showCenter || Ctrl.invincible}
 	get maxAlpha()     {return this.translucent? this.cheatAlpha : 1}
 
