@@ -28,16 +28,16 @@ export default class {
 	{
 		const mAngle = (closed? 0:this.#mAngle)
 		if (frozen || this.#losing) {
-			this.#losing?.draw(ctx, x,y, radius)
+			this.#losing?.draw(ctx, x,y)
 			return
 		}
 		ctx.save()
-	 	ctx.translate(x, y)
+		ctx.translate(x, y)
 		ctx.rotate(RotateMap.get(orient) * PI/2)
 		ctx.beginPath()
 		ctx.moveTo(-radius*scale*0.35, 0)
 		ctx.arc(0,0,radius*scale, mAngle, PI*2-mAngle)
-		ctx.fillStyle = Color.Pacman
+		ctx.fillStyle = ctx.strokeStyle = Color.Pacman
 		ctx.fill()
 		ctx.restore()
 		showCenter && cvsFillCircle(ctx)(x,y, 3, '#F00')

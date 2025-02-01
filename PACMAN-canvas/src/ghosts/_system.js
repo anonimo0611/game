@@ -17,15 +17,15 @@ const Ghosts = []
 const SysMap = new Map()
 
 /** @param {number} idx */
-const releaseTime = idx=> ([ // For always chase mode (ms)
+const releaseTime = idx=> ({ // For always chase mode (ms)
 	// Pinky->Aosuke->Guzuta
-	[1000,  500,  500], // <-After life is lost
-	[1000, 4000, 4000], [800, 2200, 4000], [600, 1900, 3500],
-	[ 600, 1900, 1500], [500, 1300, 1200], [500, 1300, 1200],
-	[ 300,  700,  800], [300,  700,  800], [200,  800,  200],
-	[ 200,  800,  200], [100,  700,  200], [100,  700,  200],
-	[   0,  900,    0]
-][Game.restarted? 0 : Game.clampedLv][idx]/Game.speedRate)
+	 0:[1000,  500,  500], // <-After life is lost
+	 1:[1000, 4000, 4000], 2:[800, 2200, 4000], 3:[600, 1900, 3500],
+	 4:[ 600, 1900, 1500], 5:[500, 1300, 1200], 6:[500, 1300, 1200],
+	 7:[ 300,  700,  800], 8:[300,  700,  800], 9:[200,  800,  200],
+	10:[ 200,  800,  200],11:[100,  700,  200],12:[100,  700,  200],
+	13:[   0,  900,    0]
+}[Game.restarted? 0 : Game.clampedLv][idx]/Game.speedRate)
 
 export class GhostState extends BaseState {
 	isIdle   = true
@@ -34,7 +34,7 @@ export class GhostState extends BaseState {
 	isBitten = false
 	isEscape = false
 	isReturn = false
-	constructor(isInHouse) {
+	constructor(isInHouse=false) {
 		super()
 		this.init(isInHouse? 'Idle':'GoOut')
 	}
@@ -49,15 +49,12 @@ const behindThePac = g=> g.frightened
 export const GhsMgr = new class {
 	static {$ready(()=> this.setup())}
 	static setup() {
-		this.bindEventToObjs()
+		$(GhsMgr).on('Init',GhsMgr.#initialize)
+		PacMgr.bindDotEaten(GhsMgr.#onDotEaten)
 		$on('Attract', GhsMgr.#onAttract)
 		$on('Playing', GhsMgr.#onPlaying)
 		$on('Clear',   GhsMgr.#onLevelEnds)
 		$on('Collided',GhsMgr.#onLevelEnds)
-	}
-	static bindEventToObjs() {
-		$(GhsMgr).on('Init',GhsMgr.#initialize)
-		PacMgr.bindDotEaten(GhsMgr.#onDotEaten)
 	}
 	#aidx = 0
 	get aInterval()  {return 6}
@@ -153,9 +150,9 @@ export const DotCounter = function() {
 	const counters = new Uint8Array(GhsType.Max)
 	const limitTbl = [[7, 0,0,0],[17, 30,0,0],[32, 60,50,0]]
 	/**
-	 * @param {number} idx Index of Ghost
-	 * @param {(bool:boolean)=> boolean} fn Release ghost
-	*/
+	 * @param {number} idx Ghost index
+	 * @param {(deactivateGlobal:boolean)=> boolean} fn Release ghost
+	 */
 	function release(idx, fn) {
 		const timeOut = (Game.level <= 4 ? 4e3:3e3)
 		const gLimit  = limitTbl[idx-1][0] // global

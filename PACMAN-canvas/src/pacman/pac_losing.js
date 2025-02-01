@@ -1,53 +1,46 @@
 import {Ticker}  from '../../_lib/timer.js'
 import {Cvs,Ctx} from '../_canvas.js'
-import {Color,TileSize} from '../_constants.js'
+import {Color,TileSize,PacRadius as R} from '../_constants.js'
 
-const StRadius = TileSize * 0.5
-const EdRadius = TileSize * 0.9
-const DisDur   = 1149/Ticker.Interval
-const LineDur  =  300/Ticker.Interval
-const FadeDur  =  300/Ticker.Interval
+const DisDur  = 1149/Ticker.Interval
+const LineDur =  300/Ticker.Interval
+const FadeDur =  300/Ticker.Interval
 
 export class Losing {
 	constructor() {freeze(this)}
-	#angle  = 0
-	#lineA  = 1
-	#innerR = TileSize * 0.2
-	#outerR = StRadius
-	draw(ctx=Ctx, x,y, radius) {
-		if (ctx == Ctx)
-			x = clamp(x, radius, Cvs.width-radius)
-		this.#angle < PI - PI/DisDur
- 			? this.#disappear(ctx, x,y, radius)
-	 		: this.#drawLines(ctx, x,y)
-	}
-	#disappear(ctx=Ctx, x,y, radius) {
-		const angle = this.#angle += PI/DisDur
+	#mAngle = 0
+	#alpha  = 1
+	#innerR = R/4
+	#outerR = R/2
+	draw(ctx=Ctx, x,y) {
+		const clampedX = ctx == Ctx
+			? clamp(x, R, Cvs.width-R) : x
 		ctx.save()
-		ctx.translate(x, y)
-		ctx.beginPath()
-		ctx.moveTo(0, radius*0.35)
-		ctx.arc(0,0, radius, -PI/2+angle,-PI/2-angle)
-		ctx.fillStyle = Color.Pacman
-		ctx.fill()
+		ctx.translate(clampedX, y)
+		ctx.lineWidth = TileSize/6
+		ctx.fillStyle = ctx.strokeStyle = Color.Pacman
+		this.#mAngle < PI - PI/DisDur
+ 			? this.#disappear(ctx)
+	 		: this.#drawRadialLines(ctx)
 		ctx.restore()
 	}
-	#drawLines(ctx=Ctx, x,y) {
-		const innerR = min(this.#innerR += StRadius/LineDur, StRadius)
-		const outerR = min(this.#outerR += EdRadius/LineDur, EdRadius)
-		ctx.save()
-		ctx.translate(x, y)
-		if (this.#outerR >= EdRadius) {
-			ctx.globalAlpha = max(this.#lineA -= 1/FadeDur, 0)
-		}
+	#disappear(ctx=Ctx) {
+		const mAngle = this.#mAngle += PI/DisDur
+		ctx.beginPath()
+		ctx.moveTo(0, R*0.35)
+		ctx.arc(0,0, R, -PI/2+mAngle,-PI/2-mAngle)
+		ctx.fill()
+	}
+	#drawRadialLines(ctx=Ctx) {
+		const innerR = min(this.#innerR += R/2/LineDur, R/2)
+		const outerR = min(this.#outerR += R/1/LineDur, R/1)
+		if (this.#outerR >= R)
+			ctx.globalAlpha = max(this.#alpha -= 1/FadeDur, 0)
 		for (let deg=0; deg<360; deg+=360/10) {
 			ctx.beginPath()
 	 		ctx.moveTo(...circumPosition(deg, innerR))
 	     	ctx.lineTo(...circumPosition(deg, outerR))
-			ctx.lineWidth   = TileSize/6
-			ctx.strokeStyle = Color.Pacman
 	     	ctx.stroke()
 		}
-		ctx.restore()
 	}
 }
