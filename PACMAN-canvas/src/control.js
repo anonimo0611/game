@@ -1,5 +1,5 @@
 import {Confirm}   from '../_lib/confirm.js'
-import {Cvs,Ctx}   from './_canvas.js'
+import {Ctx}       from './_canvas.js'
 import * as Menu   from './_menu.js'
 import {LevelMenu} from './_menu.js'
 import {State}     from './_state.js'
@@ -74,7 +74,7 @@ export const Ctrl = new class {
 		Ctx.save()
 		Ctx.strokeStyle = Color.Grid
 		for (let y=1; y<ColMax; y++) cvsStrokeLine(Ctx)(T*y, 0, T*y, RowMax*T)
-		for (let x=0; x<RowMax; x++) cvsStrokeLine(Ctx)(0, T*x, Cvs.width, T*x)
+		for (let x=0; x<RowMax; x++) cvsStrokeLine(Ctx)(0, T*x, ColMax*T, T*x)
 		Ctx.restore()
 	}
 	drawInfo() {
