@@ -56,6 +56,12 @@ export class Attract {
 		g.orient = [R,L][idx]
 		this.ghsList[idx].push(g)
 	}
+	drawGhost(idx, ghsIdx, pos) {
+		const
+		ghost = this.ghsList[idx][ghsIdx]
+		ghost.pos = pos
+		ghost.sprite.draw(ghost)
+	}
 	draw() {
 		const et = Ticker.elapsedTime, ptsFontSize = T*.68
 		drawText(7, 5, '#FFF', 'CHARACTOR　/　NICKNAME')
@@ -123,12 +129,6 @@ export class Attract {
 	caughtGhost(g) {
 		g.state.switchToBitten()
 		this.ghsList[DEMO].every(g=> g.state.isBitten) && Attract.#reset()
-	}
-	drawGhost(idx, ghsIdx, pos) {
-		const
-		ghost = this.ghsList[idx][ghsIdx]
-		ghost.pos = pos
-		ghost.sprite.draw(ghost)
 	}
 	end(e={}) {
 		if (e.target.tagName == 'BUTTON') return
