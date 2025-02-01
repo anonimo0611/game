@@ -22,9 +22,13 @@ export default class {
 		const dir = between(this.#mAngle, 0, OpenMax) ? 1 : -1
 		this.#mAngle += OpenMax/Duration * (this.#animDir*=dir)
 	}
-	draw(ctx=Ctx, {centerPos:{x,y}={x:0,y:0},
-		orient=L, radius=PacRadius, frozen=false,
-		showCenter=false, closed=false}={}, scale=1
+	draw(ctx=Ctx, {
+		centerPos:{x,y}={x:0,y:0},
+		orient    = L,
+		radius    = PacRadius,
+		frozen    = false,
+		closed    = false,
+		centerDot = false}={}, scale=1
 	) {
 		if (frozen || this.#losing)
 			return this.#losing?.draw(ctx, x,y)
@@ -38,7 +42,7 @@ export default class {
 		ctx.fillStyle = ctx.strokeStyle = Color.Pacman
 		ctx.fill()
 		ctx.restore()
-		showCenter && cvsFillCircle(ctx)(x,y, 3, '#F00')
+		centerDot && cvsFillCircle(ctx)(x,y, 3, '#F00')
 	}
 	setLosing() {this.#losing = new Losing}
 }

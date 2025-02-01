@@ -44,7 +44,7 @@ class PlayablePacman extends Pacman {
 	#nextTurn = null
 	get radius()       {return PacRadius}
 	get closed()       {return State.isPlaying == false}
-	get showCenter()   {return Ctrl.showGridLines}
+	get centerDot()    {return Ctrl.showGridLines}
 	get step()         {return this.#step}
 	get stopped()      {return this.#stopped}
 	get turning()      {return this.#turning}
@@ -108,7 +108,7 @@ class PlayablePacman extends Pacman {
 		if (State.isStart) return
 		Ctx.save()
 		super.draw()
-		this.sprite.draw(Ctx,this)
+		this.sprite.draw(Ctx,1,this)
 		Ctx.restore()
 	}
 	update() {
