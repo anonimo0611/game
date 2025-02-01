@@ -26,11 +26,9 @@ export default class {
 		orient=L, radius=PacRadius, frozen=false,
 		showCenter=false, closed=false}={}, scale=1)
 	{
+		if (frozen || this.#losing)
+			return this.#losing?.draw(ctx, x,y)
 		const mAngle = (closed? 0:this.#mAngle)
-		if (frozen || this.#losing) {
-			this.#losing?.draw(ctx, x,y)
-			return
-		}
 		ctx.save()
 		ctx.translate(x, y)
 		ctx.rotate(RotateMap.get(orient) * PI/2)
