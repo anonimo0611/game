@@ -108,7 +108,7 @@ class PlayablePacman extends Pacman {
 		if (State.isStart) return
 		Ctx.save()
 		super.draw()
-		this.sprite.draw(Ctx,1,this)
+		this.sprite.draw(Ctx,this)
 		Ctx.restore()
 	}
 	update() {
