@@ -24,8 +24,8 @@ export default class {
 	}
 	draw(ctx=Ctx, {centerPos:{x,y}={x:0,y:0},
 		orient=L, radius=PacRadius, frozen=false,
-		showCenter=false, closed=false}={}, scale=1)
-	{
+		showCenter=false, closed=false}={}, scale=1
+	) {
 		if (frozen || this.#losing)
 			return this.#losing?.draw(ctx, x,y)
 		const mAngle = (closed? 0:this.#mAngle)
