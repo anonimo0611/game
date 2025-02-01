@@ -49,7 +49,7 @@ class PlayablePacman extends Pacman {
 	get stopped()      {return this.#stopped}
 	get turning()      {return this.#turning}
 	get timeNotEaten() {return this.#notEaten * Game.interval}
-	get translucent()  {return this.showCenter || Ctrl.invincible}
+	get translucent()  {return this.centerDot || Ctrl.invincible}
 	get maxAlpha()     {return this.translucent? this.cheatAlpha : 1}
 
 	constructor() {
