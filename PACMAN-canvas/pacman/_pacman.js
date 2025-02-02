@@ -16,7 +16,7 @@ import Sprite    from './pac_sprite.js'
 import {PacRadius,PacStep as Step,TileSize as T} from '../_constants.js'
 
 export const Player = function() {
-	/** @type {?Pacman} */
+	/** @type {?PlayablePacman} */
 	let pacman = null
 	const instantiate = ()=> pacman = new PlayablePacman()
 	$on('Title Restart NewLevel', ()=> instantiate())
