@@ -12,7 +12,7 @@ export class Losing {
 	#alpha  = 1
 	#innerR = R/4
 	#outerR = R/2
-	draw(ctx=Ctx, x,y) {
+	draw(ctx=Ctx, {x=0,y=0}={}) {
 		const clampedX = ctx == Ctx
 			? clamp(x, R, Cvs.width-R) : x
 		ctx.save()
