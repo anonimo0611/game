@@ -49,12 +49,12 @@ const behindThePac = g=> g.frightened
 export const GhsMgr = new class {
 	static {$ready(()=> this.setup())}
 	static setup() {
-		$(GhsMgr).on('Init',GhsMgr.#initialize)
-		Player.bindDotEaten(GhsMgr.#onDotEaten)
 		$on('Attract', GhsMgr.#onAttract)
 		$on('Playing', GhsMgr.#onPlaying)
 		$on('Clear',   GhsMgr.#onLevelEnds)
 		$on('Collided',GhsMgr.#onLevelEnds)
+		$(GhsMgr).on('Init',GhsMgr.#initialize)
+		Player.bindDotEaten(GhsMgr.#onDotEaten)
 	}
 	#aidx = 0
 	get aInterval()  {return 6}
@@ -65,10 +65,15 @@ export const GhsMgr = new class {
 	get spriteIdx()  {return SysMap.get(FrightMode)?.spriteIdx|0}
 	get hasEscape()  {return Ghosts.some(g=> g.escaping)}
 	centerPos(idx=0) {return Ghosts[idx].centerPos}
+
 	#initialize(_, ...subClasses) {
 		GhsMgr.#aidx = 0
 		SysMap.clear()
 		subClasses.forEach((cls,i)=> Ghosts[i]=new cls)
+	}
+	#onLevelEnds() {
+		SysMap.clear()
+		Ghosts.forEach(g=> g.sprite.setFadeOut())
 	}
 	#onAttract(_, ...ghosts) {
 		ghosts.forEach((g,i)=> Ghosts[i]=g)
@@ -82,10 +87,6 @@ export const GhsMgr = new class {
 		if (!isPow) return
 		setReversalSignal()
 		FrightMode.time && new FrightMode
-	}
-	#onLevelEnds() {
-		SysMap.clear()
-		Ghosts.forEach(g=> g.sprite.setFadeOut())
 	}
 	update() {
 		if (State.isPlaying
@@ -129,8 +130,7 @@ export const Wave = function() {
 			[cnt,mode]= [0,(++idx % 2)]
 			setReversalSignal()
 		}
-		!(mode = int(Ctrl.isChaseMode))
-			&& SysMap.set(Wave, {update})
+		!(mode=+Ctrl.isChaseMode) && SysMap.set(Wave,{update})
 	}
 	$on('Playing', onPlaying)
 	return {
@@ -225,9 +225,9 @@ export class FrightMode {
 	update() {
 		if (!State.isPlaying || Timer.frozen) return
 		const {time}= FrightMode
-		const et = (Game.interval * this.#timeCnt++)
-		const fi = (time == 1000 ? 12:14)/Game.speedRate|0
+		const et = (this.#timeCnt++ * Game.interval)
 		const ac = (this.#caughtCnt == GhsType.Max)
+		const fi = (time == 1000 ? 12:14)/Game.speedRate|0
 		this.#flashIdx ^= !(this.#flashCnt % fi)
 		;(et >= time-2000)  && this.#flashCnt++
 		;(et >= time || ac) && this.#toggle(false)
