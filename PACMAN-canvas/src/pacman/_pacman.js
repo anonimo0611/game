@@ -15,8 +15,8 @@ import {GhsMgr}  from '../ghosts/_system.js'
 import Sprite    from './pac_sprite.js'
 import {PacRadius,PacStep as Step,TileSize as T} from '../_constants.js'
 
-export const PacMgr = function() {
-	/** @type {?Pacman} */
+export const Player = function() {
+	/** @type {?PlayablePacman} */
 	let pacman = null
 	const instantiate = ()=> pacman = new PlayablePacman()
 	$on('Title Restart NewLevel', ()=> instantiate())
@@ -26,7 +26,7 @@ export const PacMgr = function() {
 		get pos()        {return pacman.pos},
 		get centerPos()  {return pacman.centerPos},
 		get forwardPos() {return pacman.forwardPos},
-		bindDotEaten(fn) {$(PacMgr).on('DotEaten',fn)},
+		bindDotEaten(fn) {$(Player).on('DotEaten',fn)},
 	}
 }()
 export class Pacman extends Actor {
@@ -163,7 +163,7 @@ class PlayablePacman extends Pacman {
 			&& Sound.stopLoops()
 			&& State.switchToClear()
 			&& State.switchToFlashMaze({delay:1000})
-		$(PacMgr).trigger('DotEaten', isPow)
+		$(Player).trigger('DotEaten', isPow)
 	}
 	#playSE() {
 		const duration = (T/this.step)*Ticker.Interval*0.5

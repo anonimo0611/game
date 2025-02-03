@@ -50,7 +50,6 @@ export class Attract {
 		const g = new Ghost({idx:gIdx,anime:!!idx})
 		if (idx) {
 			g.pos = Vec2(Maze.Width+(T*6)+(T*2*gIdx), T*19)
-			g.state.switchToWalk()
 			!gIdx && (this.pacman.pos = Vec2(g.x-T*3.5, g.y))
 		}
 		g.orient = [R,L][idx]

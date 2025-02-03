@@ -33,7 +33,6 @@ export class CBreak {
 			throw TypeError('The constructor is not visible')
 		this.pacman.y =
 		this.akabei.y = Cvs.height/2 - T/2
-		this.akabei.state.switchToWalk()
 		$onNS('.CB','Quit', this.end)
 		$onNS('.CB','blur focus', this.pause)
 		State.switchToCBreak()

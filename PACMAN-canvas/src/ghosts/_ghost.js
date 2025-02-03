@@ -10,7 +10,7 @@ import {Ctrl}    from '../control.js'
 import {PtsMgr}  from '../points.js'
 import {Maze}    from '../maze.js'
 import {Actor}   from '../actor.js'
-import {PacMgr}  from '../pacman/_pacman.js'
+import {Player}  from '../pacman/_pacman.js'
 import Sprite    from './ghs_sprite.js'
 import * as Sys  from './_system.js'
 import {GhsMgr}  from './_system.js'
@@ -36,7 +36,7 @@ export class Ghost extends Actor {
 	scatterTile = Vec2(24, 0).freeze()
 	get angry()     {return false}
 	get chaseStep() {return GhsStep.Base}
-	get chasePos()  {return PacMgr.centerPos}
+	get chasePos()  {return Player.centerPos}
 	get chaseTile() {return this.chasePos.divInt(T)}
 
 	constructor({col=0,row=0,idx=0,initAlign=0,orient=L,anime=true}={}) {
@@ -49,7 +49,7 @@ export class Ghost extends Actor {
 		this.pos       = Vec2(this.initX, row*T)
 		this.name      = this.constructor.name
 		this.sprite    = new Sprite(...canvas2D(null, T*3, T*2).vals)
-		this.state     = new Sys.GhostState(this.isInHouse)
+		this.state     = new Sys.GhostState(this)
 		$(this).on('FrightMode',  this.#setFrightMode)
 		$(this).on('Reverse',()=> this.#revSig  = true)
 		$(this).on('Runaway',()=> this.#runAway = 400/Game.interval)
@@ -78,7 +78,7 @@ export class Ghost extends Actor {
 			&& abs(Maze.Center - this.centerPos.x) <= this.step
 	}
 	get distanceToPacman() {
-		return Vec2.distance(this, PacMgr.pos)
+		return Vec2.distance(this, Player.pos)
 	}
 	get step() {
 		const spd = Game.moveSpeed, {state}= this
@@ -130,7 +130,7 @@ export class Ghost extends Actor {
 		}
 	}
 	release(deactivateGlobalDotCnt=false) {
-		PacMgr.instance.resetTimer()
+		Player.instance.resetTimer()
 		this.state.isIdle && this.state.switchToGoOut()
 		return deactivateGlobalDotCnt
 	}

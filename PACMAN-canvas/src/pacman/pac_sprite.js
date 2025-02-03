@@ -31,7 +31,7 @@ export default class {
 		centerDot = false}={}, scale=1
 	) {
 		if (frozen || this.#losing)
-			return this.#losing?.draw(ctx, x,y)
+			return this.#losing?.draw(ctx, {x,y})
 		const mAngle = (closed? 0:this.#mAngle)
 		ctx.save()
 		ctx.translate(x, y)

@@ -5,7 +5,7 @@ import {Ctx}    from '../_canvas.js'
 import {State}  from '../_state.js'
 import {Ctrl}   from '../control.js'
 import {Maze}   from '../maze.js'
-import {PacMgr} from '../pacman/_pacman.js'
+import {Player} from '../pacman/_pacman.js'
 import {GhsMgr} from '../ghosts/_system.js'
 import {Ghost}  from './_ghost.js'
 import {Color,GhsType,TileSize as T} from '../_constants.js'
@@ -56,8 +56,8 @@ export const Target = new class {
 	*/
 	#strokeAuxLines(g, ofst) {
 		if (g.isScatter || !g.state.isWalk) return
-		const {dir:pacDir,centerPos:pacPos}= PacMgr
-		const fwdVals = PacMgr.forwardPos(ofst).vals
+		const {dir:pacDir,centerPos:pacPos}= Player
+		const fwdVals = Player.forwardPos(ofst).vals
 		Ctx.save()
 		Ctx.globalAlpha = 0.8
 		Ctx.lineWidth   = 6
@@ -82,7 +82,7 @@ export const Target = new class {
 		if (g.isScatter || !g.state.isWalk) return
 		Ctx.save()
 		Ctx.globalAlpha = g.distanceToPacman < T*8 ? 0.4 : 0.8
-		cvsStrokeCircle(Ctx)(...PacMgr.centerPos.vals, T*8, Color[g.name], 6)
+		cvsStrokeCircle(Ctx)(...Player.centerPos.vals, T*8, Color[g.name], 6)
 		Ctx.restore()
 	}
 }

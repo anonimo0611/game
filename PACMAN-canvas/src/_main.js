@@ -16,7 +16,7 @@ import {Score}     from './score.js'
 import {Lives}     from './lives.js'
 import {Fruit}     from './fruit.js'
 import {PtsMgr}    from './points.js'
-import {PacMgr}    from './pacman/_pacman.js'
+import {Player}    from './pacman/_pacman.js'
 import {GhsMgr}    from './ghosts/_system.js'
 import {Attract}   from './demo/attract.js'
 import {CBreak}    from './demo/coffee_break.js'
@@ -108,7 +108,7 @@ export const Game = new class {
 	}
 	#onLosing() {
 		Sound.play('losing')
-		PacMgr.instance.sprite.setLosing()
+		Player.instance.sprite.setLosing()
 		Lives.left > 0
 			? State.switchToRestart ({delay:2200})
 			: State.switchToGameOver({delay:2000})
@@ -154,7 +154,7 @@ export const Game = new class {
 	}
 	#update() {
 		PtsMgr.update()
-		PacMgr.instance.update()
+		Player.instance.update()
 		GhsMgr.update()
 		Fruit.update()
 		State.isTitle   && Attract.Timer.update()
@@ -174,7 +174,7 @@ export const Game = new class {
 		Fruit.drawTarget()
 		PtsMgr.drawFruitPts()
 		GhsMgr.drawBehind()
-		PacMgr.instance.draw()
+		Player.instance.draw()
 		GhsMgr.drawTargets()
 		GhsMgr.drawFront()
 		PtsMgr.drawGhostPts()
