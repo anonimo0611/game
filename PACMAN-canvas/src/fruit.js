@@ -15,7 +15,9 @@ import {DotMax,TileSize as T} from './_constants.js'
 const appearSet  = new Set([70,170])
 const LevelTable = freeze([0,1,2,2,3,3,4,4,5,5,6,6,7])
 const PointTable = freeze([100,300,500,700,1e3,2e3,3e3,5e3])
-const LevelCounterRect = freeze([T*12, T*32, T*2*8, T*2])
+
+const LvCounterMax  = 7
+const LvCounterRect = freeze([T*12, T*32, T*2*LvCounterMax, T*2])
 
 /** @type {?FadeOut} */
 let _fadeOut = null
@@ -77,14 +79,15 @@ export const Fruit = new class {
 		ctx.restore()
 	}
 	drawLevelCounter() {
-		const [x,y,w,h]= LevelCounterRect;
+		const [x,y,w,h] = LvCounterRect;
 		Ctx.drawImage(BgCvs, x,y, w,h, x,y, w,h)
 	}
 	#drawLevelCounter() {
-		const [x,y,w,h]= LevelCounterRect
+		const [x,y,w,h] = LvCounterRect
+		const initCount = max(Game.level-LvCounterMax, 0)
 		BgCtx.clearRect(x,y,w,h)
-		for (let i=max(Game.level-7, 0),cols=1; i<Game.level; i++) {
-			const pos = Vec2(x+w-T*2-(T*2*cols++), y).add(T)
+		for (let i=initCount,cols=1; i<Game.level; i++) {
+			const pos = Vec2(x+w+T-(T*2*cols++), y+T)
 			Fruit.#drawSprite(BgCtx, Fruit.number(i), pos)
 		}
 	}
