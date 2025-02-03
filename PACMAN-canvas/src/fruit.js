@@ -6,7 +6,7 @@ import {Game}   from './_main.js'
 import {State}  from './_state.js'
 import {Maze}   from './maze.js'
 import {PtsMgr} from './points.js'
-import {PacMgr} from './pacman/_pacman.js'
+import {Player} from './pacman/_pacman.js'
 import Sprites  from './fruits_sprite.js'
 import {Ctx,BgCvs,BgCtx} from './_canvas.js'
 import {DotMax,TileSize as T} from './_constants.js'
@@ -26,7 +26,7 @@ export const Fruit = new class {
 	static setup() {
 		$on('Title Ready',  Fruit.#reset)
 		$on('LevelChanged', Fruit.#drawLevelCounter)
-		PacMgr.bindDotEaten(Fruit.#dotEaten)
+		Player.bindDotEaten(Fruit.#dotEaten)
 	}
 	get score() {
 		return PointTable[Fruit.number()]
@@ -49,7 +49,7 @@ export const Fruit = new class {
 		Timer.set(randInt(9e3, 1e4-fadeDur)/rate,
 			()=> _fadeOut = new FadeOut(fadeDur/rate), {key:Fruit})
 	}
-	#collideWith(pos=PacMgr.centerPos) {
+	#collideWith(pos=Player.centerPos) {
 		if (!collisionCircle(pos, Fruit.targetPos, T/2)) return
 		_tgtDisp = false
 		Timer.cancel(Fruit) && Sound.play('fruit')
@@ -83,8 +83,8 @@ export const Fruit = new class {
 	#drawLevelCounter() {
 		const [x,y,w,h]= LevelCounterRect
 		BgCtx.clearRect(x,y,w,h)
-		for (let i=max(Game.level-7, 0),ofst=1; i<Game.level; i++) {
-			const pos = Vec2(T*26-(T*2*ofst++), y).add(T)
+		for (let i=max(Game.level-7, 0),cols=1; i<Game.level; i++) {
+			const pos = Vec2(x+w-T*2-(T*2*cols++), y).add(T)
 			Fruit.#drawSprite(BgCtx, Fruit.number(i), pos)
 		}
 	}
