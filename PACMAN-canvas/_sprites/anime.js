@@ -47,7 +47,7 @@ export const {cvs:pvCvs}=
 			_sprite = new Ghost(T*2)
 			setDirDisabled(true)
 			break
-		case 'default':
+		case 'none':
 			Timer.cancelAll()
 			setDirDisabled(true)
 			_animIdx  = 0
@@ -108,6 +108,5 @@ export const {cvs:pvCvs}=
 	}
 	Ticker.set(loop)
 	menu.bindChange(change)
-	$('input[name=dir]')
-		.on('input',function(){_orient = this.value})
+	$('input[name=dir]').on('input',function(){_orient = this.value})
 }())
