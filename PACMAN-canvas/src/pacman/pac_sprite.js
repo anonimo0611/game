@@ -39,7 +39,7 @@ export default class {
 		ctx.beginPath()
 		ctx.moveTo(-radius*scale*0.35, 0)
 		ctx.arc(0,0,radius*scale, mAngle, PI*2-mAngle)
-		ctx.fillStyle = ctx.strokeStyle = Color.Pacman
+		ctx.fillStyle = Color.Pacman
 		ctx.fill()
 		ctx.restore()
 		centerDot && cvsFillCircle(ctx)(x,y, 3, '#F00')
