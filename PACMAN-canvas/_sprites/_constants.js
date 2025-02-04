@@ -1,5 +1,5 @@
 import {TileSize} from '../src/_constants.js'
-import {Cvs}      from '../src/_canvas.js'
+import {Cvs}      from '../src/_constants.js'
 import {pvCvs}    from './anime.js'
 import {View}     from './_main.js'
 import * as Actor from './actor.js'
