@@ -66,7 +66,7 @@ export const GhsMgr = new class {
 	get score()      {return SysMap.get(FrightMode)?.score|0}
 	get spriteIdx()  {return SysMap.get(FrightMode)?.spriteIdx|0}
 	get hasEscape()  {return Ghosts.some(g=> g.escaping)}
-	centerPos(idx=0) {return Ghosts[idx].centerPos}
+	get akaCenter()  {return Ghosts[GhsType.Akabei].centerPos}
 
 	#initialize(_, ...subClasses) {
 		GhsMgr.#aidx = 0

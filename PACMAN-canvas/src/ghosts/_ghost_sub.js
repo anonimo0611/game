@@ -4,7 +4,7 @@ import {Maze}    from '../maze.js'
 import {Player}  from '../pacman/_pacman.js'
 import {GhsMgr}  from './_system.js'
 import {Ghost}   from './_ghost.js'
-import {TileSize as T,GhsType} from '../_constants.js'
+import {TileSize as T} from '../_constants.js'
 
 class Akabei extends Ghost {
 	constructor() {
@@ -21,11 +21,10 @@ class Pinky extends Ghost {
 		freeze(this)
 	}
 	get chasePos() {
-		const {Tunnel}= Maze
-		const P=Player, tgt=P.forwardPos(4)
-		Tunnel.isInL(P.centerPos) && P.dir == L && (tgt.x=Tunnel.entranceR*T)
-		Tunnel.isInR(P.centerPos) && P.dir == R && (tgt.x=Tunnel.entranceL*T)
-		return tgt
+		const {Tunnel}=Maze, P=Player, pos=P.forwardPos(4)
+		Tunnel.isInL(P.centerPos) && P.dir == L && (pos.x=Tunnel.entranceR*T)
+		Tunnel.isInR(P.centerPos) && P.dir == R && (pos.x=Tunnel.entranceL*T)
+		return pos
 	}
 }
 class Aosuke extends Ghost {
@@ -36,7 +35,7 @@ class Aosuke extends Ghost {
 	}
 	get chasePos() {
 		const  pos = Player.forwardPos(2)
-		return pos.clone.sub(GhsMgr.centerPos(GhsType.Akabei)).add(pos)
+		return pos.clone.sub(GhsMgr.akaCenter).add(pos)
 	}
 }
 class Guzuta extends Ghost {

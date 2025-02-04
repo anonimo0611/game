@@ -17,15 +17,15 @@ import {PacRadius,PacStep as Step,TileSize as T} from '../_constants.js'
 
 export const Player = function() {
 	/** @type {?PlayablePacman} */
-	let pacman = null
-	const instantiate = ()=> pacman = new PlayablePacman()
+	let player = null
+	const instantiate = ()=> player = new PlayablePacman()
 	$on('Title Restart NewLevel', ()=> instantiate())
 	return {
-		get instance()   {return pacman ||= instantiate()},
-		get dir()        {return pacman.dir},
-		get pos()        {return pacman.pos},
-		get centerPos()  {return pacman.centerPos},
-		get forwardPos() {return pacman.forwardPos},
+		get instance()   {return player ||= instantiate()},
+		get dir()        {return player.dir},
+		get pos()        {return player.pos},
+		get centerPos()  {return player.centerPos},
+		get forwardPos() {return player.forwardPos},
 		bindDotEaten(fn) {$(Player).on('DotEaten',fn)},
 	}
 }()
@@ -56,7 +56,7 @@ class PlayablePacman extends Pacman {
 		super()
 		this.dir = Dir.Left
 		this.pos = Vec2(13.5, 24).mul(T)
-		$offon('keydown.Pacman', e=> this.#onKeydown(e))
+		$offon('keydown.Player', e=> this.#onKeydown(e))
 	}
 	get #canTurn() {
 		return this.inForwardOfTile

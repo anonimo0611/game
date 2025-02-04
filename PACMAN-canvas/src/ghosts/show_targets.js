@@ -69,7 +69,7 @@ export const Target = new class {
 		pacDir == Dir.Up && Ctx.lineTo(...fwdVals)
 		Ctx.stroke()
 		if (g.idx == GhsType.Aosuke) {
-			const akaVals = GhsMgr.centerPos(GhsType.Akabei).vals
+			const akaVals = GhsMgr.akaCenter.vals
 			cvsStrokeLine(Ctx)(...fwdVals, ...akaVals)
 			cvsStrokeLine(Ctx)(...fwdVals, ...g.chasePos.vals)
 			cvsFillCircle(Ctx)(...fwdVals, 8, Color[g.name])
