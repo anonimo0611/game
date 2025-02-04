@@ -1,7 +1,6 @@
 ﻿import {Ticker,Timer} from '../../_lib/timer.js'
 import {Vec2}         from '../../_lib/vec2.js'
 import {L,R}          from '../../_lib/direction.js'
-import {Ctx}          from '../_canvas.js'
 import {State}        from '../_state.js'
 import {Ctrl}         from '../control.js'
 import {drawDot}      from '../maze.js'
@@ -11,7 +10,7 @@ import {Ghost}        from '../ghosts/_ghost.js'
 import {GhsMgr}       from '../ghosts/_system.js'
 import {FrightMode}   from '../ghosts/_system.js'
 import {AttractTimer} from './_run_timer.js'
-import {CvsWidth,Color,GhsType,TileSize as T} from '../_constants.js'
+import {Cvs,Ctx,Color,GhsType,TileSize as T} from '../_constants.js'
 
 /** @type {?Attract} */
 let   _attract  = null
@@ -32,8 +31,8 @@ export class Attract {
 	ghsList = [[],[]]
 	pacman  = new Pacman
 	powDisp = 1
-	pacVelX = -CvsWidth/180
-	ghsVelX = -CvsWidth/169
+	pacVelX = -Cvs.width/180
+	ghsVelX = -Cvs.width/169
 
 	constructor(symbol) {
 		if (symbol != ModSymbol)
@@ -49,7 +48,7 @@ export class Attract {
 	setActor(idx, gIdx) {
 		const g = new Ghost({idx:gIdx,anime:!!idx})
 		if (idx) {
-			g.pos = Vec2(CvsWidth+(T*6)+(T*2*gIdx), T*19)
+			g.pos = Vec2(Cvs.width+(T*6)+(T*2*gIdx), T*19)
 			!gIdx && (this.pacman.pos = Vec2(g.x-T*3.5, g.y))
 		}
 		g.orient = [R,L][idx]

@@ -2,11 +2,9 @@ import {Ticker} from '../_lib/timer.js'
 import {Vec2}   from '../_lib/vec2.js'
 import {L,R}    from '../_lib/direction.js'
 import {Rect}   from '../_lib/rect.js'
-import {Ctx}    from './_canvas.js'
-import {BgCtx}  from './_canvas.js'
 import {State}  from './_state.js'
 import {Form}   from './control.js'
-import {MapData,ColMax,Color,TileSize as T} from './_constants.js'
+import {Bg,Ctx,MapData,ColMax,Color,TileSize as T} from './_constants.js'
 
 const WallSet  = new Set()
 const DotSet   = new Set()
@@ -70,13 +68,13 @@ export const Maze = new class {
 		Maze.clearBgDot({tileIdx:i,tilePos:v})
 		DotSet.add(i)
 		!Form.powChk.checked || (chip == '.')
-			? drawDot(BgCtx, v)
+			? drawDot(Bg.ctx, v)
 			: PowMap.set(i, v)
 	}
 	clearBgDot({tileIdx:i,tilePos:v}) {
 		DotSet.delete(i)
 		PowMap.delete(i)
-		drawDot(BgCtx, v, true, null)
+		drawDot(Bg.ctx, v, true, null)
 		return DotSet.size
 	}
 	drawDot(ctx, {x,y}={}, isLarge=false, color=Color.Dot) {

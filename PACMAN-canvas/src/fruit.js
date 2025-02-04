@@ -8,8 +8,7 @@ import {Maze}   from './maze.js'
 import {PtsMgr} from './points.js'
 import {Player} from './pacman/_pacman.js'
 import Sprites  from './fruits_sprite.js'
-import {Ctx,BgCvs,BgCtx} from './_canvas.js'
-import {CvsWidth,DotMax,TileSize as T} from './_constants.js'
+import {Bg,Cvs,Ctx,DotMax,TileSize as T} from './_constants.js'
 
 // The fruit appear after 70 or 170 dots are cleared
 const appearSet  = new Set([70,170])
@@ -34,7 +33,7 @@ export const Fruit = new class {
 		return PointTable[Fruit.number()]
 	}
 	get targetPos() {
-		return Vec2(CvsWidth/2, T*18.5)
+		return Vec2(Cvs.width/2, T*18.5)
 	}
 	number(i=Game.level-1) {
 		return LevelTable.at(i >= LevelTable.length ? -1 : i)
@@ -80,15 +79,15 @@ export const Fruit = new class {
 	}
 	drawLevelCounter() {
 		const [x,y,w,h] = LvCounterRect;
-		Ctx.drawImage(BgCvs, x,y, w,h, x,y, w,h)
+		Ctx.drawImage(Bg.cvs, x,y, w,h, x,y, w,h)
 	}
 	#drawLevelCounter() {
 		const [x,y,w,h] = LvCounterRect
 		const initCount = max(Game.level-LvCounterMax, 0)
-		BgCtx.clearRect(x,y,w,h)
+		Bg.ctx.clearRect(x,y,w,h)
 		for (let i=initCount,cols=1; i<Game.level; i++) {
 			const pos = Vec2(x+w+T-(T*2*cols++), y+T)
-			Fruit.#drawSprite(BgCtx, Fruit.number(i), pos)
+			Fruit.#drawSprite(Bg.ctx, Fruit.number(i), pos)
 		}
 	}
 }

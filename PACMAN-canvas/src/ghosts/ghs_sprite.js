@@ -1,9 +1,8 @@
 import {Vec2}    from '../../_lib/vec2.js'
 import {Dir}     from '../../_lib/direction.js'
-import {Ctx}     from '../_canvas.js'
 import {GlowCvs} from './glow.js'
 import CBSprite  from './ghs_sprite_cb.js'
-import {Color,TileSize,GhsNames,GhsScale} from '../_constants.js'
+import {Ctx,Color,TileSize,GhsNames,GhsScale} from '../_constants.js'
 
 const EyesEnum = freeze({Up:0,Down:1,Left:2,Right:2,LowerR:3})
 

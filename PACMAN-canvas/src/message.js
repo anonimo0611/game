@@ -1,9 +1,8 @@
 import {Ticker}  from '../_lib/timer.js'
 import {Confirm} from '../_lib/confirm.js'
 import {Game}    from './_main.js'
-import {Ctx}     from './_canvas.js'
 import {State}   from './_state.js'
-import {Color,TileSize as T} from './_constants.js'
+import {Ctx,Color,TileSize as T} from './_constants.js'
 
 export const Message = new class {
 	drawText(col, row, color='', text='',

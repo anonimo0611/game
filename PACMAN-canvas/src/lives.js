@@ -1,10 +1,9 @@
 import {Vec2}  from '../_lib/vec2.js'
-import {BgCtx} from './_canvas.js'
 import {State} from './_state.js'
 import {Ctrl}  from './control.js'
 import {Form}  from './control.js'
 import Sprite  from './pacman/pac_sprite.js'
-import {TileSize as T} from './_constants.js'
+import {Bg,TileSize as T} from './_constants.js'
 
 export const Lives = function() {
 	let left = 0
@@ -18,14 +17,14 @@ export const Lives = function() {
 	}
 	function set(left=currentValue(Ctrl.livesMax-1)) {
 		const sprite = new Sprite({openType:1})
-		BgCtx.save()
-		BgCtx.translate(T*2, T*32)
-		BgCtx.clearRect(0,0, T*2*5, T*2)
+		Bg.ctx.save()
+		Bg.ctx.translate(T*2, T*32)
+		Bg.ctx.clearRect(0,0, T*2*5, T*2)
 		for (let i=0; i<left; i++) {
 			const centerPos = Vec2(T*2*i,0).add(T)
-			sprite.draw(BgCtx, {radius:T*.78,centerPos})
+			sprite.draw(Bg.ctx, {radius:T*.78,centerPos})
 		}
-		BgCtx.restore()
+		Bg.ctx.restore()
 	}
 	$(Form.lvsRng).on('input', ()=> set())
 	$on('Title Start Ready Restart', ()=> set())

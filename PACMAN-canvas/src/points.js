@@ -1,13 +1,12 @@
 import {Timer}  from '../_lib/timer.js'
 import {Vec2}   from '../_lib/vec2.js'
-import {Ctx}    from './_canvas.js'
 import {Game}   from './_main.js'
 import {State}  from './_state.js'
 import {Score}  from './score.js'
 import {GhsMgr} from './ghosts/_system.js'
 import {Fruit}  from './fruit.js'
 import Sprite   from './points_sprite.js'
-import {CvsWidth,TileSize as T} from './_constants.js'
+import {Cvs,Ctx,TileSize as T} from './_constants.js'
 
 /** @type {Map<any, Points>} */
 const PtsMap = new Map()
@@ -41,7 +40,7 @@ class Points {
 		const {position:{x,y}}= this
 		Ctx.save()
 		this.fadeOut?.setAlpha(Ctx)
-		Ctx.translate(clamp(x, T, CvsWidth-T), y)
+		Ctx.translate(clamp(x, T, Cvs.width-T), y)
 		Ctx.scale(T/8, T/8)
 		Sprite.draw(0,0, this.score)
 		Ctx.restore()

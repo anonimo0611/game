@@ -1,10 +1,9 @@
 import {Confirm}   from '../_lib/confirm.js'
-import {Ctx}       from './_canvas.js'
 import * as Menu   from './_menu.js'
 import {LevelMenu} from './_menu.js'
 import {State}     from './_state.js'
 import {drawText}  from './message.js'
-import {Color,ColMax,RowMax,TileSize as T} from './_constants.js'
+import {Ctx,Color,ColMax,RowMax,TileSize as T} from './_constants.js'
 
 export const Ctrl = new class {
 	static {$ready(this.setup)}

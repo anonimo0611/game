@@ -1,4 +1,4 @@
-import {Ctx} from './_canvas.js'
+import {Ctx} from './_constants.js'
 function cherry(ctx=Ctx) {
 	function fruit(x,y, idx) {
 		ctx.save()

@@ -1,5 +1,4 @@
-import {Color} from './_constants.js'
-import {Ctx}   from './_canvas.js'
+import {Ctx,Color} from './_constants.js'
 
 const linePaths0_8 = {
 	0: [1,0,2,0,3,1,3,5,2,6,1,6,0,5,0,1],

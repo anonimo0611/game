@@ -1,8 +1,7 @@
 import {Ticker}  from '../../_lib/timer.js'
 import {U,R,D,L} from '../../_lib/direction.js'
-import {Ctx}     from '../_canvas.js'
 import {Losing}  from './pac_losing.js'
-import {Color,PacRadius} from '../_constants.js'
+import {Ctx,Color,PacRadius} from '../_constants.js'
 
 const Duration  = 150/Ticker.Interval
 const OpenMid   = 30 * PI/180

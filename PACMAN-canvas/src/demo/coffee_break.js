@@ -1,13 +1,12 @@
 import {Sound}   from '../../_snd/sound.js'
 import {Ticker}  from '../../_lib/timer.js'
 import {U,R,L}   from '../../_lib/direction.js'
-import {Cvs,Ctx} from '../_canvas.js'
 import {Game}    from '../_main.js'
 import {State}   from '../_state.js'
 import {Pacman}  from '../pacman/_pacman.js'
 import {Ghost}   from '../ghosts/_ghost.js'
 import Sprite    from '../ghosts/ghs_sprite_cb.js'
-import {CvsWidth,TileSize as T} from '../_constants.js'
+import {Cvs,Ctx,TileSize as T} from '../_constants.js'
 
 const ModSymbol = Symbol()
 const IntermissionMap = new Map([[2,1], [5,2], [9,3]])
@@ -26,7 +25,7 @@ export class CBreak {
 
 	pacman  = new Pacman
 	akabei  = new Ghost
-	pacVelX = -CvsWidth/180
+	pacVelX = -Cvs.width/180
 	constructor(symbol) {
 		if (symbol != ModSymbol)
 			throw TypeError('The constructor is not visible')
@@ -64,9 +63,9 @@ export class CBreak {
 class Scene1 extends CBreak {
 	constructor() {
 		super(ModSymbol)
-		this.akaVelX  = -CvsWidth / 156.4
-		this.pacman.x =  CvsWidth + T*1
-		this.akabei.x =  CvsWidth + T*3
+		this.akaVelX  = -Cvs.width / 156.4
+		this.pacman.x =  Cvs.width + T*1
+		this.akabei.x =  Cvs.width + T*3
 	}
 	moveAkabei() {
 		if (Ticker.elapsedTime > 400)
@@ -84,7 +83,7 @@ class Scene1 extends CBreak {
 			break
 		case R:
 			akabei.x > T*7.5 && this.movePacman()
-			akabei.x > CvsWidth + T*9 && this.end()
+			akabei.x > Cvs.width + T*9 && this.end()
 			break
 		}
 	}
@@ -101,8 +100,8 @@ class Scene2 extends CBreak {
 		this.ripped   = false
 		this.sprite   = Sprite.stakeClothes
 		this.akaVelX  = this.pacVelX
-		this.pacman.x = CvsWidth + T*3
-		this.akabei.x = CvsWidth + T*16
+		this.pacman.x = Cvs.width + T*3
+		this.akabei.x = Cvs.width + T*16
 	}
 	moveAkabei({akabei:aka, akaVelX:vX}=this) {
 		const {CaughtX,AkaMinX}= this.sprite
@@ -143,15 +142,15 @@ class Scene2 extends CBreak {
 class Scene3 extends CBreak {
 	constructor() {
 		super(ModSymbol)
-		this.pacVelX  = -CvsWidth / 200
-		this.akaVelX  = -CvsWidth / 200
-		this.pacman.x =  CvsWidth + T*3
-		this.akabei.x =  CvsWidth + T*10
+		this.pacVelX  = -Cvs.width / 200
+		this.akaVelX  = -Cvs.width / 200
+		this.pacman.x =  Cvs.width + T*3
+		this.akabei.x =  Cvs.width + T*10
 	}
 	moveAkabei({akabei:aka}=this) {
 		aka.x += this.akaVelX
 		aka.x < -T*8 && (aka.orient = R) && (this.akaVelX *= -1)
-		aka.x > (T*9 + CvsWidth) && aka.orient == R && this.end()
+		aka.x > (T*9 + Cvs.width) && aka.orient == R && this.end()
 	}
 	update() {
 		this.movePacman()

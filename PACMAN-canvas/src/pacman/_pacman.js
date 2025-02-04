@@ -4,7 +4,6 @@ import {Timer}   from '../../_lib/timer.js'
 import {Vec2}    from '../../_lib/vec2.js'
 import {Confirm} from '../../_lib/confirm.js'
 import {Dir}     from '../../_lib/direction.js'
-import {Ctx}     from '../_canvas.js'
 import {Game}    from '../_main.js'
 import {State}   from '../_state.js'
 import {Ctrl}    from '../control.js'
@@ -13,7 +12,7 @@ import {Maze}    from '../maze.js'
 import {Actor}   from '../actor.js'
 import {GhsMgr}  from '../ghosts/_system.js'
 import Sprite    from './pac_sprite.js'
-import {PacRadius,PacStep as Step,TileSize as T} from '../_constants.js'
+import {Ctx,PacRadius,PacStep as Step,TileSize as T} from '../_constants.js'
 
 export const Player = function() {
 	/** @type {?PlayablePacman} */

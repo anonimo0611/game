@@ -6,7 +6,7 @@ import {Timer}     from '../_lib/timer.js'
 import {Dir}       from '../_lib/direction.js'
 import {Cursor}    from '../_lib/mouse.js'
 import {LevelMenu} from './_menu.js'
-import {BgCvs,Ctx} from './_canvas.js'
+import {Bg,Ctx}    from './_constants.js'
 import {State}     from './_state.js'
 import {Ctrl}      from './control.js'
 import {Maze}      from './maze.js'
@@ -166,7 +166,7 @@ export const Game = new class {
 		Ctrl.drawGridLines()
 		if (State.isAttract) return this.#drawAttractMode()
 		if (State.isCBreak)  return this.#drawCoffeeBreak()
-		Ctx.drawImage(BgCvs, 0,0)
+		Ctx.drawImage(Bg.cvs, 0,0)
 		Maze.drawDoor()
 		Ctrl.drawInfo()
 		Score.draw()

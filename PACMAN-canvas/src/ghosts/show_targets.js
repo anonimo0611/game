@@ -1,14 +1,13 @@
 import {Timer}  from '../../_lib/timer.js'
 import {Vec2}   from '../../_lib/vec2.js'
 import {Dir}    from '../../_lib/direction.js'
-import {Ctx}    from '../_canvas.js'
 import {State}  from '../_state.js'
 import {Ctrl}   from '../control.js'
 import {Maze}   from '../maze.js'
 import {Player} from '../pacman/_pacman.js'
 import {GhsMgr} from '../ghosts/_system.js'
 import {Ghost}  from './_ghost.js'
-import {Color,GhsType,TileSize as T} from '../_constants.js'
+import {Ctx,Color,GhsType,TileSize as T} from '../_constants.js'
 
 export const Target = new class {
 	/** @param {Ghost[]} ghosts */

@@ -1,6 +1,5 @@
-import {Ticker}  from '../../_lib/timer.js'
-import {Cvs,Ctx} from '../_canvas.js'
-import {Color,TileSize,PacRadius as R} from '../_constants.js'
+import {Ticker} from '../../_lib/timer.js'
+import {Cvs,Ctx,Color,TileSize,PacRadius as R} from '../_constants.js'
 
 const DisDur  = 1149/Ticker.Interval
 const LineDur =  300/Ticker.Interval
