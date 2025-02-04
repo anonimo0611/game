@@ -21,12 +21,11 @@ class Pinky extends Ghost {
 		freeze(this)
 	}
 	get chasePos() {
-		const Pac = Player
-		const pos = Player.forwardPos(4)
 		const {Tunnel}= Maze
-		Tunnel.isInL(Pac.centerPos) && Pac.dir == L && (pos.x=Tunnel.entranceR*T)
-		Tunnel.isInR(Pac.centerPos) && Pac.dir == R && (pos.x=Tunnel.entranceL*T)
-		return pos
+		const P=Player, tgt=P.forwardPos(4)
+		Tunnel.isInL(P.centerPos) && P.dir == L && (tgt.x=Tunnel.entranceR*T)
+		Tunnel.isInR(P.centerPos) && P.dir == R && (tgt.x=Tunnel.entranceL*T)
+		return tgt
 	}
 }
 class Aosuke extends Ghost {
