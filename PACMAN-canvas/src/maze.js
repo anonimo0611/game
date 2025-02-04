@@ -50,8 +50,6 @@ export const Maze = new class {
 
 	PowDot      = freeze(new PowDot)
 	Tunnel      = freeze(new Tunnel)
-	Width       = ColMax   * T
-	Center      = ColMax/2 * T
 	PenEntrance = Vec2(13, 12).freeze()
 	PenMiddleY  = (this.PenEntrance.y+3.5) * T
 	hasDot      = index  => DotSet.has(index)
@@ -69,16 +67,16 @@ export const Maze = new class {
 	}
 	#setDot(chip, i) {
 		const v = Vec2(i%ColMax, i/ColMax|0)
-		Maze.clearDot({tileIdx:i,tilePos:v})
+		Maze.clearBgDot({tileIdx:i,tilePos:v})
 		DotSet.add(i)
 		!Form.powChk.checked || (chip == '.')
-			? Maze.drawDot(BgCtx, v)
+			? drawDot(BgCtx, v)
 			: PowMap.set(i, v)
 	}
-	clearDot({tileIdx:i,tilePos:v}) {
+	clearBgDot({tileIdx:i,tilePos:v}) {
 		DotSet.delete(i)
 		PowMap.delete(i)
-		Maze.drawDot(BgCtx, v, true, null)
+		drawDot(BgCtx, v, true, null)
 		return DotSet.size
 	}
 	drawDot(ctx, {x,y}={}, isLarge=false, color=Color.Dot) {
@@ -88,4 +86,4 @@ export const Maze = new class {
 		if (State.isFlashMaze) return
 		cvsFillRect(Ctx)(13*T, 13.58*T, T*2, T/4, Color.Door)
 	}
-};freeze(Maze)
+}, {drawDot}=Object.freeze(Maze)

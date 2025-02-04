@@ -4,14 +4,14 @@ import {L,R}          from '../../_lib/direction.js'
 import {Ctx}          from '../_canvas.js'
 import {State}        from '../_state.js'
 import {Ctrl}         from '../control.js'
+import {drawDot}      from '../maze.js'
 import {drawText}     from '../message.js'
-import {Maze}         from '../maze.js'
 import {Pacman}       from '../pacman/_pacman.js'
 import {Ghost}        from '../ghosts/_ghost.js'
 import {GhsMgr}       from '../ghosts/_system.js'
 import {FrightMode}   from '../ghosts/_system.js'
 import {AttractTimer} from './_run_timer.js'
-import {Color,GhsType,TileSize as T} from '../_constants.js'
+import {CvsWidth,Color,GhsType,TileSize as T} from '../_constants.js'
 
 /** @type {?Attract} */
 let   _attract  = null
@@ -32,8 +32,8 @@ export class Attract {
 	ghsList = [[],[]]
 	pacman  = new Pacman
 	powDisp = 1
-	pacVelX = -Maze.Width/180
-	ghsVelX = -Maze.Width/169
+	pacVelX = -CvsWidth/180
+	ghsVelX = -CvsWidth/169
 
 	constructor(symbol) {
 		if (symbol != ModSymbol)
@@ -49,7 +49,7 @@ export class Attract {
 	setActor(idx, gIdx) {
 		const g = new Ghost({idx:gIdx,anime:!!idx})
 		if (idx) {
-			g.pos = Vec2(Maze.Width+(T*6)+(T*2*gIdx), T*19)
+			g.pos = Vec2(CvsWidth+(T*6)+(T*2*gIdx), T*19)
 			!gIdx && (this.pacman.pos = Vec2(g.x-T*3.5, g.y))
 		}
 		g.orient = [R,L][idx]
@@ -80,8 +80,8 @@ export class Attract {
 		et > 7500 && drawText( 8, 16, Color.Guzuta, 'OTOBOKE---')
 		et > 8000 && drawText(18, 16, Color.Guzuta, '"GUZUTA"')
 		if (et > 8500) {
-			Maze.drawDot(Ctx, Vec2(10, 24))
-			this.powDisp && Maze.drawDot(Ctx, Vec2(10, 26), true)
+			drawDot(Ctx, Vec2(10, 24))
+			this.powDisp && drawDot(Ctx, Vec2(10, 26), true)
 			drawText(12.0, 25, '#FFF', '10')
 			drawText(14.3, 25, '#FFF', 'PTS', {size:ptsFontSize})
 			drawText(12.0, 27, '#FFF', '50')
@@ -89,7 +89,7 @@ export class Attract {
 		}
 		if (et > 9000) {
 			if (this.pacman.orient == L && this.powDisp) {
-				Maze.drawDot(Ctx, Vec2(4, 19), true)
+				drawDot(Ctx, Vec2(4, 19), true)
 			}
 			if (Ctrl.extendPts > 0) {
 				drawText( 2.0, 30, '#F90', `BONUS　PACMAN　FOR　${Ctrl.extendPts}`)

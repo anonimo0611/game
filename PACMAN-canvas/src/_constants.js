@@ -4,6 +4,7 @@ export const PacScale  = 0.9
 export const GhsScale  = 1.1
 export const TileSize  = +$(dRoot).css('--tile-size')
 export const CvsWidth  = TileSize * ColMax
+export const CvsCenter = TileSize * ColMax/2
 export const CvsHeight = TileSize * RowMax
 export const PacRadius = TileSize * PacScale
 export const GhsType   = freeze({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4})

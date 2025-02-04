@@ -159,7 +159,7 @@ class PlayablePacman extends Pacman {
 		this.#notEaten = 0
 		this.#playSE()
 		Score.add(isPow? 50:10)
-		Maze.clearDot(this) == 0
+		Maze.clearBgDot(this) == 0
 			&& Sound.stopLoops()
 			&& State.switchToClear()
 			&& State.switchToFlashMaze({delay:1000})
