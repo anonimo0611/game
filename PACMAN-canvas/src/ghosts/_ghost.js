@@ -160,7 +160,7 @@ export class Ghost extends Actor {
 			return this.setY(Maze.PenMiddleY)
 		}
 		if (!initAlign || abs(x-initX) <= step) {
-			this.x   = initX
+			this.setX(initX)
 			this.dir = initAlign? (initAlign<0 ? R:L) : U
 			return this.#arrivedAtHome()
 		}
