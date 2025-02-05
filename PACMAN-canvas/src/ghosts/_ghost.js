@@ -115,10 +115,11 @@ export class Ghost extends Actor {
 	#behavior() {
 		const {state}= this
 		this.#runAway >= 0 && this.#runAway--
+		if (Timer.frozen && !this.escaping) return
 		if (state.isIdle)   return this.#idle(this)
 		if (state.isGoOut)  return this.#goOut(this)
 		if (state.isReturn) return this.#returnToHome(this)
-		this.#walk(state.isEscape)
+		this.#walk()
 	}
 	#idle({idx,step,orient,centerPos:{y}}=this) {
 		if (!Ctrl.isChaseMode) {
@@ -127,7 +128,7 @@ export class Ghost extends Actor {
 		if (!this.state.isGoOut) {
 			this.dir =(y+T*0.6-step > Maze.PenMiddleY && orient != D)
 				? U : (y-T*0.6+step < Maze.PenMiddleY ? D:U)
-			!Timer.frozen && this.setNextPos()
+			this.setNextPos()
 		}
 	}
 	release(deactivateGlobalDotCnt=false) {
@@ -136,8 +137,6 @@ export class Ghost extends Actor {
 		return deactivateGlobalDotCnt
 	}
 	#goOut({centerPos:{x:cx},y,step}=this) {
-		if (Timer.frozen)
-			return
 		if (cx > CvsW/2+step
 		 || cx < CvsW/2-step) {
 			return this.setMove(this.initAlign<0 ? R:L)
@@ -173,9 +172,7 @@ export class Ghost extends Actor {
 			: this.state.switchToIdle() && this.#idle(this)
 		!Timer.frozen && Sound.ghostArrivedAtHome()
 	}
-	#walk(isEscape=false) {
-		if (Timer.frozen && !isEscape)
-			return
+	#walk() {
 		for (let i=0,denom=ceil(this.step)*2; i<denom; i++) {
 			this.setNextPos(denom)
 			this.inBackwardOfTile && this.#setNextDir()
