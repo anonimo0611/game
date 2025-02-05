@@ -7,7 +7,7 @@ import {Cvs,Ctx}     from '../src/_constants.js'
 import PacSprite     from '../src/pacman/pac_sprite.js'
 import fruitsSprites from '../src/fruits_sprite.js'
 import pointsSprite  from '../src/points_sprite.js'
-import {ColMax,RowMax,T,S,Gap,ghost,cbAkabei} from './_constants.js'
+import {Cols,Rows,T,S,Gap,ghost,cbAkabei} from './_constants.js'
 
 export const View = function() {
 	const ofst = idx=> (S*idx)+(Gap*idx)
@@ -30,8 +30,8 @@ export const View = function() {
 		Ctx.lineWidth = 2
 		Ctx.strokeStyle = '#555'
 		const line = (...args)=> cvsStrokeLine(Ctx)(...args)
-		for (let y=0; y<ColMax;   y++) line(ofst(y), 0, ofst(y), RowMax*S)
-		for (let x=0; x<RowMax+1; x++) line(0, x*S, ColMax*S+Gap, x*S)
+		for (let y=0; y<Cols;   y++) line(ofst(y), 0, ofst(y), Rows*S)
+		for (let x=0; x<Rows+1; x++) line(0, x*S, Cols*S+Gap, x*S)
 		Ctx.restore()
 	}
 	function drawFruits() {
@@ -143,7 +143,7 @@ $('#brightRng').on('input', function() {
 	const v = this.value
 	Cvs.style.backgroundColor = `rgb(${v}% ${v}% ${v}%)`
 })
-$('#restBtn').on('click', ()=> {
+$('#resetBtn').on('click', ()=> {
 	[...document.forms].forEach(f=> f.reset())
 	$('[type=range]').trigger('input')
 })

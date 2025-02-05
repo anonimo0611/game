@@ -4,8 +4,8 @@ import {pvCvs}    from './anime.js'
 import {View}     from './_main.js'
 import * as Actor from './actor.js'
 
-export const ColMax = 10
-export const RowMax = 11
+export const Cols = 10
+export const Rows = 11
 
 export let T=TileSize, [S,Gap]=[T*2,T*.25]
 export let ghost    = new Actor.Ghost(T*2)
@@ -16,7 +16,7 @@ $('#sizeRng').on('input', ()=> {
 	T=size/2, [S,Gap]=[size,T*0.25]
 	ghost    = new Actor.Ghost(T*2)
 	cbAkabei = new Actor.Akabei(T*2)
-	setCanvasSize(Cvs)(ColMax*S+Gap*2, RowMax*S+Gap)
+	setCanvasSize(Cvs)(Cols*S+Gap*2, Rows*S+Gap)
 	setCanvasSize(pvCvs)(T*3, T*2)
 	View.draw()
-});setCanvasSize(Cvs)(ColMax*S+Gap*2, RowMax*S+Gap)
+});setCanvasSize(Cvs)(Cols*S+Gap*2, Rows*S+Gap)
