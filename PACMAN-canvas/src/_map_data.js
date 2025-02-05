@@ -34,7 +34,7 @@ D__________________________C\
 ////////////////////////////\
 ////////////////////////////`
 
-export const ColMax  = 28
-export const RowMax  = 34
-export const MapData = freeze([...MAP_STR])
-export const DotMax  = MAP_STR.match(/[.O]/g).length
+export const Cols   = 28
+export const Rows   = 34
+export const MapArr = freeze([...MAP_STR])
+export const DotMax = MAP_STR.match(/[.O]/g).length

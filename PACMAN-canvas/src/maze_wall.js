@@ -1,5 +1,5 @@
 import * as Constant from './_constants.js'
-const {Bg,Bg:{ctx},MapData,Color,ColMax:W,TileSize:T}= Constant
+const {Bg,Bg:{ctx},MapArr,Color,Cols:W,TileSize:T}= Constant
 
 export const MazeWall = new class {
 	#drawCorner(cornerIdx, x, y, type=0) {
@@ -28,7 +28,7 @@ export const MazeWall = new class {
 		ctx.clearRect(0,0, Bg.cvs.width, Bg.cvs.height-T*2)
 		ctx.lineWidth   = 3.5
 		ctx.strokeStyle = color
-		MapData.forEach(this.#drawTile)
+		MapArr.forEach(this.#drawTile)
 		this.#drawGhostPen()
 		ctx.restore()
 	}

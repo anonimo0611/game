@@ -3,7 +3,7 @@ import * as Menu   from './_menu.js'
 import {LevelMenu} from './_menu.js'
 import {State}     from './_state.js'
 import {drawText}  from './message.js'
-import {Ctx,Color,ColMax,RowMax,TileSize as T} from './_constants.js'
+import {Ctx,Color,Cols,Rows,TileSize as T} from './_constants.js'
 
 export const Ctrl = new class {
 	static {$ready(this.setup)}
@@ -72,8 +72,8 @@ export const Ctrl = new class {
 		if (!Ctrl.showGridLines) return
 		Ctx.save()
 		Ctx.strokeStyle = Color.Grid
-		for (let y=1; y<ColMax; y++) cvsStrokeLine(Ctx)(T*y, 0, T*y, RowMax*T)
-		for (let x=0; x<RowMax; x++) cvsStrokeLine(Ctx)(0, T*x, ColMax*T, T*x)
+		for (let y=1; y<Cols; y++) cvsStrokeLine(Ctx)(T*y, 0, T*y, Rows*T)
+		for (let x=0; x<Rows; x++) cvsStrokeLine(Ctx)(0, T*x, Cols*T, T*x)
 		Ctx.restore()
 	}
 	drawInfo() {

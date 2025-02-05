@@ -1,15 +1,15 @@
-import {ColMax,RowMax} from './_map_data.js'
+import {Cols,Rows} from './_map_data.js'
 export * from './_map_data.js'
 export const PacScale  = 0.9
 export const GhsScale  = 1.1
 export const TileSize  = +$(dRoot).css('--tile-size')
-export const CvsWidth  = TileSize * ColMax
-export const CvsHeight = TileSize * RowMax
 export const PacRadius = TileSize * PacScale
 export const GhsType   = freeze({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4})
 export const GhsNames  = freeze(keys(GhsType).slice(0,-1))
-export const Bg        = canvas2D(null, CvsWidth, CvsHeight)
-export const [Cvs,Ctx] = canvas2D('cvs',CvsWidth, CvsHeight).vals
+
+export const Bg = canvas2D(null, TileSize*Cols,TileSize*Rows)
+export const Fg = canvas2D('cvs',TileSize*Cols,TileSize*Rows)
+export const[Cvs,Ctx,CvsW,CvsH]= Fg.vals
 
 const BaseStep = +(TileSize/4.5).toFixed(1)
 export const PacStep = freeze(new class {

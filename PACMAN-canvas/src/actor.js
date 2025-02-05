@@ -3,8 +3,8 @@ import {Vec2}   from '../_lib/vec2.js'
 import {Dir,L}  from '../_lib/direction.js'
 import {State}  from './_state.js'
 import {Maze}   from './maze.js'
-import {ColMax} from './_constants.js'
-import {Ctx,CvsWidth as CW,TileSize as T} from './_constants.js'
+import {Cols} from './_constants.js'
+import {Ctx,CvsW as CW,TileSize as T} from './_constants.js'
 
 export class Actor {
 	#x = 0
@@ -19,7 +19,7 @@ export class Actor {
 	get pos()       {return Vec2(this)}
 	get centerPos() {return Vec2(this).add(T/2)}
 	get tilePos()   {return Vec2(this.centerPos).divInt(T)}
-	get tileIdx()   {return Vec2.idx(this.tilePos, ColMax)}
+	get tileIdx()   {return Vec2.idx(this.tilePos, Cols)}
 	set x(num)      {isNum(num) && (this.#x = num)}
 	set y(num)      {isNum(num) && (this.#y = num)}
 	set pos(pos)    {isObj(pos) && this.setPos(pos)}
@@ -69,12 +69,12 @@ export class Actor {
 	}
 	getAdjTile(dir, n=1, tile=this.tilePos) {
 		const  v = Vec2(dir).mul(n).add(tile)
-		return v.setX((v.x+ColMax) % ColMax)
+		return v.setX((v.x+Cols) % Cols)
 	}
 	collidedWithWall(dir=this.dir) {
 		const {step,centerPos}= this
 		const {x,y}= Vec2(dir).mul(T/2+step).add(centerPos).divInt(T)
-		return Maze.hasWall({x:(x+ColMax) % ColMax, y})
+		return Maze.hasWall({x:(x+Cols) % Cols, y})
 	}
 	update() {
 		State.isReady && this.#fadeIn.update(this.maxAlpha)

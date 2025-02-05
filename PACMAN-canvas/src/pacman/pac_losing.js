@@ -1,5 +1,5 @@
 import {Ticker} from '../../_lib/timer.js'
-import {Cvs,Ctx,Color,TileSize,PacRadius as R} from '../_constants.js'
+import {CvsW,Ctx,Color,TileSize,PacRadius as R} from '../_constants.js'
 
 const DisDur  = 1149/Ticker.Interval
 const LineDur =  300/Ticker.Interval
@@ -13,7 +13,7 @@ export class Losing {
 	#outerR = R/2
 	draw(ctx=Ctx, {x=0,y=0}={}) {
 		const clampedX = (ctx == Ctx)
-			? clamp(x, R, Cvs.width-R) : x
+			? clamp(x, R, CvsW-R) : x
 		ctx.save()
 		ctx.translate(clampedX, y)
 		ctx.lineWidth = TileSize/6

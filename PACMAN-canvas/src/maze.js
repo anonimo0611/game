@@ -4,7 +4,7 @@ import {L,R}    from '../_lib/direction.js'
 import {Rect}   from '../_lib/rect.js'
 import {State}  from './_state.js'
 import {Form}   from './control.js'
-import {Bg,Ctx,MapData,ColMax,Color,TileSize as T} from './_constants.js'
+import {Bg,Ctx,MapArr,Cols,Color,TileSize as T} from './_constants.js'
 
 const WallSet  = new Set()
 const DotSet   = new Set()
@@ -42,7 +42,7 @@ export const Maze = new class {
 	static setup() {
 		$on('Title NewLevel', Maze.#resetDots)
 		$(Form.powChk).on('change', Maze.#resetDots)
-		MapData.forEach((c,i)=> !/[.O\x20]/.test(c) && WallSet.add(i))
+		MapArr.forEach((c,i)=> !/[.O\x20]/.test(c) && WallSet.add(i))
 	}
 	get dotsLeft() {return DotSet.size}
 
@@ -52,19 +52,19 @@ export const Maze = new class {
 	PenMiddleY  = (this.PenEntrance.y+3.5) * T
 	hasDot      = index  => DotSet.has(index)
 	hasPow      = index  => PowMap.has(index)
-	hasWall     = ({x,y})=> WallSet.has(y*ColMax+x)
+	hasWall     = ({x,y})=> WallSet.has(y*Cols+x)
 	isInHouse   = ({x,y})=> PenRect.contains({x,y})
 
 	GhostNotEnterSet = new Set(['12-11','12-23','15-11','15-23'])
 	ghostExitPos({originalTarget:t={}, tilePos:pos={}}) {
-		const  x = (pos.x > ColMax/2) && (t.x > ColMax/2) ? 21:6
+		const  x = (pos.x > Cols/2) && (t.x > Cols/2) ? 21:6
 		return t.y < 10 && PenOuter.contains(pos)? Vec2(t).setX(x) : Vec2(t)
 	}
 	#resetDots() {
-		MapData.forEach((c,i)=> /[.O]/.test(c) && Maze.#setDot(c,i))
+		MapArr.forEach((c,i)=> /[.O]/.test(c) && Maze.#setDot(c,i))
 	}
 	#setDot(chip, i) {
-		const v = Vec2(i%ColMax, i/ColMax|0)
+		const v = Vec2(i%Cols, i/Cols|0)
 		Maze.clearBgDot({tileIdx:i,tilePos:v})
 		DotSet.add(i)
 		!Form.powChk.checked || (chip == '.')

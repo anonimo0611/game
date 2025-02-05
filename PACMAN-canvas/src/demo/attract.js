@@ -10,7 +10,7 @@ import {Ghost}        from '../ghosts/_ghost.js'
 import {GhsMgr}       from '../ghosts/_system.js'
 import {FrightMode}   from '../ghosts/_system.js'
 import {AttractTimer} from './_run_timer.js'
-import {Cvs,Ctx,Color,GhsType,TileSize as T} from '../_constants.js'
+import {CvsW,Ctx,Color,GhsType,TileSize as T} from '../_constants.js'
 
 /** @type {?Attract} */
 let   _attract  = null
@@ -31,8 +31,8 @@ export class Attract {
 	ghsList = [[],[]]
 	pacman  = new Pacman
 	powDisp = 1
-	pacVelX = -Cvs.width/180
-	ghsVelX = -Cvs.width/169
+	pacVelX = -CvsW/180
+	ghsVelX = -CvsW/169
 
 	constructor(symbol) {
 		if (symbol != ModSymbol)
@@ -48,7 +48,7 @@ export class Attract {
 	setActor(idx, gIdx) {
 		const g = new Ghost({idx:gIdx,anime:!!idx})
 		if (idx) {
-			g.pos = Vec2(Cvs.width+(T*6)+(T*2*gIdx), T*19)
+			g.pos = Vec2(CvsW+(T*6)+(T*2*gIdx), T*19)
 			!gIdx && (this.pacman.pos = Vec2(g.x-T*3.5, g.y))
 		}
 		g.orient = [R,L][idx]

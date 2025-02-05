@@ -1,12 +1,12 @@
-import {Sound}   from '../../_snd/sound.js'
-import {Ticker}  from '../../_lib/timer.js'
-import {U,R,L}   from '../../_lib/direction.js'
-import {Game}    from '../_main.js'
-import {State}   from '../_state.js'
-import {Pacman}  from '../pacman/_pacman.js'
-import {Ghost}   from '../ghosts/_ghost.js'
-import Sprite    from '../ghosts/ghs_sprite_cb.js'
-import {Cvs,Ctx,TileSize as T} from '../_constants.js'
+import {Sound}  from '../../_snd/sound.js'
+import {Ticker} from '../../_lib/timer.js'
+import {U,R,L}  from '../../_lib/direction.js'
+import {Game}   from '../_main.js'
+import {State}  from '../_state.js'
+import {Pacman} from '../pacman/_pacman.js'
+import {Ghost}  from '../ghosts/_ghost.js'
+import Sprite   from '../ghosts/ghs_sprite_cb.js'
+import {CvsW,CvsH,Ctx,TileSize as T} from '../_constants.js'
 
 const ModSymbol = Symbol()
 const IntermissionMap = new Map([[2,1], [5,2], [9,3]])
@@ -25,12 +25,12 @@ export class CBreak {
 
 	pacman  = new Pacman
 	akabei  = new Ghost
-	pacVelX = -Cvs.width/180
+	pacVelX = -CvsW/180
 	constructor(symbol) {
 		if (symbol != ModSymbol)
 			throw TypeError('The constructor is not visible')
 		this.pacman.y =
-		this.akabei.y = Cvs.height/2 - T/2
+		this.akabei.y = CvsH/2 - T/2
 		$onNS('.CB','Quit', this.end)
 		$onNS('.CB','blur focus', this.pause)
 		State.switchToCBreak()
@@ -63,9 +63,9 @@ export class CBreak {
 class Scene1 extends CBreak {
 	constructor() {
 		super(ModSymbol)
-		this.akaVelX  = -Cvs.width / 156.4
-		this.pacman.x =  Cvs.width + T*1
-		this.akabei.x =  Cvs.width + T*3
+		this.akaVelX  = -CvsW / 156.4
+		this.pacman.x =  CvsW + T*1
+		this.akabei.x =  CvsW + T*3
 	}
 	moveAkabei() {
 		if (Ticker.elapsedTime > 400)
@@ -83,7 +83,7 @@ class Scene1 extends CBreak {
 			break
 		case R:
 			akabei.x > T*7.5 && this.movePacman()
-			akabei.x > Cvs.width + T*9 && this.end()
+			akabei.x > CvsW + T*9 && this.end()
 			break
 		}
 	}
@@ -100,8 +100,8 @@ class Scene2 extends CBreak {
 		this.ripped   = false
 		this.sprite   = Sprite.stakeClothes
 		this.akaVelX  = this.pacVelX
-		this.pacman.x = Cvs.width + T*3
-		this.akabei.x = Cvs.width + T*16
+		this.pacman.x = CvsW + T*3
+		this.akabei.x = CvsW + T*16
 	}
 	moveAkabei({akabei:aka, akaVelX:vX}=this) {
 		const {CaughtX,AkaMinX}= this.sprite
@@ -142,15 +142,15 @@ class Scene2 extends CBreak {
 class Scene3 extends CBreak {
 	constructor() {
 		super(ModSymbol)
-		this.pacVelX  = -Cvs.width / 200
-		this.akaVelX  = -Cvs.width / 200
-		this.pacman.x =  Cvs.width + T*3
-		this.akabei.x =  Cvs.width + T*10
+		this.pacVelX  = -CvsW / 200
+		this.akaVelX  = -CvsW / 200
+		this.pacman.x =  CvsW + T*3
+		this.akabei.x =  CvsW + T*10
 	}
 	moveAkabei({akabei:aka}=this) {
 		aka.x += this.akaVelX
 		aka.x < -T*8 && (aka.orient = R) && (this.akaVelX *= -1)
-		aka.x > (T*9 + Cvs.width) && aka.orient == R && this.end()
+		aka.x > (T*9 + CvsW) && aka.orient == R && this.end()
 	}
 	update() {
 		this.movePacman()

@@ -13,7 +13,7 @@ import {Player}  from '../pacman/_pacman.js'
 import Sprite    from './ghs_sprite.js'
 import * as Sys  from './_system.js'
 import {GhsMgr}  from './_system.js'
-import {Cvs,Ctx,GhsType,GhsStep,TileSize as T} from '../_constants.js'
+import {CvsW,Ctx,GhsType,GhsStep,TileSize as T} from '../_constants.js'
 
 const compareDist = (a,b)=>
 	(a.dist == b.dist)? (a.index-b.index) : (a.dist-b.dist)
@@ -74,7 +74,7 @@ export class Ghost extends Actor {
 	}
 	get penEntranceArrived() {
 		return this.tilePos.y == Maze.PenEntrance.y
-			&& abs(Cvs.width/2 - this.centerPos.x) <= this.step
+			&& abs(CvsW/2 - this.centerPos.x) <= this.step
 	}
 	get distanceToPacman() {
 		return Vec2.distance(this, Player.pos)
@@ -103,7 +103,7 @@ export class Ghost extends Actor {
 		this.sprite.update()
 		if (this.state.isEscape && this.penEntranceArrived) {
 			this.state.switchToReturn()
-			this.setCenterX(Cvs.width/2)
+			this.setCenterX(CvsW/2)
 		}
 		if (State.isPlaying && Maze.dotsLeft) {
 			this.#behavior()
@@ -133,16 +133,16 @@ export class Ghost extends Actor {
 		this.state.isIdle && this.state.switchToGoOut()
 		return deactivateGlobalDotCnt
 	}
-	#goOut({y,centerPos,step}=this) {
+	#goOut({centerPos:{x:cx},y,step}=this) {
 		if (Timer.frozen) return
-		if (centerPos.x < Cvs.width/2-step
-		 || centerPos.x > Cvs.width/2+step) {
+		if (cx > CvsW/2+step
+		 || cx < CvsW/2-step) {
 			this.dir = this.initAlign<0 ? R:L
 			this.setNextPos()
 			return
 		}
-		if (centerPos.x != Cvs.width/2) {
-			this.setCenterX(Cvs.width/2)
+		if (cx != CvsW/2) {
+			this.setCenterX(CvsW/2)
 			return
 		}
 		if (y > Maze.PenEntrance.y*T+step) {
