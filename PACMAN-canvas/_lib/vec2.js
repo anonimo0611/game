@@ -70,6 +70,7 @@ const xyFrom = (v1=0,v2=0)=> {
 	if (!isNum(y)) throw TypeError(`${y} is an invalid y-coordinate`)
 	return [x,y]
 }
+/** @typedef {Vector2} */
 export const
 Vec2 = (...args)=> new Vector2(...args,)
 Vec2.Zero  = Vec2( 0, 0)
