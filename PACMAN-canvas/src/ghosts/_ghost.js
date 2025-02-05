@@ -73,7 +73,8 @@ export class Ghost extends Actor {
 			: Maze.ghostExitPos(this)
 	}
 	get penEntranceArrived() {
-		return this.tilePos.y == Maze.PenEntrance.y
+		return this.state.isEscape
+			&& this.tilePos.y == Maze.PenEntrance.y
 			&& abs(CvsW/2 - this.centerPos.x) <= this.step
 	}
 	get distanceToPacman() {
@@ -90,7 +91,8 @@ export class Ghost extends Actor {
 		return spd * (this.isScatter? GhsStep.Base:this.chaseStep)
 	}
 	draw() {
-		if (State.isStart) return
+		if (State.isStart)
+			return
 		Ctx.save()
 		super.draw()
 		this.sprite.fadeOut?.setAlpha(Ctx)
@@ -101,9 +103,9 @@ export class Ghost extends Actor {
 		super.update()
 		this.sprite.fadeOut?.update()
 		this.sprite.update()
-		if (this.state.isEscape && this.penEntranceArrived) {
+		if (this.penEntranceArrived) {
 			this.state.switchToReturn()
-			this.setCenterX(CvsW/2)
+			this.setCenter(CvsW/2)
 		}
 		if (State.isPlaying && Maze.dotsLeft) {
 			this.#behavior()
@@ -134,21 +136,17 @@ export class Ghost extends Actor {
 		return deactivateGlobalDotCnt
 	}
 	#goOut({centerPos:{x:cx},y,step}=this) {
-		if (Timer.frozen) return
+		if (Timer.frozen)
+			return
 		if (cx > CvsW/2+step
 		 || cx < CvsW/2-step) {
-			this.dir = this.initAlign<0 ? R:L
-			this.setNextPos()
-			return
+			return this.setMove(this.initAlign<0 ? R:L)
 		}
 		if (cx != CvsW/2) {
-			this.setCenterX(CvsW/2)
-			return
+			return this.setCenter(CvsW/2)
 		}
 		if (y > Maze.PenEntrance.y*T+step) {
-			this.dir = U
-			this.setNextPos()
-			return
+			return this.setMove(U)
 		}
 		this.dir = L
 		this.#started ||= true
@@ -156,22 +154,17 @@ export class Ghost extends Actor {
 	}
 	#returnToHome({step,x,y,initX,initAlign}=this) {
 		if (y+step <= Maze.PenMiddleY) {
-			this.dir = D
-			this.setNextPos()
-			return
+			return this.setMove(D)
 		}
 		if (this.y != Maze.PenMiddleY) {
-			this.y = Maze.PenMiddleY
-			return
+			return this.setY(Maze.PenMiddleY)
 		}
 		if (!initAlign || abs(x-initX) <= step) {
 			this.x   = initX
 			this.dir = initAlign? (initAlign<0 ? R:L) : U
-			this.#arrivedAtHome()
-		 	return
+			return this.#arrivedAtHome()
 		}
-		this.dir = initAlign<0 ? L:R
-		this.setNextPos()
+		this.setMove(initAlign<0 ? L:R)
 	}
 	#arrivedAtHome() {
 		this.sprite.setResurrect()
@@ -181,7 +174,8 @@ export class Ghost extends Actor {
 		!Timer.frozen && Sound.ghostArrivedAtHome()
 	}
 	#walk(isEscape=false) {
-		if (Timer.frozen && !isEscape) return
+		if (Timer.frozen && !isEscape)
+			return
 		for (let i=0,denom=ceil(this.step)*2; i<denom; i++) {
 			this.setNextPos(denom)
 			this.inBackwardOfTile && this.#setNextDir()
@@ -189,7 +183,8 @@ export class Ghost extends Actor {
 		}
 	}
 	#setNextDir() {
-		if (this.dir != this.orient) return
+		if (this.dir != this.orient)
+			return
 		if (this.#revSig) {
 			this.#revSig = false
 			this.orient  = Dir.opposite(this.dir)
@@ -220,7 +215,8 @@ export class Ghost extends Actor {
 			&& Maze.GhostNotEnterSet.has(tile.hyphenated)
 	}
 	#setTurn({dir,orient,pos,tilePos:t}=this) {
-		if (dir == orient || this.hasAdjWall(orient)) return
+		if (dir == orient || this.hasAdjWall(orient))
+			return
 		if (dir == L && pos.x < t.x*T
 		 || dir == R && pos.x > t.x*T
 		 || dir == U && pos.y < t.y*T
