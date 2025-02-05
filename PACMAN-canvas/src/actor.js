@@ -58,11 +58,17 @@ export class Actor {
 			if (x > CW+T/2) return -r-T/2
 		}(this.radius) ?? x
 	}
-	setCenterX(x) {
-		this.pos = Vec2(x-T/2, this.y)
+	setX(x) {isNum(x) && (this.#x = x)}
+	setY(y) {isNum(y) && (this.#y = y)}
+	setCenter(x, y=this.y) {
+		this.pos = Vec2(x-T/2, y)
 	}
 	setNextPos(denom=1, dir=this.dir) {
 		this.pos = Vec2(dir).mul(this.step/denom).add(this)
+	}
+	setMove(dir) {
+		this.dir = dir
+		this.setNextPos()
 	}
 	hasAdjWall(dir) {
 		return Maze.hasWall(this.getAdjTile(dir))
