@@ -8,7 +8,7 @@ import {Cursor}    from '../_lib/mouse.js'
 import {LevelMenu} from './_menu.js'
 import {Bg,Ctx}    from './_constants.js'
 import {State}     from './_state.js'
-import {Ctrl}      from './control.js'
+import {Ctrl,Form} from './control.js'
 import {Maze}      from './maze.js'
 import {MazeWall}  from './maze_wall.js'
 import {Message}   from './message.js'
@@ -36,8 +36,6 @@ export const Game = new class {
 		$on('GameOver', Game.#levelEnds)
 		$on('Quit',     Game.#levelEnds)
 		LevelMenu.bindChange(Game.#resetLevel)
-		Game.#resetLevel()
-		Game.#initStartBtn()
 		State.switchToTitle()
  	}
 	#level = 1
@@ -52,9 +50,6 @@ export const Game = new class {
 	get interval()  {return Game.speedRate * Ticker.Interval}
 	get moveSpeed() {return Game.speedRate * Game.speedByLv}
 
-	#initStartBtn() {
-		$('#startBtn').on('click', State.switchToStart)
-	}
 	#resetLevel() {
 		Game.#setLevel(LevelMenu.index+1)
 	}

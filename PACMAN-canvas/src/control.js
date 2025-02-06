@@ -101,16 +101,19 @@ export const Ctrl = new class {
 		btn != e.target && !e.target.closest(idS) && $(idS).hide()
 	}
 	#setupFormCtrls() {
+		for (const menu of values(Menu)) {
+			menu.bindChange(Ctrl.#saveData)
+		}
+		$('.panelBtn').each((_,btn)=> {
+			$(btn).on('click', ()=> $('.panel').toggle())
+			$on('click', e=> State.isTitle && Ctrl.#hidePanel(btn, e))
+		})
 		$('#clearStorageBtn').on('click', ()=> {
 			Confirm.open('Are you sure you want to clear local storage?',
 				null,Ctrl.#removeData, 'No','Yes', 0)
 		})
-		dqsAll('.panelBtn').forEach(btn=> {
-			$(btn).on('click', ()=> $('.panel').toggle())
-			$on('click', e=> State.isTitle && Ctrl.#hidePanel(btn, e))
-		})
-		$('input')  .on('input', Ctrl.#saveData)
-		$('#defBtn').on('click', Ctrl.#setDefault)
-		values(Menu).forEach(m=> m.bindChange(Ctrl.#saveData))
+		$('input')    .on('input', Ctrl.#saveData)
+		$('#defBtn')  .on('click', Ctrl.#setDefault)
+		$('#startBtn').on('click', State.switchToStart)
 	}
 }, Form = document.forms[0]

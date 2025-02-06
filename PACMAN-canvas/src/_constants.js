@@ -7,10 +7,10 @@ export const PacRadius = TileSize * PacScale
 export const GhsType   = freeze({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4})
 export const GhsNames  = freeze(keys(GhsType).slice(0,-1))
 
-export const [Bg,Cvs,Ctx,CvsW,CvsH] =
-	[canvas2D(null ,TileSize*Cols,TileSize*Rows),...
-	 canvas2D('cvs',TileSize*Cols,TileSize*Rows).vals]
-
+export const [Bg,Cvs,Ctx,CvsW,CvsH]= [
+	canvas2D(null ,TileSize*Cols,TileSize*Rows),...
+	canvas2D('cvs',TileSize*Cols,TileSize*Rows).vals
+]
 const BaseStep = +(TileSize/4.5).toFixed(1)
 export const PacStep = freeze(new class {
 	Base     = BaseStep
