@@ -47,9 +47,8 @@ export class Actor {
 	get inForwardOfTile()  {return this.stepsPerTile <= T/2}
 	get inBackwardOfTile() {return this.stepsPerTile >  T/2}
 
-	newTileReached(denom=1) {
-		return this.inForwardOfTile && this.stepsPerTile <= this.step/denom
-	}
+	setX(x) {isNum(x) && (this.#x = x)}
+	setY(y) {isNum(y) && (this.#y = y)}
 	setPos({x=this.x, y=this.y}={}) {
 		this.#y = y
 		this.#x = function(r) {
@@ -58,10 +57,8 @@ export class Actor {
 			if (x > CW+T/2) return -r-T/2
 		}(this.radius) ?? x
 	}
-	setX(x) {isNum(x) && (this.#x = x)}
-	setY(y) {isNum(y) && (this.#y = y)}
-	setCenter(x, y=this.y) {
-		this.pos = Vec2(x-T/2, y)
+	setCenter(x, y=this.centerPos.y) {
+		this.pos = Vec2(x-T/2, y-T/2)
 	}
 	setNextPos(denom=1, dir=this.dir) {
 		this.pos = Vec2(dir).mul(this.step/denom).add(this)
@@ -69,6 +66,9 @@ export class Actor {
 	setMove(dir) {
 		this.dir = dir
 		this.setNextPos()
+	}
+	newTileReached(denom=1) {
+		return this.inForwardOfTile && this.stepsPerTile <= this.step/denom
 	}
 	hasAdjWall(dir) {
 		return Maze.hasWall(this.getAdjTile(dir))
