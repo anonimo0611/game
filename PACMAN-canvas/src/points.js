@@ -10,7 +10,7 @@ import {CvsW,Ctx,TileSize as T} from './_constants.js'
 
 /** @type {Map<any, Points>} */
 const PtsMap = new Map()
-$on('Title Clear Collided', ()=> PtsMap.clear())
+$on('Title Clear Crashed', ()=> PtsMap.clear())
 
 export const PtsMgr = new class {
 	set(...args)   {new Points(...args)}
