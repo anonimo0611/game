@@ -71,7 +71,7 @@ export default class {
 			 this.#eyesLookingDown,
 			 this.#eyesLookingLR,
 			 this.CBSprite.bracketEyes,
-			][EyesEnum[orient]].bind(this)({orient,ripped,spriteIdx})
+			][EyesEnum[orient]].call(this,{orient,ripped,spriteIdx})
 		}
 		finalize()
 	}
