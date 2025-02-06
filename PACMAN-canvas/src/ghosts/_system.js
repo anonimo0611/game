@@ -51,10 +51,10 @@ const behindThePac = g=> g.frightened
 export const GhsMgr = new class {
 	static {$ready(()=> this.setup())}
 	static setup() {
-		$on('Attract', GhsMgr.#onAttract)
-		$on('Playing', GhsMgr.#onPlaying)
-		$on('Clear',   GhsMgr.#onLevelEnds)
-		$on('Collided',GhsMgr.#onLevelEnds)
+		$on('Attract',GhsMgr.#onAttract)
+		$on('Playing',GhsMgr.#onPlaying)
+		$on('Clear',  GhsMgr.#onLevelEnds)
+		$on('Crashed',GhsMgr.#onLevelEnds)
 		$(GhsMgr).on('Init',GhsMgr.#initialize)
 		Player.bindDotEaten(GhsMgr.#onDotEaten)
 	}

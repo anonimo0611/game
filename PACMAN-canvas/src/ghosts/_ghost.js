@@ -239,7 +239,7 @@ export class Ghost extends Actor {
 		!Ctrl.invincible
 			&& State.isPlaying
 			&& Sound.stopLoops()
-			&& State.switchToCollided()
+			&& State.switchToCrashed()
 			&& State.switchToLosing({delay:500})
 	}
 	#setEscape() {
