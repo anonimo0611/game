@@ -11,8 +11,8 @@ class Vector2 {
 	get clone()        {return Vec2(this.x,  this.y)}
 	get asInt()        {return Vec2(this.x|0,this.y|0)}
 	get normalized()   {return Vec2(this.x/this.magnitude, this.y/this.magnitude)}
-	set(x, y=x) {
-		[x, y]= xyFrom(x, y)
+	set(v1, v2=v1) {
+		const [x,y]= xyFrom(v1, v2)
 		this.x = x
 		this.y = y
 		return this
@@ -25,14 +25,14 @@ class Vector2 {
 		this.set(this.x, y)
 		return this
 	}
-	add(x, y=x) {
-		[x, y]= xyFrom(x, y)
+	add(v1, v2=v1) {
+		const [x,y]= xyFrom(v1, v2)
 		this.x += x
 		this.y += y
 		return this
 	}
-	sub(x, y=x) {
-		[x, y]= xyFrom(x, y)
+	sub(v1, v2=v1) {
+		const [x,y]= xyFrom(v1, v2)
 		this.x -= x
 		this.y -= y
 		return this
@@ -52,8 +52,8 @@ class Vector2 {
 		this.y = (this.y / n)|0
 		return this
 	}
-	eq(x, y) {
-		[x, y]= xyFrom(x, y)
+	eq(v1, v2) {
+		const [x,y]= xyFrom(v1, v2)
 		return Vec2.eq(this, {x, y})
 	}
 	distance(v) {
