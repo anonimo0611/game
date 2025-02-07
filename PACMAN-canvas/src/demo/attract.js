@@ -61,24 +61,24 @@ export class Attract {
 		ghost.sprite.draw(ghost)
 	}
 	draw() {
-		const et = Ticker.elapsedTime, ptsFontSize = T*.68
+		const et = Ticker.elapsedTime/100, ptsFontSize = T*.68
 		drawText(7, 5, '#FFF', 'CHARACTOR　/　NICKNAME')
-		et > 1000 && this.drawGhost(CHARA, 0, Vec2(5*T, 6*T))
-		et > 1500 && drawText( 8,  7, Color.Akabei, 'OIKAKE----')
-		et > 2000 && drawText(18,  7, Color.Akabei, '"AKABEI"')
+		et > 10 && this.drawGhost(CHARA, 0, Vec2(5*T, 6*T))
+		et > 15 && drawText( 8,  7, Color.Akabei, 'OIKAKE----')
+		et > 20 && drawText(18,  7, Color.Akabei, '"AKABEI"')
 
-		et > 3000 && this.drawGhost(CHARA, 1, Vec2(5*T, 9*T))
-		et > 3500 && drawText( 8, 10, Color.Pinky, 'MACHIBUSE--')
-		et > 4000 && drawText(19, 10, Color.Pinky, '"PINKY"')
+		et > 30 && this.drawGhost(CHARA, 1, Vec2(5*T, 9*T))
+		et > 35 && drawText( 8, 10, Color.Pinky, 'MACHIBUSE--')
+		et > 40 && drawText(19, 10, Color.Pinky, '"PINKY"')
 
-		et > 5000 && this.drawGhost(CHARA, 2, Vec2(5*T, 12*T))
-		et > 5500 && drawText( 8, 13, Color.Aosuke, 'KIMAGURE--')
-		et > 6000 && drawText(18, 13, Color.Aosuke, '"AOSUKE"')
+		et > 50 && this.drawGhost(CHARA, 2, Vec2(5*T, 12*T))
+		et > 55 && drawText( 8, 13, Color.Aosuke, 'KIMAGURE--')
+		et > 60 && drawText(18, 13, Color.Aosuke, '"AOSUKE"')
 
-		et > 7000 && this.drawGhost(CHARA, 3, Vec2(5*T, 15*T))
-		et > 7500 && drawText( 8, 16, Color.Guzuta, 'OTOBOKE---')
-		et > 8000 && drawText(18, 16, Color.Guzuta, '"GUZUTA"')
-		if (et > 8500) {
+		et > 70 && this.drawGhost(CHARA, 3, Vec2(5*T, 15*T))
+		et > 75 && drawText( 8, 16, Color.Guzuta, 'OTOBOKE---')
+		et > 80 && drawText(18, 16, Color.Guzuta, '"GUZUTA"')
+		if (et > 85) {
 			drawDot(Ctx, Vec2(10, 24))
 			this.powDisp && drawDot(Ctx, Vec2(10, 26), true)
 			drawText(12.0, 25, '#FFF', '10')
@@ -86,7 +86,7 @@ export class Attract {
 			drawText(12.0, 27, '#FFF', '50')
 			drawText(14.3, 27, '#FFF', 'PTS', {size:ptsFontSize})
 		}
-		if (et > 9000) {
+		if (et > 90) {
 			if (this.pacman.orient == L && this.powDisp) {
 				drawDot(Ctx, Vec2(4, 19), true)
 			}
@@ -95,7 +95,7 @@ export class Attract {
 				drawText(24.3, 30, '#F90', 'PTS', {size:ptsFontSize})
 			}
 		}
-		if (et > 1e4+500) {
+		if (et > 105) {
 			for (let i=0; i<GhsType.Max; i++)
 				this.drawGhost(DEMO, i)
 			this.pacman.sprite.draw(Ctx, this.pacman)
