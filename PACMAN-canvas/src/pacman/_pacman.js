@@ -53,7 +53,6 @@ class PlayablePacman extends Pacman {
 
 	constructor() {
 		super()
-		this.dir = Dir.Left
 		this.pos = Vec2(13.5, 24).mul(T)
 		$offon('keydown.Player', e=> this.#onKeydown(e))
 	}
@@ -155,7 +154,7 @@ class PlayablePacman extends Pacman {
 	#eaten(idx) {
 		if (!Maze.hasDot(idx)) return
 		const isPow = Maze.hasPow(idx)
-		this.#notEaten = 0
+		this.resetTimer()
 		this.#playSE()
 		Score.add(isPow? 50:10)
 		Maze.clearBgDot(this) == 0
