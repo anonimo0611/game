@@ -13,8 +13,7 @@ export const MazeWall = new class {
 		ctx.stroke()
 		ctx.restore()
 	}
-	#drawGhostPen() {
-		const lh = ctx.lineWidth/2
+	#drawGhostPen(lh) {
 		cvsSetNewLinePath(ctx)(
 		[13.00*T-lh,13.55*T],[10.55*T, 13.55*T],[10.55*T,   17.45*T],
 		[17.45*T,   17.45*T],[17.45*T, 13.55*T],[15.00*T+lh,13.55*T],
@@ -29,7 +28,7 @@ export const MazeWall = new class {
 		ctx.lineWidth   = 3.5
 		ctx.strokeStyle = color
 		MapArr.forEach(this.#drawTile)
-		this.#drawGhostPen()
+		this.#drawGhostPen(ctx.lineWidth/2)
 		ctx.restore()
 	}
 	#drawTile = (c, i)=> {
@@ -44,17 +43,18 @@ export const MazeWall = new class {
 		;(c == '-')     && cvsStrokeLine(ctx)(px, py+T/2, px+T, py+T/2)
 		;/[#|]/.test(c) && cvsStrokeLine(ctx)(px+T/2, py, px+T/2, py+T)
 
+		ctx.save()
 		if (c == '#' || (!tx || tx == W-1) && +c) {
 			const oX = tx < W/2 ? -T/2+2 : T/2-2
-			cvsStrokeLine(ctx)(px+T/2+oX, py, px+T/2+oX, py+T)
+			ctx.translate(px+oX+T/2, py)
+			cvsStrokeLine(ctx)(0,0, 0,T)
 		}
 		if (/[=_]/.test(c) || ty == 1 && +c) {
 			const oY = /[=12]/.test(c) ? -T/2+2 : T/2-2
-			ctx.save()
 			ctx.translate(px, py+T/2)
-			cvsStrokeLine(ctx)(0, oY, T, oY)
+			cvsStrokeLine(ctx)(0,oY, T,oY)
 			!+c && cvsStrokeLine(ctx)(0,0, T,0)
-			ctx.restore()
 		}
+		ctx.restore()
 	}
 };MazeWall.draw()
