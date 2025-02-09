@@ -98,6 +98,7 @@ export const GhsMgr = new class {
 		SysMap.forEach(s=> s.update())
 		Ghosts.forEach(g=> g.update())
 	}
+	/** @param {Ghost} g */
 	crashWithPac(g, pacPos=Player.pos, {fn,radius}={}) {
 		if (!(g instanceof Ghost) || !g.state.isWalk) return
 		radius ??= (g.frightened? T/2 : T/3)
@@ -207,7 +208,7 @@ export const Elroy = function() {
 
 export class FrightMode {
 	static #timeTbl = [6,5,4,3,2,5,2,2,1,5,2,1,0] // seconds
-	static get time() {return this.#timeTbl[Game.clampedLv-1] * 1000}
+	static get time() {return this.#timeTbl[Game.clampedLv-1]}
 	static caught() {SysMap.get(FrightMode)?.caught()}
 	#timeCnt   = 0
 	#flashIdx  = 1
@@ -227,12 +228,12 @@ export class FrightMode {
 	update() {
 		if (!State.isPlaying || Timer.frozen) return
 		const {time}= FrightMode
-		const et = (this.#timeCnt++ * Game.interval)
+		const et = (Game.interval*this.#timeCnt++)/1e3
 		const ac = (this.#caughtCnt == GhsType.Max)
-		const fi = (time == 1000 ? 12:14)/Game.speedRate|0
-		this.#flashIdx ^= !(this.#flashCnt % fi)
-		;(et >= time-2000)  && this.#flashCnt++
-		;(et >= time || ac) && this.#toggle(false)
+		const fi = (time == 1 ? 12:14)/Game.speedRate|0
+		this.#flashIdx ^=!(this.#flashCnt % fi)
+		;(et>=time - 2) && this.#flashCnt++
+		;(et>=time||ac) && this.#toggle(false)
 	}
 	caught() {this.#caughtCnt++}
 }
