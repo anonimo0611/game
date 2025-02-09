@@ -34,12 +34,12 @@ class Points {
 		PtsMap.set(key, freeze(this))
 	}
 	update() {
-		this.fadeOut?.update()
+		this.fadeOut.update()
 	}
 	draw() {
 		const {position:{x,y}}= this
 		Ctx.save()
-		this.fadeOut?.setAlpha(Ctx)
+		this.fadeOut.setAlpha(Ctx)
 		Ctx.translate(clamp(x, T, CvsW-T), y)
 		Ctx.scale(T/8, T/8)
 		Sprite.draw(0,0, this.score)
