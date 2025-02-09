@@ -116,9 +116,9 @@ class PlayablePacman extends Pacman {
 		this.sprite.update(this)
 		this.#notEaten++
 		for (let i=0,denom=ceil(this.step)*2; i<denom; i++)
-			this.#move(denom)
+			this.#behavior(denom)
 	}
-	#move(denom=1) {
+	#behavior(denom=1) {
 		if (this.newTileReached(denom)) {
 			this.#step = this.#getCurrentStep()
 		}
