@@ -13,7 +13,7 @@ export const MazeWall = new class {
 		ctx.stroke()
 		ctx.restore()
 	}
-	#drawGhostPen(lh) {
+	#drawGhostPen(lh=0) {
 		cvsSetNewLinePath(ctx)(
 		[13.00*T-lh,13.55*T],[10.55*T, 13.55*T],[10.55*T,   17.45*T],
 		[17.45*T,   17.45*T],[17.45*T, 13.55*T],[15.00*T+lh,13.55*T],
