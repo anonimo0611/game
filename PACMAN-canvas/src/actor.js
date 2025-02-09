@@ -47,8 +47,8 @@ export class Actor {
 	get inForwardOfTile()  {return this.stepsPerTile <= T/2}
 	get inBackwardOfTile() {return this.stepsPerTile >  T/2}
 
-	setX(x) {this.setPos({x})}
-	setY(y) {this.setPos({y})}
+	setX(x) {this.x = x}
+	setY(y) {this.y = y}
 	setPos({x=this.x, y=this.y}={}) {
 		this.#y = y
 		this.#x = function(r) {
