@@ -169,7 +169,7 @@ export default class {
 	}
 	#angryGlow(x=0, y=0, angry=false, size=TileSize*2) {
 		if (!angry) return
-		const W = GlowCvs.width, S = W*1.2
+		const {width:W}=GlowCvs, S=W*1.2
 		Ctx.save()
 		Ctx.globalAlpha = this.#resurrect?.alpha
 		Ctx.translate(x+size/4, y+size/4)
