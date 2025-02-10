@@ -138,30 +138,31 @@ export class Ghost extends Actor {
 	}
 	#goOut({centerPos:{x:cx},y,step}=this) {
 		if (cx > CvsW/2+step
-		 || cx < CvsW/2-step) {
+		 || cx < CvsW/2-step)
 			return this.setMove(this.initAlign<0 ? R:L)
-		}
-		if (cx != CvsW/2) {
+
+		if (cx != CvsW/2)
 			return this.setCenterX(CvsW/2)
-		}
-		if (y > Maze.PenEntrance.y*T+step) {
+
+		if (y > Maze.PenEntrance.y*T+step)
 			return this.setMove(U)
-		}
+
 		this.dir = L
 		this.#started ||= true
 		this.state.switchToWalk()
 	}
 	#returnToHome({step,x,y,initX,initAlign}=this) {
-		if (y+step <= Maze.PenMiddleY) {
+		if (y+step <= Maze.PenMiddleY)
 			return this.setMove(D)
-		}
-		if (this.y != Maze.PenMiddleY) {
+
+		if (y != Maze.PenMiddleY)
 			return this.setY(Maze.PenMiddleY)
-		}
+
 		if (!initAlign || abs(x-initX) <= step) {
 			this.setX(initX)
 			this.dir = initAlign? (initAlign<0 ? R:L) : U
-			return this.#arrivedAtHome()
+			this.#arrivedAtHome()
+			return
 		}
 		this.setMove(initAlign<0 ? L:R)
 	}
