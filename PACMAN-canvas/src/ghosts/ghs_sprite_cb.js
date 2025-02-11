@@ -133,15 +133,15 @@ class StakeClothes {
 	constructor() {
 		this.stake = freeze(new class {
 			size = Vec2(T*0.18, T*0.7).freeze()
-			x = (Cvs.width /2)+(T-this.size.x/2)+T
-			y = (Cvs.height/2)+(T-this.size.y)-(T*0.1)
+			x = Cvs.width /2 + T - this.size.x/2 + T
+			y = Cvs.height/2 + T - this.size.y - T*0.1
 		})
 		this.offcut = freeze({
-			x: (Cvs.width /2)+(T*2)+(this.stake.size.x/2),
-			y: (Cvs.height/2)+T-(T*0.1)
+			x: Cvs.width /2 + T*2 + this.stake.size.x/2,
+			y: Cvs.height/2 + T*1 - T*0.1
 		})
-		this.CaughtX = (Cvs.width/2)+(T/2)
-		this.AkaMinX = this.CaughtX-T
+		this.CaughtX = Cvs.width/2 + T/2
+		this.AkaMinX = this.CaughtX - T
 		freeze(this)
 	}
 	drawStake({x, y}=this.stake) {
