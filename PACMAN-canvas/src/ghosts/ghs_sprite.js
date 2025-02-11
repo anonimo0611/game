@@ -52,7 +52,7 @@ export default class {
 		ctx.scale(size/(100/GhsScale), size/(100/GhsScale))
 		ctx.fillStyle = !frightened
 			? Color[GhsNames[idx]]
-			: Color.FrightBodyList[spriteIdx]
+			: Color.FrightBodyTable[spriteIdx]
 
 		if (hadaketa) {
 			this.CBSprite.hadake(aIdx)
@@ -154,7 +154,7 @@ export default class {
 	}
 	#frightFace(spriteIdx=0) {
 		const {ctx}= this
-		ctx.fillStyle = ctx.strokeStyle = Color.FrightFaceList[spriteIdx]
+		ctx.fillStyle = ctx.strokeStyle = Color.FrightFaceTable[spriteIdx]
 		{ // Eyes
 			const size = 11
 			ctx.fillRect(-15-size/2, -11-size/2, size, size)
