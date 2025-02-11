@@ -45,7 +45,7 @@ export const Color = freeze(new class {
 	Message1  = '#0FF'
 	Message2  = '#FF0'
 	Message3  = '#F00'
-	InfoList       = freeze(['#888','#F9E'])
-	FrightBodyList = freeze(['#36A','#FFF'])
-	FrightFaceList = freeze(['#F9F','#F00'])
+	InfoTable       = freeze(['#888','#F9E'])
+	FrightBodyTable = freeze(['#36A','#FFF'])
+	FrightFaceTable = freeze(['#F9F','#F00'])
 })

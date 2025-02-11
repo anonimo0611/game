@@ -83,13 +83,13 @@ export const Ctrl = new class {
 		Ctx.save()
 		if (Ctrl.isCheatMode || speed != '1.0') {
 			Ctx.setTransform(0.7, 0,0, 1, T*0.1, T*18)
-			draw(0, h*0, Color.InfoList[+(speed != '1.0')],`Speed x${speed}`)
-			draw(0, h*1, Color.InfoList[+Ctrl.invincible], 'Invincible')
-			draw(0, h*2, Color.InfoList[+Ctrl.showTargets],'Targets')
+			draw(0, h*0, Color.InfoTable[+(speed != '1.0')],`Speed x${speed}`)
+			draw(0, h*1, Color.InfoTable[+Ctrl.invincible], 'Invincible')
+			draw(0, h*2, Color.InfoTable[+Ctrl.showTargets],'Targets')
 		}
 		if (Ctrl.unrestricted) {
 			Ctx.setTransform(0.7, 0,0, 1, T*23.3, T*18.35)
-			draw(0,0, Color.InfoList[1], 'Un-\nrestricted')
+			draw(0,0, Color.InfoTable[1], 'Un-\nrestricted')
 		}
 		Ctx.restore()
 	}
