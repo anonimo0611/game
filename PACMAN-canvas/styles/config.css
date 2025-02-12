@@ -10,8 +10,11 @@ label:has(+#LevelMenu)  {
 	margin: 0;
 	padding: .5em .3em;
 }
+label:focus-within,
+span:has(input:focus) + label,
 :is(label, .label):hover,
-:is(label, .label):has(+div:hover) {
+:is(label, .label):has(+div:hover),
+:is(label, .label):has(+div:focus)  {
 	color: var(--label-fg-hover) !important;
 }
 

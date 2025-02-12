@@ -84,12 +84,26 @@ button {
 	}
 }
 
-[type=checkbox] {
-	transform: scale(1.25);
-	transform-origin: center;
-	&:focus {
-		outline: solid 2px #26B3F7;
-		outline-offset: -1px;
+[type="checkbox"] {
+	appearance: none;
+	background: #FFF;
+	border-radius: .2em;
+	width:  1em;
+	height: 1em;
+	position: relative;
+	&:focus {outline: solid 2px #C6F}
+	&:checked       {background: #69C}
+	&:checked:hover {background: #C6F}
+	&:checked:focus {background: #C6F}
+	&:checked::before {
+		content: '';
+		position: absolute;
+		transform: translate(.25em,-.2em) rotate(48deg);
+		transform-origin: center;
+		width:  0.4em;
+		height: 0.8em;
+		border: solid #FFF;
+		border-width: 0 3px 3px 0;
 	}
 }
 
