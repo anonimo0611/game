@@ -79,3 +79,38 @@ button {
 [type=range] {
 	--thumb-size: .8rem !important;
 }
+
+.radioButtons {
+	position: relative;
+	font-size: 86%;
+	margin: .5em 0 0;
+	display: flex;
+	label {
+		text-align: center;
+		color: #fff;
+		background: #444;
+		width: 3.8em;
+		&:not(:last-child) {
+			border-right: solid 1px #888;
+		}
+	}
+	label:has([type=radio]:disabled) {
+		color: #888;
+	}
+	label:has([type=radio]:enabled:checked) {
+		color: #eee;
+		background: #0B93D5;
+	}
+	label:first-child {
+		border-radius: .2em 0 0 .2em;
+	}
+	label:last-child {
+		border-radius: 0 .2em .2em 0;
+	}
+	[type=radio] {
+		appearance: none;
+		visibility: hidden;
+		position: absolute;
+		pointer-events: none;
+	}
+}
