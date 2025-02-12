@@ -45,7 +45,7 @@ dialog {
 }
 
 button, .dropdown .current {
-	--bc: #222;
+	--bc:  #222;
 	color: #EEE;
 	background: var(--bc);
 	font-size: 1em;
@@ -84,14 +84,17 @@ button {
 	}
 }
 
-[type="checkbox"] {
+[type=checkbox] {
 	appearance: none;
 	background: #FFF;
 	border-radius: .2em;
 	width:  1em;
 	height: 1em;
 	position: relative;
-	&:focus {outline: solid 2px #C6F}
+	&:focus {
+		outline: solid 3px #C6F;
+		outline-offset:2px;
+	}
 	&:checked       {background: #69C}
 	&:checked:hover {background: #C6F}
 	&:checked:focus {background: #C6F}
