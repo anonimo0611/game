@@ -4,7 +4,7 @@ import {Dir,U,R,D,L} from './direction.js'
 class Menu {
 	reset() {this.select(this.defaultIndex, {restore:true})}
 	get index()        {return +$(this.selectedItem).index()}
-	get value()        {return this.selectedItem.dataset.val ?? ''}
+	get value()        {return String(this.selectedItem.dataset.val) ?? ''}
 	get selectedItem() {return this.menu.querySelector('.selected') || this.lis[0]}
 	constructor(id) {
 		this.root = byId(this.id=id);
@@ -31,6 +31,7 @@ export class DorpDownMenu extends Menu {
 	close()  {$(this.menu).hide();  return this}
 	toggle() {$(this.menu).toggle();return this}
 	get closed() {return $(this.menu).is(':hidden') == true}
+	/** @param {string} id */
 	constructor(id) {
 		super(id)
 		this.lis.forEach((li, i)=> li.onclick= ()=> {this.select(i),this.current.focus()})
@@ -66,6 +67,7 @@ export class DorpDownMenu extends Menu {
 	}
 }
 export class SlideMenu extends Menu {
+	/** @param {string} id */
 	constructor(id) {
 		super(id)
 		const root = this.root
