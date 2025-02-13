@@ -27,24 +27,24 @@
 				<div class="dropdown menu" id="animSelect">
 					<div class="current" tabindex="0"></div>
 					<menu class="dropdown-list">
-					<li data-val="none">——  Select Actor ——</li>
-					<li data-val="Pacman">PAC-MAN</li>
-					<li data-val="Pacman-losing">PAC-MAN(losing)</li>
-					<li data-val="Akabei">AKABEI</li>
-					<li data-val="Akabei-repaired">AKABEI(Repaired)</li>
-					<li data-val="Akabei-hadake">AKABEI(Hadake)</li>
-					<li data-val="Pinky">PINKY</li>
-					<li data-val="Aosuke">AOSUKE</li>
-					<li data-val="Guzuta">GUZUTA</li>
-					<li data-val="frightened">Frightened Ghost</li>
-					<li data-val="frightened-flash">Frightened Ghost(flash)</li>
+					<li data-val="-1">——  Select Actor ——</li>
+					<li data-val="0:0">PAC-MAN</li>
+					<li data-val="0:1">PAC-MAN(losing)</li>
+					<li data-val="1:0">AKABEI</li>
+					<li data-val="1:1">AKABEI(Repaired)</li>
+					<li data-val="1:2">AKABEI(Hadake)</li>
+					<li data-val="2:0">PINKY</li>
+					<li data-val="3:0">AOSUKE</li>
+					<li data-val="4:0">GUZUTA</li>
+					<li data-val="5:0">Frightened Ghost</li>
+					<li data-val="5:3">Frightened Ghost(flash)</li>
 					</menu>
 				</div>
 				<div class="radioButtons">
-					<label><input type="radio" value="Left"  name="dir" disabled checked>Left</label>
-					<label><input type="radio" value="Up"    name="dir" disabled>Up</label>
-					<label><input type="radio" value="Right" name="dir" disabled>Right</label>
-					<label><input type="radio" value="Down"  name="dir" disabled>Down</label>
+					<label><input type="radio" value="Left"  name="orient" data-idx="0" disabled checked>Left</label>
+					<label><input type="radio" value="Up"    name="orient" data-idx="1" disabled>Up</label>
+					<label><input type="radio" value="Right" name="orient" data-idx="2" disabled>Right</label>
+					<label><input type="radio" value="Down"  name="orient" data-idx="3" disabled>Down</label>
 				</div>
 			</form>
 		</div>

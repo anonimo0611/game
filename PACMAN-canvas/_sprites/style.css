@@ -108,8 +108,7 @@ button {
 		border-radius: 0 .2em .2em 0;
 	}
 	[type=radio] {
-		appearance: none;
-		visibility: hidden;
+		opacity: 0;
 		position: absolute;
 		pointer-events: none;
 	}

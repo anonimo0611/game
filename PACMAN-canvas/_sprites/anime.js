@@ -1,112 +1,124 @@
-import * as Menu   from '../_lib/menu.js'
-import {Ticker}    from '../_lib/timer.js'
-import {Timer}     from '../_lib/timer.js'
-import {Dir}       from '../_lib/direction.js'
-import PacSprite   from '../src/pacman/pac_sprite.js'
-import {Ghost}     from './actor.js'
-import {T,S,ghost} from './_constants.js'
-import {PacScale,GhsType,TileSize} from '../src/_constants.js'
+import * as Menu from '../_lib/menu.js'
+import {Ticker}  from '../_lib/timer.js'
+import {Timer}   from '../_lib/timer.js'
+import {Vec2}    from '../_lib/vec2.js'
+import {Dir}     from '../_lib/direction.js'
+import PacSprite from '../src/pacman/pac_sprite.js'
+import {Ghost}   from './actor.js'
+import {T,S}     from './_constants.js'
+import {PacScale,TileSize} from '../src/_constants.js'
+export const {cvs:pvCvs}= canvas2D('previewCvs', TileSize*3, TileSize*2)
 
-export const {cvs:pvCvs}=
-	canvas2D('previewCvs', TileSize*3, TileSize*2)
+/** @enum {number} */
+const Type = freeze({None:-1,Pacman:0,Akabei:1,Pinky:2,Aosuke:3,Guzuta:4,Frightened:5})
 
+/** @enum {number} */
+const PacType = freeze({Normal:0,Losing:1})
+
+/** @enum {number} */
+const GhsType = freeze({Normal:0,Repaired:1,Hadake:2,Flashed:3})
+
+class AnimeData {
+	/** @param {{type?:Type, subType?:PacType|GhsType, pacman?:PacSprite, ghost?:Ghost}} */
+	constructor({type,subType,pacman,ghost}={type:-1,subType:-1}) {
+		this.animIdx  = 0
+		this.flashIdx = 0
+		this.pacman   = pacman
+		this.ghost    = ghost
+		this.type     = type
+		this.subType  = subType
+		this.orient   = Dir.Left
+	}
+}
+function getOrient() {
+	return String(byId('select-anim').orient.value)
+}
 !(function() { // Preview
-	let _animIdx  = 0
-	let _flashIdx = 0
-	let _sprite   = null
-	let _type     = null
-	let _subType  = null
-	let _orient   = Dir.Left
-
-	const ctx  = pvCvs.getContext('2d')
+	let   data = new AnimeData()
 	const menu = new Menu.DorpDownMenu('animSelect')
+	const ctx  = pvCvs.getContext('2d')
 
 	function change(loop=false) {
-		const [TYPE,SUB]= menu.value.split('-')
-		_animIdx  = 0
-		_flashIdx = 0
-		_type     = TYPE
-		_subType  = SUB
+		const [type,subType]= menu.value.split(':').map(int)
 		!loop && Timer.cancelAll()
-		switch (TYPE) {
-		case 'Pacman':
-			_sprite = new PacSprite()
-			if (setDirDisabled(_subType == 'losing')) {
-				_sprite.setLosing()
+		switch(type) {
+		case Type.Pacman:
+			data = new AnimeData({type,subType,pacman:new PacSprite()})
+			if (setOrient(subType == PacType.Losing)) {
+				data.pacman.setLosing()
 				Timer.set(2200, ()=> change(true))
 			}
 			break
-		case 'Akabei':
-		case 'Pinky':
-		case 'Aosuke':
-		case 'Guzuta':
-			_sprite = new Ghost(T*2)
-			setDirDisabled(/hadake|repaired/.test(SUB))
+		case Type.Akabei:
+		case Type.Pinky:
+		case Type.Aosuke:
+		case Type.Guzuta:
+			data = new AnimeData({type,subType,ghost:new Ghost(T*2)})
+			setOrient(subType != GhsType.Normal)
 			break
-		case 'frightened':
-			_sprite = new Ghost(T*2)
-			setDirDisabled(true)
+		case Type.Frightened:
+			data = new AnimeData({type,subType,ghost:new Ghost(T*2)})
+			setOrient(true)
 			break
-		case 'none':
+		case Type.None:
+			data = new AnimeData()
 			Timer.cancelAll()
-			setDirDisabled(true)
-			_animIdx  = 0
-			_flashIdx = 0
-			_sprite   = null
-			_type     = null
-			_subType  = null
+			setOrient(true)
 			break
 		}
 	}
-	function setDirDisabled(bool) {
-		isBool(bool) && $('.radioButtons input').prop({disabled:bool})
-		return !!bool
+	function setOrient(disabled=false) {
+		isBool(disabled) && $('.radioButtons input').prop({disabled})
+		!disabled && (data.orient = getOrient())
+		return disabled
 	}
 	function drawPacman() {
 		ctx.save()
 		ctx.translate(S*1.5/2, S/2)
 		ctx.scale(T/TileSize,  T/TileSize)
-		_sprite.draw(ctx, {orient:_orient,radius:TileSize*PacScale})
+		data.pacman.draw(ctx, {orient:data.orient,radius:PacScale*TileSize})
 		ctx.restore()
 	}
 	function drawGhost() {
 		ctx.save()
-		_subType == 'hadake'
+		data.subType == GhsType.Hadake
 			? ctx.translate(S/4, S/4)
 			: ctx.translate(S/2*2/2, S/4)
-		const spriteIdx = menu.value == 'frightened-flash'
-			&& _flashIdx ? 1 : 0
-		_sprite.sprite.draw({
-			...ghost,spriteIdx,
+		data.ghost.sprite.draw({
 			mainCtx:    ctx,
-			idx:        GhsType[_type],
-			aIdx:       _animIdx,
-			orient:     _orient,
-			frightened: _type    == 'frightened',
-			hadaketa:   _subType == 'hadake',
-			repaired:   _subType == 'repaired',
+			idx:        data.type-1,
+			aIdx:       data.animIdx,
+			orient:     data.orient,
+			frightened: data.type    == Type.Frightened,
+			spriteIdx:  data.subType == GhsType.Flashed? data.flashIdx : 0,
+			hadaketa:   data.subType == GhsType.Hadake,
+			repaired:   data.subType == GhsType.Repaired,
 		})
 		ctx.restore()
 	}
 	function update() {
-		if (!_type) return
-		_animIdx  ^= Ticker.count %  6 == 0
-		_flashIdx ^= Ticker.count % 14 == 0
-		if (_type == 'Pacman')
-			_sprite.update()
+		if (data.type < 0) return
+		data.animIdx  ^= Ticker.count %  6 == 0
+		data.flashIdx ^= Ticker.count % 14 == 0
+		data.pacman?.update()
 	}
 	function draw() {
-		ctx.clearRect(0,0, pvCvs.width,pvCvs.height)
-		if (!_type) return
-		_type == 'Pacman'
+		ctx.clear()
+		if (data.type < 0) return
+		data.type == Type.Pacman
 			? drawPacman()
 			: drawGhost()
 	}
-	function loop() {
-		update()
-		draw()
+	{// When the menu is in focus, radio buttons can be toggled with the ← or → key
+		const radioSelector = '.radioButtons input'
+		menu.bindChange(change)
+		menu.root.addEventListener('keydown', e=> {
+			const dir = Dir.from(e), vx = Vec2(dir).x
+			const idx = +$(`${radioSelector}:enabled:checked`).data('idx')
+			if (!menu.closed || !vx || isNaN(idx)) return
+			$(radioSelector).eq((vx+idx+4) % 4).prop({checked:true}).trigger('change')
+		})
+		$(radioSelector).on('change', e=> {data.orient=e.target.value})
 	}
-	Ticker.set(loop)
-	menu.bindChange(change)
-	$('input[name=dir]').on('input',function(){_orient = this.value})
+	Ticker.set(()=> {update();draw()})
 }())
