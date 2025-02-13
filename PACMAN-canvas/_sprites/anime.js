@@ -22,7 +22,7 @@ class AnimeData {
 	/** @param {{type?:Type, subType?:PacType|GhsType, pacman?:PacSprite, ghost?:Ghost}} */
 	constructor({type,subType,pacman,ghost}={type:-1,subType:-1}) {
 		this.animIdx  = 0
-		this.flashIdx = 0
+		this.flashIdx = 1
 		this.pacman   = pacman
 		this.ghost    = ghost
 		this.type     = type
