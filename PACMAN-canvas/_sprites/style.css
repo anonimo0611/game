@@ -72,7 +72,7 @@ button {
 		text-align: center;
 		text-indent: calc(-1 * var(--caret-size));
 	}
-	li[data-val=none] {
+	li[data-val="-1"] {
 		text-align: center;
 	}
 }
