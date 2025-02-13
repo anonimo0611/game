@@ -39,7 +39,7 @@ function getOrient() {
 	const ctx  = pvCvs.getContext('2d')
 
 	function change(loop=false) {
-		const [type,subType]= menu.value.split(':').map(int)
+		const [type,subType]= menu.value.split(':').map(Number)
 		!loop && Timer.cancelAll()
 		switch(type) {
 		case Type.Pacman:
