@@ -1,11 +1,11 @@
-import * as Menu from '../_lib/menu.js'
-import {Ticker}  from '../_lib/timer.js'
-import {Timer}   from '../_lib/timer.js'
-import {Vec2}    from '../_lib/vec2.js'
-import {Dir}     from '../_lib/direction.js'
-import PacSprite from '../src/pacman/pac_sprite.js'
-import {Ghost}   from './actor.js'
-import {T,S}     from './_constants.js'
+import * as Menu   from '../_lib/menu.js'
+import {Ticker}    from '../_lib/timer.js'
+import {Timer}     from '../_lib/timer.js'
+import {Vec2}      from '../_lib/vec2.js'
+import {Dir}       from '../_lib/direction.js'
+import PacSprite   from '../src/pacman/pac_sprite.js'
+import {Ghost}     from './actor.js'
+import {T,S,ghost} from './_constants.js'
 import {PacScale,TileSize} from '../src/_constants.js'
 export const {cvs:pvCvs}= canvas2D('previewCvs', TileSize*3, TileSize*2)
 
@@ -85,6 +85,7 @@ function getOrient() {
 			? ctx.translate(S/4, S/4)
 			: ctx.translate(S/2*2/2, S/4)
 		data.ghost.sprite.draw({
+			...ghost,
 			mainCtx:    ctx,
 			idx:        data.type-1,
 			aIdx:       data.animIdx,
