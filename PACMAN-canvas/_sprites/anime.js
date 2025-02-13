@@ -37,6 +37,7 @@ function getOrient() {
 	let   data = new AnimeData()
 	const menu = new Menu.DorpDownMenu('animSelect')
 	const ctx  = pvCvs.getContext('2d')
+	const radioSelector = '.radioButtons input'
 
 	function change(loop=false) {
 		const [type,subType]= menu.value.split(':').map(Number)
@@ -68,7 +69,7 @@ function getOrient() {
 		}
 	}
 	function setOrient(disabled=false) {
-		isBool(disabled) && $('.radioButtons input').prop({disabled})
+		$(radioSelector).prop({disabled})
 		!disabled && (data.orient = getOrient())
 		return disabled
 	}
@@ -110,16 +111,14 @@ function getOrient() {
 			? drawPacman()
 			: drawGhost()
 	}
-	{// When the menu is in focus, radio buttons can be toggled with the ← or → key
-		const radioSelector = '.radioButtons input'
-		menu.bindChange(change)
-		menu.root.addEventListener('keydown', e=> {
-			const dir = Dir.from(e), vx = Vec2(dir).x
-			const idx = +$(`${radioSelector}:enabled:checked`).data('idx')
-			if (!menu.closed || !vx || isNaN(idx)) return
-			$(radioSelector).eq((vx+idx+4) % 4).prop({checked:true}).trigger('change')
-		})
-		$(radioSelector).on('change', e=> {data.orient=e.target.value})
-	}
+	menu.bindChange(change)
+	menu.root.addEventListener('keydown', e=> {
+		// Enable switching of radio controls with the ← or → key
+		const dir = Dir.from(e), vx = Vec2(dir).x
+		const idx = +$(`${radioSelector}:enabled:checked`).data('idx')
+		if (!menu.closed || !vx || isNaN(idx)) return
+		$(radioSelector).eq((vx+idx+4) % 4).prop({checked:true}).trigger('change')
+	})
+	$(radioSelector).on('change', e=> {data.orient=e.target.value})
 	Ticker.set(()=> {update();draw()})
 }())
