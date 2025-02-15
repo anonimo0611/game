@@ -15,7 +15,7 @@ span:has(input:focus) + label,
 :is(label, .label):hover,
 :is(label, .label):has(+div:hover),
 :is(label, .label):has(+div:focus)  {
-	color: var(--label-fg-hover) !important;
+	color: var(--label-fg-hover);
 }
 
 .panel {
@@ -124,6 +124,9 @@ span:has(input:focus) + label,
 		display: inline-block;
 		width: 1.5rem;
 	}
+	> li > :first-child + * {
+		flex: 1;
+	}
 	> li.buttons {
 		display: block;
 		button {
@@ -138,7 +141,7 @@ span:has(input:focus) + label,
 	}
 	[for=unrChk] {
 		display: inline-block;
-		transform: scale(.95, 1);
+		scale: .95 1;
 		transform-origin: 0 0;
 	}
 	[type=range] {
@@ -146,7 +149,8 @@ span:has(input:focus) + label,
 		position: absolute;
 		top: calc(50%);
 		right: 0;
-		transform: translateY(-50%) scale(.8);
+		translate: 0 -50%;
+		scale: .8;
 	}
 	#ExtendScoreMenu {
 		font-size: 80%;
@@ -213,10 +217,10 @@ button[data-for=keys] {
 		left: var(--thumb-size);
 		top:  var(--width);
 		width:var(--width);
-		transform: rotate(-90deg);
+		rotate: -90deg;
 		transform-origin: left center;
 		opacity: 0;
-		will-change: transform, opacity;
+		will-change: opacity;
 	}
 	input:focus {
 		opacity: 1;
@@ -257,11 +261,11 @@ button[data-for=keys] {
 		gap: .2em;
 	}
 	menu > li::before, .current::before {
+		--x: calc(-1*var(--t) * var(--ofst-x, 0));
+		--size: var(--width) var(--t);
 		content: '';
 		margin-top: -.2em;
-		background: no-repeat
-			calc(-1*var(--t) * var(--ofst-x, 0))
-			0/var(--width) var(--t) var(--url);
+		background: no-repeat var(--x) 0/var(--size) var(--url);
 		width:  var(--t);
 		height: var(--t);
 	}

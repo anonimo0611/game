@@ -64,7 +64,7 @@ body:not([data-state=Title]) #titleScr {
 	z-index: 1100;
 	top: 28.8rem;
 	left: 50%;
-	transform: translateX(-50%);
+	translate: -50% 0;
 	transition: color .2s, border-color .2s;
 	&:hover {
 		color: #74CCF8;

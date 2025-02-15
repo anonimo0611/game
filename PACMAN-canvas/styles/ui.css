@@ -10,7 +10,7 @@ dialog {
 	z-index: 10000;
 	top:  50%;
 	left: 50%;
-	transform: translate(-50%, -50%);
+	translate: -50% -50%;
 	will-change: opacity;
 	&::backdrop {
 		background-color: rgba(0 0 0 /.48);
@@ -44,8 +44,10 @@ dialog {
 	z-index: 10001;
 }
 
-button, .dropdown .current {
+button, input, .dropdown .current, .slidemenu {
 	--bc:  #222;
+	--focused-border-color: #0B93D5;
+	--active-border-color:  #26B3F7;
 	color: #EEE;
 	background: var(--bc);
 	font-size: 1em;
@@ -62,18 +64,18 @@ button {
 		--bc:  #0a384d;
 		color: #FFF;
 		background-color: var(--bc);
-		border-color: #0B93D5;
+		border-color: var(--focused-border-color);
 	}
 	&:focus {
 		--bc:  #0972A5;
 		color: #FFF;
 		background-color: var(--bc);
-		border-color: #0B93D5;
+		border-color: var(--focused-border-color);
 	}
 	&:active {
 		color: #FFF;
 		background-color: #0972A5;
-		border-color: #26B3F7;
+		border-color: var(--active-border-color);
 	}
 	&:disabled {
 		cursor: default !important;
@@ -84,30 +86,25 @@ button {
 	}
 }
 
+[type=radio],
 [type=checkbox] {
-	appearance: none;
-	background: #FFF;
-	border-radius: .2em;
-	width:  1em;
-	height: 1em;
+	accent-color: #FFF;
+	scale: 1.1;
+	vertical-align: 0.025em;
 	position: relative;
-	&:focus {
-		outline: solid 3px #C6F;
-		outline-offset:2px;
-	}
-	&:checked       {background: #69C}
-	&:checked:hover {background: #C6F}
-	&:checked:focus {background: #C6F}
-	&:checked::before {
-		content: '';
-		position: absolute;
-		transform: translate(.25em,-.2em) rotate(48deg);
-		transform-origin: center;
-		width:  0.4em;
-		height: 0.8em;
-		border: solid #FFF;
-		border-width: 0 3px 3px 0;
-	}
+	&:focus {outline: none}
+	&:checked       {accent-color: #69C}
+	&:checked:hover {accent-color: #C6F}
+	&:checked:focus {accent-color: #C6F}
+}
+[type=checkbox]:focus::before {
+	content: '';
+	position: absolute;
+	width:  100%;
+	height: 100%;
+	border-radius: 0.2em;
+	box-shadow: 0 0 0 2px #C6F;
+	scale: 1.2;
 }
 
 [type=range] {
@@ -117,16 +114,17 @@ button {
 	--bg-focus:   #00FFFF;
 	--p: var(--ratio, 100%);
 	appearance: none;
+	border: none;
 	background: #63B2D9;
 	background: linear-gradient(90deg, var(--bg-inactive) var(--p), #888 var(--p));
 	height: 5px;
 	vertical-align: middle;
 	outline: none;
 }
-label:hover [type=range] {
+:hover [type=range] {
 	background: linear-gradient(90deg, var(--bg-active) var(--p), #888 var(--p));
 }
-input[type=range]:focus {
+[type=range]:focus {
 	background: linear-gradient(90deg, var(--bg-focus) var(--p), #888 var(--p));
 }
 ::-ms-thumb {
@@ -159,7 +157,6 @@ input[type=range]:focus {
 
 .menu {
 	--hilight-bg-color: #18445A;
-	--focused-border-color: #0B93D5;
 	text-align: left;
 	white-space: nowrap;
 	color: #FFF;
@@ -179,6 +176,9 @@ input[type=range]:focus {
 	.current:focus {
 		border-color: var(--focused-border-color);
 	}
+	.current:active {
+		border-color: var(--active-border-color);
+	}
 	.current::after {
 		--size: calc(var(--caret-size)/3);
 		content: '';
@@ -189,7 +189,8 @@ input[type=range]:focus {
 		position: absolute;
 		right: var(--size);
 		top: calc(50% - var(--size)/2);
-		transform: translateY(-50%) rotate(-45deg);
+		translate: 0 -50%;
+		rotate: -45deg;
 	}
 	menu {
 		border-radius: .2em;
@@ -221,8 +222,8 @@ input[type=range]:focus {
 	display: inline-block;
 	vertical-align: middle;
 	clip-path: inset(0);
-	&:hover {background:   var(--hilight-bg-color)}
-	&:focus {border-color: var(--focused-border-color)}
+	&:hover {background:  var(--hilight-bg-color)}
+	&:focus {border-color:var(--focused-border-color)}
 	menu, li {
 		text-align: center;
 		transition:  transform .3s;
@@ -240,8 +241,8 @@ input[type=range]:focus {
 		z-index: 1000;
 		top: 50%;
 		transform-origin: center;
-		&.l {left: 0;transform:translateY(-50%) rotate(+45deg)}
-		&.r {right:0;transform:translateY(-50%) rotate(-45deg) scale(-1,1)}
+		&.l {left: 2px;translate:0 -50%;rotate:+45deg}
+		&.r {right:2px;translate:0 -50%;rotate:-45deg;scale:-1 1}
 		&:disabled {opacity: .5}
 	}
 }
