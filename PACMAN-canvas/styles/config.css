@@ -17,7 +17,11 @@
 }
 
 #titleScr .panel {
-	table {border-collapse: collapse}
+	top: var(--height);
+	right: 0;
+	table {
+		border-collapse: collapse
+	}
 	caption,
 	&[data-caption]::before {
 		text-align: center;
@@ -32,7 +36,7 @@
 		display: block;
 	}
 	> li,th,td {
-		font: 1em/1.1 sans-serif;
+		font: 1em/1 sans-serif;
 		padding: .1rem 0;
 		vertical-align: middle;
 	}
@@ -56,20 +60,14 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	~ .panel {
-		top: var(--height);
-		right: 0;
-	}
 	> * {
 		margin: 0 .2em;
-		align-self: center;
 	}
 	.checkboxes {
 		font-size: 70%;
 		label {
 			margin: .3em 0 .3em .3em;
 			display: block;
-			align-items: center;
 		}
 	}
 	.buttons {
@@ -91,7 +89,10 @@
 		padding: 0;
 		width:  1.1rem;
 		height: 1.1rem;
-		svg {fill:#FFF;pointer-events:none}
+		svg {
+			fill:#FFF;
+			pointer-events:none;
+		}
 	}
 }
 
@@ -101,7 +102,6 @@
 	> li {
 		padding: .05em 0;
 		display: flex;
-		align-items: center;
 		position: relative;
 	}
 	> li:not(.one) > :first-child,
@@ -232,14 +232,15 @@
 }
 
 #LevelMenu {
-	--t: 35px; /* tile size */
+	--scale: 1.2;
+	--t: calc(1rem * var(--scale));
 	--width: calc(var(--t)*8);
 	text-transform: uppercase;
-	font: .9rem/1 sans-serif;
+	font: 0.9rem/1 sans-serif;
 	margin-left: 0;
 	.current {
-		padding-top:    .22em;
-		padding-bottom: .20em;
+		padding-top:    .3em;
+		padding-bottom: .2em;
 	}
 	menu > li, .current {
 		display: flex;
@@ -250,8 +251,8 @@
 		--x: calc(-1*var(--t) * var(--ofst-x, 0));
 		--size: var(--width) var(--t);
 		content: '';
-		margin-top: -.2em;
 		background: no-repeat var(--x) 0/var(--size) var(--url);
+		margin-top: -.2em;
 		width:  var(--t);
 		height: var(--t);
 	}

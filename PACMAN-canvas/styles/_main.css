@@ -16,8 +16,8 @@ body {
 	background: #334;
 	font: 1rem/1 Verdana, sans-serif;
 	display: flex;
-	align-items: center;
 	justify-content: center;
+	align-items: center;
 }
 ::selection {
 	color: inherit;
@@ -31,9 +31,8 @@ div,ul,menu,li,th,td,form,input,output {
 
 [data-cursor=hidden],
 [data-cursor=stayStill] {
-	body:not([data-state=Title]) canvas {
-		cursor: none;
-	}
+	body:not([data-state=Title])
+		canvas {cursor: none}
 }
 
 #board {
@@ -61,8 +60,7 @@ body:not([data-state=Title]) #titleScr {
 	border: solid 1px #777;
 	padding: .4rem 1.5rem .2rem;
 	position: absolute;
-	z-index: 1100;
-	top: 28.8rem;
+	top: 22rem;
 	left: 50%;
 	translate: -50% 0;
 	transition: color .2s, border-color .2s;
