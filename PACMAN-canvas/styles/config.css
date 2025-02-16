@@ -272,6 +272,6 @@ label:focus-within,
 span:has(input:focus) + label,
 :is(label, .label):hover,
 :is(label, .label):has(+div:hover),
-:is(label, .label):has(+div:focus)  {
-	color: var(--label-fg-hover);
+:is(label, .label):has(+div:focus) {
+	color: var(--label-fg-hover) !important;
 }
