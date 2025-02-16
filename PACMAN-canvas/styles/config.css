@@ -1,5 +1,5 @@
 #titleScr {
-	--height: 3.6rem;
+	--height: 3.4rem;
 	--label-fg: #6FD;
 	--label-fg-hover: #FBE;
 	background: rgba(0 0 0 /.75);
@@ -77,7 +77,7 @@
 		gap: .3em;
 		flex-direction: column;
 		button {
-			padding: .3em .2em;
+			padding: .2em .2em;
 			width: 100%;
 		}
 	}
@@ -258,11 +258,15 @@
 	}
 }
 
-label, .label {color: var(--label-fg)}
+label, .label {
+	color: var(--label-fg);
+}
 label:has(+#LevelMenu)  {
 	color: #FFF;
+	font-variant: small-caps;
 	margin: 0;
 	padding: .5em .3em;
+	translate: 0 -.1em;
 }
 label:focus-within,
 span:has(input:focus) + label,
