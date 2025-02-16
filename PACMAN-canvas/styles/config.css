@@ -271,7 +271,7 @@ label:has(+#LevelMenu)  {
 label:focus-within,
 label:has(+.menu :is(:hover,:focus)),
 span:has(input:focus) + label,
-:is(label, .label):hover,
-:is(label, .label):has(+:is(:hover,:focus)) {
+:is(.label,label):hover,
+:is(.label,label):has(+:is(:hover,:focus)) {
 	color: var(--label-fg-hover) !important;
 }
