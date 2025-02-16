@@ -1,5 +1,5 @@
 #titleScr {
-	--height: 3.4rem;
+	--height: 3.3rem;
 	--label-fg: #6FD;
 	--label-fg-hover: #FBE;
 	background: rgba(0 0 0 /.75);
@@ -10,7 +10,7 @@
 	position: absolute;
 	width: 100%;
 	height: var(--height);
-	top: 6.7rem;
+	top: 6.8rem;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -62,6 +62,7 @@
 	align-items: center;
 	> * {
 		margin: 0 .2em;
+		align-self: center;
 	}
 	.checkboxes {
 		font-size: 70%;
@@ -265,8 +266,7 @@ label:has(+#LevelMenu)  {
 	color: #FFF;
 	font-variant: small-caps;
 	margin: 0;
-	padding: .5em .3em;
-	translate: 0 -.1em;
+	padding: 0 .3em;
 }
 label:focus-within,
 label:has(+.menu :is(:hover,:focus)),
