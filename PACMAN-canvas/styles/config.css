@@ -269,9 +269,9 @@ label:has(+#LevelMenu)  {
 	translate: 0 -.1em;
 }
 label:focus-within,
+label:has(+.menu :is(:hover,:focus)),
 span:has(input:focus) + label,
 :is(label, .label):hover,
-:is(label, .label):has(+div:hover),
-:is(label, .label):has(+div:focus) {
+:is(label, .label):has(+:is(:hover,:focus)) {
 	color: var(--label-fg-hover) !important;
 }
