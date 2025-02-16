@@ -1,33 +1,27 @@
 #titleScr {
-	--label-fg: #6CF4E6;
-	--label-fg-hover: #EAB6FA;
-}
-label, .label {
-	color: var(--label-fg)
-}
-label:has(+#LevelMenu)  {
-	color: #FFF;
-	margin: 0;
-	padding: .5em .3em;
-}
-label:focus-within,
-span:has(input:focus) + label,
-:is(label, .label):hover,
-:is(label, .label):has(+div:hover),
-:is(label, .label):has(+div:focus)  {
-	color: var(--label-fg-hover);
+	--height: 3.6rem;
+	--label-fg: #6FD;
+	--label-fg-hover: #FBE;
+	background: rgba(0 0 0 /.75);
+	border: solid red .1em;
+	border-style: solid none;
+	margin: auto;
+	box-sizing: border-box;
+	position: absolute;
+	width: 100%;
+	height: var(--height);
+	top: 6.7rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-.panel {
-	top: 10.3rem;
-	right: 0;
-	table {
-		border-collapse: collapse;
-	}
+#titleScr .panel {
+	table {border-collapse: collapse}
 	caption,
 	&[data-caption]::before {
 		text-align: center;
-		color: #E5EC34;
+		color: #FF3;
 		font-size: 100%;
 		font-weight: 700;
 		margin: .2em 0 .2em .4rem;
@@ -54,25 +48,18 @@ span:has(input:focus) + label,
 	}
 	tr:hover th {
 		color: var(--label-fg-hover);
-		+ td {
-			background-color: rgba(27 83 143 /.6)
-		}
+		+ td {background-color: #3699}
 	}
 }
 
 #cfg {
-	background: rgba(0 0 0 /.75);
-	border: solid red 4px;
-	border-style: solid none;
-	margin: auto;
-	padding: .2em 0;
-	width: 100%;
-	position: absolute;
-	z-index: 10000;
-	top: 6.7rem;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	~ .panel {
+		top: var(--height);
+		right: 0;
+	}
 	> * {
 		margin: 0 .2em;
 		align-self: center;
@@ -89,25 +76,25 @@ span:has(input:focus) + label,
 		font-size: 70%;
 		margin-top: .1em;
 		display: flex;
-		flex-direction: column;
 		gap: .3em;
+		flex-direction: column;
 		button {
 			padding: .3em .2em;
 			width: 100%;
 		}
 	}
-}
-
-#cfgBtn {
-	line-height: 0;
-	padding: 0;
-	width:  1.1rem;
-	height: 1.1rem;
-	svg {
-		fill: #FFF;
-		pointer-events: none;
+	button[data-for=keys] {
+		cursor: help;
+	}
+	#cfgBtn {
+		line-height: 0;
+		padding: 0;
+		width:  1.1rem;
+		height: 1.1rem;
+		svg {fill:#FFF;pointer-events:none}
 	}
 }
+
 #cfgPanel {
 	line-height: 1;
 	padding: .2em;
@@ -135,9 +122,7 @@ span:has(input:focus) + label,
 			width: 100%;
 			display: block;
 		}
-		#defBtn {
-			border-width: 4px;
-		}
+		#defBtn {border-width: 4px}
 	}
 	[for=unrChk] {
 		display: inline-block;
@@ -163,14 +148,9 @@ span:has(input:focus) + label,
 	}
 }
 
-button[data-for=keys] {
-	cursor: help;
-}
 #keysPanel {
 	padding: 0 .2em .2em;
-	.arrows {
-		display: inline-flex;
-	}
+	.arrows {display: inline-flex}
 	kbd {
 		text-align: center;
 		font: 100%/1 Consolas, monospace;
@@ -196,27 +176,33 @@ button[data-for=keys] {
 }
 
 #volume {
-	--thumb-size: 0.5rem;
+	--thumb-size: 0.4rem;
 	width: calc(1.5rem + var(--thumb-size) * 1.5);
 	height: 1.5rem;
 	position: absolute;
-	top:   .1em;
-	right: .2em;
+	top:   .2em;
+	right: .15em;
 	label {
 		display: block;
 		outline: none;
-	}
-	label:focus canvas {
-		background: #08F;
+		canvas {
+			translate: 0 -3px;
+			border: solid 3px transparent;
+			border-radius: .3em;
+			box-sizing: border-box;
+		}
+		&:focus canvas {border: solid 3px var(--focused-border-color)}
+		&:focus:active canvas {border-color: transparent}
 	}
 	input {
 		--thumb-size: inherit;
-		--width: 1.3rem;
+		--width: 1.2rem;
 		position: absolute;
 		z-index: -1;
 		left: var(--thumb-size);
 		top:  var(--width);
 		width:var(--width);
+		height: 3px;
 		rotate: -90deg;
 		transform-origin: left center;
 		opacity: 0;
@@ -237,13 +223,12 @@ button[data-for=keys] {
 	&:focus input {
 		transition: none;
 	}
-}
-#speaker {
-	position: absolute;
-	z-index: 10000;
-	top:   0;
-	right: 0;
-	cursor: pointer;
+	#speaker {
+		position: absolute;
+		top:   0;
+		right: 0;
+		cursor: pointer;
+	}
 }
 
 #LevelMenu {
@@ -258,8 +243,8 @@ button[data-for=keys] {
 	}
 	menu > li, .current {
 		display: flex;
-		align-items: center;
 		gap: .2em;
+		align-items: center;
 	}
 	menu > li::before, .current::before {
 		--x: calc(-1*var(--t) * var(--ofst-x, 0));
@@ -270,4 +255,18 @@ button[data-for=keys] {
 		width:  var(--t);
 		height: var(--t);
 	}
+}
+
+label, .label {color: var(--label-fg)}
+label:has(+#LevelMenu)  {
+	color: #FFF;
+	margin: 0;
+	padding: .5em .3em;
+}
+label:focus-within,
+span:has(input:focus) + label,
+:is(label, .label):hover,
+:is(label, .label):has(+div:hover),
+:is(label, .label):has(+div:focus)  {
+	color: var(--label-fg-hover);
 }

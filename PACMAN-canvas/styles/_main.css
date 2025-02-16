@@ -13,7 +13,7 @@ html {
 }
 body {
 	color: #FFF;
-	background: #2B2B37;
+	background: #334;
 	font: 1rem/1 Verdana, sans-serif;
 	display: flex;
 	align-items: center;
@@ -37,9 +37,9 @@ div,ul,menu,li,th,td,form,input,output {
 }
 
 #board {
-	background: black;
-	padding-top:   15px;
-	border-radius: 20px;
+	background: #000;
+	padding-top:   0.5rem;
+	border-radius: 0.7rem;
 	position: relative;
 	transform-origin: center;
 	opacity: 0;
@@ -56,7 +56,7 @@ body:not([data-state=Title]) #titleScr {
 	text-align: center;
 	white-space: nowrap;
 	color: #EEE;
-	background: rgba(34 34 34 /.7);
+	background: rgba(34 34 34 /0.7);
 	font: .8rem/1 Atari, sans-serif;
 	border: solid 1px #777;
 	padding: .4rem 1.5rem .2rem;
@@ -67,7 +67,7 @@ body:not([data-state=Title]) #titleScr {
 	translate: -50% 0;
 	transition: color .2s, border-color .2s;
 	&:hover {
-		color: #74CCF8;
+		color: #6CF;
 		border-color: currentColor;
 	}
 	&:focus {
