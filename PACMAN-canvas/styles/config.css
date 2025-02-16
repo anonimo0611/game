@@ -147,8 +147,8 @@ span:has(input:focus) + label,
 	[type=range] {
 		width: 4rem;
 		position: absolute;
-		top: calc(50%);
 		right: 0;
+		top: 50%;
 		translate: 0 -50%;
 		scale: .8;
 	}
@@ -253,7 +253,8 @@ button[data-for=keys] {
 	font: .9rem/1 sans-serif;
 	margin-left: 0;
 	.current {
-		padding: .22em var(--caret-size) .2em .2em;
+		padding-top:    .22em;
+		padding-bottom: .20em;
 	}
 	menu > li, .current {
 		display: flex;
