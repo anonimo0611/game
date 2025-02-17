@@ -42,7 +42,7 @@ dialog {
 	position: absolute;
 }
 
-button, input, .menu, #volume {
+button, input, .menu, .btn {
 	--focused-border-color: #09C;
 	--active-border-color:  #3CF;
 }
@@ -170,7 +170,6 @@ button {
 	--caret-size: 1em;
 	.current {
 		background: var(--bg);
-		margin-top: -.2em;
 		padding: .1em .2em;
 		box-sizing: border-box;
 		&:focus  {border-color: var(--focused-border-color)}
