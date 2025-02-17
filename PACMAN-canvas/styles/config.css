@@ -82,6 +82,12 @@
 			width: 100%;
 		}
 	}
+	label:has(+#LevelMenu)  {
+		color: #FFF;
+		font-variant: small-caps;
+		margin: 0;
+		padding: 0 .3em;
+	}
 	button[data-for=keys] {
 		cursor: help;
 	}
@@ -261,12 +267,6 @@
 
 label, .label {
 	color: var(--label-fg);
-}
-label:has(+#LevelMenu)  {
-	color: #FFF;
-	font-variant: small-caps;
-	margin: 0;
-	padding: 0 .3em;
 }
 label:focus-within,
 label:has(+.menu :is(:hover,:focus)),
