@@ -8,7 +8,7 @@ import {Cursor}    from '../_lib/mouse.js'
 import {LevelMenu} from './_menu.js'
 import {Bg,Ctx}    from './_constants.js'
 import {State}     from './_state.js'
-import {Ctrl,Form} from './control.js'
+import {Ctrl}      from './control.js'
 import {Maze}      from './maze.js'
 import {MazeWall}  from './maze_wall.js'
 import {Message}   from './message.js'
@@ -103,7 +103,7 @@ export const Game = new class {
 	}
 	#onLosing() {
 		Sound.play('losing')
-		Player.instance.sprite.setLosing()
+		Player.sprite.setLosing()
 		Lives.left > 0
 			? State.switchToRestart ({delay:2200})
 			: State.switchToGameOver({delay:2000})

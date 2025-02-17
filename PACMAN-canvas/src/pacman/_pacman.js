@@ -18,9 +18,10 @@ export const Player = function() {
 	/** @type {?PlayablePacman} */
 	let player = null
 	const instantiate = ()=> player = new PlayablePacman()
-	$on('Title Restart NewLevel', ()=> instantiate())
+	$on('Title Restart NewLevel', instantiate)
 	return {
 		get instance()   {return player ||= instantiate()},
+		get sprite()     {return player.sprite},
 		get dir()        {return player.dir},
 		get pos()        {return player.pos},
 		get centerPos()  {return player.centerPos},
