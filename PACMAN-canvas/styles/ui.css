@@ -23,10 +23,7 @@ dialog {
 		padding: .2em .4em .4em .4em;
 		display: flex;
 		justify-content: flex-end;
-		button {
-			margin:  .3em;
-			padding: .4em 1em;
-		}
+		button {margin:.3em;padding:.4em 1em}
 	}
 }
 
@@ -106,27 +103,21 @@ button {
 
 [type=range] {
 	--thumb-size: 0.6rem;
-	--bar-active:  #6CC;
-	--bar-inactive:#6CC;
-	--bar-focus:   #0EF;
-	--lg-ratio: var(--ratio, 100%);
-	--lg-first: var(--bar-inactive) var(--lg-ratio);
-	--lg-second:#888 var(--lg-ratio);
+	--ratio: var(--ratio, 100%);
+	--track: #6CC;
+	--focus: #0EF;
+	--second:#888 var(--ratio);
 	appearance: none;
 	border: none;
-	background: var(--bar-active);
-	background: linear-gradient(90deg, var(--lg-first), var(--lg-second));
+	background: linear-gradient(90deg, var(--track) var(--ratio), var(--second));
 	height: 5px;
-	vertical-align: middle;
 	outline: none;
 }
 :hover [type=range] {
-	--lg-first: var(--bar-active) var(--lg-ratio);
-	background: linear-gradient(90deg, var(--lg-first), var(--lg-second));
+	background: linear-gradient(90deg, var(--track) var(--ratio), var(--second));
 }
 [type=range]:focus {
-	--lg-first: var(--bar-focus) var(--lg-ratio);
-	background: linear-gradient(90deg, var(--lg-first), var(--lg-second));
+	background: linear-gradient(90deg, var(--focus) var(--ratio), var(--second));
 }
 ::-ms-thumb {
 	appearance: none;
@@ -149,12 +140,12 @@ button {
 	width:  var(--thumb-size);
 	height: var(--thumb-size);
 }
-:hover::-ms-thumb            {background: var(--bar-active)}
-:hover::-moz-range-thumb     {background: var(--bar-active)}
-:hover::-webkit-slider-thumb {background: var(--bar-active)}
-:focus::-ms-thumb            {background: var(--bar-focus)}
-:focus::-moz-range-thumb     {background: var(--bar-focus)}
-:focus::-webkit-slider-thumb {background: var(--bar-focus)}
+:hover::-ms-thumb            {background: var(--track)}
+:hover::-moz-range-thumb     {background: var(--track)}
+:hover::-webkit-slider-thumb {background: var(--track)}
+:focus::-ms-thumb            {background: var(--focus)}
+:focus::-moz-range-thumb     {background: var(--focus)}
+:focus::-webkit-slider-thumb {background: var(--focus)}
 
 .menu {
 	--hilight-bg-color: #036;
@@ -166,7 +157,7 @@ button {
 	cursor: default;
 }
 .dropdown {
-	--bg: rgba(41 41 41 /.8);
+	--bg: #333C;
 	--caret-size: 1em;
 	.current {
 		background: var(--bg);
@@ -193,7 +184,6 @@ button {
 		margin:  0;
 		padding: 0;
 		position: absolute;
-		z-index: 2000;
 	}
 	li {
 		background: var(--bg);
@@ -217,6 +207,7 @@ button {
 		text-align: center;
 		transition:  transform .3s;
 		will-change: transform;
+		z-index: 1;
 	}
 	button {
 		appearance: none;
@@ -227,7 +218,7 @@ button {
 		height: .55em;
 		padding: 0;
 		position: absolute;
-		z-index: 1000;
+		z-index: 2;
 		transform-origin: center;
 		top: 50%;
 		&.l {left: 2px;translate:0 -50%;rotate:+45deg}

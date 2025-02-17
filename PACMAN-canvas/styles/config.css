@@ -16,18 +16,15 @@
 	align-items: center;
 }
 
-#titleScr .panel {
+.panel {
 	top: var(--height);
 	right: 0;
-	table {
-		border-collapse: collapse
-	}
+	table {border-collapse: collapse}
 	caption,
 	&[data-caption]::before {
 		text-align: center;
 		color: #FF3;
-		font-size: 100%;
-		font-weight: 700;
+		font: 700 100%/1 sans-serif;
 		margin: .2em 0 .2em .4rem;
 		padding: 0;
 	}
@@ -85,7 +82,7 @@
 	label:has(+#LevelMenu)  {
 		color: #FFF;
 		font-variant: small-caps;
-		margin: 0;
+		margin:  0;
 		padding: 0 .3em;
 	}
 	button[data-for=keys] {
@@ -96,10 +93,6 @@
 		padding: 0;
 		width:  1.1rem;
 		height: 1.1rem;
-		svg {
-			fill:#FFF;
-			pointer-events:none;
-		}
 	}
 }
 
@@ -118,9 +111,7 @@
 		display: inline-block;
 		width: 1.5rem;
 	}
-	> li > :first-child + * {
-		flex: 1;
-	}
+	> li > :first-child + * {flex: 1}
 	> li.buttons {
 		display: block;
 		button {
@@ -164,21 +155,10 @@
 		position: relative;
 		display: inline-block;
 		&.↑,
-		&.↓ {
-			width:  1em;
-			height: 1em;
-		}
-		&.↑ {
-			margin-left: -0.2em;
-			top: -0.25em;
-		}
-		&.↓ {
-			margin-left: -1.0em;
-			top: 0.25em;
-		}
-		&.→ {
-			margin-left: -0.2em;
-		}
+		&.↓ {width:  1em;height: 1em;}
+		&.↑ {margin-left: -0.2em;top: -0.25em}
+		&.↓ {margin-left: -1.0em;top: +0.25em}
+		&.→ {margin-left: -0.2em;}
 	}
 }
 
@@ -187,19 +167,19 @@
 	width: calc(1.5rem + var(--thumb-size) * 1.5);
 	height: 1.5rem;
 	position: absolute;
-	top:   .2em;
+	top:   .20em;
 	right: .15em;
 	label {
 		display: block;
 		outline: none;
-		canvas {
-			translate: 0 -3px;
-			border: solid 3px transparent;
-			border-radius: .3em;
-			box-sizing: border-box;
-		}
 		&:focus canvas {border: solid 3px var(--focused-border-color)}
 		&:focus:active canvas {border-color: transparent}
+	}
+	label canvas {
+		translate: 0 -3px;
+		border: solid 3px transparent;
+		border-radius: .3em;
+		box-sizing: border-box;
 	}
 	input {
 		--thumb-size: inherit;
@@ -215,25 +195,14 @@
 		opacity: 0;
 		will-change: opacity;
 	}
-	input:focus {
-		opacity: 1;
-		z-index: 1;
-	}
+	input:focus   {z-index: 1;opacity: 1}
 	&:hover input,
-	&:focus input {
-		z-index: 1;
-		opacity: 1;
-	}
-	&:hover input {
-		transition: all .2s .4s;
-	}
-	&:focus input {
-		transition: none;
-	}
+	&:focus input {z-index: 1;opacity: 1}
+	&:hover input {transition: all .2s .4s}
+	&:focus input {transition: none}
 	#speaker {
 		position: absolute;
-		top:   0;
-		right: 0;
+		top: 0; right: 0;
 		cursor: pointer;
 	}
 }
@@ -265,13 +234,11 @@
 	}
 }
 
-label, .label {
-	color: var(--label-fg);
-}
+label,.label {color:var(--label-fg)}
 label:focus-within,
 label:has(+.menu :is(:hover,:focus)),
 span:has(input:focus) + label,
-:is(.label,label):hover,
-:is(.label,label):has(+:is(:hover,:focus)) {
+:is(label,.label):hover,
+:is(label,.label):has(+:is(:hover,:focus)) {
 	color: var(--label-fg-hover) !important;
 }

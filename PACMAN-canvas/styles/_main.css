@@ -28,6 +28,10 @@ div,ul,menu,li,th,td,form,input,output {
 	padding: 0;
 	list-style-type: none;
 }
+svg {
+	fill: #FFF;
+	pointer-events: none;
+}
 
 [data-cursor=hidden],
 [data-cursor=stayStill] {
@@ -55,26 +59,18 @@ body:not([data-state=Title]) #titleScr {
 	text-align: center;
 	white-space: nowrap;
 	color: #EEE;
-	background: rgba(34 34 34 /0.7);
+	background: #222C;
 	font: .8rem/1 Atari, sans-serif;
-	border: solid 1px #777;
+	border: solid 2px #777;
 	padding: .4rem 1.5rem .2rem;
 	position: absolute;
-	top: 22rem;
+	top: 21.85rem;
 	left: 50%;
 	translate: -50% 0;
 	transition: color .2s, border-color .2s;
-	&:hover {
-		color: #6CF;
-		border-color: currentColor;
-	}
-	&:focus {
-		border-width: 2px;
-	}
-	&:active {
-		color: #F39;
-		border-color: currentColor;
-	}
+	&:hover,
+	&:focus  {color:#6CF;border-color:currentColor}
+	&:active {color:#F39;border-color:currentColor}
 }
 
 #debug {
