@@ -21,7 +21,8 @@ export default class {
 		const dir = between(this.#mAngle, 0, OpenMax) ? 1 : -1
 		this.#mAngle += OpenMax/Duration * (this.#animDir*=dir)
 	}
-	draw(ctx=Ctx, {
+	/** @param {Ctx} ctx */
+	draw(ctx, {
 		centerPos:{x,y}={x:0,y:0},
 		orient    = L,
 		radius    = PacRadius,

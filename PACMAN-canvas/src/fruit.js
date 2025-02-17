@@ -69,7 +69,8 @@ export const Fruit = new class {
 		if (!Ticker.paused && _tgtDisp)
 			Fruit.#drawSprite(Ctx, Fruit.number(), Fruit.targetPos)
 	}
-	#drawSprite(ctx=Ctx, idx, {x, y}) {
+	/** @param {Ctx} ctx */
+	#drawSprite(ctx, idx=0, {x=0, y=0}) {
 		ctx.save()
 		_fadeOut?.setAlpha(ctx)
 		ctx.translate(x, y)

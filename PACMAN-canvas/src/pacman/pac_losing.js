@@ -6,12 +6,12 @@ const LineDur =  300/Ticker.Interval
 const FadeDur =  300/Ticker.Interval
 
 export class Losing {
-	constructor() {freeze(this)}
 	#mAngle = 0
 	#alpha  = 1
 	#innerR = R/4
 	#outerR = R/2
-	draw(ctx=Ctx, {x=0,y=0}={}) {
+	/** @param {Ctx} ctx */
+	draw(ctx, {x=0,y=0}={}) {
 		const clampedX = (ctx == Ctx)
 			? clamp(x, R, CvsW-R) : x
 		ctx.save()
@@ -23,14 +23,16 @@ export class Losing {
 	 		: this.#drawRadialLines(ctx)
 		ctx.restore()
 	}
-	#disappear(ctx=Ctx) {
+	/** @param {Ctx} ctx */
+	#disappear(ctx) {
 		const mAngle = this.#mAngle += PI/DisDur
 		ctx.beginPath()
 		ctx.moveTo(0, R*0.35)
 		ctx.arc(0,0, R, -PI/2+mAngle,-PI/2-mAngle)
 		ctx.fill()
 	}
-	#drawRadialLines(ctx=Ctx) {
+	/** @param {Ctx} ctx */
+	#drawRadialLines(ctx) {
 		const innerR = min(this.#innerR += R/2/LineDur, R/2)
 		const outerR = min(this.#outerR += R/1/LineDur, R/1)
 		if (this.#outerR >= R)
