@@ -5,15 +5,11 @@
 	background: rgba(0 0 0 /.75);
 	border: solid red .1em;
 	border-style: solid none;
-	margin: auto;
 	box-sizing: border-box;
-	position: absolute;
 	width: 100%;
 	height: var(--height);
+	position: absolute;
 	top: 6.8rem;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 }
 
 .panel {
@@ -101,15 +97,15 @@
 	padding: .2em;
 	> li {
 		padding: .05em 0;
-		display: flex;
 		position: relative;
+		display: flex;
 	}
 	> li:not(.one) > :first-child,
 	> li.slidemenu-wrapper::before {
 		content: '';
 		text-align: center;
-		display: inline-block;
 		width: 1.5rem;
+		display: inline-block;
 	}
 	> li > :first-child + * {flex: 1}
 	> li.buttons {
@@ -155,7 +151,7 @@
 		position: relative;
 		display: inline-block;
 		&.↑,
-		&.↓ {width:  1em;height: 1em;}
+		&.↓ {width: 1em;height: 1em;}
 		&.↑ {margin-left: -0.2em;top: -0.25em}
 		&.↓ {margin-left: -1.0em;top: +0.25em}
 		&.→ {margin-left: -0.2em;}
@@ -163,48 +159,36 @@
 }
 
 #volume {
+	--size: 1.4rem;
 	--thumb-size: 0.4rem;
-	width: calc(1.5rem + var(--thumb-size) * 1.5);
-	height: 1.5rem;
+	width:  calc(var(--size) + var(--thumb-size) * 1.1);
+	height: var(--size);
 	position: absolute;
-	top:   .20em;
+	top:   .25em;
 	right: .15em;
-	label {
-		display: block;
-		outline: none;
-		&:focus canvas {border: solid 3px var(--focused-border-color)}
-		&:focus:active canvas {border-color: transparent}
-	}
-	label canvas {
-		translate: 0 -3px;
-		border: solid 3px transparent;
-		border-radius: .3em;
-		box-sizing: border-box;
+	canvas {
+		position: absolute;
+		top:   0;
+		right: 0;
+		cursor: pointer;
 	}
 	input {
 		--thumb-size: inherit;
-		--width: 1.2rem;
+		--size: 1.2rem;
 		position: absolute;
 		z-index: -1;
-		left: var(--thumb-size);
-		top:  var(--width);
-		width:var(--width);
+		left: calc(var(--thumb-size)/2);
+		top:  var(--size);
+		width:var(--size);
 		height: 3px;
 		rotate: -90deg;
-		transform-origin: -2px 50%;
+		transform-origin: 0 50%;
 		opacity: 0;
 		will-change: opacity;
 	}
-	input:focus   {z-index: 1;opacity: 1}
-	&:hover input,
-	&:focus input {z-index: 1;opacity: 1}
+	input:focus,
+	&:hover input {z-index: 1;opacity: 1}
 	&:hover input {transition: all .2s .4s}
-	&:focus input {transition: none}
-	#speaker {
-		position: absolute;
-		top: 0; right: 0;
-		cursor: pointer;
-	}
 }
 
 #LevelMenu {

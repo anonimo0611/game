@@ -3,12 +3,12 @@ import {GhsMgr}   from '../src/ghosts/_system.js'
 import {SoundMgr} from './loader.js'
 import {Speaker}  from './speaker.js'
 
-const volRng   = byId('volRng')
 const speaker  = byId('speaker')
+const volRng   = byId('volRng')
+const volRngG  = dqsAll('.volRng')
 const SirenIds = SoundMgr.ids.filter(id=> /^siren/.test(id))
 
-const isEnterKey = e=>
-	!isCombinationKey(e) && /^(\x20|Enter)$/.test(e.key)
+const isEnterKey = e=> !isCombinationKey(e) && /^(\x20|Enter)$/.test(e.key)
 
 export const Sound = new class extends SoundMgr {
 	static {this.#init()}
@@ -19,21 +19,23 @@ export const Sound = new class extends SoundMgr {
 		Sound.vol = localStorage.anoPacVolume ?? 10
 		Sound.#setup()
 	}
+	/** @type {?number} */
 	#lstVol = null
 	#setup() {
-		$(speaker)  .on('wheel',Sound.#onCtrl).on('click keyup',Sound.#mute)
-		$('.volRng').on('input',Sound.#onCtrl).trigger('input')
-		$('#volRng').prop({defaultValue:Sound.vol})
+		$(speaker).on('wheel',Sound.#onWheel).on('click',  Sound.#mute)
+		$(volRngG).on('input',Sound.#onWheel).on('keydown',Sound.#mute)
+		$(volRng).prop({defaultValue:Sound.vol})
 	}
-	#onKeydown(e) {
-		if (isCombinationKey(e)) return
-		e.key.toUpperCase() == 'M' && Sound.#mute(e)
-	}
-	#onCtrl(e) {
+	#onWheel(e) {
 		Sound.vol = (e.type=='input'? e.target:volRng).valueAsNumber
 	}
+	#onKeydown(e) {
+		if (e.originalEvent.repeat || isCombinationKey(e)) return
+		e.key.toUpperCase() == 'M' && Sound.#mute(e)
+	}
 	#mute(e) {
-		if (e.type == 'keyup' && !isEnterKey(e)) return
+		if (e.originalEvent.repeat || isCombinationKey(e)) return
+		if (e.type == 'keydown' && !isEnterKey(e)) return
 		Sound.#lstVol = Sound.vol || (Sound.#lstVol ?? +volRng.max)
 		$(volRng).prop({value:Sound.vol? 0:Sound.#lstVol}).trigger('input')
 	}
@@ -61,6 +63,7 @@ export const Sound = new class extends SoundMgr {
 	stopLoops() {
 		return Sound.stopSiren().stop('fright','escape')
 	}
+	/** @param {boolean} bool */
 	toggleFrightMode(bool) {
 		bool? Sound.playFright()
 		    : Sound.playSiren()

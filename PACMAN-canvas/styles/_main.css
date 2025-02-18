@@ -15,9 +15,8 @@ body {
 	color: #FFF;
 	background: #334;
 	font: 1rem/1 Verdana, sans-serif;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	display: grid;
+	place-content: center;
 }
 ::selection {
 	color: inherit;
@@ -61,8 +60,8 @@ body:not([data-state=Title]) #titleScr {
 	color: #EEE;
 	background: #222C;
 	font: .8rem/1 Atari, sans-serif;
-	border: solid 2px #777;
 	padding: .4rem 1.5rem .2rem;
+	border: solid 2px #777;
 	position: absolute;
 	top: 21.85rem;
 	left: 50%;

@@ -1,4 +1,4 @@
-﻿const  {cvs,ctx}= canvas2D('speakerCvs', $('#volume').height())
+﻿const {cvs,ctx}= canvas2D('speakerCvs', +$('#volume').height())
 export const Speaker = new class {
 	draw(vol) {
 		const {width,height}= cvs
@@ -38,12 +38,12 @@ export const Speaker = new class {
 		ctx.save()
 		ctx.lineCap = 'round'
 		ctx.lineWidth = 8
-		;[[0.0, 0, 12, 17, 0, -PI/2.6, PI/2.6],
+		;[[0.0, 0, 12, 14, 0, -PI/2.6, PI/2.6],
 		  [4.5, 0, 25, 25, 0, -PI/2.9, PI/2.9],
-		  [6.0, 0, 37, 40, 0, -PI/3.3, PI/3.3],
+		  [8.5, 0, 37, 40, 0, -PI/3.3, PI/3.3],
 		].forEach((v,s)=> {
 			ctx.save()
-			step <= s && (ctx.globalAlpha = vol/10+.3)
+			step <= s && (ctx.globalAlpha = vol/10)
 			ctx.beginPath()
 			ctx.ellipse(...v)
 			ctx.stroke()

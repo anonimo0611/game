@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" style="--tile-size:26">
+<html lang="en" style="--tile-size:28">
 <head>
 	<meta charset="UTF-8">
 	<title>PAC-MAN</title>
@@ -21,12 +21,12 @@
 	<script src="src/_main.js" type="module"></script>
 </head>
 
-<body data-state="Title" data-loaded="false">
+<body data-loaded="false" data-state="Title">
 
 <form id="board" onsubmit="return false">
 	<canvas id="cvs"></canvas>
 	<div id="volume" class="volCtrl btn">
-		<label for="volRg2" id="speaker" tabindex="0" title="Mute/Unmute (M)">
+		<label for="volRg2" id="speaker" title="Mute/Unmute (M)">
 			<canvas id="speakerCvs"></canvas>
 		</label>
 		<input type="range" id="volRg2" class="volRng"
@@ -62,8 +62,7 @@
 				<button type="button" id="clearStorageBtn">Clear Storage</button>
 				<button type="button" class="panelBtn" data-for="keys">About Keys</button>
 			</div>
-			<button type="button" id="cfgBtn" class="panelBtn" data-for="cfg"
-				title="More configuration">
+			<button type="button" id="cfgBtn" class="panelBtn" data-for="cfg" title="More configuration">
 				<svg viewBox="0 0 32 32">
 					<path d="M26 16a2 2 0 01-2 2H8a2 2 0 010-4h16a2 2 0 012 2zM26 8a2 2 0 01-2 2H8a2
 					2 0 010-4h16a2 2 0 012 2zM26 24a2 2 0 01-2 2H8a2 2 0 010-4h16a2 2 0 012 2z"/>
