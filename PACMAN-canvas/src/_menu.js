@@ -5,8 +5,8 @@ export const LevelMenu = new class extends Menu.DorpDownMenu {
 		for (const li of this.lis)
 			$(li).css('--ofst-x', li.dataset.val)
 	}
-	select(idx=this.index) {
-		super.select(idx)
+	select(idx=this.index, {close=true}={}) {
+		super.select(idx, {close})
 		$(this.current).css('--ofst-x', this.value)
 	}
 }
