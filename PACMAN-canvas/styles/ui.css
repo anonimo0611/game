@@ -213,13 +213,13 @@ button {
 		border: solid;
 		border-width: 0 0 3px 3px;
 		padding: 0;
-		width:  .55em;
-		height: .55em;
+		width:  .5em;
+		height: .5em;
 		position: absolute;
 		z-index: 2;
 		top: 50%;
-		&.l {left: 2px;translate:0 -50%;rotate:+45deg}
-		&.r {right:2px;translate:0 -50%;rotate:-45deg;scale:-1 1}
+		&.l {left: 1px;translate:0 -50%;rotate:+45deg}
+		&.r {right:1px;translate:0 -50%;rotate:-45deg;scale:-1 1}
 		&:disabled {opacity: .5}
 		transform-origin: center;
 	}
