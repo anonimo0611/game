@@ -198,8 +198,8 @@
 	font: 0.9rem/1 sans-serif;
 	margin-left: 0;
 	.current {
-		padding-top:    .3em;
-		padding-bottom: .2em;
+		padding-top:    .4em;
+		padding-bottom: .3em;
 	}
 	menu > li, .current {
 		display: flex;
@@ -211,7 +211,7 @@
 		--size: var(--width) var(--t);
 		content: '';
 		background: no-repeat var(--x) 0/var(--size) var(--url);
-		margin-top: -.2em;
+		margin-top: -.3em;
 		width:  var(--t);
 		height: var(--t);
 	}
