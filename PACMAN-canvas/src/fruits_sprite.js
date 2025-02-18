@@ -144,7 +144,7 @@ function apple(ctx=Ctx) {
 
 function melon(ctx=Ctx) {
 	// draw body
-	cvsFillCircle(ctx)(0, 2, 5.3, '#7BF331')
+	cvsFillCircle(ctx)(0, 1.5, 5.2, '#7BF331')
 	ctx.lineCap = ctx.lineJoin = 'round'
 
 	// draw stem
@@ -157,6 +157,7 @@ function melon(ctx=Ctx) {
 	ctx.stroke()
 
 	// dark lines
+	ctx.translate(0, -0.5)
 	ctx.beginPath()
 	cvsSetLinePath(ctx)([.5,-2],[-4, 2],[0, 6])
 	cvsSetLinePath(ctx)([-3,-1],[-1, 1])
