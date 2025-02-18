@@ -197,14 +197,17 @@
 	text-transform: uppercase;
 	font: 0.9rem/1 sans-serif;
 	margin-left: 0;
+	.current, menu > li {
+		display: flex;
+		gap: .2em;
+		align-items: center;
+	}
 	.current {
 		padding-top:    .4em;
 		padding-bottom: .3em;
 	}
-	menu > li, .current {
-		display: flex;
-		gap: .2em;
-		align-items: center;
+	menu > li {
+		padding-top: .3em;
 	}
 	menu > li::before, .current::before {
 		--x: calc(-1*var(--t) * var(--ofst-x, 0));
