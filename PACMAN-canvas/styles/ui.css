@@ -4,7 +4,7 @@ dialog {
 	font: 2vmin sans-serif;
 	margin: 0;
 	padding: .2rem;
-	border: solid 1px #888;
+	border: solid 2px #555;
 	border-radius: 6px;
 	position: fixed;
 	top:  50%;
@@ -12,10 +12,10 @@ dialog {
 	translate: -50% -50%;
 	will-change: opacity;
 	&::backdrop {
-		background-color: rgba(0 0 0 /.48);
+		background-color: rgba(0 0 0 /.5);
 	}
 	.content {
-		border-bottom: solid 1px #CCC;
+		border-bottom: solid 1px #888;
 		padding: .5em 1em 1em;
 	}
 	.buttons {
@@ -225,7 +225,7 @@ button {
 	}
 }
 .slidemenu:focus,
-.dropdown > :focus,
+.dropdown > .current:focus,
 .dropdown:hover > .current,
 .label:hover + .slidemenu,
  label:hover + .dropdown > .current {
