@@ -121,13 +121,13 @@ export class Ghost extends Actor {
 		if (state.isReturn) return this.#returnToHome(this)
 		this.#walk()
 	}
-	#idle({idx,step,orient,centerPos:{y}}=this) {
+	#idle({idx,step,orient,centerPos:{y:cy}}=this) {
 		if (!Ctrl.isChaseMode) {
 			Sys.DotCounter.release(idx, this.release.bind(this))
 		}
 		if (!this.state.isGoOut) {
-			this.dir =(y+T*0.6-step > Maze.PenMiddleY && orient != D)
-				? U : (y-T*0.6+step < Maze.PenMiddleY ? D:U)
+			this.dir =(cy+T*0.6-step > Maze.PenMiddleY && orient != D)
+				? U : (cy-T*0.6+step < Maze.PenMiddleY ? D:U)
 			this.setNextPos()
 		}
 	}
@@ -152,7 +152,7 @@ export class Ghost extends Actor {
 		this.state.switchToWalk()
 	}
 	#returnToHome({step,x,y,initX,initAlign}=this) {
-		if (y+step <= Maze.PenMiddleY)
+		if (y+step < Maze.PenMiddleY)
 			return this.setMove(D)
 
 		if (y != Maze.PenMiddleY)
