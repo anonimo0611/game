@@ -214,7 +214,7 @@ tr:hover th {
 label:focus-within,
 label:has(+.menu :is(:hover,:focus)),
 span:has(input:focus) + label,
-:is(label,.label):hover,
-:is(label,.label):has(+.menu:is(:hover,:focus)) {
+:where(label,.label):hover,
+:where(label,.label):has(+.menu:where(:hover,:focus)) {
 	color: var(--label-fg-hover) !important;
 }
