@@ -65,12 +65,10 @@ button {
 
 [type=radio],
 [type=checkbox] {
-	accent-color: #FFF;
-	vertical-align: 0.025em;
 	position: relative;
 	scale: 1.1;
 	&:focus {outline:none}
-	&:checked       {accent-color:#69C}
+	&:checked       {accent-color:#9CF}
 	&:checked:hover {accent-color:#C6F}
 	&:checked:focus {accent-color:#C6F}
 }
@@ -81,7 +79,7 @@ button {
 	width:  100%;
 	height: 100%;
 	position: absolute;
-	scale: 1.2;
+	scale: 1.3;
 }
 
 [type=range] {
