@@ -115,10 +115,6 @@ body:not([data-state=Title]) #titleScr {
 		font-weight: normal;
 		padding: .2em;
 	}
-	tr:hover th {
-		color: var(--label-fg-hover);
-		+ td {background-color: #3699}
-	}
 }
 
 #cfg {

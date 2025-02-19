@@ -39,10 +39,6 @@ dialog {
 	position: absolute;
 }
 
-button, input, .menu, .btn {
-	--focus-border-color: #09C;
-	--active-border-color:#3CF;
-}
 button, input, .dropdown .current, .slidemenu {
 	color: #EEE;
 	background: #222;
@@ -51,7 +47,11 @@ button, input, .dropdown .current, .slidemenu {
 	border-radius: .2em;
 	outline: 0;
 }
-
+button, input, table, .menu, .btn {
+	--hilight-bg-color:   #036;
+	--focus-border-color: #09C;
+	--active-border-color:#3CF;
+}
 button {
 	display: inline-block;
 	cursor: pointer;
@@ -118,7 +118,6 @@ button {
 :focus::-webkit-slider-thumb {background: var(--focus)}
 
 .menu {
-	--hilight-bg-color: #036;
 	white-space: nowrap;
 	color: #FFF;
 	position: relative;
@@ -205,13 +204,16 @@ button {
 }
 
 label, .label, th {
-	--label-fg:      #6FD;
-	--label-fg-hover:#FBE;
-	color: var(--label-fg);
+	--label-fg-hover: #FBE;
+	color: #6FD;
 }
-span:has(input:focus) + label,
+tr:hover th {
+	color: var(--label-fg-hover);
+	+ td {background-color: var(--hilight-bg-color)}
+}
 label:focus-within,
 label:has(+.menu :is(:hover,:focus)),
+span:has(input:focus) + label,
 :is(label,.label):hover,
 :is(label,.label):has(+.menu:is(:hover,:focus)) {
 	color: var(--label-fg-hover) !important;
