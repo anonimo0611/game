@@ -70,24 +70,25 @@ export class SlideMenu extends Menu {
 	/** @param {string} id */
 	constructor(id) {
 		super(id)
-		const root = this.root
+		const root = $(this.root)
+		const wrap = $(root).closest('.slidemenu-wrapper')
 		this.btnR  = $('<button class="r" tabindex=-1>').text('>').prependTo(root).get(0)
 		this.btnL  = $('<button class="l" tabindex=-1>').text('<').prependTo(root).get(0)
-		$(this.menu).css('display','inline-flex')
-		const select = dir=> {
+		this.menu.style.setProperty('display','inline-flex')
+		const select = (e,dir)=> {
 			if (!dir) return
 			const val = this.index+Vec2({[U]:R,[D]:L}[dir] || dir).x
 			between(val, 0, this.size-1) && this.select(val)
+			e.type == 'click' && root.focus()
 		}
-		$(root)
-			.prev('.label').on('click', ()=> root.focus())
-		$(root)
-			.find('button')
-			.on('click',  e=> {select(e.target == this.btnL ? L:R);root.focus()})
-		$(root)
-			.closest('.slidemenu-wrapper')
-			.on('wheel',  e=> {select(e.originalEvent.deltaY > 0 ? L:R)})
-			.on('keydown',e=> {select(Dir.from(e))})
+		const onWeel  = e=> select(e, e.originalEvent.deltaY > 0 ? L:R)
+		const onClick = e=> select(e, e.target == this.btnL ? L:R)
+		root.prev('.label').on('click', ()=> root.focus())
+		root.find('button').on('click', onClick)
+		root.on('keydown', e=> select(e, Dir.from(e)))
+		wrap.length
+			? wrap.on('wheel', onWeel)
+			: root.on('wheel', onWeel)
 		this.#setWidth(this.btnL.offsetWidth*2).select(this.index)
 		freeze(this)
 	}
