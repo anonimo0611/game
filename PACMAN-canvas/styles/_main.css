@@ -45,7 +45,7 @@ svg {
 	position: relative;
 	transform-origin: center;
 	opacity: 0;
-	will-change: opacity;
+	will-change: opacity transform;
 }
 body[data-loaded=true] #board {
 	opacity: 1;
@@ -97,7 +97,7 @@ body:not([data-state=Title]) #titleScr {
 	&[data-caption]::before {
 		text-align: center;
 		color: #FF3;
-		font: 700 100%/1 sans-serif;
+		font: 700 .9rem/1 sans-serif;
 		margin: .2em 0 .2em .4rem;
 		padding: 0;
 	}
@@ -106,7 +106,7 @@ body:not([data-state=Title]) #titleScr {
 		display: block;
 	}
 	> li,th,td {
-		font: 1em/1 sans-serif;
+		font: .8rem/1 sans-serif;
 		padding: .1rem 0;
 	}
 	th, td {
@@ -147,7 +147,7 @@ body:not([data-state=Title]) #titleScr {
 
 #cfgPanel {
 	> li {
-		padding: .05em 0 !important;
+		padding: .07em 0 !important;
 		position: relative;
 		display: flex;
 		align-items: center;
@@ -169,22 +169,24 @@ body:not([data-state=Title]) #titleScr {
 		}
 		#defBtn {border-width: 4px}
 	}
+	output + label {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
 	[for=unrChk] {
 		scale: .95 1;
 		transform-origin: 0 0;
 	}
-	[type=range],
-	#ExtendScoreMenu {
-		width: 4rem;
-		position: absolute;
-		right: 0;
-		top: 50%;
-		translate: 0 -50%;
+	[type=range] {
+		width:  4rem;
+		height: 4px;
 		scale: .9;
-		small {
-			font: bold 65% sans-serif;
-			margin-left: .1em;
-		}
+	}
+	#ExtendScoreMenu {
+		text-align: right;
+		font-size:   .9em;
+		margin-left: .5em;
 	}
 }
 
