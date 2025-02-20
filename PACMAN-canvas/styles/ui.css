@@ -48,7 +48,8 @@ button, input, .dropdown .current, .slidemenu {
 	border-radius: .2em;
 	outline: 0;
 }
-button, input, table, .menu, .btn {
+form {
+	--label-fg-hover:     #FBE;
 	--hilight-bg-color:   #036;
 	--focus-border-color: #09C;
 	--active-border-color:#3CF;
@@ -175,12 +176,17 @@ button {
 	}
 }
 .slidemenu {
-	border: solid 2px transparent;
+	border: none;
 	display: inline-block;
 	vertical-align: middle;
-	clip-path: inset(0);
-	&:hover {background:  var(--hilight-bg-color)}
-	&:focus {border-color:var(--focus-border-color)}
+	overflow: hidden;
+	&:hover {
+		background: var(--hilight-bg-color)
+	}
+	&:focus {
+		outline-offset: 2px;
+		outline: solid 2px var(--focus-border-color);
+	}
 	menu, li {
 		text-align: center;
 		transition:  transform .3s;
@@ -216,7 +222,6 @@ button {
 }
 
 label, .label, th {
-	--label-fg-hover: #FBE;
 	color: #6FD;
 }
 tr:hover th {
