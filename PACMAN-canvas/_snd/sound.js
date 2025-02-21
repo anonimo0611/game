@@ -5,37 +5,34 @@ import {Speaker}  from './speaker.js'
 
 const speaker  = byId('speaker')
 const volRng   = byId('volRng')
+const volRg2   = byId('volRg2')
 const volRngG  = dqsAll('.volRng')
 const SirenIds = SoundMgr.ids.filter(id=> /^siren/.test(id))
 
-const isEnterKey = e=> !isCombinationKey(e) && /^(\x20|Enter)$/.test(e.key)
+const isEnterKey = e=> /^(\x20|Enter)$/.test(e.key)
 
 export const Sound = new class extends SoundMgr {
 	static {this.#init()}
 	static async #init() {
 		const result = await SoundMgr.setup().catch(()=> false)
 		if (!result) return $('.volCtrl').hide()
-		$on('keydown',Sound.#onKeydown)
 		Sound.vol = localStorage.anoPacVolume ?? 10
-		Sound.#setup()
+		$on('keydown',Sound.#onKeydown)
+		$(volRngG).prop({defaultValue:Sound.vol})
+		$(volRngG).on('input',Sound.#onWheel)
+		$(speaker).on('wheel',Sound.#onWheel).on('click',Sound.#mute)
 	}
 	/** @type {?number} */
 	#lstVol = null
-	#setup() {
-		$(speaker).on('wheel',Sound.#onWheel).on('click',  Sound.#mute)
-		$(volRngG).on('input',Sound.#onWheel).on('keydown',Sound.#mute)
-		$(volRng).prop({defaultValue:Sound.vol})
-	}
 	#onWheel(e) {
 		Sound.vol = (e.type=='input'? e.target:volRng).valueAsNumber
 	}
 	#onKeydown(e) {
 		if (e.originalEvent.repeat || isCombinationKey(e)) return
-		e.key.toUpperCase() == 'M' && Sound.#mute(e)
+		if (e.key.toUpperCase() == 'M'
+		 || e.target == volRg2 && isEnterKey(e)) Sound.#mute()
 	}
-	#mute(e) {
-		if (e.originalEvent.repeat || isCombinationKey(e)) return
-		if (e.type == 'keydown' && !isEnterKey(e)) return
+	#mute() {
 		Sound.#lstVol = Sound.vol || (Sound.#lstVol ?? +volRng.max)
 		$(volRng).prop({value:Sound.vol? 0:Sound.#lstVol}).trigger('input')
 	}
