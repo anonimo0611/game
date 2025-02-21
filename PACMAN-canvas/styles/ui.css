@@ -1,18 +1,18 @@
 dialog {
 	color: #FFF;
-	background: #000;
+	background: #333;
 	font: 2vmin sans-serif;
 	margin: 0;
 	padding: .2rem;
-	border: solid 2px #555;
-	border-radius: 6px;
+	border: solid 2px var(--color-border);
+	border-radius: .4em;
 	position: fixed;
 	top:  50%;
 	left: 50%;
 	translate: -50% -50%;
 	will-change: opacity;
 	&::backdrop {
-		background-color: #0007;
+		background-color: #0006;
 	}
 	.content {
 		border-bottom: solid 1px var(--color-border);
@@ -23,7 +23,10 @@ dialog {
 		padding: .2em .4em .4em .4em;
 		display: flex;
 		justify-content: flex-end;
-		button {margin: .3em;padding: .4em 1em}
+		button {
+			margin: .3em;
+			padding:.4em 1em;
+		}
 	}
 }
 
@@ -40,31 +43,29 @@ dialog {
 	z-index: 100;
 }
 
-form {
+form, dialog {
 	--color-label:        #6FD;
 	--color-label-hover:  #FBE;
 	--color-border:       #888;
 	--color-focus-border: #09C;
 	--color-active-border:#3CF;
-	--bgcolor:            #333;
-	--bgcolor-alpha:      #333C;
-	--bgcolor-hilight:    #036;
+	--bgcolor:            #333B;
+	--bgcolor-hilight:    #369B;
 }
 button, input, .dropdown .current, .slidemenu {
 	color: #EEE;
-	background: var(--bgcolor);
 	font-size: 1em;
 	border: solid 2px var(--color-border);
 	border-radius: .2em;
 	outline: 0;
 }
-button {
+button, .dropdown .current {
+	background: var(--bgcolor);
 	display: inline-block;
-	cursor: pointer;
 	padding: .2em;
-	&:hover  {background:#036;border-color:var(--color-focus-border)}
-	&:focus  {background:#069;border-color:var(--color-focus-border)}
-	&:active {background:#396;border-color:var(--color-active-border)}
+	&:hover  {background:#036C;border-color:var(--color-focus-border)}
+	&:focus  {background:#069C;border-color:var(--color-focus-border)}
+	&:active {background:#396C;border-color:var(--color-active-border)}
 	&:disabled {color:#888;cursor:auto !important}
 	&::-moz-focus-inner {border:0;padding:0}
 }
@@ -142,14 +143,10 @@ button {
 	cursor: default;
 }
 .dropdown {
-	--bg: var(--bgcolor-alpha);
 	--caret-size: 1em;
 	.current {
-		background: var(--bg);
 		padding: .1em .2em;
 		box-sizing: border-box;
-		&:focus  {border-color: var(--color-focus-border)}
-		&:active {border-color: var(--color-active-border)}
 	}
 	.current::after {
 		--size: calc(var(--caret-size)/3);
@@ -172,7 +169,7 @@ button {
 		z-index: 100;
 	}
 	li {
-		background: var(--bg);
+		background: var(--bgcolor);
 		border: solid transparent;
 		border-width: 2px 0;
 		padding: .1em calc(var(--caret-size) + .2em) .1em .2em;
@@ -187,7 +184,7 @@ button {
 	display: inline-block;
 	vertical-align: middle;
 	overflow: hidden;
-	&:hover {
+	&:hover, &:focus {
 		background: var(--bgcolor-hilight)
 	}
 	&:focus {
@@ -220,10 +217,6 @@ button {
 	}
 }
 
-.slidemenu:focus,
-.dropdown > .current:focus,
-.dropdown:hover > .current,
-.label:hover + .slidemenu,
  label:hover + .dropdown > .current {
 	background: var(--bgcolor-hilight);
 }
