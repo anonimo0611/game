@@ -124,10 +124,10 @@ body:not([data-state=Title]) #titleScr {
 	justify-content: center;
 	align-items: center;
 	.checkboxes, .buttons {
-		font-size: 70%;
+		font-size: .76rem;
 		height: 100%;
 		display: flex;
-		gap: .3em;
+		gap: .2em;
 		flex-direction: column;
 		justify-content: center;
 		label,button {display: block}

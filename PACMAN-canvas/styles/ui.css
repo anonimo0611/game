@@ -67,34 +67,48 @@ button {
 
 [type=radio],
 [type=checkbox] {
+	--accent: #9CF;
+	--active: #C6F;
+}
+[type=radio] {
+	&:checked       {accent-color:var(--accent)}
+	&:checked:hover {accent-color:var(--active)}
+	&:checked:focus {accent-color:var(--active)}
+}
+[type=checkbox] {
 	appearance: none;
-	border: solid 2px #888;
+	border: solid 2px transparent;
 	border-radius: 2px;
 	width:  .7em;
 	height: .7em;
 	position: relative;
 	scale: 1.1;
-	&:focus {outline: solid 3px #C6F;outline-offset:2px}
-	&:checked       {background:#9CF;border-color:transparent}
-	&:checked:hover {background:#C6F;border-color:transparent}
-	&:checked:focus {background:#C6F;border-color:transparent}
+	&:focus {
+		outline-offset:2px;
+		outline: solid 3px var(--active);
+	}
+	&:not(:checked) {border-color: #888}
+	&:checked       {background:var(--accent)}
+	&:checked:hover {background:var(--active)}
+	&:checked:focus {background:var(--active)}
 }
 [type=checkbox]:checked::before {
 	content: '';
 	border: solid #000;
 	border-width: 0 0 .1em .1em;
-	width:  .4em;
-	height: .2em;
+	width:  .50em;
+	height: .25em;
+	box-sizing: border-box;
 	position: absolute;
-	translate: .02em .02em;
-	rotate: -50deg;
+	translate: 1px 2px;
+	rotate: -45deg;
 }
 
 [type=range] {
 	--thumb-size: 0.55rem;
 	--per: var(--ratio, 100%);
 	--accent:#6CC;
-	--focus: #0EF;
+	--active:#0EF;
 	appearance: none;
 	background: linear-gradient(90deg, var(--accent) var(--per), #777 var(--per));
 	border:  none;
@@ -102,9 +116,9 @@ button {
 	height: 5px;
 	accent-color: var(--accent);
 	&:focus {
-		--accent: var(--focus);
+		--accent: var(--active);
 		border: none;
-		accent-color: var(--focus);
+		accent-color: var(--active);
 	}
 }
 ::-moz-range-thumb {
@@ -123,9 +137,9 @@ button {
 	height: var(--thumb-size);
 }
 :hover::-moz-range-thumb {background: var(--accent)}
-:focus::-moz-range-thumb {background: var(--focus)}
+:focus::-moz-range-thumb {background: var(--active)}
 :hover::-webkit-slider-thumb {background: var(--accent)}
-:focus::-webkit-slider-thumb {background: var(--focus)}
+:focus::-webkit-slider-thumb {background: var(--active)}
 
 .menu {
 	white-space: nowrap;
