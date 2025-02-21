@@ -5,13 +5,13 @@ import {State}     from './_state.js'
 import {drawText}  from './message.js'
 import {Ctx,Color,Cols,Rows,TileSize as T} from './_constants.js'
 
+export const Form = document.forms[0]
 export const Ctrl = new class {
 	static {$ready(this.setup)}
 	static setup() {
 		Ctrl.#restore()
 		Ctrl.#setupFormCtrls()
-		Ctrl.#hideAllPanel()
-		$on('Start', Ctrl.#hideAllPanel)
+		$on('Start', Panel.allHide) && Panel.allHide()
 		$on('resize',Ctrl.#fitToViewport).trigger('resize')
 	}
 	get livesMax()      {return +Form.lvsRng.value}
@@ -93,21 +93,10 @@ export const Ctrl = new class {
 		}
 		Ctx.restore()
 	}
-	#hideAllPanel() {
-		$('.panel').hide()
-	}
-	#hidePanel(btn, e) {
-		const idS = `#${btn.dataset.for}Panel`
-		btn != e.target && !e.target.closest(idS) && $(idS).hide()
-	}
 	#setupFormCtrls() {
 		for (const menu of values(Menu)) {
 			menu.bindChange(Ctrl.#saveData)
 		}
-		$('.panelBtn').each((_,btn)=> {
-			$(btn).on('click', ()=> $('.panel').toggle())
-			$on('click', e=> State.isTitle && Ctrl.#hidePanel(btn, e))
-		})
 		$('#clearStorageBtn').on('click', ()=> {
 			Confirm.open('Are you sure you want to clear local storage?',
 				null,Ctrl.#removeData, 'No','Yes', 0)
@@ -116,4 +105,22 @@ export const Ctrl = new class {
 		$('#defBtn')  .on('click', Ctrl.#setDefault)
 		$('#startBtn').on('click', State.switchToStart)
 	}
-}, Form = document.forms[0]
+}
+
+const Panel = function() {
+	dqsAll('.panelBtn').forEach(btn=> {
+		$on('click',      e=> hide(e, btn, btn.value))
+		$(btn).on('click',e=> show(e, btn, btn.value))
+	})
+	function show(_, btn, id) {
+		$('.panel').toggle()
+		$(btn).toggleClass('active', $(id).is(':visible'))
+	}
+	function hide(e, btn, id) {
+		if (btn == e.target || e.target.closest(id)) return
+		$(id).hide() && $(btn).removeClass('active')
+	}
+	return {
+		allHide() {$('.panel').hide()}
+	}
+}()
