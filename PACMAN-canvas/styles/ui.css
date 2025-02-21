@@ -40,6 +40,13 @@ dialog {
 	z-index: 100;
 }
 
+form {
+	--label-fg:           #6FD;
+	--label-fg-hover:     #FBE;
+	--hilight-bg-color:   #036;
+	--focus-border-color: #09C;
+	--active-border-color:#3CF;
+}
 button, input, .dropdown .current, .slidemenu {
 	color: #EEE;
 	background: #222;
@@ -47,12 +54,6 @@ button, input, .dropdown .current, .slidemenu {
 	border: solid 2px #888;
 	border-radius: .2em;
 	outline: 0;
-}
-form {
-	--label-fg-hover:     #FBE;
-	--hilight-bg-color:   #036;
-	--focus-border-color: #09C;
-	--active-border-color:#3CF;
 }
 button {
 	display: inline-block;
@@ -65,16 +66,6 @@ button {
 	&::-moz-focus-inner {border:0;padding:0}
 }
 
-[type=radio],
-[type=checkbox] {
-	--accent: #9CF;
-	--active: #C6F;
-}
-[type=radio] {
-	&:checked       {accent-color:var(--accent)}
-	&:checked:hover {accent-color:var(--active)}
-	&:checked:focus {accent-color:var(--active)}
-}
 [type=checkbox] {
 	appearance: none;
 	border: solid 2px transparent;
@@ -85,22 +76,21 @@ button {
 	scale: 1.1;
 	&:focus {
 		outline-offset:2px;
-		outline: solid 3px var(--active);
+		outline: solid 3px #C6F;
 	}
-	&:not(:checked) {border-color: #888}
-	&:checked       {background:var(--accent)}
-	&:checked:hover {background:var(--active)}
-	&:checked:focus {background:var(--active)}
+	&:not(:checked) {border-color:#888}
+	&:checked       {background:#9CF}
+	&:checked:hover {background:#C6F}
+	&:checked:focus {background:#C6F}
 }
 [type=checkbox]:checked::before {
 	content: '';
 	border: solid #000;
 	border-width: 0 0 .1em .1em;
-	width:  .50em;
-	height: .25em;
+	width:  .6em;
+	height: .3em;
 	box-sizing: border-box;
 	position: absolute;
-	translate: 1px 2px;
 	rotate: -45deg;
 }
 
@@ -235,13 +225,10 @@ button {
 	background: var(--hilight-bg-color);
 }
 
-label, .label, th {
-	color: #6FD;
-}
-tr:hover th {
-	color: var(--label-fg-hover);
-	+ td {background-color: var(--hilight-bg-color)}
-}
+label,.label,th{color: var(--label-fg)}
+tr:hover th    {color: var(--label-fg-hover)}
+tr:hover th+td {background-color: var(--hilight-bg-color)}
+
 label:focus-within,
 label:has(+.menu :is(:hover,:focus)),
 span:has(input:focus) + label,
