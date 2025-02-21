@@ -15,7 +15,7 @@ dialog {
 		background-color: #0007;
 	}
 	.content {
-		border-bottom: solid 1px #888;
+		border-bottom: solid 1px var(--color-border);
 		padding: .5em 1em 1em;
 	}
 	.buttons {
@@ -41,57 +41,60 @@ dialog {
 }
 
 form {
-	--label-fg:           #6FD;
-	--label-fg-hover:     #FBE;
-	--hilight-bg-color:   #036;
-	--focus-border-color: #09C;
-	--active-border-color:#3CF;
+	--color-label:        #6FD;
+	--color-label-hover:  #FBE;
+	--color-border:       #888;
+	--color-focus-border: #09C;
+	--color-active-border:#3CF;
+	--bgcolor:            #333;
+	--bgcolor-alpha:      #333C;
+	--bgcolor-hilight:    #036;
 }
 button, input, .dropdown .current, .slidemenu {
 	color: #EEE;
-	background: #222;
+	background: var(--bgcolor);
 	font-size: 1em;
-	border: solid 2px #888;
+	border: solid 2px var(--color-border);
 	border-radius: .2em;
 	outline: 0;
 }
 button {
 	display: inline-block;
 	cursor: pointer;
-	padding: .2em .2em;
-	&:hover  {background:#036;border-color:var(--focus-border-color)}
-	&:focus  {background:#069;border-color:var(--focus-border-color)}
-	&:active {background:#396;border-color:var(--active-border-color)}
+	padding: .2em;
+	&:hover  {background:#036;border-color:var(--color-focus-border)}
+	&:focus  {background:#069;border-color:var(--color-focus-border)}
+	&:active {background:#396;border-color:var(--color-active-border)}
 	&:disabled {color:#888;cursor:auto !important}
 	&::-moz-focus-inner {border:0;padding:0}
 }
 
 [type=checkbox] {
+	--active: #C6F;
 	appearance: none;
 	border: solid 2px transparent;
 	border-radius: 2px;
 	width:  .7em;
 	height: .7em;
 	position: relative;
-	scale: 1.1;
 	&:focus {
-		outline-offset:2px;
-		outline: solid 3px #C6F;
+		outline-offset: 2px;
+		outline: solid 3px var(--active);
 	}
-	&:not(:checked) {border-color:#888}
+	&:not(:checked) {border-color:var(--color-border)}
 	&:checked       {background:#9CF}
-	&:checked:hover {background:#C6F}
-	&:checked:focus {background:#C6F}
-}
-[type=checkbox]:checked::before {
-	content: '';
-	border: solid #000;
-	border-width: 0 0 .1em .1em;
-	width:  .6em;
-	height: .3em;
-	box-sizing: border-box;
-	position: absolute;
-	rotate: -45deg;
+	&:checked:hover {background:var(--active)}
+	&:checked:focus {background:var(--active)}
+	&:checked::before {
+		content: '';
+		border: solid #000;
+		border-width: 0 0 .1em .1em;
+		width:  .6em;
+		height: .3em;
+		box-sizing: border-box;
+		position: absolute;
+		rotate: -45deg;
+	}
 }
 
 [type=range] {
@@ -139,14 +142,14 @@ button {
 	cursor: default;
 }
 .dropdown {
-	--bg: #333C;
+	--bg: var(--bgcolor-alpha);
 	--caret-size: 1em;
 	.current {
 		background: var(--bg);
 		padding: .1em .2em;
 		box-sizing: border-box;
-		&:focus  {border-color: var(--focus-border-color)}
-		&:active {border-color: var(--active-border-color)}
+		&:focus  {border-color: var(--color-focus-border)}
+		&:active {border-color: var(--color-active-border)}
 	}
 	.current::after {
 		--size: calc(var(--caret-size)/3);
@@ -174,7 +177,7 @@ button {
 		border-width: 2px 0;
 		padding: .1em calc(var(--caret-size) + .2em) .1em .2em;
 		display: block;
-		&.selected         {border-color: var(--focus-border-color)}
+		&.selected         {border-color: var(--color-focus-border)}
 		&.selected,&:hover {background:#366}
 		&.selected:hover   {background:#336;border-color:#66C}
 	}
@@ -185,11 +188,11 @@ button {
 	vertical-align: middle;
 	overflow: hidden;
 	&:hover {
-		background: var(--hilight-bg-color)
+		background: var(--bgcolor-hilight)
 	}
 	&:focus {
 		outline-offset: 2px;
-		outline: solid 2px var(--focus-border-color);
+		outline: solid 2px var(--color-focus-border);
 	}
 	menu, li {
 		text-align: center;
@@ -212,7 +215,7 @@ button {
 		&.r {right:1px;translate:0 -50%;rotate:-45deg;scale:-1 1}
 		&:enabled:hover  {color:#0EF}
 		&:enabled:active {color:#FBE}
-		&:disabled {color: #888;background:transparent}
+		&:disabled {background:transparent}
 		transform-origin: center;
 	}
 }
@@ -222,17 +225,17 @@ button {
 .dropdown:hover > .current,
 .label:hover + .slidemenu,
  label:hover + .dropdown > .current {
-	background: var(--hilight-bg-color);
+	background: var(--bgcolor-hilight);
 }
 
-label,.label,th{color: var(--label-fg)}
-tr:hover th    {color: var(--label-fg-hover)}
-tr:hover th+td {background-color: var(--hilight-bg-color)}
+label,.label,th{color: var(--color-label)}
+tr:hover th    {color: var(--color-label-hover)}
+tr:hover th+td {background-color: var(--bgcolor-hilight)}
 
 label:focus-within,
 label:has(+.menu :is(:hover,:focus)),
 span:has(input:focus) + label,
 :where(label,.label):hover,
 :where(label,.label):has(+.menu:where(:hover,:focus)) {
-	color: var(--label-fg-hover) !important;
+	color: var(--color-label-hover) !important;
 }
