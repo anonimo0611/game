@@ -137,7 +137,6 @@ export const View = function() {
 	}
 	return {draw}
 }()
-View.draw()
 
 $('#brightRng').on('input', function() {
 	const v = this.value

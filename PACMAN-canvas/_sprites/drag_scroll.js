@@ -1,5 +1,5 @@
 /** @param {string} selector */
-function mouseDragScrollable(selector) {
+!(function(selector) {
 	if ('ontouchstart' in window
 		|| navigator.maxTouchPoints > 0
 		|| matchMedia('(pointer:coarse)').matches
@@ -22,7 +22,7 @@ function mouseDragScrollable(selector) {
 
 	for (const elm of document.querySelectorAll(selector)) {
 		elm.addEventListener('mousedown', e=> {
-			if (e.target.closest('.noDrag')) return
+			if (isNotDrag(e)) return
 			target = elm
 			StateMap.set(target, new State(e))
 			e.stopPropagation()
@@ -44,5 +44,7 @@ function mouseDragScrollable(selector) {
 		StateMap.delete(target)
 		target = null
 	})
-}
-mouseDragScrollable('html')
+})('html')
+const isNotDrag   = e=> e.target.closest('.noDrag')
+const cancelWheel = e=> isNotDrag(e) && e.preventDefault()
+addEventListener('wheel', cancelWheel, {passive:false})
