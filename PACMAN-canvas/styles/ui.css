@@ -63,9 +63,13 @@ button, .dropdown .current {
 	background: var(--bgcolor);
 	display: inline-block;
 	padding: .2em;
-	&:hover  {background:#036C;border-color:var(--color-focus-border)}
-	&:focus  {background:#069C;border-color:var(--color-focus-border)}
-	&:active {background:#396C;border-color:var(--color-active-border)}
+	&:hover,&:focus,
+	&.active {border-color:var(--color-focus-border)}
+	&:active {border-color:var(--color-active-border)}
+	&:hover  {background:#036C}
+	&:focus  {background:#069C}
+	&.active {background:#396C}
+	&:active {background:#396C}
 	&:disabled {color:#888;cursor:auto !important}
 	&::-moz-focus-inner {border:0;padding:0}
 }
