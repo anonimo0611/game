@@ -109,16 +109,16 @@ export const Ctrl = new class {
 
 const Panel = function() {
 	dqsAll('.panelBtn').forEach(btn=> {
-		$on('click',      e=> hide(e, btn, btn.value))
-		$(btn).on('click',e=> show(e, btn, btn.value))
+		$on('click',      e=> State.isTitle && hide(btn,e))
+		$(btn).on('click',e=> State.isTitle && show(btn,e))
 	})
-	function show(_, btn, id) {
+	function show(btn) {
 		$('.panel').toggle()
-		$(btn).toggleClass('active', $(id).is(':visible'))
+		$(btn).toggleClass('active', $(btn.value).is(':visible'))
 	}
-	function hide(e, btn, id) {
-		if (btn == e.target || e.target.closest(id)) return
-		$(id).hide() && $(btn).removeClass('active')
+	function hide(btn, e) {
+		if (btn == e.target || e.target.closest(btn.value)) return
+		$(btn.value).hide() && $(btn).removeClass('active')
 	}
 	return {
 		allHide() {$('.panel').hide()}

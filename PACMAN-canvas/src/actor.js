@@ -1,9 +1,9 @@
-import {Timer}  from '../_lib/timer.js'
-import {Vec2}   from '../_lib/vec2.js'
-import {Dir,L}  from '../_lib/direction.js'
-import {State}  from './_state.js'
-import {Maze}   from './maze.js'
-import {Cols} from './_constants.js'
+import {Timer} from '../_lib/timer.js'
+import {Vec2}  from '../_lib/vec2.js'
+import {Dir,L} from '../_lib/direction.js'
+import {State} from './_state.js'
+import {Maze}  from './maze.js'
+import {Cols}  from './_constants.js'
 import {Ctx,CvsW as CW,TileSize as T} from './_constants.js'
 
 export class Actor {
