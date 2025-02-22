@@ -11,7 +11,6 @@ export const Ctrl = new class {
 	static setup() {
 		Ctrl.#restore()
 		Ctrl.#setupFormCtrls()
-		$on('Start', Panel.allHide) && Panel.allHide()
 		$on('resize',Ctrl.#fitToViewport).trigger('resize')
 	}
 	get livesMax()      {return +Form.lvsRng.value}
@@ -106,8 +105,8 @@ export const Ctrl = new class {
 		$('#startBtn').on('click', State.switchToStart)
 	}
 }
-
-const Panel = function() {
+!function() { // Setup Panels
+	$on('Start', hideAll) && hideAll()
 	dqsAll('.panelBtn').forEach(btn=> {
 		$on('click',      e=> State.isTitle && hide(btn,e))
 		$(btn).on('click',e=> State.isTitle && show(btn,e))
@@ -120,7 +119,5 @@ const Panel = function() {
 		if (btn == e.target || e.target.closest(btn.value)) return
 		$(btn.value).hide() && $(btn).removeClass('active')
 	}
-	return {
-		allHide() {$('.panel').hide()}
-	}
+	function hideAll() {$('.panel').hide()}
 }()
