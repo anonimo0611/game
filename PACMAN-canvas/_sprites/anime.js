@@ -44,7 +44,7 @@ function getOrient() {
 		!loop && Timer.cancelAll()
 		switch(type) {
 		case Type.Pacman:
-			data = new AnimeData({type,subType,pacman:new PacSprite()})
+			data = new AnimeData({type,subType,pacman:new PacSprite(ctx)})
 			if (setOrient(subType == PacType.Losing)) {
 				data.pacman.setLosing()
 				Timer.set(2200, ()=> change(true))
@@ -77,7 +77,7 @@ function getOrient() {
 		ctx.save()
 		ctx.translate(S*1.5/2, S/2)
 		ctx.scale(T/TileSize,  T/TileSize)
-		data.pacman.draw(ctx, {orient:data.orient,radius:PacScale*TileSize})
+		data.pacman.draw({orient:data.orient,radius:PacScale*TileSize})
 		ctx.restore()
 	}
 	function drawGhost() {
