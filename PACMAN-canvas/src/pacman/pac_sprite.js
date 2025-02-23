@@ -13,7 +13,9 @@ export default class {
 	#losing  = null
 	#mAngle  =  0
 	#animDir = -1
-	constructor({openType=0}={}) {
+	/** @param {Ctx} ctx */
+	constructor(ctx, {openType=0}={}) {
+		this.ctx = ctx
 		this.#mAngle = [0,OpenMid,OpenMax][openType]
 	}
 	update({stopped=false}={}) {
@@ -21,8 +23,7 @@ export default class {
 		const dir = between(this.#mAngle, 0, OpenMax) ? 1 : -1
 		this.#mAngle += OpenMax/Duration * (this.#animDir*=dir)
 	}
-	/** @param {Ctx} ctx */
-	draw(ctx, {
+	draw({
 		centerPos:{x,y}={x:0,y:0},
 		orient    = L,
 		radius    = PacRadius,
@@ -31,7 +32,8 @@ export default class {
 		centerDot = false}={}, scale=1
 	) {
 		if (frozen || this.#losing)
-			return this.#losing?.draw(ctx, {x,y})
+			return this.#losing?.draw({x,y})
+		const {ctx}  = this
 		const mAngle = (closed? 0:this.#mAngle)
 		ctx.save()
 		ctx.translate(x, y)
@@ -44,5 +46,5 @@ export default class {
 		ctx.restore()
 		centerDot && cvsFillCircle(ctx)(x,y, 3, '#F00')
 	}
-	setLosing() {this.#losing = new Losing}
+	setLosing() {this.#losing = new Losing(this.ctx)}
 }

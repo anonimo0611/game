@@ -31,7 +31,7 @@ export const Player = function() {
 }()
 export class Pacman extends Actor {
 	radius = PacRadius
-	sprite = new Sprite()
+	sprite = new Sprite(Ctx)
 	constructor() {super();freeze(this)}
 }
 class PlayablePacman extends Pacman {
@@ -107,7 +107,7 @@ class PlayablePacman extends Pacman {
 		if (State.isStart) return
 		Ctx.save()
 		super.draw()
-		this.sprite.draw(Ctx,this)
+		this.sprite.draw(this)
 		Ctx.restore()
 	}
 	update() {
