@@ -73,14 +73,14 @@ class Scene1 extends CBreak {
 	}
 	update({pacman,akabei}=this) {
 		this.moveAkabei()
-		switch (pacman.orient) {
+		switch (pacman.dir) {
 		case L:
 			this.movePacman()
 			if (pacman.x >= -T*9) break
 			this.pacVelX *= -1.08
 			this.akaVelX *= -0.60
 			this.frightened = true
-			pacman.orient = akabei.orient = R
+			pacman.dir = akabei.dir = R
 			break
 		case R:
 			akabei.x > T*7.5 && this.movePacman()
@@ -90,7 +90,7 @@ class Scene1 extends CBreak {
 	}
 	draw({pacman,frightened}=this) {
 		this.drawAkabei({frightened})
-		this.drawPacman(pacman.orient == R ? 4:1)
+		this.drawPacman(pacman.dir == R ? 4:1)
 	}
 }
 class Scene2 extends CBreak {
@@ -150,8 +150,8 @@ class Scene3 extends CBreak {
 	}
 	moveAkabei({akabei:aka}=this) {
 		aka.x += this.akaVelX
-		aka.x < -T*8 && (aka.orient = R) && (this.akaVelX *= -1)
-		aka.x > (T*9 + CvsW) && aka.orient == R && this.end()
+		aka.x < -T*8 && (aka.dir = R) && (this.akaVelX *= -1)
+		aka.x > (T*9 + CvsW) && aka.dir == R && this.end()
 	}
 	update() {
 		this.movePacman()
@@ -159,7 +159,7 @@ class Scene3 extends CBreak {
 	}
 	draw() {
 		this.drawPacman()
-		this.akabei.orient == L
+		this.akabei.dir == L
 			? this.drawAkabei({repaired:true})
 			: this.drawAkabei({hadaketa:true})
 	}

@@ -51,7 +51,7 @@ export class Attract {
 			g.pos = Vec2(CvsW+(T*6)+(T*2*gIdx), T*19)
 			!gIdx && (this.pacman.pos = Vec2(g.x-T*3.5, g.y))
 		}
-		g.orient = [R,L][idx]
+		g.dir = [R,L][idx]
 		this.ghsList[idx].push(g)
 	}
 	drawGhost(idx, ghsIdx, pos) {
@@ -87,7 +87,7 @@ export class Attract {
 			drawText(14.3, 27, '#FFF', 'PTS', {size:ptsFontSize})
 		}
 		if (et > 90) {
-			if (this.pacman.orient == L && this.powDisp) {
+			if (this.pacman.dir == L && this.powDisp) {
 				drawDot(Ctx, Vec2(4, 19), true)
 			}
 			if (Ctrl.extendPts > 0) {
@@ -110,10 +110,10 @@ export class Attract {
 	updatePacman() {
 		this.pacman.sprite.update()
 		this.pacman.x += this.pacVelX
-		if (this.pacman.orient == L && this.pacman.x <= T*4) {
+		if (this.pacman.dir == L && this.pacman.x <= T*4) {
 			this.pacVelX *= -1.11
 			this.ghsVelX /= -2.14
-			this.pacman.orient = R
+			this.pacman.dir = R
 			new FrightMode()
 		}
 	}
