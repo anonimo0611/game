@@ -6,7 +6,7 @@ import {State}  from '../_state.js'
 import {Pacman} from '../pacman/_pacman.js'
 import {Ghost}  from '../ghosts/_ghost.js'
 import Sprite   from '../ghosts/ghs_sprite_cb.js'
-import {CvsW,CvsH,Ctx,TileSize as T} from '../_constants.js'
+import {CvsW,CvsH,TileSize as T} from '../_constants.js'
 
 const ModSymbol = Symbol()
 const IntermissionMap = new Map([[2,1], [5,2], [9,3]])
@@ -42,10 +42,9 @@ export class CBreak {
 	drawPacman(scale=1) {
 		this.pacman.sprite.draw(this.pacman, scale)
 	}
-	drawAkabei(cfg={}) {
-		const
-		aka = this.akabei, {pos,aIdx}= aka
-		aka.sprite.draw({...aka, ...pos, aIdx, ...cfg})
+	drawAkabei(cfg) {
+		const {akabei:aka,akabei:{aIdx,pos}}=this
+		aka.sprite.draw({aIdx,...cfg,...pos,...aka})
 	}
 	pause() {
 		Ticker.pause()
@@ -63,6 +62,7 @@ export class CBreak {
 class Scene1 extends CBreak {
 	constructor() {
 		super(ModSymbol)
+		this.frightened = false
 		this.akaVelX  = -CvsW / 156.4
 		this.pacman.x =  CvsW + T*1
 		this.akabei.x =  CvsW + T*3
@@ -79,6 +79,7 @@ class Scene1 extends CBreak {
 			if (pacman.x >= -T*9) break
 			this.pacVelX *= -1.08
 			this.akaVelX *= -0.60
+			this.frightened = true
 			pacman.orient = akabei.orient = R
 			break
 		case R:
@@ -87,9 +88,9 @@ class Scene1 extends CBreak {
 			break
 		}
 	}
-	draw() {
-		this.drawAkabei({frightened: this.akabei.orient == R})
-		this.drawPacman(this.pacman.orient == R ? 4 : 1)
+	draw({pacman,frightened}=this) {
+		this.drawAkabei({frightened})
+		this.drawPacman(pacman.orient == R ? 4:1)
 	}
 }
 class Scene2 extends CBreak {
