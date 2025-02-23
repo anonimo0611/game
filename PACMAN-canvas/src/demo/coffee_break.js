@@ -42,8 +42,8 @@ export class CBreak {
 	drawPacman(scale=1) {
 		this.pacman.sprite.draw(this.pacman, scale)
 	}
-	drawAkabei(cfg) {
-		const {akabei:aka,akabei:{aIdx,pos}}=this
+	drawAkabei(cfg={}) {
+		const {akabei:aka}=this,{aIdx,pos}=aka
 		aka.sprite.draw({aIdx,...cfg,...pos,...aka})
 	}
 	pause() {
