@@ -98,7 +98,7 @@ export class Attract {
 		if (et > 105) {
 			for (let i=0; i<GhsType.Max; i++)
 				this.drawGhost(DEMO, i)
-			this.pacman.sprite.draw(Ctx, this.pacman)
+			this.pacman.sprite.draw(this.pacman)
 		}
 	}
 	update() {

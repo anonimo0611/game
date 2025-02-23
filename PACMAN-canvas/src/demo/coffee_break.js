@@ -40,7 +40,7 @@ export class CBreak {
 		this.pacman.sprite.update()
 	}
 	drawPacman(scale=1) {
-		this.pacman.sprite.draw(Ctx, this.pacman, scale)
+		this.pacman.sprite.draw(this.pacman, scale)
 	}
 	drawAkabei(cfg={}) {
 		const
