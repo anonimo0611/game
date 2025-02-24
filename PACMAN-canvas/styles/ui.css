@@ -70,7 +70,11 @@ button, .dropdown .current {
 	&:focus  {background:#069C}
 	&.active {background:#396C}
 	&:active {background:#396C}
-	&:disabled {color:#888;cursor:auto !important}
+	&:disabled {
+		color: #888;
+		background: var(--bgcolor);
+		border-color: #888;
+	}
 	&::-moz-focus-inner {border:0;padding:0}
 }
 
@@ -203,6 +207,7 @@ button, .dropdown .current {
 	}
 	button {
 		appearance: none;
+		background: transparent !important;
 		text-indent: -10em;
 		border: solid;
 		border-width: 0 0 4px 4px;
@@ -214,14 +219,11 @@ button, .dropdown .current {
 		top: 50%;
 		&.l {left: 1px;translate:0 -50%;rotate:+45deg}
 		&.r {right:1px;translate:0 -50%;rotate:-45deg;scale:-1 1}
-		&:enabled:hover  {color:#0EF}
-		&:enabled:active {color:#FBE}
-		&:disabled {background:transparent}
 		transform-origin: center;
 	}
 }
 
- label:hover + .dropdown > .current {
+label:hover + .dropdown > .current {
 	background: var(--bgcolor-hilight);
 }
 
