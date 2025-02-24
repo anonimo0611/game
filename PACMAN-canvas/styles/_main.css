@@ -98,11 +98,6 @@ body:not([data-state=Title]) #titleScr {
 		content: attr(data-caption);
 		display: block;
 	}
-	output + label {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
 	> li,th,td {
 		font: .8rem/1 sans-serif;
 		padding: .1rem 0;
@@ -166,6 +161,11 @@ body:not([data-state=Title]) #titleScr {
 			display: block;
 		}
 		#defBtn {border-width: 4px}
+	}
+	output + label {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 	}
 	[for=unrChk] {
 		scale: .95 1;
