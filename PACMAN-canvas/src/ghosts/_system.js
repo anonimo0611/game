@@ -112,24 +112,24 @@ export const GhsMgr = new class {
 
 export const Wave = function() {
 	let mode = 0
-	function getTime(idx) {
-		const {level:lv}= Game
-		return [ // ms
-			lv <= 4 ? 4500 : 4000,
-			15e3,
-			lv <= 4 ? 4500 : 4000,
-			15e3,
-			3500,
-			lv == 1 ? 15e3 : 78e4,
-			lv == 1 ? 3500 :(1e3/60),
-			Infinity,
-		][idx] / Game.speedRate
-	}
+	const genTimeList = lv=>
+	freeze([ // ms
+		lv <= 4 ? 4500 : 4000,
+		15e3,
+		lv <= 4 ? 4500 : 4000,
+		15e3,
+		3500,
+		lv == 1 ? 15e3 : 78e4,
+		lv == 1 ? 3500 :(1e3/60),
+		Infinity,
+	])
 	function onPlaying() {
-		let [cnt,idx]= [-1,0]
+		let   [cnt,idx]= [-1,0]
+		const TimeList = genTimeList(Game.level)
+		const duration = idx=> TimeList[idx] / Game.speedRate
 		function update() {
 			if (Timer.frozen || GhsMgr.frightened) return
-			if (Ticker.Interval * ++cnt < getTime(idx)) return
+			if (Ticker.Interval * ++cnt < duration(idx)) return
 			[cnt,mode]= [0,(++idx % 2)]
 			setReversalSignal()
 		}
@@ -228,12 +228,12 @@ export class FrightMode {
 	update() {
 		if (!State.isPlaying || Timer.frozen) return
 		const {time}= FrightMode
-		const et = (Game.interval*this.#timeCnt++)/1e3
-		const ac = (this.#caughtCnt == GhsType.Max)
-		const fi = (time == 1 ? 12:14)/Game.speedRate|0
-		this.#flashIdx ^=!(this.#flashCnt % fi)
-		;(et>=time - 2) && this.#flashCnt++
-		;(et>=time||ac) && this.#toggle(false)
+		const elapsedT  = (Game.interval*this.#timeCnt++)/1e3
+		const caughtAll = (this.#caughtCnt == GhsType.Max)
+		const fInterval = (time == 1 ? 12:14)/Game.speedRate|0
+		this.#flashIdx ^=!(this.#flashCnt % fInterval)
+		;(elapsedT>=time - 2) && this.#flashCnt++
+		;(elapsedT>=time || caughtAll) && this.#toggle(false)
 	}
 	caught() {this.#caughtCnt++}
 }
