@@ -44,7 +44,7 @@ class PlayablePacman extends Pacman {
 	#nextTurn = null
 	get radius()       {return PacRadius}
 	get closed()       {return State.isPlaying == false}
-	get centerDot()    {return Ctrl.showGridLines}
+	get showCenter()   {return Ctrl.showGridLines}
 	get step()         {return this.#step}
 	get stopped()      {return this.#stopped}
 	get turning()      {return this.#turning}
@@ -61,6 +61,16 @@ class PlayablePacman extends Pacman {
 		return this.inForwardOfTile
 			&& this.#preDir
 			&& this.collidedWithWall(this.#preDir) == false
+	}
+	get #moveSpeed() {
+		return Game.moveSpeed * (Game.level<13 ? 1:Step.SlowBase)
+	}
+	#getCurrentStep() {
+		const eating  = Maze.hasDot(this.tileIdx)
+		return(!GhsMgr.frightened
+			? (eating? Step.Eating : Step.Base)
+			: (eating? Step.EneEat : Step.Energize)
+		) * this.#moveSpeed
 	}
 	#ignoreKeys(e, dir) {
 		return Confirm.opened
@@ -95,13 +105,6 @@ class PlayablePacman extends Pacman {
 	forwardPos(num=0) {
 		const  ofstX = (this.dir == Dir.Up ? -num : 0)
 		return Vec2(this.dir).mul(num*T).add(this.centerPos).add(ofstX*T, 0)
-	}
-	#getCurrentStep() {
-		const eating = Maze.hasDot(this.tileIdx)
-		return(!GhsMgr.frightened
-			? (eating? Step.Eating : Step.Base)
-			: (eating? Step.EneEat : Step.Energize)
-		) * Game.moveSpeed * (Game.level<13 ? 1 : Step.SlowBase)
 	}
 	draw() {
 		if (State.isStart) return

@@ -25,11 +25,11 @@ export default class {
 	}
 	draw({
 		centerPos:{x,y}={x:0,y:0},
-		orient    = L,
-		radius    = PacRadius,
-		frozen    = false,
-		closed    = false,
-		centerDot = false}={}, scale=1
+		orient     = L,
+		radius     = PacRadius,
+		frozen     = false,
+		closed     = false,
+		showCenter = false}={}, scale=1
 	) {
 		if (frozen || this.#losing)
 			return this.#losing?.draw({x,y})
@@ -44,7 +44,7 @@ export default class {
 		ctx.fillStyle = Color.Pacman
 		ctx.fill()
 		ctx.restore()
-		centerDot && cvsFillCircle(ctx)(x,y, 3, '#F00')
+		showCenter && cvsFillCircle(ctx)(x,y, 3, '#F00')
 	}
 	setLosing() {this.#losing = new Losing(this.ctx)}
 }

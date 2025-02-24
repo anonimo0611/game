@@ -79,7 +79,7 @@ export const Fruit = new class {
 		ctx.restore()
 	}
 	drawLevelCounter() {
-		const [x,y,w,h] = LvCounterRect;
+		const [x,y,w,h] = LvCounterRect
 		Ctx.drawImage(Bg.cvs, x,y, w,h, x,y, w,h)
 	}
 	#drawLevelCounter() {
