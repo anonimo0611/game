@@ -4,45 +4,41 @@
 	}
 }
 @media screen and (max-width:55rem) {
-	body {
-		padding: 0;
-	}
+	body {padding: 0}
 	header {
 		position: fixed;
 		top:  0;
 		left: 0;
 		z-index: 1000;
-	}
-	header > nav {
-		display: none;
-		border: solid 1px var(--border-color);
-		border-radius: .3em;
-		padding: .4em;
-	}
-	header {
 		width: 2em;
 		height: 2em;
 		overflow: hidden;
-	}
-	header[data-hidden=false] {
-		width: 11em;
-		height: auto;
-		overflow: hidden;
-	}
-	header > nav[data-hidden=true] {
-		display: block;
-		clip: rect(1px,1px,1px,1px);
-		width:  1px;
-		height: 1px;
-		margin: -1px;
-		border:  0;
-		padding: 0;
-		overflow: hidden;
-	}
-	header > nav[data-hidden=false] {
-		width:  auto;
-		margin-top: .4em;
-		display: block;
+		&[data-hidden=false] {
+			width: 11em;
+			height: auto;
+			overflow: hidden;
+		}
+		> nav {
+			display: none;
+			border: solid 1px var(--border-color);
+			border-radius: .3em;
+			padding: .4em;
+		}
+		> nav[data-hidden=true] {
+			display: block;
+			clip: rect(1px,1px,1px,1px);
+			width:  1px;
+			height: 1px;
+			margin: -1px;
+			border:  0;
+			padding: 0;
+			overflow: hidden;
+		}
+		> nav[data-hidden=false] {
+			width:  auto;
+			margin-top: .4em;
+			display: block;
+		}
 	}
 	nav.rel {
 		display: none !important;
@@ -56,6 +52,21 @@
 		margin-right:  0;
 		padding: .5em 1em 2em 2em;
 	}
+	.left, .right {
+		text-align: center;
+		box-sizing: border-box;
+		float: none;
+		margin: 1em 0;
+		width: 100%;
+		display: block;
+	}
+	img.left,
+	img.right,
+	figure.left,
+	figure.right {
+		width: auto;
+		margin: 1em auto;
+	}
 	h1 {
 		margin-top: .5rem;
 	}
@@ -68,7 +79,7 @@
 }
 @media screen and (max-width: 50em) {
 	#main-content {
-		padding: .3em 1em 1.3em 2em;
+		padding: .3em 1em 1.3em 2.5em;
 	}
 	h1 {font-size: 120% !important}
 	h2 {font-size: 110% !important}
@@ -85,25 +96,10 @@
 	}
 	blockquote {
 		margin: 1em 0 0 .5em;
-	}
-	blockquote + p {
-		margin-top: -.5em;
-		margin-right: 0;
-	}
-	.left, .right {
-		text-align: center;
-		box-sizing: border-box;
-		float: none;
-		margin: 1em 0;
-		width: 100%;
-		display: block;
-	}
-	img.left,
-	img.right,
-	figure.left,
-	figure.right {
-		width: auto;
-		margin: 1em auto;
+		+ p {
+			margin-top: -.5em;
+			margin-right: 0;
+		}
 	}
 	.center img {
 		width: 100%;

@@ -35,10 +35,10 @@ header, nav, .no-print {
 	margin-right: 0;
 	padding: 0;
 	max-width: none;
-}
-#main-content hr {
-	margin: unset;
-	visibility: hidden;
+	hr {
+		margin: unset;
+		visibility: hidden;
+	}
 }
 
 /* Footer */
@@ -47,10 +47,10 @@ footer {
 	border-radius: .2em;
 	margin: 3em 1em;
 	padding: .4em 0;
-}
-footer address {
-	margin:  0;
-	padding: 0;
+	address {
+		margin:  0;
+		padding: 0;
+	}
 }
 
 /* Headings */

@@ -1,27 +1,28 @@
-﻿
-/* Navigation */
-header > nav {
-	padding-bottom: .5em !important;
-}
-header ul.toc:first-of-type::before {
-	margin-top: .3em;
-}
-header ul.toc:first-of-type {
-	margin-bottom: .5em;
-}
-header nav ul {
-	margin-top: .2em;
-	margin-bottom: 0;
-}
-header nav ul.toc > li > ul {
-	margin-top: .4em;
-}
-header nav li span.br {
-	display: block;
-	margin-top: .2em;
-}
-header nav a[href] {
-	display: inline-block;
+﻿/* Navigation */
+header {
+	ul.toc:first-of-type::before {
+		margin-top: .3em;
+	}
+	ul.toc:first-of-type {
+		margin-bottom: .5em;
+	}
+	nav {
+		padding-bottom: .5em !important;
+		ul {
+			margin-top: .2em;
+			margin-bottom: 0;
+		}
+		ul.toc > li > ul {
+			margin-top: .4em;
+		}
+		li span.br {
+			display: block;
+			margin-top: .2em;
+		}
+		a[href] {
+			display: inline-block;
+		}
+	}
 }
 dl.ref {
 	margin: 1em 0;
@@ -32,13 +33,6 @@ p + ul a[href] {
 }
 
 /* Block-level */
-blockquote {
-	font-size: 90%;
-	padding: .5em .7em;
-}
-p, dl {
-	margin: .5em 0;
-}
 p, ul {
 	line-height: 1.4;
 	margin-top: .8em;
@@ -50,45 +44,9 @@ ul + section {
 li {
 	margin: .3em 0;
 }
-dl, dt, dd {
-	margin: 0;
-	padding: 0;
-}
-dl dl dd {
-	margin-left: 1em;
-}
-
-/* Tables */
-table {
-	border-collapse: collapse;
-	margin: 1.5em 0;
-}
-th, td {
-	padding: .1em .5em;
-}
-th {
-	text-align: center;
-	font-weight: bold;
-}
-td {
-	text-align: right;
-	background: transparent;
-}
-
-/* Buttons */
-img.button {
-	background: gray;
-	margin: 0 .2em;
-	width:  1.2em;
-	height: 1.2em;
-	line-height: 0;
-	vertical-align: -.2em;
-	box-sizing: border-box;
-	border-radius: .2em;
-	display: inline-block;
-}
-img.button + img.button {
-	margin-left: -.1em;
+blockquote {
+	font-size: 90%;
+	padding: .5em .7em;
 }
 
 /* Phrase elements */
@@ -111,274 +69,4 @@ kbd {
 	padding: 0;
 	min-width: 1.2rem;
 	display: inline-block;
-}
-
-/* Config: pseudo-table */
-#cfg-tbl {
-	display: table;
-	border: solid 1px var(--border-color);
-	border-collapse: collapse;
-}
-#cfg-tbl section {
-	margin: 0;
-	display: table-row;
-}
-#cfg-tbl h3,
-#cfg-tbl .cfg-desc {
-	font-size: inherit;
-	display: table-cell;
-	vertical-align: middle;
-}
-#cfg-tbl p {
-	margin: 0;
-}
-#cfg-tbl,
-#cfg-tbl h3,
-#cfg-tbl .cfg-desc {
-	text-align: left;
-	padding: .4em .5em;
-}
-#cfg-tbl section:not(:last-child) {
-	border-bottom: dotted 2px var(--border-color);
-}
-@media print {
-	#cfg-tbl section:not(:last-child) {
-		border-bottom: solid 1px;
-	}
-}
-#cfg-tbl h3 {
-	white-space: nowrap;
-	color: var(--th-color);
-	background: var(--th-bgcolor);
-	vertical-align: top;
-}
-#cfg-tbl .cfg-desc {
-	color: var(--td-color);
-	background: var(--td-bgcolor);
-	padding: .4em .7em;
-}
-
-/* Config: tables */
-#cfg-tbl table {
-	margin: .3em 0 0 .2em;
-}
-#cfg-tbl th,
-#cfg-tbl td {
-	line-height: 1.4;
-	padding: 0;
-}
-#cfg-tbl th {
-	background: transparent;
-}
-#cfg-tbl table.keys th {
-	text-align: center;
-	font-weight: normal;
-	padding: .05em 0;
-}
-#cfg-tbl td {
-	text-align: left;
-	padding-left: .5em;
-}
-
-/* Config: kbd */
-#cfg-tbl td kbd {
-	min-width: 1.2em;
-}
-#cfg-tbl th kbd:not(.arrow) {
-	text-align: center;
-	min-width: 2.5rem;
-	padding: 0 .2em;
-}
-#cfg-tbl th.arrow kbd {
-	font-family: sans-serif;
-	margin:0;
-	padding:0;
-	vertical-align:middle;
-}
-#cfg-tbl th.arrow .↑ {vertical-align:1.3rem}
-#cfg-tbl th.arrow .↓ {vertical-align:middle;margin-left:-1.2rem}
-#cfg-tbl th.arrow .→ {margin-left:  .1em}
-#cfg-tbl th.arrow .← {margin-right: .1em}
-
-/* Scatter and chase modes */
-#scatter-chase th,
-#scatter-chase td {
-	line-height: 1;
-	padding: .5em;
-}
-#scatter-chase tbody:nth-child(even) {
-	background: var(--group-bg1);
-}
-#scatter-chase tbody:nth-child(odd) {
-	background: var(--group-bg2);
-}
-#scatter-chase tbody th,
-#scatter-chase tbody td {
-	background: transparent;
-	font-weight: normal;
-}
-
-/* Release time */
-#release-ghosts ul {
-	margin: -.25em 1em;
-	padding: 0;
-}
-#release-ghosts ul li {
-	margin:  0;
-	padding: .1em 0;
-}
-#release-ghosts table {
-	font-size: 120%;
-}
-#release-ghosts table col[class] {
-	text-align: right;
-	width: 5em;
-}
-#release-ghosts thead th {
-	font-feature-settings: initial;
-}
-#release-ghosts tbody tr:first-child th {
-	text-align: center;
-}
-#release-ghosts tbody th {
-	text-align: left;
-}
-@media screen {
-	#release-ghosts th:not(:last-child),
-	#release-ghosts tbody td:not(:last-child) {
-		border-right: hidden;
-	}
-}
-
-/* Frightened mode */
-#frightened-mode caption {
-	text-align: left;
-}
-#frightened-mode th,
-#frightened-mode td {
-	text-align: center;
-}
-
-/* Speed */
-#relative-speed {
-	display: flex;
-	gap: .7em;
-	margin: 1.5em 0;
-}
-#relative-speed > dl {
-	display: table;
-	background: var(--table-bgcolor);
-	border-radius: .5em;
-	padding: .2em .5em;
-}
-#relative-speed > dl > dt {
-	text-align: center;
-}
-@media print {
-	#relative-speed > dl {
-		border: solid 1px;
-	}
-}
-
-/* Cruise Elroy */
-#spurt table {
-	font-size: 120%;
-}
-#spurt tbody th,
-#spurt tbody td {
-	text-align: left;
-	border-top: none;
-	border-bottom: none;
-}
-#spurt tbody td {
-	text-align: right;
-}
-
-@media screen { /* Fruit icon */
-	th {--fruits-url: url('../_imgs/fruits.png')}
-	th.fruit::before {
-		--size: 1em;
-		content: '';
-		background: no-repeat center/calc(var(--size) * 8) 100% var(--fruits-url);
-		display: inline-block;
-		margin-right: .1em;
-		vertical-align: -.1em;
-		width:  var(--size);
-		height: var(--size);
-	}
-	#frightened-mode thead th {
-		line-height: 1;
-		padding: .1em .2em .2em;
-	}
-	#frightened-mode thead th::before {
-		text-align: center;
-		margin: 0 auto;
-		font-size: 120%;
-		display: block;
-	}
-	#frightened-mode thead tr:first-child th {
-		vertical-align: bottom;
-	}
-	#frightened-mode th,
-	#frightened-mode td {
-		text-align: center;
-		padding: .2em;
-	}
-	#frightened-mode th sub {
-		display: block;
-		margin-left: 0;
-	}
-}
-@media screen and (min-width: 50em) {
-	h1 {
-		font-size: 170%;
-		margin: 1rem 0 .6em -.5em;
-		display: flex;
-		align-items: center;
-	}
-	#pacman-game h1 {
-		margin-top: 1.5rem;
-	}
-	h1::before,
-	h1::after{
-		content: '';
-		background: no-repeat center/100% url('../_imgs/pac-icon.png');
-		display: inline-block;
-		width: 1em;
-		height: 1em;
-		position: relative;
-		top: .1em;
-	}
-	h1::before {
-		transform: scale(-1,1);
-	}
-	h2 {
-		font-size: 140%;
-		margin-left: -.5em;
-	}
-}
-@media screen and (max-width: 50em) {
-	#cfg-tbl {
-		padding: 0;
-		width: 100%;
-		display: block;
-	}
-	#cfg-tbl h3 {
-		margin: 0;
-		padding: .2em .6em;
-		display: block;
-	}
-	#cfg-tbl .cfg-desc {
-		margin: 0;
-		padding: .4em 1em;
-		display: block ;
-	}
-	#cfg-tbl section,
-	#cfg-tbl p {
-		white-space: normal;
-		margin:  0;
-		padding: 0;
-		border: none;
-		display: block;
-	}
 }
