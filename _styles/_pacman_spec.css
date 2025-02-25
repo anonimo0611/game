@@ -1,4 +1,22 @@
 
+h1:has(small) {
+	&::before,
+	&::after {
+		align-self: flex-start;
+	}
+	a {
+		display: flex;
+		flex-direction: column;
+		align-self: flex-start;
+		small {
+			align-self: flex-end;
+			margin-top: 4px;
+			font-size: 50%;
+			line-height: 1;
+		}
+	}
+}
+
 table {
 	th, td {
 		padding: .2em;

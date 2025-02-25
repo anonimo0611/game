@@ -240,8 +240,8 @@ a[href].fragment {
 	align-items: center;
 	&:hover {
 		text-decoration: underline;
-		text-decoration-thickness: .1em;
-		text-underline-offset: .15em;
+		text-decoration-thickness: .07em;
+		text-underline-offset: 2px;
 	}
 }
 :is(h2,h3,h4,h5,h6) {

@@ -33,6 +33,10 @@ p + ul a[href] {
 }
 
 /* Block-level */
+h1 {
+	text-align: center;
+	margin-top: 1rem;
+}
 p, ul {
 	line-height: 1.4;
 	margin-top: .8em;
@@ -52,11 +56,6 @@ blockquote {
 /* Phrase elements */
 small {
 	font-size: 80%;
-}
-h1 small {
-	font-size: 70%;
-	line-height: 1;
-	align-self: flex-end;
 }
 kbd {
 	text-align: center;
