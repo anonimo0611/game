@@ -48,6 +48,9 @@ ul.ghost li {
 	colgroup.GHOST {
 		background: var(--group-bg2);
 	}
+	tbody tr:first-child + tr ~ tr {
+		th {text-indent: 1ch}
+	}
 }
 
 /* Chap.2: Cornering */
