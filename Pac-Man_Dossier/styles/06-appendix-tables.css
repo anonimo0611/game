@@ -6,125 +6,121 @@ table {
 #a1-wrapper {
 	position: relative;
 	display: table;
+	table {
+		margin: 0;
+		table-layout: fixed;
+		top:  0;
+		left: 0;
+	}
+	th {
+		text-align: center;
+		vertical-align: middle;
+		font-feature-settings: 'palt';
+		font-weight: normal;
+		line-height: 1.1;
+		padding: 0;
+	}
+	thead th {
+		text-align: left;
+		text-orientation: upright;
+		writing-mode: vertical-rl;
+		font-feature-settings: 'palt','vpal';
+		padding-top: .5em;
+		line-height: 1.1;
+	}
+	th.middle {
+		vertical-align: middle;
+	}
+	th,td {
+		white-space: nowrap;
+		padding: .35em .3em;
+		cursor: default;
+	}
+	tbody tr:not(:last-child) > td,
+	tbody tr:not(:last-child) > th {
+		border-bottom: hidden;
+	}
+	tbody th {
+		background: transparent;
+		&:first-child {
+			text-align: left;
+			padding-left: .5em;
+		}
+		&.pad::before {
+			content: '0';
+			visibility: hidden;
+		}
+	}
+	tbody td {
+		background: transparent;
+		text-align: right;
+		padding: .1em .2em;
+		&:empty::before {
+			content: '—';
+			padding-right: .7em;
+		}
+		&.fruit {
+			text-align: left;
+			font-size: 80%;
+		}
+	}
 }
-#a1-wrapper {
-	position: relative;
-}
-#a1-wrapper table {
-	margin: 0;
-	table-layout: fixed;
-	top:  0;
-	left: 0;
-}
-#a1-wrapper th {
-	text-align: center;
-	vertical-align: middle;
-	font-feature-settings: 'palt';
-	font-weight: normal;
-	line-height: 1.1;
-	padding: 0;
-}
-#a1-wrapper thead th {
-	text-align: left;
-	text-orientation: upright;
-	writing-mode: vertical-rl;
-	font-feature-settings: 'palt','vpal';
-	padding-top: .5em;
-	line-height: 1.1;
-}
-#a1-wrapper th.middle {
-	vertical-align: middle;
-}
-#a1-wrapper th,
-#a1-wrapper td {
-	white-space: nowrap;
-	padding: .35em .3em;
-	cursor: default;
-}
-#a1-wrapper tbody tr:not(:last-child) > td,
-#a1-wrapper tbody tr:not(:last-child) > th {
-	border-bottom: hidden;
-}
-
-#a1-wrapper tbody th {
-	background: transparent;
-}
-#a1-wrapper tbody td {
-	background: transparent;
-	text-align: right;
-	padding: .1em .2em;
-}
-#a1-wrapper tbody th:first-child {
-	text-align: left;
-	padding-left: .5em;
-}
-#a1-wrapper td:empty::before {
-	content: '—';
-	padding-right: .7em;
-}
-
-#a1-wrapper th.pad::before {
-	content: '0';
-	visibility: hidden;
-}
-#a1-wrapper td.fruit {
-	text-align: left;
-	font-size: 80%;
-}
-
 @media screen {
-	#a1-wrapper tbody tr:hover {
-		background-color: var(--hilight-bgcolor) !important;
+	#a1-wrapper {
+		tbody tr:hover {
+			background-color: var(--hilight-bgcolor) !important;
+		}
+		tbody th:hover,
+		tbody td:hover {
+			background-color: var(--hilight-bgcolor) !important;
+		}
+		td.fruit span {
+			display: flex;
+			align-items: center;
+			&::before {
+				content: '';
+				--size: 1.8em;
+				background: no-repeat center/calc(var(--size) * 8) 100% var(--fruits-url);
+				margin-right: .1em;
+				width:  var(--size);
+				height: var(--size);
+				display: inline-block;
+			}
+			&::before {
+				--size: 1.8vw;
+			}
+		}
 	}
-	#a1-wrapper tbody th:hover,
-	#a1-wrapper tbody td:hover {
-		background-color: var(--hilight-bgcolor) !important;
-	}
-	#a1-wrapper td.fruit span {
-		display: flex;
-		align-items: center;
-	}
-	#a1-wrapper td.fruit span::before {
-		content: '';
-		--size: 1.8em;
-		background: no-repeat center/calc(var(--size) * 8) 100% var(--fruits-url);
-		margin-right: .1em;
-		width:  var(--size);
-		height: var(--size);
-		display: inline-block;
-	}
-	#a1-wrapper td.fruit span::before {
-		--size: 1.8vw;
-	}
-
-	#a2 th {
-		font-size: 90%;
-		padding: .3em .3em;
-	}
-	#a2 td {
-		font-feature-settings: 'palt' 0;
-		padding: .1em .3em;
-	}
-	#a2 col.normal,
-	#a2 col.hard {
-		width: 4em;
-	}
-	#a2 col.normal-bonus,
-	#a2 col.hard-bonus {
-		width: 8em;
-	}
-	#a2 td.fruit {
-		position: relative;
-	}
-	#a2 td.fruit::before {
-		content: '';
-		--size: 1.2em;
-		background: no-repeat center/calc(var(--size) * 8) 100% var(--fruits-url);
-		margin-right: .1em;
-		width:  var(--size);
-		height: var(--size);
-		display: inline-block;
-		position: absolute;
-		left: .2em;
+	#a2 {
+		col.normal,
+		col.hard {
+			width: 4em;
+		}
+		col.normal-bonus,
+		col.hard-bonus {
+			width: 8em;
+		}
+		th {
+			font-size: 90%;
+			padding: .3em .3em;
+		}
+		td {
+			font-feature-settings: 'palt' 0;
+			padding: .1em .3em;
+			&.fruit {
+				position: relative;
+			}
+			&.fruit::before {
+				content: '';
+				--size: 1.2em;
+				background: no-repeat center/calc(var(--size) * 8) 100% var(--fruits-url);
+				margin-right: .1em;
+				width:  var(--size);
+				height: var(--size);
+				display: inline-block;
+				position: absolute;
+				left: .2em;
+			}
+		}
 	}
 }

@@ -12,9 +12,7 @@
 	dl.ref ul {
 		margin-top: .2em;
 		padding-left: 0 !important;
-	}
-	dl.ref ul li {
-		margin-bottom: .2em !important;
+		li {margin-bottom: .2em !important}
 	}
 	#main-content h1 {
 		margin-top: 2rem !important;

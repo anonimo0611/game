@@ -5,57 +5,56 @@ ul.appendix li {
 }
 
 /* Appendix: A.1 */
-#a1 p:first-of-type {
-	text-align: center;
-	margin: 0;
+#a1 {
+	p:first-of-type {
+		text-align: center;
+		margin: 0;
+	}
+	p.ref {
+		text-align: center;
+		margin: 1em 0 2em 0;
+	}
 }
 #a1-wrapper {
 	margin: 0 auto;
-}
-#a1-wrapper th,
-#a1-wrapper td,
-#a1-balloon {
-	font-size: 14px;
-}
-@media screen {
-	#a1-wrapper th,
-	#a1-wrapper td,
-	#a1-balloon {
-		font-size: min(1.13vw, .95em);
-		
+	th, td, #a1-balloon {
+		font-size: 14px;
 	}
-	#a1-wrapper tbody tr td:first-of-type ~ td {
-		font-feature-settings: 'hwid' !important;
+	@media screen {
+		th, td, #a1-balloon {
+			font-size: min(1.13vw, .95em);
+		}
+		tbody tr td:first-of-type ~ td {
+			font-feature-settings: 'hwid' !important;
+		}
 	}
-}
-@media print {
-	#a1-wrapper th,
-	#a1-wrapper td {
-		border: solid 1px !important;
+	@media print {
+		th, td {
+			border: solid 1px !important;
+		}
 	}
-}
-#a1 p.ref {
-	text-align: center;
-	margin: 1em 0 2em 0;
 }
 
 /* Appendix: A.2 */
-#a2 td {
-	text-align: right;
-}
-#a2 td:empty::before {
-	content: '—';
-}
-#a2 td:not(.lv):empty::before {
-	padding-right: 1.5em;
-}
-
-#a2 tbody tr > td.lv {
-	text-align: left;
-	padding-left: 1.5em;
-}
-#a2 tbody tr > td.pad::before {
-	content: '0';
+#a2 {
+	td {
+		text-align: right;
+		&:empty::before {
+			content: '—';
+		}
+		&:not(.lv):empty::before {
+			padding-right: 1.5em;
+		}
+	}
+	tbody tr {
+		> td.lv {
+			text-align: left;
+			padding-left: 1.5em;
+		}
+		> td.pad::before {
+			content: '0';
+		}
+	}
 }
 
 #hardware caption {

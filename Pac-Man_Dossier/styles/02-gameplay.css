@@ -9,41 +9,45 @@ ul.ghost li {
 }
 
 /* Chap.2: Scatter, Chase, Repeat... */
-#scatter-chase th.level {
-	width: 4em;
-}
-#scatter-chase tbody:nth-child(even) {
-	background: var(--group-bg1);
-}
-#scatter-chase tbody:nth-child(odd) {
-	background: var(--group-bg2);
-}
-#scatter-chase td {
-	text-align: right;
-}
-#scatter-chase td:first-child,
-#scatter-chase td[rowspan]:first-child + td {
-	text-align: center;
-}
-#scatter-chase tbody th,
-#scatter-chase tbody td {
-	background: transparent;
-	font-weight: normal;
+#scatter-chase {
+	th.level {
+		width: 4em;
+	}
+	tbody:nth-child(even) {
+		background: var(--group-bg1);
+	}
+	tbody:nth-child(odd) {
+		background: var(--group-bg2);
+	}
+	td {
+		text-align: right;
+	}
+	td:first-child,
+	td[rowspan]:first-child + td {
+		text-align: center;
+	}
+	tbody th,
+	tbody td {
+		background: transparent;
+		font-weight: normal;
+	}
 }
 
 /* Chap.2: Speed */
-#speed thead > tr:first-child th,
-#speed td {
-	text-align: center;
-	background: transparent;
-}
-#speed thead > tr:first-child th.PAC-MAN,
-#speed colgroup.PAC-MAN {
-	background: var(--group-bg1);
-}
-#speed thead > tr:first-child th.GHOST,
-#speed colgroup.GHOST {
-	background: var(--group-bg2);
+#speed {
+	thead > tr:first-child th,
+	td {
+		text-align: center;
+		background: transparent;
+	}
+	thead > tr:first-child th.PAC-MAN,
+	colgroup.PAC-MAN {
+		background: var(--group-bg1);
+	}
+	thead > tr:first-child th.GHOST,
+	colgroup.GHOST {
+		background: var(--group-bg2);
+	}
 }
 
 /* Chap.2: Cornering */
@@ -51,69 +55,67 @@ ul.ghost li {
 	line-height: 1;
 	padding: .1em;
 	display: inline-block;
+	&.pre    {background:#7f7;color:#000}
+	&.center {background:rgb(255, 187, 0);color:#000}
+	&.post   {background:#c00;color:#fff}
 }
-.turn-colors.pre    {background:#7f7;color:#000}
-.turn-colors.center {background:#ff0;color:#000}
-.turn-colors.post   {background:#c00;color:#fff}
 
 /* Chap.2: Home Sweet Home */
 #house-note {
 	margin: 0 0 1.5em auto;
+	h3 {
+		font-size: 140%;
+	}
+	h3 + table {
+		margin-top: 0;
+	}
+	table {
+		margin: .8em 0 .8em .7em;
+	}
+	caption {
+		text-align: left;
+		font-size: .9rem;
+		padding: 0 0 .1em 0;
+	}
+	th.name {
+		width: 5em;
+	}
+	th,td {
+		text-align: center;
+		padding: .3em;
+	}
+	tbody th {
+		text-align: left;
+	}
+	ul li:last-child {
+		padding-bottom: 0;
+		margin-bottom: 0;
+	}
+	.tables {
+		display: flex;
+		gap: .25em;
+	}
+	.tables table {
+		margin-top: .5em;
+	}
 }
-#house-note h3 {
-	font-size: 140%;
-}
-#house-note table {
-	margin: .8em 0 .8em .7em;
-}
-#house-note h3 + table {
-	margin-top: 0;
-}
-#house-note caption {
-	text-align: left;
-	font-size: .9rem;
-	padding: 0 0 .1em 0;
-}
-#house-note th.name {
-	width: 5em;
-}
-#house-note th,
-#house-note td {
-	text-align: center;
-	padding: .3em;
-}
-#house-note tbody th {
-	text-align: left;
-}
-#house-note ul li:last-child {
-	padding-bottom: 0;
-	margin-bottom: 0;
-}
-.tables {
-	display: flex;
-	gap: .25em;
-}
-.tables table {
-	margin-top: .5em;
-}
-
 @media print {
 	#house-note {
 		margin: 1em 0;
 		border: solid 1px;
-	}
-	#house-note ul {
-		border: solid 1px;
-		margin: unset;
-		padding: .7em .4em !important;
-	}
-	#house-note ul li {
-		margin: unset;
-		padding: 0 1em;
-		list-style-type: unset;
-		list-style-position: inside;
-	}
-	#house-note caption {
-		font-size: 80%;
+		ul {
+			border: solid 1px;
+			margin: unset;
+			padding: .7em .4em !important;
+		}
+		ul li {
+			margin: unset;
+			padding: 0 1em;
+			list-style-type: unset;
+			list-style-position: inside;
+		}
+		caption {
+			font-size: 80%;
+		}
 	}
 }

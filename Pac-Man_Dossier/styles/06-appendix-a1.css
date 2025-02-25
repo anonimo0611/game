@@ -27,16 +27,16 @@ footer {
 	display: flex;
 	justify-content: space-between; 
 	align-items: baseline;
-}
-footer address {
-	line-height: 1;
-	margin-left: .5em;
-}
-footer ul.flex li {
-	margin-right: .2em !important;
-}
-footer ul.flex li a[href] {
-	text-decoration: none !important;
+	address {
+		line-height: 1;
+		margin-left: .5em;
+	}
+	ul.flex li {
+		margin-right: .2em !important;
+		a[href] {
+			text-decoration: none !important;
+		}
+	}
 }
 
 .header {
@@ -50,21 +50,23 @@ h1 {
 	margin: 0 0 .2em .5em;
 	padding: 0;
 	display: block;
-}
-h1 + p {
-	margin: 0;
+	+ p {margin: 0}
 }
 
 table#a1-table {
 	margin: 0 auto .4em auto;
 	table-layout: fixed;
+	+ p {
+		text-align: center;
+		margin: 0 0;
+		position: absolute;
+		left: 0;
+		width: 100%;
+	}
 }
-table#a1-table + p {
-	text-align: center;
-	margin: 0 0;
-	position: absolute;
-	left: 0;
-	width: 100%;
+
+nav kbd {
+	text-decoration-thickness: 1px !important;
 }
 
 @media print {
