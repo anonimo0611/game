@@ -133,8 +133,9 @@ a:link, a:visited {
 a[href] {
 	text-decoration-color: #e9a997;
 	&:hover {
+		--bgcolor: #ffdc68;
 		color: #c82626;
-		background-color: #ffdc68;
+		background-color: var(--bgcolor);
 	}
 	&:focus {
 		outline: solid 2px #be9c9a;
@@ -209,16 +210,20 @@ nav.rel {
 }
 
 /* Current page / section */
-nav li.current {
-	color: #810c40;
-	background: linear-gradient(transparent 85%, #ede8b3 85%);
+nav {
+	--color:  #c74714;
+	--bgline: #f9b469;
+}
+nav li > span.current {
+	color: var(--color);
+	background: linear-gradient(transparent 80%, var(--bgline) 80%);
+	padding-bottom: .1em;
 }
 a[href].current {
-	color: #810c40;
-	background: linear-gradient(transparent 85%, #ede6b3 85%);
+	color: var(--color);
+	background: linear-gradient(transparent 80%, var(--bgline) 80%);
 	&:hover {
-		color: #810c40;
-		background: #ffdc68;
+		background: var(--bgcolor);
 	}
 }
 

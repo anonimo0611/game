@@ -208,8 +208,9 @@ nav {
 
 
 /* Current page / section */
-nav li.current {
+nav li > span.current {
 	font-weight: bolder;
+	padding-bottom: .1em;
 }
 a[href].current {
 	font-weight: bolder;
