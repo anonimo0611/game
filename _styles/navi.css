@@ -217,6 +217,7 @@ a[href].current {
 
 /* Anchor */
 nav a[href].current {
+	padding-bottom: .1em;
 	text-decoration: none;
 }
 

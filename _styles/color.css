@@ -201,8 +201,8 @@ nav.rel {
 
 /* Current page / section */
 nav {
-	--color:  #c74714;
-	--bgline: #f9b469;
+	--color:  #35b3a2;
+	--bgline: #95db6f;
 }
 nav li > span.current {
 	color: var(--color);
@@ -212,7 +212,9 @@ nav li > span.current {
 a[href].current {
 	color: var(--color);
 	background: linear-gradient(transparent 80%, var(--bgline) 80%);
-	&:hover {background: var(--bgcolor)}
+	&:hover {
+		background: #e3f2db;
+	}
 }
 
 /* Heading anchor */
