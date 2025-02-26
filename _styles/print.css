@@ -141,8 +141,3 @@ abbr[title] {
 img.button {
 	font-size: 150%;
 }
-
-/* fc2 */
-#fc2_footer {
-	position: static !important;
-}

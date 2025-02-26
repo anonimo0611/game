@@ -3,8 +3,8 @@
 body {
 	color: #000;
 	background: #fff6d0;
-	--border-l-color: #e8d6ae;
-	--border-color: #e0c37f;
+	--border-l-color:#e8d6ae;
+	--border-color:  #e0c37f;
 }
 #main-content {
 	background: #fff4c1;
@@ -35,8 +35,8 @@ li {--marker-color: #f819b1}
 
 /* Definition list */
 dl {
-	--Q-color: #c2522c; 
-	--A-color: #e31a94
+	--Q-color: #c2522c;
+	--A-color: #e31a94;
 }
 
 /* Long quotation */
@@ -65,21 +65,11 @@ table {
 	thead, tbody th, tfoot {
 		background-color: #e0e0e0;
 	}
-	colgroup.hlight {
-		background-color: #f9f6ef;
-	}
-	thead th.hlight {
-		background-color: #dad5cc;
-	}
-	tbody tr:hover {
-		--hilight-bgcolor: #f5dfdd;
-	}
-	th:hover, td:hover {
-		--hilight-bgcolor: #e5c1d4;
-	}
-	td:empty::before {
-		color: #555;
-	}
+	colgroup.hlight    {background-color: #f9f6ef}
+	thead th.hlight    {background-color: #dad5cc}
+	tbody tr:hover     {--hilight-bgcolor:#f5dfdd;}
+	th:hover, td:hover {--hilight-bgcolor:#e5c1d4;}
+	td:empty::before   {color: #555}
 }
 
 /* Notes */
@@ -222,9 +212,7 @@ nav li > span.current {
 a[href].current {
 	color: var(--color);
 	background: linear-gradient(transparent 80%, var(--bgline) 80%);
-	&:hover {
-		background: var(--bgcolor);
-	}
+	&:hover {background: var(--bgcolor)}
 }
 
 /* Heading anchor */

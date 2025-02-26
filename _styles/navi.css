@@ -206,7 +206,6 @@ nav {
 	}
 }
 
-
 /* Current page / section */
 nav li > span.current {
 	font-weight: bolder;
@@ -257,10 +256,10 @@ a[href].fragment {
 	}
 	> a[href].fragment:hover {
 		transition: text-decoration-color .2s .3s;
-	}
-	> a[href].fragment:hover::after {
-		opacity: 1;
-		transition: opacity .2s .3s;
+		&::after {
+			opacity: 1;
+			transition: opacity .2s .3s;
+		}
 	}
 }
 a[href].fragment:focus {
