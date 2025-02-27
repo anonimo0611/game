@@ -27,7 +27,7 @@ body {
 	position: relative;
 	hr {
 		margin: -.5em 20%;
-		border: solid 2px var(--border-color,black);
+		border: solid 2px var(--border-color,#000);
 		border-bottom: none;
 	}
 }
@@ -85,7 +85,7 @@ ul {
 }
 :not(.rel) > ul:not(.simple) > li {
 	line-height: 1.2;
-	padding: 0 0 0 .5em;
+	padding: .05em 0 .05em .5em;
 	box-sizing: border-box;
  	display: list-item;
 }
@@ -150,7 +150,7 @@ dl {
 blockquote {
 	margin:   1em  1em  1em 2em;
 	padding: .4em .5em .4em 1em;
-	border-left: solid .4em var(--border-color,black);
+	border-left: solid .4em var(--border-color,#000);
 	border-radius: 0 .7em .7em 0;
 	p {margin: .5em 0}
 	+ p.cite {
@@ -188,7 +188,7 @@ table {
 	}
 	th, td {
 		background-color: transparent;
-		border: solid 1px var(--border-color,black);
+		border: solid 1px var(--border-color,#000);
 		padding: .5em;
 	}
 	thead td {
@@ -206,7 +206,7 @@ table {
 /* Notes */
 div.note {
 	border-style: solid;
-	border-color: var(--border-color,black);
+	border-color: var(--border-color,#000);
 	border-width: 0 0 0 .22em;
 	border-radius: 0 .7em .7em 0;
 	margin: -.7em 1em 1.5em;
@@ -237,7 +237,7 @@ section.note {
 	overflow: hidden;
 	h2,h3 {
 		display: block;
-		border-bottom: double .2em var(--border-color,black);
+		border-bottom: double .2em var(--border-color,#000);
 		margin: -.2rem -.7rem .6rem -.7rem;
 		padding: .3rem 1rem .2rem;
 	}

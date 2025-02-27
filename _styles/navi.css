@@ -46,7 +46,7 @@ header nav {
 		margin-bottom: 0;
 	}
 	a[href]  {
-		padding: 0;
+		padding: 0 .1em;
 	}
 }
 

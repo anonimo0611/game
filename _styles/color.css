@@ -116,25 +116,6 @@ kbd {
 	--border-color: #aaa;
 }
 
-/* Anchor */
-a:link, a:visited {
-	color: #c22c40;
-}
-a[href] {
-	text-decoration-color: #e9a997;
-	&:hover {
-		--bgcolor: #ffdc68;
-		color: #c82626;
-		background-color: var(--bgcolor);
-	}
-	&:focus {
-		outline: solid 2px #be9c9a;
-	}
-	&:active {
-		color: #38ae84 !important;
-	}
-}
-
 /* Ghost colors */
 .bg-Akabei{background-color:#ff8d8e}
 .bg-Pinky {background-color:#ffc3d5}
@@ -181,6 +162,26 @@ nav a[href], main .toc a[href] {
 	text-decoration-color: #efb1b6;
 }
 
+/* Anchor */
+a:link, a:visited {
+	color: #c22c40;
+}
+a[href] {
+	--focused-bgcolor: #fbdff3;
+	text-decoration-color: #e9a997;
+	&:hover {
+		background-color: #ffdc68;
+	}
+	&:focus {
+		background-color: var(--focused-bgcolor) !important;
+		outline: solid 2px currentColor;
+		outline-offset: -1px;
+	}
+	&:active {
+		color: #ef13b1 !important;
+	}
+}
+
 /* Relationship navigation */
 nav.rel {
 	&#rel-top,
@@ -212,8 +213,11 @@ nav li > span.current {
 a[href].current {
 	color: var(--color);
 	background: linear-gradient(transparent 80%, var(--bgline) 80%);
-	&:hover {
-		background: #e3f2db;
+	&:not(:active):hover {
+		background: #e3f2db !important;
+	}
+	&:focus {
+		background: var(--focused-bgcolor);
 	}
 }
 
