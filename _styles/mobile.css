@@ -70,11 +70,14 @@
 		width: 100%;
 		display: block;
 	}
+	img {
+		width: auto !important;
+		max-height: 300px !important;
+	}
 	img.left,
 	img.right,
 	figure.left,
 	figure.right {
-		width: auto;
 		margin: 1em auto;
 	}
 	h1 {
@@ -113,10 +116,6 @@
 			margin-top: -.5em;
 			margin-right: 0;
 		}
-	}
-	.center img {
-		width: 100%;
-		height: auto;
 	}
 	div.note {
 		margin-left: 0;
