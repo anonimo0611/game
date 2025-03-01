@@ -10,12 +10,11 @@
 		top:  0;
 		left: 0;
 		z-index: 1000;
-		width: 2em;
-		height: 2em;
-		overflow: hidden;
+		box-sizing: border-box;
 		&[data-hidden=false] {
 			width: 11em;
 			height: auto;
+			min-height: 2em;
 			overflow: hidden;
 		}
 		> nav {

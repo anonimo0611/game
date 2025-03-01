@@ -45,7 +45,7 @@ header nav {
 		margin-top: 0;
 		margin-bottom: 0;
 	}
-	a[href]  {
+	a[href], .current  {
 		padding: 0 .1em;
 	}
 }
@@ -112,8 +112,9 @@ ul.flex {
 	box-sizing: border-box;
 	border: solid 1px var(--border-color);
 	border-radius: .3em;
-	width:  1.5rem;
-	height: 1.5rem;
+	width:  1.4rem;
+	height: 1.4rem;
+	box-sizing: border-box;
 	display: none;
 	&:hover {cursor: pointer}
 }
@@ -209,7 +210,6 @@ nav {
 /* Current page / section */
 nav li > span.current {
 	font-weight: bolder;
-	padding-bottom: .1em;
 }
 a[href].current {
 	font-weight: bolder;
@@ -217,7 +217,6 @@ a[href].current {
 
 /* Anchor */
 nav a[href].current {
-	padding-bottom: .1em;
 	text-decoration: none;
 }
 

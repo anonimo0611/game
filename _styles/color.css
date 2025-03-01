@@ -101,11 +101,11 @@ em {
 }
 dfn {
 	color: #9c5555;
-	background: linear-gradient(transparent 80%, #efafd1 80%);
+	background: linear-gradient(transparent 60%, #efafd1 100%);
 }
 cite {
 	color: #246307;
-	background: linear-gradient(transparent 80%, #95db6f 80%);
+	background: linear-gradient(transparent 60%, #95db6f 100%);
 }
 abbr[title] {
 	--border-color: #d51f85;
@@ -207,12 +207,11 @@ nav {
 }
 nav li > span.current {
 	color: var(--color);
-	background: linear-gradient(transparent 80%, var(--bgline) 80%);
-	padding-bottom: .1em;
+	background: linear-gradient(transparent 70%, var(--bgline) 100%);
 }
 a[href].current {
 	color: var(--color);
-	background: linear-gradient(transparent 80%, var(--bgline) 80%);
+	background: linear-gradient(transparent 70%, var(--bgline) 100%);
 	&:not(:active):hover {
 		background: #e3f2db !important;
 	}

@@ -3,7 +3,7 @@ html, body {
 	padding: 0;
 }
 html {
-	font: 100%/1.2 '源ノ角ゴシック','源ノ角ゴシック JP', sans-serif;
+	font: 100%/1.2 sans-serif;
 	font-feature-settings: 'palt';
 }
 body {
