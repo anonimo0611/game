@@ -121,14 +121,17 @@ ul.flex {
 
 /* Relationship navigation */
 nav.rel {
+	margin: 0;
+	position: absolute;
+	z-index: 3;
 	&#rel-top,
 	&#rel-bottom {
 		border: solid 1px var(--border-color);
 		box-sizing: border-box;
 	}
 	&#rel-top {
-		top: 0;
-		left: .25em;
+		top: 1px;
+		left: calc(.25em + 1px);
 		border-left: none;
 		border-top: none;
 		border-radius: 1.5em 0 1.5em 0;
@@ -142,13 +145,10 @@ nav.rel {
 		border-radius: 1.5em 0 1.5em 0;
 		padding: .3em 1.2em .4em;
 	}
-	margin: 0;
-	position: absolute;
-	z-index: 3;
 	ul {
 		display: flex;
 		align-items: center;
-		gap: .6em;
+		gap: .5em;
 	}
 	li {
 		margin: 0;
@@ -158,33 +158,27 @@ nav.rel {
 		text-decoration: none;
 		line-height: 1 !important;
 		padding: 0;
-	}
-	.none, a[href] {
-		display: flex;
+		display: inline-flex;
 		align-items: baseline;
+	}
+	.prev, [rel~=prev] {
+		margin-left: -.2em;
 	}
 	.none.prev::before,
 	.none.next::after,
-	a[href]::before,
-	a[href]::after {
+	a[href][rel~=prev]::before,
+	a[href][rel~=next]::after {
 		content: '';
-		font-size: 50%;
+		display: inline-block;
+		background: var(--marker-color);
+		width:  .9em;
+		height: .8em;
+		mask: no-repeat 0 center/100% var(--marker-url);
 	}
 	.none.prev::before,
 	a[href][rel~=prev]::before {
-		padding-right: .1em;
-		margin-left: -.5em;
-		position: relative;
-		top: -.5ex;
-		content: '◀';
-	}
-	.none.next::after,
-	a[href][rel~=next]::after {
-		padding-left: .1em;
-		margin-right: -.5em;
-		position: relative;
-		top: -.5ex;
-		content: '▶';
+		transform: scale(-1,1);
+		transform-origin: center;
 	}
 }
 nav {
