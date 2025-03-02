@@ -3,7 +3,7 @@ body {
 
 	--toc-svg-url: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><g><g><path class="st0" d="M388.3,201.9h-196c-9.9,0-17.9-9-17.9-20s8-20,17.9-20h196c9.9,0,17.9,9,17.9,20S398.2,201.9,388.3,201.9z"/></g><circle class="st0" cx="131.2" cy="181.9" r="25.5"/><g><path class="st0" d="M388.3,276h-196c-9.9,0-17.9-9-17.9-20s8-20,17.9-20h196c9.9,0,17.9,9,17.9,20S398.2,276,388.3,276z"/></g><circle class="st0" cx="131.2" cy="256" r="25.5"/><g><path class="st0" d="M388.3,350.1h-196c-9.9,0-17.9-9-17.9-20s8-20,17.9-20h196c9.9,0,17.9,9,17.9,20S398.2,350.1,388.3,350.1z"/></g><circle class="st0" cx="131.2" cy="330.1" r="25.5"/></g></svg>')
 }
-li::before {
+li::before, nav {
 	--marker-url: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"\
 	width="18" height="18" viewBox="0 0 93.378 200">\
 	<path d="M821.42,2304.707l-46.688-50-46.691-50v200l46.691-50Z"\
