@@ -98,8 +98,8 @@ button, .dropdown .current {
 		content: '';
 		border: solid #000;
 		border-width: 0 0 .1em .1em;
-		width:  .6em;
-		height: .3em;
+		width:  calc(.6em - 1px);
+		height: calc(.4em - 1.5px);
 		box-sizing: border-box;
 		position: absolute;
 		rotate: -45deg;
