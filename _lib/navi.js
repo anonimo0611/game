@@ -4,6 +4,16 @@ const Header  = dqs('header')
 const NavRoot = dqs('header > nav')
 const NavToc  = dqs('header > nav > .toc')
 
+// ビューポートの高さに応じてヘッダーの高さを調整
+Header && $on('resize', ()=> {
+	if (Toggle.offsetHeight) {
+		Header.style.height = ''
+		return;
+	}
+	const offsetTop = Header.parentNode.offsetTop;
+	Header.style.height = `calc(${innerHeight-offsetTop}px - 3em)`
+}).trigger('resize')
+
 // ナビゲーションのトグルボタン
 !function() {
 	if (!Header) return
@@ -29,57 +39,42 @@ const NavToc  = dqs('header > nav > .toc')
 }()
 
 // スクロール位置の見出しに対応する目次項目の強調
-// および目次項目のクリックで見出しジャンプ
 !function() {
 	if (!Header) return
-	const elements  = [...dqsAll('main,section')].reverse().flatMap(s=> {
-		const  a = s.id && Header.querySelector(`[href="#${s.id}"]`) || null
-		return a ? {s,a}:[]
+	const elements = [...dqsAll('section')].reverse().flatMap(section=> {
+		if (!section.id) return []
+		const  anchor = Header.querySelector(`[href="#${section.id}"]`) || null
+		return anchor? {section,anchor} : []
 	})
-	let lstA = dRoot.scrollTop > 0
-		? null
-		: $(NavToc).find('.to-top [href]').addClass('current').get(0)
-
-	if (elements.length > 1) {
-		const isNearly  = el=> el.s.offsetTop <= dRoot.scrollTop
-		const highlight = ()=> {
-			const el = (dRoot.scrollTop >= dRoot.scrollHeight-innerHeight-5)
-				? elements[0]
-				: elements.find(isNearly)
-			if (!el || el.a == lstA)
-				return
-			if (Header.offsetHeight < Header.scrollHeight)
-				Header.scroll(0, el.a.parentNode.offsetTop)
-			el.a.classList.add('current')
-			lstA && lstA.classList.remove('current')
-			lstA = el.a
-		}
-		$on('scroll resize', highlight)
-		highlight()
-	}
-	// 見出し位置へスクロール
-	$('header').on(ClickEv, '[href^="#"]', e=> {
-		const h = $('#'+e.target.href.split('#')[1]).get(0)
-		if (h) {
-			e.preventDefault()
-			h.scrollIntoView()
-		}
+	if (!elements.length) return
+	let   currentA = null
+	const isNearly = elm=>
+		(elm.section.offsetTop <= dRoot.scrollTop)
+	$on('scroll resize', ()=> {
+		const elm = elements.find(isNearly)
+		if (!elm || elm.anchor == currentA)
+			return
+		if (Header.offsetHeight < Header.scrollHeight)
+			Header.scroll(0, elm.anchor.parentNode.offsetTop)
+		elm.anchor.classList.add('current')
+		currentA && currentA.classList.remove('current')
+		currentA = elm.anchor
 	})
-	// フォーカスされたらナビ表示
-	$('header').on('focus', 'a[href]', ()=> {
-		NavRoot.dataset.hidden = 'false'
-	})
+	.trigger('resize')
 }()
 
-// ビューポートの高さに応じて高さを指定
-Header && $on('resize', ()=> {
-	if (Toggle.offsetHeight) {
-		Header.style.height = ''
-		return;
+// 見出し位置へスクロール
+$('header').on(ClickEv, '[href^="#"]', e=> {
+	const h = $('#'+e.target.href.split('#')[1]).get(0)
+	if (h) {
+		e.preventDefault()
+		h.scrollIntoView()
 	}
-	const offsetTop = Header.parentNode.offsetTop;
-	Header.style.height = `calc(${innerHeight-offsetTop}px - 3em)`
-}).trigger('resize')
+})
+// フォーカスされたらナビ表示
+$('header').on('focus', 'a[href]', ()=> {
+	NavRoot.dataset.hidden = 'false'
+})
 
 // 見出しへのリンクをコピー
 $('[href^="#"].fragment').on(ClickEv, e=> {
