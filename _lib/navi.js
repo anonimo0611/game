@@ -26,7 +26,7 @@ const NavToc  = dqs('header > nav > .toc')
 			&& (NavRoot.dataset.hidden = true)
 			&& (Toggle.title = prif+suff[1])
 	})
-}();
+}()
 
 // スクロール位置の見出しに対応する目次項目の強調
 // および目次項目のクリックで見出しジャンプ
@@ -64,7 +64,7 @@ const NavToc  = dqs('header > nav > .toc')
 			e.preventDefault()
 			h.scrollIntoView()
 		}
-	});
+	})
 	// フォーカスされたらナビ表示
 	$('header').on('focus', 'a[href]', ()=> {
 		NavRoot.dataset.hidden = 'false'
