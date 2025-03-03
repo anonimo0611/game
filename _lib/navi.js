@@ -1,100 +1,95 @@
-﻿'use strict';
-{
-	const _click   = !window.ontouchstart ? 'click' : 'touchend';
-	const [$w,$d]  = [$(window),$(document)];
-	const rootElem = document.documentElement;
-	const toggle   = document.createElement('button');
-	const dqs      = sel=> document.querySelector(sel);
-	const dqsAll   = sel=> document.querySelectorAll(sel);
-	const header   = dqs('header');
-	const navRoot  = dqs('header > nav');
-	const navToc   = dqs('header > nav > .toc');
+﻿const ClickEv = window.ontouchstart? 'touchend' : 'click'
+const Toggle  = document.createElement('button')
+const Header  = dqs('header')
+const NavRoot = dqs('header > nav')
+const NavToc  = dqs('header > nav > .toc')
 
-	(function() { // ナビゲーションのトグルボタン
-		if (!header) return
-		const ttlPrif = 'ナビゲーションを';
-		const ttlSuff = '隠す|表示'.split('|');
-		toggle.id     = 'nav-toggle';
-		toggle.title  = ttlPrif + ttlSuff[1];
-		toggle.textContent = toggle.title;
-		toggle.addEventListener(_click, function() {
-			const data   = navRoot.dataset.hidden;
-			const hidden = !data || data == 'true';
-			toggle.textContent = toggle.title;
-			toggle.title = ttlPrif + ttlSuff[Number(!hidden)];
-			header.dataset.hidden = hidden ? false : true;
-			navRoot.dataset.hidden = hidden ? false : true;
-		});
-		header.prepend(toggle);
-		$w.on(_click, e=> {
-			(e.target != toggle) && !e.target.closest('header > nav')
-				&& (navRoot.dataset.hidden = true)
-				&& (toggle.title = ttlPrif + ttlSuff[1]);
-		})
-	})();
+// ナビゲーションのトグルボタン
+!function() {
+	if (!Header) return
+	const prif = 'ナビゲーションを'
+	const suff = ['隠す','表示']
+	Toggle.id     = 'nav-toggle'
+	Toggle.title  = prif+suff[1]
+	Toggle.textContent = Toggle.title
+	Toggle.addEventListener(ClickEv, ()=> {
+		const data   = NavRoot.dataset.hidden
+		const hidden = !data || data == 'true'
+		Toggle.textContent = Toggle.title
+		Toggle.title = prif+suff[+!hidden]
+		Header.dataset.hidden  = !hidden
+		NavRoot.dataset.hidden = !hidden
+	})
+	Header.prepend(Toggle)
+	$on(ClickEv, e=> {
+		(e.target != Toggle) && !e.target.closest('header > nav')
+			&& (NavRoot.dataset.hidden = true)
+			&& (Toggle.title = prif+suff[1])
+	})
+}();
 
-	// スクロール位置の見出しセクションに対応する目次項目を強調する
-	(function() {
-		if (!header) return;
-		const getScrTop = _=> rootElem.scrollTop;
-		const isNearly  = e=> e.s.offsetTop <= getScrTop();
-		const elements  = [...dqsAll('main,section')].reverse().flatMap(s=> {
-				const  a = s.id && header.querySelector(`[href="#${s.id}"]`) || null;
-				return a ? {s,a} : [];
-			});
-		let lstA = null;
-		function highlight() {
-			const e = (getScrTop() >= rootElem.scrollHeight-innerHeight - 5)
+// スクロール位置の見出しに対応する目次項目の強調
+// および目次項目のクリックで見出しジャンプ
+!function() {
+	if (!Header) return
+	const elements  = [...dqsAll('main,section')].reverse().flatMap(s=> {
+		const  a = s.id && Header.querySelector(`[href="#${s.id}"]`) || null
+		return a ? {s,a}:[]
+	})
+	let lstA = dRoot.scrollTop > 0
+		? null
+		: $(NavToc).find('.to-top [href]').addClass('current').get(0)
+
+	if (elements.length > 1) {
+		const isNearly  = el=> el.s.offsetTop <= dRoot.scrollTop
+		const highlight = ()=> {
+			const el = (dRoot.scrollTop >= dRoot.scrollHeight-innerHeight-5)
 				? elements[0]
-				: elements.find(isNearly);
-			if (e && e.a != lstA) {
-				lstA && lstA.classList.remove('current');
-				if (header.offsetHeight < header.scrollHeight)
-					header.scroll(0, e.a.parentNode.offsetTop);
-				e.a.classList.add('current');
-				lstA = e.a;
-			}
+				: elements.find(isNearly)
+			if (!el || el.a == lstA)
+				return
+			if (Header.offsetHeight < Header.scrollHeight)
+				Header.scroll(0, el.a.parentNode.offsetTop)
+			el.a.classList.add('current')
+			lstA && lstA.classList.remove('current')
+			lstA = el.a
 		}
-		$('header').on(_click, 'a[href^="#"]', function(e) { // 見出し位置へスクロール
-			const h = $('#'+this.href.split('#')[1]).get(0);
-			if (!h) return;
-			e.preventDefault();
-			h.scrollIntoView();
-		});
-		$('header').on('focus', 'a[href]', function(e) { // フォーカスされたらナビ表示
-			navRoot.dataset.hidden = 'false';
-		});
-		if (elements.length == 1) return;
-		if (rootElem.scrollTop == 0) {
-			lstA = $(navToc).find('.to-top a').addClass('current').get(0);
-		}
-		$d.on('scroll', highlight);
-		$w.on('resize', highlight).trigger('resize');
-	})();
-
-	// ビューポートの高さに応じて高さを指定
-	if (header) {
-		const onResize = ()=> {
-			if (toggle.offsetHeight) {
-				header.style.height = '';
-				return;
-			}
-			const offsetTop = header.parentNode.offsetTop;
-			header.style.height = `calc(${innerHeight - offsetTop}px - 3em)`;
-		}
-		$w.on('resize', onResize).trigger('resize');
+		$on('scroll resize', highlight)
+		highlight()
 	}
-
-	// 見出し位置へのリンクをコピー
-	$w.on(_click, e=> {
-		if (!document.execCommand || e.target.tagName != 'A') return;
-		if (!e.target.matches('[href^="#"].fragment')) return;
-		e.preventDefault();
-		e.target.scrollIntoView();
-		const input = $(`<input type="text" value="${e.target.href}"
-			style="position:absolute;left:-1000px;top:-1000px">`).get(0);
-		document.body.appendChild(input);
-		input.select();document.execCommand('copy');
-		input.remove();
+	// 見出し位置へスクロール
+	$('header').on(ClickEv, '[href^="#"]', e=> {
+		const h = $('#'+e.target.href.split('#')[1]).get(0)
+		if (h) {
+			e.preventDefault()
+			h.scrollIntoView()
+		}
 	});
-}
+	// フォーカスされたらナビ表示
+	$('header').on('focus', 'a[href]', ()=> {
+		NavRoot.dataset.hidden = 'false'
+	})
+}()
+
+// ビューポートの高さに応じて高さを指定
+Header && $on('resize', ()=> {
+	if (Toggle.offsetHeight) {
+		Header.style.height = ''
+		return;
+	}
+	const offsetTop = Header.parentNode.offsetTop;
+	Header.style.height = `calc(${innerHeight-offsetTop}px - 3em)`
+}).trigger('resize')
+
+// 見出しへのリンクをコピー
+$('[href^="#"].fragment').on(ClickEv, e=> {
+	if (!document.execCommand) return
+	e.preventDefault()
+	e.target.scrollIntoView()
+	const href  = e.target.href
+	const style = 'style="position:absolute;left:-1000px;top:-1000px"'
+	const input = $(`<input type="text" value="${href}" ${style}>`).get(0)
+	document.body.appendChild(input)
+	input.select();document.execCommand('copy')
+	input.remove()
+});
