@@ -147,9 +147,9 @@ export const Game = new class {
 		}
 	}
 	#update() {
-		PtsMgr.update()
 		Player.instance.update()
 		GhsMgr.update()
+		PtsMgr.update()
 		Fruit.update()
 		State.isTitle   && Attract.Timer.update()
 		State.isAttract && Attract.update()

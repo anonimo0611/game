@@ -83,4 +83,4 @@ export const Maze = new class {
 		if (State.isFlashMaze) return
 		cvsFillRect(Ctx)(13*T, 13.58*T, T*2, T/4, Color.Door)
 	}
-}, {drawDot}=Object.freeze(Maze)
+}, {drawDot}=freeze(Maze)
