@@ -6,7 +6,6 @@ import {Dir}       from '../_lib/direction.js'
 import PacSprite   from '../src/pacman/pac_sprite.js'
 import {Ghost}     from './actor.js'
 import {T,S,ghost} from './_constants.js'
-import {PacScale,TileSize} from '../src/_constants.js'
 export const {cvs:pvCvs}= canvas2D('previewCvs', TileSize*3, TileSize*2)
 
 /** @enum {number} */

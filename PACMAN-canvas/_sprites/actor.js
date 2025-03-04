@@ -1,5 +1,4 @@
 import {Dir}       from '../_lib/direction.js'
-import {Color}     from '../src/_constants.js'
 import GhsSprite   from '../src/ghosts/ghs_sprite.js'
 import GhsSpriteCb from '../src/ghosts/ghs_sprite_cb.js'
 
