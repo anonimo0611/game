@@ -10,6 +10,7 @@
 	<script src="../_lib/__util.js"></script>
 	<script src="../_lib/_extjq.js"></script>
 	<script src="../_lib/_canvas.js"></script>
+	<script src="../src/_constants.js" defer></script>
 	<script src="drag_scroll.js" type="module"></script>
 	<script src="_main.js" type="module"></script>
 </head>
@@ -27,7 +28,7 @@
 				<div class="dropdown menu" id="animSelect">
 					<div class="current" tabindex="0"></div>
 					<menu class="dropdown-list">
-					<li data-val="-1">——  Select Actor ——</li>
+					<li data-val="-1">–––  Select Actor –––</li>
 					<li data-val="0:0">PAC-MAN</li>
 					<li data-val="0:1">PAC-MAN(losing)</li>
 					<li data-val="1:0">AKABEI</li>
@@ -58,7 +59,7 @@
 		</div>
 		<div>
 			<label>Size:
-				<input type="range" id="sizeRng" style="width:85px" value="80" min="40" max="170" step="2">
+				<input type="range" id="sizeRng" style="width:100px" value="80" min="40" max="170" step="2">
 				<output for="sizeRng">80</output>px
 			</label>
 		</div>
