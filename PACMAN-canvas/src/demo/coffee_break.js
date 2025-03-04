@@ -6,7 +6,6 @@ import {State}  from '../_state.js'
 import {Pacman} from '../pacman/_pacman.js'
 import {Ghost}  from '../ghosts/_ghost.js'
 import Sprite   from '../ghosts/ghs_sprite_cb.js'
-import {CvsW,CvsH,TileSize as T} from '../_constants.js'
 
 const ModSymbol = Symbol()
 const IntermissionMap = new Map([[2,1], [5,2], [9,3]])

@@ -2,7 +2,6 @@ import {Sound}   from '../../_snd/sound.js'
 import {Ticker}  from '../../_lib/timer.js'
 import {Timer}   from '../../_lib/timer.js'
 import BaseState from '../../_lib/state.js'
-import {GhsType} from '../_constants.js'
 import {Game}    from '../_main.js'
 import {State}   from '../_state.js'
 import {Ctrl}    from '../control.js'
@@ -10,7 +9,6 @@ import {Player}  from '../pacman/_pacman.js'
 import {Maze}    from '../maze.js'
 import {Ghost}   from './_ghost.js'
 import {Target}  from './show_targets.js'
-import {GhsStep,TileSize as T} from '../_constants.js'
 
 /** @type {Ghost[]} */
 const Ghosts = []

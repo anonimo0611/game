@@ -1,25 +1,25 @@
-import {Cols,Rows} from './_map_data.js'
-export * from './_map_data.js'
-export const PacScale  = 0.9
-export const GhsScale  = 1.1
-export const TileSize  = +$(dRoot).css('--tile-size')
-export const PacRadius = TileSize * PacScale
-export const GhsType   = freeze({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4})
-export const GhsNames  = freeze(keys(GhsType).slice(0,-1))
+const Cols      = 28
+const Rows      = 34
+const PacScale  = 0.9
+const GhsScale  = 1.1
+const TileSize  = +$(dRoot).css('--tile-size'), T=TileSize
+const BaseStep  = +(T/4.5).toFixed(1)
+const PacRadius = T*PacScale
+const GhsType   = freeze({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4})
+const GhsNames  = freeze(keys(GhsType).slice(0,-1))
 
-export const [Bg,Cvs,Ctx,CvsW,CvsH]= [
-	canvas2D(null ,TileSize*Cols,TileSize*Rows),...
-	canvas2D('cvs',TileSize*Cols,TileSize*Rows).vals
+const [Bg,Cvs,Ctx,CvsW,CvsH]= [
+	canvas2D(null ,T*Cols,T*Rows),...
+	canvas2D('cvs',T*Cols,T*Rows).vals
 ]
-const BaseStep = +(TileSize/4.5).toFixed(1)
-export const PacStep = freeze(new class {
+const PacStep = freeze(new class {
 	Base     = BaseStep
 	SlowBase = 0.98
 	Eating   = this.Base * 0.86
 	EneEat   = this.Base * 0.95
 	Energize = this.Base * 1.10
 })
-export const GhsStep = freeze(new class {
+const GhsStep = freeze(new class {
 	Base     = BaseStep  * 1.07
 	Idle     = this.Base * 0.50
 	GoOut    = this.Base * 0.50
@@ -28,7 +28,7 @@ export const GhsStep = freeze(new class {
 	Escape   = this.Base * 1.40
 	Return   = this.Escape
 })
-export const Color = freeze(new class {
+const Color = freeze(new class {
 	Grid      = '#F00'
 	Dot       = '#FFB8AE'
 	Wall      = '#55E'

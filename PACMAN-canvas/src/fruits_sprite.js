@@ -1,4 +1,3 @@
-import {Ctx,TileSize} from './_constants.js'
 function cherry(ctx=Ctx) {
 	function fruit(x,y, idx) {
 		ctx.save()
@@ -275,7 +274,7 @@ const functions = freeze([
 ])
 { // Create a sprite sheet
 	const Menu = $byId('LevelMenu')
-	const Size = +Menu.css('--scale') * TileSize
+	const Size = +Menu.css('--scale') * T
 	const {cvs,ctx}=canvas2D(null, Size*8, Size)
 	functions.forEach((fn,i)=> {
 		ctx.save()

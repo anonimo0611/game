@@ -1,9 +1,9 @@
+import './panel.js'
 import {Confirm}   from '../_lib/confirm.js'
 import * as Menu   from './_menu.js'
 import {LevelMenu} from './_menu.js'
 import {State}     from './_state.js'
 import {drawText}  from './message.js'
-import {Ctx,Color,Cols,Rows,TileSize as T} from './_constants.js'
 
 export const Form = document.forms[0]
 export const Ctrl = new class {
@@ -105,19 +105,3 @@ export const Ctrl = new class {
 		$('#startBtn').on('click', State.switchToStart)
 	}
 }
-!function() { // Setup Panels
-	$on('Start', hideAll) && hideAll()
-	dqsAll('.panelBtn').forEach(btn=> {
-		$on('click',      e=> State.isTitle && hide(btn,e))
-		$(btn).on('click',e=> State.isTitle && show(btn,e))
-	})
-	function show(btn) {
-		$('.panel').toggle()
-		$(btn).toggleClass('active', $(btn.value).is(':visible'))
-	}
-	function hide(btn, e) {
-		if (btn == e.target || e.target.closest(btn.value)) return
-		$(btn.value).hide() && $(btn).removeClass('active')
-	}
-	function hideAll() {$('.panel').hide()}
-}()

@@ -3,9 +3,8 @@ import {Vec2}  from '../_lib/vec2.js'
 import {Dir,L} from '../_lib/direction.js'
 import {State} from './_state.js'
 import {Maze}  from './maze.js'
-import {Cols}  from './_constants.js'
-import {Ctx,CvsW as CW,TileSize as T} from './_constants.js'
 
+const CW = CvsW
 export class Actor {
 	#x = 0
 	#y = 0

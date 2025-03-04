@@ -6,7 +6,6 @@ import {Score}  from './score.js'
 import {GhsMgr} from './ghosts/_system.js'
 import {Fruit}  from './fruit.js'
 import Sprite   from './points_sprite.js'
-import {CvsW,Ctx,TileSize as T} from './_constants.js'
 
 /** @type {Map<any, Points>} */
 const PtsMap = new Map()

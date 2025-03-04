@@ -4,7 +4,6 @@ import {L,R}    from '../_lib/direction.js'
 import {Rect}   from '../_lib/rect.js'
 import {State}  from './_state.js'
 import {Form}   from './control.js'
-import {Bg,Ctx,MapArr,Cols,Color,TileSize as T} from './_constants.js'
 
 const WallSet  = new Set()
 const DotSet   = new Set()

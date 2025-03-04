@@ -7,7 +7,6 @@ import {Maze}   from '../maze.js'
 import {Player} from '../pacman/_pacman.js'
 import {GhsMgr} from '../ghosts/_system.js'
 import {Ghost}  from './_ghost.js'
-import {Ctx,Color,GhsType,TileSize as T} from '../_constants.js'
 
 export const Target = new class {
 	/** @param {Ghost[]} ghosts */

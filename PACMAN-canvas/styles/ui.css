@@ -42,6 +42,9 @@ dialog {
 	position: absolute;
 	z-index: 100;
 }
+[data-loaded=false] .panel {
+	visibility: hidden;
+}
 
 form, dialog {
 	--color-label:        #6FD;

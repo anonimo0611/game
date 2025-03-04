@@ -2,7 +2,6 @@ import {Vec2}    from '../../_lib/vec2.js'
 import {Dir}     from '../../_lib/direction.js'
 import {GlowCvs} from './glow.js'
 import CBSprite  from './ghs_sprite_cb.js'
-import {Ctx,Color,TileSize,GhsNames,GhsScale} from '../_constants.js'
 
 const EyesEnum = freeze({Up:0,Down:1,Left:2,Right:2,LowerR:3})
 
@@ -28,7 +27,7 @@ export default class {
 		aIdx       = 0,
 		spriteIdx  = 0,
 		orient     = Dir.Left,
-		size       = TileSize*2,
+		size       = T*2,
 		frightened = false,
 		bitten     = false,
 		escaping   = false,
@@ -167,7 +166,7 @@ export default class {
 		ctx.lineCap = ctx.lineJoin = 'round'
 		ctx.stroke()
 	}
-	#angryGlow(x=0, y=0, angry=false, size=TileSize*2) {
+	#angryGlow(x=0, y=0, angry=false, size=T*2) {
 		if (!angry) return
 		const {width:W}=GlowCvs, S=W*1.2
 		Ctx.save()

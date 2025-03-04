@@ -1,6 +1,4 @@
-import * as Constant from './_constants.js'
-const {Bg,Bg:{ctx},MapArr,Color,Cols:W,TileSize:T}= Constant
-
+const {ctx}=Bg, W=Cols
 export const MazeWall = new class {
 	#drawCorner(cornerIdx, x, y, type=0) {
 		ctx.save()

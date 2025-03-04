@@ -1,6 +1,5 @@
 'use strict'
-const
-canvas2D = (arg, _w=null, _h=_w)=> {
+const canvas2D = (arg, _w, _h=_w)=> {
 	let cvs = document.createElement('canvas')
 	if (byId(arg) instanceof HTMLCanvasElement) cvs = byId(arg)
 	const [w,h]= setCanvasSize(cvs)(_w,_h)
@@ -28,13 +27,13 @@ cvsFillRect = ctx=> (x, y, w, h, fill)=> {
 		: ctx.fillRect(x, y, w, h)
 	ctx.restore()
 },
-cvsFillCircle = ctx=> (x, y, r, fill)=> {
+cvsFillCircle = ctx=> (x, y, radius, fill)=> {
 	ctx.save()
 	ctx.beginPath()
 	fill === null
 		? (ctx.globalCompositeOperation = 'destination-out')
 		: (ctx.fillStyle = fill)
-	ctx.arc(x, y, r, 0, PI*2)
+	ctx.arc(x, y, radius, 0, PI*2)
 	ctx.fill()
 	ctx.restore()
 },

@@ -4,7 +4,6 @@ import {Maze}    from '../maze.js'
 import {Player}  from '../pacman/_pacman.js'
 import {GhsMgr}  from './_system.js'
 import {Ghost}   from './_ghost.js'
-import {TileSize as T} from '../_constants.js'
 
 class Akabei extends Ghost {
 	constructor() {

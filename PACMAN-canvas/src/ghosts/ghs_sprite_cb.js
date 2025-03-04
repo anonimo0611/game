@@ -1,5 +1,4 @@
 import {Vec2} from '../../_lib/vec2.js'
-import {Cvs,Ctx,Color,GhsScale,TileSize as T} from '../_constants.js'
 
 export default class {
 	/** @param {CanvasRenderingContext2D} ctx */

@@ -10,7 +10,6 @@ import {Ghost}        from '../ghosts/_ghost.js'
 import {GhsMgr}       from '../ghosts/_system.js'
 import {FrightMode}   from '../ghosts/_system.js'
 import {AttractTimer} from './_run_timer.js'
-import {CvsW,Ctx,Color,GhsType,TileSize as T} from '../_constants.js'
 
 /** @type {?Attract} */
 let   _attract  = null

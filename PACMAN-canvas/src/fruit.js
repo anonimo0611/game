@@ -8,7 +8,6 @@ import {Maze}   from './maze.js'
 import {PtsMgr} from './points.js'
 import {Player} from './pacman/_pacman.js'
 import Sprites  from './fruits_sprite.js'
-import {CvsW,Bg,Ctx,DotMax,TileSize as T} from './_constants.js'
 
 // The fruit appear after 70 or 170 dots are cleared
 const appearSet  = new Set([70,170])

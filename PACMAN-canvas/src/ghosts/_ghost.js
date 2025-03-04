@@ -13,7 +13,6 @@ import {Player}  from '../pacman/_pacman.js'
 import Sprite    from './ghs_sprite.js'
 import * as Sys  from './_system.js'
 import {GhsMgr}  from './_system.js'
-import {CvsW,Ctx,GhsType,GhsStep,TileSize as T} from '../_constants.js'
 
 const compareDist = (a,b)=>
 	(a.dist == b.dist)? (a.index-b.index) : (a.dist-b.dist)
@@ -191,11 +190,11 @@ export class Ghost extends Actor {
 		this.orient = this.#getNextDir()
 	}
 	#getNextDir(target=this.targetTile) {
-		const test = this.getAdjTile(this.dir)
+		const tile = this.getAdjTile(this.dir)
 		const dirs = [U,L,D,R].flatMap((dir,index)=> {
-			const  tile = this.getAdjTile(dir,1,test)
-			const  dist = tile.distance(target)
-			return this.#isAllowDir(dir,tile)? {index,dir,dist}:[]
+			const  test = this.getAdjTile(dir,1,tile)
+			const  dist = test.distance(target)
+			return this.#isAllowDir(dir,test)? {index,dir,dist}:[]
 		})
 		return this.frightened
 			? randChoice(dirs).dir

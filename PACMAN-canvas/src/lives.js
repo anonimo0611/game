@@ -3,7 +3,6 @@ import {State} from './_state.js'
 import {Ctrl}  from './control.js'
 import {Form}  from './control.js'
 import Sprite  from './pacman/pac_sprite.js'
-import {Bg,TileSize as T} from './_constants.js'
 
 export const Lives = function() {
 	let left = 0

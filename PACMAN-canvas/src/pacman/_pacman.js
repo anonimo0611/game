@@ -12,7 +12,8 @@ import {Maze}    from '../maze.js'
 import {Actor}   from '../actor.js'
 import {GhsMgr}  from '../ghosts/_system.js'
 import Sprite    from './pac_sprite.js'
-import {Ctx,PacRadius,PacStep as Step,TileSize as T} from '../_constants.js'
+
+const Step = PacStep
 
 export const Player = function() {
 	/** @type {?PlayablePacman} */
