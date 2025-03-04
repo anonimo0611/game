@@ -33,7 +33,11 @@ const isKeyboardEvent = e=>
 const isCombinationKey = e=>
 	isKeyboardEvent(e) && !!(e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
-const dRoot  = document.documentElement
-const dqs    = sel=> document.querySelector(sel)
+const dRoot = document.documentElement
+const byId  = id=> document.getElementById(id)
+
+/** @return {?HTMLElement} */
+const dqs = sel=> document.querySelector(sel)
+
+/** @return {NodeListOf<HTMLElement>} */
 const dqsAll = sel=> document.querySelectorAll(sel)
-const byId   = id => document.getElementById(id)
