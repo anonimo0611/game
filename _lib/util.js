@@ -10,10 +10,14 @@ const isNum  = arg => typeof(arg) === 'number' && !isNaN(arg)
 const isObj  = arg => typeof(arg) === 'object' && arg !== null && !isArray(arg)
 const isFun  = arg => typeof(arg) === 'function'
 
-const dRoot  = document.documentElement
-const dqs    = sel => document.querySelector(sel)
-const dqsAll = sel => document.querySelectorAll(sel)
-const byId   = id  => document.getElementById(id)
+const dRoot = document.documentElement
+const byId  = id=> document.getElementById(id)
+
+/** @returns {?HTMLElement} */
+const dqs = sel=> document.querySelector(sel)
+
+/** @return {NodeListOf<HTMLElement>} */
+const dqsAll = sel=> document.querySelectorAll(sel)
 
 const between    = (n, min, max)  => (n >= min && n <= max)
 const clamp      = (n,_min,_max)  => min(max(n,_min), _max)
