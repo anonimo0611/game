@@ -1,7 +1,10 @@
-﻿const Tbl = document.querySelector('#table-a1')
+﻿/** @type {HTMLTableElement} Tbl */
+const Tbl = document.querySelector('#table-a1')
+/** @type {HTMLDivElement} Bal */
 const Bal = $('<div id="a1-balloon" class="balloon"></div>').hide().get(0)
 
 function balloon(e) {
+	/** @type {HTMLTableCellElement} Tbl */
 	const cell     = e.target.closest('td')
 	const cellIdx  = cell.cellIndex
 	const rowCell  = cell.parentNode.cells[0]
