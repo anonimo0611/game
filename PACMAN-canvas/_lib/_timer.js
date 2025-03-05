@@ -13,7 +13,7 @@ const Util = freeze(new class {
 	get count()       {return _counter}
 	get elapsedTime() {return _counter*this.Interval}
 	get pausedCount() {return _pausedCounter}
-	get running()     {return _ticker instanceof this}
+	get running()     {return _ticker instanceof Ticker}
 
 	/** @param {...function|undefined} args */
 	set(...args) {new Ticker(...args)}
