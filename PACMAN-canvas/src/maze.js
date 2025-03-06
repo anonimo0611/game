@@ -1,6 +1,7 @@
-import {Rect}  from '../_lib/rect.js'
-import {State} from './_state.js'
-import {Form}  from './control.js'
+import {Rect}   from '../_lib/rect.js'
+import {State}  from './_state.js'
+import {MapArr} from './_map_data.js'
+import {Form}   from './control.js'
 
 const WallSet  = new Set()
 const DotSet   = new Set()
@@ -42,6 +43,7 @@ export const Maze = new class {
 	}
 	get dotsLeft() {return DotSet.size}
 
+	DotMax      = MapArr.filter(s=> /[.O]/.test(s)).length
 	PowDot      = freeze(new PowDot)
 	Tunnel      = freeze(new Tunnel)
 	PenEntrance = Vec2(13, 12).freeze()

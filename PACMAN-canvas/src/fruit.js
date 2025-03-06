@@ -39,7 +39,7 @@ export const Fruit = new class {
 		_tgtDisp = State.isTitle
 	}
 	#dotEaten() {
-		if (!AppearSet.has(DotMax - Maze.dotsLeft)) return
+		if (!AppearSet.has(Maze.DotMax - Maze.dotsLeft)) return
 		_tgtDisp = true
 		// The fruit disappearing is between 9 and 10 seconds
 		const {speedRate:rate}=Game, fadeDur=300

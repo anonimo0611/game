@@ -1,4 +1,6 @@
 const {ctx}=Bg, W=Cols
+
+import {MapArr} from './_map_data.js'
 export const MazeWall = new class {
 	#drawCorner(cornerIdx, x, y, type=0) {
 		ctx.save()
