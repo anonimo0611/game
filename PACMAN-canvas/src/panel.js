@@ -1,7 +1,7 @@
 import {State} from './_state.js'
 new class {
     constructor() {
-        $on('Title Start', ()=> $('.panel').hide())
+        $on('load Start', ()=> $('.panel').hide())
         $('.panelBtn').each((_,btn)=> {
             $on('click',      e=> this.hide(btn,e))
             $(btn).on('click',e=> this.show(btn,e))
