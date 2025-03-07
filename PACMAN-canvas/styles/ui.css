@@ -44,6 +44,7 @@ dialog {
 }
 [data-loaded=false] .panel {
 	visibility: hidden;
+	pointer-events: none;
 }
 
 form, dialog {
