@@ -8,7 +8,7 @@ const WallSet  = new Set()
 const PowMap   = new Map()
 const PenRect  = new Rect(10,13, 7,4)
 const PenOuter = new Rect( 9,12, 9,6)
-const isDotChip = str=> /[.O]/.test(str)
+const isDotStr = str=> /[.O]/.test(str)
 
 class PowDot {
 	#disp = 1
@@ -45,7 +45,7 @@ export const Maze = new class {
 	}
 	get dotsLeft() {return DotSet.size}
 
-	DotMax      = MapArr.filter(isDotChip).length
+	DotMax      = MapArr.filter(isDotStr).length
 	PowDot      = freeze(new PowDot)
 	Tunnel      = freeze(new Tunnel)
 	PenEntrance = Vec2(13, 12).freeze()
@@ -61,7 +61,7 @@ export const Maze = new class {
 		return t.y < 10 && PenOuter.contains(pos)? Vec2(t).setX(x) : Vec2(t)
 	}
 	#setDot(chip, i) {
-		if (!isDotChip(chip)) return
+		if (!isDotStr(chip)) return
 		const v = Vec2(i%Cols, i/Cols|0)
 		Maze.clearBgDot({tileIdx:i,tilePos:v})
 		DotSet.add(i)
