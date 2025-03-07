@@ -3,11 +3,12 @@ import {State}  from './_state.js'
 import {MapArr} from './_map_data.js'
 import {Form}   from './control.js'
 
-const WallSet  = new Set()
 const DotSet   = new Set()
+const WallSet  = new Set()
 const PowMap   = new Map()
 const PenRect  = new Rect(10,13, 7,4)
 const PenOuter = new Rect( 9,12, 9,6)
+const isDotChip = str=> /[.O]/.test(str)
 
 class PowDot {
 	#disp = 1
@@ -37,13 +38,14 @@ class Tunnel {
 export const Maze = new class {
 	static {$ready(this.setup)}
 	static setup() {
-		$on('Title NewLevel', Maze.#resetDots)
-		$(Form.powChk).on('change', Maze.#resetDots)
-		MapArr.forEach((c,i)=> !/[.O\x20]/.test(c) && WallSet.add(i))
+		MapArr.forEach((c,i)=> /[^.O\s]/.test(c) && WallSet.add(i))
+		const resetDots = ()=> MapArr.forEach(Maze.#setDot)
+		$on('Title NewLevel', resetDots)
+		$(Form.powChk).on('change', resetDots)
 	}
 	get dotsLeft() {return DotSet.size}
 
-	DotMax      = MapArr.filter(s=> /[.O]/.test(s)).length
+	DotMax      = MapArr.filter(isDotChip).length
 	PowDot      = freeze(new PowDot)
 	Tunnel      = freeze(new Tunnel)
 	PenEntrance = Vec2(13, 12).freeze()
@@ -58,10 +60,8 @@ export const Maze = new class {
 		const  x = (pos.x > Cols/2) && (t.x > Cols/2) ? 21:6
 		return t.y < 10 && PenOuter.contains(pos)? Vec2(t).setX(x) : Vec2(t)
 	}
-	#resetDots() {
-		MapArr.forEach((c,i)=> /[.O]/.test(c) && Maze.#setDot(c,i))
-	}
 	#setDot(chip, i) {
+		if (!isDotChip(chip)) return
 		const v = Vec2(i%Cols, i/Cols|0)
 		Maze.clearBgDot({tileIdx:i,tilePos:v})
 		DotSet.add(i)
