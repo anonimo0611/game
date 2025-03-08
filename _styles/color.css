@@ -168,7 +168,8 @@ a:link, a:visited {
 }
 a[href] {
 	--focused-bgcolor: #fbdff3;
-	text-decoration-color: #e9a997;
+	--underline-color: #e9a997;
+	text-decoration-color: var(--underline-color);
 	&:hover {
 		background-color: #ffdc68;
 	}
