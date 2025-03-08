@@ -45,6 +45,6 @@ function balloon(e) {
 		!e.target.closest(`#${Tbl.id} td`) && $(Bal).hide()
 	}
 	Tbl.parentNode.insertBefore(Bal, Tbl.nextSibling)
-	$(Tbl, 'td').on(ClickEv, balloon)
+	$('td').on(ClickEv, balloon)
 	$(window).on(ClickEv, hide)
 }
