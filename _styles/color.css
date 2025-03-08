@@ -65,8 +65,8 @@ table {
 	thead, tbody th, tfoot {
 		background-color: #e0e0e0;
 	}
-	colgroup.hlight    {background-color: #f9f6ef}
-	thead th.hlight    {background-color: #dad5cc}
+	col.hlight         {background-color: #fbf0d7}
+	thead th.hlight    {background-color: #e4d7bd}
 	tbody tr:hover     {--hilight-bgcolor:#f5dfdd;}
 	th:hover, td:hover {--hilight-bgcolor:#e5c1d4;}
 	td:empty::before   {color: #555}
