@@ -3,6 +3,17 @@
 ul.appendix li {
 	margin: 1em 0;
 }
+a[href="#easter-eggs_tricks"] {
+	display: block;
+	text-decoration-color: transparent;
+	span {
+		text-decoration-color: var(--underline-color);
+	}
+	span + span {
+		display: block;
+		margin-left: 1em;
+	}
+}
 
 /* Appendix: A.1 */
 #a1 {
