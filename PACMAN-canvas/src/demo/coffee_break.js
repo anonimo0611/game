@@ -17,8 +17,8 @@ export class CBreak {
 		CBreak.#scene = new [Scene1,Scene2,Scene3][num-1]
 		return true
 	}
-	static update() {this.#scene?.update(this.#scene)}
-	static draw()   {this.#scene?.draw(this.#scene)}
+	static update() {this.#scene?.update()}
+	static draw()   {this.#scene?.draw()}
 
 	pacman  = new Pacman
 	akabei  = new Ghost
@@ -68,7 +68,8 @@ class Scene1 extends CBreak {
 		if (Ticker.elapsedTime > 400)
 			this.akabei.x += this.akaVelX
 	}
-	update({pacman,akabei}=this) {
+	update() {
+		const {pacman,akabei}= this
 		this.moveAkabei()
 		switch (pacman.dir) {
 		case L:
@@ -85,7 +86,8 @@ class Scene1 extends CBreak {
 			break
 		}
 	}
-	draw({pacman,frightened}=this) {
+	draw() {
+		const {pacman,frightened}= this
 		this.drawAkabei({frightened})
 		this.drawPacman(pacman.dir == R ? 4:1)
 	}
@@ -124,7 +126,8 @@ class Scene2 extends CBreak {
 			this.end()
 		}
 	}
-	draw({sprite:sp, akabei:aka, akaVelX,akaEyes,ripped}=this) {
+	draw() {
+		const {sprite:sp, akabei:aka, akaVelX,akaEyes,ripped}= this
 		sp.drawStake()
 		ripped && sp.drawOffcut()
 		const aIdx = ripped? 0 : (this.counter? 1 : aka.aIdx)
