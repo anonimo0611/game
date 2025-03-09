@@ -128,9 +128,9 @@ class Scene2 extends CBreak {
 	}
 	draw() {
 		const {sprite:sp, akabei:aka, akaVelX,akaEyes,ripped}= this
+		const aIdx = ripped? 0 : (this.counter? 1 : aka.aIdx)
 		sp.drawStake()
 		ripped && sp.drawOffcut()
-		const aIdx = ripped? 0 : (this.counter? 1 : aka.aIdx)
 		this.drawPacman()
 		this.drawAkabei({aIdx,ripped,orient:akaEyes})
 		if (aka.x + akaVelX < sp.CaughtX && !ripped) {
