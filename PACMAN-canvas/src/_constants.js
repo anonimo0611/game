@@ -2,9 +2,9 @@ const Cols      = 28
 const Rows      = 34
 const PacScale  = 0.9
 const GhsScale  = 1.1
-const TileSize  = +$(dRoot).css('--tile-size'), T=TileSize
+const TileSize  = +$(dRoot).css('--tile-size'), T = TileSize
 const BaseStep  = +(T/4.5).toFixed(1)
-const PacRadius = T*PacScale
+const PacRadius = TileSize*PacScale
 const GhsType   = freeze({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4})
 const GhsNames  = freeze(keys(GhsType).slice(0,-1))
 

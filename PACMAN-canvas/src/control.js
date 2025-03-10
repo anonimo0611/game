@@ -71,8 +71,8 @@ export const Ctrl = new class {
 		if (!Ctrl.showGridLines) return
 		Ctx.save()
 		Ctx.strokeStyle = Color.Grid
-		for (let y=1; y<Cols; y++) strokeLine(Ctx)(T*y, 0, T*y, Rows*T)
-		for (let x=0; x<Rows; x++) strokeLine(Ctx)(0, T*x, Cols*T, T*x)
+		for (let y=1; y<Cols; y++) cvsStrokeLine(Ctx)(T*y, 0, T*y, Rows*T)
+		for (let x=0; x<Rows; x++) cvsStrokeLine(Ctx)(0, T*x, Cols*T, T*x)
 		Ctx.restore()
 	}
 	drawInfo() {

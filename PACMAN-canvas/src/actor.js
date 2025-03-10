@@ -35,7 +35,6 @@ export class Actor {
 	get isInTunnel() {return Maze.Tunnel.isIn(this.centerPos)}
 
 	get stepsPerTile() {
-		if (!this.dir) return 0
 		const {x,y} = this.centerPos, v = Vec2(this.dir)
 		const count = v.x? x % T : y % T
 		return (v.x || v.y) > 0 ? count : T-count
