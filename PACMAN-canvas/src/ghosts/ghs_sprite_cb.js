@@ -127,28 +127,29 @@ export default class {
 	static get stakeClothes() {return new StakeClothes}
 }
 class StakeClothes {
-	constructor() {
-		this.stake = freeze(new class {
-			size = Vec2(T*0.18, T*0.7).freeze()
-			x = Cvs.width /2 + T - this.size.x/2 + T
-			y = Cvs.height/2 + T - this.size.y - T*0.1
-		})
-		this.offcut = freeze({
-			x: Cvs.width /2 + T*2 + this.stake.size.x/2,
-			y: Cvs.height/2 + T*1 - T*0.1
-		})
-		this.CaughtX = Cvs.width/2 + T/2
-		this.AkaMinX = this.CaughtX - T
-		freeze(this)
+	constructor() {freeze(this)}
+	CaughtX   = CvsW/2 + T/2
+	AkaMinX   = this.CaughtX - T
+	stakeSize = Vec2(T*.18, T*.7).freeze()
+
+	stakePos  = Vec2(
+		CvsW/2 + T*2 - this.stakeSize.x/2,
+		CvsH/2 + T*1 - this.stakeSize.y - T*.1
+	).freeze()
+
+	offcutPos = Vec2(
+		CvsW/2 + T*2 + this.stakeSize.x/2,
+		CvsH/2 + T*1 - T*.1
+	).freeze()
+
+	drawStake({x, y}=this.stakePos) {
+		fillRect(Ctx)(x,y, ...this.stakeSize.vals, '#FFF')
 	}
-	drawStake({x, y}=this.stake) {
-		fillRect(Ctx)(x,y, ...this.stake.size.vals, '#FFF')
-	}
-	drawOffcut({x, y}=this.offcut) {
+	drawOffcut({x, y}=this.offcutPos) {
 		Ctx.save()
 		Ctx.translate(x, y)
 		newLinePath(Ctx, Color.Akabei)
-			([0,-4],[0,-this.stake.size.y],[-T,0],[-4,0],[-4,-4])
+			([0,-4],[0,-this.stakeSize.y],[-T,0],[-4,0],[-4,-4])
 		Ctx.restore()
 	}
 	expandClothes({x, y, size=T*2}={}, aIdx, rate) {
