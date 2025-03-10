@@ -13,10 +13,10 @@ const Step = PacStep
 export const Player = function() {
 	/** @type {?PlayablePacman} */
 	let player = null
-	const instantiate = ()=> player = new PlayablePacman()
-	$on('Title Restart NewLevel', instantiate)
+	$on('Title Restart NewLevel',
+		()=> player = new PlayablePacman())
 	return {
-		get instance()   {return player ||= instantiate()},
+		get instance()   {return player},
 		get sprite()     {return player.sprite},
 		get dir()        {return player.dir},
 		get pos()        {return player.pos},
@@ -62,7 +62,7 @@ class PlayablePacman extends Pacman {
 		return Game.moveSpeed * (Game.level<13 ? 1:Step.SlowBase)
 	}
 	#getCurrentStep() {
-		const eating  = Maze.hasDot(this.tileIdx)
+		const eating = Maze.hasDot(this.tileIdx)
 		return(!GhsMgr.frightened
 			? (eating? Step.Eating : Step.Base)
 			: (eating? Step.EneEat : Step.Energize)

@@ -13,7 +13,7 @@ const Ghosts = []
 const SysMap = new Map()
 
 /** @param {number} idx */
-const releaseTime = idx=> ({ // For always chase mode (ms)
+const getReleaseTime = idx=> ({ // For always chase mode (ms)
 	// Pinky->Aosuke->Guzuta
 	 0:[1000,  500,  500], // <-After life is lost
 	 1:[1000, 4000, 4000], 2:[800, 2200, 4000], 3:[600, 1900, 3500],
@@ -79,7 +79,7 @@ export const GhsMgr = new class {
 	#onPlaying() {
 		Sound.playSiren()
 		Ctrl.isChaseMode && Timer.sequence(...Ghosts.slice(1)
-			.map((g,i)=> [releaseTime(i), ()=> g.release()]))
+			.map((g,i)=> [getReleaseTime(i), ()=> g.release()]))
 	}
 	#onDotEaten(_, isPow) {
 		if (!isPow) return
@@ -147,7 +147,10 @@ function setReversalSignal() {
 export const DotCounter = function() {
 	let globalDotCnt = -1
 	const counters = new Uint8Array(GhsType.Max)
-	const limitTbl = [[7, 0,0,0],[17, 30,0,0],[32, 60,50,0]]
+	const limitTbl = freeze([
+		freeze([ 7,  0, 0, 0]),  // Pinky
+		freeze([17, 30, 0, 0]),  // Aosuke
+		freeze([32, 60,50, 0])]) // Guzuta
 	/**
 	 * @param {number} idx Ghost index
 	 * @param {(deactivateGlobal:boolean)=> boolean} fn Release ghost
@@ -178,8 +181,8 @@ export const DotCounter = function() {
 
 export const Elroy = function() {
 	let part = 0
-	const speedRateTbl  = [1, 1.02, 1.05, 1.1]
-	const dotsLeftP2Tbl = [20,20,30,40,50,60,70,70,80,90,100,110,120]
+	const speedRateTbl  = freeze([1, 1.02, 1.05, 1.1])
+	const dotsLeftP2Tbl = freeze([20,20,30,40,50,60,70,70,80,90,100,110,120])
 	function angry() {
 		return State.isPlaying
 			&& part > 1
@@ -203,7 +206,7 @@ export const Elroy = function() {
 }()
 
 export class FrightMode {
-	static #timeTbl = [6,5,4,3,2,5,2,2,1,5,2,1,0] // seconds
+	static #timeTbl = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0])
 	static get time() {return this.#timeTbl[Game.clampedLv-1]}
 	static caught() {SysMap.get(FrightMode)?.caught()}
 	#timeCnt   = 0
@@ -214,6 +217,7 @@ export class FrightMode {
 	get spriteIdx() {return this.#flashCnt? this.#flashIdx^1:0}
 	constructor() {
 		SysMap.set(FrightMode, this.#toggle(true))
+		freeze(this)
 	}
 	#toggle(bool) {
 		SysMap.delete(FrightMode)
@@ -225,8 +229,8 @@ export class FrightMode {
 		if (!State.isPlaying || Timer.frozen) return
 		const {time}= FrightMode
 		const elapsedT  = (Game.interval*this.#timeCnt++)/1e3
-		const caughtAll = (this.#caughtCnt == GhsType.Max)
 		const fInterval = (time == 1 ? 12:14)/Game.speedRate|0
+		const caughtAll = (this.#caughtCnt == GhsType.Max)
 		this.#flashIdx ^=!(this.#flashCnt % fInterval)
 		;(elapsedT>=time - 2) && this.#flashCnt++
 		;(elapsedT>=time || caughtAll) && this.#toggle(false)
