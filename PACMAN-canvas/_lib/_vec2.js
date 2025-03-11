@@ -1,6 +1,3 @@
-/** @typedef {Vector2} */
-const Vec2 = function() {
-
 class Vector2 {
 	x = 0
 	y = 0
@@ -72,6 +69,7 @@ const xyFrom = (v1=0,v2=0)=> {
 	if (!isNum(y)) throw TypeError(`${y} is an invalid y-coordinate`)
 	return [x,y]
 }
+/** @typedef {Vector2} */
 const
 Vec2 = (...args)=> new Vector2(...args,)
 Vec2.Zero  = Vec2( 0, 0)
@@ -91,6 +89,4 @@ Vec2.mul      = (v, num)=> Vec2(v).mul(num)
 Vec2.div      = (v, num)=> Vec2(v).div(num)
 Vec2.divInt   = (v, num)=> Vec2(v).divInt(num)
 Vec2.distance = (v1, v2)=> Vec2.sub(v1, v2).magnitude
-return freeze(Vec2)
-
-}()
+freeze(Vec2)

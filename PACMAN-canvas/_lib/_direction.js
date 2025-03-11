@@ -1,3 +1,4 @@
+'use strict'
 const [U,R,D,L]='Up|Right|Down|Left'.split('|')
 const Dir = freeze(new class {
 	Up=U; Right=R; Down=D; Left=L;

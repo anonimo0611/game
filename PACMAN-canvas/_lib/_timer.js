@@ -1,3 +1,4 @@
+'use strict'
 const {Ticker,Timer}= function() {
 
 const TimerMap = new Map()
