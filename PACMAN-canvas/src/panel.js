@@ -2,7 +2,7 @@ import {State} from './_state.js'
 
 function show(btn) {
 	$('.panel').toggle()
-	$(btn).toggleClass('active',$(btn.value).is(':visible'))
+	$(btn).toggleClass('active',!!$(btn.value).height())
 }
 function hide(btn, e) {
 	if (!State.isTitle
