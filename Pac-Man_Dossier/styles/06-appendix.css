@@ -6,13 +6,16 @@ ul.appendix li {
 a[href="#easter-eggs_tricks"] {
 	display: block;
 	text-decoration-color: transparent;
+	&.current {
+    background: linear-gradient(transparent 85%, var(--bgline) 100%);
+	}
 	span {
 		text-decoration-color: var(--underline-color);
 	}
 	span + span {
 		display: block;
 		margin-left: 1em;
-	}
+  }
 }
 
 /* Appendix: A.1 */
