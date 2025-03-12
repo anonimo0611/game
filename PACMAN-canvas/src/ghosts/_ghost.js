@@ -33,13 +33,13 @@ export class Ghost extends Actor {
 	get chasePos()  {return Player.centerPos}
 	get chaseTile() {return this.chasePos.divInt(T)}
 
-	constructor({col=0,row=0,idx=0,initAlign=0,orient=L,anime=true}={}) {
+	constructor({col=0,row=0,idx=0,initAlign=0,orient=L,playAnime=true}={}) {
 		super()
 		this.dir       = orient
 		this.idx       = idx
 		this.initX     = col*T
 		this.initAlign = initAlign
-		this.playAnime = anime
+		this.playAnime = playAnime
 		this.pos       = Vec2(this.initX, row*T)
 		this.name      = this.constructor.name
 		this.sprite    = new Sprite(...canvas2D(null, T*3, T*2).vals)
@@ -218,7 +218,7 @@ export class Ghost extends Actor {
 			this.pos = t.mul(T)
 		}
 	}
-	#setFrightMode(_, bool) {
+	#setFrightMode(_, bool=false) {
 		!this.escaping && (this.#frightened = bool)
 	}
 	crashWithPac(fn = ()=> this.#setEscape()) {
