@@ -2,30 +2,32 @@
 const {Ticker,Timer}= function() {
 
 const TimerMap = new Map()
-/** @type {?Ticker} */
+/** @type {?Tick} */
 let _ticker  = null
 let _paused  = false
 let _counter = 0
 let _pausedCounter = 0
 
-const Util = freeze(new class {
+const Ticker = freeze(new class {
 	Interval = 1000/60
 	get paused()      {return _paused}
 	get count()       {return _counter}
+	get running()     {return _ticker instanceof Tick}
 	get elapsedTime() {return _counter*this.Interval}
 	get pausedCount() {return _pausedCounter}
-	get running()     {return _ticker instanceof Ticker}
 
 	/** @param {...function|undefined} args */
-	set(...args) {new Ticker(...args)}
+	set(...args) {new Tick(...args)}
+
 	/** @param {boolean|undefined} force */
 	pause(force) {return _paused=!!(isBool(force)? force : !_paused)}
+
 	stop()       {this.running && _ticker.stop();return this}
 	resetCount() {this.running && _ticker.resetCount()}
 })
-class Ticker {
+class Tick {
 	constructor(fn=null, pausingFn=null) {
-		Util.running && _ticker.stop()
+		Ticker.running && _ticker.stop()
 		_ticker    = this
 		this.start = this.count = this.stopped = 0
 		this.loop  = this.loop.bind(this)
@@ -36,7 +38,7 @@ class Ticker {
 	loop(ts) {
 		if (this.stopped) return
 		requestAnimationFrame(this.loop)
-		if ((ts-(this.start||=ts))/Util.Interval > this.count)
+		if ((ts-(this.start||=ts))/Ticker.Interval > this.count)
 			this.tick()
 	}
 	tick() {
@@ -48,12 +50,12 @@ class Ticker {
 		}
 		TimerMap.forEach(this.timer)
 		this.fn?.()
-		_pausedCounter = 0
 		_counter++
+		_pausedCounter = 0
 	}
 	timer(t, key) {
 		if (Timer.frozen && !t.ignoreFrozen)   return
-		if (Util.Interval*t.amount++ < t.ms) return
+		if (Ticker.Interval*t.amount++ < t.ms) return
 		TimerMap.delete(key)
 		t.fn()
 	}
@@ -72,12 +74,13 @@ class Ticker {
 const Timer = freeze(new class {
 	#frozen = false
 	get frozen() {return this.#frozen}
-	freeze()     {this.#frozen = true; return this}
-	unfreeze()   {this.#frozen = false;return this}
+	freeze()   {this.#frozen = true; return this}
+	unfreeze() {this.#frozen = false;return this}
+
 	set(ms=0, fn=()=>{}, {key,ignoreFrozen=Timer.frozen}={}) {
 		if (!isNum(ms)) throw TypeError(`'${ms}' is not a number`)
 		if (!isFun(fn)) throw TypeError(`'${fn}' is not a function`)
-		if (!Util.running) Util.set();
+		if (!Ticker.running) Ticker.set();
 		TimerMap.set(key ?? Symbol(), {ms,fn,ignoreFrozen,amount:0})
 	}
 	/** @param {...[timeout:number, handler:function]} sequence */
@@ -95,10 +98,10 @@ const Timer = freeze(new class {
 			;(s=seq[++idx]) ? Timer.set(s.ms, fire) : (fire=null)
 		} Timer.set(s.ms, fire)
 	}
-	stop()      {Util.stop(); return this}
+	stop()      {Ticker.stop(); return this}
 	cancelAll() {TimerMap.clear(); return this}
 	cancel(key) {TimerMap.delete(key); return this}
 })
-return {Ticker:Util,Timer}
+return {Ticker,Timer}
 
 }()

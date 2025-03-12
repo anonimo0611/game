@@ -23,8 +23,7 @@ export default class {
 			Timer.set(delay, ()=> this.switchTo(state,{delay:-1,data}))
 			return this
 		}
-		this.#last  = this.current
-		this.#state = state
+		;[this.#last,this.#state]=[this.current,state]
 		isFun(fn) && fn(state,data)
 		return this
 	}
