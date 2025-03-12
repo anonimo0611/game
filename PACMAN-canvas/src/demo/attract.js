@@ -42,7 +42,7 @@ export class Attract {
 			this.setActor(i/len|0, i%len)
 	}
 	setActor(idx, gIdx) {
-		const g = new Ghost({idx:gIdx,anime:!!idx})
+		const g = new Ghost({idx:gIdx,playAnime:!!idx})
 		if (idx) {
 			g.pos = Vec2(CvsW+(T*6)+(T*2*gIdx), T*19)
 			!gIdx && (this.pacman.pos = Vec2(g.x-T*3.5, g.y))
