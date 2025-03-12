@@ -12,8 +12,8 @@ import {Target}  from './show_targets.js'
 const Ghosts = []
 const SysMap = new Map()
 
-/** @param {number} idx */
-const getReleaseTime = idx=> ({ // For always chase mode (ms)
+/** @param {number} ghostIdx */
+const getReleaseTime = ghostIdx=> ({ // For always chase mode (ms)
 	// Pinky->Aosuke->Guzuta
 	 0:[1000,  500,  500], // <-After life is lost
 	 1:[1000, 4000, 4000], 2:[800, 2200, 4000], 3:[600, 1900, 3500],
@@ -21,7 +21,7 @@ const getReleaseTime = idx=> ({ // For always chase mode (ms)
 	 7:[ 300,  700,  800], 8:[300,  700,  800], 9:[200,  800,  200],
 	10:[ 200,  800,  200],11:[100,  700,  200],12:[100,  700,  200],
 	13:[   0,  900,    0]
-}[Game.restarted? 0 : Game.clampedLv][idx]/Game.speedRate)
+}[Game.restarted? 0 : Game.clampedLv][ghostIdx]/Game.speedRate)
 
 export class GhostState extends BaseState {
 	isIdle   = true
@@ -148,9 +148,10 @@ export const DotCounter = function() {
 	let globalDotCnt = -1
 	const counters = new Uint8Array(GhsType.Max)
 	const limitTbl = freeze([
-		freeze([ 7,  0, 0, 0]),  // Pinky
-		freeze([17, 30, 0, 0]),  // Aosuke
-		freeze([32, 60,50, 0])]) // Guzuta
+	  // globalCnt,lv1,lv2,lv3+
+		freeze([ 7,  0,  0, 0]),  // Pinky
+		freeze([17, 30,  0, 0]),  // Aosuke
+		freeze([32, 60, 50, 0])]) // Guzuta
 	/**
 	 * @param {number} idx Ghost index
 	 * @param {(deactivateGlobal:boolean)=> boolean} fn Release ghost
