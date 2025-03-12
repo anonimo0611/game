@@ -21,7 +21,7 @@ const getReleaseTime = ghostIdx=> ({ // For always chase mode (ms)
 	 7:[ 300,  700,  800], 8:[300,  700,  800], 9:[200,  800,  200],
 	10:[ 200,  800,  200],11:[100,  700,  200],12:[100,  700,  200],
 	13:[   0,  900,    0]
-}[Game.restarted? 0 : Game.clampedLv][ghostIdx-1]/Game.speedRate)
+}[Game.restarted? 0 : Game.clampedLv][ghostIdx]/Game.speedRate)
 
 export class GhostState extends BaseState {
 	isIdle   = true
@@ -78,9 +78,8 @@ export const GhsMgr = new class {
 	}
 	#onPlaying() {
 		Sound.playSiren()
-		Ctrl.isChaseMode && Timer.sequence(
-			...Ghosts.map((g,i)=> [getReleaseTime(i), ()=> g.release()])
-		)
+		Ctrl.isChaseMode && Timer.sequence(...Ghosts.slice(1)
+			.map((g,i)=> [getReleaseTime(i), ()=> g.release()]))
 	}
 	#onDotEaten(_, isPow) {
 		if (!isPow) return
