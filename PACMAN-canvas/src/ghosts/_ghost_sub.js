@@ -4,6 +4,7 @@ import {GhsMgr} from './_system.js'
 import {Ghost}  from './_ghost.js'
 
 class Akabei extends Ghost {
+	scatterTile = Vec2(24, 0).freeze()
 	constructor() {
 		super({idx:0, col:13.5, row:12, orient:L})
 		freeze(this)

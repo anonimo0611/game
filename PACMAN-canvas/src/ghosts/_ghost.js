@@ -27,7 +27,7 @@ export class Ghost extends Actor {
 	get escaping()   {return this.state.isEscaping}
 
 	// This section is overridden in subclasses
-	scatterTile = Vec2(24, 0).freeze()
+	scatterTile = Vec2()
 	get angry()     {return false}
 	get chaseStep() {return GhsStep.Base}
 	get chasePos()  {return Player.centerPos}
@@ -47,7 +47,7 @@ export class Ghost extends Actor {
 		$(this).on('FrightMode',  this.#setFrightMode)
 		$(this).on('Reverse',()=> this.#revSig  = true)
 		$(this).on('Runaway',()=> this.#runAway = 400/Game.interval)
-		;(this.constructor.name == 'Ghost') && freeze(this)
+		;(this.name == 'Ghost') && freeze(this)
 	}
 	get isScatter() {
 		return Sys.Wave.isScatter
@@ -83,7 +83,7 @@ export class Ghost extends Actor {
 		if (state.isReturn)  return spd * GhsStep.Return
 		if (this.isInTunnel) return spd * GhsStep.InTunnel
 		if (this.frightened) return spd * GhsStep.Fright
-		return spd * (this.isScatter? GhsStep.Base:this.chaseStep)
+		return spd * (this.isScatter? GhsStep.Base : this.chaseStep)
 	}
 	draw() {
 		if (State.isStart)
