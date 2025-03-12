@@ -1,8 +1,11 @@
 'use strict'
 class Vector2 {
-	x = 0
-	y = 0
-	constructor(v1,v2) {this.set(v1,v2)}
+	#x = 0
+	#y = 0
+	get x()  {return this.#x}
+	get y()  {return this.#y}
+	set x(x) {this.setX(x)}
+	set y(y) {this.setY(y)}
 	get vals()         {return [this.x, this.y]}
 	get hyphenated()   {return `${this.x}-${this.y}`}
 	get inverse()      {return this.clone.mul(-1)}
@@ -11,50 +14,48 @@ class Vector2 {
 	get clone()        {return Vec2(this.x,  this.y)}
 	get asInt()        {return Vec2(this.x|0,this.y|0)}
 	get normalized()   {return Vec2(this.x/this.magnitude, this.y/this.magnitude)}
+	constructor(v1,v2) {this.set(v1,v2)}
 	set(v1, v2=v1) {
-		const [x,y]= Vector2.#from(v1, v2)
-		this.x = x
-		this.y = y
+		const {x,y}= this.#check(v1, v2)
+		this.#x = x
+		this.#y = y
 		return this
 	}
-	setX(x) {
-		this.set(x, this.y)
-		return this
-	}
-	setY(y) {
-		this.set(this.x, y)
-		return this
-	}
+	setX(x) {return this.set(x, this.y)}
+	setY(y) {return this.set(this.x, y)}
+
 	add(v1, v2=v1) {
-		const [x,y]= Vector2.#from(v1, v2)
-		this.x += x
-		this.y += y
+		const {x,y}= this.#check(v1, v2)
+		this.#x += x
+		this.#y += y
 		return this
 	}
 	sub(v1, v2=v1) {
-		const [x,y]= Vector2.#from(v1, v2)
-		this.x -= x
-		this.y -= y
+		const {x,y}= this.#check(v1, v2)
+		this.#x -= x
+		this.#y -= y
 		return this
 	}
 	mul(n) {
-		this.x *= n
-		this.y *= n
+		this.#check(n,n,true)
+		this.#x *= n
+		this.#y *= n
 		return this
 	}
 	div(n) {
-		this.x /= n
-		this.y /= n
+		this.#check(n,n,true)
+		this.#x /= n
+		this.#y /= n
 		return this
 	}
 	divInt(n) {
-		this.x = (this.x / n)|0
-		this.y = (this.y / n)|0
+		this.#check(n,n,true)
+		this.#x = (this.x / n)|0
+		this.#y = (this.y / n)|0
 		return this
 	}
-	eq(v1, v2) {
-		const [x,y]= Vector2.#from(v1, v2)
-		return Vec2.eq(this, {x, y})
+	eq(v) {
+		return Vec2.eq(this, Vec2(v))
 	}
 	distance(v) {
 		return Vec2.sub(this, v).magnitude
@@ -62,14 +63,22 @@ class Vector2 {
 	freeze() {
 		return freeze(this)
 	}
-	static #from = (v1=0,v2=0)=> {
-		if (Dir.isValid(v1)) return Vec2[v1].vals
-		const [x,y]= isObj(v1) ? [v1.x, v1.y] : [v1, v2]
-		if (!isNum(x)) throw TypeError(`${x} is an invalid x-coordinate`)
-		if (!isNum(y)) throw TypeError(`${y} is an invalid y-coordinate`)
-		return [x,y]
+	#check(v1=0,v2=0,isScalar=false) {
+		if (isFrozen(this))
+			throw TypeError('Cannot assign to read only property')
+		if (isScalar && !isNum(v1))
+			throw TypeError(`Scalar '${v1}' is not a number`)
+		if (Dir.isValid(v1))
+			return Vec2[v1]
+		{
+			const [x,y]= isObj(v1) ? [v1.x, v1.y] : [v1, v2]
+			if (!isNum(x)) throw TypeError(`${x} is an invalid x-coordinate`)
+			if (!isNum(y)) throw TypeError(`${y} is an invalid y-coordinate`)
+			return {x,y}
+		}
 	}
-}
+} freeze(Vector2)
+
 /** @typedef {Vector2} */
 const Vec2 = function() {
 	const

@@ -1,6 +1,6 @@
 'use strict'
 const {isArray}= Array
-const {defineProperty,entries,freeze,hasOwn,keys,values}= Object
+const {defineProperty,entries,freeze,isFrozen,hasOwn,keys,values}= Object
 const {abs,ceil,floor,max,min,PI,random,round,sqrt,trunc:int}= Math
 
 const isBool = arg=> arg === true || arg === false
