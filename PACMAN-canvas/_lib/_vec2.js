@@ -36,26 +36,27 @@ class Vector2 {
 		this.#y -= y
 		return this
 	}
-	mul(n) {
-		this.#check(n,n,true)
-		this.#x *= n
-		this.#y *= n
+	mul(s) {
+		this.#check(s,s, {scalar:true})
+		this.#x *= s
+		this.#y *= s
 		return this
 	}
-	div(n) {
-		this.#check(n,n,true)
-		this.#x /= n
-		this.#y /= n
+	div(s) {
+		this.#check(s,s, {scalar:true})
+		this.#x /= s
+		this.#y /= s
 		return this
 	}
-	divInt(n) {
-		this.#check(n,n,true)
-		this.#x = (this.x / n)|0
-		this.#y = (this.y / n)|0
+	divInt(s) {
+		this.#check(s,s, {scalar:true})
+		this.#x = (this.x/s)|0
+		this.#y = (this.y/s)|0
 		return this
 	}
-	eq(v) {
-		return Vec2.eq(this, Vec2(v))
+	eq(v1, v2=v1) {
+		const {x,y}= this.#check(v1, v2, {asgmt:false})
+		return Vec2.eq(this, {x,y})
 	}
 	distance(v) {
 		return Vec2.sub(this, v).magnitude
@@ -63,17 +64,17 @@ class Vector2 {
 	freeze() {
 		return freeze(this)
 	}
-	#check(v1=0,v2=0,isScalar=false) {
-		if (isFrozen(this))
+	#check(v1=0,v2=0,{asgmt=true,scalar=false}={}) {
+		if (asgmt && isFrozen(this))
 			throw TypeError('Cannot assign to read only property')
-		if (isScalar && !isNum(v1))
+		if (scalar && !isNum(v1))
 			throw TypeError(`Scalar '${v1}' is not a number`)
 		if (Dir.isValid(v1))
 			return Vec2[v1]
 		{
 			const [x,y]= isObj(v1) ? [v1.x, v1.y] : [v1, v2]
-			if (!isNum(x)) throw TypeError(`${x} is an invalid x-coordinate`)
-			if (!isNum(y)) throw TypeError(`${y} is an invalid y-coordinate`)
+			if (!isNum(x)) throw TypeError(`${x} is an invalid x value`)
+			if (!isNum(y)) throw TypeError(`${y} is an invalid y value`)
 			return {x,y}
 		}
 	}
@@ -91,14 +92,14 @@ const Vec2 = function() {
 	for (const [k,v] of entries(Vec2)) {
 		defineProperty(Vec2, k, {get(){return v.clone}})
 	}
-	Vec2.isValid  = (pos)   => isObj(pos) && isNum(pos.x) && isNum(pos.y)
-	Vec2.eq       = (v1, v2)=> abs(v1.x-v2.x) < 1e-6 && abs(v1.y-v2.y) < 1e-6
-	Vec2.idx      = (v, col)=> Number(v.y * col + v.x)
-	Vec2.add      = (v1, v2)=> Vec2(v1).add(v2)
-	Vec2.sub      = (v1, v2)=> Vec2(v1).sub(v2)
-	Vec2.mul      = (v, num)=> Vec2(v).mul(num)
-	Vec2.div      = (v, num)=> Vec2(v).div(num)
-	Vec2.divInt   = (v, num)=> Vec2(v).divInt(num)
-	Vec2.distance = (v1, v2)=> Vec2.sub(v1, v2).magnitude
+	Vec2.isValid  = (pos)  => isObj(pos) && isNum(pos.x) && isNum(pos.y)
+	Vec2.eq       = (v, v2)=> abs(v.x-v2.x) < 1e-6 && abs(v.y-v2.y) < 1e-6
+	Vec2.idx      = (v,col)=> Number(v.y * col + v.x)
+	Vec2.add      = (v, v2)=> Vec2(v).add(v2)
+	Vec2.sub      = (v, v2)=> Vec2(v).sub(v2)
+	Vec2.mul      = (v, sc)=> Vec2(v).mul(sc)
+	Vec2.div      = (v, sc)=> Vec2(v).div(sc)
+	Vec2.divInt   = (v, sc)=> Vec2(v).divInt(sc)
+	Vec2.distance = (v, v2)=> Vec2.sub(v, v2).magnitude
 	return freeze(Vec2)
 }()
