@@ -214,10 +214,7 @@ export class FrightMode {
 	#caughtCnt = 0
 	get score()     {return 100 * (1 << this.#caughtCnt)}
 	get spriteIdx() {return this.#flashCnt? this.#flashIdx^1:0}
-	constructor() {
-		SysMap.set(FrightMode, this.#toggle(true))
-		freeze(this)
-	}
+	constructor()   {SysMap.set(FrightMode, this.#toggle(true))}
 	#toggle(bool) {
 		SysMap.delete(FrightMode)
 		Sound.toggleFrightMode(bool)
