@@ -11,11 +11,11 @@ class Vector2 {
 	get asInt()        {return Vec2(this.x|0,this.y|0)}
 	get normalized()   {return Vec2(this.x/this.magnitude, this.y/this.magnitude)}
 	constructor(v1,v2) {
-		this.set(v1,v2)
 		defineProperties(this, {
 			x:{get(){return this.#x},set(x){this.setX(x)},enumerable:true},
 			y:{get(){return this.#y},set(y){this.setY(y)},enumerable:true},
 		})
+		this.set(v1,v2)
 	}
 	set(v1, v2=v1) {
 		const {x,y}= this.#check(v1, v2)
