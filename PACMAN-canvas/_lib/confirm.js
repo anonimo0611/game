@@ -1,25 +1,29 @@
-export const Confirm = freeze(new class {
+export const Confirm = new class {
 	#opened = false
 	get opened() {return this.#opened}
-	get #btns()  {return byId('confirm')?.querySelectorAll('button')}
-	get #temp()  {return byId('confirm_temp').content.cloneNode(true)}
 	open(content, fn1,fn2, btnStr1='Ok',btnStr2='Cancel', cancelIdx=1) {
 		if (Confirm.opened) return
-		document.body.append(this.#temp)
-		this.#opened = true
-		this.#btns.forEach((btn, i, btns)=> {
+		this.#append()
+		const confirm = byId('confirm')
+		const buttons = confirm.querySelectorAll('button')
+		const cancel  = e=> {
+			e.preventDefault()
+			buttons[cancelIdx]?.click()
+		}
+		buttons.forEach((btn, i, btns)=> {
 			btn.textContent = [btnStr1,btnStr2][i]
-			btn.onclick   = ()=> {$off(NS),this.#close([fn1,fn2][i])}
-			btn.onkeydown = ev=> {Dir.from(ev)==[R,L][i] && btns[1^i].focus()}
+			btn.onclick   = _=> {$off(NS), Confirm.#close([fn1,fn2][i])}
+			btn.onkeydown = e=> {Dir.from(e)==[R,L][i] && btns[1^i].focus()}
 		})
-		byId('confirm').showModal()
-		$onNS(NS,'keydown',  ev=> {ev.key=='Escape' && this.#cancel(ev,cancelIdx)})
-		$onNS(NS,'mousedown',ev=> {ev.preventDefault()})
-		$('#confirm').find('.content').text(content).end().opacity(1,500)
+		confirm.showModal()
+		Confirm.#opened = true
+		$(confirm).find('.content').text(content).end().opacity(1,500)
+		$onNS(NS,'keydown',  e=> {e.key == 'Escape' && cancel(e)})
+		$onNS(NS,'mousedown',e=> {e.preventDefault()})
 	}
-	#cancel(ev, idx) {
-		ev.preventDefault()
-		this.#btns[idx]?.click()
+	#append() {
+		const temp = byId('confirm_temp').content.cloneNode(true)
+		document.body.append(temp)
 	}
 	#close(fn) {
 		$('#confirm').opacity(0,500).on('transitionend', ev=> {
@@ -28,4 +32,4 @@ export const Confirm = freeze(new class {
 			this.#opened = false
 		})
 	}
-});const NS='.CONFIRM'
+};const NS='.CONFIRM'

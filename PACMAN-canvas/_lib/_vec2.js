@@ -2,7 +2,6 @@
 class Vector2 {
 	x=0;y=0;
 	get vals()         {return [this.x, this.y]}
-	get vals()         {return [this.x, this.y]}
 	get hyphenated()   {return `${this.x}-${this.y}`}
 	get inverse()      {return this.clone.mul(-1)}
 	get sqrMagnitude() {return this.x**2 + this.y**2}
