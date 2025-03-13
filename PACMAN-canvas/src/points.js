@@ -28,7 +28,7 @@ class Points {
 			isFun(fn) && fn()
 		})
 		State.isPlaying && Score.add(this.score)
-		PtsMap.set(key, freeze(this))
+		PtsMap.set(key, this)
 	}
 	update() {
 		this.fadeOut.update()

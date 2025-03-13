@@ -7,7 +7,7 @@ function show(btn) {
 function hide(btn, e) {
 	if (!State.isTitle
 	 || e.target == btn
-	 || e.target.closest(btn.value))
+	 || e.target.closest?.(btn.value))
 		return
 	$(btn.value).hide() && $(btn).removeClass('active')
 }
