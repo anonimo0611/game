@@ -1,7 +1,7 @@
 'use strict'
 class Vector2 {
-	#x=0;#y=0;
-	 x=0; y=0;
+	x=0;y=0;
+	get vals()         {return [this.x, this.y]}
 	get vals()         {return [this.x, this.y]}
 	get hyphenated()   {return `${this.x}-${this.y}`}
 	get inverse()      {return this.clone.mul(-1)}
@@ -10,17 +10,11 @@ class Vector2 {
 	get clone()        {return Vec2(this.x,  this.y)}
 	get asInt()        {return Vec2(this.x|0,this.y|0)}
 	get normalized()   {return Vec2(this.x/this.magnitude, this.y/this.magnitude)}
-	constructor(v1,v2) {
-		defineProperties(this, {
-			x:{get(){return this.#x},set(x){this.setX(x)},enumerable:true},
-			y:{get(){return this.#y},set(y){this.setY(y)},enumerable:true},
-		})
-		this.set(v1,v2)
-	}
+	constructor(v1,v2) {this.set(v1,v2)}
 	set(v1, v2=v1) {
 		const {x,y}= this.#check(v1, v2)
-		this.#x = x
-		this.#y = y
+		this.x = x
+		this.y = y
 		return this
 	}
 	setX(x) {return this.set(x, this.y)}
@@ -28,36 +22,36 @@ class Vector2 {
 
 	add(v1, v2=v1) {
 		const {x,y}= this.#check(v1, v2)
-		this.#x += x
-		this.#y += y
+		this.x += x
+		this.y += y
 		return this
 	}
 	sub(v1, v2=v1) {
 		const {x,y}= this.#check(v1, v2)
-		this.#x -= x
-		this.#y -= y
+		this.x -= x
+		this.y -= y
 		return this
 	}
 	mul(s) {
 		this.#check(s,s, {scalar:true})
-		this.#x *= s
-		this.#y *= s
+		this.x *= s
+		this.y *= s
 		return this
 	}
 	div(s) {
 		this.#check(s,s, {scalar:true})
-		this.#x /= s
-		this.#y /= s
+		this.x /= s
+		this.y /= s
 		return this
 	}
 	divInt(s) {
 		this.#check(s,s, {scalar:true})
-		this.#x = (this.x/s)|0
-		this.#y = (this.y/s)|0
+		this.x = (this.x/s)|0
+		this.y = (this.y/s)|0
 		return this
 	}
 	eq(v1, v2=v1) {
-		const {x,y}= this.#check(v1, v2, {asgmt:false})
+		const {x,y}= this.#check(v1, v2)
 		return Vec2.eq(this, {x,y})
 	}
 	distance(v) {
@@ -66,9 +60,7 @@ class Vector2 {
 	freeze() {
 		return freeze(this)
 	}
-	#check(v1=0,v2=0,{asgmt=true,scalar=false}={}) {
-		if (asgmt && isFrozen(this))
-			throw TypeError('Cannot assign to read only property')
+	#check(v1=0,v2=0,{scalar=false}={}) {
 		if (scalar && !isNum(v1))
 			throw TypeError(`Scalar '${v1}' is not a number`)
 		if (Dir.isValid(v1))
@@ -80,7 +72,7 @@ class Vector2 {
 			return {x,y}
 		}
 	}
-} freeze(Vector2)
+}
 
 /** @typedef {Vector2} */
 const Vec2 = function() {

@@ -37,9 +37,9 @@ class Tick {
 	}
 	loop(ts) {
 		if (this.stopped) return
-		requestAnimationFrame(this.loop)
 		if ((ts-(this.start||=ts))/Ticker.Interval > this.count)
 			this.tick()
+		requestAnimationFrame(this.loop)
 	}
 	tick() {
 		this.count++
