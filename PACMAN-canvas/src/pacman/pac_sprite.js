@@ -40,7 +40,7 @@ export default class {
 		ctx.fillStyle = Color.Pacman
 		ctx.fill()
 		ctx.restore()
-		showCenter && fillCircle(ctx)(x,y, 3, '#F00')
+		showCenter && fillCircle(ctx)(x,y, 3, Color.PacCenter)
 	}
 	setLosing() {this.#losing = new Losing(this.ctx)}
 }
