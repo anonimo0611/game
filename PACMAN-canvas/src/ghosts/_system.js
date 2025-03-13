@@ -138,17 +138,15 @@ export const Wave = function() {
 	}
 }()
 function setReversalSignal() {
-	Ghosts.forEach(g=> {
-		$(g).trigger('Reverse')
-		FrightMode.time == 0 && $(g).trigger('Runaway')
-	})
+	$(Ghosts).trigger('Reverse')
+	!FrightMode.time && $(Ghosts).trigger('Runaway')
 }
 
 export const DotCounter = function() {
 	let globalDotCnt = -1
 	const counters = new Uint8Array(GhsType.Max)
 	const limitTbl = freeze([
-	 // globalLimit,lv1,lv2,lv3+
+	    //  global,lv1,lv2,lv3+
 		freeze([ 7,  0,  0, 0]),  // Pinky
 		freeze([17, 30,  0, 0]),  // Aosuke
 		freeze([32, 60, 50, 0])]) // Guzuta
@@ -223,7 +221,7 @@ export class FrightMode {
 	#toggle(bool) {
 		SysMap.delete(FrightMode)
 		Sound.toggleFrightMode(bool)
-		Ghosts.forEach(g=> $(g).trigger('FrightMode', bool))
+		$(Ghosts).trigger('FrightMode',bool)
 		return this
 	}
 	update() {
