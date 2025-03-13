@@ -26,8 +26,8 @@ export const Confirm = new class {
 		document.body.append(temp)
 	}
 	#close(fn) {
-		$('#confirm').opacity(0,500).on('transitionend', ev=> {
-			$(ev.target).remove()
+		$('#confirm').opacity(0,500).on('transitionend', e=> {
+			$(e.target).remove()
 			isFun(fn) && fn()
 			this.#opened = false
 		})
