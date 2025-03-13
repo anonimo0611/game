@@ -1,11 +1,7 @@
 'use strict'
 class Vector2 {
-	#x = 0
-	#y = 0
-	get x()  {return this.#x}
-	get y()  {return this.#y}
-	set x(x) {this.setX(x)}
-	set y(y) {this.setY(y)}
+	#x=0;#y=0;
+	 x=0; y=0;
 	get vals()         {return [this.x, this.y]}
 	get hyphenated()   {return `${this.x}-${this.y}`}
 	get inverse()      {return this.clone.mul(-1)}
@@ -14,7 +10,13 @@ class Vector2 {
 	get clone()        {return Vec2(this.x,  this.y)}
 	get asInt()        {return Vec2(this.x|0,this.y|0)}
 	get normalized()   {return Vec2(this.x/this.magnitude, this.y/this.magnitude)}
-	constructor(v1,v2) {this.set(v1,v2)}
+	constructor(v1,v2) {
+		this.set(v1,v2)
+		defineProperties(this, {
+			x:{get(){return this.#x},set(x){this.setX(x)},enumerable:true},
+			y:{get(){return this.#y},set(y){this.setY(y)},enumerable:true},
+		})
+	}
 	set(v1, v2=v1) {
 		const {x,y}= this.#check(v1, v2)
 		this.#x = x
