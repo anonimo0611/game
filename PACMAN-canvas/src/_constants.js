@@ -34,6 +34,7 @@ Color = freeze(new class {
 	Wall      = '#55E'
 	Door      = '#FFB8DE'
 	Pacman    = '#FF0'
+	PacCenter = '#F00'
 	Akabei    = '#E00'
 	Pinky     = '#F9B'
 	Aosuke    = '#0CF'
