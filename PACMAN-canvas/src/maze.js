@@ -48,8 +48,8 @@ export const Maze = new class {
 	Tunnel      = freeze(new Tunnel)
 	PenEntrance = Vec2(13, 12).freeze()
 	PenMiddleY  = (this.PenEntrance.y+3.5) * T
-	hasDot      = index  => DotSet.has(index)
-	hasPow      = index  => PowMap.has(index)
+	hasDot      = tileIdx=> DotSet.has(tileIdx)
+	hasPow      = tileIdx=> PowMap.has(tileIdx)
 	hasWall     = ({x,y})=> WallSet.has(y*Cols+x)
 	isInHouse   = ({x,y})=> PenRect.contains({x,y})
 
@@ -59,7 +59,7 @@ export const Maze = new class {
 		return t.y < 10 && PenOuter.contains(pos)? Vec2(t).setX(x) : Vec2(t)
 	}
 	#setDot(chip, i) {
-		if (!/[.O]/.test(chip)) return
+		if (/[^.O]/.test(chip)) return
 		const v = Vec2(i%Cols, i/Cols|0)
 		Maze.clearBgDot({tileIdx:i,tilePos:v})
 		DotSet.add(i)
