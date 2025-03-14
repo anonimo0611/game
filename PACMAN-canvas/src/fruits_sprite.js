@@ -174,7 +174,7 @@ function melon(ctx=Ctx) {
 	].forEach(s=> fillCircle(ctx)(...s, 0.5))
 }
 
-function bossGalaxian(ctx=Ctx) {
+function gala(ctx=Ctx) {
 	// yellow body
 	newLinePath(ctx,'#F8FF00')([0.0,-2.6],
 	[ 4.9,-2.4],[ 4.6,-0.5],[ 2.0, 1.6],[ 1.1, 0.5],
@@ -269,15 +269,14 @@ function key(ctx=Ctx) {
 	ctx.restore()
 }
 
-export const Scale   = 1.05
-export const sprites = freeze([
-	cherry,strawberry,orange,apple,melon,bossGalaxian,bell,key
-])
-export function draw(ctx=Ctx, idx=0, {x=0, y=0}={}) {
+const Scale = 1.05
+const Fns = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
+
+export function draw(ctx=Ctx, idx=0, {x=0,y=0}={}, scale=T/8*Scale) {
 	ctx.save()
 	ctx.translate(x, y)
-	ctx.scale(T/8*Scale, T/8*Scale)
-	sprites[idx](ctx)
+	ctx.scale(scale, scale)
+	Fns[idx](ctx)
 	ctx.restore()
 }
 export const {cvs:cachedCvs,cache}= function() {
@@ -285,9 +284,9 @@ export const {cvs:cachedCvs,cache}= function() {
 	function cache(idx) {
 		ctx.save()
 		ctx.clear()
-		ctx.translate(T, T)
+		ctx.translate(T,T)
 		ctx.scale(T/8*Scale, T/8*Scale)
-		sprites[idx](ctx)
+		Fns[idx](ctx)
 		ctx.restore()
 	}
 	return {cvs,cache}
@@ -297,7 +296,7 @@ export const {cvs:cachedCvs,cache}= function() {
 	const Menu = $byId('LevelMenu')
 	const Size = +Menu.css('--scale') * T
 	const {cvs,ctx}=canvas2D(null, Size*8, Size)
-	sprites.forEach((fn,i)=> {
+	Fns.forEach((fn,i)=> {
 		ctx.save()
 		ctx.translate(Size/2+Size*i, Size/2)
 		ctx.scale(Size/16*Scale, Size/16*Scale)
