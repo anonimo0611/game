@@ -64,7 +64,7 @@ export const Fruit = new class {
 			return
 		if (!Ticker.paused && _tgtDisp) {
 			Ctx.save()
-			_fadeOut?.setAlpha(ctx)
+			_fadeOut?.setAlpha(Ctx)
 			Ctx.translate(...TargetPos.vals)
 			Ctx.drawImage(Spr.cachedCvs, -T,-T)
 			Ctx.restore()
