@@ -30,13 +30,8 @@ export const View = function() {
 		Ctx.restore()
 	}
 	function drawFruits() {
-		for (const [i,fn] of FruitSpr.sprites.entries()) {
-			Ctx.save()
-			Ctx.translate(ofst(i)+S/2, S/2)
-			Ctx.scale(S/16*1.05, S/16*1.05)
-			fn(Ctx)
-			Ctx.restore()
-		}
+		for (let i=0; i<8; i++)
+			FruitSpr.draw(Ctx, i, Vec2(ofst(i)+S/2, S/2), S/16*1.05)
 	}
 	function drawGhosts() {
 		for (let row=1; row<=5; row++)
