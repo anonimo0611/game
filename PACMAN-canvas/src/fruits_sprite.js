@@ -269,20 +269,40 @@ function key(ctx=Ctx) {
 	ctx.restore()
 }
 
-const functions = freeze([
+export const Scale   = 1.05
+export const sprites = freeze([
 	cherry,strawberry,orange,apple,melon,bossGalaxian,bell,key
 ])
-{ // Create a sprite sheet
+export function draw(ctx=Ctx, idx=0, {x=0, y=0}={}) {
+	ctx.save()
+	ctx.translate(x, y)
+	ctx.scale(T/8*Scale, T/8*Scale)
+	sprites[idx](ctx)
+	ctx.restore()
+}
+export const {cvs:cachedCvs,cache}= function() {
+	const {cvs,ctx}= canvas2D(null,T*2)
+	function cache(idx) {
+		ctx.save()
+		ctx.clear()
+		ctx.translate(T, T)
+		ctx.scale(T/8*Scale, T/8*Scale)
+		sprites[idx](ctx)
+		ctx.restore()
+	}
+	return {cvs,cache}
+}()
+
+{ // Create a sprite sheet for menu icons
 	const Menu = $byId('LevelMenu')
 	const Size = +Menu.css('--scale') * T
 	const {cvs,ctx}=canvas2D(null, Size*8, Size)
-	functions.forEach((fn,i)=> {
+	sprites.forEach((fn,i)=> {
 		ctx.save()
 		ctx.translate(Size/2+Size*i, Size/2)
-		ctx.scale(Size/16*1.05, Size/16*1.05)
+		ctx.scale(Size/16*Scale, Size/16*Scale)
 		fn(ctx)
 		ctx.restore()
 	})
 	Menu.css('--url',`url(${cvs.toDataURL()})`)
 }
-export default functions
