@@ -1,6 +1,6 @@
 import '../_lib/mouse.js'
 import PacSprite     from '../src/pacman/pac_sprite.js'
-import fruitsSprites from '../src/fruits_sprite.js'
+import * as FruitSpr from '../src/fruits_sprite.js'
 import pointsSprite  from '../src/points_sprite.js'
 import {Cols,Rows,T,S,Gap,ghost,cbAkabei} from './_constants.js'
 
@@ -30,7 +30,7 @@ export const View = function() {
 		Ctx.restore()
 	}
 	function drawFruits() {
-		for (const [i,fn] of fruitsSprites.entries()) {
+		for (const [i,fn] of FruitSpr.sprites.entries()) {
 			Ctx.save()
 			Ctx.translate(ofst(i)+S/2, S/2)
 			Ctx.scale(S/16*1.05, S/16*1.05)
@@ -109,7 +109,7 @@ export const View = function() {
 		}
 		{ // Stake and offcut
 			const s = T/TileSize
-			const [sx,sy]= Vec2(aka.cbSprite.stake.size).mul(s).vals
+			const [sx,sy]= Vec2(aka.cbSprite.stakePos.size).mul(s).vals
 			// Stake
 			Ctx.save()
 			Ctx.translate(S*6.9, S-S/4-sy-3*s)
