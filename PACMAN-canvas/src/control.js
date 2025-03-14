@@ -30,7 +30,7 @@ export const Ctrl = new class {
 		const scale = min(
 			innerWidth /Form.offsetWidth * .98,
 			innerHeight/Form.offsetHeight)
-		Form.style.scale = min(1,scale)
+		Form.style.scale = min(1,round(scale*100)/100)
 	}
 	#saveData() {
 		const data = {}
