@@ -63,10 +63,10 @@ class PlayablePacman extends Pacman {
 	}
 	#getCurrentStep() {
 		const eating = Maze.hasDot(this.tileIdx)
-		const speed  = GhsMgr.frightened
+		return(GhsMgr.frightened
 			? (eating? PacStep.EneEat : PacStep.Energize)
 			: (eating? PacStep.Eating : PacStep.Base)
-		return this.#baseSpeed * speed
+		) * this.#baseSpeed
 	}
 	#ignoreKeys(e, dir) {
 		return Confirm.opened
