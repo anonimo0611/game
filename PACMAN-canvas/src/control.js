@@ -5,7 +5,10 @@ import {LevelMenu} from './_menu.js'
 import {State}     from './_state.js'
 import {drawText}  from './message.js'
 
-export const Form = document.forms[0]
+/** @returns {HTMLInputElement} */
+const ctrl = id=> Form[id]
+const Form = document.forms[0]
+
 export const Ctrl = new class {
 	static {$ready(this.setup)}
 	static setup() {
@@ -13,15 +16,15 @@ export const Ctrl = new class {
 		Ctrl.#setupFormCtrls()
 		$on('resize',Ctrl.#fitToViewport).trigger('resize')
 	}
-	get livesMax()      {return +Form.lvsRng.value}
-	get speedRate()     {return +Form.spdRng.value}
 	get extendPts()     {return +Menu.ExtendScoreMenu.value}
-	get isChaseMode()   {return Form.chsChk.checked == true}
-	get consecutive()   {return Form.onlChk.checked == false}
-	get unrestricted()  {return Form.unrChk.checked == true}
-	get invincible()    {return Form.invChk.checked == true}
-	get showTargets()   {return Form.tgtChk.checked == true}
-	get showGridLines() {return Form.grdChk.checked == true}
+	get livesMax()      {return ctrl('lvsRng').valueAsNumber}
+	get speedRate()     {return ctrl('spdRng').valueAsNumber}
+	get isChaseMode()   {return ctrl('chsChk').checked}
+	get consecutive()   {return ctrl('onlChk').checked == false}
+	get unrestricted()  {return ctrl('unrChk').checked}
+	get invincible()    {return ctrl('invChk').checked}
+	get showTargets()   {return ctrl('tgtChk').checked}
+	get showGridLines() {return ctrl('grdChk').checked}
 	get isPractice()    {return Ctrl.isCheatMode  ||!Ctrl.isDefaultMode}
 	get isCheatMode()   {return Ctrl.speedRate<.7 || Ctrl.showTargets || Ctrl.invincible}
 	get isDefaultMode() {return Ctrl.consecutive && LevelMenu.index == 0}
@@ -58,10 +61,10 @@ export const Ctrl = new class {
 	#restore() {
 		const data = JSON.parse(localStorage.anopacman || null) || {}
 		for (const [id,val] of entries(data)) {
-			if (!byId(id)) continue
+			if (!ctrl(id)) continue
 			switch(id.match(/[A-Z][a-z\d]+$/)[0]) {
-			case 'Rng': byId(id).value  =val;break
-			case 'Chk': byId(id).checked=val;break
+			case 'Rng': ctrl(id).value  =val;break
+			case 'Chk': ctrl(id).checked=val;break
 			case 'Menu':Menu[id].select(val);break
 			}
 			$byId(id).trigger('input')
@@ -104,4 +107,4 @@ export const Ctrl = new class {
 		$('#defBtn')  .on('click', Ctrl.#setDefault)
 		$('#startBtn').on('click', State.switchToStart)
 	}
-}
+}, powChk = ctrl('powChk')

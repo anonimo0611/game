@@ -1,6 +1,5 @@
 import {State} from './_state.js'
 import {Ctrl}  from './control.js'
-import {Form}  from './control.js'
 import Sprite  from './pacman/pac_sprite.js'
 
 export const Lives = function() {
@@ -25,7 +24,7 @@ export const Lives = function() {
 		}
 		Bg.ctx.restore()
 	}
-	$(Form.lvsRng).on('input', ()=> set())
+	$('#lvsRng').on('input', ()=> set())
 	$on('Title Start Ready Restart', ()=> set())
 	return {
 		get left() {return left},

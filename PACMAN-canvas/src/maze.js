@@ -1,7 +1,7 @@
 import {Rect}   from '../_lib/rect.js'
 import {State}  from './_state.js'
+import {powChk} from './control.js'
 import {MapArr} from './_map_data.js'
-import {Form}   from './control.js'
 
 const DotSet   = new Set()
 const WallSet  = new Set()
@@ -40,7 +40,7 @@ export const Maze = new class {
 		MapArr.forEach((c,i)=> /[^.O\s]/.test(c) && WallSet.add(i))
 		const resetDots = ()=> MapArr.forEach(Maze.#setDot)
 		$on('Title NewLevel', resetDots)
-		$(Form.powChk).on('change', resetDots)
+		$(powChk).on('change',resetDots)
 	}
 	get dotsLeft() {return DotSet.size}
 
@@ -63,7 +63,7 @@ export const Maze = new class {
 		const v = Vec2(i%Cols, i/Cols|0)
 		Maze.clearBgDot({tileIdx:i,tilePos:v})
 		DotSet.add(i)
-		!Form.powChk.checked || (chip == '.')
+		!powChk.checked || (chip == '.')
 			? drawDot(Bg.ctx, v)
 			: PowMap.set(i, v)
 	}
