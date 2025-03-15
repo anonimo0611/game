@@ -20,7 +20,7 @@
 	/** @type {Map<HTMLElement,State>} */
 	const StateMap = new Map()
 
-	for (const elm of document.querySelectorAll(selector)) {
+	for (const elm of dqsAll(selector)) {
 		elm.addEventListener('mousedown', e=> {
 			if (isNotDrag(e) || e.buttons != 1) return
 			target = elm
