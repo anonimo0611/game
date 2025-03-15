@@ -1,8 +1,6 @@
 import '../_lib/mouse.js'
-import {Vec2}        from '../_lib/vec2.js'
-import {U,R,D,L}     from '../_lib/direction.js'
 import PacSprite     from '../src/pacman/pac_sprite.js'
-import fruitsSprites from '../src/fruits_sprite.js'
+import * as FruitSpr from '../src/fruits_sprite.js'
 import pointsSprite  from '../src/points_sprite.js'
 import {Cols,Rows,T,S,Gap,ghost,cbAkabei} from './_constants.js'
 
@@ -26,19 +24,14 @@ export const View = function() {
 		Ctx.setLineDash([2,2])
 		Ctx.lineWidth = 2
 		Ctx.strokeStyle = '#555'
-		const line = (...args)=> cvsStrokeLine(Ctx)(...args)
+		const line = (...args)=> strokeLine(Ctx)(...args)
 		for (let y=0; y<Cols;   y++) line(ofst(y), 0, ofst(y), Rows*S)
 		for (let x=0; x<Rows+1; x++) line(0, x*S, Cols*S+Gap, x*S)
 		Ctx.restore()
 	}
 	function drawFruits() {
-		for (const [i,fn] of fruitsSprites.entries()) {
-			Ctx.save()
-			Ctx.translate(ofst(i)+S/2, S/2)
-			Ctx.scale(S/16*1.05, S/16*1.05)
-			fn(Ctx)
-			Ctx.restore()
-		}
+		for (let i=0; i<8; i++)
+			FruitSpr.draw(Ctx, i, Vec2(ofst(i)+S/2, S/2), S/16*1.05)
 	}
 	function drawGhosts() {
 		for (let row=1; row<=5; row++)
@@ -111,7 +104,7 @@ export const View = function() {
 		}
 		{ // Stake and offcut
 			const s = T/TileSize
-			const [sx,sy]= Vec2(aka.cbSprite.stake.size).mul(s).vals
+			const [sx,sy]= Vec2(aka.cbSprite.stakeSize).mul(s).vals
 			// Stake
 			Ctx.save()
 			Ctx.translate(S*6.9, S-S/4-sy-3*s)
