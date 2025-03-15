@@ -22,7 +22,7 @@
 
 	for (const elm of document.querySelectorAll(selector)) {
 		elm.addEventListener('mousedown', e=> {
-			if (isNotDrag(e)) return
+			if (isNotDrag(e) || e.buttons != 1) return
 			target = elm
 			StateMap.set(target, new State(e))
 			e.stopPropagation()
