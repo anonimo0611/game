@@ -12,7 +12,7 @@ function hide(btn, e) {
 	$(btn.value).hide() && $(btn).removeClass('active')
 }
 
-$on('DOMContentLoaded Start', ()=> $('.panel').hide())
+$on('load Start', ()=> $('.panel').hide())
 $('.panelBtn').each((_,btn)=> {
 	$on('click',      e=> hide(btn,e))
 	$(btn).on('click',e=> show(btn,e))
