@@ -14,15 +14,14 @@ export const Lives = function() {
 		}[State.current]
 	}
 	function set(val=currentValue()) {
+		const radius = T*.78
 		const sprite = new Sprite(Bg.ctx,{openType:1})
 		Bg.ctx.save()
 		Bg.ctx.translate(T*2, T*32)
 		Bg.ctx.clearRect(0,0, T*2*5, T*2)
-		for (let i=0; i<(_left=val); i++) {
-			const radius    = T*.78
-			const centerPos = Vec2(T*2*i,0).add(T)
-			sprite.draw({radius,centerPos})
-		}
+		for (let i=0; i<(_left=val); i++)
+			sprite.draw({radius,
+				centerPos:Vec2(T*2*i,0).add(T)})
 		Bg.ctx.restore()
 	}
 	$('#lvsRng').on('input', ()=> set())
