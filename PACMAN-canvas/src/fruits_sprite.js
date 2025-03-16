@@ -294,12 +294,12 @@ export const {cvs:cachedCvs,cache}= function() {
 
 { // Create a sprite sheet for menu icons
 	const Menu = $byId('LevelMenu')
-	const Size = +Menu.css('--scale') * T
-	const {cvs,ctx}=canvas2D(null, Size*8, Size)
+	const size = +Menu.css('--scale') * T
+	const {cvs,ctx}=canvas2D(null, size*8, size)
 	Fns.forEach((fn,i)=> {
 		ctx.save()
-		ctx.translate(Size/2+Size*i, Size/2)
-		ctx.scale(Size/16*Scale, Size/16*Scale)
+		ctx.translate(size/2+size*i, size/2)
+		ctx.scale(size/16*Scale, size/16*Scale)
 		fn(ctx)
 		ctx.restore()
 	})
