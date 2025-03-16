@@ -61,7 +61,7 @@ export const Ctrl = new class {
 	#restore() {
 		const data = JSON.parse(localStorage.anopacman || null) || {}
 		for (const [id,val] of entries(data)) {
-			if (!ctrl(id)) continue
+			if (!byId(id)) continue
 			switch(id.match(/[A-Z][a-z\d]+$/)[0]) {
 			case 'Rng': ctrl(id).value  =val;break
 			case 'Chk': ctrl(id).checked=val;break
