@@ -32,9 +32,8 @@ export class GhostState extends BaseState {
 	isReturn = false
 	constructor({name='Ghost',isInHouse=false}={}) {
 		super()
-		const state = name == 'Ghost'
-			? 'Walk' : (isInHouse? 'Idle':'GoOut')
-		this.init(state)
+		this.init(name == 'Ghost'
+			? 'Walk' : (isInHouse? 'Idle':'GoOut'))
 	}
 	get isEscaping() {
 		return this.isEscape || this.isReturn
@@ -205,7 +204,7 @@ export const Elroy = function() {
 }()
 
 export class FrightMode {
-	static #timeTbl = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0])
+	static #timeTbl = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // seconds
 	static get time() {return this.#timeTbl[Game.clampedLv-1]}
 	static caught() {SysMap.get(FrightMode)?.caught()}
 	#timeCnt   = 0
@@ -224,12 +223,12 @@ export class FrightMode {
 	update() {
 		if (!State.isPlaying || Timer.frozen) return
 		const {time}= FrightMode
-		const elapsedT  = (Game.interval*this.#timeCnt++)/1e3
+		const elapsedS  = (Game.interval*this.#timeCnt++)/1e3
 		const fInterval = (time == 1 ? 12:14)/Game.speedRate|0
 		const caughtAll = (this.#caughtCnt == GhsType.Max)
 		this.#flashIdx ^=!(this.#flashCnt % fInterval)
-		;(elapsedT>=time - 2) && this.#flashCnt++
-		;(elapsedT>=time || caughtAll) && this.#toggle(false)
+		;(elapsedS>=time - 2) && this.#flashCnt++
+		;(elapsedS>=time || caughtAll) && this.#toggle(false)
 	}
 	caught() {this.#caughtCnt++}
 }
