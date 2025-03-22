@@ -161,9 +161,9 @@ class StakeClothes {
 		Ctx.translate(x, y)
 		Ctx.scale(size/(100/GhsScale), size/(100/GhsScale))
 		Ctx.beginPath()
-		Ctx.moveTo(-8, -16)
+		Ctx.moveTo(-8, -10)
 		Ctx.quadraticCurveTo(-8,-4, v1, 3)
-		Ctx.quadraticCurveTo(v2, 9, v3, 7)
+		Ctx.quadraticCurveTo(v2, 9, v3, 9)
 		setLineTo(Ctx)([v3,43],[ls,43],[ls,20],[-8,20])
 		Ctx.fillStyle = Color.Akabei
 		Ctx.fill()
