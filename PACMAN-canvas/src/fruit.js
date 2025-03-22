@@ -14,7 +14,7 @@ const PointTable = freeze([100,300,500,700,1e3,2e3,3e3,5e3])
 const TargetPos  = Vec2(CvsW/2, T*18.5).freeze()
 
 const LvCounterMax  = 7
-const LvCounterRect = freeze([T*12, T*32, T*2*LvCounterMax, T*2])
+const LvCounterRect = freeze([T*12, CvsH-T*2, T*2*LvCounterMax, T*2])
 
 /** @type {?FadeOut} */
 let _fadeOut = null

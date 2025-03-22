@@ -19,7 +19,7 @@ export const Lives = function() {
 		const radius = T*.78, size = T*2
 		const sprite = new Sprite(ctx,{openType:1})
 		ctx.save()
-		ctx.translate(size, T*32)
+		ctx.translate(size, CvsH-size)
 		ctx.clearRect(0,0, size*5, size)
 		for (let i=0; i<(_left=val); i++)
 			sprite.draw({radius,centerPos:Vec2(size*i+T,T)})
