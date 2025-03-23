@@ -35,8 +35,8 @@ export class Actor {
 	get isInTunnel() {return Maze.Tunnel.isIn(this.centerPos)}
 
 	get stepsPerTile() {
-		const {x,y} = this.centerPos, v = Vec2(this.dir)
-		const count = v.x? x % T : y % T
+		const  {x,y} = this.centerPos, v = Vec2(this.dir)
+		const  count = v.x? x % T : y % T
 		return (v.x || v.y) > 0 ? count : T-count
 	}
 	get inForwardOfTile()  {return this.stepsPerTile <= T/2}
@@ -66,15 +66,16 @@ export class Actor {
 		return this.inForwardOfTile && this.stepsPerTile <= this.step/denom
 	}
 	hasAdjWall(dir) {
-		return Maze.hasWall(this.getAdjTile(dir))
+		const  adjTile = this.getAdjTile(dir)
+		return Maze.hasWall(adjTile)
 	}
 	getAdjTile(dir, n=1, tile=this.tilePos) {
 		const  v = Vec2(dir).mul(n).add(tile)
 		return v.setX((v.x+Cols) % Cols)
 	}
 	collidedWithWall(dir=this.dir) {
-		const {step,centerPos}= this
-		const {x,y}= Vec2(dir).mul(T/2+step).add(centerPos).divInt(T)
+		const  {step,centerPos}= this
+		const  {x,y}= Vec2(dir).mul(T/2+step).add(centerPos).divInt(T)
 		return Maze.hasWall({x:(x+Cols) % Cols, y})
 	}
 	update() {
