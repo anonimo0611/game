@@ -130,22 +130,19 @@ class StakeClothes {
 	constructor() {freeze(this)}
 	CaughtX   = CvsW/2 + T/2
 	AkaMinX   = this.CaughtX - T
-	stakeSize = Vec2(T*.18, T*.7).freeze()
-
-	stakePos  = Vec2(
-		CvsW/2 + T*2 - this.stakeSize.x/2,
-		CvsH/2 + T*1 - this.stakeSize.y - T*.1
-	).freeze()
-
-	offcutPos = Vec2(
-		CvsW/2 + T*2 + this.stakeSize.x/2,
-		CvsH/2 + T*1 - T*.1
-	).freeze()
-
-	drawStake({x, y}=this.stakePos) {
+	stakeSize = Vec2(T*.18, T*.70).freeze()
+	#stakePos = freeze({
+		x: CvsW/2 + T*2 - this.stakeSize.x/2,
+		y: CvsH/2 + T*1 - this.stakeSize.y - T*.1
+	})
+	#offcutPos = freeze({
+		x: CvsW/2 + T*2 + this.stakeSize.x/2,
+		y: CvsH/2 + T*1 - T*.1
+	})
+	drawStake({x, y}=this.#stakePos) {
 		fillRect(Ctx)(x,y, ...this.stakeSize.vals, '#FFF')
 	}
-	drawOffcut({x, y}=this.offcutPos) {
+	drawOffcut({x, y}=this.#offcutPos) {
 		Ctx.save()
 		Ctx.translate(x, y)
 		newLinePath(Ctx, Color.Akabei)
