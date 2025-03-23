@@ -90,19 +90,23 @@ button, .dropdown .current {
 		outline-offset: 2px;
 		outline: solid 3px var(--active);
 	}
-	&:not(:checked) {border-color:var(--color-border)}
-	&:checked       {background:#9CF}
-	&:checked:hover {background:var(--active)}
-	&:checked:focus {background:var(--active)}
-	&:checked::before {
-		content: '';
-		border: solid #000;
-		border-width: 0 0 .1em .1em;
-		width:  calc(.6em - 1px);
-		height: calc(.4em - 1.5px);
-		box-sizing: border-box;
-		position: absolute;
-		rotate: -45deg;
+	&:not(:checked) {
+		border-color:var(--color-border);
+		&:hover {border-color:#BBB}
+	}
+	&:checked  {
+		background:#9CF;
+		&:hover,&:focus {background:var(--active)}
+		&::before {
+			content: '';
+			border: solid #000;
+			border-width: 0 0 .1em .1em;
+			width:  calc(.6em - 1px);
+			height: calc(.4em - 1.5px);
+			box-sizing: border-box;
+			position: absolute;
+			rotate: -45deg;
+		}
 	}
 }
 
@@ -223,14 +227,14 @@ button, .dropdown .current {
 	}
 }
 
-label:hover + .dropdown > .current {
+ label:hover + .dropdown > .current,
+.label:hover + .slidemenu, tr:hover th+td {
 	background: var(--bgcolor-hilight);
 }
-
-label,.label,th{color: var(--color-label)}
-tr:hover th    {color: var(--color-label-hover)}
-tr:hover th+td {background-color: var(--bgcolor-hilight)}
-
+label, .label, th {
+	color: var(--color-label)
+}
+tr:hover th,
 label:focus-within,
 label:has(+.menu :is(:hover,:focus)),
 span:has(input:focus) + label,
