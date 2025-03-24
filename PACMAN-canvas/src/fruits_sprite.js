@@ -37,7 +37,6 @@ function cherry(ctx=Ctx) {
 	ctx.lineCap = ctx.lineJoin ='round'
 	ctx.stroke()
 }
-
 function strawberry(ctx=Ctx) {
 	ctx.lineCap = ctx.lineJoin = 'round'
 	// red body
@@ -72,7 +71,6 @@ function strawberry(ctx=Ctx) {
 	ctx.strokeStyle = '#FFF'
 	ctx.stroke()
 }
-
 function orange(ctx=Ctx) {
 	ctx.lineCap = ctx.lineJoin = 'round'
 	// orange body
@@ -108,7 +106,6 @@ function orange(ctx=Ctx) {
 	ctx.stroke()
 	ctx.fill()
 }
-
 function apple(ctx=Ctx) {
 	ctx.lineCap = 'round'
 	// red fruit
@@ -140,7 +137,6 @@ function apple(ctx=Ctx) {
 	ctx.strokeStyle = '#FFF'
 	ctx.stroke()
 }
-
 function melon(ctx=Ctx) {
 	// draw body
 	fillCircle(ctx)(0, 1.5, 5.2, '#7BF331')
@@ -173,7 +169,6 @@ function melon(ctx=Ctx) {
 	  [-1.3, 2.0],[-1, 4.5],[ 3, 2.5],[ 1.0, 4.5]
 	].forEach(s=> fillCircle(ctx)(...s, 0.5))
 }
-
 function gala(ctx=Ctx) {
 	// yellow body
 	newLinePath(ctx,'#F8FF00')([0.0,-2.6],
@@ -204,7 +199,6 @@ function gala(ctx=Ctx) {
 	newLinePath(ctx,'#0AF')(...wingPath)
 	newLinePath(ctx,'#0AF')(...wingPath.map(([x,y])=>([-x,y])))
 }
-
 function bell(ctx=Ctx) {
 	// bell body
 	ctx.beginPath()
@@ -239,7 +233,6 @@ function bell(ctx=Ctx) {
 	ctx.fill()
 	fillCircle(ctx)(1.3, 5.5, 1.3, '#FFF')
 }
-
 function key(ctx=Ctx) {
 	ctx.lineWidth   = 1
 	ctx.lineJoin    = 'round'
@@ -268,26 +261,21 @@ function key(ctx=Ctx) {
 	strokeLine(ctx)(-1.2, -4.5, +1.2, -4.5)
 	ctx.restore()
 }
-
-const Scale = 1.05
 const Fns = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
 
-export function draw(ctx=Ctx, idx=0, {x=0,y=0}={}, scale=T/8*Scale) {
+export function draw(ctx=Ctx, idx=0, x=T,y=T, scale=T/8) {
+	const ratio = 1.05
 	ctx.save()
 	ctx.translate(x, y)
-	ctx.scale(scale, scale)
+	ctx.scale(scale*ratio, scale*ratio)
 	Fns[idx](ctx)
 	ctx.restore()
 }
 export const {cvs:cachedCvs,cache}= function() {
 	const {cvs,ctx}= canvas2D(null,T*2)
 	function cache(idx) {
-		ctx.save()
 		ctx.clear()
-		ctx.translate(T,T)
-		ctx.scale(T/8*Scale, T/8*Scale)
-		Fns[idx](ctx)
-		ctx.restore()
+		draw(ctx, idx)
 	}
 	return {cvs,cache}
 }()
@@ -295,13 +283,9 @@ export const {cvs:cachedCvs,cache}= function() {
 { // Create a sprite sheet for menu icons
 	const Menu = $byId('LevelMenu')
 	const size = +Menu.css('--scale') * T
-	const {cvs,ctx}=canvas2D(null, size*8, size)
-	Fns.forEach((fn,i)=> {
-		ctx.save()
-		ctx.translate(size/2+size*i, size/2)
-		ctx.scale(size/16*Scale, size/16*Scale)
-		fn(ctx)
-		ctx.restore()
+	const {ctx}=canvas2D(null, size*8, size)
+	Fns.forEach((_,idx)=> {
+		draw(ctx, idx, size/2+size*idx, size/2, size/16)
 	})
-	Menu.css('--url',`url(${cvs.toDataURL()})`)
+	Menu.css('--url',`url(${ctx.canvas.toDataURL()})`)
 }
