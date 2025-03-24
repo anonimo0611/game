@@ -31,7 +31,7 @@ export const View = function() {
 	}
 	function drawFruits() {
 		for (let i=0; i<8; i++)
-			FruitSpr.draw(Ctx, i, Vec2(ofst(i)+S/2, S/2), S/16*1.05)
+			FruitSpr.draw(Ctx, i, ofst(i)+S/2, S/2, S/16)
 	}
 	function drawGhosts() {
 		for (let row=1; row<=5; row++)
