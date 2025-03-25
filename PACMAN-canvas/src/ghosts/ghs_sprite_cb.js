@@ -1,17 +1,17 @@
 export default class {
-	/** @param {CanvasRenderingContext2D} ctx */
+	/** @param {ExtendedContext2D} ctx */
 	constructor(ctx) {
 		this.ctx = ctx
 		freeze(this)
 	}
 	rippedBody() {
 		const {ctx}= this
-		fillRect(ctx)(38,-1, 6,25, null)
-		fillRect(ctx)(30,23,15,15, null)
-		newLinePath(ctx)([38,-8],[49,-5],[36, 4]);ctx.fill()
-		newLinePath(ctx)([40, 1],[40,23],[35,23])
+		ctx.fillColoredRect(38,-1, 6,25, null)
+		ctx.fillColoredRect(30,23,15,15, null)
+		ctx.newLinePath([38,-8],[49,-5],[36, 4]);ctx.fill()
+		ctx.newLinePath([40, 1],[40,23],[35,23])
 		ctx.quadraticCurveTo(28, 32, 35, 32)
-		setLineTo(ctx)([43,32],[43,42],[9,42],[9,38],[18,32],[26,25],[21,20],[19,19])
+		ctx.addLinePath([43,32],[43,42],[9,42],[9,38],[18,32],[26,25],[21,20],[19,19])
 		ctx.fillStyle = Color.GhostSkin
 		ctx.fill()
 	}
@@ -20,9 +20,9 @@ export default class {
 		coords = [[39,8],[33,14],[24,8],[14,15],[26,20],[14,27],[25,33],idx?[]:[14,38]]
 		ctx.lineWidth = 3.5
 		ctx.strokeStyle = '#FFF'
-		newLinePath(ctx)(...coords)
+		ctx.newLinePath(...coords)
 		ctx.stroke()
-		coords.forEach(c=> fillCircle(ctx)(...c, ctx.lineWidth, '#FFF'))
+		coords.forEach(c=> ctx.fillCircle(...c, ctx.lineWidth, '#FFF'))
 	}
 	bracketEyes() {
 		const {ctx}= this
@@ -61,22 +61,22 @@ export default class {
 		ctx.beginPath()
 		ctx.moveTo(-12, 13)
 		ctx.quadraticCurveTo(-4, -16, 28, -31)
-		setLineTo(ctx)([61, -30],[54, -16])
+		ctx.addLinePath([61, -30],[54, -16])
 		ctx.quadraticCurveTo(49, -4, 40, 4)
-		setLineTo(ctx)([56,5],[56,22],[37,22],[37,16])
+		ctx.addLinePath([56,5],[56,22],[37,22],[37,16])
 		ctx.fillStyle = Color.GhostSkin
 		ctx.fill()
 		ctx.restore()
 
 		// Clothes
 		ctx.beginPath()
-		setLinePath(ctx)([-67,22],[-55,7])
+		ctx.setLinePath([-67,22],[-55,7])
 		ctx.quadraticCurveTo(-43, -5, -35,  8)
 		ctx.quadraticCurveTo(-28, 16, -18,  6)
 		ctx.quadraticCurveTo( -8,  0, -.5, -2)
 		ctx.quadraticCurveTo( 10, -7,  13,  2)
 		ctx.quadraticCurveTo( 20, 12,  25, 15)
-		setLineTo(ctx)([17,15],[13,22],[-63,22])
+		ctx.addLinePath([17,15],[13,22],[-63,22])
 		ctx.fill()
 		for (let i=1; i>=0; i--) {
 			// Eyeballs
@@ -98,18 +98,18 @@ export default class {
 		ctx.beginPath()
 		ctx.moveTo(-15,17)
 		ctx.quadraticCurveTo(3, -3, 22, -28)
-		setLineTo(ctx)([51,-28],[51,-11])
+		ctx.addLinePath([51,-28],[51,-11])
 		ctx.quadraticCurveTo(50, -1, 45, 4)
-		setLineTo(ctx)([63,4],[63,22],[44,22],[44,16],[12,16])
+		ctx.addLinePath([63,4],[63,22],[44,22],[44,16],[12,16])
 		ctx.fillStyle = Color.GhostSkin
 		ctx.fill()
 		ctx.restore()
 
 		// Clothes
 		ctx.beginPath()
-		setLinePath(ctx)([-67, 22],[-58, 12])
+		ctx.setLinePath([-67, 22],[-58, 12])
 		ctx.quadraticCurveTo(-48, 1, -43, 11)
-		setLineTo(ctx)([-4,11],[-4,5],[22,4],[28,12],[24,15],[18,22])
+		ctx.addLinePath([-4,11],[-4,5],[22,4],[28,12],[24,15],[18,22])
 		ctx.fill()
 		for (let i=1; i>=0; i--) {
 			// Eyeballs
@@ -140,13 +140,12 @@ class StakeClothes {
 		y: CvsH/2 + T*1 - T*.1
 	})
 	drawStake({x, y}=this.#stakePos) {
-		fillRect(Ctx)(x,y, ...this.stakeSize.vals, '#FFF')
+		Ctx.fillColoredRect(x,y, ...this.stakeSize.vals, '#FFF')
 	}
 	drawOffcut({x, y}=this.#offcutPos) {
 		Ctx.save()
 		Ctx.translate(x, y)
-		newLinePath(Ctx, Color.Akabei)
-			([0,-4],[0,-this.stakeSize.y],[-T,0],[-4,0],[-4,-4])
+		Ctx.fillPolygon(Color.Akabei, [0,-4],[0,-this.stakeSize.y],[-T,0],[-4,0],[-4,-4])
 		Ctx.restore()
 	}
 	expandClothes({x, y, size=T*2}={}, aIdx, rate) {
@@ -161,7 +160,7 @@ class StakeClothes {
 		Ctx.moveTo(-8, -10)
 		Ctx.quadraticCurveTo(-8,-4, v1, 3)
 		Ctx.quadraticCurveTo(v2, 9, v3, 9)
-		setLineTo(Ctx)([v3,43],[ls,43],[ls,20],[-8,20])
+		Ctx.addLinePath([v3,43],[ls,43],[ls,20],[-8,20])
 		Ctx.fillStyle = Color.Akabei
 		Ctx.fill()
 		Ctx.restore()

@@ -9,7 +9,7 @@ export default class {
 	#losing  = null
 	#mAngle  =  0
 	#animDir = -1
-	/** @param {Ctx} ctx */
+	/** @param {ExtendedContext2D} ctx */
 	constructor(ctx, {openType=0}={}) {
 		this.ctx = ctx
 		this.#mAngle = [0,OpenMid,OpenMax][openType]
@@ -40,7 +40,7 @@ export default class {
 		ctx.fillStyle = Color.Pacman
 		ctx.fill()
 		ctx.restore()
-		showCenter && fillCircle(ctx)(x,y, 3, Color.PacCenter)
+		showCenter && ctx.fillCircle(x,y, 3, Color.PacCenter)
 	}
 	setLosing() {this.#losing = new Losing(this.ctx)}
 }

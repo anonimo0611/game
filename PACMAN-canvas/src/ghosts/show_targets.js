@@ -41,8 +41,8 @@ export const Target = new class {
 		const {x, y}= Target.#getTargetPos(g)
 		Ctx.save()
 		Ctx.globalAlpha = 0.8
-		fillCircle  (Ctx)(x, y, T*0.4, Color[g.name])
-		strokeCircle(Ctx)(x, y, T*0.4,'#FFF', 4)
+		Ctx.fillCircle  (x, y, T*0.4, Color[g.name])
+		Ctx.strokeCircle(x, y, T*0.4,'#FFF', 4)
 		Ctx.restore()
 	}
 	/**
@@ -65,10 +65,10 @@ export const Target = new class {
 		Ctx.stroke()
 		if (g.idx == GhsType.Aosuke) {
 			const akaVals = GhsMgr.akaCenter.vals
-			strokeLine(Ctx)(...fwdVals, ...akaVals)
-			strokeLine(Ctx)(...fwdVals, ...g.chasePos.vals)
-			fillCircle(Ctx)(...fwdVals, 8, Color[g.name])
-			fillCircle(Ctx)(...akaVals, 8, Color[g.name])
+			Ctx.strokeLine(...fwdVals, ...akaVals)
+			Ctx.strokeLine(...fwdVals, ...g.chasePos.vals)
+			Ctx.fillCircle(...fwdVals, 8, Color[g.name])
+			Ctx.fillCircle(...akaVals, 8, Color[g.name])
 		}
 		Ctx.restore()
 	}

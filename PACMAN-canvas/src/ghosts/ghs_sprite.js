@@ -4,7 +4,7 @@ import CBSprite from './ghs_sprite_cb.js'
 export default class {
 	/**
 	* @param {HTMLCanvasElement} cvs
-	* @param {CanvasRenderingContext2D} ctx
+	* @param {ExtendedContext2D} ctx
 	*/
 	constructor(cvs, ctx) {
 		this.cvs = cvs
@@ -116,8 +116,7 @@ export default class {
 			ctx.fillStyle = '#FFF'
 			ctx.fill()
 			// Eyes
-			ctx.fillStyle = ripped? '#000' : Color.GhostEyes
-			fillCircle(ctx)(18.5*v, -26, 8)
+			ctx.fillCircle(18.5*v, -26, 8, (ripped? '#000':Color.GhostEyes))
 		}
 	}
 	#eyesLookingDown() {
@@ -129,7 +128,7 @@ export default class {
 			ctx.fillStyle = '#FFF'
 			ctx.fill()
 			// Eyes
-			fillCircle(ctx)(19*v, 4, 8, Color.GhostEyes)
+			ctx.fillCircle(19*v, 4, 8, Color.GhostEyes)
 		}
 	}
 	#eyesLookingLR({orient=Dir.Left}) {
@@ -143,7 +142,7 @@ export default class {
 			ctx.fillStyle = '#FFF'
 			ctx.fill()
 			// Eyes
-			fillCircle(ctx)([-9.5, 29][i], -8,8, Color.GhostEyes)
+			ctx.fillCircle([-9.5, 29][i], -8,8, Color.GhostEyes)
 		}
 		ctx.restore()
 	}
@@ -155,9 +154,9 @@ export default class {
 			ctx.fillRect(-15-size/2, -11-size/2, size, size)
 			ctx.fillRect(+15-size/2, -11-size/2, size, size)
 		}
-		newLinePath(ctx) // Mouth
-		([-36,17],[-30, 9],[-25, 9],[-15,17],[-11,17],[-3, 9],[-2,9],
-		 [ +3, 9],[+11,17],[+15,17],[+25, 9],[+30, 9],[36,17])
+		ctx.newLinePath( // Mouth
+		[-36,17],[-30, 9],[-25, 9],[-15,17],[-11,17],[-3, 9],[-2,9],
+		[ +3, 9],[+11,17],[+15,17],[+25, 9],[+30, 9],[36,17])
 		ctx.lineWidth = 5
 		ctx.lineCap = ctx.lineJoin = 'round'
 		ctx.stroke()
@@ -175,6 +174,6 @@ export default class {
 const GlowCvs = function() {
 	const [cvs,ctx,w,h]= canvas2D(null, T*5).vals
 	ctx.filter = `blur(${T*0.6}px)`
-	fillCircle(ctx)(w/2, h/2, T, '#F00')
+	ctx.fillCircle(w/2, h/2, T, '#F00')
 	return cvs
 }()

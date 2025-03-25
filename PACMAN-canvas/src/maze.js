@@ -1,6 +1,5 @@
 import {Rect}   from '../_lib/rect.js'
 import {State}  from './_state.js'
-import {powChk} from './control.js'
 import {MapArr} from './_map_data.js'
 
 const DotSet   = new Set()
@@ -40,7 +39,7 @@ export const Maze = new class {
 		MapArr.forEach((c,i)=> /[^.O\s]/.test(c) && WallSet.add(i))
 		const resetDots = ()=> MapArr.forEach(Maze.#setDot)
 		$on('Title NewLevel', resetDots)
-		$(powChk).on('change',resetDots)
+		$('#powChk').on('change', resetDots)
 	}
 	get dotsLeft() {return DotSet.size}
 
@@ -63,7 +62,7 @@ export const Maze = new class {
 		const v = Vec2(i%Cols, i/Cols|0)
 		Maze.clearBgDot({tileIdx:i,tilePos:v})
 		DotSet.add(i)
-		!powChk.checked || (chip == '.')
+		!byId('powChk').checked || (chip == '.')
 			? drawDot(Bg.ctx, v)
 			: PowMap.set(i, v)
 	}
@@ -74,10 +73,10 @@ export const Maze = new class {
 		return DotSet.size
 	}
 	drawDot(ctx, {x,y}={}, isLarge=false, color=Color.Dot) {
-		fillCircle(ctx)(x*T+T/2, y*T+T/2, T/(isLarge? 2:8), color)
+		ctx.fillCircle(x*T+T/2, y*T+T/2, T/(isLarge? 2:8), color)
 	}
 	drawDoor() {
 		if (State.isFlashMaze) return
-		fillRect(Ctx)(13*T, 13.58*T, T*2, T/4, Color.Door)
+		Ctx.fillColoredRect(13*T, 13.58*T, T*2, T/4, Color.Door)
 	}
 }, {drawDot}=freeze(Maze)
