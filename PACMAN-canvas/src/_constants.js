@@ -3,7 +3,7 @@ const Rows = 34
 const TileSize = +$(dRoot).css('--tile-size'), T=TileSize
 const BaseStep = +(TileSize/4.5).toFixed(1)
 
-const [Bg,Cvs,Ctx,CvsW,CvsH]= [
+const [Bg,,Ctx,CvsW,CvsH]= [
 	canvas2D(null , TileSize*Cols, TileSize*Rows),...
 	canvas2D('cvs', TileSize*Cols, TileSize*Rows).vals
 ]
