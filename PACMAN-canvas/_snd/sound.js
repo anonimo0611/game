@@ -16,7 +16,7 @@ export const Sound = new class extends SoundMgr {
 	static async #init() {
 		const result = await SoundMgr.setup().catch(()=> false)
 		if (!result) return $('.volCtrl').hide()
-		Sound.vol = localStorage.anoPacVolume ?? 10
+		Sound.vol = localStorage.anoPacVolume ?? 5
 		$on('keydown',Sound.#onKeydown)
 		$(volRngG).prop({defaultValue:Sound.vol})
 		$(volRngG).on('input',Sound.#onWheel)
@@ -33,7 +33,7 @@ export const Sound = new class extends SoundMgr {
 		 || e.target == volRg2 && isEnterKey(e)) Sound.#mute()
 	}
 	#mute() {
-		Sound.#lstVol = Sound.vol || (Sound.#lstVol ?? +volRng.max)
+		Sound.#lstVol = Sound.vol || (Sound.#lstVol ?? +volRng.max>>1)
 		$(volRng).prop({value:Sound.vol? 0:Sound.#lstVol}).trigger('input')
 	}
 	get vol()      {return super.vol}
