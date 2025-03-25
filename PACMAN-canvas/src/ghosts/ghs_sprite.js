@@ -2,12 +2,8 @@ const EyesEnum = freeze({Up:0,Down:1,Left:2,Right:2,LowerR:3})
 
 import CBSprite from './ghs_sprite_cb.js'
 export default class {
-	/**
-	* @param {HTMLCanvasElement} cvs
-	* @param {ExtendedContext2D} ctx
-	*/
-	constructor(cvs, ctx) {
-		this.cvs = cvs
+	/** @param {ExtendedContext2D} ctx */
+	constructor(ctx) {
 		this.ctx = ctx
 		this.CBSprite = new CBSprite(ctx)
 		freeze(this)
@@ -33,12 +29,12 @@ export default class {
 		hadaketa   = false,
 	}={}) {
 		if (bitten) return
-		const {ctx,cvs}= this
+		const {ctx}= this
 		function finalize() {
 			ctx.restore()
 			mainCtx.save()
 			mainCtx.translate(x+size/4|0, y+size/4|0)
-			mainCtx.drawImage(cvs, -size/2, -size/2)
+			mainCtx.drawImage(ctx.canvas, -size/2, -size/2)
 			mainCtx.restore()
 		}
 		ctx.clear()

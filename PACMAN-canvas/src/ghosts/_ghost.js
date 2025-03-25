@@ -42,7 +42,7 @@ export class Ghost extends Actor {
 		this.playAnime = playAnime
 		this.pos       = Vec2(this.initX, row*T)
 		this.name      = this.constructor.name
-		this.sprite    = new Sprite(...canvas2D(null, T*3, T*2).vals)
+		this.sprite    = new Sprite(canvas2D(null, T*3, T*2).ctx)
 		this.state     = new Sys.GhostState(this)
 		$(this).on('FrightMode',  this.#setFrightMode)
 		$(this).on('Reverse',()=> this.#revSig  = true)
