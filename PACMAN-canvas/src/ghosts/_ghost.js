@@ -40,7 +40,7 @@ export class Ghost extends Actor {
 		this.initX     = col*T
 		this.initAlign = initAlign
 		this.playAnime = playAnime
-		this.pos       = Vec2(this.initX, row*T)
+		this.pos       = Vec2(col*T, row*T)
 		this.name      = this.constructor.name
 		this.sprite    = new Sprite(canvas2D(null, T*3, T*2).ctx)
 		this.state     = new Sys.GhostState(this)
@@ -100,7 +100,7 @@ export class Ghost extends Actor {
 		this.sprite.update()
 		if (this.penEntranceArrived) {
 			this.state.switchToReturn()
-			this.setCenterX(CvsW/2)
+			this.setToMazeCenter()
 		}
 		if (State.isPlaying && Maze.dotsLeft) {
 			this.#behavior()
@@ -137,7 +137,7 @@ export class Ghost extends Actor {
 			return this.setMove(this.initAlign<0 ? R:L)
 
 		if (cx != CvsW/2)
-			return this.setCenterX(CvsW/2)
+			return this.setToMazeCenter()
 
 		if (y > Maze.PenEntrance.y*T+step)
 			return this.setMove(U)
@@ -151,10 +151,10 @@ export class Ghost extends Actor {
 			return this.setMove(D)
 
 		if (y != Maze.PenMiddleY)
-			return this.setY(Maze.PenMiddleY)
+			return this.setPos({y:Maze.PenMiddleY})
 
 		if (!initAlign || abs(x-initX) <= step) {
-			this.setX(initX)
+			this.x   = initX
 			this.dir = initAlign? (initAlign<0 ? R:L) : U
 			this.#arrivedAtHome()
 			return
