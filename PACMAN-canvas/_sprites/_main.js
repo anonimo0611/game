@@ -24,7 +24,7 @@ export const View = function() {
 		Ctx.setLineDash([2,2])
 		Ctx.lineWidth = 2
 		Ctx.strokeStyle = '#555'
-		const line = (...args)=> strokeLine(Ctx)(...args)
+		const line = (...args)=> Ctx.strokeLine(...args)
 		for (let y=0; y<Cols;   y++) line(ofst(y), 0, ofst(y), Rows*S)
 		for (let x=0; x<Rows+1; x++) line(0, x*S, Cols*S+Gap, x*S)
 		Ctx.restore()

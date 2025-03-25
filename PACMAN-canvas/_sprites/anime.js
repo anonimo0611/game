@@ -2,7 +2,7 @@ import * as Menu   from '../_lib/menu.js'
 import PacSprite   from '../src/pacman/pac_sprite.js'
 import {Ghost}     from './actor.js'
 import {T,S,ghost} from './_constants.js'
-export const {cvs:pvCvs}= canvas2D('previewCvs', TileSize*3, TileSize*2)
+export const {ctx:pvCtx}= canvas2D('previewCvs', TileSize*3, TileSize*2)
 
 /** @enum {number} */
 const Type = freeze({None:-1,Pacman:0,Akabei:1,Pinky:2,Aosuke:3,Guzuta:4,Frightened:5})
@@ -31,7 +31,7 @@ function getOrient() {
 !(function() { // Preview
 	let   data = new AnimeData()
 	const menu = new Menu.DorpDownMenu('animSelect')
-	const ctx  = pvCvs.getContext('2d')
+	const ctx  = pvCtx
 	const radioSelector = '.radioButtons input'
 
 	function change(loop=false) {
