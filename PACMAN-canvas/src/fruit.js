@@ -24,7 +24,7 @@ export const Fruit = new class {
 	static {$ready(this.setup)}
 	static setup() {
 		$on('Title Ready',  Fruit.#reset)
-		$on('LevelChanged', Fruit.#setImage)
+		$on('LevelChanged', Fruit.#setImages)
 		Player.bindDotEaten(Fruit.#dotEaten)
 	}
 	get score() {
@@ -74,7 +74,7 @@ export const Fruit = new class {
 		const [x,y,w,h] = LvCounterRect
 		Ctx.drawImage(Bg.cvs, x,y, w,h, x,y, w,h)
 	}
-	#setImage() {
+	#setImages() {
 		const [x,y,w,h] = LvCounterRect
 		const initCount = max(Game.level-LvCounterMax, 0)
 		Spr.cache(Fruit.number())
