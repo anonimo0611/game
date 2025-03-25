@@ -99,9 +99,11 @@ class ExtendedContext2D extends CustomContext2D {
 	 * @param {[x:number,y:number][]} c
 	 */
 	fillPolygon(style, ...c) {
+		this.save()
 		this.newLinePath(...c)
 		this.fillStyle = style
 		this.fill()
+		this.restore()
 	}
 }
 /**
