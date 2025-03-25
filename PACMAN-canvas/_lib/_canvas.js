@@ -1,73 +1,126 @@
 'use strict'
-const canvas2D = (arg, _w, _h=_w)=> {
+/** @typedef {string|CanvasGradient|CanvasPattern} CtxStyle */
+class CustomContext2D extends CanvasRenderingContext2D {
+	/** @param {HTMLCanvasElement} canvas */
+	constructor(canvas, options) {
+		return Object.setPrototypeOf(canvas.getContext('2d',options), new.target.prototype)
+	}
+}
+class ExtendedContext2D extends CustomContext2D {
+	get width()  {return this.canvas.width}
+	get height() {return this.canvas.height}
+	/**
+	 * @param {number} w
+	 * @param {number} h
+	 */
+	resize(w, h=w) {
+		const cvs = this.canvas
+		isNum(w) && (cvs.width =w)
+		isNum(h) && (cvs.height=h)
+		return [cvs.width, cvs.height]
+	}
+	/** @param {CtxStyle} style */
+	clear(style=null) {
+		this.fillColoredRect(0,0,this.width,this.height,style)
+	}
+	/**
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {number} w
+	 * @param {number} h
+	 * @param {CtxStyle} style
+	 */
+	fillColoredRect(x, y, w, h, style) {
+		this.save()
+		style && (this.fillStyle = style)
+		style === null
+			? this.clearRect(x, y, w, h)
+			: this.fillRect(x, y, w, h)
+		this.restore()
+	}
+	/**
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {number} radius
+	 * @param {CtxStyle} style
+	 */
+	fillCircle(x, y, radius, style) {
+		this.save()
+		this.beginPath()
+		style === null
+			? (this.globalCompositeOperation = 'destination-out')
+			: (this.fillStyle = style)
+		this.arc(x, y, radius, 0, PI*2)
+		this.fill()
+		this.restore()
+	}
+	/**
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {number} r
+	 * @param {CtxStyle} style
+	 * @param {number} lineWidth
+	 */
+	strokeCircle(x, y, r, style, lineWidth=1) {
+		this.save()
+		this.beginPath()
+		style && (this.strokeStyle = style)
+		this.arc(x, y, r, 0, PI*2)
+		this.lineWidth = lineWidth
+		this.stroke()
+		this.restore()
+	}
+	/**
+	 * @param {number} x1
+	 * @param {number} y1
+	 * @param {number} x2
+	 * @param {number} y2
+	 */
+	strokeLine(x1, y1, x2, y2) {
+		this.beginPath()
+		this.moveTo(x1, y1)
+		this.lineTo(x2, y2)
+		this.stroke()
+	}
+	/** @param {[x:number,y:number][]} c */
+	newLinePath(...c) {
+		this.beginPath()
+		this.setLinePath(...c)
+	}
+	/** @param {[x:number,y:number][]} c */
+	setLinePath(...c) {
+		this.moveTo(c[0][0], c[0][1])
+		for (let i=1; i<c.length; i++)
+			this.lineTo(c[i][0], c[i][1])
+	}
+	/** @param {[x:number,y:number][]} c */
+	addLinePath(...c) {
+		for (let i=0; i<c.length; i++)
+			this.lineTo(c[i][0], c[i][1])
+	}
+	/**
+	 * @param {CtxStyle} style
+	 * @param {[x:number,y:number][]} c
+	 */
+	fillPolygon(style, ...c) {
+		this.newLinePath(...c)
+		this.fillStyle = style
+		this.fill()
+	}
+}
+/**
+ * @param {string|null} arg ID value of canvas
+ * @param {number} w Set of canvas width
+ * @param {number} h Set of canvas height
+ */
+const canvas2D = (arg, w, h=w)=> {
 	let cvs = document.createElement('canvas')
 	if (byId(arg) instanceof HTMLCanvasElement) cvs = byId(arg)
-	const [w,h]= setCanvasSize(cvs)(_w,_h)
-	const /** @type {CanvasRenderingContext2D} */
-	ctx = cvs.getContext('2d')
-	ctx.clear = (fill=null)=> fillRect(ctx)(0,0,cvs.width,cvs.height,fill)
+	const ctx  = new ExtendedContext2D(cvs)
+	;([w,h]= ctx.resize(w,h))
 	/** @type {[cvs,ctx,w:number,h:number]} */
 	const vals = [cvs,ctx,w,h]
 	return {cvs,ctx,w,h,vals}
-},
-setCanvasSize = cvs=> (w=0, h=w)=> {
-	cvs = isStr(cvs)? byId(cvs) : cvs
-	if (cvs instanceof HTMLCanvasElement) {
-		isNum(w) && (cvs.width =w)
-		isNum(h) && (cvs.height=h)
-		return [+cvs.width, +cvs.height]
-	}
-	return [0,0]
-},
-fillRect = ctx=> (x, y, w, h, fill)=> {
-	ctx.save()
-	fill && (ctx.fillStyle = fill)
-	fill === null
-		? ctx.clearRect(x, y, w, h)
-		: ctx.fillRect(x, y, w, h)
-	ctx.restore()
-},
-fillCircle = ctx=> (x, y, radius, fill)=> {
-	ctx.save()
-	ctx.beginPath()
-	fill === null
-		? (ctx.globalCompositeOperation = 'destination-out')
-		: (ctx.fillStyle = fill)
-	ctx.arc(x, y, radius, 0, PI*2)
-	ctx.fill()
-	ctx.restore()
-},
-strokeCircle = ctx=> (x, y, r, color, lw=1)=> {
-	ctx.save()
-	ctx.beginPath()
-	color && (ctx.strokeStyle = color)
-	ctx.arc(x, y, r, 0, PI*2)
-	ctx.lineWidth = lw
-	ctx.stroke()
-	ctx.restore()
-},
-strokeLine = ctx=> (x1,y1,x2,y2)=> {
-	ctx.beginPath()
-	ctx.moveTo(x1, y1)
-	ctx.lineTo(x2, y2)
-	ctx.stroke()
-},
-newLinePath = (ctx,fill)=> {
-	ctx.beginPath()
-	return setLinePath(ctx,fill)
-},
-setLinePath = (ctx,fill)=> (...c)=> {
-	ctx.moveTo(c[0][0], c[0][1])
-	for (let i=1; i<c.length; i++)
-		ctx.lineTo(c[i][0], c[i][1])
-	if (fill) {
-		ctx.fillStyle = fill
-		ctx.fill()
-	}
-},
-setLineTo = ctx=> (...c)=> {
-	for (let i=0; i<c.length; i++)
-		ctx.lineTo(c[i][0], c[i][1])
 }
 class FadeOut {
 	#count = 0
@@ -85,6 +138,7 @@ class FadeOut {
 		this.#alpha = clamp(this.#alpha-1/(this.#duration/(1e3/60)), 0, 1)
 		return this
 	}
+	/** @param {ExtendedContext2D} ctx */
 	setAlpha(ctx) {ctx.globalAlpha = this.#alpha}
 }
 class FadeIn {
@@ -104,5 +158,6 @@ class FadeIn {
 		this.#alpha = clamp(this.#alpha+max/(this.#duration/(1e3/60)), 0, max)
 		return this
 	}
+	/** @param {ExtendedContext2D} ctx */
 	setAlpha(ctx) {ctx.globalAlpha = this.#alpha}
 }
