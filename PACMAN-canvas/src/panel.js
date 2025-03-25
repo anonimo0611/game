@@ -1,19 +1,19 @@
 import {State} from './_state.js'
 
-function show(btn) {
+function show(button) {
 	$('.panel').toggle()
-	$(btn).toggleClass('active',!!$(btn.value).height())
+	$(button).toggleClass('active',!!$(button.value).height())
 }
-function hide(btn, e) {
+function hide(button, e) {
 	if (!State.isTitle
-	 || e.target == btn
-	 || e.target.closest?.(btn.value))
+	 || e.target == button
+	 || e.target.closest?.(button.value))
 		return
-	$(btn.value).hide() && $(btn).removeClass('active')
+	$(button.value).hide() && $(button).removeClass('active')
 }
 
 $on('load Start', ()=> $('.panel').hide())
-$('.panelBtn').each((_,btn)=> {
-	$on('click',      e=> hide(btn,e))
-	$(btn).on('click',e=> show(btn,e))
+$('.panelBtn').each((_,button)=> {
+	$(window).on('click',e=> hide(button,e))
+	$(button).on('click',e=> show(button,e))
 })
