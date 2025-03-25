@@ -21,7 +21,7 @@ export const Speaker = new class {
 		if (between(v, 1,  2)) return 1
 	}
 	#drawBody() {
-		newLinePath(ctx)(
+		ctx.newLinePath(
 			[ -7, -35],[-31, -12],[-45, -12],
 			[-45, +12],[-31, +12],[ -7, +35])
 		ctx.fill()
@@ -30,8 +30,8 @@ export const Speaker = new class {
 		ctx.save()
 		ctx.translate(24, 0)
 		ctx.lineWidth = 10
-		strokeLine(ctx)(-18, -18, +18, +18)
-		strokeLine(ctx)(+18, -18, -18, +18)
+		ctx.strokeLine(-18, -18, +18, +18)
+		ctx.strokeLine(+18, -18, -18, +18)
 		ctx.restore()
 	}
 	#drawWaves(vol, step) {
