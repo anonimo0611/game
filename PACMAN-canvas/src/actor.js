@@ -42,8 +42,6 @@ export class Actor {
 	get inForwardOfTile()  {return this.stepsPerTile <= T/2}
 	get inBackwardOfTile() {return this.stepsPerTile >  T/2}
 
-	setX(x) {this.x = x}
-	setY(y) {this.y = y}
 	setPos({x=this.x, y=this.y}={}) {
 		this.#y = y
 		this.#x = function(r) {
@@ -52,8 +50,8 @@ export class Actor {
 			if (x > CW+T/2) return -r-T/2
 		}(this.radius) ?? x
 	}
-	setCenterX(x) {
-		this.pos = Vec2(x-T/2, this.y)
+	setToMazeCenter() {
+		this.x = (CvsW-T)/2
 	}
 	setNextPos(denom=1, dir=this.dir) {
 		this.pos = Vec2(dir).mul(this.step/denom).add(this)
