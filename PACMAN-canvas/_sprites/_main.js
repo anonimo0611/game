@@ -9,7 +9,7 @@ export const View = function() {
 	function draw() {
 		Ctx.save()
 		Ctx.translate(Gap, Gap/2)
-		Ctx.clearRect(0,0, Cvs.width, Cvs.height)
+		Ctx.clear()
 		drawGridLines()
 		drawFruits()
 		drawGhosts()
@@ -130,7 +130,7 @@ export const View = function() {
 
 $('#brightRng').on('input', function() {
 	const v = this.value
-	Cvs.style.backgroundColor = `rgb(${v}% ${v}% ${v}%)`
+	Ctx.canvas.style.backgroundColor = `rgb(${v}% ${v}% ${v}%)`
 })
 $('#resetBtn').on('click', ()=> {
 	[...document.forms].forEach(f=> f.reset())
