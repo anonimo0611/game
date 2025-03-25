@@ -22,7 +22,7 @@ export default class {
 		ctx.strokeStyle = '#FFF'
 		ctx.newLinePath(...coords)
 		ctx.stroke()
-		coords.forEach(c=> ctx.fillCircle(...c, ctx.lineWidth, '#FFF'))
+		coords.forEach(xy=> ctx.fillCircle(...xy, ctx.lineWidth, '#FFF'))
 	}
 	bracketEyes() {
 		const {ctx}= this
@@ -131,18 +131,18 @@ class StakeClothes {
 	CaughtX   = CvsW/2 + T/2
 	AkaMinX   = this.CaughtX - T
 	stakeSize = Vec2(T*.18, T*.70).freeze()
-	#stakePos = freeze({
+	stakePos  = freeze({
 		x: CvsW/2 + T*2 - this.stakeSize.x/2,
 		y: CvsH/2 + T*1 - this.stakeSize.y - T*.1
 	})
-	#offcutPos = freeze({
+	offcutPos = freeze({
 		x: CvsW/2 + T*2 + this.stakeSize.x/2,
 		y: CvsH/2 + T*1 - T*.1
 	})
-	drawStake({x, y}=this.#stakePos) {
+	drawStake({x, y}=this.stakePos) {
 		Ctx.fillColoredRect(x,y, ...this.stakeSize.vals, '#FFF')
 	}
-	drawOffcut({x, y}=this.#offcutPos) {
+	drawOffcut({x, y}=this.offcutPos) {
 		Ctx.save()
 		Ctx.translate(x, y)
 		Ctx.fillPolygon(Color.Akabei, [0,-4],[0,-this.stakeSize.y],[-T,0],[-4,0],[-4,-4])
