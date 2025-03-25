@@ -248,7 +248,7 @@ body:not([data-state=Title]) #titleScr {
 		padding-bottom: .3em;
 	}
 	.current::before, menu > li::before {
-		--x: calc(-1*var(--t) * var(--ofst-x, 0));
+		--x: calc(-1*var(--t) * var(--icon-idx, 0));
 		--size: var(--width) var(--t);
 		content: '';
 		background: no-repeat var(--x) 0/var(--size) var(--url);
