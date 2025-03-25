@@ -1,4 +1,5 @@
 'use strict'
+/** @typedef {string|CanvasGradient|CanvasPattern} CtxStyle */
 class CustomContext2D extends CanvasRenderingContext2D {
 	/** @param {HTMLCanvasElement} canvas */
 	constructor(canvas, options) {
@@ -27,6 +28,7 @@ class ExtendedContext2D extends CustomContext2D {
 	 * @param {number} y
 	 * @param {number} w
 	 * @param {number} h
+	 * @param {?CtxStyle} style
 	 */
 	fillRect(x, y, w, h, style=this.fillStyle) {
 		this.save()
@@ -40,6 +42,7 @@ class ExtendedContext2D extends CustomContext2D {
 	 * @param {number} x
 	 * @param {number} y
 	 * @param {number} radius
+	 * @param {?CtxStyle} style
 	 */
 	fillCircle(x, y, radius, style=this.fillStyle) {
 		this.save()
@@ -55,6 +58,7 @@ class ExtendedContext2D extends CustomContext2D {
 	 * @param {number} x
 	 * @param {number} y
 	 * @param {number} r
+	 * @param {CtxStyle} style
 	 * @param {number} lineWidth
 	 */
 	strokeCircle(x, y, r, style=this.fillStyle, lineWidth=1) {
@@ -95,7 +99,7 @@ class ExtendedContext2D extends CustomContext2D {
 			this.lineTo(c[i][0], c[i][1])
 	}
 	/**
-	 * @param {string|CanvasGradient|CanvasPattern} style
+	 * @param {CtxStyle} style
 	 * @param {[x:number,y:number][]} c
 	 */
 	fillPolygon(style, ...c) {
