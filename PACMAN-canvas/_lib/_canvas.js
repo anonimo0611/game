@@ -21,7 +21,7 @@ class ExtendedContext2D extends CustomContext2D {
 	}
 	/** @param {CtxStyle} style */
 	clear(style=null) {
-		this.fillColoredRect(0,0,this.width,this.height,style)
+		this.fillRect(0,0,this.width,this.height,style)
 	}
 	/**
 	 * @param {number} x
@@ -30,12 +30,12 @@ class ExtendedContext2D extends CustomContext2D {
 	 * @param {number} h
 	 * @param {CtxStyle} style
 	 */
-	fillColoredRect(x, y, w, h, style) {
+	fillRect(x, y, w, h, style) {
 		this.save()
 		style && (this.fillStyle = style)
 		style === null
 			? this.clearRect(x, y, w, h)
-			: this.fillRect(x, y, w, h)
+			: super.fillRect(x, y, w, h)
 		this.restore()
 	}
 	/**
