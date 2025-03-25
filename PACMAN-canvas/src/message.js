@@ -15,9 +15,8 @@ export const Message = new class {
 		ctx.restore()
 	}
 	#drawLevel() {
-		const levelStr = String(Game.level).padStart(2,0)
 		const cfg = {scale:[0.82, 1], size:T*0.8, style:'small-caps'}
-		drawText(0.5, 12.9, Color.Message2, `Level${levelStr}`, cfg)
+		drawText(0.5, 12.9, Color.Message2, `Level${Game.levelStr}`, cfg)
 	}
 	#drawLogo() {
 		const cfg ={face:'PacFont', size:T*1.15}

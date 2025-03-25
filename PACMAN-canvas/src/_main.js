@@ -37,6 +37,7 @@ export const Game = new class {
 	#level = 1
 	#restarted = false
 	get level()     {return Game.#level}
+	get levelStr()  {return Game.#level.toString().padStart(2,0)}
 	get restarted() {return Game.#restarted}
 
 	// Divide the speed equally with level 13+ as the fastest
