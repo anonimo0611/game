@@ -6,8 +6,8 @@ export default class {
 	}
 	rippedBody() {
 		const {ctx}= this
-		ctx.fillColoredRect(38,-1, 6,25, null)
-		ctx.fillColoredRect(30,23,15,15, null)
+		ctx.clearRect(38,-1, 6,25)
+		ctx.clearRect(30,23,15,15)
 		ctx.newLinePath([38,-8],[49,-5],[36, 4]);ctx.fill()
 		ctx.newLinePath([40, 1],[40,23],[35,23])
 		ctx.quadraticCurveTo(28, 32, 35, 32)
@@ -140,7 +140,7 @@ class StakeClothes {
 		y: CvsH/2 + T*1 - T*.1
 	})
 	drawStake({x, y}=this.stakePos) {
-		Ctx.fillColoredRect(x,y, ...this.stakeSize.vals, '#FFF')
+		Ctx.fillRect(x,y, ...this.stakeSize.vals, '#FFF')
 	}
 	drawOffcut({x, y}=this.offcutPos) {
 		Ctx.save()
