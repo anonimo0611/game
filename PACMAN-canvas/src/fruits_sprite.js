@@ -14,10 +14,10 @@ function cherry(ctx=Ctx) {
 		ctx.restore()
 
 		// white shine
-		ctx.lineCap = 'round'
 		ctx.beginPath()
 		ctx.moveTo(1.1, 2.9)
 		ctx.lineTo(2.1, 3.9)
+		ctx.lineCap = 'round'
 		ctx.lineWidth = 1.05
 		ctx.strokeStyle = '#FFF'
 		ctx.stroke()
@@ -32,7 +32,7 @@ function cherry(ctx=Ctx) {
 	ctx.moveTo(-3,0)
 	ctx.bezierCurveTo(-1,-2, 2,-4, 5,-5)
 	ctx.lineTo(5,-4)
-	ctx.bezierCurveTo(3,-4, 1,0, 1,2)
+	ctx.bezierCurveTo(3,-4, 1, 0, 1, 2)
 	ctx.strokeStyle = '#F90'
 	ctx.stroke()
 }
@@ -54,9 +54,8 @@ function strawberry(ctx=Ctx) {
 	].forEach(s=> ctx.fillCircle(...s, .55, '#FFF'))
 
 	// green leaf
-	ctx.newLinePath(
-		[0,-4],[-3,-4],[0,-4],[-2,-3],[-1,-3],[0,-4],
-		[0,-2],[ 0,-4],[1,-3],[ 2,-3],[ 0,-4],[3,-4])
+	ctx.newLinePath([0,-4],[-3,-4],[0,-4],[-2,-3],[-1,-3],[0,-4])
+	ctx.addLinePath([0,-2],[ 0,-4],[1,-3],[ 2,-3],[ 0,-4],[3,-4])
 	ctx.closePath()
 	ctx.strokeStyle = '#0F0'
 	ctx.stroke()
@@ -110,7 +109,7 @@ function apple(ctx=Ctx) {
 	ctx.bezierCurveTo(-.9,6,.2, 6, 1, 6)
 	ctx.bezierCurveTo( 3, 6, 5, 3, 5, 0)
 	ctx.bezierCurveTo( 5,-3, 3,-4, 2,-4)
-	ctx.quadraticCurveTo(0, -4, 0, -3)
+	ctx.quadraticCurveTo(0,-4, 0,-3)
 	ctx.closePath()
 	ctx.fillStyle = '#F00'
 	ctx.fill()
@@ -137,7 +136,7 @@ function melon(ctx=Ctx) {
 	ctx.beginPath()
 	ctx.setLinePath([0,-3],[0,-5])
 	ctx.moveTo(2, -5)
-	ctx.quadraticCurveTo(-3, -5, -3, -6)
+	ctx.quadraticCurveTo(-3,-5,-3,-6)
 	ctx.strokeStyle = '#69B4AF'
 	ctx.stroke()
 
@@ -173,10 +172,10 @@ function gala(ctx=Ctx) {
 	ctx.setLinePath([0,-5.2],[3.8,-2.2],[3.0,-1.2],[1.3,-2.3])
 	ctx.quadraticCurveTo(+0.7, -2.7, 0.6, -1.4)
 	ctx.lineTo(+0.4, -0.6)
-	ctx.quadraticCurveTo(+0.0, +0.0, -0.4, -0.6)
+	ctx.quadraticCurveTo(+0.0,+0.0,-0.4,-0.6)
 	ctx.lineTo(-0.4, -0.6)
 	ctx.lineTo(-0.6, -1.4)
-	ctx.quadraticCurveTo(-0.7, -2.7, -1.3, -2.2)
+	ctx.quadraticCurveTo(-0.7,-2.7,-1.3,-2.2)
 	ctx.lineTo(-1.3, -2.3)
 	ctx.lineTo(-3.0, -1.2)
 	ctx.lineTo(-3.8, -2.2)
@@ -193,9 +192,8 @@ function bell(ctx=Ctx) {
 	// bell body
 	ctx.newLinePath([0, -6.3],[1.3, -6.3],[1.3, -6])
 	ctx.quadraticCurveTo(5.0, -5.0, 5.5, 1.6)
-	ctx.addLinePath(
-		[+6.1,2.2],[+6.1,4.7],[ 5.4,5.3],
-		[-5.4,5.3],[-6.1,4.7],[-6.1,2.2],[-5.5,1.6])
+	ctx.addLinePath([ 6.1,2.2],[ 6.1,4.7],[ 5.4,5.3])
+	ctx.addLinePath([-5.4,5.3],[-6.1,4.7],[-6.1,2.2],[-5.5,1.6])
 	ctx.quadraticCurveTo(-5, -5, -1.3, -6)
 	ctx.lineTo(-1.3, -6.3)
 	ctx.fillStyle = '#F8FF00'
@@ -220,10 +218,10 @@ function bell(ctx=Ctx) {
 }
 function key(ctx=Ctx) {
 	// key metal
-	ctx.newLinePath([-1, -1.5],[-1.0, +5.5],[0, 6.5],[1, 5.5],[1, 2.8])
-	ctx.setLinePath([+1, +1.8],[+1.0, -1.5])
-	ctx.setLinePath([+1, +0.6],[+2.9, +0.6])
-	ctx.setLinePath([+1, +3.9],[+2.9, +3.9])
+	ctx.newLinePath([-1,-1.5],[-1.0, 5.5],[0,6.5],[1,5.5],[1,2.8])
+	ctx.setLinePath([ 1, 1.8],[ 1.0,-1.5])
+	ctx.setLinePath([ 1, 0.6],[ 2.9, 0.6])
+	ctx.setLinePath([ 1, 3.9],[ 2.9, 3.9])
 	ctx.save()
 	ctx.lineCap = 'butt'
 	ctx.strokeStyle = '#FFF'
