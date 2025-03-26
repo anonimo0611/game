@@ -106,8 +106,7 @@ export default class {
 		ctx.restore()
 
 		// Clothes
-		ctx.beginPath()
-		ctx.setLinePath([-67, 22],[-58, 12])
+		ctx.newLinePath([-67, 22],[-58, 12])
 		ctx.quadraticCurveTo(-48, 1, -43, 11)
 		ctx.addLinePath([-4,11],[-4,5],[22,4],[28,12],[24,15],[18,22])
 		ctx.fill()
