@@ -100,7 +100,7 @@ export class Ghost extends Actor {
 		this.sprite.update()
 		if (this.penEntranceArrived) {
 			this.state.switchToReturn()
-			this.setToMazeCenter()
+			this.centering()
 		}
 		if (State.isPlaying && Maze.dotsLeft) {
 			this.#behavior()
@@ -137,7 +137,7 @@ export class Ghost extends Actor {
 			return this.setMove(this.initAlign<0 ? R:L)
 
 		if (cx != CvsW/2)
-			return this.setToMazeCenter()
+			return this.centering()
 
 		if (y > Maze.PenEntrance.y*T+step)
 			return this.setMove(U)
