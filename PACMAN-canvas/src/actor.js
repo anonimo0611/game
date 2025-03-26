@@ -50,7 +50,7 @@ export class Actor {
 			if (x > CW+T/2) return -r-T/2
 		}(this.radius) ?? x
 	}
-	setToMazeCenter() {
+	centering() {
 		this.x = (CvsW-T)/2
 	}
 	setNextPos(denom=1, dir=this.dir) {
