@@ -6,53 +6,59 @@ import {GhsMgr} from '../ghosts/_system.js'
 import {Ghost}  from './_ghost.js'
 
 export const Target = new class {
+
 	/** @param {Ghost[]} ghosts */
 	draw(ghosts=[]) {
 		if (!Ctrl.showTargets || !State.isPlaying) return
 		ghosts.forEach(Target.#strokeLines)
 		ghosts.forEach(Target.#drawTargetMarker)
 	}
+
 	/** @param {Ghost} g */
-	#enabled(g) {
-		if (g.state.isIdle || g.frightened)    return false
-		if (Timer.frozen && !g.state.isEscape) return false
-		return true
+	#disabled(g) {
+		return g.state.isIdle
+			|| g.frightened
+			|| (Timer.frozen && !g.state.isEscape)
 	}
+
 	/** @param {Ghost} g */
 	#getTargetPos(g) {
 		return (g.state.isGoOut || g.state.isEscape)
-			? Vec2(Maze.PenEntrance).mul(T).add(T/2)
+			? Maze.PenEntrance.clone.add(.5).mul(T)
 			: g.isScatter
-				? Vec2(g.originalTarget).mul(T).add(T/2)
-				: Vec2(g.chasePos)
+				? g.originalTarget.clone.add(.5).mul(T)
+				: g.chasePos
 	}
+
 	/** @param {Ghost} g */
 	#strokeLines(g) {
-		if (!Target.#enabled(g)) return
+		if (Target.#disabled(g)) return
 		switch (g.idx) {
 		case GhsType.Pinky: Target.#strokeAuxLines(g, 4); break
 		case GhsType.Aosuke:Target.#strokeAuxLines(g, 2); break
 		case GhsType.Guzuta:Target.#strokeGuzutaCircle(g);break
 		}
 	}
+
 	/** @param {Ghost} g */
 	#drawTargetMarker(g) {
-		if (!Target.#enabled(g)) return
-		const {x, y}= Target.#getTargetPos(g)
+		if (Target.#disabled(g)) return
+		const {x,y}= Target.#getTargetPos(g)
 		Ctx.save()
 		Ctx.globalAlpha = 0.8
-		Ctx.fillCircle  (x, y, T*0.4, Color[g.name])
-		Ctx.strokeCircle(x, y, T*0.4,'#FFF', 4)
+		Ctx.fillCircle  (x,y, T*0.4, Color[g.name])
+		Ctx.strokeCircle(x,y, T*0.4,'#FFF', 4)
 		Ctx.restore()
 	}
+
 	/**
-	* @param {Ghost} g
-	* @param {number} ofst
-	*/
+	 * @param {Ghost} g
+	 * @param {number} ofst
+	 */
 	#strokeAuxLines(g, ofst) {
 		if (g.isScatter || !g.state.isWalk) return
 		const {dir:pacDir,centerPos:pacPos}= Player
-		const fwdVals = Player.forwardPos(ofst).vals
+		const fwdXY = Player.forwardPos(ofst).vals
 		Ctx.save()
 		Ctx.globalAlpha = 0.8
 		Ctx.lineWidth   = 6
@@ -61,17 +67,18 @@ export const Target = new class {
 		Ctx.beginPath()
 		Ctx.moveTo(...pacPos.vals)
 		Ctx.lineTo(...Vec2(pacDir).mul(ofst*T).add(pacPos).vals)
-		pacDir == Dir.Up && Ctx.lineTo(...fwdVals)
+			pacDir == U && Ctx.lineTo(...fwdXY)
 		Ctx.stroke()
 		if (g.idx == GhsType.Aosuke) {
-			const akaVals = GhsMgr.akaCenter.vals
-			Ctx.strokeLine(...fwdVals, ...akaVals)
-			Ctx.strokeLine(...fwdVals, ...g.chasePos.vals)
-			Ctx.fillCircle(...fwdVals, 8, Color[g.name])
-			Ctx.fillCircle(...akaVals, 8, Color[g.name])
+			const akaXY = GhsMgr.akaCenter.vals
+			Ctx.strokeLine(...fwdXY, ...akaXY)
+			Ctx.strokeLine(...fwdXY, ...g.chasePos.vals)
+			Ctx.fillCircle(...fwdXY, 8, Color[g.name])
+			Ctx.fillCircle(...akaXY, 8, Color[g.name])
 		}
 		Ctx.restore()
 	}
+
 	/** @param {Ghost} g */
 	#strokeGuzutaCircle(g) {
 		if (g.isScatter || !g.state.isWalk) return
