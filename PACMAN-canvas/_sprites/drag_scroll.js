@@ -45,6 +45,11 @@
 		target = null
 	})
 })('html')
-const isNotDrag   = e=> e.target.closest('.noDrag')
-const cancelWheel = e=> isNotDrag(e) && e.preventDefault()
-addEventListener('wheel', cancelWheel, {passive:false})
+
+/** @param {MouseEvent} e */
+const isNotDrag = e=> e.target.closest('.noDrag')
+
+addEventListener(
+	'wheel', e=> isNotDrag(e) && e.preventDefault(),
+	{passive:false}
+)
