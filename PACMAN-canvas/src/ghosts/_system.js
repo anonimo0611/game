@@ -99,7 +99,7 @@ export const GhsMgr = new class {
 		radius ??= (g.frightened? T/2 : T/3)
 		collisionCircle(g, pacPos, radius) && g.crashWithPac(fn)
 	}
-	#draw = (_,i,array)=> array.at(-1-i).draw()
+	#draw = (_,i,array)=> array[array.length-1-i].draw()
 	drawTargets() {Target.draw(Ghosts)}
 	drawFront()   {Ghosts.filter(inFrontOfPac).forEach(this.#draw)}
 	drawBehind()  {Ghosts.filter(behindThePac).forEach(this.#draw)}
