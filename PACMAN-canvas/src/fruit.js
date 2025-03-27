@@ -54,8 +54,7 @@ export const Fruit = new class {
 		PtsMgr.set({key:Fruit, delay:2e3, ...TargetPos})
 	}
 	update() {
-		_fadeOut?.update()
-		if (_fadeOut?.working === false)
+		if (_fadeOut?.update() === false)
 		   [_fadeOut,_tgtDisp] = [null,false]
 		Fruit.#collideWith()
 	}

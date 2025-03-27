@@ -80,7 +80,7 @@ export class Actor {
 		State.isReady && this.#fadeIn.update(this.maxAlpha)
 	}
 	draw() {
-		Ctx.globalAlpha = this.maxAlpha
 		State.isReady && this.#fadeIn.setAlpha(Ctx)
+			|| (Ctx.globalAlpha = this.maxAlpha)
 	}
 }

@@ -77,7 +77,7 @@ export const Target = new class {
 		if (g.isScatter || !g.state.isWalk) return
 		Ctx.save()
 		Ctx.globalAlpha = g.distanceToPacman < T*8 ? 0.4 : 0.8
-		strokeCircle(Ctx)(...Player.centerPos.vals, T*8, Color[g.name], 6)
+		Ctx.strokeCircle(...Player.centerPos.vals, T*8, Color[g.name], 6)
 		Ctx.restore()
 	}
 }
