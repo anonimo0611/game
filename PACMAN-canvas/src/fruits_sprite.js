@@ -133,8 +133,7 @@ function melon(ctx=Ctx) {
 	ctx.fillCircle(0, 1.5, 5.2, '#7BF331')
 
 	// draw stem
-	ctx.beginPath()
-	ctx.setLinePath([0,-3],[0,-5])
+	ctx.newLinePath([0,-3],[0,-5])
 	ctx.moveTo(2, -5)
 	ctx.quadraticCurveTo(-3,-5,-3,-6)
 	ctx.strokeStyle = '#69B4AF'
