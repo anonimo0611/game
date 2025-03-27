@@ -32,7 +32,7 @@ export class Attract {
 
 	constructor(symbol) {
 		if (symbol != ModSymbol)
-			throw TypeError('The constructor is not visible')
+			throw TypeError(`The constructor ${this.constructor.name}() is not visible`)
 		$onNS('.Attract','click keydown blur', this.end)
 		this.setActors(GhsType.Max)
 		State.switchToAttract({data:this.ghsList[DEMO]})
