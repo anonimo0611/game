@@ -138,10 +138,13 @@ class FadeOut {
 	update() {
 		if (++this.#count * 1e3/60 < this.#delay) return
 		this.#alpha = clamp(this.#alpha-1/(this.#duration/(1e3/60)), 0, 1)
-		return this
+		return this.working
 	}
 	/** @param {ExtendedContext2D} ctx */
-	setAlpha(ctx) {ctx.globalAlpha = this.#alpha}
+	setAlpha(ctx) {
+		ctx.globalAlpha = this.#alpha
+		return this.working
+	}
 }
 class FadeIn {
 	#count = 0
@@ -158,8 +161,11 @@ class FadeIn {
 		if (++this.#count * 1e3/60 < this.#delay) return
 		if (!this.working) return
 		this.#alpha = clamp(this.#alpha+max/(this.#duration/(1e3/60)), 0, max)
-		return this
+		return this.working
 	}
 	/** @param {ExtendedContext2D} ctx */
-	setAlpha(ctx) {ctx.globalAlpha = this.#alpha}
+	setAlpha(ctx) {
+		ctx.globalAlpha = this.#alpha
+		return this.working
+	}
 }
