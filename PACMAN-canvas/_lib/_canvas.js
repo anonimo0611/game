@@ -108,19 +108,28 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		this.restore()
 	}
 }
-/**
- * @param {string|null} arg ID value of canvas
- * @param {number} w Set of canvas width
- * @param {number} h Set of canvas height
- */
-const canvas2D = (arg, w, h=w)=> {
-	let cvs = document.createElement('canvas')
-	if (byId(arg) instanceof HTMLCanvasElement) cvs = byId(arg)
-	const ctx  = new ExtendedContext2D(cvs)
-	;([w,h]= ctx.resize(w,h))
-	/** @type {[cvs,ctx,w:number,h:number]} */
-	const vals = [cvs,ctx,w,h]
-	return {cvs,ctx,w,h,vals}
+class FadeIn {
+	#count = 0
+	#delay = 0
+	#alpha = 0
+	#duration = 0
+	get alpha()   {return this.#alpha}
+	get working() {return this.#alpha < 1}
+	constructor(ms=1000, delay=0) {
+		this.#duration = ms
+		this.#delay = delay
+	}
+	update(max=1) {
+		if (++this.#count * 1e3/60 < this.#delay) return
+		if (!this.working) return
+		this.#alpha = clamp(this.#alpha+max/(this.#duration/(1e3/60)), 0, max)
+		return this.working
+	}
+	/** @param {ExtendedContext2D} ctx */
+	setAlpha(ctx) {
+		ctx.globalAlpha = this.#alpha
+		return this.working
+	}
 }
 class FadeOut {
 	#count = 0
@@ -144,26 +153,17 @@ class FadeOut {
 		return this.working
 	}
 }
-class FadeIn {
-	#count = 0
-	#delay = 0
-	#alpha = 0
-	#duration = 0
-	get alpha()   {return this.#alpha}
-	get working() {return this.#alpha < 1}
-	constructor(ms=1000, delay=0) {
-		this.#duration = ms
-		this.#delay = delay
-	}
-	update(max=1) {
-		if (++this.#count * 1e3/60 < this.#delay) return
-		if (!this.working) return
-		this.#alpha = clamp(this.#alpha+max/(this.#duration/(1e3/60)), 0, max)
-		return this.working
-	}
-	/** @param {ExtendedContext2D} ctx */
-	setAlpha(ctx) {
-		ctx.globalAlpha = this.#alpha
-		return this.working
-	}
+/**
+ * @param {string|null} arg ID value of canvas
+ * @param {number} w Set of canvas width
+ * @param {number} h Set of canvas height
+ */
+const canvas2D = (arg, w, h=w)=> {
+	let cvs = document.createElement('canvas')
+	if (byId(arg) instanceof HTMLCanvasElement) cvs = byId(arg)
+	const ctx  = new ExtendedContext2D(cvs)
+	;([w,h]= ctx.resize(w,h))
+	/** @type {[cvs,ctx,w:number,h:number]} */
+	const vals = [cvs,ctx,w,h]
+	return {cvs,ctx,w,h,vals}
 }
