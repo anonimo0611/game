@@ -25,7 +25,8 @@ export class CBreak {
 	pacVelX = -CvsW/180
 	constructor(symbol) {
 		if (symbol != ModSymbol)
-			throw TypeError(`The constructor ${this.constructor.name}() is not visible`)
+			throw TypeError('The constructor'
+				+` ${this.constructor.name}() is not visible`)
 		this.pacman.y =
 		this.akabei.y = CvsH/2 - T/2
 		$onNS('.CB','Quit', this.end)
