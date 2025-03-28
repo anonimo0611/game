@@ -13,7 +13,7 @@ export const MazeWall = new class {
 		ctx.stroke()
 		ctx.restore()
 	}
-	#drawGhostPen(lh=0) {
+	#drawHouse(lh=0) {
 		ctx.newLinePath(
 			[13.00*T-lh,13.55*T],[10.55*T, 13.55*T],[10.55*T,   17.45*T],
 			[17.45*T,   17.45*T],[17.45*T, 13.55*T],[15.00*T+lh,13.55*T],
@@ -28,7 +28,7 @@ export const MazeWall = new class {
 		ctx.lineWidth   = 3.5
 		ctx.strokeStyle = color
 		MapArr.forEach(this.#drawTile)
-		this.#drawGhostPen(ctx.lineWidth/2)
+		this.#drawHouse(ctx.lineWidth/2)
 		ctx.restore()
 	}
 	#drawTile = (c, i)=> {

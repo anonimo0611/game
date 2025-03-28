@@ -31,7 +31,7 @@ export class Actor {
 	get maxAlpha()   {return 1}
 	get cheatAlpha() {return 0.75}
 	get frozen()     {return Timer.frozen}
-	get isInHouse()  {return Maze.isInHouse(this.tilePos)}
+	get isInHouse()  {return Maze.House .isIn(this.tilePos)}
 	get isInTunnel() {return Maze.Tunnel.isIn(this.centerPos)}
 
 	get stepsPerTile() {

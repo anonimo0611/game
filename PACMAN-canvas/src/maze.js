@@ -8,6 +8,11 @@ const PowMap   = new Map()
 const PenRect  = new Rect(10,13, 7,4)
 const PenOuter = new Rect( 9,12, 9,6)
 
+class House {
+	get Entrance() {return Vec2(13, 12)}
+	isIn = tilePos=> PenRect.contains(tilePos)
+	MiddleY = (this.Entrance.y+3.5)*T
+}
 class PowDot {
 	#disp = 1
 	#drawDot(pos) {
@@ -33,6 +38,7 @@ class Tunnel {
 		return null
 	}
 }
+
 export const Maze = new class {
 	static {$ready(this.setup)}
 	static setup() {
@@ -43,19 +49,18 @@ export const Maze = new class {
 	}
 	get dotsLeft() {return DotSet.size}
 
-	PowDot      = freeze(new PowDot)
-	Tunnel      = freeze(new Tunnel)
-	PenEntrance = Vec2(13, 12).freeze()
-	PenMiddleY  = (this.PenEntrance.y+3.5) * T
-	hasDot      = tileIdx=> DotSet.has(tileIdx)
-	hasPow      = tileIdx=> PowMap.has(tileIdx)
-	hasWall     = ({x,y})=> WallSet.has(y*Cols+x)
-	isInHouse   = ({x,y})=> PenRect.contains({x,y})
+	House   = freeze(new House)
+	PowDot  = freeze(new PowDot)
+	Tunnel  = freeze(new Tunnel)
+	hasDot  = tileIdx=> DotSet.has(tileIdx)
+	hasPow  = tileIdx=> PowMap.has(tileIdx)
+	hasWall = ({x,y})=> WallSet.has(y*Cols+x)
 
 	GhostNotEnterSet = new Set(['12-11','12-23','15-11','15-23'])
-	ghostExitPos({originalTarget:t={}, tilePos:pos={}}) {
-		const  x = (pos.x > Cols/2) && (t.x > Cols/2) ? 21:6
-		return t.y < 10 && PenOuter.contains(pos)? Vec2(t).setX(x) : Vec2(t)
+	ghostExitPos({originalTarget:o={}, tilePos:t={}}) {
+		return o.y < 10 && PenOuter.contains(t)
+			? Vec2((t.x > Cols/2) && (o.x > Cols/2) ? 21:6, 15)
+			: Vec2(o)
 	}
 	#setDot(chip, i) {
 		if (/[^.O]/.test(chip)) return
@@ -77,6 +82,6 @@ export const Maze = new class {
 	}
 	drawDoor() {
 		if (State.isFlashMaze) return
-		Ctx.fillRect(13*T, 13.58*T, T*2, T/4, Color.Door)
+		Ctx.fillRect(13*T, 13.6*T, T*2, T/4, Color.Door)
 	}
 }, {drawDot}=freeze(Maze)
