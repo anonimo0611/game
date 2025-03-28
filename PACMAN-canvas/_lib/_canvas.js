@@ -87,14 +87,14 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 	}
 	/** @param {[x:number,y:number][]} c */
 	setLinePath(...c) {
-		this.moveTo(c[0][0], c[0][1])
-		for (let i=1; i<c.length; i++)
-			this.lineTo(c[i][0], c[i][1])
+		c.forEach(([x,y], i)=> {
+			!i ? this.moveTo(x,y)
+			   : this.lineTo(x,y)
+		})
 	}
 	/** @param {[x:number,y:number][]} c */
 	addLinePath(...c) {
-		for (let i=0; i<c.length; i++)
-			this.lineTo(c[i][0], c[i][1])
+		c.forEach(([x,y])=> this.lineTo(x,y))
 	}
 	/**
 	 * @param {CtxStyle} style
