@@ -44,7 +44,7 @@ class Guzuta extends Ghost {
 	get scatterTile() {return Vec2(0, 33)}
 	get chasePos() {
 		return this.distanceToPacman < T*8
-			? Vec2(this.scatterTile).mul(T).add(T/2)
+			? Vec2(this.scatterTile).add(.5).mul(T)
 			: Player.centerPos
 	}
 }
