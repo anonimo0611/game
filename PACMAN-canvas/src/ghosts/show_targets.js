@@ -6,7 +6,6 @@ import {GhsMgr} from '../ghosts/_system.js'
 import {Ghost}  from './_ghost.js'
 
 export const Target = new class {
-
 	/** @param {Ghost[]} ghosts */
 	draw(ghosts=[]) {
 		if (!Ctrl.showTargets || !State.isPlaying) return
@@ -24,9 +23,9 @@ export const Target = new class {
 	/** @param {Ghost} g */
 	#getTargetPos(g) {
 		return (g.state.isGoOut || g.state.isEscape)
-			? Maze.PenEntrance.clone.add(.5).mul(T)
+			? Maze.House.Entrance.add(.5).mul(T)
 			: g.isScatter
-				? g.originalTarget.clone.add(.5).mul(T)
+				? g.originalTarget.add(.5).mul(T)
 				: g.chasePos
 	}
 

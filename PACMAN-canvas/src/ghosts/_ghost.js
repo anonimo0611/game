@@ -18,20 +18,21 @@ export class Ghost extends Actor {
 	#started    = false
 	#revSig     = false
 	#frightened = false
-	get spriteIdx()  {return GhsMgr.spriteIdx}
-	get aIdx()       {return GhsMgr.animIndex & this.playAnime}
-	get maxAlpha()   {return Ctrl.showTargets ? this.cheatAlpha : 1}
-	get started()    {return this.#started}
-	get frightened() {return this.#frightened}
-	get bitten()     {return this.state.isBitten}
-	get escaping()   {return this.state.isEscaping}
 
 	// This section is overridden in subclasses
-	scatterTile = Vec2()
-	get angry()     {return false}
-	get chaseStep() {return GhsStep.Base}
-	get chasePos()  {return Player.centerPos}
-	get chaseTile() {return this.chasePos.divInt(T)}
+	get angry()       {return false}
+	get chaseStep()   {return GhsStep.Base}
+	get chasePos()    {return Player.centerPos}
+	get scatterTile() {return Vec2()}
+
+	get spriteIdx()   {return GhsMgr.spriteIdx}
+	get aIdx()        {return GhsMgr.animIndex & this.playAnime}
+	get maxAlpha()    {return Ctrl.showTargets ? this.cheatAlpha : 1}
+	get started()     {return this.#started}
+	get frightened()  {return this.#frightened}
+	get bitten()      {return this.state.isBitten}
+	get escaping()    {return this.state.isEscaping}
+	get chaseTile()   {return this.chasePos.divInt(T)}
 
 	constructor({col=0,row=0,idx=0,initAlign=0,orient=L,playAnime=true}={}) {
 		super()
@@ -57,7 +58,7 @@ export class Ghost extends Actor {
 	}
 	get originalTarget() {
 		return this.state.isEscape
-			? Maze.PenEntrance
+			? Maze.House.Entrance
 			: this.isScatter
 				? this.scatterTile
 				: this.chaseTile
@@ -67,9 +68,9 @@ export class Ghost extends Actor {
 			? this.originalTarget
 			: Maze.ghostExitPos(this)
 	}
-	get penEntranceArrived() {
+	get houseEntranceArrived() {
 		return this.state.isEscape
-			&& this.tilePos.y == Maze.PenEntrance.y
+			&& this.tilePos.y == Maze.House.Entrance.y
 			&& abs(CvsW/2 - this.centerPos.x) <= this.step
 	}
 	get distanceToPacman() {
@@ -98,7 +99,7 @@ export class Ghost extends Actor {
 		super.update()
 		this.sprite.fadeOut?.update()
 		this.sprite.update()
-		if (this.penEntranceArrived) {
+		if (this.houseEntranceArrived) {
 			this.state.switchToReturn()
 			this.centering()
 		}
@@ -121,8 +122,8 @@ export class Ghost extends Actor {
 			Sys.DotCounter.release(idx, this.release.bind(this))
 		}
 		if (!this.state.isGoOut) {
-			this.dir =(cy+T*0.6-step > Maze.PenMiddleY && orient != D)
-				? U : (cy-T*0.6+step < Maze.PenMiddleY ? D:U)
+			this.dir =(cy+T*0.6-step > Maze.House.MiddleY && orient != D)
+				? U : (cy-T*0.6+step < Maze.House.MiddleY ? D:U)
 			this.setNextPos()
 		}
 	}
@@ -139,7 +140,7 @@ export class Ghost extends Actor {
 		if (cx != CvsW/2)
 			return this.centering()
 
-		if (y > Maze.PenEntrance.y*T+step)
+		if (y > Maze.House.Entrance.y*T+step)
 			return this.setMove(U)
 
 		this.dir = L
@@ -147,11 +148,11 @@ export class Ghost extends Actor {
 		this.state.switchToWalk()
 	}
 	#returnToHome({step,x,y,initX,initAlign}=this) {
-		if (y+step < Maze.PenMiddleY)
+		if (y+step < Maze.House.MiddleY)
 			return this.setMove(D)
 
-		if (y != Maze.PenMiddleY)
-			return this.setPos({y:Maze.PenMiddleY})
+		if (y != Maze.House.MiddleY)
+			return this.setPos({y:Maze.House.MiddleY})
 
 		if (!initAlign || abs(x-initX) <= step) {
 			this.x   = initX
