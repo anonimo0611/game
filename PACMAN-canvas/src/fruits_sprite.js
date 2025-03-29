@@ -14,9 +14,7 @@ function cherry(ctx=Ctx) {
 		ctx.restore()
 
 		// white shine
-		ctx.beginPath()
-		ctx.moveTo(1.1, 2.9)
-		ctx.lineTo(2.1, 3.9)
+		ctx.newLinePath([1.1,2.9],[2.1,3.9])
 		ctx.lineCap = 'round'
 		ctx.lineWidth = 1.05
 		ctx.strokeStyle = '#FFF'
@@ -266,9 +264,8 @@ export const {cvs:cachedCvs,cache}= function() {
 { // Create a sprite sheet for menu icons
 	const Menu = $byId('LevelMenu')
 	const size = +Menu.css('--scale') * T
-	const {ctx}=canvas2D(null, size*8, size)
-	Fns.forEach((_,idx)=> {
-		draw(ctx, idx, size/2+size*idx, size/2, size/16)
-	})
+	const {ctx}= canvas2D(null, size*8, size)
+	for (const i of Fns.keys())
+		draw(ctx, i, size/2+size*i, size/2, size/16)
 	Menu.css('--url',`url(${ctx.canvas.toDataURL()})`)
 }
