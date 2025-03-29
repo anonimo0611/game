@@ -1,7 +1,6 @@
 import {Sound}  from '../_snd/sound.js'
 import {Game}   from './_main.js'
 import {State}  from './_state.js'
-import {DotMax} from './_map_data.js'
 import {Maze}   from './maze.js'
 import {PtsMgr} from './points.js'
 import {Player} from './pacman/_pacman.js'
@@ -38,7 +37,7 @@ export const Fruit = new class {
 		_tgtDisp = State.isTitle
 	}
 	#dotEaten() {
-		if (!AppearSet.has(DotMax - Maze.dotsLeft))
+		if (!AppearSet.has(Maze.DotMax - Maze.dotsLeft))
 			return
 		_tgtDisp = true
 		// The fruit disappearing is between 9 and 10 seconds

@@ -1,6 +1,6 @@
 const {ctx}= Bg, W = Cols
 
-import {MapArr} from './_map_data.js'
+import {Maze} from './maze.js'
 export const MazeWall = new class {
 	#drawCorner(cornerIdx, x, y, type=0) {
 		ctx.save()
@@ -27,7 +27,7 @@ export const MazeWall = new class {
 		ctx.clearRect(0,0, CvsW, CvsH-T*2)
 		ctx.lineWidth   = 3.5
 		ctx.strokeStyle = color
-		MapArr.forEach(this.#drawTile)
+		Maze.Map.forEach(this.#drawTile)
 		this.#drawHouse(ctx.lineWidth/2)
 		ctx.restore()
 	}
