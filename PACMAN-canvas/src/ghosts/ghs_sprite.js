@@ -150,9 +150,9 @@ export default class {
 			ctx.fillRect(-15-size/2, -11-size/2, size, size)
 			ctx.fillRect(+15-size/2, -11-size/2, size, size)
 		}
-		ctx.newLinePath( // Mouth
-			[-36,17],[-30, 9],[-25, 9],[-15,17],[-11,17],[-3, 9],[-2,9],
-			[ +3, 9],[+11,17],[+15,17],[+25, 9],[+30, 9],[36,17])
+		// Mouth
+		ctx.newLinePath([-36,17],[-30, 9],[-25, 9],[-15,17],[-11,17],[-3, 9])
+		ctx.addLinePath([ +3, 9],[+11,17],[+15,17],[+25, 9],[+30, 9],[36,17])
 		ctx.lineWidth = 5
 		ctx.lineCap = ctx.lineJoin = 'round'
 		ctx.stroke()
