@@ -59,7 +59,8 @@ export const Fruit = new class {
 		Fruit.#collideWith()
 	}
 	drawTarget() {
-		if (!State.isTitle && !State.isPlaying)
+		if (!State.isTitle
+		 && !State.isPlaying)
 			return
 		if (!Ticker.paused && _tgtDisp) {
 			Ctx.save()
@@ -80,7 +81,7 @@ export const Fruit = new class {
 		Bg.ctx.clearRect(x,y,w,h)
 		for (let i=initCount,cols=1; i<Game.level; i++) {
 			const xy = Vec2(x+w+T-(T*2*cols++), y+T).vals
-			Spr.draw(Bg.ctx, Fruit.number(i),...xy)
+			Spr.draw(Bg.ctx, Fruit.number(i), ...xy)
 		}
 	}
 }
