@@ -161,12 +161,17 @@ function gala(ctx=Ctx) {
 		ctx.scale(scaleX, 1)
 		ctx.fillPolygon(yellow,[0,-2.6],[4.9,-2.4],[4.6,-.5],[2,1.6],[1.1,.5],[0,.5])
 		// blue wings
-		ctx.fillPolygon('#0AF',[5,-4.8],[6,-4.5],[6,.6],[1.6,4],[1.6,2],[4.6,-.6])
+		ctx.fillPolygon('#0AF',[4.6,-4.8],[6,-4.5],[6,.6],[1.6,4],[1.6,2],[4.6,-.6])
 		ctx.restore()
 	}
+	// yellow tail
+	ctx.lineWidth   = 1.2
+	ctx.strokeStyle = yellow
+	ctx.strokeLine(0, 0, 0, 6)
+
 	// red arrow head
 	ctx.beginPath()
-	ctx.setLinePath([0,-5.2],[3.8,-2.2],[3.0,-1.2],[1.3,-2.3])
+	ctx.setLinePath([0,-5],[3.8,-2.2],[3.0,-1.2],[1.3,-2.3])
 	ctx.quadraticCurveTo(+0.7, -2.7, 0.6, -1.4)
 	ctx.lineTo(+0.4, -0.6)
 	ctx.quadraticCurveTo(+0.0,+0.0,-0.4,-0.6)
@@ -178,12 +183,6 @@ function gala(ctx=Ctx) {
 	ctx.lineTo(-3.8, -2.2)
 	ctx.fillStyle = '#FF3401'
 	ctx.fill()
-
-	// yellow tail
-	ctx.lineWidth   = 1.2
-	ctx.strokeStyle = yellow
-	ctx.strokeLine(0, 0.28, 0, 6)
-
 }
 function bell(ctx=Ctx) {
 	// bell body
