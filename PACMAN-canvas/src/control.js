@@ -37,13 +37,13 @@ export const Ctrl = new class {
 	}
 	#saveData() {
 		const data = {}
-		for (const ctrl of dqsAll('.menu,input')) {
-			if (!ctrl.id) continue
-			data[ctrl.id] = {
-				menu:    Menu[ctrl.id]?.index,
-				range:   ctrl.valueAsNumber,
-				checkbox:ctrl.checked,
-			}[ctrl.type]
+		for (const c of dqsAll('.menu,input')) {
+			if (!c.id) continue
+			data[c.id]= {
+				menu:    Menu[c.id]?.index,
+				range:   c.valueAsNumber,
+				checkbox:c.checked,
+			}[c.type]
 		}
 		localStorage.anopacman = JSON.stringify(data)
 		return this
