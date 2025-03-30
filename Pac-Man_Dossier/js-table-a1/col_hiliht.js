@@ -8,6 +8,7 @@ const mouseover = (e, x)=> {
 	const table  = target.closest('table')
 	const thead  = table.querySelector('thead')
 	table.querySelectorAll('col')[x].classList.add('hlight')
+	table.tHead.querySelectorAll('th')[x].classList.add('hlight')
 	if (thead)
 		for (const row of thead.querySelectorAll('tr'))
 			if (row.cells[x])
@@ -22,9 +23,9 @@ const removeClasses = ()=> {
 	for (const ths of hilightedThs)  ths.classList.remove('hlight')
 	for (const col of hilightedCols) col.classList.remove('hlight')
 }
-Trs[0].querySelectorAll('th').forEach(()=>
+/*Trs[0].querySelectorAll('th').forEach(()=>
 	Tbl.insertBefore(document.createElement('col'), Tbl.firstChild)
-)
+)*/
 Trs.forEach((row, y)=>
 	Array.from(row.cells).forEach((cell, x)=>
 		cell.addEventListener('mouseover', e=> mouseover(e, x, y))

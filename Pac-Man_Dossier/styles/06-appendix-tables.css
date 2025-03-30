@@ -7,38 +7,64 @@ table {
 	position: relative;
 	display: table;
 	table {
+		border: solid 2px var(--border-color);
 		margin: 0;
 		table-layout: fixed;
 		top:  0;
 		left: 0;
 	}
+	colgroup[class]:not(:nth-child(2)) > col:first-child,
+	colgroup.spurt > col:nth-child(3) {
+		border-left: double 4.5px var(--border-color);
+	}
 	th {
 		text-align: center;
 		vertical-align: middle;
-		font-feature-settings: 'palt';
 		font-weight: normal;
 		line-height: 1.1;
 		padding: 0;
 	}
 	thead th {
+		text-align: center;
+		vertical-align: top;
+		font-feature-settings: 'palt','vpal';
+   	margin-left: auto;
+   	margin-right: auto;
+   	padding-top: 1em;
+   	width: 2.1em;
+   	line-height: 1;
+	}
+	thead th .v {
 		text-align: left;
+		display: inline-block;
 		text-orientation: upright;
 		writing-mode: vertical-rl;
-		font-feature-settings: 'palt','vpal';
-		padding-top: .5em;
-		line-height: 1.1;
+   	line-height: 1;
+		&.l3 {width: 3.2em}
 	}
 	th.middle {
 		vertical-align: middle;
 	}
 	th,td {
 		white-space: nowrap;
-		padding: .35em .3em;
+		padding: .2em .3em;
 		cursor: default;
+	}
+	td {
+		box-sizing: border-box;
+		padding-right: .4em;
+		min-width: 2.5em;
+	}
+	tbody tr td:first-of-type ~ td {
+		font-feature-settings: 'hwid' !important;
 	}
 	tbody tr:not(:last-child) > td,
 	tbody tr:not(:last-child) > th {
 		border-bottom: hidden;
+	}
+	tbody td:nth-child(10),
+	tbody td:nth-child(12) ~ td {
+		text-align: center;
 	}
 	tbody th {
 		background: transparent;
@@ -54,14 +80,12 @@ table {
 	tbody td {
 		background: transparent;
 		text-align: right;
-		padding: .1em .2em;
 		&:empty::before {
 			content: '—';
 			padding-right: .7em;
 		}
 		&.fruit {
 			text-align: left;
-			font-size: 80%;
 		}
 	}
 }
@@ -79,15 +103,12 @@ table {
 			align-items: center;
 			&::before {
 				content: '';
-				--size: 1.8em;
-				background: no-repeat center/calc(var(--size) * 8) 100% var(--fruits-url);
+				--size: 1rem;
+				background: no-repeat center/calc(var(--size) * 8) 90% var(--fruits-url);
 				margin-right: .1em;
 				width:  var(--size);
 				height: var(--size);
 				display: inline-block;
-			}
-			&::before {
-				--size: 1.8vw;
 			}
 		}
 	}

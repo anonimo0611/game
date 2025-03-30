@@ -1,19 +1,19 @@
 ﻿@import url('06-appendix-tables.css');
 
-html {
-	font-size: 70%;
-}
-html, body {
+html,body {
 	margin:  0;
 	padding: 0;
-	width:  100%;
+	width: 100%;
 	height: 100%;
+	box-sizing: border-box;
 }
-
 body {
+	font-size: 2.15vmin;
+	display: flex;
+	margin: 0;
+	padding: 1em;
 	display: flex;
 	align-items: center;
-	justify-content: center;
 }
 main {
 	margin:  0 auto;
