@@ -27,12 +27,16 @@ table {
 	thead th {
 		text-align: center;
 		vertical-align: top;
-		font-feature-settings: 'palt','vpal';
+		font-feature-settings: 'palt';
    	margin-left: auto;
    	margin-right: auto;
    	padding-top: 1em;
    	width: 2.1em;
    	line-height: 1;
+   	.sup {
+			display: inline-block;
+			text-indent: -.5em;
+		}
 	}
 	thead th .v {
 		text-align: left;
