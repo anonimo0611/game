@@ -55,7 +55,7 @@ table {
 		padding-right: .4em;
 		min-width: 2.5em;
 	}
-	tbody tr td:first-of-type ~ td {
+	tbody tr td:first-of-type ~ td:not(:empty) {
 		font-feature-settings: 'hwid' !important;
 	}
 	tbody tr:not(:last-child) > td,
@@ -80,9 +80,12 @@ table {
 	tbody td {
 		background: transparent;
 		text-align: right;
+		&:empty {
+			text-align: center !important;
+			padding: 0;
+		}
 		&:empty::before {
 			content: '—';
-			padding-right: .7em;
 		}
 		&.fruit {
 			text-align: left;

@@ -38,9 +38,6 @@ a[href="#easter-eggs_tricks"] {
 		th, td, #a1-balloon {
 			font-size: min(1.13vw, .95em);
 		}
-		tbody tr td:first-of-type ~ td {
-			font-feature-settings: 'hwid' !important;
-		}
 	}
 	@media print {
 		th, td {
