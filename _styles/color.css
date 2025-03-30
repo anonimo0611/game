@@ -65,9 +65,21 @@ table {
 	thead, tbody th, tfoot {
 		background-color: #e0e0e0;
 	}
-	col.hlight         {background-color: #fbf0d7}
+	thead th.fruits  {background: #d3bfd5}
+	colgroup.fruits  {background: #fdeeff}
+
+	thead th.speed  {background: #d5ccbe}
+	colgroup.speed  {background: #f5f3f0}
+
+	thead th.spurt  {background: #ccf}
+	colgroup.spurt  {background: #eef}
+
+	thead th.fright {background: #cfc}
+	colgroup.fright {background: #efe}
+
+	col.hlight         {background-color: rgba(0 0 0 /0.1)}
 	thead th.hlight    {background-color: #e4d7bd}
-	tbody tr:hover     {--hilight-bgcolor:#f5dfdd;}
+	tbody tr:hover     {--hilight-bgcolor:rgba(0 0 0 /0.1)}
 	th:hover, td:hover {--hilight-bgcolor:#e5c1d4;}
 	td:empty::before   {color: #555}
 }
