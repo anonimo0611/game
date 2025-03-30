@@ -65,17 +65,17 @@ table {
 	thead, tbody th, tfoot {
 		background-color: #e0e0e0;
 	}
-	thead th.fruits  {background: #d3bfd5}
-	colgroup.fruits  {background: #fdeeff}
+	thead th.fruits {background: #d3bfd5}
+	colgroup.fruits {background: #fdeeff}
 
 	thead th.speed  {background: #d5ccbe}
 	colgroup.speed  {background: #f5f3f0}
 
-	thead th.spurt  {background: #ccf}
-	colgroup.spurt  {background: #eef}
+	thead th.spurt  {background: rgb(255, 204, 227)}
+	colgroup.spurt  {background: rgb(255, 238, 245)}
 
-	thead th.fright {background: #cfc}
-	colgroup.fright {background: #efe}
+	thead th.fright {background: rgb(204, 209, 255)}
+	colgroup.fright {background: rgb(238, 240, 255)}
 
 	col.hlight         {background-color: rgba(0 0 0 /0.1)}
 	thead th.hlight    {background-color: #e4d7bd}
