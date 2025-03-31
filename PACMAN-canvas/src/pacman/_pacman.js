@@ -55,7 +55,7 @@ class PlayablePacman extends Pacman {
 	get #canTurn() {
 		return this.inForwardOfTile
 			&& this.#preDir
-			&& this.collidedWithWall(this.#preDir) == false
+			&& this.collidedWithWall(this.#preDir) === false
 	}
 	get #baseSpeed() {
 		return Game.moveSpeed
