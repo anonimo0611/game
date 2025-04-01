@@ -10,7 +10,6 @@ import {Target}  from './show_targets.js'
 
 /** @type {Ghost[]} */
 const Ghosts = []
-const SysMap = new Map()
 
 /** @param {number} ghostIdx */
 const getReleaseTime = ghostIdx=> ({ // For always chase mode (ms)
@@ -57,23 +56,21 @@ export const GhsMgr = new class {
 	get aInterval()  {return 6}
 	get animIndex()  {return this.#aidx}
 	get Elroy()      {return Elroy}
-	get frightened() {return SysMap.has(FrightMode)}
-	get score()      {return SysMap.get(FrightMode)?.score|0}
-	get spriteIdx()  {return SysMap.get(FrightMode)?.spriteIdx|0}
+	get frightened() {return FrightMode.instance != null}
+	get score()      {return FrightMode.instance?.score|0}
+	get spriteIdx()  {return FrightMode.instance?.spriteIdx|0}
 	get hasEscape()  {return Ghosts.some(g=> g.escaping)}
 	get akaCenter()  {return Ghosts[GhsType.Akabei].centerPos}
 
 	#initialize(_, ...subClasses) {
 		GhsMgr.#aidx = 0
-		SysMap.clear()
 		subClasses.forEach((cls,i)=> Ghosts[i]=new cls)
-	}
-	#onLevelEnds() {
-		SysMap.clear()
-		Ghosts.forEach(g=> g.sprite.setFadeOut())
 	}
 	#onAttract(_, ...ghosts) {
 		ghosts.forEach((g,i)=> Ghosts[i]=g)
+	}
+	#onLevelEnds() {
+		Ghosts.forEach(g=> g.sprite.setFadeOut())
 	}
 	#onPlaying() {
 		Sound.playSiren()
@@ -83,14 +80,15 @@ export const GhsMgr = new class {
 	#onDotEaten(_, isPow) {
 		if (!isPow) return
 		setReversalSignal()
-		FrightMode.time && new FrightMode
+		FrightMode.duration && new FrightMode()
 	}
 	update() {
 		if (State.isPlaying
 		 || State.isAttract
 		 || State.isCBreak)
 			this.#aidx ^= !Timer.frozen && !(Ticker.count % this.aInterval)
-		SysMap.forEach(s=> s.update())
+		AttackInWaves.update()
+		FrightMode.instance?.update()
 		Ghosts.forEach(g=> g.update())
 	}
 	/** @param {Ghost} g */
@@ -105,40 +103,42 @@ export const GhsMgr = new class {
 	drawBehind()  {Ghosts.filter(behindThePac).forEach(this.#draw)}
 }
 
-export const Wave = function() {
+export const AttackInWaves = function() {
 	let _mode = 0
+	let _tick = ()=>{}
 	const genTimeList = lv=>
-	freeze([ // ms
-		lv <= 4 ? 4500 : 4000,
-		15e3,
-		lv <= 4 ? 4500 : 4000,
-		15e3,
-		3500,
-		lv == 1 ? 15e3 : 78e4,
-		lv == 1 ? 3500 :(1e3/60),
-		Infinity,
-	])
-	function onPlaying() {
+		freeze([ // ms
+			lv <= 4 ? 4500 : 4000,
+			15e3,
+			lv <= 4 ? 4500 : 4000,
+			15e3,
+			3500,
+			lv == 1 ? 15e3 : 78e4,
+			lv == 1 ? 3500 :(1e3/60),
+			Infinity,
+		])
+	function init() {
 		let   [cnt,idx]= [-1,0]
 		const TimeList = genTimeList(Game.level)
 		const duration = idx=> TimeList[idx] / Game.speedRate
-		function update() {
+		function tick() {
 			if (Timer.frozen || GhsMgr.frightened) return
 			if (Ticker.Interval * ++cnt < duration(idx)) return
-			[cnt,_mode]= [0,(++idx % 2)]
+			;[cnt,_mode]= [0,(++idx % 2)]
 			setReversalSignal()
 		}
-		!(_mode=+Ctrl.isChaseMode) && SysMap.set(Wave,{update})
+		!(_mode= +Ctrl.isChaseMode) && (_tick=tick)
 	}
-	$on('Playing', onPlaying)
+	$on('Title Ready', init)
 	return {
+		update() {State.isPlaying && _tick()},
 		get isScatter() {return _mode == 0},
 		get isChase()   {return _mode == 1},
 	}
 }()
 function setReversalSignal() {
 	$(Ghosts).trigger('Reverse')
-	!FrightMode.time && $(Ghosts).trigger('Runaway')
+	!FrightMode.duration && $(Ghosts).trigger('Runaway')
 }
 
 export const DotCounter = function() {
@@ -204,31 +204,36 @@ export const Elroy = function() {
 }()
 
 export class FrightMode {
-	static #timeTbl = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // seconds
-	static get time() {return this.#timeTbl[Game.clampedLv-1]}
-	static caught() {SysMap.get(FrightMode)?.caught()}
+	/** @type {?FrightMode} */
+	static #instance  = null
+	static #durations = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // seconds
+	static get instance() {return this.#instance}
+	static get duration() {return this.#durations[Game.clampedLv-1]}
+	static {$(GhsMgr).on('Init',this.#reset)}
+	static #reset() {FrightMode.#instance = null}
+	static caught() {FrightMode.#instance?.caught()}
 	#timeCnt   = 0
 	#flashIdx  = 1
 	#flashCnt  = 0
 	#caughtCnt = 0
 	get score()     {return 100 * (1 << this.#caughtCnt)}
 	get spriteIdx() {return this.#flashCnt? this.#flashIdx^1:0}
-	constructor()   {SysMap.set(FrightMode, this.#toggle(true))}
+	constructor()   {FrightMode.#instance = this.#toggle(true)}
 	#toggle(bool) {
-		SysMap.delete(FrightMode)
+		FrightMode.#reset()
 		Sound.toggleFrightMode(bool)
 		$(Ghosts).trigger('FrightMode',bool)
 		return this
 	}
 	update() {
 		if (!State.isPlaying || Timer.frozen) return
-		const {time}= FrightMode
+		const {duration:dur}= FrightMode
 		const elapsedS  = (Game.interval*this.#timeCnt++)/1e3
-		const fInterval = (time == 1 ? 12:14)/Game.speedRate|0
+		const fInterval = (dur == 1 ? 12:14)/Game.speedRate|0
 		const caughtAll = (this.#caughtCnt == GhsType.Max)
 		this.#flashIdx ^=!(this.#flashCnt % fInterval)
-		;(elapsedS>=time - 2) && this.#flashCnt++
-		;(elapsedS>=time || caughtAll) && this.#toggle(false)
+		;(elapsedS>=dur - 2) && this.#flashCnt++
+		;(elapsedS>=dur || caughtAll) && this.#toggle(false)
 	}
 	caught() {this.#caughtCnt++}
 }
