@@ -106,7 +106,7 @@ export const GhsMgr = new class {
 }
 
 export const Wave = function() {
-	let mode = 0
+	let _mode = 0
 	const genTimeList = lv=>
 	freeze([ // ms
 		lv <= 4 ? 4500 : 4000,
@@ -125,15 +125,15 @@ export const Wave = function() {
 		function update() {
 			if (Timer.frozen || GhsMgr.frightened) return
 			if (Ticker.Interval * ++cnt < duration(idx)) return
-			[cnt,mode]= [0,(++idx % 2)]
+			[cnt,_mode]= [0,(++idx % 2)]
 			setReversalSignal()
 		}
-		!(mode=+Ctrl.isChaseMode) && SysMap.set(Wave,{update})
+		!(_mode=+Ctrl.isChaseMode) && SysMap.set(Wave,{update})
 	}
 	$on('Playing', onPlaying)
 	return {
-		get isScatter() {return mode == 0},
-		get isChase()   {return mode == 1},
+		get isScatter() {return _mode == 0},
+		get isChase()   {return _mode == 1},
 	}
 }()
 function setReversalSignal() {
@@ -142,7 +142,7 @@ function setReversalSignal() {
 }
 
 export const DotCounter = function() {
-	let globalDotCnt = -1
+	let _globalCnt = -1
 	const counters = new Uint8Array(GhsType.Max)
 	const limitTbl = freeze([
 	    //  global,lv1,lv2,lv3+
@@ -158,18 +158,18 @@ export const DotCounter = function() {
 		const gLimit  = limitTbl[idx-1][0] // global
 		const pLimit  = limitTbl[idx-1][min(Game.level,3)] // personal
 		;(Player.instance.timeNotEaten >= timeOut)? fn()
-		:(!Game.restarted || globalDotCnt < 0)
+		:(!Game.restarted || _globalCnt < 0)
 			? counters[idx]>= pLimit && fn()
-			: globalDotCnt == gLimit && fn(idx == GhsType.Guzuta)
-				&& (globalDotCnt = -1)
+			: _globalCnt == gLimit && fn(idx == GhsType.Guzuta)
+				&& (_globalCnt = -1)
 	}
 	function reset() {
 		!Game.restarted && counters.fill(0)
-		globalDotCnt = Game.restarted? 0 : -1
+		_globalCnt = Game.restarted? 0 : -1
 	}
 	function addCnt() {
-		(Game.restarted && globalDotCnt >= 0)
-			? globalDotCnt++
+		(Game.restarted && _globalCnt >= 0)
+			? _globalCnt++
 			: counters[Ghosts.findIndex(g=> g.state.isIdle)]++
 	}
 	$on('Title Ready', reset)
@@ -178,27 +178,27 @@ export const DotCounter = function() {
 }()
 
 export const Elroy = function() {
-	let part = 0
+	let _part = 0
 	const speedRateTbl  = freeze([1, 1.02, 1.05, 1.1])
 	const dotsLeftP2Tbl = freeze([20,20,30,40,50,60,70,70,80,90,100,110,120])
 	function angry() {
 		return State.isPlaying
-			&& part > 1
+			&& _part > 1
 			&& Ghosts[GhsType.Akabei]?.frightened === false
 			&& Ghosts[GhsType.Guzuta]?.started === true
 	}
 	function onDotEaten() {
 		const elroyP2 = dotsLeftP2Tbl[Game.clampedLv-1]
-		if (Maze.dotsLeft <= elroyP2*([15,10,50][part]/10)) {
-			++part
+		if (Maze.dotsLeft <= elroyP2*([15,10,50][_part]/10)) {
+			++_part
 			Sound.playSiren()
 		}
 	}
-	$on('Title NewLevel', ()=> part=0)
+	$on('Title NewLevel', ()=> _part=0)
 	$ready(()=> Player.bindDotEaten(onDotEaten))
 	return {
-		get part()  {return part},
-		get step()  {return GhsStep.Base * speedRateTbl[part]},
+		get part()  {return _part},
+		get step()  {return GhsStep.Base * speedRateTbl[_part]},
 		get angry() {return angry()},
 	}
 }()
