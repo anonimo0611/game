@@ -107,4 +107,4 @@ export const Ctrl = new class {
 		$('#defBtn')  .on('click', Ctrl.#setDefault)
 		$('#startBtn').on('click', State.switchToStart)
 	}
-}, powChk = ctrl('powChk')
+}
