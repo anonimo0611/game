@@ -181,7 +181,7 @@ export class Ghost extends Actor {
 			return
 		if (this.#revSig) {
 			this.#revSig = false
-			this.orient  = Dir.opposite(this.dir)
+			this.orient  = Dir.opp.get(this.dir)
 			return
 		}
 		this.orient = this.#getNextDir()
@@ -199,8 +199,8 @@ export class Ghost extends Actor {
 	}
 	#isAllowDir(dir, tile) {
 		return !Maze.hasWall(tile)
-		    && !Dir.isOpposite(dir,this.orient)
-		    && !this.#notEnterTile(dir,tile)
+			&& !this.#notEnterTile(dir,tile)
+		    && Dir.opp.get(this.orient) != dir
 	}
 	#notEnterTile(dir, tile) {
 		return !Ctrl.unrestricted
