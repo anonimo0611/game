@@ -23,9 +23,9 @@ export class Actor {
 	get dir()       {return this.#movDir}
 	get movDir()    {return this.#movDir}
 	get orient()    {return this.#orient}
-	set dir(dir)    {Dir.isValid(dir) && (this.#movDir = this.orient = dir)}
-	set movDir(dir) {Dir.isValid(dir) && (this.#movDir = dir)}
-	set orient(dir) {Dir.isValid(dir) && (this.#orient = dir)}
+	set dir(dir)    {hasOwn(Dir,dir) && (this.#movDir = this.orient = dir)}
+	set movDir(dir) {hasOwn(Dir,dir) && (this.#movDir = dir)}
+	set orient(dir) {hasOwn(Dir,dir) && (this.#orient = dir)}
 
 	get step()       {return 0}
 	get maxAlpha()   {return 1}
