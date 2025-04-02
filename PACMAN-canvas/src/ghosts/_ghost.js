@@ -228,7 +228,7 @@ export class Ghost extends Actor {
 			Timer.freeze()
 			this.state.switchToBitten()
 			this.#frightened = false
-			Sys.FrightMode.caught()
+			GhsMgr.caught()
 			PtsMgr.set({key:GhsMgr, ...this.centerPos}, fn)
 			Sound.play('bitten')
 			return

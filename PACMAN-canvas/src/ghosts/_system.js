@@ -12,7 +12,7 @@ import {Target}  from './show_targets.js'
 const Ghosts = []
 
 /** @param {number} ghostIdx */
-const getReleaseTime = ghostIdx=> ({ // For always chase mode (ms)
+const releaseDelay = ghostIdx=> ({ // For always chase mode (ms)
 	// Pinky->Aosuke->Guzuta
 	 0:[1000,  500,  500], // <-After life is lost
 	 1:[1000, 4000, 4000], 2:[800, 2200, 4000], 3:[600, 1900, 3500],
@@ -50,7 +50,6 @@ export const GhsMgr = new class {
 		$on('Clear',  GhsMgr.#onLevelEnds)
 		$on('Crashed',GhsMgr.#onLevelEnds)
 		$(GhsMgr).on('Init',GhsMgr.#initialize)
-		Player.bindDotEaten(GhsMgr.#onDotEaten)
 	}
 	#aidx = 0
 	get aInterval()  {return 6}
@@ -75,18 +74,22 @@ export const GhsMgr = new class {
 	#onPlaying() {
 		Sound.playSiren()
 		Ctrl.isChaseMode && Timer.sequence(...Ghosts.slice(1)
-			.map((g,i)=> [getReleaseTime(i), ()=> g.release()]))
+			.map((g,i)=> [releaseDelay(i), ()=> g.release()]))
 	}
-	#onDotEaten(_, isPow) {
+	setFrightMode(isPow=false) {
 		if (!isPow) return
 		setReversalSignal()
 		FrightMode.duration && new FrightMode()
+	}
+	caught() {
+		FrightMode.instance?.caught()
 	}
 	update() {
 		if (State.isPlaying
 		 || State.isAttract
 		 || State.isCBreak)
-			this.#aidx ^= !Timer.frozen && !(Ticker.count % this.aInterval)
+			this.#aidx ^= !Timer.frozen
+				&& !(Ticker.count % this.aInterval)
 		AttackInWaves.update()
 		FrightMode.instance?.update()
 		Ghosts.forEach(g=> g.update())
@@ -106,7 +109,7 @@ export const GhsMgr = new class {
 export const AttackInWaves = function() {
 	let _mode = 0
 	let _tick = ()=>{}
-	const genTimeList = lv=>
+	const genDurList = lv=>
 		freeze([ // ms
 			lv <= 4 ? 4500 : 4000,
 			15e3,
@@ -118,22 +121,24 @@ export const AttackInWaves = function() {
 			Infinity,
 		])
 	function init() {
-		let   [cnt,idx]= [-1,0]
-		const TimeList = genTimeList(Game.level)
-		const duration = idx=> TimeList[idx] / Game.speedRate
-		function tick() {
-			if (Timer.frozen || GhsMgr.frightened) return
-			if (Ticker.Interval * ++cnt < duration(idx)) return
+		let  [cnt,idx]= [-1,0]
+		const durList = genDurList(Game.level)
+		function update() {
+			if (!State.isPlaying
+			 || Timer.frozen
+			 || GhsMgr.frightened
+		     || ++cnt*Ticker.Interval < durList[idx]/Game.speedRate)
+			 	return
 			;[cnt,_mode]= [0,(++idx % 2)]
 			setReversalSignal()
 		}
-		!(_mode= +Ctrl.isChaseMode) && (_tick=tick)
+		_mode = +Ctrl.isChaseMode
+		_mode == false && (_tick=update)
 	}
 	$on('Title Ready', init)
 	return {
-		update() {State.isPlaying && _tick()},
+		get update()    {return _tick},
 		get isScatter() {return _mode == 0},
-		get isChase()   {return _mode == 1},
 	}
 }()
 function setReversalSignal() {
@@ -203,15 +208,13 @@ export const Elroy = function() {
 	}
 }()
 
-export class FrightMode {
+class FrightMode {
 	/** @type {?FrightMode} */
 	static #instance  = null
 	static #durations = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // seconds
 	static get instance() {return this.#instance}
 	static get duration() {return this.#durations[Game.clampedLv-1]}
-	static {$(GhsMgr).on('Init',this.#reset)}
-	static #reset() {FrightMode.#instance = null}
-	static caught() {FrightMode.#instance?.caught()}
+	static {$(GhsMgr).on('Init',()=> this.#instance = null)}
 	#timeCnt   = 0
 	#flashIdx  = 1
 	#flashCnt  = 0
@@ -220,7 +223,7 @@ export class FrightMode {
 	get spriteIdx() {return this.#flashCnt? this.#flashIdx^1:0}
 	constructor()   {FrightMode.#instance = this.#toggle(true)}
 	#toggle(bool) {
-		FrightMode.#reset()
+		FrightMode.#instance = null
 		Sound.toggleFrightMode(bool)
 		$(Ghosts).trigger('FrightMode',bool)
 		return this
