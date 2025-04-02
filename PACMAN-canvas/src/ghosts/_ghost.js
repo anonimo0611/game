@@ -177,14 +177,13 @@ export class Ghost extends Actor {
 		}
 	}
 	#setNextDir() {
-		if (this.dir != this.orient)
-			return
 		if (this.#revSig) {
 			this.#revSig = false
 			this.orient  = Dir.opp.get(this.dir)
 			return
 		}
-		this.orient = this.#getNextDir()
+		if (this.dir == this.orient)
+			this.orient = this.#getNextDir()
 	}
 	#getNextDir(target=this.targetTile) {
 		const tile = this.getAdjTile(this.dir)
