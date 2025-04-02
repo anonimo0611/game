@@ -39,8 +39,8 @@ export default class {
 		ctx.arc(0,0,radius*scale, mAngle, PI*2-mAngle)
 		ctx.fillStyle = Color.Pacman
 		ctx.fill()
+			showCenter && ctx.fillCircle(0,0, 3, Color.PacCenter)
 		ctx.restore()
-		showCenter && ctx.fillCircle(x,y, 3, Color.PacCenter)
 	}
 	setLosing() {this.#losing = new Losing(this.ctx)}
 }
