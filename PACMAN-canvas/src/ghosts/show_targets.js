@@ -5,12 +5,12 @@ import {Player} from '../pacman/_pacman.js'
 import {GhsMgr} from '../ghosts/_system.js'
 import {Ghost}  from './_ghost.js'
 
-export const Target = new class {
+class Target {
 	/** @param {Ghost[]} ghosts */
 	draw(ghosts=[]) {
 		if (!Ctrl.showTargets || !State.isPlaying) return
-		ghosts.forEach(Target.#strokeLines)
-		ghosts.forEach(Target.#drawTargetMarker)
+		for (let g of ghosts) this.#strokeLines(g)
+		for (let g of ghosts) this.#drawTargetMarker(g)
 	}
 
 	/** @param {Ghost} g */
@@ -31,18 +31,18 @@ export const Target = new class {
 
 	/** @param {Ghost} g */
 	#strokeLines(g) {
-		if (Target.#disabled(g)) return
+		if (this.#disabled(g)) return
 		switch (g.idx) {
-		case GhsType.Pinky: Target.#strokeAuxLines(g, 4); break
-		case GhsType.Aosuke:Target.#strokeAuxLines(g, 2); break
-		case GhsType.Guzuta:Target.#strokeGuzutaCircle(g);break
+		case GhsType.Pinky: this.#strokeAuxLines(g, 4); break
+		case GhsType.Aosuke:this.#strokeAuxLines(g, 2); break
+		case GhsType.Guzuta:this.#strokeGuzutaCircle(g);break
 		}
 	}
 
 	/** @param {Ghost} g */
 	#drawTargetMarker(g) {
-		if (Target.#disabled(g)) return
-		const {x,y}= Target.#getTargetPos(g)
+		if (this.#disabled(g)) return
+		const {x,y}= this.#getTargetPos(g)
 		Ctx.save()
 		Ctx.globalAlpha = 0.8
 		Ctx.fillCircle  (x,y, T*0.4, Color[g.name])
@@ -86,4 +86,4 @@ export const Target = new class {
 		Ctx.strokeCircle(...Player.centerPos.vals, T*8, Color[g.name], 6)
 		Ctx.restore()
 	}
-}
+} export default new Target()

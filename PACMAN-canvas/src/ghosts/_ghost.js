@@ -48,7 +48,7 @@ export class Ghost extends Actor {
 		$(this).on('FrightMode',  this.#setFrightMode)
 		$(this).on('Reverse',()=> this.#revSig  = true)
 		$(this).on('Runaway',()=> this.#runAway = 400/Game.interval)
-		;(this.name == 'Ghost') && freeze(this)
+		freeze(this)
 	}
 	get isScatter() {
 		return Sys.AttackInWaves.isScatter
