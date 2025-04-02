@@ -226,9 +226,9 @@ export class Ghost extends Actor {
 		if (this.frightened) {
 			if (Timer.frozen) return
 			Timer.freeze()
-			this.state.switchToBitten()
 			this.#frightened = false
-			GhsMgr.caught()
+			this.state.switchToBitten()
+			$(this).trigger('Cought')
 			PtsMgr.set({key:GhsMgr, ...this.centerPos}, fn)
 			Sound.play('bitten')
 			return

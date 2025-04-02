@@ -76,13 +76,9 @@ export const GhsMgr = new class {
 		Ctrl.isChaseMode && Timer.sequence(...Ghosts.slice(1)
 			.map((g,i)=> [releaseDelay(i), ()=> g.release()]))
 	}
-	setFrightMode(isPow=false) {
-		if (!isPow) return
+	setFrightMode() {
 		setReversalSignal()
 		FrightMode.duration && new FrightMode()
-	}
-	caught() {
-		FrightMode.instance?.caught()
 	}
 	update() {
 		if (State.isPlaying
@@ -109,8 +105,8 @@ export const GhsMgr = new class {
 export const AttackInWaves = function() {
 	let _mode = 0
 	let _tick = ()=>{}
-	const genDurList = lv=>
-		freeze([ // ms
+	function genDurationList(lv) {
+		return freeze([ // ms
 			lv <= 4 ? 4500 : 4000,
 			15e3,
 			lv <= 4 ? 4500 : 4000,
@@ -120,28 +116,27 @@ export const AttackInWaves = function() {
 			lv == 1 ? 3500 :(1e3/60),
 			Infinity,
 		])
-	function init() {
-		let  [cnt,idx]= [-1,0]
-		const durList = genDurList(Game.level)
-		function update() {
-			if (!State.isPlaying
-			 || Timer.frozen
-			 || GhsMgr.frightened
-		     || ++cnt*Ticker.Interval < durList[idx]/Game.speedRate)
+	}
+	function initialize() {
+		let  [cnt,idx] = [-1,0]
+		const durList  = genDurationList(Game.level)
+		const duration = idx=> durList[idx]/Game.speedRate
+		function tick() {
+			if (Timer.frozen || GhsMgr.frightened
+		     || ++cnt*Ticker.Interval < duration(idx))
 			 	return
-			;[cnt,_mode]= [0,(++idx % 2)]
+			[cnt,_mode] = [0,(++idx % 2)]
 			setReversalSignal()
 		}
-		_mode = +Ctrl.isChaseMode
-		_mode == false && (_tick=update)
+		_tick = (_mode = +Ctrl.isChaseMode) ? ()=>{} : tick
 	}
-	$on('Title Ready', init)
+	$on('Title Ready', initialize)
 	return {
-		get update()    {return _tick},
 		get isScatter() {return _mode == 0},
+		update() {State.isPlaying && _tick()},
 	}
 }()
-function setReversalSignal() {
+const setReversalSignal = ()=> {
 	$(Ghosts).trigger('Reverse')
 	!FrightMode.duration && $(Ghosts).trigger('Runaway')
 }
@@ -221,11 +216,14 @@ class FrightMode {
 	#caughtCnt = 0
 	get score()     {return 100 * (1 << this.#caughtCnt)}
 	get spriteIdx() {return this.#flashCnt? this.#flashIdx^1:0}
-	constructor()   {FrightMode.#instance = this.#toggle(true)}
+	constructor() {
+		FrightMode.#instance = this.#toggle(true)
+		$(Ghosts).offon('Cought', ()=> ++this.#caughtCnt)
+	}
 	#toggle(bool) {
 		FrightMode.#instance = null
-		Sound.toggleFrightMode(bool)
 		$(Ghosts).trigger('FrightMode',bool)
+		Sound.toggleFrightMode(bool)
 		return this
 	}
 	update() {
@@ -238,5 +236,4 @@ class FrightMode {
 		;(elapsedS>=dur - 2) && this.#flashCnt++
 		;(elapsedS>=dur || caughtAll) && this.#toggle(false)
 	}
-	caught() {this.#caughtCnt++}
 }
