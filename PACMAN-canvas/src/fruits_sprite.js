@@ -251,14 +251,14 @@ export function draw(ctx=Ctx, idx=0, x=T,y=T, scale=T/8) {
 	Fns[idx](ctx)
 	ctx.restore()
 }
-export const {cvs:cachedCvs,cache}= function() {
+export const [cachedCvs,cache]= function() {
 	const {cvs,ctx}= canvas2D(null,T*2)
 	/** @param {number} fruitIdx */
 	function cache(fruitIdx) {
 		ctx.clear()
 		draw(ctx, fruitIdx)
 	}
-	return {cvs,cache}
+	return [cvs,cache]
 }()
 { // Create a sprite sheet for menu icons
 	const Menu = $byId('LevelMenu')
