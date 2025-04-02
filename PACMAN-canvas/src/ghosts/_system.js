@@ -1,12 +1,12 @@
-import {Sound} from '../../_snd/sound.js'
-import _State  from '../../_lib/state.js'
-import {Game}  from '../_main.js'
-import {State} from '../_state.js'
-import {Ctrl}  from '../control.js'
-import {Player}from '../pacman/_pacman.js'
-import {Maze}  from '../maze.js'
-import {Ghost} from './_ghost.js'
-import Target  from './show_targets.js'
+import _State   from '../../_lib/state.js'
+import {Sound}  from '../../_snd/sound.js'
+import {State}  from '../_state.js'
+import {Game}   from '../_main.js'
+import {Ctrl}   from '../control.js'
+import {Player} from '../pacman/_pacman.js'
+import {Maze}   from '../maze.js'
+import {Ghost}  from './_ghost.js'
+import Target   from './show_targets.js'
 
 /** @type {Ghost[]} */
 const Ghosts = []

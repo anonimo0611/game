@@ -5,7 +5,7 @@ import {Player} from '../pacman/_pacman.js'
 import {GhsMgr} from '../ghosts/_system.js'
 import {Ghost}  from './_ghost.js'
 
-class Target {
+export default new class {
 	/** @param {Ghost[]} ghosts */
 	draw(ghosts=[]) {
 		if (!Ctrl.showTargets || !State.isPlaying) return
@@ -86,4 +86,4 @@ class Target {
 		Ctx.strokeCircle(...Player.centerPos.vals, T*8, Color[g.name], 6)
 		Ctx.restore()
 	}
-} export default new Target()
+}
