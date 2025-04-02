@@ -154,15 +154,18 @@ class PlayablePacman extends Pacman {
 	#eaten(idx) {
 		if (!Maze.hasDot(idx)) return
 		const isPow = Maze.hasPow(idx)
-		this.resetTimer()
 		this.#playSE()
+		this.resetTimer()
 		Score.add(isPow? 50:10)
-		GhsMgr.setFrightMode(isPow)
+		isPow && GhsMgr.setFrightMode()
 		Maze.clearBgDot(this) == 0
-			&& Sound.stopLoops()
-			&& State.switchToClear()
-			&& State.switchToFlashMaze({delay:1000})
-		$(Player).trigger('DotEaten',isPow)
+			? this.#allDotsCleared()
+			: $(Player).trigger('DotEaten',isPow)
+	}
+	#allDotsCleared() {
+		Sound.stopLoops()
+		State.switchToClear()
+		State.switchToFlashMaze({delay:1000})
 	}
 	#playSE() {
 		const duration = (T/this.step)*Ticker.Interval*0.5
