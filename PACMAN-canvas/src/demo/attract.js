@@ -1,12 +1,11 @@
-﻿import {State}      from '../_state.js'
-import {Ctrl}       from '../control.js'
-import {drawDot}    from '../maze.js'
-import {drawText}   from '../message.js'
-import {Pacman}     from '../pacman/_pacman.js'
-import {Ghost}      from '../ghosts/_ghost.js'
-import {GhsMgr}     from '../ghosts/_system.js'
-import {FrightMode} from '../ghosts/_system.js'
-import {RunTimer}   from './_run_timer.js'
+﻿import {State}    from '../_state.js'
+import {Ctrl}     from '../control.js'
+import {drawDot}  from '../maze.js'
+import {drawText} from '../message.js'
+import {Pacman}   from '../pacman/_pacman.js'
+import {Ghost}    from '../ghosts/_ghost.js'
+import {GhsMgr}   from '../ghosts/_system.js'
+import {RunTimer} from './_run_timer.js'
 
 /** @type {?Attract} */
 let   _attract  = null
@@ -111,7 +110,7 @@ export class Attract {
 			this.pacVelX *= -1.11
 			this.ghsVelX /= -2.14
 			this.pacman.dir = R
-			new FrightMode()
+			GhsMgr.setFrightMode(true)
 		}
 	}
 	updateGhosts() {
