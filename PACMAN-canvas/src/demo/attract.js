@@ -110,7 +110,7 @@ export class Attract {
 			this.pacVelX *= -1.11
 			this.ghsVelX /= -2.14
 			this.pacman.dir = R
-			GhsMgr.setFrightMode(true)
+			GhsMgr.setFrightMode()
 		}
 	}
 	updateGhosts() {
