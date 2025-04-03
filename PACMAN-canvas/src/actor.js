@@ -56,7 +56,7 @@ export class Actor {
 	setNextPos(denom=1, dir=this.dir) {
 		this.pos = Vec2(dir).mul(this.step/denom).add(this)
 	}
-	setMove(dir) {
+	move(dir) {
 		this.dir = dir
 		this.setNextPos()
 	}
