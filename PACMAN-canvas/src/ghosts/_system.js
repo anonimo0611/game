@@ -205,17 +205,18 @@ export const Elroy = function() {
 
 class FrightMode {
 	/** @type {?FrightMode} */
-	static #instance  = null
-	static #durations = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // seconds
+	static #instance = null
+	static #timeList = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	static get instance() {return this.#instance}
-	static get duration() {return this.#durations[Game.clampedLv-1]}
+	static get duration() {return this.#timeList[Game.clampedLv-1]}
 	static {$(GhsMgr).on('Init',()=> this.#instance = null)}
-	#timeCnt   = 0
+	#tCounter  = 0
+	#fCounter  = 0
 	#flashIdx  = 1
-	#flashCnt  = 0
 	#caughtCnt = 0
 	get score()     {return 100 * (1 << this.#caughtCnt)}
-	get spriteIdx() {return this.#flashCnt? this.#flashIdx^1:0}
+	get spriteIdx() {return this.#fCounter? this.#flashIdx^1:0}
+	get allCaught() {return this.#caughtCnt == GhsType.Max}
 	constructor() {
 		FrightMode.#instance = this.#toggle(true)
 		$(Ghosts).offon('Cought', ()=> ++this.#caughtCnt)
@@ -229,11 +230,10 @@ class FrightMode {
 	update() {
 		if (!State.isPlaying || Timer.frozen) return
 		const {duration:dur}= FrightMode
-		const elapsedS  = (Game.interval*this.#timeCnt++)/1e3
-		const fInterval = (dur == 1 ? 12:14)/Game.speedRate|0
-		const caughtAll = (this.#caughtCnt == GhsType.Max)
-		this.#flashIdx ^=!(this.#flashCnt % fInterval)
-		;(elapsedS>=dur - 2) && this.#flashCnt++
-		;(elapsedS>=dur || caughtAll) && this.#toggle(false)
+		const et = (Game.interval*this.#tCounter++)/1e3
+		const fi = (dur == 1 ? 12:14)/Game.speedRate|0
+		this.#flashIdx ^=!(this.#fCounter % fi)
+		;(et>=dur - 2) && this.#fCounter++
+		;(et>=dur || this.allCaught) && this.#toggle(false)
 	}
 }
