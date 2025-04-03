@@ -122,9 +122,8 @@ export class Ghost extends Actor {
 			Sys.DotCounter.release(idx, this.release.bind(this))
 		}
 		if (!this.state.isGoOut) {
-			this.dir =(cy+T*0.6-step > Maze.House.MiddleY && orient != D)
-				? U : (cy-T*0.6+step < Maze.House.MiddleY ? D:U)
-			this.setNextPos()
+			this.move((cy+T*0.6-step > Maze.House.MiddleY && orient != D)
+				? U : (cy-T*0.6+step < Maze.House.MiddleY ? D:U))
 		}
 	}
 	release(deactivateGlobalDotCnt=false) {
@@ -135,13 +134,13 @@ export class Ghost extends Actor {
 	#goOut({centerPos:{x:cx},y,step}=this) {
 		if (cx > CvsW/2+step
 		 || cx < CvsW/2-step)
-			return this.setMove(this.initAlign<0 ? R:L)
+			return this.move(this.initAlign<0 ? R:L)
 
 		if (cx != CvsW/2)
 			return this.centering()
 
 		if (y > Maze.House.Entrance.y*T+step)
-			return this.setMove(U)
+			return this.move(U)
 
 		this.dir = L
 		this.#started ||= true
@@ -149,7 +148,7 @@ export class Ghost extends Actor {
 	}
 	#returnToHome({step,x,y,initX,initAlign}=this) {
 		if (y+step < Maze.House.MiddleY)
-			return this.setMove(D)
+			return this.move(D)
 
 		if (y != Maze.House.MiddleY)
 			return this.setPos({y:Maze.House.MiddleY})
@@ -160,7 +159,7 @@ export class Ghost extends Actor {
 			this.#arrivedAtHome()
 			return
 		}
-		this.setMove(initAlign<0 ? L:R)
+		this.move(initAlign<0 ? L:R)
 	}
 	#arrivedAtHome() {
 		this.sprite.setResurrect()
