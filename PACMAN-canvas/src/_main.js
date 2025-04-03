@@ -174,15 +174,15 @@ export const Game = new class {
 		Message.draw()
 	}
 	#drawAttractMode() {
-		Fruit.drawLevelCounter()
 		Score.draw()
 		Attract.draw()
 		PtsMgr.drawGhostPts()
+		Fruit.drawLevelCounter()
 	}
 	#drawCoffeeBreak() {
+		CBreak.draw()
 		State.lastIs('FlashMaze')
 			&& Fruit.drawLevelCounter()
-		CBreak.draw()
 	}
 	#pausing() {
 		Game.#draw()
