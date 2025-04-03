@@ -17,12 +17,12 @@ export default new class {
 	#disabled(g) {
 		return g.state.isIdle
 			|| g.frightened
-			|| (Timer.frozen && !g.state.isEscape)
+			|| (Timer.frozen && !g.escaping)
 	}
 
 	/** @param {Ghost} g */
 	#getTargetPos(g) {
-		return (g.state.isGoOut || g.state.isEscape)
+		return (g.state.isGoOut || g.escaping)
 			? Maze.House.Entrance.add(.5).mul(T)
 			: g.isScatter
 				? g.originalTarget.add(.5).mul(T)
