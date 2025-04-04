@@ -18,14 +18,12 @@ const between = (n,min,max)=> (n >= min && n <= max)
 const randChoice = array=>
 	isArray(array) && array[randInt(0, array.length-1)] || undefined
 
-const splitByBar = str=>
-	isStr(str) && (str=str.trim()) && String(str).split('|') || []
-
 const collisionCircle = (v1, v2, r1, r2)=>
 	(v1.x-v2.x)**2 + (v1.y-v2.y)**2 <= (r1+(r2 ?? r1))**2
 
 const circumPosition = (deg, r, cx=0, cy=0)=>
-	[Math.cos(PI/180*deg)*r+cx, Math.sin(PI/180*deg)*r+cy]
+	[Math.cos(PI/180*deg)*r+cx,
+	 Math.sin(PI/180*deg)*r+cy]
 
 const isKeyboardEvent = e=>
 	isObj(e) && (e.originalEvent || e) instanceof KeyboardEvent
