@@ -9,11 +9,12 @@ class Menu {
 		/** @type {HTMLElement} */
 		this.menu = this.root.querySelector('mn-list')
 		/** @type {NodeListOf<MenuItem>} */
-		this.lis  = this.menu.querySelectorAll('mn-item')
-		this.lis.forEach(li=> $(li).css('--data', li.val))
-		this.size = this.lis.length
+		this.lis   = this.menu.querySelectorAll('mn-item')
+		this.size  = this.lis.length
+		this.label = this.root.closest('label')
 		this.defaultIndex = this.index
-		$(this.root).closest('form').on('reset',()=> this.reset())
+		this.lis.forEach(li=> $(li).css('--data', li.val))
+		this.root.closest('form')?.addEventListener('reset',()=> this.reset())
 	}
 	select(idx=0) {
 		if (!this.lis[idx]) return false
@@ -37,8 +38,7 @@ export class DorpDown extends Menu {
 		this.cur = this.root.querySelector('output')
 		this.lis.forEach((li,i)=> li.onclick = ()=> this.select(i).cur.focus())
 		$on('click', e=> !e.target.closest(`#${this.id}`) && this.select())
-		$(this.root)
-			.parent('label')
+		$(this.label)
 			.on('click', e=> {e.preventDefault();this.cur.focus()})
 		$(this.cur)
 			.css('width',`${this.menu.offsetWidth}px`)
@@ -72,18 +72,16 @@ export class Slide extends Menu {
 	/** @param {string} id */
 	constructor(id) {
 		super(id)
-		const root=$(this.root), wrap=$(root).closest('label')
-		const onWeel  = e=> this.#select(e,e.deltaY > 0 ? L:R)
-		const onClick = e=> this.#select(e,e.target == this.btnL ? L:R)
-		root.find('.button').on('click', onClick)
-		root.parent('label').on('click', ()=> root.focus())
-		root.on('keydown', e=> this.#select(e,Dir.from(e)))
-		wrap.length
-			? wrap.get(0)?.addEventListener('wheel',onWeel)
-			: root.get(0)?.addEventListener('wheel',onWeel)
+		const {root,label}=this
+		const onWheel  = e=> this.#select(e,e.deltaY > 0 ? L:R)
+		const onClick  = e=> this.#select(e,e.target == this.btnL ? L:R)
+		const onKeyDwn = e=> this.#select(e,Dir.from(e))
 		this.btnR = $('<span class="button r">').prependTo(root).get(0)
 		this.btnL = $('<span class="button l">').prependTo(root).get(0)
 		this.#setWidth(this.btnL.offsetWidth*2)
+		;(label ?? root).addEventListener('wheel',onWheel)
+		$(root) .on('keydown',onKeyDwn).find('.button').on('click',onClick)
+		$(label).on('click',()=> root.focus())
 		freeze(this).select(this.index)
 	}
 	#select(e, dir) {
