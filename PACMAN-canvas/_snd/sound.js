@@ -1,4 +1,4 @@
-import {State}    from '../src/_state.js'
+import {State}    from '../src/state.js'
 import {GhsMgr}   from '../src/ghosts/_system.js'
 import {SoundMgr} from './loader.js'
 import {Speaker}  from './speaker.js'
@@ -28,7 +28,8 @@ export const Sound = new class extends SoundMgr {
 		Sound.vol = (e.type=='input'? e.target:volRng).valueAsNumber
 	}
 	#onKeydown(e) {
-		if (e.originalEvent.repeat || isCombinationKey(e)) return
+		if (e.originalEvent.repeat || isCombinationKey(e))
+			return
 		if (e.key.toUpperCase() == 'M'
 		 || e.target == volRg2 && isEnterKey(e)) Sound.#mute()
 	}
@@ -41,7 +42,8 @@ export const Sound = new class extends SoundMgr {
 	get sirenId()  {return SirenIds[GhsMgr.Elroy.part]}
 	get ringing()  {return Sound.isPlaying('bell')}
 	set vol(vol) {
-		if (Sound.disabled) return
+		if (Sound.disabled)
+			return
 		vol = isNaN(vol)? 10 : clamp(+vol, 0, 10)
 		localStorage.anoPacVolume = volRng.value = super.vol = vol
 		Speaker.draw(Sound.vol)

@@ -11,7 +11,8 @@ export class SoundMgr {
 		Sound.registerSounds(Manifest)
 		Sound.on('fileerror', reject)
 		Sound.on('fileload', ()=> {
-			if (++amount < Manifest.length) return
+			if (++amount < Manifest.length)
+				return
 			SoundMgr.#disabled = false
 			SoundIds.forEach(i=> Instance.set(i, Sound.createInstance(i)))
 			Instance.forEach(i=> i.setPaused = bool=> i.paused = bool)
