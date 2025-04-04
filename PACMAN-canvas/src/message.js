@@ -19,7 +19,7 @@ export const Message = new class {
 		drawText(0.5, 12.9, Color.Message2, `Level${Game.levelStr}`, cfg)
 	}
 	#drawLogo() {
-		const cfg ={face:'PacFont', size:T*1.15}
+		const cfg = {face:'PacFont', size:T*1.15}
 		drawText(23.26, 12.5, Color.Message2, 'pac', cfg)
 		drawText(25.06, 13.5, Color.Message2, 'man', cfg)
 	}
