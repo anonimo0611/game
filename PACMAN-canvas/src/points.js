@@ -16,6 +16,10 @@ export const PtsMgr = new class {
 	drawGhostPts() {PtsMap.get(GhsMgr)?.draw()}
 }
 class Points {
+	/**
+	 * @param {object}
+	 * @param {function} fn
+	 */
 	constructor({key={},x=0,y=0,delay=1e3}={}, fn) {
 		const speed   = Game.speedRate
 		const fadeDur = 300

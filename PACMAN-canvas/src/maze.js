@@ -1,5 +1,6 @@
-import {Rect}  from '../_lib/rect.js'
-import {State} from './state.js'
+import {Rect}   from '../_lib/rect.js'
+import {Pacman} from './pacman/_pacman.js'
+import {State}  from './state.js'
 
 export const MapStr = `\
 ////////////////////////////\
@@ -108,12 +109,17 @@ export const Maze = new class {
 			? drawDot(Bg.ctx, v)
 			: PowMap.set(i, v)
 	}
+	/** @param {Pacman} */
 	clearBgDot({tileIdx:i,tilePos:v}) {
 		DotSet.delete(i)
 		PowMap.delete(i)
 		drawDot(Bg.ctx, v, true, null)
 		return DotSet.size
 	}
+	/**
+	 * @param {ExtendedContext2D} ctx
+	 * @param {Vector2}
+	 */
 	drawDot(ctx, {x,y}, isLarge=false, color=Color.Dot) {
 		ctx.fillCircle(x*T+T/2, y*T+T/2, T/(isLarge? 2:8), color)
 	}

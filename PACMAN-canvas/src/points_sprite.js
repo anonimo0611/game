@@ -26,6 +26,11 @@ const coords100_5000 = {
 const GhsPtsSet = new Set([200,400,800,1600])
 
 export default new class {
+	/**
+	 * @param {number} x 
+	 * @param {number} y 
+	 * @param {number} pts 
+	 */
 	draw(x, y, pts) {
 		Ctx.save()
 		Ctx.translate(x, y)
