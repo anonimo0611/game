@@ -77,7 +77,7 @@ export class Slide extends Menu {
 		const onClick = e=> this.#select(e,e.target == this.btnL ? L:R)
 		root.find('.button').on('click', onClick)
 		root.parent('label').on('click', ()=> root.focus())
-		root.on('keydown', e=> select(e,Dir.from(e)))
+		root.on('keydown', e=> this.#select(e,Dir.from(e)))
 		wrap.length
 			? wrap.get(0)?.addEventListener('wheel',onWeel)
 			: root.get(0)?.addEventListener('wheel',onWeel)
