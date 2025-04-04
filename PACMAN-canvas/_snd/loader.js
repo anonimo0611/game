@@ -13,7 +13,7 @@ export class SoundMgr {
 		Sound.on('fileload', ()=> {
 			if (++amount < Manifest.length) return
 			SoundMgr.#disabled = false
-			SoundIds.forEach(id=> Instance.set(id, Sound.createInstance(id)))
+			SoundIds.forEach(i=> Instance.set(i, Sound.createInstance(i)))
 			Instance.forEach(i=> i.setPaused = bool=> i.paused = bool)
 			resolve(true)
 		})
@@ -29,7 +29,8 @@ export class SoundMgr {
 		return {...ConfigMap.get(prefix) || ConfigMap.get('_normal'), ...cfg}
 	}
 	play(id, cfg={}) {
-		if (this.disabled || !Instance.has(id)) return
+		if (this.disabled || !Instance.has(id))
+			return
 		if (isNum(cfg.duration))
 			Instance.get(id)._duration = cfg.duration
 		Instance.get(id).play(this.#configMerge(id, cfg))
