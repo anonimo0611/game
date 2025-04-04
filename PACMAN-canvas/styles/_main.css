@@ -126,7 +126,10 @@ body:not([data-state=Title]) #titleScr {
 		label,button {display: block}
 		[data-for=keys] {cursor: help}
 	}
-	label:has(+#LevelMenu)  {
+	label:has(#LevelMenu)  {
+		display: flex;
+		gap: .2em;
+		align-items: center;
 		color: #FFF;
 		font-variant: small-caps;
 	}
@@ -145,8 +148,8 @@ body:not([data-state=Title]) #titleScr {
 		display: flex;
 		align-items: center;
 	}
-	> li.one::before,
-	> li:not(.one) > :first-child {
+	> li.noLeft::before,
+	> li:not(.noLeft) > :first-child {
 		content: '';
 		text-align: center;
 		width: 1.5rem;
@@ -176,10 +179,10 @@ body:not([data-state=Title]) #titleScr {
 		height: 4px;
 		scale: .9;
 	}
-	#ExtendScoreMenu {
+	#ExtendMenu {
 		text-align: right;
-		font-size:   .9em;
-		margin-left: .5em;
+		font-size: .9em;
+		scale: .9;
 	}
 }
 
@@ -238,17 +241,21 @@ body:not([data-state=Title]) #titleScr {
 	text-transform: uppercase;
 	font: 0.9rem/1 sans-serif;
 	margin-left: 0;
-	.current, menu > li {
+	output, mn-item {
 		display: flex;
 		gap: .2em;
 		align-items: center;
 	}
-	.current {
+	output {
 		padding-top:    .4em;
 		padding-bottom: .3em;
 	}
-	.current::before, menu > li::before {
-		--x: calc(-1*var(--t) * var(--icon-idx, 0));
+	mn-item {
+		padding-top: .3em
+	}
+	output::before,
+	mn-item::before {
+		--x: calc(-1*var(--t) * var(--data, 0));
 		--size: var(--width) var(--t);
 		content: '';
 		background: no-repeat var(--x) 0/var(--size) var(--url);
@@ -256,5 +263,4 @@ body:not([data-state=Title]) #titleScr {
 		width:  var(--t);
 		height: var(--t);
 	}
-	menu > li {padding-top: .3em}
 }

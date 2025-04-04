@@ -1,5 +1,5 @@
 import {Sound}    from '../_snd/sound.js'
-import {State}    from './_state.js'
+import {State}    from './state.js'
 import {Ctrl}     from './control.js'
 import {Lives}    from './lives.js'
 import {drawText} from './message.js'

@@ -1,17 +1,17 @@
-import {State} from './_state.js'
+import {State} from './state.js'
 import {Maze}  from './maze.js'
 
 const CW = CvsW
 export class Actor {
 	#x = 0
 	#y = 0
+	radius  = T
 	#orient = L
 	#movDir = L
 	#fadeIn = new FadeIn(500)
 
 	get x()         {return this.#x}
 	get y()         {return this.#y}
-	get radius()    {return T}
 	get pos()       {return Vec2(this)}
 	get centerPos() {return Vec2(this).add(T/2)}
 	get tilePos()   {return Vec2(this.centerPos).divInt(T)}
@@ -61,7 +61,8 @@ export class Actor {
 		this.setNextPos()
 	}
 	newTileReached(denom=1) {
-		return this.inForwardOfTile && this.stepsPerTile <= this.step/denom
+		return this.inForwardOfTile
+			&& this.stepsPerTile <= this.step/denom
 	}
 	hasAdjWall(dir) {
 		const  adjTile = this.getAdjTile(dir)

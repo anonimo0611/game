@@ -1,4 +1,4 @@
-import {State} from './_state.js'
+import {State} from './state.js'
 
 function show(button) {
 	$('.panel').toggle()

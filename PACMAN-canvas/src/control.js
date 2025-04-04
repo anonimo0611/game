@@ -1,9 +1,8 @@
 import './panel.js'
-import {Confirm}   from '../_lib/confirm.js'
-import * as Menu   from './_menu.js'
-import {LevelMenu} from './_menu.js'
-import {State}     from './_state.js'
-import {drawText}  from './message.js'
+import {Confirm}  from '../_lib/confirm.js'
+import {Menu}     from './_main.js'
+import {State}    from './state.js'
+import {drawText} from './message.js'
 
 /** @returns {HTMLInputElement} */
 const ctrl = id=> Form[id]
@@ -16,7 +15,7 @@ export const Ctrl = new class {
 		Ctrl.#setupFormCtrls()
 		$on('resize',Ctrl.#fitToViewport).trigger('resize')
 	}
-	get extendPts()     {return +Menu.ExtendScoreMenu.value}
+	get extendPts()     {return +Menu.ExtendMenu.value}
 	get livesMax()      {return ctrl('lvsRng').valueAsNumber}
 	get speedRate()     {return ctrl('spdRng').valueAsNumber}
 	get isChaseMode()   {return ctrl('chsChk').checked}
@@ -27,7 +26,7 @@ export const Ctrl = new class {
 	get showGridLines() {return ctrl('grdChk').checked}
 	get isPractice()    {return Ctrl.isCheatMode  ||!Ctrl.isDefaultMode}
 	get isCheatMode()   {return Ctrl.speedRate<.7 || Ctrl.showTargets || Ctrl.invincible}
-	get isDefaultMode() {return Ctrl.consecutive && LevelMenu.index == 0}
+	get isDefaultMode() {return Ctrl.consecutive && Menu.LevelMenu.index == 0}
 
 	#fitToViewport() {
 		const scale = min(
@@ -37,7 +36,7 @@ export const Ctrl = new class {
 	}
 	#saveData() {
 		const data = {}
-		for (const c of dqsAll('.menu,input')) {
+		for (const c of dqsAll('custom-menu,input')) {
 			if (!c.id) continue
 			data[c.id]= {
 				menu:    Menu[c.id]?.index,

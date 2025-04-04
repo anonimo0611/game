@@ -1,6 +1,6 @@
 import {Confirm} from '../_lib/confirm.js'
 import {Game}    from './_main.js'
-import {State}   from './_state.js'
+import {State}   from './state.js'
 
 export const Message = new class {
 	drawText(col, row, color='', text='',

@@ -1,6 +1,6 @@
 import {Sound}  from '../../_snd/sound.js'
 import {Game}   from '../_main.js'
-import {State}  from '../_state.js'
+import {State}  from '../state.js'
 import {Pacman} from '../pacman/_pacman.js'
 import {Ghost}  from '../ghosts/_ghost.js'
 import Sprite   from '../ghosts/ghs_sprite_cb.js'

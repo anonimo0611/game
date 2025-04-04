@@ -30,7 +30,7 @@ function getOrient() {
 }
 !(function() { // Preview
 	let   data = new AnimeData()
-	const menu = new Menu.DorpDownMenu('animSelect')
+	const menu = new Menu.DorpDown('animSelect')
 	const ctx  = pvCtx
 	const radioSelector = '.radioButtons input'
 

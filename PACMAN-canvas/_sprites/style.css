@@ -70,11 +70,11 @@ button {
 }
 #select-anim {
 	margin: 1em 0;
-	.current {
+	output {
 		text-align: center;
 		text-indent: calc(-1 * var(--caret-size));
 	}
-	li[data-val="-1"] {
+	[val="-1"] {
 		text-align: center;
 	}
 }

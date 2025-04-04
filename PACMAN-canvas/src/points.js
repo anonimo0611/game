@@ -1,5 +1,5 @@
 import {Game}   from './_main.js'
-import {State}  from './_state.js'
+import {State}  from './state.js'
 import {Score}  from './score.js'
 import {GhsMgr} from './ghosts/_system.js'
 import {Fruit}  from './fruit.js'

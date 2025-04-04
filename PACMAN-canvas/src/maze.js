@@ -1,5 +1,5 @@
 import {Rect}  from '../_lib/rect.js'
-import {State} from './_state.js'
+import {State} from './state.js'
 
 export const MapStr = `\
 ////////////////////////////\
@@ -114,7 +114,7 @@ export const Maze = new class {
 		drawDot(Bg.ctx, v, true, null)
 		return DotSet.size
 	}
-	drawDot(ctx, {x,y}={}, isLarge=false, color=Color.Dot) {
+	drawDot(ctx, {x,y}, isLarge=false, color=Color.Dot) {
 		ctx.fillCircle(x*T+T/2, y*T+T/2, T/(isLarge? 2:8), color)
 	}
 	drawDoor() {

@@ -1,7 +1,7 @@
 import {Sound}   from '../../_snd/sound.js'
 import {Confirm} from '../../_lib/confirm.js'
 import {Game}    from '../_main.js'
-import {State}   from '../_state.js'
+import {State}   from '../state.js'
 import {Ctrl}    from '../control.js'
 import {Score}   from '../score.js'
 import {Maze}    from '../maze.js'
@@ -21,7 +21,10 @@ export const Player = function() {
 		get pos()        {return player.pos},
 		get centerPos()  {return player.centerPos},
 		get forwardPos() {return player.forwardPos},
-		bindDotEaten(fn) {$(Player).on('DotEaten',fn)},
+		/** @param {function} fn */
+		bindDotEaten(fn) {
+			isFun(fn) && $(Player).on('DotEaten',fn)
+		},
 	}
 }()
 export class Pacman extends Actor {
@@ -37,7 +40,6 @@ class PlayablePacman extends Pacman {
 	#stopped  = true
 	#preDir   = null
 	#nextTurn = null
-	get radius()       {return PacRadius}
 	get closed()       {return State.isPlaying == false}
 	get showCenter()   {return Ctrl.showGridLines}
 	get step()         {return this.#step}
@@ -49,7 +51,7 @@ class PlayablePacman extends Pacman {
 
 	constructor() {
 		super()
-		this.pos = Vec2(13.5, 24).mul(T)
+		this.pos = Vec2(13.52, 24).mul(T)
 		$offon('keydown.Player', e=> this.#onKeydown(e))
 	}
 	get #canTurn() {

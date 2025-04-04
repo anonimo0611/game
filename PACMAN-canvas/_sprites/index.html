@@ -28,22 +28,22 @@
 				<canvas id="previewCvs"></canvas>
 			</div>
 			<form id="select-anim">
-				<div class="dropdown menu" id="animSelect">
-					<div class="current" tabindex="0"></div>
-					<menu class="dropdown-list">
-					<li data-val="-1">–––  Select Actor –––</li>
-					<li data-val="0:0">PAC-MAN</li>
-					<li data-val="0:1">PAC-MAN(losing)</li>
-					<li data-val="1:0">AKABEI</li>
-					<li data-val="1:1">AKABEI(Repaired)</li>
-					<li data-val="1:2">AKABEI(Hadake)</li>
-					<li data-val="2:0">PINKY</li>
-					<li data-val="3:0">AOSUKE</li>
-					<li data-val="4:0">GUZUTA</li>
-					<li data-val="5:0">Frightened Ghost</li>
-					<li data-val="5:3">Frightened Ghost(flash)</li>
-					</menu>
-				</div>
+				<custom-menu id="animSelect" role="dropdown">
+					<output tabindex="0"></output>
+					<mn-list class="dropdown-list">
+					<mn-item val="-1">–––  Select Actor –––</mn-item>
+					<mn-item val="0:0">PAC-MAN</mn-item>
+					<mn-item val="0:1">PAC-MAN(losing)</mn-item>
+					<mn-item val="1:0">AKABEI</mn-item>
+					<mn-item val="1:1">AKABEI(Repaired)</mn-item>
+					<mn-item val="1:2">AKABEI(Hadake)</mn-item>
+					<mn-item val="2:0">PINKY</mn-item>
+					<mn-item val="3:0">AOSUKE</mn-item>
+					<mn-item val="4:0">GUZUTA</mn-item>
+					<mn-item val="5:0">Frightened Ghost</mn-item>
+					<mn-item val="5:3">Frightened Ghost(flash)</mn-item>
+					</mn-list>
+				</custom-menu>
 				<div class="radioButtons">
 					<label><input type="radio" value="Left"  name="orient" data-idx="0" disabled checked>Left</label>
 					<label><input type="radio" value="Up"    name="orient" data-idx="1" disabled>Up</label>

@@ -1,22 +1,26 @@
 import './ghosts/_ghost_sub.js'
-import {Sound}     from '../_snd/sound.js'
-import {Confirm}   from '../_lib/confirm.js'
-import {Cursor}    from '../_lib/mouse.js'
-import {LevelMenu} from './_menu.js'
-import {State}     from './_state.js'
-import {Ctrl}      from './control.js'
-import {Maze}      from './maze.js'
-import {MazeWall}  from './maze_wall.js'
-import {Message}   from './message.js'
-import {Score}     from './score.js'
-import {Lives}     from './lives.js'
-import {Fruit}     from './fruit.js'
-import {Player}    from './pacman/_pacman.js'
-import {GhsMgr}    from './ghosts/_system.js'
-import {PtsMgr}    from './points.js'
-import {Attract}   from './demo/attract.js'
-import {CBreak}    from './demo/coffee_break.js'
+import {Sound}    from '../_snd/sound.js'
+import {Confirm}  from '../_lib/confirm.js'
+import {Cursor}   from '../_lib/mouse.js'
+import * as _Menu from '../_lib/menu.js'
+import {State}    from './state.js'
+import {Ctrl}     from './control.js'
+import {Maze}     from './maze.js'
+import {MazeWall} from './maze_wall.js'
+import {Message}  from './message.js'
+import {Score}    from './score.js'
+import {Lives}    from './lives.js'
+import {Fruit}    from './fruit.js'
+import {Player}   from './pacman/_pacman.js'
+import {GhsMgr}   from './ghosts/_system.js'
+import {PtsMgr}   from './points.js'
+import {Attract}  from './demo/attract.js'
+import {CBreak}   from './demo/coffee_break.js'
 
+export const Menu = freeze({
+	LevelMenu:  new _Menu.DorpDown('LevelMenu'),
+	ExtendMenu: new _Menu.Slide('ExtendMenu'),
+})
 export const Game = new class {
 	static {$ready(this.setup)}
 	static setup() {
@@ -31,7 +35,7 @@ export const Game = new class {
 		$on('Restart',  Game.#levelBegins)
 		$on('GameOver', Game.#levelEnds)
 		$on('Quit',     Game.#levelEnds)
-		LevelMenu.bindChange(Game.#resetLevel)
+		Menu.LevelMenu.bindChange(Game.#resetLevel)
 		State.switchToTitle()
  	}
 	#level = 1
@@ -48,7 +52,7 @@ export const Game = new class {
 	get moveSpeed() {return Game.speedRate * Game.speedByLv}
 
 	#resetLevel() {
-		Game.#setLevel(LevelMenu.index+1)
+		Game.#setLevel(Menu.LevelMenu.index+1)
 	}
 	#setLevel(i=1) {
 		Game.#level = between(i, 1, 0xFF) && +i || 1

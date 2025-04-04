@@ -52,14 +52,16 @@ form, dialog {
 	--bgcolor:            #333B;
 	--bgcolor-hilight:    #369B;
 }
-button, input, .dropdown .current, .slidemenu {
+button, input,
+[role=dropdown] > output,
+[role=slidemenu] {
 	color: #EEE;
 	font-size: 1em;
 	border: solid 2px var(--color-border);
 	border-radius: .2em;
 	outline: 0;
 }
-button, .dropdown .current {
+button, .button, [role=dropdown] > output {
 	background: var(--bgcolor);
 	display: inline-block;
 	padding: .2em;
@@ -147,20 +149,20 @@ button, .dropdown .current {
 :hover::-webkit-slider-thumb {background: var(--accent)}
 :focus::-webkit-slider-thumb {background: var(--active)}
 
-.menu {
+custom-menu {
 	white-space: nowrap;
 	color: #FFF;
 	position: relative;
 	display: inline-block;
 	cursor: default;
 }
-.dropdown {
+[role=dropdown] {
 	--caret-size: 1em;
-	.current {
+	output {
 		padding: .1em .2em;
 		box-sizing: border-box;
 	}
-	.current::after {
+	output::after {
 		--size: calc(var(--caret-size)/3);
 		content: '';
 		border: solid;
@@ -173,14 +175,15 @@ button, .dropdown .current {
 		translate: 0 -50%;
 		rotate: -45deg;
 	}
-	menu {
+	mn-list {
 		border-radius: .2em;
 		margin:  0;
 		padding: 0;
+		display: block;
 		position: absolute;
 		z-index: 100;
 	}
-	li {
+	mn-item {
 		background: var(--bgcolor);
 		border: solid transparent;
 		border-width: 2px 0;
@@ -191,7 +194,7 @@ button, .dropdown .current {
 		&.selected:hover   {background:#336;border-color:#66C}
 	}
 }
-.slidemenu {
+[role=slidemenu] {
 	border: none;
 	display: inline-block;
 	vertical-align: middle;
@@ -203,21 +206,26 @@ button, .dropdown .current {
 		outline-offset: 2px;
 		outline: solid 2px var(--color-focus-border);
 	}
-	menu, li {
+	mn-list,
+	mn-item {
 		text-align: center;
 		transition:  transform .3s;
 		will-change: transform;
 		z-index: 1;
 	}
-	button {
+	mn-list {
+		display: inline-flex;
+	}
+	.button {
 		appearance: none;
 		background: transparent !important;
 		text-indent: -10em;
 		border: solid;
 		border-width: 0 0 4px 4px;
 		padding: 0;
-		width:  .6em;
-		height: .6em;
+		width:  .5em;
+		height: .5em;
+		display: inline-block;
 		position: absolute;
 		z-index: 2;
 		top: 50%;
@@ -227,18 +235,19 @@ button, .dropdown .current {
 	}
 }
 
- label:hover + .dropdown > .current,
-.label:hover + .slidemenu, tr:hover th+td {
-	background: var(--bgcolor-hilight);
-}
-label, .label, th {
+label, th {
 	color: var(--color-label)
+}
+label:hover {
+	color: var(--color-label-hover) !important;
+}
+tr:hover td,
+label:hover [role=dropdown] > output,
+label:hover [role=slidemenu] {
+	background: var(--bgcolor-hilight);
 }
 tr:hover th,
 label:focus-within,
-label:has(+.menu :is(:hover,:focus)),
-span:has(input:focus) + label,
-:where(label,.label):hover,
-:where(label,.label):has(+.menu:where(:hover,:focus)) {
+span:has(input:focus) + label {
 	color: var(--color-label-hover) !important;
 }

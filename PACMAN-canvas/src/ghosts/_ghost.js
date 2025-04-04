@@ -1,6 +1,6 @@
 import {Sound}  from '../../_snd/sound.js'
 import {Game}   from '../_main.js'
-import {State}  from '../_state.js'
+import {State}  from '../state.js'
 import {Ctrl}   from '../control.js'
 import {PtsMgr} from '../points.js'
 import {Maze}   from '../maze.js'

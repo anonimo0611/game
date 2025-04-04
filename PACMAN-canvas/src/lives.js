@@ -1,4 +1,4 @@
-import {State} from './_state.js'
+import {State} from './state.js'
 import {Ctrl}  from './control.js'
 import Sprite  from './pacman/pac_sprite.js'
 
