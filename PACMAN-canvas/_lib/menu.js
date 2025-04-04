@@ -61,10 +61,10 @@ export class DorpDown extends Menu {
 		}
 	}
 	select(idx=this.index, {close=true}={}) {
-		if (!super.select(idx)) return
+		if (!super.select(idx)) return this
 		const {selectedItem:item}= this
 		$(this.cur).css('--data', item.val).text(item.textContent)
-		return close && this.close()
+		return close && this.close() || this
 	}
 }
 export class Slide extends Menu {
