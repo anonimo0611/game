@@ -27,9 +27,9 @@ const GhsPtsSet = new Set([200,400,800,1600])
 
 export default new class {
 	/**
-	 * @param {number} x 
-	 * @param {number} y 
-	 * @param {number} pts 
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {number} pts
 	 */
 	draw(x, y, pts) {
 		Ctx.save()
