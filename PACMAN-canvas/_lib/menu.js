@@ -16,10 +16,11 @@ class Menu {
 		$(this.root).closest('form').on('reset',()=> this.reset())
 	}
 	select(idx=0) {
-		if (!this.lis[idx]) return this
+		if (!this.lis[idx]) return false
 		this.selectedItem.classList.remove('selected')
 		this.lis[idx].classList.add('selected')
 		$(this.menu).trigger('change')
+		return true
 	}
 	/** @param {function} fn */
 	bindChange(fn) {isFun(fn) && $(this.menu).on('change', fn)}
@@ -60,7 +61,7 @@ export class DorpDown extends Menu {
 		}
 	}
 	select(idx=this.index, {close=true}={}) {
-		super.select(idx)
+		if (!super.select(idx)) return
 		const {selectedItem:item}= this
 		$(this.cur).css('--data', item.val).text(item.textContent)
 		return close && this.close()
@@ -97,7 +98,7 @@ export class Slide extends Menu {
 		$(this.root).css('width',`${this.#width}px`)
 	}
 	select(idx=this.index) {
-		super.select(idx)
+		if (!super.select(idx)) return
 		this.menu.style.transform = `translateX(${-this.#width*idx}px)`
 		this.btnL.disabled = (idx == 0)
 		this.btnR.disabled = (idx == this.size-1)
