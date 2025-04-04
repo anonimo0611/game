@@ -1,9 +1,8 @@
 export default class {
 	#state = ''
 	#last  = ''
-	get last()    {return this.#last}
 	get current() {return this.#state}
-	lastIs(state) {return state === this.last}
+	lastIs(state) {return state === this.#last}
 	init(state) {
 		this.Enum = Object.create(null)
 		entries(this).forEach(([key,val])=> {

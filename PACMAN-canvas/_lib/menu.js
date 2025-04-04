@@ -1,100 +1,100 @@
 class Menu {
-	reset() {this.select(this.defaultIndex, {restore:true})}
-	get index()        {return +$(this.selectedItem).index()}
-	get value()        {return String(this.selectedItem.dataset.val) ?? ''}
+	get value() {return this.selectedItem.val ?? ''}
+	get index() {return +$(this.selectedItem).index()}
+	/** @returns {MenuItem} */
 	get selectedItem() {return this.menu.querySelector('.selected') || this.lis[0]}
 	constructor(id) {
-		this.root = byId(this.id=id);
-		this.menu = this.root.querySelector('menu')
-		this.lis  = this.menu.querySelectorAll('li')
-		this.size = this.lis.length |0
+		/** @type {MenuRoot} */
+		this.root = byId(this.id=id)
+		/** @type {HTMLElement} */
+		this.menu = this.root.querySelector('mn-list')
+		/** @type {NodeListOf<MenuItem>} */
+		this.lis  = this.menu.querySelectorAll('mn-item')
+		this.lis.forEach(li=> $(li).css('--data', li.val))
+		this.size = this.lis.length
 		this.defaultIndex = this.index
-		this.selectedItem.classList.add('selected')
-		$(this.root).closest('form').on('reset', ()=> this.reset())
-		defineProperty(this.root, 'type', {get(){return 'menu'}})
-	}
-	bindChange(fn) {
-		isFun(fn) && $(this.menu).on('change', fn)
+		$(this.root).closest('form').on('reset',()=> this.reset())
 	}
 	select(idx=0) {
-		if (!this.lis[idx]) return
+		if (!this.lis[idx]) return this
 		this.selectedItem.classList.remove('selected')
 		this.lis[idx].classList.add('selected')
-		$(this.menu).trigger('change');
+		$(this.menu).trigger('change')
 	}
+	/** @param {function} fn */
+	bindChange(fn) {isFun(fn) && $(this.menu).on('change', fn)}
+	reset() {this.select(this.defaultIndex, {restore:true})}
 }
-export class DorpDownMenu extends Menu {
-	open()   {$(this.menu).show();  return this}
-	close()  {$(this.menu).hide();  return this}
-	toggle() {$(this.menu).toggle();return this}
+export class DorpDown extends Menu {
+	close() {$(this.menu).hide();return this}
+	open()  {$(this.menu).show();return this}
+	toggle(){$(this.menu).toggle();return this}
 	get closed() {return $(this.menu).is(':hidden') == true}
 	/** @param {string} id */
 	constructor(id) {
 		super(id)
-		this.lis.forEach((li, i)=> li.onclick= ()=> {this.select(i),this.current.focus()})
-		this.current = this.root.querySelector('.current')
-		$(this.current)
-		.css('width',`${this.menu.offsetWidth}px`)
-		.on('keydown click', e=> {
-			if (e.type == 'click')
-				return this.toggle()
-			const {size,index}=this, dir=Dir.from(e)
-			switch (e.key) {
-			case 'Tab':
-			case 'Escape':
-				return this.close()
-			case '\x20':
-			case 'Enter':
-				e.preventDefault()
-				return this.closed? this.open() : this.select(index)
-			case 'ArrowUp':
-			case 'ArrowDown':
-				e.preventDefault()
-				this.select((index+Vec2(dir).y+size) % size, {close:false})
-			}
-		})
-		$(this.root).prev('label').on('click', ()=> this.current.focus())
-		$on('click', e=> {!this.closed && !e.target.closest(`#${id}`) && this.select()})
+		this.cur = this.root.querySelector('output')
+		this.lis.forEach((li,i)=> li.onclick = ()=> this.select(i).cur.focus())
+		$on('click', e=> !e.target.closest(`#${this.id}`) && this.select())
+		$(this.root)
+			.parent('label')
+			.on('click', e=> {e.preventDefault();this.cur.focus()})
+			.find('output')
+			.css('width',`${this.menu.offsetWidth}px`)
+			.on('click',  ()=> this.toggle())
+			.on('keydown',this.#onKeydown.bind(this))
 		freeze(this).close().select(this.index)
+	}
+	#onKeydown(e) {
+		const [dir,{size,index}]= [Dir.from(e),this]
+		switch (e.key) {
+		case 'Tab':
+		case 'Escape':
+			return this.close()
+		case '\x20':
+		case 'Enter':
+			return this.closed? this.open() : this.select(index)
+		case 'ArrowUp':
+		case 'ArrowDown':
+			this.select((index+Vec2(dir).y+size) % size, {close:false})
+		}
 	}
 	select(idx=this.index, {close=true}={}) {
 		super.select(idx)
-		$(this.current).attr('data-val', this.value).text(this.selectedItem.textContent)
-		close && this.close()
+		const {selectedItem:item}= this
+		$(this.cur).css('--data', item.val).text(item.textContent)
+		return close && this.close()
 	}
 }
-export class SlideMenu extends Menu {
+export class Slide extends Menu {
+	#width = 0
 	/** @param {string} id */
 	constructor(id) {
 		super(id)
-		const root = $(this.root)
-		const wrap = $(root).closest('.slidemenu-wrapper')
-		this.btnR  = $('<button class="r" tabindex=-1>').text('>').prependTo(root).get(0)
-		this.btnL  = $('<button class="l" tabindex=-1>').text('<').prependTo(root).get(0)
-		this.menu.style.setProperty('display','inline-flex')
-		const select = (e,dir)=> {
-			if (!dir) return
-			const val = this.index+Vec2({[U]:R,[D]:L}[dir] || dir).x
-			between(val, 0, this.size-1) && this.select(val)
-			e.type == 'click' && root.focus()
-		}
-		const onWeel  = e=> select(e, e.originalEvent.deltaY > 0 ? L:R)
-		const onClick = e=> select(e, e.target == this.btnL ? L:R)
-		root.prev('.label').on('click', ()=> root.focus())
-		root.find('button').on('click', onClick)
-		root.on('keydown', e=> select(e, Dir.from(e)))
+		const root=$(this.root), wrap=$(root).closest('label')
+		const onWeel  = e=> this.#select(e,e.deltaY > 0 ? L:R)
+		const onClick = e=> this.#select(e,e.target == this.btnL ? L:R)
+		root.find('.button').on('click', onClick)
+		root.parent('label').on('click', ()=> root.focus())
+		root.on('keydown', e=> select(e,Dir.from(e)))
 		wrap.length
-			? wrap.on('wheel', onWeel)
-			: root.on('wheel', onWeel)
-		this.#setWidth(this.btnL.offsetWidth*2).select(this.index)
-		freeze(this)
+			? wrap.get(0)?.addEventListener('wheel',onWeel)
+			: root.get(0)?.addEventListener('wheel',onWeel)
+		this.btnR = $('<span class="button r">').prependTo(root).get(0)
+		this.btnL = $('<span class="button l">').prependTo(root).get(0)
+		this.#setWidth(this.btnL.offsetWidth*2)
+		freeze(this).select(this.index)
 	}
-	#width = 0
+	#select(e, dir) {
+		if (!dir) return
+		const val = this.index+Vec2({[U]:R,[D]:L}[dir] || dir).x
+		between(val, 0, this.size-1) && this.select(val)
+		e.type == 'click' && root.focus()
+	}
 	#setWidth(btnW) {
-		this.#width = max(...[...this.lis].map(li=> li.offsetWidth)) + btnW
-		$(this.lis) .css('width', `${this.#width}px`)
-		$(this.root).css('width', `${this.#width}px`)
-		return this
+		this.#width = max(...[...this.lis].map(li=> li.offsetWidth))+btnW
+		$(this.lis) .css('width',`${this.#width}px`)
+		$(this.root).css('width',`${this.#width}px`)
 	}
 	select(idx=this.index) {
 		super.select(idx)
@@ -103,3 +103,7 @@ export class SlideMenu extends Menu {
 		this.btnR.disabled = (idx == this.size-1)
 	}
 }
+class MenuRoot extends HTMLElement{get type(){return 'menu'}}
+class MenuItem extends HTMLElement{get val() {return this.getAttribute('val')}}
+customElements.define('custom-menu', MenuRoot)
+customElements.define('mn-item', MenuItem)
