@@ -39,7 +39,7 @@ export class DorpDown extends Menu {
 		$(this.root)
 			.parent('label')
 			.on('click', e=> {e.preventDefault();this.cur.focus()})
-			.find('output')
+		$(this.cur)
 			.css('width',`${this.menu.offsetWidth}px`)
 			.on('click',  ()=> this.toggle())
 			.on('keydown',this.#onKeydown.bind(this))
