@@ -81,9 +81,10 @@ export default new class {
 	/** @param {Ghost} g */
 	#strokeGuzutaCircle(g) {
 		if (g.isScatter || !g.state.isWalk) return
+		const radius = T*8
 		Ctx.save()
-		Ctx.globalAlpha = g.sqrMagToPacman < (T*8)**2 ? 0.4 : 0.8
-		Ctx.strokeCircle(...Player.centerPos.vals, T*8, Color[g.name], 6)
+		Ctx.globalAlpha = g.sqrMagToPacman < radius*radius ? 0.4 : 0.8
+		Ctx.strokeCircle(...Player.centerPos.vals, radius, Color[g.name], 6)
 		Ctx.restore()
 	}
 }
