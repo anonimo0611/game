@@ -3,6 +3,10 @@ import {Game}    from './_main.js'
 import {State}   from './state.js'
 
 export const Message = new class {
+	/**
+	 * @param {number} col
+	 * @param {number} row
+	 */
 	drawText(col, row, color='', text='',
 		{ctx=Ctx,scale=[1,1],face='Atari',size=T,style=''}={}
 	) {
