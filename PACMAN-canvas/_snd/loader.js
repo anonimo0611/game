@@ -22,13 +22,20 @@ export class SoundMgr {
 	set vol(vol)   {Sound.volume = isNum(vol)? vol/10 : this.vol}
 	get vol()      {return Sound.volume * 10}
 	get disabled() {return SoundMgr.#disabled}
+
+	/** @param {string} id */
 	isPlaying(id)  {return Instance.get(id)?.playState == Sound.PLAY_SUCCEEDED}
+
+	/** @param {string} id */
 	isFinished(id) {return Instance.get(id)?.playState == Sound.PLAY_FINISHED}
 
+	/** @param {string} id */
 	#configMerge(id, cfg={}) {
 		const prefix = isStr(id) && id.match(/^\D+/)?.[0] || null
 		return {...ConfigMap.get(prefix) || ConfigMap.get('_normal'), ...cfg}
 	}
+
+	/** @param {string} id */
 	play(id, cfg={}) {
 		if (this.disabled || !Instance.has(id))
 			return
@@ -36,14 +43,22 @@ export class SoundMgr {
 			Instance.get(id)._duration = cfg.duration
 		Instance.get(id).play(this.#configMerge(id, cfg))
 	}
+
+	/** @param {string[]} ids */
 	stop(...ids) {
 		ids.length == 0 && Sound.stop()
 		ids.forEach(id=> Instance.get(id)?.stop())
 		return this
 	}
+
+	/**
+	 * @param {boolean} bool
+	 * @param {string[]} ids
+	 */
 	paused(bool, ...ids) {
 		ids.forEach(id=> Instance.get(id)?.setPaused(bool))
 	}
+
 	/** @param {boolean} bool */
 	set allPaused(bool) {
 		Instance.forEach(i=> i.paused = bool)
