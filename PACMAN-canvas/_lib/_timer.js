@@ -81,8 +81,11 @@ const Timer = freeze(new class {
 	get frozen() {return this.#frozen}
 	freeze()   {this.#frozen = true; return this}
 	unfreeze() {this.#frozen = false;return this}
-
-	set(ms=0, fn=()=>{}, {key,ignoreFrozen=Timer.frozen}={}) {
+	/**
+	 * @param {number} ms
+	 * @param {function} fn
+	 */
+	set(ms, fn, {key,ignoreFrozen=Timer.frozen}={}) {
 		if (!isNum(ms)) throw TypeError(`'${ms}' is not a number`)
 		if (!isFun(fn)) throw TypeError(`'${fn}' is not a function`)
 		if (!Ticker.running) Ticker.set();
