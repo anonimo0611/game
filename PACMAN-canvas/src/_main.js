@@ -66,8 +66,7 @@ export const Game = new class {
 	}
 	#pause(force) {
 		if (!State.isPlaying) return
-		Ticker.pause(force)
-		Sound.pauseAll(Ticker.paused)
+		Sound.pauseAll = Ticker.pause(force)
 	}
 	#onKeydown(e) {
 		if (Confirm.opened) return
