@@ -42,16 +42,17 @@ export class SoundMgr {
 		return this
 	}
 	pause(id) {
-		arguments.length
-			? Instance.get(id)?.setPaused(true)
-			: Instance.forEach(i=> i.paused = true)
+		id === undefined
+			? Instance.forEach(i=> i.paused = true)
+			: Instance.get(id)?.setPaused(true)
 	}
 	resume(id) {
 		arguments.length
 			? Instance.get(id)?.setPaused(false)
 			: Instance.forEach(i=> i.paused = false)
 	}
-	pauseAll(bool) {
+	/** @param {boolean} bool */
+	set pauseAll(bool) {
 		bool? this.pause()
 			: this.resume()
 	}
