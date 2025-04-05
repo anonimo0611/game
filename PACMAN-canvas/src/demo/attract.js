@@ -14,12 +14,12 @@ const CHARA=0, DEMO=1
 
 export class Attract {
 	static {
-		$(RunTimer).on('Run', this.#reset)
-		$('button.attractDemo').on('click', this.#reset)
+		$(RunTimer).on('Run', this.#begin)
+		$('button.attractDemo').on('click', this.#begin)
 	}
 	static update() {_attract?.update()}
 	static draw()   {_attract?.draw()}
-	static #reset() {_attract = new Attract(ModSymbol)}
+	static #begin() {_attract = new Attract(ModSymbol)}
 	static get Timer() {return RunTimer}
 
 	/** @type {Ghost[][]} */
@@ -34,12 +34,13 @@ export class Attract {
 			throw TypeError('The constructor'
 				+` ${this.constructor.name}() is not visible`)
 		$onNS('.Attract','click keydown blur', this.end)
-		this.setActors(GhsType.Max)
-		State.switchToAttract({data:this.ghsList[DEMO]})
+		this.initialize()
 	}
-	setActors(len) {
-		for (let i=0; i<this.ghsList.length*len; i++)
-			this.setActor(i/len|0, i%len)
+	initialize() {
+		const {Max}=GhsType
+		for (let i=0; i<this.ghsList.length*Max; i++)
+			this.setActor(i/Max|0, i%Max)
+		State.switchToAttract({data:this.ghsList[DEMO]})
 	}
 	setActor(idx, gIdx) {
 		const g = new Ghost({idx:gIdx,playAnime:!!idx})
@@ -122,7 +123,8 @@ export class Attract {
 	}
 	caughtGhost(g) {
 		g.state.switchToBitten()
-		this.ghsList[DEMO].every(g=> g.state.isBitten) && Attract.#reset()
+		this.ghsList[DEMO].every(g=> g.state.isBitten)
+			&& Attract.#begin()
 	}
 	end(e={}) {
 		if (e.target.tagName == 'BUTTON') return
