@@ -14,8 +14,8 @@ export class Actor {
 	get y()         {return this.#y}
 	get pos()       {return Vec2(this)}
 	get centerPos() {return Vec2(this).add(T/2)}
-	get tilePos()   {return Vec2(this.centerPos).divInt(T)}
-	get tileIdx()   {return Vec2.idx(this.tilePos, Cols)}
+	get tilePos()   {return Vec2(this).add(T/2).divInt(T)}
+	get tileIdx()   {return Vec2.idx(this.tilePos,Cols)}
 	set x(num)      {isNum(num) && (this.#x = num)}
 	set y(num)      {isNum(num) && (this.#y = num)}
 	set pos(pos)    {isObj(pos) && this.setPos(pos)}
