@@ -73,8 +73,8 @@ export class Ghost extends Actor {
 			&& this.tilePos.y == Maze.House.Entrance.y
 			&& abs(CvsW/2 - this.centerPos.x) <= this.step
 	}
-	get distanceToPacman() {
-		return Vec2.distance(this, Player.pos)
+	get sqrMagToPacman() {
+		return Vec2.sqrMag(this,Player.instance)
 	}
 	get step() {
 		const spd = Game.moveSpeed, {state}= this
@@ -188,7 +188,7 @@ export class Ghost extends Actor {
 		const tile = this.getAdjTile(this.dir)
 		const dirs = [U,L,D,R].flatMap((dir,index)=> {
 			const  test = this.getAdjTile(dir,1,tile)
-			const  dist = test.distance(target)
+			const  dist = Vec2.sqrMag(test,target)
 			return this.#isAllowDir(dir,test)? {index,dir,dist}:[]
 		})
 		return this.frightened

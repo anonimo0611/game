@@ -82,7 +82,7 @@ export default new class {
 	#strokeGuzutaCircle(g) {
 		if (g.isScatter || !g.state.isWalk) return
 		Ctx.save()
-		Ctx.globalAlpha = g.distanceToPacman < T*8 ? 0.4 : 0.8
+		Ctx.globalAlpha = g.sqrMagToPacman < (T*8)**2 ? 0.4 : 0.8
 		Ctx.strokeCircle(...Player.centerPos.vals, T*8, Color[g.name], 6)
 		Ctx.restore()
 	}
