@@ -93,6 +93,7 @@ const Vec2 = function() {
 	Vec2.mul      = (v, sc)=> Vec2(v).mul(sc)
 	Vec2.div      = (v, sc)=> Vec2(v).div(sc)
 	Vec2.divInt   = (v, sc)=> Vec2(v).divInt(sc)
+	Vec2.sqrMag   = (v, v2)=> Vec2.sub(v, v2).sqrMagnitude
 	Vec2.distance = (v, v2)=> Vec2.sub(v, v2).magnitude
 	return freeze(Vec2)
 }()
