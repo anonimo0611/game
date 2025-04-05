@@ -45,7 +45,7 @@ export class CBreak {
 		aka.sprite.draw({aIdx,...cfg,...pos,...aka})
 	}
 	pause() {
-		Sound.pauseAll = Ticker.pause()
+		Sound.allPaused = Ticker.pause()
 	}
 	end() {
 		$off('.CB')
