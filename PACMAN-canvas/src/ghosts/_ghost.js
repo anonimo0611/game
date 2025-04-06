@@ -74,7 +74,7 @@ export class Ghost extends Actor {
 			&& abs(CvsW/2 - this.centerPos.x) <= this.step
 	}
 	get sqrMagToPacman() {
-		return Vec2.sqrMag(this,Player.instance)
+		return Vec2.sqrMag(this, Player.pos)
 	}
 	get step() {
 		const spd = Game.moveSpeed, {state}= this
@@ -226,7 +226,7 @@ export class Ghost extends Actor {
 			Timer.freeze()
 			this.#frightened = false
 			this.state.switchToBitten()
-			$(this).trigger('Cought')
+			this.trigger('Cought')
 			PtsMgr.set({key:GhsMgr, ...this.centerPos}, fn)
 			Sound.play('bitten')
 			return
