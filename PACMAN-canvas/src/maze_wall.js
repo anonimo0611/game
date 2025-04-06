@@ -1,4 +1,4 @@
-const {ctx}= Bg, W = Cols
+const {ctx}=Bg, W=Cols
 
 import {Maze} from './maze.js'
 export const MazeWall = new class {
@@ -21,15 +21,6 @@ export const MazeWall = new class {
 			[10.90*T,   17.10*T],[10.90*T, 13.90*T],[13.00*T-lh,13.90*T])
 		ctx.closePath()
 		ctx.stroke()
-	}
-	draw(color=Color.Wall) {
-		ctx.save()
-		ctx.clearRect(0,0, CvsW, CvsH-T*2)
-		ctx.lineWidth   = 3.5
-		ctx.strokeStyle = color
-		Maze.Map.forEach(this.#drawTile)
-		this.#drawHouse(ctx.lineWidth/2)
-		ctx.restore()
 	}
 	#drawTile = (c, i)=> {
 		const [tx,ty]= [i%W, i/W|0]
@@ -55,6 +46,15 @@ export const MazeWall = new class {
 			ctx.strokeLine(0,oY, T,oY)
 			!+c && ctx.strokeLine(0,0, T,0)
 		}
+		ctx.restore()
+	}
+	draw(color=Color.Wall) {
+		ctx.save()
+		ctx.clearRect(0,0, CvsW, CvsH-T*2)
+		ctx.lineWidth   = 3.5
+		ctx.strokeStyle = color
+		Maze.Map.forEach(this.#drawTile)
+		this.#drawHouse(ctx.lineWidth/2)
 		ctx.restore()
 	}
 };MazeWall.draw()

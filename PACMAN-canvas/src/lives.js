@@ -2,7 +2,7 @@ import {State} from './state.js'
 import {Ctrl}  from './control.js'
 import Sprite  from './pacman/pac_sprite.js'
 
-const {ctx}= Bg
+const {ctx}=Bg
 
 export const Lives = function() {
 	let _left = 0
