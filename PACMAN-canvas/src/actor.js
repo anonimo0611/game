@@ -84,4 +84,7 @@ export class Actor {
 		State.isReady && this.#fadeIn.setAlpha(Ctx)
 			|| (Ctx.globalAlpha = this.maxAlpha)
 	}
+	trigger(state) {
+		$(this).trigger(state)
+	}
 }
