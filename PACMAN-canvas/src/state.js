@@ -1,5 +1,5 @@
-import BaseState from '../_lib/state.js'
-export const State = new class extends BaseState {
+import _State from '../_lib/state.js'
+export const State = new class extends _State {
 	isTitle     = true
 	isAttract   = false
 	isStart     = false
