@@ -103,8 +103,6 @@ export const GhsMgr = new class {
 }
 
 export const AttackInWaves = function() {
-	let _mode = 0
-	let _tick = ()=>{}
 	function genDurationList(lv) {
 		return freeze([ // ms
 			lv <= 4 ? 4500 : 4000,
@@ -113,7 +111,7 @@ export const AttackInWaves = function() {
 			15e3,
 			3500,
 			lv == 1 ? 15e3 : 78e4,
-			lv == 1 ? 3500 :(1e3/60),
+			lv == 1 ? 3500 : 1e3/60,
 			Infinity,
 		])
 	}
@@ -121,19 +119,25 @@ export const AttackInWaves = function() {
 		let  [cnt,idx] = [-1,0]
 		const durList  = genDurationList(Game.level)
 		const duration = idx=> durList[idx]/Game.speedRate
-		function tick() {
-			if (Timer.frozen || GhsMgr.frightened
-		     || ++cnt*Ticker.Interval < duration(idx))
-			 	return
-			[cnt,_mode] = [0,(++idx % 2)]
-			setReversalSignal()
+		const Tick = {
+			mode: +Ctrl.isChaseMode,
+			update() {
+				if (Timer.frozen || GhsMgr.frightened
+				|| ++cnt*Ticker.Interval < duration(idx))
+					return
+				[cnt,Tick.mode] = [0,(++idx % 2)]
+				setReversalSignal()
+			}
 		}
-		_tick = (_mode = +Ctrl.isChaseMode) ? ()=>{} : tick
+		return Tick.mode? {mode:1}:Tick
 	}
-	$on('Title Ready', initialize)
-	return {
-		get isScatter() {return _mode == 0},
-		update() {State.isPlaying && _tick()},
+	{
+		let tick= {mode:0,update(){}}
+		$on('Title Ready', ()=> tick=initialize())
+		return {
+			get isScatter() {return tick.mode == 0},
+			update() {State.isPlaying && tick.update?.()},
+		}
 	}
 }()
 const setReversalSignal = ()=> {
