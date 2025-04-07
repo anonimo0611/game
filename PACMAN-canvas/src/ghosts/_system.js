@@ -115,7 +115,7 @@ export const AttackInWaves = function() {
 			Infinity,
 		])
 	}
-	function initialize() {
+	function genSequence() {
 		let  [cnt,idx] = [-1,0]
 		const durList  = genDurationList(Game.level)
 		const duration = idx=> durList[idx]/Game.speedRate
@@ -133,7 +133,7 @@ export const AttackInWaves = function() {
 	}
 	{
 		let tick= {mode:0,update(){}}
-		$on('Title Ready', ()=> tick=initialize())
+		$on('Title Ready', ()=> tick=genSequence())
 		return {
 			get isScatter() {return tick.mode == 0},
 			update() {State.isPlaying && tick.update?.()},
