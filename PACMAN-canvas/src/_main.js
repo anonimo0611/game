@@ -29,6 +29,7 @@ export const Game = new class {
 		$on('Title',    Game.#onTitle)
 		$on('Start',    Game.#onStart)
 		$on('Playing',  Game.#onPlaying)
+		$on('Clear',    Game.#onClear)
 		$on('FlashMaze',Game.#onFlashMaze)
 		$on('NewLevel', Game.#onNewLevel)
 		$on('Losing',   Game.#onLosing)
@@ -108,6 +109,10 @@ export const Game = new class {
 		Lives.left > 0
 			? State.switchToRestart ({delay:2200})
 			: State.switchToGameOver({delay:2000})
+	}
+	#onClear() {
+		Sound.stopLoops()
+		State.switchToFlashMaze({delay:1000})
 	}
 	#onFlashMaze() {
 		let count = 0
