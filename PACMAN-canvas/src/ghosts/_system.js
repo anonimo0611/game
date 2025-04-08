@@ -22,7 +22,20 @@ const releaseDelay = ghostIdx=> ({ // For always chase mode (ms)
 	13:[   0,  900,    0]
 }[Game.restarted? 0 : Game.clampedLv][ghostIdx]/Game.speedRate)
 
-export class GhostState extends _State {
+/** @param {number} lv */
+const genModeDurationList = lv=>
+	freeze([ // ms
+		lv <= 4 ? 4500 : 4000, // scatter
+		15e3,                  // chase
+		lv <= 4 ? 4500 : 4000, // scatter
+		15e3,                  // chase
+		3500,                  // scatter
+		lv == 1 ? 15e3 : 78e4, // chase
+		lv == 1 ? 3500 : 16.7, // scatter
+		Infinity, // chase indefinitely
+	])
+
+export class GhostSsate extends _State {
 	isIdle   = true
 	isGoOut  = false
 	isWalk   = false
@@ -55,6 +68,7 @@ export const GhsMgr = new class {
 	get aInterval()  {return 6}
 	get animIndex()  {return this.#aidx}
 	get Elroy()      {return Elroy}
+	get isScatter()  {return AlternateBetweenModes.isScatter}
 	get frightened() {return FrightMode.instance != null}
 	get score()      {return FrightMode.instance?.score|0}
 	get spriteIdx()  {return FrightMode.instance?.spriteIdx|0}
@@ -86,7 +100,7 @@ export const GhsMgr = new class {
 		 || State.isCBreak)
 			this.#aidx ^= !Timer.frozen
 				&& !(Ticker.count % this.aInterval)
-		AttackInWaves.update()
+		AlternateBetweenModes.update()
 		FrightMode.instance?.update()
 		Ghosts.forEach(g=> g.update())
 	}
@@ -102,22 +116,18 @@ export const GhsMgr = new class {
 	drawBehind()  {Ghosts.filter(behindThePac).forEach(this.#draw)}
 }
 
-export const AttackInWaves = function() {
-	function genDurationList(lv) {
-		return freeze([ // ms
-			lv <= 4 ? 4500 : 4000,
-			15e3,
-			lv <= 4 ? 4500 : 4000,
-			15e3,
-			3500,
-			lv == 1 ? 15e3 : 78e4,
-			lv == 1 ? 3500 : 1e3/60,
-			Infinity,
-		])
+const AlternateBetweenModes = function() {
+	{
+		let seq={mode:0,update(){}}
+		$on('Title Ready', ()=> seq=genSequence())
+		return {
+			get isScatter() {return seq.mode == 0},
+			update() {State.isPlaying && seq.update?.()},
+		}
 	}
 	function genSequence() {
 		let  [cnt,idx] = [-1,0]
-		const durList  = genDurationList(Game.level)
+		const durList  = genModeDurationList(Game.level)
 		const duration = idx=> durList[idx]/Game.speedRate
 		const Seq = {
 			mode: +Ctrl.isChaseMode,
@@ -129,14 +139,6 @@ export const AttackInWaves = function() {
 				setReversalSignal()
 			}
 		};return Seq.mode? {mode:1}:Seq
-	}
-	{
-		let seq={mode:0,update(){}}
-		$on('Title Ready', ()=> seq=genSequence())
-		return {
-			get isScatter() {return seq.mode == 0},
-			update() {State.isPlaying && seq.update?.()},
-		}
 	}
 }()
 const setReversalSignal = ()=> {

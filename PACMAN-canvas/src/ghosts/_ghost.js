@@ -51,7 +51,7 @@ export class Ghost extends Actor {
 		freeze(this)
 	}
 	get isScatter() {
-		return Sys.AttackInWaves.isScatter
+		return GhsMgr.isScatter
 			&& !this.frightened
 			&& !this.state.isEscape
 			&& !this.angry
