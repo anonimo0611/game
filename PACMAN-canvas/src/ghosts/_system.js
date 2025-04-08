@@ -128,8 +128,7 @@ export const AttackInWaves = function() {
 				[cnt,Seq.mode] = [0,(++idx % 2)]
 				setReversalSignal()
 			}
-		}
-		return Seq.mode? {mode:1}:Seq
+		};return Seq.mode? {mode:1}:Seq
 	}
 	{
 		let seq={mode:0,update(){}}
