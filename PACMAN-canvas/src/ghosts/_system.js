@@ -119,17 +119,17 @@ export const AttackInWaves = function() {
 		let  [cnt,idx] = [-1,0]
 		const durList  = genDurationList(Game.level)
 		const duration = idx=> durList[idx]/Game.speedRate
-		const Tick = {
+		const Seq = {
 			mode: +Ctrl.isChaseMode,
 			update() {
 				if (Timer.frozen || GhsMgr.frightened
 				|| ++cnt*Ticker.Interval < duration(idx))
 					return
-				[cnt,Tick.mode] = [0,(++idx % 2)]
+				[cnt,Seq.mode] = [0,(++idx % 2)]
 				setReversalSignal()
 			}
 		}
-		return Tick.mode? {mode:1}:Tick
+		return Seq.mode? {mode:1}:Seq
 	}
 	{
 		let seq={mode:0,update(){}}
