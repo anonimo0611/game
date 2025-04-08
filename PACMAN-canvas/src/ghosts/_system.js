@@ -22,19 +22,6 @@ const releaseDelay = ghostIdx=> ({ // For always chase mode (ms)
 	13:[   0,  900,    0]
 }[Game.restarted? 0 : Game.clampedLv][ghostIdx]/Game.speedRate)
 
-/** @param {number} lv */
-const genModeDurationList = lv=>
-	freeze([ // ms
-		lv <= 4 ? 4500 : 4000, // scatter
-		15e3,                  // chase
-		lv <= 4 ? 4500 : 4000, // scatter
-		15e3,                  // chase
-		3500,                  // scatter
-		lv == 1 ? 15e3 : 78e4, // chase
-		lv == 1 ? 3500 : 16.7, // scatter
-		Infinity, // chase indefinitely
-	]);
-
 export class GhostState extends _State {
 	isIdle   = true
 	isGoOut  = false
@@ -125,9 +112,21 @@ const AlternateBetweenModes = function() {
 			update() {State.isPlaying && seq.update?.()},
 		}
 	}
+	function genDurationList(lv) {
+		return freeze([ // ms
+			lv <= 4 ? 4500 : 4000,
+			15e3,
+			lv <= 4 ? 4500 : 4000,
+			15e3,
+			3500,
+			lv == 1 ? 15e3 : 78e4,
+			lv == 1 ? 3500 : 16.7,
+			Infinity,
+		]);
+	}
 	function genSequence() {
 		let  [cnt,idx] = [-1,0]
-		const durList  = genModeDurationList(Game.level)
+		const durList  = genDurationList(Game.level)
 		const duration = idx=> durList[idx]/Game.speedRate
 		const Seq = {
 			mode: +Ctrl.isChaseMode,
