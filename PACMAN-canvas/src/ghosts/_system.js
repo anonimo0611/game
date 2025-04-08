@@ -132,7 +132,7 @@ export const AttackInWaves = function() {
 		return Tick.mode? {mode:1}:Tick
 	}
 	{
-		let seq= {mode:0,update(){}}
+		let seq={mode:0,update(){}}
 		$on('Title Ready', ()=> seq=genSequence())
 		return {
 			get isScatter() {return seq.mode == 0},
