@@ -181,7 +181,7 @@ section > :first-child + .quote {
 /* Tables */
 table {
 	border-collapse: collapse;
-	margin-bottom: 2em;
+	margin: 1.5em 0;
 	caption {
 		text-align: left;
 		font-weight: bold;
