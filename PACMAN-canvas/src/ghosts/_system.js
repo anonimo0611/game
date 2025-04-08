@@ -33,9 +33,9 @@ const genModeDurationList = lv=>
 		lv == 1 ? 15e3 : 78e4, // chase
 		lv == 1 ? 3500 : 16.7, // scatter
 		Infinity, // chase indefinitely
-	])
+	]);
 
-export class GhostSsate extends _State {
+export class GhostState extends _State {
 	isIdle   = true
 	isGoOut  = false
 	isWalk   = false
@@ -52,8 +52,8 @@ export class GhostSsate extends _State {
 	}
 }
 
-const inFrontOfPac = g=> !behindThePac(g)
 const behindThePac = g=> g.frightened
+const inFrontOfPac = g=> !behindThePac(g)
 
 export const GhsMgr = new class {
 	static {$ready(()=> this.setup())}
