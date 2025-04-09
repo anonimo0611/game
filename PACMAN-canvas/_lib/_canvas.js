@@ -1,9 +1,9 @@
 'use strict'
 /** @typedef {string|CanvasGradient|CanvasPattern} CtxStyle */
 class ExtendedContext2D extends CanvasRenderingContext2D {
-	/** @param {HTMLCanvasElement} canvas */
-	constructor(canvas, options) {
-		return Object.setPrototypeOf(canvas.getContext('2d',options), new.target.prototype)
+	/** @param {HTMLCanvasElement} cvs */
+	constructor(cvs, opts) {
+		return Object.setPrototypeOf(cvs.getContext('2d',opts), new.target.prototype)
 	}
 	get width()  {return this.canvas.width}
 	get height() {return this.canvas.height}
