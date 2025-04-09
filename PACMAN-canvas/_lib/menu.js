@@ -28,9 +28,9 @@ class Menu {
 	reset() {this.select(this.defaultIndex, {restore:true})}
 }
 export class DorpDown extends Menu {
-	close() {$(this.menu).hide();return this}
-	open()  {$(this.menu).show();return this}
-	toggle(){$(this.menu).toggle();return this}
+	close() {$(this.menu).hide()}
+	open()  {$(this.menu).show()}
+	toggle(){$(this.menu).toggle()}
 	get closed() {return $(this.menu).is(':hidden') == true}
 	/** @param {string} id */
 	constructor(id) {
@@ -44,17 +44,21 @@ export class DorpDown extends Menu {
 			.css('width',`${this.menu.offsetWidth}px`)
 			.on('click',  ()=> this.toggle())
 			.on('keydown',this.#onKeydown.bind(this))
-		freeze(this).close().select(this.index)
+		this.close()
+		this.select(this.index)
+		freeze(this)
 	}
 	#onKeydown(e) {
 		const [dir,{size,index}]= [Dir.from(e),this]
 		switch (e.key) {
 		case 'Tab':
 		case 'Escape':
-			return this.close()
+			this.close()
+			return
 		case '\x20':
 		case 'Enter':
-			return this.closed? this.open() : this.select(index)
+			this.closed? this.open() : this.select(index)
+			return
 		case 'ArrowUp':
 		case 'ArrowDown':
 			this.select((index+Vec2(dir).y+size) % size, {close:false})
@@ -74,21 +78,24 @@ export class Slide extends Menu {
 		super(id)
 		const {root,label}=this
 		const onWheel  = e=> this.#select(e,e.deltaY > 0 ? L:R)
-		const onClick  = e=> this.#select(e,e.target == this.btnL ? L:R)
+		const onClick  = e=> this.#select(e,e.target == this.btn.L ? L:R)
 		const onKeyDwn = e=> this.#select(e,Dir.from(e))
-		this.btnR = $('<span class="button r">').prependTo(root).get(0)
-		this.btnL = $('<span class="button l">').prependTo(root).get(0)
-		this.#setWidth(this.btnL.offsetWidth*2)
+		/** @type {{R:HTMLElement,L:HTMLElement}} */
+		this.btn = freeze({
+			R: $('<span class="button r">').prependTo(root).get(0),
+			L: $('<span class="button l">').prependTo(root).get(0),
+		})
+		this.#setWidth(this.btn.L.offsetWidth*2)
 		;(label ?? root).addEventListener('wheel',onWheel)
 		$(root) .on('keydown',onKeyDwn).find('.button').on('click',onClick)
-		$(label).on('click',()=> root.focus())
+		$(label).on('click', e=> {e.preventDefault();root.focus()})
 		freeze(this).select(this.index)
 	}
 	#select(e, dir) {
 		if (!dir) return
 		const val = this.index+Vec2({[U]:R,[D]:L}[dir] || dir).x
 		between(val, 0, this.size-1) && this.select(val)
-		e.type == 'click' && root.focus()
+		e.type == 'click' && this.root.focus()
 	}
 	#setWidth(btnW) {
 		this.#width = max(...[...this.lis].map(li=> li.offsetWidth))+btnW
@@ -98,8 +105,8 @@ export class Slide extends Menu {
 	select(idx=this.index) {
 		if (!super.select(idx)) return
 		this.menu.style.transform = `translateX(${-this.#width*idx}px)`
-		this.btnL.disabled = (idx == 0)
-		this.btnR.disabled = (idx == this.size-1)
+		this.btn.L.dataset.disabled = (idx == 0)
+		this.btn.R.dataset.disabled = (idx == this.size-1)
 	}
 }
 class MenuRoot extends HTMLElement{get type(){return 'menu'}}
