@@ -247,6 +247,6 @@ label:hover [tabindex="0"] {
 }
 tr:hover th,
 label:focus-within,
-span:has(input:focus) + label {
+.chk:has(input:focus) + label {
 	color: var(--color-label-hover) !important;
 }
