@@ -7,12 +7,10 @@ $.fn.opacity = function(a, ms) {
 	? $(this).css('opacity')
 	: $(this).css({opacity:+a,transition:isNum(ms)?`opacity ${ms}ms`:null})
 }
-const $ready   = (...args)=> $(window).ready  (...args)
-const $one     = (...args)=> $(window).one    (...args)
-const $on      = (...args)=> $(window).on     (...args)
-const $off     = (...args)=> $(window).off    (...args)
-const $offon   = (...args)=> $(window).offon  (...args)
-const $trigger = (...args)=> $(window).trigger(...args)
+const [$ready,$one,$on,$off,$offon,$trigger]= function() {
+	return ['ready','one','on','off','offon','trigger']
+		.map(f=> (...args)=> $(window)[f](...args))
+}()
 const $byId = (id)=> $('#'+id)
 const $load = (fn)=> $(window).one('load',fn)
 const $onNS = (ns,ev,fn)=> $on(String(ev).trim().replace(/(\s+)|$/g,`${ns}$1`),fn)
