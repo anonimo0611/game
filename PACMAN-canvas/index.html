@@ -28,7 +28,7 @@
 
 <form id="board">
 	<canvas id="cvs"></canvas>
-	<div id="volume" class="volCtrl btn">
+	<div id="volume" class="volCtrl">
 		<label for="volRg2" id="speaker" title="Mute/Unmute (M)">
 			<canvas id="speakerCvs"></canvas>
 		</label>
@@ -102,19 +102,19 @@
 				</label>
 			</li>
 			<li>
-				<span class="chk"><input type="checkbox" id="invChk"></span>
+				<chk-wrapper><input type="checkbox" id="invChk"></chk-wrapper>
 				<label for="invChk">Invincible</label>
 			</li>
 			<li>
-				<span class="chk"><input type="checkbox" id="unrChk"></span>
+				<chk-wrapper><input type="checkbox" id="unrChk"></chk-wrapper>
 				<label for="unrChk">Unrestricted ghosts</label>
 			</li>
 			<li>
-				<span class="chk"><input type="checkbox" id="tgtChk"></span>
+				<chk-wrapper><input type="checkbox" id="tgtChk"></chk-wrapper>
 				<label for="tgtChk">Show targets</label>
 			</li>
 			<li>
-				<span class="chk"><input type="checkbox" id="grdChk"></span>
+				<chk-wrapper><input type="checkbox" id="grdChk"></chk-wrapper>
 				<label for="grdChk">Show tile grid</label>
 			</li>
 			<li class="buttons noLeft">
@@ -147,12 +147,12 @@
 			<tr>
 				<th>Move</th>
 				<td>
-				<span class="arrows">
+				<kbd-arrows>
 					<kbd class="←">←</kbd>
 					<kbd class="↑">↑</kbd>
 					<kbd class="↓">↓</kbd>
 					<kbd class="→">→</kbd>
-				</span> or <kbd>WASD</kbd>
+				</kbd-arrows> or <kbd>WASD</kbd>
 				</td>
 			</tr>
 			</table>

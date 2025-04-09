@@ -126,11 +126,11 @@ body:not([data-state=Title]) #titleScr {
 		label,button {display: block}
 		[data-for=keys] {cursor: help}
 	}
-	label:has(#LevelMenu)  {
+	>label:first-of-type  {
+		color: inherit;
 		display: flex;
 		gap: .2em;
 		align-items: center;
-		color: #FFF;
 		font-variant: small-caps;
 	}
 	#cfgBtn {
@@ -179,15 +179,46 @@ body:not([data-state=Title]) #titleScr {
 		height: 4px;
 		scale: .9;
 	}
-	#ExtendMenu {
-		text-align: right;
-		font-size: .9em;
-		scale: .9;
+}
+
+#LevelMenu {
+	--scale: 1.2;
+	--t: calc(1rem * var(--scale));
+	--width: calc(var(--t)*8);
+	text-transform: uppercase;
+	font: 0.9rem/1 sans-serif;
+	margin-left: 0;
+	output, mn-item {
+		display: flex;
+		gap: .2em;
+		align-items: center;
 	}
+	output {
+		padding-top:    .4em;
+		padding-bottom: .3em;
+	}
+	mn-item {
+		padding-top: .3em
+	}
+	output::before,
+	mn-item::before {
+		--x: calc(-1*var(--t) * var(--data, 0));
+		--size: var(--width) var(--t);
+		content: '';
+		background: no-repeat var(--x) 0/var(--size) var(--url);
+		margin-top: -.3em;
+		width:  var(--t);
+		height: var(--t);
+	}
+}
+#ExtendMenu {
+	text-align: right;
+	font-size: .9em;
+	scale: .9;
 }
 
 #keysPanel {
-	.arrows {display: inline-flex}
+	kbd-arrows {display: inline-flex}
 	kbd {
 		text-align: center;
 		font: 100%/1 Consolas, monospace;
@@ -232,35 +263,4 @@ body:not([data-state=Title]) #titleScr {
 	input:focus,
 	&:hover input {z-index: 1;opacity: 1}
 	&:hover input {transition: all .2s .4s}
-}
-
-#LevelMenu {
-	--scale: 1.2;
-	--t: calc(1rem * var(--scale));
-	--width: calc(var(--t)*8);
-	text-transform: uppercase;
-	font: 0.9rem/1 sans-serif;
-	margin-left: 0;
-	output, mn-item {
-		display: flex;
-		gap: .2em;
-		align-items: center;
-	}
-	output {
-		padding-top:    .4em;
-		padding-bottom: .3em;
-	}
-	mn-item {
-		padding-top: .3em
-	}
-	output::before,
-	mn-item::before {
-		--x: calc(-1*var(--t) * var(--data, 0));
-		--size: var(--width) var(--t);
-		content: '';
-		background: no-repeat var(--x) 0/var(--size) var(--url);
-		margin-top: -.3em;
-		width:  var(--t);
-		height: var(--t);
-	}
 }

@@ -176,9 +176,6 @@ custom-menu {
 		rotate: -45deg;
 	}
 	mn-list {
-		border-radius: .2em;
-		margin:  0;
-		padding: 0;
 		display: block;
 		position: absolute;
 		z-index: 100;
@@ -189,9 +186,11 @@ custom-menu {
 		border-width: 2px 0;
 		padding: .1em calc(var(--caret-size) + .2em) .1em .2em;
 		display: block;
-		&.selected         {border-color: var(--color-focus-border)}
 		&.selected,&:hover {background:#366}
-		&.selected:hover   {background:#336;border-color:#66C}
+		&.selected {
+			border-color: var(--color-focus-border);
+			&:hover {background:#336;border-color:#66C}
+		}
 	}
 }
 [role=slidemenu] {
@@ -217,9 +216,7 @@ custom-menu {
 		display: inline-flex;
 	}
 	.button {
-		appearance: none;
 		background: transparent !important;
-		text-indent: -10em;
 		border: solid;
 		border-width: 0 0 4px 4px;
 		padding: 0;
@@ -247,6 +244,6 @@ label:hover [tabindex="0"] {
 }
 tr:hover th,
 label:focus-within,
-.chk:has(input:focus) + label {
+chk-wrapper:has(input:focus) + label {
 	color: var(--color-label-hover) !important;
 }
