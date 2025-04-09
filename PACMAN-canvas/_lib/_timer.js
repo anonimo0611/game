@@ -16,6 +16,7 @@ const Ticker = freeze(new class {
 	get running()     {return _ticker instanceof Tick}
 	get elapsedTime() {return _counter*this.Interval}
 	get pausedCount() {return _pausedCounter}
+
 	/**
 	 * @param {function} handler
 	 * @param {function} pausedHandler
@@ -23,6 +24,7 @@ const Ticker = freeze(new class {
 	set(handler, pausedHandler) {
 		new Tick(handler, pausedHandler)
 	}
+
 	/** @param {boolean|undefined} force */
 	pause(force) {return _paused=!!(isBool(force)? force : !_paused)}
 

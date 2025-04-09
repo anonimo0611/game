@@ -62,7 +62,7 @@ class Vector2 {
 	#check(v1=0,v2=0,{scalar=false}={}) {
 		if (scalar && !isNum(v1))
 			throw TypeError(`Scalar '${v1}' is not a number`)
-		if (hasOwn(Dir,v1))
+		if (Dir.has(v1))
 			return Vec2[v1]
 		{
 			const [x,y]= isObj(v1) ? [v1.x, v1.y] : [v1, v2]

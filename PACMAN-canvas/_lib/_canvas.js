@@ -7,6 +7,7 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 	}
 	get width()  {return this.canvas.width}
 	get height() {return this.canvas.height}
+
 	/**
 	 * @param {number} w
 	 * @param {number} h
@@ -17,10 +18,12 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		isNum(h) && (cvs.height=h)
 		return [cvs.width, cvs.height]
 	}
+
 	/** @param {CtxStyle} style */
 	clear(style=null) {
 		this.fillRect(0,0,this.width,this.height,style)
 	}
+
 	/**
 	 * @param {number} x
 	 * @param {number} y
@@ -36,6 +39,7 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 			: super.fillRect(x, y, w, h)
 		this.restore()
 	}
+
 	/**
 	 * @param {number} x
 	 * @param {number} y
@@ -52,6 +56,7 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		this.fill()
 		this.restore()
 	}
+
 	/**
 	 * @param {number} x
 	 * @param {number} y
@@ -68,6 +73,7 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		this.stroke()
 		this.restore()
 	}
+
 	/**
 	 * @param {number} x1
 	 * @param {number} y1
@@ -80,11 +86,13 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		this.lineTo(x2, y2)
 		this.stroke()
 	}
+
 	/** @param {[x:number,y:number][]} c */
 	newLinePath(...c) {
 		this.beginPath()
 		this.setLinePath(...c)
 	}
+
 	/** @param {[x:number,y:number][]} c */
 	setLinePath(...c) {
 		c.forEach(([x,y], i)=> {
@@ -92,10 +100,12 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 			   : this.lineTo(x,y)
 		})
 	}
+
 	/** @param {[x:number,y:number][]} c */
 	addLinePath(...c) {
 		c.forEach(([x,y])=> this.lineTo(x,y))
 	}
+
 	/**
 	 * @param {CtxStyle} style
 	 * @param {[x:number,y:number][]} c
