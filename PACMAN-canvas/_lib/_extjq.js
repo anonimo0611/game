@@ -8,7 +8,7 @@ $.fn.opacity = function(a, ms) {
 	: $(this).css({opacity:+a,transition:isNum(ms)?`opacity ${ms}ms`:null})
 }
 const [$ready,$one,$on,$off,$offon,$trigger]= function() {
-	return ['ready','one','on','off','offon','trigger']
+	return 'ready|one|on|off|offon|trigger'.split('|')
 		.map(f=> (...args)=> $(window)[f](...args))
 }()
 const $byId = (id)=> $('#'+id)

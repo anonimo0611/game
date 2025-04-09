@@ -2,6 +2,7 @@
 const {Ticker,Timer}= function() {
 
 const TimerMap = new Map()
+
 /** @type {?Tick} */
 let _ticker  = null
 let _paused  = false
@@ -15,7 +16,6 @@ const Ticker = freeze(new class {
 	get running()     {return _ticker instanceof Tick}
 	get elapsedTime() {return _counter*this.Interval}
 	get pausedCount() {return _pausedCounter}
-
 	/**
 	 * @param {function} handler
 	 * @param {function} pausedHandler
@@ -23,7 +23,6 @@ const Ticker = freeze(new class {
 	set(handler, pausedHandler) {
 		new Tick(handler, pausedHandler)
 	}
-
 	/** @param {boolean|undefined} force */
 	pause(force) {return _paused=!!(isBool(force)? force : !_paused)}
 
@@ -41,7 +40,8 @@ class Tick {
 		requestAnimationFrame(this.loop)
 	}
 	loop(ts) {
-		if (this.stopped) return
+		if (this.stopped)
+			return
 		if ((ts-(this.start||=ts))/Ticker.Interval > this.count)
 			this.tick()
 		requestAnimationFrame(this.loop)
@@ -93,7 +93,8 @@ const Timer = freeze(new class {
 	}
 	/** @param {...[timeout:number, handler:function]} sequence */
 	sequence(...sequence) {
-		if (!sequence.length) return
+		if (!sequence.length)
+			return
 		const
 		seq = sequence.map(s=> ({ms:s[0],fn:s[1]}))
 		seq.forEach(s=> {
