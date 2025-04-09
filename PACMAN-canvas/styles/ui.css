@@ -72,7 +72,7 @@ button, .button, [role=dropdown] > output {
 	&:focus  {background:#069C}
 	&.active {background:#396C}
 	&:active {background:#396C}
-	&:disabled {
+	&:disabled, [data-disabled=true] {
 		color: #888;
 		background: var(--bgcolor);
 		border-color: #888;
@@ -242,8 +242,7 @@ label:hover {
 	color: var(--color-label-hover) !important;
 }
 tr:hover td,
-label:hover [role=dropdown] > output,
-label:hover [role=slidemenu] {
+label:hover [tabindex="0"] {
 	background: var(--bgcolor-hilight);
 }
 tr:hover th,
