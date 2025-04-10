@@ -38,8 +38,11 @@ class PlayablePacman extends Pacman {
 	#notEaten = 0
 	#turning  = false
 	#stopped  = true
+
+	/** @type {?keyof DirEnum} */
 	#preDir   = null
-	#nextTurn = null
+	#nextTurn = this.#preDir
+
 	get closed()       {return State.isPlaying == false}
 	get showCenter()   {return Ctrl.showGridLines}
 	get step()         {return this.#step}
@@ -140,7 +143,7 @@ class PlayablePacman extends Pacman {
 		if (!this.#canTurn) return
 		this.orient = this.#preDir
 		this.#turning ||= true
-		this.pos = this.setNextPos(denom,this.orient)
+		this.setNextPos(denom,this.orient)
 	}
 	#endCornering() {
 		if (this.turning && this.inBackwardOfTile) {
