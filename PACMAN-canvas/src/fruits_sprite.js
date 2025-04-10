@@ -250,7 +250,7 @@ export function draw(ctx=Ctx, idx=0, x=T,y=T, scale=T/8) {
 	Fns[idx](ctx)
 	ctx.restore()
 }
-export const [cachedCvs,cache]= function() {
+export const [current,cache]= function() {
 	const {cvs,ctx}= canvas2D(null,T*2)
 	/** @param {number} fruitIdx */
 	function cache(fruitIdx) {

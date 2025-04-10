@@ -65,7 +65,7 @@ export const Fruit = new class {
 			Ctx.save()
 			_fadeOut?.setAlpha(Ctx)
 			Ctx.translate(...TargetPos.vals)
-			Ctx.drawImage(Spr.cachedCvs, -T,-T)
+			Ctx.drawImage(Spr.current, -T,-T)
 			Ctx.restore()
 		}
 	}
