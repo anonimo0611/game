@@ -139,8 +139,8 @@ const AlternateBetweenModes = function() {
 			}
 		};return Seq.mode? {mode:1}:Seq
 	}
-}()
-const setReversalSignal = ()=> {
+}(),
+setReversalSignal = ()=> {
 	$(Ghosts).trigger('Reverse')
 	!FrightMode.duration && $(Ghosts).trigger('Runaway')
 }
