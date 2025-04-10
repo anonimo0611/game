@@ -122,7 +122,7 @@ const AlternateBetweenModes = function() {
 			lv == 1 ? 15e3 : 78e4,
 			lv == 1 ? 3500 : 16.7,
 			Infinity,
-		]);
+		])
 	}
 	function genSequence() {
 		let  [cnt,idx] = [-1,0]
@@ -146,9 +146,9 @@ const setReversalSignal = ()=> {
 }
 
 export const DotCounter = function() {
-	let _globalCnt = -1
-	const counters = new Uint8Array(GhsType.Max)
-	const limitTbl = freeze([
+	let _globalCounter = -1
+	const pCounters  = new Uint8Array(GhsType.Max)
+	const limitTable = freeze([
 	    //  global,lv1,lv2,lv3+
 		freeze([ 7,  0,  0, 0]),  // Pinky
 		freeze([17, 30,  0, 0]),  // Aosuke
@@ -159,22 +159,22 @@ export const DotCounter = function() {
 	 */
 	function release(idx, fn) {
 		const timeOut = (Game.level <= 4 ? 4e3:3e3)
-		const gLimit  = limitTbl[idx-1][0] // global
-		const pLimit  = limitTbl[idx-1][min(Game.level,3)] // personal
+		const gLimit  = limitTable[idx-1][0] // global
+		const pLimit  = limitTable[idx-1][min(Game.level,3)] // personal
 		;(Player.instance.timeNotEaten >= timeOut)? fn()
-		:(!Game.restarted || _globalCnt < 0)
-			? counters[idx]>= pLimit && fn()
-			: _globalCnt == gLimit && fn(idx == GhsType.Guzuta)
-				&& (_globalCnt = -1)
+		:(!Game.restarted || _globalCounter < 0)
+			? pCounters[idx] >= pLimit && fn()
+			: _globalCounter == gLimit && fn(idx == GhsType.Guzuta)
+				&& (_globalCounter = -1)
 	}
 	function reset() {
-		!Game.restarted && counters.fill(0)
-		_globalCnt = Game.restarted? 0 : -1
+		!Game.restarted && pCounters.fill(0)
+		_globalCounter = Game.restarted? 0 : -1
 	}
 	function addCnt() {
-		(Game.restarted && _globalCnt >= 0)
-			? _globalCnt++
-			: counters[Ghosts.findIndex(g=> g.state.isIdle)]++
+		(Game.restarted && _globalCounter >= 0)
+			? _globalCounter++
+			: pCounters[Ghosts.findIndex(g=> g.state.isIdle)]++
 	}
 	$on('Title Ready', reset)
 	$ready(()=> Player.bindDotEaten(addCnt))
