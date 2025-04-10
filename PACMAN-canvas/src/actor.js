@@ -58,14 +58,14 @@ export class Actor {
 	setNextPos(denom=1, dir=this.dir) {
 		this.pos = Vec2(dir).mul(this.step/denom).add(this)
 	}
+	newTileReached(denom=1) {
+		return this.inForwardOfTile
+			&& this.stepsPerTile <= this.step/denom
+	}
 	/** @param {keyof DirEnum} dir */
 	move(dir) {
 		this.dir = dir
 		this.setNextPos()
-	}
-	newTileReached(denom=1) {
-		return this.inForwardOfTile
-			&& this.stepsPerTile <= this.step/denom
 	}
 	/** @param {keyof DirEnum} dir */
 	hasAdjWall(dir) {
