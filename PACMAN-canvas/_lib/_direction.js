@@ -9,7 +9,7 @@ const Dir = function() {
 		/**
 		 * @param {KeyboardEvent} e
 		 * @returns {?keyof DirEnum}
-		*/
+		 */
 		from(e, {wasd=false}={}) {
 			if (!isKeyboardEvent(e)) return null
 			if (isCombinationKey(e)) return null
