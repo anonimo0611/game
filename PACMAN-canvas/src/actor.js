@@ -6,9 +6,11 @@ export class Actor {
 	#x = 0
 	#y = 0
 	radius  = T
-	#orient = L
-	#movDir = L
 	#fadeIn = new FadeIn(500)
+
+	/** @type {keyof DirEnum} */
+	#orient = L
+	#movDir = this.#orient
 
 	get x()         {return this.#x}
 	get y()         {return this.#y}
@@ -56,6 +58,7 @@ export class Actor {
 	setNextPos(denom=1, dir=this.dir) {
 		this.pos = Vec2(dir).mul(this.step/denom).add(this)
 	}
+	/** @param {keyof DirEnum} dir */
 	move(dir) {
 		this.dir = dir
 		this.setNextPos()
@@ -64,10 +67,12 @@ export class Actor {
 		return this.inForwardOfTile
 			&& this.stepsPerTile <= this.step/denom
 	}
+	/** @param {keyof DirEnum} dir */
 	hasAdjWall(dir) {
 		const  adjTile = this.getAdjTile(dir)
 		return Maze.hasWall(adjTile)
 	}
+	/** @param {keyof DirEnum} dir */
 	getAdjTile(dir, n=1, tile=this.tilePos) {
 		const  v = Vec2(dir).mul(n).add(tile)
 		return v.setX((v.x+Cols) % Cols)
@@ -84,6 +89,7 @@ export class Actor {
 		State.isReady && this.#fadeIn.setAlpha(Ctx)
 			|| (Ctx.globalAlpha = this.maxAlpha)
 	}
+	/** @param {string} state */
 	trigger(state) {
 		$(this).trigger(state)
 	}

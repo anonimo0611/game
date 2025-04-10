@@ -29,7 +29,7 @@ export default new class {
 	/**
 	 * @param {number} x
 	 * @param {number} y
-	 * @param {number} pts
+	 * @param {keyof coords100_5000} pts
 	 */
 	draw(x, y, pts) {
 		Ctx.save()
