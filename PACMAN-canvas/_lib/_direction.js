@@ -6,7 +6,10 @@ const Dir = function() {
 	return freeze({
 		...DirEnum,
 		opp: new Map([[U,D],[R,L],[D,U],[L,R]]),
-		/** @param {KeyboardEvent} e */
+		/**
+		 * @param {KeyboardEvent} e
+		 * @returns {?keyof DirEnum}
+		*/
 		from(e, {wasd=false}={}) {
 			if (!isKeyboardEvent(e)) return null
 			if (isCombinationKey(e)) return null
