@@ -51,7 +51,7 @@ export const Ctrl = new class {
 		localStorage.removeItem('anopacman')
 		localStorage.removeItem('anopac_hiscore')
 		Ctrl.#setDefault()
-		$trigger('InitData')
+		State.switchToTitle()
 	}
 	#setDefault() {
 		Form.reset()

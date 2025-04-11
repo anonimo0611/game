@@ -15,6 +15,6 @@ function hide(button, e) {
 }
 $on('load Start', ()=> $('.panel').hide())
 $('.panelBtn').each((_,button)=> {
-	$(window).on('click', e=> hide(button,e))
-	$(button).on('click', e=> show(button,e))
+	$(window).on('pointerdown', e=> hide(button,e))
+	$(button).on('pointerdown', e=> show(button,e))
 })
