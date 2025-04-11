@@ -11,7 +11,7 @@ export const Score = new class {
 	static {$load(this.#setup)}
 	static #setup() {
 		Score.#init()
-		$on('InitData',Score.#init)
+		$on('Title',   Score.#init)
 		$on('Quit',    Score.#restore)
 		$on('Start',   Score.#onStart)
 		$on('GameOver',Score.#onGameOver)
