@@ -165,6 +165,10 @@ nav.rel {
 		margin-left: -.2em;
 	}
 	.none.prev::before,
+	.none.next::after {
+		opacity: 0.5;
+	}
+	.none.prev::before,
 	.none.next::after,
 	a[href][rel~=prev]::before,
 	a[href][rel~=next]::after {
