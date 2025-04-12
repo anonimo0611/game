@@ -53,7 +53,7 @@ export const Score = new class {
 	}
 	draw() {
 		const oneUpColor = (Sound.ringing? '#F55':'#FFF')
-		drawText(2,1, oneUpColor, this.#oneUpDisp? '1UP':'')
+		drawText(2,1, oneUpColor, Score.#oneUpDisp? '1UP':'')
 		drawText(6,1, '#FFF', _score || '00')
 		Ctrl.isPractice
 			? drawText(14,1, '#FFF', 'PRACTICE')
