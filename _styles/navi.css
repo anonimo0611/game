@@ -119,6 +119,26 @@ ul.flex {
 	&:hover {cursor: pointer}
 }
 
+nav {
+	li.none {
+		cursor: default;
+	}
+	li.none kbd, a[href] kbd {
+		color: inherit;
+		background: transparent;
+		text-align: center;
+		text-decoration: 2px underline;
+		text-underline-offset: 2px;
+		font-family: inherit;
+		font-weight: bold;
+		line-height: 1;
+		display: inline-block;
+	}
+	li.none kbd {
+		text-decoration: none;
+	}
+}
+
 /* Relationship navigation */
 nav.rel {
 	margin: 0;
@@ -184,23 +204,7 @@ nav.rel {
 		transform: scale(-1,1);
 		transform-origin: center;
 	}
-}
-nav {
-	li.none {
-		cursor: default;
-	}
-	li.none kbd, a[href] kbd {
-		color: inherit;
-		background: transparent;
-		text-align: center;
-		text-decoration: 2px underline;
-		text-underline-offset: 2px;
-		font-family: inherit;
-		font-weight: bold;
-		line-height: 1;
-		display: inline-block;
-	}
-	li.none kbd {
+	a[href]:hover kbd {
 		text-decoration: none;
 	}
 }
