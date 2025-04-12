@@ -62,6 +62,18 @@ export class Actor {
 		return this.inForwardOfTile
 			&& this.stepsPerTile <= this.step/denom
 	}
+	collidedWithWall(dir=this.dir) {
+		const  {step,centerPos}= this
+		const  {x,y}= Vec2(dir).mul(T/2+step).add(centerPos).divInt(T)
+		return Maze.hasWall({x:(x+Cols) % Cols, y})
+	}
+	update() {
+		State.isReady && this.#fadeIn.update(this.maxAlpha)
+	}
+	draw() {
+		State.isReady && this.#fadeIn.setAlpha(Ctx)
+			|| (Ctx.globalAlpha = this.maxAlpha)
+	}
 	/** @param {keyof DirEnum} dir */
 	move(dir) {
 		this.dir = dir
@@ -76,18 +88,6 @@ export class Actor {
 	getAdjTile(dir, n=1, tile=this.tilePos) {
 		const  v = Vec2(dir).mul(n).add(tile)
 		return v.setX((v.x+Cols) % Cols)
-	}
-	collidedWithWall(dir=this.dir) {
-		const  {step,centerPos}= this
-		const  {x,y}= Vec2(dir).mul(T/2+step).add(centerPos).divInt(T)
-		return Maze.hasWall({x:(x+Cols) % Cols, y})
-	}
-	update() {
-		State.isReady && this.#fadeIn.update(this.maxAlpha)
-	}
-	draw() {
-		State.isReady && this.#fadeIn.setAlpha(Ctx)
-			|| (Ctx.globalAlpha = this.maxAlpha)
 	}
 	/** @param {string} state */
 	trigger(state) {
