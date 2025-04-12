@@ -17,7 +17,6 @@ const Dir = function() {
 			return this.has(key)? key
 				: (wasd && FromWASD.get(key) || null)
 		},
-		/** @param {keyof DirEnum} dir */
 		has(dir) {return hasOwn(DirEnum,dir)},
 	})
 }()
