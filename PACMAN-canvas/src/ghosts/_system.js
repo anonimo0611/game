@@ -89,7 +89,7 @@ export const GhsMgr = new class {
 				&& !(Ticker.count % this.aInterval)
 		AlternateBetweenModes.update()
 		FrightMode.instance?.update()
-		Ghosts.forEach(g=> g.update())
+		for (const g of Ghosts) g.update()
 	}
 	/** @param {Ghost} g */
 	crashWithPac(g, pacPos=Player.pos, {fn,radius}={}) {
@@ -181,7 +181,7 @@ export const DotCounter = function() {
 	return {release}
 }()
 
-export const Elroy = function() {
+const Elroy = function() {
 	let _part = 0
 	const speedRateTbl  = freeze([1, 1.02, 1.05, 1.1])
 	const dotsLeftP2Tbl = freeze([20,20,30,40,50,60,70,70,80,90,100,110,120])

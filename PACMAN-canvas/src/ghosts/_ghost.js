@@ -35,8 +35,7 @@ export class Ghost extends Actor {
 	get chaseTile()   {return this.chasePos.divInt(T)}
 
 	constructor({col=0,row=0,idx=0,initAlign=0,orient=L,playAnime=true}={}) {
-		super()
-		this.dir       = orient
+		super(orient)
 		this.idx       = idx
 		this.initX     = col*T
 		this.initAlign = initAlign
