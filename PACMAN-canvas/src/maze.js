@@ -1,6 +1,7 @@
 import {Rect}   from '../_lib/rect.js'
 import {Pacman} from './pacman/_pacman.js'
 import {State}  from './state.js'
+import {powChk} from './control.js'
 
 export const MapStr = `\
 ////////////////////////////\
@@ -59,7 +60,7 @@ class PowDot {
 	}
 	draw() {
 		this.#disp ^= Ticker.count % 15 == 0
-		PowMap.forEach(this.#drawDot.bind(this))
+		for (const [,p] of PowMap) this.#drawDot(p)
 	}
 }
 class Tunnel {
@@ -78,10 +79,22 @@ class Tunnel {
 export const Maze = new class {
 	static {$ready(this.setup)}
 	static setup() {
-		Maze.Map.forEach((c,i)=> /[^.O\s]/.test(c) && WallSet.add(i))
-		const resetDots = ()=> Maze.Map.forEach(Maze.#setDot)
-		$on('Title NewLevel', resetDots)
-		$('#powChk').on('change', resetDots)
+		for (const [i,c] of Maze.Map.entries())
+			/[^.O\s]/.test(c) && WallSet.add(i)
+		$on('Title NewLevel', Maze.#resetDots)
+		$(powChk).on('change',Maze.#resetDots)
+	}
+	#resetDots() {
+		for (const [i,c] of Maze.Map.entries())
+			/[.O]/.test(c) && Maze.#setDot(i,c)
+	}
+	#setDot(i, chip) {
+		const v = Vec2(i%Cols, i/Cols|0)
+		Maze.clearBgDot({tileIdx:i,tilePos:v})
+		DotSet.add(i)
+		!powChk.checked || (chip == '.')
+			? drawDot(Bg.ctx, v)
+			: PowMap.set(i, v)
 	}
 	get dotsLeft() {return DotSet.size}
 
@@ -100,14 +113,9 @@ export const Maze = new class {
 			? Vec2((t.x > Cols/2) && (o.x > Cols/2) ? 21:6, 15)
 			: Vec2(o)
 	}
-	#setDot(chip, i) {
-		if (!/[.O]/.test(chip)) return
-		const v = Vec2(i%Cols, i/Cols|0)
-		Maze.clearBgDot({tileIdx:i,tilePos:v})
-		DotSet.add(i)
-		!byId('powChk').checked || (chip == '.')
-			? drawDot(Bg.ctx, v)
-			: PowMap.set(i, v)
+	drawDoor() {
+		if (State.isFlashMaze) return
+		Ctx.fillRect(13*T, 13.6*T, T*2, T/4, Color.Door)
 	}
 	/** @param {Pacman} */
 	clearBgDot({tileIdx:i,tilePos:v}) {
@@ -116,15 +124,8 @@ export const Maze = new class {
 		drawDot(Bg.ctx, v, true, null)
 		return DotSet.size
 	}
-	/**
-	 * @param {ExtendedContext2D} ctx
-	 * @param {Vector2}
-	 */
-	drawDot(ctx, {x,y}, isLarge=false, color=Color.Dot) {
+	/** @param {ExtendedContext2D} ctx */
+	drawDot(ctx, {x,y}=Vec2(), isLarge=false, color=Color.Dot) {
 		ctx.fillCircle(x*T+T/2, y*T+T/2, T/(isLarge? 2:8), color)
-	}
-	drawDoor() {
-		if (State.isFlashMaze) return
-		Ctx.fillRect(13*T, 13.6*T, T*2, T/4, Color.Door)
 	}
 }, {drawDot}=freeze(Maze)

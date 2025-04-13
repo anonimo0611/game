@@ -185,12 +185,12 @@ function gala(ctx=Ctx) {
 }
 function bell(ctx=Ctx) {
 	// bell body
-	ctx.newLinePath([0, -6.3],[1.3, -6.3],[1.3, -6])
-	ctx.quadraticCurveTo(5.0, -5.0, 5.5, 1.6)
-	ctx.addLinePath([ 6.1,2.2],[ 6.1,4.7],[ 5.4,5.3])
-	ctx.addLinePath([-5.4,5.3],[-6.1,4.7],[-6.1,2.2],[-5.5,1.6])
-	ctx.quadraticCurveTo(-5, -5, -1.3, -6)
-	ctx.lineTo(-1.3, -6.3)
+	ctx.beginPath()
+	for (const s of [1,-1]) {
+		ctx.addLinePath([0,-6.3],[1.3*s,-6.3],[1.3*s,-6])
+		ctx.quadraticCurveTo(5*s, -5, 5.5*s, 1.6)
+		ctx.addLinePath([6.1*s,2.2],[6.1*s,4.7],[5.4*s,5.3],[0,5.3])
+	}
 	ctx.fillStyle = '#F8FF00'
 	ctx.fill()
 
