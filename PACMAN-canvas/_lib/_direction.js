@@ -1,5 +1,5 @@
 'use strict'
-const [U,R,D,L]='Up|Right|Down|Left'.split('|')
+const U='Up',R='Right',D='Down',L='Left'
 const DirEnum = freeze({Up:U, Right:R, Down:D, Left:L})
 const Dir = function() {
 	const FromWASD = new Map([['W',U],['A',L],['S',D],['D',R]])
