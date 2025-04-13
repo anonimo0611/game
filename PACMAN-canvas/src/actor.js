@@ -11,6 +11,7 @@ export class Actor {
 	/** @type {keyof DirEnum} */
 	#orient = L
 	#movDir = this.#orient
+	constructor(dir=L) {this.dir = dir}
 
 	get x()         {return this.#x}
 	get y()         {return this.#y}
