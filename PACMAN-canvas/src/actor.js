@@ -45,19 +45,12 @@ export class Actor {
 	get inForwardOfTile()  {return this.stepsPerTile <= T/2}
 	get inBackwardOfTile() {return this.stepsPerTile >  T/2}
 
-	setPos({x=this.x, y=this.y}={}) {
-		this.#y = y
-		this.#x = function(r) {
-			if (!State.isPlaying) return
-			if (x < -r-T/2) return CW+T/2
-			if (x > CW+T/2) return -r-T/2
-		}(this.radius) ?? x
+	update() {
+		State.isReady && this.#fadeIn.update(this.maxAlpha)
 	}
-	centering() {
-		this.x = (CvsW-T)/2
-	}
-	setNextPos(denom=1, dir=this.dir) {
-		this.pos = Vec2(dir).mul(this.step/denom).add(this)
+	draw() {
+		State.isReady && this.#fadeIn.setAlpha(Ctx)
+			|| (Ctx.globalAlpha = this.maxAlpha)
 	}
 	newTileReached(denom=1) {
 		return this.inForwardOfTile
@@ -68,10 +61,24 @@ export class Actor {
 		const  {x,y}= Vec2(dir).mul(T/2+step).add(centerPos).divInt(T)
 		return Maze.hasWall({x:(x+Cols) % Cols, y})
 	}
+	centering() {
+		this.x = (CvsW-T)/2
+	}
+	setPos({x=this.x, y=this.y}={}) {
+		this.#y = y
+		this.#x = function(r) {
+			if (!State.isPlaying) return
+			if (x < -r-T/2) return CW+T/2
+			if (x > CW+T/2) return -r-T/2
+		}(this.radius) ?? x
+	}
+	setNextPos(denom=1, dir=this.dir) {
+		this.pos = Vec2(dir).mul(this.step/denom).add(this)
+	}
 	/** @param {keyof DirEnum} dir */
-	getAdjTile(dir, n=1, tile=this.tilePos) {
-		const  v = Vec2(dir).mul(n).add(tile)
-		return v.setX((v.x+Cols) % Cols)
+	move(dir) {
+		this.dir = dir
+		this.setNextPos()
 	}
 	/** @param {keyof DirEnum} dir */
 	hasAdjWall(dir) {
@@ -79,19 +86,12 @@ export class Actor {
 		return Maze.hasWall(adjTile)
 	}
 	/** @param {keyof DirEnum} dir */
-	move(dir) {
-		this.dir = dir
-		this.setNextPos()
+	getAdjTile(dir, n=1, tile=this.tilePos) {
+		const  v = Vec2(dir).mul(n).add(tile)
+		return v.setX((v.x+Cols) % Cols)
 	}
 	/** @param {string} state */
 	trigger(state) {
 		$(this).trigger(state)
-	}
-	update() {
-		State.isReady && this.#fadeIn.update(this.maxAlpha)
-	}
-	draw() {
-		State.isReady && this.#fadeIn.setAlpha(Ctx)
-			|| (Ctx.globalAlpha = this.maxAlpha)
 	}
 }
