@@ -86,6 +86,15 @@ export class Ghost extends Actor {
 		if (this.frightened) return spd * GhsStep.Fright
 		return spd * (this.isScatter? GhsStep.Base : this.chaseStep)
 	}
+	draw() {
+		if (State.isStart)
+			return
+		Ctx.save()
+		super.draw()
+		this.sprite.fadeOut?.setAlpha(Ctx)
+		this.sprite.draw(this)
+		Ctx.restore()
+	}
 	update() {
 		super.update()
 		this.sprite.fadeOut?.update()
@@ -98,15 +107,6 @@ export class Ghost extends Actor {
 			this.#behavior()
 			GhsMgr.crashWithPac(this)
 		}
-	}
-	draw() {
-		if (State.isStart)
-			return
-		Ctx.save()
-		super.draw()
-		this.sprite.fadeOut?.setAlpha(Ctx)
-		this.sprite.draw(this)
-		Ctx.restore()
 	}
 	#behavior() {
 		const {state}= this
