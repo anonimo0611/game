@@ -107,13 +107,6 @@ class PlayablePacman extends Pacman {
 		const  ofstX = (this.dir == Dir.Up ? -num : 0)
 		return Vec2(this.dir).mul(num*T).add(this.centerPos).add(ofstX*T, 0)
 	}
-	draw() {
-		if (State.isStart) return
-		Ctx.save()
-		super.draw()
-		this.sprite.draw(this)
-		Ctx.restore()
-	}
 	update() {
 		super.update()
 		if (Timer.frozen || !State.isPlaying) return
@@ -121,6 +114,13 @@ class PlayablePacman extends Pacman {
 		this.#notEaten++
 		for (let i=0,denom=ceil(this.step)*2; i<denom; i++)
 			this.#behavior(denom)
+	}
+	draw() {
+		if (State.isStart) return
+		Ctx.save()
+		super.draw()
+		this.sprite.draw(this)
+		Ctx.restore()
 	}
 	#behavior(denom=1) {
 		if (this.newTileReached(denom)) {
