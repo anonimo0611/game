@@ -44,6 +44,7 @@ export class Ghost extends Actor {
 		this.name      = this.constructor.name
 		this.sprite    = new Sprite(canvas2D(null, T*3, T*2).ctx)
 		this.state     = new Sys.GhostState(this)
+		this.release   = this.release.bind(this)
 		$(this).on('FrightMode',  this.#setFrightMode)
 		$(this).on('Reverse',()=> this.#revSig  = true)
 		$(this).on('Runaway',()=> this.#runAway = 400/Game.interval)
@@ -118,7 +119,7 @@ export class Ghost extends Actor {
 	}
 	#idle({idx,step,orient,centerPos:{y:cy}}=this) {
 		if (!Ctrl.isChaseMode) {
-			Sys.DotCounter.release(idx, this.release.bind(this))
+			Sys.DotCounter.release(idx, this.release)
 		}
 		if (!this.state.isGoOut) {
 			this.move((cy+T*0.6-step > Maze.House.MiddleY && orient != D)
