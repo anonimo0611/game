@@ -3,10 +3,8 @@ import {Maze}  from './maze.js'
 
 const CW = CvsW
 export class Actor {
-	#x = 0
-	#y = 0
-	radius  = T
-	#fadeIn = new FadeIn(500)
+	radius = T
+	#x=0; #y=0; #fadeIn=new FadeIn(500)
 
 	/** @type {keyof DirEnum} */
 	#orient = L
