@@ -55,7 +55,7 @@ class PlayablePacman extends Pacman {
 	constructor() {
 		super()
 		this.pos = Vec2(13.52, 24).mul(T)
-		$offon('keydown.Player', e=> this.#onKeydown(e))
+		$offon('keydown.Player', this.#onKeydown.bind(this))
 	}
 	get #canTurn() {
 		return this.inForwardOfTile
