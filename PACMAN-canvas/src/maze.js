@@ -46,9 +46,9 @@ const PenRect  = new Rect(10,13, 7,4)
 const PenOuter = new Rect( 9,12, 9,6)
 
 class House {
-	get Entrance() {return Vec2(13, 12)}
+	get EntranceTile() {return Vec2(13, 12)}
 	isIn = tilePos=> PenRect.contains(tilePos)
-	MiddleY = (this.Entrance.y+3.5)*T
+	MiddleY = (this.EntranceTile.y+3.5)*T
 }
 class PowDot {
 	#disp = 1

@@ -58,7 +58,7 @@ export class Ghost extends Actor {
 	}
 	get originalTarget() {
 		return this.state.isEscape
-			? Maze.House.Entrance
+			? Maze.House.EntranceTile
 			: this.isScatter
 				? this.scatterTile
 				: this.chaseTile
@@ -70,7 +70,7 @@ export class Ghost extends Actor {
 	}
 	get houseEntranceArrived() {
 		return this.state.isEscape
-			&& this.tilePos.y == Maze.House.Entrance.y
+			&& this.tilePos.y == Maze.House.EntranceTile.y
 			&& abs(CvsW/2 - this.centerPos.x) <= this.step
 	}
 	get sqrMagToPacman() {
@@ -139,7 +139,7 @@ export class Ghost extends Actor {
 		if (cx != CvsW/2)
 			return this.centering()
 
-		if (y > Maze.House.Entrance.y*T+step)
+		if (y > Maze.House.EntranceTile.y*T+step)
 			return this.move(U)
 
 		this.dir = L
