@@ -8,7 +8,7 @@ import * as Spr from './fruits_sprite.js'
 
 // The fruit appear after 70 or 170 dots are cleared
 const AppearSet  = new Set([70,170])
-const LevelTable = freeze([0,1,2,2,3,3,4,4,5,5,6,6,7])
+const IndexTable = freeze([0,1,2,2,3,3,4,4,5,5,6,6,7])
 const PointTable = freeze([100,300,500,700,1e3,2e3,3e3,5e3])
 const TargetPos  = Vec2(CvsW/2, T*18.5).freeze()
 
@@ -30,7 +30,7 @@ export const Fruit = new class {
 		return PointTable[Fruit.number()]
 	}
 	number(i=Game.level-1) {
-		return LevelTable.at(i >= LevelTable.length ? -1 : i)
+		return IndexTable.at(i >= IndexTable.length ? -1 : i)
 	}
 	#reset() {
 		_fadeOut = null
