@@ -22,8 +22,11 @@ let _tgtDisp = true
 export const Fruit = new class {
 	static {$ready(this.setup)}
 	static setup() {
-		$on('Title Ready',  Fruit.#reset)
-		$on('LevelChanged', Fruit.#setImages)
+		$on({
+			Title: Fruit.#reset,
+			Ready: Fruit.#reset,
+			SetLv: Fruit.#setImages,
+		})
 		Player.bindDotEaten(Fruit.#dotEaten)
 	}
 	get score() {

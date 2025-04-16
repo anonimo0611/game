@@ -36,18 +36,20 @@ export class Ghost extends Actor {
 
 	constructor({col=0,row=0,idx=0,initAlign=0,orient=L,playAnime=true}={}) {
 		super(orient)
+		this.setHandler({
+			FrightMode:  this.#setFrightMode,
+			Reverse:()=> this.#revSig  = true,
+			Runaway:()=> this.#runAway = 400/Game.interval,
+		})
 		this.idx       = idx
 		this.initX     = col*T
 		this.initAlign = initAlign
-		this.playAnime = playAnime
+		this.playAnime = +playAnime
 		this.pos       = Vec2(col*T, row*T)
 		this.name      = this.constructor.name
 		this.release   = this.release.bind(this)
 		this.state     = new Sys.GhostState(this)
 		this.sprite    = new Sprite(canvas2D(null, T*3, T*2).ctx)
-		$(this).on('FrightMode',  this.#setFrightMode)
-		$(this).on('Reverse',()=> this.#revSig  = true)
-		$(this).on('Runaway',()=> this.#runAway = 400/Game.interval)
 		freeze(this)
 	}
 	get isScatter() {

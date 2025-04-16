@@ -75,8 +75,7 @@ export class Actor {
 	}
 	/** @param {keyof DirEnum} dir */
 	move(dir) {
-		this.dir = dir
-		this.setNextPos()
+		this.setNextPos(1, this.dir=dir)
 	}
 	/** @param {keyof DirEnum} dir */
 	hasAdjWall(dir) {
@@ -91,5 +90,8 @@ export class Actor {
 	/** @param {string} state */
 	trigger(state) {
 		$(this).trigger(state)
+	}
+	setHandler(...args) {
+		$(this).on(...args)
 	}
 }

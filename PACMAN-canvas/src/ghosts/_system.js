@@ -43,13 +43,15 @@ const behindThePac = g=> g.frightened
 const inFrontOfPac = g=> !behindThePac(g)
 
 export const GhsMgr = new class {
-	static {$ready(()=> this.setup())}
+	static {$ready(this.setup)}
 	static setup() {
-		$on('Attract',GhsMgr.#onAttract)
-		$on('Playing',GhsMgr.#onPlaying)
-		$on('Clear',  GhsMgr.#onLevelEnds)
-		$on('Crashed',GhsMgr.#onLevelEnds)
-		$(GhsMgr).on('Init',GhsMgr.#initialize)
+		$on({
+			Attract: GhsMgr.#onAttract,
+			Playing: GhsMgr.#onPlaying,
+			Clear:   GhsMgr.#onLevelEnds,
+			Crashed: GhsMgr.#onLevelEnds,
+		})
+		$(GhsMgr).on({Init:GhsMgr.#initialize})
 	}
 	#aidx = 0
 	get aInterval()  {return 6}
@@ -89,7 +91,7 @@ export const GhsMgr = new class {
 				&& !(Ticker.count % this.aInterval)
 		AlternateBetweenModes.update()
 		FrightMode.instance?.update()
-		for (const g of Ghosts) g.update()
+		Ghosts.forEach(g=> g.update())
 	}
 	/** @param {Ghost} g */
 	crashWithPac(g, pacPos=Player.pos, {fn,radius}={}) {
@@ -112,7 +114,7 @@ const AlternateBetweenModes = function() {
 			update() {State.isPlaying && seq.update?.()},
 		}
 	}
-	function genDurationList(lv) {
+	function genDurList(lv) {
 		return freeze([ // ms
 			lv <= 4 ? 4500 : 4000,
 			15e3,
@@ -126,7 +128,7 @@ const AlternateBetweenModes = function() {
 	}
 	function genSequence() {
 		let  [cnt,idx] = [-1,0]
-		const durList  = genDurationList(Game.level)
+		const durList  = genDurList(Game.level)
 		const duration = idx=> durList[idx]/Game.speedRate
 		const Seq = {
 			mode: +Ctrl.isChaseMode,
@@ -223,7 +225,7 @@ class FrightMode {
 	get allCaught() {return this.#caughtCnt == GhsType.Max}
 	constructor() {
 		FrightMode.#instance = this.#toggle(true)
-		$(Ghosts).offon('Cought', ()=> ++this.#caughtCnt)
+		$(Ghosts).offon({Cought:()=> ++this.#caughtCnt})
 	}
 	#toggle(bool) {
 		FrightMode.#instance = null

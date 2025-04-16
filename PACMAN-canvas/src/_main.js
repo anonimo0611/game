@@ -24,18 +24,20 @@ export const Menu = freeze({
 export const Game = new class {
 	static {$ready(this.setup)}
 	static setup() {
-		$on('blur',()=> Game.#pause(true))
-		$on('keydown',  Game.#onKeydown)
-		$on('Title',    Game.#onTitle)
-		$on('Start',    Game.#onStart)
-		$on('Playing',  Game.#onPlaying)
-		$on('Clear',    Game.#onClear)
-		$on('FlashMaze',Game.#onFlashMaze)
-		$on('NewLevel', Game.#onNewLevel)
-		$on('Losing',   Game.#onLosing)
-		$on('Restart',  Game.#levelBegins)
-		$on('GameOver', Game.#levelEnds)
-		$on('Quit',     Game.#levelEnds)
+		$on({
+			blur:()=> Game.#pause(true),
+			keydown:  Game.#onKeydown,
+			Title:    Game.#onTitle,
+			Start:    Game.#onStart,
+			Playing:  Game.#onPlaying,
+			Clear:    Game.#onClear,
+			FlashMaze:Game.#onFlashMaze,
+			NewLevel: Game.#onNewLevel,
+			Losing:   Game.#onLosing,
+			Restart:  Game.#levelBegins,
+			GameOver: Game.#levelEnds,
+			Quit:     Game.#levelEnds,
+		})
 		Menu.LevelMenu.bindChange(Game.#resetLevel)
 		State.switchToTitle()
  	}
@@ -57,7 +59,7 @@ export const Game = new class {
 	}
 	#setLevel(i=1) {
 		Game.#level = between(i, 1, 0xFF) && +i || 1
-		$trigger('LevelChanged')
+		$trigger('SetLv')
 	}
 	#confirm() {
 		if (!State.isPlaying) return

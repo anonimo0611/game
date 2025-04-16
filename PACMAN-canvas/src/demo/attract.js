@@ -14,8 +14,8 @@ const CHARA=0, DEMO=1
 
 export class Attract {
 	static {
-		$(RunTimer).on('Run', this.#begin)
-		$('button.attractDemo').on('click', this.#begin)
+		$(RunTimer).on({Run:this.#begin})
+		$('button.attractDemo').on({click:this.#begin})
 	}
 	static update() {_attract?.update()}
 	static draw()   {_attract?.draw()}

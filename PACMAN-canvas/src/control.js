@@ -9,11 +9,11 @@ const input = id=> Form[id]
 const Form  = document.forms[0]
 
 export const Ctrl = new class {
-	static {$ready(this.setup)}
+	static {$load(this.setup)}
 	static setup() {
 		Ctrl.#restore()
 		Ctrl.#setupFormCtrls()
-		$on('resize',Ctrl.#fitToViewport).trigger('resize')
+		$on({resize:Ctrl.#fitToViewport}).trigger('resize')
 	}
 	get extendPts()     {return +Menu.ExtendMenu.value}
 	get livesMax()      {return input('lvsRng').valueAsNumber}
