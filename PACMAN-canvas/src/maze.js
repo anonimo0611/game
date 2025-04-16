@@ -98,7 +98,7 @@ export const Maze = new class {
 	}
 	get dotsLeft() {return DotSet.size}
 
-	DoxMax  = MapStr.match(/[.O]/g).length
+	DotMax  = MapStr.match(/[.O]/g).length
 	Map     = freeze([...MapStr])
 	House   = freeze(new House)
 	PowDot  = freeze(new PowDot)

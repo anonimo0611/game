@@ -81,7 +81,8 @@ export const GhsMgr = new class {
 	}
 	setFrightMode() {
 		setReversalSignal()
-		FrightMode.duration && new FrightMode()
+		if (State.isAttract || FrightMode.duration)
+			new FrightMode()
 	}
 	update() {
 		if (State.isPlaying

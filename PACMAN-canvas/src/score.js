@@ -53,11 +53,11 @@ export const Score = new class {
 			? true : !!(Ticker.count & (Sound.ringing? 8:16))
 	}
 	draw() {
-		const oneUpColor = (Sound.ringing? '#F55':'#FFF')
+		const oneUpColor = (Sound.ringing? Color.Extend:null)
 		drawText(2,1, oneUpColor, Score.#oneUpDisp? '1UP':'')
-		drawText(6,1, '#FFF', _score || '00')
+		drawText(6,1, null, _score || '00')
 		Ctrl.isPractice
-			? drawText(14,1, '#FFF', 'PRACTICE')
-			: drawText(14,1, '#FFF', `HIGH　${_hiSco || '00'}`)
+			? drawText(14,1, null, 'PRACTICE')
+			: drawText(14,1, null, `HIGH　${_hiSco || '00'}`)
 	}
 }

@@ -121,7 +121,7 @@ export const Game = new class {
 		!function redraw() {
 			if (++count > 8)
 				return Timer.set(500, Game.#levelEnds)
-			MazeWall.draw([, '#FFF'][count % 2])
+			MazeWall.draw([, Color.FlashWall][count % 2])
 			Timer.set(250, redraw)
 		}()
 	}

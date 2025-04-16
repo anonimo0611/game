@@ -59,7 +59,7 @@ export class Attract {
 	}
 	draw() {
 		const et = Ticker.elapsedTime/100, ptsFontSize = T*.68
-		drawText(7, 5, '#FFF', 'CHARACTOR　/　NICKNAME')
+		drawText(7, 5, null, 'CHARACTOR　/　NICKNAME')
 		et > 10 && this.drawGhost(CHARA, 0, Vec2(5*T, 6*T))
 		et > 15 && drawText( 8,  7, Color.Akabei, 'OIKAKE----')
 		et > 20 && drawText(18,  7, Color.Akabei, '"AKABEI"')
@@ -78,18 +78,19 @@ export class Attract {
 		if (et > 85) {
 			drawDot(Ctx, Vec2(10, 24))
 			this.powDisp && drawDot(Ctx, Vec2(10, 26), true)
-			drawText(12.0, 25, '#FFF', '10')
-			drawText(14.3, 25, '#FFF', 'PTS', {size:ptsFontSize})
-			drawText(12.0, 27, '#FFF', '50')
-			drawText(14.3, 27, '#FFF', 'PTS', {size:ptsFontSize})
+			drawText(12.0, 25, null, '10')
+			drawText(14.3, 25, null, 'PTS', {size:ptsFontSize})
+			drawText(12.0, 27, null, '50')
+			drawText(14.3, 27, null, 'PTS', {size:ptsFontSize})
 		}
 		if (et > 90) {
 			if (this.pacman.dir == L && this.powDisp) {
 				drawDot(Ctx, Vec2(4, 19), true)
 			}
 			if (Ctrl.extendPts > 0) {
-				drawText( 2.0, 30, '#F90', `BONUS　PACMAN　FOR　${Ctrl.extendPts}`)
-				drawText(24.3, 30, '#F90', 'PTS', {size:ptsFontSize})
+				const {BonusText:color}= Color
+				drawText( 2.0, 30, color, `BONUS　PACMAN　FOR　${Ctrl.extendPts}`)
+				drawText(24.3, 30, color, 'PTS', {size:ptsFontSize})
 			}
 		}
 		if (et > 105) {
