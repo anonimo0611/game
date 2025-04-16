@@ -36,7 +36,7 @@ export class Ghost extends Actor {
 
 	constructor({col=0,row=0,idx=0,initAlign=0,orient=L,playAnime=true}={}) {
 		super(orient)
-		this.setHandler({
+		this.addHandler({
 			FrightMode:  this.#setFrightMode,
 			Reverse:()=> this.#revSig  = true,
 			Runaway:()=> this.#runAway = 400/Game.interval,

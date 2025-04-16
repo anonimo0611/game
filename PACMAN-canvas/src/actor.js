@@ -79,8 +79,7 @@ export class Actor {
 	}
 	/** @param {keyof DirEnum} dir */
 	hasAdjWall(dir) {
-		const  adjTile = this.getAdjTile(dir)
-		return Maze.hasWall(adjTile)
+		return Maze.hasWall(this.getAdjTile(dir))
 	}
 	/** @param {keyof DirEnum} dir */
 	getAdjTile(dir, n=1, tile=this.tilePos) {
@@ -91,7 +90,7 @@ export class Actor {
 	trigger(state) {
 		$(this).trigger(state)
 	}
-	setHandler(...args) {
+	addHandler(...args) {
 		$(this).on(...args)
 	}
 }
