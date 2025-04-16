@@ -17,10 +17,10 @@ export const Sound = new class extends SoundMgr {
 		const result = await SoundMgr.setup().catch(()=> false)
 		if (!result) return $('.volCtrl').hide()
 		Sound.vol = localStorage.anoPacVolume ?? 5
-		$on('keydown',Sound.#onKeydown)
+		$on({keydown:Sound.#onKeydown})
 		$(volRngG).prop({defaultValue:Sound.vol})
-		$(volRngG).on('input',Sound.#onWheel)
-		$(speaker).on('wheel',Sound.#onWheel).on('click',Sound.#mute)
+		$(volRngG).on({input:Sound.#onWheel})
+		$(speaker).on({wheel:Sound.#onWheel}).on({click:Sound.#mute})
 	}
 	/** @type {?number} */
 	#lstVol = null
