@@ -1,5 +1,5 @@
-import GhsSprite   from '../src/ghosts/ghs_sprite.js'
-import GhsSpriteCb from '../src/ghosts/ghs_sprite_cb.js'
+import GhsSprite   from '../src/sprites/ghost.js'
+import GhsSpriteCb from '../src/sprites/ghost_cb.js'
 
 export class Ghost {
 	constructor(size) {

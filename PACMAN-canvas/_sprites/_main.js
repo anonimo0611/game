@@ -1,7 +1,7 @@
 import '../_lib/mouse.js'
-import PacSprite     from '../src/pacman/pac_sprite.js'
-import * as FruitSpr from '../src/fruits_sprite.js'
-import pointsSprite  from '../src/points_sprite.js'
+import PacSprite     from '../src/sprites/pacman.js'
+import * as FruitSpr from '../src/sprites/fruits.js'
+import pointsSprite  from '../src/sprites/points.js'
 import {Cols,Rows,T,S,Gap,ghost,cbAkabei} from './_constants.js'
 
 export const View = function() {

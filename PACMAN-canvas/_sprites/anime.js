@@ -1,5 +1,5 @@
 import * as Menu   from '../_lib/menu.js'
-import PacSprite   from '../src/pacman/pac_sprite.js'
+import PacSprite   from '../src/sprites/pacman.js'
 import {Ghost}     from './actor.js'
 import {T,S,ghost} from './_constants.js'
 export const {ctx:pvCtx}= canvas2D('previewCvs', TileSize*3, TileSize*2)
