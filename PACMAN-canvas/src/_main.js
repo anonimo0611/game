@@ -22,23 +22,22 @@ export const Menu = freeze({
 	ExtendMenu: new _Menu.Slide('ExtendMenu'),
 })
 export const Game = new class {
-	static {$ready(this.setup)}
-	static setup() {
+	constructor() {
 		$on({
-			blur:()=> Game.#pause(true),
-			keydown:  Game.#onKeydown,
-			Title:    Game.#onTitle,
-			Start:    Game.#onStart,
-			Playing:  Game.#onPlaying,
-			Clear:    Game.#onClear,
-			FlashMaze:Game.#onFlashMaze,
-			NewLevel: Game.#onNewLevel,
-			Losing:   Game.#onLosing,
-			Restart:  Game.#levelBegins,
-			GameOver: Game.#levelEnds,
-			Quit:     Game.#levelEnds,
+			blur:()=> this.#pause(true),
+			keydown:  this.#onKeydown,
+			Title:    this.#onTitle,
+			Start:    this.#onStart,
+			Playing:  this.#onPlaying,
+			Clear:    this.#onClear,
+			FlashMaze:this.#onFlashMaze,
+			NewLevel: this.#onNewLevel,
+			Losing:   this.#onLosing,
+			Restart:  this.#levelBegins,
+			GameOver: this.#levelEnds,
+			Quit:     this.#levelEnds,
 		})
-		Menu.LevelMenu.bindChange(Game.#resetLevel)
+		Menu.LevelMenu.bindChange(this.#resetLevel)
 		State.switchToTitle()
  	}
 	#level = 1
