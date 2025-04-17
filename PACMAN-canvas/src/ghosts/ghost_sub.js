@@ -5,7 +5,7 @@ import {Ghost}  from './ghost.js'
 
 class Akabei extends Ghost {
 	constructor() {
-		super({idx:0, col:13.5, row:12, orient:L})
+		super({idx:0, col:13.54, row:12, orient:L})
 	}
 	get scatterTile() {return Vec2(24, 0)}
 	get angry()       {return GhsMgr.Elroy.angry}
