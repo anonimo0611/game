@@ -2,9 +2,9 @@
 import {Ctrl}     from '../control.js'
 import {drawDot}  from '../maze.js'
 import {drawText} from '../message.js'
-import {Pacman}   from '../pacman/_pacman.js'
-import {Ghost}    from '../ghosts/_ghost.js'
+import {Pacman}   from '../pacman.js'
 import {GhsMgr}   from '../ghosts/_system.js'
+import {Ghost}    from '../ghosts/ghost.js'
 import {RunTimer} from './_run_timer.js'
 
 /** @type {?Attract} */
@@ -33,7 +33,7 @@ export class Attract {
 		if (symbol != ModSymbol)
 			throw TypeError('The constructor'
 				+` ${this.constructor.name}() is not visible`)
-		$onNS('.Attract','click keydown blur', this.end)
+		$onNS('.Attract', {click_keydown_blur:this.end})
 		this.initialize()
 	}
 	initialize() {

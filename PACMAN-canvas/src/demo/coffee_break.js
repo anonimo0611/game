@@ -1,9 +1,9 @@
 import {Sound}  from '../../_snd/sound.js'
 import {Game}   from '../_main.js'
 import {State}  from '../state.js'
-import {Pacman} from '../pacman/_pacman.js'
-import {Ghost}  from '../ghosts/_ghost.js'
-import Sprite   from '../ghosts/ghs_sprite_cb.js'
+import {Pacman} from '../pacman.js'
+import {Ghost}  from '../ghosts/ghost.js'
+import Sprite   from '../sprites/ghost_cb.js'
 
 const ModSymbol = Symbol()
 const IntermissionMap = new Map([[2,1], [5,2], [9,3]])
@@ -29,8 +29,8 @@ export class CBreak {
 				+` ${this.constructor.name}() is not visible`)
 		this.pacman.y =
 		this.akabei.y = CvsH/2 - T/2
-		$onNS('.CB','Quit', this.end)
-		$onNS('.CB','blur focus', this.pause)
+		$onNS('.CB', {Quit:this.end})
+		$onNS('.CB', {blur_focus:this.pause})
 		State.switchToCBreak()
 	}
 	movePacman() {

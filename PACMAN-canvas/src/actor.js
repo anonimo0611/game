@@ -73,19 +73,23 @@ export class Actor {
 	setNextPos(denom=1, dir=this.dir) {
 		this.pos = Vec2(dir).mul(this.step/denom).add(this)
 	}
+
 	/** @param {keyof DirEnum} dir */
 	move(dir) {
 		this.setNextPos(1, this.dir=dir)
 	}
+
 	/** @param {keyof DirEnum} dir */
 	hasAdjWall(dir) {
 		return Maze.hasWall(this.getAdjTile(dir))
 	}
+
 	/** @param {keyof DirEnum} dir */
 	getAdjTile(dir, n=1, tile=this.tilePos) {
 		const  v = Vec2(dir).mul(n).add(tile)
 		return v.setX((v.x+Cols) % Cols)
 	}
+
 	/** @param {string} state */
 	trigger(state) {
 		$(this).trigger(state)

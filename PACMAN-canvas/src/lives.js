@@ -1,6 +1,6 @@
 import {State} from './state.js'
 import {Ctrl}  from './control.js'
-import Sprite  from './pacman/pac_sprite.js'
+import Sprite  from './sprites/pacman.js'
 
 const {ctx}=Bg
 
@@ -25,8 +25,8 @@ export const Lives = function() {
 			sprite.draw({radius,centerPos:Vec2(size*i+T,T)})
 		ctx.restore()
 	}
-	$('#lvsRng').on('input', ()=> set())
-	$on('Title Start Ready Restart', ()=> set())
+	$('#lvsRng').on({input:()=> set()})
+	$on({Title_Start_Ready_Restart:()=> set()})
 	return {
 		get left(){return _left},
 		append:()=> set(++_left),

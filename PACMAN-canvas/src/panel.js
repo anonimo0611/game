@@ -2,8 +2,7 @@ import {State} from './state.js'
 
 function show(button) {
 	$('.panel').toggle()
-	$(button).toggleClass('active',
-		$(button.value).height() > 0)
+	$(button).toggleClass('active',$(button.value).is(':visible'))
 }
 function hide(button, e) {
 	if (!State.isTitle
@@ -13,8 +12,8 @@ function hide(button, e) {
 	$(button.value).hide()
 	$(button).removeClass('active')
 }
-$on('load Start', ()=> $('.panel').hide())
+$on({load_Start:()=> $('.panel').hide()})
 $('.panelBtn').each((_,button)=> {
-	$(window).on('pointerdown', e=> hide(button,e))
-	$(button).on('pointerdown', e=> show(button,e))
+	$(window).on({pointerdown:e=> hide(button,e)})
+	$(button).on({pointerdown:e=> show(button,e)})
 })

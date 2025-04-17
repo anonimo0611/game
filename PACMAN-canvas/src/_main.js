@@ -1,4 +1,4 @@
-import './ghosts/_ghost_sub.js'
+import './ghosts/ghost_sub.js'
 import {Sound}    from '../_snd/sound.js'
 import {Confirm}  from '../_lib/confirm.js'
 import {Cursor}   from '../_lib/mouse.js'
@@ -6,12 +6,12 @@ import * as _Menu from '../_lib/menu.js'
 import {State}    from './state.js'
 import {Ctrl}     from './control.js'
 import {Maze}     from './maze.js'
-import {MazeWall} from './maze_wall.js'
+import {Wall}     from './sprites/wall.js'
 import {Message}  from './message.js'
 import {Score}    from './score.js'
 import {Lives}    from './lives.js'
 import {Fruit}    from './fruit.js'
-import {Player}   from './pacman/_pacman.js'
+import {Player}   from './pacman.js'
 import {GhsMgr}   from './ghosts/_system.js'
 import {PtsMgr}   from './points.js'
 import {Attract}  from './demo/attract.js'
@@ -59,7 +59,7 @@ export const Game = new class {
 	}
 	#setLevel(i=1) {
 		Game.#level = between(i, 1, 0xFF) && +i || 1
-		$trigger('SetLv')
+		$trigger('LevelChanged')
 	}
 	#confirm() {
 		if (!State.isPlaying) return
@@ -121,7 +121,7 @@ export const Game = new class {
 		!function redraw() {
 			if (++count > 8)
 				return Timer.set(500, Game.#levelEnds)
-			MazeWall.draw([, Color.FlashWall][count % 2])
+			Wall.draw([, Color.FlashWall][count % 2])
 			Timer.set(250, redraw)
 		}()
 	}
@@ -138,7 +138,7 @@ export const Game = new class {
 		Game.#restarted = false
 		if (State.isQuit) {
 			Ticker.pause(false)
-			MazeWall.draw()
+			Wall.draw()
 			State.switchToTitle()
 			return
 		}

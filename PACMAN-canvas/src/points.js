@@ -3,11 +3,11 @@ import {State}  from './state.js'
 import {Score}  from './score.js'
 import {GhsMgr} from './ghosts/_system.js'
 import {Fruit}  from './fruit.js'
-import Sprite   from './points_sprite.js'
+import Sprite   from './sprites/points.js'
 
 /** @type {Map<any, Points>} */
 const PtsMap = new Map()
-$on('Title Clear Crashed', ()=> PtsMap.clear())
+$on({Title_Clear_Crashed:()=> PtsMap.clear()})
 
 export const PtsMgr = new class {
 	set(...args)   {new Points(...args)}

@@ -1,5 +1,5 @@
 import {Rect}   from '../_lib/rect.js'
-import {Pacman} from './pacman/_pacman.js'
+import {Pacman} from './pacman.js'
 import {State}  from './state.js'
 import {powChk} from './control.js'
 
@@ -81,8 +81,8 @@ export const Maze = new class {
 	static setup() {
 		for (const [i,c] of Maze.Map.entries())
 			/[^.O\s]/.test(c) && WallSet.add(i)
-		$on('Title NewLevel', Maze.#resetDots)
-		$(powChk).on('change',Maze.#resetDots)
+		$on({Title_NewLevel: Maze.#resetDots})
+		$(powChk).on({change:Maze.#resetDots})
 	}
 	#resetDots() {
 		for (const [i,c] of Maze.Map.entries())

@@ -102,8 +102,8 @@ export const Ctrl = new class {
 			Confirm.open('Are you sure you want to clear local storage?',
 				null,Ctrl.#removeData, 'No','Yes', 0)
 		})
-		$('input')    .on('input', Ctrl.#saveData)
-		$('#defBtn')  .on('click', Ctrl.#setDefault)
-		$('#startBtn').on('click', State.switchToStart)
+		$('input')    .on({input:Ctrl.#saveData})
+		$('#defBtn')  .on({click:Ctrl.#setDefault})
+		$('#startBtn').on({click:()=> State.switchToStart()})
 	}
 }, powChk = input('powChk')

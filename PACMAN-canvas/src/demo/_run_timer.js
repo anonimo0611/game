@@ -2,7 +2,7 @@
 const WaitTime = 1e3*30 // ms
 let  _frameCnt = 0
 
-$on('Title blur click focus mousemove keydown resize wheel',()=> _frameCnt=0)
+$on({Title_blur_click_focus_mousemove_keydown_resize_wheel:()=> _frameCnt=0})
 
 import {Confirm} from '../../_lib/confirm.js'
 export const RunTimer = new class {

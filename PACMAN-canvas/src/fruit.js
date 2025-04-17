@@ -3,8 +3,8 @@ import {Game}   from './_main.js'
 import {State}  from './state.js'
 import {Maze}   from './maze.js'
 import {PtsMgr} from './points.js'
-import {Player} from './pacman/_pacman.js'
-import * as Spr from './fruits_sprite.js'
+import {Player} from './pacman.js'
+import * as Spr from './sprites/fruits.js'
 
 // The fruit appear after 70 or 170 dots are cleared
 const AppearSet  = new Set([70,170])
@@ -23,9 +23,8 @@ export const Fruit = new class {
 	static {$ready(this.setup)}
 	static setup() {
 		$on({
-			Title: Fruit.#reset,
-			Ready: Fruit.#reset,
-			SetLv: Fruit.#setImages,
+			Title_Ready:  Fruit.#reset,
+			LevelChanged: Fruit.#setImages,
 		})
 		Player.bindDotEaten(Fruit.#dotEaten)
 	}

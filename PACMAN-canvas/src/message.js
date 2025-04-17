@@ -33,9 +33,9 @@ export const Message = new class {
 			&& drawText(11, 19, Color.Message3, 'PAUSED')
 	}
 	draw() {
-		Message.#drawLevel()
-		Message.#drawLogo()
-		Message.#drawPausedText()
+		this.#drawLevel()
+		this.#drawLogo()
+		this.#drawPausedText()
 		if (State.isStart) {
 			drawText( 9, 13, Color.Message1, 'PLAYER　ONE')
 		}
