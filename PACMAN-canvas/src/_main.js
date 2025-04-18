@@ -159,15 +159,19 @@ export const Game = new class {
 		GhsMgr.update()
 		PtsMgr.update()
 		Fruit.update()
-		State.isTitle   && Attract.Timer.update()
-		State.isAttract && Attract.update()
-		State.isCBreak  && CBreak.update()
+		switch (State.current){
+		case 'Title':   return Attract.Timer.update()
+		case 'Attract': return Attract.update()
+		case 'CBreak':  return CBreak.update()
+		}
 	}
 	#draw() {
 		Ctx.clear()
 		Ctrl.drawGridLines()
-		if (State.isAttract) return this.#drawAttractMode()
-		if (State.isCBreak)  return this.#drawCoffeeBreak()
+		switch (State.current){
+		case 'Attract': return this.#drawAttractMode()
+		case 'CBreak':  return this.#drawCoffeeBreak()
+		}
 		Ctx.drawImage(Bg.cvs, 0,0)
 		Maze.drawDoor()
 		Ctrl.drawInfo()

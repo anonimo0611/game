@@ -29,8 +29,7 @@ export class CBreak {
 				+` ${this.constructor.name}() is not visible`)
 		this.pacman.y =
 		this.akabei.y = CvsH/2 - T/2
-		$onNS('.CB', {Quit:this.end})
-		$onNS('.CB', {blur_focus:this.pause})
+		$onNS('.CB', {blur_focus:this.pause, Quit:this.end})
 		State.switchToCBreak()
 	}
 	movePacman() {
@@ -42,7 +41,7 @@ export class CBreak {
 	}
 	drawAkabei(cfg={}) {
 		const {akabei:aka}=this,{aIdx,pos}=aka
-		aka.sprite.draw({aIdx,...cfg,...pos,...aka})
+		aka.sprite.draw({aIdx, ...cfg, ...pos, ...aka})
 	}
 	pause() {
 		Sound.allPaused = Ticker.pause()
