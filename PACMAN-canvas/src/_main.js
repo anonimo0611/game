@@ -159,7 +159,7 @@ export const Game = new class {
 		GhsMgr.update()
 		PtsMgr.update()
 		Fruit.update()
-		switch (State.current){
+		switch (State.current) {
 		case 'Title':   return Attract.Timer.update()
 		case 'Attract': return Attract.update()
 		case 'CBreak':  return CBreak.update()
@@ -168,7 +168,7 @@ export const Game = new class {
 	#draw() {
 		Ctx.clear()
 		Ctrl.drawGridLines()
-		switch (State.current){
+		switch (State.current) {
 		case 'Attract': return this.#drawAttractMode()
 		case 'CBreak':  return this.#drawCoffeeBreak()
 		}
