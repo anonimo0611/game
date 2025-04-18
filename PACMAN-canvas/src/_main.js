@@ -15,7 +15,7 @@ import {Player}   from './pacman.js'
 import {GhsMgr}   from './ghosts/_system.js'
 import {PtsMgr}   from './points.js'
 import {Attract}  from './demo/attract.js'
-import {CoffBrk}   from './demo/coffee_break.js'
+import {CoffBrk}  from './demo/coffee_break.js'
 
 export const Menu = freeze({
 	LevelMenu:  new _Menu.DorpDown('LevelMenu'),
