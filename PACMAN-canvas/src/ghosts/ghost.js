@@ -44,7 +44,7 @@ export class Ghost extends Actor {
 		this.idx     = idx
 		this.initX   = col*T
 		this.iAlign  = align
-		this.aniFlag = +aniFlag
+		this.aniFlag = aniFlag
 		this.pos     = Vec2(col*T, row*T)
 		this.name    = this.constructor.name
 		this.release = this.release.bind(this)
