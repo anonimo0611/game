@@ -12,7 +12,7 @@ export const State = new class extends _State {
 	isCrashed   = false
 	isLosing    = false
 	isGameOver  = false
-	isCBreak    = false
+	isCoffBrk   = false
 	isQuit      = false
 	constructor() {
 		super()

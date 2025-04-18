@@ -1,6 +1,7 @@
 import {Sound}  from '../../_snd/sound.js'
 import {Game}   from '../_main.js'
 import {State}  from '../state.js'
+import {Fruit}  from '../fruit.js'
 import {Pacman} from '../pacman.js'
 import {Ghost}  from '../ghosts/ghost.js'
 import Sprite   from '../sprites/ghost_cb.js'
@@ -8,29 +9,34 @@ import Sprite   from '../sprites/ghost_cb.js'
 const ModSymbol = Symbol()
 const IntermissionMap = new Map([[2,1], [5,2], [9,3]])
 
-export class CBreak {
+export class CoffBrk {
 	/** @type {?(Scene1|Scene2|Scene3)} */
 	static #scene = null
 	static begin(num=IntermissionMap.get(Game.level)) {
-		if (State.isCBreak || !between(num,1,3)) return false
+		if (State.isCoffBrk || !between(num,1,3)) return false
 		Sound.play('cutscene', {loop:1^num == 2})
-		CBreak.#scene = new [Scene1,Scene2,Scene3][num-1]
+		CoffBrk.#scene = new [Scene1,Scene2,Scene3][num-1]
 		return true
 	}
-	static update() {this.#scene?.update()}
-	static draw()   {this.#scene?.draw()}
-
+	static update() {
+		this.#scene?.update()
+	}
+	static draw()   {
+		this.#scene?.draw()
+		return State.isCoffBrk
+	}
 	pacman  = new Pacman
 	akabei  = new Ghost
 	pacVelX = -CvsW/180
 	constructor(symbol) {
-		if (symbol != ModSymbol)
+		if (symbol != ModSymbol) {
 			throw TypeError('The constructor'
-				+` ${this.constructor.name}() is not visible`)
+			+` ${this.constructor.name}() is not visible`)
+		}
+		$onNS('.CB',{Quit:this.end,blur_focus:this.pause})
 		this.pacman.y =
 		this.akabei.y = CvsH/2 - T/2
-		$onNS('.CB', {blur_focus:this.pause, Quit:this.end})
-		State.switchToCBreak()
+		State.switchToCoffBrk()
 	}
 	movePacman() {
 		this.pacman.x += this.pacVelX
@@ -46,16 +52,20 @@ export class CBreak {
 	pause() {
 		Sound.allPaused = Ticker.pause()
 	}
+	draw() {
+		State.lastIs('FlashMaze')
+			&& Fruit.drawLevelCounter()
+	}
 	end() {
 		$off('.CB')
-		CBreak.#scene = null
+		CoffBrk.#scene = null
 		State.lastIs('Title')
 			? State.switchToTitle()
 			: State.switchToNewLevel()
 	}
-} $('button.CB').on('click', e=> CBreak.begin(+e.target.value))
+} $('button.CB').on('click', e=> CoffBrk.begin(+e.target.value))
 
-class Scene1 extends CBreak {
+class Scene1 extends CoffBrk {
 	constructor() {
 		super(ModSymbol)
 		this.frightened = false
@@ -89,9 +99,10 @@ class Scene1 extends CBreak {
 		const {pacman,frightened}= this
 		this.drawAkabei({frightened})
 		this.drawPacman(pacman.dir == R ? 4:1)
+		super.draw()
 	}
 }
-class Scene2 extends CBreak {
+class Scene2 extends CoffBrk {
 	constructor() {
 		super(ModSymbol)
 		this.counter  = 0
@@ -137,9 +148,10 @@ class Scene2 extends CBreak {
 			const rate = norm(sp.CaughtX, sp.AkaMinX, aka.x)
 			sp.expandClothes(pos, aIdx, rate)
 		}
+		super.draw()
 	}
 }
-class Scene3 extends CBreak {
+class Scene3 extends CoffBrk {
 	constructor() {
 		super(ModSymbol)
 		this.pacVelX  = -CvsW / 200
@@ -161,5 +173,6 @@ class Scene3 extends CBreak {
 		this.akabei.dir == L
 			? this.drawAkabei({repaired:true})
 			: this.drawAkabei({hadaketa:true})
+		super.draw()
 	}
 }

@@ -1,5 +1,8 @@
 ﻿import {State}    from '../state.js'
 import {Ctrl}     from '../control.js'
+import {Score}    from '../score.js'
+import {PtsMgr}   from '../points.js'
+import {Fruit}    from '../fruit.js'
 import {drawDot}  from '../maze.js'
 import {drawText} from '../message.js'
 import {Pacman}   from '../pacman.js'
@@ -17,11 +20,17 @@ export class Attract {
 		$(RunTimer).on({Run:this.#begin})
 		$('button.attractDemo').on({click:this.#begin})
 	}
-	static update() {_attract?.update()}
-	static draw()   {_attract?.draw()}
-	static #begin() {_attract = new Attract(ModSymbol)}
-	static get Timer() {return RunTimer}
-
+	static #begin() {
+		_attract = new Attract(ModSymbol)
+	}
+	static update() {
+		RunTimer.update()
+		_attract?.update()
+	}
+	static draw() {
+		_attract?.draw()
+		return State.isAttract
+	}
 	/** @type {Ghost[][]} */
 	ghsList = [[],[]]
 	pacman  = new Pacman
@@ -30,9 +39,10 @@ export class Attract {
 	ghsVelX = -CvsW/169
 
 	constructor(symbol) {
-		if (symbol != ModSymbol)
+		if (symbol != ModSymbol) {
 			throw TypeError('The constructor'
-				+` ${this.constructor.name}() is not visible`)
+			+` ${this.constructor.name}() is not visible`)
+		}
 		$onNS('.Attract', {click_keydown_blur:this.end})
 		this.initialize()
 	}
@@ -59,7 +69,7 @@ export class Attract {
 	}
 	draw() {
 		const et = Ticker.elapsedTime/100, ptsFontSize = T*.68
-		drawText(7, 5, null, 'CHARACTOR　/　NICKNAME')
+		Score.draw(),drawText(7, 5, null, 'CHARACTOR　/　NICKNAME')
 		et > 10 && this.drawGhost(CHARA, 0, Vec2(5*T, 6*T))
 		et > 15 && drawText( 8,  7, Color.Akabei, 'OIKAKE----')
 		et > 20 && drawText(18,  7, Color.Akabei, '"AKABEI"')
@@ -97,7 +107,9 @@ export class Attract {
 			for (let i=0; i<GhsType.Max; i++)
 				this.drawGhost(DEMO, i)
 			this.pacman.sprite.draw(this.pacman)
+			PtsMgr.drawGhostPts()
 		}
+		Fruit.drawLevelCounter()
 	}
 	update() {
 		if (Ticker.elapsedTime <= 1e4+500) return

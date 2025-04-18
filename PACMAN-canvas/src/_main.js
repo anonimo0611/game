@@ -15,7 +15,7 @@ import {Player}   from './pacman.js'
 import {GhsMgr}   from './ghosts/_system.js'
 import {PtsMgr}   from './points.js'
 import {Attract}  from './demo/attract.js'
-import {CBreak}   from './demo/coffee_break.js'
+import {CoffBrk}   from './demo/coffee_break.js'
 
 export const Menu = freeze({
 	LevelMenu:  new _Menu.DorpDown('LevelMenu'),
@@ -151,7 +151,7 @@ export const Game = new class {
 				State.switchToTitle()
 				return
 			}
-			!Ctrl.isPractice && CBreak.begin()
+			!Ctrl.isPractice && CoffBrk.begin()
 				|| State.switchToNewLevel()
 		}
 	}
@@ -160,19 +160,17 @@ export const Game = new class {
 		GhsMgr.update()
 		PtsMgr.update()
 		Fruit.update()
-		switch (State.current) {
-		case 'Title':   return Attract.Timer.update()
-		case 'Attract': return Attract.update()
-		case 'CBreak':  return CBreak.update()
-		}
+		Attract.update()
+		CoffBrk.update()
 	}
 	#draw() {
 		Ctx.clear()
 		Ctrl.drawGridLines()
-		switch (State.current) {
-		case 'Attract': return this.#drawAttractMode()
-		case 'CBreak':  return this.#drawCoffeeBreak()
-		}
+		Attract.draw() ||
+		CoffBrk.draw() ||
+		Game.#drawMain()
+	}
+	#drawMain() {
 		Ctx.drawImage(Bg.cvs, 0,0)
 		Maze.drawDoor()
 		Ctrl.drawInfo()
@@ -186,17 +184,6 @@ export const Game = new class {
 		GhsMgr.drawFront()
 		PtsMgr.drawGhostPts()
 		Message.draw()
-	}
-	#drawAttractMode() {
-		Score.draw()
-		Attract.draw()
-		PtsMgr.drawGhostPts()
-		Fruit.drawLevelCounter()
-	}
-	#drawCoffeeBreak() {
-		CBreak.draw()
-		State.lastIs('FlashMaze')
-			&& Fruit.drawLevelCounter()
 	}
 	#pausing() {
 		Game.#draw()
