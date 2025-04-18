@@ -9,7 +9,7 @@ const input = id=> Form[id]
 const Form  = document.forms[0]
 
 export const Ctrl = new class {
-	static {$load(this.setup)}
+	static {$ready(this.setup)}
 	static setup() {
 		Ctrl.#restore()
 		Ctrl.#setupFormCtrls()
