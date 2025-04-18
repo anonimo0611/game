@@ -26,7 +26,7 @@ export class Ghost extends Actor {
 	get scatterTile() {return Vec2()}
 
 	get spriteIdx()   {return GhsMgr.spriteIdx}
-	get aIdx()        {return GhsMgr.animIndex & this.playAnime}
+	get aIdx()        {return GhsMgr.animIndex & this.aniFlag}
 	get maxAlpha()    {return Ctrl.showTargets ? this.cheatAlpha : 1}
 	get started()     {return this.#started}
 	get frightened()  {return this.#frightened}
@@ -34,22 +34,22 @@ export class Ghost extends Actor {
 	get escaping()    {return this.state.isEscaping}
 	get chaseTile()   {return this.chasePos.divInt(T)}
 
-	constructor({col=0,row=0,idx=0,initAlign=0,orient=L,playAnime=true}={}) {
+	constructor({col=0,row=0,idx=0,align=0,aniFlag=1,orient=L}={}) {
 		super(orient)
 		this.addHandler({
 			FrightMode:  this.#setFrightMode,
 			Reverse:()=> this.#revSig  = true,
 			Runaway:()=> this.#runAway = 400/Game.interval,
 		})
-		this.idx       = idx
-		this.initX     = col*T
-		this.initAlign = initAlign
-		this.playAnime = +playAnime
-		this.pos       = Vec2(col*T, row*T)
-		this.name      = this.constructor.name
-		this.release   = this.release.bind(this)
-		this.state     = new Sys.GhostState(this)
-		this.sprite    = new Sprite(canvas2D(null, T*3, T*2).ctx)
+		this.idx     = idx
+		this.initX   = col*T
+		this.iAlign  = align
+		this.aniFlag = +aniFlag
+		this.pos     = Vec2(col*T, row*T)
+		this.name    = this.constructor.name
+		this.release = this.release.bind(this)
+		this.state   = new Sys.GhostState(this)
+		this.sprite  = new Sprite(canvas2D(null, T*3, T*2).ctx)
 		freeze(this)
 	}
 	get isScatter() {
@@ -136,7 +136,7 @@ export class Ghost extends Actor {
 	#goOut({centerPos:{x:cx},y,step}=this) {
 		if (cx > CvsW/2+step
 		 || cx < CvsW/2-step)
-			return this.move(this.initAlign<0 ? R:L)
+			return this.move(this.iAlign<0 ? R:L)
 
 		if (cx != CvsW/2)
 			return this.centering()
@@ -148,20 +148,20 @@ export class Ghost extends Actor {
 		this.#started ||= true
 		this.state.switchToWalk()
 	}
-	#returnToHome({step,x,y,initX,initAlign}=this) {
+	#returnToHome({step,x,y,initX,iAlign}=this) {
 		if (y+step < Maze.House.MiddleY)
 			return this.move(D)
 
 		if (y != Maze.House.MiddleY)
 			return this.setPos({y:Maze.House.MiddleY})
 
-		if (!initAlign || abs(x-initX) <= step) {
+		if (!iAlign || abs(x-initX) <= step) {
 			this.x   = initX
-			this.dir = initAlign? (initAlign<0 ? R:L) : U
+			this.dir = iAlign? (iAlign<0 ? R:L) : U
 			this.#arrivedAtHome()
 			return
 		}
-		this.move(initAlign<0 ? L:R)
+		this.move(iAlign<0 ? L:R)
 	}
 	#arrivedAtHome() {
 		this.sprite.setResurrect()

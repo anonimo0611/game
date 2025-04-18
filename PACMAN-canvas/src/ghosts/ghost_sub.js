@@ -25,7 +25,7 @@ class Pinky extends Ghost {
 }
 class Aosuke extends Ghost {
 	constructor() {
-		super({idx:2, col:11.5, row:15, orient:U, initAlign:-1})
+		super({idx:2, col:11.5, row:15, orient:U, align:-1})
 	}
 	get scatterTile() {return Vec2(27, 33)}
 	get chasePos() {
@@ -35,7 +35,7 @@ class Aosuke extends Ghost {
 }
 class Guzuta extends Ghost {
 	constructor() {
-		super({idx:3, col:15.5, row:15, orient:U, initAlign:+1})
+		super({idx:3, col:15.5, row:15, orient:U, align:+1})
 	}
 	get scatterTile() {return Vec2(0, 33)}
 	get chasePos() {

@@ -29,10 +29,9 @@ export class GhostState extends _State {
 	isBitten = false
 	isEscape = false
 	isReturn = false
-	constructor({name='Ghost',isInHouse=false}={}) {
+	constructor({isInHouse=false}={}) {
 		super()
-		this.init(name == 'Ghost'
-			? 'Walk' : (isInHouse? 'Idle':'GoOut'))
+		this.init(isInHouse? 'Idle':'Walk')
 	}
 	get isEscaping() {
 		return this.isEscape || this.isReturn
