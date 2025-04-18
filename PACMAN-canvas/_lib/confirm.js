@@ -22,8 +22,8 @@ export const Confirm = new class {
 		})
 		confirm.showModal()
 		$(confirm).find('.content').text(content).end().opacity(1,500)
-		$onNS(NS,{keydown:  e=> {e.key == 'Escape' && cancel(e)}})
-		$onNS(NS,{mousedown:e=> {e.preventDefault()}})
+		$onNS(NS,{keydown:  e=> e.key == 'Escape' && cancel(e)})
+		$onNS(NS,{mousedown:e=> e.preventDefault()})
 		_opened = true
 	}
 	#close(fn) {
