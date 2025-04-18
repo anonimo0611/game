@@ -6,7 +6,7 @@ html,body {
 	overflow: hidden;
 }
 html {
-	font-size: calc(var(--tile-size) * 1px);
+	font-size: 28px;
 	-webkit-user-select: none;
 	user-select: none;
 }
