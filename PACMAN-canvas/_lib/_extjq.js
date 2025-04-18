@@ -7,6 +7,13 @@ $.fn.opacity = function(a, ms) {
 		? $(this).css('opacity')
 		: $(this).css({opacity:+a,transition:isNum(ms)?`opacity ${ms}ms`:null})
 }
+const $byId = id=> $('#'+id)
+const $load = fn=> $(window).one('load',fn)
+const $onNS = (ns,cfg)=> {
+	isObj(cfg) && entries(cfg).forEach(([ev,fn])=>
+		$on(String(ev).trim().replace(/[_\s]+|$/g,`${ns}\x20`),fn))
+	return $(window)
+}
 const [$ready,$one,$on,$off,$offon,$trigger]= function() {
 	const rep = arg=> isStr(arg)? arg.trim().replace(/_/g,'\x20'):arg
 	return 'ready|one|on|off|offon|trigger'.split('|').map(f=> (...a)=> {
@@ -15,10 +22,3 @@ const [$ready,$one,$on,$off,$offon,$trigger]= function() {
 		return $(window)
 	})
 }()
-const $byId = id=> $('#'+id)
-const $load = fn=> $(window).one('load',fn)
-const $onNS = (ns,cfg)=> {
-	isObj(cfg) && entries(cfg).forEach(([ev,fn])=>
-		$on(String(ev).trim().replace(/[_\s]+|$/g,`${ns}\x20`),fn))
-	return $(window)
-}
