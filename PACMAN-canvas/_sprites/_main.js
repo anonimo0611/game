@@ -2,7 +2,7 @@ import '../_lib/mouse.js'
 import PacSprite     from '../src/sprites/pacman.js'
 import * as FruitSpr from '../src/sprites/fruits.js'
 import pointsSprite  from '../src/sprites/points.js'
-import {Cols,Rows,T,S,Gap,ghost,cbAkabei} from './_constants.js'
+import {Cols,Rows,T,S,Gap,ghost,cbAka} from './_constants.js'
 
 export const View = function() {
 	const ofst = idx=> (S*idx)+(Gap*idx)
@@ -86,17 +86,17 @@ export const View = function() {
 		}
 	}
 	function drawAkabei() {
-		const aka = cbAkabei
-		function draw(pos, cfg) {
+		const aka = cbAka
+		function draw(x,y, cfg) {
 			Ctx.save()
-			aka.sprite.draw({...aka, ...pos, ...cfg})
+			aka.sprite.draw({...aka, x,y, ...cfg})
 			Ctx.restore()
 		}
 		Ctx.translate(S/4, S*9+S/4-Gap/4)
 		{ // Expand clothes
 			const pos = Vec2.Zero, rates = [0.3, 0.5 ,1]
 			for (let i=0,ofst=0; i<3; i++) {
-				draw(pos, {aIdx:+(i==2)})
+				draw(...pos.vals, {aIdx:+(i==2)})
 				const nPos = Vec2(pos).add(S*0.75, S/4)
 				aka.cbSprite.expandClothes({...nPos,size:S}, +(i==2), rates[i])
 				pos.x += S*1.2 + (++ofst * Gap)
@@ -118,12 +118,12 @@ export const View = function() {
 			aka.cbSprite.drawOffcut(Vec2.Zero)
 			Ctx.restore()
 		}
-		draw(Vec2(ofst(4),   0),{ripped:true,orient:U})
-		draw(Vec2(ofst(5),   0),{ripped:true,orient:'LowerR'})
-		draw(Vec2(0,         S),{repaired:true})
-		draw(Vec2(S+Gap,     S),{repaired:true,aIdx:1})
-		draw(Vec2(ofst(2.25),S),{hadaketa:true})
-		draw(Vec2(ofst(4.25),S),{hadaketa:true,aIdx:1})
+		draw(ofst(4.00), 0, {ripped:true,orient:U})
+		draw(ofst(5.00), 0, {ripped:true,orient:'LowerR'})
+		draw(ofst(0.00), S, {repaired:true})
+		draw(ofst(1.00), S, {repaired:true,aIdx:1})
+		draw(ofst(2.25), S, {hadaketa:true})
+		draw(ofst(4.25), S, {hadaketa:true,aIdx:1})
 	}
 	return {draw}
 }()
@@ -132,8 +132,10 @@ $('#brightRng').on('input', function() {
 	const v = this.value
 	Ctx.canvas.style.backgroundColor = `rgb(${v}% ${v}% ${v}%)`
 })
-$('#resetBtn').on('click', ()=> {
+
+$('#resetBtn').on('click', function() {
 	Array.from(document.forms).forEach(f=> f.reset())
 	$('[type=range]').trigger('input')
 })
+
 $load(()=> document.body.style.opacity = 1)
