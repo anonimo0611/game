@@ -24,13 +24,14 @@ export class Attract {
 		_attract = new Attract(ModSymbol)
 	}
 	static update() {
-		RunTimer.update()
+		RunTimer .update()
 		_attract?.update()
 	}
 	static draw() {
 		_attract?.draw()
 		return State.isAttract
 	}
+
 	/** @type {Ghost[][]} */
 	ghsList = [[],[]]
 	pacman  = new Pacman

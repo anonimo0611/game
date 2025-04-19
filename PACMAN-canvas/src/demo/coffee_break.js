@@ -25,9 +25,11 @@ export class CoffBrk {
 		this.#scene?.draw()
 		return State.isCoffBrk
 	}
+
 	pacman  = new Pacman
 	akabei  = new Ghost
 	pacVelX = -CvsW/180
+
 	constructor(symbol) {
 		if (symbol != ModSymbol) {
 			throw TypeError('The constructor'
