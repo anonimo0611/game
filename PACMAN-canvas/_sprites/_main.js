@@ -133,7 +133,7 @@ $('#brightRng').on('input', function() {
 	Ctx.canvas.style.backgroundColor = `rgb(${v}% ${v}% ${v}%)`
 })
 $('#resetBtn').on('click', ()=> {
-	[...document.forms].forEach(f=> f.reset())
+	Array.from(document.forms).forEach(f=> f.reset())
 	$('[type=range]').trigger('input')
 })
 $load(()=> document.body.style.opacity = 1)
