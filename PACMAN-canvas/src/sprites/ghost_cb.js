@@ -78,18 +78,7 @@ export default class {
 		ctx.quadraticCurveTo( 20, 12,  25, 15)
 		ctx.addLinePath([17,15],[13,22],[-63,22])
 		ctx.fill()
-		for (let i=1; i>=0; i--) {
-			// Eyeballs
-			ctx.beginPath()
-			ctx.ellipse([33,54][i], -33, 11, 16, 0,0, PI*2)
-			ctx.fillStyle = '#FFF'
-			ctx.fill()
-			// Eyes
-			ctx.beginPath()
-			ctx.ellipse([39,61][i], -33,  5, 9, 0,0, PI*2)
-			ctx.fillStyle = Color.GhostEyes
-			ctx.fill()
-		}
+		this.#hadakeEyes([33,54],[39,61])
 	}
 	#hadake1() {
 		const {ctx}= this
@@ -110,15 +99,19 @@ export default class {
 		ctx.quadraticCurveTo(-48, 1, -43, 11)
 		ctx.addLinePath([-4,11],[-4,5],[22,4],[28,12],[24,15],[18,22])
 		ctx.fill()
+		this.#hadakeEyes([28,49],[34,56])
+	}
+	#hadakeEyes(ballsLR, eyesLR) {
+		const {ctx}= this
 		for (let i=1; i>=0; i--) {
 			// Eyeballs
 			ctx.beginPath()
-			ctx.ellipse([28,49][i], -33, 11, 16, 0,0, PI*2)
+			ctx.ellipse(ballsLR[i], -33, 11, 16, 0,0, PI*2)
 			ctx.fillStyle = '#FFF'
 			ctx.fill()
 			// Eyes
 			ctx.beginPath()
-			ctx.ellipse([34,56][i], -33, 5, 8.6, 0,0, PI*2)
+			ctx.ellipse(eyesLR[i], -33,  5, 9, 0,0, PI*2)
 			ctx.fillStyle = Color.GhostEyes
 			ctx.fill()
 		}
