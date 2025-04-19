@@ -12,8 +12,8 @@ export let ghost    = new Actor.Ghost (T*2)
 export let cbAkabei = new Actor.Akabei(T*2)
 
 function resize() {
-	const size = sizeRng.valueAsNumber
-	T=size/2, [S,Gap]=[size,T*.25]
+	T        = sizeRng.valueAsNumber/2,
+	[S,Gap]  = [T*2,T*.25]
 	ghost    = new Actor.Ghost (T*2)
 	cbAkabei = new Actor.Akabei(T*2)
 	Ctx.resize(Cols*S+Gap*2, Rows*S+Gap)
