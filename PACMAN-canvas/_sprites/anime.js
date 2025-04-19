@@ -42,7 +42,7 @@ function getOrient() {
 			data = new AnimeData({type,subType,pacman:new PacSprite(ctx)})
 			if (setOrient(subType == PacType.Losing)) {
 				data.pacman.setLosing()
-				Timer.set(2200, ()=> change(true))
+				Timer.set(2200, ()=> change(true), {key:'Losing'})
 			}
 			break
 		case Type.Akabei:
