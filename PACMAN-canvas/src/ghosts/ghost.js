@@ -107,7 +107,6 @@ export class Ghost extends Actor {
 		}
 		if (State.isPlaying && Maze.dotsLeft) {
 			this.#behavior()
-			GhsMgr.crashWithPac(this)
 		}
 	}
 	#behavior() {
@@ -175,6 +174,7 @@ export class Ghost extends Actor {
 			this.setNextPos(denom)
 			this.inBackwardOfTile && this.#setNextDir()
 			this.#setTurn(this)
+			GhsMgr.crashWithPac(this)
 		}
 	}
 	#setNextDir() {
@@ -223,6 +223,8 @@ export class Ghost extends Actor {
 		!this.escaping && (this.#frightened = bool)
 	}
 	crashWithPac(fn = ()=> this.#setEscape()) {
+		if (!this.state.isWalk)
+			return
 		if (this.frightened) {
 			if (Timer.frozen) return
 			Timer.freeze()

@@ -28,7 +28,8 @@ export const Message = new class {
 		drawText(25.06, 13.5, Color.Message2, 'man', cfg)
 	}
 	#drawPausedText() {
-		if (Confirm.opened || !Ticker.paused) return
+		if (Confirm.opened || !Ticker.paused)
+			return
 		(Ticker.pausedCount & 32) == 0
 			&& drawText(11, 19, Color.Message3, 'PAUSED')
 	}

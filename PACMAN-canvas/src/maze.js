@@ -113,10 +113,6 @@ export const Maze = new class {
 			? Vec2((t.x > Cols/2) && (o.x > Cols/2) ? 21:6, 15)
 			: Vec2(o)
 	}
-	drawDoor() {
-		if (State.isFlashMaze) return
-		Ctx.fillRect(13*T, 13.6*T, T*2, T/4, Color.Door)
-	}
 	/** @param {Pacman} */
 	clearBgDot({tileIdx:i,tilePos:v}) {
 		DotSet.delete(i)
@@ -127,5 +123,10 @@ export const Maze = new class {
 	/** @param {ExtendedContext2D} ctx */
 	drawDot(ctx, {x,y}=Vec2(), isLarge=false, color=Color.Dot) {
 		ctx.fillCircle(x*T+T/2, y*T+T/2, T/(isLarge? 2:8), color)
+	}
+	drawDoor() {
+		if (State.isFlashMaze)
+			return
+		Ctx.fillRect(13*T, 13.6*T, T*2, T/4, Color.Door)
 	}
 }, {drawDot}=freeze(Maze)

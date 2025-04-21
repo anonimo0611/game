@@ -62,18 +62,20 @@ export const Game = new class {
 		$trigger('LevelChanged')
 	}
 	#confirm() {
-		if (!State.isPlaying) return
-		if (!Ticker.paused) Game.#pause()
+		if (!State.isPlaying)
+			return
+		!Ticker.paused && Game.#pause()
 		Confirm.open('Are you sure you want to quit the game?',
 			Game.#pause, State.switchToQuit, 'Resume','Quit', 0)
 	}
 	#pause(force) {
-		if (!State.isPlaying) return
+		if (!State.isPlaying)
+			return
 		Sound.allPaused = Ticker.pause(force)
 	}
 	#onKeydown(e) {
-		if (Confirm.opened) return
-		if (e.originalEvent.repeat) return
+		if (Confirm.opened || e.originalEvent.repeat)
+			return
 		switch (e.key) {
 		case 'Escape':
 			Game.#pause()

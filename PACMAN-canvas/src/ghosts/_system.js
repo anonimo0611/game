@@ -94,7 +94,7 @@ export const GhsMgr = new class {
 	}
 	/** @param {Ghost} g */
 	crashWithPac(g, pacPos=Player.pos, {fn,radius}={}) {
-		if (!(g instanceof Ghost) || !g.state.isWalk) return
+		if (!(g instanceof Ghost)) return
 		radius ??= (g.frightened? T/2 : T/3)
 		collisionCircle(g, pacPos, radius) && g.crashWithPac(fn)
 	}

@@ -31,7 +31,8 @@ export default new class {
 
 	/** @param {Ghost} g */
 	#strokeLines(g) {
-		if (this.#disabled(g)) return
+		if (this.#disabled(g))
+			return
 		switch (g.idx) {
 		case GhsType.Pinky: this.#strokeAuxLines(g, 4); break
 		case GhsType.Aosuke:this.#strokeAuxLines(g, 2); break
@@ -41,7 +42,8 @@ export default new class {
 
 	/** @param {Ghost} g */
 	#drawTargetMarker(g) {
-		if (this.#disabled(g)) return
+		if (this.#disabled(g))
+			return
 		const {x,y}= this.#getTargetPos(g)
 		Ctx.save()
 		Ctx.globalAlpha = 0.8
@@ -55,7 +57,8 @@ export default new class {
 	 * @param {number} ofst
 	 */
 	#strokeAuxLines(g, ofst) {
-		if (g.isScatter || !g.state.isWalk) return
+		if (g.isScatter || !g.state.isWalk)
+			return
 		const {dir:pacDir,centerPos:pacPos}= Player
 		const fwdXY = Player.forwardPos(ofst).vals
 		Ctx.save()
@@ -80,7 +83,8 @@ export default new class {
 
 	/** @param {Ghost} g */
 	#strokeGuzutaCircle(g) {
-		if (g.isScatter || !g.state.isWalk) return
+		if (g.isScatter || !g.state.isWalk)
+			return
 		const radius = T*8
 		Ctx.save()
 		Ctx.globalAlpha = g.sqrMagToPacman < radius*radius ? 0.4 : 0.8

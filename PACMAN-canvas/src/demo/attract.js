@@ -113,7 +113,8 @@ export class Attract {
 		Fruit.drawLevelCounter()
 	}
 	update() {
-		if (Ticker.elapsedTime <= 1e4+500) return
+		if (Ticker.elapsedTime <= 1e4+500)
+			return
 		this.powDisp ^= Ticker.count % 15 == 0
 		!Timer.frozen && this.updatePacman()
 		!Timer.frozen && this.updateGhosts()
@@ -141,7 +142,8 @@ export class Attract {
 			&& Attract.#begin()
 	}
 	end(e={}) {
-		if (e.target.tagName == 'BUTTON') return
+		if (e.target.tagName == 'BUTTON')
+			return
 		_attract = null
 		State.switchToTitle()
 		$off('.Attract')

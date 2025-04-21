@@ -15,7 +15,8 @@ export default class {
 		this.#mAngle = [0,OpenMid,OpenMax][openType]
 	}
 	update({stopped=false}={}) {
-		if (stopped && this.#mAngle > OpenMid) return
+		if (stopped && this.#mAngle > OpenMid)
+			return
 		const dir = between(this.#mAngle, 0, OpenMax) ? 1 : -1
 		this.#mAngle += OpenMax/Duration * (this.#animDir*=dir)
 	}
