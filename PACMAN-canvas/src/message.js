@@ -24,8 +24,8 @@ export const Message = new class {
 	}
 	#drawLogo() {
 		const cfg = {face:'PacFont', size:T*1.15}
-		drawText(23.26, 12.5, Color.Message2, 'pac', cfg)
-		drawText(25.06, 13.5, Color.Message2, 'man', cfg)
+		drawText(Cols-4.8, 12.5, Color.Message2, 'pac', cfg)
+		drawText(Cols-3.0, 13.5, Color.Message2, 'man', cfg)
 	}
 	#drawPausedText() {
 		if (Confirm.opened || !Ticker.paused)

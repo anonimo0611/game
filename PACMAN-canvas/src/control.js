@@ -90,7 +90,7 @@ export const Ctrl = new class {
 			draw(0, h*2, Color.InfoTable[+Ctrl.showTargets],'Targets')
 		}
 		if (Ctrl.unrestricted) {
-			Ctx.setTransform(0.7, 0,0, 1, T*23.1, T*18.35)
+			Ctx.setTransform(0.7, 0,0, 1, T*(Cols-4.9), T*18.5)
 			draw(0,0, Color.InfoTable[1], 'Un-\nrestricted')
 		}
 		Ctx.restore()
