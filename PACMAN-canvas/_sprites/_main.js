@@ -2,7 +2,7 @@ import '../_lib/mouse.js'
 import PacSprite     from '../src/sprites/pacman.js'
 import * as FruitSpr from '../src/sprites/fruits.js'
 import pointsSprite  from '../src/sprites/points.js'
-import {Cols,Rows,T,S,Gap,ghost,cbAka} from './_constants.js'
+import {GridSize,T,S,Gap,ghost,cbAka} from './_constants.js'
 
 export const View = function() {
 	const ofst = idx=> (S*idx)+(Gap*idx)
@@ -24,6 +24,7 @@ export const View = function() {
 		Ctx.setLineDash([2,2])
 		Ctx.lineWidth = 2
 		Ctx.strokeStyle = '#555'
+		const {x:Cols,y:Rows}= GridSize
 		const line = (...args)=> Ctx.strokeLine(...args)
 		for (let y=0; y<Cols;   y++) line(ofst(y), 0, ofst(y), Rows*S)
 		for (let x=0; x<Rows+1; x++) line(0, x*S, Cols*S+Gap, x*S)
