@@ -58,7 +58,7 @@ export class Ghost extends Actor {
 			&& !this.state.isEscape
 			&& !this.angry
 	}
-	get originalTarget() {
+	get originalTargetTile() {
 		return this.state.isEscape
 			? Maze.House.EntranceTile
 			: this.isScatter
@@ -67,7 +67,7 @@ export class Ghost extends Actor {
 	}
 	get targetTile() {
 		return Ctrl.unrestricted
-			? this.originalTarget
+			? this.originalTargetTile
 			: Maze.ghostExitPos(this)
 	}
 	get houseEntranceArrived() {
@@ -229,8 +229,7 @@ export class Ghost extends Actor {
 		if (this.frightened) {
 			Timer.freeze()
 			this.#frightened = false
-			this.state.to('Bitten')
-			this.trigger('Cought')
+			this.trigger('Cought').state.to('Bitten')
 			PtsMgr.set({key:GhsMgr, ...this.centerPos}, fn)
 			Sound.play('bitten')
 			return true

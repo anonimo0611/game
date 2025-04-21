@@ -25,7 +25,7 @@ export default new class {
 		return (g.state.isGoOut || g.escaping)
 			? Maze.House.EntranceTile.add(.5).mul(T)
 			: g.isScatter
-				? g.originalTarget.add(.5).mul(T)
+				? g.originalTargetTile.add(.5).mul(T)
 				: g.chasePos
 	}
 
