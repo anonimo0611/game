@@ -80,13 +80,12 @@ export const GhsMgr = new class {
 	}
 	setFrightMode() {
 		setReversalSignal()
-		if (State.isAttract || FrightMode.duration)
-			new FrightMode()
+		;(State.isAttract || FrightMode.duration) && new FrightMode()
 	}
 	update() {
 		if (State.isPlaying
 		 || State.isAttract
-		 || State.isCBreak)
+		 || State.isCoffBrk)
 			this.#aidx ^= !Timer.frozen
 				&& !(Ticker.count % this.aInterval)
 		AlternateBetweenModes.update()
@@ -129,12 +128,12 @@ const AlternateBetweenModes = function() {
 	function genSequence() {
 		let  [cnt,idx] = [-1,0]
 		const durList  = genDurList(Game.level)
-		const duration = idx=> durList[idx]/Game.speedRate
+		const duration = ()=> durList[idx]/Game.speedRate
 		const Seq = {
 			mode: +Ctrl.isChaseMode,
 			update() {
 				if (Timer.frozen || GhsMgr.frightened
-				|| ++cnt*Ticker.Interval < duration(idx))
+				|| ++cnt*Ticker.Interval < duration())
 					return
 				[cnt,Seq.mode] = [0,(++idx % 2)]
 				setReversalSignal()
