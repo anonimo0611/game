@@ -241,12 +241,12 @@ function key(ctx=Ctx) {
 const Fns = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
 
 export function draw(ctx=Ctx, idx=0, x=T,y=T, scale=T/8) {
-	const ratio = 1.05
+	const Scale = 1.05
 	ctx.save()
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
 	ctx.translate(x, y)
-	ctx.scale(scale*ratio, scale*ratio)
+	ctx.scale(scale*Scale, scale*Scale)
 	Fns[idx](ctx)
 	ctx.restore()
 }
