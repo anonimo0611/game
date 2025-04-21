@@ -51,7 +51,7 @@ export class Attract {
 		const {Max}=GhsType
 		for (let i=0; i<this.ghsList.length*Max; i++)
 			this.setActor(i/Max|0, i%Max)
-		State.switchToAttract({data:this.ghsList[DEMO]})
+		State.to('Attract', {data:this.ghsList[DEMO]})
 	}
 	setActor(idx, gIdx) {
 		const g = new Ghost({idx:gIdx,aniFlag:+!!idx})
@@ -137,7 +137,7 @@ export class Attract {
 		})
 	}
 	caughtGhost(g) {
-		g.state.switchToBitten()
+		g.state.to('Bitten')
 		this.ghsList[DEMO].every(g=> g.state.isBitten)
 			&& Attract.#begin()
 	}
@@ -145,7 +145,7 @@ export class Attract {
 		if (e.target.tagName == 'BUTTON')
 			return
 		_attract = null
-		State.switchToTitle()
+		State.to('Title')
 		$off('.Attract')
 	}
 }

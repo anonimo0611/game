@@ -39,7 +39,7 @@ export const Game = new class {
 			Quit:     Game.#levelEnds,
 		})
 		Menu.LevelMenu.bindChange(Game.#resetLevel)
-		State.switchToTitle()
+		State.to('Title')
  	}
 	#level = 1
 	#restarted = false
@@ -66,7 +66,7 @@ export const Game = new class {
 			return
 		!Ticker.paused && Game.#pause()
 		Confirm.open('Are you sure you want to quit the game?',
-			Game.#pause, State.switchToQuit, 'Resume','Quit', 0)
+			Game.#pause, ()=> State.to('Quit'), 'Resume','Quit', 0)
 	}
 	#pause(force) {
 		if (!State.isPlaying)
@@ -79,16 +79,17 @@ export const Game = new class {
 		switch (e.key) {
 		case 'Escape':
 			Game.#pause()
-			break
+			return
 		case 'Delete':
 			!e.ctrlKey
 				? Game.#confirm()
-				: State.switchToQuit()
-			break
+				: State.to('Quit')
+			return
 		default:
-			if (dqs(':not(#startBtn):focus')) break
+			if (dqs(':not(#startBtn):focus'))
+				return
 			if (Dir.from(e, {wasd:true}) || e.key=='\x20') {
-				State.isTitle && State.switchToStart()
+				State.isTitle && State.to('Start')
 				Ticker.paused && Game.#pause()
 			}
 		}
@@ -111,12 +112,12 @@ export const Game = new class {
 		Sound.play('losing')
 		Player.sprite.setLosing()
 		Lives.left > 0
-			? State.switchToRestart ({delay:2200})
-			: State.switchToGameOver({delay:2000})
+			? State.to('Restart', {delay:2200})
+			: State.to('GameOver',{delay:2000})
 	}
 	#onClear() {
 		Sound.stopLoops()
-		State.switchToFlashMaze({delay:1000})
+		State.to('FlashMaze', {delay:1000})
 	}
 	#onFlashMaze() {
 		let count = 0
@@ -133,28 +134,28 @@ export const Game = new class {
 	}
 	#levelBegins() {
 		Game.#restarted = State.isRestart
-		State.switchToReady()
-		State.switchToPlaying({delay:2200})
+		State.to('Ready')
+		State.to('Playing', {delay:2200})
 	}
 	#levelEnds() {
 		Game.#restarted = false
 		if (State.isQuit) {
 			Ticker.pause(false)
 			Wall.draw()
-			State.switchToTitle()
+			State.to('Title')
 			return
 		}
 		if (State.isGameOver) {
-			State.switchToTitle({delay:2500})
+			State.to('Title', {delay:2500})
 			return
 		}
 		if (State.isFlashMaze) {
 			if (!Ctrl.consecutive) {
-				State.switchToTitle()
+				State.to('Title')
 				return
 			}
 			!Ctrl.isPractice && CoffBrk.begin()
-				|| State.switchToNewLevel()
+				|| State.to('NewLevel')
 		}
 	}
 	#update() {

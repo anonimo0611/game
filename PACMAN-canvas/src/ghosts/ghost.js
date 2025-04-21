@@ -102,7 +102,7 @@ export class Ghost extends Actor {
 		this.sprite.fadeOut?.update()
 		this.sprite.update()
 		if (this.houseEntranceArrived) {
-			this.state.switchToReturn()
+			this.state.to('Return')
 			this.centering()
 		}
 		if (State.isPlaying && Maze.dotsLeft) {
@@ -129,7 +129,7 @@ export class Ghost extends Actor {
 	}
 	release(deactivateGlobalDotCnt=false) {
 		Player.instance.resetTimer()
-		this.state.isIdle && this.state.switchToGoOut()
+		this.state.isIdle && this.state.to('GoOut')
 		return deactivateGlobalDotCnt
 	}
 	#goOut({centerPos:{x:cx},y,step}=this) {
@@ -145,7 +145,7 @@ export class Ghost extends Actor {
 
 		this.dir = L
 		this.#started ||= true
-		this.state.switchToWalk()
+		this.state.to('Walk')
 	}
 	#returnToHome({step,x,y,initX,iAlign}=this) {
 		if (y+step < Maze.House.MiddleY)
@@ -165,16 +165,16 @@ export class Ghost extends Actor {
 	#arrivedAtHome() {
 		this.sprite.setResurrect()
 		;(Ctrl.isChaseMode || this.idx == GhsType.Akabei)
-			? this.state.switchToGoOut()
-			: this.state.switchToIdle() && this.#idle(this)
+			? this.state.to('GoOut')
+			: this.state.to('Idle') && this.#idle(this)
 		!Timer.frozen && Sound.ghostArrivedAtHome()
 	}
 	#walk() {
 		for (let i=0,denom=ceil(this.step)*2; i<denom; i++) {
 			this.setNextPos(denom)
 			this.inBackwardOfTile && this.#setNextDir()
-			this.#setTurn(this)
-			GhsMgr.crashWithPac(this)
+			if (this.#setTurn(this)) break
+			if (GhsMgr.crashWithPac(this)) break
 		}
 	}
 	#setNextDir() {
@@ -209,40 +209,42 @@ export class Ghost extends Actor {
 			&& Maze.GhostNotEnterSet.has(tile.hyphenated)
 	}
 	#setTurn({dir,orient,pos,tilePos:t}=this) {
-		if (dir == orient || this.hasAdjWall(orient))
-			return
+		if (dir == orient
+		 || this.hasAdjWall(orient))
+			return false
 		if (dir == L && pos.x < t.x*T
 		 || dir == R && pos.x > t.x*T
 		 || dir == U && pos.y < t.y*T
 		 || dir == D && pos.y > t.y*T) {
 			this.movDir = this.orient
 			this.pos = t.mul(T)
+			return true
 		}
+		return false
 	}
 	#setFrightMode(_, bool=false) {
 		!this.escaping && (this.#frightened = bool)
 	}
-	crashWithPac(fn = ()=> this.#setEscape()) {
-		if (!this.state.isWalk)
-			return
+	crashedWithPac(fn = ()=> this.#setEscape()) {
 		if (this.frightened) {
-			if (Timer.frozen) return
 			Timer.freeze()
 			this.#frightened = false
-			this.state.switchToBitten()
+			this.state.to('Bitten')
 			this.trigger('Cought')
 			PtsMgr.set({key:GhsMgr, ...this.centerPos}, fn)
 			Sound.play('bitten')
-			return
+			return true
 		}
-		!Ctrl.invincible
-			&& State.isPlaying
-			&& Sound.stopLoops()
-			&& State.switchToCrashed()
-			&& State.switchToLosing({delay:500})
+		if (!Ctrl.invincible) {
+			Sound.stopLoops()
+			State.to('Crashed')
+			State.to('Losing', {delay:500})
+			return true
+		}
+		return false
 	}
 	#setEscape() {
 		Sound.ghostEscape()
-		this.state.switchToEscape()
+		this.state.to('Escape')
 	}
 }

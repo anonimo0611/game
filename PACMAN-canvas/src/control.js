@@ -51,7 +51,7 @@ export const Ctrl = new class {
 		localStorage.removeItem('anopacman')
 		localStorage.removeItem('anopac_hiscore')
 		Ctrl.#setDefault()
-		State.switchToTitle()
+		State.to('Title')
 	}
 	#setDefault() {
 		Form.reset()
@@ -105,6 +105,6 @@ export const Ctrl = new class {
 		})
 		$('input')    .on({input:Ctrl.#saveData})
 		$('#defBtn')  .on({click:Ctrl.#setDefault})
-		$('#startBtn').on({click:()=> State.switchToStart()})
+		$('#startBtn').on({click:()=> State.to('Start')})
 	}
 }, powChk = input('powChk')

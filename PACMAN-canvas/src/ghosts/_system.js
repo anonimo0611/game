@@ -93,10 +93,9 @@ export const GhsMgr = new class {
 		Ghosts.forEach(g=> g.update())
 	}
 	/** @param {Ghost} g */
-	crashWithPac(g, pacPos=Player.pos, {fn,radius}={}) {
-		if (!(g instanceof Ghost)) return
-		radius ??= (g.frightened? T/2 : T/3)
-		collisionCircle(g, pacPos, radius) && g.crashWithPac(fn)
+	crashWithPac(g, pos=Player.pos, {fn,radius=(g?.frightened? T/2:T/3)}={}) {
+		return g instanceof Ghost && g.state.isWalk
+			&& collisionCircle(g, pos, radius) && g.crashedWithPac(fn)
 	}
 	#draw = (_,i,array)=> array[array.length-1-i].draw()
 	drawTargets() {Target.draw(Ghosts)}

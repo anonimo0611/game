@@ -11,7 +11,7 @@ export const Lives = function() {
 		return +{
 			Title: Max,
 			Start: Max+1,
-			Ready: State.lastIs('Start')? Max:_left,
+			Ready: State.last('Start')? Max:_left,
 			Restart: _left-1,
 		}[State.current]
 	}

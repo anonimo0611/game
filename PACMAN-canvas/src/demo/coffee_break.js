@@ -38,7 +38,7 @@ export class CoffBrk {
 		$onNS('.CB',{Quit:this.end,blur_focus:this.pause})
 		this.pacman.y =
 		this.akabei.y = CvsH/2 - T/2
-		State.switchToCoffBrk()
+		State.to('CoffBrk')
 	}
 	movePacman() {
 		this.pacman.x += this.pacVelX
@@ -55,15 +55,13 @@ export class CoffBrk {
 		Sound.allPaused = Ticker.pause()
 	}
 	draw() {
-		State.lastIs('FlashMaze')
+		State.last('FlashMaze')
 			&& Fruit.drawLevelCounter()
 	}
 	end() {
 		$off('.CB')
 		CoffBrk.#scene = null
-		State.lastIs('Title')
-			? State.switchToTitle()
-			: State.switchToNewLevel()
+		State.to(State.last('Title') || 'NewLevel')
 	}
 } $('button.CB').on('click', e=> CoffBrk.begin(+e.target.value))
 

@@ -169,7 +169,7 @@ class PlayablePacman extends Pacman {
 		Score.add(isPow? 50:10)
 		isPow && GhsMgr.setFrightMode()
 		Maze.clearBgDot(this) == 0
-			? State.switchToClear()
+			? State.to('Clear')
 			: $(Player).trigger('DotEaten',isPow)
 	}
 	#playSE() {
