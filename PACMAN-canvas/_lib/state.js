@@ -2,7 +2,6 @@ export default class {
 	#state = ''
 	#last  = ''
 	get current() {return this.#state}
-	lastIs(state) {return state === this.#last}
 	init(state) {
 		this.Enum = Object.create(null)
 		entries(this).forEach(([key,val])=> {
@@ -10,20 +9,24 @@ export default class {
 			if (!state) return; this.Enum[state] = state
 			if (this.#state === '' && val === true) this.#state = state
 			defineProperty(this, key, {get(){return this.#state === state}})
-			this['switchTo'+state] = cfg=> this.switchTo(state, cfg)
 		})
 		freeze(this.Enum)
-		hasOwn(this.Enum, state) && this.switchTo(state)
+		hasOwn(this.Enum, state) && this.to(state)
 	}
-	switchTo(state, {delay=-1,data,fn}={}) {
+	/** @param {string} state */
+	to(state, {delay=-1,data,fn}={}) {
 		if (!hasOwn(this.Enum, state))
 			throw ReferenceError(`State '${state}' is not defined`)
 		if (delay >= 0) {
-			Timer.set(delay, ()=> this.switchTo(state,{delay:-1,data}))
+			Timer.set(delay, ()=> this.to(state,{delay:-1,data}))
 			return this
 		}
 		;[this.#last,this.#state]=[this.current,state]
 		isFun(fn) && fn(state,data)
 		return this
+	}
+	/** @param {string} state */
+	last(state) {
+		return state? (state === this.#last ? this.#last : '') : this.#last
 	}
 }
