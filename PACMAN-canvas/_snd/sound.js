@@ -15,7 +15,8 @@ export const Sound = new class extends SoundMgr {
 	static {this.#init()}
 	static async #init() {
 		const result = await SoundMgr.setup().catch(()=> false)
-		if (!result) return $('.volCtrl').hide()
+		if (!result)
+			return $('.volCtrl').hide()
 		Sound.vol = localStorage.anoPacVolume ?? 5
 		$on({keydown:Sound.#onKeydown})
 		$(volRngG).prop({defaultValue:Sound.vol})
@@ -71,7 +72,8 @@ export const Sound = new class extends SoundMgr {
 		Sound.stopSiren().stop('fright').play('escape')
 	}
 	ghostArrivedAtHome() {
-		if (GhsMgr.hasEscape) return
+		if (GhsMgr.hasEscape)
+			return
 		const id = GhsMgr.frightened? 'fright':Sound.sirenId
 		Sound.stop('escape').play(id)
 	}

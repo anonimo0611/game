@@ -9,8 +9,9 @@ export class Ghost {
 	}
 	prop(cfg) {
 		if (!isObj(cfg)) return
-		for (const [key,val] of Object.entries(cfg))
+		for (const [key,val] of Object.entries(cfg)) {
 			this[key] = val
+		}
 		return this
 	}
 }

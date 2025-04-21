@@ -1,5 +1,7 @@
 'use strict'
-/** @typedef {string|CanvasGradient|CanvasPattern} CtxStyle */
+/**
+ * @typedef {string|CanvasGradient|CanvasPattern} CtxStyle
+ */
 class ExtendedContext2D extends CanvasRenderingContext2D {
 	/** @param {HTMLCanvasElement} cvs */
 	constructor(cvs, opts) {
@@ -130,8 +132,10 @@ class FadeIn {
 		this.#delay = delay
 	}
 	update(max=1) {
-		if (++this.#count * 1e3/60 < this.#delay) return
-		if (!this.working) return
+		if (++this.#count * 1e3/60 < this.#delay)
+			return
+		if (!this.working)
+			return
 		this.#alpha = clamp(this.#alpha+max/(this.#duration/(1e3/60)), 0, max)
 		return this.working
 	}
@@ -153,7 +157,8 @@ class FadeOut {
 		this.#delay = delay
 	}
 	update() {
-		if (++this.#count * 1e3/60 < this.#delay) return
+		if (++this.#count * 1e3/60 < this.#delay)
+			return
 		this.#alpha = clamp(this.#alpha-1/(this.#duration/(1e3/60)), 0, 1)
 		return this.working
 	}

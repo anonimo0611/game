@@ -2,19 +2,14 @@ import * as Menu   from '../_lib/menu.js'
 import PacSprite   from '../src/sprites/pacman.js'
 import {Ghost}     from './actor.js'
 import {T,S,ghost} from './_constants.js'
-export const {ctx:pvCtx}= canvas2D('previewCvs', TileSize*3, TileSize*2)
+export const {ctx:PvC}= canvas2D('previewCvs', TileSize*3, TileSize*2)
 
-/** @enum {number} */
-const Type = freeze({None:-1,Pacman:0,Akabei:1,Pinky:2,Aosuke:3,Guzuta:4,Frightened:5})
-
-/** @enum {number} */
+const Type    = freeze({None:-1,Pacman:0,Akabei:1,Pinky:2,Aosuke:3,Guzuta:4,Frightened:5})
 const PacType = freeze({Normal:0,Losing:1})
-
-/** @enum {number} */
 const GhsType = freeze({Normal:0,Repaired:1,Hadake:2,Flashed:3})
 
 class AnimeData {
-	/** @param {{type?:Type, subType?:PacType|GhsType, pacman?:PacSprite, ghost?:Ghost}} */
+	/** @param {{type?:number, subType?:number, pacman?:PacSprite, ghost?:Ghost}} */
 	constructor({type,subType,pacman,ghost}={type:-1,subType:-1}) {
 		this.animIdx  = 0
 		this.flashIdx = 1
@@ -31,7 +26,6 @@ function getOrient() {
 !(function() { // Preview
 	let   data = new AnimeData()
 	const menu = new Menu.DorpDown('animSelect')
-	const ctx  = pvCtx
 	const radioSelector = '.radioButtons input'
 
 	function change(loop=false) {
@@ -39,7 +33,7 @@ function getOrient() {
 		!loop && Timer.cancelAll()
 		switch(type) {
 		case Type.Pacman:
-			data = new AnimeData({type,subType,pacman:new PacSprite(ctx)})
+			data = new AnimeData({type,subType,pacman:new PacSprite(PvC)})
 			if (setOrient(subType == PacType.Losing)) {
 				data.pacman.setLosing()
 				Timer.set(2200, ()=> change(true), {key:'Losing'})
@@ -69,20 +63,20 @@ function getOrient() {
 		return disabled
 	}
 	function drawPacman() {
-		ctx.save()
-		ctx.translate(S*1.5/2, S/2)
-		ctx.scale(T/TileSize,  T/TileSize)
+		PvC.save()
+		PvC.translate(S*1.5/2, S/2)
+		PvC.scale(T/TileSize,  T/TileSize)
 		data.pacman.draw({orient:data.orient,radius:PacScale*TileSize})
-		ctx.restore()
+		PvC.restore()
 	}
 	function drawGhost() {
-		ctx.save()
+		PvC.save()
 		data.subType == GhsType.Hadake
-			? ctx.translate(S/4, S/4)
-			: ctx.translate(S/2*2/2, S/4)
+			? PvC.translate(S/4, S/4)
+			: PvC.translate(S/2*2/2, S/4)
 		data.ghost.sprite.draw({
 			...ghost,
-			mainCtx:    ctx,
+			mainCtx:    PvC,
 			idx:        data.type-1,
 			aIdx:       data.animIdx,
 			orient:     data.orient,
@@ -91,17 +85,19 @@ function getOrient() {
 			hadaketa:   data.subType == GhsType.Hadake,
 			repaired:   data.subType == GhsType.Repaired,
 		})
-		ctx.restore()
+		PvC.restore()
 	}
 	function update() {
-		if (data.type < 0) return
+		if (data.type < 0)
+			return
 		data.animIdx  ^= Ticker.count %  6 == 0
 		data.flashIdx ^= Ticker.count % 14 == 0
 		data.pacman?.update()
 	}
 	function draw() {
-		ctx.clear()
-		if (data.type < 0) return
+		PvC.clear()
+		if (data.type < 0)
+			return
 		data.type == Type.Pacman
 			? drawPacman()
 			: drawGhost()

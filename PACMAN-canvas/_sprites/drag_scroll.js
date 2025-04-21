@@ -22,7 +22,8 @@
 
 	for (const elm of dqsAll(selector)) {
 		elm.addEventListener('mousedown', e=> {
-			if (isNotDrag(e) || e.buttons != 1) return
+			if (isNotDrag(e) || e.buttons != 1)
+				return
 			target = elm
 			StateMap.set(target, new State(e))
 			e.stopPropagation()
@@ -39,7 +40,8 @@
 		}
 	})
 	addEventListener('mouseup', e=> {
-		if (!StateMap.has(target)) return
+		if (!StateMap.has(target))
+			return
 		e.stopPropagation()
 		StateMap.delete(target)
 		target = null

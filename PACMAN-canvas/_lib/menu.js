@@ -17,7 +17,8 @@ class Menu {
 		this.root.closest('form')?.addEventListener('reset',()=> this.reset())
 	}
 	select(idx=0) {
-		if (!this.lis[idx]) return false
+		if (!this.lis[idx])
+			return false
 		this.selectedItem.classList.remove('selected')
 		this.lis[idx].classList.add('selected')
 		$(this.menu).trigger('change')
@@ -65,7 +66,8 @@ export class DorpDown extends Menu {
 		}
 	}
 	select(idx=this.index, {close=true}={}) {
-		if (!super.select(idx)) return this
+		if (!super.select(idx))
+			return this
 		const {selectedItem:item}= this
 		$(this.cur).css('--data', item.val).text(item.textContent)
 		return close && this.close() || this
@@ -92,10 +94,11 @@ export class Slide extends Menu {
 		freeze(this).select(this.index)
 	}
 	#select(e, dir) {
-		if (!dir) return
-		const val = this.index+Vec2({[U]:R,[D]:L}[dir] || dir).x
-		between(val, 0, this.size-1) && this.select(val)
-		e.type == 'click' && this.root.focus()
+		if (dir) {
+			const val = this.index+Vec2({[U]:R,[D]:L}[dir] || dir).x
+			between(val, 0, this.size-1) && this.select(val)
+			e.type == 'click' && this.root.focus()
+		}
 	}
 	#setWidth(btnW) {
 		this.#width = max(...[...this.lis].map(li=> li.offsetWidth))+btnW
@@ -103,7 +106,8 @@ export class Slide extends Menu {
 		$(this.root).css('width',`${this.#width}px`)
 	}
 	select(idx=this.index) {
-		if (!super.select(idx)) return
+		if (!super.select(idx))
+			return
 		this.menu.style.transform = `translateX(${-this.#width*idx}px)`
 		this.btn.L.dataset.disabled = (idx == 0)
 		this.btn.R.dataset.disabled = (idx == this.size-1)
