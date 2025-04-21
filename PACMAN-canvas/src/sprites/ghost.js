@@ -8,8 +8,12 @@ export default class {
 		this.CBSprite = new CBSprite(ctx)
 		freeze(this)
 	}
-	#fadeOut   = null
+	/** @type {?FadeOut} */
+	#fadeOut = null
+
+	/** @type {?FadeIn} */
 	#resurrect = null
+
 	get fadeOut()  {return this.#fadeOut}
 	setFadeOut()   {this.#fadeOut ||= new FadeOut(400)}
 	setResurrect() {this.#resurrect = new FadeIn (600)}
