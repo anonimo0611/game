@@ -93,8 +93,10 @@ export class Actor {
 	/** @param {string} state */
 	trigger(state) {
 		$(this).trigger(state)
+		return this
 	}
 	addHandler(...args) {
 		$(this).on(...args)
+		return this
 	}
 }
