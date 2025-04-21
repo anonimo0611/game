@@ -13,6 +13,7 @@ export default class {
 	constructor(ctx, {openType=0}={}) {
 		this.ctx = ctx
 		this.#mAngle = [0,OpenMid,OpenMax][openType]
+		freeze(this)
 	}
 	update({stopped=false}={}) {
 		if (stopped && this.#mAngle > OpenMid)
