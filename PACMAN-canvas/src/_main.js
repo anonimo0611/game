@@ -134,8 +134,7 @@ export const Game = new class {
 	}
 	#levelBegins() {
 		Game.#restarted = State.isRestart
-		State.to('Ready')
-		State.to('Playing', {delay:2200})
+		State.to('Ready').to('Playing', {delay:2200})
 	}
 	#levelEnds() {
 		Game.#restarted = false
