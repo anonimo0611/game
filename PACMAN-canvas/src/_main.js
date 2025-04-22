@@ -69,9 +69,8 @@ export const Game = new class {
 			Game.#pause, ()=> State.to('Quit'), 'Resume','Quit', 0)
 	}
 	#pause(force) {
-		if (!State.isPlaying)
-			return
-		Sound.allPaused = Ticker.pause(force)
+		if (State.isPlaying)
+			Sound.allPaused = Ticker.pause(force)
 	}
 	#onKeydown(e) {
 		if (Confirm.opened || e.originalEvent.repeat)
