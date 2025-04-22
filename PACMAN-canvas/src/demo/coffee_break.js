@@ -13,10 +13,12 @@ export class CoffBrk {
 	/** @type {?(Scene1|Scene2|Scene3)} */
 	static #scene = null
 	static begin(num=IntermissionMap.get(Game.level)) {
-		if (State.isCoffBrk || !between(num,1,3)) return false
-		Sound.play('cutscene', {loop:1^num == 2})
-		CoffBrk.#scene = new [Scene1,Scene2,Scene3][num-1]
-		return true
+		if (!State.isCoffBrk && between(num,1,3)) {
+			Sound.play('cutscene', {loop:1^num == 2})
+			CoffBrk.#scene = new [Scene1,Scene2,Scene3][num-1]
+			return true
+		}
+		return false
 	}
 	static update() {
 		this.#scene?.update()
