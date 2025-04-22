@@ -37,7 +37,7 @@ export default class {
 		function finalize() {
 			ctx.restore()
 			mainCtx.save()
-			mainCtx.translate(x+size/4, y+size/4)
+			mainCtx.translate(x+size/4|0, y+size/4|0)
 			mainCtx.drawImage(ctx.canvas, -size/2, -size/2)
 			mainCtx.restore()
 		}
