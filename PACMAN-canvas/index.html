@@ -27,7 +27,10 @@
 <body data-loaded="false" data-state="Title">
 
 <form id="board" onsubmit="return false">
-	<canvas id="cvs"></canvas>
+	<div id="cvs-board">
+		<canvas id="bg"></canvas>
+		<canvas id="cvs"></canvas>
+	</div>
 	<div id="volume" class="volCtrl">
 		<label for="volRg2" id="speaker" title="Mute/Unmute (M)">
 			<canvas id="speakerCvs"></canvas>

@@ -12,8 +12,9 @@ html {
 }
 body {
 	color: #FFF;
-	background: #334;
+	background: #000;
 	font: 1rem/1 Verdana, sans-serif;
+	--cols: calc(1rem * 28);
 	display: grid;
 	place-content: center;
 	color-scheme: dark;
@@ -40,15 +41,22 @@ svg {
 
 #board {
 	background: #000;
-	padding-top:   0.5rem;
-	border-radius: 0.7rem;
 	position: relative;
 	transform-origin: center;
 	opacity: 0;
+	transition: opacity 0ms 100ms;
 	will-change: opacity transform;
 }
 body[data-loaded=true] #board {
 	opacity: 1;
+}
+#cvs-board {
+	margin-top: 0.5rem;
+	canvas#bg {position: absolute;z-index:-1;}
+}
+:is([data-state=Attract],
+    [data-state=CoffBrk]) {
+	canvas#bg {visibility: hidden}
 }
 
 #titleScr {
