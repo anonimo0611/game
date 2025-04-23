@@ -34,7 +34,7 @@ export default class {
 		const {ctx}  = this
 		const mAngle = (closed? 0:this.#mAngle)
 		ctx.save()
-		ctx.translate(x|0, y|0)
+		ctx.translate(x, y)
 		ctx.rotate(RotateMap.get(orient) * PI/2)
 		ctx.beginPath()
 		ctx.moveTo(-radius*scale*0.35, 0)
