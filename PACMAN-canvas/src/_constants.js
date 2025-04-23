@@ -5,7 +5,7 @@ TileSize = 28, T=TileSize,
 BaseStep = TileSize / 4.5,
 
 [Bg,,Ctx,CvsW,CvsH]= [
-	canvas2D(null , TileSize*Cols, TileSize*Rows),...
+	canvas2D('bg' , TileSize*Cols, TileSize*Rows),...
 	canvas2D('cvs', TileSize*Cols, TileSize*Rows).vals
 ],
 

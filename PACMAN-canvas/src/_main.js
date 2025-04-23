@@ -172,8 +172,6 @@ export const Game = new class {
 		Game.#drawMain()
 	}
 	#drawMain() {
-		Ctx.drawImage(Bg.cvs, 0,0)
-		Maze.drawDoor()
 		Ctrl.drawInfo()
 		Score.draw()
 		Maze.PowDot.draw()
