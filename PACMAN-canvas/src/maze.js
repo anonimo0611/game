@@ -126,7 +126,6 @@ export const Maze = new class {
 		ctx.fillCircle(x*T+T/2, y*T+T/2, T/(isLarge? 2:8), color)
 	}
 	#drawDoor() {
-		if (State.isFlashMaze) return
 		Bg.ctx.fillRect(13*T, 13.6*T, T*2, T/4, Color.Door)
 	}
 }, {drawDot}=freeze(Maze)
