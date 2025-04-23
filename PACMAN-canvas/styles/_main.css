@@ -12,16 +12,11 @@ html {
 }
 body {
 	color: #FFF;
-	background: #000;
+	background: #1b1b1c;
 	font: 1rem/1 Verdana, sans-serif;
-	--cols: calc(1rem * 28);
 	display: grid;
 	place-content: center;
 	color-scheme: dark;
-}
-::selection {
-	color: inherit;
-	background: 0 0;
 }
 div,ul,menu,li,th,td,form,input,output {
 	margin:  0;
@@ -32,11 +27,30 @@ svg {
 	fill: #FFF;
 	pointer-events: none;
 }
+::selection {
+	color: inherit;
+	background: 0 0;
+}
 
 [data-cursor=hidden],
 [data-cursor=stayStill] {
 	body:not([data-state=Title])
 		canvas {cursor: none}
+}
+
+h1, #level {
+	color: #FF0;
+	position: absolute;
+}
+h1 {
+	font: 1.15rem/.9 PacFont;
+	translate: 23.3rem 11.2rem;
+	span {text-indent: 1.5em;display: block}
+}
+#level {
+	font: small-caps .8rem/1 Atari;
+	scale: 0.82 1;
+	translate: .1em 12.6rem;
 }
 
 #board {
@@ -52,11 +66,11 @@ body[data-loaded=true] #board {
 }
 #cvs-board {
 	margin-top: 0.5rem;
-	canvas#bg {position: absolute;z-index:-1;}
+	canvas#bg {position: absolute;z-index:-1}
 }
 :is([data-state=Attract],
     [data-state=CoffBrk]) {
-	canvas#bg {visibility: hidden}
+	:is(header,canvas#bg) {visibility: hidden}
 }
 
 #titleScr {
