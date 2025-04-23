@@ -59,6 +59,7 @@ export const Game = new class {
 	}
 	#setLevel(i=1) {
 		Game.#level = between(i, 1, 0xFF) && +i || 1
+		$('#level').text(`Level${Game.levelStr}`)
 		$trigger('LevelChanged')
 	}
 	#confirm() {
