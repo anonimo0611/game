@@ -19,7 +19,7 @@ export const Message = new class {
 	#drawPausedText() {
 		if (!Confirm.opened && Ticker.paused)
 			(Ticker.pausedCount & 32) == 0
-				&& drawText(11, 19, Color.Message3, 'PAUSED')
+			&& drawText(11, 19, Color.Message3, 'PAUSED')
 	}
 	draw() {
 		this.#drawPausedText()
