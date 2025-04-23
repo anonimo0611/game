@@ -53,15 +53,15 @@ form, dialog {
 	--bgcolor-hilight:    #369B;
 }
 button, input,
-[role=dropdown] > output,
-[role=slidemenu] {
+[type=dropdown] > output,
+[type=slidemenu] {
 	color: #EEE;
 	font-size: 1em;
 	border: solid 2px var(--color-border);
 	border-radius: .2em;
 	outline: 0;
 }
-button, .button, [role=dropdown] > output {
+button, .button, [type=dropdown] > output {
 	background: var(--bgcolor);
 	display: inline-block;
 	padding: .2em;
@@ -156,7 +156,7 @@ custom-menu {
 	display: inline-block;
 	cursor: default;
 }
-[role=dropdown] {
+[type=dropdown] {
 	--caret-size: 1em;
 	output {
 		padding: .1em .2em;
@@ -193,7 +193,7 @@ custom-menu {
 		}
 	}
 }
-[role=slidemenu] {
+[type=slidemenu] {
 	border: none;
 	display: inline-block;
 	vertical-align: middle;
