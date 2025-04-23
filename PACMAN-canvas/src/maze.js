@@ -81,10 +81,11 @@ export const Maze = new class {
 	static setup() {
 		for (const [i,c] of Maze.Map.entries())
 			/[^.O\s]/.test(c) && WallSet.add(i)
-		$on({Title_NewLevel: Maze.#resetDots})
-		$(powChk).on({change:Maze.#resetDots})
+		$on({Title_NewLevel: Maze.#reset})
+		$(powChk).on({change:Maze.#reset})
 	}
-	#resetDots() {
+	#reset(e) {
+		e.target != powChk && Maze.#drawDoor()
 		for (const [i,c] of Maze.Map.entries())
 			/[.O]/.test(c) && Maze.#setDot(i,c)
 	}
@@ -124,8 +125,8 @@ export const Maze = new class {
 	drawDot(ctx, {x,y}=Vec2(), isLarge=false, color=Color.Dot) {
 		ctx.fillCircle(x*T+T/2, y*T+T/2, T/(isLarge? 2:8), color)
 	}
-	drawDoor() {
+	#drawDoor() {
 		if (State.isFlashMaze) return
-		Ctx.fillRect(13*T, 13.6*T, T*2, T/4, Color.Door)
+		Bg.ctx.fillRect(13*T, 13.6*T, T*2, T/4, Color.Door)
 	}
 }, {drawDot}=freeze(Maze)
