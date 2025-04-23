@@ -3,9 +3,10 @@ class Menu {
 	get index() {return +$(this.selectedItem).index()}
 	/** @returns {MenuItem} */
 	get selectedItem() {return this.menu.querySelector('.selected') || this.lis[0]}
-	constructor(id) {
+	constructor(id, type) {
 		/** @type {MenuRoot} */
 		this.root = byId(this.id=id)
+		this.root.setAttribute('type',type)
 		/** @type {HTMLElement} */
 		this.menu = this.root.querySelector('mn-list')
 		/** @type {NodeListOf<MenuItem>} */
@@ -35,7 +36,7 @@ export class DorpDown extends Menu {
 	get closed() {return $(this.menu).is(':hidden') == true}
 	/** @param {string} id */
 	constructor(id) {
-		super(id)
+		super(id,'dropdown')
 		this.cur = this.root.querySelector('output')
 		this.lis.forEach((li,i)=> li.onclick = ()=> this.select(i).cur.focus())
 		$on('pointerdown', e=> !e.target.closest(`#${this.id}`) && this.select())
@@ -77,7 +78,7 @@ export class Slide extends Menu {
 	#width = 0
 	/** @param {string} id */
 	constructor(id) {
-		super(id)
+		super(id,'slidemenu')
 		const {root,label}=this
 		const onWheel  = e=> this.#select(e,e.deltaY > 0 ? L:R)
 		const onClick  = e=> this.#select(e,e.target == this.btn.L ? L:R)
