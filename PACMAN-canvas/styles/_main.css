@@ -44,6 +44,7 @@ h1, #level {
 	z-index: 100;
 }
 h1 {
+	text-transform: lowercase;
 	font: 1.15rem/.9 PacFont;
 	translate: 23.3rem 11.2rem;
 	span {text-indent: 1.5em;display: block}
