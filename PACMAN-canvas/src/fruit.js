@@ -73,16 +73,16 @@ export const Fruit = new class {
 	}
 	drawLevelCounter() {
 		const [x,y,w,h] = LvCounterRect
-		Ctx.drawImage(Bg.cvs, x,y, w,h, x,y, w,h)
+		Ctx.drawImage(Inf.cvs, x,y, w,h, x,y, w,h)
 	}
 	#setImages() {
 		const [x,y,w,h] = LvCounterRect
 		const initCount = max(Game.level-LvCounterCols, 0)
 		Spr.cache(Fruit.number())
-		Bg.ctx.clearRect(x,y,w,h)
+		Inf.ctx.clearRect(x,y,w,h)
 		for (let i=initCount,cols=1; i<Game.level; i++) {
 			const xy = Vec2(x+w+T-(T*2*cols++), y+T).vals
-			Spr.draw(Bg.ctx, Fruit.number(i), ...xy)
+			Spr.draw(Inf.ctx, Fruit.number(i), ...xy)
 		}
 	}
 }

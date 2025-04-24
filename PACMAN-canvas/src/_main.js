@@ -168,6 +168,7 @@ export const Game = new class {
 	}
 	#draw() {
 		Ctx.clear()
+		Ctrl.drawGrid()
 		Attract.draw() ||
 		CoffBrk.draw() ||
 		Game.#drawMain()

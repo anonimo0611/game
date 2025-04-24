@@ -74,11 +74,13 @@ export const Ctrl = new class {
 			$byId(id).trigger('input')
 		}
 	}
-	#drawGrid() {
+	drawGrid() {
 		if (!Ctrl.showGridLines) return
-		Inf.ctx.strokeStyle = Color.Grid
-		for (let y=1; y<Cols; y++) Inf.ctx.strokeLine(T*y, 0, T*y, Rows*T)
-		for (let x=0; x<Rows; x++) Inf.ctx.strokeLine(0, T*x, Cols*T, T*x)
+		Ctx.save()
+		Ctx.strokeStyle = Color.Grid
+		for (let y=1; y<Cols; y++) Ctx.strokeLine(T*y, 0, T*y, Rows*T)
+		for (let x=0; x<Rows; x++) Ctx.strokeLine(0, T*x, Cols*T, T*x)
+		Ctx.restore()
 	}
 	drawInfo() {
 		const {ctx} = Inf, lh = 0.84
@@ -86,9 +88,8 @@ export const Ctrl = new class {
 		const cfg   = {ctx, size:T*0.68, style:'bold', scale:[.7,1]}
 		const speed = Ctrl.speedRate.toFixed(1)
 		ctx.save()
-		ctx.clear()
-		Ctrl.#drawGrid()
 		ctx.translate(0, T*18)
+		ctx.clearRect(0,-T, CvsW, T*3)
 		if (Ctrl.isCheatMode || speed != '1.0') {
 			draw(.1, lh*0, Color.InfoTable[+(speed != '1.0')],`Speed x${speed}`)
 			draw(.1, lh*1, Color.InfoTable[+Ctrl.invincible], 'Invincible')
