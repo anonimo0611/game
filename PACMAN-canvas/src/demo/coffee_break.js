@@ -93,8 +93,7 @@ class Scene1 extends CoffBrk {
 			break
 		case R:
 			akabei.x > T*7.5 && this.movePacman()
-			akabei.x > CvsW + T*9 && this.end()
-			break
+			akabei.x > CvsW+T*9 && this.end()
 		}
 	}
 	draw() {
@@ -113,13 +112,13 @@ class Scene2 extends CoffBrk {
 		this.sprite   = Sprite.stakeClothes
 		this.akaVelX  = this.pacVelX
 		this.pacman.x = CvsW + T*3
-		this.akabei.x = CvsW + T*16
+		this.akabei.x = CvsW + T*15.5
 	}
 	moveAkabei({akabei:aka, akaVelX:vX}=this) {
 		const {CaughtX,AkaMinX}= this.sprite
-		aka.x + vX    > CaughtX && (aka.x += vX)
-		aka.x + vX/10 > AkaMinX ?  (aka.x += vX/10):(aka.x = AkaMinX)
-		return aka.x != AkaMinX
+		if (aka.x+vX    > CaughtX) return !!(aka.x += vX)
+		if (aka.x+vX/10 > AkaMinX) return !!(aka.x += vX/10)
+		return !(aka.x = AkaMinX)
 	}
 	update() {
 		this.movePacman()
