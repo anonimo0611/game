@@ -44,7 +44,7 @@ export class Attract {
 			throw TypeError('The constructor'
 			+` ${this.constructor.name}() is not visible`)
 		}
-		$onNS('.Attract', {click_keydown_blur:this.end})
+		$onNS('.Attract', {click_keydown_blur:this.quit})
 		this.initialize()
 	}
 	initialize() {
@@ -136,7 +136,7 @@ export class Attract {
 			GhsMgr.crashWithPac(g, this.pacman, {radius:T/4,fn})
 		})
 	}
-	end(e) {
+	quit(e) {
 		if (e.target.tagName == 'BUTTON')
 			return
 		_attract = null
