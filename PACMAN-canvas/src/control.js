@@ -13,7 +13,7 @@ export const Ctrl = new class {
 	static setup() {
 		Ctrl.#restore()
 		Ctrl.#setupFormCtrls()
-		Ctrl.drawInfo()
+		Ctrl.#drawInfo()
 		$on({resize:Ctrl.#fitToViewport}).trigger('resize')
 	}
 	get extendPts()     {return +Menu.ExtendMenu.value}
@@ -36,7 +36,7 @@ export const Ctrl = new class {
 		Form.style.scale = min(1, round(scale*100)/100)
 	}
 	#update() {
-		Ctrl.drawInfo()
+		Ctrl.#drawInfo()
 		Ctrl.#saveData()
 		return this
 	}
@@ -82,14 +82,14 @@ export const Ctrl = new class {
 		for (let x=0; x<Rows; x++) Ctx.strokeLine(0, T*x, Cols*T, T*x)
 		Ctx.restore()
 	}
-	drawInfo() {
+	#drawInfo() {
 		const {ctx} = Inf, lh = 0.84
 		const draw  = (...args)=> drawText(...args, cfg)
 		const cfg   = {ctx, size:T*0.68, style:'bold', scale:[.7,1]}
 		const speed = Ctrl.speedRate.toFixed(1)
 		ctx.save()
 		ctx.translate(0, T*18)
-		ctx.clearRect(0,-T, CvsW, T*3)
+		ctx.clearRect(0, -T, CvsW, T*3)
 		if (Ctrl.isCheatMode || speed != '1.0') {
 			draw(.1, lh*0, Color.InfoTable[+(speed != '1.0')],`Speed x${speed}`)
 			draw(.1, lh*1, Color.InfoTable[+Ctrl.invincible], 'Invincible')

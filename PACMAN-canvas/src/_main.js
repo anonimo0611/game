@@ -125,7 +125,6 @@ export const Game = new class {
 			if (++count > 8)
 				return Timer.set(500, Game.#levelEnds)
 			Wall.draw([, Color.FlashWall][count % 2])
-			Ctrl.drawInfo()
 			Timer.set(250, redraw)
 		}()
 	}
