@@ -60,6 +60,7 @@ export const GhsMgr = new class {
 	get frightened() {return FrightMode.instance != null}
 	get score()      {return FrightMode.instance?.score|0}
 	get spriteIdx()  {return FrightMode.instance?.spriteIdx|0}
+	get caughtAll()  {return FrightMode.instance?.caughtAll|0}
 	get hasEscape()  {return Ghosts.some(g=> g.escaping)}
 	get akaCenter()  {return Ghosts[GhsType.Akabei].centerPos}
 
@@ -102,6 +103,7 @@ export const GhsMgr = new class {
 	drawFront()   {Ghosts.filter(inFrontOfPac).forEach(this.#draw)}
 	drawBehind()  {Ghosts.filter(behindThePac).forEach(this.#draw)}
 }
+
 
 const AlternateBetweenModes = function() {
 	{
@@ -220,7 +222,7 @@ class FrightMode {
 	#caughtCnt = 0
 	get score()     {return 100 * (1 << this.#caughtCnt)}
 	get spriteIdx() {return this.#fCounter? this.#flashIdx^1:0}
-	get allCaught() {return this.#caughtCnt == GhsType.Max}
+	get caughtAll() {return this.#caughtCnt == GhsType.Max}
 	constructor() {
 		FrightMode.#instance = this.#toggle(true)
 		$(Ghosts).offon({Cought:()=> ++this.#caughtCnt})
@@ -238,6 +240,6 @@ class FrightMode {
 		const fi = (dur == 1 ? 12:14)/Game.speedRate|0
 		this.#flashIdx ^=!(this.#fCounter % fi)
 		;(et>=dur - 2) && this.#fCounter++
-		;(et>=dur || this.allCaught) && this.#toggle(false)
+		;(et>=dur || this.caughtAll) && this.#toggle(false)
 	}
 }
