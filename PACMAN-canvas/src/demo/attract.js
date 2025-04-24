@@ -136,7 +136,7 @@ export class Attract {
 			GhsMgr.crashWithPac(g, this.pacman, {radius:T/4,fn})
 		})
 	}
-	end(e={}) {
+	end(e) {
 		if (e.target.tagName == 'BUTTON')
 			return
 		_attract = null
