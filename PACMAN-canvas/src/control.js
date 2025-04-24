@@ -83,15 +83,15 @@ export const Ctrl = new class {
 		Ctx.restore()
 	}
 	#drawInfo() {
-		const {ctx} = Inf, lh = 0.84
-		const draw  = (...args)=> drawText(...args, cfg)
-		const cfg   = {ctx, size:T*0.68, style:'bold', scale:[.7,1]}
-		const speed = Ctrl.speedRate.toFixed(1)
+		const {ctx}= Inf, lh = 0.84
+		const spd  = Ctrl.speedRate.toFixed(1)
+		const cfg  = {ctx, size:T*0.68, style:'bold', scale:[.7,1]}
+		const draw = (...args)=> drawText(...args, cfg)
 		ctx.save()
 		ctx.translate(0, T*18)
 		ctx.clearRect(0, -T, CvsW, T*3)
-		if (Ctrl.isCheatMode || speed != '1.0') {
-			draw(.1, lh*0, Color.InfoTable[+(speed != '1.0')],`Speed x${speed}`)
+		if (Ctrl.isCheatMode || spd != '1.0') {
+			draw(.1, lh*0, Color.InfoTable[+(spd != '1.0')],`Speed x${spd}`)
 			draw(.1, lh*1, Color.InfoTable[+Ctrl.invincible], 'Invincible')
 			draw(.1, lh*2, Color.InfoTable[+Ctrl.showTargets],'Targets')
 		}
