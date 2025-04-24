@@ -99,7 +99,7 @@ export const Ctrl = new class {
 		for (const menu of values(Menu)) {
 			menu.bindChange(Ctrl.#saveData)
 		}
-		$('#clearStorageBtn').on('click', ()=> {
+		$('#clearStorageBtn').on({click:()=>
 			Confirm.open('Are you sure you want to clear local storage?',
 				null,Ctrl.#removeData, 'No','Yes', 0)
 		})
