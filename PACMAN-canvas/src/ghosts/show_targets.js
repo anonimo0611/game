@@ -34,8 +34,8 @@ export default new class {
 		if (this.#disabled(g))
 			return
 		switch (g.idx) {
-		case GhsType.Pinky: this.auxLines(g, 4);  break
-		case GhsType.Aosuke:this.auxLines(g, 2);  break
+		case GhsType.Pinky: this.#auxLines(g, 4); break
+		case GhsType.Aosuke:this.#auxLines(g, 2); break
 		case GhsType.Guzuta:this.#guzutaCircle(g);break
 		}
 	}
@@ -56,7 +56,7 @@ export default new class {
 	 * @param {Ghost} g
 	 * @param {number} ofst
 	 */
-	auxLines(g, ofst) {
+	#auxLines(g, ofst) {
 		if (g.isScatter || !g.state.isWalk)
 			return
 		const {dir:pacDir,centerPos:pacPos}= Player
