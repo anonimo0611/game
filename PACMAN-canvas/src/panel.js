@@ -1,19 +1,18 @@
-import {State} from './state.js'
-
-function show(button) {
-	$('.panel').toggle()
-	$(button).toggleClass('opened',$(button.value).is(':visible'))
-}
-function hide(button, e) {
-	if (!State.isTitle
-	 || e.target == button
-	 || e.target.closest?.(button.value))
-		return
-	$(button.value).hide()
-	$(button).removeClass('opened')
-}
 $on({load_Start:()=> $('.panel').hide()})
-$('.panelBtn').each((_,button)=> {
-	$(window).on({pointerdown:e=> hide(button,e)})
-	$(button).on({pointerdown:e=> show(button,e)})
-})
+
+/** @type {NodeListOf<HTMLButtonElement>} */
+const btns = dqsAll('.panelBtn')
+for (const btn of btns) {
+	btn.addEventListener('pointerdown', ()=> {
+		$('.panel').toggle()
+		btn.classList.toggle('opened')
+	})
+	addEventListener('pointerdown', e=> {
+		if (!btn.offsetParent
+		 || e.target == btn
+		 || e.target.closest?.(btn.value))
+			return
+		$(btn.value).hide()
+		btn.classList.remove('opened')
+	})
+}
