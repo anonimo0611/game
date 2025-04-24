@@ -29,7 +29,7 @@ export const Sound = new class extends SoundMgr {
 		Sound.vol = (e.type=='input'? e.target:volRng).valueAsNumber
 	}
 	#onKeydown(e) {
-		if (e.originalEvent.repeat || isCombinationKey(e))
+		if (keyRepeat(e) || isCombinationKey(e))
 			return
 		if (e.key.toUpperCase() == 'M'
 		 || e.target == volRg2 && isEnterKey(e)) Sound.#mute()
