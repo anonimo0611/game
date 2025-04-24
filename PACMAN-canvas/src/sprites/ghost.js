@@ -2,23 +2,26 @@ const EyesEnum = freeze({Up:0,Down:1,Left:2,Right:2,LowerR:3})
 
 import CBSprite from './ghost_cb.js'
 export default class {
+	#eyesFns
+	#CBSprite
+
+	/** @type {?FadeOut} */
+	#fadeOut
+	/** @type {?FadeIn} */
+	#resurrect
+
 	/** @param {ExtendedContext2D} ctx */
 	constructor(ctx) {
 		this.ctx = ctx
-		this.CBSprite = new CBSprite(ctx)
-		this.eyesFns  = freeze([
+		this.#CBSprite = new CBSprite(ctx)
+		this.#eyesFns  = freeze([
 			this.#eyesLookingUp,
 			this.#eyesLookingDown,
 			this.#eyesLookingLR,
-			this.CBSprite.bracketEyes,
+			this.#CBSprite.bracketEyes,
 		])
 		freeze(this)
 	}
-	/** @type {?FadeOut} */
-	#fadeOut = null
-
-	/** @type {?FadeIn} */
-	#resurrect = null
 
 	get fadeOut()  {return this.#fadeOut}
 	setFadeOut()   {this.#fadeOut ||= new FadeOut(400)}
@@ -56,7 +59,7 @@ export default class {
 			: Color.FrightBodyTable[spriteIdx]
 
 		if (hadaketa) {
-			this.CBSprite.hadake(aIdx)
+			this.#CBSprite.hadake(aIdx)
 			return finalize()
 		}
 		if (!escaping) {
@@ -68,7 +71,7 @@ export default class {
 			ctx.restore()
 		}
 		if (!frightened) {
-			this.eyesFns[EyesEnum[orient]].call(this,{orient,ripped,spriteIdx})
+			this.#eyesFns[EyesEnum[orient]].call(this,{orient,ripped,spriteIdx})
 		}
 		finalize()
 	}
@@ -86,8 +89,8 @@ export default class {
 			? this.#foot0()
 			: this.#foot1()
 		ctx.fill()
-		ripped   && this.CBSprite.rippedBody()
-		repaired && this.CBSprite.mendedStitch(aIdx)
+		ripped   && this.#CBSprite.rippedBody()
+		repaired && this.#CBSprite.mendedStitch(aIdx)
 	}
 	#foot0() {
 		const {ctx}= this
