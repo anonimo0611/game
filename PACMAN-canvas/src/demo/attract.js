@@ -132,14 +132,9 @@ export class Attract {
 	updateGhosts() {
 		this.ghsList[DEMO].forEach(g=> {
 			g.x += this.ghsVelX
-			const fn = ()=> this.caughtGhost(g)
+			const fn = ()=> GhsMgr.caughtAll && Attract.#begin()
 			GhsMgr.crashWithPac(g, this.pacman, {radius:T/4,fn})
 		})
-	}
-	caughtGhost(g) {
-		g.state.to('Bitten')
-		this.ghsList[DEMO].every(g=> g.state.isBitten)
-			&& Attract.#begin()
 	}
 	end(e={}) {
 		if (e.target.tagName == 'BUTTON')
