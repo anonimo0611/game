@@ -2,8 +2,8 @@ const EyesEnum = freeze({Up:0,Down:1,Left:2,Right:2,LowerR:3})
 
 import CBSprite from './ghost_cb.js'
 export default class {
-	#eyesFns
 	#CBSprite
+	#eyesFns
 
 	/** @type {?FadeOut} */
 	#fadeOut
