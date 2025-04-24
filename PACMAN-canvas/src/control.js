@@ -13,6 +13,7 @@ export const Ctrl = new class {
 	static setup() {
 		Ctrl.#restore()
 		Ctrl.#setupFormCtrls()
+		Ctrl.drawInfo()
 		$on({resize:Ctrl.#fitToViewport}).trigger('resize')
 	}
 	get extendPts()     {return +Menu.ExtendMenu.value}
@@ -34,6 +35,11 @@ export const Ctrl = new class {
 			innerHeight/Form.offsetHeight)
 		Form.style.scale = min(1, round(scale*100)/100)
 	}
+	#update() {
+		Ctrl.drawInfo()
+		Ctrl.#saveData()
+		return this
+	}
 	#saveData() {
 		const data = {}
 		for (const c of dqsAll('custom-menu,input')) {
@@ -45,7 +51,6 @@ export const Ctrl = new class {
 			}[c.type]
 		}
 		localStorage.anopacman = JSON.stringify(data)
-		return this
 	}
 	#removeData() {
 		localStorage.removeItem('anopacman')
@@ -55,7 +60,7 @@ export const Ctrl = new class {
 	}
 	#setDefault() {
 		Form.reset()
-		Ctrl.#saveData().#restore()
+		Ctrl.#update().#restore()
 	}
 	#restore() {
 		const data = JSON.parse(localStorage.anopacman || null) || {}
@@ -69,41 +74,41 @@ export const Ctrl = new class {
 			$byId(id).trigger('input')
 		}
 	}
-	drawGridLines() {
-		if (!Ctrl.showGridLines)
-			return
-		Ctx.save()
-		Ctx.strokeStyle = Color.Grid
-		for (let y=1; y<Cols; y++) Ctx.strokeLine(T*y, 0, T*y, Rows*T)
-		for (let x=0; x<Rows; x++) Ctx.strokeLine(0, T*x, Cols*T, T*x)
-		Ctx.restore()
+	#drawGrid() {
+		if (!Ctrl.showGridLines) return
+		Inf.ctx.strokeStyle = Color.Grid
+		for (let y=1; y<Cols; y++) Inf.ctx.strokeLine(T*y, 0, T*y, Rows*T)
+		for (let x=0; x<Rows; x++) Inf.ctx.strokeLine(0, T*x, Cols*T, T*x)
 	}
 	drawInfo() {
+		const {ctx} = Inf, lh = 0.84
 		const draw  = (...args)=> drawText(...args, cfg)
-		const cfg   = {size:T*0.68, style:'bold'}, h = 0.84
+		const cfg   = {ctx, size:T*0.68, style:'bold', scale:[.7,1]}
 		const speed = Ctrl.speedRate.toFixed(1)
-		Ctx.save()
+		ctx.save()
+		ctx.clear()
+		Ctrl.#drawGrid()
+		ctx.translate(0, T*18)
 		if (Ctrl.isCheatMode || speed != '1.0') {
-			Ctx.setTransform(0.7, 0,0, 1, T*0.1, T*18)
-			draw(0, h*0, Color.InfoTable[+(speed != '1.0')],`Speed x${speed}`)
-			draw(0, h*1, Color.InfoTable[+Ctrl.invincible], 'Invincible')
-			draw(0, h*2, Color.InfoTable[+Ctrl.showTargets],'Targets')
+			draw(.1, lh*0, Color.InfoTable[+(speed != '1.0')],`Speed x${speed}`)
+			draw(.1, lh*1, Color.InfoTable[+Ctrl.invincible], 'Invincible')
+			draw(.1, lh*2, Color.InfoTable[+Ctrl.showTargets],'Targets')
 		}
 		if (Ctrl.unrestricted) {
-			Ctx.setTransform(0.7, 0,0, 1, T*(Cols-4.9), T*18.5)
+			ctx.translate(T*(Cols-4.9), T/2)
 			draw(0,0, Color.InfoTable[1], 'Un-\nrestricted')
 		}
-		Ctx.restore()
+		ctx.restore()
 	}
 	#setupFormCtrls() {
 		for (const menu of values(Menu)) {
-			menu.bindChange(Ctrl.#saveData)
+			menu.bindChange(Ctrl.#update)
 		}
 		$('#clearStorageBtn').on({click:()=>
 			Confirm.open('Are you sure you want to clear local storage?',
 				null,Ctrl.#removeData, 'No','Yes', 0)
 		})
-		$('input')    .on({input:Ctrl.#saveData})
+		$('input')    .on({input:Ctrl.#update})
 		$('#defBtn')  .on({click:Ctrl.#setDefault})
 		$('#startBtn').on({click:()=> State.to('Start')})
 	}

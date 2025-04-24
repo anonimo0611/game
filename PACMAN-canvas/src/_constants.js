@@ -4,9 +4,10 @@ Cols     = 28,
 TileSize = 28, T=TileSize,
 BaseStep = TileSize / 4.5,
 
-[Bg,,Ctx,CvsW,CvsH]= [
-	canvas2D('bg' , TileSize*Cols, TileSize*Rows),...
-	canvas2D('cvs', TileSize*Cols, TileSize*Rows).vals
+[Bg,Inf,,Ctx,CvsW,CvsH]= [
+	canvas2D('bg' , T*Cols, T*Rows),
+	canvas2D('inf', T*Cols, T*Rows),...
+	canvas2D('cvs', T*Cols, T*Rows).vals
 ],
 
 Color = freeze(new class {
@@ -36,7 +37,7 @@ Color = freeze(new class {
 }),
 
 PacScale  = 0.9,
-PacRadius = TileSize*PacScale,
+PacRadius = T*PacScale,
 PacStep   = freeze(new class {
 	Base     = BaseStep
 	SlowBase = 0.98

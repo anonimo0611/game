@@ -7,9 +7,10 @@ export const Message = new class {
 	 * @param {number} row
 	 */
 	drawText(col, row, color='', text='',
-		{ctx=Ctx,face='Atari',size=T,style=''}={}
+		{ctx=Ctx,scale=[1,1],face='Atari',size=T,style=''}={}
 	) {
 		ctx.save()
+		ctx.scale(...scale)
 		ctx.font = `${style} ${size}px ${face}`
 		ctx.fillStyle = color ?? '#FFF'
 		String(text).split('\n').forEach((txt,i)=>
