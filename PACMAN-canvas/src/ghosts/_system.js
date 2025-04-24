@@ -96,6 +96,7 @@ export const GhsMgr = new class {
 	/**
 	 * @param {Ghost} g
 	 * @param {Vector2} pos
+	 * @param {{fn?:function,radius?:number}}
 	 */
 	crashWithPac(g, pos, {fn,radius}={}) {
 		return g instanceof Ghost && g.crashWithPac({pos,radius,fn})
