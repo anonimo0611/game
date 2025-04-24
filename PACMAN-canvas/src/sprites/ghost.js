@@ -6,6 +6,12 @@ export default class {
 	constructor(ctx) {
 		this.ctx = ctx
 		this.CBSprite = new CBSprite(ctx)
+		this.eyesFns  = freeze([
+			this.#eyesLookingUp,
+			this.#eyesLookingDown,
+			this.#eyesLookingLR,
+			this.CBSprite.bracketEyes,
+		])
 		freeze(this)
 	}
 	/** @type {?FadeOut} */
@@ -22,7 +28,7 @@ export default class {
 		idx        = 0,
 		aIdx       = 0,
 		spriteIdx  = 0,
-		orient     = Dir.Left,
+		orient     = L,
 		size       = T*2,
 		frightened = false,
 		bitten     = false,
@@ -62,11 +68,7 @@ export default class {
 			ctx.restore()
 		}
 		if (!frightened) {
-			[this.#eyesLookingUp,
-			 this.#eyesLookingDown,
-			 this.#eyesLookingLR,
-			 this.CBSprite.bracketEyes,
-			][EyesEnum[orient]].call(this,{orient,ripped,spriteIdx})
+			this.eyesFns[EyesEnum[orient]].call(this,{orient,ripped,spriteIdx})
 		}
 		finalize()
 	}
