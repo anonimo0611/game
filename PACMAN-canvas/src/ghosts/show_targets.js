@@ -34,9 +34,9 @@ export default new class {
 		if (this.#disabled(g))
 			return
 		switch (g.idx) {
-		case GhsType.Pinky: this.#strokeAuxLines(g, 4); break
-		case GhsType.Aosuke:this.#strokeAuxLines(g, 2); break
-		case GhsType.Guzuta:this.#strokeGuzutaCircle(g);break
+		case GhsType.Pinky: this.auxLines(g, 4);  break
+		case GhsType.Aosuke:this.auxLines(g, 2);  break
+		case GhsType.Guzuta:this.#guzutaCircle(g);break
 		}
 	}
 
@@ -56,7 +56,7 @@ export default new class {
 	 * @param {Ghost} g
 	 * @param {number} ofst
 	 */
-	#strokeAuxLines(g, ofst) {
+	auxLines(g, ofst) {
 		if (g.isScatter || !g.state.isWalk)
 			return
 		const {dir:pacDir,centerPos:pacPos}= Player
@@ -82,7 +82,7 @@ export default new class {
 	}
 
 	/** @param {Ghost} g */
-	#strokeGuzutaCircle(g) {
+	#guzutaCircle(g) {
 		if (g.isScatter || !g.state.isWalk)
 			return
 		const radius = T*8
