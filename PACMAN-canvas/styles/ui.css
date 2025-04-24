@@ -66,12 +66,12 @@ button, .button, [type=dropdown] > output {
 	display: inline-block;
 	padding: .2em;
 	&:hover,&:focus,
-	&.active {border-color:var(--color-focus-border)}
+	&.opened {border-color:var(--color-focus-border)}
 	&:active {border-color:var(--color-active-border)}
 	&:hover  {background:#036C}
 	&:focus  {background:#069C}
-	&.active {background:#396C}
 	&:active {background:#396C}
+	&.opened {background:#396C}
 	&:disabled, [data-disabled=true] {
 		color: #888;
 		background: var(--bgcolor);

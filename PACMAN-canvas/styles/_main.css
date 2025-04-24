@@ -10,6 +10,11 @@ html {
 	-webkit-user-select: none;
 	user-select: none;
 }
+html[data-cursor=hidden],
+html[data-cursor=stayStill] {
+	body:not([data-state=Title])
+		canvas {cursor: none}
+}
 body {
 	color: #FFF;
 	background: #1b1b1c;
@@ -27,18 +32,8 @@ svg {
 	fill: #FFF;
 	pointer-events: none;
 }
-::selection {
-	color: inherit;
-	background: 0 0;
-}
 
-[data-cursor=hidden],
-[data-cursor=stayStill] {
-	body:not([data-state=Title])
-		canvas {cursor: none}
-}
-
-h1, #level {
+header * {
 	color: #FF0;
 	position: absolute;
 	z-index: 100;
@@ -73,8 +68,7 @@ body[data-loaded=true] #board {
 	canvas#bg  {z-index: -1}
 	canvas#inf {z-index: +1}
 }
-:is([data-state=Attract],
-    [data-state=CoffBrk]) {
+body:is([data-state=Attract],[data-state=CoffBrk]) {
 	:is(header,canvas.sub) {visibility: hidden}
 }
 
@@ -102,7 +96,6 @@ body:not([data-state=Title]) #titleScr {
 	left: 50%;
 	translate: -50% 0;
 }
-
 #debug {
 	white-space: pre;
 	position: fixed;
@@ -154,7 +147,7 @@ body:not([data-state=Title]) #titleScr {
 		label,button {display: block}
 		[data-for=keys] {cursor: help}
 	}
-	>label:first-of-type  {
+	> label:first-of-type  {
 		color: inherit;
 		display: flex;
 		gap: .2em;
