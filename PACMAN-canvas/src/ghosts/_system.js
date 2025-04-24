@@ -95,15 +95,13 @@ export const GhsMgr = new class {
 	}
 	/** @param {Ghost} g */
 	crashWithPac(g, pos=Player.pos, {fn,radius=(g?.frightened? T/2:T/3)}={}) {
-		return g instanceof Ghost && g.state.isWalk
-			&& collisionCircle(g, pos, radius) && g.crashedWithPac(fn)
+		return g instanceof Ghost && g.crashWithPac(pos, radius, fn)
 	}
 	#draw = (_,i,array)=> array[array.length-1-i].draw()
 	drawTargets() {Target.draw(Ghosts)}
 	drawFront()   {Ghosts.filter(inFrontOfPac).forEach(this.#draw)}
 	drawBehind()  {Ghosts.filter(behindThePac).forEach(this.#draw)}
 }
-
 
 const AlternateBetweenModes = function() {
 	{

@@ -225,7 +225,14 @@ export class Ghost extends Actor {
 	#setFrightMode(_, bool=false) {
 		!this.escaping && (this.#frightened = bool)
 	}
-	crashedWithPac(fn = ()=> this.#setEscape()) {
+	/**
+	 * @param {Vector2} pos
+	 * @param {number} radius
+	 */
+	crashWithPac(pos, radius, fn = ()=> this.#setEscape()) {
+		if (!this.state.isWalk
+		 || !collisionCircle(this, pos, radius))
+			return false
 		if (this.frightened) {
 			Timer.freeze()
 			this.#frightened = false
