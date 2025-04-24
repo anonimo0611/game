@@ -133,7 +133,7 @@ export class Attract {
 		this.ghsList[DEMO].forEach(g=> {
 			g.x += this.ghsVelX
 			const fn = ()=> GhsMgr.caughtAll && Attract.#begin()
-			GhsMgr.crashWithPac(g, this.pacman, {radius:T/4,fn})
+			GhsMgr.crashWithPac(g, this.pacman.pos, {radius:T/4,fn})
 		})
 	}
 	quit(e) {
