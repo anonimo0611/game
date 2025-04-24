@@ -109,7 +109,7 @@ export const Maze = new class {
 	hasWall = ({x,y})=> WallSet.has(y*Cols+x)
 
 	GhostNotEnterSet = new Set(['12-11','12-23','15-11','15-23'])
-	ghostExitPos({originalTargetTile:o={}, tilePos:t={}}) {
+	ghostExitTile({originalTargetTile:o={}, tilePos:t={}}) {
 		return o.y < 10 && PenOuter.contains(t)
 			? Vec2((t.x > Cols/2) && (o.x > Cols/2) ? 21:6, 15)
 			: Vec2(o)

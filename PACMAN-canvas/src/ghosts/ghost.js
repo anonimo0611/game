@@ -68,7 +68,7 @@ export class Ghost extends Actor {
 	get targetTile() {
 		return Ctrl.unrestricted
 			? this.originalTargetTile
-			: Maze.ghostExitPos(this)
+			: Maze.ghostExitTile(this)
 	}
 	get houseEntranceArrived() {
 		return this.state.isEscape
