@@ -12,7 +12,7 @@ export const Ctrl = new class {
 	static {$ready(this.setup)}
 	static setup() {
 		Ctrl.#restore()
-		Ctrl.#setupFormCtrls()
+		Ctrl.#setupCtrls()
 		Ctrl.#drawInfo()
 		$on({resize:Ctrl.#fitToViewport}).trigger('resize')
 	}
@@ -101,7 +101,7 @@ export const Ctrl = new class {
 		}
 		ctx.restore()
 	}
-	#setupFormCtrls() {
+	#setupCtrls() {
 		for (const menu of values(Menu)) {
 			menu.bindChange(Ctrl.#update)
 		}
