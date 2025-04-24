@@ -41,6 +41,7 @@ svg {
 h1, #level {
 	color: #FF0;
 	position: absolute;
+	z-index: 100;
 }
 h1 {
 	font: 1.15rem/.9 PacFont;
@@ -66,11 +67,14 @@ body[data-loaded=true] #board {
 }
 #cvs-board {
 	margin-top: 0.5rem;
-	canvas#bg {position: absolute;z-index:-1}
+	pointer-events: none;
+	canvas.sub {position: absolute}
+	canvas#bg  {z-index: -1}
+	canvas#inf {z-index: +1}
 }
 :is([data-state=Attract],
     [data-state=CoffBrk]) {
-	:is(header,canvas#bg) {visibility: hidden}
+	:is(header,canvas.sub) {visibility: hidden}
 }
 
 #titleScr {
@@ -80,6 +84,7 @@ body[data-loaded=true] #board {
 	border-style: solid none;
 	width: 100%;
 	position: absolute;
+	z-index: 100;
 	top: 6.9rem;
 }
 body:not([data-state=Title]) #titleScr {
