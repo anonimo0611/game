@@ -85,9 +85,9 @@ export const Maze = new class {
 		$(powChk).on({change:Maze.#reset})
 	}
 	#reset(e) {
-		e.target != powChk && Maze.#drawDoor()
 		for (const [i,c] of Maze.Map.entries())
 			/[.O]/.test(c) && Maze.#setDot(i,c)
+		e.target != powChk && Maze.#drawDoor()
 	}
 	#setDot(i, chip) {
 		const v = Vec2(i%Cols, i/Cols|0)
