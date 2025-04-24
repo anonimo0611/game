@@ -66,10 +66,10 @@ class PowDot {
 class Tunnel {
 	entranceL =  5.5
 	entranceR = 22.5
-	isIn  = centerPos=> this.side(centerPos) != null
-	isInL = centerPos=> this.side(centerPos) == L
-	isInR = centerPos=> this.side(centerPos) == R
-	side({x, y}={}) { // Coordinates in pixels
+	isIn  = centerPos=> this.#side(centerPos) != null
+	isInL = centerPos=> this.#side(centerPos) == L
+	isInR = centerPos=> this.#side(centerPos) == R
+	#side({x, y}={}) {
 		if (int(y/T) == 15 && x/T <= this.entranceL) return L
 		if (int(y/T) == 15 && x/T >= this.entranceR) return R
 		return null
