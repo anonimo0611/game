@@ -75,7 +75,7 @@ class PlayablePacman extends Pacman {
 	}
 	#ignoreKeys(e, dir) {
 		return Confirm.opened
-			|| e.originalEvent.repeat
+			|| keyRepeat(e)
 			|| (dir == null)
 			|| (dir == this.dir && !this.turning)
 	}
