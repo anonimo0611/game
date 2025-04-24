@@ -28,8 +28,12 @@ const circumPosition = (deg, r, cx=0, cy=0)=>
 const isKeyboardEvent = e=>
 	isObj(e) && (e.originalEvent || e) instanceof KeyboardEvent
 
+const keyRepeat = e=>
+	isKeyboardEvent(e) && !!(e.originalEvent || e).repeat
+
 const isCombinationKey = e=>
 	isKeyboardEvent(e) && !!(e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
+
 
 const dRoot = document.documentElement
 const byId  = id=> document.getElementById(id)
