@@ -175,7 +175,8 @@ class FadeOut {
  */
 const canvas2D = (arg, w, h=w)=> {
 	let cvs = document.createElement('canvas')
-	if (byId(arg) instanceof HTMLCanvasElement) cvs = byId(arg)
+	if (byId(arg) instanceof HTMLCanvasElement)
+		cvs = byId(arg)
 	const ctx  = new ExtendedContext2D(cvs)
 	;([w,h]= ctx.resize(w,h))
 	/** @type {[cvs,ctx,w:number,h:number]} */
