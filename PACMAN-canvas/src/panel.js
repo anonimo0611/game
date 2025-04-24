@@ -2,7 +2,7 @@ import {State} from './state.js'
 
 function show(button) {
 	$('.panel').toggle()
-	$(button).toggleClass('active',$(button.value).is(':visible'))
+	$(button).toggleClass('opened',$(button.value).is(':visible'))
 }
 function hide(button, e) {
 	if (!State.isTitle
@@ -10,7 +10,7 @@ function hide(button, e) {
 	 || e.target.closest?.(button.value))
 		return
 	$(button.value).hide()
-	$(button).removeClass('active')
+	$(button).removeClass('opened')
 }
 $on({load_Start:()=> $('.panel').hide()})
 $('.panelBtn').each((_,button)=> {
