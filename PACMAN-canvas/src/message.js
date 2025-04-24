@@ -24,15 +24,14 @@ export const Message = new class {
 	}
 	draw() {
 		this.#drawPausedText()
-		if (State.isStart) {
+		if (State.isStart)
 			drawText( 9, 13, Color.Message1, 'PLAYER　ONE')
-		}
-		if (State.isSt_Ready) {
+
+		if (State.isSt_Ready)
 			drawText(11, 19, Color.Message2, 'READY!')
-		}
+
 		if (State.isTitle
-		 || State.isGameOver) {
+		 || State.isGameOver)
 			drawText( 9, 19, Color.Message3, 'GAME　　OVER')
-		}
 	}
 },{drawText}=Message
