@@ -93,9 +93,12 @@ export const GhsMgr = new class {
 		FrightMode.instance?.update()
 		Ghosts.forEach(g=> g.update())
 	}
-	/** @param {Ghost} g */
-	crashWithPac(g, pos=Player.pos, {fn,radius=(g?.frightened? T/2:T/3)}={}) {
-		return g instanceof Ghost && g.crashWithPac(pos, radius, fn)
+	/**
+	 * @param {Ghost} g
+	 * @param {Vector2} pos
+	 */
+	crashWithPac(g, pos, {fn,radius}={}) {
+		return g instanceof Ghost && g.crashWithPac({pos,radius,fn})
 	}
 	#draw = (_,i,array)=> array[array.length-1-i].draw()
 	drawTargets() {Target.draw(Ghosts)}
