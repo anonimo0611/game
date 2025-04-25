@@ -81,7 +81,7 @@ export const Fruit = new class {
 		Spr.cache(Fruit.number())
 		Inf.ctx.clearRect(x,y,w,h)
 		for (let i=initCount,cols=1; i<Game.level; i++) {
-			const xy = Vec2(x+w+T-(T*2*cols++), y+T).vals
+			const xy = Vec2(x+w+T-(T*2*cols++), y+T-1).vals
 			Spr.draw(Inf.ctx, Fruit.number(i), ...xy)
 		}
 	}
