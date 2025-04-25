@@ -1,5 +1,3 @@
-$on({load_Start:()=> $('.panel').hide()})
-
 /** @type {NodeListOf<HTMLButtonElement>} */
 const btns = dqsAll('.panelBtn')
 for (const btn of btns) {
@@ -15,4 +13,4 @@ for (const btn of btns) {
 		$(btn.value).hide()
 		btn.classList.remove('opened')
 	})
-}
+} $('.panel').hide()
