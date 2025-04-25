@@ -4,7 +4,6 @@ import CBSprite from './ghost_cb.js'
 export default class {
 	#CBSprite
 	#eyesFns
-
 	/** @type {?FadeOut} */
 	#fadeOut
 	/** @type {?FadeIn} */
