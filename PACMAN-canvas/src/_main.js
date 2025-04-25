@@ -154,8 +154,9 @@ export const Game = new class {
 				State.to('Title')
 				return
 			}
-			!Ctrl.isPractice && CoffBrk.begin()
-				|| State.to('NewLevel')
+			CoffBrk.isIntermission
+				? State.to('CoffBrk')
+				: State.to('NewLevel')
 		}
 	}
 	#update() {

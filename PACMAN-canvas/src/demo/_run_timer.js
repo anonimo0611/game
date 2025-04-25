@@ -12,7 +12,7 @@ export const RunTimer = function() {
 			|| dqs(':not(#startBtn):focus')
 		)? fcnt = 0
 		 : fcnt++ * Ticker.Interval > WaitTime
-			&& $(RunTimer).trigger('Run')
+			&& $(RunTimer).trigger('begin')
 	}
 	return {update,reset:()=>{fcnt=0}}
 }()

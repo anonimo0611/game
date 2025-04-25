@@ -45,5 +45,7 @@ class Guzuta extends Ghost {
 			: Player.centerPos
 	}
 }
-$on({Title_Restart_NewLevel:
-	()=> $(GhsMgr).trigger('Init',[Akabei,Pinky,Aosuke,Guzuta])})
+const Classes = [Akabei,Pinky,Aosuke,Guzuta]
+$on({Title_Restart_NewLevel:()=>
+	$(GhsMgr).trigger('Init', Classes.map(cls=> new cls))
+})

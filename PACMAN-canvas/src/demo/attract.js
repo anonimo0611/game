@@ -10,18 +10,21 @@ import {GhsMgr}   from '../ghosts/_system.js'
 import {Ghost}    from '../ghosts/ghost.js'
 import {RunTimer} from './_run_timer.js'
 
-/** @type {?Attract} */
-let   _attract  = null
+const CHAR = 0, DEMO = 1
 const ModSymbol = Symbol()
-const CHARA=0, DEMO=1
+const StButton  = dqs('button.attract')
+
+/** @type {?Attract} */
+let _attract = null
 
 export class Attract {
 	static {
-		$(RunTimer).on({Run:this.#begin})
-		$('button.attractDemo').on({click:this.#begin})
+		$(RunTimer).on({begin:this.#begin})
+		$(StButton).on({click:this.#begin})
+		$on({Attract:()=> _attract = new Attract(ModSymbol)})
 	}
 	static #begin() {
-		_attract = new Attract(ModSymbol)
+		State.to('Attract')
 	}
 	static update() {
 		RunTimer .update()
@@ -48,10 +51,11 @@ export class Attract {
 		this.initialize()
 	}
 	initialize() {
-		const {Max}=GhsType
-		for (let i=0; i<this.ghsList.length*Max; i++)
+		const {Max}= GhsType
+		for (let i=0; i<this.ghsList.length*Max; i++) {
 			this.setActor(i/Max|0, i%Max)
-		State.to('Attract', {data:this.ghsList[DEMO]})
+		}
+		$(GhsMgr).trigger('Init', this.ghsList[DEMO])
 	}
 	setActor(idx, gIdx) {
 		const g = new Ghost({idx:gIdx,aniFlag:+!!idx})
@@ -71,19 +75,19 @@ export class Attract {
 	draw() {
 		const et = Ticker.elapsedTime/100, ptsFontSize = T*.68
 		Score.draw(),drawText(7, 5, null, 'CHARACTOR　/　NICKNAME')
-		et > 10 && this.drawGhost(CHARA, 0, Vec2(5*T, 6*T))
+		et > 10 && this.drawGhost(CHAR, 0, Vec2(5*T, 6*T))
 		et > 15 && drawText( 8,  7, Color.Akabei, 'OIKAKE----')
 		et > 20 && drawText(18,  7, Color.Akabei, '"AKABEI"')
 
-		et > 30 && this.drawGhost(CHARA, 1, Vec2(5*T, 9*T))
+		et > 30 && this.drawGhost(CHAR, 1, Vec2(5*T, 9*T))
 		et > 35 && drawText( 8, 10, Color.Pinky, 'MACHIBUSE--')
 		et > 40 && drawText(19, 10, Color.Pinky, '"PINKY"')
 
-		et > 50 && this.drawGhost(CHARA, 2, Vec2(5*T, 12*T))
+		et > 50 && this.drawGhost(CHAR, 2, Vec2(5*T, 12*T))
 		et > 55 && drawText( 8, 13, Color.Aosuke, 'KIMAGURE--')
 		et > 60 && drawText(18, 13, Color.Aosuke, '"AOSUKE"')
 
-		et > 70 && this.drawGhost(CHARA, 3, Vec2(5*T, 15*T))
+		et > 70 && this.drawGhost(CHAR, 3, Vec2(5*T, 15*T))
 		et > 75 && drawText( 8, 16, Color.Guzuta, 'OTOBOKE---')
 		et > 80 && drawText(18, 16, Color.Guzuta, '"GUZUTA"')
 		if (et > 85) {

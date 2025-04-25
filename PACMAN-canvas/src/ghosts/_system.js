@@ -45,7 +45,6 @@ export const GhsMgr = new class {
 	static {$ready(this.setup)}
 	static setup() {
 		$on({
-			Attract: GhsMgr.#onAttract,
 			Playing: GhsMgr.#onPlaying,
 			Clear:   GhsMgr.#onLevelEnds,
 			Crashed: GhsMgr.#onLevelEnds,
@@ -64,12 +63,9 @@ export const GhsMgr = new class {
 	get hasEscape()  {return Ghosts.some(g=> g.escaping)}
 	get akaCenter()  {return Ghosts[GhsType.Akabei].centerPos}
 
-	#initialize(_, ...subClasses) {
+	#initialize(_, ...instances) {
 		GhsMgr.#aidx = 0
-		subClasses.forEach((cls,i)=> Ghosts[i]=new cls)
-	}
-	#onAttract(_, ...ghosts) {
-		ghosts.forEach((g,i)=> Ghosts[i]=g)
+		instances.forEach((g,i)=> Ghosts[i]=g)
 	}
 	#onLevelEnds() {
 		Ghosts.forEach(g=> g.sprite.setFadeOut())
