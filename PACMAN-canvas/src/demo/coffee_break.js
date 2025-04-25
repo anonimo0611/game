@@ -1,46 +1,36 @@
 import {Sound}  from '../../_snd/sound.js'
 import {Game}   from '../_main.js'
-import {State}  from '../state.js'
-import {Fruit}  from '../fruit.js'
-import {Pacman} from '../pacman.js'
-import {Ghost}  from '../ghosts/ghost.js'
-import Sprite   from '../sprites/ghost_cb.js'
+import {State}  from '../_state.js'
+import {Pacman} from '../pacman/_pacman.js'
+import {Ghost}  from '../ghosts/_ghost.js'
+import Sprite   from '../ghosts/ghs_sprite_cb.js'
 
 const ModSymbol = Symbol()
 const IntermissionMap = new Map([[2,1], [5,2], [9,3]])
 
-export class CoffBrk {
+export class CBreak {
 	/** @type {?(Scene1|Scene2|Scene3)} */
 	static #scene = null
 	static begin(num=IntermissionMap.get(Game.level)) {
-		if (!State.isCoffBrk && between(num,1,3)) {
-			Sound.play('cutscene', {loop:1^num == 2})
-			CoffBrk.#scene = new [Scene1,Scene2,Scene3][num-1]
-			return true
-		}
-		return false
+		if (State.isCBreak || !between(num,1,3)) return false
+		Sound.play('cutscene', {loop:1^num == 2})
+		CBreak.#scene = new [Scene1,Scene2,Scene3][num-1]
+		return true
 	}
-	static update() {
-		this.#scene?.update()
-	}
-	static draw()   {
-		this.#scene?.draw()
-		return State.isCoffBrk
-	}
+	static update() {this.#scene?.update()}
+	static draw()   {this.#scene?.draw()}
 
 	pacman  = new Pacman
 	akabei  = new Ghost
 	pacVelX = -CvsW/180
-
 	constructor(symbol) {
-		if (symbol != ModSymbol) {
-			throw TypeError('The constructor'
-			+` ${this.constructor.name}() is not visible`)
-		}
-		$onNS('.CB',{Quit:this.end,blur_focus:this.pause})
+		if (symbol != ModSymbol)
+			throw TypeError('The constructor is not visible')
 		this.pacman.y =
 		this.akabei.y = CvsH/2 - T/2
-		State.to('CoffBrk')
+		$onNS('.CB','Quit', this.end)
+		$onNS('.CB','blur focus', this.pause)
+		State.switchToCBreak()
 	}
 	movePacman() {
 		this.pacman.x += this.pacVelX
@@ -51,23 +41,22 @@ export class CoffBrk {
 	}
 	drawAkabei(cfg={}) {
 		const {akabei:aka}=this,{aIdx,pos}=aka
-		aka.sprite.draw({aIdx, ...cfg, ...pos, ...aka})
+		aka.sprite.draw({aIdx,...cfg,...pos,...aka})
 	}
 	pause() {
-		Sound.allPaused = Ticker.pause()
-	}
-	draw() {
-		State.last('FlashMaze')
-			&& Fruit.drawLevelCounter()
+		Ticker.pause()
+		Sound.pauseAll(Ticker.paused)
 	}
 	end() {
 		$off('.CB')
-		CoffBrk.#scene = null
-		State.to(State.last('Title') || 'NewLevel')
+		CBreak.#scene = null
+		State.lastIs('Title')
+			? State.switchToTitle()
+			: State.switchToNewLevel()
 	}
-} $('button.CB').on('click', e=> CoffBrk.begin(+e.target.value))
+} $('button.CB').on('click', e=> CBreak.begin(+e.target.value))
 
-class Scene1 extends CoffBrk {
+class Scene1 extends CBreak {
 	constructor() {
 		super(ModSymbol)
 		this.frightened = false
@@ -93,17 +82,17 @@ class Scene1 extends CoffBrk {
 			break
 		case R:
 			akabei.x > T*7.5 && this.movePacman()
-			akabei.x > CvsW+T*9 && this.end()
+			akabei.x > CvsW + T*9 && this.end()
+			break
 		}
 	}
 	draw() {
 		const {pacman,frightened}= this
 		this.drawAkabei({frightened})
 		this.drawPacman(pacman.dir == R ? 4:1)
-		super.draw()
 	}
 }
-class Scene2 extends CoffBrk {
+class Scene2 extends CBreak {
 	constructor() {
 		super(ModSymbol)
 		this.counter  = 0
@@ -112,13 +101,13 @@ class Scene2 extends CoffBrk {
 		this.sprite   = Sprite.stakeClothes
 		this.akaVelX  = this.pacVelX
 		this.pacman.x = CvsW + T*3
-		this.akabei.x = CvsW + T*15.5
+		this.akabei.x = CvsW + T*16
 	}
 	moveAkabei({akabei:aka, akaVelX:vX}=this) {
 		const {CaughtX,AkaMinX}= this.sprite
-		if (aka.x+vX    > CaughtX) return !!(aka.x += vX)
-		if (aka.x+vX/10 > AkaMinX) return !!(aka.x += vX/10)
-		return !(aka.x = AkaMinX)
+		aka.x + vX    > CaughtX && (aka.x += vX)
+		aka.x + vX/10 > AkaMinX ?  (aka.x += vX/10):(aka.x = AkaMinX)
+		return aka.x != AkaMinX
 	}
 	update() {
 		this.movePacman()
@@ -149,10 +138,9 @@ class Scene2 extends CoffBrk {
 			const rate = norm(sp.CaughtX, sp.AkaMinX, aka.x)
 			sp.expandClothes(pos, aIdx, rate)
 		}
-		super.draw()
 	}
 }
-class Scene3 extends CoffBrk {
+class Scene3 extends CBreak {
 	constructor() {
 		super(ModSymbol)
 		this.pacVelX  = -CvsW / 200
@@ -174,6 +162,5 @@ class Scene3 extends CoffBrk {
 		this.akabei.dir == L
 			? this.drawAkabei({repaired:true})
 			: this.drawAkabei({hadaketa:true})
-		super.draw()
 	}
 }
