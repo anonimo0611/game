@@ -91,7 +91,7 @@ class PlayablePacman extends Pacman {
 			this.#preDir = dir
 			return
 		}
-		if (State.isSt_Ready && Vec2(dir).x || this.#stopped) {
+		if (State.isSt_Ready && Vec2(dir).x || this.stopped) {
 			[this.#preDir,this.dir] = [null,dir]
 			return
 		}
