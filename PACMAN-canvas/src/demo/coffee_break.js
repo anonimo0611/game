@@ -13,17 +13,11 @@ const IntermissionMap = new Map([[2,1], [5,2], [9,3]])
 export class CoffBrk {
 	/** @type {?(Scene1|Scene2|Scene3)} */
 	static #scene = null
-	static {
-		$on({CoffBrk:()=> this.#begin()})
-		$('button.CB').on({click:e=> this.#begin(+e.target.value)})
-	}
+	static {$on({CoffBrk:(_,num)=> this.#begin(num)})}
 	static #begin(num=IntermissionMap.get(Game.level)) {
 		Sound.play('cutscene', {loop:1^num == 2})
+		console.log(num)
 		CoffBrk.#scene = new [Scene1,Scene2,Scene3][num-1]
-	}
-	static get isIntermission() {
-		return !Ctrl.isPractice
-			&& IntermissionMap.has(Game.level)
 	}
 	static update() {
 		this.#scene?.update()
@@ -32,7 +26,10 @@ export class CoffBrk {
 		this.#scene?.draw()
 		return State.isCoffBrk
 	}
-
+	static get isIntermission() {
+		return !Ctrl.isPractice
+			&& IntermissionMap.has(Game.level)
+	}
 	pacman  = new Pacman
 	akabei  = new Ghost
 	pacVelX = -CvsW/180
@@ -72,6 +69,9 @@ export class CoffBrk {
 		State.to(State.last('Title') || 'NewLevel')
 	}
 }
+$('button.CB').on('click', function() {
+	State.to('CoffBrk', {data:+this.value})
+})
 
 class Scene1 extends CoffBrk {
 	constructor() {

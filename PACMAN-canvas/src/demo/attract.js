@@ -34,7 +34,6 @@ export class Attract {
 		_attract?.draw()
 		return State.isAttract
 	}
-
 	/** @type {Ghost[][]} */
 	ghsList = [[],[]]
 	pacman  = new Pacman
