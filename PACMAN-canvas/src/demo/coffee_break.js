@@ -16,7 +16,6 @@ export class CoffBrk {
 	static {$on({CoffBrk:(_,num)=> this.#begin(num)})}
 	static #begin(num=IntermissionMap.get(Game.level)) {
 		Sound.play('cutscene', {loop:1^num == 2})
-		console.log(num)
 		CoffBrk.#scene = new [Scene1,Scene2,Scene3][num-1]
 	}
 	static update() {
