@@ -11,7 +11,7 @@ const $byId = id=> $('#'+id)
 const $load = fn=> $(window).one('load',fn)
 const $onNS = (ns,cfg)=> {
 	isObj(cfg) && entries(cfg).forEach(([ev,fn])=>
-		$on(String(ev).trim().replace(/[_\s]+|$/g,`${ns}\x20`),fn))
+		$offon(String(ev).trim().replace(/[_\s]+|$/g,`${ns}\x20`),fn))
 	return $(window)
 }
 const [$ready,$one,$on,$off,$offon,$trigger]= function() {
