@@ -38,12 +38,8 @@ export class CoffBrk {
 			throw TypeError('The constructor'
 			+` ${this.constructor.name}() is not visible`)
 		}
-		this.pacman.y =
-		this.akabei.y = CvsH/2 - T/2
-		$onNS('.CB',{
-			Quit:      this.end,
-			blur_focus:this.pause
-		})
+		this.pacman.y = this.akabei.y = (CvsH/2 - T/2)
+		$onNS('.CB',{Quit:this.end, blur_focus:this.pause})
 	}
 	movePacman() {
 		this.pacman.x += this.pacVelX
