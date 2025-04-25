@@ -20,13 +20,13 @@ class Points {
 	 * @param {object}
 	 * @param {function} fn
 	 */
-	constructor({key={},x=0,y=0,delay=1e3}={}, fn) {
+	constructor({key={},x=0,y=0,duration=1e3}={}, fn) {
 		const speed   = Game.speedRate
 		const fadeDur = 300
 		this.score    = +key.score
 		this.position = Vec2(x, y)
-		this.fadeOut  = new FadeOut(fadeDur/speed, (delay-fadeDur)/speed)
-		Timer.set(delay/speed, ()=> {
+		this.fadeOut  = new FadeOut(fadeDur/speed, (duration-fadeDur)/speed)
+		Timer.set(duration/speed, ()=> {
 			Timer.unfreeze()
 			PtsMap.delete(key)
 			isFun(fn) && fn()
