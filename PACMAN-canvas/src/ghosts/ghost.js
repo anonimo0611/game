@@ -222,9 +222,6 @@ export class Ghost extends Actor {
 		}
 		return false
 	}
-	#setFrightMode(_, bool=false) {
-		!this.escaping && (this.#frightened = bool)
-	}
 	crashWithPac({
 		pos    = Player.pos,
 		radius = (this.frightened? T/2:T/3),
@@ -234,11 +231,11 @@ export class Ghost extends Actor {
 		 || !collisionCircle(this, pos, radius))
 			return false
 		if (this.frightened) {
+			Sound.play('bitten')
 			Timer.freeze()
 			this.#frightened = false
 			this.trigger('Cought').state.to('Bitten')
 			PtsMgr.set({key:GhsMgr, ...this.centerPos}, fn)
-			Sound.play('bitten')
 			return true
 		}
 		if (!Ctrl.invincible) {
@@ -247,6 +244,9 @@ export class Ghost extends Actor {
 			return true
 		}
 		return false
+	}
+	#setFrightMode(_, bool=false) {
+		!this.escaping && (this.#frightened = bool)
 	}
 	#setEscape() {
 		Sound.ghostEscape()
