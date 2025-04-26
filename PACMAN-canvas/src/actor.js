@@ -4,9 +4,9 @@ import {Common} from '../_lib/common.js'
 
 const CW = CvsW
 export class Actor extends Common {
-	radius = T
 	#x = 0
 	#y = 0
+	radius  = T
 	#fadeIn = new FadeIn(500)
 
 	/** @type {keyof DirEnum} */
