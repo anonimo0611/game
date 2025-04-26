@@ -10,6 +10,7 @@ import {GhsMgr} from './_system.js'
 import * as Sys from './_system.js'
 import Sprite   from '../sprites/ghost.js'
 
+const Step = GhsStep
 const compareDist = (a,b)=>
 	(a.dist == b.dist)? (a.index-b.index) : (a.dist-b.dist)
 
@@ -80,13 +81,13 @@ export class Ghost extends Actor {
 	}
 	get step() {
 		return (state=> {
-			if (state.isIdle)    return GhsStep.Idle
-			if (state.isGoOut)   return GhsStep.GoOut
-			if (state.isEscape)  return GhsStep.Escape
-			if (state.isReturn)  return GhsStep.Return
-			if (this.isInTunnel) return GhsStep.InTunnel
-			if (this.frightened) return GhsStep.Fright
-			if (this.isScatter)  return GhsStep.Base
+			if (state.isIdle)    return Step.Idle
+			if (state.isGoOut)   return Step.GoOut
+			if (state.isEscape)  return Step.Escape
+			if (state.isReturn)  return Step.Return
+			if (this.isInTunnel) return Step.InTunnel
+			if (this.frightened) return Step.Fright
+			if (this.isScatter)  return Step.Base
 			return this.chaseStep
 		})(this.state) * Game.moveSpeed
 	}
@@ -112,9 +113,9 @@ export class Ghost extends Actor {
 		if (Timer.frozen && !this.escaping)
 			return
 		switch (this.state.current) {
-		case 'Idle':  return this.#idle(this)
-		case 'GoOut': return this.#goOut(this)
-		case 'Return':return this.#returnToHome(this)
+		case 'Idle':   return this.#idle(this)
+		case 'GoOut':  return this.#goOut(this)
+		case 'Return': return this.#returnToHome(this)
 		default: this.#walk()
 		}
 	}
