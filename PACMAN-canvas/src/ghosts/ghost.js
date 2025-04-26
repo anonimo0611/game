@@ -86,7 +86,8 @@ export class Ghost extends Actor {
 			if (state.isReturn)  return GhsStep.Return
 			if (this.isInTunnel) return GhsStep.InTunnel
 			if (this.frightened) return GhsStep.Fright
-			return this.isScatter? GhsStep.Base : this.chaseStep
+			if (this.isScatter)  return GhsStep.Base
+			return this.chaseStep
 		})(this.state) * Game.moveSpeed
 	}
 	draw() {
@@ -108,7 +109,8 @@ export class Ghost extends Actor {
 	}
 	#behavior() {
 		this.#runAway >= 0 && this.#runAway--
-		if (Timer.frozen && !this.escaping) return
+		if (Timer.frozen && !this.escaping)
+			return
 		switch (this.state.current) {
 		case 'Idle':  return this.#idle(this)
 		case 'GoOut': return this.#goOut(this)
