@@ -118,14 +118,13 @@ export class Ghost extends Actor {
 		default: this.#walk()
 		}
 	}
-	#idle({idx,step,orient,centerPos:{y:cy}}=this) {
-		if (!Ctrl.isChaseMode) {
+	#idle({idx,step,orient,state,centerPos:{y:cy}}=this) {
+		if (!Ctrl.isChaseMode)
 			Sys.DotCounter.release(idx, this.release)
-		}
-		if (!this.state.isGoOut) {
-			this.move((cy+T*0.6-step > Maze.House.MiddleY && orient != D)
-				? U : (cy-T*0.6+step < Maze.House.MiddleY ? D:U))
-		}
+		!state.isGoOut && this.move(
+			(cy+T*0.6-step > Maze.House.MiddleY && orient != D)? U:
+			(cy-T*0.6+step < Maze.House.MiddleY ? D:U)
+		)
 	}
 	release(deactivateGlobalDotCnt=false) {
 		Player.instance.resetTimer()
