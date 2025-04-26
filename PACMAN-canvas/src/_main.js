@@ -154,8 +154,9 @@ export const Game = new class {
 				State.to('Title')
 				return
 			}
-			CoffBrk.isIntermission
-				? State.to('CoffBrk')
+			const intermissionLv = {2:1, 5:2, 9:3}[Game.level]
+			!Ctrl.isPractice && intermissionLv
+				? State.to('CoffBrk', {data:intermissionLv})
 				: State.to('NewLevel')
 		}
 	}

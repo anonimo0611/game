@@ -1,6 +1,4 @@
 import {Sound}  from '../../_snd/sound.js'
-import {Game}   from '../_main.js'
-import {Ctrl}   from '../control.js'
 import {State}  from '../state.js'
 import {Fruit}  from '../fruit.js'
 import {Pacman} from '../pacman.js'
@@ -8,13 +6,12 @@ import {Ghost}  from '../ghosts/ghost.js'
 import Sprite   from '../sprites/ghost_cb.js'
 
 const ModSymbol = Symbol()
-const IntermissionMap = new Map([[2,1], [5,2], [9,3]])
 
 export class CoffBrk {
 	/** @type {?(Scene1|Scene2|Scene3)} */
 	static #scene = null
 	static {$on({CoffBrk:(_,num)=> this.#begin(num)})}
-	static #begin(num=IntermissionMap.get(Game.level)) {
+	static #begin(num) {
 		Sound.play('cutscene', {loop:1^num == 2})
 		CoffBrk.#scene = new [Scene1,Scene2,Scene3][num-1]
 	}
@@ -24,10 +21,6 @@ export class CoffBrk {
 	static draw()   {
 		this.#scene?.draw()
 		return State.isCoffBrk
-	}
-	static get isIntermission() {
-		return !Ctrl.isPractice
-			&& IntermissionMap.has(Game.level)
 	}
 	pacman  = new Pacman
 	akabei  = new Ghost
