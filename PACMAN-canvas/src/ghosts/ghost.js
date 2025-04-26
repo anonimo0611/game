@@ -113,8 +113,8 @@ export class Ghost extends Actor {
 		case 'Idle':  return this.#idle(this)
 		case 'GoOut': return this.#goOut(this)
 		case 'Return':return this.#returnToHome(this)
+		default: this.#walk()
 		}
-		this.#walk()
 	}
 	#idle({idx,step,orient,centerPos:{y:cy}}=this) {
 		if (!Ctrl.isChaseMode) {
