@@ -1,16 +1,21 @@
-import {State} from './state.js'
-import {Maze}  from './maze.js'
+import {State}  from './state.js'
+import {Maze}   from './maze.js'
+import {Common} from '../_lib/common.js'
 
 const CW = CvsW
-export class Actor {
+export class Actor extends Common {
 	radius = T
-	#x=0; #y=0; #fadeIn=new FadeIn(500)
+	#x = 0
+	#y = 0
+	#fadeIn = new FadeIn(500)
 
 	/** @type {keyof DirEnum} */
 	#orient = L
 	#movDir = this.#orient
-	constructor(dir=L) {this.dir = dir}
-
+	constructor(dir=L) {
+		super()
+		this.dir = dir
+	}
 	get x()         {return this.#x}
 	get y()         {return this.#y}
 	get pos()       {return Vec2(this)}
@@ -88,15 +93,5 @@ export class Actor {
 	getAdjTile(dir, n=1, tile=this.tilePos) {
 		const  v = Vec2(dir).mul(n).add(tile)
 		return v.setX((v.x+Cols) % Cols)
-	}
-
-	/** @param {string} state */
-	trigger(state) {
-		$(this).trigger(state)
-		return this
-	}
-	addHandler(...args) {
-		$(this).on(...args)
-		return this
 	}
 }

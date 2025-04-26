@@ -59,8 +59,8 @@ export default new class {
 	#auxLines(g, ofst) {
 		if (g.isScatter || !g.state.isWalk)
 			return
-		const {dir:pacDir,centerPos:pacPos}= Player
-		const fwdXY = Player.forwardPos(ofst).vals
+		const {dir:pacDir,centerPos:pacPos}= Player.i
+		const fwdXY = Player.i.forwardPos(ofst).vals
 		Ctx.save()
 		Ctx.globalAlpha = 0.8
 		Ctx.lineWidth   = 6
@@ -88,7 +88,7 @@ export default new class {
 		const radius = T*8
 		Ctx.save()
 		Ctx.globalAlpha = g.sqrMagToPacman < radius*radius ? 0.4 : 0.8
-		Ctx.strokeCircle(...Player.centerPos.vals, radius, Color[g.name], 6)
+		Ctx.strokeCircle(...Player.i.centerPos.vals, radius, Color[g.name], 6)
 		Ctx.restore()
 	}
 }

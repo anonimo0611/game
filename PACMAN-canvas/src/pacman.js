@@ -1,5 +1,6 @@
 import {Sound}   from '../_snd/sound.js'
 import {Confirm} from '../_lib/confirm.js'
+import {Common}  from '../_lib/common.js'
 import {Game}    from './_main.js'
 import {State}   from './state.js'
 import {Ctrl}    from './control.js'
@@ -9,30 +10,22 @@ import {Actor}   from './actor.js'
 import {GhsMgr}  from './ghosts/_system.js'
 import Sprite    from './sprites/pacman.js'
 
-export const Player = function() {
-	/** @type {?PlayablePacman} */
-	let player = null
-	$on({Title_Restart_NewLevel:
-		()=> player = new PlayablePacman()})
-	return {
-		get instance()   {return player},
-		get sprite()     {return player.sprite},
-		get dir()        {return player.dir},
-		get pos()        {return player.pos},
-		get centerPos()  {return player.centerPos},
-		get forwardPos() {return player.forwardPos},
-		/** @param {function} fn */
-		bindDotEaten(fn) {
-			isFun(fn) && $(Player).on('DotEaten',fn)
-		},
+export const Player = new class extends Common {
+	/** @type {?PlayablePac} */
+	#player = null
+	constructor() {
+		super()
+		$on({Title_Restart_NewLevel:
+			()=> this.#player = new PlayablePac})
 	}
-}()
+	get i() {return this.#player}
+}
 export class Pacman extends Actor {
 	radius = PacRadius
 	sprite = new Sprite(Ctx)
-	constructor() {super();freeze(this)}
+	constructor() {super(),freeze(this)}
 }
-class PlayablePacman extends Pacman {
+class PlayablePac extends Pacman {
 	#step     = this.#getCurrentStep()
 	#eatIdx   = 0
 	#notEaten = 0
@@ -170,7 +163,7 @@ class PlayablePacman extends Pacman {
 		isPow && GhsMgr.setFrightMode()
 		Maze.clearBgDot(this) == 0
 			? State.to('Clear')
-			: $(Player).trigger('DotEaten',isPow)
+			: Player.trigger('DotEaten',isPow)
 	}
 	#playSE() {
 		const duration = (T/this.step)*Ticker.Interval*0.5

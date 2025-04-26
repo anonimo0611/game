@@ -23,12 +23,12 @@ const releaseDelay = ghostIdx=> ({ // For always chase mode (ms)
 }[Game.restarted? 0 : Game.clampedLv][ghostIdx]/Game.speedRate)
 
 export class GhostState extends _State {
-	isIdle   = true
-	isGoOut  = false
-	isWalk   = false
-	isBitten = false
-	isEscape = false
-	isReturn = false
+	isIdle    = true
+	isGoOut   = false
+	isWalk    = false
+	isBitten  = false
+	isEscape  = false
+	isReturn  = false
 	constructor({isInHouse=false}={}) {
 		super()
 		this.init(isInHouse? 'Idle':'Walk')
@@ -161,7 +161,7 @@ export const DotCounter = function() {
 		const timeOut = (Game.level <= 4 ? 4e3:3e3)
 		const gLimit  = limitTable[idx-1][0] // global
 		const pLimit  = limitTable[idx-1][min(Game.level,3)] // personal
-		;(Player.instance.timeNotEaten >= timeOut)? fn()
+		;(Player.i.timeNotEaten >= timeOut)? fn()
 		:(!Game.restarted || _globalCounter < 0)
 			? pCounters[idx] >= pLimit && fn()
 			: _globalCounter == gLimit && fn(idx == GhsType.Guzuta)
@@ -177,7 +177,7 @@ export const DotCounter = function() {
 			: pCounters[Ghosts.findIndex(g=> g.state.isIdle)]++
 	}
 	$on({Title_Ready:reset})
-	$ready(()=> Player.bindDotEaten(addCnt))
+	$ready(()=> Player.bind({DotEaten:addCnt}))
 	return {release}
 }()
 
@@ -199,7 +199,7 @@ const Elroy = function() {
 		}
 	}
 	$on({Title_NewLevel:()=> _part=0})
-	$ready(()=> Player.bindDotEaten(onDotEaten))
+	$ready(()=> Player.bind({DotEaten:onDotEaten}))
 	return {
 		get part()  {return _part},
 		get step()  {return GhsStep.Base * speedRateTbl[_part]},

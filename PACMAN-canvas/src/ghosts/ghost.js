@@ -23,7 +23,7 @@ export class Ghost extends Actor {
 	// This section is overridden in subclasses
 	get angry()       {return false}
 	get chaseStep()   {return GhsStep.Base}
-	get chasePos()    {return Player.centerPos}
+	get chasePos()    {return Player.i.centerPos}
 	get scatterTile() {return Vec2()}
 
 	get spriteIdx()   {return GhsMgr.spriteIdx}
@@ -37,7 +37,7 @@ export class Ghost extends Actor {
 
 	constructor({col=0,row=0,idx=0,align=0,aniFlag=1,orient=L}={}) {
 		super(orient)
-		this.addHandler({
+		this.bind({
 			FrightMode:  this.#setFrightMode,
 			Reverse:()=> this.#revSig  = true,
 			Runaway:()=> this.#runAway = 400/Game.interval,
@@ -77,7 +77,7 @@ export class Ghost extends Actor {
 			&& abs(CvsW/2 - this.centerPos.x) <= this.step
 	}
 	get sqrMagToPacman() {
-		return Vec2.sqrMag(this, Player.pos)
+		return Vec2.sqrMag(this, Player.i.pos)
 	}
 	get step() {
 		return (state=> {
@@ -128,7 +128,7 @@ export class Ghost extends Actor {
 		)
 	}
 	release(deactivateGlobalDotCnt=false) {
-		Player.instance.resetTimer()
+		Player.i.resetTimer()
 		this.state.isIdle && this.state.to('GoOut')
 		return deactivateGlobalDotCnt
 	}
@@ -228,7 +228,7 @@ export class Ghost extends Actor {
 		return false
 	}
 	crashWithPac({
-		pos    = Player.pos,
+		pos    = Player.i.pos,
 		radius = (this.frightened? T/2:T/3),
 		fn = ()=> this.#setEscape()
 	}={}) {

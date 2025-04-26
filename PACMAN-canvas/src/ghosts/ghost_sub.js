@@ -17,7 +17,7 @@ class Pinky extends Ghost {
 	}
 	get scatterTile() {return Vec2(3, 0)}
 	get chasePos() {
-		const {Tunnel}=Maze, P=Player, pos=P.forwardPos(4)
+		const {Tunnel}=Maze, P=Player.i, pos=P.forwardPos(4)
 		Tunnel.isInL(P.centerPos) && P.dir == L && (pos.x=Tunnel.entranceR*T)
 		Tunnel.isInR(P.centerPos) && P.dir == R && (pos.x=Tunnel.entranceL*T)
 		return pos
@@ -29,7 +29,7 @@ class Aosuke extends Ghost {
 	}
 	get scatterTile() {return Vec2(27, 33)}
 	get chasePos() {
-		const  pos = Player.forwardPos(2)
+		const  pos = Player.i.forwardPos(2)
 		return pos.clone.sub(GhsMgr.akaCenter).add(pos)
 	}
 }
@@ -42,7 +42,7 @@ class Guzuta extends Ghost {
 		const  radius = T*8
 		return this.sqrMagToPacman < radius*radius
 			? Vec2(this.scatterTile).add(.5).mul(T)
-			: Player.centerPos
+			: Player.i.centerPos
 	}
 }
 const Classes = [Akabei,Pinky,Aosuke,Guzuta]

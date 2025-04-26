@@ -23,10 +23,10 @@ export const Fruit = new class {
 	static {$ready(this.setup)}
 	static setup() {
 		$on({
-			Title_Ready:  Fruit.#reset,
-			LevelChanged: Fruit.#setImages,
+			Title_Ready: Fruit.#reset,
+			LevelChanged:Fruit.#setImages,
 		})
-		Player.bindDotEaten(Fruit.#dotEaten)
+		Player.bind({DotEaten:Fruit.#dotEaten})
 	}
 	get score() {
 		return PointTable[Fruit.number()]
@@ -47,7 +47,7 @@ export const Fruit = new class {
 		const setFadeOut = ()=> _fadeOut = new FadeOut(fadeDur/rate)
 		Timer.set(randInt(9e3, 1e4-fadeDur)/rate, setFadeOut, {key:Fruit})
 	}
-	#collideWith(pos=Player.centerPos) {
+	#collideWith(pos=Player.i.centerPos) {
 		if (!_tgtDisp || !collisionCircle(pos, TargetPos, T/2))
 			return
 		_tgtDisp = false

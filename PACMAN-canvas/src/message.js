@@ -32,6 +32,6 @@ export const Message = new class {
 
 		if (State.isTitle
 		 || State.isGameOver)
-			drawText( 9, 19, Color.Message3, 'GAME　　OVER')
+		 	drawText( 9, 19, Color.Message3, 'GAME　　OVER')
 	}
 },{drawText}=Message

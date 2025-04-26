@@ -38,7 +38,7 @@ export const Game = new class {
 			GameOver: Game.#levelEnds,
 			Quit:     Game.#levelEnds,
 		})
-		Menu.LevelMenu.bindChange(Game.#resetLevel)
+		Menu.LevelMenu.bind({change:Game.#resetLevel})
 		State.to('Title')
  	}
 	#level = 1
@@ -111,7 +111,7 @@ export const Game = new class {
 	}
 	#onLosing() {
 		Sound.play('losing')
-		Player.sprite.setLosing()
+		Player.i.sprite.setLosing()
 		Lives.left > 0
 			? State.to('Restart', {delay:2200})
 			: State.to('GameOver',{delay:2000})
@@ -161,7 +161,7 @@ export const Game = new class {
 		}
 	}
 	#update() {
-		Player.instance.update()
+		Player.i.update()
 		GhsMgr.update()
 		PtsMgr.update()
 		Fruit.update()
@@ -181,7 +181,7 @@ export const Game = new class {
 		Fruit.drawTarget()
 		PtsMgr.drawFruitPts()
 		GhsMgr.drawBehind()
-		Player.instance.draw()
+		Player.i.draw()
 		GhsMgr.drawTargets()
 		GhsMgr.drawFront()
 		PtsMgr.drawGhostPts()

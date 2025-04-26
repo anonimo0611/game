@@ -50,7 +50,7 @@ export const Wall = new class {
 	}
 	draw(color=Color.Wall) {
 		ctx.save()
-		ctx.clearRect(0,0, CvsW, CvsH-T*2)
+		ctx.clear()
 		ctx.lineWidth   = 3.5
 		ctx.strokeStyle = color
 		Maze.Map.forEach(this.#drawTile)
