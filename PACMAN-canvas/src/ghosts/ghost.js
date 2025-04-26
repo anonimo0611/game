@@ -79,14 +79,15 @@ export class Ghost extends Actor {
 		return Vec2.sqrMag(this, Player.pos)
 	}
 	get step() {
-		const spd = Game.moveSpeed, {state}= this
-		if (state.isIdle)    return spd * GhsStep.Idle
-		if (state.isGoOut)   return spd * GhsStep.GoOut
-		if (state.isEscape)  return spd * GhsStep.Escape
-		if (state.isReturn)  return spd * GhsStep.Return
-		if (this.isInTunnel) return spd * GhsStep.InTunnel
-		if (this.frightened) return spd * GhsStep.Fright
-		return spd * (this.isScatter? GhsStep.Base : this.chaseStep)
+		return (state=> {
+			if (state.isIdle)    return GhsStep.Idle
+			if (state.isGoOut)   return GhsStep.GoOut
+			if (state.isEscape)  return GhsStep.Escape
+			if (state.isReturn)  return GhsStep.Return
+			if (this.isInTunnel) return GhsStep.InTunnel
+			if (this.frightened) return GhsStep.Fright
+			return this.isScatter? GhsStep.Base : this.chaseStep
+		})(this.state) * Game.moveSpeed
 	}
 	draw() {
 		if (State.isStart)
@@ -101,21 +102,18 @@ export class Ghost extends Actor {
 		super.update()
 		this.sprite.fadeOut?.update()
 		this.sprite.update()
-		if (this.houseEntranceArrived) {
-			this.state.to('Return')
-			this.centering()
-		}
-		if (State.isPlaying && Maze.dotsLeft) {
-			this.#behavior()
-		}
+		this.houseEntranceArrived
+			? this.#prepEnterHouse()
+			: State.isPlaying && this.#behavior()
 	}
 	#behavior() {
-		const {state}= this
 		this.#runAway >= 0 && this.#runAway--
 		if (Timer.frozen && !this.escaping) return
-		if (state.isIdle)   return this.#idle(this)
-		if (state.isGoOut)  return this.#goOut(this)
-		if (state.isReturn) return this.#returnToHome(this)
+		switch (this.state.current) {
+		case 'Idle':  return this.#idle(this)
+		case 'GoOut': return this.#goOut(this)
+		case 'Return':return this.#returnToHome(this)
+		}
 		this.#walk()
 	}
 	#idle({idx,step,orient,centerPos:{y:cy}}=this) {
@@ -147,9 +145,14 @@ export class Ghost extends Actor {
 		this.#started ||= true
 		this.state.to('Walk')
 	}
+	#prepEnterHouse() {
+		this.state.to('Return')
+		this.dir = D
+		this.centering()
+	}
 	#returnToHome({step,x,y,initX,iAlign}=this) {
 		if (y+step < Maze.House.MiddleY)
-			return this.move(D)
+			return this.setNextPos()
 
 		if (y != Maze.House.MiddleY)
 			return this.setPos({y:Maze.House.MiddleY})
