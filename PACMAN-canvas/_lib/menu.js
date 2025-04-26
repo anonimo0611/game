@@ -1,18 +1,24 @@
-class Menu {
+import {Common} from './common.js'
+
+class Menu extends Common {
 	get value() {return this.selectedItem.val ?? ''}
 	get index() {return +$(this.selectedItem).index()}
 	/** @returns {MenuItem} */
 	get selectedItem() {return this.menu.querySelector('.selected') || this.lis[0]}
 	constructor(id, type) {
 		/** @type {MenuRoot} */
-		this.root = byId(this.id=id)
-		this.root.setAttribute('type',type)
+		const root = $byId(id).attr({type}).get(0)
 		/** @type {HTMLElement} */
-		this.menu = this.root.querySelector('mn-list')
+		const menu = root.querySelector('mn-list')
 		/** @type {NodeListOf<MenuItem>} */
-		this.lis   = this.menu.querySelectorAll('mn-item')
-		this.size  = this.lis.length
-		this.label = this.root.closest('label')
+		const lis = menu.querySelectorAll('mn-item')
+		super({eventTarget:menu})
+		this.id    = id
+		this.root  = root
+		this.menu  = menu
+		this.lis   = lis
+		this.size  = lis.length
+		this.label = root.closest('label')
 		this.defaultIndex = this.index
 		this.lis.forEach(li=> $(li).css('--data', li.val))
 		this.root.closest('form')?.addEventListener('reset',()=> this.reset())
@@ -22,11 +28,9 @@ class Menu {
 			return false
 		this.selectedItem.classList.remove('selected')
 		this.lis[idx].classList.add('selected')
-		$(this.menu).trigger('change')
+		this.trigger('change')
 		return true
 	}
-	/** @param {function} fn */
-	bindChange(fn) {isFun(fn) && $(this.menu).on('change', fn)}
 	reset() {this.select(this.defaultIndex, {restore:true})}
 }
 export class DorpDown extends Menu {

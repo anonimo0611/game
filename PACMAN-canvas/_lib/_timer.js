@@ -31,6 +31,7 @@ const Ticker = freeze(new class {
 	stop()       {this.running && _ticker.stop();return this}
 	resetCount() {this.running && _ticker.resetCount()}
 })
+
 class Tick {
 	constructor(fn=null, pausingFn=null) {
 		Ticker.running && _ticker.stop()
