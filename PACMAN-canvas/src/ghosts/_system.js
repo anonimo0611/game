@@ -37,6 +37,7 @@ export class GhostState extends _State {
 	/** @returns {GhsStateType} */
 	get current()    {return super.current}
 	get isEscaping() {return this.isEscape || this.isReturn}
+
 	/** @param {GhsStateType} state */
 	to(state) {
 		return super.to(state)
