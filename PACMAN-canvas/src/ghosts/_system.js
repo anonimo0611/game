@@ -34,9 +34,9 @@ export class GhostState extends _State {
 		super()
 		this.init(isInHouse? 'Idle':'Walk')
 	}
-	get isEscaping() {
-		return this.isEscape || this.isReturn
-	}
+	/** @returns {GhsStateType} */
+	get current()    {return super.current}
+	get isEscaping() {return this.isEscape || this.isReturn}
 	/** @param {GhsStateType} state */
 	to(state) {
 		return super.to(state)

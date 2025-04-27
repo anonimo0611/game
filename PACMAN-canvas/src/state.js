@@ -20,9 +20,10 @@ export const State = new class extends _State {
 		super()
 		this.init()
 	}
-	get isSt_Ready() {
-		return this.isStart || this.isReady
-	}
+	/** @returns {StateType} */
+	get current()    {return super.current}
+	get isSt_Ready() {return this.isStart || this.isReady}
+
 	/** @param {StateType} state */
 	#callback(state, data) {
 		Ticker.resetCount()
