@@ -16,8 +16,11 @@ export default class {
 		hasOwn(this.#Enum, state) && this.to(state)
 	}
 
-	/** @param {string} state */
-	to(state, {delay=-1,data,fn}={}) {
+	/**
+	 * @param {string} state
+	 * @param {{data:any,delay?:number,fn?:function}}
+	*/
+	to(state, {data,delay=-1,fn}={}) {
 		if (!hasOwn(this.#Enum, state))
 			throw ReferenceError(`State '${state}' is not defined`)
 		if (delay >= 0) {
