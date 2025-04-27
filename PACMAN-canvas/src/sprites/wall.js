@@ -2,6 +2,11 @@ const {ctx}=Bg, W=Cols
 
 import {Maze} from '../maze.js'
 export const Wall = new class {
+	/**
+	 * @param {number} cornerIdx
+	 * @param {number} x
+	 * @param {number} y
+	 */
 	#drawCorner(cornerIdx, x, y, type=0) {
 		ctx.save()
 		ctx.translate(x+T/2, y+T/2)
@@ -22,6 +27,10 @@ export const Wall = new class {
 		ctx.closePath()
 		ctx.stroke()
 	}
+	/**
+	 * @param {string} c Map chip
+	 * @param {number} i Tile index
+	 */
 	#drawTile = (c, i)=> {
 		const [tx,ty]= [i%W, i/W|0]
 		const [px,py]= [tx*T, ty*T]

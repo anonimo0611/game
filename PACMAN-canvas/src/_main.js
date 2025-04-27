@@ -69,6 +69,7 @@ export const Game = new class {
 		Confirm.open('Are you sure you want to quit the game?',
 			Game.#pause, ()=> State.to('Quit'), 'Resume','Quit', 0)
 	}
+	/** @param {boolean} [force] */
 	#pause(force) {
 		if (State.isPlaying)
 			Sound.allPaused = Ticker.pause(force)

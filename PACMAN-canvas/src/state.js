@@ -21,6 +21,7 @@ export const State = new class extends _State {
 	get isSt_Ready() {
 		return this.isStart || this.isReady
 	}
+	/** @param {string} state */
 	#callback(state, data) {
 		Ticker.resetCount()
 		$trigger(document.body.dataset.state=state, data)

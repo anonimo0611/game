@@ -11,6 +11,8 @@ export class CoffBrk {
 	/** @type {?(Scene1|Scene2|Scene3)} */
 	static #scene = null
 	static {$on({CoffBrk:(_,num)=> this.#begin(num)})}
+
+	/** @param {1|2|3} num Scene number */
 	static #begin(num) {
 		Sound.play('cutscene', {loop:1^num == 2})
 		CoffBrk.#scene = new [Scene1,Scene2,Scene3][num-1]
@@ -26,6 +28,7 @@ export class CoffBrk {
 	akabei  = new Ghost
 	pacVelX = -CvsW/180
 
+	/** @param {Symbol} symbol */
 	constructor(symbol) {
 		if (symbol != ModSymbol) {
 			throw TypeError('The constructor'

@@ -1,6 +1,6 @@
 import {Rect}   from '../_lib/rect.js'
-import {Pacman} from './pacman.js'
 import {State}  from './state.js'
+import {Pacman} from './pacman.js'
 import {powChk} from './control.js'
 
 export const MapStr = `\
@@ -39,36 +39,48 @@ D__________________________C\
 ////////////////////////////\
 ////////////////////////////`
 
-const DotSet   = new Set()
-const WallSet  = new Set()
-const PowMap   = new Map()
+/** @type {Set<number>} */
+const DotSet = new Set()
+
+/** @type {Set<number>} */
+const WallSet = new Set()
+
+/** @type {Map<number,Vector2>} */
+const PowMap = new Map()
+
 const PenRect  = new Rect(10,13, 7,4)
 const PenOuter = new Rect( 9,12, 9,6)
 
 class House {
 	get EntranceTile() {return Vec2(13, 12)}
+	/** @param {Vector2} tilePos */
 	isIn = tilePos=> PenRect.contains(tilePos)
 	MiddleY = (this.EntranceTile.y+3.5)*T
 }
 class PowDot {
 	#disp = 1
-	#drawDot(pos) {
-		if (!State.isPlaying
-		 || Ticker.paused
-		 || this.#disp)
-			Maze.drawDot(Ctx, pos, true)
-	}
 	draw() {
 		this.#disp ^= Ticker.count % 15 == 0
-		for (const [,p] of PowMap) this.#drawDot(p)
+		for (const [,pos] of PowMap) {
+			if (!State.isPlaying
+			 || Ticker.paused
+			 || this.#disp)
+				Maze.drawDot(Ctx, pos, true)
+		}
 	}
 }
 class Tunnel {
 	entranceL =  5.5
 	entranceR = 22.5
-	isIn  = centerPos=> this.#where(centerPos) != null
-	isInL = centerPos=> this.#where(centerPos) == L
-	isInR = centerPos=> this.#where(centerPos) == R
+	/**
+	  * @param {Vector2} centerPos
+	  * @param {L|R} [dir]
+	  */
+	isIn(centerPos, dir) {
+		if (!dir)     return this.#where(centerPos) != null
+		if (dir == L) return this.#where(centerPos) == L
+		if (dir == R) return this.#where(centerPos) == R
+	}
 	#where({x, y}={}) {
 		if (int(y/T) == 15 && x/T <= this.entranceL) return L
 		if (int(y/T) == 15 && x/T >= this.entranceR) return R
@@ -89,6 +101,10 @@ export const Maze = new class {
 			/[.O]/.test(c) && Maze.#setDot(i,c)
 		e.target != powChk && Maze.#drawDoor()
 	}
+	/**
+	 * @param {number} i
+	 * @param {string} chip
+	 */
 	#setDot(i, chip) {
 		const v = Vec2(i%Cols, i/Cols|0)
 		Maze.clearBgDot({tileIdx:i,tilePos:v})
@@ -98,22 +114,28 @@ export const Maze = new class {
 			: PowMap.set(i, v)
 	}
 	get dotsLeft() {return DotSet.size}
+	GhostNotEnterSet = new Set(['12-11','12-23','15-11','15-23'])
 
 	DotMax  = MapStr.match(/[.O]/g).length
 	Map     = freeze([...MapStr])
 	House   = freeze(new House)
 	PowDot  = freeze(new PowDot)
 	Tunnel  = freeze(new Tunnel)
-	hasDot  = tileIdx=> DotSet.has(tileIdx)
-	hasPow  = tileIdx=> PowMap.has(tileIdx)
+
+	/** @param {number} tileIdx */
+	hasDot = tileIdx=> DotSet.has(tileIdx)
+
+	/** @param {number} tileIdx */
+	hasPow = tileIdx=> PowMap.has(tileIdx)
+
+	/** @param {Vector2} */
 	hasWall = ({x,y})=> WallSet.has(y*Cols+x)
 
-	GhostNotEnterSet = new Set(['12-11','12-23','15-11','15-23'])
-	ghostExitTile({originalTargetTile:o={}, tilePos:t={}}) {
-		return o.y < 10 && PenOuter.contains(t)
-			? Vec2((t.x > Cols/2) && (o.x > Cols/2) ? 21:6, 15)
-			: Vec2(o)
-	}
+	/** @param {Object.<string,Vector2>} */
+	ghostExitTile = ({originalTargetTile:o, tilePos:t})=>
+		o.y < 10 && PenOuter.contains(t)
+			? Vec2((t.x > Cols/2) && (o.x > Cols/2) ? 21:6, 15) : o
+
 	/** @param {Pacman} */
 	clearBgDot({tileIdx:i,tilePos:v}) {
 		DotSet.delete(i)
@@ -121,8 +143,11 @@ export const Maze = new class {
 		drawDot(Bg.ctx, v, true, null)
 		return DotSet.size
 	}
-	/** @param {ExtendedContext2D} ctx */
-	drawDot(ctx, {x,y}=Vec2(), isLarge=false, color=Color.Dot) {
+	/**
+	 * @param {ExtendedContext2D} ctx
+	 * @param {Position}
+	 */
+	drawDot(ctx, {x,y}, isLarge=false, color=Color.Dot) {
 		ctx.fillCircle(x*T+T/2, y*T+T/2, T/(isLarge? 2:8), color)
 	}
 	#drawDoor() {

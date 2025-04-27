@@ -9,13 +9,11 @@ export class Actor extends Common {
 	radius  = T
 	#fadeIn = new FadeIn(500)
 
-	/** @type {keyof DirEnum} */
+	/** @type {U|R|D|L} */
 	#orient = L
 	#movDir = this.#orient
-	constructor(dir=L) {
-		super()
-		this.dir = dir
-	}
+	constructor() {super()}
+
 	get x()         {return this.#x}
 	get y()         {return this.#y}
 	get pos()       {return Vec2(this)}
@@ -41,7 +39,7 @@ export class Actor extends Common {
 	get isInTunnel() {return Maze.Tunnel.isIn(this.centerPos)}
 
 	get moveAmountPerTile() {
-		const  {x,y} = this.centerPos, v = Vec2(this.dir)
+		const  {x,y} = this.centerPos, v = Vec2[this.dir]
 		const  count = v.x? x % T : y % T
 		return (v.x || v.y) > 0 ? count : T-count
 	}
@@ -61,7 +59,7 @@ export class Actor extends Common {
 	}
 	collidedWithWall(dir=this.dir) {
 		const  {step,centerPos}= this
-		const  {x,y}= Vec2(dir).mul(T/2+step).add(centerPos).divInt(T)
+		const  {x,y}= Vec2[dir].mul(T/2+step).add(centerPos).divInt(T)
 		return Maze.hasWall({x:(x+Cols) % Cols, y})
 	}
 	centering() {
@@ -76,22 +74,22 @@ export class Actor extends Common {
 		}(this.radius) ?? x
 	}
 	setNextPos(denom=1, dir=this.dir) {
-		this.pos = Vec2(dir).mul(this.step/denom).add(this)
+		this.pos = Vec2[dir].mul(this.step/denom).add(this)
 	}
 
-	/** @param {keyof DirEnum} dir */
+	/** @param {U|R|D|L} dir */
 	move(dir) {
 		this.setNextPos(1, this.dir=dir)
 	}
 
-	/** @param {keyof DirEnum} dir */
+	/** @param {U|R|D|L} dir */
 	hasAdjWall(dir) {
 		return Maze.hasWall(this.getAdjTile(dir))
 	}
 
-	/** @param {keyof DirEnum} dir */
+	/** @param {U|R|D|L} dir */
 	getAdjTile(dir, n=1, tile=this.tilePos) {
-		const  v = Vec2(dir).mul(n).add(tile)
+		const  v = Vec2[dir].mul(n).add(tile)
 		return v.setX((v.x+Cols) % Cols)
 	}
 }

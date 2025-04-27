@@ -32,9 +32,11 @@ class PlayablePac extends Pacman {
 	#turning  = false
 	#stopped  = true
 
-	/** @type {?keyof DirEnum} */
+	/** @type {?(U|R|D|L)} */
 	#preDir   = null
-	#nextTurn = this.#preDir
+
+	/** @type {?(U|R|D|L)} */
+	#nextTurn = null
 
 	get closed()       {return State.isPlaying == false}
 	get showCenter()   {return Ctrl.showGridLines}
@@ -66,12 +68,17 @@ class PlayablePac extends Pacman {
 			: (eating? PacStep.Eating : PacStep.Base)
 		) * this.#baseSpeed
 	}
+	/**
+	 * @param {KeyboardEvent} e
+	 * @param {?(U|R|D|L)} dir
+	*/
 	#ignoreKeys(e, dir) {
 		return Confirm.opened
 			|| keyRepeat(e)
 			|| (dir == null)
 			|| (dir == this.dir && !this.turning)
 	}
+	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
 		const dir = Dir.from(e, {wasd:true})
 		if (this.#ignoreKeys(e, dir))
@@ -84,7 +91,7 @@ class PlayablePac extends Pacman {
 			this.#preDir = dir
 			return
 		}
-		if (State.isSt_Ready && Vec2(dir).x || this.stopped) {
+		if (State.isSt_Ready && Vec2[dir].x || this.stopped) {
 			[this.#preDir,this.dir] = [null,dir]
 			return
 		}
@@ -99,7 +106,7 @@ class PlayablePac extends Pacman {
 	}
 	forwardPos(num=0) {
 		const  ofstX = (this.dir == Dir.Up ? -num : 0)
-		return Vec2(this.dir).mul(num*T).add(this.centerPos).add(ofstX*T, 0)
+		return Vec2[this.dir].mul(num*T).add(this.centerPos).add(ofstX*T, 0)
 	}
 	draw() {
 		if (State.isStart)
@@ -153,10 +160,11 @@ class PlayablePac extends Pacman {
 		Dir.opp.get(this.orient) == this.dir
 			&& (this.movDir = this.orient)
 	}
-	#eaten(idx) {
-		if (!Maze.hasDot(idx))
+	/** @param {number} tileIdx */
+	#eaten(tileIdx) {
+		if (!Maze.hasDot(tileIdx))
 			return
-		const isPow = Maze.hasPow(idx)
+		const isPow = Maze.hasPow(tileIdx)
 		this.#playSE()
 		this.resetTimer()
 		Score.add(isPow? 50:10)

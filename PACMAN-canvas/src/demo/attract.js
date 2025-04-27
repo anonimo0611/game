@@ -41,6 +41,7 @@ export class Attract {
 	pacVelX = -CvsW/180
 	ghsVelX = -CvsW/169
 
+	/** @param {Symbol} symbol */
 	constructor(symbol) {
 		if (symbol != ModSymbol) {
 			throw TypeError('The constructor'
@@ -56,6 +57,10 @@ export class Attract {
 		}
 		$(GhsMgr).trigger('Init', this.ghsList[DEMO])
 	}
+	/**
+	 * @param {number} idx
+	 * @param {number} gIdx
+	 */
 	setActor(idx, gIdx) {
 		const g = new Ghost({idx:gIdx,aniFlag:+!!idx})
 		if (idx) {
@@ -65,6 +70,11 @@ export class Attract {
 		g.dir = [R,L][idx]
 		this.ghsList[idx].push(g)
 	}
+	/**
+	 * @param {number} idx
+	 * @param {number} ghsIdx
+	 * @param {Vector2} [pos]
+	 */
 	drawGhost(idx, ghsIdx, pos) {
 		const
 		ghost = this.ghsList[idx][ghsIdx]
@@ -139,6 +149,7 @@ export class Attract {
 			GhsMgr.crashWithPac(g, this.pacman.pos, {radius:T/4,fn})
 		})
 	}
+	/** @param {Event} e */
 	quit(e) {
 		if (e.target.tagName == 'BUTTON')
 			return

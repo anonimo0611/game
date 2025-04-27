@@ -11,9 +11,6 @@ import * as Sys from './_system.js'
 import Sprite   from '../sprites/ghost.js'
 
 const Step = GhsStep
-const compareDist = (a,b)=>
-	(a.dist == b.dist)? (a.index-b.index) : (a.dist-b.dist)
-
 export class Ghost extends Actor {
 	#runAway    = -1
 	#started    = false
@@ -36,12 +33,14 @@ export class Ghost extends Actor {
 	get chaseTile()   {return this.chasePos.divInt(T)}
 
 	constructor({col=0,row=0,idx=0,align=0,aniFlag=1,orient=L}={}) {
-		super(orient)
+		super()
 		this.bind({
 			FrightMode:  this.#setFrightMode,
 			Reverse:()=> this.#revSig  = true,
 			Runaway:()=> this.#runAway = 400/Game.interval,
 		})
+		/** @type {U|R|D|L} */
+		this.dir     = orient
 		this.idx     = idx
 		this.initX   = col*T
 		this.iAlign  = align
@@ -77,7 +76,7 @@ export class Ghost extends Actor {
 			&& abs(CvsW/2 - this.centerPos.x) <= this.step
 	}
 	get sqrMagToPacman() {
-		return Vec2.sqrMag(this, Player.i.pos)
+		return Vec2.sqrMagnitude(this, Player.i.pos)
 	}
 	get step() {
 		return (state=> {
@@ -195,24 +194,34 @@ export class Ghost extends Actor {
 		const tile = this.getAdjTile(this.dir)
 		const dirs = [U,L,D,R].flatMap((dir,index)=> {
 			const  test = this.getAdjTile(dir,1,tile)
-			const  dist = Vec2.sqrMag(test,target)
-			return this.#isAllowDir(dir,test)? {index,dir,dist}:[]
+			const  dist = Vec2.sqrMagnitude(test,target)
+			return this.#isAllowDir(dir,test)? [{index,dir,dist}]:[]
 		})
 		return this.frightened
 			? randChoice(dirs).dir
 			: dirs.sort(compareDist).at(this.#runAway<0 ? 0:-1).dir
 	}
+
+	/**
+	 * @param {U|R|D|L} dir
+	 * @param {Vector2} tile
+	 */
 	#isAllowDir(dir, tile) {
 		return !Maze.hasWall(tile)
 			&& !this.#notEnterTile(dir,tile)
 		    && Dir.opp.get(this.orient) != dir
 	}
+	/**
+	 * @param {U|R|D|L} dir
+	 * @param {Vector2} tile
+	 */
 	#notEnterTile(dir, tile) {
 		return !Ctrl.unrestricted
 			&& (this.state.isWalk && !this.frightened)
 			&& (dir == U)
 			&& Maze.GhostNotEnterSet.has(tile.hyphenated)
 	}
+
 	#setTurn({dir,orient,pos,tilePos:t}=this) {
 		if (dir == orient
 		 || this.hasAdjWall(orient))
@@ -240,7 +249,7 @@ export class Ghost extends Actor {
 			Timer.freeze()
 			this.#frightened = false
 			this.trigger('Cought').state.to('Bitten')
-			PtsMgr.set({key:GhsMgr, ...this.centerPos}, fn)
+			new PtsMgr.Pts({key:GhsMgr, ...this.centerPos}, fn)
 			return true
 		}
 		if (!Ctrl.invincible) {

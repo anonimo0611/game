@@ -38,7 +38,9 @@ export class GhostState extends _State {
 	}
 }
 
+/** @param {Ghost} g */
 const behindThePac = g=> g.frightened
+/** @param {Ghost} g */
 const inFrontOfPac = g=> !behindThePac(g)
 
 export const GhsMgr = new class {
@@ -112,6 +114,7 @@ const AlternateBetweenModes = function() {
 			update() {State.isPlaying && seq.update?.()},
 		}
 	}
+	/** @param {number} lv */
 	function genDurList(lv) {
 		return freeze([ // ms
 			lv <= 4 ? 4500 : 4000,
@@ -225,6 +228,7 @@ class FrightMode {
 		FrightMode.#instance = this.#toggle(true)
 		$(Ghosts).offon({Cought:()=> ++this.#caughtCnt})
 	}
+	/** @param {boolean} bool */
 	#toggle(bool) {
 		FrightMode.#instance = null
 		$(Ghosts).trigger('FrightMode',bool)

@@ -68,7 +68,7 @@ export default new class {
 		Ctx.strokeStyle = Color[g.name]
 		Ctx.beginPath()
 		Ctx.moveTo(...pacPos.vals)
-		Ctx.lineTo(...Vec2(pacDir).mul(ofst*T).add(pacPos).vals)
+		Ctx.lineTo(...Vec2[pacDir].mul(ofst*T).add(pacPos).vals)
 		pacDir == U && Ctx.lineTo(...fwdXY)
 		Ctx.stroke()
 		if (g.idx == GhsType.Aosuke) {

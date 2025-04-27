@@ -18,8 +18,8 @@ class Pinky extends Ghost {
 	get scatterTile() {return Vec2(3, 0)}
 	get chasePos() {
 		const {Tunnel}=Maze, P=Player.i, pos=P.forwardPos(4)
-		Tunnel.isInL(P.centerPos) && P.dir == L && (pos.x=Tunnel.entranceR*T)
-		Tunnel.isInR(P.centerPos) && P.dir == R && (pos.x=Tunnel.entranceL*T)
+		Tunnel.isIn(P.centerPos,L) && P.dir == L && (pos.x=Tunnel.entranceR*T)
+		Tunnel.isIn(P.centerPos,R) && P.dir == R && (pos.x=Tunnel.entranceL*T)
 		return pos
 	}
 }

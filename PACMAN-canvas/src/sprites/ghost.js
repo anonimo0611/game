@@ -135,10 +135,11 @@ export default class {
 			ctx.fillCircle(19*v, 4, 8, Color.GhostEyes)
 		}
 	}
-	#eyesLookingLR({orient=Dir.Left}) {
+	/** @param {Object.<string,L|R>}  */
+	#eyesLookingLR({orient}) {
 		const {ctx}= this
 		ctx.save()
-		ctx.scale(Vec2(orient).x, 1)
+		ctx.scale(Vec2[orient].x, 1)
 		for (let i=0; i<=1; i++) {
 			// Eyeballs
 			ctx.beginPath()

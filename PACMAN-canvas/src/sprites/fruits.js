@@ -240,14 +240,18 @@ function key(ctx=Ctx) {
 }
 const Fns = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
 
-export function draw(ctx=Ctx, idx=0, x=T,y=T, scale=T/8) {
+/**
+ * @param {ExtendedContext2D} ctx
+ * @param {number} fruitIdx
+ */
+export function draw(ctx, fruitIdx, x=T,y=T, scale=T/8) {
 	const Scale = 1.05
 	ctx.save()
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
 	ctx.translate(x, y)
 	ctx.scale(scale*Scale, scale*Scale)
-	Fns[idx](ctx)
+	Fns[fruitIdx](ctx)
 	ctx.restore()
 }
 export const [current,cache]= function() {

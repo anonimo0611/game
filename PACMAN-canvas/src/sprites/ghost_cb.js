@@ -101,6 +101,10 @@ export default class {
 		ctx.fill()
 		this.#hadakeEyes([28,49],[34,56])
 	}
+	/**
+	 * @param {[L:number, R:number]} ballsLR
+	 * @param {[L:number, R:number]} eyesLR
+	 */
 	#hadakeEyes(ballsLR, eyesLR) {
 		const {ctx}= this
 		for (let i=1; i>=0; i--) {
@@ -140,6 +144,11 @@ class StakeClothes {
 		Ctx.fillPolygon(Color.Akabei, [0,-4],[0,-this.stakeSize.y],[-T,0],[-4,0],[-4,-4])
 		Ctx.restore()
 	}
+	/**
+	 * @param {{x:number, y:number, size?:number}}
+	 * @param {number} aIdx
+	 * @param {number} rate
+	 */
 	expandClothes({x, y, size=T*2}={}, aIdx, rate) {
 		const v1 = lerp(-2,  5, rate)
 		const v2 = lerp( 4, 22, rate)

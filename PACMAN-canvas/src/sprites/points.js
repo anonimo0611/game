@@ -47,15 +47,25 @@ export default new class {
 		})
 		Ctx.restore()
 	}
+	/**
+	 * @param {number} x
+	 * @param {number} y
+	 */
 	#strokeThin1(x, y) {
 		this.#strokeLines([x,y,x,y+6])
 	}
+	/**
+	 * @param {number} n
+	 * @param {number} x
+	 * @param {number} y
+	 */
 	#strokeNumber(n, x, y) {
 		Ctx.save()
 		Ctx.translate(x,y)
 		this.#strokeLines(linePaths0_8[n], n==0 || n==8)
 		Ctx.restore()
 	}
+	/** @param {number[]} v */
 	#strokeLines(v, isClose=false) {
 		Ctx.beginPath()
 		Ctx.moveTo(v[0], v[1])
