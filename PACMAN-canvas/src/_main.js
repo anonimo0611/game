@@ -100,7 +100,7 @@ export const Game = new class {
 		Cursor.default()
 		Sound.stop()
 		Game.#resetLevel()
-		Ticker.set(Game.#loop, Game.#pausing)
+		Ticker.set(Game.#loop, Game.#draw)
 	}
 	#onStart() {
 		Cursor.hide()
@@ -187,9 +187,6 @@ export const Game = new class {
 		GhsMgr.drawFront()
 		PtsMgr.drawGhostPts()
 		Message.draw()
-	}
-	#pausing() {
-		Game.#draw()
 	}
 	#loop() {
 		Game.#update()
