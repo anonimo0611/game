@@ -14,7 +14,8 @@ export const Ctrl = new class {
 		Ctrl.#restore()
 		Ctrl.#setupCtrls()
 		Ctrl.#drawInfo()
-		$on({resize:Ctrl.#fitToViewport}).trigger('resize')
+		Ctrl.#fitToViewport()
+		$on({resize:Ctrl.#fitToViewport})
 	}
 	get extendPts()     {return +Menu.ExtendMenu.value}
 	get livesMax()      {return input('lvsRng').valueAsNumber}
