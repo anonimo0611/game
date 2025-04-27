@@ -22,6 +22,7 @@ const releaseDelay = ghostIdx=> ({ // For always chase mode (ms)
 	13:[   0,  900,    0]
 }[Game.restarted? 0 : Game.clampedLv][ghostIdx]/Game.speedRate)
 
+/** @typedef {'Idle'|'GoOut'|'Walk'|'Bitten'|'Escape'|'Return'} GhsStateType */
 export class GhostState extends _State {
 	isIdle    = true
 	isGoOut   = false
@@ -36,12 +37,11 @@ export class GhostState extends _State {
 	get isEscaping() {
 		return this.isEscape || this.isReturn
 	}
+	/** @param {GhsStateType} state */
+	to(state) {
+		return super.to(state)
+	}
 }
-
-/** @param {Ghost} g */
-const behindThePac = g=> g.frightened
-/** @param {Ghost} g */
-const inFrontOfPac = g=> !behindThePac(g)
 
 export const GhsMgr = new class {
 	static {$ready(this.setup)}
@@ -101,8 +101,8 @@ export const GhsMgr = new class {
 	}
 	#draw = (_,i,array)=> array[array.length-1-i].draw()
 	drawTargets() {Target.draw(Ghosts)}
-	drawFront()   {Ghosts.filter(inFrontOfPac).forEach(this.#draw)}
-	drawBehind()  {Ghosts.filter(behindThePac).forEach(this.#draw)}
+	drawFront()   {Ghosts.filter(g=>!g.frightened).forEach(this.#draw)}
+	drawBehind()  {Ghosts.filter(g=> g.frightened).forEach(this.#draw)}
 }
 
 const AlternateBetweenModes = function() {
