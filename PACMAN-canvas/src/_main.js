@@ -100,7 +100,7 @@ export const Game = new class {
 		Cursor.default()
 		Sound.stop()
 		Game.#resetLevel()
-		Ticker.set(Game.#loop, Game.#draw)
+		Ticker.set(Game.#loop, Game.#pausing)
 	}
 	#onStart() {
 		Cursor.hide()
@@ -119,7 +119,7 @@ export const Game = new class {
 	}
 	#onClear() {
 		Sound.stopLoops()
-		State.to('FlashMaze', {delay:1000})
+		State.to('FlashMaze',{delay:1000})
 	}
 	#onFlashMaze() {
 		let count = 0
@@ -136,7 +136,7 @@ export const Game = new class {
 	}
 	#levelBegins() {
 		Game.#restarted = State.isRestart
-		State.to('Ready').to('Playing', {delay:2200})
+		State.to('Ready').to('Playing',{delay:2200})
 	}
 	#levelEnds() {
 		Game.#restarted = false
@@ -147,7 +147,7 @@ export const Game = new class {
 			return
 		}
 		if (State.isGameOver) {
-			State.to('Title', {delay:2500})
+			State.to('Title',{delay:2500})
 			return
 		}
 		if (State.isFlashMaze) {
@@ -155,10 +155,10 @@ export const Game = new class {
 				State.to('Title')
 				return
 			}
-			const intermissionLv = {2:1, 5:2, 9:3}[Game.level]
-			!Ctrl.isPractice && intermissionLv
-				? State.to('CoffBrk', {data:intermissionLv})
-				: State.to('NewLevel')
+			const intermissionLv = +{2:1, 5:2, 9:3}[Game.level]
+			Ctrl.isPractice || isNaN(intermissionLv)
+				? State.to('NewLevel')
+				: State.to('CoffBrk',{data:intermissionLv})
 		}
 	}
 	#update() {
@@ -187,6 +187,9 @@ export const Game = new class {
 		GhsMgr.drawFront()
 		PtsMgr.drawGhostPts()
 		Message.draw()
+	}
+	#pausing() {
+		Game.#draw()
 	}
 	#loop() {
 		Game.#update()

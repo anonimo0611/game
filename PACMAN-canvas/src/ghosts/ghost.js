@@ -254,7 +254,7 @@ export class Ghost extends Actor {
 		}
 		if (!Ctrl.invincible) {
 			Sound.stopLoops()
-			State.to('Crashed').to('Losing', {delay:500})
+			State.to('Crashed').to('Losing',{delay:500})
 			return true
 		}
 		return false
