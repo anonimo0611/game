@@ -77,9 +77,10 @@ class Tunnel {
 	  * @param {L|R} [dir]
 	  */
 	isIn(centerPos, dir) {
-		if (!dir)     return this.#where(centerPos) != null
-		if (dir == L) return this.#where(centerPos) == L
-		if (dir == R) return this.#where(centerPos) == R
+		const where = this.#where(centerPos)
+		if (dir == L) return (where == L)
+		if (dir == R) return (where == R)
+		return where != null
 	}
 	#where({x, y}={}) {
 		if (int(y/T) == 15 && x/T <= this.entranceL) return L
@@ -102,16 +103,16 @@ export const Maze = new class {
 		e.target != powChk && Maze.#drawDoor()
 	}
 	/**
-	 * @param {number} i
+	 * @param {number} idx
 	 * @param {string} chip
 	 */
-	#setDot(i, chip) {
-		const v = Vec2(i%Cols, i/Cols|0)
-		Maze.clearBgDot({tileIdx:i,tilePos:v})
-		DotSet.add(i)
+	#setDot(idx, chip) {
+		const v = Vec2(idx%Cols, idx/Cols|0)
+		Maze.clearBgDot({tileIdx:idx,tilePos:v})
+		DotSet.add(idx)
 		!powChk.checked || (chip == '.')
 			? drawDot(Bg.ctx, v)
-			: PowMap.set(i, v)
+			: PowMap.set(idx, v)
 	}
 	get dotsLeft() {return DotSet.size}
 	GhostNotEnterSet = new Set(['12-11','12-23','15-11','15-23'])
@@ -128,7 +129,7 @@ export const Maze = new class {
 	/** @param {number} tileIdx */
 	hasPow = tileIdx=> PowMap.has(tileIdx)
 
-	/** @param {Vector2} */
+	/** @param {Position} */
 	hasWall = ({x,y})=> WallSet.has(y*Cols+x)
 
 	/** @param {Object.<string,Vector2>} */
@@ -137,9 +138,9 @@ export const Maze = new class {
 			? Vec2((t.x > Cols/2) && (o.x > Cols/2) ? 21:6, 15) : o
 
 	/** @param {Pacman} */
-	clearBgDot({tileIdx:i,tilePos:v}) {
-		DotSet.delete(i)
-		PowMap.delete(i)
+	clearBgDot({tileIdx:idx,tilePos:v}) {
+		DotSet.delete(idx)
+		PowMap.delete(idx)
 		drawDot(Bg.ctx, v, true, null)
 		return DotSet.size
 	}
