@@ -100,7 +100,7 @@ class Vector2 {
 		return freeze(this)
 	}
 	#checkScaler(s) {
-		if (!isNum(s)) throw TypeError(`Scalar '${v1}' is not a number`)
+		if (!isNum(s)) throw TypeError(`Scalar '${s}' is not a number`)
 	}
 	#check(v1=0,v2=0) {
 		const [x,y] = isObj(v1) ? [v1.x, v1.y] : [v1, v2]
