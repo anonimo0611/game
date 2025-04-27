@@ -1,6 +1,7 @@
 import {Rect}   from '../_lib/rect.js'
 import {State}  from './state.js'
 import {Pacman} from './pacman.js'
+import {Ghost}  from './ghosts/ghost.js'
 import {powChk} from './control.js'
 
 export const MapStr = `\
@@ -132,7 +133,7 @@ export const Maze = new class {
 	/** @param {Position} */
 	hasWall = ({x,y})=> WallSet.has(y*Cols+x)
 
-	/** @param {Object.<string,Vector2>} */
+	/** @param {Ghost} */
 	ghostExitTile = ({originalTargetTile:o, tilePos:t})=>
 		o.y < 10 && PenOuter.contains(t)
 			? Vec2((t.x > Cols/2) && (o.x > Cols/2) ? 21:6, 15) : o
