@@ -33,7 +33,7 @@ class Vector2 {
 	/** @param {number} x */
 	setX(x) {return this.set(x, this.y)}
 
-	/** @param {number} x */
+	/** @param {number} y */
 	setY(y) {return this.set(this.x, y)}
 
 	/**
