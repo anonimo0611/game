@@ -17,7 +17,7 @@ class AnimeData {
 		this.ghost    = ghost
 		this.type     = type
 		this.subType  = subType
-		this.orient   = Dir.Left
+		this.orient   = Left
 	}
 }
 function getOrient() {
@@ -102,13 +102,16 @@ function getOrient() {
 			? drawPacman()
 			: drawGhost()
 	}
-	menu.bindChange(change)
+	menu.bind({change})
 	menu.root.addEventListener('keydown', e=> {
 		// Enable switching of radio controls with the ← or → key
-		const dir = Dir.from(e), vx = Vec2(dir).x
-		const idx = +$(`${radioSelector}:enabled:checked`).data('idx')
-		if (!menu.closed || !vx || isNaN(idx)) return
-		$(radioSelector).eq((vx+idx+4) % 4).prop({checked:true}).trigger('change')
+		const dir = Dir.from(e)
+		if (dir) {
+			const vx  = Vec2[dir].x
+			const idx = +$(`${radioSelector}:enabled:checked`).data('idx')
+			if (!menu.closed || !vx || isNaN(idx)) return
+			$(radioSelector).eq((vx+idx+4) % 4).prop({checked:true}).trigger('change')
+		}
 	})
 	$(radioSelector).on('change', e=> {data.orient=e.target.value})
 	Ticker.set(()=> {update();draw()})

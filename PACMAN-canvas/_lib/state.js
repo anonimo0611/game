@@ -1,21 +1,24 @@
 export default class {
 	#state = ''
 	#last  = ''
+	#Enum  = Object.create(null)
 	get current() {return this.#state}
+
+	/** @param {string} state */
 	init(state) {
-		this.Enum = Object.create(null)
 		entries(this).forEach(([key,val])=> {
 			const state = key.match(/^is([A-Z][a-zA-Z\d]*)$/)?.[1]
-			if (!state) return; this.Enum[state] = state
+			if (!state) return; this.#Enum[state] = state
 			if (this.#state === '' && val === true) this.#state = state
 			defineProperty(this, key, {get(){return this.#state === state}})
 		})
-		freeze(this.Enum)
-		hasOwn(this.Enum, state) && this.to(state)
+		freeze(this.#Enum)
+		hasOwn(this.#Enum, state) && this.to(state)
 	}
+
 	/** @param {string} state */
 	to(state, {delay=-1,data,fn}={}) {
-		if (!hasOwn(this.Enum, state))
+		if (!hasOwn(this.#Enum, state))
 			throw ReferenceError(`State '${state}' is not defined`)
 		if (delay >= 0) {
 			Timer.set(delay, ()=> this.to(state,{delay:-1,data}))
@@ -25,6 +28,7 @@ export default class {
 		isFun(fn) && fn(state,data)
 		return this
 	}
+
 	/** @param {string} state */
 	last(state) {
 		return state? (state === this.#last ? this.#last : '') : this.#last

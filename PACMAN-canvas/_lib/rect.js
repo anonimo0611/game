@@ -1,6 +1,12 @@
 export class Rect {
 	#vals = [0,0,0,0]
-	constructor(x=0,y=0,w=0,h=0) {
+	/**
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {number} w
+	 * @param {number} h
+	 */
+	constructor(x,y,w,h) {
 		this.x = x
 		this.y = y
 		this.w = w
@@ -8,11 +14,12 @@ export class Rect {
 		this.#vals = freeze([x,y,w,h])
 		freeze(this)
 	}
-	get vals() {return this.#vals}
+	/** @param {{x:number, y:number}} pos */
 	contains(pos={}) {
 		const [x,y,w,h]=this.#vals
 		return (
 			between(pos?.x, x, x+w) &&
 			between(pos?.y, y, y+h) )
 	}
+	get vals() {return this.#vals}
 }

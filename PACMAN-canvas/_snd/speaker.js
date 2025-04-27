@@ -1,5 +1,6 @@
 ﻿const {cvs,ctx}= canvas2D('speakerCvs', +$('#volume').height())
 export const Speaker = new class {
+	/** @param {number} vol */
 	draw(vol) {
 		const {width,height}= cvs
 		const step = this.#step(vol)
@@ -14,11 +15,12 @@ export const Speaker = new class {
 			: this.#drawWaves(vol, step)
 		ctx.restore()
 	}
-	#step(v) {
-		if (v == 0) return 0
-		if (between(v, 8, 10)) return 3
-		if (between(v, 3,  7)) return 2
-		if (between(v, 1,  2)) return 1
+	/** @param {number} vol */
+	#step(vol) {
+		if (between(vol, 8, 10)) return 3
+		if (between(vol, 3,  7)) return 2
+		if (between(vol, 1,  2)) return 1
+		if (vol == 0) return 0
 	}
 	#drawBody() {
 		ctx.newLinePath(
@@ -34,6 +36,10 @@ export const Speaker = new class {
 		ctx.strokeLine(+18, -18, -18, +18)
 		ctx.restore()
 	}
+	/**
+	 * @param {number} vol
+	 * @param {number} step
+	 */
 	#drawWaves(vol, step) {
 		ctx.save()
 		ctx.lineCap = 'round'

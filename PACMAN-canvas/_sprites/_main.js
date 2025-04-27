@@ -5,7 +5,8 @@ import pointsSprite  from '../src/sprites/points.js'
 import {GridSize,T,S,Gap,ghost,cbAka} from './_constants.js'
 
 export const View = function() {
-	const ofst = idx=> (S*idx)+(Gap*idx)
+	/** @param {number} colIdx */
+	const ofst = colIdx=> (S*colIdx)+(Gap*colIdx)
 	function draw() {
 		Ctx.save()
 		Ctx.translate(Gap, Gap/2)
@@ -43,6 +44,10 @@ export const View = function() {
 				Ctx.restore()
 			}
 	}
+	/**
+	 * @param {number} col
+	 * @param {number} row
+	 */
 	function drawGhost(col, row) {
 		const [x,y]= [ofst(col), row*S]
 		const dirs = [U,U,L,L,D,D,R,R]
@@ -72,10 +77,11 @@ export const View = function() {
 			pointsSprite.draw(0, 0, pts)
 			Ctx.restore()
 		}
-		const pts1 = (pts,i)=> {draw(pts, ofst(i)+T, S*6+T)}
-		const pts2 = (pts,i)=> {draw(pts, (S+Gap/2)+S*(2+Gap/T)*i, S*7+S/2)}
-		;[200,400,800,1600,100,300,500,700].forEach(pts1)
-		;[1000,2000,3000,5000].forEach(pts2)
+		;[200,400,800,1600,100,300,500,700].forEach(
+			(pts,i)=> draw(pts, ofst(i)+T, S*6+T))
+
+		;[1000,2000,3000,5000].forEach(
+			(pts,i)=> draw(pts, (S+Gap/2)+S*(2+Gap/T)*i, S*7+S/2))
 	}
 	function drawPacman() {
 		const dirs = [U,U,L,L,D,D,R,R]

@@ -7,8 +7,13 @@ $.fn.opacity = function(a, ms) {
 		? $(this).css('opacity')
 		: $(this).css({opacity:+a,transition:isNum(ms)?`opacity ${ms}ms`:null})
 }
+/** @param {string} id */
 const $byId = id=> $('#'+id)
+
+/** @param {function} fn */
 const $load = fn=> $(window).one('load',fn)
+
+/** @param {string} ns */
 const $onNS = (ns,cfg)=> {
 	isObj(cfg) && entries(cfg).forEach(([ev,fn])=>
 		$offon(String(ev).trim().replace(/[_\s]+|$/g,`${ns}\x20`),fn))

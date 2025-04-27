@@ -4,21 +4,23 @@ const Instance = new Map()
 import {Manifest,ConfigMap,SoundIds} from './_manifest.js'
 export class SoundMgr {
 	static #disabled = true
-	static ids = SoundIds
-	static setup() {return new Promise(this.#setup)}
-	static #setup(resolve, reject) {
-		let amount = 0;
-		Sound.registerSounds(Manifest)
-		Sound.on('fileerror', reject)
-		Sound.on('fileload', ()=> {
-			if (++amount < Manifest.length)
-				return
-			SoundMgr.#disabled = false
-			SoundIds.forEach(i=> Instance.set(i, Sound.createInstance(i)))
-			Instance.forEach(i=> i.setPaused = bool=> i.paused = bool)
-			resolve(true)
+	static ids   = SoundIds
+	static setup = ()=>
+		new Promise((resolve, reject)=> {
+			let amount = 0;
+			Sound.registerSounds(Manifest)
+			Sound.on('fileerror', reject)
+			Sound.on('fileload', ()=> {
+				if (++amount < Manifest.length)
+					return
+				SoundMgr.#disabled = false
+				SoundIds.forEach(i=> Instance.set(i, Sound.createInstance(i)))
+				Instance.forEach(i=> i.setPaused = bool=> i.paused = bool)
+				resolve()
+			})
 		})
-	}
+		.then(()=> true).catch(()=> false)
+
 	set vol(vol)   {Sound.volume = isNum(vol)? vol/10 : this.vol}
 	get vol()      {return Sound.volume * 10}
 	get disabled() {return SoundMgr.#disabled}

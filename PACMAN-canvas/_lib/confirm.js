@@ -26,6 +26,7 @@ export const Confirm = new class {
 		$onNS(NS,{mousedown:e=> e.preventDefault()})
 		_opened = true
 	}
+	/** @param {function} fn */
 	#close(fn) {
 		$('#confirm').opacity(0,500).on('transitionend', e=> {
 			$(e.target).remove()

@@ -14,8 +14,7 @@ const isEnterKey = e=> /^(\x20|Enter)$/.test(e.key)
 export const Sound = new class extends SoundMgr {
 	static {this.#init()}
 	static async #init() {
-		const result = await SoundMgr.setup().catch(()=> false)
-		if (!result)
+		if (!await SoundMgr.setup())
 			return $('.volCtrl').hide()
 		Sound.vol = localStorage.anoPacVolume ?? 5
 		$on({keydown:Sound.#onKeydown})
@@ -28,6 +27,7 @@ export const Sound = new class extends SoundMgr {
 	#onWheel(e) {
 		Sound.vol = (e.type=='input'? e.target:volRng).valueAsNumber
 	}
+	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
 		if (keyRepeat(e) || isCombinationKey(e))
 			return
