@@ -14,7 +14,7 @@ export class Rect {
 		this.#vals = freeze([x,y,w,h])
 		freeze(this)
 	}
-	/** @param {{x:number, y:number}} pos */
+	/** @param {Position} pos */
 	contains(pos={}) {
 		const [x,y,w,h]=this.#vals
 		return (
