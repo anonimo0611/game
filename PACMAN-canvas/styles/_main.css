@@ -7,12 +7,6 @@ html,body {
 }
 html {
 	font-size: 28px;
-	-webkit-user-select: none;
-	user-select: none;
-}
-html[data-cursor=hidden] {
-	body:not([data-state=Title])
-		#board {cursor: none}
 }
 body {
 	color: #FFF;

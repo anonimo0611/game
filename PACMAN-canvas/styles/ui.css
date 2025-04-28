@@ -1,3 +1,17 @@
+html {
+	-webkit-user-select: none;
+	user-select: none;
+	&[data-cursor=hidden] {
+		body:not([data-state=Title]) #board {
+			cursor: none
+		}
+	}
+}
+::selection {
+	color: inherit;
+	background: transparent;
+}
+
 dialog {
 	color: #FFF;
 	background: #333;
