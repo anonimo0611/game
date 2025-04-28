@@ -1,7 +1,7 @@
 'use strict'
 const {Ticker,Timer}= function() {
 
-/** @type {Map<any,{ms:number,fn:function,ignoreFrozen:boolean,amount:number}>} */
+/** @type {Map<any,{ms:number,fn:Function,ignoreFrozen:boolean,amount:number}>} */
 const TimerMap = new Map()
 
 /** @type {?Tick} */
@@ -19,8 +19,8 @@ const Ticker = freeze(new class {
 	get pausedCount() {return _pausedCounter}
 
 	/**
-	 * @param {function} [handler]
-	 * @param {function} [pausedHandler]
+	 * @param {Function} [handler]
+	 * @param {Function} [pausedHandler]
 	 */
 	set(handler, pausedHandler) {
 		new Tick(handler, pausedHandler)
@@ -91,7 +91,7 @@ const Timer = freeze(new class {
 
 	/**
 	 * @param {number} ms
-	 * @param {function} fn
+	 * @param {Function} fn
 	 */
 	set(ms, fn, {key,ignoreFrozen=Timer.frozen}={}) {
 		if (!isNum(ms)) throw TypeError(`'${ms}' is not a number`)
@@ -100,7 +100,7 @@ const Timer = freeze(new class {
 		TimerMap.set(key ?? Symbol(), {ms,fn,ignoreFrozen,amount:0})
 	}
 
-	/** @param {...[timeout:number, handler:function]} sequence */
+	/** @param {...[timeout:number, handler:Function]} sequence */
 	sequence(...sequence) {
 		if (!sequence.length)
 			return

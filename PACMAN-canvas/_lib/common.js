@@ -4,8 +4,8 @@ export class Common {
 		this.#eventTarget = eventTarget || this
 	}
 	/**
-	 * @param {Object.<string,function>|string} arg}
-	 * @param {function} [fn]
+	 * @param {Object.<string,Function>|string} arg}
+	 * @param {Function} [fn]
 	 */
 	bind(arg, fn) {
 		$(this.#eventTarget).on(arg, fn)

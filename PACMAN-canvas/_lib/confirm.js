@@ -3,8 +3,8 @@ export const Confirm = new class {
 	get opened() {return _opened}
 	/**
 	 * @param {string} content
-	 * @param {function} fn1
-	 * @param {function} fn2
+	 * @param {Function} fn1
+	 * @param {Function} fn2
 	 */
 	open(content, fn1,fn2, btnStr1='Ok',btnStr2='Cancel', cancelIdx=1) {
 		if (_opened) return
@@ -26,7 +26,7 @@ export const Confirm = new class {
 		$onNS(NS,{mousedown:e=> e.preventDefault()})
 		_opened = true
 	}
-	/** @param {function} fn */
+	/** @param {Function} fn */
 	#close(fn) {
 		$('#confirm').opacity(0,500).on('transitionend', e=> {
 			$(e.target).remove()

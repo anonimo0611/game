@@ -10,7 +10,7 @@ $.fn.opacity = function(a, ms) {
 /** @param {string} id */
 const $byId = id=> $('#'+id)
 
-/** @param {function} fn */
+/** @param {Function} fn */
 const $load = fn=> $(window).one('load',fn)
 
 /** @param {string} ns */

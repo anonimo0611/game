@@ -18,7 +18,7 @@ export default class {
 
 	/**
 	 * @param {string} state
-	 * @param {{data:any,delay?:number,fn?:function}}
+	 * @param {{data:any,delay?:number,fn?:Function}}
 	 */
 	to(state, {data,delay=-1,fn}={}) {
 		if (!hasOwn(this.#Enum, state))
