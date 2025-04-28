@@ -8,7 +8,6 @@ class Menu extends Common {
 		return this.menu.querySelector('.selected') || this.items[0]
 	}
 	constructor(id, type) {
-
 		/** @type {MenuRoot} */
 		const root = $byId(id).attr({type}).get(0)
 

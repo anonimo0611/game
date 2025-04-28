@@ -24,7 +24,7 @@ class Vector2 {
 	 * @param {number} v2
 	 */
 	set(v1, v2=v1) {
-		const {x,y}= this.#check(v1, v2)
+		const {x,y}= this.#validXY(v1, v2)
 		this.x = x
 		this.y = y
 		return this
@@ -41,7 +41,7 @@ class Vector2 {
 	 * @param {number} v2
 	 */
 	add(v1, v2=v1) {
-		const {x,y}= this.#check(v1, v2)
+		const {x,y}= this.#validXY(v1, v2)
 		this.x += x
 		this.y += y
 		return this
@@ -52,7 +52,7 @@ class Vector2 {
 	 * @param {number} v2
 	 */
 	sub(v1, v2=v1) {
-		const {x,y}= this.#check(v1, v2)
+		const {x,y}= this.#validXY(v1, v2)
 		this.x -= x
 		this.y -= y
 		return this
@@ -60,7 +60,7 @@ class Vector2 {
 
 	/** @param {number} scalar */
 	mul(scalar) {
-		this.#checkScaler(scalar)
+		this.#assertIsNumber(scalar)
 		this.x *= scalar
 		this.y *= scalar
 		return this
@@ -68,7 +68,7 @@ class Vector2 {
 
 	/** @param {number} scalar */
 	div(scalar) {
-		this.#checkScaler(scalar)
+		this.#assertIsNumber(scalar)
 		this.x /= scalar
 		this.y /= scalar
 		return this
@@ -76,7 +76,7 @@ class Vector2 {
 
 	/** @param {number} scalar */
 	divInt(scalar) {
-		this.#checkScaler(scalar)
+		this.#assertIsNumber(scalar)
 		this.x = (this.x/scalar)|0
 		this.y = (this.y/scalar)|0
 		return this
@@ -87,7 +87,7 @@ class Vector2 {
 	 * @param {number} v2
 	 */
 	eq(v1, v2=v1) {
-		const {x,y}= this.#check(v1, v2)
+		const {x,y}= this.#validXY(v1, v2)
 		return Vec2.eq(this, {x,y})
 	}
 
@@ -99,13 +99,13 @@ class Vector2 {
 	freeze() {
 		return freeze(this)
 	}
-	#checkScaler(s) {
-		if (!isNum(s)) throw TypeError(`Scalar '${s}' is not a number`)
+	#assertIsNumber(s) {
+		if (!isNum(s)) throw TypeError(`'${s}' is an illegal scalar`)
 	}
-	#check(v1=0,v2=0) {
+	#validXY(v1=0,v2=0) {
 		const [x,y] = isObj(v1) ? [v1.x, v1.y] : [v1, v2]
-		if (!isNum(x)) throw TypeError(`${x} is not a number`)
-		if (!isNum(y)) throw TypeError(`${y} is not a number`)
+		if (!isNum(x)) throw TypeError(`${x} is an ilegal x value`)
+		if (!isNum(y)) throw TypeError(`${y} is an ilegal y valuer`)
 		return {x,y}
 	}
 }
@@ -123,6 +123,11 @@ const Vec2 = function() {
 	Vec2.Right = Vec2( 1, 0)
 	Vec2.Down  = Vec2( 0, 1)
 	Vec2.Left  = Vec2(-1, 0)
+
+	for (const [k,v] of entries(Vec2)) {
+		if (v instanceof Vector2)
+			defineProperty(Vec2, k, {get(){return v.clone}})
+	}
 
 	/** @param {Position} v */
 	Vec2.isValid = v=> isObj(v) && isNum(v.x) && isNum(v.y)
@@ -181,9 +186,5 @@ const Vec2 = function() {
 	 */
 	Vec2.distance = (v1, v2)=> Vec2.sub(v1,v2).magnitude
 
-	for (const [k,v] of entries(Vec2)) {
-		if (v instanceof Vector2)
-			defineProperty(Vec2, k, {get(){return v.clone}})
-	}
 	return freeze(Vec2)
 }()

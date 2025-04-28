@@ -19,7 +19,7 @@ const Ticker = freeze(new class {
 	get pausedCount() {return _pausedCounter}
 
 	/**
-	 * @param {function} handler
+	 * @param {function} [handler]
 	 * @param {function} [pausedHandler]
 	 */
 	set(handler, pausedHandler) {
