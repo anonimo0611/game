@@ -10,15 +10,20 @@ const PtsMap = new Map()
 $on({Title_Clear_Crashed:()=> PtsMap.clear()})
 
 export const PtsMgr = new class {
-	get Pts()      {return Points}
+	/**
+	 * @param {PtsData} data
+	 * @param {Function} [fn]
+	 */
+	set(data, fn)  {new Points(data, fn)}
 	update()       {PtsMap.forEach(v=> v.update())}
 	drawFruitPts() {PtsMap.get(Fruit) ?.draw()}
 	drawGhostPts() {PtsMap.get(GhsMgr)?.draw()}
 }
 class Points {
 	/**
-	 * @param {{key:{score:number},x:number,y:number,duration?:number}}
-	 * @param {function} fn
+ 	 * @typedef {{key:{score:number},x:number,y:number,duration?:number}} PtsData
+	 * @param {PtsData}
+	 * @param {Function} [fn]
 	 */
 	constructor({key,x,y,duration=1e3}={}, fn) {
 		const speed   = Game.speedRate

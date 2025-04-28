@@ -52,7 +52,7 @@ export const Fruit = new class {
 			return
 		_tgtDisp = false
 		Timer.cancel(Fruit) && Sound.play('fruit')
-		new PtsMgr.Pts({key:Fruit, duration:2e3, ...TargetPos})
+		PtsMgr.set({key:Fruit, duration:2e3, ...TargetPos})
 	}
 	update() {
 		if (_fadeOut?.update() === false)
