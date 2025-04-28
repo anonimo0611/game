@@ -1,7 +1,7 @@
 const {Sound}  = createjs
 const Instance = new Map()
 
-import {Manifest,ConfigMap,SoundIds} from './_manifest.js'
+import {SoundType,Manifest,ConfigMap,SoundIds} from './_manifest.js'
 export class SoundMgr {
 	static #disabled = true
 	static ids   = SoundIds
@@ -25,19 +25,19 @@ export class SoundMgr {
 	get vol()      {return Sound.volume * 10}
 	get disabled() {return SoundMgr.#disabled}
 
-	/** @param {string} id */
+	/** @param {keyof SoundType} id */
 	isPlaying(id)  {return Instance.get(id)?.playState == Sound.PLAY_SUCCEEDED}
 
-	/** @param {string} id */
+	/** @param {keyof SoundType} id */
 	isFinished(id) {return Instance.get(id)?.playState == Sound.PLAY_FINISHED}
 
-	/** @param {string} id */
+	/** @param {keyof SoundType} id */
 	#configMerge(id, cfg={}) {
 		const prefix = isStr(id) && id.match(/^\D+/)?.[0] || null
 		return {...ConfigMap.get(prefix) || ConfigMap.get('_normal'), ...cfg}
 	}
 
-	/** @param {string} id */
+	/** @param {keyof SoundType} id */
 	play(id, cfg={}) {
 		if (this.disabled || !Instance.has(id))
 			return
@@ -46,7 +46,7 @@ export class SoundMgr {
 		Instance.get(id).play(this.#configMerge(id, cfg))
 	}
 
-	/** @param {string[]} ids */
+	/** @param {...keyof SoundType} ids */
 	stop(...ids) {
 		ids.length == 0 && Sound.stop()
 		ids.forEach(id=> Instance.get(id)?.stop())
@@ -55,7 +55,7 @@ export class SoundMgr {
 
 	/**
 	 * @param {boolean} bool
-	 * @param {string[]} ids
+	 * @param {...keyof SoundType} ids
 	 */
 	paused(bool, ...ids) {
 		ids.forEach(id=> Instance.get(id)?.setPaused(bool))
