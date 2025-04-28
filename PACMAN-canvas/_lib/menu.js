@@ -115,7 +115,7 @@ export class Slide extends Menu {
 	}
 	/**
 	 * @param {Event} e
-	 * @param {U|R|D|L} dir */
+	 * @param {Direction} dir */
 	#select(e, dir) {
 		if (dir) {
 			dir = {[U]:R,[D]:L}[dir] || dir
