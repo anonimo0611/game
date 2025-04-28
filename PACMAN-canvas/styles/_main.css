@@ -10,10 +10,9 @@ html {
 	-webkit-user-select: none;
 	user-select: none;
 }
-html[data-cursor=hidden],
-html[data-cursor=stayStill] {
+html[data-cursor=hidden] {
 	body:not([data-state=Title])
-		canvas {cursor: none}
+		#board {cursor: none}
 }
 body {
 	color: #FFF;
