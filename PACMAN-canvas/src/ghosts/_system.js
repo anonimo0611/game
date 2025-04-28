@@ -39,9 +39,7 @@ export class GhostState extends _State {
 	get isEscaping() {return this.isEscape || this.isReturn}
 
 	/** @param {GhsStateType} state */
-	to(state) {
-		return super.to(state)
-	}
+	to(state) {return super.to(state)}
 }
 
 export const GhsMgr = new class {
@@ -95,7 +93,7 @@ export const GhsMgr = new class {
 	/**
 	 * @param {Ghost} g
 	 * @param {Vector2} pos
-	 * @param {{fn?:function,radius?:number}}
+	 * @param {{fn?:Function,radius?:number}}
 	 */
 	crashWithPac(g, pos, {fn,radius}={}) {
 		return g instanceof Ghost && g.crashWithPac({pos,radius,fn})

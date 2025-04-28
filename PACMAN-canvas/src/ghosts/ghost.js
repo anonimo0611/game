@@ -32,14 +32,14 @@ export class Ghost extends Actor {
 	get escaping()    {return this.state.isEscaping}
 	get chaseTile()   {return this.chasePos.divInt(T)}
 
-	constructor({col=0,row=0,idx=0,align=0,aniFlag=1,orient=L}={}) {
+	/** @param {Direction} orient */
+	constructor(orient=L, {col=0,row=0,idx=0,align=0,aniFlag=1}={}) {
 		super()
 		this.bind({
 			FrightMode:  this.#setFrightMode,
 			Reverse:()=> this.#revSig  = true,
 			Runaway:()=> this.#runAway = 400/Game.interval,
 		})
-		/** @type {Direction} */
 		this.dir     = orient
 		this.idx     = idx
 		this.initX   = col*T
@@ -201,7 +201,6 @@ export class Ghost extends Actor {
 			? randChoice(dirs).dir
 			: dirs.sort(compareDist).at(this.#runAway<0 ? 0:-1).dir
 	}
-
 	/**
 	 * @param {Direction} dir
 	 * @param {Vector2} tile
@@ -249,7 +248,7 @@ export class Ghost extends Actor {
 			Timer.freeze()
 			this.#frightened = false
 			this.trigger('Cought').state.to('Bitten')
-			new PtsMgr.Pts({key:GhsMgr, ...this.centerPos}, fn)
+			PtsMgr.set({key:GhsMgr, ...this.centerPos}, fn)
 			return true
 		}
 		if (!Ctrl.invincible) {
