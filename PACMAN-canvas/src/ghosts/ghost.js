@@ -32,15 +32,15 @@ export class Ghost extends Actor {
 	get escaping()    {return this.state.isEscaping}
 	get chaseTile()   {return this.chasePos.divInt(T)}
 
-	/** @param {Direction} orient */
-	constructor(orient=L, {col=0,row=0,idx=0,align=0,aniFlag=1}={}) {
+	/** @param {Direction} dir */
+	constructor(dir=L, {col=0,row=0,idx=0,align=0,aniFlag=1}={}) {
 		super()
 		this.bind({
 			FrightMode:  this.#setFrightMode,
 			Reverse:()=> this.#revSig  = true,
 			Runaway:()=> this.#runAway = 400/Game.interval,
 		})
-		this.dir     = orient
+		this.dir     = dir
 		this.idx     = idx
 		this.initX   = col*T
 		this.iAlign  = align
