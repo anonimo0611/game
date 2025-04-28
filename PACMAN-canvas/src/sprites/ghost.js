@@ -135,7 +135,7 @@ export default class {
 			ctx.fillCircle(19*v, 4, 8, Color.GhostEyes)
 		}
 	}
-	/** @param {Object.<string,L|R>}  */
+	/** @param {Object.<string,DirHorizontal>}  */
 	#eyesLookingLR({orient}) {
 		const {ctx}= this
 		ctx.save()

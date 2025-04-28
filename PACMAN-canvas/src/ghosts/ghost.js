@@ -39,7 +39,7 @@ export class Ghost extends Actor {
 			Reverse:()=> this.#revSig  = true,
 			Runaway:()=> this.#runAway = 400/Game.interval,
 		})
-		/** @type {U|R|D|L} */
+		/** @type {Direction} */
 		this.dir     = orient
 		this.idx     = idx
 		this.initX   = col*T
@@ -203,7 +203,7 @@ export class Ghost extends Actor {
 	}
 
 	/**
-	 * @param {U|R|D|L} dir
+	 * @param {Direction} dir
 	 * @param {Vector2} tile
 	 */
 	#isAllowDir(dir, tile) {
@@ -212,7 +212,7 @@ export class Ghost extends Actor {
 		    && Dir.opp.get(this.orient) != dir
 	}
 	/**
-	 * @param {U|R|D|L} dir
+	 * @param {Direction} dir
 	 * @param {Vector2} tile
 	 */
 	#notEnterTile(dir, tile) {

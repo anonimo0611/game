@@ -75,7 +75,7 @@ class Tunnel {
 	entranceR = 22.5
 	/**
 	  * @param {Vector2} centerPos
-	  * @param {L|R} [dir]
+	  * @param {DirHorizontal} [dir]
 	  */
 	isIn(centerPos, dir) {
 		const where = this.#where(centerPos)

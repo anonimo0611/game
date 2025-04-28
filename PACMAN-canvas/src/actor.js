@@ -9,7 +9,7 @@ export class Actor extends Common {
 	radius  = T
 	#fadeIn = new FadeIn(500)
 
-	/** @type {U|R|D|L} */
+	/** @type {Direction} */
 	#orient = L
 	#movDir = this.#orient
 	constructor() {super()}
@@ -77,17 +77,17 @@ export class Actor extends Common {
 		this.pos = Vec2[dir].mul(this.step/denom).add(this)
 	}
 
-	/** @param {U|R|D|L} dir */
+	/** @param {Direction} dir */
 	move(dir) {
 		this.setNextPos(1, this.dir=dir)
 	}
 
-	/** @param {U|R|D|L} dir */
+	/** @param {Direction} dir */
 	hasAdjWall(dir) {
 		return Maze.hasWall(this.getAdjTile(dir))
 	}
 
-	/** @param {U|R|D|L} dir */
+	/** @param {Direction} dir */
 	getAdjTile(dir, n=1, tile=this.tilePos) {
 		const  v = Vec2[dir].mul(n).add(tile)
 		return v.setX((v.x+Cols) % Cols)

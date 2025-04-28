@@ -32,10 +32,10 @@ class PlayablePac extends Pacman {
 	#turning  = false
 	#stopped  = true
 
-	/** @type {?(U|R|D|L)} */
+	/** @type {?Direction} */
 	#preDir   = null
 
-	/** @type {?(U|R|D|L)} */
+	/** @type {?Direction} */
 	#nextTurn = null
 
 	get closed()       {return State.isPlaying == false}
@@ -70,7 +70,7 @@ class PlayablePac extends Pacman {
 	}
 	/**
 	 * @param {KeyboardEvent} e
-	 * @param {?(U|R|D|L)} dir
+	 * @param {?Direction} dir
 	*/
 	#ignoreKeys(e, dir) {
 		return Confirm.opened
@@ -105,7 +105,7 @@ class PlayablePac extends Pacman {
 		this.#notEaten = 0
 	}
 	forwardPos(num=0) {
-		const  ofstX = (this.dir == Dir.Up ? -num : 0)
+		const  ofstX = (this.dir == Up ? -num : 0)
 		return Vec2[this.dir].mul(num*T).add(this.centerPos).add(ofstX*T, 0)
 	}
 	draw() {
