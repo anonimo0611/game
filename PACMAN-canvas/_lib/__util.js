@@ -19,8 +19,8 @@ const isCombinationKey = e=>
 	isKeyboardEvent(e) && !!(e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
 /**
- * @param {{index:number,dist:number}} a
- * @param {{index:number,dist:number}} b
+ * @typedef {{dist:number,index:number}} CompareDist
+ * @type {(a:CompareDist, b:CompareDist)=> number}
  */
 const compareDist = (a,b)=>
 	(a.dist == b.dist)? (a.index-b.index) : (a.dist-b.dist)
