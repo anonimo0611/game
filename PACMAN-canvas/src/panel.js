@@ -13,4 +13,4 @@ for (const btn of btns) {
 		$(btn.value).hide()
 		btn.classList.remove('opened')
 	})
-} $('.panel').hide()
+} $ready(()=> $('.panel').hide())
