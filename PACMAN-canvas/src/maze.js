@@ -1,6 +1,5 @@
 import {Rect}   from '../_lib/rect.js'
 import {State}  from './state.js'
-import {Pacman} from './pacman.js'
 import {Ghost}  from './ghosts/ghost.js'
 import {powChk} from './control.js'
 
@@ -138,7 +137,7 @@ export const Maze = new class {
 		o.y < 10 && PenOuter.contains(t)
 			? Vec2((t.x > Cols/2) && (o.x > Cols/2) ? 21:6, 15) : o
 
-	/** @param {Pacman} */
+	/** @param {{tileIdx:number, tilePos:Vector2}} */
 	clearBgDot({tileIdx:idx,tilePos:v}) {
 		DotSet.delete(idx)
 		PowMap.delete(idx)
