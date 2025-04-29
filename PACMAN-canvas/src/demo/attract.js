@@ -144,8 +144,8 @@ export class Attract {
 	updateGhosts() {
 		this.ghsList[DEMO].forEach(g=> {
 			g.x += this.ghsVelX
-			const fn = ()=> GhsMgr.caughtAll && Attract.#begin()
-			GhsMgr.crashWithPac(g, this.pacman.pos, {radius:T/4,fn})
+			g.crashWithPac({pos:this.pacman.pos, radius:T/4,
+				fn:()=> GhsMgr.caughtAll && Attract.#begin()})
 		})
 	}
 	/** @param {Event} e */

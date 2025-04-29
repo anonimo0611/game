@@ -90,14 +90,6 @@ export const GhsMgr = new class {
 		FrightMode.instance?.update()
 		Ghosts.forEach(g=> g.update())
 	}
-	/**
-	 * @param {Ghost} g
-	 * @param {Vector2} pos
-	 * @param {{fn?:Function,radius?:number}}
-	 */
-	crashWithPac(g, pos, {fn,radius}={}) {
-		return g instanceof Ghost && g.crashWithPac({pos,radius,fn})
-	}
 	#draw = (_,i,array)=> array[array.length-1-i].draw()
 	drawTargets() {Target.draw(Ghosts)}
 	drawFront()   {Ghosts.filter(g=>!g.frightened).forEach(this.#draw)}

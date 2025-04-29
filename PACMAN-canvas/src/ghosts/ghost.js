@@ -178,7 +178,7 @@ export class Ghost extends Actor {
 			this.setNextPos(denom)
 			this.inBackwardOfTile && this.#setNextDir()
 			if (this.#setTurn(this)) break
-			if (GhsMgr.crashWithPac(this)) break
+			if (this.crashWithPac()) break
 		}
 	}
 	#setNextDir() {
