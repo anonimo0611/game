@@ -142,11 +142,11 @@ export class Attract {
 		}
 	}
 	updateGhosts() {
-		this.ghsList[DEMO].forEach(g=> {
+		for (const g of this.ghsList[DEMO]) {
 			g.x += this.ghsVelX
 			g.crashWithPac({pos:this.pacman.pos, radius:T/4,
 				fn:()=> GhsMgr.caughtAll && Attract.#begin()})
-		})
+		}
 	}
 	/** @param {Event} e */
 	quit(e) {
