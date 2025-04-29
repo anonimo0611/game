@@ -1,7 +1,7 @@
 'use strict'
 const {Ticker,Timer}= function() {
 
-/** @type {Map<any,{ms:number,fn:Function,ignoreFrozen:boolean,amount:number}>} */
+/** @type {Map<any, {ms:number, fn:Function, ignoreFrozen:boolean, amount:number}>} */
 const TimerMap = new Map()
 
 /** @type {?Tick} */
@@ -86,8 +86,6 @@ class Tick {
 const Timer = freeze(new class {
 	#frozen = false
 	get frozen() {return this.#frozen}
-	freeze()   {this.#frozen = true; return this}
-	unfreeze() {this.#frozen = false;return this}
 
 	/**
 	 * @param {number} ms
@@ -116,9 +114,26 @@ const Timer = freeze(new class {
 			;(s=seq[++idx]) ? Timer.set(s.ms, fire) : (fire=null)
 		} Timer.set(s.ms, fire)
 	}
-	stop()      {Ticker.stop(); return this}
-	cancelAll() {TimerMap.clear(); return this}
-	cancel(key) {TimerMap.delete(key); return this}
+	freeze() {
+		this.#frozen = true
+		return this
+	}
+	unfreeze() {
+		this.#frozen = false
+		return this
+	}
+	stop() {
+		Ticker.stop()
+		return this
+	}
+	cancelAll() {
+		TimerMap.clear()
+		return this
+	}
+	cancel(key) {
+		TimerMap.delete(key)
+		return this
+	}
 })
 return {Ticker,Timer}
 

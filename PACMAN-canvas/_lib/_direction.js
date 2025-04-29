@@ -1,11 +1,10 @@
 'use strict'
 /** @typedef {'Up'|'Right'|'Down'|'Left'} Direction */
-/** @typedef {'Up'|'Down'}    DirVertical */
+/** @typedef {'Up'|'Down'}    DirVertical   */
 /** @typedef {'Left'|'Right'} DirHorizontal */
 
-const DirEnum = freeze({Up:'Up',Right:'Right',Down:'Down',Left:'Left'})
-const {Up,Right,Down,Left}= DirEnum
-const {Up:U,Right:R,Down:D,Left:L}= DirEnum
+const U='Up',R='Right',D='Down',L='Left'
+const Up=U,Right=R,Down=D,Left=L
 
 const Dir = freeze({
 	Up,Right,Down,Left,
@@ -29,5 +28,5 @@ const Dir = freeze({
 			: (wasd && this.wasdToDir.get(key) || null)
 	},
 	/** @param {Direction} dir */
-	has(dir) {return hasOwn(DirEnum,dir)},
+	has(dir) {return dir==U || dir==R || dir==D || dir==L},
 })
