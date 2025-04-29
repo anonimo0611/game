@@ -10,6 +10,23 @@ BaseStep = TileSize / 4.5,
 	canvas2D('cvs', T*Cols, T*Rows).vals
 ],
 
+StateType = freeze({
+	Title:    0,
+	Attract:  1,
+	Start:    2,
+	Restart:  3,
+	NewLevel: 4,
+	Ready:    5,
+	Playing:  6,
+	Clear:    7,
+	FlashMaze:8,
+	CoffBrk:  9,
+	Crashed: 10,
+	Losing:  11,
+	GameOver:12,
+	Quit:    13,
+}),
+
 Color = freeze(new class {
 	Grid      = '#F00'
 	Dot       = '#FFB8AE'
