@@ -100,7 +100,7 @@ export const Game = new class {
 		Cursor.default()
 		Sound.stop()
 		Game.#resetLevel()
-		Ticker.set(Game.#loop, Game.#pausing)
+		Ticker.set(Game.#loop, Game.#draw)
 	}
 	#onStart() {
 		Cursor.hide()
@@ -123,11 +123,11 @@ export const Game = new class {
 	}
 	#onFlashMaze() {
 		let count = 0
-		!function redraw() {
+		!function redrawWalls() {
 			if (++count > 8)
 				return Timer.set(500, Game.#levelEnds)
 			Wall.draw([, Color.FlashWall][count % 2])
-			Timer.set(250, redraw)
+			Timer.set(250, redrawWalls)
 		}()
 	}
 	#onNewLevel() {
@@ -187,9 +187,6 @@ export const Game = new class {
 		GhsMgr.drawFront()
 		PtsMgr.drawGhostPts()
 		Message.draw()
-	}
-	#pausing() {
-		Game.#draw()
 	}
 	#loop() {
 		Game.#update()
