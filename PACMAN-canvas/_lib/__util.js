@@ -12,11 +12,11 @@ const isFun  = arg=> typeof(arg) == 'function'
 const isKeyboardEvent = e=>
 	isObj(e) && (e.originalEvent || e) instanceof KeyboardEvent
 
-const isEnterKey = e=>
-	isKeyboardEvent(e) && /^(\x20|Enter)$/.test(e.key)
-
 const keyRepeat = e=>
 	isKeyboardEvent(e) && !!(e.originalEvent || e).repeat
+
+const isEnterKey = e=>
+	isKeyboardEvent(e) && /^(\x20|Enter)$/.test(e.key)
 
 const isCombinationKey = e=>
 	isKeyboardEvent(e) && !!(e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
