@@ -30,9 +30,11 @@ export class GhostState extends _State {
 	isBitten  = false
 	isEscape  = false
 	isReturn  = false
-	constructor({isInHouse=false}={}) {
+
+	/** @param {Ghost} */
+	constructor({tilePos}) {
 		super()
-		this.init(isInHouse? 'Idle':'Walk')
+		this.init(Maze.House.isIn(tilePos)? 'Idle':'Walk')
 	}
 	/** @returns {GhsStateType} */
 	get current()    {return super.current}
@@ -57,11 +59,11 @@ export const GhsMgr = new class {
 	get animIndex()  {return this.#aidx}
 	get Elroy()      {return Elroy}
 	get isScatter()  {return AlternateBetweenModes.isScatter}
-	get frightened() {return FrightMode.instance != null}
+	get isFright()   {return FrightMode.instance != null}
 	get score()      {return FrightMode.instance?.score|0}
 	get spriteIdx()  {return FrightMode.instance?.spriteIdx|0}
 	get caughtAll()  {return FrightMode.instance?.caughtAll|0}
-	get hasEscape()  {return Ghosts.some(g=> g.escaping)}
+	get hasEscape()  {return Ghosts.some(g=> g.isEscaping)}
 	get akaCenter()  {return Ghosts[GhsType.Akabei].centerPos}
 
 	#initialize(_, ...instances) {
@@ -92,8 +94,8 @@ export const GhsMgr = new class {
 	}
 	#draw = (_,i,array)=> array[array.length-1-i].draw()
 	drawTargets() {Target.draw(Ghosts)}
-	drawFront()   {Ghosts.filter(g=>!g.frightened).forEach(this.#draw)}
-	drawBehind()  {Ghosts.filter(g=> g.frightened).forEach(this.#draw)}
+	drawFront()   {Ghosts.filter(g=>!g.isFright).forEach(this.#draw)}
+	drawBehind()  {Ghosts.filter(g=> g.isFright).forEach(this.#draw)}
 }
 
 const AlternateBetweenModes = function() {
@@ -125,7 +127,7 @@ const AlternateBetweenModes = function() {
 		const Seq = {
 			mode: +Ctrl.isChaseMode,
 			update() {
-				if (Timer.frozen || GhsMgr.frightened
+				if (Timer.frozen || GhsMgr.isFright
 				|| ++cnt*Ticker.Interval < duration())
 					return
 				[cnt,Seq.mode] = [0,(++idx % 2)]
@@ -182,8 +184,8 @@ const Elroy = function() {
 	function angry() {
 		return State.isPlaying
 			&& _part > 1
-			&& Ghosts[GhsType.Akabei]?.frightened === false
-			&& Ghosts[GhsType.Guzuta]?.started === true
+			&& Ghosts[GhsType.Akabei]?.isFright  === false
+			&& Ghosts[GhsType.Guzuta]?.isStarted === true
 	}
 	function onDotEaten() {
 		const elroyP2 = dotsLeftP2Tbl[Game.clampedLv-1]

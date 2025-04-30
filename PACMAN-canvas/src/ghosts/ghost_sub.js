@@ -7,9 +7,9 @@ class Akabei extends Ghost {
 	constructor() {
 		super(L, {idx:0, col:13.5, row:12})
 	}
-	get scatterTile() {return Vec2(24, 0)}
-	get angry()       {return GhsMgr.Elroy.angry}
+	get isAngry()     {return GhsMgr.Elroy.angry}
 	get chaseStep()   {return GhsMgr.Elroy.step}
+	get scatterTile() {return Vec2(24, 0)}
 }
 class Pinky extends Ghost {
 	constructor() {

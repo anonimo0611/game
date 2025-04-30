@@ -33,9 +33,7 @@ export class Actor extends Common {
 
 	get step()       {return 0}
 	get maxAlpha()   {return 1}
-	get cheatAlpha() {return 0.75}
 	get frozen()     {return Timer.frozen}
-	get isInHouse()  {return Maze.House .isIn(this.tilePos)}
 	get isInTunnel() {return Maze.Tunnel.isIn(this.centerPos)}
 
 	get moveAmountPerTile() {

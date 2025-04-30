@@ -45,7 +45,7 @@ class PlayablePac extends Pacman {
 	get turning()      {return this.#turning}
 	get timeNotEaten() {return this.#notEaten * Game.interval}
 	get translucent()  {return this.showCenter || Ctrl.invincible}
-	get maxAlpha()     {return this.translucent? this.cheatAlpha : 1}
+	get maxAlpha()     {return this.translucent? 0.75:1}
 
 	constructor() {
 		super()
@@ -63,7 +63,7 @@ class PlayablePac extends Pacman {
 	}
 	#getCurrentStep() {
 		const eating = Maze.hasDot(this.tileIdx)
-		return(GhsMgr.frightened
+		return(GhsMgr.isFright
 			? (eating? PacStep.EneEat : PacStep.Energize)
 			: (eating? PacStep.Eating : PacStep.Base)
 		) * this.#baseSpeed

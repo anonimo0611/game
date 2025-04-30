@@ -56,5 +56,4 @@ GhsStep  = freeze(new class {
 	Fright   = this.Base * 0.60
 	InTunnel = this.Base * 0.60
 	Escape   = this.Base * 1.40
-	Return   = this.Escape
 })

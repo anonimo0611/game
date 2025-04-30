@@ -10,7 +10,7 @@ const ModSymbol = Symbol()
 export class CoffBrk {
 	/** @type {?(Scene1|Scene2|Scene3)} */
 	static #scene = null
-	static {$on({CoffBrk:(_,num)=> this.#begin(num)})}
+	static {$on({CoffBrk:(_,num)=> this.#begin(+num)})}
 
 	/** @param {1|2|3} num Scene number */
 	static #begin(num) {
@@ -68,7 +68,7 @@ $('button.CB').on('click', function() {
 class Scene1 extends CoffBrk {
 	constructor() {
 		super(ModSymbol)
-		this.frightened = false
+		this.isFright = false
 		this.akaVelX  = -CvsW / 156.4
 		this.pacman.x =  CvsW + T*1
 		this.akabei.x =  CvsW + T*3
@@ -84,9 +84,9 @@ class Scene1 extends CoffBrk {
 		case L:
 			this.movePacman()
 			if (pacman.x >= -T*9) break
+			this.isFright = true
 			this.pacVelX *= -1.08
 			this.akaVelX *= -0.60
-			this.frightened = true
 			pacman.dir = akabei.dir = R
 			break
 		case R:
@@ -95,8 +95,8 @@ class Scene1 extends CoffBrk {
 		}
 	}
 	draw() {
-		const {pacman,frightened}= this
-		this.drawAkabei({frightened})
+		const {pacman,isFright}= this
+		this.drawAkabei({isFright})
 		this.drawPacman(pacman.dir == R ? 4:1)
 		super.draw()
 	}
@@ -106,7 +106,7 @@ class Scene2 extends CoffBrk {
 		super(ModSymbol)
 		this.counter  = 0
 		this.akaEyes  = L
-		this.ripped   = false
+		this.isRipped = false
 		this.sprite   = Sprite.stakeClothes
 		this.akaVelX  = this.pacVelX
 		this.pacman.x = CvsW + T*3
@@ -124,9 +124,9 @@ class Scene2 extends CoffBrk {
 			return
 		switch (this.counter++) {
 		case 90:
+			this.isRipped = true
+			this.akaEyes  = U
 			this.akabei.x -= T/4
-			this.ripped  = true
-			this.akaEyes = U
 			break
 		case 90 + 60*1:
 			this.akaEyes = 'LowerR'
@@ -136,15 +136,15 @@ class Scene2 extends CoffBrk {
 		}
 	}
 	draw() {
-		const {sprite:spr, akabei:aka, akaVelX,akaEyes,ripped}= this
-		const aIdx = ripped? 0 : (this.counter? 1 : aka.aIdx)
+		const {sprite:spr, akabei,akaVelX,akaEyes,isRipped}= this
+		const aIdx = isRipped? 0 : (this.counter? 1 : akabei.aIdx)
 		spr.drawStake()
-		ripped && spr.drawOffcut()
+		isRipped && spr.drawOffcut()
 		this.drawPacman()
-		this.drawAkabei({aIdx,ripped,orient:akaEyes})
-		if (aka.x + akaVelX < spr.CaughtX && !ripped) {
-			const pos  = aka.centerPos.add(T,0)
-			const rate = norm(spr.CaughtX, spr.AkaMinX, aka.x)
+		this.drawAkabei({aIdx,orient:akaEyes,isRipped})
+		if (akabei.x + akaVelX < spr.CaughtX && !isRipped) {
+			const pos  = akabei.centerPos.add(T,0)
+			const rate = norm(spr.CaughtX, spr.AkaMinX, akabei.x)
 			spr.expandClothes(pos, aIdx, rate)
 		}
 		super.draw()
@@ -170,8 +170,8 @@ class Scene3 extends CoffBrk {
 	draw() {
 		this.drawPacman()
 		this.akabei.dir == L
-			? this.drawAkabei({repaired:true})
-			: this.drawAkabei({hadaketa:true})
+			? this.drawAkabei({isMended: true})
+			: this.drawAkabei({isExposed:true})
 		super.draw()
 	}
 }

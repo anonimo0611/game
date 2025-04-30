@@ -12,51 +12,53 @@ import Sprite   from '../sprites/ghost.js'
 
 const Step = GhsStep
 export class Ghost extends Actor {
-	#runAway    = -1
-	#started    = false
-	#revSig     = false
-	#frightened = false
+	#runTimer  = -1
+	#revSig    = false
+	#isStarted = false
+	#isFright  = false
 
 	// This section is overridden in subclasses
-	get angry()       {return false}
+	get isAngry()     {return false}
 	get chaseStep()   {return GhsStep.Base}
 	get chasePos()    {return Player.i.centerPos}
 	get scatterTile() {return Vec2()}
 
+	get aIdx()        {return GhsMgr.animIndex & this.animFlag}
 	get spriteIdx()   {return GhsMgr.spriteIdx}
-	get aIdx()        {return GhsMgr.animIndex & this.aniFlag}
-	get maxAlpha()    {return Ctrl.showTargets ? this.cheatAlpha : 1}
-	get started()     {return this.#started}
-	get frightened()  {return this.#frightened}
-	get bitten()      {return this.state.isBitten}
-	get escaping()    {return this.state.isEscaping}
+	get maxAlpha()    {return Ctrl.showTargets ? 0.75:1}
 	get chaseTile()   {return this.chasePos.divInt(T)}
+	get isStarted()   {return this.#isStarted}
+	get isFright()    {return this.#isFright}
+	get isIdle()      {return this.state.isIdle}
+	get isGoOut()     {return this.state.isGoOut}
+	get isBitten()    {return this.state.isBitten}
+	get isEscaping()  {return this.state.isEscaping}
 
 	/** @param {Direction} dir */
-	constructor(dir=L, {col=0,row=0,idx=0,align=0,aniFlag=1}={}) {
+	constructor(dir=L, {col=0,row=0,idx=0,align=0,animFlag=1}={}) {
 		super()
 		this.bind({
 			FrightMode:  this.#setFrightMode,
 			Reverse:()=> this.#revSig  = true,
-			Runaway:()=> this.#runAway = 400/Game.interval,
+			Runaway:()=> this.#runTimer = 400/Game.interval,
 		})
-		this.dir     = dir
-		this.idx     = idx
-		this.initX   = col*T
-		this.iAlign  = align
-		this.aniFlag = aniFlag
-		this.pos     = Vec2(col*T, row*T)
-		this.name    = this.constructor.name
-		this.release = this.release.bind(this)
-		this.state   = new Sys.GhostState(this)
-		this.sprite  = new Sprite(canvas2D(null, T*3, T*2).ctx)
+		this.dir      = dir
+		this.idx      = idx
+		this.initX    = col*T
+		this.iniAlign = align
+		this.animFlag = animFlag
+		this.pos      = Vec2(col*T, row*T)
+		this.name     = this.constructor.name
+		this.release  = this.release.bind(this)
+		this.state    = new Sys.GhostState(this)
+		this.sprite   = new Sprite(canvas2D(null, T*3, T*2).ctx)
 		freeze(this)
 	}
 	get isScatter() {
 		return GhsMgr.isScatter
-			&& !this.frightened
+			&& !this.isFright
 			&& !this.state.isEscape
-			&& !this.angry
+			&& !this.isAngry
 	}
 	get originalTargetTile() {
 		return this.state.isEscape
@@ -79,16 +81,15 @@ export class Ghost extends Actor {
 		return Vec2.sqrMagnitude(this, Player.i.pos)
 	}
 	get step() {
-		return (state=> {
-			if (state.isIdle)    return Step.Idle
-			if (state.isGoOut)   return Step.GoOut
-			if (state.isEscape)  return Step.Escape
-			if (state.isReturn)  return Step.Return
-			if (this.isInTunnel) return Step.InTunnel
-			if (this.frightened) return Step.Fright
-			if (this.isScatter)  return Step.Base
-			return this.chaseStep
-		})(this.state) * Game.moveSpeed
+		return (s=> {
+			if (s.isIdle)     return Step.Idle
+			if (s.isGoOut)    return Step.GoOut
+			if (s.isEscaping) return Step.Escape
+			if (s.isInTunnel) return Step.InTunnel
+			if (s.isFright)   return Step.Fright
+			if (s.isScatter)  return Step.Base
+			return s.chaseStep
+		})(this) * Game.moveSpeed
 	}
 	draw() {
 		if (State.isStart)
@@ -105,18 +106,15 @@ export class Ghost extends Actor {
 		this.sprite.update()
 		this.houseEntranceArrived
 			? this.#prepEnterHouse()
-			: State.isPlaying && this.#behavior()
+			: State.isPlaying && this.#behavior(this)
 	}
-	#behavior() {
-		this.#runAway >= 0 && this.#runAway--
-		if (Timer.frozen && !this.escaping)
-			return
-		switch (this.state.current) {
-		case 'Idle':   return this.#idle(this)
-		case 'GoOut':  return this.#goOut(this)
-		case 'Return': return this.#returnToHome(this)
-		default: this.#walk()
-		}
+	#behavior({state:s}=this) {
+		this.#runTimer >= 0 && this.#runTimer--
+		if (Timer.frozen && !this.isEscaping) return
+		if (s.isIdle)   return this.#idle(this)
+		if (s.isGoOut)  return this.#goOut(this)
+		if (s.isReturn) return this.#returnToHome(this)
+		this.#walk()
 	}
 	#idle({idx,step,orient,state,centerPos:{y:cy}}=this) {
 		if (!Ctrl.isChaseMode)
@@ -134,7 +132,7 @@ export class Ghost extends Actor {
 	#goOut({centerPos:{x:cx},y,step}=this) {
 		if (cx > CvsW/2+step
 		 || cx < CvsW/2-step)
-			return this.move(this.iAlign<0 ? R:L)
+			return this.move(this.iniAlign<0 ? R:L)
 
 		if (cx != CvsW/2)
 			return this.centering()
@@ -143,7 +141,7 @@ export class Ghost extends Actor {
 			return this.move(U)
 
 		this.dir = L
-		this.#started ||= true
+		this.#isStarted ||= true
 		this.state.to('Walk')
 	}
 	#prepEnterHouse() {
@@ -151,20 +149,20 @@ export class Ghost extends Actor {
 		this.dir = D
 		this.centering()
 	}
-	#returnToHome({step,x,y,initX,iAlign}=this) {
+	#returnToHome({step,x,y,initX,iniAlign}=this) {
 		if (y+step < Maze.House.MiddleY)
 			return this.setNextPos()
 
 		if (y != Maze.House.MiddleY)
 			return this.setPos({y:Maze.House.MiddleY})
 
-		if (!iAlign || abs(x-initX) <= step) {
+		if (!iniAlign || abs(x-initX) <= step) {
 			this.x   = initX
-			this.dir = iAlign? (iAlign<0 ? R:L) : U
+			this.dir = iniAlign? (iniAlign<0 ? R:L) : U
 			this.#arrivedAtHome()
 			return
 		}
-		this.move(iAlign<0 ? L:R)
+		this.move(iniAlign<0 ? L:R)
 	}
 	#arrivedAtHome() {
 		this.sprite.setResurrect()
@@ -197,9 +195,9 @@ export class Ghost extends Actor {
 			const  dist = Vec2.sqrMagnitude(test,target)
 			return this.#isAllowDir(dir,test)? [{index,dir,dist}]:[]
 		})
-		return this.frightened
+		return this.isFright
 			? randChoice(dirs).dir
-			: dirs.sort(compareDist).at(this.#runAway<0 ? 0:-1).dir
+			: dirs.sort(compareDist).at(this.#runTimer<0 ? 0:-1).dir
 	}
 	/**
 	 * @param {Direction} dir
@@ -216,7 +214,7 @@ export class Ghost extends Actor {
 	 */
 	#notEnterTile(dir, tile) {
 		return !Ctrl.unrestricted
-			&& (this.state.isWalk && !this.frightened)
+			&& (this.state.isWalk && !this.isFright)
 			&& (dir == U)
 			&& Maze.GhostNotEnterSet.has(tile.hyphenated)
 	}
@@ -229,7 +227,7 @@ export class Ghost extends Actor {
 		 || dir == R && pos.x > t.x*T
 		 || dir == U && pos.y < t.y*T
 		 || dir == D && pos.y > t.y*T) {
-			this.movDir = this.orient
+			this.movDir = orient
 			this.pos = t.mul(T)
 			return true
 		}
@@ -237,16 +235,16 @@ export class Ghost extends Actor {
 	}
 	crashWithPac({
 		pos    = Player.i.pos,
-		radius = (this.frightened? T/2:T/3),
+		radius = (this.isFright? T/2:T/3),
 		fn = ()=> this.#setEscape()
 	}={}) {
 		if (!this.state.isWalk
 		 || !collisionCircle(this, pos, radius))
 			return false
-		if (this.frightened) {
+		if (this.isFright) {
 			Sound.play('bitten')
 			Timer.freeze()
-			this.#frightened = false
+			this.#isFright = false
 			this.trigger('Cought').state.to('Bitten')
 			PtsMgr.set({key:GhsMgr, ...this.centerPos}, fn)
 			return true
@@ -259,7 +257,7 @@ export class Ghost extends Actor {
 		return false
 	}
 	#setFrightMode(_, bool=false) {
-		!this.escaping && (this.#frightened = bool)
+		!this.isEscaping && (this.#isFright = bool)
 	}
 	#setEscape() {
 		Sound.ghostEscape()
