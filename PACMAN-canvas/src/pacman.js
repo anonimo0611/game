@@ -34,9 +34,7 @@ class PlayablePac extends Pacman {
 
 	/** @type {?Direction} */
 	#preDir   = null
-
-	/** @type {?Direction} */
-	#nextTurn = null
+	#nextTurn = this.#preDir
 
 	get closed()       {return State.isPlaying == false}
 	get showCenter()   {return Ctrl.showGridLines}
