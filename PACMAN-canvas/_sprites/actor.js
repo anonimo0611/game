@@ -17,7 +17,7 @@ export class Ghost {
 	}
 }
 export class Akabei extends Ghost {
-	orient   = Dir.Left
+	orient   = Left
 	Color    = Color.Akabei
 	cbSprite = GhsSpriteCb.stakeClothes
 }

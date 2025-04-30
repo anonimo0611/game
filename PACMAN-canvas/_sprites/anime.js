@@ -6,7 +6,7 @@ export const {ctx:PvC}= canvas2D('previewCvs', TileSize*3, TileSize*2)
 
 const Type    = freeze({None:-1,Pacman:0,Akabei:1,Pinky:2,Aosuke:3,Guzuta:4,Frightened:5})
 const PacType = freeze({Normal:0,Losing:1})
-const GhsType = freeze({Normal:0,Repaired:1,Hadake:2,Flashed:3})
+const GhsType = freeze({Normal:0,Mended:1,Exposed:2,Flashed:3})
 
 class AnimeData {
 	/** @param {{type?:number, subType?:number, pacman?:PacSprite, ghost?:Ghost}} */
@@ -71,19 +71,19 @@ function getOrient() {
 	}
 	function drawGhost() {
 		PvC.save()
-		data.subType == GhsType.Hadake
+		data.subType == GhsType.Exposed
 			? PvC.translate(S/4, S/4)
 			: PvC.translate(S/2*2/2, S/4)
 		data.ghost.sprite.draw({
 			...ghost,
-			mainCtx:    PvC,
-			idx:        data.type-1,
-			aIdx:       data.animIdx,
-			orient:     data.orient,
-			frightened: data.type    == Type.Frightened,
-			spriteIdx:  data.subType == GhsType.Flashed? data.flashIdx : 0,
-			hadaketa:   data.subType == GhsType.Hadake,
-			repaired:   data.subType == GhsType.Repaired,
+			mainCtx:   PvC,
+			idx:       data.type-1,
+			aIdx:      data.animIdx,
+			orient:    data.orient,
+			spriteIdx: data.subType == GhsType.Flashed? data.flashIdx : 0,
+			isFright:  data.type    == Type.Frightened,
+			isExposed: data.subType == GhsType.Exposed,
+			isMended:  data.subType == GhsType.Mended,
 		})
 		PvC.restore()
 	}

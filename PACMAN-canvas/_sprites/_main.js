@@ -63,10 +63,10 @@ export const View = function() {
 		const orient = [R,R,R,R,U,L,D,R][col]
 		ghost.sprite.draw({
 			...ghost,x,y,orient,
-			aIdx:       (col % 2 != 0),
-			frightened: (col <= 3),
-			escaping:   (col >= 4),
-			spriteIdx: +(col >= 2),
+			aIdx:      (col % 2 != 0),
+			isFright:  (col <= 3),
+			isEscaping:(col >= 4),
+			spriteIdx: (col >= 2)|0,
 		})
 	}
 	function drawPoints() {
@@ -125,12 +125,12 @@ export const View = function() {
 			aka.cbSprite.drawOffcut(Vec2.Zero)
 			Ctx.restore()
 		}
-		draw(ofst(4.00), 0, {ripped:true,orient:U})
-		draw(ofst(5.00), 0, {ripped:true,orient:'LowerR'})
-		draw(ofst(0.00), S, {repaired:true})
-		draw(ofst(1.00), S, {repaired:true,aIdx:1})
-		draw(ofst(2.25), S, {hadaketa:true})
-		draw(ofst(4.25), S, {hadaketa:true,aIdx:1})
+		draw(ofst(4.00), 0, {isRipped: true,orient:U})
+		draw(ofst(5.00), 0, {isRipped: true,orient:'LowerR'})
+		draw(ofst(0.00), S, {isMended: true})
+		draw(ofst(1.00), S, {isMended: true,aIdx:1})
+		draw(ofst(2.25), S, {isExposed:true})
+		draw(ofst(4.25), S, {isExposed:true,aIdx:1})
 	}
 	return {draw}
 }()
