@@ -76,21 +76,19 @@ export const Game = new class {
 	}
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
-		if (Confirm.opened || keyRepeat(e))
+		if (dqs(':not(#startBtn):focus')
+		 || Confirm.opened
+		 || keyRepeat(e))
 			return
 		switch (e.key) {
-		case 'Escape':
-			Game.#pause()
-			return
-		case 'Delete':
+		case 'Escape': return Game.#pause()
+		case 'Delete': return function() {
 			!e.ctrlKey
 				? Game.#confirm()
 				: State.to('Quit')
-			return
+			}()
 		default:
-			if (dqs(':not(#startBtn):focus'))
-				return
-			if (Dir.from(e, {wasd:true}) || e.key=='\x20') {
+			if (Dir.from(e,{wasd:true}) || e.key=='\x20') {
 				State.isTitle && State.to('Start')
 				Ticker.paused && Game.#pause()
 			}
