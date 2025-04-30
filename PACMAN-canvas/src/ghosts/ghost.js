@@ -12,7 +12,7 @@ import Sprite   from '../sprites/ghost.js'
 
 const Step = GhsStep
 export class Ghost extends Actor {
-	#runTimer  = -1
+	#runAway   = -1
 	#revSig    = false
 	#isStarted = false
 	#isFright  = false
@@ -40,7 +40,7 @@ export class Ghost extends Actor {
 		this.bind({
 			FrightMode:  this.#setFrightMode,
 			Reverse:()=> this.#revSig  = true,
-			Runaway:()=> this.#runTimer = 400/Game.interval,
+			Runaway:()=> this.#runAway = 400/Game.interval,
 		})
 		this.dir      = dir
 		this.idx      = idx
@@ -109,7 +109,7 @@ export class Ghost extends Actor {
 			: State.isPlaying && this.#behavior(this)
 	}
 	#behavior({state:s}=this) {
-		this.#runTimer >= 0 && this.#runTimer--
+		this.#runAway >= 0 && this.#runAway--
 		if (Timer.frozen && !this.isEscaping) return
 		if (s.isIdle)   return this.#idle(this)
 		if (s.isGoOut)  return this.#goOut(this)
@@ -197,7 +197,7 @@ export class Ghost extends Actor {
 		})
 		return this.isFright
 			? randChoice(dirs).dir
-			: dirs.sort(compareDist).at(this.#runTimer<0 ? 0:-1).dir
+			: dirs.sort(compareDist).at(this.#runAway<0 ? 0:-1).dir
 	}
 	/**
 	 * @param {Direction} dir
