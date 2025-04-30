@@ -12,6 +12,9 @@ const isFun  = arg=> typeof(arg) == 'function'
 const isKeyboardEvent = e=>
 	isObj(e) && (e.originalEvent || e) instanceof KeyboardEvent
 
+const isEnterKey = e=>
+	isKeyboardEvent(e) && /^(\x20|Enter)$/.test(e.key)
+
 const keyRepeat = e=>
 	isKeyboardEvent(e) && !!(e.originalEvent || e).repeat
 
