@@ -50,7 +50,7 @@ export const Sound = new class extends SoundMgr {
 		Speaker.draw(Sound.vol)
 	}
 	playSiren() {
-		if (!GhsMgr.frightened && !GhsMgr.hasEscape)
+		if (!GhsMgr.isFright && !GhsMgr.hasEscape)
 			Sound.stop('fright').stopSiren().play(Sound.sirenId)
 	}
 	playFright() {
@@ -74,7 +74,7 @@ export const Sound = new class extends SoundMgr {
 	ghostArrivedAtHome() {
 		if (GhsMgr.hasEscape)
 			return
-		const id = GhsMgr.frightened? 'fright':Sound.sirenId
+		const id = GhsMgr.isFright? 'fright':Sound.sirenId
 		Sound.stop('escape').play(id)
 	}
 };freeze(Sound)
