@@ -123,11 +123,11 @@ export const Game = new class {
 	}
 	#onFlashMaze() {
 		let count = 0
-		!function redrawWalls() {
+		!function redraw() {
 			if (++count > 8)
 				return Timer.set(500, Game.#levelEnds)
 			Wall.draw([, Color.FlashWall][count % 2])
-			Timer.set(250, redrawWalls)
+			Timer.set(250, redraw)
 		}()
 	}
 	#onNewLevel() {
