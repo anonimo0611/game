@@ -3,7 +3,7 @@ import {State}  from './state.js'
 import {Ghost}  from './ghosts/ghost.js'
 import {powChk} from './control.js'
 
-export const MapStr = `\
+export const MapArr = [...`\
 ////////////////////////////\
 A============21============B\
 #............||............#\
@@ -37,7 +37,7 @@ A====c.43 4--21--3 43.d====B\
 #..........................#\
 D__________________________C\
 ////////////////////////////\
-////////////////////////////`
+////////////////////////////`]
 
 /** @type {Set<number>} */
 const DotSet = new Set()
@@ -97,6 +97,7 @@ export const Maze = new class {
 		$on({Title_NewLevel: Maze.#reset})
 		$(powChk).on({change:Maze.#reset})
 	}
+	/** @param {Event} e */
 	#reset(e) {
 		for (const [i,c] of Maze.Map.entries())
 			/[.O]/.test(c) && Maze.#setDot(i,c)
@@ -117,11 +118,11 @@ export const Maze = new class {
 	get dotsLeft() {return DotSet.size}
 	GhostNotEnterSet = new Set(['12-11','12-23','15-11','15-23'])
 
-	DotMax  = MapStr.match(/[.O]/g).length
-	Map     = freeze([...MapStr])
+	Map     = freeze(MapArr)
 	House   = freeze(new House)
 	PowDot  = freeze(new PowDot)
 	Tunnel  = freeze(new Tunnel)
+	DotMax  = MapArr.join('').match(/[.O]/g).length
 
 	/** @param {number} tileIdx */
 	hasDot = tileIdx=> DotSet.has(tileIdx)
