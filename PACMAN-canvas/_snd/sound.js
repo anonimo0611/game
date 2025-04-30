@@ -9,8 +9,6 @@ const volRg2   = byId('volRg2')
 const volRngG  = dqsAll('.volRng')
 const SirenIds = SoundMgr.ids.filter(id=> /^siren/.test(id))
 
-const isEnterKey = e=> /^(\x20|Enter)$/.test(e.key)
-
 export const Sound = new class extends SoundMgr {
 	static {this.#init()}
 	static async #init() {
