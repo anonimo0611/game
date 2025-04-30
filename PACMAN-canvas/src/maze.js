@@ -121,6 +121,8 @@ export const Maze = new class {
 	PowDot = freeze(new PowDot)
 	Tunnel = freeze(new Tunnel)
 	DotMax = MapArr.join('').match(/[.O]/g).length
+
+	// These tiles (x-y) forbidden ghosts from entering upward
 	GhostNotEnterSet = new Set(['12-11','12-23','15-11','15-23'])
 
 	/** @param {number} tileIdx */
