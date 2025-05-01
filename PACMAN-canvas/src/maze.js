@@ -40,13 +40,15 @@ D__________________________C\
 ////////////////////////////`]
 
 /** @type {Set<number>} */
-const DotSet = new Set()
+const DotSet  = new Set()
+const DotChip = new Set(['.','O'])
 
 /** @type {Set<number>} */
 const WallSet = new Set()
 
 /** @type {Map<number,Vector2>} */
 const PowMap = new Map()
+
 
 const PenRect  = new Rect(10,13, 7,4)
 const PenOuter = new Rect( 9,12, 9,6)
@@ -95,14 +97,14 @@ export const Maze = new class {
 	static {$ready(this.setup)}
 	static setup() {
 		for (const [i,c] of Maze.Map.entries())
-			/[^.O\s]/.test(c) && WallSet.add(i)
+			!DotChip.has(c) && c.trim() && WallSet.add(i)
 		$on({Title_NewLevel: Maze.#reset})
 		$(powChk).on({change:Maze.#reset})
 	}
 	/** @param {Event} e */
 	#reset(e) {
 		for (const [i,c] of Maze.Map.entries())
-			/[.O]/.test(c) && Maze.#setDot(i,c)
+			DotChip.has(c) && Maze.#setDot(i,c)
 		e.target != powChk && Maze.#drawDoor()
 	}
 	/**
@@ -122,7 +124,7 @@ export const Maze = new class {
 	House  = freeze(new House)
 	PowDot = freeze(new PowDot)
 	Tunnel = freeze(new Tunnel)
-	DotMax = MapArr.join('').match(/[.O]/g).length
+	DotMax = MapArr.filter(c=> DotChip.has(c)).length
 
 	// These tiles (x-y) forbidden ghosts from entering upward
 	GhostNotEnterSet = new Set(['12-11','12-23','15-11','15-23'])
