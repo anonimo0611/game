@@ -2,7 +2,7 @@ import '../_lib/mouse.js'
 import PacSprite     from '../src/sprites/pacman.js'
 import * as FruitSpr from '../src/sprites/fruits.js'
 import pointsSprite  from '../src/sprites/points.js'
-import {GridSize,T,S,Gap,ghost,cbAka} from './_constants.js'
+import {GridSize,T,S,Gap,ghost} from './_constants.js'
 
 export const View = function() {
 	/** @param {number} colIdx */
@@ -93,7 +93,8 @@ export const View = function() {
 		}
 	}
 	function drawAkabei() {
-		const aka = cbAka
+		const aka = ghost
+		const spr = aka.cbSprite.stakeClothes
 		function draw(x,y, cfg) {
 			Ctx.save()
 			aka.sprite.draw({...aka, x,y, ...cfg})
@@ -105,24 +106,24 @@ export const View = function() {
 			for (let i=0,ofst=0; i<3; i++) {
 				draw(...pos.vals, {aIdx:+(i==2)})
 				const nPos = Vec2(pos).add(S*0.75, S/4)
-				aka.cbSprite.expandClothes({...nPos,size:S}, +(i==2), rates[i])
+				spr.expandClothes({...nPos,size:S}, +(i==2), rates[i])
 				pos.x += S*1.2 + (++ofst * Gap)
 			}
 		}
 		{ // Stake and offcut
 			const s = T/TileSize
-			const [sx,sy]= Vec2(aka.cbSprite.stakeSize).mul(s).vals
+			const [sx,sy]= Vec2(spr.stakeSize).mul(s).vals
 			// Stake
 			Ctx.save()
 			Ctx.translate(S*6.9, S-S/4-sy-3*s)
 			Ctx.scale(s, s)
-			aka.cbSprite.drawStake(Vec2.Zero)
+			spr.drawStake(Vec2.Zero)
 			Ctx.restore()
 			// Offcut
 			Ctx.save()
 			Ctx.translate(S*6.9+sx, S-S/4-3*s)
 			Ctx.scale(s, s)
-			aka.cbSprite.drawOffcut(Vec2.Zero)
+			spr.drawOffcut(Vec2.Zero)
 			Ctx.restore()
 		}
 		draw(ofst(4.00), 0, {isRipped: true,orient:U})
