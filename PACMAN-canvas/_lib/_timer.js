@@ -1,7 +1,8 @@
 'use strict'
 const {Ticker,Timer}= function() {
 
-/** @type {Map<any, {ms:number, fn:Function, ignoreFrozen:boolean, amount:number}>} */
+/** @typedef {{ms:number, fn:Function, ignoreFrozen:boolean, amount:number}} TimerData */
+/** @type {Map<any, TimerData>} */
 const TimerMap = new Map()
 
 /** @type {?Tick} */
@@ -58,18 +59,17 @@ class Tick {
 			_pausedCounter++
 			return
 		}
-		this.timer()
+		TimerMap.forEach(this.timer)
 		this.fn?.()
 		_counter++
 		_pausedCounter = 0
 	}
-	timer() {
-		TimerMap.forEach((t, key)=> {
-			if (Timer.frozen && !t.ignoreFrozen)   return
-			if (Ticker.Interval*t.amount++ < t.ms) return
-			TimerMap.delete(key)
-			t.fn()
-		})
+	/** @param {TimerData} t */
+	timer(t, key) {
+		if (Timer.frozen && !t.ignoreFrozen)   return
+		if (Ticker.Interval*t.amount++ < t.ms) return
+		TimerMap.delete(key)
+		t.fn()
 	}
 	stop() {
 		TimerMap.clear()
@@ -86,6 +86,8 @@ class Tick {
 const Timer = freeze(new class {
 	#frozen = false
 	get frozen() {return this.#frozen}
+	freeze()   {this.#frozen = true; return this}
+	unfreeze() {this.#frozen = false;return this}
 
 	/**
 	 * @param {number} ms
@@ -114,26 +116,9 @@ const Timer = freeze(new class {
 			;(s=seq[++idx]) ? Timer.set(s.ms, fire) : (fire=null)
 		} Timer.set(s.ms, fire)
 	}
-	freeze() {
-		this.#frozen = true
-		return this
-	}
-	unfreeze() {
-		this.#frozen = false
-		return this
-	}
-	stop() {
-		Ticker.stop()
-		return this
-	}
-	cancelAll() {
-		TimerMap.clear()
-		return this
-	}
-	cancel(key) {
-		TimerMap.delete(key)
-		return this
-	}
+	stop()      {Ticker.stop();     return this}
+	cancel(k)   {TimerMap.delete(k);return this}
+	cancelAll() {TimerMap.clear();  return this}
 })
 return {Ticker,Timer}
 
