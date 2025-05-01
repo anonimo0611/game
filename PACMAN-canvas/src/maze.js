@@ -59,14 +59,16 @@ class House {
 }
 class PowDot {
 	#disp = 1
+	/** @param {Vector2} pos */
+	#draw(pos) {
+		if (!State.isPlaying
+		 || Ticker.paused
+		 || this.#disp)
+			Maze.drawDot(Ctx, pos, true)
+	}
 	draw() {
 		this.#disp ^= Ticker.count % 15 == 0
-		for (const [,pos] of PowMap) {
-			if (!State.isPlaying
-			 || Ticker.paused
-			 || this.#disp)
-				Maze.drawDot(Ctx, pos, true)
-		}
+		for (const [,pos] of PowMap) this.#draw(pos)
 	}
 }
 class Tunnel {
