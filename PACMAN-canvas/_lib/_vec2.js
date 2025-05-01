@@ -17,7 +17,7 @@ class Vector2 {
 	 * @param {number|Position} v1
 	 * @param {number} v2
 	 */
-	constructor(v1,v2=v1) {this.set(v1,v2)}
+	constructor(v1,v2=v1) {this.set(v1, v2)}
 
 	/**
 	 * @param {number|Position} v1

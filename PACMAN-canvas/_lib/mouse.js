@@ -1,13 +1,16 @@
 export const Cursor = new class {
 	static {
-		let timerId=0, lstPos={x:0, y:0}
-		$on('mousemove', e=> { // Hide cursor if not moved for 2 secs
+		let timerId = 0, lstPos = {x:0, y:0}
+		/** @param {MouseEvent} e */
+		function onMouseMove(e) {
+			//Hide cursor if not moved for 2 secs
 			clearTimeout(timerId)
 			timerId = setTimeout(()=> Cursor.#setState('hidden'), 2e3)
 			const {pageX:x, pageY:y}= e
 			Vec2.distance(lstPos,{x,y}) > 2 && Cursor.default()
 			lstPos = {x,y}
-		})
+		}
+		$on('mousemove', onMouseMove)
 	}
 	hide()    {this.#setState('hidden')}
 	default() {this.#setState('default')}
