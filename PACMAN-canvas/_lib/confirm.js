@@ -17,7 +17,7 @@ export const Confirm = new class {
 		}
 		buttons.forEach((btn, i, btns)=> {
 			btn.textContent = [btnStr1,btnStr2][i]
-			btn.onclick   = _=> {$off(NS), Confirm.#close([fn1,fn2][i])}
+			btn.onclick   = _=> {$off(NS), Confirm.#remove([fn1,fn2][i])}
 			btn.onkeydown = e=> {Dir.from(e)==[R,L][i] && btns[1^i].focus()}
 		})
 		confirm.showModal()
@@ -26,16 +26,18 @@ export const Confirm = new class {
 		$onNS(NS,{mousedown:e=> {e.preventDefault()}})
 		_opened = true
 	}
-	/** @param {?Function} fn */
-	#close(fn) {
-		$('#confirm').opacity(0,500).on('transitionend', e=> {
-			$(e.target).remove()
-			isFun(fn) && fn()
-			_opened = false
-		})
-	}
 	#append() {
 		const temp = byId('confirm_temp').content.cloneNode(true)
 		document.body.append(temp)
+	}
+	/** @param {Function} [fn] */
+	#remove(fn) {
+		/** @param {Event} e */
+		function remove(e) {
+			e.target.remove()
+			isFun(fn) && fn()
+			_opened = false
+		}
+		$('#confirm').opacity(0,500).on({transitionend:remove})
 	}
 };const NS='.CONFIRM'
