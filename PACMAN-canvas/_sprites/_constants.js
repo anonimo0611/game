@@ -1,17 +1,7 @@
-import {PvC}  from './anime.js'
-import {View} from './_main.js'
-import GhsSprite   from '../src/sprites/ghost.js'
-import GhsSpriteCb from '../src/sprites/ghost_cb.js'
+import {PvC}   from './anime.js'
+import {View}  from './_main.js'
+import {Ghost} from './actor.js'
 
-class Ghost {
-	/** @param {number} size */
-	constructor(size) {
-		this.idx      = 0
-		this.size     = size
-		this.sprite   = new GhsSprite(canvas2D(null, size*4, size*3).ctx)
-		this.cbSprite = GhsSpriteCb
-	}
-}
 export const sizeRng  = byId('sizeRng')
 export const GridSize = Vec2(10,11).freeze()
 
