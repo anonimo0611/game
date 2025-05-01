@@ -7,7 +7,9 @@ export class Actor extends Common {
 	#x = 0
 	#y = 0
 	radius  = T
-	#fadeIn = new FadeIn(500)
+
+	/** @type {?FadeIn} */
+	#fadeIn = null
 
 	/** @type {Direction} */
 	#orient = L
@@ -45,10 +47,12 @@ export class Actor extends Common {
 	get inBackwardOfTile() {return this.moveAmountPerTile >  T/2}
 
 	update() {
-		State.isReady && this.#fadeIn.update(this.maxAlpha)
+		const maxα = this.maxAlpha
+		State.isReady   && (this.#fadeIn||=new FadeIn(500))?.update(maxα)
+		State.isPlaying && (this.#fadeIn&&=null)
 	}
 	draw() {
-		State.isReady && this.#fadeIn.setAlpha(Ctx)
+		State.isReady && this.#fadeIn?.setAlpha(Ctx)
 			|| (Ctx.globalAlpha = this.maxAlpha)
 	}
 	newTileReached(denom=1) {
