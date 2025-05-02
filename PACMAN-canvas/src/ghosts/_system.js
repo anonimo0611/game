@@ -127,8 +127,9 @@ const AlternateBetweenModes = function() {
 		const Seq = {
 			mode: +Ctrl.isChaseMode,
 			update() {
-				if (Timer.frozen || GhsMgr.isFright
-				|| ++cnt*Ticker.Interval < duration())
+				if (Timer.frozen
+				 || GhsMgr.isFright
+				 || ++cnt*Ticker.Interval < duration())
 					return
 				[cnt,Seq.mode] = [0,(++idx % 2)]
 				setReversalSignal()
@@ -234,7 +235,7 @@ class FrightMode {
 		const {numOfSec}= FrightMode
 		const et = (Game.interval*this.#tCounter++)/1000
 		const fi = (numOfSec == 1 ? 12:14)/Game.speedRate|0
-		this.#flashIdx ^=!(this.#fCounter % fi)
+		this.#flashIdx ^= !(this.#fCounter % fi)
 		;(et>=numOfSec - 2) && this.#fCounter++
 		;(et>=numOfSec || this.caughtAll) && this.#toggle(false)
 	}
