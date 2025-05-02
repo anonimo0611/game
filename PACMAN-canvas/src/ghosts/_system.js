@@ -80,7 +80,7 @@ export const GhsMgr = new class {
 	}
 	setFrightMode() {
 		setReversalSignal()
-		;(State.isAttract || FrightMode.duration) && new FrightMode()
+		;(State.isAttract || FrightMode.numOfSec) && new FrightMode()
 	}
 	update() {
 		if (State.isPlaying
@@ -138,7 +138,7 @@ const AlternateBetweenModes = function() {
 }(),
 setReversalSignal = ()=> {
 	$(Ghosts).trigger('Reverse')
-	!FrightMode.duration && $(Ghosts).trigger('Runaway')
+	!FrightMode.numOfSec && $(Ghosts).trigger('Runaway')
 }
 
 export const DotCounter = function() {
@@ -208,7 +208,7 @@ class FrightMode {
 	static #instance = null
 	static #timeList = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	static get instance() {return this.#instance}
-	static get duration() {return this.#timeList[Game.clampedLv-1]}
+	static get numOfSec() {return this.#timeList[Game.clampedLv-1]}
 	static {$(GhsMgr).on('Init',()=> this.#instance = null)}
 	#tCounter  = 0
 	#fCounter  = 0
@@ -229,12 +229,13 @@ class FrightMode {
 		return this
 	}
 	update() {
-		if (!State.isPlaying || Timer.frozen) return
-		const {duration:dur}= FrightMode
-		const et = (Game.interval*this.#tCounter++)/1e3
-		const fi = (dur == 1 ? 12:14)/Game.speedRate|0
+		if (!State.isPlaying || Timer.frozen)
+			return
+		const {numOfSec}= FrightMode
+		const et = (Game.interval*this.#tCounter++)/1000
+		const fi = (numOfSec == 1 ? 12:14)/Game.speedRate|0
 		this.#flashIdx ^=!(this.#fCounter % fi)
-		;(et>=dur - 2) && this.#fCounter++
-		;(et>=dur || this.caughtAll) && this.#toggle(false)
+		;(et>=numOfSec - 2) && this.#fCounter++
+		;(et>=numOfSec || this.caughtAll) && this.#toggle(false)
 	}
 }
