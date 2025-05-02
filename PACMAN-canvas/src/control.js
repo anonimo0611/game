@@ -89,15 +89,15 @@ export const Ctrl = new class {
 		const cfg  = {ctx, size:T*0.68, style:'bold', scale:[.7,1]}
 		const draw = (...args)=> drawText(...args, cfg)
 		ctx.save()
-		ctx.translate(0, T*18)
+		ctx.translate(T*0.1, T*18)
 		ctx.clearRect(0, -T, CvsW, T*3)
 		if (Ctrl.isCheatMode || spd != '1.0') {
-			draw(.1, lh*0, Color.InfoTable[+(spd != '1.0')],`Speed x${spd}`)
-			draw(.1, lh*1, Color.InfoTable[+Ctrl.invincible], 'Invincible')
-			draw(.1, lh*2, Color.InfoTable[+Ctrl.showTargets],'Targets')
+			draw(0, lh*0, Color.InfoTable[+(spd != '1.0')],`Speed x${spd}`)
+			draw(0, lh*1, Color.InfoTable[+Ctrl.invincible], 'Invincible')
+			draw(0, lh*2, Color.InfoTable[+Ctrl.showTargets],'Targets')
 		}
 		if (Ctrl.unrestricted) {
-			ctx.translate(T*(Cols-4.9), T/2)
+			ctx.translate(T*(Cols-5), T/2)
 			draw(0,0, Color.InfoTable[1], 'Un-\nrestricted')
 		}
 		ctx.restore()
