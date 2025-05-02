@@ -40,16 +40,15 @@ D__________________________C\
 ////////////////////////////`]
 
 /** @type {Set<number>} */
-const DotSet  = new Set()
-const DotChip = new Set(['.','O'])
+const WallSet = new Set()
 
 /** @type {Set<number>} */
-const WallSet = new Set()
+const DotSet = new Set()
 
 /** @type {Map<number,Vector2>} */
 const PowMap = new Map()
 
-
+const DotChip  = new Set(['.','O'])
 const PenRect  = new Rect(10,13, 7,4)
 const PenOuter = new Rect( 9,12, 9,6)
 
