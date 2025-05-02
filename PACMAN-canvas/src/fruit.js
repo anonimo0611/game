@@ -38,32 +38,35 @@ export const Fruit = new class {
 		_fadeOut = null
 		_tgtDisp = State.isTitle
 	}
-	#dotEaten() {
-		if (!AppearSet.has(Maze.DotMax - Maze.dotsLeft))
-			return
-		_tgtDisp = true
-		// The fruit disappearing is between 9 and 10 seconds
+	#setTimerToHideTarget() {
+		// Disappearing is between 9 and 10 seconds
 		const {speedRate:rate}=Game, fadeDur=300
 		const setFadeOut = ()=> _fadeOut = new FadeOut(fadeDur/rate)
 		Timer.set(randInt(9e3, 1e4-fadeDur)/rate, setFadeOut, {key:Fruit})
 	}
+	#dotEaten() {
+		if (AppearSet.has(Maze.DotMax - Maze.dotsLeft)) {
+			_tgtDisp = true
+			Fruit.#setTimerToHideTarget()
+		}
+	}
 	#collideWith(pos=Player.i.centerPos) {
-		if (!_tgtDisp || !collisionCircle(pos, TargetPos, T/2))
-			return
-		_tgtDisp = false
-		Timer.cancel(Fruit) && Sound.play('fruit')
-		PtsMgr.set({key:Fruit, duration:2e3, ...TargetPos})
+		if (_tgtDisp && collisionCircle(pos, TargetPos, T/2)) {
+			_tgtDisp = false
+			Timer.cancel(Fruit) && Sound.play('fruit')
+			PtsMgr.set({key:Fruit, duration:2e3, ...TargetPos})
+		}
 	}
 	update() {
-		if (_fadeOut?.update() === false)
-		   [_fadeOut,_tgtDisp] = [null,false]
+		if (_fadeOut?.update() === false) {
+			_fadeOut = null
+			_tgtDisp = false
+		}
 		Fruit.#collideWith()
 	}
 	drawTarget() {
-		if (!State.isTitle
-		 && !State.isPlaying)
-			return
-		if (!Ticker.paused && _tgtDisp) {
+		if ((State.isTitle || State.isPlaying)
+		 && !Ticker.paused && _tgtDisp) {
 			Ctx.save()
 			_fadeOut?.setAlpha(Ctx)
 			Ctx.translate(...TargetPos.vals)
