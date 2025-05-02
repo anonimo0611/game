@@ -139,9 +139,10 @@ class StakeClothes {
 		Ctx.fillRect(x,y, ...this.stakeSize.vals, '#FFF')
 	}
 	drawOffcut({x, y}=this.offcutPos) {
+		const h = this.stakeSize.y
 		Ctx.save()
 		Ctx.translate(x, y)
-		Ctx.fillPolygon(Color.Akabei, [0,-4],[0,-this.stakeSize.y],[-T,0],[-4,0],[-4,-4])
+		Ctx.fillPolygon(Color.Akabei, [0,-4],[0,-h],[-T,0],[-4,0],[-4,-4])
 		Ctx.restore()
 	}
 	/**
