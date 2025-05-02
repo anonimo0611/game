@@ -170,16 +170,13 @@ function gala(ctx=Ctx) {
 	ctx.strokeLine(0, 0, 0, 6)
 
 	// red arrow head
-	ctx.newLinePath([0,-5],[3.8,-2.2],[3.0,-1.2],[1.3,-2.3])
-	ctx.quadraticCurveTo(+0.7, -2.7, 0.6, -1.4)
-	ctx.lineTo(+0.4, -0.6)
-	ctx.quadraticCurveTo(+0.0, +0.0, -0.4, -0.6)
-	ctx.lineTo(-0.4, -0.6)
-	ctx.lineTo(-0.6, -1.4)
-	ctx.quadraticCurveTo(-0.7, -2.7, -1.3, -2.2)
-	ctx.lineTo(-1.3, -2.3)
-	ctx.lineTo(-3.0, -1.2)
-	ctx.lineTo(-3.8, -2.2)
+	ctx.beginPath()
+	for (const scaleX of [1,-1]) {
+		ctx.scale(scaleX, 1)
+		ctx.setLinePath([0,-4.9],[3.8,-2.2],[3.0,-1.2],[1.3,-2.3])
+		ctx.quadraticCurveTo(+0.7,-2.7, 0.7,-1.4)
+		ctx.quadraticCurveTo(+0.4, 0.0, 0.0, 0.0)
+	}
 	ctx.fillStyle = '#FF3401'
 	ctx.fill()
 }
