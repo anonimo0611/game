@@ -6,7 +6,7 @@ const CW = CvsW
 export class Actor extends Common {
 	#x = 0
 	#y = 0
-	radius  = T
+	radius = T
 
 	/** @type {?FadeIn} */
 	#fadeIn = null
