@@ -129,7 +129,7 @@ const AlternateBetweenModes = function() {
 			update() {
 				if (Timer.frozen
 				 || GhsMgr.isFright
-				 || ++cnt*Ticker.Interval < duration())
+				 || Ticker.Interval*(++cnt) < duration())
 					return
 				[cnt,Seq.mode] = [0,(++idx % 2)]
 				setReversalSignal()
