@@ -26,7 +26,7 @@ export class Pacman extends Actor {
 	constructor() {super(),freeze(this)}
 }
 class PlayablePac extends Pacman {
-	#step     = this.#getCurrentStep()
+	#step     = this.#getStep()
 	#eatIdx   = 0
 	#notEaten = 0
 	#turning  = false
@@ -40,7 +40,6 @@ class PlayablePac extends Pacman {
 	get showCenter()   {return Ctrl.showGridLines}
 	get step()         {return this.#step}
 	get stopped()      {return this.#stopped}
-	get turning()      {return this.#turning}
 	get timeNotEaten() {return this.#notEaten * Game.interval}
 	get translucent()  {return this.showCenter || Ctrl.invincible}
 	get maxAlpha()     {return this.translucent? 0.75:1}
@@ -50,21 +49,21 @@ class PlayablePac extends Pacman {
 		this.pos = Vec2(13.5, 24).mul(T)
 		$offon('keydown.Player', this.#onKeydown.bind(this))
 	}
-	get #canTurn() {
+	get canTurn() {
 		return this.inForwardOfTile
 			&& this.#preDir
 			&& this.collidedWithWall(this.#preDir) === false
 	}
-	get #baseSpeed() {
+	get baseSpeed() {
 		return Game.moveSpeed
 			* (Game.level<13 ? 1 : PacStep.SlowBase)
 	}
-	#getCurrentStep() {
+	#getStep() {
 		const eating = Maze.hasDot(this.tileIdx)
 		return(GhsMgr.isFright
 			? (eating? PacStep.EneEat : PacStep.Energize)
 			: (eating? PacStep.Eating : PacStep.Base)
-		) * this.#baseSpeed
+		) * this.baseSpeed
 	}
 	/**
 	 * @param {KeyboardEvent} e
@@ -74,14 +73,14 @@ class PlayablePac extends Pacman {
 		return Confirm.opened
 			|| keyRepeat(e)
 			|| (dir == null)
-			|| (dir == this.dir && !this.turning)
+			|| (dir == this.dir && !this.#turning)
 	}
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
 		const dir = Dir.from(e, {wasd:true})
 		if (this.#ignoreKeys(e, dir))
 			return
-		if (this.turning) {
+		if (this.#turning) {
 			this.#nextTurn = dir
 			return
 		}
@@ -103,7 +102,7 @@ class PlayablePac extends Pacman {
 		this.#notEaten = 0
 	}
 	forwardPos(num=0) {
-		const  ofstX = (this.dir == Up ? -num : 0)
+		const  ofstX = (this.dir == U ? -num : 0)
 		return Vec2[this.dir].mul(num*T).add(this.centerPos).add(ofstX*T, 0)
 	}
 	draw() {
@@ -125,9 +124,9 @@ class PlayablePac extends Pacman {
 	}
 	#behavior(denom=1) {
 		if (this.newTileReached(denom)) {
-			this.#step = this.#getCurrentStep()
+			this.#step = this.#getStep()
 		}
-		if (!this.turning && this.collidedWithWall()) {
+		if (!this.#turning && this.collidedWithWall()) {
 			this.pos = this.tilePos.mul(T)
 			this.#preDir  = null
 			this.#stopped = true
@@ -141,14 +140,14 @@ class PlayablePac extends Pacman {
 		this.#turnAround()
 	}
 	#setCornering(denom=1) {
-		if (!this.#canTurn)
+		if (!this.canTurn)
 			return
 		this.orient = this.#preDir
 		this.#turning ||= true
 		this.setNextPos(denom,this.orient)
 	}
 	#endCornering() {
-		if (this.turning && this.inBackwardOfTile) {
+		if (this.#turning && this.inBackwardOfTile) {
 			this.movDir   = this.orient
 			this.#preDir  = this.#nextTurn
 			this.#turning = !!(this.#nextTurn=null)
