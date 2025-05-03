@@ -50,14 +50,14 @@ export class Ghost extends Actor {
 		this.pos      = Vec2(col*T, row*T)
 		this.name     = this.constructor.name
 		this.release  = this.release.bind(this)
-		this.state    = new Sys.GhostState(this)
+		this.state    = new Sys.GhostState(this, Game.interval)
 		this.sprite   = new Sprite(canvas2D(null, T*3, T*2).ctx)
 		freeze(this)
 	}
 	get isScatter() {
 		return GhsMgr.isScatter
 			&& !this.isFright
-			&& !this.state.isEscape
+			&& !this.isEscaping
 			&& !this.isAngry
 	}
 	get originalTargetTile() {
@@ -81,7 +81,7 @@ export class Ghost extends Actor {
 		return Vec2.sqrMagnitude(this, Player.i.pos)
 	}
 	get step() {
-		return (s=> {
+		return function(s) {
 			if (s.isIdle)     return Step.Idle
 			if (s.isGoOut)    return Step.GoOut
 			if (s.isEscaping) return Step.Escape
@@ -89,7 +89,7 @@ export class Ghost extends Actor {
 			if (s.isFright)   return Step.Fright
 			if (s.isScatter)  return Step.Base
 			return s.chaseStep
-		})(this) * Game.moveSpeed
+		}(this) * Game.moveSpeed
 	}
 	draw() {
 		if (State.isStart)
@@ -114,7 +114,7 @@ export class Ghost extends Actor {
 		if (s.isIdle)   return this.#idle(this)
 		if (s.isGoOut)  return this.#goOut(this)
 		if (s.isReturn) return this.#returnToHome(this)
-		this.#walk()
+		this.#walkRoute()
 	}
 	#idle({idx,step,orient,state,centerPos:{y:cy}}=this) {
 		if (!Ctrl.isChaseMode)
@@ -171,7 +171,7 @@ export class Ghost extends Actor {
 			: this.state.to('Idle') && this.#idle(this)
 		!Timer.frozen && Sound.ghostArrivedAtHome()
 	}
-	#walk() {
+	#walkRoute() {
 		for (let i=0,denom=ceil(this.step)*2; i<denom; i++) {
 			this.setNextPos(denom)
 			this.inBackwardOfTile && this.#setNextDir()
