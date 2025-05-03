@@ -18,7 +18,7 @@ const coords100_5000 = {
 	 700: [[7,-7.0,-3],[0,-1.0,-3],[0,4.0,-3]],
 	 800: [[8,-7.0,-3],[0,-1.0,-3],[0,4.0,-3]],
 	1000: [[1,-8.0,-3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
-	1600: [[  -7.4,-3],[6,-5.3,-3],[0,-.3,-3],[0,4.7,-3]],
+	1600: [[ ,-7.4,-3],[6,-5.3,-3],[0,-.3,-3],[0,4.7,-3]],
 	2000: [[2,-10, -3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
 	3000: [[3,-10, -3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
 	5000: [[5,-10, -3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
@@ -40,20 +40,12 @@ export default new class {
 		Ctx.strokeStyle = GhsPtsSet.has(pts)
 			? Color.GhostPts
 			: Color.FruitPts
-		coords100_5000[pts]?.forEach((c,i)=> {
+		coords100_5000[pts]?.forEach(([n,x,y],i)=> {
 			pts == 1600 && i == 0
-				? this.#strokeThin1(...c)
-				: this.#strokeNumber(...c)
+				? this.#strokeLines([x,y,x,y+6]) // narrow 1
+				: this.#strokeNumber(n,x,y)
 		})
 		Ctx.restore()
-	}
-
-	/**
-	 * @param {number} x
-	 * @param {number} y
-	 */
-	#strokeThin1(x, y) {
-		this.#strokeLines([x,y,x,y+6])
 	}
 
 	/**
