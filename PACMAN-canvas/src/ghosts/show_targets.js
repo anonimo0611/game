@@ -8,7 +8,8 @@ import {Ghost}  from './ghost.js'
 export default new class {
 	/** @param {Ghost[]} ghosts */
 	draw(ghosts=[]) {
-		if (!Ctrl.showTargets || !State.isPlaying) return
+		if (!Ctrl.showTargets || !State.isPlaying)
+			return
 		for (let g of ghosts) this.#strokeLines(g)
 		for (let g of ghosts) this.#drawTargetMarker(g)
 	}

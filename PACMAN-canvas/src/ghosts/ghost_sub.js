@@ -11,6 +11,7 @@ class Akabei extends Ghost {
 	get chaseStep()   {return GhsMgr.Elroy.step}
 	get scatterTile() {return Vec2(24, 0)}
 }
+
 class Pinky extends Ghost {
 	constructor() {
 		super(D, {idx:1, col:13.5, row:15})
@@ -23,6 +24,7 @@ class Pinky extends Ghost {
 		return pos
 	}
 }
+
 class Aosuke extends Ghost {
 	constructor() {
 		super(U, {idx:2, col:11.5, row:15, align:-1})
@@ -33,6 +35,7 @@ class Aosuke extends Ghost {
 		return pos.clone.sub(GhsMgr.akaCenter).add(pos)
 	}
 }
+
 class Guzuta extends Ghost {
 	constructor() {
 		super(U, {idx:3, col:15.5, row:15, align:+1})
@@ -45,6 +48,7 @@ class Guzuta extends Ghost {
 			: Player.i.centerPos
 	}
 }
+
 const Classes = [Akabei,Pinky,Aosuke,Guzuta]
 $on({Title_Restart_NewLevel:()=>
 	$(GhsMgr).trigger('Init', Classes.map(cls=> new cls))
