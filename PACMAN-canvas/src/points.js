@@ -14,10 +14,10 @@ export const PtsMgr = new class {
 	 * @param {PtsData} data
 	 * @param {Function} [fn]
 	 */
-	set(data, fn)  {new Points(data, fn)}
-	update()       {PtsMap.forEach(v=> v.update())}
-	drawFruitPts() {PtsMap.get(Fruit) ?.draw()}
-	drawGhostPts() {PtsMap.get(GhsMgr)?.draw()}
+	set(data, fn) {new Points(data, fn)}
+	update()      {PtsMap.forEach(v=> v.update())}
+	drawBehind()  {PtsMap.get(Fruit) ?.draw()}
+	drawFront()   {PtsMap.get(GhsMgr)?.draw()}
 }
 class Points {
 	/**

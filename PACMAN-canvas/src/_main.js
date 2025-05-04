@@ -177,12 +177,12 @@ export const Game = new class {
 		Score.draw()
 		Maze.PowDot.draw()
 		Fruit.drawTarget()
-		PtsMgr.drawFruitPts()
+		PtsMgr.drawBehind()
 		GhsMgr.drawBehind()
 		Player.i.draw()
-		GhsMgr.drawTargets()
+		GhsMgr.drawTarget()
 		GhsMgr.drawFront()
-		PtsMgr.drawGhostPts()
+		PtsMgr.drawFront()
 		Message.draw()
 	}
 	#loop() {
