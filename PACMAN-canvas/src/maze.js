@@ -83,7 +83,7 @@ class Tunnel {
 		const where = this.#where(centerPos)
 		if (dir == L) return (where == L)
 		if (dir == R) return (where == R)
-		return where != null
+		return (where != null)
 	}
 	#where({x, y}={}) {
 		if (int(y/T) == 15 && x/T <= this.entranceL) return L
@@ -114,7 +114,7 @@ export const Maze = new class {
 		const v = Vec2(idx%Cols, idx/Cols|0)
 		Maze.clearBgDot({tileIdx:idx,tilePos:v})
 		DotSet.add(idx)
-		!powChk.checked || (chip == '.')
+		!powChk.checked || chip == '.'
 			? drawDot(Bg.ctx, v)
 			: PowMap.set(idx, v)
 	}
