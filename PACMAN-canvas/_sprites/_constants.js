@@ -2,7 +2,9 @@ import {PvC}   from './anime.js'
 import {View}  from './_main.js'
 import {Ghost} from './actor.js'
 
-export const sizeRng  = byId('sizeRng')
+export const sizeRng =
+	/**@type {HTMLInputElement}*/(byId('sizeRng'))
+
 export const GridSize = Vec2(10,11).freeze()
 
 export let T=0,[S,Gap]=[0,0]

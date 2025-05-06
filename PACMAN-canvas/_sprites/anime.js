@@ -1,15 +1,16 @@
-import * as Menu   from '../_lib/menu.js'
-import PacSprite   from '../src/sprites/pacman.js'
-import {Ghost}     from './actor.js'
+import {Dir}     from '../_lib/direction.js'
+import * as Menu from '../_lib/menu.js'
+import PacSprite from '../src/sprites/pacman.js'
+import {Ghost}   from './actor.js'
 import {T,S,ghost} from './_constants.js'
-export const {ctx:PvC}= canvas2D('previewCvs', TileSize*3, TileSize*2)
+export const {ctx:PvC}= canvas2D('previewCvs')
 
 const Type    = freeze({None:-1,Pacman:0,Akabei:1,Pinky:2,Aosuke:3,Guzuta:4,Frightened:5})
 const PacType = freeze({Normal:0,Losing:1})
 const GhsType = freeze({Normal:0,Mended:1,Exposed:2,Flashed:3})
 
 class AnimeData {
-	/** @param {{type?:number, subType?:number, pacman?:PacSprite, ghost?:Ghost}} */
+	/** @param {{type?:number, subType?:number, pacman?:PacSprite, ghost?:Ghost}} params */
 	constructor({type,subType,pacman,ghost}={type:-1,subType:-1}) {
 		this.animIdx  = 0
 		this.flashIdx = 1
@@ -17,13 +18,13 @@ class AnimeData {
 		this.ghost    = ghost
 		this.type     = type
 		this.subType  = subType
-		this.orient   = Left
+		this.orient   = L
 	}
 }
 function getOrient() {
-	return String(byId('select-anim').orient.value)
+	return $('input[name=orient]:checked').attr('value')
 }
-!(function() { // Preview
+(function() { // Preview
 	let   data = new AnimeData()
 	const menu = new Menu.DorpDown('animSelect')
 	const radioSelector = '.radioButtons input'
@@ -90,8 +91,8 @@ function getOrient() {
 	function update() {
 		if (data.type < 0)
 			return
-		data.animIdx  ^= Ticker.count %  6 == 0
-		data.flashIdx ^= Ticker.count % 14 == 0
+		data.animIdx  ^= +(Ticker.count %  6 == 0)
+		data.flashIdx ^= +(Ticker.count % 14 == 0)
 		data.pacman?.update()
 	}
 	function draw() {
@@ -113,6 +114,6 @@ function getOrient() {
 			$(radioSelector).eq((vx+idx+4) % 4).prop({checked:true}).trigger('change')
 		}
 	})
-	$(radioSelector).on('change', e=> {data.orient=e.target.value})
+	$(radioSelector).on('change', e=> {data.orient=e.target.getAttribute('value')})
 	Ticker.set(()=> {update();draw()})
-}())
+})()

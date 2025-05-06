@@ -26,7 +26,7 @@ export const View = function() {
 		Ctx.lineWidth = 2
 		Ctx.strokeStyle = '#555'
 		const {x:Cols,y:Rows}= GridSize
-		const line = (...args)=> Ctx.strokeLine(...args)
+		const line = (x1=0,y1=0,x2=0,y2=0)=> Ctx.strokeLine(x1,y1,x2,y2)
 		for (let y=0; y<Cols;   y++) line(ofst(y), 0, ofst(y), Rows*S)
 		for (let x=0; x<Rows+1; x++) line(0, x*S, Cols*S+Gap, x*S)
 		Ctx.restore()
@@ -55,7 +55,7 @@ export const View = function() {
 			ghost.sprite.draw({
 				...ghost,x,y,
 				idx:   row-1,
-				aIdx:  col % 2 != 0,
+				aIdx:  +(col % 2 != 0),
 				orient:dirs[col],
 			})
 			return
@@ -63,13 +63,18 @@ export const View = function() {
 		const orient = [R,R,R,R,U,L,D,R][col]
 		ghost.sprite.draw({
 			...ghost,x,y,orient,
-			aIdx:      (col % 2 != 0),
+			aIdx:     +(col % 2 != 0),
 			isFright:  (col <= 3),
 			isEscaping:(col >= 4),
-			spriteIdx: (col >= 2)|0,
+			spriteIdx:+(col >= 2),
 		})
 	}
 	function drawPoints() {
+		/**
+		 * @param {number} pts
+		 * @param {number} x
+		 * @param {number} y
+		 */
 		const draw = (pts, x, y)=> {
 			Ctx.save()
 			Ctx.translate(x, y)
@@ -95,6 +100,11 @@ export const View = function() {
 	function drawAkabei() {
 		const aka = ghost
 		const spr = aka.cbSprite.stakeClothes
+		/**
+		 * @param {number} x
+		 * @param {number} y
+		 * @param {object} cfg
+		 */
 		function draw(x,y, cfg) {
 			Ctx.save()
 			aka.sprite.draw({...aka, x,y, ...cfg})
@@ -137,7 +147,7 @@ export const View = function() {
 }()
 
 $('#brightRng').on('input', function() {
-	const v = this.value
+	const v = this.getAttribute('value')
 	Ctx.canvas.style.backgroundColor = `rgb(${v}% ${v}% ${v}%)`
 })
 
@@ -146,4 +156,4 @@ $('#resetBtn').on('click', function() {
 	$('[type=range]').trigger('input')
 })
 
-$load(()=> document.body.style.opacity = 1)
+$load(()=> document.body.style.opacity = '1')

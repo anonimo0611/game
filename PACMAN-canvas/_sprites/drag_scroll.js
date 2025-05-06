@@ -1,5 +1,5 @@
 /** @param {string} selector */
-!(function(selector) {
+(function(selector) {
 	if ('ontouchstart' in window
 		|| navigator.maxTouchPoints > 0
 		|| matchMedia('(pointer:coarse)').matches
@@ -20,7 +20,7 @@
 	/** @type {Map<HTMLElement,State>} */
 	const StateMap = new Map()
 
-	for (const elm of dqsAll(selector)) {
+	for (const elm of qSAll(selector)) {
 		elm.addEventListener('mousedown', e=> {
 			if (isNotDrag(e) || e.buttons != 1)
 				return
@@ -49,7 +49,7 @@
 })('html')
 
 /** @param {MouseEvent} e */
-const isNotDrag = e=> e.target.closest('.noDrag')
+const isNotDrag = e=> /**@type {HTMLElement}*/(e.target).closest('.noDrag')
 
 addEventListener(
 	'wheel', e=> isNotDrag(e) && e.preventDefault(),

@@ -24,11 +24,12 @@ export const Manifest = [
     {src:'./res/regular.ogg',data:{channels:4, audioSprite:[...genSpriteData(1)]}},
 ]
 export const SoundIds  = freeze(keys(SoundType))
-export const ConfigMap = new Map()
-	.set('_normal', {loop: 0, volume:1.00})
-	.set('eat',     {loop: 0, volume:0.70})
-	.set('bell',    {loop: 0, volume:0.70})
-	.set('cutscene',{loop: 1, volume:1.00})
-	.set('fright',  {loop:-1, volume:0.55})
-	.set('siren',   {loop:-1, volume:0.80})
-	.set('escape',  {loop:-1, volume:0.90})
+export const ConfigMap = new Map([
+	['_normal', {loop: 0, volume:1.00}],
+	['eat',     {loop: 0, volume:0.70}],
+	['bell',    {loop: 0, volume:0.70}],
+	['cutscene',{loop: 1, volume:1.00}],
+	['fright',  {loop:-1, volume:0.55}],
+	['siren',   {loop:-1, volume:0.80}],
+	['escape',  {loop:-1, volume:0.90}],
+])

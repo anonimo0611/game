@@ -4,10 +4,11 @@ import {SoundMgr} from './loader.js'
 import {Speaker}  from './speaker.js'
 
 const speaker  = byId('speaker')
-const volRng   = byId('volRng')
-const volRg2   = byId('volRg2')
-const volRngG  = dqsAll('.volRng')
-const SirenIds = SoundMgr.ids.filter(id=> /^siren/.test(id))
+const volRng   = /**@type {HTMLInputElement}*/(byId('volRng'))
+const volRg2   = /**@type {HTMLInputElement}*/(byId('volRg2'))
+const volRngs  = /**@type {HTMLInputElement[]}*/(qSAll('.volRng'))
+const SirenIds = /**@type {['siren0','siren1','siren2','siren3']}*/
+	(SoundMgr.ids.filter(id=> /^siren/.test(id)))
 
 export const Sound = new class extends SoundMgr {
 	static {this.#init()}
@@ -16,22 +17,27 @@ export const Sound = new class extends SoundMgr {
 			return $('.volCtrl').hide()
 		Sound.vol = localStorage.anoPacVolume ?? 5
 		$on({keydown:Sound.#onKeydown})
-		$(volRngG).prop({defaultValue:Sound.vol})
-		$(volRngG).on({input:Sound.#onWheel})
+		$(volRngs).prop({defaultValue:Sound.vol})
+		$(volRngs).on({input:Sound.#onWheel})
 		$(speaker).on({wheel:Sound.#onWheel}).on({click:Sound.#mute})
 	}
+
 	/** @type {?number} */
 	#lstVol = null
+
+	/** @param {MouseEvent} e */
 	#onWheel(e) {
-		Sound.vol = (e.type=='input'? e.target:volRng).valueAsNumber
+		Sound.vol = /**@type {HTMLInputElement}*/
+			(e.type == 'input'? e.target:volRng).valueAsNumber
 	}
+
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
-		if (keyRepeat(e) || isCombinationKey(e))
-			return
+		if (keyRepeat(e) || isCombinationKey(e)) return
 		if (e.key.toUpperCase() == 'M'
 		 || e.target == volRg2 && isEnterKey(e)) Sound.#mute()
 	}
+
 	#mute() {
 		Sound.#lstVol = Sound.vol || (Sound.#lstVol ?? +volRng.max>>1)
 		$(volRng).prop({value:Sound.vol? 0:Sound.#lstVol}).trigger('input')
@@ -41,10 +47,9 @@ export const Sound = new class extends SoundMgr {
 	get sirenId()  {return SirenIds[GhsMgr.Elroy.part]}
 	get ringing()  {return Sound.isPlaying('bell')}
 	set vol(vol) {
-		if (Sound.disabled)
-			return
+		if (Sound.disabled) return
 		vol = isNaN(vol)? 10 : clamp(+vol, 0, 10)
-		localStorage.anoPacVolume = volRng.value = super.vol = vol
+		localStorage.anoPacVolume = volRng.valueAsNumber = super.vol = +vol
 		Speaker.draw(Sound.vol)
 	}
 	playSiren() {
@@ -70,8 +75,7 @@ export const Sound = new class extends SoundMgr {
 		Sound.stopSiren().stop('fright').play('escape')
 	}
 	ghostArrivedAtHome() {
-		if (GhsMgr.hasEscape)
-			return
+		if (GhsMgr.hasEscape) return
 		const id = GhsMgr.isFright? 'fright':Sound.sirenId
 		Sound.stop('escape').play(id)
 	}
