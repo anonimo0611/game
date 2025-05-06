@@ -2,16 +2,24 @@ const EyesEnum = freeze({Up:0,Down:1,Left:2,Right:2,LowerR:3})
 
 import CBSprite from './ghost_cb.js'
 export default class {
+	#CBSprite
+	#eyesFns
+	#fadeOut   = /**@type {?FadeOut}*/(null)
+	#resurrect = /**@type {?FadeIn} */(null)
+
 	/** @param {ExtendedContext2D} ctx */
-	constructor(ctx) {
+	constructor(ctx, interval=1000/60) {
 		this.ctx = ctx
-		this.CBSprite = new CBSprite(ctx)
+		this.interval  = interval
+		this.#CBSprite = new CBSprite(ctx)
+		this.#eyesFns  = freeze([
+			this.#eyesLookingUp,
+			this.#eyesLookingDown,
+			this.#eyesLookingLR,
+			this.#CBSprite.bracketEyes,
+		])
 		freeze(this)
 	}
-	/** @type {?FadeOut} */
-	#fadeOut   = null
-	/** @type {?FadeIn} */
-	#resurrect = null
 
 	get fadeOut()  {return this.#fadeOut}
 	setFadeOut()   {this.#fadeOut ||= new FadeOut(400)}
@@ -21,17 +29,17 @@ export default class {
 		idx        = 0,
 		aIdx       = 0,
 		spriteIdx  = 0,
-		orient     = Dir.Left,
 		size       = T*2,
-		frightened = false,
-		bitten     = false,
-		escaping   = false,
-		angry      = false,
-		ripped     = false,
-		repaired   = false,
-		hadaketa   = false,
+		orient     = L,
+		isFright   = false,
+		isBitten   = false,
+		isEscaping = false,
+		isAngry    = false,
+		isRipped   = false,
+		isMended   = false,
+		isExposed  = false,
 	}={}) {
-		if (bitten) return
+		if (isBitten) return
 		const {ctx}= this
 		function finalize() {
 			ctx.restore()
@@ -44,35 +52,31 @@ export default class {
 		ctx.save()
 		ctx.translate(size/2, size/2)
 		ctx.scale(size/(100/GhsScale), size/(100/GhsScale))
-		ctx.fillStyle = !frightened
+		ctx.fillStyle = !isFright
 			? Color[GhsNames[idx]]
 			: Color.FrightBodyTable[spriteIdx]
 
-		if (hadaketa) {
-			this.CBSprite.hadake(aIdx)
+		if (isExposed) {
+			this.#CBSprite.hadake(aIdx)
 			return finalize()
 		}
-		if (!escaping) {
+		if (!isEscaping) {
 			ctx.save()
 			this.#resurrect?.setAlpha(ctx)
-			this.#angryGlow(x, y, angry, size)
-			this.#body({aIdx,ripped,repaired})
-			frightened && this.#frightFace(spriteIdx)
+			this.#angryGlow(x, y, isAngry, size)
+			this.#body({aIdx,isRipped,isMended})
+			isFright && this.#frightFace(spriteIdx)
 			ctx.restore()
 		}
-		if (!frightened) {
-			[this.#eyesLookingUp,
-			 this.#eyesLookingDown,
-			 this.#eyesLookingLR,
-			 this.CBSprite.bracketEyes,
-			][EyesEnum[orient]].call(this,{orient,ripped,spriteIdx})
+		if (!isFright) {
+			this.#eyesFns[EyesEnum[orient]].call(this,{orient,isRipped})
 		}
 		finalize()
 	}
 	update() {
 		this.#resurrect?.update()
 	}
-	#body({aIdx=0,ripped=false,repaired=false}) {
+	#body({aIdx=0,isRipped=false,isMended=false}) {
 		const {ctx}= this
 		ctx.beginPath()
 		ctx.moveTo(+42, +26)
@@ -83,8 +87,8 @@ export default class {
 			? this.#foot0()
 			: this.#foot1()
 		ctx.fill()
-		ripped   && this.CBSprite.rippedBody()
-		repaired && this.CBSprite.mendedStitch(aIdx)
+		isRipped && this.#CBSprite.rippedBody()
+		isMended && this.#CBSprite.mendedStitch(aIdx)
 	}
 	#foot0() {
 		const {ctx}= this
@@ -106,7 +110,7 @@ export default class {
 		ctx.bezierCurveTo(+13, 28, +22, 28, +26, 38)
 		ctx.bezierCurveTo(+29, 45, +41, 45, +42, 26)
 	}
-	#eyesLookingUp({ripped=false}) {
+	#eyesLookingUp({isRipped=false}) {
 		const {ctx}= this
 		for (const v of [-1,+1]) {
 			// Eyeballs
@@ -115,7 +119,7 @@ export default class {
 			ctx.fillStyle = '#FFF'
 			ctx.fill()
 			// Eyes
-			ctx.fillCircle(18.5*v, -26, 8, (ripped? '#000':Color.GhostEyes))
+			ctx.fillCircle(18.5*v, -26, 8, (isRipped? '#000':Color.GhostEyes))
 		}
 	}
 	#eyesLookingDown() {
@@ -130,10 +134,11 @@ export default class {
 			ctx.fillCircle(19*v, 4, 8, Color.GhostEyes)
 		}
 	}
-	#eyesLookingLR({orient=Dir.Left}) {
+	/** @param {{orient:'Left'|'Right'}} orient */
+	#eyesLookingLR({orient}) {
 		const {ctx}= this
 		ctx.save()
-		ctx.scale(Vec2(orient).x, 1)
+		ctx.scale(Vec2[orient].x, 1)
 		for (let i=0; i<=1; i++) {
 			// Eyeballs
 			ctx.beginPath()
