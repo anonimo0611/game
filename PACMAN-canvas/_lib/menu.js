@@ -8,20 +8,19 @@ class Menu extends Common {
 	get selectedItem() {
 		return this.menu.querySelector('.selected') || this.items[0]
 	}
+	/**
+	 * @param {string} id
+	 * @param {string} type
+	 */
 	constructor(id, type) {
-		const root = /**@type {MenuRoot}*/
-			($byId(id).attr({type}).get(0))
-
-		/** @type {HTMLElement} */
-		const menu = root.querySelector('mn-list')
-
-		/** @type {NodeListOf<MenuItem>} */
-		const items = menu.querySelectorAll('mn-item')
+		const root  = /**@type {MenuRoot}*/($byId(id).attr({type}).get(0))
+		const menu  = $(root).find('mn-list')
+		const items = /**@type {MenuItem[]}*/(menu.find('mn-item').get())
 
 		super({eventTarget:menu})
 		this.id    = id
 		this.root  = root
-		this.menu  = menu
+		this.menu  = menu.get(0)
 		this.items = items
 		this.size  = items.length
 		this.label = root.closest('label')
@@ -54,11 +53,11 @@ export class DorpDown extends Menu {
 		$('body')
 			.on('pointerdown', e=> {!e.target.closest(`#${this.id}`) && this.select()})
 		$(this.label)
-			.on('pointerdown', e=> {e.preventDefault();this.cur.focus()})
+			.on('pointerdown', e=> {e.preventDefault(),this.cur.focus()})
 		$(this.cur)
 			.css('width',`${this.menu.offsetWidth}px`)
 			.on('pointerdown', ()=> this.toggle())
-			.on('keydown',this.#onKeydown.bind(this))
+			.on('keydown', this.#onKeydown.bind(this))
 		this.close()
 		this.select(this.index)
 		freeze(this)
@@ -103,7 +102,7 @@ export class Slide extends Menu {
 		this.#setWidth(this.btn.L.offsetWidth*2)
 		root  .addEventListener('keydown',    e=> {this.#select(e,Dir.from(e))})
 		wrap  .addEventListener('wheel',      e=> {this.#select(e,e.deltaY>0? L:R)})
-		label?.addEventListener('pointerdown',e=> {e.preventDefault();root.focus()})
+		label?.addEventListener('pointerdown',e=> {e.preventDefault(),root.focus()})
 		for (const btn of values(this.btn))
 			btn.addEventListener('click', e=> {this.#select(e,e.target==this.btn.L?L:R)})
 		freeze(this).select(this.index)
