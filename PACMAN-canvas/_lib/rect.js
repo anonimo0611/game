@@ -1,5 +1,6 @@
 export class Rect {
-	#vals = [0,0,0,0]
+	/** @type {readonly [x:number, y:number, w:number, h:number]} */
+	#vals = freeze([0,0,0,0])
 	/**
 	 * @param {number} x
 	 * @param {number} y
@@ -15,7 +16,7 @@ export class Rect {
 		freeze(this)
 	}
 	/** @param {Position} pos */
-	contains(pos={}) {
+	contains(pos) {
 		const [x,y,w,h]=this.#vals
 		return (
 			between(pos?.x, x, x+w) &&

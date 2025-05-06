@@ -1,29 +1,24 @@
-'use strict'
-$.fn.offon = function(type, ...args) {
-	return $(this).off(type).on(type, ...args)
-}
-$.fn.opacity = function(a, ms) {
-	return !arguments.length
-		? $(this).css('opacity')
-		: $(this).css({opacity:+a,
-			transition:isNum(ms)?`opacity ${ms}ms`:null})
-}
-/** @param {string} id */
-const $byId = id=> $('#'+id)
+'use strrict'
+/** @param {string} elementId */
+const $byId = elementId=> $('#'+elementId)
 
 /** @param {Function} fn */
-const $load = fn=> $(window).one('load',fn)
+const $load = fn=> $(window).on({load:fn})
 
 /** @param {string} ns */
 const $onNS = (ns,cfg)=> {
-	isObj(cfg) && entries(cfg).forEach(([ev,fn])=>
-		$offon(String(ev).trim().replace(/[_\s]+|$/g,`${ns}\x20`),fn))
+	isObj(cfg) && entries(cfg).forEach(([ev,fn])=> {
+		ev = String(ev).trim().replace(/[_\s]+|$/g,`${ns}\x20`)
+		$off(ev).on(ev,fn)
+	})
 	return $(window)
 }
-const [$ready,$on,$off,$offon,$trigger]=(_=> {
-	const w=this,rep=arg=>isStr(arg)?arg.trim().replace(/_/g,' '):arg
-	return['ready','on','off','offon','trigger'].map(f=>(...a)=>{
-		if(!isObj(a[0]))return $(w)[f](rep(a[0]),...a.slice(1))
-		entries(a[0]).forEach(([k,v])=>$(w)[f](rep(k),v));return $(w)
+const [$ready,$on,$off,$trigger]=(()=> {
+	const rep = arg=> isStr(arg)?arg.trim().replace(/_/g,' '):arg
+	return['ready','on','off','trigger'].map(f=> (...a)=>{
+		!isObj(a[0])
+			? $(this)[f](rep(a[0]),...a.slice(1))
+			: entries(a[0]).forEach(([k,v])=>$(this)[f](rep(k),v))
+		return $(this)
 	})
 })()

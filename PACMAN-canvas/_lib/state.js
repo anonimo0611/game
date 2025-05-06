@@ -4,7 +4,7 @@ export default class {
 	#Enum  = Object.create(null)
 	get current() {return this.#state}
 
-	/** @param {string} state */
+	/** @param {string} [state] */
 	init(state) {
 		entries(this).forEach(([key,val])=> {
 			const state = key.match(/^is([A-Z][a-zA-Z\d]*)$/)?.[1]
@@ -18,7 +18,7 @@ export default class {
 
 	/**
 	 * @param {string} state
-	 * @param {{data:any,delay?:number,fn?:Function}}
+	 * @param {{data?:any,delay?:number,fn?:Function}} config
 	 */
 	to(state, {data,delay=-1,fn}={}) {
 		if (!hasOwn(this.#Enum, state))
@@ -34,6 +34,7 @@ export default class {
 
 	/** @param {string} state */
 	last(state) {
-		return state? (state === this.#last ? this.#last : '') : this.#last
+		const last = this.#last
+		return state? (state === last ? last:'') : last
 	}
 }

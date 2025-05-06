@@ -12,12 +12,11 @@
 	@font-face {src:url(res/Atari.woff2)       format('woff2');font-family:Atari}
 	@font-face {src:url(res/PacfontGood.woff2) format('woff2');font-family:PacFont}
 	</style>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/SoundJS/1.0.2/soundjs.min.js"></script>
 	<script src="_lib/__util.js"></script>
 	<script src="_lib/_extjq.js"></script>
 	<script src="_lib/_timer.js"></script>
-	<script src="_lib/_direction.js"></script>
 	<script src="_lib/_canvas.js"></script>
 	<script src="_lib/_vec2.js"></script>
 	<script src="src/_constants.js" defer></script>
@@ -173,8 +172,8 @@
 </form>
 
 <div id="debug"></div>
-<template id="confirm_temp">
-	<dialog id="confirm" style="opacity:0">
+<template id="confirm_t">
+	<dialog id="confirm" style="display:none">
 		<div class="content"></div>
 		<div class="buttons">
 			<button></button>

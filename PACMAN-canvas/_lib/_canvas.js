@@ -1,10 +1,10 @@
 'use strict'
-/**
- * @typedef {string|CanvasGradient|CanvasPattern} CtxStyle
- */
+/** @typedef {string|CanvasGradient|CanvasPattern} CtxStyle */
+
 class ExtendedContext2D extends CanvasRenderingContext2D {
 	/** @param {HTMLCanvasElement} cvs */
-	constructor(cvs, opts) {
+	constructor(cvs, opts={}) {
+		try {super()} catch(e){}
 		return Object.setPrototypeOf(cvs.getContext('2d',opts), new.target.prototype)
 	}
 	get width()  {return this.canvas.width}
@@ -89,13 +89,13 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		this.stroke()
 	}
 
-	/** @param {[x:number,y:number][]} c */
+	/** @param {([x:number,y:number]|[])[]} c */
 	newLinePath(...c) {
 		this.beginPath()
 		this.setLinePath(...c)
 	}
 
-	/** @param {[x:number,y:number][]} c */
+	/** @param {([x:number,y:number]|[])[]} c */
 	setLinePath(...c) {
 		c.forEach(([x,y], i)=> {
 			!i ? this.moveTo(x,y)
@@ -103,14 +103,14 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		})
 	}
 
-	/** @param {[x:number,y:number][]} c */
+	/** @param {([x:number,y:number]|[])[]} c */
 	addLinePath(...c) {
 		c.forEach(([x,y])=> this.lineTo(x,y))
 	}
 
 	/**
 	 * @param {CtxStyle} style
-	 * @param {[x:number,y:number][]} c
+	 * @param {([x:number,y:number]|[])[]} c
 	 */
 	fillPolygon(style, ...c) {
 		this.save()
@@ -120,6 +120,7 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		this.restore()
 	}
 }
+
 class FadeIn {
 	#count = 0
 	#delay = 0
@@ -132,10 +133,9 @@ class FadeIn {
 		this.#delay = delay
 	}
 	update(max=1) {
-		if (++this.#count * 1e3/60 < this.#delay)
-			return
-		if (!this.working)
-			return
+		if (++this.#count * 1e3/60 < this.#delay || !this.working) {
+			return false
+		}
 		this.#alpha = clamp(this.#alpha+max/(this.#duration/(1e3/60)), 0, max)
 		return this.working
 	}
@@ -157,8 +157,9 @@ class FadeOut {
 		this.#delay = delay
 	}
 	update() {
-		if (++this.#count * 1e3/60 < this.#delay)
-			return
+		if (++this.#count * 1e3/60 < this.#delay) {
+			return false
+		}
 		this.#alpha = clamp(this.#alpha-1/(this.#duration/(1e3/60)), 0, 1)
 		return this.working
 	}
@@ -168,16 +169,17 @@ class FadeOut {
 		return this.working
 	}
 }
+
 /**
- * @param {string|null} arg ID value of canvas
- * @param {number} w Set of canvas width
- * @param {number} h Set of canvas height
+ * @param {string|null} arg canvas element id
+ * @param {number} [w] canvas width
+ * @param {number} [h] canvas height
  */
 const canvas2D = (arg, w, h=w)=> {
 	let cvs = document.createElement('canvas')
 	if (byId(arg) instanceof HTMLCanvasElement)
-		cvs = byId(arg)
-	const ctx  = new ExtendedContext2D(cvs)
+		cvs = /**@type {HTMLCanvasElement}*/(byId(arg))
+	const ctx = new ExtendedContext2D(cvs)
 	;([w,h]= ctx.resize(w,h))
 	/** @type {[cvs,ctx,w:number,h:number]} */
 	const vals = [cvs,ctx,w,h]

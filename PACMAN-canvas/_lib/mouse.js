@@ -1,16 +1,14 @@
 export const Cursor = new class {
 	static {
 		let timerId = 0, lstPos = {x:0, y:0}
-		/** @param {MouseEvent} e */
-		function onMouseMove(e) {
+		$('body').on('mousemove', e=> {
 			//Hide cursor if not moved for 2 secs
 			clearTimeout(timerId)
 			timerId = setTimeout(()=> Cursor.#setState('hidden'), 2e3)
 			const {pageX:x, pageY:y}= e
 			Vec2.distance(lstPos,{x,y}) > 2 && Cursor.default()
 			lstPos = {x,y}
-		}
-		$on('mousemove', onMouseMove)
+		})
 	}
 	hide()    {this.#setState('hidden')}
 	default() {this.#setState('default')}
@@ -23,10 +21,10 @@ export const Cursor = new class {
 function setupCtrl(ctrl) {
 	// Enable mouse wheel on range controls
 	// Label elements must be block-level
-	const output = dqs(`output[for~="${ctrl.id}"]`) ?? []
+	const output = qS(`output[for~="${ctrl.id}"]`) ?? []
 	const ids    = ctrl.dataset.links?.trim().split(/\s+/) ?? []
-	const label  = ctrl.closest('label') || dqs(`label[for="${ctrl.id}"]`)
-	const links  = new Set(ids.flatMap(id=> dqs(`input#${id}`) ?? []))
+	const label  = ctrl.closest('label') || qS(`label[for="${ctrl.id}"]`)
+	const links  = ids.map(id=> qS(`input#${id}`)).filter(isObj)
 
 	/** @param {WheelEvent} e */
 	function onWheel(e) {
@@ -38,9 +36,9 @@ function setupCtrl(ctrl) {
 	}
 	function onInput() {
 		const {value,min,max}= ctrl
-		$([ctrl,output, ...links])
+		$([ctrl,output, ...new Set(links)])
 			.prop({value})
-			.css({'--ratio':`${norm(min,max,value)*100}%`})
+			.css({'--ratio':`${norm(+min,+max,+value)*100}%`})
 	}
 	$(output).text(ctrl.value)
 	$(ctrl).on('input',onInput).trigger('input')

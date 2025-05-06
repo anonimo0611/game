@@ -21,87 +21,74 @@ const isEnterKey = e=>
 const isCombinationKey = e=>
 	isKeyboardEvent(e) && !!(e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
+const dRoot = document.getElementsByTagName('html')[0]
+
+/** @param {string} elementId */
+const byId = elementId=> document.getElementById(elementId)
+
+/**
+ * @param {string} selector
+ * @return {?HTMLElement}
+ */const qS = selector=> document.querySelector(selector)
+
+/**
+ * @param {string} selector
+ */const qSAll = selector=> /**@type {HTMLElement[]}*/
+ 	([...document.querySelectorAll(selector)])
+
 /**
  * @typedef {{dist:number, index:number}} DistObject
  * @type {(a:DistObject, b:DistObject)=> number}
- */
-const compareDist = (a,b)=>
+ */const compareDist = (a,b)=>
 	(a.dist == b.dist)? (a.index-b.index) : (a.dist-b.dist)
 
 /**
  * @param {number} x
  * @param {number} y
  * @param {number} s
- */
-const lerp = (x,y,s)=> x + (y-x) * s
+ */const lerp = (x,y,s)=> x + (y-x) * s
 
 /**
  * @param {number} x
  * @param {number} y
  * @param {number} p
- */
-const norm = (x,y,p)=> (p-x) / (y-x)
+ */const norm = (x,y,p)=> (p-x) / (y-x)
 
 /**
  * @param {number} min
  * @param {number} max
- */
-const randInt = (min,max)=> int(random() * (max-min+1) + min)
-
-/**
- * @param {number} n
- * @param {number} min
- * @param {number} max
- */
-const clamp = (n,min,max)=> Math.min(Math.max(n,min), max)
+ */const randInt = (min,max)=> int(random() * (max-min+1) + min)
 
 /**
  * @param {number} n
  * @param {number} min
  * @param {number} max
- */
-const between = (n,min,max)=> (n >= min && n <= max)
+ */const clamp = (n,min,max)=> Math.min(Math.max(n,min), max)
+
+/**
+ * @param {number} n
+ * @param {number} min
+ * @param {number} max
+ */const between = (n,min,max)=> (n >= min && n <= max)
 
 /**
  * @template T
  * @param {Array<T>} array
- * @returns {T|undefined}
- */
-const randChoice = array=>
-	isArray(array) && array[randInt(0, array.length-1)] || undefined
+ * @returns {T}
+ */const randChoice = array=> array[randInt(0, array.length-1)]
 
 /**
  * @param {Position} v1
  * @param {Position} v2
  * @param {number} r1
- * @param {number} r2
- */
-const collisionCircle = (v1,v2,r1,r2)=>
+ * @param {number} [r2]
+ */const collisionCircle = (v1,v2,r1,r2=r1)=>
 	(v1.x-v2.x)**2 + (v1.y-v2.y)**2 <= (r1+(r2 ?? r1))**2
 
 /**
  * @param {number} deg
  * @param {number} r
  * @returns {[x:number, y:number]}
- */
-const circumPosition = (deg, r, cx=0, cy=0)=>
+ */const circumPosition = (deg, r, cx=0, cy=0)=>
 	[Math.cos(PI/180*deg)*r+cx,
 	 Math.sin(PI/180*deg)*r+cy]
-
-/** @type {HTMLHtmlElement} */
-const dRoot = document.documentElement
-
-/** @param {string} id */
-const byId = id=> document.getElementById(id)
-
-/**
- * @param {string} selector
- * @return {?HTMLElement}
- */
-const dqs = selector=> document.querySelector(selector)
-
-/**
- * @param {string} selector
- * @return {NodeListOf<HTMLElement>}
- */
-const dqsAll = selector=> document.querySelectorAll(selector)

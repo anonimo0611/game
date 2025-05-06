@@ -1,15 +1,16 @@
+import {Dir}    from './direction.js'
 import {Common} from './common.js'
 class Menu extends Common {
 	get value() {return this.selectedItem.val ?? ''}
-	get index() {return +$(this.selectedItem).index()}
+	get index() {return $(this.selectedItem).index()}
 
 	/** @returns {MenuItem} */
 	get selectedItem() {
 		return this.menu.querySelector('.selected') || this.items[0]
 	}
 	constructor(id, type) {
-		/** @type {MenuRoot} */
-		const root = $byId(id).attr({type}).get(0)
+		const root = /**@type {MenuRoot}*/
+			($byId(id).attr({type}).get(0))
 
 		/** @type {HTMLElement} */
 		const menu = root.querySelector('mn-list')
@@ -31,11 +32,9 @@ class Menu extends Common {
 		$(this.root).closest('form').on('reset', this.reset)
 	}
 	select(idx=0) {
-		if (!this.items[idx]) return false
 		this.selectedItem.classList.remove('selected')
 		this.items[idx].classList.add('selected')
 		this.trigger('change')
-		return true
 	}
 	reset() {this.select(this.defaultIndex)}
 }
@@ -52,7 +51,8 @@ export class DorpDown extends Menu {
 		super(id,'dropdown')
 		this.cur = this.root.querySelector('output')
 		this.items.forEach((li,i)=> li.onclick = ()=> this.select(i).cur.focus())
-		$on('pointerdown', e=> !e.target.closest(`#${this.id}`) && this.select())
+		$('body')
+			.on('pointerdown', e=> {!e.target.closest(`#${this.id}`) && this.select()})
 		$(this.label)
 			.on('pointerdown', e=> {e.preventDefault();this.cur.focus()})
 		$(this.cur)
@@ -83,7 +83,7 @@ export class DorpDown extends Menu {
 		}
 	}
 	select(idx=this.index, {close=true}={}) {
-		if (!super.select(idx)) return this
+		super.select(idx)
 		const {selectedItem:item}= this
 		$(this.cur).css('--data', item.val).text(item.textContent)
 		return close && this.close() || this
@@ -91,25 +91,21 @@ export class DorpDown extends Menu {
 }
 
 export class Slide extends Menu {
-	#width = 0
-
 	/** @param {string} id */
 	constructor(id) {
 		super(id,'slidemenu')
 		const {root,label}=this
-		const onWheel  = e=> this.#select(e, e.deltaY > 0 ? L:R)
-		const onClick  = e=> this.#select(e, e.target == this.btn.L ? L:R)
-		const onKeyDwn = e=> this.#select(e, Dir.from(e))
-
-		/** @type {{R:HTMLElement,L:HTMLElement}} */
+		const wrap = /**@type {HTMLElement}*/(label ?? root)
 		this.btn = freeze({
 			R: $('<span class="button r">').prependTo(root).get(0),
 			L: $('<span class="button l">').prependTo(root).get(0),
 		})
 		this.#setWidth(this.btn.L.offsetWidth*2)
-		;(label ?? root).addEventListener('wheel',onWheel)
-		$(root) .on('keydown',onKeyDwn).find('.button').on('click',onClick)
-		$(label).on('pointerdown', e=> {e.preventDefault();root.focus()})
+		root  .addEventListener('keydown',    e=> {this.#select(e,Dir.from(e))})
+		wrap  .addEventListener('wheel',      e=> {this.#select(e,e.deltaY>0? L:R)})
+		label?.addEventListener('pointerdown',e=> {e.preventDefault();root.focus()})
+		for (const btn of values(this.btn))
+			btn.addEventListener('click', e=> {this.#select(e,e.target==this.btn.L?L:R)})
 		freeze(this).select(this.index)
 	}
 	/**
@@ -117,12 +113,13 @@ export class Slide extends Menu {
 	 * @param {Direction} dir */
 	#select(e, dir) {
 		if (dir) {
-			dir = {[U]:R,[D]:L}[dir] || dir
+			dir = {Up:R,Down:L}[dir] || dir
 			const val = this.index+Vec2[dir].x
 			between(val, 0, this.size-1) && this.select(val)
 			e.type == 'click' && this.root.focus()
 		}
 	}
+	#width = 0
 	/** @param {number} btnW */
 	#setWidth(btnW) {
 		this.#width = max(...[...this.items].map(li=> li.offsetWidth))+btnW
@@ -130,10 +127,10 @@ export class Slide extends Menu {
 		$(this.items).css('width',`${this.#width}px`)
 	}
 	select(idx=this.index) {
-		if (!super.select(idx)) return
+		super.select(idx)
 		this.menu.style.transform = `translateX(${-this.#width*idx}px)`
-		this.btn.L.dataset.disabled = (idx == 0)
-		this.btn.R.dataset.disabled = (idx == this.size-1)
+		this.btn.L.dataset.disabled = String(idx == 0)
+		this.btn.R.dataset.disabled = String(idx == this.size-1)
 	}
 }
 class MenuRoot extends HTMLElement{get type() {return 'menu'}}

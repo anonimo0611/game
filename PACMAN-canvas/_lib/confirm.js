@@ -1,43 +1,52 @@
-let _opened = false
+import {Dir} from './direction.js'
 export const Confirm = new class {
-	get opened() {return _opened}
+	#opened = false
+	#cancelIdx = 0
+	get opened() {return this.#opened}
+
+	get #tempElm() {return /**@type {HTMLTemplateElement}*/(byId('confirm_t'))}
+	get #buttons() {return byId('confirm').querySelectorAll('button')}
+
+	/** @param {MouseEvent} e */
+	#onMousedown = e=> {e.preventDefault()}
+
+	/** @param {KeyboardEvent} e */
+	#onKeydown(e) {
+		if (e.key != 'Escape') {
+			e.preventDefault()
+			Confirm.#buttons[Confirm.#cancelIdx]?.click()
+		}
+	}
 	/**
 	 * @param {string} content
 	 * @param {Function} fn1
 	 * @param {Function} fn2
 	 */
-	open(content, fn1,fn2, btnStr1='Ok',btnStr2='Cancel', cancelIdx=1) {
-		if (_opened) return
-		this.#append()
-		const confirm = byId('confirm')
-		const buttons = confirm.querySelectorAll('button')
-		const cancel  = e=> {
-			e.preventDefault()
-			buttons[cancelIdx]?.click()
-		}
-		buttons.forEach((btn, i, btns)=> {
-			btn.textContent = [btnStr1,btnStr2][i]
+	open(content, fn1,fn2, btnTxt1='Ok',btnTxt2='Cancel', cancelIdx=1) {
+		if (Confirm.#opened)
+			return
+		Confirm.#cancelIdx = cancelIdx
+		document.body.append(Confirm.#tempElm.content.cloneNode(true))
+		const confirm = /**@type {HTMLDialogElement}*/(byId('confirm'))
+		Confirm.#buttons.forEach((btn, i, btns)=> {
+			btn.textContent = [btnTxt1,btnTxt2][i]
 			btn.onclick   = _=> {$off(NS), Confirm.#remove([fn1,fn2][i])}
 			btn.onkeydown = e=> {Dir.from(e)==[R,L][i] && btns[1^i].focus()}
 		})
+		$(confirm).find('.content').text(content).end().fadeIn(300)
+		$onNS(NS,{keydown:  Confirm.#onKeydown})
+		$onNS(NS,{mousedown:Confirm.#onMousedown})
 		confirm.showModal()
-		$(confirm).find('.content').text(content).end().opacity(1,500)
-		$onNS(NS,{keydown:  e=> {e.key == 'Escape' && cancel(e)}})
-		$onNS(NS,{mousedown:e=> {e.preventDefault()}})
-		_opened = true
-	}
-	#append() {
-		const temp = byId('confirm_temp').content.cloneNode(true)
-		document.body.append(temp)
+		Confirm.#opened = true
 	}
 	/** @param {Function} [fn] */
 	#remove(fn) {
-		/** @param {Event} e */
-		function remove(e) {
-			e.target.remove()
-			isFun(fn) && fn()
-			_opened = false
-		}
-		$('#confirm').opacity(0,500).on({transitionend:remove})
+		$('#confirm').fadeOut(300,
+			function() {
+				this.remove()
+				isFun(fn) && fn()
+				Confirm.#opened = false
+			}
+		)
 	}
 };const NS='.CONFIRM'

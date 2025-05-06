@@ -1,7 +1,7 @@
 'use strict'
 const {Ticker,Timer}= function() {
 
-/** @typedef {{ms:number, fn:Function, ignoreFrozen:boolean, amount:number}} TimerData */
+/** @typedef {{timeout:number,handler:Function,ignoreFrozen:boolean,amount:number}} TimerData */
 /** @type {Map<any, TimerData>} */
 const TimerMap = new Map()
 
@@ -35,7 +35,11 @@ const Ticker = freeze(new class {
 })
 
 class Tick {
-	constructor(fn=null, pausingFn=null) {
+	/**
+	 * @param {Function} [fn]
+	 * @param {Function} [pausingFn]
+	 */
+	constructor(fn, pausingFn) {
 		Ticker.running && _ticker.stop()
 		_ticker    = this
 		this.start = this.count = this.stopped = 0
@@ -64,12 +68,15 @@ class Tick {
 		_counter++
 		_pausedCounter = 0
 	}
-	/** @param {TimerData} t */
+	/**
+	 * @param {TimerData} t
+	 * @param {*} key
+	 */
 	timer(t, key) {
-		if (Timer.frozen && !t.ignoreFrozen)   return
-		if (Ticker.Interval*t.amount++ < t.ms) return
+		if (Timer.frozen && !t.ignoreFrozen) return
+		if (Ticker.Interval*t.amount++ < t.timeout) return
 		TimerMap.delete(key)
-		t.fn()
+		t.handler()
 	}
 	stop() {
 		TimerMap.clear()
@@ -90,35 +97,38 @@ const Timer = freeze(new class {
 	unfreeze() {this.#frozen = false;return this}
 
 	/**
-	 * @param {number} ms
-	 * @param {Function} fn
+	 * @param {number}   timeout
+	 * @param {Function} handler
+	 * @param {{key?:any,ignoreFrozen?:boolean}} config
 	 */
-	set(ms, fn, {key,ignoreFrozen=Timer.frozen}={}) {
-		if (!isNum(ms)) throw TypeError(`'${ms}' is not a number`)
-		if (!isFun(fn)) throw TypeError(`'${fn}' is not a function`)
-		if (!Ticker.running) Ticker.set();
-		TimerMap.set(key ?? Symbol(), {ms,fn,ignoreFrozen,amount:0})
+	set(timeout, handler, {key,ignoreFrozen=Timer.frozen}={}) {
+		!Ticker.running && Ticker.set()
+		TimerMap.set(key ?? Symbol(), {timeout,handler,ignoreFrozen,amount:0})
 	}
 
 	/** @param {...[timeout:number, handler:Function]} sequence */
 	sequence(...sequence) {
-		if (!sequence.length)
-			return
-		const
-		seq = sequence.map(s=> ({ms:s[0],fn:s[1]}))
-		seq.forEach(s=> {
-			if (!isNum(s.ms)) throw TypeError(`'${s.ms}' is not a number`)
-			if (!isFun(s.fn)) throw TypeError(`'${s.fn}' is not a function`)
-		})
+		if (!sequence.length) return
+		const seq = sequence.map(s=> ({ms:s[0],fn:s[1]}))
 		let idx=0, s=seq[idx]
 		function fire() {
 			seq[idx].fn()
-			;(s=seq[++idx]) ? Timer.set(s.ms, fire) : (fire=null)
+			;(s=seq[++idx]) && Timer.set(s.ms, fire)
 		} Timer.set(s.ms, fire)
 	}
-	stop()      {Ticker.stop();     return this}
-	cancel(k)   {TimerMap.delete(k);return this}
-	cancelAll() {TimerMap.clear();  return this}
+	/** @param {*} key */
+	cancel(key) {
+		TimerMap.delete(key)
+		return this
+	}
+	cancelAll() {
+		TimerMap.clear()
+		return this
+	}
+	stop() {
+		Ticker.stop()
+		return this
+	}
 })
 return {Ticker,Timer}
 

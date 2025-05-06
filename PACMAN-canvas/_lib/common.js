@@ -1,14 +1,14 @@
 export class Common {
 	#eventTarget
-	constructor({eventTarget}={}) {
+	constructor({eventTarget}={eventTarget:null}) {
 		this.#eventTarget = eventTarget || this
 	}
 	/**
-	 * @param {Object.<string,Function>|string} arg}
+	 * @param {*} events}
 	 * @param {Function} [fn]
 	 */
-	bind(arg, fn) {
-		$(this.#eventTarget).on(arg, fn)
+	bind(events, fn) {
+		$(this.#eventTarget).on(events, fn)
 		return this
 	}
 	/** @param {string} event */
