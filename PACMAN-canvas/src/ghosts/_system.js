@@ -208,8 +208,7 @@ const Elroy = function() {
 }()
 
 class FrightMode {
-	/** @type {?FrightMode} */
-	static #instance = null
+	static #instance = /**@type {?FrightMode}*/(null)
 	static #timeList = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	static get instance() {return this.#instance}
 	static get numOfSec() {return this.#timeList[Game.clampedLv-1]}

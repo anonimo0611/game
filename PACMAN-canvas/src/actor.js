@@ -7,13 +7,9 @@ const CW = CvsW
 export class Actor extends Common {
 	#x = 0
 	#y = 0
-	radius = T
-
-	/** @type {?FadeIn} */
-	#fadeIn = null
-
-	/** @type {Direction} */
-	#orient = L
+	radius  = T
+	#fadeIn = /**@type {?FadeIn}*/(null)
+	#orient = /**@type {Direction}*/(L)
 	#movDir = this.#orient
 
 	constructor()   {super()}

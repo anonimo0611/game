@@ -39,15 +39,9 @@ D__________________________C\
 ////////////////////////////\
 ////////////////////////////`]
 
-/** @type {Set<number>} */
-const WallSet = new Set()
-
-/** @type {Set<number>} */
-const DotSet = new Set()
-
-/** @type {Map<number,Vector2>} */
-const PowMap = new Map()
-
+const WallSet  = /**@type {Set<number>}*/(new Set)
+const DotSet   = /**@type {Set<number>}*/(new Set)
+const PowMap   = /**@type {Map<number,Vector2>}*/(new Map)
 const DotChip  = new Set(['.','O'])
 const PenRect  = new Rect(10,13, 7,4)
 const PenOuter = new Rect( 9,12, 9,6)
