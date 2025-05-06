@@ -52,11 +52,11 @@ class Tick {
 	}
 	/** @param {number} ts */
 	loop(ts) {
-		if (!this.stopped) {
-			requestAnimationFrame(this.loop)
-			if ((ts-(this.start||=ts))/Interval >= this.count)
-				this.tick()
-		}
+		if (this.stopped)
+			return
+		requestAnimationFrame(this.loop)
+		if ((ts-(this.start||=ts))/Interval >= this.count)
+			this.tick()
 	}
 	tick() {
 		this.count++
@@ -75,8 +75,10 @@ class Tick {
 	 * @param {*} key
 	 */
 	timer(t, key) {
-		if (Timer.frozen && !t.ignoreFrozen) return
-		if (Interval*t.amount++ < t.timeout) return
+		if (Timer.frozen && !t.ignoreFrozen)
+			return
+		if (Interval*t.amount++ < t.timeout)
+			return
 		TimerMap.delete(key)
 		t.handler()
 	}
@@ -110,7 +112,8 @@ const Timer = freeze(new class {
 
 	/** @param {...[timeout:number, handler:Function]} sequence */
 	sequence(...sequence) {
-		if (!sequence.length) return
+		if (!sequence.length)
+			return
 		const seq = sequence.map(s=> ({ms:s[0],fn:s[1]}))
 		let idx=0, s=seq[idx]
 		function fire() {
