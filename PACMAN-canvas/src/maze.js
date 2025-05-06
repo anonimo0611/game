@@ -39,9 +39,10 @@ D__________________________C\
 ////////////////////////////\
 ////////////////////////////`]
 
-const WallSet  = /**@type {Set<number>}*/(new Set)
-const DotSet   = /**@type {Set<number>}*/(new Set)
-const PowMap   = /**@type {Map<number,Vector2>}*/(new Map)
+/** @typedef {number} TileIdx */
+const WallSet  = /**@type {Set<TileIdx>}*/(new Set)
+const DotSet   = /**@type {Set<TileIdx>}*/(new Set)
+const PowMap   = /**@type {Map<TileIdx,Vector2>}*/(new Map)
 const DotChip  = new Set(['.','O'])
 const PenRect  = new Rect(10,13, 7,4)
 const PenOuter = new Rect( 9,12, 9,6)
@@ -105,7 +106,7 @@ export const Maze = new class {
 		e.target != powChk && Maze.#drawDoor()
 	}
 	/**
-	 * @param {number} idx
+	 * @param {TileIdx} idx
 	 * @param {string} chip
 	 */
 	#setDot(idx, chip) {
@@ -126,21 +127,16 @@ export const Maze = new class {
 	// These tiles(x-y) forbidden ghosts from entering upward
 	GhostNotEnterSet = new Set(['12-11','12-23','15-11','15-23'])
 
-	/** @param {number} tileIdx */
-	hasDot = tileIdx=> DotSet.has(tileIdx)
+	hasDot  = /**@type {(i:TileIdx) =>boolean}*/i=> DotSet.has(i)
+	hasPow  = /**@type {(i:TileIdx) =>boolean}*/i=> PowMap.has(i)
+	hasWall = /**@type {(p:Position)=>boolean}*/p=> WallSet.has(p.y*Cols+p.x)
 
-	/** @param {number} tileIdx */
-	hasPow = tileIdx=> PowMap.has(tileIdx)
-
-	/** @param {Position} position */
-	hasWall = ({x,y})=> WallSet.has(y*Cols+x)
-
-	/** @param {Ghost} */
+	/** @param {Ghost} ghost */
 	ghostExitTile = ({originalTargetTile:o, tilePos:t})=>
 		o.y < 10 && PenOuter.contains(t)
 			? Vec2((t.x > Cols/2) && (o.x > Cols/2) ? 21:6, 15) : o
 
-	/** @param {{tileIdx:number, tilePos:Vector2}} */
+	/** @param {{tileIdx:TileIdx, tilePos:Vector2}} cfg */
 	clearBgDot({tileIdx:idx,tilePos:v}) {
 		DotSet.delete(idx)
 		PowMap.delete(idx)
