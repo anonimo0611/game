@@ -2,22 +2,24 @@
 const {Ticker,Timer}= function() {
 
 /** @typedef {{timeout:number,handler:Function,ignoreFrozen:boolean,amount:number}} TimerData */
-/** @type {Map<any, TimerData>} */
+/** @type {Map<any,TimerData>} */
 const TimerMap = new Map()
+const Interval = 1000/60
 
 /** @type {?Tick} */
-let _ticker  = null
-let _paused  = false
-let _counter = 0
-let _pausedCounter = 0
+let _ticker = null
+let _paused = false
+
+let _counter  = 0
+let _pCounter = 0 // for paused
 
 const Ticker = freeze(new class {
-	Interval = 1000/60
+	Interval = Interval
 	get paused()      {return _paused}
 	get count()       {return _counter}
 	get running()     {return _ticker instanceof Tick}
-	get elapsedTime() {return _counter*this.Interval}
-	get pausedCount() {return _pausedCounter}
+	get elapsedTime() {return _counter*Interval}
+	get pausedCount() {return _pCounter}
 
 	/**
 	 * @param {Function} [handler]
@@ -50,23 +52,23 @@ class Tick {
 	}
 	/** @param {number} ts */
 	loop(ts) {
-		if (this.stopped)
-			return
-		if ((ts-(this.start||=ts))/Ticker.Interval > this.count)
-			this.tick()
-		requestAnimationFrame(this.loop)
+		if (!this.stopped) {
+			requestAnimationFrame(this.loop)
+			if ((ts-(this.start||=ts))/Interval >= this.count)
+				this.tick()
+		}
 	}
 	tick() {
 		this.count++
 		if (_paused) {
 			this.pFn?.()
-			_pausedCounter++
+			_pCounter++
 			return
 		}
 		TimerMap.forEach(this.timer)
 		this.fn?.()
 		_counter++
-		_pausedCounter = 0
+		_pCounter = 0
 	}
 	/**
 	 * @param {TimerData} t
@@ -74,7 +76,7 @@ class Tick {
 	 */
 	timer(t, key) {
 		if (Timer.frozen && !t.ignoreFrozen) return
-		if (Ticker.Interval*t.amount++ < t.timeout) return
+		if (Interval*t.amount++ < t.timeout) return
 		TimerMap.delete(key)
 		t.handler()
 	}
@@ -84,7 +86,7 @@ class Tick {
 		this.stopped = 1
 		_ticker  = null
 		_paused  = false
-		_counter = _pausedCounter = 0
+		_counter = _pCounter = 0
 	}
 	resetCount() {
 		_counter = 0
