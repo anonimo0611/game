@@ -4,10 +4,8 @@ import CBSprite from './ghost_cb.js'
 export default class {
 	#CBSprite
 	#eyesFns
-	/** @type {?FadeOut} */
-	#fadeOut
-	/** @type {?FadeIn} */
-	#resurrect
+	#fadeOut   = /**@type {?FadeOut}*/(null)
+	#resurrect = /**@type {?FadeIn} */(null)
 
 	/** @param {ExtendedContext2D} ctx */
 	constructor(ctx, interval=1000/60) {
