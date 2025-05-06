@@ -22,10 +22,10 @@ export const PtsMgr = new class {
 class Points {
 	/**
  	 * @typedef {{key:{score:number},x:number,y:number,duration?:number}} PtsData
-	 * @param {PtsData}
+	 * @param {PtsData} PtsData
 	 * @param {Function} [fn]
 	 */
-	constructor({key,x,y,duration=1e3}={}, fn) {
+	constructor({key,x,y,duration=1e3}, fn) {
 		const speed   = Game.speedRate
 		const fadeDur = 300
 		this.score    = key.score

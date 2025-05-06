@@ -1,12 +1,12 @@
-import _State   from '../../_lib/state.js'
-import {Sound}  from '../../_snd/sound.js'
-import {Game}   from '../_main.js'
-import {State}  from '../state.js'
-import {Ctrl}   from '../control.js'
-import {Player} from '../pacman.js'
-import {Maze}   from '../maze.js'
-import {Ghost}  from './ghost.js'
-import Target   from './show_targets.js'
+import _State    from '../../_lib/state.js'
+import {Sound}   from '../../_snd/sound.js'
+import {Game}    from '../_main.js'
+import {State}   from '../state.js'
+import {Ctrl}    from '../control.js'
+import {Player}  from '../pacman.js'
+import {Maze}    from '../maze.js'
+import {Ghost}   from './ghost.js'
+import Target    from './show_targets.js'
 
 /** @type {Ghost[]} */
 const Ghosts = []
@@ -22,7 +22,7 @@ const releaseDelay = ghostIdx=> ({ // For always chase mode (ms)
 	13:[   0,  900,    0]
 }[Game.restarted? 0 : Game.clampedLv][ghostIdx]/Game.speedRate)
 
-/** @typedef {'Idle'|'GoOut'|'Walk'|'Bitten'|'Escape'|'Return'} GhsStateType */
+/** @typedef {'Idle'|'GoOut'|'Walk'|'Bitten'|'Escape'|'Return'} StateType */
 export class GhostState extends _State {
 	isIdle    = true
 	isGoOut   = false
@@ -31,16 +31,16 @@ export class GhostState extends _State {
 	isEscape  = false
 	isReturn  = false
 
-	/** @param {Ghost} */
+	get current()    {return /**@type {StateType}*/(super.current)}
+	get isEscaping() {return this.isEscape || this.isReturn}
+
+	/** @param {Ghost} Ghost */
 	constructor({tilePos}) {
 		super()
 		this.init(Maze.House.isIn(tilePos)? 'Idle':'Walk')
 	}
-	/** @returns {GhsStateType} */
-	get current()    {return super.current}
-	get isEscaping() {return this.isEscape || this.isReturn}
 
-	/** @param {GhsStateType} state */
+	/** @param {StateType} state */
 	to(state) {return super.to(state)}
 }
 
@@ -60,12 +60,16 @@ export const GhsMgr = new class {
 	get Elroy()      {return Elroy}
 	get isScatter()  {return AlternateBetweenModes.isScatter}
 	get isFright()   {return FrightMode.instance != null}
-	get score()      {return FrightMode.instance?.score|0}
-	get spriteIdx()  {return FrightMode.instance?.spriteIdx|0}
-	get caughtAll()  {return FrightMode.instance?.caughtAll|0}
+	get score()      {return FrightMode.instance?.score     ?? 0}
+	get spriteIdx()  {return FrightMode.instance?.spriteIdx ?? 0}
+	get caughtAll()  {return FrightMode.instance?.caughtAll ?? false}
 	get hasEscape()  {return Ghosts.some(g=> g.isEscaping)}
 	get akaCenter()  {return Ghosts[GhsType.Akabei].centerPos}
 
+	/**
+	 * @param {*} _
+	 * @param {...Ghost} instances
+	 */
 	#initialize(_, ...instances) {
 		GhsMgr.#aidx = 0
 		instances.forEach((g,i)=> Ghosts[i]=g)
@@ -75,8 +79,9 @@ export const GhsMgr = new class {
 	}
 	#onPlaying() {
 		Sound.playSiren()
-		Ctrl.isChaseMode && Timer.sequence(...Ghosts.slice(1)
-			.map((g,i)=> [releaseDelay(i), ()=> g.release()]))
+		Ctrl.isChaseMode && Timer.sequence(
+			...Ghosts.slice(1).map(/**@returns {[number,Function]}*/
+				(g,i)=> [releaseDelay(i), ()=> g.release()]))
 	}
 	setFrightMode() {
 		setReversalSignal()
@@ -86,8 +91,7 @@ export const GhsMgr = new class {
 		if (State.isPlaying
 		 || State.isAttract
 		 || State.isCoffBrk)
-			this.#aidx ^= !Timer.frozen
-				&& !(Ticker.count % this.aInterval)
+			this.#aidx ^= +(!Timer.frozen && !(Ticker.count % this.aInterval))
 		AlternateBetweenModes.update()
 		FrightMode.instance?.update()
 		Ghosts.forEach(g=> g.update())
@@ -103,7 +107,7 @@ const AlternateBetweenModes = function() {
 		$on({Title_Ready:()=> seq=genSequence()})
 		return {
 			get isScatter() {return seq.mode == 0},
-			update() {State.isPlaying && seq.update?.()},
+			update() {State.isPlaying && seq.update()},
 		}
 	}
 	/** @param {number} lv */
@@ -133,7 +137,7 @@ const AlternateBetweenModes = function() {
 				[cnt,Seq.mode] = [0,(++idx % 2)]
 				setReversalSignal()
 			}
-		};return Seq.mode? {mode:1}:Seq
+		};return Seq.mode? {mode:1,update(){}}:Seq
 	}
 }(),
 setReversalSignal = ()=> {
@@ -150,8 +154,8 @@ export const DotCounter = function() {
 		freeze([17, 30,  0, 0]),  // Aosuke
 		freeze([32, 60, 50, 0])]) // Guzuta
 	/**
-	 * @param {number} idx Ghost index
-	 * @param {(deactivateGlobal:boolean)=> boolean} fn Release ghost
+	 * @param {number} idx Pinky, Aosuke, Guzuta's index
+	 * @param {(deactivateGlobal?:boolean)=> boolean} fn Release ghost
 	 */
 	function release(idx, fn) {
 		const timeOut = (Game.level <= 4 ? 4e3:3e3)
@@ -219,12 +223,12 @@ class FrightMode {
 	get caughtAll() {return this.#caughtCnt == GhsType.Max}
 	constructor() {
 		FrightMode.#instance = this.#toggle(true)
-		$(Ghosts).offon({Cought:()=> ++this.#caughtCnt})
+		$(Ghosts).on('Cought',()=> ++this.#caughtCnt)
 	}
 	/** @param {boolean} bool */
 	#toggle(bool) {
 		FrightMode.#instance = null
-		$(Ghosts).trigger('FrightMode',bool)
+		$(Ghosts).off('Cought').trigger('FrightMode',bool)
 		Sound.toggleFrightMode(bool)
 		return this
 	}
@@ -234,7 +238,7 @@ class FrightMode {
 		const {numOfSec}= FrightMode
 		const et = (Game.interval*this.#tCounter++)/1000
 		const fi = (numOfSec == 1 ? 12:14)/Game.speedRate|0
-		this.#flashIdx ^= !(this.#fCounter % fi)
+		this.#flashIdx ^= +!(this.#fCounter % fi)
 		;(et>=numOfSec - 2) && this.#fCounter++
 		;(et>=numOfSec || this.caughtAll) && this.#toggle(false)
 	}

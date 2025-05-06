@@ -55,7 +55,7 @@ export const Score = new class {
 	draw() {
 		const oneUpColor = (Sound.ringing? Color.Extend:null)
 		drawText(2,1, oneUpColor, Score.#oneUpDisp? '1UP':'')
-		drawText(6,1, null, _score || '00')
+		drawText(6,1, null, `${_score || '00'}`)
 		Ctrl.isPractice
 			? drawText(14,1, null, 'PRACTICE')
 			: drawText(14,1, null, `HIGH　${_hiSco || '00'}`)

@@ -1,4 +1,7 @@
-const {ctx}=Bg, W=Cols
+const {ctx}=Bg, W=Cols, T=TileSize
+
+/** @type {[x:number,y:number][]} */
+const ScaleTable = [[1,1],[-1,1],[-1,-1],[1,-1]]
 
 import {Maze} from '../maze.js'
 export const Wall = new class {
@@ -10,7 +13,7 @@ export const Wall = new class {
 	#drawCorner(cornerIdx, x, y, type=0) {
 		ctx.save()
 		ctx.translate(x+T/2, y+T/2)
-		ctx.scale(...[[1,1],[-1,1],[-1,-1],[1,-1]][cornerIdx])
+		ctx.scale(...ScaleTable[cornerIdx])
 		ctx.beginPath()
 		;(type == 2)
 			? ctx.strokeLine(T/2,T/2, T/2-2,T/2-2)
@@ -34,7 +37,7 @@ export const Wall = new class {
 	#drawTile = (c, i)=> {
 		const [tx,ty]= [i%W, i/W|0]
 		const [px,py]= [tx*T, ty*T]
-		const ci = +c? c-1 : 'ABCD'.indexOf(c.toUpperCase())
+		const ci = +c? +c-1 : 'ABCD'.indexOf(c.toUpperCase())
 
 		;/[A-D]/.test(c) && this.#drawCorner(ci, px, py, 1)
 		;/[a-d]/.test(c) && this.#drawCorner(ci, px, py, 2)

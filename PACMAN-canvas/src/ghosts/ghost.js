@@ -1,4 +1,5 @@
 import {Sound}  from '../../_snd/sound.js'
+import {Dir}    from '../../_lib/direction.js'
 import {Game}   from '../_main.js'
 import {State}  from '../state.js'
 import {Ctrl}   from '../control.js'
@@ -10,7 +11,6 @@ import {GhsMgr} from './_system.js'
 import * as Sys from './_system.js'
 import Sprite   from '../sprites/ghost.js'
 
-const Step = GhsStep
 export class Ghost extends Actor {
 	#runAway   = -1
 	#revSig    = false
@@ -50,7 +50,7 @@ export class Ghost extends Actor {
 		this.pos      = Vec2(col*T, row*T)
 		this.name     = this.constructor.name
 		this.release  = this.release.bind(this)
-		this.state    = new Sys.GhostState(this, Game.interval)
+		this.state    = new Sys.GhostState(this)
 		this.sprite   = new Sprite(canvas2D(null, T*3, T*2).ctx)
 		freeze(this)
 	}
@@ -78,16 +78,16 @@ export class Ghost extends Actor {
 			&& abs(CvsW/2 - this.centerPos.x) <= this.step
 	}
 	get sqrMagToPacman() {
-		return Vec2.sqrMagnitude(this, Player.i.pos)
+		return Vec2.sqrMagnitude(this, Player.i)
 	}
 	get step() {
 		return function(s) {
-			if (s.isIdle)     return Step.Idle
-			if (s.isGoOut)    return Step.GoOut
-			if (s.isEscaping) return Step.Escape
-			if (s.isInTunnel) return Step.InTunnel
-			if (s.isFright)   return Step.Fright
-			if (s.isScatter)  return Step.Base
+			if (s.isIdle)     return GhsStep.Idle
+			if (s.isGoOut)    return GhsStep.GoOut
+			if (s.isEscaping) return GhsStep.Escape
+			if (s.isInTunnel) return GhsStep.InTunnel
+			if (s.isFright)   return GhsStep.Fright
+			if (s.isScatter)  return GhsStep.Base
 			return s.chaseStep
 		}(this) * Game.moveSpeed
 	}
@@ -190,7 +190,8 @@ export class Ghost extends Actor {
 	}
 	#getNextDir(target=this.targetTile) {
 		const tile = this.getAdjTile(this.dir)
-		const dirs = [U,L,D,R].flatMap((dir,index)=> {
+		const dirs = [U,L,D,R].flatMap(
+			/** @param {Direction} dir */(dir,index)=> {
 			const  test = this.getAdjTile(dir,1,tile)
 			const  dist = Vec2.sqrMagnitude(test,target)
 			return this.#isAllowDir(dir,test)? [{index,dir,dist}]:[]
@@ -256,6 +257,7 @@ export class Ghost extends Actor {
 		}
 		return false
 	}
+	/** @param {*} _ */
 	#setFrightMode(_, bool=false) {
 		!this.isEscaping && (this.#isFright = bool)
 	}

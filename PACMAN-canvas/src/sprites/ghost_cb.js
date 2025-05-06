@@ -17,12 +17,13 @@ export default class {
 	}
 	mendedStitch(idx=0) {
 		const {ctx}= this,
+		/** @type {([number,number]|[])[]} */
 		coords = [[39,8],[33,14],[24,8],[14,15],[26,20],[14,27],[25,33],idx?[]:[14,38]]
 		ctx.lineWidth = 3.5
 		ctx.strokeStyle = '#FFF'
 		ctx.newLinePath(...coords)
 		ctx.stroke()
-		coords.forEach(xy=> ctx.fillCircle(...xy, ctx.lineWidth, '#FFF'))
+		coords.forEach(([x,y])=> ctx.fillCircle(x,y, ctx.lineWidth, '#FFF'))
 	}
 	bracketEyes() {
 		const {ctx}= this
@@ -146,11 +147,11 @@ class StakeClothes {
 		Ctx.restore()
 	}
 	/**
-	 * @param {{x:number, y:number, size?:number}}
+	 * @param {{x:number, y:number, size?:number}} cfg
 	 * @param {number} aIdx
 	 * @param {number} rate
 	 */
-	expandClothes({x, y, size=T*2}={}, aIdx, rate) {
+	expandClothes({x, y, size=T*2}, aIdx, rate) {
 		const v1 = lerp(-2,  5, rate)
 		const v2 = lerp( 4, 22, rate)
 		const v3 = lerp( 4, 50, rate)

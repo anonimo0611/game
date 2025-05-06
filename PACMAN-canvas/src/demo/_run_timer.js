@@ -9,7 +9,7 @@ export const RunTimer = function() {
 		(!document.hasFocus()
 			|| !State.isTitle
 			|| Confirm.opened
-			|| dqs(':not(#startBtn):focus')
+			|| qS(':not(#startBtn):focus')
 		)? fcnt = 0
 		 : fcnt++ * Ticker.Interval > WaitTime
 			&& $(RunTimer).trigger('begin')

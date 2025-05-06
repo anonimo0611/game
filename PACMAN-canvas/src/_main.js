@@ -1,8 +1,10 @@
+import '../_lib/_canvas.js'
 import './ghosts/ghost_sub.js'
 import {Sound}    from '../_snd/sound.js'
 import {Confirm}  from '../_lib/confirm.js'
 import {Cursor}   from '../_lib/mouse.js'
 import * as _Menu from '../_lib/menu.js'
+import {Dir}      from '../_lib/direction.js'
 import {State}    from './state.js'
 import {Ctrl}     from './control.js'
 import {Maze}     from './maze.js'
@@ -44,7 +46,7 @@ export const Game = new class {
 	#level = 1
 	#restarted = false
 	get level()     {return Game.#level}
-	get levelStr()  {return Game.#level.toString().padStart(2,0)}
+	get levelStr()  {return Game.#level.toString().padStart(2,'0')}
 	get restarted() {return Game.#restarted}
 
 	// Divide the speed equally with level 13+ as the fastest
@@ -86,7 +88,7 @@ export const Game = new class {
 				: State.to('Quit')
 			}()
 		default:
-			if (dqs(':not(#startBtn):focus') == null
+			if (qS(':not(#startBtn):focus') == null
 			 && Dir.from(e,{wasd:true}) || e.key == '\x20') {
 				State.isTitle && State.to('Start')
 				Ticker.paused && Game.#pause()
@@ -120,12 +122,12 @@ export const Game = new class {
 	}
 	#onFlashMaze() {
 		let count = 0
-		!function redraw() {
+		;(function redraw() {
 			if (++count > 8)
 				return Timer.set(500, Game.#levelEnds)
 			Wall.draw([, Color.FlashWall][count % 2])
 			Timer.set(250, redraw)
-		}()
+		})()
 	}
 	#onNewLevel() {
 		Game.#setLevel(Game.level+1)
@@ -153,7 +155,7 @@ export const Game = new class {
 				return
 			}
 			const intermissionLv = +{2:1, 5:2, 9:3}[Game.level]
-			Ctrl.isPractice || isNaN(intermissionLv)
+			Ctrl.isPractice || !intermissionLv
 				? State.to('NewLevel')
 				: State.to('CoffBrk',{data:intermissionLv})
 		}
@@ -189,4 +191,4 @@ export const Game = new class {
 		Game.#update()
 		Game.#draw()
 	}
-};$load(()=> document.body.dataset.loaded = true)
+};$load(()=> document.body.dataset.loaded = 'true')

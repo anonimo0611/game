@@ -1,6 +1,7 @@
+import {Dir}    from '../_lib/direction.js'
+import {Common} from '../_lib/common.js'
 import {State}  from './state.js'
 import {Maze}   from './maze.js'
-import {Common} from '../_lib/common.js'
 
 const CW = CvsW
 export class Actor extends Common {
@@ -22,16 +23,16 @@ export class Actor extends Common {
 	get centerPos() {return Vec2(this).add(T/2)}
 	get tilePos()   {return Vec2(this).add(T/2).divInt(T)}
 	get tileIdx()   {return Vec2.idx(this.tilePos,Cols)}
-	set x(num)      {isNum(num) && (this.#x = num)}
-	set y(num)      {isNum(num) && (this.#y = num)}
-	set pos(pos)    {isObj(pos) && this.setPos(pos)}
+	set x(num)      {this.#x = num}
+	set y(num)      {this.#y = num}
+	set pos(pos)    {this.setPos(pos)}
 
 	get dir()       {return this.#movDir}
 	get movDir()    {return this.#movDir}
 	get orient()    {return this.#orient}
-	set dir(dir)    {Dir.has(dir) && (this.#movDir = this.orient = dir)}
-	set movDir(dir) {Dir.has(dir) && (this.#movDir = dir)}
-	set orient(dir) {Dir.has(dir) && (this.#orient = dir)}
+	set dir(dir)    {this.#movDir = this.orient = dir}
+	set movDir(dir) {this.#movDir = dir}
+	set orient(dir) {this.#orient = dir}
 
 	get step()       {return 0}
 	get maxAlpha()   {return 1}

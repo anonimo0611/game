@@ -1,14 +1,17 @@
-/** @type {NodeListOf<HTMLButtonElement>} */
-const btns = dqsAll('.panelBtn')
+
+const btns = /**@type {HTMLButtonElement[]}*/
+	(qSAll('button.panelBtn'))
+
 for (const btn of btns) {
 	btn.addEventListener('pointerdown', ()=> {
 		$('.panel').toggle()
 		btn.classList.toggle('opened')
 	})
 	addEventListener('pointerdown', e=> {
+		const tgt = /**@type {HTMLElement}*/(e.target)
 		if (!btn.offsetParent
-		 || e.target == btn
-		 || e.target.closest?.(btn.value))
+		 || tgt == btn
+		 || tgt.closest?.(btn.value))
 			return
 		$(btn.value).hide()
 		btn.classList.remove('opened')

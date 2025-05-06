@@ -4,13 +4,16 @@ Cols     = 28,
 TileSize = 28, T=TileSize,
 BaseStep = TileSize / 4.5,
 
+/** @typedef {'Up'|'Right'|'Down'|'Left'} Direction */
+U='Up', R='Right', D='Down', L='Left',
+
 [Bg,Inf,,Ctx,CvsW,CvsH]= [
 	canvas2D('bg' , T*Cols, T*Rows),
 	canvas2D('inf', T*Cols, T*Rows),...
 	canvas2D('cvs', T*Cols, T*Rows).vals
-],
+]
 
-Color = freeze(new class {
+const Color = freeze(new class {
 	Grid      = '#F00'
 	Dot       = '#FFB8AE'
 	Wall      = '#55E'

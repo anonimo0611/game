@@ -1,6 +1,7 @@
 import {Sound}   from '../_snd/sound.js'
 import {Confirm} from '../_lib/confirm.js'
 import {Common}  from '../_lib/common.js'
+import {Dir}     from '../_lib/direction.js'
 import {Game}    from './_main.js'
 import {State}   from './state.js'
 import {Ctrl}    from './control.js'
@@ -46,8 +47,9 @@ class PlayablePac extends Pacman {
 
 	constructor() {
 		super()
+		const kd = 'keydown.Player'
 		this.pos = Vec2(13.5, 24).mul(T)
-		$offon('keydown.Player', this.#onKeydown.bind(this))
+		$off(kd).on(kd,this.#onKeydown.bind(this))
 	}
 	get canTurn() {
 		return this.inForwardOfTile
@@ -68,7 +70,7 @@ class PlayablePac extends Pacman {
 	/**
 	 * @param {KeyboardEvent} e
 	 * @param {?Direction} dir
-	*/
+	 */
 	#ignoreKeys(e, dir) {
 		return Confirm.opened
 			|| keyRepeat(e)
@@ -170,7 +172,7 @@ class PlayablePac extends Pacman {
 			: Player.trigger('DotEaten',isPow)
 	}
 	#playSE() {
-		const duration = (T/this.step)*Ticker.Interval*0.5
-		Sound.play(`eat${this.#eatIdx ^= 1}`, {duration})
+		const id = (this.#eatIdx ^= 1) ? 'eat1':'eat0'
+		Sound.play(id, {duration:(T/this.step)*Ticker.Interval*0.5})
 	}
 }

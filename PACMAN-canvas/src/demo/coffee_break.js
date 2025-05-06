@@ -10,11 +10,13 @@ const ModSymbol = Symbol()
 export class CoffBrk {
 	/** @type {?(Scene1|Scene2|Scene3)} */
 	static #scene = null
-	static {$on({CoffBrk:(_,num)=> this.#begin(+num)})}
-
+	static {
+		$on({CoffBrk:/**@type {(_:any,num:1|2|3)=>void}*/
+			(_,num)=> this.#begin(num)})
+	}
 	/** @param {1|2|3} num Scene number */
 	static #begin(num) {
-		Sound.play('cutscene', {loop:1^num == 2})
+		Sound.play('cutscene', {loop:1^Number(num == 2)})
 		CoffBrk.#scene = new [Scene1,Scene2,Scene3][num-1]
 	}
 	static update() {
@@ -31,8 +33,7 @@ export class CoffBrk {
 	/** @param {Symbol} symbol */
 	constructor(symbol) {
 		if (symbol != ModSymbol) {
-			throw TypeError('The constructor'
-			+` ${this.constructor.name}() is not visible`)
+			throw TypeError('The constructor is not visible')
 		}
 		this.pacman.y = this.akabei.y = (CvsH/2 - T/2)
 		$onNS('.CB',{Quit:this.end, blur_focus:this.pause})
@@ -62,7 +63,7 @@ export class CoffBrk {
 	}
 }
 $('button.CB').on('click', function() {
-	State.to('CoffBrk', {data:+this.value})
+	State.to('CoffBrk', {data:+$(this).attr('value')})
 })
 
 class Scene1 extends CoffBrk {

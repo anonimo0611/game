@@ -10,8 +10,9 @@ export default class {
 	#resurrect
 
 	/** @param {ExtendedContext2D} ctx */
-	constructor(ctx) {
+	constructor(ctx, interval=1000/60) {
 		this.ctx = ctx
+		this.interval  = interval
 		this.#CBSprite = new CBSprite(ctx)
 		this.#eyesFns  = freeze([
 			this.#eyesLookingUp,
@@ -135,7 +136,7 @@ export default class {
 			ctx.fillCircle(19*v, 4, 8, Color.GhostEyes)
 		}
 	}
-	/** @param {Object.<string,DirHorizontal>}  */
+	/** @param {{orient:'Left'|'Right'}} orient */
 	#eyesLookingLR({orient}) {
 		const {ctx}= this
 		ctx.save()

@@ -12,7 +12,7 @@ import {RunTimer} from './_run_timer.js'
 
 const CHAR = 0, DEMO = 1
 const ModSymbol = Symbol()
-const StButton  = dqs('button.attract')
+const StButton  = qS('button.attract')
 
 /** @type {?Attract} */
 let _attract = null
@@ -44,8 +44,7 @@ export class Attract {
 	/** @param {Symbol} symbol */
 	constructor(symbol) {
 		if (symbol != ModSymbol) {
-			throw TypeError('The constructor'
-			+` ${this.constructor.name}() is not visible`)
+			throw TypeError('The constructor is not visible')
 		}
 		$onNS('.Attract', {click_keydown_blur:this.quit})
 		this.initialize()
@@ -62,7 +61,7 @@ export class Attract {
 	 * @param {number} gIdx
 	 */
 	setActor(idx, gIdx) {
-		const g = new Ghost(idx? L:R, {idx:gIdx,animFlag:+!!idx})
+		const g = new Ghost(idx? L:R, {idx:gIdx,animFlag:+(idx == 1)})
 		if (idx) {
 			g.pos = Vec2(CvsW+(T*6)+(T*2*gIdx), T*19)
 			!gIdx && (this.pacman.pos = Vec2(g.x-T*3.5, g.y))
@@ -120,14 +119,14 @@ export class Attract {
 			for (let i=0; i<GhsType.Max; i++)
 				this.drawGhost(DEMO, i)
 			this.pacman.sprite.draw(this.pacman)
-			PtsMgr.drawGhostPts()
+			PtsMgr.drawFront()
 		}
 		Fruit.drawLevelCounter()
 	}
 	update() {
 		if (Ticker.elapsedTime <= 1e4+500)
 			return
-		this.powDisp ^= Ticker.count % 15 == 0
+		this.powDisp ^= +(Ticker.count % 15 == 0)
 		!Timer.frozen && this.updatePacman()
 		!Timer.frozen && this.updateGhosts()
 	}
@@ -150,7 +149,7 @@ export class Attract {
 	}
 	/** @param {Event} e */
 	quit(e) {
-		if (e.target.tagName == 'BUTTON')
+		if (/**@type {Element}*/(e.target).tagName == 'BUTTON')
 			return
 		_attract = null
 		State.to('Title')

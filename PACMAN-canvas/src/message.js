@@ -8,10 +8,10 @@ export const Message = new class {
 	 * @param {CtxStyle|null} color
 	 */
 	drawText(col, row, color='', text='',
-		{ctx=Ctx,scale=[1,1],face='Atari',size=T,style=''}={}
+		{ctx=Ctx,scaleX=1,face='Atari',size=T,style=''}={}
 	) {
 		ctx.save()
-		ctx.scale(...scale)
+		ctx.scale(scaleX, 1)
 		ctx.font = `${style} ${size}px ${face}`
 		ctx.fillStyle = color ?? '#FFF'
 		String(text).split('\n').forEach((txt,i)=>

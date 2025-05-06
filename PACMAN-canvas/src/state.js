@@ -19,15 +19,16 @@ export const State = new class extends _State {
 		super()
 		this.init()
 	}
-	/** @returns {StateType} */
-	get current()    {return super.current}
+	get current()    {return /**@type {StateType}*/(super.current)}
 	get isSt_Ready() {return this.isStart || this.isReady}
 
 	/** @param {StateType} state */
-	last(state) {
-		return super.last(state)
-	}
-	/** @param {StateType} state */
+	last(state) {return /**@type {StateType}*/(super.last(state))}
+
+	/**
+	 * @param {StateType} state
+	 * @param {{delay?:number,data?:any}} config
+	*/
 	to(state, {delay=(state=='Quit' ? -1:0),data}={}) {
 		return super.to(state, {delay,data,fn:this.#callback})
 	}

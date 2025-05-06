@@ -68,7 +68,7 @@ class PowDot {
 			Maze.drawDot(Ctx, pos, true)
 	}
 	draw() {
-		this.#disp ^= Ticker.count % 15 == 0
+		this.#disp ^= +(Ticker.count % 15 == 0)
 		for (const [,pos] of PowMap) this.#draw(pos)
 	}
 }
@@ -77,7 +77,7 @@ class Tunnel {
 	entranceR = 22.5
 	/**
 	  * @param {Vector2} centerPos
-	  * @param {DirHorizontal} [dir]
+	  * @param {'Left'|'Right'} [dir]
 	  */
 	isIn(centerPos, dir) {
 		const where = this.#where(centerPos)
@@ -85,7 +85,11 @@ class Tunnel {
 		if (dir == R) return (where == R)
 		return (where != null)
 	}
-	#where({x, y}={}) {
+	/**
+	 * @param {Position} centerPos
+	 * @returns {'Left'|'Right'|null}
+	 */
+	#where({x, y}) {
 		if (int(y/T) == 15 && x/T <= this.entranceL) return L
 		if (int(y/T) == 15 && x/T >= this.entranceR) return R
 		return null
@@ -125,7 +129,7 @@ export const Maze = new class {
 	Tunnel = freeze(new Tunnel)
 	DotMax = MapArr.filter(c=> DotChip.has(c)).length
 
-	// These tiles (x-y) forbidden ghosts from entering upward
+	// These tiles(x-y) forbidden ghosts from entering upward
 	GhostNotEnterSet = new Set(['12-11','12-23','15-11','15-23'])
 
 	/** @param {number} tileIdx */
@@ -134,7 +138,7 @@ export const Maze = new class {
 	/** @param {number} tileIdx */
 	hasPow = tileIdx=> PowMap.has(tileIdx)
 
-	/** @param {Position} */
+	/** @param {Position} position */
 	hasWall = ({x,y})=> WallSet.has(y*Cols+x)
 
 	/** @param {Ghost} */

@@ -4,9 +4,10 @@ import {Menu}     from './_main.js'
 import {State}    from './state.js'
 import {drawText} from './message.js'
 
-/** @returns {HTMLInputElement} */
-const input = id=> Form[id]
-const Form  = document.forms[0]
+const Form = document.forms[0]
+
+/** @param {string} id */
+const input = id=>/**@type {HTMLInputElement}*/(byId(id))
 
 export const Ctrl = new class {
 	static {$ready(this.setup)}
@@ -34,7 +35,7 @@ export const Ctrl = new class {
 		const scale = min(
 			innerWidth /Form.offsetWidth * .98,
 			innerHeight/Form.offsetHeight)
-		Form.style.scale = min(1, round(scale*100)/100)
+		Form.style.scale = min(1, round(scale*100)/100).toString()
 	}
 	#update() {
 		Ctrl.#drawInfo()
@@ -43,14 +44,15 @@ export const Ctrl = new class {
 	}
 	#saveData() {
 		const data = {}
-		for (const c of dqsAll('custom-menu,input')) {
-			if (!c.id) continue
-			data[c.id]= {
-				menu:    Menu[c.id]?.index,
-				range:   c.valueAsNumber,
-				checkbox:c.checked,
-			}[c.type]
-		}
+		;/** @type {HTMLInputElement[]} */
+		(qSAll('custom-menu,input')).forEach(ctrl=> {
+			if (!ctrl.id) return
+			data[ctrl.id]= {
+				menu:    Menu[ctrl.id]?.index,
+				range:   ctrl.valueAsNumber,
+				checkbox:ctrl.checked,
+			}[ctrl.type]
+		})
 		localStorage.anopacman = JSON.stringify(data)
 	}
 	#removeData() {
@@ -84,21 +86,20 @@ export const Ctrl = new class {
 		Ctx.restore()
 	}
 	#drawInfo() {
-		const {ctx}= Inf, lh = 0.84
-		const spd  = Ctrl.speedRate.toFixed(1)
-		const cfg  = {ctx, size:T*0.68, style:'bold', scale:[.7,1]}
-		const draw = (...args)=> drawText(...args, cfg)
+		const{ctx}= Inf, lh = 0.84, ColTbl = Color.InfoTable
+		const spd = Ctrl.speedRate.toFixed(1)
+		const cfg = {ctx, size:T*0.68, style:'bold', scaleX:.7}
 		ctx.save()
 		ctx.translate(T*0.1, T*18)
 		ctx.clearRect(0, -T, CvsW, T*3)
 		if (Ctrl.isCheatMode || spd != '1.0') {
-			draw(0, lh*0, Color.InfoTable[+(spd != '1.0')],`Speed x${spd}`)
-			draw(0, lh*1, Color.InfoTable[+Ctrl.invincible], 'Invincible')
-			draw(0, lh*2, Color.InfoTable[+Ctrl.showTargets],'Targets')
+			drawText(0, lh*0, ColTbl[+(spd != '1.0')],`Speed x${spd}`, cfg)
+			drawText(0, lh*1, ColTbl[+Ctrl.invincible], 'Invincible', cfg)
+			drawText(0, lh*2, ColTbl[+Ctrl.showTargets],'Targets', cfg)
 		}
 		if (Ctrl.unrestricted) {
 			ctx.translate(T*(Cols-5), T/2)
-			draw(0,0, Color.InfoTable[1], 'Un-\nrestricted')
+			drawText(0,0, ColTbl[1], 'Un-\nrestricted', cfg)
 		}
 		ctx.restore()
 	}
