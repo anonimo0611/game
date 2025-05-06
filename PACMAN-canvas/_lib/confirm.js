@@ -12,7 +12,7 @@ export const Confirm = new class {
 
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
-		if (e.key != 'Escape') {
+		if (e.key == 'Escape') {
 			e.preventDefault()
 			Confirm.#buttons[Confirm.#cancelIdx]?.click()
 		}
