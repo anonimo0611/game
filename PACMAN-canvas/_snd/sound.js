@@ -1,14 +1,13 @@
 import {State}    from '../src/state.js'
 import {GhsMgr}   from '../src/ghosts/_system.js'
+import {Ids}      from './_manifest.js'
 import {SoundMgr} from './loader.js'
 import {Speaker}  from './speaker.js'
 
-const speaker  = /**@type {HTMLLabelElement}*/(byId('speaker'))
-const volRng   = /**@type {HTMLInputElement}*/(byId('volRng'))
-const volRg2   = /**@type {HTMLInputElement}*/(byId('volRg2'))
-const volRngs  = /**@type {HTMLInputElement[]}*/(qSAll('.volRng'))
-const SirenIds = /**@type {['siren0','siren1','siren2','siren3']}*/
-	(SoundMgr.ids.filter(id=> /^siren/.test(id)))
+/** @typedef {import("./_manifest.js").SirenType} ST */
+
+const [volRg2,volRng]= /**@type {HTMLInputElement[]}*/(byClass('volRng'))
+const SirenIds = /**@type {ST[]}*/(Ids.filter(id=>id.startsWith('siren')))
 
 export const Sound = new class extends SoundMgr {
 	static {this.#init()}
@@ -17,9 +16,9 @@ export const Sound = new class extends SoundMgr {
 			return $('.volCtrl').hide()
 		Sound.vol = localStorage.anoPacVolume ?? 5
 		$on({keydown:Sound.#onKeydown})
-		$(volRngs).prop({defaultValue:Sound.vol})
-		$(volRngs).on({input:Sound.#onWheel})
-		$(speaker).on({wheel:Sound.#onWheel}).on({click:Sound.#mute})
+		$('.volRng') .prop({defaultValue:Sound.vol})
+		$('.volRng') .on({input:Sound.#onWheel})
+		$('#speaker').on({wheel:Sound.#onWheel}).on({click:Sound.#mute})
 	}
 
 	/** @type {?number} */

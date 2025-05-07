@@ -1,4 +1,4 @@
-export const SoundType = freeze({
+const SoundData = freeze({
     //---- looped.ogg ----
     siren0:  {srcIdx:0, startTime:    0, duration: 402},
     siren1:  {srcIdx:0, startTime: 1402, duration: 327},
@@ -16,14 +16,17 @@ export const SoundType = freeze({
     bell:    {srcIdx:1, startTime: 3641, duration:2090},
     fruit:   {srcIdx:1, startTime: 5952, duration: 496},
 })
+/** @typedef {keyof SoundData} SoundType */
+/** @typedef {'siren0'|'siren1'|'siren2'|'siren3'} SirenType */
+
 const genSpriteData = idx=>
-    entries(SoundType).flatMap(([k,v])=> idx == v.srcIdx ? [{id:k,...v}]:[])
+    entries(SoundData).flatMap(([k,v])=> idx == v.srcIdx ? [{id:k,...v}]:[])
 
 export const Manifest = [
     {src:'./res/looped.ogg', data:{channels:3, audioSprite:[...genSpriteData(0)]}},
     {src:'./res/regular.ogg',data:{channels:4, audioSprite:[...genSpriteData(1)]}},
 ]
-export const SoundIds  = freeze(keys(SoundType))
+export const Ids  = freeze(keys(SoundData))
 export const ConfigMap = new Map([
 	['_normal', {loop: 0, volume:1.00}],
 	['eat',     {loop: 0, volume:0.70}],
