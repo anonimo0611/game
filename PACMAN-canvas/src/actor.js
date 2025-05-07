@@ -1,4 +1,3 @@
-import {Dir}    from '../_lib/direction.js'
 import {Common} from '../_lib/common.js'
 import {State}  from './state.js'
 import {Maze}   from './maze.js'
