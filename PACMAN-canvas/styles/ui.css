@@ -75,7 +75,9 @@ button, input,
 	border-radius: .2em;
 	outline: 0;
 }
-button, .button, [type=dropdown] > output {
+button,
+[type=dropdown] > output,
+.button[data-disabled=false] {
 	background: var(--bgcolor);
 	display: inline-block;
 	padding: .2em;
@@ -86,7 +88,7 @@ button, .button, [type=dropdown] > output {
 	&:focus  {background:#069C}
 	&:active {background:#396C}
 	&.opened {background:#396C}
-	&:disabled, [data-disabled=true] {
+	&:disabled {
 		color: #888;
 		background: var(--bgcolor);
 		border-color: #888;
@@ -242,6 +244,7 @@ custom-menu {
 		top: 50%;
 		&.l {left: 1px;translate:0 -50%;rotate:+45deg}
 		&.r {right:1px;translate:0 -50%;rotate:-45deg;scale:-1 1}
+		&[data-disabled=true] {opacity: 0.4}
 		transform-origin: center;
 	}
 }
