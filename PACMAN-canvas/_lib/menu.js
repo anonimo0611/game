@@ -26,7 +26,7 @@ class Menu extends Common {
 		this.menu   = menu
 		this.items  = items
 		this.size   = items.length
-		this.reset  =  this.reset.bind(this)
+		this.reset  = this.reset.bind(this)
 		this.$label = $(root).closest('label')
 		this.defaultIndex = this.index
 
