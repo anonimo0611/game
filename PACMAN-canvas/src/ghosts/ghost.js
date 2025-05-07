@@ -12,7 +12,7 @@ import * as Sys from './_system.js'
 import Sprite   from '../sprites/ghost.js'
 
 export class Ghost extends Actor {
-	#runAway   = -1
+	#runaway   = -1
 	#revSig    = false
 	#isStarted = false
 	#isFright  = false
@@ -30,7 +30,7 @@ export class Ghost extends Actor {
 	get spriteIdx()   {return GhsMgr.spriteIdx}
 	get maxAlpha()    {return Ctrl.showTargets ? 0.75:1}
 	get chaseTile()   {return this.chasePos.divInt(T)}
-	get isRunAway()   {return this.#runAway >= 0}
+	get isRunaway()   {return this.#runaway >= 0}
 	get isStarted()   {return this.#isStarted}
 	get isFright()    {return this.#isFright}
 	get isIdle()      {return this.state.isIdle}
@@ -44,7 +44,7 @@ export class Ghost extends Actor {
 		this.bind({
 			FrightMode:  this.#setFrightMode,
 			Reverse:()=> this.#revSig  = true,
-			Runaway:()=> this.#runAway = 400/Game.interval,
+			Runaway:()=> this.#runaway = 400/Game.interval,
 		})
 		this.dir      = dir
 		this.idx      = idx
@@ -113,7 +113,7 @@ export class Ghost extends Actor {
 			: State.isPlaying && this.#behavior(this)
 	}
 	#behavior({state:s}=this) {
-		this.#runAway >= 0 && this.#runAway--
+		this.#runaway >= 0 && this.#runaway--
 		if (Timer.frozen && !this.isEscaping) return
 		if (s.isIdle)   return this.#idle(this)
 		if (s.isGoOut)  return this.#goOut(this)
@@ -201,7 +201,7 @@ export class Ghost extends Actor {
 		})
 		return this.isFright
 			? randChoice(dirs).dir
-			: dirs.sort(compareDist)[this.isRunAway? dirs.length-1:0].dir
+			: dirs.sort(compareDist)[this.isRunaway? dirs.length-1:0].dir
 	}
 	/**
 	 * @param {Direction} dir
