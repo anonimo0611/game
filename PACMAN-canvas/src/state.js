@@ -1,4 +1,6 @@
-/** @typedef {'Title'|'Attract'|'Start'|'Restart'|'NewLevel'|'Ready'|'Playing'|'Clear'|'FlashMaze'|'CoffBrk'|'Crashed'|'Losing'|'GameOver'|'Quit'} StateType */
+/**
+ * @typedef {'Title'|'Attract'|'Start'|'Restart'|'NewLevel'|'Ready'|'Playing'|'Clear'|'FlashMaze'|'CoffBrk'|'Crashed'|'Losing'|'GameOver'|'Quit'} StateType
+ */
 import _State from '../_lib/state.js'
 export const State = new class extends _State {
 	isTitle     = true
@@ -28,7 +30,7 @@ export const State = new class extends _State {
 	/**
 	 * @param {StateType} state
 	 * @param {{delay?:number,data?:any}} config
-	 */
+	*/
 	to(state, {delay=(state=='Quit' ? -1:0),data}={}) {
 		return super.to(state, {delay,data,fn:this.#callback})
 	}
