@@ -37,6 +37,11 @@ const byId = elementId=> document.getElementById(elementId)
  	([...document.querySelectorAll(selector)])
 
 /**
+ * @param {string} className
+ */const byClass = className=> /**@type {HTMLElement[]}*/
+	([...document.getElementsByClassName(className)])
+
+/**
  * @typedef {{dist:number, index:number}} DistObject
  * @type {(a:DistObject, b:DistObject)=> number}
  */const compareDist = (a,b)=>
