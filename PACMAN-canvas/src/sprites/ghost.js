@@ -169,7 +169,7 @@ export default class {
 		if (!angry) return
 		const {width:W}=GlowCvs, S=W*1.2
 		Ctx.save()
-		Ctx.globalAlpha = this.#resurrect?.alpha
+		Ctx.globalAlpha = this.#resurrect?.alpha ?? 1
 		Ctx.translate(x+size/4, y+size/4)
 		Ctx.drawImage(GlowCvs, 0,0, W,W, -S/2,-S/2, S,S)
 		Ctx.restore()

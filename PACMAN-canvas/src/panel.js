@@ -8,7 +8,7 @@ for (const btn of btns) {
 		btn.classList.toggle('opened')
 	})
 	addEventListener('pointerdown', e=> {
-		const tgt = /**@type {HTMLElement}*/(e.target)
+		const tgt = /**@type {Element}*/(e.target)
 		if (!btn.offsetParent
 		 || tgt == btn
 		 || tgt.closest?.(btn.value))

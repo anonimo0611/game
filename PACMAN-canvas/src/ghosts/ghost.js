@@ -17,6 +17,9 @@ export class Ghost extends Actor {
 	#isStarted = false
 	#isFright  = false
 
+	/**@type {readonly Direction[]}*/
+	TurnDirs = [U,L,D,R]
+
 	// This section is overridden in subclasses
 	get isAngry()     {return false}
 	get chaseStep()   {return GhsStep.Base}
@@ -27,6 +30,7 @@ export class Ghost extends Actor {
 	get spriteIdx()   {return GhsMgr.spriteIdx}
 	get maxAlpha()    {return Ctrl.showTargets ? 0.75:1}
 	get chaseTile()   {return this.chasePos.divInt(T)}
+	get isRunAway()   {return this.#runAway >= 0}
 	get isStarted()   {return this.#isStarted}
 	get isFright()    {return this.#isFright}
 	get isIdle()      {return this.state.isIdle}
@@ -182,7 +186,7 @@ export class Ghost extends Actor {
 	#setNextDir() {
 		if (this.#revSig) {
 			this.#revSig = false
-			this.orient  = Dir.opp.get(this.dir)
+			this.orient  = Dir.opp(this.dir)
 			return
 		}
 		if (this.dir == this.orient)
@@ -190,15 +194,14 @@ export class Ghost extends Actor {
 	}
 	#getNextDir(target=this.targetTile) {
 		const tile = this.getAdjTile(this.dir)
-		const dirs = [U,L,D,R].flatMap(
-			/** @param {Direction} dir */(dir,index)=> {
+		const dirs = this.TurnDirs.flatMap((dir,index)=> {
 			const  test = this.getAdjTile(dir,1,tile)
 			const  dist = Vec2.sqrMagnitude(test,target)
 			return this.#isAllowDir(dir,test)? [{index,dir,dist}]:[]
 		})
 		return this.isFright
 			? randChoice(dirs).dir
-			: dirs.sort(compareDist).at(this.#runAway<0 ? 0:-1).dir
+			: dirs.sort(compareDist)[this.isRunAway? dirs.length-1:0].dir
 	}
 	/**
 	 * @param {Direction} dir
@@ -207,7 +210,7 @@ export class Ghost extends Actor {
 	#isAllowDir(dir, tile) {
 		return !Maze.hasWall(tile)
 			&& !this.#notEnterTile(dir,tile)
-		    && Dir.opp.get(this.orient) != dir
+		    && Dir.opp(this.orient) != dir
 	}
 	/**
 	 * @param {Direction} dir

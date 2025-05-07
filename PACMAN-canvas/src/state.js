@@ -28,7 +28,7 @@ export const State = new class extends _State {
 	/**
 	 * @param {StateType} state
 	 * @param {{delay?:number,data?:any}} config
-	*/
+	 */
 	to(state, {delay=(state=='Quit' ? -1:0),data}={}) {
 		return super.to(state, {delay,data,fn:this.#callback})
 	}

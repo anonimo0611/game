@@ -10,7 +10,7 @@ export class Actor extends Common {
 	radius  = T
 	#fadeIn = /**@type {?FadeIn}*/(null)
 	#orient = /**@type {Direction}*/(L)
-	#movDir = this.#orient
+	#movDir = /**@type {Direction}*/(L)
 
 	constructor()   {super()}
 	get x()         {return this.#x}

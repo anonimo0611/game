@@ -61,7 +61,7 @@ export const Game = new class {
 	}
 	#setLevel(i=1) {
 		Game.#level = between(i, 1, 0xFF) && +i || 1
-		byId('level').textContent = `Level${Game.levelStr}`
+		$('#level').text(`Level${Game.levelStr}`)
 		$trigger('LevelChanged')
 	}
 	#confirm() {

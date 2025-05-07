@@ -43,7 +43,7 @@ export const Ctrl = new class {
 		return this
 	}
 	#saveData() {
-		const data = {}
+		const data = Object.create(null)
 		;/** @type {HTMLInputElement[]} */
 		(qSAll('custom-menu,input')).forEach(ctrl=> {
 			if (!ctrl.id) return
@@ -69,7 +69,7 @@ export const Ctrl = new class {
 		const data = JSON.parse(localStorage.anopacman || null) || {}
 		for (const [id,val] of entries(data)) {
 			if (!byId(id)) continue
-			switch(id.match(/[A-Z][a-z\d]+$/)[0]) {
+			switch(id.match(/[A-Z][a-z\d]+$/)?.[0]) {
 			case 'Rng':input(id).value  =val;break
 			case 'Chk':input(id).checked=val;break
 			case 'Menu':Menu[id].select(val);break

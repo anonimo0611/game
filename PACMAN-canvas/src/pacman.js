@@ -12,8 +12,7 @@ import {GhsMgr}  from './ghosts/_system.js'
 import Sprite    from './sprites/pacman.js'
 
 export const Player = new class extends Common {
-	/** @type {?PlayablePac} */
-	#player = null
+	/**@type {PlayablePac}*/#player
 	constructor() {
 		super()
 		$on({Title_Restart_NewLevel:
@@ -65,21 +64,21 @@ class PlayablePac extends Pacman {
 			: (eating? PacStep.Eating : PacStep.Base)
 		) * this.baseSpeed
 	}
-	/**
-	 * @param {KeyboardEvent} e
-	 * @param {?Direction} dir
-	 */
-	#ignoreKeys(e, dir) {
-		return Confirm.opened
+
+	/** @param {KeyboardEvent} e */
+	#allowKey(e) {
+		const dir = Dir.from(e, {wasd:true})
+		return (Confirm.opened
 			|| keyRepeat(e)
-			|| (dir == null)
-			|| (dir == this.dir && !this.#turning)
+			|| dir == null
+			|| dir == this.dir && !this.#turning
+		)? null : dir
 	}
+
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
-		const dir = Dir.from(e, {wasd:true})
-		if (this.#ignoreKeys(e, dir))
-			return
+		const dir = this.#allowKey(e)
+		if (!dir) return
 		if (this.#turning) {
 			this.#nextTurn = dir
 			return
@@ -95,7 +94,7 @@ class PlayablePac extends Pacman {
 		this.#preDir = dir
 		if (this.inBackwardOfTile) {
 			this.orient = dir
-			this.movDir = Dir.opp.get(this.dir)
+			this.movDir = Dir.opp(this.dir)
 		}
 	}
 	resetTimer() {
@@ -140,7 +139,7 @@ class PlayablePac extends Pacman {
 	}
 	#setCornering(denom=1) {
 		if (this.canTurn) {
-			this.orient = this.#preDir
+			this.orient = Dir.decide(this.#preDir)
 			this.#turning ||= true
 			this.setNextPos(denom,this.orient)
 		}
@@ -153,7 +152,7 @@ class PlayablePac extends Pacman {
 		}
 	}
 	#turnAround() {
-		Dir.opp.get(this.orient) == this.dir
+		Dir.opp(this.orient) == this.dir
 			&& (this.movDir = this.orient)
 	}
 	/** @param {number} tileIdx */

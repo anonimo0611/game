@@ -47,7 +47,7 @@ function strawberry(ctx=Ctx) {
 	ctx.stroke()
 
 	;/** @type {[x:number,y:number][]} */
-	([// white spots
+	([//white spots
 		[-4,-1],[-3,2],[-2, 0],[-1,4],[0, 2],
 		[ 0, 0],[ 2,4],[ 2,-1],[ 3,1],[4,-2]
 	]).forEach(s=> ctx.fillCircle(...s, .55, '#FFF'))
@@ -150,7 +150,7 @@ function melon(ctx=Ctx) {
 	ctx.stroke()
 
 	;/** @type {[x:number,y:number][]} */
-	([// white spots
+	([//white spots
 		[ 0.0,-2.3],[-2,-1.2],[-4, 0.8],[-3.6, 3.2],[1, 0],
 	  	[-1.3, 2.0],[-1, 4.5],[ 3, 2.5],[ 1.0, 4.5]
 	]).forEach(s=> ctx.fillCircle(...s, 0.5, '#FFF'))
@@ -262,7 +262,7 @@ export const [current,cache]= function() {
 	}
 	return [cvs,cache]
 }()
-{ // Create a sprite sheet for menu icons
+{// Create a sprite sheet for menu icons
 	const Menu = $byId('LevelMenu')
 	const size = +Menu.css('--scale') * T
 	const {ctx}= canvas2D(null, size*8, size)

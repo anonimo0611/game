@@ -12,15 +12,14 @@ import {RunTimer} from './_run_timer.js'
 
 const CHAR = 0, DEMO = 1
 const ModSymbol = Symbol()
-const StButton  = qS('button.attract')
 
 /** @type {?Attract} */
 let _attract = null
 
 export class Attract {
 	static {
-		$(RunTimer).on({begin:this.#begin})
-		$(StButton).on({click:this.#begin})
+		$(RunTimer)  .on({begin:this.#begin})
+		$('.DemoBtn').on({click:this.#begin})
 		$on({Attract:()=> _attract = new Attract(ModSymbol)})
 	}
 	static #begin() {
@@ -76,7 +75,7 @@ export class Attract {
 	drawGhost(idx, ghsIdx, pos) {
 		const
 		ghost = this.ghsList[idx][ghsIdx]
-		ghost.pos = pos
+		pos && (ghost.pos = pos)
 		ghost.sprite.draw(ghost)
 	}
 	draw() {
@@ -147,10 +146,7 @@ export class Attract {
 				fn:()=> GhsMgr.caughtAll && Attract.#begin()})
 		}
 	}
-	/** @param {Event} e */
-	quit(e) {
-		if (/**@type {Element}*/(e.target).tagName == 'BUTTON')
-			return
+	quit() {
 		_attract = null
 		State.to('Title')
 		$off('.Attract')

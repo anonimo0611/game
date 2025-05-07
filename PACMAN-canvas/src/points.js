@@ -34,7 +34,7 @@ class Points {
 		Timer.set(duration/speed, ()=> {
 			Timer.unfreeze()
 			PtsMap.delete(key)
-			isFun(fn) && fn()
+			fn?.()
 		})
 		State.isPlaying && Score.add(this.score)
 		PtsMap.set(key, this)

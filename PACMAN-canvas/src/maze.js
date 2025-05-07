@@ -80,10 +80,7 @@ class Tunnel {
 		if (dir == R) return (where == R)
 		return (where != null)
 	}
-	/**
-	 * @param {Position} centerPos
-	 * @returns {'Left'|'Right'|null}
-	 */
+	/** @param {Position} centerPos */
 	#where({x, y}) {
 		if (int(y/T) == 15 && x/T <= this.entranceL) return L
 		if (int(y/T) == 15 && x/T >= this.entranceR) return R
@@ -127,9 +124,9 @@ export const Maze = new class {
 	// These tiles(x-y) forbidden ghosts from entering upward
 	GhostNotEnterSet = new Set(['12-11','12-23','15-11','15-23'])
 
-	hasDot  = /**@type {(i:TileIdx) =>boolean}*/i=> DotSet.has(i)
-	hasPow  = /**@type {(i:TileIdx) =>boolean}*/i=> PowMap.has(i)
-	hasWall = /**@type {(p:Position)=>boolean}*/p=> WallSet.has(p.y*Cols+p.x)
+	hasDot  = (/**@type {TileIdx}*/ i)=> DotSet.has(i)
+	hasPow  = (/**@type {TileIdx}*/ i)=> PowMap.has(i)
+	hasWall = (/**@type {Position}*/p)=> WallSet.has(p.y*Cols+p.x)
 
 	/** @param {Ghost} ghost */
 	ghostExitTile = ({originalTargetTile:o, tilePos:t})=>
@@ -145,7 +142,9 @@ export const Maze = new class {
 	}
 	/**
 	 * @param {ExtendedContext2D} ctx
-	 * @param {Position}
+	 * @param {Position}  pos
+	 * @param {boolean}   isLarge
+	 * @param {?CtxStyle} color
 	 */
 	drawDot(ctx, {x,y}, isLarge=false, color=Color.Dot) {
 		ctx.fillCircle(x*T+T/2, y*T+T/2, T/(isLarge? 2:8), color)

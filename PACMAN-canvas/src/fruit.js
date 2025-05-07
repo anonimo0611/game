@@ -32,7 +32,7 @@ export const Fruit = new class {
 		return PointTable[Fruit.number()]
 	}
 	number(i=Game.level-1) {
-		return IndexTable.at(i >= IndexTable.length ? -1 : i)
+		return IndexTable.at(i >= IndexTable.length ? -1 : i) ?? 1
 	}
 	#reset() {
 		_fadeOut = null

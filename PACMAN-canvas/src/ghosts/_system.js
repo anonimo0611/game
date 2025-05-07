@@ -97,8 +97,8 @@ export const GhsMgr = new class {
 		Ghosts.forEach(g=> g.update())
 	}
 	drawTarget() {Target.draw(Ghosts)}
-	drawFront()  {Ghosts.forEach((g,i,a)=>!g.isFright && a.at(-1-i).draw())}
-	drawBehind() {Ghosts.forEach((g,i,a)=> g.isFright && a.at(-1-i).draw())}
+	drawFront()  {Ghosts.forEach((g,i,a)=>!g.isFright && a.at(-1-i)?.draw())}
+	drawBehind() {Ghosts.forEach((g,i,a)=> g.isFright && a.at(-1-i)?.draw())}
 }
 
 const AlternateBetweenModes = function() {

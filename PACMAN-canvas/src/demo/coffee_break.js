@@ -46,8 +46,8 @@ export class CoffBrk {
 		this.pacman.sprite.draw(this.pacman, scale)
 	}
 	drawAkabei(cfg={}) {
-		const {akabei:aka}=this,{aIdx,pos}=aka
-		aka.sprite.draw({aIdx, ...cfg, ...pos, ...aka})
+		const {akabei}=this,{aIdx,pos}=akabei
+		akabei.sprite.draw({aIdx, ...cfg, ...pos})
 	}
 	pause() {
 		Sound.allPaused = Ticker.pause()
@@ -62,8 +62,8 @@ export class CoffBrk {
 		State.to(State.last('Title') || 'NewLevel')
 	}
 }
-$('button.CB').on('click', function() {
-	State.to('CoffBrk', {data:+$(this).attr('value')})
+qSAll('button.CBBtn').forEach((/**@type {HTMLButtonElement}*/e)=> {
+	$(e).on('click', e=> State.to('CoffBrk',{data:+e.target.value}))
 })
 
 class Scene1 extends CoffBrk {
