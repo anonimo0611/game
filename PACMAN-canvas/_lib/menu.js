@@ -102,18 +102,15 @@ export class Slide extends Menu {
 		this.btnR = $('<span class="button r">').prependTo(root)[0]
 		this.btnL = $('<span class="button l">').prependTo(root)[0]
 		this.#setWidth(this.btnL.offsetWidth*2)
-		root.addEventListener('keydown',    e=> {this.#select(e,Dir.from(e))})
-		wrap.addEventListener('wheel',      e=> {this.#select(e,e.deltaY>0? L:R)})
+		root.addEventListener('keydown',    e=> {this.#select(Dir.from(e))})
+		wrap.addEventListener('wheel',      e=> {this.#select(e.deltaY>0? L:R)})
 		wrap.addEventListener('pointerdown',e=> {e.preventDefault(),root.focus()})
 		for (const btn of [this.btnL,this.btnR])
-			btn.addEventListener('click', e=> {this.#select(e,e.target==this.btnL?L:R)})
+			btn.addEventListener('click', e=> {this.#select(e.target==this.btnL?L:R)})
 		freeze(this).select(this.index)
 	}
-	/**
-	 * @param {Event} e
-	 * @param {?Direction} dir
-	 */
-	#select(e, dir) {
+	/** @param {?Direction} dir */
+	#select(dir) {
 		if (dir) {
 			dir = Dir.decide({Up:R,Down:L}[dir] || dir)
 			const val = this.index+Vec2[dir].x
