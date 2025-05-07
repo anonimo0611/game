@@ -32,8 +32,8 @@ const Ticker = freeze(new class {
 	/** @param {boolean} [force] */
 	pause(force) {return _paused=!!(isBool(force)? force : !_paused)}
 
-	stop()       {this.running && _ticker.stop();return this}
-	resetCount() {this.running && _ticker.resetCount()}
+	stop()       {this.running && _ticker?.stop();return this}
+	resetCount() {this.running && _ticker?.resetCount()}
 })
 
 class Tick {
@@ -42,7 +42,7 @@ class Tick {
 	 * @param {Function} [pausingFn]
 	 */
 	constructor(fn, pausingFn) {
-		Ticker.running && _ticker.stop()
+		Ticker.running && _ticker?.stop()
 		_ticker    = this
 		this.start = this.count = this.stopped = 0
 		this.loop  = this.loop.bind(this)

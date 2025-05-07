@@ -6,15 +6,15 @@
 	) return
 
 	class State {
-		scrL = target.scrollLeft
-		scrT = target.scrollTop
+		scrL = target?.scrollLeft
+		scrT = target?.scrollTop
 		/** @param {MouseEvent} e */
 		constructor(e) {
 			this.x = e.clientX
 			this.y = e.clientY
 		}
 	}
-	/** @type {?HTMLElement} */
+	/** @type {HTMLElement|object} */
 	let target = null
 
 	/** @type {Map<HTMLElement,State>} */
@@ -30,17 +30,18 @@
 		})
 	}
 	addEventListener('mousemove', e=> {
-		if (!StateMap.has(target)) return
-		const moveX = StateMap.get(target).x - e.clientX
-		const moveY = StateMap.get(target).y - e.clientY
+		const tgt = StateMap.get(target)
+		if (!tgt) return
+		const moveX = tgt.x - e.clientX
+		const moveY = tgt.y - e.clientY
 		if (moveX || moveY) {
 			e.stopPropagation()
-			target.scrollLeft = StateMap.get(target).scrL + moveX
-			target.scrollTop  = StateMap.get(target).scrT + moveY
+			target.scrollLeft = tgt.scrL + moveX
+			target.scrollTop  = tgt.scrT + moveY
 		}
 	})
 	addEventListener('mouseup', e=> {
-		if (!StateMap.has(target))
+		if (!StateMap.get(target))
 			return
 		e.stopPropagation()
 		StateMap.delete(target)
@@ -49,9 +50,5 @@
 })('html')
 
 /** @param {MouseEvent} e */
-const isNotDrag = e=> /**@type {HTMLElement}*/(e.target).closest('.noDrag')
-
-addEventListener(
-	'wheel', e=> isNotDrag(e) && e.preventDefault(),
-	{passive:false}
-)
+const isNotDrag = e=> /**@type {Element}*/(e.target).closest('.noDrag')
+addEventListener('wheel',e=>{isNotDrag(e) && e.preventDefault()}, {passive:false})

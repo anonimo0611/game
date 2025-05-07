@@ -3,7 +3,7 @@ import {GhsMgr}   from '../src/ghosts/_system.js'
 import {SoundMgr} from './loader.js'
 import {Speaker}  from './speaker.js'
 
-const speaker  = byId('speaker')
+const speaker  = /**@type {HTMLLabelElement}*/(byId('speaker'))
 const volRng   = /**@type {HTMLInputElement}*/(byId('volRng'))
 const volRg2   = /**@type {HTMLInputElement}*/(byId('volRg2'))
 const volRngs  = /**@type {HTMLInputElement[]}*/(qSAll('.volRng'))

@@ -1,4 +1,5 @@
-﻿const {cvs,ctx}= canvas2D('speakerCvs', +$('#volume').height())
+﻿const size = $('#volume').height() || T
+const {cvs,ctx}= canvas2D('speakerCvs', size)
 export const Speaker = new class {
 	/** @param {number} vol */
 	draw(vol) {
@@ -20,7 +21,7 @@ export const Speaker = new class {
 		if (between(vol, 8, 10)) return 3
 		if (between(vol, 3,  7)) return 2
 		if (between(vol, 1,  2)) return 1
-		if (vol == 0) return 0
+		return 0
 	}
 	#drawBody() {
 		ctx.newLinePath(

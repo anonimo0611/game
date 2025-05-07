@@ -1,11 +1,11 @@
-export const Dir = freeze({
-	enum: freeze({Up:U, Right:R, Down:D, Left:L}),
+const Opposite = freeze({Up:D, Right:L, Down:U, Left:R})
+const FromWASD = freeze({W:U, A:L, S:D, D:R})
 
-	/** @type {Map<Direction,Direction>} */
-	opp: new Map([[U,D],[R,L],[D,U],[L,R]]),
+export const Dir = freeze(new class {
+	Up=U; Right=R; Down=D; Left=L;
 
-	/** @type {Map<string,Direction>} */
-	wasdToDir: new Map([['W',U],['A',L],['S',D],['D',R]]),
+	/** @param {Direction} dir */
+	opp(dir) {return Opposite[dir]}
 
 	/**
 	 * @param {KeyboardEvent} e
@@ -13,8 +13,14 @@ export const Dir = freeze({
 	 */
 	from(e, {wasd=false}={}) {
 		if (isCombinationKey(e)) return null
-		const key = e.code.replace(/^(Arrow|Key)/,'')
-		return hasOwn(this.enum, key)? this.enum[key]
-			: (wasd && this.wasdToDir.get(key) || null)
-	},
+		const  key = e.code.replace(/^(Arrow|Key)/,'')
+		return Dir[key] || (wasd && FromWASD[key] || null)
+	}
+
+	/** @param {?Direction} dir */
+	decide(dir) {
+		if (dir === null)
+			throw TypeError("`Direction` is null value")
+		return dir
+	}
 })

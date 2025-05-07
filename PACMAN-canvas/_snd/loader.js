@@ -17,24 +17,24 @@ export class SoundMgr {
 					return
 				SoundMgr.#disabled = false
 				SoundIds.forEach(i=> Instance.set(i, SoundJS.createInstance(i)))
-				resolve()
+				resolve(true)
 			})
 		})
-		.then(()=> true).catch(()=> false)
+		.catch(()=> false)
 
 	set vol(vol)   {SoundJS.volume = isNum(vol)? vol/10 : this.vol}
 	get vol()      {return SoundJS.volume * 10}
 	get disabled() {return SoundMgr.#disabled}
 
 	/** @param {keyof SoundType} id */
-	isPlaying(id)  {return Instance.get(id)?.playState == SoundJS.PLAY_SUCCEEDED}
+	isPlaying(id)  {return Instance.get(id)?.playState === SoundJS.PLAY_SUCCEEDED}
 
 	/** @param {keyof SoundType} id */
-	isFinished(id) {return Instance.get(id)?.playState == SoundJS.PLAY_FINISHED}
+	isFinished(id) {return Instance.get(id)?.playState === SoundJS.PLAY_FINISHED}
 
 	/** @param {keyof SoundType} id */
 	#configMerge(id, cfg={}) {
-		const prefix = id.match(/^\D+/)?.[0] || null
+		const prefix = id.match(/^\D+/)?.[0] || ''
 		return {...ConfigMap.get(prefix) || ConfigMap.get('_normal'), ...cfg}
 	}
 
@@ -43,11 +43,12 @@ export class SoundMgr {
 	 * @param {{duration?:number,loop?:number}} cfg}
 	 */
 	play(id, cfg={}) {
-		if (this.disabled || !Instance.has(id))
+		const instance = Instance.get(id)
+		if (this.disabled || !instance)
 			return
-		if (isNum(cfg.duration))
-			Instance.get(id).duration = cfg.duration
-		Instance.get(id).play(this.#configMerge(id, cfg))
+		if (typeof cfg.duration == 'number')
+			instance.duration = cfg.duration
+		instance.play(this.#configMerge(id, cfg))
 	}
 
 	/** @param {...keyof SoundType} ids */
@@ -62,9 +63,10 @@ export class SoundMgr {
 	 * @param {...keyof SoundType} ids
 	 */
 	paused(bool, ...ids) {
-		ids.forEach(id=>
-			 Instance.has(id) &&
-			(Instance.get(id).paused=bool))
+		ids.forEach(id=> {
+			const instance = Instance.get(id)
+			instance && (instance.paused=bool)
+		})
 	}
 
 	/** @param {boolean} bool */

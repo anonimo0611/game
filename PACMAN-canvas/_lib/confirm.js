@@ -5,7 +5,7 @@ export const Confirm = new class {
 	get opened() {return this.#opened}
 
 	get #tempElm() {return /**@type {HTMLTemplateElement}*/(byId('confirm_t'))}
-	get #buttons() {return byId('confirm').querySelectorAll('button')}
+	get #buttons() {return byId('confirm')?.querySelectorAll('button')}
 
 	/** @param {MouseEvent} e */
 	#onMousedown = e=> {e.preventDefault()}
@@ -14,13 +14,13 @@ export const Confirm = new class {
 	#onKeydown(e) {
 		if (e.key == 'Escape') {
 			e.preventDefault()
-			Confirm.#buttons[Confirm.#cancelIdx]?.click()
+			Confirm.#buttons?.[Confirm.#cancelIdx].click()
 		}
 	}
 	/**
 	 * @param {string} content
-	 * @param {Function} fn1
-	 * @param {Function} fn2
+	 * @param {?Function} fn1
+	 * @param {?Function} fn2
 	 */
 	open(content, fn1,fn2, btnTxt1='Ok',btnTxt2='Cancel', cancelIdx=1) {
 		if (Confirm.#opened)
@@ -28,7 +28,7 @@ export const Confirm = new class {
 		Confirm.#cancelIdx = cancelIdx
 		document.body.append(Confirm.#tempElm.content.cloneNode(true))
 		const confirm = /**@type {HTMLDialogElement}*/(byId('confirm'))
-		Confirm.#buttons.forEach((btn, i, btns)=> {
+		Confirm.#buttons?.forEach((btn, i, btns)=> {
 			btn.textContent = [btnTxt1,btnTxt2][i]
 			btn.onclick   = _=> {$off(NS), Confirm.#remove([fn1,fn2][i])}
 			btn.onkeydown = e=> {Dir.from(e)==[R,L][i] && btns[1^i].focus()}
@@ -39,12 +39,12 @@ export const Confirm = new class {
 		confirm.showModal()
 		Confirm.#opened = true
 	}
-	/** @param {Function} [fn] */
+	/** @param {?Function} fn */
 	#remove(fn) {
 		$('#confirm').fadeOut(300,
 			function() {
 				this.remove()
-				isFun(fn) && fn()
+				fn?.()
 				Confirm.#opened = false
 			}
 		)

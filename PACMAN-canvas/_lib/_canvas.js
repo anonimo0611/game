@@ -11,19 +11,19 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 	get height() {return this.canvas.height}
 
 	/**
-	 * @param {number} w
-	 * @param {number} h
+	 * @param {number} [w]
+	 * @param {number} [h]
 	 */
 	resize(w, h=w) {
 		const cvs = this.canvas
-		isNum(w) && (cvs.width =w)
-		isNum(h) && (cvs.height=h)
+		typeof(w) == 'number' && w>=0 && (cvs.width =w)
+		typeof(h) == 'number' && h>=0 && (cvs.height=h)
 		return [cvs.width, cvs.height]
 	}
 
-	/** @param {CtxStyle} style */
-	clear(style=null) {
-		this.fillRect(0,0,this.width,this.height,style)
+	/** @param {CtxStyle} [style] */
+	clear(style) {
+		this.fillRect(0,0,this.width,this.height,style??null)
 	}
 
 	/**
@@ -89,13 +89,13 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		this.stroke()
 	}
 
-	/** @param {([x:number,y:number]|[])[]} c */
+	/** @param {[x:number,y:number][]} c */
 	newLinePath(...c) {
 		this.beginPath()
 		this.setLinePath(...c)
 	}
 
-	/** @param {([x:number,y:number]|[])[]} c */
+	/** @param {[x:number,y:number][]} c */
 	setLinePath(...c) {
 		c.forEach(([x,y], i)=> {
 			!i ? this.moveTo(x,y)
@@ -103,14 +103,14 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		})
 	}
 
-	/** @param {([x:number,y:number]|[])[]} c */
+	/** @param {[x:number,y:number][]} c */
 	addLinePath(...c) {
 		c.forEach(([x,y])=> this.lineTo(x,y))
 	}
 
 	/**
 	 * @param {CtxStyle} style
-	 * @param {([x:number,y:number]|[])[]} c
+	 * @param {[x:number,y:number][]} c
 	 */
 	fillPolygon(style, ...c) {
 		this.save()
@@ -177,7 +177,7 @@ class FadeOut {
  */
 const canvas2D = (arg, w, h=w)=> {
 	let cvs = document.createElement('canvas')
-	if (byId(arg) instanceof HTMLCanvasElement)
+	if (isStr(arg) && byId(arg) instanceof HTMLCanvasElement)
 		cvs = /**@type {HTMLCanvasElement}*/(byId(arg))
 	const ctx = new ExtendedContext2D(cvs)
 	;([w,h]= ctx.resize(w,h))

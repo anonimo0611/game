@@ -11,18 +11,18 @@ const GhsType = freeze({Normal:0,Mended:1,Exposed:2,Flashed:3})
 
 class AnimeData {
 	/** @param {{type?:number, subType?:number, pacman?:PacSprite, ghost?:Ghost}} params */
-	constructor({type,subType,pacman,ghost}={type:-1,subType:-1}) {
+	constructor({type,subType,pacman,ghost}={}) {
 		this.animIdx  = 0
 		this.flashIdx = 1
 		this.pacman   = pacman
 		this.ghost    = ghost
-		this.type     = type
-		this.subType  = subType
+		this.type     = type ?? -1
+		this.subType  = subType ?? -1
 		this.orient   = L
 	}
 }
 function getOrient() {
-	return $('input[name=orient]:checked').attr('value')
+	return $('input[name=orient]:checked').attr('value') ?? ''
 }
 (function() { // Preview
 	let   data = new AnimeData()
@@ -36,7 +36,7 @@ function getOrient() {
 		case Type.Pacman:
 			data = new AnimeData({type,subType,pacman:new PacSprite(PvC)})
 			if (setOrient(subType == PacType.Losing)) {
-				data.pacman.setLosing()
+				data.pacman?.setLosing()
 				Timer.set(2200, ()=> change(true), {key:'Losing'})
 			}
 			break
@@ -67,7 +67,7 @@ function getOrient() {
 		PvC.save()
 		PvC.translate(S*1.5/2, S/2)
 		PvC.scale(T/TileSize,  T/TileSize)
-		data.pacman.draw({orient:data.orient,radius:PacScale*TileSize})
+		data.pacman?.draw({orient:data.orient,radius:PacScale*TileSize})
 		PvC.restore()
 	}
 	function drawGhost() {
@@ -75,7 +75,7 @@ function getOrient() {
 		data.subType == GhsType.Exposed
 			? PvC.translate(S/4, S/4)
 			: PvC.translate(S/2*2/2, S/4)
-		data.ghost.sprite.draw({
+		data.ghost?.sprite.draw({
 			...ghost,
 			mainCtx:   PvC,
 			idx:       data.type-1,
@@ -114,6 +114,6 @@ function getOrient() {
 			$(radioSelector).eq((vx+idx+4) % 4).prop({checked:true}).trigger('change')
 		}
 	})
-	$(radioSelector).on('change', e=> {data.orient=e.target.getAttribute('value')})
+	$(radioSelector).on('change', e=> {data.orient=e.target.getAttribute('value') ?? ''})
 	Ticker.set(()=> {update();draw()})
 })()

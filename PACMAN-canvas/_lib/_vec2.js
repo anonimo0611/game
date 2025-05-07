@@ -19,7 +19,7 @@ class Vector2 {
 	constructor(v1,v2) {this.set(v1, v2)}
 
 	/**
-	 * @param {number|Position} v1
+	 * @param {number|Position} [v1]
 	 * @param {number} [v2]
 	 */
 	set(v1, v2) {
@@ -96,14 +96,14 @@ class Vector2 {
 	}
 	/**
 	 * @param {*} v1
-	 * @param {number} v2
+	 * @param {number} [v2]
 	 */
 	#validXY(v1,v2) {
 		v1 ??= 0
 		isNum(v1) && (v2 ??= v1)
 		const [x,y] = isObj(v1) ? [v1.x, v1.y] : [v1, v2]
-		if (!isNum(x)) throw TypeError(`${x} is an ilegal x value`)
-		if (!isNum(y)) throw TypeError(`${y} is an ilegal y valuer`)
+		if (!isNum(x)) throw TypeError(`\`${x}\` is an ilegal x value`)
+		if (!isNum(y)) throw TypeError(`\`${y}\` is an ilegal y valuer`)
 		return {x,y}
 	}
 }
