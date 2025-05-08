@@ -1,24 +1,34 @@
 'use strrict'
-/** @param {string} elementId */
-const $byId = elementId=> $('#'+elementId)
+
+/** @param {Function} fn */
+const $ready = fn=> $(document).on({DOMContentLoaded:fn}) && $(window)
 
 /** @param {Function} fn */
 const $load = fn=> $(window).on({load:fn})
 
-/** @param {string} ns */
+/** @param {string} elementId */
+const $byId = elementId=> $('#'+elementId)
+
+/**
+ * @param {string} ns
+ * @param   {Object.<string,Function>} cfg
+ */
 const $onNS = (ns,cfg)=> {
-	isObj(cfg) && entries(cfg).forEach(([ev,fn])=> {
-		ev = String(ev).trim().replace(/[_\s]+|$/g,`${ns}\x20`)
-		$off(ev).on(ev,fn)
+	entries(cfg).forEach(([ev,fn])=> {
+		ev = ev.trim().replace(/[_\s]+|$/g,`${ns} `)
+		$offon(ev,fn)
 	})
 	return $(window)
 }
 
 /** @param {string} event */
-const $off = event=> $(window).off(event)
+const $off = event=> $(window).off(event.trim().replace(/_/g,' '))
 
-/** @param {Function} fn */
-const $ready = fn=> $(document).on({DOMContentLoaded:fn})
+/**
+ * @param {string} event
+ * @param {Function} fn
+*/
+const $offon = (event,fn)=> $off(event) && $on(event, fn)
 
 /**
  * @param {string} event
