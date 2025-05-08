@@ -8,7 +8,7 @@ export default class {
 	/** @param {string} [state] */
 	init(state) {
 		keys(this)
-		.flatMap(k=> /^is[A-Z\d]*$/i.test(k) ? [[k,k.substring(2)]]:[])
+		.flatMap(k=> /^is[A-Z\d]*$/i.test(k) ? [[k,k.slice(2)]]:[])
 		.forEach(([k,s])=> {
 			this.#StateSet.add(s)
 			if (this[k] === true) this.#state ||= s
