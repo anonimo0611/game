@@ -11,9 +11,9 @@ U='Up', R='Right', D='Down', L='Left',
 	canvas2D('bg' , T*Cols, T*Rows),
 	canvas2D('inf', T*Cols, T*Rows),...
 	canvas2D('cvs', T*Cols, T*Rows).vals
-]
+],
 
-const Color = freeze(new class {
+Color = freeze(new class {
 	Grid      = '#F00'
 	Dot       = '#FFB8AE'
 	Wall      = '#55E'
