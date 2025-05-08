@@ -8,11 +8,11 @@ export default class {
 	/** @param {string} [state] */
 	init(state) {
 		keys(this)
-		.flatMap(k=> /^is[A-Z\d]*$/i.test(k) ? [k.substring(2)]:[])
-		.forEach(s=> {
+		.flatMap(k=> /^is[A-Z\d]*$/i.test(k) ? [[k,k.substring(2)]]:[])
+		.forEach(([k,s])=> {
 			this.#StateSet.add(s)
-			if (this[`is${s}`] === true) this.#state ||= s
-			defineProperty(this,s,{get(){return this.#state===s}})
+			if (this[k] === true) this.#state ||= s
+			defineProperty(this,k,{get(){return this.#state===s}})
 		})
 		state && this.#StateSet.has(state) && this.to(state)
 	}
