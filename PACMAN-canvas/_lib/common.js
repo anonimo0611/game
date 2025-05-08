@@ -5,11 +5,22 @@ export class Common {
 		this.#eventTarget = eventTarget ?? this
 	}
 	/**
-	 * @param {*} events}
+	 * @param {string|object} arg
 	 * @param {Function} [fn]
+
+	 * @overload
+	 * @param {string} arg
+	 * @param {Function} fn
+	 * @returns {this}
+
+	 * @overload
+	 * @param {Object.<string,Function>} arg
+	 * @returns {this}
 	 */
-	bind(events, fn) {
-		$(this.#eventTarget).on(events, fn)
+	bind(arg, fn) {
+		typeof(arg) == 'object'
+			? $(this.#eventTarget).on(arg)
+			: $(this.#eventTarget).on(arg, fn)
 		return this
 	}
 	/**
