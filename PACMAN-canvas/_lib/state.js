@@ -1,19 +1,20 @@
 export default class {
 	#state = ''
 	#last  = ''
-	#Enum  = Object.create(null)
+	#StateSet = /**@type {Set<string>}*/(new Set)
+
 	get current() {return this.#state}
 
 	/** @param {string} [state] */
 	init(state) {
-		entries(this).forEach(([key,val])=> {
-			const state = key.match(/^is([A-Z][a-zA-Z\d]*)$/)?.[1]
-			if (!state) return; this.#Enum[state] = state
-			if (this.#state === '' && val === true) this.#state = state
-			defineProperty(this, key, {get(){return this.#state === state}})
+		keys(this)
+		.flatMap(k=> /^is[A-Z\d]*$/i.test(k) ? [k.substring(2)]:[])
+		.forEach(s=> {
+			this.#StateSet.add(s)
+			if (this[`is${s}`] === true) this.#state ||= s
+			defineProperty(this,s,{get(){return this.#state===s}})
 		})
-		freeze(this.#Enum)
-		state && hasOwn(this.#Enum, state) && this.to(state)
+		state && this.#StateSet.has(state) && this.to(state)
 	}
 
 	/**
@@ -21,13 +22,15 @@ export default class {
 	 * @param {{data?:any,delay?:number,fn?:Function}} config
 	 */
 	to(state, {data,delay=-1,fn}={}) {
-		if (!hasOwn(this.#Enum, state))
+		if (!this.#StateSet.has(state))
 			throw ReferenceError(`State \`${state}\` is not defined`)
+
 		if (delay >= 0) {
 			Timer.set(delay, ()=> this.to(state,{delay:-1,data}))
 			return this
 		}
-		;[this.#last,this.#state]=[this.current,state]
+		this.#state = state
+		this.#last  = this.current
 		fn?.(state,data)
 		return this
 	}
