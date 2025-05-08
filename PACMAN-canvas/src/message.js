@@ -19,8 +19,8 @@ export const Message = new class {
 		ctx.restore()
 	}
 	#drawPausedText() {
-		if (!Confirm.opened && Ticker.paused)
-			(Ticker.pausedCount & 32) == 0
+		(!Confirm.opened && Ticker.paused)
+			&& (Ticker.pausedCount & 32) == 0
 			&& drawText(11, 19, Color.Message3, 'PAUSED')
 	}
 	draw() {
