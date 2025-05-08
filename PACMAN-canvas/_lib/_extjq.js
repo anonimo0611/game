@@ -13,12 +13,36 @@ const $onNS = (ns,cfg)=> {
 	})
 	return $(window)
 }
-const [$ready,$on,$off,$trigger]=(()=> {
+
+/** @param {string} event */
+const $off = event=> $(window).off(event)
+
+/** @param {Function} fn */
+const $ready = fn=> $(document).on({DOMContentLoaded:fn})
+
+/**
+ * @param {string} event
+ * @param {*} [data]
+ */
+const $trigger = (event,data)=> $(window).trigger(event, data)
+
+/**
+ * @param {string}   arg
+ * @param {Function} [fn]
+
+ * @overload
+ * @param   {string} arg
+ * @param   {Function} fn
+ * @returns {JQuery<window>}
+
+ * @overload
+ * @param   {Object.<string,Function>} arg
+ * @returns {JQuery<window>}
+ */
+const $on = (arg, fn)=> {
 	const rep = arg=> isStr(arg)?arg.trim().replace(/_/g,' '):arg
-	return['ready','on','off','trigger'].map(f=> (...a)=>{
-		!isObj(a[0])
-			? $(this)[f](rep(a[0]),...a.slice(1))
-			: entries(a[0]).forEach(([k,v])=>$(this)[f](rep(k),v))
-		return $(this)
-	})
-})()
+	typeof(arg) != 'object'
+		? $(this).on(rep(arg),fn)
+		: entries(arg).forEach(([ev,fn])=>$(this).on(rep(ev),fn))
+	return $(this)
+}
