@@ -137,17 +137,12 @@ const $offon = (event,fn)=> $off(event) && $on(event, fn)
 const $trigger = (event,data)=> $(window).trigger(event, data)
 
 /**
- * @param {string}   arg
+ * @param {string|object} arg
  * @param {Function} [fn]
-
- * @overload
- * @param   {string} arg
- * @param   {Function} fn
- * @returns {JQuery<window>}
-
- * @overload
- * @param   {Object.<string,Function>} arg
- * @returns {JQuery<window>}
+ * @type {{
+ *    (arg:string, fn:Function):  JQuery<typeof globalThis>
+ *    (arg:{[x:string]:Function}):JQuery<typeof globalThis>
+ * }}
  */
 const $on = (arg, fn)=> {
 	const rep = arg=> isStr(arg)?arg.trim().replace(/_/g,' '):arg
