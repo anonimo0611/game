@@ -16,11 +16,4 @@ export const Dir = freeze(new class {
 		const  key = e.code.replace(/^(Arrow|Key)/,'')
 		return Dir[key] || (wasd && FromWASD[key] || null)
 	}
-
-	/** @param {?Direction} dir */
-	decide(dir) {
-		if (dir === null)
-			throw TypeError("In this context, the direction must not be `null`")
-		return dir
-	}
 })
