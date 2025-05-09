@@ -51,7 +51,7 @@ const byId = elementId=> document.getElementById(elementId)
   * @template T
   * @param {T|null|undefined} arg
   * @returns {T}
-  */const getValue = arg=> {
+  */const asNotNull = arg=> {
 	if (!arg) throw TypeError('Does not have a specific value')
 	return arg
   }
