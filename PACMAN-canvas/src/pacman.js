@@ -49,7 +49,7 @@ class PlayablePac extends Pacman {
 	}
 	get canTurn() {
 		return this.inForwardOfTile
-			&& this.#preDir
+			&& this.#preDir != null
 			&& this.collidedWithWall(this.#preDir) === false
 	}
 	get baseSpeed() {
@@ -138,8 +138,8 @@ class PlayablePac extends Pacman {
 	}
 	#setCornering(denom=1) {
 		if (this.canTurn) {
-			this.orient = Dir.decide(this.#preDir)
 			this.#turning ||= true
+			this.orient = Dir.decide(this.#preDir)
 			this.setNextPos(denom,this.orient)
 		}
 	}
