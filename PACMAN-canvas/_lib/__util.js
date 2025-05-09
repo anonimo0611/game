@@ -48,14 +48,13 @@ const byId = elementId=> document.getElementById(elementId)
 	(a.dist == b.dist)? (a.index-b.index) : (a.dist-b.dist)
 
  /**
- * @template T
- * @param {T|null|undefined} arg
- * @returns {T}
- */
-const getValue = arg=> {
+  * @template T
+  * @param {T|null|undefined} arg
+  * @returns {T}
+  */const getValue = arg=> {
 	if (!arg) throw TypeError('Does not have a specific value')
 	return arg
-}
+  }
 
 /**
  * @param {number} x
