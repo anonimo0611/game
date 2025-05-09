@@ -139,7 +139,7 @@ class PlayablePac extends Pacman {
 	#setCornering(denom=1) {
 		if (this.canTurn) {
 			this.#turning ||= true
-			this.orient = Dir.decide(this.#preDir)
+			this.orient = getValue(this.#preDir)
 			this.setNextPos(denom,this.orient)
 		}
 	}

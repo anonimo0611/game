@@ -8,7 +8,6 @@ export const Lives = function() {
 	let _left = 0
 	function currentValue() {
 		const Max = Ctrl.livesMax-1
-		console.log(State.current)
 		return +{
 			Title: Max,
 			Start: Max+1,
