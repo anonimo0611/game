@@ -8,10 +8,11 @@ export const Lives = function() {
 	let _left = 0
 	function currentValue() {
 		const Max = Ctrl.livesMax-1
+		console.log(State.current)
 		return +{
 			Title: Max,
 			Start: Max+1,
-			Ready: State.last('Start')? Max:_left,
+			Ready: State.last('Start')? Max:--_left,
 			Restart: _left-1,
 		}[State.current]
 	}
