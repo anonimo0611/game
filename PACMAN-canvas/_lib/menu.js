@@ -111,8 +111,8 @@ export class Slide extends Menu {
 	}
 	/** @param {?Direction} dir */
 	#select(dir) {
+		dir = {Up:R,Down:L}[dir] || dir
 		if (dir) {
-			dir = Dir.decide({Up:R,Down:L}[dir] || dir)
 			const val = this.index+Vec2[dir].x
 			between(val, 0, this.size-1) && this.select(val)
 		}
