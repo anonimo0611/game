@@ -20,7 +20,7 @@ export const Dir = freeze(new class {
 	/** @param {?Direction} dir */
 	decide(dir) {
 		if (dir === null)
-			throw TypeError("`Direction` is null value")
+			throw TypeError("In this context, the direction must not be `null`")
 		return dir
 	}
 })
