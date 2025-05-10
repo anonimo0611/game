@@ -24,22 +24,24 @@ const releaseDelay = ghostIdx=> ({ // For always chase mode (ms)
 
 /** @typedef {'Idle'|'GoOut'|'Walk'|'Bitten'|'Escape'|'Return'} StateType */
 export class GhostState extends _State {
-	isIdle    = true
-	isGoOut   = false
-	isWalk    = false
-	isBitten  = false
-	isEscape  = false
-	isReturn  = false
+	isIdle   = true
+	isGoOut  = false
+	isWalk   = false
+	isBitten = false
+	isEscape = false
+	isReturn = false
 
-	get current()    {return /**@type {StateType}*/(super.current)}
-	get isEscaping() {return this.isEscape || this.isReturn}
-
+	get isEscaping() {
+		return this.isEscape || this.isReturn
+	}
+	get current() {
+		return /**@type {StateType}*/(super.current)
+	}
 	/** @param {Ghost} Ghost */
 	constructor({tilePos}) {
 		super()
 		this.init(Maze.House.isIn(tilePos)? 'Idle':'Walk')
 	}
-
 	/** @param {StateType} state */
 	to(state) {return super.to(state)}
 }
@@ -158,7 +160,7 @@ export const DotCounter = function() {
 	 * @param {(deactivateGlobal?:boolean)=> boolean} fn Release ghost
 	 */
 	function release(idx, fn) {
-		const timeOut = (Game.level <= 4 ? 4e3:3e3)
+		const timeOut = Game.level <= 4 ? 4e3 : 3e3
 		const gLimit  = limitTable[idx-1][0] // global
 		const pLimit  = limitTable[idx-1][min(Game.level,3)] // personal
 		;(Player.i.timeNotEaten >= timeOut)? fn()
@@ -183,7 +185,7 @@ export const DotCounter = function() {
 
 const Elroy = function() {
 	let _part = 0
-	const speedRateTbl  = freeze([1, 1.02, 1.05, 1.1])
+	const speedRatesTbl = freeze([1, 1.02, 1.05, 1.1])
 	const dotsLeftP2Tbl = freeze([20,20,30,40,50,60,70,70,80,90,100,110,120])
 	function angry() {
 		return State.isPlaying
@@ -192,8 +194,8 @@ const Elroy = function() {
 			&& Ghosts[GhsType.Guzuta]?.isStarted === true
 	}
 	function onDotEaten() {
-		const elroyP2 = dotsLeftP2Tbl[Game.clampedLv-1]
-		if (Maze.dotsLeft <= elroyP2*([15,10,50][_part]/10)) {
+		const P2Left = dotsLeftP2Tbl[Game.clampedLv-1]
+		if (Maze.dotsLeft <= P2Left*([15,10,50][_part]/10)) {
 			++_part
 			Sound.playSiren()
 		}
@@ -202,43 +204,39 @@ const Elroy = function() {
 	$ready(()=> Player.bind({DotEaten:onDotEaten}))
 	return {
 		get part()  {return _part},
-		get step()  {return GhsStep.Base * speedRateTbl[_part]},
+		get step()  {return GhsStep.Base * speedRatesTbl[_part]},
 		get angry() {return angry()},
 	}
 }()
 
 class FrightMode {
+	static {$(GhsMgr).on('Init', ()=> this.#instance = null)}
 	static #instance = /**@type {?FrightMode}*/(null)
 	static #timeList = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	static get instance() {return this.#instance}
 	static get numOfSec() {return this.#timeList[Game.clampedLv-1]}
-	static {$(GhsMgr).on('Init',()=> this.#instance = null)}
-	#tCounter  = 0
-	#fCounter  = 0
-	#flashIdx  = 1
-	#caughtCnt = 0
+	#tCounter=0; #fCounter=0; #flashIdx=1; #caughtCnt=0;
 	get score()     {return 100 * (1 << this.#caughtCnt)}
 	get spriteIdx() {return this.#fCounter? this.#flashIdx^1:0}
 	get caughtAll() {return this.#caughtCnt == GhsType.Max}
 	constructor() {
 		FrightMode.#instance = this.#toggle(true)
-		$(Ghosts).on('Cought',()=> ++this.#caughtCnt)
+		$(Ghosts).on('Cought', ()=> ++this.#caughtCnt)
 	}
 	/** @param {boolean} bool */
 	#toggle(bool) {
 		FrightMode.#instance = null
-		$(Ghosts).off('Cought').trigger('FrightMode',bool)
+		$(Ghosts).off('Cought').trigger('FrightMode', bool)
 		Sound.toggleFrightMode(bool)
 		return this
 	}
 	update() {
-		if (!State.isPlaying || Timer.frozen)
-			return
+		if (!State.isPlaying || Timer.frozen) return
 		const {numOfSec}= FrightMode
 		const et = (Game.interval*this.#tCounter++)/1000
 		const fi = (numOfSec == 1 ? 12:14)/Game.speedRate|0
 		this.#flashIdx ^= +!(this.#fCounter % fi)
-		;(et>=numOfSec - 2) && this.#fCounter++
-		;(et>=numOfSec || this.caughtAll) && this.#toggle(false)
+		;(et >= numOfSec-2) && this.#fCounter++
+		;(et >= numOfSec || this.caughtAll) && this.#toggle(false)
 	}
 }
