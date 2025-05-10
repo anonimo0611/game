@@ -50,9 +50,9 @@ export const GhsMgr = new class {
 	static {$ready(this.setup)}
 	static setup() {
 		$on({
-			Playing: GhsMgr.#onPlaying,
-			Clear:   GhsMgr.#onLevelEnds,
-			Crashed: GhsMgr.#onLevelEnds,
+			Playing:GhsMgr.#onPlaying,
+			Clear:  GhsMgr.#onLevelEnds,
+			Crashed:GhsMgr.#onLevelEnds,
 		})
 		$(GhsMgr).on({Init:GhsMgr.#initialize})
 	}
@@ -81,8 +81,8 @@ export const GhsMgr = new class {
 	}
 	#onPlaying() {
 		Sound.playSiren()
-		Ctrl.isChaseMode && Timer.sequence(
-			...Ghosts.slice(1).map(/**@returns {[number,Function]}*/
+		Ctrl.isChaseMode && Timer.sequence(...
+			Ghosts.slice(1).map(/**@returns {[number,Function]}*/
 				(g,i)=> [releaseDelay(i), ()=> g.release()]))
 	}
 	setFrightMode() {
@@ -185,8 +185,8 @@ export const DotCounter = function() {
 
 const Elroy = function() {
 	let _part = 0
-	const speedRatesTbl = freeze([1, 1.02, 1.05, 1.1])
-	const dotsLeftP2Tbl = freeze([20,20,30,40,50,60,70,70,80,90,100,110,120])
+	const spdRatesTable = freeze([1, 1.02, 1.05, 1.1])
+	const dotsLeftTable = freeze([20,20,30,40,50,60,70,70,80,90,100,110,120])
 	function angry() {
 		return State.isPlaying
 			&& _part > 1
@@ -194,8 +194,8 @@ const Elroy = function() {
 			&& Ghosts[GhsType.Guzuta]?.isStarted === true
 	}
 	function onDotEaten() {
-		const P2Left = dotsLeftP2Tbl[Game.clampedLv-1]
-		if (Maze.dotsLeft <= P2Left*([15,10,50][_part]/10)) {
+		const Left = dotsLeftTable[Game.clampedLv-1]
+		if (Maze.dotsLeft <= Left*([1.5, 1.0, 0.5][_part])) {
 			++_part
 			Sound.playSiren()
 		}
@@ -204,7 +204,7 @@ const Elroy = function() {
 	$ready(()=> Player.bind({DotEaten:onDotEaten}))
 	return {
 		get part()  {return _part},
-		get step()  {return GhsStep.Base * speedRatesTbl[_part]},
+		get step()  {return GhsStep.Base * spdRatesTable[_part]},
 		get angry() {return angry()},
 	}
 }()
