@@ -7,6 +7,8 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		try {super()} catch(e){}
 		return Object.setPrototypeOf(cvs.getContext('2d',opts), new.target.prototype)
 	}
+	/** @type {[x:number, y:number]} */
+	get size()   {return [this.width, this.height]}
 	get width()  {return this.canvas.width}
 	get height() {return this.canvas.height}
 
@@ -18,7 +20,7 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		const cvs = this.canvas
 		typeof(w) == 'number' && w>=0 && (cvs.width =w)
 		typeof(h) == 'number' && h>=0 && (cvs.height=h)
-		return [cvs.width, cvs.height]
+		return this
 	}
 
 	/** @param {CtxStyle} [style] */
@@ -128,7 +130,7 @@ class FadeIn {
 	#duration = 0
 	get alpha()   {return this.#alpha}
 	get working() {return this.#alpha < 1}
-	constructor(ms=1000, delay=0) {
+	constructor(ms=300, delay=0) {
 		this.#duration = ms
 		this.#delay = delay
 	}
@@ -152,7 +154,7 @@ class FadeOut {
 	#duration = 0
 	get alpha()   {return this.#alpha}
 	get working() {return this.#alpha > 0}
-	constructor(ms=1000, delay=0) {
+	constructor(ms=300, delay=0) {
 		this.#duration = ms
 		this.#delay = delay
 	}
@@ -171,17 +173,19 @@ class FadeOut {
 }
 
 /**
- * @param {string|null} arg canvas element id
- * @param {number} [w] canvas width
- * @param {number} [h] canvas height
+ * @param {string|null} id ID of a canvas that exists in the document; if null, the canvas is created
+ * @param {number} [w] width; The default value uses the width attribute
+ * @param {number} [h] height; The default is the same as `w`, but if both `w` and `h` are undefined, use the heigt attribute
  */
-const canvas2D = (arg, w, h=w)=> {
-	let cvs = document.createElement('canvas')
-	if (arg && byId(arg) instanceof HTMLCanvasElement)
-		cvs = /**@type {HTMLCanvasElement}*/(byId(arg))
-	const ctx = new ExtendedContext2D(cvs)
-	;([w,h]= ctx.resize(w,h))
-	/** @type {[cvs,ctx,w:number,h:number]} */
-	const vals = [cvs,ctx,w,h]
-	return {cvs,ctx,w,h,vals}
+const canvas2D = (id, w, h=w)=> {
+	const cvs = (id && byId(id) instanceof HTMLCanvasElement)
+		? /**@type {HTMLCanvasElement}*/(byId(id))
+		: document.createElement('canvas'),
+	ctx = new ExtendedContext2D(cvs).resize(w,h)
+	{
+		const [w,h]=ctx.size
+		/** @type {[cvs,ctx,w:number,h:number]} */
+		const vals = [cvs,ctx,w,h]
+		return {cvs,ctx,w,h,vals}
+	}
 }
