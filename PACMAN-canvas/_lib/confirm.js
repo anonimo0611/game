@@ -12,11 +12,17 @@ export const Confirm = new class {
 
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
+		const btns = asNotNull(Confirm.#buttons)
 		if (e.key == 'Escape') {
 			e.preventDefault()
-			Confirm.#buttons?.[Confirm.#cancelIdx].click()
+			return btns[Confirm.#cancelIdx].click()
+		}
+		if (e.target instanceof HTMLButtonElement) {
+			const i = $(e.target).index()
+			Dir.from(e) == ['Right','Left'][i] && btns[1^i].focus()
 		}
 	}
+
 	/**
 	 * @param {string} content
 	 * @param {?Function} fn1
@@ -28,10 +34,9 @@ export const Confirm = new class {
 		Confirm.#cancelIdx = cancelIdx
 		document.body.append(Confirm.#tempElm.content.cloneNode(true))
 		const confirm = /**@type {HTMLDialogElement}*/(byId('confirm'))
-		Confirm.#buttons?.forEach((btn, i, btns)=> {
+		Confirm.#buttons?.forEach((btn, i)=> {
 			btn.textContent = [btnTxt1,btnTxt2][i]
-			btn.onclick   = _=> {$off(NS), Confirm.#remove([fn1,fn2][i])}
-			btn.onkeydown = e=> {Dir.from(e)==['Right','Left'][i] && btns[1^i].focus()}
+			btn.onclick = ()=> {$off(NS), Confirm.#remove([fn1,fn2][i])}
 		})
 		$(confirm).find('.content').text(content).end().fadeIn(300)
 		$onNS(NS,{keydown:  Confirm.#onKeydown})
