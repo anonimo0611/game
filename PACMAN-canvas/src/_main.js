@@ -45,6 +45,7 @@ export const Game = new class {
  	}
 	#level = 1
 	#restarted = false
+
 	get level()     {return Game.#level}
 	get levelStr()  {return Game.#level.toString().padStart(2,'0')}
 	get restarted() {return Game.#restarted}
@@ -190,5 +191,6 @@ export const Game = new class {
 	#loop() {
 		Game.#update()
 		Game.#draw()
+
 	}
 };$load(()=> document.body.dataset.loaded = 'true')

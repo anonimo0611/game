@@ -113,6 +113,6 @@ export const Ctrl = new class {
 		})
 		$('input')    .on({input:Ctrl.#update})
 		$('#defBtn')  .on({click:Ctrl.#setDefault})
-		$('#startBtn').on({click:()=> State.to('Start')})
+		$('#startBtn').on({keydown:()=> State.to('Start')})
 	}
 }, powChk = input('powChk')

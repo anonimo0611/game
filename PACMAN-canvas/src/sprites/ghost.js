@@ -153,7 +153,7 @@ export default class {
 	#frightFace(spriteIdx=0) {
 		const {ctx}= this
 		ctx.fillStyle = ctx.strokeStyle = Color.FrightFaceTable[spriteIdx]
-		{ // Eyes
+		{// Eyes
 			const size = 11
 			ctx.fillRect(-15-size/2, -11-size/2, size, size)
 			ctx.fillRect(+15-size/2, -11-size/2, size, size)
