@@ -91,14 +91,14 @@ class Tunnel {
 export const Maze = new class {
 	static {$ready(this.setup)}
 	static setup() {
-		for (const [i,c] of Maze.Map.entries())
+		for (const [i,c] of MapArr.entries())
 			!DotChip.has(c) && c.trim() && WallSet.add(i)
 		$on({Title_NewLevel: Maze.#reset})
 		$(powChk).on({change:Maze.#reset})
 	}
 	/** @param {Event} e */
 	#reset(e) {
-		for (const [i,c] of Maze.Map.entries())
+		for (const [i,c] of MapArr.entries())
 			DotChip.has(c) && Maze.#setDot(i,c)
 		e.target != powChk && Maze.#drawDoor()
 	}
