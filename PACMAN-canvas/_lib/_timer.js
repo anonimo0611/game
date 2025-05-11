@@ -46,8 +46,8 @@ class Tick {
 		_ticker    = this
 		this.start = this.count = this.stopped = 0
 		this.loop  = this.loop.bind(this)
-		this.fn    = isFun(fn)? fn : null
-		this.pFn   = isFun(pausingFn)? pausingFn : null
+		this.fn    = fn
+		this.pFn   = pausingFn
 		requestAnimationFrame(this.loop)
 	}
 	/** @param {number} ts */
@@ -72,7 +72,7 @@ class Tick {
 	}
 	/**
 	 * @param {TimerData} t
-	 * @param {*} key
+	 * @param {unknown} key
 	 */
 	timer(t, key) {
 		if (Timer.frozen && !t.ignoreFrozen)
@@ -103,7 +103,7 @@ const Timer = freeze(new class {
 	/**
 	 * @param {number}   timeout
 	 * @param {Function} handler
-	 * @param {{key?:any,ignoreFrozen?:boolean}} config
+	 * @param {{key?:unknown,ignoreFrozen?:boolean}} config
 	 */
 	set(timeout, handler, {key,ignoreFrozen=Timer.frozen}={}) {
 		!Ticker.running && Ticker.set()

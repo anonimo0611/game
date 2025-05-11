@@ -3,28 +3,19 @@ const {isArray}= Array
 const {defineProperty,entries,freeze,hasOwn,keys,values}= Object
 const {abs,ceil,floor,max,min,PI,random,round,sqrt,trunc:int}= Math
 
-const isBool = arg=> arg === true || arg === false
-const isStr  = arg=> typeof(arg) == 'string'
-const isNum  = arg=> typeof(arg) == 'number' && !isNaN(arg)
-const isObj  = arg=> typeof(arg) == 'object' && arg !== null && !isArray(arg)
-const isFun  = arg=> typeof(arg) == 'function'
+const dRoot  = document.getElementsByTagName('html')[0]
+const byId   = (/**@type {string} */elementId)=> document.getElementById(elementId)
+const isObj  = (/**@type {unknown}*/arg)=> typeof(arg)=='object' && !!arg && !isArray(arg)
+const isBool = (/**@type {unknown}*/arg)=> arg === true || arg === false
 
-const isKeyboardEvent = e=>
-	isObj(e) && (e.originalEvent || e) instanceof KeyboardEvent
+/** @param {KeyboardEvent|JQuery.KeyDownEvent} e */
+const keyRepeat = e=> !!(e instanceof KeyboardEvent ? e : e.originalEvent)?.repeat
 
-const keyRepeat = e=>
-	isKeyboardEvent(e) && !!(e.originalEvent || e).repeat
+/** @param {KeyboardEvent} e */
+const isEnterKey = e=> /^(\x20|Enter)$/.test(e.key)
 
-const isEnterKey = e=>
-	isKeyboardEvent(e) && /^(\x20|Enter)$/.test(e.key)
-
-const isCombinationKey = e=>
-	isKeyboardEvent(e) && !!(e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
-
-const dRoot = document.getElementsByTagName('html')[0]
-
-/** @param {string} elementId */
-const byId = elementId=> document.getElementById(elementId)
+/** @param {KeyboardEvent} e */
+const isCombinationKey = e=> !!(e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
 /**
  * @param {string} selector
@@ -154,9 +145,9 @@ const $trigger = (event,data)=> $(window).trigger(event, data)
  * }}
  */
 const $on = (arg, fn)=> {
-	const rep = arg=> isStr(arg)?arg.trim().replace(/_/g,' '):arg
+	const rep = (/**@type {string}*/str)=> str.trim().replace(/_/g,' ')
 	typeof(arg) != 'object'
-		? $(this).on(rep(arg),fn)
+		? $(this).on({[rep(arg)]:fn})
 		: entries(arg).forEach(([ev,fn])=>$(this).on(rep(ev),fn))
 	return $(this)
 }

@@ -1,20 +1,20 @@
 export class Common {
 	#eventTarget
-	/** @param {{eventTarget?:any}} [cfg] */
+	/** @param {{eventTarget?:unknown}} [cfg] */
 	constructor({eventTarget}={}) {
 		this.#eventTarget = eventTarget ?? this
 	}
 	/**
-	 * @param {string|object} arg
+ 	 * @param {string|object} arg
 	 * @param {Function} [fn]
 
 	 * @overload
-	 * @param {string} arg
-	 * @param {Function} fn
+	 * @param   {string} arg
+	 * @param   {Function} fn
 	 * @returns {this}
 
 	 * @overload
-	 * @param {Object.<string,Function>} arg
+	 * @param   {Object.<string,Function>} arg
 	 * @returns {this}
 	 */
 	bind(arg, fn) {

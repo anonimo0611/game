@@ -100,10 +100,10 @@ class Vector2 {
 	 */
 	#validXY(v1,v2) {
 		v1 ??= 0
-		isNum(v1) && (v2 ??= v1)
+		Number.isFinite(v1) && (v2 ??= v1)
 		const [x,y] = isObj(v1) ? [v1.x, v1.y] : [v1, v2]
-		if (!isNum(x)) throw TypeError(`\`${x}\` is an ilegal x value`)
-		if (!isNum(y)) throw TypeError(`\`${y}\` is an ilegal y valuer`)
+		if (!Number.isFinite(x)) throw TypeError(`\`${x}\` is an ilegal x value`)
+		if (!Number.isFinite(y)) throw TypeError(`\`${y}\` is an ilegal y valuer`)
 		return {x,y}
 	}
 }
@@ -127,7 +127,7 @@ for (const [k,v] of entries(Vec2)) {
 }
 /**
  * @param {Position} v
- */Vec2.isValid = v=> isObj(v) && isNum(v.x) && isNum(v.y)
+ */Vec2.isValid = v=> isObj(v) && Number.isFinite(v.x) && Number.isFinite(v.y)
 
 /**
  * @param {Position} v1

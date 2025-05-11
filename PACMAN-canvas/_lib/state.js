@@ -19,7 +19,7 @@ export default class {
 
 	/**
 	 * @param {string} state
-	 * @param {{data?:any,delay?:number,fn?:Function}} config
+	 * @param {{data?:unknown,delay?:number,fn?:Function}} config
 	 */
 	to(state, {data,delay=-1,fn}={}) {
 		if (!this.#StateSet.has(state))

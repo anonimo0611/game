@@ -23,7 +23,7 @@ export class SoundMgr {
 		})
 		.catch(()=> false)
 
-	set vol(vol)   {SoundJS.volume = isNum(vol)? vol/10 : this.vol}
+	set vol(vol)   {SoundJS.volume = Number.isFinite(vol)? vol/10 : this.vol}
 	get vol()      {return SoundJS.volume * 10}
 	get disabled() {return SoundMgr.#disabled}
 
