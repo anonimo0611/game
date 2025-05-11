@@ -15,7 +15,7 @@ const keyRepeat = e=> !!(e instanceof KeyboardEvent ? e : e.originalEvent)?.repe
 const isEnterKey = e=> /^(\x20|Enter)$/.test(e.key)
 
 /** @param {KeyboardEvent} e */
-const isCombinationKey = e=> !!(e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
+const isCombinationKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
 /**
  * @param {string} selector
@@ -98,7 +98,7 @@ const isCombinationKey = e=> !!(e.ctrlKey || e.metaKey || e.altKey || e.shiftKey
 	[Math.cos(PI/180*deg)*r+cx,
 	 Math.sin(PI/180*deg)*r+cy]
 
-//-- jQuery utilities ------
+//---- jQuery utilities ------
 
 /** @param {Function} fn */
 const $ready = fn=> $(document).on({DOMContentLoaded:fn}) && $(window)
