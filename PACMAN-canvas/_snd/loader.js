@@ -41,7 +41,7 @@ export class SoundMgr {
 
 	/**
 	 * @param {SoundType} id
-	 * @param {{duration?:number,loop?:number}} cfg}
+	 * @param {{duration?:number,loop?:number}} cfg
 	 */
 	play(id, cfg={}) {
 		const instance = Instance.get(id)
