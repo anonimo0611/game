@@ -1,5 +1,6 @@
 /**
- * @typedef {'Title'|'Attract'|'Start'|'Restart'|'NewLevel'|'Ready'|'Playing'|'Clear'|'FlashMaze'|'CoffBrk'|'Crashed'|'Losing'|'GameOver'|'Quit'} StateType
+ * @typedef {'Title'|'Attract'|'Start'|'Restart'|'NewLevel'|'Ready'|'Playing'|
+ * 'Clear'|'FlashMaze'|'CoffBrk'|'Crashed'|'Losing'|'GameOver'|'Quit'} StateType
  */
 import _State from '../_lib/state.js'
 export const State = new class extends _State {
