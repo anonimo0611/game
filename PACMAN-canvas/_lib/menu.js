@@ -81,7 +81,7 @@ export class DorpDown extends Menu {
 			return
 		case 'ArrowUp':
 		case 'ArrowDown': {
-				const dir = e.key == 'ArrowUp' ? U:D
+				const dir = e.key == 'ArrowUp' ? 'Up':'Down'
 				this.select((index+Vec2[dir].y+size) % size, {close:false})
 			}
 		}
@@ -111,7 +111,7 @@ export class Slide extends Menu {
 	}
 	/** @param {?Direction} dir */
 	#select(dir) {
-		dir = {Up:R,Down:L}[dir] || dir
+		dir = {Up:'Right',Down:'Left'}[dir] || dir
 		if (dir) {
 			const val = this.index+Vec2[dir].x
 			between(val, 0, this.size-1) && this.select(val)

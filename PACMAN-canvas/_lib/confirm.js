@@ -31,7 +31,7 @@ export const Confirm = new class {
 		Confirm.#buttons?.forEach((btn, i, btns)=> {
 			btn.textContent = [btnTxt1,btnTxt2][i]
 			btn.onclick   = _=> {$off(NS), Confirm.#remove([fn1,fn2][i])}
-			btn.onkeydown = e=> {Dir.from(e)==[R,L][i] && btns[1^i].focus()}
+			btn.onkeydown = e=> {Dir.from(e)==['Right','Left'][i] && btns[1^i].focus()}
 		})
 		$(confirm).find('.content').text(content).end().fadeIn(300)
 		$onNS(NS,{keydown:  Confirm.#onKeydown})
