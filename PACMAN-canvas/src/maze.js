@@ -3,7 +3,7 @@ import {State}  from './state.js'
 import {Ghost}  from './ghosts/ghost.js'
 import {powChk} from './control.js'
 
-export const MapArr = [...`\
+const MapArr = freeze([... `\
 ////////////////////////////\
 A============21============B\
 #............||............#\
@@ -37,7 +37,7 @@ A====c.43 4--21--3 43.d====B\
 #..........................#\
 D__________________________C\
 ////////////////////////////\
-////////////////////////////`]
+////////////////////////////`])
 
 /** @typedef {number} TileIdx */
 const WallSet  = /**@type {Set<TileIdx>}*/(new Set)
@@ -115,11 +115,11 @@ export const Maze = new class {
 			: PowMap.set(idx, v)
 	}
 	get dotsLeft() {return DotSet.size}
-	Map    = freeze(MapArr)
+	Map    = MapArr
+	DotMax = MapArr.filter(c=> DotChip.has(c)).length
 	House  = freeze(new House)
 	PowDot = freeze(new PowDot)
 	Tunnel = freeze(new Tunnel)
-	DotMax = MapArr.filter(c=> DotChip.has(c)).length
 
 	// These tiles(x-y) forbidden ghosts from entering upward
 	GhostNotEnterSet = new Set(['12-11','12-23','15-11','15-23'])
