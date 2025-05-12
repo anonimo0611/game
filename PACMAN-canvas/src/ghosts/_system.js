@@ -11,7 +11,7 @@ import Target   from './show_targets.js'
 /** @type {Ghost[]} */
 const Ghosts = []
 
-/** @param {number} ghostIdx */
+/** @type {(ghostIdx: number)=> number}  */
 const releaseDelay = ghostIdx=> ({ // For always chase mode (ms)
 	// Pinky->Aosuke->Guzuta
 	 0:[1000,  500,  500], // <-After life is lost
