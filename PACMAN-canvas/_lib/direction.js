@@ -5,7 +5,7 @@ export const Dir = freeze(new class {
 	Up=U; Right=R; Down=D; Left=L;
 
 	/** @param {Direction} dir */
-	opp(dir) {return Opposite[dir]}
+	opposite(dir) {return Opposite[dir]}
 
 	/**
 	 * @param {KeyboardEvent} e
