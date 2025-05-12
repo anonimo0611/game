@@ -34,16 +34,17 @@ export const State = new class extends _State {
 		return /**@type {StateType|''}*/(super.last(state))
 	}
 
+	/** @param {StateType} state */
+	#callback(state, data) {
+		Ticker.resetCount()
+		$trigger(document.body.dataset.state=state, data)
+	}
+
 	/**
 	 * @param {StateType} state
 	 * @param {{delay?:number,data?:unknown}} config
 	 */
 	to(state, {delay=(state=='Quit' ? -1:0),data}={}) {
 		return super.to(state, {delay,data,fn:this.#callback})
-	}
-	/** @param {StateType} state */
-	#callback(state, data) {
-		Ticker.resetCount()
-		$trigger(document.body.dataset.state=state, data)
 	}
 }
