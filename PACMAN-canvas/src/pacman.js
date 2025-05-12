@@ -93,7 +93,7 @@ class PlayablePac extends Pacman {
 		this.#preDir = dir
 		if (this.inBackwardOfTile) {
 			this.orient = dir
-			this.movDir = Dir.opp(this.dir)
+			this.movDir = Dir.opposite(this.dir)
 		}
 	}
 	resetTimer() {
@@ -151,7 +151,7 @@ class PlayablePac extends Pacman {
 		}
 	}
 	#turnAround() {
-		Dir.opp(this.orient) == this.dir
+		Dir.opposite(this.orient) == this.dir
 			&& (this.movDir = this.orient)
 	}
 	/** @param {number} tileIdx */
