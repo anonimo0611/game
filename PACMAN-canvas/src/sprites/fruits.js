@@ -1,5 +1,6 @@
 function cherry(ctx=Ctx) {
-	function fruit(x,y, idx) {
+	// both fruits
+	for (const [x,y,idx] of [[-6,-1,0],[-1,1,1]]) {
 		ctx.save()
 		ctx.translate(x,y)
 
@@ -21,10 +22,6 @@ function cherry(ctx=Ctx) {
 		ctx.stroke()
 		ctx.restore()
 	}
-	// both fruits
-	fruit(-6,-1, 0)
-	fruit(-1,+1, 1)
-
 	// stems
 	ctx.beginPath()
 	ctx.moveTo(-3,0)
