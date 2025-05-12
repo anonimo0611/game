@@ -130,7 +130,7 @@ class PlayablePac extends Pacman {
 			return
 		}
 		this.#stopped = false
-		this.#eaten(this.tileIdx)
+		this.#eaten(this)
 		this.#setCornering(denom)
 		this.setNextPos(denom)
 		this.#endCornering()
@@ -154,8 +154,7 @@ class PlayablePac extends Pacman {
 		Dir.opposite(this.orient) == this.dir
 			&& (this.movDir = this.orient)
 	}
-	/** @param {number} tileIdx */
-	#eaten(tileIdx) {
+	#eaten({tileIdx}=this) {
 		if (!Maze.hasDot(tileIdx))
 			return
 		const isPow = Maze.hasPow(tileIdx)
