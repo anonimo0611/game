@@ -175,7 +175,7 @@ class FadeOut {
 /**
  * @param {string|null} id ID of a canvas that exists in the document; if null, the canvas is created
  * @param {number} [w] width; The default value uses the width attribute
- * @param {number} [h] height; The default is the same as `w`, but if both `w` and `h` are undefined, use the heigt attribute
+ * @param {number} [h] height; The default is the same as `w`,but if both `w` and `h` are undefined, use the heigt attribute
  */
 const canvas2D = (id, w, h=w)=> {
 	const cvs = (id && byId(id) instanceof HTMLCanvasElement)

@@ -8,7 +8,7 @@ export const Dir = freeze(new class {
 	opposite(dir) {return Opposite[dir]}
 
 	/**
-	 * @param {KeyboardEvent} e
+	 * @param {KeyboardEvent|JQuery.KeyDownEvent} e
 	 * @returns {Direction|null}
 	 */
 	from(e, {wasd=false}={}) {

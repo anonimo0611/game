@@ -11,10 +11,14 @@ const isBool = (/**@type {unknown}*/arg)=> arg === true || arg === false
 /** @param {KeyboardEvent|JQuery.KeyDownEvent} e */
 const keyRepeat = e=> !!(e instanceof KeyboardEvent ? e : e.originalEvent)?.repeat
 
-/** @param {KeyboardEvent} e */
+/** @param {WheelEvent|JQuery.TriggeredEvent} e */
+const wheelDeltaY = e=> /** @type {WheelEvent} */
+	(e instanceof WheelEvent ? e : e.originalEvent)?.deltaY ?? 0
+
+/** @param {KeyboardEvent|JQuery.KeyDownEvent} e */
 const isEnterKey = e=> /^(\x20|Enter)$/.test(e.key)
 
-/** @param {KeyboardEvent} e */
+/** @param {KeyboardEvent|JQuery.KeyDownEvent} e */
 const isCombinationKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
 /**

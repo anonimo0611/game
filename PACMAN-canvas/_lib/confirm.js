@@ -19,7 +19,7 @@ export const Confirm = new class {
 		}
 		if (e.target instanceof HTMLButtonElement) {
 			const i = $(e.target).index()
-			Dir.from(e) == ['Right','Left'][i] && btns[1^i].focus()
+			Dir.from(e) == [R,L][i] && btns[1^i].focus()
 		}
 	}
 
