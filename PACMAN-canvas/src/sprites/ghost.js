@@ -41,6 +41,8 @@ export default class {
 	}={}) {
 		if (isBitten) return
 		const {ctx}= this
+		ctx.clear()
+		ctx.save()
 		function finalize() {
 			ctx.restore()
 			mainCtx.save()
@@ -48,8 +50,6 @@ export default class {
 			mainCtx.drawImage(ctx.canvas, -size/2, -size/2)
 			mainCtx.restore()
 		}
-		ctx.clear()
-		ctx.save()
 		ctx.translate(size/2, size/2)
 		ctx.scale(size/(100/GhsScale), size/(100/GhsScale))
 		ctx.fillStyle = !isFright
@@ -74,7 +74,8 @@ export default class {
 		finalize()
 	}
 	update() {
-		this.#resurrect?.update()
+		if (this.#resurrect?.update() === false)
+			this.#resurrect = null
 	}
 	#body({aIdx=0,isRipped=false,isMended=false}) {
 		const {ctx}= this
