@@ -133,7 +133,7 @@ export const Maze = new class {
 		o.y < 10 && PenOuter.contains(t)
 			? Vec2((t.x > Cols/2) && (o.x > Cols/2) ? 21:6, 15) : o
 
-	/** @param {{tileIdx:TileIdx, tilePos:Vector2}} cfg */
+	/** @param {{tileIdx:TileIdx, tilePos:Vector2}} tile */
 	clearBgDot({tileIdx:idx,tilePos:v}) {
 		DotSet.delete(idx)
 		PowMap.delete(idx)
