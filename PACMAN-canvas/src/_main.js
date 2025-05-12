@@ -47,7 +47,6 @@ export const Game = new class {
 	#restarted = false
 
 	get level()     {return Game.#level}
-	get levelStr()  {return Game.#level.toString().padStart(2,'0')}
 	get restarted() {return Game.#restarted}
 
 	// Divide the speed equally with level 13+ as the fastest
@@ -62,7 +61,7 @@ export const Game = new class {
 	}
 	#setLevel(i=1) {
 		Game.#level = between(i, 1, 0xFF) && +i || 1
-		$('#level').text(`Level${Game.levelStr}`)
+		$('#level').text(`Level${String(Game.level).padStart(2,'0')}`)
 		$trigger('LevelChanged')
 	}
 	#confirm() {
