@@ -46,7 +46,7 @@ const isCombinationKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
   * @template T
   * @param {T|null|undefined} arg
   * @returns {T}
-  */const asNotNull = arg=> {
+  */const nonNull = arg=> {
 	if (!arg) throw TypeError('Does not have a specific value')
 	return arg
   }
