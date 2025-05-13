@@ -73,8 +73,7 @@ export class Attract {
 	 * @param {Vector2} [pos]
 	 */
 	drawGhost(idx, ghsIdx, pos) {
-		const
-		ghost = this.ghsList[idx][ghsIdx]
+		const ghost = this.ghsList[idx][ghsIdx]
 		pos && (ghost.pos = pos)
 		ghost.sprite.draw(ghost)
 	}
