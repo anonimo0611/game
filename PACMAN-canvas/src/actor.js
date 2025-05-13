@@ -43,8 +43,8 @@ export class Actor extends Common {
 	get inBackwardOfTile() {return this.moveAmountPerTile >  T/2}
 
 	update() {
-		const MaxA = this.maxAlpha
-		State.isReady   && (this.#fadeIn ||= new FadeIn(500))?.update(MaxA)
+		const {maxAlpha:maxA}= this
+		State.isReady   && (this.#fadeIn ||= new FadeIn(500))?.update(maxA)
 		State.isPlaying && (this.#fadeIn &&= null)
 	}
 	draw() {
