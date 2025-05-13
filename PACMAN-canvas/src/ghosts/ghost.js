@@ -207,11 +207,13 @@ export class Ghost extends Actor {
 				[this.#runaway<0 ? 0:dirs.length-1].dir
 	}
 	#setTurn({dir,orient,pos,tilePos:t}=this) {
-		if (dir != orient && !this.hasAdjWall(orient)
-		 &&(dir == L && pos.x < t.x*T
+		if (dir == orient
+		 || this.hasAdjWall(orient))
+			return
+		if (dir == L && pos.x < t.x*T
 		 || dir == R && pos.x > t.x*T
 		 || dir == U && pos.y < t.y*T
-		 || dir == D && pos.y > t.y*T)) {
+		 || dir == D && pos.y > t.y*T) {
 			this.movDir = orient
 			this.pos = t.mul(T)
 			return true
