@@ -80,7 +80,7 @@ class Tunnel {
 		if (dir == R) return (where == R)
 		return (where != null)
 	}
-	/** @param {Position} centerPos */
+	/** @param {Vector2} centerPos */
 	#where({x, y}) {
 		if (int(y/T) == 15 && x/T <= this.entranceL) return L
 		if (int(y/T) == 15 && x/T >= this.entranceR) return R
@@ -142,7 +142,7 @@ export const Maze = new class {
 	}
 	/**
 	 * @param {ExtendedContext2D} ctx
-	 * @param {Position}  pos
+	 * @param {Position}  tilePos
 	 * @param {boolean}   isLarge
 	 * @param {?CtxStyle} color
 	 */
