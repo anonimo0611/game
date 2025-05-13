@@ -11,7 +11,7 @@ import Target   from './show_targets.js'
 /** @type {Ghost[]} */
 const Ghosts = []
 
-/** @type {(ghostIdx: number)=> number}  */
+/** @type {(ghostIdx:number) => number}  */
 const releaseDelay = ghostIdx=> ({ // For always chase mode (ms)
 	// Pinky->Aosuke->Guzuta
 	 0:[1000,  500,  500], // <-After life is lost
@@ -21,6 +21,14 @@ const releaseDelay = ghostIdx=> ({ // For always chase mode (ms)
 	10:[ 200,  800,  200],11:[100,  700,  200],12:[100,  700,  200],
 	13:[   0,  900,    0]
 }[Game.restarted? 0 : Game.clampedLv][ghostIdx]/Game.speedRate)
+
+/** @type {(ghost:Ghost, tile:Vector2, dir:Direction)=> boolean} */
+export const notEnter = (ghost, tile, dir)=> {
+	return !Ctrl.unrestricted
+		&& !ghost.isFright
+		&& !ghost.isEscaping
+		&& (dir == U && Maze.GhostNotEnterSet.has(tile.hyphenated))
+}
 
 /** @typedef {'Idle'|'GoOut'|'Walk'|'Bitten'|'Escape'|'Return'} StateType */
 export class GhostState extends _State {

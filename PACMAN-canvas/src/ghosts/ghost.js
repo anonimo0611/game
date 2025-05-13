@@ -30,7 +30,6 @@ export class Ghost extends Actor {
 	get spriteIdx()   {return GhsMgr.spriteIdx}
 	get maxAlpha()    {return Ctrl.showTargets ? 0.75:1}
 	get chaseTile()   {return this.chasePos.divInt(T)}
-	get isRunaway()   {return this.#runaway >= 0}
 	get isStarted()   {return this.#isStarted}
 	get isFright()    {return this.#isFright}
 	get isIdle()      {return this.state.isIdle}
@@ -195,40 +194,24 @@ export class Ghost extends Actor {
 	#getNextDir(target=this.targetTile) {
 		const tile = this.getAdjTile(this.dir)
 		const dirs = this.TurnDirs.flatMap((dir,index)=> {
-			const  test = this.getAdjTile(dir,1,tile)
-			const  dist = Vec2.sqrMagnitude(test,target)
-			return this.#isAllowDir(dir,test)? [{index,dir,dist}]:[]
+			const test = this.getAdjTile(dir,1,tile)
+			const dist = Vec2.sqrMagnitude(test,target)
+			return !Maze.hasWall(test)
+				&& !(Dir.opposite(this.orient) == dir)
+				&& !Sys.notEnter(this,test,dir)
+			? [{index,dir,dist}] : []
 		})
 		return this.isFright
 			? randChoice(dirs).dir
-			: dirs.sort(compareDist)[this.isRunaway? dirs.length-1:0].dir
-	}
-	/**
-	 * @param {Direction} dir
-	 * @param {Vector2} tile
-	 */
-	#isAllowDir(dir, tile) {
-		return !Maze.hasWall(tile)
-			&& !this.#notEnterTile(dir,tile)
-		    && Dir.opposite(this.orient) != dir
-	}
-	/**
-	 * @param {Direction} dir
-	 * @param {Vector2} tile
-	 */
-	#notEnterTile(dir, tile) {
-		return !Ctrl.unrestricted
-			&& (this.state.isWalk && !this.isFright)
-			&& (dir == U)
-			&& Maze.GhostNotEnterSet.has(tile.hyphenated)
+			: dirs.sort(compareDist)
+				[this.#runaway<0 ? 0:dirs.length-1].dir
 	}
 	#setTurn({dir,orient,pos,tilePos:t}=this) {
 		if (dir != orient && !this.hasAdjWall(orient)
 		 &&(dir == L && pos.x < t.x*T
 		 || dir == R && pos.x > t.x*T
 		 || dir == U && pos.y < t.y*T
-		 || dir == D && pos.y > t.y*T)
-		) {
+		 || dir == D && pos.y > t.y*T)) {
 			this.movDir = orient
 			this.pos = t.mul(T)
 			return true
@@ -236,9 +219,9 @@ export class Ghost extends Actor {
 		return false
 	}
 	crashWithPac({
-		pos    = Player.i.pos,
-		radius = (this.isFright? T/2:T/3),
-		fn = ()=> this.#setEscape()
+		pos     = Player.i.pos,
+		radius  = (this.isFright? T/2:T/3),
+		release = ()=> this.#setEscape()
 	}={}) {
 		if (!this.state.isWalk
 		 || !this.isFright && Ctrl.invincible
@@ -246,16 +229,20 @@ export class Ghost extends Actor {
 			return false
 		}
 		if (this.isFright) {
-			Sound.play('bitten')
-			Timer.freeze()
-			this.#isFright = false
-			this.trigger('Cought').state.to('Bitten')
-			PtsMgr.set({key:GhsMgr, ...this.centerPos}, fn)
+			this.#caught(release)
 			return true
 		}
 		Sound.stopLoops()
 		State.to('Crashed').to('Losing',{delay:500})
 		return true
+	}
+	/** @param {Function} fn */
+	#caught(fn) {
+		Sound.play('bitten')
+		Timer.freeze()
+		this.#isFright = false
+		this.trigger('Cought').state.to('Bitten')
+		PtsMgr.set({key:GhsMgr, ...this.centerPos}, fn)
 	}
 	/** @param {unknown} _ */
 	#setFrightMode(_, bool=false) {
