@@ -222,15 +222,13 @@ export class Ghost extends Actor {
 			&& (dir == U)
 			&& Maze.GhostNotEnterSet.has(tile.hyphenated)
 	}
-
 	#setTurn({dir,orient,pos,tilePos:t}=this) {
-		if (dir == orient
-		 || this.hasAdjWall(orient))
-			return false
-		if (dir == L && pos.x < t.x*T
+		if (dir != orient && !this.hasAdjWall(orient)
+		 &&(dir == L && pos.x < t.x*T
 		 || dir == R && pos.x > t.x*T
 		 || dir == U && pos.y < t.y*T
-		 || dir == D && pos.y > t.y*T) {
+		 || dir == D && pos.y > t.y*T)
+		) {
 			this.movDir = orient
 			this.pos = t.mul(T)
 			return true
@@ -243,8 +241,10 @@ export class Ghost extends Actor {
 		fn = ()=> this.#setEscape()
 	}={}) {
 		if (!this.state.isWalk
-		 || !collisionCircle(this, pos, radius))
+		 || !this.isFright && Ctrl.invincible
+		 || !collisionCircle(this, pos, radius)) {
 			return false
+		}
 		if (this.isFright) {
 			Sound.play('bitten')
 			Timer.freeze()
@@ -253,14 +253,11 @@ export class Ghost extends Actor {
 			PtsMgr.set({key:GhsMgr, ...this.centerPos}, fn)
 			return true
 		}
-		if (!Ctrl.invincible) {
-			Sound.stopLoops()
-			State.to('Crashed').to('Losing',{delay:500})
-			return true
-		}
-		return false
+		Sound.stopLoops()
+		State.to('Crashed').to('Losing',{delay:500})
+		return true
 	}
-	/** @param {*} _ */
+	/** @param {unknown} _ */
 	#setFrightMode(_, bool=false) {
 		!this.isEscaping && (this.#isFright = bool)
 	}
