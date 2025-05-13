@@ -201,10 +201,10 @@ export class Ghost extends Actor {
 				&& !Sys.notEnter(this,test,dir)
 			? [{index,dir,dist}] : []
 		})
-		return this.isFright
-			? randChoice(dirs).dir
-			: nonNull(dirs.sort(compareDist)
-				.at(this.#runaway<0 ? 0:-1)).dir
+		return nonNull(
+			this.isFright? randChoice(dirs):
+			dirs.sort(compareDist).at(this.#runaway<0 ? 0:-1)
+		).dir
 	}
 	#setTurn({dir,orient,pos,tilePos:t}=this) {
 		if (dir == orient
@@ -227,9 +227,8 @@ export class Ghost extends Actor {
 	}={}) {
 		if (!this.state.isWalk
 		 || !this.isFright && Ctrl.invincible
-		 || !collisionCircle(this, pos, radius)) {
+		 || !collisionCircle(this, pos, radius))
 			return false
-		}
 		if (this.isFright) {
 			this.#caught(release)
 			return true
