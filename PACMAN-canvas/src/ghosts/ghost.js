@@ -209,7 +209,7 @@ export class Ghost extends Actor {
 	#setTurn({dir,orient,pos,tilePos:t}=this) {
 		if (dir == orient
 		 || this.hasAdjWall(orient))
-			return
+			return false
 		if (dir == L && pos.x < t.x*T
 		 || dir == R && pos.x > t.x*T
 		 || dir == U && pos.y < t.y*T
