@@ -201,10 +201,10 @@ export class Ghost extends Actor {
 				&& !Sys.notEnter(this,test,dir)
 			? [{index,dir,dist}] : []
 		})
-		return nonNull(
-			this.isFright? randChoice(dirs):
-			dirs.sort(compareDist).at(this.#runaway<0 ? 0:-1)
-		).dir
+		return this.isFright
+			? randChoice(dirs).dir
+			: dirs.sort(compareDist)
+				[this.#runaway>=0 ? dirs.length-1:0].dir
 	}
 	#setTurn({dir,orient,pos,tilePos:t}=this) {
 		if (dir == orient
