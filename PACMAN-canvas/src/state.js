@@ -28,18 +28,15 @@ export const State = new class extends _State {
 	get current() {
 		return /**@type {StateType}*/(super.current)
 	}
-
 	/** @param {StateType} state */
 	last(state) {
 		return /**@type {StateType|''}*/(super.last(state))
 	}
-
 	/** @param {StateType} state */
 	#callback(state, data) {
 		Ticker.resetCount()
 		$trigger(document.body.dataset.state=state, data)
 	}
-
 	/**
 	 * @param {StateType} state
 	 * @param {{delay?:number,data?:unknown}} config
