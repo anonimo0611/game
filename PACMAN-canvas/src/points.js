@@ -14,14 +14,15 @@ export const PtsMgr = new class {
 	 * @param {PtsData} data
 	 * @param {Function} [fn]
 	 */
-	set(data, fn) {new Points(data, fn)}
-	update()      {PtsMap.forEach(v=> v.update())}
-	drawBehind()  {PtsMap.get(Fruit) ?.draw()}
-	drawFront()   {PtsMap.get(GhsMgr)?.draw()}
+	set(data,fn) {new Points(data,fn)}
+	update()     {PtsMap.forEach(v=> v.update())}
+	drawBehind() {PtsMap.get(Fruit) ?.draw()}
+	drawFront()  {PtsMap.get(GhsMgr)?.draw()}
 }
 class Points {
 	/**
- 	 * @typedef {{key:{score:number},x:number,y:number,duration?:number}} PtsData
+ 	 * @typedef {{key:{score:number},
+	 * x:number,y:number,duration?:number}} PtsData
 	 * @param {PtsData} PtsData
 	 * @param {Function} [fn]
 	 */
