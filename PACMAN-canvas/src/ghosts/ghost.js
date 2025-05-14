@@ -148,9 +148,9 @@ export class Ghost extends Actor {
 		this.state.to('Walk')
 	}
 	#prepEnterHouse() {
-		this.state.to('Return')
 		this.dir = D
 		this.centering()
+		this.state.to('Return')
 	}
 	#returnToHome({step,x,y,initX,iniAlign}=this) {
 		if (y+step < Maze.House.MiddleY)
@@ -236,17 +236,17 @@ export class Ghost extends Actor {
 		State.to('Crashed').to('Losing',{delay:500})
 		return true
 	}
-	/** @param {Function} fn */
-	#caught(fn) {
-		Sound.play('bitten')
-		Timer.freeze()
-		this.#isFright = false
-		this.trigger('Cought').state.to('Bitten')
-		PtsMgr.set({key:GhsMgr, ...this.centerPos}, fn)
-	}
 	/** @param {unknown} _ */
 	#setFrightMode(_, bool=false) {
 		!this.isEscaping && (this.#isFright = bool)
+	}
+	/** @param {Function} fn */
+	#caught(fn) {
+		this.#isFright = false
+		Sound.play('bitten')
+		Timer.freeze()
+		this.trigger('Cought').state.to('Bitten')
+		PtsMgr.set({key:GhsMgr, ...this.centerPos}, fn)
 	}
 	#setEscape() {
 		Sound.ghostEscape()
