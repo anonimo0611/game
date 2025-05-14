@@ -34,15 +34,15 @@ export const Fruit = new class {
 	number(i=Game.level-1) {
 		return IndexTable.at(i >= IndexTable.length ? -1 : i) ?? 1
 	}
-	#reset() {
-		_fadeOut = null
-		_tgtDisp = State.isTitle
-	}
 	#setTimerToHideTarget() {
 		// Disappearing is between 9 and 10 seconds
 		const {speedRate:rate}=Game, fadeDur=300
 		const setFadeOut = ()=> _fadeOut = new FadeOut(fadeDur/rate)
 		Timer.set(randInt(9e3, 1e4-fadeDur)/rate, setFadeOut, {key:Fruit})
+	}
+	#reset() {
+		_fadeOut = null
+		_tgtDisp = State.isTitle
 	}
 	#dotEaten() {
 		if (AppearSet.has(Maze.DotMax - Maze.dotsLeft)) {
