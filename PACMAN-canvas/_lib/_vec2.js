@@ -167,7 +167,7 @@ for (const [k,v] of entries(Vec2)) {
 /**
  * @param {Position} v1
  * @param {Position} v2
- */Vec2.sqrMagnitude = (v1, v2)=> Vec2.sub(v1,v2).sqrMagnitude
+ */Vec2.sqrMag = (v1, v2)=> Vec2.sub(v1,v2).sqrMagnitude
 
 /**
  * @param {Position} v1
