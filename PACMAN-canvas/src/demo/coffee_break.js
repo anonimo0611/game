@@ -5,8 +5,6 @@ import {Pacman} from '../pacman.js'
 import {Ghost}  from '../ghosts/ghost.js'
 import Sprite   from '../sprites/ghost_cb.js'
 
-const ModSymbol = Symbol()
-
 export class CoffBrk {
 	/** @type {?(Scene1|Scene2|Scene3)} */
 	static #scene = null
@@ -30,11 +28,8 @@ export class CoffBrk {
 	akabei  = new Ghost
 	pacVelX = -CvsW/180
 
-	/** @param {Symbol} symbol */
-	constructor(symbol) {
-		if (symbol != ModSymbol) {
-			throw TypeError('The constructor is not visible')
-		}
+	/** @protected */
+	constructor() {
 		this.pacman.y = this.akabei.y = (CvsH/2 - T/2)
 		$onNS('.CB',{Quit:this.end, blur_focus:this.pause})
 	}
@@ -68,7 +63,7 @@ qSAll('button.CBBtn').forEach((/**@type {HTMLButtonElement}*/e)=> {
 
 class Scene1 extends CoffBrk {
 	constructor() {
-		super(ModSymbol)
+		super()
 		this.isFright = false
 		this.akaVelX  = -CvsW / 156.4
 		this.pacman.x =  CvsW + T*1
@@ -104,7 +99,7 @@ class Scene1 extends CoffBrk {
 }
 class Scene2 extends CoffBrk {
 	constructor() {
-		super(ModSymbol)
+		super()
 		this.counter  = 0
 		this.akaEyes  = L
 		this.isRipped = false
@@ -153,7 +148,7 @@ class Scene2 extends CoffBrk {
 }
 class Scene3 extends CoffBrk {
 	constructor() {
-		super(ModSymbol)
+		super()
 		this.pacVelX  = -CvsW / 200
 		this.akaVelX  = -CvsW / 200
 		this.pacman.x =  CvsW + T*3

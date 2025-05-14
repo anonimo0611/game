@@ -10,8 +10,8 @@ import {GhsMgr}   from '../ghosts/_system.js'
 import {Ghost}    from '../ghosts/ghost.js'
 import {RunTimer} from './_run_timer.js'
 
-const CHAR = 0, DEMO = 1
-const ModSymbol = Symbol()
+const CHAR = 0
+const DEMO = 1
 
 /** @type {?Attract} */
 let _attract = null
@@ -20,7 +20,7 @@ export class Attract {
 	static {
 		$(RunTimer)  .on({begin:this.#begin})
 		$('.DemoBtn').on({click:this.#begin})
-		$on({Attract:()=> _attract = new Attract(ModSymbol)})
+		$on({Attract:()=> _attract = new Attract()})
 	}
 	static #begin() {
 		State.to('Attract')
@@ -40,11 +40,8 @@ export class Attract {
 	pacVelX = -CvsW/180
 	ghsVelX = -CvsW/169
 
-	/** @param {Symbol} symbol */
-	constructor(symbol) {
-		if (symbol != ModSymbol) {
-			throw TypeError('The constructor is not visible')
-		}
+	/** @private */
+	constructor() {
 		$onNS('.Attract', {click_keydown_blur:this.quit})
 		this.initialize()
 	}
