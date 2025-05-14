@@ -221,13 +221,16 @@ class FrightMode {
 	static {$(GhsMgr).on('Init', ()=> this.#instance=null)}
 	static #instance = /**@type {?FrightMode}*/(null)
 	static #timeList = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
-	static start() {State.isAttract || this.numOfSec && new this()}
 	static get instance() {return this.#instance}
 	static get numOfSec() {return this.#timeList[Game.clampedLv-1]}
-	#tCounter=0; #fCounter=0; #flashIdx=1; #caughtCnt=0;
+	static start() {State.isAttract || this.numOfSec && new this()}
+
 	get score()     {return 100 * (1 << this.#caughtCnt)}
 	get spriteIdx() {return this.#fCounter? this.#flashIdx^1:0}
 	get caughtAll() {return this.#caughtCnt == GhsType.Max}
+
+	#tCounter = 0; #fCounter  = 0;
+	#flashIdx = 1; #caughtCnt = 0;
 
 	/** @private */
 	constructor() {
@@ -244,7 +247,7 @@ class FrightMode {
 	update() {
 		if (!State.isPlaying || Timer.frozen) return
 		const {numOfSec}= FrightMode
-		const et = (Game.interval*this.#tCounter++)/1000
+		const et = (Game.interval * this.#tCounter++)/1000
 		const fi = (numOfSec == 1 ? 12:14)/Game.speedRate|0
 		this.#flashIdx ^= +!(this.#fCounter % fi)
 		;(et >= numOfSec-2) && this.#fCounter++
