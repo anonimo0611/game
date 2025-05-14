@@ -65,19 +65,19 @@ export const GhsMgr = new class {
 		$(GhsMgr).on({Init:GhsMgr.#initialize})
 	}
 	#aidx = 0
-	get aInterval()  {return 6}
-	get animIndex()  {return this.#aidx}
-	get Elroy()      {return Elroy}
-	get isScatter()  {return AlternateBetweenModes.isScatter}
-	get isFright()   {return FrightMode.instance != null}
-	get score()      {return FrightMode.instance?.score     ?? 0}
-	get spriteIdx()  {return FrightMode.instance?.spriteIdx ?? 0}
-	get caughtAll()  {return FrightMode.instance?.caughtAll ?? false}
-	get hasEscape()  {return Ghosts.some(g=> g.isEscaping)}
-	get akaCenter()  {return Ghosts[GhsType.Akabei].centerPos}
+	get aInterval() {return 6}
+	get animIndex() {return this.#aidx}
+	get Elroy()     {return Elroy}
+	get isScatter() {return AlternateBetweenModes.isScatter}
+	get isFright()  {return FrightMode.instance != null}
+	get score()     {return FrightMode.instance?.score     ?? 0}
+	get spriteIdx() {return FrightMode.instance?.spriteIdx ?? 0}
+	get caughtAll() {return FrightMode.instance?.caughtAll ?? false}
+	get hasEscape() {return Ghosts.some(g=> g.isEscaping)}
+	get akaCenter() {return Ghosts[GhsType.Akabei].centerPos}
 
 	/**
-	 * @param {*} _
+	 * @param {unknown}  _
 	 * @param {...Ghost} instances
 	 */
 	#initialize(_, ...instances) {
@@ -95,7 +95,7 @@ export const GhsMgr = new class {
 	}
 	setFrightMode() {
 		setReversalSignal()
-		;(State.isAttract || FrightMode.numOfSec) && new FrightMode()
+		;(State.isAttract || FrightMode.numOfSec) && FrightMode.set()
 	}
 	update() {
 		if (State.isPlaying
@@ -218,6 +218,7 @@ const Elroy = function() {
 }()
 
 class FrightMode {
+	static set() {new FrightMode()}
 	static {$(GhsMgr).on('Init', ()=> this.#instance = null)}
 	static #instance = /**@type {?FrightMode}*/(null)
 	static #timeList = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
@@ -227,6 +228,8 @@ class FrightMode {
 	get score()     {return 100 * (1 << this.#caughtCnt)}
 	get spriteIdx() {return this.#fCounter? this.#flashIdx^1:0}
 	get caughtAll() {return this.#caughtCnt == GhsType.Max}
+
+	/** @private */
 	constructor() {
 		FrightMode.#instance = this.#toggle(true)
 		$(Ghosts).on('Cought', ()=> ++this.#caughtCnt)
