@@ -227,7 +227,7 @@ class FrightMode {
 	static #timeList = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	static get instance() {return this.#instance}
 	static get numOfSec() {return this.#timeList[Game.clampedLv-1]}
-	static start() {State.isAttract || this.numOfSec && new this()}
+	static start() {(State.isAttract||this.numOfSec) && new this()}
 
 	#tCounter = 0; #fCounter  = 0;
 	#flashIdx = 1; #caughtCnt = 0;
