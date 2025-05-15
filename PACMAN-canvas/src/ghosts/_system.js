@@ -11,8 +11,8 @@ import Target   from './show_targets.js'
 /** @type {Ghost[]} */
 const Ghosts = []
 
-/** @type {(ghostIdx:number) => number}  */
-const releaseDelay = ghostIdx=> ({ // For always chase mode (ms)
+/** @type {(ghostIdx:number)=> number}  */
+const releaseDelay = idxOfGhsInHouse=> ({ // For always chase mode(ms)
 	// Pinky->Aosuke->Guzuta
 	 0:[1000,  500,  500], // <-After life is lost
 	 1:[1000, 4000, 4000], 2:[800, 2200, 4000], 3:[600, 1900, 3500],
@@ -20,7 +20,7 @@ const releaseDelay = ghostIdx=> ({ // For always chase mode (ms)
 	 7:[ 300,  700,  800], 8:[300,  700,  800], 9:[200,  800,  200],
 	10:[ 200,  800,  200],11:[100,  700,  200],12:[100,  700,  200],
 	13:[   0,  900,    0]
-}[Game.restarted? 0 : Game.clampedLv][ghostIdx]/Game.speedRate)
+}[Game.restarted? 0 : Game.clampedLv][idxOfGhsInHouse]/Game.speedRate)
 
 /** @type {(ghost:Ghost, tile:Vector2, dir:Direction)=> boolean} */
 export const notEnter = (ghost, tile, dir)=> {
@@ -77,7 +77,7 @@ export const GhsMgr = new class {
 	get akaCenter() {return Ghosts[GhsType.Akabei].centerPos}
 
 	/**
-	 * @param {unknown}  _
+	 * @param {unknown } _
 	 * @param {...Ghost} instances
 	 */
 	#initialize(_, ...instances) {
@@ -89,9 +89,11 @@ export const GhsMgr = new class {
 	}
 	#onPlaying() {
 		Sound.playSiren()
-		Ctrl.isChaseMode && Timer.sequence(...
-			Ghosts.slice(1).map(/**@returns {[number,Function]}*/
-				(g,i)=> [releaseDelay(i), ()=> g.release()]))
+		Ctrl.isChaseMode &&
+			Timer.sequence(...Ghosts.slice(1).map(
+				/** @returns {[number,Function]} */
+				(g,i)=> [releaseDelay(i), ()=> g.release()])
+			)
 	}
 	setFrightMode() {
 		setReversalSignal()
@@ -173,8 +175,10 @@ export const DotCounter = function() {
 		const pLimit  = limitTable[idx-1][min(Game.level,3)] // personal
 		;(Player.i.timeNotEaten >= timeOut)? fn()
 		:(!Game.restarted || _globalCounter < 0)
-			? pCounters[idx] >= pLimit && fn()
-			: _globalCounter == gLimit && fn(idx == GhsType.Guzuta)
+			? (pCounters[idx] >= pLimit)
+				&& fn()
+			: (_globalCounter == gLimit)
+				&& fn(idx == GhsType.Guzuta)
 				&& (_globalCounter = -1)
 	}
 	function reset() {
@@ -225,12 +229,12 @@ class FrightMode {
 	static get numOfSec() {return this.#timeList[Game.clampedLv-1]}
 	static start() {State.isAttract || this.numOfSec && new this()}
 
+	#tCounter = 0; #fCounter  = 0;
+	#flashIdx = 1; #caughtCnt = 0;
+
 	get score()     {return 100 * (1 << this.#caughtCnt)}
 	get spriteIdx() {return this.#fCounter? this.#flashIdx^1:0}
 	get caughtAll() {return this.#caughtCnt == GhsType.Max}
-
-	#tCounter = 0; #fCounter  = 0;
-	#flashIdx = 1; #caughtCnt = 0;
 
 	/** @private */
 	constructor() {
