@@ -47,7 +47,8 @@ const isCombinationKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
   * @param {T|null|undefined} arg
   * @returns {T}
   */const nonNull = arg=> {
-	if (!arg) throw TypeError('Does not have a specific value')
+	if (arg === null || arg === undefined)
+		throw TypeError('Does not have a specific value')
 	return arg
   }
 
@@ -132,13 +133,13 @@ const $off = event=> $(window).off(event.trim().replace(/_/g,' '))
  * @param {string} event
  * @param {Function} fn
 */
-const $offon = (event,fn)=> $off(event) && $on(event, fn)
+const $offon = (event,fn)=> $off(event) && $on(event,fn)
 
 /**
  * @param {string} event
  * @param {*} [data]
  */
-const $trigger = (event,data)=> $(window).trigger(event, data)
+const $trigger = (event,data)=> $(window).trigger(event,data)
 
 /**
  * @param {string|object} arg
@@ -152,6 +153,6 @@ const $on = (arg, fn)=> {
 	const rep = (/**@type {string}*/str)=> str.trim().replace(/_/g,' ')
 	typeof(arg) != 'object'
 		? $(this).on({[rep(arg)]:fn})
-		: entries(arg).forEach(([ev,fn])=>$(this).on(rep(ev),fn))
+		: entries(arg).forEach(([ev,fn])=> $(this).on(rep(ev),fn))
 	return $(this)
 }
