@@ -87,19 +87,19 @@ export const Ctrl = new class {
 	}
 	#drawInfo() {
 		const{ctx}= Inf, lh = 0.84, ColTbl = Color.InfoTable
-		const spd = Ctrl.speedRate.toFixed(1)
+		const spd = 'x'+Ctrl.speedRate.toFixed(1)
 		const cfg = {ctx, size:T*0.68, style:'bold', scaleX:.7}
 		ctx.save()
 		ctx.translate(T*0.1, T*18)
 		ctx.clearRect(0, -T, CvsW, T*3)
-		if (Ctrl.isCheatMode || spd != '1.0') {
-			drawText(0, lh*0, ColTbl[+(spd != '1.0')],`Speed x${spd}`, cfg)
-			drawText(0, lh*1, ColTbl[+Ctrl.invincible], 'Invincible', cfg)
-			drawText(0, lh*2, ColTbl[+Ctrl.showTargets],'Targets', cfg)
+		if (Ctrl.isCheatMode || spd != 'x1.0') {
+			drawText(0, lh*0, ColTbl[+(spd != 'x1.0') ], 'Speed'+spd,  cfg)
+			drawText(0, lh*1, ColTbl[+Ctrl.invincible ], 'Invincible', cfg)
+			drawText(0, lh*2, ColTbl[+Ctrl.showTargets], 'Targets',    cfg)
 		}
 		if (Ctrl.unrestricted) {
 			ctx.translate(T*(Cols-5), T/2)
-			drawText(0,0, ColTbl[1], 'Un-\nrestricted', cfg)
+			drawText(0, 0, ColTbl[1], 'Un-\nrestricted', cfg)
 		}
 		ctx.restore()
 	}
