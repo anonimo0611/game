@@ -61,20 +61,17 @@ export const Game = new class {
 	}
 	#setLevel(i=1) {
 		Game.#level = between(i, 1, 0xFF) && +i || 1
-		$('#level').text(`Level${String(Game.level).padStart(2,'0')}`)
+		$('#level').text(`Level${('0'+Game.level).slice(-2)}`)
 		$trigger('LevelChanged')
 	}
 	#confirm() {
-		if (!State.isPlaying)
-			return
 		!Ticker.paused && Game.#pause()
 		Confirm.open('Are you sure you want to quit the game?',
 			Game.#pause, ()=> State.to('Quit'), 'Resume','Quit', 0)
 	}
 	/** @param {boolean} [force] */
 	#pause(force) {
-		if (State.isPlaying)
-			Sound.allPaused = Ticker.pause(force)
+		State.isPlaying && (Sound.allPaused=Ticker.pause(force))
 	}
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
@@ -84,7 +81,7 @@ export const Game = new class {
 		case 'Escape': return Game.#pause()
 		case 'Delete': return function() {
 			!e.ctrlKey
-				? Game.#confirm()
+				? State.isPlaying && Game.#confirm()
 				: State.to('Quit')
 			}()
 		default:
@@ -118,7 +115,7 @@ export const Game = new class {
 	}
 	#onClear() {
 		Sound.stopLoops()
-		State.to('FlashMaze',{delay:1000})
+		State.to('FlashMaze', {delay:1000})
 	}
 	#onFlashMaze() {
 		let count = 0
@@ -135,18 +132,17 @@ export const Game = new class {
 	}
 	#levelBegins() {
 		Game.#restarted = State.isRestart
-		State.to('Ready').to('Playing',{delay:2200})
+		State.to('Ready').to('Playing', {delay:2200})
 	}
 	#levelEnds() {
 		Game.#restarted = false
 		if (State.isQuit) {
-			Ticker.pause(false)
-			Wall.draw()
+			Ticker.stop()
 			State.to('Title')
 			return
 		}
 		if (State.isGameOver) {
-			State.to('Title',{delay:2500})
+			State.to('Title', {delay:2500})
 			return
 		}
 		if (State.isFlashMaze) {
@@ -154,10 +150,11 @@ export const Game = new class {
 				State.to('Title')
 				return
 			}
-			const intermissionLv = +{2:1, 5:2, 9:3}[Game.level]
-			Ctrl.isPractice || !intermissionLv
+			// intermisssion level
+			const lv = +{2:1, 5:2, 9:3}[Game.level]
+			Ctrl.isPractice || !lv
 				? State.to('NewLevel')
-				: State.to('CoffBrk',{data:intermissionLv})
+				: State.to('CoffBrk', {data:lv})
 		}
 	}
 	#update() {

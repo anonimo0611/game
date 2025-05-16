@@ -2,6 +2,7 @@ import {Rect}   from '../_lib/rect.js'
 import {State}  from './state.js'
 import {Ghost}  from './ghosts/ghost.js'
 import {powChk} from './control.js'
+import { Wall } from './sprites/wall.js'
 
 const MapArr = freeze([... `\
 ////////////////////////////\
@@ -98,13 +99,16 @@ export const Maze = new class {
 	}
 	/** @param {Event} e */
 	#reset(e) {
+		if (e.target != powChk) {
+			Wall.draw()
+			Maze.#drawDoor()
+		}
 		for (const [i,c] of MapArr.entries())
 			DotChip.has(c) && Maze.#setDot(i,c)
-		e.target != powChk && Maze.#drawDoor()
 	}
 	/**
 	 * @param {TileIdx} idx
-	 * @param {string} chip
+	 * @param {string}  chip
 	 */
 	#setDot(idx, chip) {
 		const v = Vec2(idx%Cols, idx/Cols|0)
