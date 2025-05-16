@@ -13,7 +13,7 @@ class Menu extends Common {
 	 * @param {string} type
 	 */
 	constructor(id, type) {
-		const root  = /**@type {MenuRoot}*/($byId(id).attr({type}).get(0))
+		const root  = /**@type {MenuRoot}*/   ($byId(id).attr({type}) .get(0))
 		const menu  = /**@type {HTMLElement}*/($(root).find('mn-list').get(0))
 		const items = /**@type {MenuItem[]} */($(menu).find('mn-item').get())
 
@@ -42,9 +42,9 @@ class Menu extends Common {
 }
 
 export class DorpDown extends Menu {
-	close() {$(this.menu).hide();  return this}
-	open()  {$(this.menu).show();  return this}
-	toggle(){$(this.menu).toggle();return this}
+	close()  {$(this.menu).hide();  return this}
+	open()   {$(this.menu).show();  return this}
+	toggle() {$(this.menu).toggle();return this}
 	get closed() {
 		return $(this.menu).is(':hidden') == true
 	}

@@ -17,10 +17,12 @@ export const Cursor = new class {
 	#setState(state) {dRoot.dataset.cursor = state}
 }
 
-/** @param {HTMLInputElement} ctrl */
+/**
+ * Enable mouse wheel on range controls.
+ * Label elements must be block-level.
+ * @param {HTMLInputElement} ctrl
+ */
 function setupCtrl(ctrl) {
-	// Enable mouse wheel on range controls
-	// Label elements must be block-level
 	const output = qS(`output[for~="${ctrl.id}"]`) ?? []
 	const ids    = ctrl.dataset.links?.trim().split(/\s+/) ?? []
 	const label  = ctrl.closest('label') || qS(`label[for="${ctrl.id}"]`)
