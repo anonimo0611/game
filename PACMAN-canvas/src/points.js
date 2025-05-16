@@ -11,7 +11,7 @@ $on({Title_Clear_Crashed:()=> PtsMap.clear()})
 
 export const PtsMgr = new class {
 	/**
-	 * @param {PtsData} data
+	 * @param {PtsData}  data
 	 * @param {Function} [fn]
 	 */
 	set(data,fn) {new Points(data,fn)}
@@ -21,9 +21,8 @@ export const PtsMgr = new class {
 }
 class Points {
 	/**
- 	 * @typedef {{key:{score:number},
-	 * x:number,y:number,duration?:number}} PtsData
-	 * @param {PtsData} PtsData
+ 	 * @typedef {{key:{score:number},x:number,y:number,duration?:number}} PtsData
+	 * @param {PtsData}  PtsData
 	 * @param {Function} [fn]
 	 */
 	constructor({key,x,y,duration=1e3}, fn) {
