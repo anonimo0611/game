@@ -69,4 +69,4 @@ export const Wall = new class {
 		this.#drawHouse(ctx.lineWidth/2)
 		ctx.restore()
 	}
-};Wall.draw()
+}
