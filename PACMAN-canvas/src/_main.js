@@ -1,4 +1,3 @@
-import '../_lib/_canvas.js'
 import './ghosts/ghost_sub.js'
 import {Sound}    from '../_snd/sound.js'
 import {Confirm}  from '../_lib/confirm.js'
