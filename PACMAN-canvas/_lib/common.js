@@ -25,7 +25,7 @@ export class Common {
 	}
 	/**
 	 * @param {string} event
-	 * @param {*} [data]
+	 * @param {number|string|boolean|any[]} [data]
 	 */
 	trigger(event, data) {
 		$(this.#eventTarget).trigger(event, data)
