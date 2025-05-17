@@ -34,13 +34,13 @@ export class Actor extends Common {
 	get frozen()     {return Timer.frozen}
 	get isInTunnel() {return Maze.Tunnel.isIn(this.centerPos)}
 
-	get moveAmountPerTile() {
+	get tilePixel() {
 		const  {x,y} = this.centerPos, v = Vec2[this.dir]
 		const  count = v.x? x % T : y % T
 		return (v.x || v.y) > 0 ? count : T-count
 	}
-	get inForwardOfTile()  {return this.moveAmountPerTile <= T/2}
-	get inBackwardOfTile() {return this.moveAmountPerTile >  T/2}
+	get tileForward()  {return this.tilePixel <= T/2}
+	get tileBackward() {return this.tilePixel >  T/2}
 
 	update() {
 		const {maxAlpha:maxA}= this
@@ -52,8 +52,8 @@ export class Actor extends Common {
 			|| (Ctx.globalAlpha = this.maxAlpha)
 	}
 	newTileReached(denom=1) {
-		return this.inForwardOfTile
-			&& this.moveAmountPerTile <= this.step/denom
+		return this.tileForward
+			&& this.tilePixel <= this.step/denom
 	}
 	collidedWithWall(dir=this.dir) {
 		const  {step,centerPos}= this

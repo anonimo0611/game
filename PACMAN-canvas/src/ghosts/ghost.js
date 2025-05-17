@@ -177,7 +177,7 @@ export class Ghost extends Actor {
 	#walkRoute() {
 		for (let i=0,denom=ceil(this.step)*2; i<denom; i++) {
 			this.setNextPos(denom)
-			this.inBackwardOfTile && this.#setNextDir()
+			this.tileBackward && this.#setNextDir()
 			if (this.#setTurn(this)) break
 			if (this.crashWithPac()) break
 		}
@@ -233,7 +233,7 @@ export class Ghost extends Actor {
 			return true
 		}
 		Sound.stopLoops()
-		State.to('Crashed').to('Losing',{delay:500})
+		State.to('Crashed').to('Losing', {delay:500})
 		return true
 	}
 	/** @param {unknown} _ */

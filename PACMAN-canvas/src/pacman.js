@@ -48,7 +48,7 @@ class PlayablePac extends Pacman {
 		$offon('keydown.Player',this.#onKeydown.bind(this))
 	}
 	get canTurn() {
-		return this.inForwardOfTile
+		return this.tileForward
 			&& this.#preDir != null
 			&& this.collidedWithWall(this.#preDir) === false
 	}
@@ -91,7 +91,7 @@ class PlayablePac extends Pacman {
 			return
 		}
 		this.#preDir = dir
-		if (this.inBackwardOfTile) {
+		if (this.tileBackward) {
 			this.orient = dir
 			this.movDir = Dir.opposite(this.dir)
 		}
@@ -144,7 +144,7 @@ class PlayablePac extends Pacman {
 		}
 	}
 	#endCornering() {
-		if (this.#turning && this.inBackwardOfTile) {
+		if (this.#turning && this.tileBackward) {
 			this.movDir   = this.orient
 			this.#preDir  = this.#nextTurn
 			this.#turning = !!(this.#nextTurn=null)
