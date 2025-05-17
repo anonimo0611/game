@@ -177,7 +177,7 @@ export class Ghost extends Actor {
 	#walkRoute() {
 		for (let i=0,denom=ceil(this.step)*2; i<denom; i++) {
 			this.setNextPos(denom)
-			this.tileBackward && this.#setNextDir()
+			this.inTileBackward && this.#setNextDir()
 			if (this.#setTurn(this)) break
 			if (this.crashWithPac()) break
 		}
