@@ -1,4 +1,5 @@
 import _State   from '../../_lib/state.js'
+import {Common} from '../../_lib/common.js'
 import {Sound}  from '../../_snd/sound.js'
 import {Game}   from '../_main.js'
 import {State}  from '../state.js'
@@ -54,7 +55,7 @@ export class GhostState extends _State {
 	to(state) {return super.to(state)}
 }
 
-export const GhsMgr = new class {
+export const GhsMgr = new class extends Common {
 	static {$ready(this.setup)}
 	static setup() {
 		$on({
@@ -62,7 +63,7 @@ export const GhsMgr = new class {
 			Clear:  GhsMgr.#onLevelEnds,
 			Crashed:GhsMgr.#onLevelEnds,
 		})
-		$(GhsMgr).on({Init:GhsMgr.#initialize})
+		this.bind({Init:GhsMgr.#initialize})
 	}
 	#aidx = 0
 	get aInterval() {return 6}
@@ -222,7 +223,7 @@ const Elroy = function() {
 }()
 
 class FrightMode {
-	static {$(GhsMgr).on('Init', ()=> this.#instance=null)}
+	static {GhsMgr.bind({Init:()=> this.#instance=null})}
 	static #instance = /**@type {?FrightMode}*/(null)
 	static #timeList = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	static get instance() {return this.#instance}
