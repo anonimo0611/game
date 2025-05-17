@@ -50,7 +50,7 @@ export class Attract {
 		for (let i=0; i<this.ghsList.length*Max; i++) {
 			this.setActor(i/Max|0, i%Max)
 		}
-		$(GhsMgr).trigger('Init', this.ghsList[DEMO])
+		GhsMgr.trigger('Init', this.ghsList[DEMO])
 	}
 	/**
 	 * @param {number} idx
