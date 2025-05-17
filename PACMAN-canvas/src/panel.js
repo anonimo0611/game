@@ -1,4 +1,3 @@
-
 const btns = /**@type {HTMLButtonElement[]}*/
 	(qSAll('button.panelBtn'))
 
