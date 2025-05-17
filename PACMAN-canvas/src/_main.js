@@ -149,11 +149,11 @@ export const Game = new class {
 				State.to('Title')
 				return
 			}
-			// intermisssion level
-			const lv = +{2:1, 5:2, 9:3}[Game.level]
-			Ctrl.isPractice || !lv
+			// intermission level
+			const imLv = +{2:1, 5:2, 9:3}[Game.level]
+			Ctrl.isPractice || !imLv
 				? State.to('NewLevel')
-				: State.to('CoffBrk', {data:lv})
+				: State.to('CoffBrk', {data:imLv})
 		}
 	}
 	#update() {
