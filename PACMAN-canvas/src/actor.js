@@ -39,8 +39,8 @@ export class Actor extends Common {
 		const  count = v.x? x % T : y % T
 		return (v.x || v.y) > 0 ? count : T-count
 	}
-	get inTileForward()  {return this.tilePixel <= T/2}
-	get inTileBackward() {return this.tilePixel >  T/2}
+	get inFrontOfTile() {return this.tilePixel <= T/2}
+	get inBackOfTile()  {return this.tilePixel >  T/2}
 
 	update() {
 		const {maxAlpha:maxA}= this
@@ -52,7 +52,7 @@ export class Actor extends Common {
 			|| (Ctx.globalAlpha = this.maxAlpha)
 	}
 	newTileReached(denom=1) {
-		return this.inTileForward
+		return this.inFrontOfTile
 			&& this.tilePixel <= this.step/denom
 	}
 	collidedWithWall(dir=this.dir) {
