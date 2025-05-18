@@ -12,7 +12,7 @@ import Target   from './show_targets.js'
 /** @type {Ghost[]} */
 const Ghosts = []
 
-/** @type {(ghostIdx:number)=> number}  */
+/** @type {(ghostIdx:number)=> number} */
 const releaseDelay = idxOfGhsInHouse=> ({ // For always chase mode(ms)
 	// Pinky->Aosuke->Guzuta
 	 0:[1000,  500,  500], // <-After life is lost
@@ -63,7 +63,7 @@ export const GhsMgr = new class extends Common {
 			Clear:  GhsMgr.#onLevelEnds,
 			Crashed:GhsMgr.#onLevelEnds,
 		})
-		this.bind({Init:GhsMgr.#initialize})
+		GhsMgr.bind({Init:GhsMgr.#initialize})
 	}
 	#aidx = 0
 	get aInterval() {return 6}
