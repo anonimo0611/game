@@ -29,8 +29,8 @@ export default class {
 			Timer.set(delay, ()=> this.to(state,{delay:-1,data}))
 			return this
 		}
-		this.#state = state
 		this.#last  = this.current
+		this.#state = state
 		fn?.(state,data)
 		return this
 	}
