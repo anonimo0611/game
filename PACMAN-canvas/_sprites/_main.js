@@ -78,7 +78,7 @@ export const View = function() {
 		const draw = (pts, x, y)=> {
 			Ctx.save()
 			Ctx.translate(x, y)
-			pointsSprite.draw(0, 0, pts, T*2)
+			pointsSprite.draw(0, 0, pts, S)
 			Ctx.restore()
 		}
 		;[200,400,800,1600,100,300,500,700].forEach(
