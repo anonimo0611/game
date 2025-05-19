@@ -66,7 +66,7 @@ export class Actor extends Common {
 	setPos({x=this.x, y=this.y}={}) {
 		this.#y = y
 		this.#x = function(r) {
-			// Go around to the other side during Play
+			// Go around to the other side during play
 			if (!State.isPlaying) return
 			if (x < -r-T/2) return CW+T/2
 			if (x > CW+T/2) return -r-T/2
