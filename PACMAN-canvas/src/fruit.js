@@ -67,8 +67,7 @@ export const Fruit = new class {
 	drawTarget() {
 		if ((State.isTitle || State.isPlaying)
 		 && !Ticker.paused && _tgtDisp) {
-			Ctx.save()
-			_fadeOut?.setAlpha(Ctx)
+			Ctx.save(),_fadeOut?.setAlpha(Ctx)
 			Ctx.translate(...TargetPos.vals)
 			Ctx.drawImage(Spr.current, -T,-T)
 			Ctx.restore()
