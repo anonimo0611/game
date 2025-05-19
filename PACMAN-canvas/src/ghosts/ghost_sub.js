@@ -16,40 +16,40 @@ class Pinky extends Ghost {
 	constructor() {
 		super(D, {idx:1, col:13.5, row:15})
 	}
-	get scatterTile() {return Vec2(3, 0)}
 	get chasePos() {
 		const {Tunnel}=Maze, P=Player.i, pos=P.forwardPos(4)
 		Tunnel.isIn(P.centerPos,L) && P.dir == L && (pos.x=Tunnel.entranceR*T)
 		Tunnel.isIn(P.centerPos,R) && P.dir == R && (pos.x=Tunnel.entranceL*T)
 		return pos
 	}
+	get scatterTile() {return Vec2(3, 0)}
 }
 
 class Aosuke extends Ghost {
 	constructor() {
 		super(U, {idx:2, col:11.5, row:15, align:-1})
 	}
-	get scatterTile() {return Vec2(27, 33)}
 	get chasePos() {
 		const  pos = Player.i.forwardPos(2)
 		return pos.clone.sub(GhsMgr.akaCenter).add(pos)
 	}
+	get scatterTile() {return Vec2(27, 33)}
 }
 
 class Guzuta extends Ghost {
 	constructor() {
 		super(U, {idx:3, col:15.5, row:15, align:+1})
 	}
-	get scatterTile() {return Vec2(0, 33)}
 	get chasePos() {
 		const  radius = T*8
 		return this.sqrMagToPacman < radius*radius
 			? Vec2(this.scatterTile).add(.5).mul(T)
 			: Player.i.centerPos
 	}
+	get scatterTile() {return Vec2(0, 33)}
 }
 
 const Classes = [Akabei,Pinky,Aosuke,Guzuta]
 $on({Title_Restart_NewLevel:()=>
-	$(GhsMgr).trigger('Init', Classes.map(cls=> new cls))
+	GhsMgr.trigger('Init', Classes.map(cls=> new cls))
 })
