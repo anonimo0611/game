@@ -46,7 +46,7 @@ class Points {
 		const {position:{x,y}}= this
 		Ctx.save(),this.fadeOut.setAlpha(Ctx)
 		Ctx.translate(clamp(x, T, CvsW-T), y)
-		Sprite.draw(0,0, this.score, T*2)
+		Sprite.draw(0,0, this.score)
 		Ctx.restore()
 	}
 }
