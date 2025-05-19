@@ -114,12 +114,14 @@ export const GhsMgr = new class extends Common {
 	drawBehind() {Ghosts.forEach((g,i,a)=> g.isFright && a.at(-1-i)?.draw())}
 }
 
+const SCATTER = 0
+const CHASE   = 1
 const AlternateBetweenModes = function() {
 	{
 		let seq={mode:0,update(){}}
 		$on({Title_Ready:()=> seq=genSequence()})
 		return {
-			get isScatter() {return seq.mode == 0},
+			get isScatter() {return seq.mode == SCATTER},
 			update() {State.isPlaying && seq.update()},
 		}
 	}
@@ -150,7 +152,7 @@ const AlternateBetweenModes = function() {
 				[cnt,Seq.mode] = [0,(++idx % 2)]
 				setReversalSig()
 			}
-		};return Seq.mode? {mode:1,update(){}}:Seq
+		};return Seq.mode? {mode:CHASE,update(){}}:Seq
 	}
 }(),
 setReversalSig = ()=> {
