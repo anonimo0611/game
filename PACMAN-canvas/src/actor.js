@@ -58,7 +58,7 @@ export class Actor extends Common {
 	collidedWithWall(dir=this.dir) {
 		const  {step,centerPos}= this
 		const  {x,y}= Vec2[dir].mul(T/2+step).add(centerPos).divInt(T)
-		return Maze.hasWall({x:(x+Cols) % Cols, y})
+		return Maze.hasWall({x:(x+Cols) % Cols, y}) // x-axis loops
 	}
 	centering() {
 		this.x = (CvsW-T)/2
@@ -89,6 +89,6 @@ export class Actor extends Common {
 	/** @param {Direction} dir */
 	getAdjTile(dir, n=1, tile=this.tilePos) {
 		const  v = Vec2[dir].mul(n).add(tile)
-		return v.setX((v.x+Cols) % Cols) // X-axis loops
+		return v.setX((v.x+Cols) % Cols) // x-axis loops
 	}
 }
