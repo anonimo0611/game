@@ -56,16 +56,16 @@ class House {
 }
 class PowDot {
 	#disp = 1
-	/** @param {Vector2} pos */
-	#draw(pos) {
+	/** @param {Vector2} t */
+	#draw(t) {
 		if (!State.isPlaying
 		 || Ticker.paused
 		 || this.#disp)
-			Maze.drawDot(Ctx, pos, true)
+			Maze.drawDot(Ctx, t.x, t.y, true)
 	}
 	draw() {
 		this.#disp ^= +(Ticker.count % 15 == 0)
-		for (const [,pos] of PowMap) this.#draw(pos)
+		for (const [,tPos] of PowMap) this.#draw(tPos)
 	}
 }
 class Tunnel {
@@ -111,12 +111,12 @@ export const Maze = new class {
 	 * @param {string}  chip
 	 */
 	#setDot(idx, chip) {
-		const v = Vec2(idx%Cols, idx/Cols|0)
-		Maze.clearBgDot({tileIdx:idx,tilePos:v})
+		const t = Vec2(idx%Cols, idx/Cols|0)
+		Maze.clearBgDot({tileIdx:idx,tilePos:t})
 		DotSet.add(idx)
 		!powChk.checked || chip == '.'
-			? drawDot(Bg.ctx, v)
-			: PowMap.set(idx, v)
+			? drawDot(Bg.ctx, t.x, t.y)
+			: PowMap.set(idx, t)
 	}
 	get dotsLeft() {return DotSet.size}
 	Map    = MapArr
@@ -138,20 +138,21 @@ export const Maze = new class {
 			? Vec2((t.x > Cols/2) && (o.x > Cols/2) ? 21:6, 15) : o
 
 	/** @param {{tileIdx:TileIdx, tilePos:Vector2}} tile */
-	clearBgDot({tileIdx:idx,tilePos:v}) {
+	clearBgDot({tileIdx:idx,tilePos:t}) {
 		DotSet.delete(idx)
 		PowMap.delete(idx)
-		drawDot(Bg.ctx, v, true, null)
+		drawDot(Bg.ctx, t.x, t.y, true, null)
 		return DotSet.size
 	}
 	/**
 	 * @param {ExtendedContext2D} ctx
-	 * @param {Position}  tilePos
-	 * @param {boolean}   isLarge
+	 * @param {number} col
+	 * @param {number} row
+	 * @param {boolean} isLarge
 	 * @param {?CtxStyle} color
 	 */
-	drawDot(ctx, {x,y}, isLarge=false, color=Color.Dot) {
-		ctx.fillCircle(x*T+T/2, y*T+T/2, T/(isLarge? 2:8), color)
+	drawDot(ctx, col,row, isLarge=false, color=Color.Dot) {
+		ctx.fillCircle(col*T+T/2, row*T+T/2, T/(isLarge? 2:8), color)
 	}
 	#drawDoor() {
 		Bg.ctx.fillRect(13*T, 13.6*T, T*2, T/4, Color.Door)

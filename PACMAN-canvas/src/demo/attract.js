@@ -50,7 +50,7 @@ export class Attract {
 		for (let i=0; i<this.ghsList.length*Max; i++) {
 			this.setActor(i/Max|0, i%Max)
 		}
-		$(GhsMgr).trigger('Init', this.ghsList[DEMO])
+		GhsMgr.trigger('Init', this.ghsList[DEMO])
 	}
 	/**
 	 * @param {number} idx
@@ -67,47 +67,46 @@ export class Attract {
 	/**
 	 * @param {number} idx
 	 * @param {number} ghsIdx
-	 * @param {Vector2} [pos]
 	 */
-	drawGhost(idx, ghsIdx, pos) {
-		const ghost = this.ghsList[idx][ghsIdx]
-		pos && (ghost.pos = pos)
-		ghost.sprite.draw(ghost)
+	drawGhost(idx, ghsIdx, col=NaN, row=NaN) {
+		const g = this.ghsList[idx][ghsIdx]
+		!isNaN(col) && !isNaN(row) && (g.pos = Vec2(col*T, row*T))
+		g.sprite.draw(g)
 	}
 	draw() {
-		const et = Ticker.elapsedTime/100, ptsFontSize = T*.68
+		const et = Ticker.elapsedTime/100, ptsSize = T*.68
 		Score.draw(),drawText(7, 5, null, 'CHARACTOR　/　NICKNAME')
-		et > 10 && this.drawGhost(CHAR, 0, Vec2(5*T, 6*T))
+		et > 10 && this.drawGhost(CHAR, GhsType.Akabei, 5, 6)
 		et > 15 && drawText( 8,  7, Color.Akabei, 'OIKAKE----')
 		et > 20 && drawText(18,  7, Color.Akabei, '"AKABEI"')
 
-		et > 30 && this.drawGhost(CHAR, 1, Vec2(5*T, 9*T))
+		et > 30 && this.drawGhost(CHAR, GhsType.Pinky,  5, 9)
 		et > 35 && drawText( 8, 10, Color.Pinky, 'MACHIBUSE--')
 		et > 40 && drawText(19, 10, Color.Pinky, '"PINKY"')
 
-		et > 50 && this.drawGhost(CHAR, 2, Vec2(5*T, 12*T))
+		et > 50 && this.drawGhost(CHAR, GhsType.Aosuke, 5, 12)
 		et > 55 && drawText( 8, 13, Color.Aosuke, 'KIMAGURE--')
 		et > 60 && drawText(18, 13, Color.Aosuke, '"AOSUKE"')
 
-		et > 70 && this.drawGhost(CHAR, 3, Vec2(5*T, 15*T))
+		et > 70 && this.drawGhost(CHAR, GhsType.Guzuta, 5, 15)
 		et > 75 && drawText( 8, 16, Color.Guzuta, 'OTOBOKE---')
 		et > 80 && drawText(18, 16, Color.Guzuta, '"GUZUTA"')
 		if (et > 85) {
-			drawDot(Ctx, Vec2(10, 24))
-			this.powDisp && drawDot(Ctx, Vec2(10, 26), true)
+			drawDot(Ctx, 10, 24)
+			this.powDisp && drawDot(Ctx, 10, 26, true)
 			drawText(12.0, 25, null, '10')
-			drawText(14.3, 25, null, 'PTS', {size:ptsFontSize})
+			drawText(14.3, 25, null, 'PTS', {size:ptsSize})
 			drawText(12.0, 27, null, '50')
-			drawText(14.3, 27, null, 'PTS', {size:ptsFontSize})
+			drawText(14.3, 27, null, 'PTS', {size:ptsSize})
 		}
 		if (et > 90) {
 			if (this.pacman.dir == L && this.powDisp) {
-				drawDot(Ctx, Vec2(4, 19), true)
+				drawDot(Ctx, 4, 19, true)
 			}
 			if (Ctrl.extendPts > 0) {
 				const {BonusText:color}= Color
 				drawText( 2.0, 30, color, `BONUS　PACMAN　FOR　${Ctrl.extendPts}`)
-				drawText(24.3, 30, color, 'PTS', {size:ptsFontSize})
+				drawText(24.3, 30, color, 'PTS', {size:ptsSize})
 			}
 		}
 		if (et > 105) {
