@@ -31,9 +31,10 @@ export default new class {
 	 * @param {number} y
 	 * @param {number} pts
 	 */
-	draw(x, y, pts) {
+	draw(x, y, pts, size=TileSize*2) {
 		Ctx.save()
 		Ctx.translate(x, y)
+		Ctx.scale(size/16, size/16)
 		Ctx.lineWidth   = 1.2
 		Ctx.lineCap     ='round'
 		Ctx.lineJoin    ='round'
