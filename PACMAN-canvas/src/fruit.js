@@ -1,5 +1,6 @@
 import {Sound}  from '../_snd/sound.js'
 import {Game}   from './_main.js'
+import {$level} from './_main.js'
 import {State}  from './state.js'
 import {Maze}   from './maze.js'
 import {PtsMgr} from './points.js'
@@ -22,11 +23,9 @@ let _tgtDisp = true
 export const Fruit = new class {
 	static {$ready(this.setup)}
 	static setup() {
-		$on({
-			Title_Ready: Fruit.#reset,
-			LevelChanged:Fruit.#setImages,
-		})
-		Player.bind({DotEaten:Fruit.#dotEaten})
+		$on({Title_Ready:Fruit.#reset})
+		$level.on({Changed: Fruit.#setImages})
+		Player.on({DotEaten:Fruit.#dotEaten})
 	}
 	get score() {
 		return PointTable[Fruit.number()]

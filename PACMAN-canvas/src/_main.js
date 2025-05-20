@@ -18,10 +18,13 @@ import {PtsMgr}   from './points.js'
 import {Attract}  from './demo/attract.js'
 import {CoffBrk}  from './demo/coffee_break.js'
 
+export const $level = $byId('level')
+
 export const Menu = freeze({
 	LevelMenu:  new _Menu.DorpDown('LevelMenu'),
 	ExtendMenu: new _Menu.Slide('ExtendMenu'),
 })
+
 export const Game = new class {
 	static {$ready(this.setup)}
 	static setup() {
@@ -39,13 +42,14 @@ export const Game = new class {
 			GameOver: Game.#levelEnds,
 			Quit:     Game.#levelEnds,
 		})
-		Menu.LevelMenu.bind({change:Game.#resetLevel})
+		Menu.LevelMenu.on({change:Game.#resetLevel})
 		State.to('Title')
  	}
 	#level = 1
 	#restarted = false
 
 	get level()     {return Game.#level}
+	get levelStr()  {return Game.#level.toString().padStart(2,'0')}
 	get restarted() {return Game.#restarted}
 
 	// Divide the speed equally with level 13+ as the fastest
@@ -60,8 +64,7 @@ export const Game = new class {
 	}
 	#setLevel(i=1) {
 		Game.#level = between(i, 1, 0xFF) && +i || 1
-		$('#level').text(`Level${('0'+Game.level).slice(-2)}`)
-		$trigger('LevelChanged')
+		$level.text('Level'+this.levelStr).trigger('Changed')
 	}
 	#confirm() {
 		!Ticker.paused && Game.#pause()

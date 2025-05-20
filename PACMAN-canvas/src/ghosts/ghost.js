@@ -40,7 +40,7 @@ export class Ghost extends Actor {
 	/** @param {Direction} dir */
 	constructor(dir=L, {col=0,row=0,idx=0,align=0,animFlag=1}={}) {
 		super()
-		this.bind({
+		this.on({
 			FrightMode:  this.#setFrightMode,
 			Reverse:()=> this.#revSig  = true,
 			Runaway:()=> this.#runaway = 400/Game.interval,

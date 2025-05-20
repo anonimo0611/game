@@ -104,7 +104,7 @@ export const Ctrl = new class {
 	}
 	#setupCtrls() {
 		for (const menu of values(Menu)) {
-			menu.bind({change:Ctrl.#update})
+			menu.on({change:Ctrl.#update})
 		}
 		$('#clearStorageBtn').on({click:()=>
 			Confirm.open('Are you sure you want to clear local storage?',
