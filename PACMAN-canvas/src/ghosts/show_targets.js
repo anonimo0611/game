@@ -23,7 +23,7 @@ export default new class {
 
 	/** @param {Ghost} g */
 	#getTargetPos(g) {
-		return (g.state.isGoOut || g.isEscaping)
+		return (g.state.isGoOut || g.state.isEscape)
 			? Maze.House.EntranceTile.add(.5).mul(T)
 			: g.isScatter
 				? g.originalTargetTile.add(.5).mul(T)
