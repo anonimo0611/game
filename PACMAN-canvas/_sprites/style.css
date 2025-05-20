@@ -12,14 +12,15 @@ body {
 	padding: 25px;
 	opacity: 0;
 	transition: 300ms opacity;
-	cursor: grab;
 	-webkit-user-select: none;
 	user-select: none;
 	color-scheme: dark;
 }
-body:active {
-	cursor: grabbing;
+body.dragScrollEnabeld {
+	& {cursor: grab}
+	&:active {cursor: grabbing}
 }
+
 button {
 	background: transparent !important;
 }

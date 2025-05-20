@@ -5,6 +5,8 @@
 		|| matchMedia('(pointer:coarse)').matches
 	) return
 
+	document.body.classList.add('dragScrollEnabeld')
+
 	class State {
 		scrL = target?.scrollLeft
 		scrT = target?.scrollTop
