@@ -103,7 +103,7 @@ function getOrient() {
 			? drawPacman()
 			: drawGhost()
 	}
-	menu.bind({change})
+	menu.on({change})
 	menu.root.addEventListener('keydown', e=> {
 		// Enable switching of radio controls with the ← or → key
 		const dir = Dir.from(e)
