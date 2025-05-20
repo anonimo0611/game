@@ -82,8 +82,8 @@ export class DorpDown extends Menu {
 			return
 		case 'ArrowUp':
 		case 'ArrowDown': {
-				const dir = e.key == 'ArrowUp' ? 'Up':'Down'
-				this.select((index+Vec2[dir].y+size) % size, {close:false})
+				const dir = e.key.endsWith('Up') ? -1:1
+				this.select((index+dir+size) % size, {close:false})
 			}
 		}
 	}
