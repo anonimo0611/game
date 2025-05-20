@@ -9,6 +9,7 @@ class Menu extends Common {
 		return this.menu?.querySelector('.selected') || this.items[0]
 	}
 	/**
+	 * @protected
 	 * @param {string} id
 	 * @param {string} type
 	 */
