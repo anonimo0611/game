@@ -68,27 +68,27 @@ export class Attract {
 	 * @param {number} idx
 	 * @param {number} ghsIdx
 	 */
-	drawGhost(idx, ghsIdx, col=NaN, row=NaN) {
-		const g = this.ghsList[idx][ghsIdx]
-		!isNaN(col) && !isNaN(row) && (g.pos = Vec2(col*T, row*T))
-		g.sprite.draw(g)
+	drawGhost(idx, ghsIdx, row=NaN) {
+		const ghost = this.ghsList[idx][ghsIdx]
+		!isNaN(row) && (ghost.pos = Vec2(5*T, row*T))
+		ghost.sprite.draw(ghost)
 	}
 	draw() {
 		const et = Ticker.elapsedTime/100, ptsSize = T*.68
 		Score.draw(),drawText(7, 5, null, 'CHARACTOR　/　NICKNAME')
-		et > 10 && this.drawGhost(CHAR, GhsType.Akabei, 5, 6)
+		et > 10 && this.drawGhost(CHAR, GhsType.Akabei, 6)
 		et > 15 && drawText( 8,  7, Color.Akabei, 'OIKAKE----')
 		et > 20 && drawText(18,  7, Color.Akabei, '"AKABEI"')
 
-		et > 30 && this.drawGhost(CHAR, GhsType.Pinky,  5, 9)
+		et > 30 && this.drawGhost(CHAR, GhsType.Pinky,  9)
 		et > 35 && drawText( 8, 10, Color.Pinky, 'MACHIBUSE--')
 		et > 40 && drawText(19, 10, Color.Pinky, '"PINKY"')
 
-		et > 50 && this.drawGhost(CHAR, GhsType.Aosuke, 5, 12)
+		et > 50 && this.drawGhost(CHAR, GhsType.Aosuke, 12)
 		et > 55 && drawText( 8, 13, Color.Aosuke, 'KIMAGURE--')
 		et > 60 && drawText(18, 13, Color.Aosuke, '"AOSUKE"')
 
-		et > 70 && this.drawGhost(CHAR, GhsType.Guzuta, 5, 15)
+		et > 70 && this.drawGhost(CHAR, GhsType.Guzuta, 15)
 		et > 75 && drawText( 8, 16, Color.Guzuta, 'OTOBOKE---')
 		et > 80 && drawText(18, 16, Color.Guzuta, '"GUZUTA"')
 		if (et > 85) {
