@@ -11,6 +11,7 @@ export class Actor extends Common {
 	#orient = /**@type {Direction}*/(L)
 	#movDir = /**@type {Direction}*/(L)
 
+	/** @protected */
 	constructor()   {super()}
 	get x()         {return this.#x}
 	get y()         {return this.#y}
