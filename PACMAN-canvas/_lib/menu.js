@@ -97,6 +97,7 @@ export class DorpDown extends Menu {
 }
 
 export class Slide extends Menu {
+	#width = 0
 	/** @param {string} id */
 	constructor(id) {
 		super(id,'slidemenu')
@@ -120,7 +121,6 @@ export class Slide extends Menu {
 			between(val, 0, this.size-1) && this.select(val)
 		}
 	}
-	#width = 0
 	/** @param {number} btnW */
 	#setWidth(btnW) {
 		this.#width = max(...[...this.items].map(li=> li.offsetWidth))+btnW
