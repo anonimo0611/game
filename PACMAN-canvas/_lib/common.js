@@ -17,7 +17,7 @@ export class Common {
 	 * @param   {Object.<string,Function>} arg
 	 * @returns {this}
 	 */
-	bind(arg, fn) {
+	on(arg, fn) {
 		typeof(arg) == 'object'
 			? $(this.#eventTarget).on(arg)
 			: $(this.#eventTarget).on(arg, fn)
