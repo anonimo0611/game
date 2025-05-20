@@ -1,5 +1,6 @@
 import {Dir}    from './direction.js'
 import {Common} from './common.js'
+
 class Menu extends Common {
 	get value() {return this.selectedItem.val}
 	get index() {return $(this.selectedItem).index()}
@@ -31,7 +32,7 @@ class Menu extends Common {
 		this.$label = $(root).closest('label')
 		this.defaultIndex = this.index
 
-		for (const i of this.items) $(i).css('--data', i.val)
+		for (const i of this.items) $(i).css('--val', i.val)
 		$(this.root).closest('form').on('reset', this.reset)
 	}
 	select(idx=0) {
@@ -90,7 +91,7 @@ export class DorpDown extends Menu {
 	select(idx=this.index, {close=true}={}) {
 		super.select(idx)
 		const item = this.selectedItem
-		this.$cur.css('--data', item.val).text($(item).text())
+		this.$cur.css('--val', item.val).text(item.innerText)
 		return close && this.close() || this
 	}
 }
@@ -128,12 +129,13 @@ export class Slide extends Menu {
 	}
 	select(idx=this.index) {
 		super.select(idx)
-		this.menu.style.transform = `translateX(${-this.#width*idx}px)`
+		this.menu.style.transform  =`translateX(${-this.#width*idx}px)`
 		this.btnL.dataset.disabled = String(idx == 0)
 		this.btnR.dataset.disabled = String(idx == this.size-1)
 	}
 }
+
 class MenuRoot extends HTMLElement{get type() {return 'menu'}}
-class MenuItem extends HTMLElement{get val()  {return this.getAttribute('val') ?? ''}}
+class MenuItem extends HTMLElement{get val()  {return $(this).attr('val') ?? ''}}
 customElements.define('custom-menu', MenuRoot)
 customElements.define('mn-item', MenuItem)
