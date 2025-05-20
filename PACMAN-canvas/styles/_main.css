@@ -10,7 +10,7 @@ html {
 }
 body {
 	color: #FFF;
-	background: #1b1b1c;
+	background: #1B1B1C;
 	font: 1rem/1 Verdana, sans-serif;
 	display: grid;
 	place-content: center;
@@ -218,7 +218,7 @@ body:not([data-state=Title]) #titleScr {
 	}
 	output::before,
 	mn-item::before {
-		--x: calc(-1*var(--t) * var(--data, 0));
+		--x: calc(-1*var(--t) * var(--val, 0));
 		--size: var(--width) var(--t);
 		content: '';
 		background: no-repeat var(--x) 0/var(--size) var(--url);
