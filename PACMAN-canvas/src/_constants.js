@@ -4,6 +4,8 @@ Cols     = 28,
 TileSize = 28, T=TileSize,
 BaseStep = TileSize / 4.5,
 
+dBody = /**@type {HTMLBodyElement}*/(document.body),
+
 /** @typedef {'Up'|'Right'|'Down'|'Left'} Direction */
 U='Up', R='Right', D='Down', L='Left',
 

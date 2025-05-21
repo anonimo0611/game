@@ -43,7 +43,7 @@ export const Game = new class {
 			Quit:     Game.#levelEnds,
 		})
 		Menu.LevelMenu.on({change:Game.#resetLevel})
-		State.to('Title')
+		State.to('Title') && (dBody.dataset.loaded='true')
 	}
 	#level = 1
 	#restarted = false
@@ -191,4 +191,4 @@ export const Game = new class {
 		Game.#draw()
 
 	}
-};$load(()=> document.body.dataset.loaded = 'true')
+}
