@@ -46,4 +46,4 @@ function setupCtrl(ctrl) {
 	$(label || ctrl).on({wheel:onWheel})
 	$(ctrl).on('input',onInput).trigger('input')
 }
-document.body.querySelectorAll('input[type=range]').forEach(setupCtrl)
+$load(()=> $('input[type=range]').get().forEach(setupCtrl))

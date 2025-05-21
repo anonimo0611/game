@@ -35,7 +35,7 @@ export default class {
 		return this
 	}
 
-	/** @param {string} state */
+	/** @param {string} [state] */
 	last(state) {
 		const last = this.#last
 		return state? (state === last ? last:'') : last
