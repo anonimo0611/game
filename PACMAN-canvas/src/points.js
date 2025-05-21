@@ -25,28 +25,28 @@ class Points {
 	 * @param {PtsData}  PtsData
 	 * @param {Function} [fn]
 	 */
-	constructor({key,x,y,duration=1e3}, fn) {
-		const speed   = Game.speedRate
-		const fadeDur = 300
-		this.score    = key.score
-		this.position = Vec2(x, y)
-		this.fadeOut  = new FadeOut(fadeDur/speed, (duration-fadeDur)/speed)
-		Timer.set(duration/speed, ()=> {
+	constructor({key,x,y,duration:dur=1e3}, fn) {
+		const spd  = Game.speedRate, fadeDur = 300
+		this.score = key.score
+		this.pos   = Vec2(x, y)
+		this.fade  = new FadeOut(fadeDur/spd, (dur-fadeDur)/spd)
+		Timer.set(dur/spd, ()=> {
 			Timer.unfreeze()
 			PtsMap.delete(key)
 			fn?.()
 		})
-		State.isPlaying && Score.add(this.score)
+		State.isPlaying && Score.add(key.score)
 		PtsMap.set(key, this)
 	}
 	update() {
-		this.fadeOut.update()
+		this.fade.update()
 	}
 	draw() {
-		const {position:{x,y}}= this
+		const sideOfst = T*1.25
+		const {pos:{x,y}}= this
 		Ctx.save()
-		Ctx.setAlpha(this.fadeOut?.alpha)
-		Ctx.translate(clamp(x, T+T/4, CvsW-T-T/4), y)
+		Ctx.setAlpha(this.fade?.alpha)
+		Ctx.translate(clamp(x, sideOfst, CvsW-sideOfst), y)
 		Sprite.draw(0,0, this.score)
 		Ctx.restore()
 	}
