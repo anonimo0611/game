@@ -189,6 +189,5 @@ export const Game = new class {
 	#loop() {
 		Game.#update()
 		Game.#draw()
-
 	}
 }
