@@ -38,7 +38,7 @@ export const State = new class extends _State {
 	 */
 	#callback(state, data) {
 		Ticker.resetCount()
-		$trigger(document.body.dataset.state=state, data)
+		$trigger(dBody.dataset.state=state, data)
 	}
 	/**
 	 * @param {StateType} state
