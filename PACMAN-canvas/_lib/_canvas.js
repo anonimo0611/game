@@ -135,7 +135,7 @@ class FadeIn {
 	#duration = 0
 	get alpha()   {return this.#alpha}
 	get working() {return this.#alpha < 1}
-	constructor(ms=300, delay=0) {
+	constructor(ms=500, delay=0) {
 		this.#duration = ms
 		this.#delay = delay
 	}
@@ -159,7 +159,7 @@ class FadeOut {
 	#duration = 0
 	get alpha()   {return this.#alpha}
 	get working() {return this.#alpha > 0}
-	constructor(ms=300, delay=0) {
+	constructor(ms=500, delay=0) {
 		this.#duration = ms
 		this.#delay = delay
 	}
