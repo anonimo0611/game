@@ -26,7 +26,7 @@ export const Menu = freeze({
 })
 
 export const Game = new class {
-	static {$ready(this.setup)}
+	static {$load(this.setup)}
 	static setup() {
 		$on({
 			blur:()=> Game.#pause(true),
@@ -44,7 +44,7 @@ export const Game = new class {
 		})
 		Menu.LevelMenu.on({change:Game.#resetLevel})
 		State.to('Title')
- 	}
+	}
 	#level = 1
 	#restarted = false
 

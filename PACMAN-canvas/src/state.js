@@ -28,7 +28,7 @@ export const State = new class extends _State {
 	get current() {
 		return /**@type {StateType}*/(super.current)
 	}
-	/** @param {StateType} state */
+	/** @param {StateType} [state] */
 	last(state) {
 		return /**@type {StateType|''}*/(super.last(state))
 	}

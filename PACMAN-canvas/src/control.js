@@ -73,7 +73,6 @@ export const Ctrl = new class {
 			case 'Chk':input(id).checked=val;break
 			case 'Menu':Menu[id].select(val);break
 			}
-			$byId(id).trigger('input')
 		}
 	}
 	drawGrid() {
