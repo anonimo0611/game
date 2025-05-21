@@ -49,8 +49,7 @@ export class Actor extends Common {
 		State.isPlaying && (this.#fadeIn &&= null)
 	}
 	draw() {
-		State.isReady && this.#fadeIn?.setAlpha(Ctx)
-			|| (Ctx.globalAlpha = this.maxAlpha)
+		Ctx.setAlpha(this.#fadeIn?.alpha ?? this.maxAlpha)
 	}
 	newTileReached(denom=1) {
 		return this.inFrontOfTile
