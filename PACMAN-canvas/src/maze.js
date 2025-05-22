@@ -64,7 +64,7 @@ class PowDot {
 			Maze.drawDot(Ctx, t.x, t.y, true)
 	}
 	draw() {
-		this.#disp ^= +(Ticker.count % 15 == 0)
+		this.#disp ^= +(Ticker.count % PowDotInterval == 0)
 		for (const [,tPos] of PowMap) this.#draw(tPos)
 	}
 }
@@ -125,14 +125,18 @@ export const Maze = new class {
 	PowDot = freeze(new PowDot)
 	Tunnel = freeze(new Tunnel)
 
-	// These tiles(x-y) forbidden ghosts from entering upward
-	GhostNotEnterSet = new Set(['12-11','12-23','15-11','15-23'])
-
 	hasDot  = (/**@type {TileIdx} */i)=> DotSet.has(i)
 	hasPow  = (/**@type {TileIdx} */i)=> PowMap.has(i)
 	hasWall = (/**@type {Position}*/p)=> WallSet.has(p.y*Cols+p.x)
 
-	/** @param {Ghost} ghost */
+	/** The following tiles(x-y) forbidden ghosts from entering upward */
+	GhostNotEnterSet = new Set(['12-11','12-23','15-11','15-23'])
+
+	/**
+	 * If the target tile is on the upper side of the maze \
+	 * and the ghost is around the house, guid them outside of it
+	 * @param {Ghost} ghost
+	 */
 	ghostExitTile = ({originalTargetTile:o, tilePos:t})=>
 		o.y < 10 && PenOuter.contains(t)
 			? Vec2((t.x > Cols/2) && (o.x > Cols/2) ? 21:6, 15) : o
