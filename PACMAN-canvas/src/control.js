@@ -84,7 +84,7 @@ export const Ctrl = new class {
 		Ctx.restore()
 	}
 	#drawInfo() {
-		const{ctx}= Inf, lh = 0.84, ColTbl = Color.InfoTable
+		const{ctx}= HUD, lh = 0.84, ColTbl = Color.InfoTable
 		const spd = 'x'+Ctrl.speedRate.toFixed(1)
 		const cfg = {ctx, size:T*0.68, style:'bold', scaleX:.7}
 		ctx.save()

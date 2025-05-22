@@ -12,7 +12,7 @@ PowDotInterval = 15,
 /** @typedef {'Up'|'Right'|'Down'|'Left'} Direction */
 U='Up', R='Right', D='Down', L='Left',
 
-[Bg,Inf,,Ctx,CvsW,CvsH]= [
+[Bg,HUD,,Ctx,CvsW,CvsH]= [
 	canvas2D('bg' , T*Cols, T*Rows),
 	canvas2D('inf', T*Cols, T*Rows),...
 	canvas2D('cvs', T*Cols, T*Rows).vals
