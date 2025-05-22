@@ -6,7 +6,7 @@ BaseStep = TileSize / 4.5,
 
 dBody = /**@type {HTMLBodyElement}*/(document.body),
 
-/** Blinking frame interval */
+/** Blinks every specified number of frames */
 PowDotInterval = 15,
 
 /** @typedef {'Up'|'Right'|'Down'|'Left'} Direction */
