@@ -133,9 +133,9 @@ export const Maze = new class {
 	GhostNotEnterSet = new Set(['12-11','12-23','15-11','15-23'])
 
 	/**
+	 * @param {Ghost} ghost
 	 * If the target tile is on the upper side of the maze \
 	 * and the ghost is around the house, guid them outside of it
-	 * @param {Ghost} ghost
 	 */
 	ghostExitTile = ({originalTargetTile:o, tilePos:t})=>
 		o.y < 10 && PenOuter.contains(t)
