@@ -129,7 +129,7 @@ export const Maze = new class {
 	hasPow  = (/**@type {TileIdx} */i)=> PowMap.has(i)
 	hasWall = (/**@type {Position}*/p)=> WallSet.has(p.y*Cols+p.x)
 
-	/** The following tiles(x-y) forbidden ghosts from entering upward */
+	/** These tiles(x-y) forbidden ghosts from entering upward */
 	GhostNotEnterSet = new Set(['12-11','12-23','15-11','15-23'])
 
 	/**
