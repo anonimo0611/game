@@ -17,10 +17,10 @@ export class SoundMgr {
 					return
 				SoundMgr.#disabled = false
 				Ids.forEach(i=> Instance.set(i, SoundJS.createInstance(i)))
-				resolve(true)
+				resolve('All sound files loaded')
 			})
 		})
-		.catch(()=> false)
+		.then(()=> true).catch(()=> false)
 
 	set vol(vol)   {SoundJS.volume = Number.isFinite(vol)? vol/10 : this.vol}
 	get vol()      {return SoundJS.volume * 10}
