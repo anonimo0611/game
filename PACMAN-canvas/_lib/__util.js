@@ -131,7 +131,7 @@ const $off = event=> $(window).off(event.trim().replace(/_/g,' '))
 /**
  * @param {string} event
  * @param {Function} fn
-*/
+ */
 const $offon = (event,fn)=> $off(event) && $on(event,fn)
 
 /**
