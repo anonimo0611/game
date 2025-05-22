@@ -148,6 +148,7 @@ export const Maze = new class {
 		drawDot(Bg.ctx, t.x, t.y, true, null)
 		return DotSet.size
 	}
+
 	/**
 	 * @param {ExtendedContext2D} ctx
 	 * @param {number} col
