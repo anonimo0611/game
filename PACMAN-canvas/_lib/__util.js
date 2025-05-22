@@ -42,16 +42,15 @@ const isCombinationKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
  */const compareDist = (a,b)=>
 	(a.dist == b.dist)? (a.index-b.index) : (a.dist-b.dist)
 
- /**
-  * @template T
-  * @param {T|null|undefined} arg
-  * @returns {T}
-  */const nonNull = arg=> {
+/**
+ * @template T
+ * @param {T|null|undefined} arg
+ * @returns {T}
+ */const nonNull = arg=> {
 	if (arg === null || arg === undefined)
 		throw TypeError('Does not have a specific value')
 	return arg
   }
-
 /**
  * @param {number} x
  * @param {number} y
@@ -90,7 +89,7 @@ const isCombinationKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 /**
  * @param {Position} v1
  * @param {Position} v2
- * @param {number} r1
+ * @param {number}  r1
  * @param {number} [r2]
  */const collisionCircle = (v1,v2,r1,r2=r1)=>
 	(v1.x-v2.x)**2 + (v1.y-v2.y)**2 <= (r1+(r2 ?? r1))**2
