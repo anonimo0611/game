@@ -23,9 +23,9 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		return this
 	}
 
-	/** @param {number} opacity */
-	setAlpha(opacity=this.globalAlpha) {
-		this.globalAlpha = opacity
+	/** @param {number} alpha */
+	setAlpha(alpha=this.globalAlpha) {
+		this.globalAlpha = alpha
 	}
 
 	/** @param {CtxStyle} [style] */
@@ -139,6 +139,10 @@ class FadeIn {
 		this.#duration = ms
 		this.#delay = delay
 	}
+	/**
+	 * @param {number} max max alpha
+	 * @returns {boolean} during fading in
+	 */
 	update(max=1) {
 		if (++this.#count * 1e3/60 < this.#delay || !this.working) {
 			return false
@@ -163,6 +167,7 @@ class FadeOut {
 		this.#duration = ms
 		this.#delay = delay
 	}
+	/** @returns {boolean} during fading out */
 	update() {
 		if (++this.#count * 1e3/60 < this.#delay) {
 			return false
@@ -179,7 +184,7 @@ class FadeOut {
 
 /**
  * @param {string|null} id ID of a canvas that exists in the document; if null, the canvas is created
- * @param {number} [width] The default value uses the width attribute of canvas element
+ * @param {number} [width]  The default value uses the width attribute of canvas element
  * @param {number} [height] The default is the same as `width`, but if both `width` and `height` are undefined, use the heigt attribute of canvas element
  */
 const canvas2D = (id, width, height=width)=> {
