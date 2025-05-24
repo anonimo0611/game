@@ -26,11 +26,13 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 	/** @param {number} alpha */
 	setAlpha(alpha=this.globalAlpha) {
 		this.globalAlpha = alpha
+		return this
 	}
 
 	/** @param {CtxStyle} [style] */
 	clear(style) {
 		this.fillRect(0,0,this.width,this.height,style??null)
+		return this
 	}
 
 	/**
@@ -100,6 +102,7 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 	newLinePath(...c) {
 		this.beginPath()
 		this.setLinePath(...c)
+		return this
 	}
 
 	/** @param {[x:number,y:number][]} c */
@@ -108,11 +111,13 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 			!i ? this.moveTo(x,y)
 			   : this.lineTo(x,y)
 		})
+		return this
 	}
 
 	/** @param {[x:number,y:number][]} c */
 	addLinePath(...c) {
 		c.forEach(([x,y])=> this.lineTo(x,y))
+		return this
 	}
 
 	/**
