@@ -87,8 +87,9 @@ export const Game = new class {
 				: State.to('Quit')
 			}()
 		default:
-			if (qS(':not(#startBtn):focus') == null
-			 && Dir.from(e,{wasd:true}) || e.key == '\x20') {
+			if (qS(':not(#startBtn):focus'))
+				return
+			if (Dir.from(e,{wasd:true}) || e.key == '\x20') {
 				State.isTitle && State.to('Start')
 				Ticker.paused && Game.#pause()
 			}
