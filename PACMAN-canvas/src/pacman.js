@@ -69,8 +69,8 @@ class PlayablePac extends Pacman {
 		const dir = Dir.from(e, {wasd:true})
 		return (Confirm.opened
 			|| keyRepeat(e)
-			|| dir == null
-			|| dir == this.dir && !this.#turning
+			|| (dir == null)
+			|| (dir == this.dir && !this.#turning)
 		)? null : dir
 	}
 
