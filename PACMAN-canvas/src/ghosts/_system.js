@@ -163,11 +163,12 @@ setReversalSig = ()=> {
 export const DotCounter = function() {
 	let _globalCounter = -1
 	const pCounters  = new Uint8Array(GhsType.Max)
-	const limitTable = freeze([
-	    //  global,lv1,lv2,lv3+
-		freeze([ 7,  0,  0, 0]),  // Pinky
-		freeze([17, 30,  0, 0]),  // Aosuke
-		freeze([32, 60, 50, 0])]) // Guzuta
+	const limitTable = /**@type {const}*/
+		([//global,lv1,lv2,lv3+
+			[ 7,  0,  0, 0], // Pinky
+			[17, 30,  0, 0], // Aosuke
+			[32, 60, 50, 0], // Guzuta
+		])
 	/**
 	 * @param {number} idx Pinky, Aosuke, Guzuta's index
 	 * @param {(deactivateGlobal?:boolean)=> boolean} fn Release ghost
@@ -225,12 +226,13 @@ const Elroy = function() {
 }()
 
 class FrightMode {
-	static {GhsMgr.on({Init:()=> this.#instance=null})}
+	/** @private @readonly */
+	static TimeTable = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	static #instance = /**@type {?FrightMode}*/(null)
-	static #timeList = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	static get instance() {return this.#instance}
-	static get numOfSec() {return this.#timeList[Game.clampedLv-1]}
+	static get numOfSec() {return this.TimeTable[Game.clampedLv-1]}
 	static new() {(State.isAttract || this.numOfSec) && new this()}
+	static {GhsMgr.on({Init:()=> this.#instance=null})}
 
 	#tCounter = 0; #fCounter  = 0;
 	#flashIdx = 1; #caughtCnt = 0;
