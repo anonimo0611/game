@@ -8,7 +8,7 @@ export default class {
 		const {ctx}= this
 		ctx.clearRect(38,-1, 6,25)
 		ctx.clearRect(30,23,15,15)
-		ctx.newLinePath([38,-8],[49,-5],[36, 4]);ctx.fill()
+		ctx.newLinePath([38,-8],[49,-5],[36, 4]).fill()
 		ctx.newLinePath([40, 1],[40,23],[35,23])
 		ctx.quadraticCurveTo(28, 32, 35, 32)
 		ctx.addLinePath([43,32],[43,42],[9,42],[9,38],[18,32],[26,25],[21,20],[19,19])
@@ -20,7 +20,7 @@ export default class {
 		/** @type {[x:number, y:number][]} */
 		coords = [[39,8],[33,14],[24,8],[14,15],[26,20],[14,27],[25,33],[14,38]]
 		idx && coords.pop()
-		ctx.lineWidth = 3.5
+		ctx.lineWidth   = 3.5
 		ctx.strokeStyle = '#FFF'
 		ctx.newLinePath(...coords)
 		ctx.stroke()
@@ -31,8 +31,8 @@ export default class {
 		ctx.save()
 		for (const v of [-1,+1]) {
 			ctx.beginPath() // Eyeball
-			ctx.fillStyle = '#FFF'
 			ctx.ellipse(19*v, -14, 13,16, 0, PI/2.2, PI*2.2)
+			ctx.fillStyle = '#FFF'
 			ctx.fill()
 		}
 		ctx.lineWidth   = 8
