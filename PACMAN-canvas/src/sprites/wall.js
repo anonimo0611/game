@@ -1,24 +1,18 @@
 const {ctx}=Bg, W=Cols, T=TileSize
 
-/** @type {[x:number,y:number][]} */
+/** @type {readonly(readonly[x:number,y:number])[]} */
 const ScaleTable = [[1,1],[-1,1],[-1,-1],[1,-1]]
 
 import {Maze} from '../maze.js'
-export const Wall = new class {
-	/**
-	 * @param {number} cornerIdx
-	 * @param {number} x
-	 * @param {number} y
-	 */
-	#drawCorner(cornerIdx, x, y, type=0) {
+export const Wall = new class
+{
+	draw(color=Color.Wall) {
 		ctx.save()
-		ctx.translate(x+T/2, y+T/2)
-		ctx.scale(...ScaleTable[cornerIdx])
-		ctx.beginPath()
-		;(type == 2)
-			? ctx.strokeLine(T/2,T/2, T/2-2,T/2-2)
-			: ctx.arc(T/2,T/2, (type? T-2:T/2), PI,PI*1.5)
-		ctx.stroke()
+		ctx.clear()
+		ctx.lineWidth = 3
+		ctx.strokeStyle = color
+		Maze.Map.forEach(this.#drawTile)
+		this.#drawHouse(ctx.lineWidth/2)
 		ctx.restore()
 	}
 	#drawHouse(hl=0) {
@@ -30,18 +24,29 @@ export const Wall = new class {
 		ctx.closePath()
 		ctx.stroke()
 	}
-	/**
-	 * @param {string} c Map chip
-	 * @param {number} i Tile index
-	 */
-	#drawTile = (c, i)=> {
+
+	/** @type {(cornerIdx:number, x:number, y:number, type:number)=> void} */
+	#drawCorner = (cornerIdx, x, y, type)=> {
+		ctx.save()
+		ctx.translate(x+T/2, y+T/2)
+		ctx.scale(...ScaleTable[cornerIdx])
+		ctx.beginPath()
+		;(type == 2)
+			? ctx.strokeLine(T/2,T/2, T/2-2,T/2-2)
+			: ctx.arc(T/2,T/2, (type? T-2:T/2), PI,PI*1.5)
+		ctx.stroke()
+		ctx.restore()
+	}
+
+	/** @type {(c:string, i:number)=> void} */
+	#drawTile = (c, i)=> { // c=Map chip, i=tileIdx
 		const [tx,ty]= [i%W, i/W|0]
 		const [px,py]= [tx*T, ty*T]
 		const ci = +c? +c-1 : 'ABCD'.indexOf(c.toUpperCase())
 
-		;/[A-D]/.test(c) && this.#drawCorner(ci, px, py, 1)
-		;/[a-d]/.test(c) && this.#drawCorner(ci, px, py, 2)
-		;/[a-d1-4]/i.test(c) && this.#drawCorner(ci, px, py)
+		;/[A-D]/.test(c)     && this.#drawCorner(ci, px, py, 1)
+		;/[a-d]/.test(c)     && this.#drawCorner(ci, px, py, 2)
+		;/[a-d1-4]/i.test(c) && this.#drawCorner(ci, px, py, 0)
 
 		;(c == '-')     && ctx.strokeLine(px, py+T/2, px+T, py+T/2)
 		;/[#|]/.test(c) && ctx.strokeLine(px+T/2, py, px+T/2, py+T)
@@ -58,15 +63,6 @@ export const Wall = new class {
 			ctx.strokeLine(0,oY, T,oY)
 			!+c && ctx.strokeLine(0,0, T,0)
 		}
-		ctx.restore()
-	}
-	draw(color=Color.Wall) {
-		ctx.save()
-		ctx.clear()
-		ctx.lineWidth   = 3
-		ctx.strokeStyle = color
-		Maze.Map.forEach(this.#drawTile)
-		this.#drawHouse(ctx.lineWidth/2)
 		ctx.restore()
 	}
 }
