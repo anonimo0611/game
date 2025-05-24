@@ -21,12 +21,12 @@ export const Wall = new class {
 		ctx.stroke()
 		ctx.restore()
 	}
-	#drawHouse(lh=0) {
+	#drawHouse(hl=0) {
 		ctx.newLinePath(
-			[13.00*T-lh,13.55*T],[10.55*T, 13.55*T],[10.55*T,   17.45*T],
-			[17.45*T,   17.45*T],[17.45*T, 13.55*T],[15.00*T+lh,13.55*T],
-			[15.00*T+lh,13.90*T],[17.10*T, 13.90*T],[17.10*T,   17.10*T],
-			[10.90*T,   17.10*T],[10.90*T, 13.90*T],[13.00*T-lh,13.90*T])
+			[13.00*T-hl,13.55*T],[10.55*T, 13.55*T],[10.55*T,   17.45*T],
+			[17.45*T,   17.45*T],[17.45*T, 13.55*T],[15.00*T+hl,13.55*T],
+			[15.00*T+hl,13.90*T],[17.10*T, 13.90*T],[17.10*T,   17.10*T],
+			[10.90*T,   17.10*T],[10.90*T, 13.90*T],[13.00*T-hl,13.90*T])
 		ctx.closePath()
 		ctx.stroke()
 	}
@@ -63,7 +63,7 @@ export const Wall = new class {
 	draw(color=Color.Wall) {
 		ctx.save()
 		ctx.clear()
-		ctx.lineWidth   = 3.5
+		ctx.lineWidth   = 3
 		ctx.strokeStyle = color
 		Maze.Map.forEach(this.#drawTile)
 		this.#drawHouse(ctx.lineWidth/2)
