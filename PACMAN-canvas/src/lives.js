@@ -1,17 +1,19 @@
-/** @typedef {'Title'|'Start'|'Ready'|'Restart'} Scene */
 import {State} from './state.js'
 import {Ctrl}  from './control.js'
 import Sprite  from './sprites/pacman.js'
+
 export const Lives = function() {
 	let _left = 0
+	const EvTypes = /** @type {const} */
+		(['Title','Start','Ready','Restart'])
 	function currentValue() {
 		const Max = Ctrl.livesMax-1
 		return {
-			Title: Max,
-			Start: Max+1,
-			Ready: State.last('Start')? Max:_left,
-			Restart: _left-1,
-		}[/**@type {Scene}*/(State.current)]
+			Title:  Max,
+			Start:  Max+1,
+			Ready:  State.last('Start')? Max:_left,
+			Restart:_left-1,
+		}[/**@type {typeof EvTypes[number]}*/(State.current)]
 	}
 	function set(val=currentValue()) {
 		const {ctx}  = HUD
@@ -25,7 +27,7 @@ export const Lives = function() {
 		ctx.restore()
 	}
 	$('#lvsRng').on({input:()=> set()})
-	$on({Title_Start_Ready_Restart:()=> set()})
+	$on(EvTypes.join('_'), ()=> set())
 	return {
 		get left(){return _left},
 		append:()=> set(++_left),
