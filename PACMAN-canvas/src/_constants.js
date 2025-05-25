@@ -2,7 +2,7 @@ const
 Rows     = 34,
 Cols     = 28,
 TileSize = 28,
-BaseStep = TileSize / 4.5,
+BaseStep = TileSize/4.5,
 
 /** Shorthand of TileSize */
 T = TileSize,
@@ -58,8 +58,8 @@ PacStep   = freeze(new class {
 }),
 
 GhsScale = 1.1,
-GhsType  = freeze({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4}),
-GhsNames = freeze(keys(GhsType).slice(0,-1)),
+GhsType  = /**@type {const}*/({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4}),
+GhsNames = /**@type {const}*/(['Akabei','Pinky','Aosuke','Guzuta']),
 GhsStep  = freeze(new class {
 	Base     = BaseStep  * 1.07
 	Idle     = this.Base * 0.50

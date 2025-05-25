@@ -1,20 +1,20 @@
-const EyesEnum = freeze({Up:0,Down:1,Left:2,Right:2,LowerR:3})
+const EyesMap = new Map([[L,0],[R,0],[U,1],[D,2],['LowerR',3]])
 
 import CBSprite from './ghost_cb.js'
 export default class {
-	#CBSprite
-	#eyesFns
 	#fadeOut   = /**@type {?FadeOut}*/(null)
 	#resurrect = /**@type {?FadeIn} */(null)
 
+	/** @readonly */#CBSprite
+	/** @readonly */#eyesFns
 	/** @param {ExtendedContext2D} ctx */
 	constructor(ctx) {
 		this.ctx = ctx
 		this.#CBSprite = new CBSprite(ctx)
 		this.#eyesFns  = freeze([
+			this.#eyesLookingLR,
 			this.#eyesLookingUp,
 			this.#eyesLookingDown,
-			this.#eyesLookingLR,
 			this.#CBSprite.bracketEyes,
 		])
 		freeze(this)
@@ -25,11 +25,11 @@ export default class {
 	setResurrect() {this.#resurrect = new FadeIn (600)}
 	draw({
 		mainCtx=Ctx,x=0,y=0,
-		idx        = 0,
 		aIdx       = 0,
 		spriteIdx  = 0,
 		size       = T*2,
 		orient     = L,
+		color      = Color.Akabei,
 		isFright   = false,
 		isBitten   = false,
 		isEscaping = false,
@@ -52,8 +52,7 @@ export default class {
 		ctx.translate(size/2, size/2)
 		ctx.scale(size/(100/GhsScale), size/(100/GhsScale))
 		ctx.fillStyle = !isFright
-			? Color[GhsNames[idx]]
-			: Color.FrightBodyTable[spriteIdx]
+			? color : Color.FrightBodyTable[spriteIdx]
 
 		if (isExposed) {
 			this.#CBSprite.hadake(aIdx)
@@ -68,7 +67,8 @@ export default class {
 			ctx.restore()
 		}
 		if (!isFright) {
-			this.#eyesFns[EyesEnum[orient]].call(this,{orient,isRipped})
+			const idx = EyesMap.get(orient)
+			this.#eyesFns[nonNull(idx)].call(this,{orient,isRipped})
 		}
 		finalize()
 	}

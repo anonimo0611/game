@@ -1,21 +1,20 @@
+/** @typedef {'Title'|'Start'|'Ready'|'Restart'} Scene */
 import {State} from './state.js'
 import {Ctrl}  from './control.js'
 import Sprite  from './sprites/pacman.js'
-
-const {ctx}=HUD
-
 export const Lives = function() {
 	let _left = 0
 	function currentValue() {
 		const Max = Ctrl.livesMax-1
-		return +{
+		return {
 			Title: Max,
 			Start: Max+1,
 			Ready: State.last('Start')? Max:_left,
 			Restart: _left-1,
-		}[State.current]
+		}[/**@type {Scene}*/(State.current)]
 	}
 	function set(val=currentValue()) {
+		const {ctx}  = HUD
 		const radius = T*.78, size = T*2
 		const sprite = new Sprite(ctx,{openType:1})
 		ctx.save()

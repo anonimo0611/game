@@ -48,7 +48,7 @@ export default new class {
 		const {x,y}= this.#getTargetPos(g)
 		Ctx.save()
 		Ctx.globalAlpha = 0.8
-		Ctx.fillCircle  (x,y, T*0.4, Color[g.name])
+		Ctx.fillCircle  (x,y, T*0.4, g.color)
 		Ctx.strokeCircle(x,y, T*0.4,'#FFF', 4)
 		Ctx.restore()
 	}
@@ -66,7 +66,7 @@ export default new class {
 		Ctx.globalAlpha = 0.8
 		Ctx.lineWidth   = 6
 		Ctx.lineJoin    ='round'
-		Ctx.strokeStyle = Color[g.name]
+		Ctx.strokeStyle = g.color
 		Ctx.beginPath()
 		Ctx.moveTo(...pacPos.vals)
 		Ctx.lineTo(...Vec2[pacDir].mul(ofst*T).add(pacPos).vals)
@@ -76,8 +76,8 @@ export default new class {
 			const akaXY = GhsMgr.akaCenter.vals
 			Ctx.strokeLine(...fwdXY, ...akaXY)
 			Ctx.strokeLine(...fwdXY, ...g.chasePos.vals)
-			Ctx.fillCircle(...fwdXY, 8, Color[g.name])
-			Ctx.fillCircle(...akaXY, 8, Color[g.name])
+			Ctx.fillCircle(...fwdXY, 8, g.color)
+			Ctx.fillCircle(...akaXY, 8, g.color)
 		}
 		Ctx.restore()
 	}
@@ -89,7 +89,7 @@ export default new class {
 		const radius = T*8
 		Ctx.save()
 		Ctx.globalAlpha = g.sqrMagToPacman < radius*radius ? 0.4 : 0.8
-		Ctx.strokeCircle(...Player.i.centerPos.vals, radius, Color[g.name], 6)
+		Ctx.strokeCircle(...Player.i.centerPos.vals, radius, g.color, 6)
 		Ctx.restore()
 	}
 }

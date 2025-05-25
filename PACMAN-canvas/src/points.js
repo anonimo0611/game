@@ -5,16 +5,12 @@ import {GhsMgr} from './ghosts/_system.js'
 import {Fruit}  from './fruit.js'
 import Sprite   from './sprites/points.js'
 
-/** @type {Map<any, Points>} */
-const PtsMap = new Map()
+const PtsMap = /**@type {Map<any, Points>}*/(new Map)
 $on({Title_Clear_Crashed:()=> PtsMap.clear()})
 
 export const PtsMgr = new class {
-	/**
-	 * @param {PtsData}  data
-	 * @param {Function} [fn]
-	 */
-	set(data,fn) {new Points(data,fn)}
+	/** @type {(data:PtsData, fn?:Function)=> void} */
+	set = (data,fn)=> {new Points(data,fn)}
 	update()     {PtsMap.forEach(v=> v.update())}
 	drawBehind() {PtsMap.get(Fruit) ?.draw()}
 	drawFront()  {PtsMap.get(GhsMgr)?.draw()}

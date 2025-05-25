@@ -1,7 +1,7 @@
-const Duration = 150/Ticker.Interval
-const OpenMid  = 30 * PI/180
-const OpenMax  = 60 * PI/180
-const RotateEnum = freeze({Right:0,Down:1,Left:2,Up:3})
+const Duration  = 150/Ticker.Interval
+const OpenMid   = 30 * PI/180
+const OpenMax   = 60 * PI/180
+const RotateMap = new Map([[R,0],[D,1],[L,2],[U,3]])
 
 import {Losing} from './losing.js'
 export default class {
@@ -32,10 +32,11 @@ export default class {
 		if (frozen || this.#losing)
 			return this.#losing?.draw({x,y})
 		const {ctx}  = this
+		const rotate = RotateMap.get(orient)
 		const mAngle = (closed? 0:this.#mAngle)
 		ctx.save()
 		ctx.translate(x,y)
-		ctx.rotate(RotateEnum[orient] * PI/2)
+		ctx.rotate(nonNull(rotate) * PI/2)
 		ctx.beginPath()
 		ctx.moveTo(-radius*scale*0.35, 0)
 		ctx.arc(0,0,radius*scale, mAngle, PI*2-mAngle)

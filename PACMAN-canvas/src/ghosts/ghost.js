@@ -51,8 +51,8 @@ export class Ghost extends Actor {
 		this.iniAlign = align
 		this.animFlag = animFlag
 		this.pos      = Vec2(col*T, row*T)
-		this.name     = this.constructor.name
 		this.release  = this.release.bind(this)
+		this.color    = Color[GhsNames[idx]]
 		this.state    = new Sys.GhostState(this)
 		this.sprite   = new Sprite(canvas2D(null, T*3, T*2).ctx)
 		freeze(this)

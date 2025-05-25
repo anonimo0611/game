@@ -41,6 +41,7 @@ D__________________________C\
 ////////////////////////////`])
 
 /** @typedef {number} TileIdx */
+
 const WallSet  = /**@type {Set<TileIdx>}*/(new Set)
 const DotSet   = /**@type {Set<TileIdx>}*/(new Set)
 const PowMap   = /**@type {Map<TileIdx,Vector2>}*/(new Map)

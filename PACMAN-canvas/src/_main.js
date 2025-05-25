@@ -2,10 +2,10 @@ import './ghosts/ghost_sub.js'
 import {Sound}    from '../_snd/sound.js'
 import {Confirm}  from '../_lib/confirm.js'
 import {Cursor}   from '../_lib/mouse.js'
-import * as _Menu from '../_lib/menu.js'
 import {Dir}      from '../_lib/direction.js'
 import {State}    from './state.js'
 import {Ctrl}     from './control.js'
+import {Menu}     from './menu.js'
 import {Maze}     from './maze.js'
 import {Wall}     from './sprites/wall.js'
 import {Message}  from './message.js'
@@ -17,13 +17,6 @@ import {GhsMgr}   from './ghosts/_system.js'
 import {PtsMgr}   from './points.js'
 import {Attract}  from './demo/attract.js'
 import {CoffBrk}  from './demo/coffee_break.js'
-
-export const $level = $byId('level')
-
-export const Menu = freeze({
-	LevelMenu:  new _Menu.DorpDown('LevelMenu'),
-	ExtendMenu: new _Menu.Slide('ExtendMenu'),
-})
 
 export const Game = new class {
 	static {$load(this.setup)}
@@ -42,7 +35,7 @@ export const Game = new class {
 			GameOver: Game.#levelEnds,
 			Quit:     Game.#levelEnds,
 		})
-		Menu.LevelMenu.on({change:Game.#resetLevel})
+		Menu.Level.on({change:Game.#resetLevel})
 		State.to('Title') && (dBody.dataset.loaded='true')
 	}
 	#level = 1
@@ -60,7 +53,7 @@ export const Game = new class {
 	get moveSpeed() {return Game.speedRate * Game.speedByLv}
 
 	#resetLevel() {
-		Game.#setLevel(Menu.LevelMenu.index+1)
+		Game.#setLevel(Menu.Level.index+1)
 	}
 	#setLevel(i=1) {
 		Game.#level = between(i, 1, 0xFF) && +i || 1
@@ -154,7 +147,7 @@ export const Game = new class {
 				return
 			}
 			// intermission level
-			const imLv = +{2:1, 5:2, 9:3}[Game.level]
+			const imLv = {2:1, 5:2, 9:3}[Game.level] ?? NaN
 			Ctrl.isPractice || !imLv
 				? State.to('NewLevel')
 				: State.to('CoffBrk', {data:imLv})
@@ -191,4 +184,4 @@ export const Game = new class {
 		Game.#update()
 		Game.#draw()
 	}
-}
+}, $level = $byId('level')

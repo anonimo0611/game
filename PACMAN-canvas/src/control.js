@@ -1,6 +1,7 @@
 import './panel.js'
 import {Confirm}  from '../_lib/confirm.js'
-import {Menu}     from './_main.js'
+import {Menu}     from './menu.js'
+import {MenuIds}  from './menu.js'
 import {State}    from './state.js'
 import {drawText} from './message.js'
 
@@ -17,7 +18,7 @@ export const Ctrl = new class {
 		Ctrl.#drawInfo()
 		$on({resize:Ctrl.#fitToViewport}).trigger('resize')
 	}
-	get extendPts()     {return +Menu.ExtendMenu.value}
+	get extendPts()     {return +Menu.Extend.value}
 	get livesMax()      {return ctrl('lvsRng').valueAsNumber}
 	get speedRate()     {return ctrl('spdRng').valueAsNumber}
 	get isChaseMode()   {return ctrl('chsChk').checked}
@@ -28,7 +29,7 @@ export const Ctrl = new class {
 	get showGridLines() {return ctrl('grdChk').checked}
 	get isPractice()    {return Ctrl.isCheatMode  ||!Ctrl.isDefaultMode}
 	get isCheatMode()   {return Ctrl.speedRate<.7 || Ctrl.showTargets || Ctrl.invincible}
-	get isDefaultMode() {return Ctrl.consecutive && Menu.LevelMenu.index == 0}
+	get isDefaultMode() {return Ctrl.consecutive && Menu.Level.index == 0}
 
 	#fitToViewport() {
 		const scale = min(
@@ -44,14 +45,11 @@ export const Ctrl = new class {
 	#saveData() {
 		const data = Object.create(null)
 		;/** @type {HTMLInputElement[]} */
-		(qSAll('custom-menu,input')).forEach(ctrl=> {
-			if (!ctrl.id) return
-			data[ctrl.id]= {
-				menu:    Menu[ctrl.id]?.index,
-				range:   ctrl.valueAsNumber,
-				checkbox:ctrl.checked,
-			}[ctrl.type]
+		(qSAll('input')).forEach(e=> {
+			if (!e.id) return
+			data[e.id]= {range:+e.value, checkbox:e.checked}[e.type]
 		})
+		MenuIds.forEach(id=> data[id] = Menu[id].index)
 		localStorage.anopacman = JSON.stringify(data)
 	}
 	#removeData() {
@@ -68,11 +66,11 @@ export const Ctrl = new class {
 		const data = JSON.parse(localStorage.anopacman||null)||{}
 		for (const [id,val] of entries(data)) {
 			switch(ctrl(id)?.type) {
-			case 'menu':    Menu[id].index  =val;break
 			case 'range':   ctrl(id).value  =val;break
 			case 'checkbox':ctrl(id).checked=val;break
 			}
 		}
+		MenuIds.forEach(id=> Menu[id].index = data[id])
 	}
 	drawGrid() {
 		if (!Ctrl.showGridLines) return

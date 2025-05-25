@@ -3,6 +3,7 @@
     "module": "ES2022",
     "target": "ES2024",
     "checkJs": true,
-    "strictNullChecks":true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
   },
 }
