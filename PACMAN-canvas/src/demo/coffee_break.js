@@ -57,8 +57,8 @@ export class CoffBrk {
 		State.to(State.last('Title') || 'NewLevel')
 	}
 }
-qSAll('button.CBBtn').forEach((/**@type {HTMLButtonElement}*/e)=> {
-	$(e).on('click', e=> State.to('CoffBrk',{data:+e.target.value}))
+qSAll('button.CBBtn').forEach((e,i)=> {
+	$(e).on('click', ()=> State.to('CoffBrk', {data:i+1}))
 })
 
 class Scene1 extends CoffBrk {
