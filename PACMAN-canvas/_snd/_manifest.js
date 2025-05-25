@@ -19,6 +19,7 @@ const SoundData = freeze({
 /** @typedef {keyof SoundData} SoundType */
 /** @typedef {'siren0'|'siren1'|'siren2'|'siren3'} SirenType */
 
+/** @param {number} idx */
 const genSpriteData = idx=>
     entries(SoundData).flatMap(([k,v])=> idx == v.srcIdx ? [{id:k,...v}]:[])
 

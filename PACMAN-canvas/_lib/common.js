@@ -1,11 +1,11 @@
 export class Common {
-	#eventTarget
-	/** @param {{eventTarget?:unknown}} [cfg] */
+	/** @type  {any} */#target
+	/** @param {{eventTarget?:any}} [cfg] */
 	constructor({eventTarget}={}) {
-		this.#eventTarget = eventTarget ?? this
+		this.#target = eventTarget ?? this
 	}
 	/**
- 	 * @param {string|object} arg
+ 	 * @param {string|Object.<string,Function>} arg
 	 * @param {Function} [fn]
 
 	 * @overload
@@ -18,17 +18,21 @@ export class Common {
 	 * @returns {this}
 	 */
 	on(arg, fn) {
-		typeof(arg) == 'object'
-			? $(this.#eventTarget).on(arg)
-			: $(this.#eventTarget).on(arg, fn)
+		typeof(arg) == 'string'
+			? $(this.#target).on(arg, ()=>fn?.())
+			: $(this.#target).on(arg)
 		return this
+	}
+	/** @param {string} eventType */
+	off(eventType) {
+		$(this.#target).off(eventType)
 	}
 	/**
 	 * @param {string} event
 	 * @param {number|string|boolean|any[]} [data]
 	 */
 	trigger(event, data) {
-		$(this.#eventTarget).trigger(event, data)
+		$(this.#target).trigger(event, data)
 		return this
 	}
 }

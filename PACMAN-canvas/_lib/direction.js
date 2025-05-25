@@ -1,19 +1,19 @@
+const DirSet   = new Set([U,R,D,L])
+const FromWASD = new Map([['W',U],['A',L],['S',D],['D',R]])
 const Opposite = freeze({Up:D, Right:L, Down:U, Left:R})
-const FromWASD = freeze({W:U, A:L, S:D, D:R})
 
-export const Dir = freeze(new class {
-	Up=U; Right=R; Down=D; Left=L;
+export const Dir = freeze({
+	Up:U, Right:R, Down:D, Left:L,
 
 	/** @param {Direction} dir */
-	opposite(dir) {return Opposite[dir]}
+	opposite(dir) {return Opposite[dir]},
 
-	/**
-	 * @param {KeyboardEvent|JQuery.KeyDownEvent} e
-	 * @returns {Direction|null}
-	 */
+	/** @param {KeyboardEvent|JQuery.KeyDownEvent} e */
 	from(e, {wasd=false}={}) {
 		if (isCombinationKey(e)) return null
-		const  key = e.code.replace(/^(Arrow|Key)/,'')
-		return Dir[key] || (wasd && FromWASD[key] || null)
-	}
+		const k = e.code.replace(/^(Arrow|Key)/,'')
+		return /**@type {?Direction}*/(
+			DirSet.has(k) ? k : (wasd && FromWASD.get(k)) || null
+		)
+	},
 })

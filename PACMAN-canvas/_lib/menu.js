@@ -118,11 +118,9 @@ export class Slide extends Menu {
 	}
 	/** @param {?Direction} dir */
 	#select(dir) {
-		dir = {Up:U,Down:L}[dir] || dir
-		if (dir) {
-			const val = this.index+Vec2[dir].x
-			between(val, 0, this.size-1) && this.select(val)
-		}
+		if (dir == null) return
+		const v=Vec2[dir], i=this.index+(v.x || -v.y)
+		;(i >= 0 && i < this.size) && this.select(i)
 	}
 	/** @param {number} btnW */
 	#setWidth(btnW) {
@@ -138,7 +136,11 @@ export class Slide extends Menu {
 	}
 }
 
-class MenuRoot extends HTMLElement{get type() {return 'menu'}}
-class MenuItem extends HTMLElement{get val()  {return $(this).attr('val') ?? ''}}
+class MenuRoot extends HTMLElement{
+	get type() {return 'menu'}
+}
+class MenuItem extends HTMLElement{
+	get val()  {return $(this).attr('val') ?? ''}
+}
 customElements.define('custom-menu', MenuRoot)
 customElements.define('mn-item', MenuItem)

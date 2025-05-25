@@ -11,7 +11,6 @@ export default class {
 		.flatMap(k=> /^is[A-Z\d]*$/i.test(k) ? [[k,k.slice(2)]]:[])
 		.forEach(([k,s])=> {
 			this.#StateSet.add(s)
-			if (this[k] === true) this.#state ||= s
 			defineProperty(this,k,{get(){return this.#state===s}})
 		})
 		state && this.#StateSet.has(state) && this.to(state)
