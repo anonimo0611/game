@@ -1,16 +1,19 @@
 const
 Rows     = 34,
 Cols     = 28,
-TileSize = 28, T=TileSize,
+TileSize = 28,
 BaseStep = TileSize / 4.5,
 
-dBody = /**@type {HTMLBodyElement}*/(document.body),
+/** Shorthand of TileSize */
+T = TileSize,
 
-/** Blinks every specified number of frames */
+/** Blinking interval in frames */
 PowDotInterval = 15,
 
 /** @typedef {'Up'|'Right'|'Down'|'Left'} Direction */
 U='Up', R='Right', D='Down', L='Left',
+
+dBody = /**@type {HTMLBodyElement}*/(document.body),
 
 [Bg,HUD,,Ctx,CvsW,CvsH]= [
 	canvas2D('bg' , T*Cols, T*Rows),
