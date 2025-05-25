@@ -54,9 +54,9 @@ export const View = function() {
 		if (row < 5) {
 			ghost.sprite.draw({
 				...ghost,x,y,
-				idx:   row-1,
 				aIdx:  +(col % 2 != 0),
 				orient:dirs[col],
+				color: Color[GhsNames[row-1]],
 			})
 			return
 		}

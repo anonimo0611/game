@@ -78,7 +78,7 @@ function getOrient() {
 		data.ghost?.sprite.draw({
 			...ghost,
 			mainCtx:   PvC,
-			idx:       data.type-1,
+			color:     Color[GhsNames[data.type-1]],
 			aIdx:      data.animIdx,
 			orient:    data.orient,
 			spriteIdx: data.subType == GhsType.Flashed? data.flashIdx : 0,
