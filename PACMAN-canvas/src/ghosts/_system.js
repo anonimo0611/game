@@ -77,11 +77,8 @@ export const GhsMgr = new class extends Common {
 	get hasEscape() {return Ghosts.some(g=> g.isEscaping)}
 	get akaCenter() {return Ghosts[GhsType.Akabei].centerPos}
 
-	/**
-	 * @param {unknown } _
-	 * @param {...Ghost} instances
-	 */
-	#initialize(_, ...instances) {
+	/** @type {(_:unknown, ...instances:Ghosts)=> void} */
+	#initialize = (_, ...instances)=> {
 		GhsMgr.#aidx = 0
 		instances.forEach((g,i)=> Ghosts[i]=g)
 	}
