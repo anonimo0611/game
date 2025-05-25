@@ -19,7 +19,7 @@ export class Common {
 	 */
 	on(arg, fn) {
 		typeof(arg) == 'string'
-			? $(this.#target).on(arg, ()=>fn?.())
+			? $(this.#target).on({[arg]:fn})
 			: $(this.#target).on(arg)
 		return this
 	}
