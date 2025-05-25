@@ -5,10 +5,10 @@ const RotateEnum = freeze({Right:0,Down:1,Left:2,Up:3})
 
 import {Losing} from './losing.js'
 export default class {
-	/** @type {?Losing} */
-	#losing  = null
 	#mAngle  =  0
 	#animDir = -1
+	#losing  = /**@type {?Losing}*/(null)
+
 	/** @param {ExtendedContext2D} ctx */
 	constructor(ctx, {openType=0}={}) {
 		this.ctx = ctx
