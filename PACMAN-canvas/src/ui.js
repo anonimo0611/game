@@ -10,10 +10,8 @@ MenuIds = /**@type {MenuType[]}*/(keys(Menu))
 
 //== Panels ======
 
-const btns = /**@type {HTMLButtonElement[]}*/
-	(qSAll('button.panelBtn'))
-
-for (const btn of btns) {
+;/**@type {HTMLButtonElement[]}*/
+(qSAll('.panelBtn')).forEach(btn=> {
 	btn.addEventListener('pointerdown', ()=> {
 		$('.panel').toggle()
 		btn.classList.toggle('opened')
@@ -27,4 +25,4 @@ for (const btn of btns) {
 		$(btn.value).hide()
 		btn.classList.remove('opened')
 	})
-} $ready(()=> $('.panel').hide())
+});$ready(()=> $('.panel').hide())
