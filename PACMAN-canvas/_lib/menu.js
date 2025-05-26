@@ -20,20 +20,20 @@ class Menu extends Common {
 		const menu  = /**@type {HTMLElement}*/($(root).find('mn-list').get(0))
 		const items = /**@type {MenuItem[]} */($(menu).find('mn-item').get())
 
-		if (!root || !menu || !items.length)
+		if (!root || !menu || !items.length) {
 			throw ReferenceError('The Menu structure of the document is incorrect')
-
+		}
 		super({eventTarget:menu})
-		/**@protected*/this.root   = root
-		/**@protected*/this.menu   = menu
-		/**@protected*/this.items  = items
-		/**@protected*/this.$label = $(root).closest('label')
+		/** @protected */ this.root   = root
+		/** @protected */ this.menu   = menu
+		/** @protected */ this.items  = items
+		/** @protected */ this.$label = $(root).closest('label')
 		this.id    = id
 		this.size  = items.length
 		this.reset = this.reset.bind(this)
 		this.defaultIndex = this.index
 
-		for (const i of items) $(i).css('--val', i.val)
+		items.forEach(i=> $(i).css('--val', i.val))
 		$(this.root).closest('form').on('reset', this.reset)
 	}
 	/** @protected */
@@ -57,7 +57,8 @@ export class DorpDown extends Menu {
 	/** @param {string} id */
 	constructor(id) {
 		super(id,'dropdown')
-		/**@protected*/this.$cur = $(this.root).find('output')
+		/** @protected */
+		this.$cur = $(this.root).find('output')
 		this.items.forEach((li,i)=> li.onclick = ()=> this.select(i).$cur.focus())
 		$('body')
 			.on('pointerdown', e=> {!e.target.closest(`#${this.id}`) && this.select()})
