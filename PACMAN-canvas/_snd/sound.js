@@ -1,13 +1,10 @@
 import {State}    from '../src/state.js'
 import {GhsMgr}   from '../src/ghosts/_system.js'
-import {Ids}      from './_manifest.js'
+import {SirenIds} from './_manifest.js'
 import {SoundMgr} from './loader.js'
 import {Speaker}  from './speaker.js'
 
-/** @typedef {import("./_manifest.js").SirenType} ST */
-
 const [volRg2,volRng]= /**@type {HTMLInputElement[]}*/(byClass('volRng'))
-const SirenIds = /**@type {ST[]}*/(Ids.filter(id=>id.startsWith('siren')))
 
 export const Sound = new class extends SoundMgr {
 	static {this.#init()}

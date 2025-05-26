@@ -17,7 +17,11 @@ const SoundData = freeze({
     fruit:   {srcIdx:1, startTime: 5952, duration: 496},
 })
 /** @typedef {keyof SoundData} SoundType */
-/** @typedef {'siren0'|'siren1'|'siren2'|'siren3'} SirenType */
+
+export const Ids =
+    /**@type {SoundType[]}*/(keys(SoundData))
+export const SirenIds =
+    /**@type {const}*/(['siren0','siren1','siren2','siren3'])
 
 /** @param {number} idx */
 const genSpriteData = idx=>
@@ -27,7 +31,6 @@ export const Manifest = [
     {src:'./res/looped.ogg', data:{channels:3, audioSprite:[...genSpriteData(0)]}},
     {src:'./res/regular.ogg',data:{channels:4, audioSprite:[...genSpriteData(1)]}},
 ]
-export const Ids  = freeze(keys(SoundData))
 export const ConfigMap = new Map([
 	['_normal', {loop: 0, volume:1.00}],
 	['eat',     {loop: 0, volume:0.70}],
