@@ -24,18 +24,19 @@ class Menu extends Common {
 			throw ReferenceError('The Menu structure of the document is incorrect')
 
 		super({eventTarget:menu})
-		this.id     = id
-		this.root   = root
-		this.menu   = menu
-		this.items  = items
-		this.size   = items.length
-		this.reset  = this.reset.bind(this)
-		this.$label = $(root).closest('label')
+		/**@protected*/this.root   = root
+		/**@protected*/this.menu   = menu
+		/**@protected*/this.items  = items
+		/**@protected*/this.$label = $(root).closest('label')
+		this.id    = id
+		this.size  = items.length
+		this.reset = this.reset.bind(this)
 		this.defaultIndex = this.index
 
-		for (const i of this.items) $(i).css('--val', i.val)
+		for (const i of items) $(i).css('--val', i.val)
 		$(this.root).closest('form').on('reset', this.reset)
 	}
+	/** @protected */
 	select(idx=0) {
 		if (!between(idx, 0, this.size-1))
 			throw ReferenceError('List index out of range')
@@ -56,7 +57,7 @@ export class DorpDown extends Menu {
 	/** @param {string} id */
 	constructor(id) {
 		super(id,'dropdown')
-		this.$cur = $(this.root).find('output')
+		/**@protected*/this.$cur = $(this.root).find('output')
 		this.items.forEach((li,i)=> li.onclick = ()=> this.select(i).$cur.focus())
 		$('body')
 			.on('pointerdown', e=> {!e.target.closest(`#${this.id}`) && this.select()})
@@ -91,6 +92,7 @@ export class DorpDown extends Menu {
 			}
 		}
 	}
+	/** @protected */
 	select(idx=this.index, {close=true}={}) {
 		super.select(idx)
 		const item = this.selectedItem
@@ -114,7 +116,8 @@ export class Slide extends Menu {
 		$(wrap).on('pointerdown',e=> {e.preventDefault(),root.focus()})
 		for (const btn of [this.btnL,this.btnR])
 			$(btn).on('click', e=> {this.#select(e.target==this.btnL?L:R)})
-		freeze(this).select(this.index)
+		this.select(this.index)
+		freeze(this)
 	}
 	/** @param {?Direction} dir */
 	#select(dir) {
@@ -129,6 +132,7 @@ export class Slide extends Menu {
 		$(this.root) .css('width',`${this.#width}px`)
 		$(this.items).css('width',`${this.#width}px`)
 	}
+	/** @protected */
 	select(idx=this.index) {
 		super.select(idx)
 		this.menu.style.transform  =`translateX(${-this.#width*idx}px)`
