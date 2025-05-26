@@ -26,7 +26,7 @@ export const Wall = new class
 	}
 
 	/** @type {(cornerIdx:number, x:number, y:number, type:number)=> void} */
-	#drawCorner(cornerIdx, x, y, type) {
+	#drawCorner = (cornerIdx, x, y, type)=> {
 		ctx.save()
 		ctx.translate(x+T/2, y+T/2)
 		ctx.scale(...ScaleTable[cornerIdx])
@@ -39,7 +39,7 @@ export const Wall = new class
 	}
 
 	/** @type {(c:string, i:number)=> void} */
-	#drawTile(c, i) { // c=Map chip, i=tileIdx
+	#drawTile = (c, i)=> { // c=Map chip, i=tileIdx
 		const [tx,ty]= [i%W, i/W|0]
 		const [px,py]= [tx*T, ty*T]
 		const ci = +c? +c-1 : 'ABCD'.indexOf(c.toUpperCase())
