@@ -70,7 +70,7 @@ export const Ctrl = new class {
 			case 'checkbox':ctrl(id).checked=val;break
 			}
 		}
-		MenuIds.forEach(id=> Menu[id].index = data[id])
+		MenuIds.forEach(id=> Menu[id].index = data[id] ?? 0)
 	}
 	drawGrid() {
 		if (!Ctrl.showGridLines) return
