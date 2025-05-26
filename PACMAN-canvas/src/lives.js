@@ -8,13 +8,14 @@ export const Lives = function() {
 		(['Title','Start','Ready','Restart'])
 
 	function currentValue() {
-		const Max = Ctrl.livesMax-1
+		const cur = State.current
+		const max = Ctrl.livesMax-1
 		return {
-			Title:  Max,
-			Start:  Max+1,
-			Ready:  State.last('Start')? Max:_left,
+			Title:  max,
+			Start:  max+1,
+			Ready:  State.last('Start')? max:_left,
 			Restart:_left-1,
-		}[/**@type {typeof EvTypes[number]}*/(State.current)]
+		}[/**@type {typeof EvTypes[number]}*/(cur)]
 	}
 	function set(val=currentValue()) {
 		const {ctx}  = HUD
