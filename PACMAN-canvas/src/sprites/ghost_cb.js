@@ -117,7 +117,7 @@ export default class {
 			ctx.fill()
 			// Eyes
 			ctx.beginPath()
-			ctx.ellipse(eyesLR[i], -33,  5, 9, 0,0, PI*2)
+			ctx.ellipse(eyesLR[i], -33, 5, 9, 0,0, PI*2)
 			ctx.fillStyle = Color.GhostEyes
 			ctx.fill()
 		}
