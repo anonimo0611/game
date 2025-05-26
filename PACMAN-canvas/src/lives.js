@@ -27,9 +27,9 @@ export const Lives = function() {
 			sprite.draw({radius,centerPos:Vec2(size*i+T,T)})
 		ctx.restore()
 	}
-
 	$on(EvTypes.join('_'), ()=> set())
 	$('#lvsRng').on({input:()=> set()})
+
 	return {
 		get left(){return _left},
 		append:()=> set(++_left),
