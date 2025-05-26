@@ -3,9 +3,10 @@ import {Ctrl}  from './control.js'
 import Sprite  from './sprites/pacman.js'
 
 export const Lives = function() {
-	let _left = 0
-	const EvTypes = /** @type {const} */
+	let   _left   = 0
+	const EvTypes = /**@type {const}*/
 		(['Title','Start','Ready','Restart'])
+
 	function currentValue() {
 		const Max = Ctrl.livesMax-1
 		return {
@@ -26,8 +27,9 @@ export const Lives = function() {
 			sprite.draw({radius,centerPos:Vec2(size*i+T,T)})
 		ctx.restore()
 	}
-	$('#lvsRng').on({input:()=> set()})
+
 	$on(EvTypes.join('_'), ()=> set())
+	$('#lvsRng').on({input:()=> set()})
 	return {
 		get left(){return _left},
 		append:()=> set(++_left),

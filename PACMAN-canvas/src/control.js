@@ -1,7 +1,7 @@
 import './panel.js'
 import {Confirm}  from '../_lib/confirm.js'
-import {Menu}     from './menu.js'
-import {MenuIds}  from './menu.js'
+import {Menu}     from './ui.js'
+import {MenuIds}  from './ui.js'
 import {State}    from './state.js'
 import {drawText} from './message.js'
 
