@@ -4,6 +4,7 @@ export class Common {
 	constructor({eventTarget}={}) {
 		this.#target = eventTarget ?? this
 	}
+
 	/**
  	 * @param {string|Object.<string,Function>} arg
 	 * @param {Function} [fn]
