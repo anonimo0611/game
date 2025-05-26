@@ -44,9 +44,9 @@ export const Wall = new class
 		const [px,py]= [tx*T, ty*T]
 		const ci = +c? +c-1 : 'ABCD'.indexOf(c.toUpperCase())
 
-		;/[A-D]/.test(c)     && this.#drawCorner(ci, px, py, 1)
-		;/[a-d]/.test(c)     && this.#drawCorner(ci, px, py, 2)
-		;/[a-d1-4]/i.test(c) && this.#drawCorner(ci, px, py, 0)
+		;/[A-D]/.test(c)    && this.#drawCorner(ci, px, py, 1)
+		;/[a-d]/.test(c)    && this.#drawCorner(ci, px, py, 2)
+		;/[a-d\d]/i.test(c) && this.#drawCorner(ci, px, py, 0)
 
 		;(c == '-')     && ctx.strokeLine(px, py+T/2, px+T, py+T/2)
 		;/[#|]/.test(c) && ctx.strokeLine(px+T/2, py, px+T/2, py+T)
