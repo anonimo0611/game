@@ -4,7 +4,7 @@ import {Common} from './common.js'
 class Menu extends Common {
 	get value()  {return this.selectedItem.val}
 	get index()  {return $(this.selectedItem).index()}
-	set index(i) {this.select(i)}
+	set index(i) {(i>=0 && i<this.size) && this.select(i)}
 
 	/** @returns {MenuItem} */
 	get selectedItem() {
@@ -118,9 +118,10 @@ export class Slide extends Menu {
 	}
 	/** @param {?Direction} dir */
 	#select(dir) {
-		if (dir == null) return
-		const v=Vec2[dir], i=this.index+(v.x || -v.y)
-		;(i >= 0 && i < this.size) && this.select(i)
+		if (dir) {
+			const v = Vec2[dir]
+			this.index += (v.x || -v.y)
+		}
 	}
 	/** @param {number} btnW */
 	#setWidth(btnW) {
