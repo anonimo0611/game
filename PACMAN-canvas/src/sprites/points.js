@@ -26,11 +26,7 @@ const CoordsMap = new Map([
 const GhsPtsSet = new Set([200,400,800,1600])
 
 export default new class {
-	/**
-	 * @param {number} x
-	 * @param {number} y
-	 * @param {number} pts
-	 */
+	/** @type {(n:number, x:number, pts:number, size?:number)=> void} */
 	draw(x, y, pts, size=TileSize*2) {
 		Ctx.save()
 		Ctx.translate(x, y)
@@ -49,11 +45,7 @@ export default new class {
 		Ctx.restore()
 	}
 
-	/**
-	 * @param {number} n
-	 * @param {number} x
-	 * @param {number} y
-	 */
+	/** @type {(n:number, x:number, y:number)=> void} */
 	#strokeNumber(n, x, y) {
 		Ctx.save()
 		Ctx.translate(x,y)
@@ -61,7 +53,7 @@ export default new class {
 		Ctx.restore()
 	}
 
-	/** @param {number[]} v */
+	/** @type {(v:number[], isClose?:boolean)=> void} */
 	#strokeLines(v, isClose=false) {
 		Ctx.beginPath()
 		Ctx.moveTo(v[0], v[1])
