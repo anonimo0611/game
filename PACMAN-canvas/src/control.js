@@ -43,7 +43,7 @@ export const Ctrl = new class {
 	}
 	#saveData() {
 		const data = Object.create(null)
-		;(document.querySelectorAll('input')).forEach(e=> {
+		document.querySelectorAll('input').forEach(e=> {
 			if (!e.id) return
 			data[e.id]= {range:+e.value, checkbox:e.checked}[e.type]
 		})
