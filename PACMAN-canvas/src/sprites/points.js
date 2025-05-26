@@ -1,4 +1,4 @@
-const LinePaths = [
+const ZeroToEightPaths = /**@type {const}*/([
 	[1,0,2,0,3,1,3,5,2,6,1,6,0,5,0,1],
 	[0,1,1,0,1,6,0,6,2,6],
 	[0,2,0,1,1,0,3,0,4,1,4,2,0,6,4,6],
@@ -8,8 +8,8 @@ const LinePaths = [
 	[3,0,1,0,0,1,0,5,1,6,2,6,3,5,3,3,0,3],
 	[0,1,0,0,4,0,4,1,2,4,2,6],
 	[1,0,3,0,4,1,4,2,3,3,1,3,0,4,0,5,1,6,3,6,4,5,4,4,3,3,1,3,0,2,0,1],
-]
-const CoordsMap = new Map([
+])
+const PtsRelativePosMap = new Map([
 	[  100, [[1,-6.1,-3],[0,-2.1,-3],[0,2.7,-3]] ],
 	[  200, [[2,-7.0,-3],[0,-1.0,-3],[0,4.0,-3]] ],
 	[  300, [[3,-7.2,-3],[0,-1.2,-3],[0,3.8,-3]] ],
@@ -37,7 +37,7 @@ export default new class {
 		Ctx.strokeStyle = GhsPtsSet.has(pts)
 			? Color.GhostPts
 			: Color.FruitPts
-		CoordsMap.get(pts)?.forEach(([n,x,y],i)=> {
+		PtsRelativePosMap.get(pts)?.forEach(([n,x,y],i)=> {
 			pts == 1600 && i == 0
 				? this.#strokeLines([x,y,x,y+6]) // narrow 1
 				: this.#strokeNumber(n,x,y)
@@ -49,11 +49,11 @@ export default new class {
 	#strokeNumber(n, x, y) {
 		Ctx.save()
 		Ctx.translate(x,y)
-		this.#strokeLines(LinePaths[n], n==0 || n==8)
+		this.#strokeLines(ZeroToEightPaths[n], n==0 || n==8)
 		Ctx.restore()
 	}
 
-	/** @type {(v:number[], isClose?:boolean)=> void} */
+	/** @type {(v:readonly number[], isClose?:boolean)=> void} */
 	#strokeLines(v, isClose=false) {
 		Ctx.beginPath()
 		Ctx.moveTo(v[0], v[1])
