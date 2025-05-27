@@ -50,14 +50,10 @@ export class Actor extends Common {
 	setNextPos(denom=1, dir=this.dir) {
 		this.pos = Vec2[dir].mul(this.step/denom).add(this)
 	}
-	centering() {
-		this.x = (CvsW-T)/2
-	}
+	centering() {this.x = (CvsW-T)/2}
 
 	/** @param {Direction} dir */
-	move(dir) {
-		this.setNextPos(1, this.dir=dir)
-	}
+	move(dir) {this.setNextPos(1, this.dir=dir)}
 
 	/** @param {Direction} dir */
 	hasAdjWall(dir) {
@@ -69,6 +65,7 @@ export class Actor extends Common {
 		const  v = Vec2[dir].mul(n).add(tile)
 		return v.setX((v.x+Cols) % Cols) // x-axis loops
 	}
+
 	collidedWithWall(dir=this.dir) {
 		const  {step,centerPos}= this
 		const  {x,y}= Vec2[dir].mul(T/2+step).add(centerPos).divInt(T)
@@ -76,8 +73,7 @@ export class Actor extends Common {
 	}
 	setPos({x=this.x, y=this.y}={}) {
 		this.#y = y
-		this.#x = function(r) {
-			// Loops x-axis movement during play
+		this.#x = function(r) { // x-axis move loops during play
 			if (!State.isPlaying) return
 			if (x < -r-T/2) return CW+T/2
 			if (x > CW+T/2) return -r-T/2
