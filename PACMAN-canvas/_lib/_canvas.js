@@ -149,10 +149,10 @@ class FadeIn {
 	 * @returns {boolean} during fading in
 	 */
 	update(max=1) {
-		if (++this.#count * Ticker.Interval < this.#delay || !this.working) {
+		if (++this.#count * Ticker.Interval < this.#delay || !this.working)
 			return false
-		}
-		this.#alpha = clamp(this.#alpha+max/(this.#duration/Ticker.Interval), 0, max)
+		const rate  = this.#duration / Ticker.Interval
+		this.#alpha = clamp(this.#alpha+max/rate, 0, max)
 		return this.working
 	}
 	/** @param {ExtendedContext2D} ctx */
@@ -174,10 +174,10 @@ class FadeOut {
 	}
 	/** @returns {boolean} during fading out */
 	update() {
-		if (++this.#count * Ticker.Interval < this.#delay) {
+		if (++this.#count * Ticker.Interval < this.#delay)
 			return false
-		}
-		this.#alpha = clamp(this.#alpha-1/(this.#duration/Ticker.Interval), 0, 1)
+		const rate  = this.#duration / Ticker.Interval
+		this.#alpha = clamp(this.#alpha-1/rate, 0, 1)
 		return this.working
 	}
 	/** @param {ExtendedContext2D} ctx */
