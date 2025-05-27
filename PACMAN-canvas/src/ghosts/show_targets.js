@@ -10,8 +10,8 @@ export default new class {
 	draw(ghosts=[]) {
 		if (!Ctrl.showTargets || !State.isPlaying)
 			return
-		for (let g of ghosts) this.#strokeLines(g)
-		for (let g of ghosts) this.#drawTargetMarker(g)
+		for (const g of ghosts) this.#strokeLines(g)
+		for (const g of ghosts) this.#drawTargetMarker(g)
 	}
 
 	/** @param {Ghost} g */
