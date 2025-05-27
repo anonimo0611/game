@@ -9,8 +9,7 @@ import {Maze}   from '../maze.js'
 import {Ghost}  from './ghost.js'
 import Target   from './show_targets.js'
 
-/** @type {Ghost[]} */
-const Ghosts = []
+const Ghosts = /**@type {Ghost[]}*/([])
 
 /**
  * Delay time(ms) for ghost to be released in always chase mode
