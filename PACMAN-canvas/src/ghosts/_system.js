@@ -12,8 +12,11 @@ import Target   from './show_targets.js'
 /** @type {Ghost[]} */
 const Ghosts = []
 
-/** @type {(ghostIdx:number)=> number} */
-const releaseDelay = idxOfGhsInHouse=> nonNull({ // For always chase mode(ms)
+/**
+ * Delay time(ms) for ghost to be released in always chase mode
+ * @type {(idxOfGhostInHouse:number)=> number}
+ */
+const getReleaseDelay = idxOfGhostInHouse=> nonNull({
 	// Pinky->Aosuke->Guzuta
 	 0:[1000,  500,  500], // <-After life is lost
 	 1:[1000, 4000, 4000], 2:[800, 2200, 4000], 3:[600, 1900, 3500],
@@ -21,9 +24,12 @@ const releaseDelay = idxOfGhsInHouse=> nonNull({ // For always chase mode(ms)
 	 7:[ 300,  700,  800], 8:[300,  700,  800], 9:[200,  800,  200],
 	10:[ 200,  800,  200],11:[100,  700,  200],12:[100,  700,  200],
 	13:[   0,  900,    0]
-}[Game.restarted? 0 : Game.clampedLv])[idxOfGhsInHouse]/Game.speedRate
+}[Game.restarted? 0 : Game.clampedLv])[idxOfGhostInHouse]/Game.speedRate
 
-/** @type {(ghost:Ghost, tile:Vector2, dir:Direction)=> boolean} */
+/**
+ * Whether ghost can't enter the intersection
+ * @type {(ghost:Ghost, tile:Vector2, dir:Direction)=> boolean}
+ */
 export const notEnter = (ghost, tile, dir)=> {
 	return !Ctrl.unrestricted
 		&& !ghost.isFright
@@ -90,7 +96,7 @@ export const GhsMgr = new class extends Common {
 		Ctrl.isChaseMode &&
 			Timer.sequence(...Ghosts.slice(1).map(
 				/** @returns {[number,Function]} */
-				(g,i)=> [releaseDelay(i), ()=> g.release()])
+				(g,i)=> [getReleaseDelay(i), ()=> g.release()])
 			)
 	}
 	setFrightMode() {
