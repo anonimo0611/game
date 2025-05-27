@@ -79,8 +79,7 @@ export class Actor extends Common {
 			if (x > CW+T/2) return -r-T/2
 		}(this.radius) ?? x
 	}
-	update() {
-		const {maxAlpha:maxA}= this
+	update(maxA=this.maxAlpha) {
 		State.isReady   && (this.#fadeIn ||= new FadeIn)?.update(maxA)
 		State.isPlaying && (this.#fadeIn &&= null)
 	}
