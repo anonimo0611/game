@@ -1,4 +1,4 @@
-//== Menus ======
+//---- Menus ----
 
 import * as _Menu from '../_lib/menu.js'
 export const Menu = freeze({
@@ -7,7 +7,7 @@ export const Menu = freeze({
 }),
 MenuIds = /**@type {(keyof Menu)[]}*/(keys(Menu))
 
-//== Panels ======
+//---- Panels ----
 
 ;/**@type {HTMLButtonElement[]}*/
 (qSAll('.panelBtn')).forEach(btn=> {
