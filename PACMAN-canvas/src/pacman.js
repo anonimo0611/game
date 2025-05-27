@@ -11,15 +11,13 @@ import {Actor}   from './actor.js'
 import {GhsMgr}  from './ghosts/_system.js'
 import Sprite    from './sprites/pacman.js'
 
-export const Player = new class extends Common {
-	/**@type {PlayablePac}*/#player
-	constructor() {
-		super()
-		$on({Title_Restart_NewLevel:
-			()=> this.#player = new PlayablePac})
-	}
-	get i() {return this.#player}
-}
+export const Player = function() {
+	/** @type {PlayablePac} */
+	let player
+	$on({Title_Restart_NewLevel:()=> player=new PlayablePac})
+	return new class extends Common {get i() {return player}}
+}()
+
 export class Pacman extends Actor {
 	radius = PacRadius
 	sprite = new Sprite(Ctx)
