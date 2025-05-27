@@ -6,7 +6,7 @@ export class Common {
 	}
 
 	/**
- 	 * @param {string|Object.<string,Function>} arg
+ 	 * @param {string|{[event:string]:Function}} arg
 	 * @param {Function} [fn]
 
 	 * @overload
@@ -15,19 +15,21 @@ export class Common {
 	 * @returns {this}
 
 	 * @overload
-	 * @param   {Object.<string,Function>} arg
+	 * @param   {{[event:string]:Function}} arg
 	 * @returns {this}
 	 */
 	on(arg, fn) {
-		typeof(arg) == 'string'
-			? $(this.#target).on({[arg]:fn})
-			: $(this.#target).on(arg)
+		typeof(arg) == 'object'
+			? $(this.#target).on(arg)
+			: $(this.#target).on({[arg]:fn})
 		return this
 	}
+
 	/** @param {string} eventType */
 	off(eventType) {
 		$(this.#target).off(eventType)
 	}
+
 	/**
 	 * @param {string} event
 	 * @param {number|string|boolean|any[]} [data]
