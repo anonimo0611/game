@@ -1,6 +1,8 @@
 export default class {
 	#state = ''
 	#last  = ''
+
+	/** @readonly */
 	#StateSet = /**@type {Set<string>}*/(new Set)
 
 	get current() {return this.#state}
