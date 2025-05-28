@@ -130,7 +130,10 @@ export const Maze = new class {
 	hasPow  = (/**@type {TileIdx} */i)=> PowMap.has(i)
 	hasWall = (/**@type {Position}*/p)=> WallSet.has(p.y*Cols+p.x)
 
-	/** These tiles(x-y) forbidden ghosts from entering upward */
+	/**
+	 * These tiles(x-y) forbidden ghosts from entering upward
+	 * @type {ReadonlySet<string>}
+	 */
 	GhostNotEnterSet = new Set(['12-11','12-23','15-11','15-23'])
 
 	/**
@@ -144,7 +147,7 @@ export const Maze = new class {
 
 	/**
 	 * @param {{tileIdx:TileIdx, tilePos:Vector2}} tile
-	 * @return {number} number of remaining dots
+	 * @returns {number} number of remaining dots
 	 */
 	clearBgDot({tileIdx:idx,tilePos:t}) {
 		DotSet.delete(idx)
@@ -155,10 +158,10 @@ export const Maze = new class {
 
 	/**
 	 * @param {ExtendedContext2D} ctx
-	 * @param {number}    col
-	 * @param {number}    row
-	 * @param {boolean}   isLarge
-	 * @param {?CtxStyle} color
+	 * @param {number}  col
+	 * @param {number}  row
+	 * @param {boolean} isLarge
+	 * @param {?CanvasStyle} color
 	 */
 	drawDot(ctx, col,row, isLarge=false, color=Color.Dot) {
 		ctx.fillCircle(col*T+T/2, row*T+T/2, T/(isLarge? 2:8), color)
