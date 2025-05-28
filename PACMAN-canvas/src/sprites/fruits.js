@@ -229,10 +229,8 @@ function key(ctx=Ctx) {
 	ctx.fill()
 
 	// key hole
-	ctx.save()
 	ctx.globalCompositeOperation = 'destination-out'
 	ctx.strokeLine(-1.2, -4.5, +1.2, -4.5)
-	ctx.restore()
 }
 const Fns = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
 
