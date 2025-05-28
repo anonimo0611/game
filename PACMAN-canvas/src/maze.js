@@ -40,12 +40,16 @@ D__________________________C\
 ////////////////////////////\
 ////////////////////////////`])
 
-/** @typedef {number} TileIdx */
+/**
+ * `.` and `O` represent normal and power cookies
+ * @type {ReadonlySet<string>}
+ */
+const DotChipSet = new Set(['.','O'])
 
+/** @typedef {number} TileIdx */
 const WallSet  = /**@type {Set<TileIdx>}*/(new Set)
 const DotSet   = /**@type {Set<TileIdx>}*/(new Set)
 const PowMap   = /**@type {Map<TileIdx,Vector2>}*/(new Map)
-const DotChip  = new Set(['.','O'])
 const PenRect  = new Rect(10,13, 7,4)
 const PenOuter = new Rect( 9,12, 9,6)
 
@@ -94,7 +98,7 @@ export const Maze = new class {
 	static {$ready(this.setup)}
 	static setup() {
 		for (const [i,c] of MapArr.entries())
-			!DotChip.has(c) && c.trim() && WallSet.add(i)
+			!DotChipSet.has(c) && c.trim() && WallSet.add(i)
 		$on({Title_NewLevel: Maze.#reset})
 		$(powChk).on({change:Maze.#reset})
 	}
@@ -105,7 +109,7 @@ export const Maze = new class {
 			Maze.#drawDoor()
 		}
 		for (const [i,c] of MapArr.entries())
-			DotChip.has(c) && Maze.#setDot(i,c)
+			DotChipSet.has(c) && Maze.#setDot(i,c)
 	}
 	/**
 	 * @param {TileIdx} idx
@@ -121,7 +125,7 @@ export const Maze = new class {
 	}
 	get dotsLeft() {return DotSet.size}
 	Map    = MapArr
-	DotMax = MapArr.filter(c=> DotChip.has(c)).length
+	DotMax = MapArr.filter(c=> DotChipSet.has(c)).length
 	House  = freeze(new House)
 	PowDot = freeze(new PowDot)
 	Tunnel = freeze(new Tunnel)

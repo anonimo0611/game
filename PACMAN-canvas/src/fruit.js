@@ -7,8 +7,12 @@ import {PtsMgr} from './points.js'
 import {Player} from './pacman.js'
 import * as Spr from './sprites/fruits.js'
 
-// The fruit appear after 70 or 170 dots are cleared
+/**
+ * The fruit appear after 70 or 170 dots are cleared
+ * @type {ReadonlySet<number>}
+ */
 const AppearSet  = new Set([70,170])
+
 const IndexTable = freeze([0,1,2,2,3,3,4,4,5,5,6,6,7])
 const PointTable = freeze([100,300,500,700,1e3,2e3,3e3,5e3])
 const TargetPos  = Vec2(CvsW/2, T*18.5).freeze()

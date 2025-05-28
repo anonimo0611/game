@@ -26,6 +26,7 @@ RelPosListFrom = /**@type {const}*/({
 	3000: [[3,-10, -3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
 	5000: [[5,-10, -3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
 }),
+/** @type {ReadonlySet<number>} */
 GhsPtsSet = new Set([200,400,800,1600])
 
 export default new class {
