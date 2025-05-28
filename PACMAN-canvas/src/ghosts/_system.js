@@ -94,7 +94,7 @@ export const GhsMgr = new class extends Common {
 		Sound.playSiren()
 		Ctrl.isChaseMode &&
 			Timer.sequence(...Ghosts.slice(1).map(
-				/** @returns {[number,Function]} */
+				/** @returns {TimerSequenceItem} */
 				(g,i)=> [getReleaseDelay(i), ()=> g.release()])
 			)
 	}
