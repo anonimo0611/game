@@ -29,7 +29,7 @@ RelPosListFrom = /**@type {const}*/({
 GhsPtsSet = new Set([200,400,800,1600])
 
 export default new class {
-	/** @type {(n:number, x:number, pts:number, size?:number)=> void} */
+	/** @type {(x:number, y:number, pts:number, size?:number)=> void} */
 	draw(x, y, pts, size=TileSize*2) {
 		Ctx.save()
 		Ctx.translate(x, y)
