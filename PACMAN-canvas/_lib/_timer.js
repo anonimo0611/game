@@ -1,7 +1,9 @@
 'use strict'
+/** @typedef {[timeout:number,handler:Function]} TimerSequenceItem */
+/** @typedef {{timeout:number,handler:Function,ignoreFrozen:boolean,amount:number}} TimerData */
+
 const {Ticker,Timer}= function() {
 
-/** @typedef {{timeout:number,handler:Function,ignoreFrozen:boolean,amount:number}} TimerData */
 /** @type {Map<any,TimerData>} */
 const TimerMap = new Map()
 const Interval = 1000/60
@@ -110,7 +112,7 @@ const Timer = freeze(new class {
 		TimerMap.set(key ?? Symbol(), {timeout,handler,ignoreFrozen,amount:0})
 	}
 
-	/** @param {...[timeout:number, handler:Function]} sequence */
+	/** @param {...TimerSequenceItem} sequence */
 	sequence(...sequence) {
 		if (!sequence.length)
 			return
