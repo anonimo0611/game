@@ -141,7 +141,7 @@ class Scene2 extends CoffBrk {
 		if (akabei.x + akaVelX < spr.CaughtX && !isRipped) {
 			const pos  = akabei.centerPos.add(T,0)
 			const rate = norm(spr.CaughtX, spr.AkaMinX, akabei.x)
-			spr.expandClothes(pos, aIdx, rate)
+			spr.expandClothes(aIdx, rate, pos)
 		}
 		super.draw()
 	}
