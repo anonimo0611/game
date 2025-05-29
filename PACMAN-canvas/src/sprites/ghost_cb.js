@@ -147,11 +147,11 @@ class StakeClothes {
 		Ctx.restore()
 	}
 	/**
-	 * @param {{x:number, y:number, size?:number}} cfg
 	 * @param {number} aIdx
 	 * @param {number} rate
+	 * @param {{x?:number, y?:number, size?:number}} cfg
 	 */
-	expandClothes({x, y, size=T*2}, aIdx, rate) {
+	expandClothes(aIdx, rate, {x=0, y=0, size=T*2}={}) {
 		const v1 = lerp(-2,  5, rate)
 		const v2 = lerp( 4, 22, rate)
 		const v3 = lerp( 4, 50, rate)
