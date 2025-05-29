@@ -30,7 +30,11 @@ RelPosListFrom = /**@type {const}*/({
 GhsPtsSet = new Set([200,400,800,1600])
 
 export default new class {
-	/** @type {(x:number, y:number, pts:number, size?:number)=> void} */
+	/**
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {number} pts
+	 */
 	draw(x, y, pts, size=TileSize*2) {
 		Ctx.save()
 		Ctx.translate(x, y)
@@ -50,7 +54,11 @@ export default new class {
 		Ctx.restore()
 	}
 
-	/** @type {(n:ZeroToEight, x:number, y:number)=> void} */
+	/**
+	 * @param {ZeroToEight} n
+	 * @param {number} x
+	 * @param {number} y
+	 */
 	#strokeNumber(n, x, y) {
 		Ctx.save()
 		Ctx.translate(x,y)
@@ -58,7 +66,7 @@ export default new class {
 		Ctx.restore()
 	}
 
-	/** @type {(v:readonly number[], isClose?:boolean)=> void} */
+	/** @param {readonly number[]} v */
 	#strokeLines(v, isClose=false) {
 		Ctx.beginPath()
 		Ctx.moveTo(v[0], v[1])

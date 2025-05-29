@@ -20,8 +20,7 @@ const TargetPos  = Vec2(CvsW/2, T*18.5).freeze()
 const LvCounterCols = 7
 const LvCounterRect = freeze([T*12, CvsH-T*2, T*2*LvCounterCols, T*2])
 
-/** @type {?FadeOut} */
-let _fadeOut = null
+let _fadeOut = /**@type {?FadeOut}*/(null)
 let _tgtDisp = true
 
 export const Fruit = new class {
