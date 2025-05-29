@@ -32,14 +32,14 @@
 		</h1>
 		<div id="level"></div>
 	</header>
-	<div id="cvs-board">
-		<canvas id="bg"  class="sub"></canvas>
-		<canvas id="inf" class="sub"></canvas>
-		<canvas id="cvs"></canvas>
+	<div id="boardCanvases">
+		<canvas id="cvs_bg"  class="sub"></canvas>
+		<canvas id="cvs_hud" class="sub"></canvas>
+		<canvas id="cvs_main"></canvas>
 	</div>
 	<div id="volume" class="volCtrl">
 		<label for="volRg2" id="speaker" title="Mute/Unmute (M)">
-			<canvas id="speakerCvs"></canvas>
+			<canvas id="cvs_speaker"></canvas>
 		</label>
 		<input type="range" id="volRg2" class="volRng"
 			value="10" step="1" min="0" max="10" data-links="volRng">

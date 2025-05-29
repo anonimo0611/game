@@ -56,12 +56,12 @@ h1 {
 body[data-loaded=true] #board {
 	opacity: 1;
 }
-#cvs-board {
+#boardCanvases {
 	margin-top: 0.5rem;
 	pointer-events: none;
 	canvas.sub {position: absolute}
-	canvas#bg  {z-index: -1}
-	canvas#inf {z-index: +1}
+	canvas#cvs_bg  {z-index: -1}
+	canvas#cvs_hud {z-index: +1}
 }
 body:is([data-state=Attract],[data-state=CoffBrk]) {
 	:is(header,canvas.sub) {visibility: hidden}
