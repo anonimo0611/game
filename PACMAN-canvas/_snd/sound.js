@@ -4,7 +4,8 @@ import {SirenIds} from './_manifest.js'
 import {SoundMgr} from './loader.js'
 import {Speaker}  from './speaker.js'
 
-const [volRg2,volRng]= /**@type {HTMLInputElement[]}*/(byClass('volRng'))
+const volRg2 = /**@type {HTMLInputElement}*/(byId('volRg2'))
+const volRng = /**@type {HTMLInputElement}*/(byId('volRng'))
 
 export const Sound = new class extends SoundMgr {
 	static {this.#init()}
