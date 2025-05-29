@@ -24,14 +24,16 @@ class Menu extends Common {
 			throw ReferenceError('The Menu structure of the document is incorrect')
 		}
 		super({eventTarget:menu})
-		/** @protected */ this.root   = root
-		/** @protected */ this.menu   = menu
-		/** @protected */ this.items  = items
-		/** @protected */ this.$label = $(root).closest('label')
+		this.root  = root
+		this.menu  = menu
+		this.items = items
 		this.id    = id
 		this.size  = items.length
 		this.reset = this.reset.bind(this)
 		this.defaultIndex = this.index
+
+		/** @protected */
+		this.$label = $(root).closest('label')
 
 		items.forEach(i=> $(i).css('--val', i.val))
 		$(this.root).closest('form').on('reset', this.reset)
