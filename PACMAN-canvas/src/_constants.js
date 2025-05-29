@@ -16,9 +16,9 @@ U='Up', R='Right', D='Down', L='Left',
 dBody = /**@type {HTMLBodyElement}*/(document.body),
 
 [Bg,HUD,,Ctx,CvsW,CvsH]= [
-	canvas2D('bg' , T*Cols, T*Rows),
-	canvas2D('inf', T*Cols, T*Rows),...
-	canvas2D('cvs', T*Cols, T*Rows).vals
+	canvas2D('cvs_bg' ,  T*Cols, T*Rows),
+	canvas2D('cvs_hud',  T*Cols, T*Rows),...
+	canvas2D('cvs_main', T*Cols, T*Rows).vals
 ],
 
 Color = freeze(new class {
