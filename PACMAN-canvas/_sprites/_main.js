@@ -7,6 +7,10 @@ import {GridSize,T,S,Gap,ghost} from './_constants.js'
 export const View = function() {
 	/** @param {number} colIdx */
 	const ofst = colIdx=> (S*colIdx)+(Gap*colIdx)
+
+	/** @param {Array<string>} array */
+	const toDirs = array=> /**@type {Direction[]}*/(array)
+
 	function draw() {
 		Ctx.save()
 		Ctx.translate(Gap, Gap/2)
@@ -50,7 +54,7 @@ export const View = function() {
 	 */
 	function drawGhost(col, row) {
 		const [x,y]= [ofst(col), row*S]
-		const dirs = [U,U,L,L,D,D,R,R]
+		const dirs = toDirs([U,U,L,L,D,D,R,R])
 		if (row < 5) {
 			ghost.sprite.draw({
 				...ghost,x,y,
@@ -60,7 +64,7 @@ export const View = function() {
 			})
 			return
 		}
-		const orient = [R,R,R,R,U,L,D,R][col]
+		const orient = toDirs([R,R,R,R,U,L,D,R])[col]
 		ghost.sprite.draw({
 			...ghost,x,y,orient,
 			aIdx:     +(col % 2 != 0),
@@ -88,7 +92,7 @@ export const View = function() {
 			(pts,i)=> draw(pts, (S+Gap/2)+S*(2+Gap/T)*i, S*7+S/2))
 	}
 	function drawPacman() {
-		const dirs = [U,U,L,L,D,D,R,R]
+		const dirs = toDirs([U,U,L,L,D,D,R,R])
 		for (let i=-1; i<=8; i++) {
 			const centerPos = Vec2(T+ofst(i), S*8.5)
 			const cfg = {centerPos, orient:dirs[i-1], radius:T*PacScale}
