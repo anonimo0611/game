@@ -4,15 +4,13 @@
 
 const {Ticker,Timer}= function() {
 
-/** @type {Map<any,TimerData>} */
-const TimerMap = new Map()
+const TimerMap = /** @type{Map<any,TimerData>}*/(new Map)
 const Interval = 1000/60
 
-/** @type {?Tick} */
-let _ticker = null
+let _ticker = /**@type {?Tick}*/(null)
 let _paused = false
 
-let _counter  = 0
+let _counter  = 0 // frame count
 let _pCounter = 0 // for paused
 
 const Ticker = freeze(new class {

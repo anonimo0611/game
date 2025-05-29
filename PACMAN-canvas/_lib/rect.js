@@ -1,6 +1,6 @@
 export class Rect {
-	/** @type {readonly [x:number, y:number, w:number, h:number]} */
-	#vals = [0,0,0,0]
+	#vals = /**@type {readonly [x:number, y:number, w:number, h:number]}*/
+		([0,0,0,0])
 	/**
 	 * @param {number} x
 	 * @param {number} y

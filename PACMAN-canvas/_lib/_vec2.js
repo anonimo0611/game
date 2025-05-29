@@ -2,7 +2,7 @@
 /** @typedef {Vector2|{x:number,y:number}} Position */
 class Vector2 {
 	x=0;y=0;
-	/** @type {[x:number, y:number]} */
+	/** @returns {[x:number, y:number]} */
 	get vals()         {return [this.x, this.y]}
 	get hyphenated()   {return `${this.x}-${this.y}`}
 	get inverse()      {return this.clone.mul(-1)}

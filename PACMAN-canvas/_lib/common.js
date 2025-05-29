@@ -1,5 +1,5 @@
 export class Common {
-	/** @type  {any} */#target
+	#target
 	/** @param {{eventTarget?:any}} [cfg] */
 	constructor({eventTarget}={}) {
 		this.#target = eventTarget ?? this

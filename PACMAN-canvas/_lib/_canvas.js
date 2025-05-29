@@ -7,7 +7,7 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		try {super()} catch(e){}
 		return Object.setPrototypeOf(cvs.getContext('2d',opts), new.target.prototype)
 	}
-	/** @type {[x:number, y:number]} */
+	/** @returns {[width:number, height:number]} */
 	get size()   {return [this.width, this.height]}
 	get width()  {return this.canvas.width}
 	get height() {return this.canvas.height}
@@ -146,7 +146,7 @@ class FadeIn {
 	}
 	/**
 	 * @param {number} max max alpha
-	 * @returns {boolean} during fading in
+	 * @returns {boolean} during fade-in
 	 */
 	update(max=1) {
 		if (++this.#count * Ticker.Interval < this.#delay || !this.working)
@@ -172,7 +172,7 @@ class FadeOut {
 		this.#duration = ms
 		this.#delay = delay
 	}
-	/** @returns {boolean} during fading out */
+	/** @returns {boolean} during fade-out */
 	update() {
 		if (++this.#count * Ticker.Interval < this.#delay)
 			return false
