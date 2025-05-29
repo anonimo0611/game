@@ -9,8 +9,8 @@ export class CoffBrk {
 	/** @type {?(Scene1|Scene2|Scene3)} */
 	static #scene = null
 	static {
-		$on({CoffBrk:/**@type {(_:unknown,num:1|2|3)=>void}*/
-			(_,num)=> this.#begin(num)})
+		/** @typedef {(_:unknown, num:1|2|3)=> void} BeginCB */
+		$on({CoffBrk:/**@type {BeginCB}*/(_,num)=> this.#begin(num)})
 	}
 	/** @param {1|2|3} num Scene number */
 	static #begin(num) {

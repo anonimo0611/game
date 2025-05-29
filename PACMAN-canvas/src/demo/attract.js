@@ -13,8 +13,7 @@ import {RunTimer} from './_run_timer.js'
 const CHAR = 0
 const DEMO = 1
 
-/** @type {?Attract} */
-let _attract = null
+let _attract = /**@type {?Attract}*/(null)
 
 export class Attract {
 	static {
