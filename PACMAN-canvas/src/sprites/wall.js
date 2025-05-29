@@ -1,4 +1,4 @@
-const {ctx}=Bg, W=Cols, T=TileSize
+const {ctx}=Bg
 
 const ScaleTable = /**@type {const}*/
 	([[1,1],[-1,1],[-1,-1],[1,-1]])
@@ -25,9 +25,14 @@ export const Wall = new class
 		ctx.stroke()
 	}
 
-	/** @type {(cornerIdx:number, x:number, y:number, type:number)=> void} */
-	#drawCorner = (cornerIdx, x, y, type)=> {
-		const [sx,sy]= ScaleTable[cornerIdx]
+	/**
+	 * @param {number} idx
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {number} type
+	 */
+	#drawCorner(idx, x, y, type) {
+		const [sx,sy]= ScaleTable[idx]
 		ctx.save()
 		ctx.translate(x+T/2, y+T/2)
 		ctx.scale(sx, sy)
@@ -39,22 +44,25 @@ export const Wall = new class
 		ctx.restore()
 	}
 
-	/** @type {(c:string, i:number)=> void} */
-	#drawTile = (c, i)=> { // c=Map chip, i=tileIdx
-		const [tx,ty]= [i%W, i/W|0]
+	/**
+	 * @param {string} c Map chip
+	 * @param {number} i Tile index
+	 */
+	#drawTile(c, i) {
+		const [tx,ty]= [i%Cols, i/Cols|0]
 		const [px,py]= [tx*T, ty*T]
 		const ci = +c? +c-1 : 'ABCD'.indexOf(c.toUpperCase())
 
-		;/[A-D]/.test(c)    && this.#drawCorner(ci, px, py, 1)
-		;/[a-d]/.test(c)    && this.#drawCorner(ci, px, py, 2)
-		;/[a-d\d]/i.test(c) && this.#drawCorner(ci, px, py, 0)
+		;/[A-D]/.test(c)    && Wall.#drawCorner(ci, px, py, 1)
+		;/[a-d]/.test(c)    && Wall.#drawCorner(ci, px, py, 2)
+		;/[a-d\d]/i.test(c) && Wall.#drawCorner(ci, px, py, 0)
 
 		;(c == '-')     && ctx.strokeLine(px, py+T/2, px+T, py+T/2)
 		;/[#|]/.test(c) && ctx.strokeLine(px+T/2, py, px+T/2, py+T)
 
 		ctx.save()
-		if (c == '#' || (!tx || tx == W-1) && +c) {
-			const oX = tx < W/2 ? -T/2+2 : T/2-2
+		if (c == '#' || (!tx || tx == Cols-1) && +c) {
+			const oX = tx < Cols/2 ? -T/2+2 : T/2-2
 			ctx.translate(px+oX+T/2, py)
 			ctx.strokeLine(0,0, 0,T)
 		}
