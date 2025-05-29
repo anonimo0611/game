@@ -1,5 +1,5 @@
 ﻿const size = $('#volume').height() || T
-const {cvs,ctx}= canvas2D('speakerCvs', size)
+const {cvs,ctx}= canvas2D('cvs_speaker', size)
 export const Speaker = new class {
 	/** @param {number} vol */
 	draw(vol) {
