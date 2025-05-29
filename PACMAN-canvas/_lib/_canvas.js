@@ -193,13 +193,14 @@ class FadeOut {
  * @param {number} [height] The default is the same as `width`, but if both `width` and `height` are undefined, use the heigt attribute of canvas element
  */
 const canvas2D = (id, width, height=width)=> {
-	const cvs = (id && byId(id) instanceof HTMLCanvasElement)
+	const cvs = typeof(id) == 'string'
 		? /**@type {HTMLCanvasElement}*/(byId(id))
 		: document.createElement('canvas')
-	if (!cvs) throw ReferenceError(`Canvas with the specified ID \`${id}\` cannot be found`)
+	if (id && (!cvs || cvs instanceof HTMLCanvasElement == false)) {
+		throw ReferenceError(`Canvas with specified ID \`${id}\` not found`)
+	}
 	const ctx  = new ExtendedContext2D(cvs).resize(width,height)
-	const[w,h] = ctx.size
-	/** @type {readonly [cvs,ctx,w:number,h:number]} */
-	const vals = [cvs,ctx,w,h]
+	const [w,h]= ctx.size
+	const vals = /**@type {readonly[cvs,ctx,w:number,h:number]}*/([cvs,ctx,w,h])
 	return freeze({cvs,ctx,w,h,vals})
 }
