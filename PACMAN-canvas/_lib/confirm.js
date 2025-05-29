@@ -2,8 +2,7 @@ import {Dir} from './direction.js'
 export const Confirm = new class {
 	#opened = false
 	#cancelIdx = 0
-	get opened() {return this.#opened}
-
+	get opened()   {return this.#opened}
 	get #tempElm() {return /**@type {HTMLTemplateElement}*/(byId('confirm_t'))}
 	get #buttons() {return byId('confirm')?.querySelectorAll('button')}
 
