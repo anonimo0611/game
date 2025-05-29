@@ -13,7 +13,7 @@ const Ghosts = /**@type {Ghost[]}*/([])
 
 /**
  * Delay time(ms) for ghost to be released in always chase mode
- * @type {(idxOfGhostInHouse:number)=> number}
+ * @param {number} idxOfGhostInHouse
  */
 const getReleaseDelay = idxOfGhostInHouse=> nonNull({
 	// Pinky->Aosuke->Guzuta
@@ -27,7 +27,9 @@ const getReleaseDelay = idxOfGhostInHouse=> nonNull({
 
 /**
  * Whether ghost can't enter the intersection
- * @type {(ghost:Ghost, tile:Vector2, dir:Direction)=> boolean}
+ * @param {Ghost}     ghost
+ * @param {Vector2}   tile
+ * @param {Direction} dir
  */
 export const notEnter = (ghost, tile, dir)=> {
 	return !Ctrl.unrestricted
@@ -82,7 +84,10 @@ export const GhsMgr = new class extends Common {
 	get hasEscape() {return Ghosts.some(g=> g.isEscaping)}
 	get akaCenter() {return Ghosts[GhsType.Akabei].centerPos}
 
-	/** @type {(_:unknown, ...instances:Ghosts)=> void} */
+	/**
+	 * @param {unknown} _
+	 * @param {Ghosts}  instances
+	 */
 	#initialize = (_, ...instances)=> {
 		GhsMgr.#aidx = 0
 		instances.forEach((g,i)=> Ghosts[i]=g)
