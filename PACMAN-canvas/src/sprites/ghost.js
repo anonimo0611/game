@@ -1,4 +1,5 @@
-const EyesMap = new Map([[L,0],[R,0],[U,1],[D,2],['LowerR',3]])
+const EyesEnum = /**@type {const}*/
+	({[L]:0,[R]:0,[U]:1,[D]:2,LowerR:3})
 
 import CBSprite from './ghost_cb.js'
 export default class {
@@ -28,7 +29,7 @@ export default class {
 		aIdx       = 0,
 		spriteIdx  = 0,
 		size       = T*2,
-		orient     = L,
+		orient     = /**@type {Direction}*/(L),
 		color      = Color.Akabei,
 		isFright   = false,
 		isBitten   = false,
@@ -67,8 +68,7 @@ export default class {
 			ctx.restore()
 		}
 		if (!isFright) {
-			const idx = EyesMap.get(orient)
-			this.#eyesFns[nonNull(idx)].call(this,{orient,isRipped})
+			this.#eyesFns[EyesEnum[orient]].call(this,{orient,isRipped})
 		}
 		finalize()
 	}
