@@ -25,6 +25,7 @@ class Menu extends Common {
 		}
 		super({eventTarget:menu})
 		this.root  = root
+		this.$root = $(root)
 		this.menu  = menu
 		this.items = items
 		this.id    = id
