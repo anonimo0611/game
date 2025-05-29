@@ -7,15 +7,15 @@ export default class {
 
 	get current() {return this.#state}
 
-	/** @param {string} [state] */
-	init(state) {
+	/** @param {string} [initState] */
+	init(initState) {
 		keys(this)
 		.flatMap(k=> /^is[A-Z\d]*$/i.test(k) ? [[k,k.slice(2)]]:[])
-		.forEach(([k,s])=> {
-			this.#StateSet.add(s)
-			defineProperty(this,k,{get(){return this.#state===s}})
+		.forEach(([key,state])=> {
+			this.#StateSet.add(state)
+			defineProperty(this,key,{get(){return this.#state===state}})
 		})
-		state && this.#StateSet.has(state) && this.to(state)
+		initState && this.#StateSet.has(initState) && this.to(initState)
 	}
 
 	/**
