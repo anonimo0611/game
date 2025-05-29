@@ -25,10 +25,10 @@ export class Pacman extends Actor {
 }
 class PlayablePac extends Pacman {
 	#step     = this.#getStep()
-	#eatIdx   = 0
 	#notEaten = 0
 	#turning  = false
 	#stopped  = true
+	#eatIdx   = /**@type {0|1}*/(0)
 	#preDir   = /**@type {?Direction}*/(null)
 	#nextTurn = /**@type {?Direction}*/(null)
 
