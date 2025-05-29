@@ -104,7 +104,7 @@ const getOrient = ()=> /**@type {Direction}*/(
 			: drawGhost()
 	}
 	menu.on({change})
-	$(menu.root).on('keydown', e=> {
+	menu.$root.on('keydown', e=> {
 		// Enable switching of radio controls with the ← or → key
 		const dir = Dir.from(e)
 		if (dir) {
