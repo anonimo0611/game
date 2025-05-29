@@ -24,7 +24,7 @@ export default class {
 	 */
 	to(state, {data,delay=-1,fn}={}) {
 		if (!this.#StateSet.has(state))
-			throw ReferenceError(`State \`${state}\` is not defined`)
+			throw TypeError(`State \`${state}\` is not defined`)
 
 		if (delay >= 0) {
 			Timer.set(delay, ()=> this.to(state,{delay:-1,data}))
