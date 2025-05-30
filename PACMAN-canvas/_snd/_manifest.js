@@ -1,4 +1,4 @@
-const SoundData = freeze({
+const SoundData = /**@type {const}*/({
     //---- looped.ogg ----
     siren0:  {srcIdx:0, startTime:    0, duration: 402},
     siren1:  {srcIdx:0, startTime: 1402, duration: 327},
