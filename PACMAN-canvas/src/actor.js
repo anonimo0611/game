@@ -56,28 +56,32 @@ export class Actor extends Common {
 	move(dir) {this.setNextPos(1, this.dir=dir)}
 
 	/** @param {Direction} dir */
-	hasAdjWall(dir) {
-		return Maze.hasWall(this.getAdjTile(dir))
-	}
+	hasAdjWall(dir) {return Maze.hasWall(this.getAdjTile(dir))}
 
 	/** @param {Direction} dir */
 	getAdjTile(dir, n=1, tile=this.tilePos) {
 		const  v = Vec2[dir].mul(n).add(tile)
 		return v.setX((v.x+Cols) % Cols) // x-axis loops
 	}
-
+	/** @param {Direction} [dir] */
 	collidedWithWall(dir=this.dir) {
 		const  {step,centerPos}= this
 		const  {x,y}= Vec2[dir].mul(T/2+step).add(centerPos).divInt(T)
 		return Maze.hasWall({x:(x+Cols) % Cols, y}) // x-axis loops
 	}
-	setPos({x=this.x, y=this.y}={}) {
-		this.#y = y
-		this.#x = function(r) { // x-axis move loops during play
+	/**
+	 * @param {number|OptionalPos} v
+	 * @param {number} [n]
+	 * @type {{(x:number, y:number):void,(pos:OptionalPos):void}}
+	 */
+	setPos = (v,n)=> {
+		let[x,y]= (typeof v == 'number')? [v,n] : [v.x,v.y]
+		this.#y = (y ??= this.y);(x ??= this.x);
+		this.#x = function(x,r) { // x-axis move loops during play
 			if (!State.isPlaying) return
 			if (x < -r-T/2) return CW+T/2
 			if (x > CW+T/2) return -r-T/2
-		}(this.radius) ?? x
+		}(x,this.radius) ?? x
 	}
 	update(maxA=this.maxAlpha) {
 		State.isReady   && (this.#fadeIn ||= new FadeIn)?.update(maxA)

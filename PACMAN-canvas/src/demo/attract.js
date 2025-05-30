@@ -41,35 +41,26 @@ export class Attract {
 
 	/** @private */
 	constructor() {
+		this.setActors()
 		$onNS('.Attract', {click_keydown_blur:this.quit})
-		this.initialize()
 	}
-	initialize() {
-		const {Max}= GhsType
-		for (let i=0; i<this.ghsList.length*Max; i++) {
-			this.setActor(i/Max|0, i%Max)
-		}
+	setActors() {
+		for (const where of this.ghsList.keys())
+			for (let i=0; i<GhsType.Max; i++)
+				this.setActor(where, i, where == DEMO)
 		GhsMgr.trigger('Init', this.ghsList[DEMO])
 	}
-	/**
-	 * @param {number} idx
-	 * @param {number} gIdx
-	 */
-	setActor(idx, gIdx) {
-		const g = new Ghost(idx? L:R, {idx:gIdx,animFlag:+(idx==DEMO)})
-		if (idx) {
-			g.pos = Vec2(CvsW+(T*6)+(T*2*gIdx), T*19)
-			!gIdx && (this.pacman.pos = Vec2(g.x-T*3.5, g.y))
+	setActor(where=0, gIdx=0, isDemo=false) {
+		const g = new Ghost(isDemo? L:R, {idx:gIdx, animFlag:+isDemo})
+		if (isDemo) {
+			g.setPos(CvsW+(T*6)+(T*2*gIdx), T*19)
+			g.idx == 0 && this.pacman.setPos(g.x-T*3.5, g.y)
 		}
-		this.ghsList[idx].push(g)
+		this.ghsList[where].push(g)
 	}
-	/**
-	 * @param {number} idx
-	 * @param {number} ghsIdx
-	 */
-	drawGhost(idx, ghsIdx, row=NaN) {
-		const ghost = this.ghsList[idx][ghsIdx]
-		!isNaN(row) && (ghost.pos = Vec2(5*T, row*T))
+	drawGhost(where=0, gIdx=0, row=NaN) {
+		const ghost = this.ghsList[where][gIdx]
+		row && ghost.setPos(5*T, row*T)
 		ghost.sprite.draw(ghost)
 	}
 	draw() {
