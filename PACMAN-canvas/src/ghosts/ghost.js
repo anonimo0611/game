@@ -193,12 +193,12 @@ export class Ghost extends Actor {
 	}
 	#getNextDir(tgt=this.targetTile) {
 		const tile = this.getAdjTile(this.dir)
-		const dirs = this.TurnDirs.flatMap((dir,i)=> {
+		const dirs = this.TurnDirs.flatMap((dir,index)=> {
 			const test = this.getAdjTile(dir,1,tile)
 			return Dir.opposite(this.orient) != dir
-				&& !Maze.hasWall(test)
-				&& !Sys.notEnter(this,test,dir)
-			? [{dir,index:i,dist:Vec2.sqrMag(test,tgt)}]:[]
+				&& Maze.hasWall(test) == false
+				&& Sys.canEnter(test,dir,this)
+			? [{dir,index,dist:Vec2.sqrMag(test,tgt)}]:[]
 		})
 		return this.isFright
 			? randChoice(dirs).dir

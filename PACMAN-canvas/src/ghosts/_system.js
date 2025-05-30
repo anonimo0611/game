@@ -12,7 +12,7 @@ import Target   from './show_targets.js'
 const Ghosts = /**@type {Ghost[]}*/([])
 
 /**
- * Delay time(ms) for ghost to be released in always chase mode
+ * Delay time(ms) for ghost to be departs in always chase mode
  * @param {number} idxOfGhostInHouse
  */
 const getReleaseDelay = idxOfGhostInHouse=> nonNull({
@@ -26,16 +26,17 @@ const getReleaseDelay = idxOfGhostInHouse=> nonNull({
 }[Game.restarted? 0 : Game.clampedLv])[idxOfGhostInHouse]/Game.speedRate
 
 /**
- * Whether ghost can't enter the intersection
- * @param {Ghost}     ghost
+ * Can a ghost turn at an intersection?
  * @param {Vector2}   tile
  * @param {Direction} dir
+ * @param {Ghost}     ghost
  */
-export const notEnter = (ghost, tile, dir)=> {
-	return !Ctrl.unrestricted
-		&& !ghost.isFright
-		&& !ghost.isEscaping
-		&& (dir == U && Maze.GhostNotEnterSet.has(tile.hyphenated))
+export const canEnter = (tile, dir, ghost)=> {
+	return Ctrl.unrestricted
+		|| ghost.isFright
+		|| ghost.isEscaping
+		|| dir != U
+		|| !Maze.GhostNoEnter.has(tile.hyphenated)
 }
 
 /** @typedef {'Idle'|'GoOut'|'Walk'|'Bitten'|'Escape'|'Return'} StateType */

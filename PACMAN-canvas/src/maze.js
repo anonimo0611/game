@@ -138,7 +138,7 @@ export const Maze = new class {
 	 * These tiles(x-y) forbidden ghosts from entering upward
 	 * @type {ReadonlySet<string>}
 	 */
-	GhostNotEnterSet = new Set(['12-11','12-23','15-11','15-23'])
+	GhostNoEnter = new Set(['12-11','12-23','15-11','15-23'])
 
 	/**
 	 * If the target tile is on the upper side of the maze \
