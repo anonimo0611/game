@@ -1,4 +1,5 @@
 'use strict'
+/** @typedef {{x?:number,y?:number}} OptionalPos */
 /** @typedef {Vector2|{x:number,y:number}} Position */
 class Vector2 {
 	x=0;y=0;
