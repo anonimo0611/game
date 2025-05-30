@@ -1,11 +1,12 @@
 import {State}    from '../src/state.js'
+import {ctrl}     from '../src/control.js'
 import {GhsMgr}   from '../src/ghosts/_system.js'
 import {SirenIds} from './_manifest.js'
 import {SoundMgr} from './loader.js'
 import {Speaker}  from './speaker.js'
 
-const volRg2 = /**@type {HTMLInputElement}*/(byId('volRg2'))
-const volRng = /**@type {HTMLInputElement}*/(byId('volRng'))
+const volRng = ctrl('volRng')
+const volRg2 = ctrl('volRg2')
 
 export const Sound = new class extends SoundMgr {
 	static {this.#init()}
@@ -24,13 +25,14 @@ export const Sound = new class extends SoundMgr {
 
 	/** @param {MouseEvent} e */
 	#onWheel(e) {
-		Sound.vol = /**@type {HTMLInputElement}*/
-			(e.type == 'input'? e.target:volRng).valueAsNumber
+		const isInput = e.target instanceof HTMLInputElement
+		Sound.vol = (isInput? e.target:volRng).valueAsNumber
 	}
 
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
-		if (keyRepeat(e) || isCombinationKey(e))
+		if (keyRepeat(e)
+		 || isCombinationKey(e))
 			return
 		if (e.key.toUpperCase() == 'M'
 		 || e.target == volRg2 && isEnterKey(e))
