@@ -8,17 +8,9 @@ export class Common {
 	/**
  	 * @param {string|{[event:string]:Function}} arg
 	 * @param {Function} [fn]
-
-	 * @overload
-	 * @param   {string} arg
-	 * @param   {Function} fn
-	 * @returns {this}
-
-	 * @overload
-	 * @param   {{[event:string]:Function}} arg
-	 * @returns {this}
+	 * @type {((event:string, fn:Function)=> this) & ((arg:{[event:string]:Function})=> this)}
 	 */
-	on(arg, fn) {
+	on = (arg, fn)=> {
 		typeof(arg) == 'object'
 			? $(this.#target).on(arg)
 			: $(this.#target).on({[arg]:fn})

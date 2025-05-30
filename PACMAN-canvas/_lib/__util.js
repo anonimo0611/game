@@ -139,7 +139,7 @@ const $trigger = (event,data)=> $(window).trigger(event,data)
  * @param {string|object} arg
  * @param {Function} [fn]
  * @type {{
- *    (arg:string, fn:Function):  JQuery<typeof globalThis>
+ *    (arg:string, fn:Function):JQuery<typeof globalThis>
  *    (arg:{[event:string]:Function}):JQuery<typeof globalThis>
  * }}
  */
