@@ -14,13 +14,13 @@ export const Sound = new class extends SoundMgr {
 			return $('.volCtrl').hide()
 		Sound.vol = localStorage.anoPacVolume ?? 5
 		$on({keydown:Sound.#onKeydown})
-		$('.volRng') .prop({defaultValue:Sound.vol})
-		$('.volRng') .on({input:Sound.#onWheel})
-		$('#speaker').on({wheel:Sound.#onWheel}).on({click:Sound.#mute})
+		$('#speaker')
+			.on({wheel:Sound.#onWheel})
+			.on({click:Sound.#mute})
+		$('.volRng')
+			.prop({defaultValue:Sound.vol})
+			.on({input:Sound.#onWheel})
 	}
-
-	/** @type {?number} */
-	#lstVol = null
 
 	/** @param {MouseEvent} e */
 	#onWheel(e) {
@@ -30,19 +30,24 @@ export const Sound = new class extends SoundMgr {
 
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
-		if (keyRepeat(e) || isCombinationKey(e)) return
+		if (keyRepeat(e) || isCombinationKey(e))
+			return
 		if (e.key.toUpperCase() == 'M'
-		 || e.target == volRg2 && isEnterKey(e)) Sound.#mute()
+		 || e.target == volRg2 && isEnterKey(e))
+		 	Sound.#mute()
 	}
 
+	#lstVol = /**@type {?number}*/(null)
 	#mute() {
 		Sound.#lstVol = Sound.vol || (Sound.#lstVol ?? +volRng.max>>1)
 		$(volRng).prop({value:Sound.vol? 0:Sound.#lstVol}).trigger('input')
 	}
-	get vol()      {return super.vol}
-	get disabled() {return super.disabled || State.isAttract}
+
 	get sirenId()  {return SirenIds[GhsMgr.Elroy.part]}
 	get ringing()  {return Sound.isPlaying('bell')}
+	get disabled() {return super.disabled || State.isAttract}
+
+	get vol() {return super.vol}
 	set vol(vol) {
 		if (Sound.disabled) return
 		vol = isNaN(vol)? 10 : clamp(+vol, 0, 10)
@@ -57,12 +62,9 @@ export const Sound = new class extends SoundMgr {
 		if (!GhsMgr.hasEscape)
 			Sound.stopSiren().play('fright')
 	}
-	stopSiren() {
-		return Sound.stop(...SirenIds)
-	}
-	stopLoops() {
-		return Sound.stopSiren().stop('fright','escape')
-	}
+	stopSiren = ()=> Sound.stop(...SirenIds)
+	stopLoops = ()=> Sound.stopSiren().stop('fright','escape')
+
 	/** @param {boolean} bool */
 	toggleFrightMode(bool) {
 		bool? Sound.playFright()
