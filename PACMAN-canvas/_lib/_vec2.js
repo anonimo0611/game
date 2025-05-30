@@ -4,14 +4,15 @@
 class Vector2 {
 	x=0;y=0;
 	/** @returns {[x:number, y:number]} */
-	get vals()         {return [this.x, this.y]}
-	get hyphenated()   {return `${this.x}-${this.y}`}
-	get inverse()      {return this.clone.mul(-1)}
-	get sqrMagnitude() {return this.x**2 + this.y**2}
-	get magnitude()    {return sqrt(this.sqrMagnitude)}
-	get clone()        {return Vec2(this.x,  this.y)}
-	get asInt()        {return Vec2(this.x|0,this.y|0)}
-	get normalized()   {return Vec2(this.x/this.magnitude, this.y/this.magnitude)}
+	get vals()       {return [this.x, this.y]}
+	get hyphenated() {return `${this.x}-${this.y}`}
+	get string()     {return this.toString()}
+	get inverse()    {return this.clone.mul(-1)}
+	get sqrMag()     {return this.x**2 + this.y**2}
+	get magnitude()  {return sqrt(this.sqrMag)}
+	get clone()      {return Vec2(this.x,  this.y)}
+	get asInt()      {return Vec2(this.x|0,this.y|0)}
+	get normalized() {return Vec2(this.x/this.magnitude, this.y/this.magnitude)}
 
 	/**
 	 * @param {number|Position} [v1]
@@ -107,6 +108,7 @@ class Vector2 {
 		if (!Number.isFinite(y)) throw TypeError(`\`${y}\` is an ilegal y valuer`)
 		return {x,y}
 	}
+	toString() {return `{x:${this.x}, y:${this.y}}`}
 }
 
 /**
@@ -168,7 +170,7 @@ for (const [k,v] of entries(Vec2)) {
 /**
  * @param {Position} v1
  * @param {Position} v2
- */Vec2.sqrMag = (v1, v2)=> Vec2.sub(v1,v2).sqrMagnitude
+ */Vec2.sqrMag = (v1, v2)=> Vec2.sub(v1,v2).sqrMag
 
 /**
  * @param {Position} v1
