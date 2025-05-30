@@ -110,7 +110,7 @@ const $byId = elementId=> $('#'+elementId)
 
 /**
  * @param {string} ns
- * @param {Object.<string,Function>} cfg
+ * @param {{[event:string]:Function}} cfg
  */
 const $onNS = (ns,cfg)=> {
 	entries(cfg).forEach(([ev,fn])=> {
