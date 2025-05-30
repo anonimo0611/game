@@ -72,7 +72,7 @@ export class Actor extends Common {
 	/**
 	 * @param {number|OptionalPos} v
 	 * @param {number} [n]
-	 * @type {{(x:number, y:number):void,(pos:OptionalPos):void}}
+	 * @type {((x:number, y:number)=>void) & ((pos:OptionalPos)=>void)}
 	 */
 	setPos = (v,n)=> {
 		let[x,y]= (typeof v == 'number')? [v,n] : [v.x,v.y]
