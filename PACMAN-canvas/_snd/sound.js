@@ -61,7 +61,7 @@ export const Sound = new class extends SoundMgr {
 	}
 	playSiren() {
 		if (!GhsMgr.isFright && !GhsMgr.hasEscape)
-			Sound.stop('fright').stopSiren().play(Sound.sirenId)
+			Sound.stopLoops().play(Sound.sirenId)
 	}
 	playFright() {
 		if (!GhsMgr.hasEscape)
