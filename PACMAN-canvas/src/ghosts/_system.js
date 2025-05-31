@@ -26,7 +26,7 @@ const getReleaseDelay = idxOfGhostInHouse=> nonNull({
 }[Game.restarted? 0 : Game.clampedLv])[idxOfGhostInHouse]/Game.speedRate
 
 /**
- * Can a ghost turn at an intersection?
+ * Determines whether the ghost can enter the intersection
  * @param {Vector2}   tile
  * @param {Direction} dir
  * @param {Ghost}     ghost
