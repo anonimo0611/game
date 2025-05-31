@@ -13,7 +13,7 @@ PowDotInterval = 15,
 /** @typedef {'Up'|'Right'|'Down'|'Left'} Direction */
 U='Up', R='Right', D='Down', L='Left',
 
-dBody = /**@type {HTMLBodyElement}*/(document.body),
+dBody = document.getElementsByTagName('body')[0],
 
 [Bg,HUD,,Ctx,CvsW,CvsH]= [
 	canvas2D('cvs_bg' ,  T*Cols, T*Rows),
