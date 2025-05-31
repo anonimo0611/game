@@ -1,7 +1,7 @@
 import '../_lib/mouse.js'
-import PacSprite     from '../src/sprites/pacman.js'
-import * as FruitSpr from '../src/sprites/fruits.js'
-import pointsSprite  from '../src/sprites/points.js'
+import PacSprite  from '../src/sprites/pacman.js'
+import * as Pts   from '../src/sprites/points.js'
+import * as Fruit from '../src/sprites/fruits.js'
 import {GridSize,T,S,Gap,ghost} from './_constants.js'
 
 export const View = function() {
@@ -37,7 +37,7 @@ export const View = function() {
 	}
 	function drawFruits() {
 		for (let i=0; i<8; i++)
-			FruitSpr.draw(Ctx, i, ofst(i)+S/2, S/2, S/16)
+			Fruit.draw(Ctx, i, ofst(i)+S/2, S/2, S/16)
 	}
 	function drawGhosts() {
 		for (let row=1; row<=5; row++)
@@ -75,21 +75,21 @@ export const View = function() {
 	}
 	function drawPoints() {
 		/**
-		 * @param {number} pts
-		 * @param {number} x
-		 * @param {number} y
+		 * @typedef {import("../src/sprites/points.js").PtsType} PtsType
+		 * @type {(pts:number, x: number, y: number)=> void}
 		 */
 		const draw = (pts, x, y)=> {
+			const {ctx,w,h}=
+				Pts.create(/**@type {PtsType}*/(pts), S)
 			Ctx.save()
 			Ctx.translate(x, y)
-			pointsSprite.draw(0, 0, pts, S)
+			Ctx.drawImage(ctx.canvas, -w/2, -h/2)
 			Ctx.restore()
 		}
-		;[200,400,800,1600,100,300,500,700].forEach(
-			(pts,i)=> draw(pts, ofst(i)+T, S*6+T))
-
-		;[1000,2000,3000,5000].forEach(
-			(pts,i)=> draw(pts, (S+Gap/2)+S*(2+Gap/T)*i, S*7+S/2))
+		;[200,400,800,1600,100,300,500,700]
+			.forEach((pts,i)=> draw(pts, ofst(i)+T, S*6+T))
+		;[1000,2000,3000,5000]
+			.forEach((pts,i)=> draw(pts, (S+Gap/2)+S*(2+Gap/T)*i, S*7+S/2))
 	}
 	function drawPacman() {
 		const dirs = toDirs([U,U,L,L,D,D,R,R])
@@ -103,11 +103,7 @@ export const View = function() {
 	function drawAkabei() {
 		const aka = ghost
 		const spr = aka.cbSprite.stakeClothes
-		/**
-		 * @param {number} x
-		 * @param {number} y
-		 * @param {object} cfg
-		 */
+		/** @type {(x:number, y:number, cfg:object)=> void} */
 		function draw(x,y, cfg) {
 			Ctx.save()
 			aka.sprite.draw({...aka, x,y, ...cfg})
@@ -150,10 +146,9 @@ export const View = function() {
 }()
 
 $('#brightRng').on('input', function() {
-	const v = this.getAttribute('value')
+	const v = /**@type {HTMLInputElement}*/(this).value
 	Ctx.canvas.style.backgroundColor = `rgb(${v}% ${v}% ${v}%)`
 })
-
 $('#resetBtn').on('click', function() {
 	Array.from(document.forms).forEach(f=> f.reset())
 	$('[type=range]').trigger('input')
