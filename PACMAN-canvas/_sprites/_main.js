@@ -80,7 +80,7 @@ export const View = function() {
 		 */
 		const draw = (pts, x, y)=> {
 			const {ctx,w,h}=
-				Pts.create(/**@type {PtsType}*/(pts), S)
+				Pts.cache(/**@type {PtsType}*/(pts), S)
 			Ctx.save()
 			Ctx.translate(x, y)
 			Ctx.drawImage(ctx.canvas, -w/2, -h/2)
