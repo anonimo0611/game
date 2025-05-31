@@ -1,8 +1,8 @@
+import './control.js'
 import {State}    from '../src/state.js'
 import {GhsMgr}   from '../src/ghosts/_system.js'
 import {SirenIds} from './_manifest.js'
 import {SoundMgr} from './loader.js'
-import {volRng}   from './control.js'
 import {Speaker}  from './speaker.js'
 
 export const Sound = new class extends SoundMgr {
@@ -19,8 +19,8 @@ export const Sound = new class extends SoundMgr {
 	set vol(_vol) {
 		if (!Sound.disabled) {
 			const vol = super.vol = clamp(+_vol, 0, 10)
-			localStorage.anoPacVolume = volRng.valueAsNumber = vol
 			Speaker.draw(vol)
+			localStorage.anoPacVolume = vol
 		}
 	}
 	playSiren() {

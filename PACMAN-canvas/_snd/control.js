@@ -1,9 +1,9 @@
 import {ctrl}  from '../src/control.js'
 import {Sound} from "./sound.js"
-export const volRng = ctrl('volRng')
-export const volRg2 = ctrl('volRg2')
 
-let lstVol = NaN
+let   lstVol = NaN
+const volRng = ctrl('volRng')
+const volRg2 = ctrl('volRg2')
 
 addEventListener('load', ()=> {
 	if (Sound.disabled) {
