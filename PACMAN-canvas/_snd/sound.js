@@ -25,8 +25,8 @@ export const Sound = new class extends SoundMgr {
 
 	/** @param {MouseEvent} e */
 	#onWheel(e) {
-		const isInput = e.target instanceof HTMLInputElement
-		Sound.vol = (isInput? e.target:volRng).valueAsNumber
+		const isInputElem = e.target instanceof HTMLInputElement
+		Sound.vol = (isInputElem? e.target : volRng).valueAsNumber
 	}
 
 	/** @param {KeyboardEvent} e */
@@ -39,10 +39,13 @@ export const Sound = new class extends SoundMgr {
 		 	Sound.#mute()
 	}
 
-	#lstVol = /**@type {?number}*/(null)
+	#lstVol = NaN
 	#mute() {
-		Sound.#lstVol = Sound.vol || (Sound.#lstVol ?? +volRng.max>>1)
-		$(volRng).prop({value:Sound.vol? 0:Sound.#lstVol}).trigger('input')
+		Sound.#lstVol = Sound.vol
+			|| (Sound.#lstVol || +volRng.max >> 1)
+		$(volRng)
+			.prop({value:(Sound.vol? 0 : Sound.#lstVol)})
+			.trigger('input')
 	}
 
 	get sirenId()  {return SirenIds[GhsMgr.Elroy.part]}
@@ -50,11 +53,11 @@ export const Sound = new class extends SoundMgr {
 	get disabled() {return super.disabled || State.isAttract}
 
 	get vol() {return super.vol}
-	set vol(vol) {
-		if (Sound.disabled) return
-		vol = isNaN(vol)? 10 : clamp(+vol, 0, 10)
-		localStorage.anoPacVolume = volRng.valueAsNumber = super.vol = +vol
-		Speaker.draw(Sound.vol)
+	set vol(_vol) {
+		if (!Sound.disabled) {
+			const vol = super.vol = clamp(+_vol, 0, 10)
+			Speaker.draw(localStorage.anoPacVolume=volRng.valueAsNumber=vol)
+		}
 	}
 	playSiren() {
 		if (!GhsMgr.isFright && !GhsMgr.hasEscape)
@@ -69,15 +72,17 @@ export const Sound = new class extends SoundMgr {
 
 	/** @param {boolean} bool */
 	toggleFrightMode(bool) {
-		bool? Sound.playFright()
-		    : Sound.playSiren()
+		bool
+			? Sound.playFright()
+			: Sound.playSiren()
 	}
 	ghostEscape() {
 		Sound.stopSiren().stop('fright').play('escape')
 	}
 	ghostArrivedAtHome() {
-		if (GhsMgr.hasEscape) return
-		const id = GhsMgr.isFright? 'fright':Sound.sirenId
-		Sound.stop('escape').play(id)
+		if (!GhsMgr.hasEscape) {
+			const id = GhsMgr.isFright? 'fright' : Sound.sirenId
+			Sound.stop('escape').play(id)
+		}
 	}
-};freeze(Sound)
+}

@@ -16,22 +16,18 @@ const SoundData = /**@type {const}*/({
     bell:    {srcIdx:1, startTime: 3641, duration:2090},
     fruit:   {srcIdx:1, startTime: 5952, duration: 496},
 })
-/** @typedef {keyof SoundData} SoundType */
-
-export const Ids =
-    /**@type {SoundType[]}*/(keys(SoundData))
-export const SirenIds =
-    /**@type {const}*/(['siren0','siren1','siren2','siren3'])
 
 /** @param {number} idx */
-const genSpriteData = idx=>
+const genSprite = idx=>
     entries(SoundData).flatMap(([k,v])=> idx == v.srcIdx ? [{id:k,...v}]:[])
 
-export const Manifest = [
-    {src:'./res/looped.ogg', data:{channels:3, audioSprite:[...genSpriteData(0)]}},
-    {src:'./res/regular.ogg',data:{channels:4, audioSprite:[...genSpriteData(1)]}},
-]
-export const ConfigMap = new Map([
+/**
+ * @typedef {keyof SoundData} SoundType
+ * @typedef {{loop:number,volume:number}} CfgData
+ * @type {ReadonlyMap<string, CfgData>}
+ */
+export const
+ConfigMap = new Map([
 	['_normal', {loop: 0, volume:1.00}],
 	['eat',     {loop: 0, volume:0.70}],
 	['bell',    {loop: 0, volume:0.70}],
@@ -40,3 +36,9 @@ export const ConfigMap = new Map([
 	['siren',   {loop:-1, volume:0.80}],
 	['escape',  {loop:-1, volume:0.90}],
 ])
+, Ids      = /**@type {SoundType[]}*/(keys(SoundData))
+, SirenIds = /**@type {const}*/(['siren0','siren1','siren2','siren3'])
+, Manifest = [
+    {src:'./res/looped.ogg', data:{channels:3, audioSprite:[...genSprite(0)]}},
+    {src:'./res/regular.ogg',data:{channels:4, audioSprite:[...genSprite(1)]}},
+]

@@ -1,14 +1,13 @@
 const {Sound:SoundJS}= createjs
+const Instance = /**@type {Map<string,createjs.AbstractSoundInstance>}*/(new Map)
 
 /** @typedef {import("./_manifest.js").SoundType} SoundType */
-/** @type {Map<string,createjs.AbstractSoundInstance>} */
-const Instance = new Map()
-
 import {Manifest,ConfigMap,Ids} from './_manifest.js'
+
 export class SoundMgr {
 	static #disabled = true
 	static setup = ()=>
-		new Promise((resolve, reject)=> {
+		new Promise((resolve,reject)=> {
 			let amount = 0;
 			SoundJS.registerSounds(Manifest)
 			SoundJS.on('fileerror', reject)
@@ -20,11 +19,12 @@ export class SoundMgr {
 				resolve('All sound files loaded')
 			})
 		})
-		.then(()=> true).catch(()=> false)
+		.then (()=> true)
+		.catch(()=> false)
 
-	set vol(vol)   {SoundJS.volume = Number.isFinite(vol)? vol/10 : this.vol}
-	get vol()      {return SoundJS.volume * 10}
 	get disabled() {return SoundMgr.#disabled}
+	get vol()      {return SoundJS.volume * 10}
+	set vol(vol)   {SoundJS.volume = Number.isFinite(vol)? vol/10 : this.vol}
 
 	/** @param {SoundType} id */
 	isPlaying(id)  {return Instance.get(id)?.playState === SoundJS.PLAY_SUCCEEDED}
@@ -35,7 +35,7 @@ export class SoundMgr {
 	/** @param {SoundType} id */
 	#configMerge(id, cfg={}) {
 		const prefix = id.match(/^\D+/)?.[0] || ''
-		return {...ConfigMap.get(prefix) || ConfigMap.get('_normal'), ...cfg}
+		return {...ConfigMap.get(prefix) ?? ConfigMap.get('_normal'), ...cfg}
 	}
 
 	/**
@@ -44,10 +44,10 @@ export class SoundMgr {
 	 */
 	play(id, cfg={}) {
 		const instance = Instance.get(id)
-		if (this.disabled || !instance)
-			return
-		if (typeof cfg.duration == 'number')
-			instance.duration = cfg.duration
+		const {duration:dur}= cfg
+		if (this.disabled || !instance) return
+		if (typeof dur == 'number' && isFinite(dur))
+			instance.duration = dur
 		instance.play(this.#configMerge(id, cfg))
 	}
 
