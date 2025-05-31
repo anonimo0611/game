@@ -12,8 +12,7 @@ export class SoundMgr {
 			SoundJS.registerSounds(Manifest)
 			SoundJS.on('fileerror', reject)
 			SoundJS.on('fileload', ()=> {
-				if (++amount < Manifest.length)
-					return
+				if (++amount < Manifest.length) return
 				SoundMgr.#disabled = false
 				Ids.forEach(i=> Instance.set(i, SoundJS.createInstance(i)))
 				resolve('All sound files loaded')
@@ -25,6 +24,17 @@ export class SoundMgr {
 	get disabled() {return SoundMgr.#disabled}
 	get vol()      {return SoundJS.volume * 10}
 	set vol(vol)   {SoundJS.volume = Number.isFinite(vol)? vol/10 : this.vol}
+
+	/** @param {boolean} bool */
+	set allPaused(bool) {Instance.forEach(i=> i.paused = bool)}
+
+	/**
+	 * @param {boolean} bool
+	 * @param {...SoundType} ids
+	 */
+	paused(bool, ...ids) {
+		ids.forEach(id=> {const i=Instance.get(id);i && (i.paused=bool)})
+	}
 
 	/** @param {SoundType} id */
 	isPlaying(id)  {return Instance.get(id)?.playState === SoundJS.PLAY_SUCCEEDED}
@@ -57,20 +67,4 @@ export class SoundMgr {
 		ids.forEach(id=> Instance.get(id)?.stop())
 		return this
 	}
-
-	/**
-	 * @param {boolean} bool
-	 * @param {...SoundType} ids
-	 */
-	paused(bool, ...ids) {
-		ids.forEach(id=> {
-			const instance = Instance.get(id)
-			instance && (instance.paused=bool)
-		})
-	}
-
-	/** @param {boolean} bool */
-	set allPaused(bool) {
-		Instance.forEach(i=> i.paused = bool)
-	}
-}freeze(SoundMgr)
+}

@@ -15,16 +15,12 @@ const SoundData = /**@type {const}*/({
     bitten:  {srcIdx:1, startTime: 2603, duration: 575},
     bell:    {srcIdx:1, startTime: 3641, duration:2090},
     fruit:   {srcIdx:1, startTime: 5952, duration: 496},
-})
-
-/** @param {number} idx */
-const genSprite = idx=>
+}),
+genSprite = (/**@type {number}*/idx)=>
     entries(SoundData).flatMap(([k,v])=> idx == v.srcIdx ? [{id:k,...v}]:[])
-
 /**
  * @typedef {keyof SoundData} SoundType
- * @typedef {{loop:number,volume:number}} CfgData
- * @type {ReadonlyMap<string, CfgData>}
+ * @type {ReadonlyMap<string,{loop:number,volume:number}>}
  */
 export const
 ConfigMap = new Map([
