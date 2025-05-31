@@ -6,10 +6,12 @@ import {State}  from '../state.js'
 import {Ctrl}   from '../control.js'
 import {Player} from '../pacman.js'
 import {Maze}   from '../maze.js'
+import * as Pts from '../sprites/points.js'
 import {Ghost}  from './ghost.js'
 import Target   from './show_targets.js'
 
 const Ghosts = /**@type {Ghost[]}*/([])
+const Pts1st = Pts.GhostTable[0]
 
 /**
  * Delay time(ms) for ghost to be departs in always chase mode
@@ -78,10 +80,10 @@ export const GhsMgr = new class extends Common {
 	get animIndex() {return this.#aidx}
 	get Elroy()     {return Elroy}
 	get isScatter() {return AlternateBetweenModes.isScatter}
-	get isFright()  {return FrightMode.instance != null}
-	get score()     {return FrightMode.instance?.score     ?? 0}
-	get spriteIdx() {return FrightMode.instance?.spriteIdx ?? 0}
-	get caughtAll() {return FrightMode.instance?.caughtAll ?? false}
+	get isFright()  {return FrightMode.session != null}
+	get score()     {return FrightMode.session?.score ?? Pts1st}
+	get spriteIdx() {return FrightMode.session?.spriteIdx ?? 0}
+	get caughtAll() {return FrightMode.session?.caughtAll ?? false}
 	get hasEscape() {return Ghosts.some(g=> g.isEscaping)}
 	get akaCenter() {return Ghosts[GhsType.Akabei].centerPos}
 
@@ -114,7 +116,7 @@ export const GhsMgr = new class extends Common {
 		 || State.isCoffBrk)
 			this.#aidx ^= +(!Timer.frozen && !(Ticker.count % this.aInterval))
 		AlternateBetweenModes.update()
-		FrightMode.instance?.update()
+		FrightMode.session?.update()
 		Ghosts.forEach(g=> g.update())
 	}
 	drawTarget() {Target.draw(Ghosts)}
@@ -233,41 +235,42 @@ const Elroy = function() {
 	}
 }()
 
-class FrightMode {
-	/** @private @readonly */
-	static TimeTable = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
-	static #instance = /**@type {?FrightMode}*/(null)
-	static get instance() {return this.#instance}
-	static get numOfSec() {return this.TimeTable[Game.clampedLv-1]}
-	static new() {(State.isAttract || this.numOfSec) && new this()}
-	static {GhsMgr.on({Init:()=> this.#instance=null})}
+const FrightMode = function() {
+	let   _session  = /**@type {?Session}*/(null)
+	const TimeTable = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
+	const numOfSec  = ()=> TimeTable[Game.clampedLv-1]
+	class Session {
+		#tCounter = 0; #fCounter  = 0;
+		#flashIdx = 1; #caughtCnt = 0;
+		get score()     {return Pts.GhostTable[this.#caughtCnt-1]}
+		get spriteIdx() {return this.#fCounter? this.#flashIdx^1:0}
+		get caughtAll() {return this.#caughtCnt == GhsType.Max}
 
-	#tCounter = 0; #fCounter  = 0;
-	#flashIdx = 1; #caughtCnt = 0;
-
-	get score()     {return 100 * (1 << this.#caughtCnt)}
-	get spriteIdx() {return this.#fCounter? this.#flashIdx^1:0}
-	get caughtAll() {return this.#caughtCnt == GhsType.Max}
-
-	/** @private */
-	constructor() {
-		FrightMode.#instance = this.#toggle(true)
-		$(Ghosts).on('Cought', ()=> ++this.#caughtCnt)
+		/** @readonly */
+		dur = numOfSec()
+		constructor() {
+			_session = this.#toggle(true)
+			$(Ghosts).on('Cought', ()=> ++this.#caughtCnt)
+		}
+		#toggle(/**@type {boolean}*/bool) {
+			_session = null
+			$(Ghosts).off('Cought').trigger('FrightMode', bool)
+			Sound.toggleFrightMode(bool)
+			return this
+		}
+		update() {
+			if (!State.isPlaying || Timer.frozen) return
+			const et = (Game.interval * this.#tCounter++)/1000
+			const fi = (this.dur == 1 ? 12:14)/Game.speedRate|0
+			this.#flashIdx ^= +!(this.#fCounter % fi)
+			;(et >= this.dur-2) && this.#fCounter++
+			;(et >= this.dur || this.caughtAll) && this.#toggle(false)
+		}
 	}
-	/** @param {boolean} bool */
-	#toggle(bool) {
-		FrightMode.#instance = null
-		$(Ghosts).off('Cought').trigger('FrightMode', bool)
-		Sound.toggleFrightMode(bool)
-		return this
+	GhsMgr.on({Init:()=> _session = null})
+	return {
+		get session()  {return _session},
+		get numOfSec() {return numOfSec()},
+		new() {(State.isAttract || this.numOfSec) && new Session()},
 	}
-	update() {
-		if (!State.isPlaying || Timer.frozen) return
-		const {numOfSec}= FrightMode
-		const et = (Game.interval * this.#tCounter++)/1000
-		const fi = (numOfSec == 1 ? 12:14)/Game.speedRate|0
-		this.#flashIdx ^= +!(this.#fCounter % fi)
-		;(et >= numOfSec-2) && this.#fCounter++
-		;(et >= numOfSec || this.caughtAll) && this.#toggle(false)
-	}
-}
+}()

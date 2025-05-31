@@ -1,5 +1,6 @@
 const
-/** @typedef {keyof PathFrom0To8} ZeroToEight */
+FruitCvs = canvas2D(null),
+GhostCvs = canvas2D(null),
 PathFrom0To8 = /**@type {const}*/({
 	0: [1,0,2,0,3,1,3,5,2,6,1,6,0,5,0,1],
 	1: [0,1,1,0,1,6,0,6,2,6],
@@ -11,8 +12,7 @@ PathFrom0To8 = /**@type {const}*/({
 	7: [0,1,0,0,4,0,4,1,2,4,2,6],
 	8: [1,0,3,0,4,1,4,2,3,3,1,3,0,4,0,5,1,6,3,6,4,5,4,4,3,3,1,3,0,2,0,1],
 }),
-/** @typedef {keyof RelPosListFrom} PtsType */
-RelPosListFrom = /**@type {const}*/({
+PosListFrom100to5000 = /**@type {const}*/({
 	 100: [[1,-6.1,-3],[0,-2.1,-3],[0,2.7,-3]],
 	 200: [[2,-7.0,-3],[0,-1.0,-3],[0,4.0,-3]],
 	 300: [[3,-7.2,-3],[0,-1.2,-3],[0,3.8,-3]],
@@ -25,54 +25,48 @@ RelPosListFrom = /**@type {const}*/({
 	2000: [[2,-10, -3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
 	3000: [[3,-10, -3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
 	5000: [[5,-10, -3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
-}),
-/** @type {ReadonlySet<number>} */
-GhsPtsSet = new Set([200,400,800,1600])
+})
 
-export default new class {
-	/**
-	 * @param {number} x
-	 * @param {number} y
-	 * @param {number} pts
-	 */
-	draw(x, y, pts, size=TileSize*2) {
-		Ctx.save()
-		Ctx.translate(x, y)
-		Ctx.scale(size/16, size/16)
-		Ctx.lineWidth   = 1.2
-		Ctx.lineCap     ='round'
-		Ctx.lineJoin    ='round'
-		Ctx.strokeStyle = GhsPtsSet.has(pts)
-			? Color.GhostPts
-			: Color.FruitPts
-		RelPosListFrom[/**@type {PtsType}*/(pts)]
-		?.forEach(([n,x,y],i)=> {
-			pts == 1600 && i == 0
-				? this.#strokeLines([x,y,x,y+6]) // narrow 1
-				: this.#strokeNumber(n,x,y)
-		})
-		Ctx.restore()
-	}
+export const GhostTable = /**@type {const}*/([200,400,800,1600])
+export const FruitTable = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
 
-	/**
-	 * @param {ZeroToEight} n
-	 * @param {number} x
-	 * @param {number} y
-	 */
-	#strokeNumber(n, x, y) {
-		Ctx.save()
-		Ctx.translate(x,y)
-		this.#strokeLines(PathFrom0To8[n], n==0 || n==8)
-		Ctx.restore()
+/**
+ * @typedef {keyof PosListFrom100to5000} PtsType
+ * @typedef {typeof GhostTable[number]} GhsPts
+ * @param {PtsType} pts
+ */
+export function create(pts, size=TileSize*2) {
+	const isGhs = GhostTable.includes(/**@type {GhsPts}*/(pts))
+	const ctx   = (isGhs? GhostCvs:FruitCvs).ctx
+	const [w,h] = ctx.resize(size*1.5, size).size
+	ctx.clear()
+	ctx.save()
+	ctx.translate(w/2, h/2)
+	ctx.scale(size/16, size/16)
+	ctx.lineWidth   = 1.2
+	ctx.lineCap     ='round'
+	ctx.lineJoin    ='round'
+	ctx.strokeStyle = isGhs? Color.GhostPts:Color.FruitPts
+	PosListFrom100to5000[pts]
+	?.forEach(([n,x,y],i)=> {
+		(pts == 1600 && i == 0) // narrow 1
+			? stroke([x,y,x,y+6])
+			: (_=> {
+				ctx.save()
+				ctx.translate(x,y)
+				stroke(PathFrom0To8[n], n==0 || n==8)
+				ctx.restore()
+			})()
+	})
+	/** @param {readonly number[]} path*/
+	function stroke(path, isClose=false) {
+		ctx.beginPath()
+		ctx.moveTo(path[0], path[1])
+		for (let i=2; i<path.length; i+=2)
+			ctx.lineTo(path[i], path[i+1])
+		isClose && ctx.closePath()
+		ctx.stroke()
 	}
-
-	/** @param {readonly number[]} v */
-	#strokeLines(v, isClose=false) {
-		Ctx.beginPath()
-		Ctx.moveTo(v[0], v[1])
-		for (let i=2; i<v.length; i+=2)
-			Ctx.lineTo(v[i], v[i+1])
-		isClose && Ctx.closePath()
-		Ctx.stroke()
-	}
+	ctx.restore()
+	return /**@type {const}*/({ctx,w,h})
 }

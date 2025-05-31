@@ -5,17 +5,17 @@ import {State}  from './state.js'
 import {Maze}   from './maze.js'
 import {PtsMgr} from './points.js'
 import {Player} from './pacman.js'
+import * as Pts from './sprites/points.js'
 import * as Spr from './sprites/fruits.js'
 
 /**
  * The fruit appear after 70 or 170 dots are cleared
  * @type {ReadonlySet<number>}
  */
-const AppearSet  = new Set([70,170])
+const AppearSet = new Set([70,170])
 
-const IndexTable = freeze([0,1,2,2,3,3,4,4,5,5,6,6,7])
-const PointTable = freeze([100,300,500,700,1e3,2e3,3e3,5e3])
-const TargetPos  = Vec2(CvsW/2, T*18.5).freeze()
+const IdxTable  = /**@type {const}*/([0,1,2,2,3,3,4,4,5,5,6,6,7])
+const TargetPos = Vec2(CvsW/2, T*18.5).freeze()
 
 const LvCounterCols = 7
 const LvCounterRect = freeze([T*12, CvsH-T*2, T*2*LvCounterCols, T*2])
@@ -31,10 +31,10 @@ export const Fruit = new class {
 		Player.on({DotEaten:Fruit.#dotEaten})
 	}
 	get score() {
-		return PointTable[Fruit.number()]
+		return Pts.FruitTable[Fruit.number()]
 	}
 	number(i=Game.level-1) {
-		return IndexTable.at(i >= IndexTable.length ? -1 : i) ?? 0
+		return IdxTable.at(i >= IdxTable.length ? -1 : i) ?? 0
 	}
 	/** Disappearing is between 9 and 10 seconds */
 	#setTimerToHideTarget() {
@@ -56,7 +56,7 @@ export const Fruit = new class {
 		if (_tgtDisp && collisionCircle(pos, TargetPos, T/2)) {
 			_tgtDisp = false
 			Timer.cancel(Fruit) && Sound.play('fruit')
-			PtsMgr.set({key:Fruit, duration:2e3, ...TargetPos})
+			new PtsMgr.Points({key:Fruit, duration:2e3, ...TargetPos})
 		}
 	}
 	update() {
