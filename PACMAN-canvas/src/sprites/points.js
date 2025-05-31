@@ -35,7 +35,7 @@ export const FruitTable = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
  * @typedef {typeof GhostTable[number]} GhsPts
  * @param {PtsType} pts
  */
-export function create(pts, size=TileSize*2) {
+export function cache(pts, size=TileSize*2) {
 	const isGhs = GhostTable.includes(/**@type {GhsPts}*/(pts))
 	const ctx   = (isGhs? GhostCvs:FruitCvs).ctx
 	const [w,h] = ctx.resize(size*1.5, size).size

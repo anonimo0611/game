@@ -22,7 +22,7 @@ class Points {
 	 */
 	constructor({key,x,y,duration:dur=1e3}, fn) {
 		const spd  = Game.speedRate, fadeDur = 300
-		this.cache = Pts.create(key.score)
+		this.cache = Pts.cache(key.score)
 		this.pos   = Vec2(x, y)
 		this.score = key.score
 		this.fade  = new FadeOut(fadeDur/spd, (dur-fadeDur)/spd)
