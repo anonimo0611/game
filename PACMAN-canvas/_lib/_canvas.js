@@ -18,8 +18,8 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 	 */
 	resize(w, h=w) {
 		const cvs = this.canvas
-		typeof(w) == 'number' && w>=0 && (cvs.width =w)
-		typeof(h) == 'number' && h>=0 && (cvs.height=h)
+		w != cvs.width  && typeof(w) == 'number' && w>=0 && (cvs.width =w)
+		h != cvs.height && typeof(h) == 'number' && h>=0 && (cvs.height=h)
 		return this
 	}
 
@@ -188,7 +188,7 @@ class FadeOut {
 }
 
 /**
- * @param {string|null} id ID of a canvas that exists in the document; if `null`, the canvas is created
+ * @param {string|null} id ID of a canvas that exists in the document; If the `null` or does not exist, the canvas is created
  * @param {number} [width]  The default value uses the width attribute of canvas element
  * @param {number} [height] The default is the same as `width`, but if both `width` and `height` are undefined, use the heigt attribute of canvas element
  */

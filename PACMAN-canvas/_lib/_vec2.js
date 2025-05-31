@@ -115,7 +115,7 @@ class Vector2 {
  * @typedef {Vector2}
  * @param {number|Position} [v1]
  * @param {number} [v2]
- */
+*/
 const
 Vec2 = (v1, v2)=> new Vector2(v1, v2)
 Vec2.Zero  = Vec2( 0, 0)
