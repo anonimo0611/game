@@ -61,13 +61,13 @@ export class DorpDown extends Menu {
 	constructor(id) {
 		super(id,'dropdown')
 		/** @protected */
-		this.$cur = $(this.root).find('output')
-		this.items.forEach((li,i)=> li.onclick = ()=> this.select(i).$cur.focus())
+		this.cur = $('<output tabindex="0"></output>').prependTo(this.root)[0]
+		this.items.forEach((li,i)=> li.onclick = ()=> this.select(i).cur.focus())
 		$('body')
 			.on('pointerdown', e=> {!e.target.closest(`#${this.id}`) && this.select()})
 		$(this.$label)
-			.on('pointerdown', e=> {e.preventDefault(),this.$cur.focus()})
-		$(this.$cur)
+			.on('pointerdown', e=> {e.preventDefault(),this.cur.focus()})
+		$(this.cur)
 			.css('width',`${this.menu.offsetWidth}px`)
 			.on('pointerdown', ()=> this.toggle())
 			.on('keydown', this.#onKeydown.bind(this))
@@ -100,7 +100,7 @@ export class DorpDown extends Menu {
 	select(idx=this.index, {close=true}={}) {
 		super.select(idx)
 		const item = this.selectedItem
-		this.$cur.css('--val', item.val).text(item.innerText)
+		$(this.cur).css('--val', item.val).text(item.innerText)
 		return close && this.close() || this
 	}
 }
@@ -120,6 +120,7 @@ export class Slide extends Menu {
 		$(wrap).on('pointerdown',e=> {e.preventDefault(),root.focus()})
 		for (const btn of [this.btnL,this.btnR])
 			$(btn).on('click', e=> {this.#select(e.target==this.btnL?L:R)})
+		root.tabIndex = 0
 		this.select(this.index)
 		freeze(this)
 	}
