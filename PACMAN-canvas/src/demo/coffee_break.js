@@ -1,4 +1,5 @@
 import {Sound}  from '../../_snd/sound.js'
+import {Game}   from '../_main.js'
 import {State}  from '../state.js'
 import {Fruit}  from '../fruit.js'
 import {Pacman} from '../pacman.js'
@@ -6,9 +7,6 @@ import {Ghost}  from '../ghosts/ghost.js'
 import Sprite   from '../sprites/ghost_cb.js'
 
 export class CoffBrk {
-	/** @readonly @type {ReadonlyMap<number,number>} */
-	static intermisson = new Map([[2,1], [5,2], [9,3]])
-
 	/** @type {?(Scene1|Scene2|Scene3)} */
 	static #scene = null
 	static {
@@ -19,6 +17,9 @@ export class CoffBrk {
 	static #begin(num) {
 		Sound.play('cutscene', {loop:1^Number(num == 2)})
 		CoffBrk.#scene = new [Scene1,Scene2,Scene3][num-1]
+	}
+	static get intermissionLevel() {
+		return {2:1, 5:2, 9:3}[Game.level] ?? -1
 	}
 	static update() {
 		this.#scene?.update()
