@@ -7,19 +7,14 @@ import {Ghost}  from '../ghosts/ghost.js'
 import Sprite   from '../sprites/ghost_cb.js'
 
 export class CoffBrk {
-	/** @type {?(Scene1|Scene2|Scene3)} */
-	static #scene = null
+	static #scene =/**@type {?(Scene1|Scene2|Scene3)}*/(null)
 	static {
-		/** @typedef {(_:unknown, num:1|2|3)=> void} BeginCB */
-		$on({CoffBrk:/**@type {BeginCB}*/(_,num)=> this.#begin(num)})
+		/** @typedef {(_:unknown, num:1|2|3)=> void} fn */
+		$on({CoffBrk:/**@type {fn}*/(_, num)=> this.#begin(num)})
 	}
-	/** @param {1|2|3} num Scene number */
-	static #begin(num) {
+	static #begin(/**@type {1|2|3}*/num) {
 		Sound.play('cutscene', {loop:1^Number(num == 2)})
-		CoffBrk.#scene = new [Scene1,Scene2,Scene3][num-1]
-	}
-	static get intermissionLevel() {
-		return {2:1, 5:2, 9:3}[Game.level] ?? -1
+		CoffBrk.#scene = new[Scene1,Scene2,Scene3][num-1]
 	}
 	static update() {
 		this.#scene?.update()
@@ -27,6 +22,9 @@ export class CoffBrk {
 	static draw()   {
 		this.#scene?.draw()
 		return State.isCoffBrk
+	}
+	static get intermissionLevel() {
+		return {2:1, 5:2, 9:3}[Game.level] ?? -1
 	}
 	pacman  = new Pacman
 	akabei  = new Ghost
