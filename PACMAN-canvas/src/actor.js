@@ -77,11 +77,11 @@ export class Actor extends Common {
 	setPos = (v,n)=> {
 		let[x,y]= (typeof v == 'number')? [v,n] : [v.x,v.y]
 		this.#y = (y ??= this.y);(x ??= this.x);
-		this.#x = function(x,r) { // x-axis move loops during play
+		this.#x = function(r) { // x-axis move loops during play
 			if (!State.isPlaying) return
 			if (x < -r-T/2) return CW+T/2
 			if (x > CW+T/2) return -r-T/2
-		}(x,this.radius) ?? x
+		}(this.radius) ?? x
 	}
 	update(maxA=this.maxAlpha) {
 		State.isReady   && (this.#fadeIn ||= new FadeIn)?.update(maxA)
