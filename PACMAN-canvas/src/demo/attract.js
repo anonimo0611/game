@@ -34,8 +34,8 @@ export class Attract {
 	}
 	/** @type {Ghost[][]} */
 	ghsList = [[],[]]
+	powDisp = /**@type {0|1}*/(1)
 	pacman  = new Pacman
-	powDisp = 1
 	pacVelX = -CvsW/180
 	ghsVelX = -CvsW/169
 

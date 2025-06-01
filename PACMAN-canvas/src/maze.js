@@ -60,17 +60,16 @@ class House {
 	MiddleY = (this.EntranceTile.y+3.5)*T
 }
 class PowDot {
-	#disp = 1
-	/** @param {Vector2} t */
-	#draw(t) {
+	#disp = /**@type {0|1}*/(1)
+	draw() {
+		this.#disp ^= +(Ticker.count % PowDotInterval == 0)
+		for (const [,tPos] of PowMap) this.#draw(tPos)
+	}
+	#draw(/**@type {Vector2}*/t) {
 		if (!State.isPlaying
 		 || Ticker.paused
 		 || this.#disp)
 			Maze.drawDot(Ctx, t.x, t.y, true)
-	}
-	draw() {
-		this.#disp ^= +(Ticker.count % PowDotInterval == 0)
-		for (const [,tPos] of PowMap) this.#draw(tPos)
 	}
 }
 class Tunnel {
