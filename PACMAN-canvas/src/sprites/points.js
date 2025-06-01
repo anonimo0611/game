@@ -34,7 +34,6 @@ const GtsPtsSet = new Set(GhostTable)
 
 /**
  * @typedef {keyof PosListFrom100to5000} PtsType
- * @typedef {typeof GhostTable[number]} GhsPts
  * @param {PtsType} pts
  */
 export function cache(pts, size=TileSize*2) {
