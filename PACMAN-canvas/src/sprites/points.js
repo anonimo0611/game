@@ -26,9 +26,11 @@ PosListFrom100to5000 = /**@type {const}*/({
 	3000: [[3,-10, -3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
 	5000: [[5,-10, -3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
 })
-
 export const GhostTable = /**@type {const}*/([200,400,800,1600])
 export const FruitTable = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
+
+/** @type {ReadonlySet<number>} */
+const GtsPtsSet = new Set(GhostTable)
 
 /**
  * @typedef {keyof PosListFrom100to5000} PtsType
@@ -36,7 +38,7 @@ export const FruitTable = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
  * @param {PtsType} pts
  */
 export function cache(pts, size=TileSize*2) {
-	const isGhs = GhostTable.includes(/**@type {GhsPts}*/(pts))
+	const isGhs = GtsPtsSet.has(pts)
 	const ctx   = (isGhs? GhostCvs:FruitCvs).ctx
 	const [w,h] = ctx.resize(size*1.5, size).size
 	ctx.clear()
@@ -58,7 +60,7 @@ export function cache(pts, size=TileSize*2) {
 				ctx.restore()
 			})()
 	})
-	/** @param {readonly number[]} path*/
+	/** @param {readonly number[]} path */
 	function stroke(path, isClose=false) {
 		ctx.beginPath()
 		ctx.moveTo(path[0], path[1])
