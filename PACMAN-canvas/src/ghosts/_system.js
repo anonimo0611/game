@@ -14,7 +14,7 @@ const Ghosts = /**@type {Ghost[]}*/([])
 const Pts1st = Pts.GhostTable[0]
 
 /**
- * Delay time(ms) for ghost to be departs in always chase mode
+ * Delay time(ms) for ghost to be left from the house in always chase mode
  * @param {number} idxOfGhostInHouse
  */
 const getReleaseDelay = idxOfGhostInHouse=> nonNull({
@@ -128,7 +128,7 @@ const SCATTER = 0
 const CHASE   = 1
 const AlternateBetweenModes = function() {
 	{
-		let seq={mode:0,update(){}}
+		let seq={mode:SCATTER,update(){}}
 		$on({Title_Ready:()=> seq=genSequence()})
 		return {
 			get isScatter() {return seq.mode == SCATTER},
@@ -167,7 +167,7 @@ const AlternateBetweenModes = function() {
 }(),
 setReversalSig = ()=> {
 	$(Ghosts).trigger('Reverse')
-	!FrightMode.numOfSec && $(Ghosts).trigger('Runaway')
+	!FrightMode.numOfSecs && $(Ghosts).trigger('Runaway')
 }
 
 export const DotCounter = function() {
@@ -238,7 +238,7 @@ const Elroy = function() {
 const FrightMode = function() {
 	let   _session  = /**@type {?Session}*/(null)
 	const TimeTable = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
-	const numOfSec  = ()=> TimeTable[Game.clampedLv-1]
+	const numOfSecs = ()=> TimeTable[Game.clampedLv-1]
 	class Session {
 		#tCounter = 0; #fCounter  = 0;
 		#flashIdx = 1; #caughtCnt = 0;
@@ -247,7 +247,7 @@ const FrightMode = function() {
 		get caughtAll() {return this.#caughtCnt == GhsType.Max}
 
 		/** @readonly */
-		dur = numOfSec()
+		dur = numOfSecs()
 		constructor() {
 			_session = this.#toggle(true)
 			$(Ghosts).on('Cought', ()=> ++this.#caughtCnt)
@@ -269,8 +269,8 @@ const FrightMode = function() {
 	}
 	GhsMgr.on({Init:()=> _session = null})
 	return {
-		get session()  {return _session},
-		get numOfSec() {return numOfSec()},
-		new() {(State.isAttract || this.numOfSec) && new Session()},
+		get session()   {return _session},
+		get numOfSecs() {return numOfSecs()},
+		new() {(State.isAttract || this.numOfSecs) && new Session()},
 	}
 }()

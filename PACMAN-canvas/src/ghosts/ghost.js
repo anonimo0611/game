@@ -236,12 +236,10 @@ export class Ghost extends Actor {
 		State.to('Crashed').to('Losing', {delay:500})
 		return true
 	}
-	/** @param {unknown} _ */
-	#setFrightMode(_, bool=false) {
+	#setFrightMode(/**@type {unknown}*/_, bool=false) {
 		!this.isEscaping && (this.#isFright = bool)
 	}
-	/** @param {Function} fn */
-	#caught(fn) {
+	#caught(/**@type {Function}*/fn) {
 		this.#isFright = false
 		this.trigger('Cought').state.to('Bitten')
 		Timer.freeze()
