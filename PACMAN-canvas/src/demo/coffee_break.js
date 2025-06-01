@@ -6,6 +6,9 @@ import {Ghost}  from '../ghosts/ghost.js'
 import Sprite   from '../sprites/ghost_cb.js'
 
 export class CoffBrk {
+	/** @readonly @type {ReadonlyMap<number,number>} */
+	static intermisson = new Map([[2,1], [5,2], [9,3]])
+
 	/** @type {?(Scene1|Scene2|Scene3)} */
 	static #scene = null
 	static {

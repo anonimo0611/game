@@ -146,8 +146,7 @@ export const Game = new class {
 				State.to('Title')
 				return
 			}
-			// intermission level
-			const imLv = {2:1, 5:2, 9:3}[Game.level] ?? NaN
+			const imLv = CoffBrk.intermisson.get(Game.level) ?? NaN
 			Ctrl.isPractice || !imLv
 				? State.to('NewLevel')
 				: State.to('CoffBrk', {data:imLv})
