@@ -87,9 +87,9 @@ export const GhsMgr = new class extends Common {
 
 	/**
 	 * @param {unknown} _
-	 * @param {Ghosts}  instances
+	 * @param {Ghost[]} instances
 	 */
-	#initialize = (_, ...instances)=> {
+	#initialize(_, ...instances) {
 		GhsMgr.#aidx = 0
 		instances.forEach((g,i)=> Ghosts[i]=g)
 	}
