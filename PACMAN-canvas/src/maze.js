@@ -141,7 +141,7 @@ export const Maze = new class {
 
 	/**
 	 * If the target tile is on the upper side of the maze \
-	 * and the ghost is around the house, guid them outside of it
+	 * and the ghost is around the house, guide them outside of the area
 	 * @param {Ghost} ghost
 	 */
 	ghostExitTile = ({originalTargetTile:o, tilePos:t})=>
