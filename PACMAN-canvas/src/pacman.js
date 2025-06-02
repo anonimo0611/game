@@ -119,7 +119,7 @@ class PlayablePac extends Pacman {
 			this.#behavior(denom)
 	}
 	#behavior(denom=1) {
-		if (this.newTileReached(denom)) {
+		if (this.tileJustUpdated(denom)) {
 			this.#step = this.#getStep()
 		}
 		if (!this.#turning && this.collidedWithWall()) {

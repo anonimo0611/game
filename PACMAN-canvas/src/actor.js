@@ -50,15 +50,15 @@ export class Actor extends Common {
 	draw() {
 		Ctx.setAlpha(this.#fadeIn?.alpha ?? this.maxAlpha)
 	}
-	newTileReached(denom=1) {
+	centering() {
+		this.x = (CvsW-T)/2
+	}
+	tileJustUpdated(denom=1) {
 		return this.inFrontOfTile
 			&& this.tilePixel <= this.step/denom
 	}
 	setNextPos(denom=1, dir=this.dir) {
 		this.pos = Vec2[dir].mul(this.step/denom).add(this)
-	}
-	centering() {
-		this.x = (CvsW-T)/2
 	}
 	move(/**@type {Direction}*/dir) {
 		this.setNextPos(1, this.dir=dir)
