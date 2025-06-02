@@ -13,21 +13,21 @@ const volRg2 = ctrl('volRg2')
 			return void $('.volCtrl').hide()
 		}
 		Sound.vol = localStorage.anoPacVolume ?? 5
-		$on({keydown:this.onKeydown})
-		$('#speaker')
-			.on({wheel:this.onWheel})
+		$('#cvs_speaker')
 			.on({click:this.mute})
+			.on({wheel:this.onInput})
 		$('.volRng')
 			.prop({defaultValue:Sound.vol})
-			.on({input:this.onWheel})
+			.on({input:this.onInput})
+		$on({keydown:this.onKeydown.bind(this)})
 	}
-	mute() {
+	mute(/**@type {MouseEvent}*/e) {
 		lstVol = Sound.vol || (lstVol || +volRng.max >> 1)
 		$(volRng)
 			.prop({value:(Sound.vol? 0 : lstVol)})
 			.trigger('input')
 	}
-	onWheel(/**@type {MouseEvent}*/e) {
+	onInput(/**@type {Event}*/e) {
 		const isInputElem = e.target instanceof HTMLInputElement
 		Sound.vol = (isInputElem? e.target : volRng).valueAsNumber
 	}
