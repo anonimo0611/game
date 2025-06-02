@@ -10,10 +10,13 @@ export default class {
 	#animDir = -1
 	#losing  = /**@type {?Losing}*/(null)
 
-	/** @param {ExtendedContext2D} ctx */
-	constructor(ctx, {openType=0}={}) {
+	/**
+	 * @param {ExtendedContext2D} ctx
+	 * @param {0|1|2} mouseOpening
+	 */
+	constructor(ctx, mouseOpening=0) {
 		this.ctx = ctx
-		this.#mAngle = [0,OpenMid,OpenMax][openType]
+		this.#mAngle = [0,OpenMid,OpenMax][mouseOpening]
 		freeze(this)
 	}
 	update({stopped=false}={}) {
