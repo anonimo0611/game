@@ -19,19 +19,19 @@ const volRg2 = ctrl('volRg2')
 		$('.volRng')
 			.prop({defaultValue:Sound.vol})
 			.on({input:this.onInput})
-		$on({keydown:this.onKeydown.bind(this)})
+		$(window).on({keydown:e=> this.onKeydown(e)})
 	}
 	mute() {
 		lstVol = Sound.vol || (lstVol || +volRng.max >> 1)
 		$(volRng)
-			.prop({value:(Sound.vol? 0 : lstVol)})
+			.prop({value:Sound.vol? 0 : lstVol})
 			.trigger('input')
 	}
 	onInput(/**@type {Event}*/e) {
 		const isInputElem = e.target instanceof HTMLInputElement
 		Sound.vol = (isInputElem? e.target : volRng).valueAsNumber
 	}
-	onKeydown(/**@type {KeyboardEvent}*/e) {
+	onKeydown(/**@type {JQuery.KeyDownEvent}*/e) {
 		if (keyRepeat(e) || isCombinationKey(e))
 			return
 		if (e.key.toUpperCase() == 'M'
