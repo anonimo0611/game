@@ -20,7 +20,7 @@ export const Lives = function() {
 	function set(val=currentValue()) {
 		const {ctx}  = HUD
 		const radius = T*.78, size = T*2
-		const sprite = new Sprite(ctx,{openType:1})
+		const sprite = new Sprite(ctx, 1)
 		ctx.save()
 		ctx.translate(size, CvsH-size)
 		ctx.clearRect(0,0, size*5, size)
