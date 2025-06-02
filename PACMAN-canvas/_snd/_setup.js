@@ -21,7 +21,7 @@ const volRg2 = ctrl('volRg2')
 			.on({input:this.onInput})
 		$on({keydown:this.onKeydown.bind(this)})
 	}
-	mute(/**@type {MouseEvent}*/e) {
+	mute() {
 		lstVol = Sound.vol || (lstVol || +volRng.max >> 1)
 		$(volRng)
 			.prop({value:(Sound.vol? 0 : lstVol)})
