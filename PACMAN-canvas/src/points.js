@@ -16,7 +16,7 @@ export const PtsMgr = new class {
 }
 class Points {
 	/**
-	 * @typedef {import("./sprites/points.js").PtsType} PtsType
+	 * @typedef {import('sprites/points.js').PtsType} PtsType
 	 * @param {{key:{score:PtsType}, x:number, y:number, duration?:number}} data
 	 * @param {Function} [fn]
 	 */
