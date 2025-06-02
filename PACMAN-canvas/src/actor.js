@@ -43,6 +43,13 @@ export class Actor extends Common {
 	get inFrontOfTile() {return this.tilePixel <= T/2}
 	get inBackOfTile()  {return this.tilePixel >  T/2}
 
+	update(maxA=this.maxAlpha) {
+		State.isReady   && (this.#fadeIn ||= new FadeIn)?.update(maxA)
+		State.isPlaying && (this.#fadeIn &&= null)
+	}
+	draw() {
+		Ctx.setAlpha(this.#fadeIn?.alpha ?? this.maxAlpha)
+	}
 	newTileReached(denom=1) {
 		return this.inFrontOfTile
 			&& this.tilePixel <= this.step/denom
@@ -50,20 +57,19 @@ export class Actor extends Common {
 	setNextPos(denom=1, dir=this.dir) {
 		this.pos = Vec2[dir].mul(this.step/denom).add(this)
 	}
-	centering() {this.x = (CvsW-T)/2}
-
-	/** @param {Direction} dir */
-	move(dir) {this.setNextPos(1, this.dir=dir)}
-
-	/** @param {Direction} dir */
-	hasAdjWall(dir) {return Maze.hasWall(this.getAdjTile(dir))}
-
-	/** @param {Direction} dir */
-	getAdjTile(dir, n=1, tile=this.tilePos) {
+	centering() {
+		this.x = (CvsW-T)/2
+	}
+	move(/**@type {Direction}*/dir) {
+		this.setNextPos(1, this.dir=dir)
+	}
+	hasAdjWall(/**@type {Direction}*/dir) {
+		return Maze.hasWall(this.getAdjTile(dir))
+	}
+	getAdjTile(/**@type {Direction}*/dir, n=1, tile=this.tilePos) {
 		const  v = Vec2[dir].mul(n).add(tile)
 		return v.setX((v.x+Cols) % Cols) // x-axis loops
 	}
-	/** @param {Direction} [dir] */
 	collidedWithWall(dir=this.dir) {
 		const  {step,centerPos}= this
 		const  {x,y}= Vec2[dir].mul(T/2+step).add(centerPos).divInt(T)
@@ -82,12 +88,5 @@ export class Actor extends Common {
 			if (x < -r-T/2) return CW+T/2
 			if (x > CW+T/2) return -r-T/2
 		}(this.radius) ?? x
-	}
-	update(maxA=this.maxAlpha) {
-		State.isReady   && (this.#fadeIn ||= new FadeIn)?.update(maxA)
-		State.isPlaying && (this.#fadeIn &&= null)
-	}
-	draw() {
-		Ctx.setAlpha(this.#fadeIn?.alpha ?? this.maxAlpha)
 	}
 }
