@@ -28,7 +28,7 @@ const getReleaseDelay = idxOfGhostInHouse=> nonNull({
 }[Game.restarted? 0 : Game.clampedLv])[idxOfGhostInHouse]/Game.speedRate
 
 /**
- * Determines whether the ghost can enter the intersection
+ * Determines whether ghost can turn at intersection
  * @param {Vector2}   tile
  * @param {Direction} dir
  * @param {Ghost}     ghost
@@ -41,7 +41,7 @@ export const canEnter = (tile, dir, ghost)=> {
 		|| !Maze.GhostNoEnter.has(tile.hyphenated)
 }
 
-/** @typedef {'Idle'|'GoOut'|'Walk'|'Bitten'|'Escape'|'Return'} StateType */
+/** @typedef {'Idle'|'GoOut'|'Walk'|'Bitten'|'Escape'|'Return'} State */
 export class GhostState extends _State {
 	isIdle   = true
 	isGoOut  = false
@@ -50,19 +50,17 @@ export class GhostState extends _State {
 	isEscape = false
 	isReturn = false
 
+	get current() {
+		return /**@type {State}*/(super.current)
+	}
 	get isEscaping() {
 		return this.isEscape || this.isReturn
 	}
-	get current() {
-		return /**@type {StateType}*/(super.current)
-	}
-	/** @param {Ghost} Ghost */
-	constructor({tilePos}) {
+	constructor(/**@type {Ghost}*/{tilePos}) {
 		super()
 		this.init(Maze.House.isIn(tilePos)? 'Idle':'Walk')
 	}
-	/** @param {StateType} state */
-	to(state) {return super.to(state)}
+	to(/**@type {State}*/state) {return super.to(state)}
 }
 
 export const GhsMgr = new class extends Common {
