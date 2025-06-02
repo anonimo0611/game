@@ -97,8 +97,8 @@ export const View = function() {
 		for (let i=-1; i<=8; i++) {
 			const centerPos = Vec2(T+ofst(i), S*8.5)
 			const cfg = {centerPos, orient:dirs[i-1], radius:T*PacScale}
-			const openType = i>0 ? (i%2 ? 1:2) : 0
-			new PacSprite(Ctx, {openType}).draw(cfg)
+			const opening = i>0 ? (i%2 ? 1:2) : 0
+			new PacSprite(Ctx, opening).draw(cfg)
 		}
 	}
 	function drawAkabei() {
