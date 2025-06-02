@@ -75,21 +75,22 @@ export const View = function() {
 	}
 	function drawPoints() {
 		/**
-		 * @typedef {import("../src/sprites/points.js").PtsType} PtsType
-		 * @type {(pts:number, x: number, y: number)=> void}
+		 * @typedef {import('../src/sprites/points.js').PtsType} PtsType
+		 * @type {(pts:PtsType, x: number, y: number)=> void}
 		 */
 		const draw = (pts, x, y)=> {
-			const {ctx,w,h}=
-				Pts.cache(/**@type {PtsType}*/(pts), S)
+			const {ctx,w,h}= Pts.cache(pts, S)
 			Ctx.save()
 			Ctx.translate(x, y)
 			Ctx.drawImage(ctx.canvas, -w/2, -h/2)
 			Ctx.restore()
 		}
-		;[200,400,800,1600,100,300,500,700]
-			.forEach((pts,i)=> draw(pts, ofst(i)+T, S*6+T))
-		;[1000,2000,3000,5000]
-			.forEach((pts,i)=> draw(pts, (S+Gap/2)+S*(2+Gap/T)*i, S*7+S/2))
+		const scoreLst = /**@type {const}*/([
+			[200,400,800,1600,100,300,500,700],
+			[1000,2000,3000,5000]
+		])
+		;scoreLst[0].forEach((pts,i)=> draw(pts, ofst(i)+T, S*6+T))
+		;scoreLst[1].forEach((pts,i)=> draw(pts, (S+Gap/2)+S*(2+Gap/T)*i, S*7+S/2))
 	}
 	function drawPacman() {
 		const dirs = toDirs([U,U,L,L,D,D,R,R])
