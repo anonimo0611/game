@@ -6,7 +6,7 @@ export const Cursor = new class {
 			clearTimeout(timerId)
 			timerId = setTimeout(()=> Cursor.#setState('hidden'), 2e3)
 			const {pageX:x, pageY:y}= e
-			Vec2.distance(lstPos,{x,y}) > 2 && Cursor.default()
+			Vec2.sqrMag(lstPos,{x,y}) > 4 && Cursor.default()
 			lstPos = {x,y}
 		})
 	}
