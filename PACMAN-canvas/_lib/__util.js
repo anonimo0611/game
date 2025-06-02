@@ -99,8 +99,11 @@ const isCombinationKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
 //---- jQuery utilities ------
 
+const $win = $(window)
+const $doc = $(document)
+
 /** @param {Function} fn */
-const $ready = fn=> $(document).on({DOMContentLoaded:fn}) && $(window)
+const $ready = fn=> $(document).on({DOMContentLoaded:fn}) && $win
 
 /** @param {Function} fn */
 const $load = fn=> $(window).on({load:fn})
@@ -117,11 +120,11 @@ const $onNS = (ns,cfg)=> {
 		ev = ev.trim().replace(/[_\s]+|$/g,`${ns} `)
 		$offon(ev,fn)
 	})
-	return $(window)
+	return $win
 }
 
 /** @param {string} event */
-const $off = event=> $(window).off(event.trim().replace(/_/g,' '))
+const $off = event=> $win.off(event.trim().replace(/_/g,' '))
 
 /**
  * @param {string} event
@@ -133,7 +136,7 @@ const $offon = (event,fn)=> $off(event) && $on(event,fn)
  * @param {string} event
  * @param {*} [data]
  */
-const $trigger = (event,data)=> $(window).trigger(event,data)
+const $trigger = (event,data)=> $win.trigger(event,data)
 
 /**
  * @param {string|object} arg
@@ -146,7 +149,7 @@ const $trigger = (event,data)=> $(window).trigger(event,data)
 const $on = (arg, fn)=> {
 	const rep = (/**@type {string}*/str)=> str.trim().replace(/_/g,' ')
 	typeof(arg) != 'object'
-		? $(this).on({[rep(arg)]:fn})
-		: entries(arg).forEach(([ev,fn])=> $(this).on(rep(ev),fn))
-	return $(this)
+		? $win.on({[rep(arg)]:fn})
+		: entries(arg).forEach(([ev,fn])=> $win.on(rep(ev),fn))
+	return $win
 }
