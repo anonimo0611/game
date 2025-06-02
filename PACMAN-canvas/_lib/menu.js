@@ -60,8 +60,7 @@ export class DorpDown extends Menu {
 	/** @param {string} id */
 	constructor(id) {
 		super(id,'dropdown')
-		/** @protected */
-		this.cur = $('<output tabindex="0"></output>').prependTo(this.root)[0]
+		this.cur = $(document.createElement('output')).prependTo(this.root)[0]
 		this.items.forEach((li,i)=> li.onclick = ()=> this.select(i).cur.focus())
 		$('body')
 			.on('pointerdown', e=> {!e.target.closest(`#${this.id}`) && this.select()})
@@ -72,6 +71,7 @@ export class DorpDown extends Menu {
 			.on('pointerdown', ()=> this.toggle())
 			.on('keydown', this.#onKeydown.bind(this))
 		this.close()
+		this.cur.tabIndex = 0
 		this.select(this.index)
 		freeze(this)
 	}
@@ -110,8 +110,7 @@ export class Slide extends Menu {
 	/** @param {string} id */
 	constructor(id) {
 		super(id,'slidemenu')
-		const {root}= this,
-		wrap = /**@type {HTMLElement}*/(this.$label.get(0) ?? root)
+		const {root}= this, wrap = this.$label.get(0) ?? root
 		this.btnR = $('<span class="button r">').prependTo(root)[0]
 		this.btnL = $('<span class="button l">').prependTo(root)[0]
 		this.#setWidth(this.btnL.offsetWidth*2)
