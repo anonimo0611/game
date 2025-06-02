@@ -3,19 +3,16 @@ import {Ctrl}  from './control.js'
 import Sprite  from './sprites/pacman.js'
 
 export const Lives = function() {
-	let   _left   = 0
-	const EvTypes = /**@type {const}*/
-		(['Title','Start','Ready','Restart'])
-
+	let _left = 0
 	function currentValue() {
-		const cur = State.current
 		const max = Ctrl.livesMax-1
-		return {
-			Title:  max,
-			Start:  max+1,
-			Ready:  State.last('Start')? max:_left,
-			Restart:_left-1,
-		}[/**@type {typeof EvTypes[number]}*/(cur)]
+		switch(State.current) {
+		case 'Title':  return max
+		case 'Start':  return max+1
+		case 'Ready':  return State.last('Start')? max:_left
+		case 'Restart':return _left-1
+		default: return 0
+		}
 	}
 	function set(val=currentValue()) {
 		const {ctx}  = HUD
@@ -28,8 +25,8 @@ export const Lives = function() {
 			sprite.draw({radius,centerPos:Vec2(size*i+T,T)})
 		ctx.restore()
 	}
-	$on(EvTypes.join('_'), ()=> set())
 	$('#lvsRng').on({input:()=> set()})
+	$on({Title_Start_Ready_Restart:()=> set()})
 
 	return {
 		get left(){return _left},
