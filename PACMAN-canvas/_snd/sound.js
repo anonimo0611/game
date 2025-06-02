@@ -1,4 +1,4 @@
-import './control.js'
+import './_setup.js'
 import {State}    from '../src/state.js'
 import {GhsMgr}   from '../src/ghosts/_system.js'
 import {SirenIds} from './_manifest.js'
@@ -6,11 +6,6 @@ import {SoundMgr} from './loader.js'
 import {Speaker}  from './speaker.js'
 
 export const Sound = new class extends SoundMgr {
-	static {this.#init()}
-	static async #init() {
-		if (!await SoundMgr.setup()) return
-		Sound.vol = localStorage.anoPacVolume ?? 5
-	}
 	get sirenId()  {return SirenIds[GhsMgr.Elroy.part]}
 	get ringing()  {return Sound.isPlaying('bell')}
 	get disabled() {return super.disabled || State.isAttract}
