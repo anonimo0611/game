@@ -4,7 +4,7 @@
 
 const {Ticker,Timer}= function() {
 
-const TimerMap = /**@type{Map<any,TimerData>}*/(new Map)
+const TimerMap = /**@type Map<any,TimerData>*/(new Map)
 const Interval = 1000/60
 
 let _ticker = /**@type {?Tick}*/(null)

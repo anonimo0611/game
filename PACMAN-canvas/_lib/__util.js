@@ -4,15 +4,15 @@ const {defineProperty,entries,freeze,hasOwn,keys,values}= Object
 const {abs,ceil,floor,max,min,PI,random,round,sqrt,trunc:int}= Math
 
 const dRoot  = document.getElementsByTagName('html')[0]
-const byId   = (/**@type {string} */elementId)=> document.getElementById(elementId)
-const isObj  = (/**@type {unknown}*/arg)=> typeof(arg)=='object' && !!arg && !isArray(arg)
-const isBool = (/**@type {unknown}*/arg)=> arg === true || arg === false
+const byId   = (/**@type string */elementId)=> document.getElementById(elementId)
+const isObj  = (/**@type unknown*/arg)=> typeof(arg)=='object' && !!arg && !isArray(arg)
+const isBool = (/**@type unknown*/arg)=> arg === true || arg === false
 
 /** @param {KeyboardEvent|JQuery.KeyDownEvent} e */
 const keyRepeat = e=> !!(e instanceof KeyboardEvent ? e : e.originalEvent)?.repeat
 
 /** @param {WheelEvent|JQuery.TriggeredEvent} e */
-const wheelDeltaY = e=> /** @type {WheelEvent} */
+const wheelDeltaY = e=> /** @type WheelEvent */
 	(e instanceof WheelEvent ? e : e.originalEvent)?.deltaY ?? 0
 
 /** @param {KeyboardEvent|JQuery.KeyDownEvent} e */
@@ -28,7 +28,7 @@ const isCombinationKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
 /**
  * @param {string} selector
- */const qSAll = selector=> /**@type {HTMLElement[]}*/
+ */const qSAll = selector=> /**@type HTMLElement[]*/
  	([...document.querySelectorAll(selector)])
 
 /**

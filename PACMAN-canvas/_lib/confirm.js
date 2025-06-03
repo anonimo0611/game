@@ -3,7 +3,7 @@ export const Confirm = new class {
 	#opened = false
 	#cancelIdx = 0
 	get opened()   {return this.#opened}
-	get #tempElm() {return /**@type {HTMLTemplateElement}*/(byId('confirm_t'))}
+	get #tempElm() {return /**@type HTMLTemplateElement*/(byId('confirm_t'))}
 	get #buttons() {return byId('confirm')?.querySelectorAll('button')}
 
 	/** @param {MouseEvent} e */
@@ -32,7 +32,7 @@ export const Confirm = new class {
 			return
 		Confirm.#cancelIdx = cancelIdx
 		document.body.append(Confirm.#tempElm.content.cloneNode(true))
-		const confirm = /**@type {HTMLDialogElement}*/(byId('confirm'))
+		const confirm = /**@type HTMLDialogElement*/(byId('confirm'))
 		Confirm.#buttons?.forEach((btn, i)=> {
 			btn.textContent = [btnTxt1,btnTxt2][i]
 			btn.onclick = ()=> {$off(NS), Confirm.#remove([fn1,fn2][i])}

@@ -3,19 +3,21 @@ export default class {
 	#last  = ''
 
 	/** @readonly */
-	#StateSet = /**@type {Set<string>}*/(new Set)
+	#StateSet = /**@type Set<string>*/(new Set)
 
 	get current() {return this.#state}
 
-	/** @param {string} [initState] */
-	init(initState) {
-		keys(this)
-		.flatMap(k=> /^is[A-Z\d]*$/i.test(k) ? [[k,k.slice(2)]]:[])
-		.forEach(([key,state])=> {
+	/** @param {string} [state] */
+	init(state) {
+		entries(this)
+		.flatMap(([k,v])=> /^is[A-Z\d]*$/i.test(k)? [{k,v:(!!v)}]:[])
+		.forEach(({k,v})=> {
+			const state = k.substring(2)
 			this.#StateSet.add(state)
-			defineProperty(this,key,{get(){return this.#state===state}})
+			v === true && this.to(state)
+			defineProperty(this,k,{get(){return this.#state === state}})
 		})
-		initState && this.#StateSet.has(initState) && this.to(initState)
+		state && this.#StateSet.has(state) && this.to(state)
 	}
 
 	/**
