@@ -95,8 +95,7 @@ export class Ghost extends Actor {
 		}(this) * Game.moveSpeed
 	}
 	draw() {
-		if (State.isStart)
-			return
+		if (State.isStart) return
 		Ctx.save()
 		super.draw()
 		this.sprite.fadeOut?.setAlpha(Ctx)
