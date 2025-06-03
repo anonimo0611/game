@@ -6,7 +6,7 @@ import {Manifest,ConfigMap,Ids} from './_manifest.js'
 
 export class SoundMgr {
 	static #disabled = true
-	static setup = ()=>
+	static load = ()=>
 		new Promise((resolve,reject)=> {
 			let amount = 0;
 			SoundJS.registerSounds(Manifest)

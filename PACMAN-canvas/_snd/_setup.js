@@ -6,10 +6,10 @@ let   lstVol = NaN
 const volRng = ctrl('volRng')
 const volRg2 = ctrl('volRg2')
 
-;(new class { // Load sound and set up controls
+;(new class { // Register sound instances and set up controls
 	constructor() {this.setup()}
 	async setup() {
-		if (!await SoundMgr.setup()) {
+		if (!await SoundMgr.load()) {
 			$('.volCtrl').hide()
 			return
 		}
