@@ -66,10 +66,10 @@ export const Game = new class {
 	}
 	/** @param {boolean} [force] */
 	#pause(force) {
+		console.log(force)
 		State.isPlaying && (Sound.allPaused=Ticker.pause(force))
 	}
-	/** @param {KeyboardEvent} e */
-	#onKeydown(e) {
+	#onKeydown(/**@type KeyboardEvent*/e) {
 		if (Confirm.opened || keyRepeat(e))
 			return
 		switch (e.key) {
