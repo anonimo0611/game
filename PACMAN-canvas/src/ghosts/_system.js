@@ -10,7 +10,7 @@ import * as Pts from '../sprites/points.js'
 import {Ghost}  from './ghost.js'
 import Target   from './show_targets.js'
 
-const Ghosts = /**@type {Ghost[]}*/([])
+const Ghosts = /**@type Ghost[]*/([])
 const Pts1st = Pts.GhostTable[0]
 
 /**
@@ -107,8 +107,8 @@ export const GhsMgr = new class extends Common {
 		Sound.playSiren()
 		Ctrl.isChaseMode &&
 			Timer.sequence(...Ghosts.slice(1).map(
-				/** @returns {TimerSequenceItem} */
-				(g,i)=> [getReleaseDelay(i), ()=> g.release()])
+				(g,i)=> /**@type TimerSequenceItem*/
+				([getReleaseDelay(i), ()=> g.release()]))
 			)
 	}
 	setFrightMode() {
