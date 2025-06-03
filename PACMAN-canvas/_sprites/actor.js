@@ -1,7 +1,7 @@
 import GhsSprite   from '../src/sprites/ghost.js'
 import GhsSpriteCb from '../src/sprites/ghost_cb.js'
 export class Ghost {
-	/** @param {number} size */
+	/** @param {number}size */
 	constructor(size) {
 		this.size     = size
 		this.cbSprite = GhsSpriteCb

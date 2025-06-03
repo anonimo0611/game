@@ -1,5 +1,5 @@
 const {Sound:SoundJS}= createjs
-const Instance = /**@type Map<string,createjs.AbstractSoundInstance>*/(new Map)
+const Instance = /** @type Map<string,createjs.AbstractSoundInstance> */(new Map)
 
 /** @typedef {import('_manifest.js').SoundType} SoundType */
 import {Manifest,ConfigMap,Ids} from './_manifest.js'
@@ -39,10 +39,10 @@ export class SoundMgr {
 	/** @param {SoundType} id */
 	isPlaying(id)  {return Instance.get(id)?.playState === SoundJS.PLAY_SUCCEEDED}
 
-	/** @param {SoundType} id */
+	/** @param {SoundType}id */
 	isFinished(id) {return Instance.get(id)?.playState === SoundJS.PLAY_FINISHED}
 
-	/** @param {SoundType} id */
+	/** @param {SoundType}id */
 	#configMerge(id, cfg={}) {
 		const prefix = id.match(/^\D+/)?.[0] || ''
 		return {...ConfigMap.get(prefix) ?? ConfigMap.get('_normal'), ...cfg}
@@ -61,7 +61,7 @@ export class SoundMgr {
 		instance.play(this.#configMerge(id, cfg))
 	}
 
-	/** @param {...SoundType} ids */
+	/** @param {...SoundType}ids */
 	stop(...ids) {
 		ids.length == 0 && SoundJS.stop()
 		ids.forEach(id=> Instance.get(id)?.stop())

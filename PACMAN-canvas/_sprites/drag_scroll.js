@@ -16,8 +16,7 @@
 			this.y = e.clientY
 		}
 	}
-	/** @type {?HTMLElement} */
-	let target = null
+	let target = /**@type {?HTMLElement}*/(null)
 
 	/** @type {Map<HTMLElement,State>} */
 	const StateMap = new Map()

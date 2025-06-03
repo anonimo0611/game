@@ -4,9 +4,9 @@ const {defineProperty,entries,freeze,hasOwn,keys,values}= Object
 const {abs,ceil,floor,max,min,PI,random,round,sqrt,trunc:int}= Math
 
 const dRoot  = document.getElementsByTagName('html')[0]
-const byId   = (/**@type string */elementId)=> document.getElementById(elementId)
-const isObj  = (/**@type unknown*/arg)=> typeof(arg)=='object' && !!arg && !isArray(arg)
-const isBool = (/**@type unknown*/arg)=> arg === true || arg === false
+const byId   = (/** @type string  */elementId)=> document.getElementById(elementId)
+const isObj  = (/** @type unknown */arg)=> typeof(arg)=='object' && !!arg && !isArray(arg)
+const isBool = (/** @type unknown */arg)=> arg === true || arg === false
 
 /** @param {KeyboardEvent|JQuery.KeyDownEvent} e */
 const keyRepeat = e=> !!(e instanceof KeyboardEvent ? e : e.originalEvent)?.repeat

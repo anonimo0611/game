@@ -18,10 +18,10 @@ class AnimeData {
 		this.ghost    = ghost
 		this.type     = type ?? -1
 		this.subType  = subType ?? -1
-		this.orient   = /**@type Direction*/(L)
+		this.orient   = /** @type Direction */(L)
 	}
 }
-const getOrient = ()=> /**@type Direction*/(
+const getOrient = ()=> /** @type Direction */(
 	$('input[name=orient]:checked').attr('value')
 )
 ;(function() { // Preview

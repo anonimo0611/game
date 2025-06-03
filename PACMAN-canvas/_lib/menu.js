@@ -16,9 +16,9 @@ class Menu extends Common {
 	 * @param {string} type
 	 */
 	constructor(id, type) {
-		const root  = /**@type MenuRoot*/   ($byId(id).attr({type}) .get(0))
-		const menu  = /**@type HTMLElement*/($(root).find('mn-list').get(0))
-		const items = /**@type MenuItem[] */($(menu).find('mn-item').get())
+		const root  = /** @type MenuRoot */   ($byId(id).attr({type}) .get(0))
+		const menu  = /** @type HTMLElement */($(root).find('mn-list').get(0))
+		const items = /** @type MenuItem[]  */($(menu).find('mn-item').get())
 
 		if (!root || !menu || !items.length) {
 			throw ReferenceError('The Menu structure of the document is incorrect')

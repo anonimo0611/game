@@ -28,11 +28,11 @@ const volRg2 = ctrl('volRg2')
 			.prop({value:Sound.vol? 0 : _lstVol})
 			.trigger('input')
 	}
-	onInput(/**@type Event*/e) {
+	onInput(/** @type Event */e) {
 		const isInputElem = e.target instanceof HTMLInputElement
 		Sound.vol = (isInputElem? e.target : volRng).valueAsNumber
 	}
-	onKeydown(/**@type JQuery.KeyDownEvent*/e) {
+	onKeydown(/** @type JQuery.KeyDownEvent */e) {
 		if (keyRepeat(e) || isCombinationKey(e))
 			return
 		if (e.key.toUpperCase() == 'M'

@@ -1,6 +1,7 @@
 'use strict'
 /** @typedef {{x?:number,y?:number}} OptionalPos */
 /** @typedef {Vector2|{x:number,y:number}} Position */
+
 class Vector2 {
 	x=0;y=0;
 	/** @returns {[x:number, y:number]} */
@@ -21,6 +22,19 @@ class Vector2 {
 	constructor(v1,v2) {this.set(v1, v2)}
 
 	/**
+	 * @param {*} v1
+	 * @param {number} [v2]
+	 */
+	#validXY(v1,v2) {
+		v1 ??= 0
+		Number.isFinite(v1) && (v2 ??= v1)
+		const [x,y] = isObj(v1) ? [v1.x, v1.y] : [v1, v2]
+		if (!Number.isFinite(x)) throw TypeError(`\`${x}\` is an ilegal x value`)
+		if (!Number.isFinite(y)) throw TypeError(`\`${y}\` is an ilegal y valuer`)
+		return {x,y}
+	}
+
+	/**
 	 * @param {number|Position} [v1]
 	 * @param {number} [v2]
 	 */
@@ -30,12 +44,17 @@ class Vector2 {
 		this.y = y
 		return this
 	}
+	setX(/**@type {number}*/x) {return this.set(x, this.y)}
+	setY(/**@type {number}*/y) {return this.set(this.x, y)}
 
-	/** @param {number} x */
-	setX(x) {return this.set(x, this.y)}
-
-	/** @param {number} y */
-	setY(y) {return this.set(this.x, y)}
+	/**
+	 * @param {number|Position} v1
+	 * @param {number} [v2]
+	 */
+	eq(v1, v2) {
+		const {x,y}= this.#validXY(v1, v2)
+		return Vec2.eq(this, {x,y})
+	}
 
 	/**
 	 * @param {number|Position} v1
@@ -59,54 +78,26 @@ class Vector2 {
 		return this
 	}
 
-	/** @param {number} scalar */
-	mul(scalar) {
+	mul(/**@type {number}*/scalar) {
 		this.x *= scalar
 		this.y *= scalar
 		return this
 	}
-
-	/** @param {number} scalar */
-	div(scalar) {
+	div(/**@type {number}*/scalar) {
 		this.x /= scalar
 		this.y /= scalar
 		return this
 	}
-
-	/** @param {number} scalar */
-	divInt(scalar) {
+	divInt(/**@type {number}*/scalar) {
 		this.x = (this.x/scalar)|0
 		this.y = (this.y/scalar)|0
 		return this
 	}
-
-	/**
-	 * @param {number|Position} v1
-	 * @param {number} [v2]
-	 */
-	eq(v1, v2) {
-		const {x,y}= this.#validXY(v1, v2)
-		return Vec2.eq(this, {x,y})
-	}
-
-	/** @param {Position} v */
-	distance(v) {
+	distance(/**@type {Position}*/v) {
 		return Vec2.sub(this, v).magnitude
 	}
 	freeze() {
 		return freeze(this)
-	}
-	/**
-	 * @param {*} v1
-	 * @param {number} [v2]
-	 */
-	#validXY(v1,v2) {
-		v1 ??= 0
-		Number.isFinite(v1) && (v2 ??= v1)
-		const [x,y] = isObj(v1) ? [v1.x, v1.y] : [v1, v2]
-		if (!Number.isFinite(x)) throw TypeError(`\`${x}\` is an ilegal x value`)
-		if (!Number.isFinite(y)) throw TypeError(`\`${y}\` is an ilegal y valuer`)
-		return {x,y}
 	}
 	toString() {return `{x:${this.x}, y:${this.y}}`}
 }
