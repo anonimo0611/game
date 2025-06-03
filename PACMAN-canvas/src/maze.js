@@ -40,8 +40,8 @@ D__________________________C\
 ////////////////////////////\
 ////////////////////////////`])
 
-/** `.` and `O` represent normal and power cookies
-@type {ReadonlySet<string>} */
+/**`.` and `O` represent normal and power cookies
+   @type {ReadonlySet<string>} */
 const DotChipSet = new Set(['.','O'])
 
 /**@typedef {number} TileIdx*/
@@ -99,7 +99,7 @@ export const Maze = new class {
 		$on({Title_NewLevel: Maze.#reset})
 		$(powChk).on({change:Maze.#reset})
 	}
-	#reset(/** @type {Event} */e) {
+	#reset(/**@type Event*/e) {
 		if (e.target != powChk) {
 			Wall.draw()
 			Maze.#drawDoor()
