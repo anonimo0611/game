@@ -160,9 +160,9 @@ export const Maze = new class {
 
 	/**
 	 * @param {ExtendedContext2D} ctx
-	 * @param {number}       col
-	 * @param {number}       row
-	 * @param {boolean}      isLarge
+	 * @param {number}  col
+	 * @param {number}  row
+	 * @param {boolean} isLarge
 	 * @param {?CanvasStyle} color
 	 */
 	drawDot(ctx, col,row, isLarge=false, color=Color.Dot) {
