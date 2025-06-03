@@ -146,7 +146,7 @@ class FadeIn {
 	}
 	/**
 	 * @param {number} max max alpha
-	 * @returns {boolean} during fade-in
+	 * @returns {boolean} Determine if fade-in is in progress
 	 */
 	update(max=1) {
 		if (++this.#count * Ticker.Interval < this.#delay || !this.working)
@@ -172,7 +172,7 @@ class FadeOut {
 		this.#duration = ms
 		this.#delay = delay
 	}
-	/** @returns {boolean} during fade-out */
+	/** @returns {boolean} Determine if fade-out is in progress */
 	update() {
 		if (++this.#count * Ticker.Interval < this.#delay)
 			return false
