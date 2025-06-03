@@ -9,7 +9,7 @@ export const View = function() {
 	const ofst = colIdx=> (S*colIdx)+(Gap*colIdx)
 
 	/** @param {Array<string>} array */
-	const toDirs = array=> /**@type {Direction[]}*/(array)
+	const toDirs = array=> /**@type Direction[]*/(array)
 
 	function draw() {
 		Ctx.save()
@@ -85,7 +85,7 @@ export const View = function() {
 			Ctx.drawImage(ctx.canvas, -w/2, -h/2)
 			Ctx.restore()
 		}
-		const scoreLst = /**@type {const}*/([
+		const scoreLst = /**@type const*/([
 			[200,400,800,1600,100,300,500,700],
 			[1000,2000,3000,5000]
 		])
@@ -146,7 +146,7 @@ export const View = function() {
 }()
 
 $('#brightRng').on('input', function() {
-	const v = /**@type {HTMLInputElement}*/(this).value
+	const v = /**@type HTMLInputElement*/(this).value
 	Ctx.canvas.style.backgroundColor = `rgb(${v}% ${v}% ${v}%)`
 })
 $('#resetBtn').on('click', function() {
