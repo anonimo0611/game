@@ -1,5 +1,5 @@
 const {Sound:SoundJS}= createjs
-const Instance = /** @type Map<string,createjs.AbstractSoundInstance> */(new Map)
+const Instance = /**@type {Map<string,createjs.AbstractSoundInstance>}*/(new Map)
 
 /** @typedef {import('_manifest.js').SoundType} SoundType */
 import {Manifest,ConfigMap,Ids} from './_manifest.js'

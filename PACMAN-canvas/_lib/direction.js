@@ -12,7 +12,7 @@ export const Dir = freeze({
 	from(e, {wasd=false}={}) {
 		if (isCombinationKey(e)) return null
 		const k = e.code.replace(/^(Arrow|Key)/,'')
-		return /** @type Direction|null */(
+		return /**@type {?Direction}*/(
 			DirSet.has(k) ? k : (wasd && FromWASD.get(k)) || null
 		)
 	},

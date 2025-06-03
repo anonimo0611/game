@@ -3,7 +3,7 @@ export default class {
 	#last  = ''
 
 	/** @readonly */
-	#StateSet = /** @type Set<string> */(new Set)
+	#StateSet = /**@type {Set<string>}*/(new Set)
 
 	get current() {return this.#state}
 

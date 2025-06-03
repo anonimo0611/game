@@ -11,11 +11,10 @@ export const Sound = new class extends SoundMgr {
 	get disabled() {return super.disabled || State.isAttract}
 
 	get vol() {return super.vol}
-	set vol(_vol) {
+	set vol(vol) {
 		if (!Sound.disabled) {
-			const vol = super.vol = clamp(+_vol, 0, 10)
-			Speaker.draw(vol)
-			localStorage.anoPacVolume = vol
+			localStorage.anoPacVolume = super.vol = clamp(+vol, 0, 10)
+			Speaker.draw(Sound.vol)
 		}
 	}
 	playSiren() {
@@ -29,8 +28,8 @@ export const Sound = new class extends SoundMgr {
 	stopSiren = ()=> Sound.stop(...SirenIds)
 	stopLoops = ()=> Sound.stopSiren().stop('fright','escape')
 
-	toggleFrightMode(/** @type boolean */b) {
-		b? Sound.playFright()
+	toggleFrightMode(/**@type {boolean}*/f) {
+		f? Sound.playFright()
 		 : Sound.playSiren()
 	}
 	ghostEscape() {

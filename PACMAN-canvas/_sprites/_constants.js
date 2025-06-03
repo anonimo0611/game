@@ -6,7 +6,7 @@ export let T=0,[S,Gap]=[0,0]
 export let ghost = new Ghost(0)
 
 export const GridSize = Vec2(10,11).freeze()
-export const sizeRng  = /**@type HTMLInputElement*/(byId('sizeRng'))
+export const sizeRng  = /**@type {HTMLInputElement}*/(byId('sizeRng'))
 
 let lastT = T
 function resize() {
@@ -17,5 +17,4 @@ function resize() {
 		PvC.resize(T*3, T*2) && View.draw()
 		lastT = T
 	}
-}
-Ticker.set(resize)
+} Ticker.set(resize)

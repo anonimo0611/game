@@ -5,9 +5,9 @@ import {Ghost}   from './actor.js'
 import {T,S,ghost} from './_constants.js'
 export const {ctx:PvC}= canvas2D('previewCvs')
 
-const Type    = /**@type const*/({None:-1,Pacman:0,Akabei:1,Pinky:2,Aosuke:3,Guzuta:4,Frightened:5})
-const PacType = /**@type const*/({Normal:0,Losing:1})
-const GhsType = /**@type const*/({Normal:0,Mended:1,Exposed:2,Flashed:3})
+const Type    = /**@type {const}*/({None:-1,Pacman:0,Akabei:1,Pinky:2,Aosuke:3,Guzuta:4,Frightened:5})
+const PacType = /**@type {const}*/({Normal:0,Losing:1})
+const GhsType = /**@type {const}*/({Normal:0,Mended:1,Exposed:2,Flashed:3})
 
 class AnimeData {
 	/** @param {{type?:number, subType?:number, pacman?:PacSprite, ghost?:Ghost}} params */
@@ -18,10 +18,10 @@ class AnimeData {
 		this.ghost    = ghost
 		this.type     = type ?? -1
 		this.subType  = subType ?? -1
-		this.orient   = /** @type Direction */(L)
+		this.orient   = /**@type {Direction}*/(L)
 	}
 }
-const getOrient = ()=> /** @type Direction */(
+const getOrient = ()=> /**@type {Direction}*/(
 	$('input[name=orient]:checked').attr('value')
 )
 ;(function() { // Preview
@@ -115,7 +115,7 @@ const getOrient = ()=> /** @type Direction */(
 		}
 	})
 	$(radioSelector).on('change', e=> {
-		data.orient = /**@type Direction*/(
+		data.orient = /**@type {Direction}*/(
 			e.target.getAttribute('value')
 		)
 	})

@@ -98,14 +98,14 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		this.stroke()
 	}
 
-	/** @param {[x:number,y:number][]} c */
+	/** @param {[x:number, y:number][]} c */
 	newLinePath(...c) {
 		this.beginPath()
 		this.setLinePath(...c)
 		return this
 	}
 
-	/** @param {[x:number,y:number][]} c */
+	/** @param {[x:number, y:number][]} c */
 	setLinePath(...c) {
 		c.forEach(([x,y], i)=> {
 			!i ? this.moveTo(x,y)
@@ -114,7 +114,7 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		return this
 	}
 
-	/** @param {[x:number,y:number][]} c */
+	/** @param {[x:number, y:number][]} c */
 	addLinePath(...c) {
 		c.forEach(([x,y])=> this.lineTo(x,y))
 		return this
@@ -122,7 +122,7 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 
 	/**
 	 * @param {CanvasStyle} style
-	 * @param {[x:number,y:number][]} c
+	 * @param {[x:number, y:number][]} c
 	 */
 	fillPolygon(style, ...c) {
 		this.save()
@@ -188,16 +188,16 @@ class FadeOut {
 }
 
 /**
- * @param {string|null} id ID of a canvas that exists in the document; If the `null` or does not exist, the canvas is created
+ * @param {?string} id ID of a canvas that exists in the document; If the `null` or does not exist, the canvas is created
  * @param {number} [width]  The default value uses the width attribute of canvas element
  * @param {number} [height] The default is the same as `width`, but if both `width` and `height` are undefined, use the heigt attribute of canvas element
  */
 const canvas2D = (id, width, height=width)=> {
 	const cvs = id && byId(id) instanceof HTMLCanvasElement
-		? /**@type HTMLCanvasElement*/(byId(id))
+		? /**@type {HTMLCanvasElement}*/(byId(id))
 		: document.createElement('canvas')
 	const ctx  = new ExtendedContext2D(cvs).resize(width,height)
 	const [w,h]= ctx.size
-	const vals = /**@type readonly[cvs,ctx,w:number,h:number]*/([cvs,ctx,w,h])
+	const vals = /**@type {readonly[cvs,ctx,w:number,h:number]}*/([cvs,ctx,w,h])
 	return freeze({cvs,ctx,w,h,vals})
 }

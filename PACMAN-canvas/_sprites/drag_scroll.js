@@ -1,5 +1,4 @@
-/** @param {string} selector */
-(function(selector) {
+(function(/**@type {string}*/selector) {
 	if ('ontouchstart' in window
 		|| navigator.maxTouchPoints > 0
 		|| matchMedia('(pointer:coarse)').matches
@@ -10,16 +9,13 @@
 	class State {
 		scrL = target?.scrollLeft ?? 0
 		scrT = target?.scrollTop  ?? 0
-		/** @param {MouseEvent} e */
-		constructor(e) {
+		constructor(/**@type {MouseEvent}*/e) {
 			this.x = e.clientX
 			this.y = e.clientY
 		}
 	}
-	let target = /**@type {?HTMLElement}*/(null)
-
-	/** @type {Map<HTMLElement,State>} */
-	const StateMap = new Map()
+	let   target   = /**@type {?HTMLElement}*/(null)
+	const StateMap = /**@type {Map<HTMLElement,State>}*/(new Map)
 
 	for (const elm of qSAll(selector)) {
 		elm.addEventListener('mousedown', e=> {
@@ -51,5 +47,5 @@
 })('html')
 
 /** @param {MouseEvent} e */
-const isNotDrag = e=> /**@type Element*/(e.target).closest('.noDrag')
+const isNotDrag = e=> /**@type {Element}*/(e.target).closest('.noDrag')
 addEventListener('wheel',e=>{isNotDrag(e) && e.preventDefault()}, {passive:false})

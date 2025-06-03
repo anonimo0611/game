@@ -4,10 +4,10 @@
 
 const {Ticker,Timer}= function() {
 
-const TimerMap = /** @type Map<any,TimerData> */(new Map)
+const TimerMap = /**@type {Map<any,TimerData>}*/(new Map)
 const Interval = 1000/60
 
-let _ticker = /** @type {?Tick} */(null)
+let _ticker = /**@type {?Tick}*/(null)
 let _paused = false
 
 let _counter  = 0 // frame count
@@ -121,7 +121,7 @@ const Timer = freeze(new class {
 			;(s=seq[++idx]) && Timer.set(s.ms, fire)
 		} Timer.set(s.ms, fire)
 	}
-	cancel(/** @type unknown */key) {
+	cancel(/**@type {unknown}*/key) {
 		TimerMap.delete(key)
 		return this
 	}

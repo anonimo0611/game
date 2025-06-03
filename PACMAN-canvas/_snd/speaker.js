@@ -2,7 +2,7 @@
 const{cvs,ctx}= canvas2D('cvs_speaker', Size)
 
 export const Speaker = new class {
-	draw(/** @type number */vol) {
+	draw(/**@type {number}*/vol) {
 		const {width,height}= cvs
 		const step = this.#step(vol)
 		ctx.clear()
@@ -16,7 +16,7 @@ export const Speaker = new class {
 			: this.#drawWaves(vol, step)
 		ctx.restore()
 	}
-	#step(/** @type number */vol) {
+	#step(/**@type {number}*/vol) {
 		if (between(vol, 8, 10)) return 3
 		if (between(vol, 3,  7)) return 2
 		if (between(vol, 1,  2)) return 1
@@ -37,8 +37,8 @@ export const Speaker = new class {
 		ctx.restore()
 	}
 	#drawWaves(
-		/** @type number */vol,
-		/** @type number */step
+	 /**@type {number}*/vol,
+	 /**@type {number}*/step
 	) {
 		ctx.save()
 		ctx.lineCap = 'round'
