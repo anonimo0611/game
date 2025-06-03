@@ -1,5 +1,5 @@
-const EyesEnum = /**@type {const}*/
-	({[L]:0,[R]:0,[U]:1,[D]:2,LowerR:3})
+const EyesEnum = /**@type const*/
+	({[L]:0, [R]:0, [U]:1, [D]:2,LowerR:3})
 
 import CBSprite from './ghost_cb.js'
 export default class {
@@ -29,7 +29,7 @@ export default class {
 		aIdx       = 0,
 		spriteIdx  = 0,
 		size       = T*2,
-		orient     = /**@type {Direction}*/(L),
+		orient     = /**@type Direction*/(L),
 		color      = Color.Akabei,
 		isFright   = false,
 		isBitten   = false,

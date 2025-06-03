@@ -32,7 +32,7 @@ export class Attract {
 		_attract?.draw()
 		return State.isAttract
 	}
-	/** @type {Ghost[][]} */
+	/** @type Ghost[][] */
 	ghsList = [[],[]]
 	powDisp = /**@type {0|1}*/(1)
 	pacman  = new Pacman

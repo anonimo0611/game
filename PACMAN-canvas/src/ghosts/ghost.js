@@ -17,7 +17,7 @@ export class Ghost extends Actor {
 	#isStarted = false
 	#isFright  = false
 
-	TurnDirs = /**@type {readonly Direction[]}*/
+	TurnDirs = /**@type readonly Direction[]*/
 		([U,L,D,R])
 
 	// This section is overridden in subclasses
@@ -236,10 +236,10 @@ export class Ghost extends Actor {
 		State.to('Crashed').to('Losing', {delay:500})
 		return true
 	}
-	#setFrightMode(/**@type {unknown}*/_, bool=false) {
+	#setFrightMode(/**@type unknown*/_, bool=false) {
 		!this.isEscaping && (this.#isFright = bool)
 	}
-	#caught(/**@type {Function}*/fn) {
+	#caught(/**@type Function*/fn) {
 		this.#isFright = false
 		this.trigger('Cought').state.to('Bitten')
 		Timer.freeze()

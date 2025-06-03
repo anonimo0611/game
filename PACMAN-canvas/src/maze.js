@@ -47,9 +47,9 @@ D__________________________C\
 const DotChipSet = new Set(['.','O'])
 
 /** @typedef {number} TileIdx */
-const WallSet  = /**@type {Set<TileIdx>}*/(new Set)
-const DotSet   = /**@type {Set<TileIdx>}*/(new Set)
-const PowMap   = /**@type {Map<TileIdx,Vector2>}*/(new Map)
+const WallSet  = /**@type Set<TileIdx>*/(new Set)
+const DotSet   = /**@type Set<TileIdx>*/(new Set)
+const PowMap   = /**@type Map<TileIdx,Vector2>*/(new Map)
 const PenRect  = new Rect(10,13, 7,4)
 const PenOuter = new Rect( 9,12, 9,6)
 
@@ -65,7 +65,7 @@ class PowDot {
 		this.#disp ^= +(Ticker.count % PowDotInterval == 0)
 		for (const [,tPos] of PowMap) this.#draw(tPos)
 	}
-	#draw(/**@type {Vector2}*/t) {
+	#draw(/**@type Vector2*/t) {
 		if (!State.isPlaying
 		 || Ticker.paused
 		 || this.#disp)
@@ -129,9 +129,9 @@ export const Maze = new class {
 	PowDot = freeze(new PowDot)
 	Tunnel = freeze(new Tunnel)
 
-	hasDot  = (/**@type {TileIdx} */i)=> DotSet.has(i)
-	hasPow  = (/**@type {TileIdx} */i)=> PowMap.has(i)
-	hasWall = (/**@type {Position}*/p)=> WallSet.has(p.y*Cols+p.x)
+	hasDot  = (/**@type TileIdx */i)=> DotSet.has(i)
+	hasPow  = (/**@type TileIdx */i)=> PowMap.has(i)
+	hasWall = (/**@type Position*/p)=> WallSet.has(p.y*Cols+p.x)
 
 	/**
 	 * These tiles(x-y) forbidden ghosts from entering upward

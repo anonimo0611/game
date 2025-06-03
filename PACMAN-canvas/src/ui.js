@@ -5,7 +5,7 @@ export const Menu = freeze({
 	Level:  new _Menu.DorpDown('LevelMenu'),
 	Extend: new _Menu.Slide('ExtendMenu'),
 }),
-MenuIds = /**@type {(keyof Menu)[]}*/(keys(Menu))
+MenuIds = /**@type (keyof Menu)[]*/(keys(Menu))
 
 //---- Panels ----
 

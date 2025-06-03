@@ -16,7 +16,7 @@ export default class {
 		ctx.fill()
 	}
 	mendedStitch(idx=0) {
-		const {ctx}= this, coords = /**@type {[x:number, y:number][]}*/
+		const {ctx}= this, coords = /**@type [x:number, y:number][]*/
 			([[39,8],[33,14],[24,8],[14,15],[26,20],[14,27],[25,33],[14,38]])
 		idx && coords.pop()
 		ctx.lineWidth   = 3.5

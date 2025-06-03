@@ -45,9 +45,9 @@ export const Game = new class {
 	get levelStr()  {return Game.#level.toString().padStart(2,'0')}
 	get restarted() {return Game.#restarted}
 
-	// Divide the speed equally with level 13+ as the fastest
-	get clampedLv() {return clamp(Game.level, 1, 13) || 1}
+	// Stepwise faster from level 1 to level 13
 	get speedByLv() {return 1 - (13-Game.clampedLv) * .01}
+	get clampedLv() {return clamp(Game.level, 1, 13)}
 	get speedRate() {return State.isPlaying? Ctrl.speedRate : 1}
 	get interval()  {return Game.speedRate * Ticker.Interval}
 	get moveSpeed() {return Game.speedRate * Game.speedByLv}

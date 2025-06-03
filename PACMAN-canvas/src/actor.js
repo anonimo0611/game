@@ -60,13 +60,13 @@ export class Actor extends Common {
 	setNextPos(denom=1, dir=this.dir) {
 		this.pos = Vec2[dir].mul(this.step/denom).add(this)
 	}
-	move(/**@type {Direction}*/dir) {
+	move(/**@type Direction*/dir) {
 		this.setNextPos(1, this.dir=dir)
 	}
-	hasAdjWall(/**@type {Direction}*/dir) {
+	hasAdjWall(/**@type Direction*/dir) {
 		return Maze.hasWall(this.getAdjTile(dir))
 	}
-	getAdjTile(/**@type {Direction}*/dir, n=1, tile=this.tilePos) {
+	getAdjTile(/**@type Direction*/dir, n=1, tile=this.tilePos) {
 		const  v = Vec2[dir].mul(n).add(tile)
 		return v.setX((v.x+Cols) % Cols) // x-axis loops
 	}
@@ -78,7 +78,7 @@ export class Actor extends Common {
 	/**
 	 * @param {number|OptionalPos} v
 	 * @param {number} [n]
-	 * @type {((x:number, y:number)=>void) & ((pos:OptionalPos)=>void)}
+	 * @type ((x:number, y:number)=>void) & ((pos:OptionalPos)=>void)
 	 */
 	setPos = (v,n)=> {
 		let[x,y]= (typeof v == 'number')? [v,n] : [v.x,v.y]
