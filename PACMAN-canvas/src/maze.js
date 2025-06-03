@@ -40,13 +40,11 @@ D__________________________C\
 ////////////////////////////\
 ////////////////////////////`])
 
-/**
- * `.` and `O` represent normal and power cookies
- * @type {ReadonlySet<string>}
- */
+/** `.` and `O` represent normal and power cookies
+@type {ReadonlySet<string>} */
 const DotChipSet = new Set(['.','O'])
 
-/** @typedef {number} TileIdx */
+/**@typedef {number} TileIdx*/
 const WallSet  = /**@type Set<TileIdx>*/(new Set)
 const DotSet   = /**@type Set<TileIdx>*/(new Set)
 const PowMap   = /**@type Map<TileIdx,Vector2>*/(new Map)
@@ -55,7 +53,7 @@ const PenOuter = new Rect( 9,12, 9,6)
 
 class House {
 	get EntranceTile() {return Vec2(13, 12)}
-	/** @param {Vector2} tilePos */
+	/**@param {Vector2} tilePos*/
 	isIn = tilePos=> PenRect.contains(tilePos)
 	MiddleY = (this.EntranceTile.y+3.5)*T
 }
@@ -101,8 +99,7 @@ export const Maze = new class {
 		$on({Title_NewLevel: Maze.#reset})
 		$(powChk).on({change:Maze.#reset})
 	}
-	/** @param {Event} e */
-	#reset(e) {
+	#reset(/** @type {Event} */e) {
 		if (e.target != powChk) {
 			Wall.draw()
 			Maze.#drawDoor()
@@ -110,11 +107,10 @@ export const Maze = new class {
 		for (const [i,c] of MapArr.entries())
 			DotChipSet.has(c) && Maze.#setDot(i,c)
 	}
-	/**
-	 * @param {TileIdx} idx
-	 * @param {string}  chip
-	 */
-	#setDot(idx, chip) {
+	#setDot(
+		/**@type number*/idx,
+		/**@type string*/chip
+	) {
 		const t = Vec2(idx%Cols, idx/Cols|0)
 		Maze.clearBgDot({tileIdx:idx,tilePos:t})
 		DotSet.add(idx)
@@ -161,9 +157,9 @@ export const Maze = new class {
 
 	/**
 	 * @param {ExtendedContext2D} ctx
-	 * @param {number}  col
-	 * @param {number}  row
-	 * @param {boolean} isLarge
+	 * @param {number}       col
+	 * @param {number}       row
+	 * @param {boolean}      isLarge
 	 * @param {?CanvasStyle} color
 	 */
 	drawDot(ctx, col,row, isLarge=false, color=Color.Dot) {

@@ -1,7 +1,7 @@
 const Duration = 150/Ticker.Interval
 const OpenMid  = 30 * PI/180
 const OpenMax  = 60 * PI/180
-const Rotation = /**@type const*/({[R]:0, [D]:1, [L]:2, [U]:3})
+const Rotation = /** @type const */({[R]:0, [D]:1, [L]:2, [U]:3})
 
 import {Losing} from './losing.js'
 export default class {

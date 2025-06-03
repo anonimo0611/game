@@ -9,14 +9,14 @@ MenuIds = /**@type (keyof Menu)[]*/(keys(Menu))
 
 //---- Panels ----
 
-;/**@type {HTMLButtonElement[]}*/
+;/** @type {HTMLButtonElement[]} */
 (qSAll('.panelBtn')).forEach(btn=> {
 	btn.addEventListener('pointerdown', ()=> {
 		$('.panel').toggle()
 		btn.classList.toggle('opened')
 	})
 	addEventListener('pointerdown', e=> {
-		const tgt = /**@type {Element}*/(e.target)
+		const tgt = /** @type {Element} */(e.target)
 		if (!btn.offsetParent
 		 || tgt == btn
 		 || tgt.closest?.(btn.value))

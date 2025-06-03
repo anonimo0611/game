@@ -7,10 +7,12 @@ import {Ghost}  from '../ghosts/ghost.js'
 import Sprite   from '../sprites/ghost_cb.js'
 
 export class CoffBrk {
-	static #scene =/**@type Scene1|Scene2|Scene3|null*/(null)
+	static #scene = /**@type Scene1|Scene2|Scene3|null*/(null)
 	static {
-		/** @typedef {(_:unknown, num:1|2|3)=> void} fn */
-		$on({CoffBrk:/**@type fn*/(_, num)=> this.#begin(num)})
+		$on('CoffBrk',
+			/**@type (_:unknown, num:1|2|3)=> void*/
+			(_,num)=> this.#begin(num)
+		)
 	}
 	static #begin(/**@type {1|2|3}*/num) {
 		Sound.play('cutscene', {loop:1^Number(num == 2)})
@@ -30,7 +32,7 @@ export class CoffBrk {
 	akabei  = new Ghost
 	pacVelX = -CvsW/180
 
-	/** @protected */
+	/**@protected*/
 	constructor() {
 		this.pacman.y = this.akabei.y = (CvsH/2 - T/2)
 		$onNS('.CB',{Quit:this.end, blur_focus:this.pause})

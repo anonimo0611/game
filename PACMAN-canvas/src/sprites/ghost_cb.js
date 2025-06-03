@@ -16,7 +16,7 @@ export default class {
 		ctx.fill()
 	}
 	mendedStitch(idx=0) {
-		const {ctx}= this, coords = /** @type [x:number, y:number][] */
+		const {ctx}= this, coords = /**@type [x:number, y:number][]*/
 			([[39,8],[33,14],[24,8],[14,15],[26,20],[14,27],[25,33],[14,38]])
 		idx && coords.pop()
 		ctx.lineWidth   = 3.5
@@ -102,11 +102,10 @@ export default class {
 		ctx.fill()
 		this.#hadakeEyes([28,49],[34,56])
 	}
-	/**
-	 * @param {[L:number, R:number]} ballsLR
-	 * @param {[L:number, R:number]} eyesLR
-	 */
-	#hadakeEyes(ballsLR, eyesLR) {
+	#hadakeEyes(
+		/**@type [L:number, R:number]*/ballsLR,
+		/**@type [L:number, R:number]*/eyesLR
+	) {
 		const {ctx}= this
 		for (let i=1; i>=0; i--) {
 			// Eyeballs

@@ -52,12 +52,12 @@ export class GhostState extends _State {
 	isReturn = false
 
 	get current() {
-		return /**@type State*/(super.current)
+		return /** @type State */(super.current)
 	}
 	get isEscaping() {
 		return this.isEscape || this.isReturn
 	}
-	constructor(/**@type Ghost*/{tilePos}) {
+	constructor(/** @type Ghost */{tilePos}) {
 		super()
 		this.init(Maze.House.isIn(tilePos)? 'Idle':'Walk')
 	}
@@ -81,7 +81,7 @@ export const GhsMgr = new class extends Common {
 		})
 		GhsMgr.on({Init:GhsMgr.#initialize})
 	}
-	#aidx = /**@type {0|1}*/(0)
+	#aidx = /** @type {0|1} */(0)
 	get aInterval() {return 6}
 	get animIndex() {return this.#aidx}
 	get Elroy()     {return Elroy}
@@ -93,7 +93,10 @@ export const GhsMgr = new class extends Common {
 	get hasEscape() {return Ghosts.some(g=> g.isEscaping)}
 	get akaCenter() {return Ghosts[GhsType.Akabei].centerPos}
 
-	/** @param {unknown} _ @param {Ghost[]} ghosts */
+	/**
+	 * @param {unknown} _
+	 * @param {Ghost[]} ghosts
+	 */
 	#initialize(_, ...ghosts) {
 		GhsMgr.#aidx = 0
 		ghosts.forEach((g,i)=> Ghosts[i]=g)

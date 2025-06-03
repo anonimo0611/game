@@ -1,7 +1,7 @@
 const
 FruitCvs = canvas2D(null),
 GhostCvs = canvas2D(null),
-PathFrom0To8 = /**@type const*/({
+PathFrom0To8 = /** @type const */({
 	0: [1,0,2,0,3,1,3,5,2,6,1,6,0,5,0,1],
 	1: [0,1,1,0,1,6,0,6,2,6],
 	2: [0,2,0,1,1,0,3,0,4,1,4,2,0,6,4,6],
