@@ -7,7 +7,7 @@ import {drawText} from './message.js'
 const Form = document.forms[0]
 
 /** @param {string} id */
-export const ctrl = id=> /**@type HTMLInputElement*/(byId(id))
+export const ctrl = id=> /**@type {HTMLInputElement}*/(byId(id))
 
 export const Ctrl = new class {
 	static {$ready(this.setup)}

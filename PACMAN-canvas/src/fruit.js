@@ -49,7 +49,7 @@ export const Fruit = new class {
 			Fruit.#setTimerToHideTarget()
 		}
 	}
-	#collideWith(pos=Player.i.centerPos) {
+	#collideWith(pos=Player.instance.centerPos) {
 		if (_tgtDisp && collisionCircle(pos, TargetPos, T/2)) {
 			_tgtDisp = false
 			Timer.cancel(Fruit) && Sound.play('fruit')

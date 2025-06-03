@@ -12,10 +12,10 @@ import {GhsMgr}  from './ghosts/_system.js'
 import Sprite    from './sprites/pacman.js'
 
 export const Player = function() {
-	/** @type PlayablePac */
+	/** @type {PlayablePac} */
 	let player
 	$on({Title_Restart_NewLevel:()=> player=new PlayablePac})
-	return new class extends Common {get i()  {return player}}
+	return new class extends Common {get instance(){return player}}
 }()
 
 export class Pacman extends Actor {
@@ -61,7 +61,7 @@ class PlayablePac extends Pacman {
 			: (eating? PacStep.Eating : PacStep.Base)
 		) * this.baseSpeed
 	}
-	#allowKey(/**@type KeyboardEvent*/e) {
+	#allowKey(/**@type {KeyboardEvent}*/e) {
 		const dir = Dir.from(e, {wasd:true})
 		return (Confirm.opened
 			|| keyRepeat(e)
@@ -69,7 +69,7 @@ class PlayablePac extends Pacman {
 			|| (dir == this.dir && !this.#turning)
 		)? null : dir
 	}
-	#onKeydown(/**@type KeyboardEvent*/e) {
+	#onKeydown(/**@type {KeyboardEvent}*/e) {
 		const dir = this.#allowKey(e)
 		if (!dir) return
 		if (this.#turning) {
@@ -98,8 +98,7 @@ class PlayablePac extends Pacman {
 		return Vec2[this.dir].mul(num*T).add(this.centerPos).add(ofstX*T, 0)
 	}
 	draw() {
-		if (State.isStart)
-			return
+		if (State.isStart) return
 		Ctx.save()
 		super.draw()
 		this.sprite.draw(this)
@@ -107,8 +106,7 @@ class PlayablePac extends Pacman {
 	}
 	update() {
 		super.update()
-		if (Timer.frozen || !State.isPlaying)
-			return
+		if (Timer.frozen || !State.isPlaying) return
 		this.sprite.update(this)
 		this.#notEaten++
 		for (let i=0,denom=ceil(this.step)*2; i<denom; i++)
@@ -149,8 +147,7 @@ class PlayablePac extends Pacman {
 			&& (this.movDir = this.orient)
 	}
 	#eaten({tileIdx}=this) {
-		if (!Maze.hasDot(tileIdx))
-			return
+		if (!Maze.hasDot(tileIdx)) return
 		const isPow = Maze.hasPow(tileIdx)
 		this.#playSE()
 		this.resetTimer()

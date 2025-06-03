@@ -12,6 +12,7 @@ import {RunTimer} from './_run_timer.js'
 
 const CHAR = 0
 const DEMO = 1
+const SmallTextSize = T*0.68
 
 let _attract = /**@type {?Attract}*/(null)
 
@@ -32,8 +33,8 @@ export class Attract {
 		_attract?.draw()
 		return State.isAttract
 	}
-	powDisp = /**type {0|1}*/(1)
-	ghsList = /**@type Ghost[][]*/([[],[]])
+	powDisp = /**@type {0|1}*/(1)
+	ghsList = /**@type {Ghost[][]}*/([[],[]])
 	pacman  = new Pacman
 	pacVelX = -CvsW/180
 	ghsVelX = -CvsW/169
@@ -41,13 +42,13 @@ export class Attract {
 	/** @private */
 	constructor() {
 		this.setActors()
+		GhsMgr.trigger('Init', this.ghsList[DEMO])
 		$onNS('.Attract', {click_keydown_blur:this.quit})
 	}
 	setActors() {
 		for (const where of this.ghsList.keys())
 			for (let i=0; i<GhsType.Max; i++)
 				this.setActor(where, i, where == DEMO)
-		GhsMgr.trigger('Init', this.ghsList[DEMO])
 	}
 	setActor(where=0, gIdx=0, isDemo=false) {
 		const g = new Ghost(isDemo? L:R, {idx:gIdx, animFlag:+isDemo})
@@ -63,7 +64,7 @@ export class Attract {
 		ghost.sprite.draw(ghost)
 	}
 	draw() {
-		const et = Ticker.elapsedTime/100, ptsSize = T*.68
+		const et = Ticker.elapsedTime/100
 		Score.draw(),drawText(7, 5, null, 'CHARACTOR　/　NICKNAME')
 		et > 10 && this.drawGhost(CHAR, GhsType.Akabei, 6)
 		et > 15 && drawText( 8,  7, Color.Akabei, 'OIKAKE----')
@@ -84,9 +85,9 @@ export class Attract {
 			drawDot(Ctx, 10, 24)
 			this.powDisp && drawDot(Ctx, 10, 26, true)
 			drawText(12.0, 25, null, '10')
-			drawText(14.3, 25, null, 'PTS', {size:ptsSize})
+			drawText(14.3, 25, null, 'PTS', {size:SmallTextSize})
 			drawText(12.0, 27, null, '50')
-			drawText(14.3, 27, null, 'PTS', {size:ptsSize})
+			drawText(14.3, 27, null, 'PTS', {size:SmallTextSize})
 		}
 		if (et > 90) {
 			if (this.pacman.dir == L && this.powDisp) {
@@ -95,7 +96,7 @@ export class Attract {
 			if (Ctrl.extendPts > 0) {
 				const {BonusText:color}= Color
 				drawText( 2.0, 30, color, `BONUS　PACMAN　FOR　${Ctrl.extendPts}`)
-				drawText(24.3, 30, color, 'PTS', {size:ptsSize})
+				drawText(24.3, 30, color, 'PTS', {size:SmallTextSize})
 			}
 		}
 		if (et > 105) {
@@ -107,8 +108,7 @@ export class Attract {
 		Fruit.drawLevelCounter()
 	}
 	update() {
-		if (Ticker.elapsedTime <= 1e4+500)
-			return
+		if (Ticker.elapsedTime <= 1e4+500) return
 		this.powDisp ^= +(Ticker.count % PowDotInterval == 0)
 		!Timer.frozen && this.updatePacman()
 		!Timer.frozen && this.updateGhosts()

@@ -42,14 +42,13 @@ D__________________________C\
 
 /**
  * `.` and `O` represent normal and power cookies
- * @type {ReadonlySet<string>}
- */
+ * @type {ReadonlySet<string>} */
 const DotChipSet = new Set(['.','O'])
 
 /**@typedef {number} TileIdx*/
-const WallSet  = /**@type Set<TileIdx>*/(new Set)
-const DotSet   = /**@type Set<TileIdx>*/(new Set)
-const PowMap   = /**@type Map<TileIdx,Vector2>*/(new Map)
+const WallSet  = /**@type {Set<TileIdx>}*/(new Set)
+const DotSet   = /**@type {Set<TileIdx>}*/(new Set)
+const PowMap   = /**@type {Map<TileIdx,Vector2>}*/(new Map)
 const PenRect  = new Rect(10,13, 7,4)
 const PenOuter = new Rect( 9,12, 9,6)
 
@@ -65,7 +64,7 @@ class PowDot {
 		this.#disp ^= +(Ticker.count % PowDotInterval == 0)
 		for (const [,tPos] of PowMap) this.#draw(tPos)
 	}
-	#draw(/**@type Vector2*/t) {
+	#draw(/**@type {Vector2}*/t) {
 		if (!State.isPlaying
 		 || Ticker.paused
 		 || this.#disp)
@@ -101,7 +100,7 @@ export const Maze = new class {
 		$on({Title_NewLevel: Maze.#reset})
 		$(powChk).on({change:Maze.#reset})
 	}
-	#reset(/**@type Event*/e) {
+	#reset(/**@type {Event}*/e) {
 		if (e.target != powChk) {
 			Wall.draw()
 			Maze.#drawDoor()
@@ -109,11 +108,10 @@ export const Maze = new class {
 		for (const [i,c] of MapArr.entries())
 			DotChipSet.has(c) && Maze.#setDot(i,c)
 	}
-	/**
-	 * @param {number} idx
-	 * @param {string} chip
-	 */
-	#setDot(idx, chip) {
+	#setDot(
+	 /**@type {number}*/idx,
+	 /**@type {string}*/chip
+	) {
 		const t = Vec2(idx%Cols, idx/Cols|0)
 		Maze.clearBgDot({tileIdx:idx,tilePos:t})
 		DotSet.add(idx)
@@ -128,9 +126,9 @@ export const Maze = new class {
 	PowDot = freeze(new PowDot)
 	Tunnel = freeze(new Tunnel)
 
-	hasDot  = (/**@type TileIdx */i)=> DotSet.has(i)
-	hasPow  = (/**@type TileIdx */i)=> PowMap.has(i)
-	hasWall = (/**@type Position*/p)=> WallSet.has(p.y*Cols+p.x)
+	hasDot  = (/**@type {TileIdx} */i)=> DotSet.has(i)
+	hasPow  = (/**@type {TileIdx} */i)=> PowMap.has(i)
+	hasWall = (/**@type {Position}*/p)=> WallSet.has(p.y*Cols+p.x)
 
 	/**
 	 * These tiles(x-y) forbidden ghosts from entering upward

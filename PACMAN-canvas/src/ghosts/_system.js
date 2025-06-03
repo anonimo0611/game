@@ -11,7 +11,7 @@ import * as Pts from '../sprites/points.js'
 import {Ghost}  from './ghost.js'
 import Target   from './show_targets.js'
 
-const Ghosts = /**@type Ghost[]*/([])
+const Ghosts = /**@type {Ghost[]}*/([])
 const Pts1st = Pts.GhostVals[0]
 
 /**
@@ -52,12 +52,12 @@ export class GhostState extends _State {
 	isReturn = false
 
 	get current() {
-		return /** @type State */(super.current)
+		return /**@type {State}*/(super.current)
 	}
 	get isEscaping() {
 		return this.isEscape || this.isReturn
 	}
-	constructor(/** @type Ghost */{tilePos}) {
+	constructor(/**@type {Ghost}*/{tilePos}) {
 		super()
 		this.init(Maze.House.isIn(tilePos)? 'Idle':'Walk')
 	}
@@ -67,7 +67,7 @@ export class GhostState extends _State {
 }
 
 const [drawBehind,drawFront]=
-	/**@type ((g:Ghost, i:number, a:Ghost[])=> void)[]*/(
+	/**@type {((g:Ghost, i:number, a:Ghost[])=> void)[]}*/(
 	[(g,i,a)=> { g.isFright && a.at(-1-i)?.draw()},
 	 (g,i,a)=> {!g.isFright && a.at(-1-i)?.draw()}]
 	)
@@ -81,7 +81,7 @@ export const GhsMgr = new class extends Common {
 		})
 		GhsMgr.on({Init:GhsMgr.#initialize})
 	}
-	#aidx = /** @type {0|1} */(0)
+	#aidx =/**@type {0|1}*/(0)
 	get aInterval() {return 6}
 	get animIndex() {return this.#aidx}
 	get Elroy()     {return Elroy}
@@ -93,11 +93,10 @@ export const GhsMgr = new class extends Common {
 	get hasEscape() {return Ghosts.some(g=> g.isEscaping)}
 	get akaCenter() {return Ghosts[GhsType.Akabei].centerPos}
 
-	/**
-	 * @param {unknown} _
-	 * @param {Ghost[]} ghosts
-	 */
-	#initialize(_, ...ghosts) {
+	#initialize(
+	 /**@type {unknown}*/ _,
+	 /**@type {Ghost[]}*/...ghosts
+	) {
 		GhsMgr.#aidx = 0
 		ghosts.forEach((g,i)=> Ghosts[i]=g)
 	}
@@ -184,7 +183,7 @@ setReversalSig = ()=> {
 export const DotCounter = function() {
 	let _globalCounter = -1
 	const pCounters  = new Uint8Array(GhsType.Max)
-	const limitTable = /**@type const*/
+	const limitTable = /**@type {const}*/
 		([//global,lv1,lv2,lv3+
 			[ 7,  0,  0, 0], // Pinky
 			[17, 30,  0, 0], // Aosuke
@@ -198,7 +197,7 @@ export const DotCounter = function() {
 		const timeOut = Game.level <= 4 ? 4e3 : 3e3
 		const gLimit  = limitTable[idx-1][0] // global
 		const pLimit  = limitTable[idx-1][min(Game.level,3)] // personal
-		;(Player.i.timeNotEaten >= timeOut)? fn()
+		;(Player.instance.timeNotEaten >= timeOut)? fn()
 		:(!Game.restarted || _globalCounter < 0)
 			? (pCounters[idx] >= pLimit)
 				&& fn()
@@ -263,7 +262,7 @@ const FrightMode = function() {
 			_session = this.#toggle(true)
 			$(Ghosts).on('Cought', ()=> ++this.#caughtCnt)
 		}
-		#toggle(/**@type boolean*/bool) {
+		#toggle(/**@type {boolean}*/bool) {
 			_session = null
 			$(Ghosts).off('Cought').trigger('FrightMode', bool)
 			Sound.toggleFrightMode(bool)

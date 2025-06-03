@@ -7,12 +7,10 @@ import {Ghost}  from '../ghosts/ghost.js'
 import Sprite   from '../sprites/ghost_cb.js'
 
 export class CoffBrk {
-	static #scene = /**@type Scene1|Scene2|Scene3|null*/(null)
+	static #scene = /**@type {?(Scene1|Scene2|Scene3)}*/(null)
 	static {
-		$on('CoffBrk',
-			/**@type (_:unknown, num:1|2|3)=> void*/
-			(_,num)=> this.#begin(num)
-		)
+		/** @typedef {(_:unknown,num:1|2|3)=> void} fn */
+		$on('CoffBrk',/**@type {fn}*/(_,num)=> this.#begin(num))
 	}
 	static #begin(/**@type {1|2|3}*/num) {
 		Sound.play('cutscene', {loop:1^Number(num == 2)})
@@ -45,7 +43,7 @@ export class CoffBrk {
 		this.pacman.sprite.draw(this.pacman, scale)
 	}
 	drawAkabei(cfg={}) {
-		const {akabei}=this,{aIdx,pos}=akabei
+		const {akabei}=this, {aIdx,pos}=akabei
 		akabei.sprite.draw({aIdx, ...cfg, ...pos})
 	}
 	pause() {

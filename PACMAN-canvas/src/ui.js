@@ -5,18 +5,18 @@ export const Menu = freeze({
 	Level:  new _Menu.DorpDown('LevelMenu'),
 	Extend: new _Menu.Slide('ExtendMenu'),
 }),
-MenuIds = /**@type (keyof Menu)[]*/(keys(Menu))
+MenuIds = /**@type {(keyof Menu)[]}*/(keys(Menu))
 
 //---- Panels ----
 
 ;/** @type {HTMLButtonElement[]} */
 (qSAll('.panelBtn')).forEach(btn=> {
-	btn.addEventListener('pointerdown', ()=> {
+	btn.addEventListener('pointerdown', _=> {
 		$('.panel').toggle()
 		btn.classList.toggle('opened')
 	})
 	addEventListener('pointerdown', e=> {
-		const tgt = /** @type {Element} */(e.target)
+		const tgt = /**@type {Element}*/(e.target)
 		if (!btn.offsetParent
 		 || tgt == btn
 		 || tgt.closest?.(btn.value))

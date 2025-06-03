@@ -1,7 +1,7 @@
 const
 FruitCvs = canvas2D(null),
 GhostCvs = canvas2D(null),
-PathFrom0To8 = /** @type const */({
+PathFrom0To8 = /**@type {const}*/({
 	0: [1,0,2,0,3,1,3,5,2,6,1,6,0,5,0,1],
 	1: [0,1,1,0,1,6,0,6,2,6],
 	2: [0,2,0,1,1,0,3,0,4,1,4,2,0,6,4,6],
@@ -12,7 +12,7 @@ PathFrom0To8 = /** @type const */({
 	7: [0,1,0,0,4,0,4,1,2,4,2,6],
 	8: [1,0,3,0,4,1,4,2,3,3,1,3,0,4,0,5,1,6,3,6,4,5,4,4,3,3,1,3,0,2,0,1],
 }),
-PosListFrom100to5000 = /**@type const*/({
+PosListFrom100to5000 = /**@type {const}*/({
 	 100: [[1,-6.1,-3],[0,-2.1,-3],[0,2.7,-3]],
 	 200: [[2,-7.0,-3],[0,-1.0,-3],[0,4.0,-3]],
 	 300: [[3,-7.2,-3],[0,-1.2,-3],[0,3.8,-3]],
@@ -26,8 +26,8 @@ PosListFrom100to5000 = /**@type const*/({
 	3000: [[3,-10, -3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
 	5000: [[5,-10, -3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
 })
-export const GhostVals = /**@type const*/([200,400,800,1600])
-export const FruitVals = /**@type const*/([100,300,500,700,1e3,2e3,3e3,5e3])
+export const GhostVals = /**@type {const}*/([200,400,800,1600])
+export const FruitVals = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
 
 /** @type {ReadonlySet<number>} */
 const GtsPtsSet = new Set(GhostVals)
@@ -69,5 +69,5 @@ export function cache(pts, size=TileSize*2) {
 		ctx.stroke()
 	}
 	ctx.restore()
-	return /**@type const*/({ctx,w,h})
+	return /**@type {const}*/({ctx,w,h})
 }

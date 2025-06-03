@@ -18,6 +18,7 @@ export const State = new class extends _State {
 	isLosing    = false
 	isGameOver  = false
 	isQuit      = false
+
 	constructor() {
 		super()
 		this.init()
@@ -26,11 +27,11 @@ export const State = new class extends _State {
 		return this.isStart || this.isReady
 	}
 	get current() {
-		return /**@type StateType*/(super.current)
+		return /**@type {StateType}*/(super.current)
 	}
 	/** @param {StateType} [state] */
 	last(state) {
-		return /**@type StateType|''*/(super.last(state))
+		return /**@type {StateType|''}*/(super.last(state))
 	}
 
 	/**

@@ -17,13 +17,13 @@ export class Ghost extends Actor {
 	#isStarted = false
 	#isFright  = false
 
-	TurnDirs = /**@type readonly Direction[]*/
+	TurnDirs = /**@type {readonly Direction[]}*/
 		([U,L,D,R])
 
 	// This section is overridden in subclasses
 	get isAngry()     {return false}
 	get chaseStep()   {return GhsStep.Base}
-	get chasePos()    {return Player.i.centerPos}
+	get chasePos()    {return Player.instance.centerPos}
 	get scatterTile() {return Vec2()}
 
 	get aIdx()        {return GhsMgr.animIndex & this.animFlag}
@@ -81,7 +81,7 @@ export class Ghost extends Actor {
 			&& abs(CvsW/2 - this.centerPos.x) <= this.step
 	}
 	get sqrMagToPacman() {
-		return Vec2.sqrMag(this, Player.i)
+		return Vec2.sqrMag(this, Player.instance)
 	}
 	get step() {
 		return function(s) {
@@ -128,7 +128,7 @@ export class Ghost extends Actor {
 		)
 	}
 	release(deactivateGlobalDotCnt=false) {
-		Player.i.resetTimer()
+		Player.instance.resetTimer()
 		this.state.isIdle && this.state.to('GoOut')
 		return deactivateGlobalDotCnt
 	}
@@ -220,7 +220,7 @@ export class Ghost extends Actor {
 		return false
 	}
 	crashWithPac({
-		pos     = Player.i.pos,
+		pos     = Player.instance.pos,
 		radius  = (this.isFright? T/2:T/3),
 		release = ()=> this.#setEscape()
 	}={}) {
@@ -236,10 +236,10 @@ export class Ghost extends Actor {
 		State.to('Crashed').to('Losing', {delay:500})
 		return true
 	}
-	#setFrightMode(/**@type unknown*/_, bool=false) {
+	#setFrightMode(/**@type {unknown}*/_, bool=false) {
 		!this.isEscaping && (this.#isFright = bool)
 	}
-	#caught(/**@type Function*/fn) {
+	#caught(/**@type {Function}*/fn) {
 		this.#isFright = false
 		this.trigger('Cought').state.to('Bitten')
 		Timer.freeze()

@@ -102,7 +102,7 @@ export const Game = new class {
 	}
 	#onLosing() {
 		Sound.play('losing')
-		Player.i.sprite.setLosing()
+		Player.instance.sprite.setLosing()
 		Lives.left > 0
 			? State.to('Restart', {delay:2200})
 			: State.to('GameOver',{delay:2000})

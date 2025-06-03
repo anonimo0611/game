@@ -1,6 +1,6 @@
  const {ctx}=Bg
 
-const ScaleTable = /** @type const */
+const ScaleTable = /**@type {const}*/
 	([[1,1],[-1,1],[-1,-1],[1,-1]])
 
 import {Maze} from '../maze.js'
