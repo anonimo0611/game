@@ -5,7 +5,7 @@ import Sprite  from './sprites/pacman.js'
 /** @typedef {'Title'|'Start'|'Ready'|'Restart'} EvType */
 
 export const Lives = function() {
-	let  _left = 0
+	let _left = 0
 	function onChange() {
 		;({
 			Title:  ()=> _left = Ctrl.livesMax-1,
