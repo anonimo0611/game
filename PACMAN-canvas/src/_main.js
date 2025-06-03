@@ -12,8 +12,8 @@ import {Message} from './message.js'
 import {Score}   from './score.js'
 import {Lives}   from './lives.js'
 import {Fruit}   from './fruit.js'
+import {Actor}   from './actor.js'
 import {Player}  from './pacman.js'
-import {GhsMgr}  from './ghosts/_system.js'
 import {PtsMgr}  from './points.js'
 import {Attract} from './demo/attract.js'
 import {CoffBrk} from './demo/coffee_break.js'
@@ -45,7 +45,7 @@ export const Game = new class {
 	get levelStr()  {return Game.#level.toString().padStart(2,'0')}
 	get restarted() {return Game.#restarted}
 
-	// Stepwise faster from level 1 to level 13
+	// Level 13+ as the fastest, stepwise faster from level 1 to 13
 	get speedByLv() {return 1 - (13-Game.clampedLv) * .01}
 	get clampedLv() {return clamp(Game.level, 1, 13)}
 	get speedRate() {return State.isPlaying? Ctrl.speedRate : 1}
@@ -70,8 +70,7 @@ export const Game = new class {
 	}
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
-		if (Confirm.opened || keyRepeat(e))
-			return
+		if (Confirm.opened || keyRepeat(e)) return
 		switch (e.key) {
 		case 'Escape': return Game.#pause()
 		case 'Delete': return function() {
@@ -80,8 +79,7 @@ export const Game = new class {
 				: State.to('Quit')
 			}()
 		default:
-			if (qS(':not(#startBtn):focus'))
-				return
+			if (qS(':not(#startBtn):focus')) return
 			if (Dir.from(e,{wasd:true}) || e.key == '\x20') {
 				State.isTitle && State.to('Start')
 				Ticker.paused && Game.#pause()
@@ -153,16 +151,15 @@ export const Game = new class {
 		}
 	}
 	#update() {
-		Player.i.update()
-		GhsMgr.update()
 		PtsMgr.update()
 		Fruit.update()
+		Actor.update()
 		Attract.update()
 		CoffBrk.update()
 	}
 	#draw() {
 		Ctx.clear()
-		Ctrl.drawGrid()
+		Ctrl.draw()
 		Attract.draw() ||
 		CoffBrk.draw() ||
 		Game.#drawMain()
@@ -170,13 +167,8 @@ export const Game = new class {
 	#drawMain() {
 		Score.draw()
 		Maze.PowDot.draw()
-		Fruit.drawTarget()
-		PtsMgr.drawBehind()
-		GhsMgr.drawBehind()
-		Player.i.draw()
-		GhsMgr.drawTarget()
-		GhsMgr.drawFront()
-		PtsMgr.drawFront()
+		Fruit.draw()
+		Actor.draw()
 		Message.draw()
 	}
 	#loop() {

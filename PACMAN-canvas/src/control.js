@@ -70,7 +70,7 @@ export const Ctrl = new class {
 		}
 		MenuIds.forEach(id=> Menu[id].index = data[id])
 	}
-	drawGrid() {
+	draw() {
 		if (!Ctrl.showGridLines) return
 		Ctx.save()
 		Ctx.strokeStyle = Color.Grid

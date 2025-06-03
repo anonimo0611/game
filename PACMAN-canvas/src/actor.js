@@ -1,6 +1,8 @@
 import {Common} from '../_lib/common.js'
 import {State}  from './state.js'
 import {Maze}   from './maze.js'
+import {Player} from './pacman.js'
+import {GhsMgr} from './ghosts/_system.js'
 
 const CW = CvsW
 export class Actor extends Common {
@@ -43,6 +45,15 @@ export class Actor extends Common {
 	get inFrontOfTile() {return this.tilePixel <= T/2}
 	get inBackOfTile()  {return this.tilePixel >  T/2}
 
+	static update() {
+		Player.i.update()
+		GhsMgr.update()
+	}
+	static draw() {
+		GhsMgr.drawBehind()
+		Player.i.draw()
+		GhsMgr.drawFront()
+	}
 	update(maxA=this.maxAlpha) {
 		State.isReady   && (this.#fadeIn ||= new FadeIn)?.update(maxA)
 		State.isPlaying && (this.#fadeIn &&= null)

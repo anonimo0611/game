@@ -13,25 +13,20 @@ export default new class {
 		for (const g of ghosts) this.#strokeLines(g)
 		for (const g of ghosts) this.#drawTargetMarker(g)
 	}
-
-	/** @param {Ghost} g */
-	#disabled(g) {
-		return g.state.isIdle
+	#disabled(/**@type Ghost*/g) {
+		return g.isIdle
 			|| g.isFright
+			|| g.isBitten
 			|| (Timer.frozen && !g.isEscaping)
 	}
-
-	/** @param {Ghost} g */
-	#getTargetPos(g) {
-		return (g.state.isGoOut || g.state.isEscape)
+	#getTargetPos(/**@type Ghost*/g) {
+		return (g.isGoOut || g.isEscaping)
 			? Maze.House.EntranceTile.add(.5).mul(T)
 			: g.isScatter
 				? g.originalTargetTile.add(.5).mul(T)
 				: g.chasePos
 	}
-
-	/** @param {Ghost} g */
-	#strokeLines(g) {
+	#strokeLines(/**@type Ghost*/g) {
 		if (this.#disabled(g))
 			return
 		switch (g.idx) {
@@ -40,9 +35,7 @@ export default new class {
 		case GhsType.Guzuta:this.#guzutaCircle(g);break
 		}
 	}
-
-	/** @param {Ghost} g */
-	#drawTargetMarker(g) {
+	#drawTargetMarker(/**@type Ghost*/g) {
 		if (this.#disabled(g))
 			return
 		const {x,y}= this.#getTargetPos(g)
@@ -52,12 +45,7 @@ export default new class {
 		Ctx.strokeCircle(x,y, T*0.4,'#FFF', 4)
 		Ctx.restore()
 	}
-
-	/**
-	 * @param {Ghost} g
-	 * @param {number} ofst
-	 */
-	#auxLines(g, ofst) {
+	#auxLines(/**@type Ghost*/g, ofst=4) {
 		if (g.isScatter || !g.state.isWalk)
 			return
 		const {dir:pacDir,centerPos:pacPos}= Player.i
@@ -81,9 +69,7 @@ export default new class {
 		}
 		Ctx.restore()
 	}
-
-	/** @param {Ghost} g */
-	#guzutaCircle(g) {
+	#guzutaCircle(/**@type Ghost*/g) {
 		if (g.isScatter || !g.state.isWalk)
 			return
 		const radius = T*8

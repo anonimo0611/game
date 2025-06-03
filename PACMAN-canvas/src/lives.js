@@ -9,16 +9,16 @@ export const Lives = function() {
 	function onChange() {
 		;({
 			Title:  ()=> _left = Ctrl.livesMax-1,
-			Start:  ()=> _left += 1,
+			Start:  ()=> _left += +1,
 			Ready:  ()=> _left += State.last('Start')? -1:0,
-			Restart:()=> _left -= 1,
+			Restart:()=> _left += -1,
 		})[/**@type EvType*/(State.current)]()
 		draw()
 	}
 	function draw() {
 		const {ctx}  = HUD
 		const radius = T*.78, size = T*2
-		const sprite = new Sprite(ctx,1)
+		const sprite = new Sprite(ctx, 1)
 		ctx.save()
 		ctx.translate(size, CvsH-size)
 		ctx.clearRect(0,0, size*5, size)

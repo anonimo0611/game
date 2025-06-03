@@ -26,11 +26,11 @@ PosListFrom100to5000 = /**@type const*/({
 	3000: [[3,-10, -3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
 	5000: [[5,-10, -3],[0,-4.0,-3],[0,1.0,-3],[0,6.0,-3]],
 })
-export const GhostTable = /**@type const*/([200,400,800,1600])
-export const FruitTable = /**@type const*/([100,300,500,700,1e3,2e3,3e3,5e3])
+export const GhostVals = /**@type const*/([200,400,800,1600])
+export const FruitVals = /**@type const*/([100,300,500,700,1e3,2e3,3e3,5e3])
 
 /** @type {ReadonlySet<number>} */
-const GtsPtsSet = new Set(GhostTable)
+const GtsPtsSet = new Set(GhostVals)
 
 /**
  * @typedef {keyof PosListFrom100to5000} PtsType
@@ -52,12 +52,12 @@ export function cache(pts, size=TileSize*2) {
 	?.forEach(([n,x,y],i)=> {
 		(pts == 1600 && i == 0) // narrow 1
 			? stroke([x,y,x,y+6])
-			: (_=> {
+			: function() {
 				ctx.save()
 				ctx.translate(x,y)
 				stroke(PathFrom0To8[n], n==0 || n==8)
 				ctx.restore()
-			})()
+			}()
 	})
 	/** @param {readonly number[]} path */
 	function stroke(path, isClose=false) {

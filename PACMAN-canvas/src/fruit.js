@@ -31,7 +31,7 @@ export const Fruit = new class {
 		Player.on({DotEaten:Fruit.#dotEaten})
 	}
 	get score() {
-		return Pts.FruitTable[Fruit.number()]
+		return Pts.FruitVals[Fruit.number()]
 	}
 	number(i=Game.level-1) {
 		return IdxTable.at(i >= IdxTable.length ? -1 : i) ?? 0
@@ -66,7 +66,7 @@ export const Fruit = new class {
 		}
 		Fruit.#collideWith()
 	}
-	drawTarget() {
+	draw() {
 		if ((State.isTitle || State.isPlaying)
 		 && !Ticker.paused && _tgtDisp) {
 			Ctx.save()
@@ -75,6 +75,7 @@ export const Fruit = new class {
 			Ctx.drawImage(Spr.current, -T,-T)
 			Ctx.restore()
 		}
+		PtsMgr.drawFruitPts()
 	}
 	drawLevelCounter() {
 		const [x,y,w,h] = LvCounterRect

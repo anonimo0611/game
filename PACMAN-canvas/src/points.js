@@ -3,16 +3,16 @@ import {State}  from './state.js'
 import {Score}  from './score.js'
 import {GhsMgr} from './ghosts/_system.js'
 import {Fruit}  from './fruit.js'
-import * as Pts from './sprites/points.js'
+import * as Spr from './sprites/points.js'
 
 const PtsMap = /**@type Map<any, Points>*/(new Map)
 $on({Title_Clear_Crashed:()=> PtsMap.clear()})
 
 export const PtsMgr = new class {
-	get Points() {return Points}
-	update()     {PtsMap.forEach(v=> v.update())}
-	drawBehind() {PtsMap.get(Fruit) ?.draw()}
-	drawFront()  {PtsMap.get(GhsMgr)?.draw()}
+	get Points()   {return Points}
+	update()       {PtsMap.forEach(v=> v.update())}
+	drawFruitPts() {PtsMap.get(Fruit) ?.draw()}
+	drawGhostPts() {PtsMap.get(GhsMgr)?.draw()}
 }
 class Points {
 	/**
@@ -22,7 +22,7 @@ class Points {
 	 */
 	constructor({key,x,y,duration:dur=1e3}, fn) {
 		const spd  = Game.speedRate, fadeDur = 300
-		this.cache = Pts.cache(key.score)
+		this.cache = Spr.cache(key.score)
 		this.pos   = Vec2(x, y)
 		this.score = key.score
 		this.fade  = new FadeOut(fadeDur/spd, (dur-fadeDur)/spd)

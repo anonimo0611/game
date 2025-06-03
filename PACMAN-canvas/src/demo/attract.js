@@ -102,7 +102,7 @@ export class Attract {
 			for (let i=0; i<GhsType.Max; i++)
 				this.drawGhost(DEMO, i)
 			this.pacman.sprite.draw(this.pacman)
-			PtsMgr.drawFront()
+			PtsMgr.drawGhostPts()
 		}
 		Fruit.drawLevelCounter()
 	}

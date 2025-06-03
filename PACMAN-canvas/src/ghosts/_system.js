@@ -6,12 +6,13 @@ import {State}  from '../state.js'
 import {Ctrl}   from '../control.js'
 import {Player} from '../pacman.js'
 import {Maze}   from '../maze.js'
+import {PtsMgr} from '../points.js'
 import * as Pts from '../sprites/points.js'
 import {Ghost}  from './ghost.js'
 import Target   from './show_targets.js'
 
 const Ghosts = /**@type Ghost[]*/([])
-const Pts1st = Pts.GhostTable[0]
+const Pts1st = Pts.GhostVals[0]
 
 /**
  * Delay time(ms) for ghost to be left from the house in always chase mode
@@ -92,13 +93,10 @@ export const GhsMgr = new class extends Common {
 	get hasEscape() {return Ghosts.some(g=> g.isEscaping)}
 	get akaCenter() {return Ghosts[GhsType.Akabei].centerPos}
 
-	/**
-	 * @param {unknown} _
-	 * @param {Ghost[]} instances
-	 */
-	#initialize(_, ...instances) {
+	/** @param {unknown} _ @param {Ghost[]} ghosts */
+	#initialize(_, ...ghosts) {
 		GhsMgr.#aidx = 0
-		instances.forEach((g,i)=> Ghosts[i]=g)
+		ghosts.forEach((g,i)=> Ghosts[i]=g)
 	}
 	#onLevelEnds() {
 		Ghosts.forEach(g=> g.sprite.setFadeOut())
@@ -107,8 +105,8 @@ export const GhsMgr = new class extends Common {
 		Sound.playSiren()
 		Ctrl.isChaseMode &&
 			Timer.sequence(...Ghosts.slice(1).map(
-				(g,i)=> /**@type TimerSequenceItem*/
-				([getReleaseDelay(i), ()=> g.release()]))
+				/** @returns {TimerSequenceItem} */
+				(g,i)=> [getReleaseDelay(i), ()=> g.release()])
 			)
 	}
 	setFrightMode() {
@@ -124,9 +122,14 @@ export const GhsMgr = new class extends Common {
 		FrightMode.session?.update()
 		Ghosts.forEach(g=> g.update())
 	}
-	drawTarget() {Target.draw(Ghosts)}
-	drawFront()  {Ghosts.forEach(drawFront)}
-	drawBehind() {Ghosts.forEach(drawBehind)}
+	drawBehind() {
+		Ghosts.forEach(drawBehind)
+	}
+	drawFront()  {
+		Target.draw(Ghosts)
+		Ghosts.forEach(drawFront)
+		PtsMgr.drawGhostPts()
+	}
 }
 
 const SCATTER = 0
@@ -140,8 +143,8 @@ const AlternateBetweenModes = function() {
 			update() {State.isPlaying && seq.update()},
 		}
 	}
-	/** @param {number} lv */
-	function genDurList(lv) {
+	function genDurList() {
+		const {level:lv}= Game
 		return freeze([ // ms
 			lv <= 4 ? 4500 : 4000,
 			15e3,
@@ -155,7 +158,7 @@ const AlternateBetweenModes = function() {
 	}
 	function genSequence() {
 		let  [cnt,idx] = [-1,0]
-		const durList  = genDurList(Game.level)
+		const durList  = genDurList()
 		const duration = ()=> durList[idx]/Game.speedRate
 		const Seq = {
 			mode: +Ctrl.isChaseMode,
@@ -247,7 +250,7 @@ const FrightMode = function() {
 	class Session {
 		#tCounter = 0; #fCounter  = 0;
 		#flashIdx = 1; #caughtCnt = 0;
-		get score()     {return Pts.GhostTable[this.#caughtCnt-1]}
+		get score()     {return Pts.GhostVals[this.#caughtCnt-1]}
 		get spriteIdx() {return this.#fCounter? this.#flashIdx^1:0}
 		get caughtAll() {return this.#caughtCnt == GhsType.Max}
 
