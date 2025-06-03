@@ -40,8 +40,10 @@ D__________________________C\
 ////////////////////////////\
 ////////////////////////////`])
 
-/**`.` and `O` represent normal and power cookies
-   @type {ReadonlySet<string>} */
+/**
+ * `.` and `O` represent normal and power cookies
+ * @type {ReadonlySet<string>}
+ */
 const DotChipSet = new Set(['.','O'])
 
 /**@typedef {number} TileIdx*/
@@ -107,10 +109,11 @@ export const Maze = new class {
 		for (const [i,c] of MapArr.entries())
 			DotChipSet.has(c) && Maze.#setDot(i,c)
 	}
-	#setDot(
-		/**@type number*/idx,
-		/**@type string*/chip
-	) {
+	/**
+	 * @param {number} idx
+	 * @param {string} chip
+	 */
+	#setDot(idx, chip) {
 		const t = Vec2(idx%Cols, idx/Cols|0)
 		Maze.clearBgDot({tileIdx:idx,tilePos:t})
 		DotSet.add(idx)
