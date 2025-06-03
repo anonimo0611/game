@@ -2,7 +2,7 @@ import {ctrl}     from '../src/control.js'
 import {Sound}    from './sound.js'
 import {SoundMgr} from './loader.js'
 
-let   lstVol = NaN
+let  _lstVol = NaN
 const volRng = ctrl('volRng')
 const volRg2 = ctrl('volRg2')
 
@@ -23,9 +23,9 @@ const volRg2 = ctrl('volRg2')
 			.on({input:this.onInput})
 	}
 	mute() {
-		lstVol = Sound.vol || (lstVol || +volRng.max >> 1)
+		_lstVol = Sound.vol || (_lstVol || +volRng.max >> 1)
 		$(volRng)
-			.prop({value:Sound.vol? 0 : lstVol})
+			.prop({value:Sound.vol? 0 : _lstVol})
 			.trigger('input')
 	}
 	onInput(/**@type Event*/e) {
