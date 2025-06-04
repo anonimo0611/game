@@ -1,8 +1,9 @@
 'use strict'
-/** @typedef {[timeout:number,handler:Function]} TimerSequenceItem */
-/** @typedef {{timeout:number,handler:Function,ignoreFrozen:boolean,amount:number}} TimerData */
-
 const {Ticker,Timer} = function() {
+	/**
+	 * @typedef {{timeout:number, handler:Function,
+	 * ignoreFrozen:boolean, amount:number}} TimerData
+	 */
 	const Interval = 1000/60
 	const TimerMap = /**@type {Map<any,TimerData>}*/(new Map)
 	let _ticker    = /**@type {?Tick}*/(null)
@@ -95,12 +96,14 @@ const {Ticker,Timer} = function() {
 			!Ticker.running && Ticker.set()
 			TimerMap.set(key??Symbol(),{timeout,handler,ignoreFrozen,amount:0})
 		}
-		/** @param {...readonly [...TimerSequenceItem]} sequence */
-		sequence(...sequence) {
-			if (!sequence.length) return
-			const seq=sequence.map(s=>({ms:s[0],fn:s[1]}));let idx=0,s=seq[idx]
-			function fire(){seq[idx].fn();(s=seq[++idx])&&Timer.set(s.ms,fire)}
-			Timer.set(s.ms,fire)
+		/** @param {...{ms:number,fn:Function}} seq */
+		sequence(...seq) {
+			let idx=0, s=seq[idx]
+			function fire() {
+				seq[idx].fn()
+				;(s=seq[++idx]) && Timer.set(s.ms, fire)
+			}
+			Timer.set(s.ms, fire)
 		}
 		stop() {Ticker.stop();return this}
 		/** @param {unknown} key */
