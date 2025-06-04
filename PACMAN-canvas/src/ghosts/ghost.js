@@ -1,4 +1,4 @@
- import {Sound}  from '../../_snd/sound.js'
+import {Sound}  from '../../_snd/sound.js'
 import {Dir}    from '../../_lib/direction.js'
 import {Game}   from '../_main.js'
 import {State}  from '../state.js'
@@ -17,8 +17,7 @@ export class Ghost extends Actor {
 	#isStarted = false
 	#isFright  = false
 
-	TurnDirs = /**@type {readonly Direction[]}*/
-		([U,L,D,R])
+	TurnDirs = /**@type {readonly Direction[]}*/([U,L,D,R])
 
 	// This section is overridden in subclasses
 	get isAngry()     {return false}

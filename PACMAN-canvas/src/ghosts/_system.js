@@ -76,8 +76,8 @@ export const GhsMgr = new class extends Common {
 		})
 		GhsMgr.on({Init:GhsMgr.#initialize})
 	}
-	#aIdx =/**@type {0|1}*/(0)
-	get aInterval() {return 6}
+	#aIdx = /**@type {0|1}*/(0)
+	get aInterval() {return Ticker.count % 6 == 0}
 	get animIndex() {return this.#aIdx}
 	get Elroy()     {return Elroy}
 	get isScatter() {return AlternateBetweenModes.isScatter}
@@ -90,18 +90,22 @@ export const GhsMgr = new class extends Common {
 
 	#initialize(
 	 /**@type {unknown}*/ _,
-	 /**@type {Ghost[]}*/...ghosts
+	 /**@type {readonly Ghost[]}*/...ghosts
 	) {
 		GhsMgr.#aIdx = 0
-		ghosts.forEach((g,i)=> Ghosts[i]=g)
+		ghosts.forEach((g,i)=> Ghosts[i] = g)
 	}
 	#onLevelEnds() {
 		Ghosts.forEach(g=> g.sprite.setFadeOut())
 	}
 	#onPlaying() {
 		Sound.playSiren()
-		Ctrl.isChaseMode && Timer.sequence(...Ghosts.slice(1).map(
-			(g,i)=>/**@type {const}*/([releaseDelay(i), g.release])))
+		GhsMgr.#setReleaseTimer()
+	}
+	#setReleaseTimer() {
+		if (!Ctrl.isChaseMode) return
+		Timer.sequence(...Ghosts.slice(1).map((g,i)=>
+			({ms:releaseDelay(i), fn:g.release})))
 	}
 	setFrightMode() {
 		setReversalSig()
@@ -110,23 +114,24 @@ export const GhsMgr = new class extends Common {
 	update() {
 		if (State.isPlaying
 		 || State.isAttract
-		 || State.isCoffBrk)
-			this.#aIdx ^= +(!Timer.frozen && !(Ticker.count % this.aInterval))
+		 || State.isCoffBrk) {
+			this.#aIdx ^= +(!Timer.frozen && GhsMgr.aInterval)
+		}
 		AlternateBetweenModes.update()
 		FrightMode.session?.update()
 		Ghosts.forEach(g=> g.update())
 	}
-	#drawGhosts(onFront=true) {
+	#draw(onFront=true) {
 		Ghosts.forEach((_,i,a, g=a.at(-1-i))=> {
 			(g?.isFright != onFront) && g?.draw()
 		})
 	}
 	drawBehind() {
-		GhsMgr.#drawGhosts(false)
+		GhsMgr.#draw(false)
 	}
 	drawFront()  {
 		Target.draw(Ghosts)
-		GhsMgr.#drawGhosts(true)
+		GhsMgr.#draw(true)
 		PtsMgr.drawGhostPts()
 	}
 }
@@ -267,11 +272,11 @@ const FrightMode = function() {
 		}
 		update() {
 			if (!State.isPlaying || Timer.frozen) return
-			const et = (Game.interval * this.#tCounter++)/1000
-			const fi = (this.dur == 1 ? 12:14)/Game.speedRate|0
-			this.#flashIdx ^= +!(this.#fCounter % fi)
-			;(et >= this.dur-2) && this.#fCounter++
-			;(et >= this.dur || this.caughtAll) && this.#toggle(false)
+			const t = (Game.interval * this.#tCounter++)/1000
+			const f = (this.dur == 1 ? 12:14)/Game.speedRate|0
+			this.#flashIdx ^= +!(this.#fCounter % f)
+			;(t >= this.dur-2) && this.#fCounter++
+			;(t >= this.dur || this.caughtAll) && this.#toggle(false)
 		}
 	}
 	GhsMgr.on({Init:()=> _session = null})

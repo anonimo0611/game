@@ -6,7 +6,7 @@ import {GhsMgr} from '../ghosts/_system.js'
 import {Ghost}  from './ghost.js'
 
 export default new class {
-	draw(/**@type {Ghost[]}*/ghosts) {
+	draw(/**@type {readonly Ghost[]}*/ghosts) {
 		if (!Ctrl.showTargets || !State.isPlaying) return
 		for (const g of ghosts) this.#strokeLines(g)
 		for (const g of ghosts) this.#drawTargetMarker(g)
