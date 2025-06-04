@@ -16,9 +16,9 @@ const Pts1st = Pts.GhostVals[0]
 
 /**
  * Delay time(ms) for ghost to be left from the house in always chase mode
- * @param {number} idxOfGhostInHouse
+ * @param {number} idx index of ghost in the house
  */
-const getReleaseDelay = idxOfGhostInHouse=> nonNull({
+const releaseDelay = idx=> nonNull({
 	// Pinky->Aosuke->Guzuta
 	 0:[1000,  500,  500], // <-After life is lost
 	 1:[1000, 4000, 4000], 2:[800, 2200, 4000], 3:[600, 1900, 3500],
@@ -26,7 +26,7 @@ const getReleaseDelay = idxOfGhostInHouse=> nonNull({
 	 7:[ 300,  700,  800], 8:[300,  700,  800], 9:[200,  800,  200],
 	10:[ 200,  800,  200],11:[100,  700,  200],12:[100,  700,  200],
 	13:[   0,  900,    0]
-}[Game.restarted? 0 : Game.clampedLv])[idxOfGhostInHouse]/Game.speedRate
+}[Game.restarted? 0 : Game.clampedLv])[idx]/Game.speedRate
 
 /**
  * Determines whether ghost can turn at intersection
@@ -66,11 +66,6 @@ export class GhostState extends _State {
 	}
 }
 
-const [drawBehind,drawFront]=
-	/**@type {((g:Ghost, i:number, a:Ghost[])=> void)[]}*/(
-	[(g,i,a)=> { g.isFright && a.at(-1-i)?.draw()},
-	 (g,i,a)=> {!g.isFright && a.at(-1-i)?.draw()}]
-	)
 export const GhsMgr = new class extends Common {
 	static {$ready(this.setup)}
 	static setup() {
@@ -81,9 +76,9 @@ export const GhsMgr = new class extends Common {
 		})
 		GhsMgr.on({Init:GhsMgr.#initialize})
 	}
-	#aidx =/**@type {0|1}*/(0)
+	#aIdx = /**@type {0|1}*/(0)
 	get aInterval() {return 6}
-	get animIndex() {return this.#aidx}
+	get animIndex() {return this.#aIdx}
 	get Elroy()     {return Elroy}
 	get isScatter() {return AlternateBetweenModes.isScatter}
 	get isFright()  {return FrightMode.session != null}
@@ -97,7 +92,7 @@ export const GhsMgr = new class extends Common {
 	 /**@type {unknown}*/ _,
 	 /**@type {Ghost[]}*/...ghosts
 	) {
-		GhsMgr.#aidx = 0
+		GhsMgr.#aIdx = 0
 		ghosts.forEach((g,i)=> Ghosts[i]=g)
 	}
 	#onLevelEnds() {
@@ -105,11 +100,8 @@ export const GhsMgr = new class extends Common {
 	}
 	#onPlaying() {
 		Sound.playSiren()
-		Ctrl.isChaseMode &&
-			Timer.sequence(...Ghosts.slice(1).map(
-				/** @returns {TimerSequenceItem} */
-				(g,i)=> [getReleaseDelay(i), ()=> g.release()])
-			)
+		Ctrl.isChaseMode && Timer.sequence(...Ghosts.slice(1).map(
+			(g,i)=>/**@type {const}*/([releaseDelay(i), g.release])))
 	}
 	setFrightMode() {
 		setReversalSig()
@@ -119,17 +111,22 @@ export const GhsMgr = new class extends Common {
 		if (State.isPlaying
 		 || State.isAttract
 		 || State.isCoffBrk)
-			this.#aidx ^= +(!Timer.frozen && !(Ticker.count % this.aInterval))
+			this.#aIdx ^= +(!Timer.frozen && !(Ticker.count % this.aInterval))
 		AlternateBetweenModes.update()
 		FrightMode.session?.update()
 		Ghosts.forEach(g=> g.update())
 	}
+	#drawGhosts(onFront=true) {
+		Ghosts.forEach((_,i,a, g=a.at(-1-i))=> {
+			(g?.isFright != onFront) && g?.draw()
+		})
+	}
 	drawBehind() {
-		Ghosts.forEach(drawBehind)
+		GhsMgr.#drawGhosts(false)
 	}
 	drawFront()  {
 		Target.draw(Ghosts)
-		Ghosts.forEach(drawFront)
+		GhsMgr.#drawGhosts(true)
 		PtsMgr.drawGhostPts()
 	}
 }
