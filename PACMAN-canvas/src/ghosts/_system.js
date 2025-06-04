@@ -61,7 +61,7 @@ export class GhostState extends _State {
 		super()
 		this.init(Maze.House.isIn(tilePos)? 'Idle':'Walk')
 	}
-	to(/**@type State*/state) {
+	to(/**@type {State}*/state) {
 		return super.to(state)
 	}
 }
