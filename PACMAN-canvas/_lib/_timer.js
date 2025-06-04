@@ -62,7 +62,6 @@ const {Ticker,Timer} = function() {
 		pausedProc() {
 			this.pFn?.()
 			_pCounter++
-
 		}
 		timer(
 		 /**@type {TimerData}*/t,
