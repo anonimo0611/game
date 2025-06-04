@@ -40,12 +40,11 @@ D__________________________C\
 ////////////////////////////\
 ////////////////////////////`])
 
-/**
- * `.` and `O` represent normal and power cookies
+/** `.` and `O` represent normal and power cookies
  * @type {ReadonlySet<string>} */
 const DotChipSet = new Set(['.','O'])
 
-/**@typedef {number} TileIdx*/
+/** @typedef {number} TileIdx */
 const WallSet  = /**@type {Set<TileIdx>}*/(new Set)
 const DotSet   = /**@type {Set<TileIdx>}*/(new Set)
 const PowMap   = /**@type {Map<TileIdx,Vector2>}*/(new Map)
@@ -54,7 +53,7 @@ const PenOuter = new Rect( 9,12, 9,6)
 
 class House {
 	get EntranceTile() {return Vec2(13, 12)}
-	/**@param {Vector2} tilePos*/
+	/** @param {Vector2} tilePos */
 	isIn = tilePos=> PenRect.contains(tilePos)
 	MiddleY = (this.EntranceTile.y+3.5)*T
 }
