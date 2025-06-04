@@ -110,7 +110,7 @@ const Timer = freeze(new class {
 		TimerMap.set(key ?? Symbol(), {timeout,handler,ignoreFrozen,amount:0})
 	}
 
-	/** @param {...TimerSequenceItem} sequence */
+	/** @param {...readonly [...TimerSequenceItem]} sequence */
 	sequence(...sequence) {
 		if (!sequence.length)
 			return
