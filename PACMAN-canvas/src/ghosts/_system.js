@@ -76,7 +76,7 @@ export const GhsMgr = new class extends Common {
 		})
 		GhsMgr.on({Init:GhsMgr.#initialize})
 	}
-	#aIdx = /**@type {0|1}*/(0)
+	#aIdx =/**@type {0|1}*/(0)
 	get aInterval() {return 6}
 	get animIndex() {return this.#aIdx}
 	get Elroy()     {return Elroy}
