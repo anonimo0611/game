@@ -242,7 +242,7 @@ export class Ghost extends Actor {
 		this.trigger('Cought').state.to('Bitten')
 		Timer.freeze()
 		Sound.play('bitten')
-		new PtsMgr.Points({key:GhsMgr, ...this.centerPos}, fn)
+		PtsMgr.set({key:GhsMgr, ...this.centerPos}, fn)
 	}
 	#setEscape() {
 		Sound.ghostEscape()

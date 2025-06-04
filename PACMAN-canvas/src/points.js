@@ -9,7 +9,11 @@ const PtsMap = /**@type {Map<any, Points>}*/(new Map)
 $on({Title_Clear_Crashed:()=> PtsMap.clear()})
 
 export const PtsMgr = new class {
-	get Points()   {return Points}
+	/**
+	 * @param {PtsData}  data
+	 * @param {Function} [fn]
+	 */
+	set(data,fn)   {new Points(data,fn)}
 	update()       {PtsMap.forEach(v=> v.update())}
 	drawFruitPts() {PtsMap.get(Fruit) ?.draw()}
 	drawGhostPts() {PtsMap.get(GhsMgr)?.draw()}
@@ -17,7 +21,8 @@ export const PtsMgr = new class {
 class Points {
 	/**
 	 * @typedef {import('sprites/points.js').PtsType} PtsType
-	 * @param {{key:{score:PtsType}, x:number, y:number, duration?:number}} data
+	 * @typedef {{key:{score:PtsType}, x:number, y:number, duration?:number}} PtsData
+	 * @param {PtsData}  cfg
 	 * @param {Function} [fn]
 	 */
 	constructor({key,x,y,duration:dur=1e3}, fn) {
