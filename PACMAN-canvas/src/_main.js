@@ -90,7 +90,7 @@ export const Game = new class {
 		Cursor.default()
 		Sound.stop()
 		Game.#resetLevel()
-		Ticker.set(Game.#loop, Game.#draw)
+		Ticker.set(Game.#update, Game.#draw)
 	}
 	#onStart() {
 		Cursor.hide()
@@ -170,9 +170,5 @@ export const Game = new class {
 		Fruit.draw()
 		Actor.draw()
 		Message.draw()
-	}
-	#loop() {
-		Game.#update()
-		Game.#draw()
 	}
 }, $level = $byId('level')
