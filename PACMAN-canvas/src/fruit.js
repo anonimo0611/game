@@ -53,7 +53,7 @@ export const Fruit = new class {
 		if (_tgtDisp && collisionCircle(pos, TargetPos, T/2)) {
 			_tgtDisp = false
 			Timer.cancel(Fruit) && Sound.play('fruit')
-			PtsMgr.set({key:Fruit, duration:2e3, ...TargetPos})
+			PtsMgr.set({key:Fruit, dur:2e3, pos:TargetPos})
 		}
 	}
 	update() {

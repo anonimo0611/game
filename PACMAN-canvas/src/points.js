@@ -10,8 +10,9 @@ $on({Title_Clear_Crashed:()=> PtsMap.clear()})
 
 export const PtsMgr = new class {
 	/**
-	 * @param {PtsData}  data
-	 * @param {Function} [fn]
+	 * @typedef {import('sprites/points.js').PtsType} PtsType
+	 * @typedef {{key:{score:PtsType},pos:Position,dur?:number}} PtsData
+	 * @type {(data:PtsData, fn?:function)=> void}
 	 */
 	set(data,fn)   {new Points(data,fn)}
 	update()       {PtsMap.forEach(v=> v.update())}
@@ -20,15 +21,13 @@ export const PtsMgr = new class {
 }
 class Points {
 	/**
-	 * @typedef {import('sprites/points.js').PtsType} PtsType
-	 * @typedef {{key:{score:PtsType}, x:number, y:number, duration?:number}} PtsData
-	 * @param {PtsData}  cfg
+	 * @param {PtsData}  data
 	 * @param {Function} [fn]
 	 */
-	constructor({key,x,y,duration:dur=1e3}, fn) {
+	constructor({key,pos,dur=1e3}, fn) {
 		const spd  = Game.speedRate, fadeDur = 300
 		this.cache = Spr.cache(key.score)
-		this.pos   = Vec2(x, y)
+		this.pos   = pos
 		this.score = key.score
 		this.fade  = new FadeOut(fadeDur/spd, (dur-fadeDur)/spd)
 		Timer.set(dur/spd, ()=> {
