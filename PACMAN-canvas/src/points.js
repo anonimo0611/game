@@ -11,7 +11,7 @@ $on({Title_Clear_Crashed:()=> PtsMap.clear()})
 export const PtsMgr = new class {
 	/**
 	 * @typedef {import('sprites/points.js').PtsType} PtsType
-	 * @typedef {{key:{score:PtsType},pos:Position,dur?:number}} PtsData
+	 * @typedef {{key:{score:PtsType}, pos:Position, dur?:number}} PtsData
 	 * @type {(data:PtsData, fn?:function)=> void}
 	 */
 	set(data,fn)   {new Points(data,fn)}
