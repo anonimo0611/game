@@ -20,10 +20,10 @@ const {Ticker,Timer} = function() {
 		get pausedCount() {return _pCounter}
 
 		/**
-		 * @param {Function} [handler]
-		 * @param {Function} [pausedHandler]
+		 * @param {Function} [updateFn]
+		 * @param {Function} [drawFn]
 		 */
-		set(handler,pausedHandler) {new Tick(handler,pausedHandler)}
+		set(updateFn,drawFn) {new Tick(updateFn,drawFn)}
 
 		/** @param {boolean} [force] */
 		pause(force) {return _paused=!!(isBool(force)? force : !_paused)}
@@ -32,16 +32,16 @@ const {Ticker,Timer} = function() {
 	})
 	class Tick {
 		/**
-		 * @param {Function} [fn]
-		 * @param {Function} [pausingFn]
+		 * @param {Function} [update]
+		 * @param {Function} [drawFn]
 		 */
-		constructor(fn, pausingFn) {
+		constructor(update, drawFn) {
 			_ticker?.stop()
-			_ticker    = this
-			this.start = this.count = this.stopped = 0
-			this.loop  = this.loop.bind(this)
-			this.fn    = fn
-			this.pFn   = pausingFn
+			_ticker     = this
+			this.start  = this.count = this.stopped = 0
+			this.loop   = this.loop.bind(this)
+			this.update = update
+			this.draw   = drawFn
 			requestAnimationFrame(this.loop)
 		}
 		loop(/**@type {number}*/ts) {
@@ -56,12 +56,13 @@ const {Ticker,Timer} = function() {
 		}
 		proc() {
 			TimerMap.forEach(this.timer)
-			this.fn?.()
+			this.update?.()
+			this.draw?.()
 			_pCounter = 0
 			_fCounter++
 		}
 		pausedProc() {
-			this.pFn?.()
+			this.draw?.()
 			_pCounter++
 		}
 		timer(
