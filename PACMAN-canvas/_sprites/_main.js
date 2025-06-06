@@ -8,9 +8,6 @@ export const View = function() {
 	/** @param {number} colIdx */
 	const ofst = colIdx=> (S*colIdx)+(Gap*colIdx)
 
-	/** @param {Array<string>} array */
-	const toDirs = array=> /**@type {Direction[]}*/(array)
-
 	function draw() {
 		Ctx.save()
 		Ctx.translate(Gap, Gap/2)
@@ -54,7 +51,7 @@ export const View = function() {
 	 */
 	function drawGhost(col, row) {
 		const [x,y]= [ofst(col), row*S]
-		const dirs = toDirs([U,U,L,L,D,D,R,R])
+		const dirs = /**@type {const}*/([U,U,L,L,D,D,R,R])
 		if (row < 5) {
 			ghost.sprite.draw({
 				...ghost,x,y,
@@ -64,7 +61,7 @@ export const View = function() {
 			})
 			return
 		}
-		const orient = toDirs([R,R,R,R,U,L,D,R])[col]
+		const orient = /**@type {const}*/([R,R,R,R,U,L,D,R])[col]
 		ghost.sprite.draw({
 			...ghost,x,y,orient,
 			aIdx:     +(col % 2 != 0),
@@ -93,7 +90,7 @@ export const View = function() {
 		;scoreLst[1].forEach((pts,i)=> draw(pts, (S+Gap/2)+S*(2+Gap/T)*i, S*7+S/2))
 	}
 	function drawPacman() {
-		const dirs = toDirs([U,U,L,L,D,D,R,R])
+		const dirs = /**@type {const}*/([U,U,L,L,D,D,R,R])
 		for (let i=-1; i<=8; i++) {
 			const centerPos = Vec2(T+ofst(i), S*8.5)
 			const cfg = {centerPos, orient:dirs[i-1], radius:T*PacScale}
@@ -101,25 +98,21 @@ export const View = function() {
 		}
 	}
 	function drawAkabei() {
-		const aka = ghost
-		const spr = aka.cbSprite.stakeClothes
-		/** @type {(x:number, y:number, cfg:object)=> void} */
-		function draw(x,y, cfg) {
-			Ctx.save()
-			aka.sprite.draw({...aka, x,y, ...cfg})
-			Ctx.restore()
-		}
+		/** @type {(x: number, y: number, cfg: object)=> void} */
+		const draw = (x,y, cfg)=> aka.sprite.draw({...aka, x,y, ...cfg})
+		const aka = ghost, spr = aka.cbSprite.stakeClothes
+
 		Ctx.translate(S/4, S*9+S/4-Gap/4)
-		{ // Expand clothes
+		;{//Expand clothes
 			const pos = Vec2.Zero, rates = [0.3, 0.5 ,1]
 			for (let i=0,ofst=0; i<3; i++) {
 				draw(...pos.vals, {aIdx:+(i==2)})
 				const nPos = Vec2(pos).add(S*0.75, S/4)
 				spr.expandClothes(+(i==2), rates[i], {...nPos,size:S})
-				pos.x += S*1.2 + (++ofst * Gap)
+				pos.x += S*1.2 + (++ofst*Gap)
 			}
 		}
-		{ // Stake and offcut
+		;{//Stake and offcut
 			const s = T/TileSize
 			const [sx,sy]= Vec2(spr.stakeSize).mul(s).vals
 			// Stake

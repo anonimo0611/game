@@ -35,7 +35,7 @@ const getOrient = ()=> /**@type {Direction}*/(
 		switch(type) {
 		case Type.Pacman:
 			data = new AnimeData({type,subType,pacman:new PacSprite(PvC)})
-			if (setOrient(subType == PacType.Losing)) {
+			if (setOrientCtrl({disabled:subType == PacType.Losing})) {
 				data.pacman?.setLosing()
 				Timer.set(2200, ()=> change(true), {key:'Losing'})
 			}
@@ -45,20 +45,20 @@ const getOrient = ()=> /**@type {Direction}*/(
 		case Type.Aosuke:
 		case Type.Guzuta:
 			data = new AnimeData({type,subType,ghost:new Ghost(T*2)})
-			setOrient(subType != GhsType.Normal)
+			setOrientCtrl({disabled:subType != GhsType.Normal})
 			break
 		case Type.Frightened:
 			data = new AnimeData({type,subType,ghost:new Ghost(T*2)})
-			setOrient(true)
+			setOrientCtrl({disabled:true})
 			break
 		case Type.None:
 			data = new AnimeData()
 			Timer.cancelAll()
-			setOrient(true)
+			setOrientCtrl({disabled:true})
 			break
 		}
 	}
-	function setOrient(disabled=false) {
+	function setOrientCtrl({disabled=false}) {
 		$(radioSelector).prop({disabled})
 		!disabled && (data.orient = getOrient())
 		return disabled
