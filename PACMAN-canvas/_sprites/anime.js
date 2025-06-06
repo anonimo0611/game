@@ -2,7 +2,7 @@ import {Dir}     from '../_lib/direction.js'
 import * as Menu from '../_lib/menu.js'
 import PacSprite from '../src/sprites/pacman.js'
 import {Ghost}   from './actor.js'
-import {T,S,ghost} from './_constants.js'
+import {T,S,ghost,resize} from './_constants.js'
 export const {ctx:PvC}= canvas2D('previewCvs')
 
 const Type    = /**@type {const}*/({None:-1,Pacman:0,Akabei:1,Pinky:2,Aosuke:3,Guzuta:4,Frightened:5})
@@ -58,7 +58,7 @@ const getOrient = ()=> /**@type {Direction}*/(
 			break
 		}
 	}
-	function setOrientCtrl({disabled=false}) {
+	function setOrientCtrl({disabled=false}={}) {
 		$(radioSelector).prop({disabled})
 		!disabled && (data.orient = getOrient())
 		return disabled
@@ -89,6 +89,7 @@ const getOrient = ()=> /**@type {Direction}*/(
 		PvC.restore()
 	}
 	function update() {
+		resize()
 		if (data.type < 0)
 			return
 		data.animIdx  ^= +(Ticker.count %  6 == 0)
