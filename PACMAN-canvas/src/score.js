@@ -18,6 +18,7 @@ export const Score = new class {
 		})
 	}
 	#init() {
+		_score = 0
 		_hiSco = localStorage.anopac_hiscore|0
 	}
 	#save() {

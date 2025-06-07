@@ -30,7 +30,7 @@ export class CoffBrk {
 	akabei  = new Ghost
 	pacVelX = -CvsW/180
 
-	/**@protected*/
+	/** @protected */
 	constructor() {
 		this.pacman.y = this.akabei.y = (CvsH/2 - T/2)
 		$onNS('.CB',{Quit:this.end, blur_focus:this.pause})

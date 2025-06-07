@@ -61,7 +61,7 @@ export class SoundMgr {
 		instance.play(this.#configMerge(id, cfg))
 	}
 
-	/** @param {...SoundType}ids */
+	/** @param {...SoundType} ids */
 	stop(...ids) {
 		ids.length == 0 && SoundJS.stop()
 		ids.forEach(id=> Instance.get(id)?.stop())

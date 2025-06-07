@@ -13,12 +13,13 @@ const volRg2 = ctrl('volRg2')
 			$('.volCtrl').hide()
 			return
 		}
-		Sound.vol = localStorage.anoPacVolume ?? 5
+		Sound.vol = localStorage.anopac_volume ?? 5
 		$win.on({keydown:e=> this.onKeydown(e)})
 		$('#cvs_speaker')
 			.on({click:this.mute})
 			.on({wheel:this.onInput})
 		$('.volRng')
+			.prop({value:Sound.vol})
 			.prop({defaultValue:Sound.vol})
 			.on({input:this.onInput})
 	}
@@ -27,10 +28,12 @@ const volRg2 = ctrl('volRg2')
 		$(volRng)
 			.prop({value:Sound.vol? 0 : _lstVol})
 			.trigger('input')
+
 	}
 	onInput(/**@type {Event}*/e) {
 		const isInputElem = e.target instanceof HTMLInputElement
 		Sound.vol = (isInputElem? e.target : volRng).valueAsNumber
+		localStorage.anopac_volume =  Sound.vol
 	}
 	onKeydown(/**@type {JQuery.KeyDownEvent}*/e) {
 		if (keyRepeat(e) || isCombinationKey(e))

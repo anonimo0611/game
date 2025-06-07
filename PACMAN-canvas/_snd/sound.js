@@ -13,7 +13,7 @@ export const Sound = new class extends SoundMgr {
 	get vol() {return super.vol}
 	set vol(vol) {
 		if (!Sound.disabled) {
-			localStorage.anoPacVolume = super.vol = clamp(+vol, 0, 10)
+			super.vol = clamp(+vol, 0, 10)
 			Speaker.draw(Sound.vol)
 		}
 	}

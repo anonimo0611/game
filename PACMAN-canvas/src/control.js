@@ -36,39 +36,40 @@ export const Ctrl = new class {
 			innerHeight/Form.offsetHeight)
 		Form.style.scale = min(1, round(scale*100)/100).toString()
 	}
-	#update() {
-		Ctrl.#drawInfo()
-		Ctrl.#saveData()
-		return this
-	}
-	#saveData() {
+	#save() {
 		const data = Object.create(null)
-		document.querySelectorAll('input').forEach(e=> {
-			if (!e.id) return
-			data[e.id]= {range:+e.value, checkbox:e.checked}[e.type]
-		})
 		MenuIds.forEach(id=> data[id] = Menu[id].index)
+		document.querySelectorAll('input').forEach(e=> {
+			switch(e.type) {
+			case 'range':   data[e.id]=e.value;  break
+			case 'checkbox':data[e.id]=e.checked;break
+			}
+		})
 		localStorage.anopacman = JSON.stringify(data)
 	}
-	#removeData() {
-		localStorage.removeItem('anopacman')
+	#restore() {
+		if (!localStorage.anopacman) return
+		const data = JSON.parse(localStorage.anopacman)
+		MenuIds.forEach(id=> Menu[id].index = data[id])
+		document.querySelectorAll('input').forEach(e=> {
+			switch(e.type) {
+			case 'range':   e.value  =data[e.id];break
+			case 'checkbox':e.checked=data[e.id];break
+			}
+		})
+	}
+	#clearHiScore() {
 		localStorage.removeItem('anopac_hiscore')
-		Ctrl.#setDefault()
 		State.to('Title')
 	}
 	#setDefault() {
 		Form.reset()
 		Ctrl.#update().#restore()
 	}
-	#restore() {
-		const data = JSON.parse(localStorage.anopacman||null)||{}
-		for (const [id,val] of entries(data)) {
-			switch(ctrl(id)?.type) {
-			case 'range':   ctrl(id).value  =val;break
-			case 'checkbox':ctrl(id).checked=val;break
-			}
-		}
-		MenuIds.forEach(id=> Menu[id].index = data[id])
+	#update() {
+		Ctrl.#save()
+		Ctrl.#drawInfo()
+		return this
 	}
 	draw() {
 		if (!Ctrl.showGridLines) return
@@ -100,9 +101,9 @@ export const Ctrl = new class {
 		for (const menu of values(Menu)) {
 			menu.on({change:Ctrl.#update})
 		}
-		$('#clearStorageBtn').on({click:()=>
-			Confirm.open('Are you sure you want to clear local storage?',
-				null,Ctrl.#removeData, 'No','Yes', 0)
+		$('#clearHiScore').on({click:()=>
+			Confirm.open('Are you sure you want to clear high-score?',
+				null,Ctrl.#clearHiScore, 'No','Yes', 0)
 		})
 		$('input')    .on({input:Ctrl.#update})
 		$('#defBtn')  .on({click:Ctrl.#setDefault})
