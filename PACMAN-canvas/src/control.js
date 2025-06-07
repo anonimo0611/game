@@ -1,4 +1,5 @@
 import {Confirm}  from '../_lib/confirm.js'
+import {Score}    from './score.js'
 import {Menu}     from './ui.js'
 import {MenuIds}  from './ui.js'
 import {State}    from './state.js'
@@ -60,7 +61,7 @@ export const Ctrl = new class {
 	}
 	#clearHiScore() {
 		localStorage.removeItem('anopac_hiscore')
-		State.to('Title')
+		Score.reset()
 	}
 	#setDefault() {
 		Form.reset()

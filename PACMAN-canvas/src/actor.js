@@ -82,8 +82,8 @@ export class Actor extends Common {
 		return v.setX((v.x+Cols) % Cols) // x-axis loops
 	}
 	collidedWithWall(dir=this.dir) {
-		const  {step,centerPos}= this
-		const  {x,y}= Vec2[dir].mul(T/2+step).add(centerPos).divInt(T)
+		const {step,centerPos}= this
+		const {x,y}= Vec2[dir].mul(T/2+step).add(centerPos).divInt(T)
 		return Maze.hasWall({x:(x+Cols) % Cols, y}) // x-axis loops
 	}
 	/**

@@ -10,14 +10,14 @@ let _saveS=0,_saveH=0
 export const Score = new class {
 	static {$ready(this.setup)}
 	static setup() {
+		Score.reset()
 		$on({
-			Title:   Score.#init,
 			Quit:    Score.#restore,
 			Start:   Score.#onStart,
 			GameOver:Score.#onGameOver,
 		})
 	}
-	#init() {
+	reset() {
 		_score = 0
 		_hiSco = localStorage.anopac_hiscore|0
 	}
