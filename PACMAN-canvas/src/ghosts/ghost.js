@@ -17,6 +17,7 @@ export class Ghost extends Actor {
 	#isStarted = false
 	#isFright  = false
 
+	/** @readonly */
 	TurnDirs = /**@type {readonly Direction[]}*/([U,L,D,R])
 
 	// This section is overridden in subclasses

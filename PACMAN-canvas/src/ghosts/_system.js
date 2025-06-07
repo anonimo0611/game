@@ -77,8 +77,8 @@ export const GhsMgr = new class extends Common {
 		GhsMgr.on({Init:GhsMgr.#initialize})
 	}
 	#aIdx = /**@type {0|1}*/(0)
-	get aInterval() {return Ticker.count % 6 == 0}
 	get animIndex() {return this.#aIdx}
+	get aInterval() {return Ticker.count % 6 == 0}
 	get Elroy()     {return Elroy}
 	get isScatter() {return AlternateBetweenModes.isScatter}
 	get isFright()  {return FrightMode.session != null}
@@ -283,6 +283,6 @@ const FrightMode = function() {
 	return {
 		get session()   {return _session},
 		get numOfSecs() {return numOfSecs()},
-		new() {(State.isAttract || this.numOfSecs) && new Session()},
+		new() {(State.isAttract || this.numOfSecs) && new Session},
 	}
 }()
