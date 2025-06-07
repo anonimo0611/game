@@ -1,7 +1,7 @@
 import {Dir}    from './direction.js'
 import {Common} from './common.js'
 
-class Menu extends Common {
+export class Menu extends Common {
 	get value()  {return this.selectedItem.val}
 	get index()  {return $(this.selectedItem).index()}
 	set index(i) {(i>=0 && i<this.size) && this.select(i)}
@@ -16,7 +16,7 @@ class Menu extends Common {
 	 * @param {string} type
 	 */
 	constructor(id, type) {
-		const root  = /**@type {MenuRoot}   */($byId(id).attr({type}) .get(0))
+		const root  = /**@type {CustomMenu} */($byId(id).attr({type}) .get(0))
 		const menu  = /**@type {HTMLElement}*/($(root).find('mn-list').get(0))
 		const items = /**@type {MenuItem[]} */($(menu).find('mn-item').get())
 
@@ -39,13 +39,12 @@ class Menu extends Common {
 		items.forEach(i=> $(i).css('--val', i.val))
 		$(this.root).closest('form').on('reset', this.reset)
 	}
-	/** @protected */
 	select(idx=0) {
 		if (!between(idx, 0, this.size-1))
 			throw ReferenceError('List index out of range')
 		this.selectedItem.classList.remove('selected')
 		this.items[idx].classList.add('selected')
-		this.trigger('change')
+		return this.trigger('change')
 	}
 	reset() {this.select(this.defaultIndex)}
 }
@@ -96,12 +95,11 @@ export class DorpDown extends Menu {
 			}
 		}
 	}
-	/** @protected */
 	select(idx=this.index, {close=true}={}) {
 		super.select(idx)
 		const item = this.selectedItem
 		$(this.cur).css('--val', item.val).text(item.innerText)
-		return close && this.close() || this
+		return (close && this.close()) || this
 	}
 }
 
@@ -136,20 +134,20 @@ export class Slide extends Menu {
 		$(this.root) .css('width',`${this.#width}px`)
 		$(this.items).css('width',`${this.#width}px`)
 	}
-	/** @protected */
 	select(idx=this.index) {
 		super.select(idx)
 		this.menu.style.transform  =`translateX(${-this.#width*idx}px)`
 		this.btnL.dataset.disabled = String(idx == 0)
 		this.btnR.dataset.disabled = String(idx == this.size-1)
+		return this
 	}
 }
 
-class MenuRoot extends HTMLElement{
+class CustomMenu extends HTMLElement{
 	get type() {return 'menu'}
 }
 class MenuItem extends HTMLElement{
 	get val()  {return $(this).attr('val') ?? ''}
 }
-customElements.define('custom-menu', MenuRoot)
+customElements.define('custom-menu', CustomMenu)
 customElements.define('mn-item', MenuItem)
