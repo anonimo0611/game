@@ -136,8 +136,7 @@ export const GhsMgr = new class extends Common {
 	}
 }
 
-const SCATTER = 0
-const CHASE   = 1
+const SCATTER=0, CHASE=1
 const AlternateBetweenModes = function() {
 	{
 		let seq={mode:SCATTER,update(){}}
@@ -165,7 +164,7 @@ const AlternateBetweenModes = function() {
 		const durList  = genDurList()
 		const duration = ()=> durList[idx]/Game.speedRate
 		const Seq = {
-			mode: +Ctrl.isChaseMode,
+			mode: Ctrl.isChaseMode? CHASE:SCATTER,
 			update() {
 				if (Timer.frozen
 				 || GhsMgr.isFright
@@ -174,7 +173,7 @@ const AlternateBetweenModes = function() {
 				[cnt,Seq.mode] = [0,(++idx % 2)]
 				setReversalSig()
 			}
-		};return Seq.mode? {mode:CHASE,update(){}}:Seq
+		};return Seq.mode==CHASE ? {mode:CHASE,update(){}} : Seq
 	}
 }(),
 setReversalSig = ()=> {
