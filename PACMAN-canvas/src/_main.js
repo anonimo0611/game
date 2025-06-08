@@ -31,9 +31,9 @@ export const Game = new class {
 			FlashMaze:Game.#onFlashMaze,
 			NewLevel: Game.#onNewLevel,
 			Losing:   Game.#onLosing,
+			GameOver: Game.#onGameOver,
+			Quit:     Game.#onQuit,
 			Restart:  Game.#levelBegins,
-			GameOver: Game.#levelEnds,
-			Quit:     Game.#levelEnds,
 		})
 		Menu.Level.on({change:Game.#resetLevel})
 		State.to('Title') && (dBody.dataset.loaded='true')
@@ -53,6 +53,7 @@ export const Game = new class {
 	get moveSpeed() {return Game.speedRate * Game.speedByLv}
 
 	#resetLevel() {
+		Game.#restarted = false
 		Game.#setLevel(Menu.Level.index+1)
 	}
 	#setLevel(i=1) {
@@ -124,31 +125,27 @@ export const Game = new class {
 		Game.#setLevel(Game.level+1)
 		Game.#levelBegins()
 	}
+	#onGameOver() {
+		State.to('Title', {delay:2500})
+	}
+	#onQuit() {
+		Ticker.stop()
+		State.to('Title')
+	}
 	#levelBegins() {
 		Game.#restarted = State.isRestart
 		State.to('Ready').to('Playing', {delay:2200})
 	}
 	#levelEnds() {
 		Game.#restarted = false
-		if (State.isQuit) {
-			Ticker.stop()
+		if (!Ctrl.consecutive) {
 			State.to('Title')
 			return
 		}
-		if (State.isGameOver) {
-			State.to('Title', {delay:2500})
-			return
-		}
-		if (State.isFlashMaze) {
-			if (!Ctrl.consecutive) {
-				State.to('Title')
-				return
-			}
-			const imLv = CoffBrk.intermissionLevel
-			Ctrl.isPractice || imLv < 0
-				? State.to('NewLevel')
-				: State.to('CoffBrk', {data:imLv})
-		}
+		const imLv = CoffBrk.intermissionLevel
+		Ctrl.isPractice || imLv < 0
+			? State.to('NewLevel')
+			: State.to('CoffBrk', {data:imLv})
 	}
 	#update() {
 		PtsMgr.update()
