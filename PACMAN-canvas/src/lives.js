@@ -2,7 +2,8 @@ import {State} from './state.js'
 import {Ctrl}  from './control.js'
 import Sprite  from './sprites/pacman.js'
 
-/** @typedef {'Title'|'Start'|'Ready'|'Restart'} EvType */
+const EvTypes = /**@type {const}*/
+	(['Title','Start','Ready','Restart'])
 
 export const Lives = function() {
 	let   _left  = 0
@@ -16,7 +17,7 @@ export const Lives = function() {
 			Start:  ()=> _left += +1,
 			Ready:  ()=> _left += State.last('Start')? -1:0,
 			Restart:()=> _left += -1,
-		})[/**@type {EvType}*/(State.current)]()
+		})[/**@type {typeof EvTypes[number]}*/(State.current)]()
 		draw()
 	}
 	function draw() {
@@ -27,7 +28,7 @@ export const Lives = function() {
 			sprite.draw({radius,centerPos:Vec2(size*i+T,T)})
 		ctx.restore()
 	}
-	$on({Title_Start_Ready_Restart:onChange})
+	$on(EvTypes.join('_'), onChange)
 	$('#lvsRng').on({input:onChange})
 
 	return {
