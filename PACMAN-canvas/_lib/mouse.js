@@ -26,7 +26,7 @@ function setupCtrl(ctrl) {
 	const output = qS(`output[for~="${ctrl.id}"]`) ?? []
 	const ids    = ctrl.dataset.links?.trim().split(/\s+/) ?? []
 	const label  = ctrl.closest('label') || qS(`label[for="${ctrl.id}"]`)
-	const links  = ids.map(id=> qS(`input#${id}`)).filter(isObj)
+	const links  = ids.map(id=> qS(`input#${id}`)).filter(e=> e!=null)
 
 	/** @param {WheelEvent} e */
 	function onWheel(e) {

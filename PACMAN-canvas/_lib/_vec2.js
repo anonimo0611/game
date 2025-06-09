@@ -23,16 +23,20 @@ class Vector2 {
 	constructor(v1,v2) {this.set(v1, v2)}
 
 	/**
-	 * @param {*} v1
+	 * @param {number|Position} [v1]
 	 * @param {number} [v2]
 	 */
 	#validXY(v1,v2) {
+		if (typeof v1 == 'object') {
+			return v1
+		}
+		if (typeof v1 == 'number'
+		 && typeof v2 == 'number') {
+			return {x:v1, y:v2}
+		}
 		v1 ??= 0
-		Number.isFinite(v1) && (v2 ??= v1)
-		const [x,y] = isObj(v1) ? [v1.x, v1.y] : [v1, v2]
-		if (!Number.isFinite(x)) throw TypeError(`\`${x}\` is an ilegal x value`)
-		if (!Number.isFinite(y)) throw TypeError(`\`${y}\` is an ilegal y valuer`)
-		return {x,y}
+		v2 ??= v1
+		return {x:v1, y:v2}
 	}
 
 	/**
@@ -122,7 +126,7 @@ for (const [k,v] of entries(Vec2)) {
 }
 /**
  * @param {Position} v
- */Vec2.isValid = v=> isObj(v) && Number.isFinite(v.x) && Number.isFinite(v.y)
+ */Vec2.isValid = v=> v && Number.isFinite(v.x) && Number.isFinite(v.y)
 
 /**
  * @param {Position} v1

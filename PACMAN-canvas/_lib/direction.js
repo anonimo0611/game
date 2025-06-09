@@ -10,7 +10,7 @@ export const Dir = freeze({
 
 	/** @param {KeyboardEvent|JQuery.KeyDownEvent} e */
 	from(e, {wasd=false}={}) {
-		if (isCombinationKey(e)) return null
+		if (isCombiKey(e)) return null
 		const k = e.code.replace(/^(Arrow|Key)/,'')
 		return /**@type {?Direction}*/(
 			DirSet.has(k) ? k : (wasd && FromWASD.get(k)) || null

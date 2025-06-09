@@ -3,13 +3,13 @@ const {isArray}= Array
 const {defineProperty,entries,freeze,hasOwn,keys,values}= Object
 const {abs,ceil,floor,max,min,PI,random,round,sqrt,trunc:int}= Math
 
-const dRoot  = document.getElementsByTagName('html')[0]
-const byId   = (/**@type {string} */elementId)=> document.getElementById(elementId)
-const isObj  = (/**@type {unknown}*/arg)=> typeof(arg)=='object' && !!arg && !isArray(arg)
-const isBool = (/**@type {unknown}*/arg)=> arg === true || arg === false
+const dRoot = document.getElementsByTagName('html')[0]
+const byId  = (/**@type {string} */elementId)=>
+	document.getElementById(elementId)
 
 /** @param {KeyboardEvent|JQuery.KeyDownEvent} e */
-const keyRepeat = e=> !!(e instanceof KeyboardEvent ? e : e.originalEvent)?.repeat
+const keyRepeat = e=>
+	(e instanceof KeyboardEvent ? e : e.originalEvent)?.repeat ?? false
 
 /** @param {WheelEvent|JQuery.TriggeredEvent} e */
 const wheelDeltaY = e=> /**@type {WheelEvent}*/
@@ -19,7 +19,7 @@ const wheelDeltaY = e=> /**@type {WheelEvent}*/
 const isEnterKey = e=> /^(\x20|Enter)$/.test(e.key)
 
 /** @param {KeyboardEvent|JQuery.KeyDownEvent} e */
-const isCombinationKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
+const isCombiKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
 /**
  * @param {string} selector
@@ -77,7 +77,7 @@ const isCombinationKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
 /**
  * @template T
- * @param {Array<T>} array
+ * @param {T[]} array
  * @returns {T}
  */const randChoice = array=> array[randInt(0, array.length-1)]
 
@@ -151,7 +151,7 @@ const $trigger = (event,data)=> $win.trigger(event,data)
  * @param {string|object} arg
  * @param {Function} [fn]
  * @type {{
- *    (event:string, fn:Function):JQuery<typeof globalThis>
+ *    (event:string, fn:Function):    JQuery<typeof globalThis>
  *    (arg:{[event:string]:Function}):JQuery<typeof globalThis>
  * }}
  */

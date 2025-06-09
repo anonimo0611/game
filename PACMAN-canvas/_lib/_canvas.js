@@ -31,7 +31,7 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 
 	/** @param {CanvasStyle} [style] */
 	clear(style) {
-		this.fillRect(0,0,this.width,this.height,style??null)
+		this.fillRect(0,0, this.width, this.height, style ?? null)
 		return this
 	}
 
@@ -42,7 +42,7 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 	 * @param {number} h
 	 * @param {?CanvasStyle} style
 	 */
-	fillRect(x, y, w, h, style=this.fillStyle) {
+	fillRect(x,y, w,h, style=this.fillStyle) {
 		this.save()
 		style && (this.fillStyle = style)
 		style === null
@@ -57,13 +57,13 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 	 * @param {number} radius
 	 * @param {?CanvasStyle} style
 	 */
-	fillCircle(x, y, radius, style=this.fillStyle) {
+	fillCircle(x,y, radius, style=this.fillStyle) {
 		this.save()
 		this.beginPath()
 		style === null
 			? (this.globalCompositeOperation = 'destination-out')
 			: (this.fillStyle = style)
-		this.arc(x, y, radius, 0, PI*2)
+		this.arc(x,y, radius, 0, PI*2)
 		this.fill()
 		this.restore()
 	}
@@ -75,11 +75,11 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 	 * @param {CanvasStyle} style
 	 * @param {number} lineWidth
 	 */
-	strokeCircle(x, y, r, style=this.fillStyle, lineWidth=1) {
+	strokeCircle(x,y, r, style=this.fillStyle, lineWidth=1) {
 		this.save()
 		this.beginPath()
 		style && (this.strokeStyle = style)
-		this.arc(x, y, r, 0, PI*2)
+		this.arc(x,y, r, 0, PI*2)
 		this.lineWidth = lineWidth
 		this.stroke()
 		this.restore()

@@ -21,7 +21,7 @@ export class Menu extends Common {
 		const items = /**@type {MenuItem[]} */($(menu).find('mn-item').get())
 
 		if (!root || !menu || !items.length) {
-			throw ReferenceError('The Menu structure of the document is incorrect')
+			throw ReferenceError('The menu structure is invalid')
 		}
 		super({eventTarget:menu})
 		this.root  = root

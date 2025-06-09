@@ -26,7 +26,7 @@ const {Ticker,Timer} = function() {
 		set(updateFn,drawFn) {new Tick(updateFn,drawFn)}
 
 		/** @param {boolean} [force] */
-		pause(force) {return _paused=!!(isBool(force)? force : !_paused)}
+		pause(force) {return _paused=!!(force? force : !_paused)}
 		stop()       {this.running && _ticker?.stop();return this}
 		resetCount() {this.running && _ticker?.resetCount()}
 	})
