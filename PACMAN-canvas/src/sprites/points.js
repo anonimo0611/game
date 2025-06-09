@@ -50,24 +50,18 @@ export function cache(pts, size=TileSize*2) {
 	ctx.strokeStyle = isGhs? Color.GhostPts:Color.FruitPts
 	PosListFrom100to5000[pts]
 	?.forEach(([n,x,y],i)=> {
-		(pts == 1600 && i == 0) // narrow 1
-			? stroke([x,y,x,y+6])
-			: function() {
-				ctx.save()
-				ctx.translate(x,y)
-				stroke(PathFrom0To8[n], n==0 || n==8)
-				ctx.restore()
-			}()
-	})
-	/** @param {readonly number[]} path */
-	function stroke(path, isClose=false) {
-		ctx.beginPath()
-		ctx.moveTo(path[0], path[1])
-		for (let i=2; i<path.length; i+=2)
-			ctx.lineTo(path[i], path[i+1])
-		isClose && ctx.closePath()
+		(pts == 1600 && i == 0)
+		? ctx.newLinePath([x,y],[x,y+6]) //narrow 1
+		: function() {
+			ctx.save()
+			ctx.translate(x,y)
+			ctx.newLinePath(.../**@type {xyList[]}*/
+				(chunk(PathFrom0To8[n],2)))
+			;(n==0 || n==8) && ctx.closePath()
+			ctx.restore()
+		}()
 		ctx.stroke()
-	}
+	})
 	ctx.restore()
 	return /**@type {const}*/({ctx,w,h})
 }
