@@ -53,7 +53,7 @@ h1 {
 	transition: opacity 0ms 100ms;
 	will-change: opacity transform;
 }
-body[data-loaded=true] #board {
+body[data-state] #board {
 	opacity: 1;
 }
 #boardCanvases {
@@ -77,8 +77,14 @@ body:is([data-state=Attract],[data-state=CoffBrk]) {
 	z-index: 100;
 	top: 6.9rem;
 }
-body:not([data-state=Title]) #titleScr {
-	display: none;
+body:not([data-state]) #titleScr {
+	visibility: hidden;
+	display: block;
+}
+body[data-state] {
+	&:not([data-state=Title]) #titleScr {
+		display: none;
+	}
 }
 
 #startBtn {
