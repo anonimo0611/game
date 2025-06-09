@@ -22,22 +22,27 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		h != cvs.height && typeof(h) == 'number' && h>=0 && (cvs.height=h)
 		return this
 	}
+
+	/** @param {number} alpha */
+	setAlpha(alpha=this.globalAlpha) {
+		this.globalAlpha = alpha
+		return this
+	}
+
 	/** @param {CanvasStyle} [style] */
 	clear(style) {
 		this.fillRect(0,0,this.width,this.height,style??null)
 		return this
 	}
-	setAlpha(alpha=this.globalAlpha) {
-		this.globalAlpha = alpha
-		return this
-	}
-	fillRect(
-	 /**@type {number}*/x,
-	 /**@type {number}*/y,
-	 /**@type {number}*/w,
-	 /**@type {number}*/h,
-	 /**@type {?CanvasStyle}*/style=this.fillStyle
-	) {
+
+	/**
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {number} w
+	 * @param {number} h
+	 * @param {?CanvasStyle} style
+	 */
+	fillRect(x, y, w, h, style=this.fillStyle) {
 		this.save()
 		style && (this.fillStyle = style)
 		style === null
@@ -45,12 +50,14 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 			: super.fillRect(x, y, w, h)
 		this.restore()
 	}
-	fillCircle(
-	 /**@type {number}*/x,
-	 /**@type {number}*/y,
-	 /**@type {number}*/radius,
-	 /**@type {?CanvasStyle}*/style=this.fillStyle
-	) {
+
+	/**
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {number} radius
+	 * @param {?CanvasStyle} style
+	 */
+	fillCircle(x, y, radius, style=this.fillStyle) {
 		this.save()
 		this.beginPath()
 		style === null
@@ -60,13 +67,15 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		this.fill()
 		this.restore()
 	}
-	strokeCircle(
-	 /**@type {number}*/x,
-	 /**@type {number}*/y,
-	 /**@type {number}*/r,
-	 /**@type {CanvasStyle}*/style=this.fillStyle,
-	 /**@type {number}*/lineWidth=1
-	) {
+
+	/**
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {number} r
+	 * @param {CanvasStyle} style
+	 * @param {number} lineWidth
+	 */
+	strokeCircle(x, y, r, style=this.fillStyle, lineWidth=1) {
 		this.save()
 		this.beginPath()
 		style && (this.strokeStyle = style)
@@ -75,49 +84,52 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		this.stroke()
 		this.restore()
 	}
-	strokeLine(
-	 /**@type {number}*/x1,
-	 /**@type {number}*/y1,
-	 /**@type {number}*/x2,
-	 /**@type {number}*/y2
-	) {
+
+	/**
+	 * @param {number} x1
+	 * @param {number} y1
+	 * @param {number} x2
+	 * @param {number} y2
+	 */
+	strokeLine(x1, y1, x2, y2) {
 		this.beginPath()
 		this.moveTo(x1, y1)
 		this.lineTo(x2, y2)
 		this.stroke()
 	}
-	newLinePath(
-	 /**@type {xyList[]}*/...c
-	) {
+
+	/** @param {[x:number, y:number][]} c */
+	newLinePath(...c) {
 		this.beginPath()
 		this.setLinePath(...c)
 		return this
 	}
-	setLinePath(
-	 /**@type {xyList[]}*/...c
-	) {
+
+	/** @param {[x:number, y:number][]} c */
+	setLinePath(...c) {
 		c.forEach(([x,y], i)=> {
 			!i ? this.moveTo(x,y)
 			   : this.lineTo(x,y)
 		})
 		return this
 	}
-	addLinePath(
-	 /**@type {xyList[]}*/...c
-	) {
+
+	/** @param {[x:number, y:number][]} c */
+	addLinePath(...c) {
 		c.forEach(([x,y])=> this.lineTo(x,y))
 		return this
 	}
-	fillPolygon(
-	 /**@type {CanvasStyle}*/style,
-	 /**@type {xyList[]}*/...c
-	) {
+
+	/**
+	 * @param {CanvasStyle} style
+	 * @param {[x:number, y:number][]} c
+	 */
+	fillPolygon(style, ...c) {
 		this.save()
 		this.newLinePath(...c)
 		this.fillStyle = style
 		this.fill()
 		this.restore()
-		return this
 	}
 }
 
