@@ -91,7 +91,7 @@ class Tunnel {
 	}
 }
 
-export const Maze = new class {
+export const Maze = new class _Maze {
 	static {$ready(this.setup)}
 	static setup() {
 		for (const [i,c] of MapArr.entries())
@@ -159,13 +159,14 @@ export const Maze = new class {
 	 * @param {ExtendedContext2D} ctx
 	 * @param {number}  col
 	 * @param {number}  row
-	 * @param {boolean} isLarge
+	 * @param {boolean} isPow
 	 * @param {?CanvasStyle} color
 	 */
-	drawDot(ctx, col,row, isLarge=false, color=Color.Dot) {
-		ctx.fillCircle(col*T+T/2, row*T+T/2, T/(isLarge? 2:8), color)
+	drawDot(ctx, col,row, isPow=false, color=Color.Dot) {
+		const v = Vec2(col,row).add(.5).mul(T).vals
+		ctx.fillCircle(...v, T/(isPow? 2:8), color)
 	}
 	#drawDoor() {
-		Bg.ctx.fillRect(13*T, 13.6*T, T*2, T/4, Color.Door)
+		Bg.ctx.fillRect(T*13, T*13.6, T*2, T/4, Color.Door)
 	}
 }, {drawDot}=freeze(Maze)
