@@ -68,7 +68,8 @@ export const Game = new class {
 	#pause(force) {
 		State.isPlaying && (Sound.allPaused=Ticker.pause(force))
 	}
-	#onKeydown(/**@type {KeyboardEvent}*/e) {
+	/** @param {KeyboardEvent} e */
+	#onKeydown(e) {
 		if (!Sound.loaded || Confirm.opened || keyRepeat(e))
 			return
 		switch(e.key) {
@@ -94,7 +95,6 @@ export const Game = new class {
 		Ticker.set(Game.#update, Game.#draw)
 	}
 	#onStart() {
-		if (!Sound.loaded) return
 		Cursor.hide()
 		Sound.play('start')
 		Timer.set(2200, Game.#levelBegins)
