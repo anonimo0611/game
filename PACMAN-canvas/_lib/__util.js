@@ -81,6 +81,17 @@ const isCombinationKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
  * @returns {T}
  */const randChoice = array=> array[randInt(0, array.length-1)]
 
+ /**
+ * @template T
+ * @param {readonly T[]} a
+ * @param {number} size
+ * @returns {T[][]}
+ */const chunk = (a, size) =>
+    Array.from(
+        {length:ceil(a.length/size)},
+        (_,i)=> a.slice(i*size, i*size + size)
+    )
+
 /**
  * @param {Position} v1
  * @param {Position} v2
