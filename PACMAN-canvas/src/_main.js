@@ -19,7 +19,7 @@ import {Attract} from './demo/attract.js'
 import {CoffBrk} from './demo/coffee_break.js'
 
 export const Game = new class {
-	static {$load(this.setup)}
+	static {$ready(this.setup)}
 	static setup() {
 		$on({
 			blur:()=> Game.#pause(true),
@@ -36,7 +36,6 @@ export const Game = new class {
 			Restart:  Game.#levelBegins,
 		})
 		Menu.Level.on({change:Game.#resetLevel})
-		State.to('Title') && (dBody.dataset.loaded='true')
 	}
 	#level = 1
 	#restarted = false
@@ -69,18 +68,19 @@ export const Game = new class {
 	#pause(force) {
 		State.isPlaying && (Sound.allPaused=Ticker.pause(force))
 	}
-	/** @param {KeyboardEvent} e */
-	#onKeydown(e) {
-		if (Confirm.opened || keyRepeat(e)) return
-		switch (e.key) {
+	#onKeydown(/**@type {KeyboardEvent}*/e) {
+		if (!Sound.loaded || Confirm.opened || keyRepeat(e))
+			return
+		switch(e.key) {
 		case 'Escape': return Game.#pause()
 		case 'Delete': return function() {
-			!e.ctrlKey
-				? State.isPlaying && Game.#confirm()
-				: State.to('Quit')
+			e.ctrlKey
+				? State.to('Quit')
+				: State.isPlaying && Game.#confirm()
 			}()
 		default:
-			if (qS(':not(#startBtn):focus')) return
+			if (qS(':not(#startBtn):focus'))
+				return
 			if (Dir.from(e,{wasd:true}) || e.key == '\x20') {
 				State.isTitle && State.to('Start')
 				Ticker.paused && Game.#pause()
@@ -94,6 +94,7 @@ export const Game = new class {
 		Ticker.set(Game.#update, Game.#draw)
 	}
 	#onStart() {
+		if (!Sound.loaded) return
 		Cursor.hide()
 		Sound.play('start')
 		Timer.set(2200, Game.#levelBegins)
