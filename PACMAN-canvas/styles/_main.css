@@ -77,10 +77,6 @@ body:is([data-state=Attract],[data-state=CoffBrk]) {
 	z-index: 100;
 	top: 6.9rem;
 }
-body:not([data-state]) #titleScr {
-	visibility: hidden;
-	display: block;
-}
 body[data-state] {
 	&:not([data-state=Title]) #titleScr {
 		display: none;
