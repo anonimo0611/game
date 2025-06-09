@@ -1,11 +1,11 @@
- const {ctx}=Bg
+const {ctx}= Bg
 
-const ScaleTable = /**@type {const}*/
+const ScaleTable =
+	/**@type {readonly xyList[]}*/
 	([[1,1],[-1,1],[-1,-1],[1,-1]])
 
 import {Maze} from '../maze.js'
-export const Wall = new class
-{
+export const Wall = new class {
 	draw(color=Color.Wall) {
 		ctx.save()
 		ctx.clear()
@@ -32,10 +32,9 @@ export const Wall = new class
 	 * @param {number} type
 	 */
 	#drawCorner(idx, x, y, type) {
-		const [sx,sy]= ScaleTable[idx]
 		ctx.save()
 		ctx.translate(x+T/2, y+T/2)
-		ctx.scale(sx, sy)
+		ctx.scale(...ScaleTable[idx])
 		ctx.beginPath()
 		;(type == 2)
 			? ctx.strokeLine(T/2,T/2, T/2-2,T/2-2)

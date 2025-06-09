@@ -1,5 +1,5 @@
 const EyesEnum = /**@type {const}*/
-	({[L]:0, [R]:0, [U]:1, [D]:2,LowerR:3})
+	({[L]:0, [R]:0, [U]:1, [D]:2, LowerR:3})
 
 import CBSprite from './ghost_cb.js'
 export default class {
@@ -167,17 +167,17 @@ export default class {
 	}
 	#angryGlow(x=0, y=0, angry=false, size=T*2) {
 		if (!angry) return
-		const {width:W}=GlowCvs, S=W*1.2
+		const {width:W}=Glow, S=W*1.2
 		Ctx.save()
 		Ctx.globalAlpha = this.#resurrect?.alpha ?? 1
 		Ctx.translate(x+size/4, y+size/4)
-		Ctx.drawImage(GlowCvs, 0,0, W,W, -S/2,-S/2, S,S)
+		Ctx.drawImage(Glow, 0,0, W,W, -S/2,-S/2, S,S)
 		Ctx.restore()
 	}
 }
-const GlowCvs = function() {
-	const [cvs,ctx,w,h]= canvas2D(null, T*5).vals
+const Glow = function() {
+	const {ctx,w,h}= canvas2D(null, T*5)
 	ctx.filter = `blur(${T*0.6}px)`
 	ctx.fillCircle(w/2, h/2, T, '#F00')
-	return cvs
+	return ctx.canvas
 }()
