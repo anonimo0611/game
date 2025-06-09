@@ -86,11 +86,9 @@ const isCombinationKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
  * @param {readonly T[]} a
  * @param {number} size
  * @returns {T[][]}
- */const chunk = (a, size) =>
-    Array.from(
-        {length:ceil(a.length/size)},
-        (_,i)=> a.slice(i*size, i*size + size)
-    )
+ */const chunk = (a, size)=>
+    Array.from({length:ceil(a.length/size)},
+        (_,i)=> a.slice(i*size, i*size + size))
 
 /**
  * @param {Position} v1
