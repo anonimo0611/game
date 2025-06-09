@@ -86,8 +86,8 @@ export const View = function() {
 			[200,400,800,1600,100,300,500,700],
 			[1000,2000,3000,5000]
 		])
-		;scoreLst[0].forEach((pts,i)=> draw(pts, ofst(i)+T, S*6+T))
-		;scoreLst[1].forEach((pts,i)=> draw(pts, (S+Gap/2)+S*(2+Gap/T)*i, S*7+S/2))
+		scoreLst[0].forEach((pts,i)=> draw(pts, ofst(i)+T, S*6+T))
+		scoreLst[1].forEach((pts,i)=> draw(pts, (S+Gap/2)+S*(2+Gap/T)*i, S*7+S/2))
 	}
 	function drawPacman() {
 		const dirs = /**@type {const}*/([U,U,L,L,D,D,R,R])
@@ -98,7 +98,7 @@ export const View = function() {
 		}
 	}
 	function drawAkabei() {
-		/** @type {(x: number, y: number, cfg: object)=> void} */
+		/** @type {(x:number, y:number, cfg:object)=> void} */
 		const draw = (x,y, cfg)=> aka.sprite.draw({...aka, x,y, ...cfg})
 		const aka = ghost, spr = aka.cbSprite.stakeClothes
 
