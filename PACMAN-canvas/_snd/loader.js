@@ -41,10 +41,10 @@ export class SoundMgr {
 	/** @param {SoundType} id */
 	isPlaying(id)  {return Instance.get(id)?.playState === SoundJS.PLAY_SUCCEEDED}
 
-	/** @param {SoundType}id */
+	/** @param {SoundType} id */
 	isFinished(id) {return Instance.get(id)?.playState === SoundJS.PLAY_FINISHED}
 
-	/** @param {SoundType}id */
+	/** @param {SoundType} id */
 	#configMerge(id, cfg={}) {
 		const prefix = id.match(/^\D+/)?.[0] || ''
 		return {...ConfigMap.get(prefix) ?? ConfigMap.get('_normal'), ...cfg}
