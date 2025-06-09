@@ -34,7 +34,7 @@ const volRg2 = ctrl('volRg2')
 		localStorage.anopac_volume =  Sound.vol
 	}
 	onKeydown(/**@type {JQuery.KeyDownEvent}*/e) {
-		if (keyRepeat(e) || isCombinationKey(e))
+		if (keyRepeat(e) || isCombiKey(e))
 			return
 		if (e.key.toUpperCase() == 'M'
 		 || e.target == volRg2 && isEnterKey(e))
