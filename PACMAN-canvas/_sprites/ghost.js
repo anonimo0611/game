@@ -1,21 +1,21 @@
-const EyesEnum = freeze({Up:0,Down:1,Left:2,Right:2,LowerR:3})
+const EyesEnum = /**@type {const}*/
+	({[L]:0, [R]:0, [U]:1, [D]:2, LowerR:3})
 
 import CBSprite from './ghost_cb.js'
 export default class {
-	#CBSprite
-	#eyesFns
 	#fadeOut   = /**@type {?FadeOut}*/(null)
 	#resurrect = /**@type {?FadeIn} */(null)
 
+	/** @readonly */#CBSprite
+	/** @readonly */#eyesFns
 	/** @param {ExtendedContext2D} ctx */
-	constructor(ctx, interval=1000/60) {
+	constructor(ctx) {
 		this.ctx = ctx
-		this.interval  = interval
 		this.#CBSprite = new CBSprite(ctx)
 		this.#eyesFns  = freeze([
+			this.#eyesLookingLR,
 			this.#eyesLookingUp,
 			this.#eyesLookingDown,
-			this.#eyesLookingLR,
 			this.#CBSprite.bracketEyes,
 		])
 		freeze(this)
@@ -26,11 +26,11 @@ export default class {
 	setResurrect() {this.#resurrect = new FadeIn (600)}
 	draw({
 		mainCtx=Ctx,x=0,y=0,
-		idx        = 0,
 		aIdx       = 0,
 		spriteIdx  = 0,
 		size       = T*2,
-		orient     = L,
+		orient     = /**@type {Direction}*/(L),
+		color      = Color.Akabei,
 		isFright   = false,
 		isBitten   = false,
 		isEscaping = false,
@@ -41,6 +41,8 @@ export default class {
 	}={}) {
 		if (isBitten) return
 		const {ctx}= this
+		ctx.clear()
+		ctx.save()
 		function finalize() {
 			ctx.restore()
 			mainCtx.save()
@@ -48,13 +50,10 @@ export default class {
 			mainCtx.drawImage(ctx.canvas, -size/2, -size/2)
 			mainCtx.restore()
 		}
-		ctx.clear()
-		ctx.save()
 		ctx.translate(size/2, size/2)
 		ctx.scale(size/(100/GhsScale), size/(100/GhsScale))
 		ctx.fillStyle = !isFright
-			? Color[GhsNames[idx]]
-			: Color.FrightBodyTable[spriteIdx]
+			? color : Color.FrightBodyTable[spriteIdx]
 
 		if (isExposed) {
 			this.#CBSprite.hadake(aIdx)
@@ -74,7 +73,8 @@ export default class {
 		finalize()
 	}
 	update() {
-		this.#resurrect?.update()
+		if (this.#resurrect?.update() === false)
+			this.#resurrect = null
 	}
 	#body({aIdx=0,isRipped=false,isMended=false}) {
 		const {ctx}= this
@@ -153,7 +153,7 @@ export default class {
 	#frightFace(spriteIdx=0) {
 		const {ctx}= this
 		ctx.fillStyle = ctx.strokeStyle = Color.FrightFaceTable[spriteIdx]
-		{ // Eyes
+		{// Eyes
 			const size = 11
 			ctx.fillRect(-15-size/2, -11-size/2, size, size)
 			ctx.fillRect(+15-size/2, -11-size/2, size, size)
@@ -167,17 +167,17 @@ export default class {
 	}
 	#angryGlow(x=0, y=0, angry=false, size=T*2) {
 		if (!angry) return
-		const {width:W}=GlowCvs, S=W*1.2
+		const {width:W}=Glow, S=W*1.2
 		Ctx.save()
-		Ctx.globalAlpha = this.#resurrect?.alpha
+		Ctx.globalAlpha = this.#resurrect?.alpha ?? 1
 		Ctx.translate(x+size/4, y+size/4)
-		Ctx.drawImage(GlowCvs, 0,0, W,W, -S/2,-S/2, S,S)
+		Ctx.drawImage(Glow, 0,0, W,W, -S/2,-S/2, S,S)
 		Ctx.restore()
 	}
 }
-const GlowCvs = function() {
-	const [cvs,ctx,w,h]= canvas2D(null, T*5).vals
+const Glow = function() {
+	const {ctx,w,h}= canvas2D(null, T*5)
 	ctx.filter = `blur(${T*0.6}px)`
 	ctx.fillCircle(w/2, h/2, T, '#F00')
-	return cvs
+	return ctx.canvas
 }()
