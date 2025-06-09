@@ -5,6 +5,7 @@ const Instance = /**@type {Map<string,createjs.AbstractSoundInstance>}*/(new Map
 import {Manifest,ConfigMap,Ids} from './_manifest.js'
 
 export class SoundMgr {
+	static #loaded   = false
 	static #disabled = true
 	static load = ()=>
 		new Promise((resolve,reject)=> {
@@ -18,9 +19,10 @@ export class SoundMgr {
 				resolve('All sound files loaded')
 			})
 		})
-		.then (()=> true)
-		.catch(()=> false)
+		.then (()=> this.#loaded = true)
+		.catch(()=> this.#loaded = false)
 
+	get loaded()   {return SoundMgr.#loaded}
 	get disabled() {return SoundMgr.#disabled}
 	get vol()      {return SoundJS.volume * 10}
 	set vol(vol)   {SoundJS.volume = Number.isFinite(vol)? vol/10 : this.vol}

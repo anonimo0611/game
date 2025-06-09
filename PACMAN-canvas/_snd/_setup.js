@@ -9,10 +9,12 @@ const volRg2 = ctrl('volRg2')
 ;(new class { // Register sound instances and set up controls
 	constructor() {this.setup()}
 	async setup() {
-		if (!await SoundMgr.load()) {
-			$('.volCtrl').hide()
-			return
-		}
+		await SoundMgr.load()
+			? this.onLoaded()
+			: this.onFailed()
+		$('#startBtn').prop({disabled:false})
+	}
+	onLoaded() {
 		Sound.vol = localStorage.anopac_volume ?? 5
 		$win.on({keydown:e=> this.onKeydown(e)})
 		$('#cvs_speaker')
@@ -23,16 +25,12 @@ const volRg2 = ctrl('volRg2')
 			.prop({defaultValue:Sound.vol})
 			.on({input:this.onInput})
 	}
-	mute() {
-		_lstVol = Sound.vol || (_lstVol || +volRng.max >> 1)
-		$(volRng)
-			.prop({value:Sound.vol? 0 : _lstVol})
-			.trigger('input')
-
+	onFailed() {
+		$('.volCtrl').hide()
 	}
 	onInput(/**@type {Event}*/e) {
-		const isInputElem = e.target instanceof HTMLInputElement
-		Sound.vol = (isInputElem? e.target : volRng).valueAsNumber
+		const isInput = e.target instanceof HTMLInputElement
+		Sound.vol = (isInput? e.target : volRng).valueAsNumber
 		localStorage.anopac_volume =  Sound.vol
 	}
 	onKeydown(/**@type {JQuery.KeyDownEvent}*/e) {
@@ -41,5 +39,9 @@ const volRg2 = ctrl('volRg2')
 		if (e.key.toUpperCase() == 'M'
 		 || e.target == volRg2 && isEnterKey(e))
 			this.mute()
+	}
+	mute() {
+		_lstVol = Sound.vol || (_lstVol || +volRng.max >> 1)
+		$(volRng).prop({value:Sound.vol? 0 : _lstVol}).trigger('input')
 	}
 })
