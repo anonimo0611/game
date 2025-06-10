@@ -1,23 +1,22 @@
-const EyesEnum = /**@type {const}*/
-	({[L]:0, [R]:0, [U]:1, [D]:2, LowerR:3})
-
 import CBSprite from './ghost_cb.js'
 export default class {
 	#fadeOut   = /**@type {?FadeOut}*/(null)
 	#resurrect = /**@type {?FadeIn} */(null)
 
 	/** @readonly */#CBSprite
-	/** @readonly */#eyesFns
+	/** @readonly */#EyesDraw
 	/** @param {ExtendedContext2D} ctx */
 	constructor(ctx) {
 		this.ctx = ctx
 		this.#CBSprite = new CBSprite(ctx)
-		this.#eyesFns  = freeze([
-			this.#eyesLookingLR,
-			this.#eyesLookingUp,
-			this.#eyesLookingDown,
-			this.#CBSprite.bracketEyes,
-		])
+		this.#EyesDraw = /**@type {const}*/
+		({
+			[L]:this.#eyesLookingLR,
+			[R]:this.#eyesLookingLR,
+			[U]:this.#eyesLookingUp,
+			[D]:this.#eyesLookingDown,
+			LowerR:this.#CBSprite.bracketEyes
+		})
 		freeze(this)
 	}
 
@@ -68,7 +67,7 @@ export default class {
 			ctx.restore()
 		}
 		if (!isFright) {
-			this.#eyesFns[EyesEnum[orient]].call(this,{orient,isRipped})
+			this.#EyesDraw[orient].call(this,{orient,isRipped})
 		}
 		finalize()
 	}
