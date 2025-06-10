@@ -14,7 +14,7 @@ import Sprite    from './sprites/pacman.js'
 export const Player = function() {
 	/** @type {PlayablePac} */
 	let player
-	$on({Title_Restart_NewLevel:()=> player=new PlayablePac})
+	$on({Title_Restart_NewLevel:()=> player = new PlayablePac})
 	return new class extends Common {get instance(){return player}}
 }()
 
