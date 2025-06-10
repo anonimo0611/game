@@ -37,7 +37,10 @@ export default class {
 		return this
 	}
 
-	/** @param {string} [state] */
+	/**
+	 * @param {string} [state]
+	 * @returns {string}
+	 */
 	last(state) {
 		const last = this.#last
 		return state? (state === last ? last:'') : last
