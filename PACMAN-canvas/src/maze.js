@@ -108,15 +108,15 @@ export const Maze = new class _Maze {
 			DotChipSet.has(c) && Maze.#setDot(i,c)
 	}
 	#setDot(
-	 /**@type {number}*/idx,
-	 /**@type {string}*/chip
+	 /**@type {TileIdx}*/i,
+	 /**@type {string} */chip
 	) {
-		const t = Vec2(idx%Cols, idx/Cols|0)
-		Maze.clearBgDot({tileIdx:idx,tilePos:t})
-		DotSet.add(idx)
+		const t = Vec2(i%Cols, i/Cols|0)
+		Maze.clearBgDot({tileIdx:i,tilePos:t})
+		DotSet.add(i)
 		!powChk.checked || chip == '.'
 			? drawDot(Bg.ctx, t.x, t.y)
-			: PowMap.set(idx, t)
+			: PowMap.set(i, t)
 	}
 	get dotsLeft() {return DotSet.size}
 	Map    = MapArr
@@ -145,12 +145,12 @@ export const Maze = new class _Maze {
 			? Vec2((t.x > Cols/2) && (o.x > Cols/2) ? 21:6, 15) : o
 
 	/**
-	 * @param {{tileIdx:TileIdx, tilePos:Vector2}} tile
+	 * @param {{tileIdx:number, tilePos:Vector2}} tile
 	 * @returns {number} number of remaining dots
 	 */
-	clearBgDot({tileIdx:idx,tilePos:t}) {
-		DotSet.delete(idx)
-		PowMap.delete(idx)
+	clearBgDot({tileIdx:i,tilePos:t}) {
+		DotSet.delete(i)
+		PowMap.delete(i)
 		drawDot(Bg.ctx, t.x, t.y, true, null)
 		return DotSet.size
 	}
