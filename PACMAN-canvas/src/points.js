@@ -10,9 +10,9 @@ $on({Title_Clear_Crashed:()=> PtsMap.clear()})
 
 export const PtsMgr = new class {
 	/**
-	 * @typedef {import('sprites/points.js').PtsType} Type
-	 * @typedef {{key:{score:Type}, pos:Position, dur?:number}} Data
-	 * @type {(data:Data, fn?:function)=> void}
+	 * @typedef {import('sprites/points.js').PtsType} Score
+	 * @typedef {{key:{score:Score}, pos:Position, dur?:number}} PtsData
+	 * @type {(data:PtsData, fn?:function)=> void}
 	 */
 	set(data,fn)   {new Points(data,fn)}
 	update()       {PtsMap.forEach(v=> v.update())}
@@ -21,7 +21,7 @@ export const PtsMgr = new class {
 }
 class Points {
 	/**
-	 * @param {Data} data
+	 * @param {PtsData}  data
 	 * @param {Function} [fn]
 	 */
 	constructor({key,pos,dur=1e3}, fn) {
