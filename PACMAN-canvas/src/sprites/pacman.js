@@ -8,7 +8,6 @@ export default class {
 	#mAngle  =  0
 	#animDir = -1
 	#losing  = /**@type {?Losing}*/(null)
-
 	/**
 	 * @param {ExtendedContext2D} ctx
 	 * @param {0|1|2} mouseOpening
