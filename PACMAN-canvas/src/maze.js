@@ -91,7 +91,7 @@ class Tunnel {
 	}
 }
 
-export const Maze = new class _Maze {
+export const Maze = new class {
 	static {$ready(this.setup)}
 	static setup() {
 		for (const [i,c] of MapArr.entries())
