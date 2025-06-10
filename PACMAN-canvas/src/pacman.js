@@ -52,7 +52,7 @@ class PlayablePac extends Pacman {
 	}
 	get baseSpeed() {
 		return Game.moveSpeed
-			* (Game.level<13 ? 1 : PacStep.SlowBase)
+			* (Game.level<13 ? 1 : PacStep.SlowRate)
 	}
 	#getStep() {
 		const eating = Maze.hasDot(this.tileIdx)
