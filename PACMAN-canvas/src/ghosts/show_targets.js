@@ -57,8 +57,7 @@ export default new class {
 		Ctx.stroke()
 		if (g.idx == GhsType.Aosuke) {
 			const akaXY = GhsMgr.akaCenter.vals
-			Ctx.strokeLine(...fwdXY, ...akaXY)
-			Ctx.strokeLine(...fwdXY, ...g.chasePos.vals)
+			Ctx.newLinePath(akaXY, fwdXY, g.chasePos.vals).stroke()
 			Ctx.fillCircle(...fwdXY, 8, g.color)
 			Ctx.fillCircle(...akaXY, 8, g.color)
 		}
