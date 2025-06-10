@@ -2,20 +2,19 @@ import {State} from './state.js'
 import {Ctrl}  from './control.js'
 import Sprite  from './sprites/pacman.js'
 
-/** @typedef {'Title'|'Start'|'Ready'|'Restart'} EvType */
-
 export const Lives = function() {
 	let   _left  = 0
 	const {ctx}  = HUD
 	const radius = T*.78, size = T*2
 	const sprite = new Sprite(ctx, 1)
 	function onChange() {
+		/** @type {Object.<string,Function>} */
 		({
 			Title:  ()=> _left = Ctrl.livesMax-1,
 			Start:  ()=> _left += +1,
 			Ready:  ()=> _left += State.last('Start')? -1:0,
 			Restart:()=> _left += -1,
-		})[/**@type {EvType}*/(State.current)]()
+		})[State.current]()
 		draw()
 	}
 	function draw() {
