@@ -9,8 +9,8 @@ import Sprite   from '../sprites/ghost_cb.js'
 export class CoffBrk {
 	static #scene = /**@type {?(Scene1|Scene2|Scene3)}*/(null)
 	static {
-		/** @typedef {(_:unknown,num:1|2|3)=> void} fn */
-		$on('CoffBrk',/**@type {fn}*/(_,num)=> this.#begin(num))
+		$on('CoffBrk', /**@type {(_:unknown,num:1|2|3)=> void}*/
+			((_,num)=> this.#begin(num)))
 	}
 	static #begin(/**@type {1|2|3}*/num) {
 		Sound.play('cutscene', {loop:1^Number(num == 2)})
@@ -90,6 +90,7 @@ class Scene1 extends CoffBrk {
 		case R:
 			akabei.x > T*7.5    && this.movePacman()
 			akabei.x > CvsW+T*9 && this.end()
+			break
 		}
 	}
 	draw() {
