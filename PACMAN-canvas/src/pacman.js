@@ -106,7 +106,7 @@ class PlayablePac extends Pacman {
 	}
 	update() {
 		super.update()
-		if (Timer.frozen || !State.isPlaying) return
+		if (this.frozen || !State.isPlaying) return
 		this.sprite.update(this)
 		this.#notEaten++
 		for (let i=0,denom=ceil(this.step)*2; i<denom; i++)
@@ -129,10 +129,10 @@ class PlayablePac extends Pacman {
 		this.#turnAround()
 	}
 	#setCornering(denom=1) {
-		if (this.canTurn) {
+		const dir = this.#preDir
+		if (this.canTurn && dir) {
 			this.#turning ||= true
-			this.orient = nonNull(this.#preDir)
-			this.setNextPos(denom,this.orient)
+			this.setNextPos(denom,this.orient=dir)
 		}
 	}
 	#endCornering() {
