@@ -16,7 +16,7 @@ const Pts1st = Pts.GhostVals[0]
 
 /**
  * Delay time(ms) for ghost to be left from the house in always chase mode
- * @param {number} idx index of ghost in the house
+ * @param {number} idx Index of ghosts waiting to start at house
  */
 const releaseDelay = idx=> nonNull({
 	// Pinky->Aosuke->Guzuta
@@ -51,12 +51,9 @@ export class GhostState extends _State {
 	isEscape = false
 	isReturn = false
 
-	get current() {
-		return /**@type {State}*/(super.current)
-	}
-	get isEscaping() {
-		return this.isEscape || this.isReturn
-	}
+	get current()    {return /**@type {State}*/(super.current)}
+	get isEscaping() {return this.isEscape || this.isReturn}
+
 	constructor(/**@type {Ghost}*/{tilePos}) {
 		super()
 		this.init(Maze.House.isIn(tilePos)? 'Idle':'Walk')
@@ -139,8 +136,8 @@ export const GhsMgr = new class extends Common {
 const SCATTER=0, CHASE=1
 const AlternateBetweenModes = function() {
 	{
-		let seq={mode:SCATTER,update(){}}
-		$on({Title_Ready:()=> seq=genSequence()})
+		let seq = {mode:SCATTER,update(){}}
+		$on({Title_Ready:()=> seq = genSequence()})
 		return {
 			get isScatter() {return seq.mode == SCATTER},
 			update() {State.isPlaying && seq.update()},
@@ -173,7 +170,7 @@ const AlternateBetweenModes = function() {
 				[cnt,Seq.mode] = [0,(++idx % 2)]
 				setReversalSig()
 			}
-		};return Seq.mode==CHASE ? {mode:CHASE,update(){}} : Seq
+		};return Seq.mode == CHASE ? {mode:CHASE,update(){}}:Seq
 	}
 }(),
 setReversalSig = ()=> {

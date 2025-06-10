@@ -18,7 +18,8 @@ export class Ghost extends Actor {
 	#isFright  = false
 
 	/** @readonly */
-	TurnDirs = /**@type {readonly Direction[]}*/([U,L,D,R])
+	TurnDirs = /**@type {readonly Direction[]}*/
+		([U,L,D,R])
 
 	// This section is overridden in subclasses
 	get isAngry()     {return false}
@@ -112,7 +113,7 @@ export class Ghost extends Actor {
 	}
 	#behavior({state:s}=this) {
 		this.#runaway >= 0 && this.#runaway--
-		if (Timer.frozen && !this.isEscaping) return
+		if (this.frozen && !this.isEscaping) return
 		if (s.isIdle)   return this.#idle(this)
 		if (s.isGoOut)  return this.#goOut(this)
 		if (s.isReturn) return this.#returnToHome(this)
@@ -171,7 +172,7 @@ export class Ghost extends Actor {
 		;(Ctrl.isChaseMode || this.idx == GhsType.Akabei)
 			? this.state.to('GoOut')
 			: this.state.to('Idle') && this.#idle(this)
-		!Timer.frozen && Sound.ghostArrivedAtHome()
+		!this.frozen && Sound.ghostArrivedAtHome()
 	}
 	#walkRoute() {
 		for (let i=0,denom=ceil(this.step)*2; i<denom; i++) {

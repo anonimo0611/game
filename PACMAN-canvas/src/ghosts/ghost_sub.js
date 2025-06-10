@@ -49,7 +49,7 @@ class Guzuta extends Ghost {
 	get scatterTile() {return Vec2(0, 33)}
 }
 
-const Classes = [Akabei,Pinky,Aosuke,Guzuta]
+const Classes = freeze([Akabei,Pinky,Aosuke,Guzuta])
 $on({Title_Restart_NewLevel:()=>
 	GhsMgr.trigger('Init', Classes.map(cls=> new cls))
 })

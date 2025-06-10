@@ -15,7 +15,7 @@ export default new class {
 		return g.isIdle
 			|| g.isFright
 			|| g.isBitten
-			|| (Timer.frozen && !g.isEscaping)
+			||(g.frozen && !g.isEscaping)
 	}
 	#getTargetPos(/**@type {Ghost}*/g) {
 		return (g.isGoOut || g.isEscaping)
