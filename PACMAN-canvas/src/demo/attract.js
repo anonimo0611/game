@@ -20,7 +20,7 @@ export class Attract {
 	static {
 		$(RunTimer)  .on({begin:this.#begin})
 		$('.DemoBtn').on({click:this.#begin})
-		$on({Attract:()=> _attract = new Attract()})
+		$on({Attract:()=> _attract = new Attract})
 	}
 	static #begin() {
 		State.to('Attract')
