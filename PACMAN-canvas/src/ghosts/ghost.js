@@ -199,11 +199,10 @@ export class Ghost extends Actor {
 				&& Maze.hasWall(test) == false
 				&& Sys.canEnter(test,dir,this)
 			? [{dir,index,dist:Vec2.sqrMag(test,tgt)}]:[]
-		})
+		}).sort(compareDist)
 		return this.isFright
 			? randChoice(dirs).dir
-			: dirs.sort(compareDist)
-				[this.#runaway>=0 ? dirs.length-1:0].dir
+			: dirs[this.#runaway>=0 ? dirs.length-1:0].dir
 	}
 	#setTurn({dir,orient,pos,tilePos:t}=this) {
 		if (dir == orient
