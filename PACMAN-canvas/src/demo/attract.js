@@ -116,7 +116,9 @@ export class Attract {
 	updatePacman() {
 		this.pacman.sprite.update()
 		this.pacman.x += this.pacVelX
-		if (this.pacman.dir == L && this.pacman.x <= T*4) {
+		if (this.pacman.dir == L
+		 && this.pacman.x <= T*4
+		) {
 			this.pacVelX *= -1.11
 			this.ghsVelX /= -2.14
 			this.pacman.dir = R
