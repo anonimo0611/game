@@ -63,5 +63,5 @@ export function cache(pts, size=TileSize*2) {
 		ctx.stroke()
 	})
 	ctx.restore()
-	return /**@type {const}*/({ctx,w,h})
+	return/**@type {const}*/({ctx,w,h})
 }
