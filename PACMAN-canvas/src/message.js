@@ -5,7 +5,7 @@ export const Message = new class {
 	/**
 	 * @param {number} col
 	 * @param {number} row
-	 * @param {?CanvasStyle} color
+	 * @param {?Cvs2DStyle} color
 	 */
 	drawText(col, row, color='', text='',
 		{ctx=Ctx,scaleX=1,face='Atari',size=T,style=''}={}

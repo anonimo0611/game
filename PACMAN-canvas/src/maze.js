@@ -160,7 +160,7 @@ export const Maze = new class {
 	 * @param {number}  col
 	 * @param {number}  row
 	 * @param {boolean} isPow
-	 * @param {?CanvasStyle} color
+	 * @param {?Cvs2DStyle} color
 	 */
 	drawDot(ctx, col,row, isPow=false, color=Color.Dot) {
 		const v = Vec2(col,row).add(.5).mul(T).vals
