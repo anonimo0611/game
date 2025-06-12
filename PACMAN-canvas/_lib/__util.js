@@ -32,10 +32,10 @@ const isCombiKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
  	([...document.querySelectorAll(selector)])
 
 /**
- * @typedef {{dist:number, index:number}} DistObject
+ * @typedef {{dist:number, i:number}} DistObject
  * @type {(a:DistObject, b:DistObject)=> number}
  */const compareDist = (a,b)=>
-	(a.dist == b.dist)? (a.index-b.index) : (a.dist-b.dist)
+	(a.dist == b.dist)? (a.i-b.i) : (a.dist-b.dist)
 
 /**
  * @template T
