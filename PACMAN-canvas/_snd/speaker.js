@@ -1,4 +1,4 @@
-﻿const Size = nonNull(byId('volume')).offsetHeight
+﻿const Size = $('#volume').height()
 const{cvs,ctx}= canvas2D('cvs_speaker', Size)
 
 export const Speaker = new class {
