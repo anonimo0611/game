@@ -8,6 +8,7 @@ export const Confirm = new class {
 
 	/** @param {MouseEvent} e */
 	#onMousedown = e=> {e.preventDefault()}
+
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
 		const btns = Confirm.#buttons
@@ -20,6 +21,7 @@ export const Confirm = new class {
 			Dir.from(e) == [R,L][i] && btns[1^i].focus()
 		}
 	}
+
 	/**
 	 * @param {string} content
 	 * @param {?Function} fn1
@@ -44,6 +46,7 @@ export const Confirm = new class {
 		confirm.showModal()
 		Confirm.#opened = true
 	}
+
 	/** @param {?Function} fn */
 	#remove(fn) {
 		$('#confirm').fadeOut(300,
