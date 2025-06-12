@@ -5,14 +5,13 @@ export const Confirm = new class {
 	get opened()   {return this.#opened}
 	get #tempElm() {return /**@type {HTMLTemplateElement}*/(byId('confirm_t'))}
 	get #confirm() {return /**@type {HTMLDialogElement}  */(byId('confirm'))}
-	get #buttons() {return $(this.#confirm).find('button').get()}
 
 	/** @param {MouseEvent} e */
 	#onMousedown = e=> {e.preventDefault()}
 
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
-		const btns = Confirm.#buttons
+		const btns = $('#confirm button').get()
 		if (e.key == 'Escape') {
 			e.preventDefault()
 			return btns[Confirm.#cancel].click()
@@ -36,7 +35,7 @@ export const Confirm = new class {
 		document.body.append(this.#tempElm.content.cloneNode(true))
 		this.#opened = true
 		this.#cancel = cancelIdx
-		this.#buttons.forEach((btn, i)=> {
+		$('#confirm').find('button').each((i,btn)=> {
 			btn.textContent = [btnTxt1,btnTxt2][i]
 			btn.onclick = ()=> {$off(NS),this.#remove([fn1,fn2][i])}
 		})
