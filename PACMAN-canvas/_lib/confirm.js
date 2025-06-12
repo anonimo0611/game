@@ -4,14 +4,13 @@ export const Confirm = new class {
 	#cancelIdx = 0
 	get opened()   {return this.#opened}
 	get #tempElm() {return /**@type {HTMLTemplateElement}*/(byId('confirm_t'))}
-	get #buttons() {return byId('confirm')?.querySelectorAll('button')}
+	get #buttons() {return $('#confirm').find('button').get()}
 
 	/** @param {MouseEvent} e */
 	#onMousedown = e=> {e.preventDefault()}
-
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
-		const btns = nonNull(Confirm.#buttons)
+		const btns = Confirm.#buttons
 		if (e.key == 'Escape') {
 			e.preventDefault()
 			return btns[Confirm.#cancelIdx].click()
@@ -21,7 +20,6 @@ export const Confirm = new class {
 			Dir.from(e) == [R,L][i] && btns[1^i].focus()
 		}
 	}
-
 	/**
 	 * @param {string} content
 	 * @param {?Function} fn1

@@ -38,15 +38,6 @@ const isCombiKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 	(a.dist == b.dist)? (a.i-b.i) : (a.dist-b.dist)
 
 /**
- * @template T
- * @param {T|null|undefined} arg
- * @returns {T}
- */const nonNull = arg=> {
-	if (arg === null || arg === undefined)
-		throw TypeError('Does not have a specific value')
-	return arg
-  }
-/**
  * @param {number} x
  * @param {number} y
  * @param {number} s
