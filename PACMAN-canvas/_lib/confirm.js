@@ -26,6 +26,9 @@ export const Confirm = new class {
 	 * @param {string} content
 	 * @param {?Function} fn1
 	 * @param {?Function} fn2
+	 * @param {string} [btnTxt1]
+	 * @param {string} [btnTxt2]
+	 * @param {0|1} [cancelIdx]
 	 */
 	open(content, fn1,fn2, btnTxt1='Ok',btnTxt2='Cancel', cancelIdx=1) {
 		if (Confirm.#opened)
