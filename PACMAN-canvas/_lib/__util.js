@@ -1,10 +1,9 @@
 'use strict'
-const {isArray}= Array
 const {defineProperty,entries,freeze,hasOwn,keys,values}= Object
 const {abs,ceil,floor,max,min,PI,random,round,sqrt,trunc:int}= Math
 
 const dRoot = document.getElementsByTagName('html')[0]
-const byId  = (/**@type {string} */elementId)=>
+const byId  = (/**@type {string}*/elementId)=>
 	document.getElementById(elementId)
 
 /** @param {KeyboardEvent|JQuery.KeyDownEvent} e */
