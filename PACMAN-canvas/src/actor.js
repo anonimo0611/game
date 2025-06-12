@@ -77,8 +77,8 @@ export class Actor extends Common {
 	hasAdjWall(/**@type {Direction}*/dir) {
 		return Maze.hasWall(this.getAdjTile(dir))
 	}
-	getAdjTile(/**@type {Direction}*/dir, n=1, tile=this.tilePos) {
-		const  v = Vec2[dir].mul(n).add(tile)
+	getAdjTile(/**@type {Direction}*/dir, tile=this.tilePos) {
+		const  v = Vec2[dir].add(tile)
 		return v.setX((v.x+Cols) % Cols) // x-axis loops
 	}
 	collidedWithWall(dir=this.dir) {

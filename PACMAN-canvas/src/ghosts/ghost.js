@@ -193,16 +193,22 @@ export class Ghost extends Actor {
 	}
 	#getNextDir(tgt=this.targetTile) {
 		const tile = this.getAdjTile(this.dir)
-		const dirs = this.TurnDirs.flatMap((dir,index)=> {
-			const test = this.getAdjTile(dir,1,tile)
+		const dirs = this.TurnDirs.flatMap((dir,i)=> {
+			const test = this.getAdjTile(dir,tile)
+			const dist = Vec2.sqrMag(test,tgt)
 			return Dir.opposite(this.orient) != dir
 				&& Maze.hasWall(test) == false
-				&& Sys.canEnter(test,dir,this)
-			? [{dir,index,dist:Vec2.sqrMag(test,tgt)}]:[]
-		}).sort(compareDist)
-		return this.isFright
-			? randChoice(dirs).dir
-			: dirs[this.#runaway>=0 ? dirs.length-1:0].dir
+				&& this.#canEnter({dir,test})? [{i,dir,dist}]:[]
+		})
+		return this.isFright? randChoice(dirs).dir:
+			(idx=> dirs.sort(compareDist)[idx].dir)
+				(this.#runaway >= 0 ? dirs.length-1:0)
+	}
+	/** @param {{dir:Direction, test:Vector2}} cfg */
+	#canEnter({dir,test}) {
+		return Ctrl.unrestricted
+			|| (dir != U || this.isFright || this.isEscaping)
+			|| Maze.GhostNoEnter.has(test.hyphenated) == false
 	}
 	#setTurn({dir,orient,pos,tilePos:t}=this) {
 		if (dir == orient

@@ -28,20 +28,6 @@ const releaseDelay = idx=> nonNull({
 	13:[   0,  900,    0]
 }[Game.restarted? 0 : Game.clampedLv])[idx]/Game.speedRate
 
-/**
- * Determines whether ghost can turn at intersection
- * @param {Vector2}   tile
- * @param {Direction} dir
- * @param {Ghost}     ghost
- */
-export const canEnter = (tile, dir, ghost)=> {
-	return Ctrl.unrestricted
-		|| ghost.isFright
-		|| ghost.isEscaping
-		|| dir != U
-		|| !Maze.GhostNoEnter.has(tile.hyphenated)
-}
-
 /** @typedef {'Idle'|'GoOut'|'Walk'|'Bitten'|'Escape'|'Return'} State */
 export class GhostState extends _State {
 	isIdle   = true
