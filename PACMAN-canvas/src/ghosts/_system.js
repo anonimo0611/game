@@ -18,7 +18,7 @@ const Pts1st = Pts.GhostVals[0]
  * Delay time(ms) for ghost to be left from the house in always chase mode
  * @param {number} idx Index of ghosts waiting to start at house
  */
-const releaseDelay = idx=> nonNull({
+const releaseDelay = idx=> ({
 	// Pinky->Aosuke->Guzuta
 	 0:[1000,  500,  500], // <-After life is lost
 	 1:[1000, 4000, 4000], 2:[800, 2200, 4000], 3:[600, 1900, 3500],
@@ -26,7 +26,7 @@ const releaseDelay = idx=> nonNull({
 	 7:[ 300,  700,  800], 8:[300,  700,  800], 9:[200,  800,  200],
 	10:[ 200,  800,  200],11:[100,  700,  200],12:[100,  700,  200],
 	13:[   0,  900,    0]
-}[Game.restarted? 0 : Game.clampedLv])[idx]/Game.speedRate
+})[Game.restarted? 0 : Game.clampedLv]?.[idx] ?? 0/Game.speedRate
 
 /** @typedef {'Idle'|'GoOut'|'Walk'|'Bitten'|'Escape'|'Return'} State */
 export class GhostState extends _State {
