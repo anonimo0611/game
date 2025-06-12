@@ -12,7 +12,9 @@ export function resize() {
 	T = sizeRng.valueAsNumber/2
 	if (lastT != T) {
 		[S,Gap]=[T*2,T*.25], ghost=new Ghost(T*2)
-		Ctx.resize(GridSize.x*S+Gap*2, GridSize.y*S+Gap*1)
+		Ctx.resize(
+			GridSize.x*S+Gap*2,
+			GridSize.y*S+Gap*1)
 		PvC.resize(T*3, T*2) && View.draw()
 		lastT = T
 	}

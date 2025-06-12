@@ -51,19 +51,18 @@ export const View = function() {
 	 */
 	function drawGhost(col, row) {
 		const [x,y]= [ofst(col), row*S]
-		const dirs = /**@type {const}*/([U,U,L,L,D,D,R,R])
 		if (row < 5) {
 			ghost.sprite.draw({
 				...ghost,x,y,
 				aIdx:  +(col % 2 != 0),
-				orient:dirs[col],
+				orient:/**@type {const}*/([U,U,L,L,D,D,R,R])[col],
 				color: Color[GhsNames[row-1]],
 			})
 			return
 		}
-		const orient = /**@type {const}*/([R,R,R,R,U,L,D,R])[col]
 		ghost.sprite.draw({
-			...ghost,x,y,orient,
+			...ghost,x,y,
+			orient:/**@type {const}*/([R,R,R,R,U,L,D,R])[col],
 			aIdx:     +(col % 2 != 0),
 			isFright:  (col <= 3),
 			isEscaping:(col >= 4),
@@ -146,5 +145,4 @@ $('#resetBtn').on('click', function() {
 	Array.from(document.forms).forEach(f=> f.reset())
 	$('[type=range]').trigger('input')
 })
-
 $load(()=> document.body.style.opacity = '1')
