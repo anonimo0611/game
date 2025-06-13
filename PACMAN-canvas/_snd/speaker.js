@@ -43,10 +43,11 @@ export const Speaker = new class {
 		ctx.save()
 		ctx.lineCap = 'round'
 		ctx.lineWidth = 8
-		;([[0.0, 12, 14, -PI/2.6, PI/2.6],
-		   [4.5, 25, 25, -PI/2.9, PI/2.9],
-		   [8.5, 37, 40, -PI/3.3, PI/3.3],
-		]).forEach(([x,rX,rY,st,ed], idx)=> {
+		;[
+			[0.0, 12, 14, -PI/2.6, PI/2.6],
+			[4.5, 25, 25, -PI/2.9, PI/2.9],
+			[8.5, 37, 40, -PI/3.3, PI/3.3],
+		].forEach(([x,rX,rY,st,ed], idx)=> {
 			ctx.save()
 			ctx.setAlpha(step <= idx && vol/10 || 1)
 			ctx.beginPath()
