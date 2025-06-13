@@ -58,6 +58,10 @@ export class Ghost extends Actor {
 		this.sprite   = new Sprite(canvas2D(null, T*3, T*2).ctx)
 		freeze(this)
 	}
+	get isChase() {
+		return !this.isScatter
+			&&  this.state.isWalk
+	}
 	get isScatter() {
 		return GhsMgr.isScatter
 			&& !this.isFright

@@ -42,7 +42,7 @@ export default new class {
 		Ctx.restore()
 	}
 	#auxLines(/**@type {Ghost}*/g, ofst=4) {
-		if (g.isScatter || !g.state.isWalk) return
+		if (!g.isChase) return
 		const {dir:pacDir,centerPos:pacPos}= Player.instance
 		const fwdXY = Player.instance.forwardPos(ofst).vals
 		Ctx.save()
@@ -64,7 +64,7 @@ export default new class {
 		Ctx.restore()
 	}
 	#guzutaCircle(/**@type {Ghost}*/g) {
-		if (g.isScatter || !g.state.isWalk) return
+		if (!g.isChase) return
 		const radius = T*8, {centerPos:pacPos}= Player.instance
 		Ctx.save()
 		Ctx.globalAlpha = g.sqrMagToPacman < radius*radius ? 0.4 : 0.8
