@@ -25,7 +25,7 @@ export default new class {
 				: g.chasePos
 	}
 	#strokeLines(/**@type {Ghost}*/g) {
-		if (this.#disabled(g)) return
+		if (this.#disabled(g) || !g.isChase) return
 		switch (g.idx) {
 		case GhsType.Pinky: this.#auxLines(g, 4); break
 		case GhsType.Aosuke:this.#auxLines(g, 2); break
@@ -42,7 +42,6 @@ export default new class {
 		Ctx.restore()
 	}
 	#auxLines(/**@type {Ghost}*/g, ofst=4) {
-		if (!g.isChase) return
 		const {dir:pacDir,centerPos:pacPos}= Player.instance
 		const fwdXY = Player.instance.forwardPos(ofst).vals
 		Ctx.save()
@@ -64,7 +63,6 @@ export default new class {
 		Ctx.restore()
 	}
 	#guzutaCircle(/**@type {Ghost}*/g) {
-		if (!g.isChase) return
 		const radius = T*8, {centerPos:pacPos}= Player.instance
 		Ctx.save()
 		Ctx.globalAlpha = g.sqrMagToPacman < radius*radius ? 0.4 : 0.8
