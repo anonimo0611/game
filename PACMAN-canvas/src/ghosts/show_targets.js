@@ -25,7 +25,7 @@ export default new class {
 				: g.chasePos
 	}
 	#strokeLines(/**@type {Ghost}*/g) {
-		if (this.#disabled(g) || !g.isChase) return
+		if (!g.isChase || this.#disabled(g)) return
 		switch (g.idx) {
 		case GhsType.Pinky: this.#auxLines(g, 4); break
 		case GhsType.Aosuke:this.#auxLines(g, 2); break
