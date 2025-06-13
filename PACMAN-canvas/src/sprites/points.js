@@ -49,8 +49,7 @@ export function cache(pts, size=TileSize*2) {
 	ctx.translate(w/2, h/2)
 	ctx.scale(size/16, size/16)
 	ctx.lineWidth   = 1.2
-	ctx.lineCap     ='round'
-	ctx.lineJoin    ='round'
+	ctx.lineJoin    = ctx.lineCap = 'round'
 	ctx.strokeStyle = [Color.FruitPts,Color.GhostPts][idx]
 	Data.PosListFrom100To5000[pts]
 	?.forEach(([n,x,y],i)=> {
