@@ -3,15 +3,15 @@ import {State}  from './state.js'
 import {Score}  from './score.js'
 import {GhsMgr} from './ghosts/_system.js'
 import {Fruit}  from './fruit.js'
-import * as Spr from './sprites/points.js'
+import * as Pts from './sprites/points.js'
 
 const PtsMap = /**@type {Map<any, Points>}*/(new Map)
 $on({Title_Clear_Crashed:()=> PtsMap.clear()})
 
 export const PtsMgr = new class {
 	/**
-	 * @typedef {import('sprites/points.js').PtsType} Score
-	 * @typedef {{key:{score:Score}, pos:Position, dur?:number}} PtsData
+	 * @typedef {typeof Pts.Vals.All[number]} Pts
+	 * @typedef {{key:{score:Pts}, pos:Position, dur?:number}} PtsData
 	 * @type {(data:PtsData, fn?:function)=> void}
 	 */
 	set(data,fn)   {new Points(data,fn)}
@@ -26,7 +26,7 @@ class Points {
 	 */
 	constructor({key,pos,dur=1e3}, fn) {
 		const spd  = Game.speedRate, fadeDur = 300
-		this.cache = Spr.cache(key.score)
+		this.cache = Pts.cache(key.score)
 		this.pos   = pos
 		this.score = key.score
 		this.fade  = new FadeOut(fadeDur/spd, (dur-fadeDur)/spd)

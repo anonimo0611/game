@@ -28,7 +28,7 @@ export const Fruit = new class {
 		Player.on({DotEaten:Fruit.#dotEaten})
 	}
 	get score() {
-		return Pts.FruitVals[Fruit.number()]
+		return Pts.Vals.Fruit[Fruit.number()]
 	}
 	number(i=Game.level-1) {
 		return IdxTable.at(i >= IdxTable.length ? -1 : i) ?? 0

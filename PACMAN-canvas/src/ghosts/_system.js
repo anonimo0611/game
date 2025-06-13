@@ -12,7 +12,7 @@ import {Ghost}  from './ghost.js'
 import Target   from './show_targets.js'
 
 const Ghosts = /**@type {Ghost[]}*/([])
-const Pts1st = Pts.GhostVals[0]
+const Pts1st = Pts.Vals.Ghost[0]
 
 /**
  * Delay time(ms) for ghost to be left from the house in always chase mode
@@ -236,7 +236,7 @@ const FrightMode = function() {
 	class Session {
 		#tCounter = 0; #fCounter  = 0;
 		#flashIdx = 1; #caughtCnt = 0;
-		get score()     {return Pts.GhostVals[this.#caughtCnt-1]}
+		get score()     {return Pts.Vals.Ghost[this.#caughtCnt-1]}
 		get spriteIdx() {return this.#fCounter? this.#flashIdx^1:0}
 		get caughtAll() {return this.#caughtCnt == GhsType.Max}
 
