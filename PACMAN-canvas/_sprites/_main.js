@@ -71,8 +71,8 @@ export const View = function() {
 	}
 	function drawPoints() {
 		/**
-		 * @typedef {import('../src/sprites/points.js').PtsType} PtsType
-		 * @type {(pts:PtsType, x:number, y:number)=> void}
+		 * @typedef {typeof Pts.Vals.All[number]} Pts
+		 * @type {(pts:Pts, x:number, y:number)=> void}
 		 */
 		const draw = (pts, x, y)=> {
 			const {ctx,w,h}= Pts.cache(pts, S)
