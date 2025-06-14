@@ -43,7 +43,7 @@ class PlayablePac extends Pacman {
 	constructor() {
 		super()
 		this.pos = Vec2(13.5, 24).mul(T)
-		$offon('keydown.Player',this.#onKeydown.bind(this))
+		$offon('keydown.Player', this.#onKeydown.bind(this))
 	}
 	get canTurn() {
 		return this.inFrontOfTile
@@ -146,16 +146,23 @@ class PlayablePac extends Pacman {
 		Dir.opposite(this.orient) == this.dir
 			&& (this.movDir = this.orient)
 	}
-	#eaten({tileIdx}=this) {
-		if (!Maze.hasDot(tileIdx)) return
-		const isPow = Maze.hasPow(tileIdx)
+	#eaten({tileIdx:i}=this) {
+		if (!Maze.hasDot(i)) return
 		this.#playSE()
 		this.resetTimer()
-		Score.add(isPow? 50:10)
-		isPow && GhsMgr.setFrightMode()
+		Maze.hasPow(i)
+			? this.#powEaten()
+			: this.#dotEaten()
 		Maze.clearBgDot(this) == 0
 			? State.to('Clear')
 			: Player.trigger('Eaten')
+	}
+	#dotEaten() {
+		Score.add(10)
+	}
+	#powEaten() {
+		Score.add(50)
+		GhsMgr.setFrightMode()
 	}
 	#playSE() {
 		const id = (this.#eatIdx ^= 1) ? 'eat1':'eat0'
