@@ -199,7 +199,7 @@ export const DotCounter = function() {
 			: pCounters[Ghosts.findIndex(g=> g.state.isIdle)]++
 	}
 	$on({Title_Ready:reset})
-	$ready(()=> Player.on({DotEaten:addCnt}))
+	$ready(()=> Player.on({Eaten:addCnt}))
 	return {release}
 }()
 
@@ -221,7 +221,7 @@ const Elroy = function() {
 		}
 	}
 	$on({Title_NewLevel:()=> _part=0})
-	$ready(()=> Player.on({DotEaten:onDotEaten}))
+	$ready(()=> Player.on({Eaten:onDotEaten}))
 	return {
 		get part()  {return _part},
 		get step()  {return GhsStep.Base * spdRatesTable[_part]},

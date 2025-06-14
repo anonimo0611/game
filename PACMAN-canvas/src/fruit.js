@@ -23,9 +23,9 @@ let _fadeOut = /**@type {?FadeOut}*/(null)
 export const Fruit = new class {
 	static {$ready(this.setup)}
 	static setup() {
-		$on({Title_Ready:   Fruit.#reset})
-		$level.on({Changed: Fruit.#setImages})
-		Player.on({DotEaten:Fruit.#dotEaten})
+		$on({Title_Ready: Fruit.#reset})
+		Player.on({Eaten: Fruit.#dotEaten})
+		$level.on({change:Fruit.#setImages})
 	}
 	get score() {
 		return Pts.Vals.Fruit[Fruit.number()]

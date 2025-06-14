@@ -57,7 +57,7 @@ export const Game = new class {
 	}
 	#setLevel(i=1) {
 		Game.#level = between(i, 1, 0xFF) && +i || 1
-		$level.text('Level'+this.levelStr).trigger('Changed')
+		$level.text('Level'+this.levelStr).trigger('change')
 	}
 	#confirm() {
 		!Ticker.paused && Game.#pause()

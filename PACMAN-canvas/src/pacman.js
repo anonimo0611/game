@@ -155,7 +155,7 @@ class PlayablePac extends Pacman {
 		isPow && GhsMgr.setFrightMode()
 		Maze.clearBgDot(this) == 0
 			? State.to('Clear')
-			: Player.trigger('DotEaten')
+			: Player.trigger('Eaten')
 	}
 	#playSE() {
 		const id = (this.#eatIdx ^= 1) ? 'eat1':'eat0'
