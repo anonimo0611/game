@@ -41,7 +41,7 @@ D__________________________C\
 ////////////////////////////`])
 
 /** `.` and `O` represent normal and power cookies
- * @type {ReadonlySet<string>} */
+ ** @type {ReadonlySet<string>} */
 const DotChipSet = new Set(['.','O'])
 
 /** @typedef {number} TileIdx */

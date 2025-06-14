@@ -9,7 +9,7 @@ import * as Pts from './sprites/points.js'
 import * as Spr from './sprites/fruits.js'
 
 /** The fruit appear after 70 or 170 dots are cleared
-@type {ReadonlySet<number>} */
+ ** @type {ReadonlySet<number>} */
 const AppearSet = new Set([70,170])
 const IdxTable  = freeze([0,1,2,2,3,3,4,4,5,5,6,6,7])
 const TargetPos = Vec2(CvsW/2, T*18.5).freeze()
@@ -23,7 +23,7 @@ let _fadeOut = /**@type {?FadeOut}*/(null)
 export const Fruit = new class {
 	static {$ready(this.setup)}
 	static setup() {
-		$on({Title_Ready:Fruit.#reset})
+		$on({Title_Ready:   Fruit.#reset})
 		$level.on({Changed: Fruit.#setImages})
 		Player.on({DotEaten:Fruit.#dotEaten})
 	}
