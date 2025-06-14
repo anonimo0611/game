@@ -53,7 +53,7 @@ export const Game = new class {
 
 	#resetLevel() {
 		Game.#restarted = false
-		Game.#level = Menu.Level.index+1
+		Game.#setLevel(Menu.Level.index+1)
 	}
 	#setLevel(i=1) {
 		Game.#level = between(i, 1, 0xFF) && +i || 1
