@@ -2,10 +2,10 @@ import {Dir}     from '../_lib/direction.js'
 import * as Menu from '../_lib/menu.js'
 import PacSprite from '../src/sprites/pacman.js'
 import {Ghost}   from './actor.js'
-import {T,S,ghost,resize} from './_constants.js'
+import {_t,_s,_ghost,resize} from './_constants.js'
 export const {ctx:PvC}= canvas2D('previewCvs')
 
-const Type    = /**@type {const}*/({None:-1,Pacman:0,Akabei:1,Pinky:2,Aosuke:3,Guzuta:4,Frightened:5})
+const ActType = /**@type {const}*/({None:-1,Pacman:0,Akabei:1,Pinky:2,Aosuke:3,Guzuta:4,Frightened:5})
 const PacType = /**@type {const}*/({Normal:0,Losing:1})
 const GhsType = /**@type {const}*/({Normal:0,Mended:1,Exposed:2,Flashed:3})
 
@@ -33,25 +33,25 @@ const getOrient = ()=> /**@type {Direction}*/(
 		const [type,subType]= menu.value.split(':').map(Number)
 		!loop && Timer.cancelAll()
 		switch(type) {
-		case Type.Pacman:
+		case ActType.Pacman:
 			data = new AnimeData({type,subType,pacman:new PacSprite(PvC)})
 			if (setOrientCtrl({disabled:subType == PacType.Losing})) {
 				data.pacman?.setLosing()
 				Timer.set(2200, ()=> change(true), {key:'Losing'})
 			}
 			break
-		case Type.Akabei:
-		case Type.Pinky:
-		case Type.Aosuke:
-		case Type.Guzuta:
-			data = new AnimeData({type,subType,ghost:new Ghost(T*2)})
+		case ActType.Akabei:
+		case ActType.Pinky:
+		case ActType.Aosuke:
+		case ActType.Guzuta:
+			data = new AnimeData({type,subType,ghost:new Ghost(_s)})
 			setOrientCtrl({disabled:subType != GhsType.Normal})
 			break
-		case Type.Frightened:
-			data = new AnimeData({type,subType,ghost:new Ghost(T*2)})
+		case ActType.Frightened:
+			data = new AnimeData({type,subType,ghost:new Ghost(_s)})
 			setOrientCtrl({disabled:true})
 			break
-		case Type.None:
+		case ActType.None:
 			data = new AnimeData()
 			Timer.cancelAll()
 			setOrientCtrl({disabled:true})
@@ -65,24 +65,24 @@ const getOrient = ()=> /**@type {Direction}*/(
 	}
 	function drawPacman() {
 		PvC.save()
-		PvC.translate(S*1.5/2, S/2)
-		PvC.scale(T/TileSize,  T/TileSize)
+		PvC.translate(_s*1.5/2, _s/2)
+		PvC.scale(_t/TileSize, _t/TileSize)
 		data.pacman?.draw({orient:data.orient,radius:PacScale*TileSize})
 		PvC.restore()
 	}
 	function drawGhost() {
 		PvC.save()
 		data.subType == GhsType.Exposed
-			? PvC.translate(S/4, S/4)
-			: PvC.translate(S/2*2/2, S/4)
+			? PvC.translate(_s/3.3, _t/2)
+			: PvC.translate(_s/2.0, _t/2)
 		data.ghost?.sprite.draw({
-			...ghost,
+			..._ghost,
 			mainCtx:   PvC,
 			color:     Color[GhsNames[data.type-1]],
 			aIdx:      data.animIdx,
 			orient:    data.orient,
 			spriteIdx: data.subType == GhsType.Flashed? data.flashIdx : 0,
-			isFright:  data.type    == Type.Frightened,
+			isFright:  data.type    == ActType.Frightened,
 			isExposed: data.subType == GhsType.Exposed,
 			isMended:  data.subType == GhsType.Mended,
 		})
@@ -100,7 +100,7 @@ const getOrient = ()=> /**@type {Direction}*/(
 		PvC.clear()
 		if (data.type < 0)
 			return
-		data.type == Type.Pacman
+		data.type == ActType.Pacman
 			? drawPacman()
 			: drawGhost()
 	}
