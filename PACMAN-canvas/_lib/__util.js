@@ -6,7 +6,7 @@ const dRoot = document.getElementsByTagName('html')[0]
 const byId  = (/**@type {string}*/elementId)=>
 	document.getElementById(elementId)
 
-/** @param {KeyboardEvent|JQuery.KeyDownEvent} e */
+/** @param {KeyboardEvent|JQuery.KeyboardEventBase} e */
 const keyRepeat = e=>
 	(e instanceof KeyboardEvent ? e : e.originalEvent)?.repeat ?? false
 
@@ -14,10 +14,10 @@ const keyRepeat = e=>
 const wheelDeltaY = e=> /**@type {WheelEvent}*/
 	(e instanceof WheelEvent ? e : e.originalEvent)?.deltaY ?? 0
 
-/** @param {KeyboardEvent|JQuery.KeyDownEvent} e */
+/** @param {KeyboardEvent|JQuery.KeyboardEventBase} e */
 const isEnterKey = e=> /^(\x20|Enter)$/.test(e.key)
 
-/** @param {KeyboardEvent|JQuery.KeyDownEvent} e */
+/** @param {KeyboardEvent|JQuery.KeyboardEventBase} e */
 const isCombiKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
 /**
@@ -67,7 +67,7 @@ const isCombiKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
 /**
  * @template T
- * @param {T[]} array
+ * @param {readonly T[]} array
  * @returns {T}
  */const randChoice = array=> array[randInt(0, array.length-1)]
 
@@ -102,10 +102,10 @@ const $win = $(window)
 const $doc = $(document)
 
 /** @param {Function} fn */
-const $ready = fn=> $(document).on({DOMContentLoaded:fn}) && $win
+const $ready = fn=> $doc.on({DOMContentLoaded:fn}) && $win
 
 /** @param {Function} fn */
-const $load = fn=> $(window).on({load:fn})
+const $load = fn=> $win.on({load:fn})
 
 /** @param {string} elementId */
 const $byId = elementId=> $('#'+elementId)

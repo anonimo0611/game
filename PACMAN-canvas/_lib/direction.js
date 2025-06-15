@@ -8,7 +8,7 @@ export const Dir = freeze({
 	/** @param {Direction} dir */
 	opposite(dir) {return Opposite[dir]},
 
-	/** @param {KeyboardEvent|JQuery.KeyDownEvent} e */
+	/** @param {KeyboardEvent|JQuery.KeyboardEventBase} e */
 	from(e, {wasd=false}={}) {
 		if (isCombiKey(e)) return null
 		const k = e.code.replace(/^(Arrow|Key)/,'')
