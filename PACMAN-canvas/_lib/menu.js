@@ -113,10 +113,10 @@ export class Slide extends Menu {
 		this.btnL = $('<span class="button l">').prependTo(root)[0]
 		this.#setWidth(this.btnL.offsetWidth*2)
 		$(root).on('keydown',    e=> {this.#select(Dir.from(e))})
-		$(wrap).on('wheel',      e=> {this.#select(wheelDeltaY(e)>0?L:R)})
+		$(wrap).on('wheel',      e=> {this.#select(wheelDeltaY(e)>0 ? L:R)})
 		$(wrap).on('pointerdown',e=> {e.preventDefault(),root.focus()})
-		for (const btn of [this.btnL,this.btnR])
-			$(btn).on('click', e=> {this.#select(e.target==this.btnL?L:R)})
+		for (const [i,btn] of [this.btnL,this.btnR].entries())
+			$(btn).on('click', ()=> {this.#select(i? R:L)})
 		root.tabIndex = 0
 		this.select(this.index)
 		freeze(this)
