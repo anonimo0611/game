@@ -71,21 +71,26 @@ export class Actor extends Common {
 	setNextPos(denom=1, dir=this.dir) {
 		this.pos = Vec2[dir].mul(this.step/denom).add(this)
 	}
-	move(/**@type {Direction}*/dir) {
-		this.setNextPos(1, this.dir=dir)
-	}
-	hasAdjWall(/**@type {Direction}*/dir) {
-		return Maze.hasWall(this.getAdjTile(dir))
-	}
-	getAdjTile(/**@type {Direction}*/dir, tile=this.tilePos) {
+
+	/** @param {Direction} dir */
+	move(dir) {this.setNextPos(1, this.dir=dir)}
+
+	/** @param {Direction} dir */
+	hasAdjWall(dir) {return Maze.hasWall(this.getAdjTile(dir))}
+
+	/** @param {Direction} dir */
+	getAdjTile(dir, tile=this.tilePos) {
 		const  v = Vec2[dir].add(tile)
 		return v.setX((v.x+Cols) % Cols) // x-axis loops
 	}
+
+	/** @param {Direction} dir */
 	collidedWithWall(dir=this.dir) {
 		const {step,centerPos}= this
 		const {x,y}= Vec2[dir].mul(T/2+step).add(centerPos).divInt(T)
 		return Maze.hasWall({x:(x+Cols) % Cols, y}) // x-axis loops
 	}
+
 	/**
 	 * @param {number|OptionalPos} v
 	 * @param {number} [n]
