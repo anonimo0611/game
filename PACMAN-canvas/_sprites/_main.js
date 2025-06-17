@@ -28,17 +28,17 @@ export const View = function() {
 		Ctx.strokeStyle = '#555'
 		const {x:Cols,y:Rows}= GridSize
 		const line = (x1=0,y1=0,x2=0,y2=0)=> Ctx.strokeLine(x1,y1,x2,y2)
-		for (let y of range(Cols+0)) line(ofst(y), 0, ofst(y), Rows*_s)
-		for (let x of range(Rows+1)) line(0, x*_s, Cols*_s+_gap, x*_s)
+		for (const y of range(Cols+0)) line(ofst(y), 0, ofst(y), Rows*_s)
+		for (const x of range(Rows+1)) line(0, x*_s, Cols*_s+_gap, x*_s)
 		Ctx.restore()
 	}
 	function drawFruits() {
-		for (let i of range(8))
+		for (const i of range(8))
 			Fruit.draw(Ctx, i, ofst(i)+_s/2, _s/2, _s/16)
 	}
 	function drawGhosts() {
-		for (let row of range(1,6))
-			for (let col of range(0,8)) {
+		for (const row of range(1,6))
+			for (const col of range(0,8)) {
 				Ctx.save()
 				Ctx.translate(_t/2, _t/2)
 				drawGhost(col, row)
@@ -90,7 +90,7 @@ export const View = function() {
 	}
 	function drawPacman() {
 		const dirs = /**@type {const}*/([U,U,L,L,D,D,R,R])
-		for (let i of range(-1,9)) {
+		for (const i of range(-1,9)) {
 			const centerPos = Vec2(_t+ofst(i), _s*8.5)
 			const cfg = {centerPos, orient:dirs[i-1], radius:_t*PacScale}
 			new PacSprite(Ctx, i>0 ? (i%2 ? 1:2) : 0).draw(cfg)
@@ -104,7 +104,7 @@ export const View = function() {
 		Ctx.translate(_s/4, _s*9+_s/4-_gap/4)
 		;{//Expand clothes
 			const pos = Vec2.Zero, rates = [0.3, 0.5 ,1]
-			for (let i of range(3)) {
+			for (const i of range(3)) {
 				draw(...pos.vals, {aIdx:+(i==2)})
 				const nPos = Vec2(pos).add(_s*0.75, _s/4)
 				spr.expandClothes(+(i==2), rates[i], {...nPos,size:_s})
