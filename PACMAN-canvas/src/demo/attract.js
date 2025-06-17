@@ -47,7 +47,7 @@ export class Attract {
 	}
 	setActors() {
 		for (const where of this.ghsList.keys())
-			for (let i=0; i<GhsType.Max; i++)
+			for (let i of range(GhsType.Max))
 				this.setActor(where, i, where == DEMO)
 	}
 	setActor(where=0, gIdx=0, isDemo=false) {
@@ -100,7 +100,7 @@ export class Attract {
 			}
 		}
 		if (et > 105) {
-			for (let i=0; i<GhsType.Max; i++)
+			for (let i of range(GhsType.Max))
 				this.drawGhost(DEMO, i)
 			this.pacman.sprite.draw(this.pacman)
 			PtsMgr.drawGhostPts()

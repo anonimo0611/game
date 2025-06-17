@@ -37,7 +37,7 @@ export class Losing {
 		const outerR = min(this.#outerR += PacR/1/LineDur, PacR/1)
 		if (this.#outerR >= PacR)
 			ctx.globalAlpha = max(this.#alpha -= 1/FadeDur, 0)
-		for (let deg=0; deg<360; deg+=360/10) {
+		for (const deg of range(0, 360, 360/10)) {
 			ctx.beginPath()
 	 		ctx.moveTo(...circumPosition(deg, innerR))
 	     	ctx.lineTo(...circumPosition(deg, outerR))

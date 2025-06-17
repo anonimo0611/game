@@ -138,7 +138,7 @@ export default class {
 		const {ctx}= this
 		ctx.save()
 		ctx.scale(Vec2[orient].x, 1)
-		for (let i=0; i<=1; i++) {
+		for (let i of [0,1]) {
 			// Eyeballs
 			ctx.beginPath()
 			ctx.ellipse([-16.5, 23][i], -11, 13,17, 0,0, PI*2)

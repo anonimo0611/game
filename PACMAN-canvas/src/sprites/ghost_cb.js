@@ -37,7 +37,7 @@ export default class {
 		ctx.lineWidth   = 8
 		ctx.lineCap     = 'square'
 		ctx.strokeStyle = '#000'
-		for (let i=0; i<=1; i++) {
+		for (let i of [0,1]) {
 			ctx.beginPath() // Eyes
 			ctx.moveTo([-15, 22][i],  0)
 			ctx.lineTo([-15, 22][i], -7)
@@ -107,7 +107,8 @@ export default class {
 	 /**@type {[L:number, R:number]}*/eyesLR
 	) {
 		const {ctx}= this
-		for (let i=1; i>=0; i--) {
+		for (let i of [1,0]) {
+			console.log(i)
 			// Eyeballs
 			ctx.beginPath()
 			ctx.ellipse(ballsLR[i], -33, 11, 16, 0,0, PI*2)
@@ -120,10 +121,9 @@ export default class {
 			ctx.fill()
 		}
 	}
-	static get stakeClothes() {return new StakeClothes}
+	static get stakeClothes() {return freeze(new StakeClothes)}
 }
 class StakeClothes {
-	constructor() {freeze(this)}
 	CaughtX   = CvsW/2 + T/2
 	AkaMinX   = this.CaughtX - T
 	stakeSize = Vec2(T*.18, T*.70).freeze()
