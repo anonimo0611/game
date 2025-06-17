@@ -34,7 +34,6 @@ export class Actor extends Common {
 
 	get maxAlpha()   {return 1}
 	get step()       {return 0}
-	get stepDiv()    {return ceil(this.step)*2}
 	get frozen()     {return Timer.frozen}
 	get isInTunnel() {return Maze.Tunnel.isIn(this.centerPos)}
 

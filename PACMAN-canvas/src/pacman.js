@@ -109,8 +109,8 @@ class PlayablePac extends Pacman {
 		if (this.frozen || !State.isPlaying) return
 		this.sprite.update(this)
 		this.#notEaten++
-		for (const _ of range(this.stepDiv))
-			this.#behavior(this.stepDiv)
+		for (let i=0,divisor=ceil(this.step)*2; i<divisor; i++)
+			this.#behavior(divisor)
 	}
 	#behavior(divisor=1) {
 		if (this.tileJustUpdated(divisor)) {
