@@ -121,7 +121,7 @@ export class Ghost extends Actor {
 		if (s.isIdle)   return this.#idle(this)
 		if (s.isGoOut)  return this.#goOut(this)
 		if (s.isReturn) return this.#returnToHome(this)
-		this.#walkRails()
+		this.#walkRails(this)
 	}
 	#idle({idx,step,orient,state,centerPos:{y:cy}}=this) {
 		if (!Ctrl.isChaseMode)
@@ -178,9 +178,9 @@ export class Ghost extends Actor {
 			: this.state.to('Idle') && this.#idle(this)
 		!this.frozen && Sound.ghostArrivedAtHome()
 	}
-	#walkRails() {
-		for (let i=0,divisor=ceil(this.step)*2; i<divisor; i++) {
-			this.setNextPos(divisor)
+	#walkRails({step}=this) {
+		for (const _ of range(step)) {
+			this.setNextPos(step)
 			this.inBackOfTile && this.#setNextDir()
 			if (this.#setTurn(this)) break
 			if (this.crashWithPac()) break
@@ -214,7 +214,7 @@ export class Ghost extends Actor {
 			|| (dir != U || this.isFright || this.isEscaping)
 			|| Maze.GhostNoEnter.has(test.hyphenated) == false
 	}
-	#setTurn({dir,orient,pos,tilePos:t}=this) {
+	#setTurn({step,dir,orient,pos,tilePos:t}=this) {
 		if (dir == orient
 		 || this.hasAdjWall(orient))
 			return false
@@ -224,6 +224,7 @@ export class Ghost extends Actor {
 		 || dir == D && pos.y > t.y*T) {
 			this.movDir = orient
 			this.pos = t.mul(T)
+			this.setNextPos(step)
 			return true
 		}
 		return false
