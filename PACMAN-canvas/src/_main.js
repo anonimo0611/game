@@ -36,6 +36,7 @@ export const Game = new class {
 			Restart:  Game.#levelBegins,
 		})
 		Menu.Level.on({change:Game.#resetLevel})
+		State.to('Title')
 	}
 	#level = 1
 	#restarted = false
@@ -44,10 +45,10 @@ export const Game = new class {
 	get levelStr()  {return Game.#level.toString().padStart(2,'0')}
 	get restarted() {return Game.#restarted}
 
-	// Level 13+ as the fastest, stepwise faster from level 1 to 13
+	/** Level 13+ as the fastest, stepwise faster from level 1 to 13 */
 	get speedByLv() {return 1 - (13-Game.clampedLv) * .01}
 	get clampedLv() {return clamp(Game.level, 1, 13)}
-	get speedRate() {return State.isPlaying? Ctrl.speedRate : 1}
+	get speedRate() {return State.isPlaying ? Ctrl.speedRate : 1}
 	get interval()  {return Game.speedRate * Ticker.Interval}
 	get moveSpeed() {return Game.speedRate * Game.speedByLv}
 
@@ -80,7 +81,7 @@ export const Game = new class {
 				: State.isPlaying && Game.#confirm()
 			}()
 		default:
-			if (qS(':not(#startBtn):focus'))
+			if (qS(':not(#startBtn):focus') != null)
 				return
 			if (Dir.from(e,{wasd:true}) || e.key == '\x20') {
 				State.isTitle && State.to('Start')
@@ -93,6 +94,7 @@ export const Game = new class {
 		Sound.stop()
 		Game.#resetLevel()
 		Ticker.set(Game.#update, Game.#draw)
+
 	}
 	#onStart() {
 		Cursor.hide()
