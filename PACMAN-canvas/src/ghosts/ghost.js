@@ -121,7 +121,7 @@ export class Ghost extends Actor {
 		if (s.isIdle)   return this.#idle(this)
 		if (s.isGoOut)  return this.#goOut(this)
 		if (s.isReturn) return this.#returnToHome(this)
-		this.#walkRoute()
+		this.#walkRails()
 	}
 	#idle({idx,step,orient,state,centerPos:{y:cy}}=this) {
 		if (!Ctrl.isChaseMode)
@@ -178,9 +178,9 @@ export class Ghost extends Actor {
 			: this.state.to('Idle') && this.#idle(this)
 		!this.frozen && Sound.ghostArrivedAtHome()
 	}
-	#walkRoute() {
-		for (let i=0,denom=ceil(this.step)*2; i<denom; i++) {
-			this.setNextPos(denom)
+	#walkRails() {
+		for (const _ of range(this.stepDiv)) {
+			this.setNextPos(this.stepDiv)
 			this.inBackOfTile && this.#setNextDir()
 			if (this.#setTurn(this)) break
 			if (this.crashWithPac()) break

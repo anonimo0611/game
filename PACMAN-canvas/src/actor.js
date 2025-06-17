@@ -32,8 +32,9 @@ export class Actor extends Common {
 	set movDir(dir) {this.#movDir = dir}
 	set orient(dir) {this.#orient = dir}
 
-	get step()       {return 0}
 	get maxAlpha()   {return 1}
+	get step()       {return 0}
+	get stepDiv()    {return ceil(this.step)*2}
 	get frozen()     {return Timer.frozen}
 	get isInTunnel() {return Maze.Tunnel.isIn(this.centerPos)}
 
@@ -64,12 +65,12 @@ export class Actor extends Common {
 	centering() {
 		this.x = (CvsW-T)/2
 	}
-	tileJustUpdated(denom=1) {
+	tileJustUpdated(divisor=1) {
 		return this.inFrontOfTile
-			&& this.tilePixel <= this.step/denom
+			&& this.tilePixel <= this.step/divisor
 	}
-	setNextPos(denom=1, dir=this.dir) {
-		this.pos = Vec2[dir].mul(this.step/denom).add(this)
+	setNextPos(divisor=1, dir=this.dir) {
+		this.pos = Vec2[dir].mul(this.step/divisor).add(this)
 	}
 
 	/** @param {Direction} dir */

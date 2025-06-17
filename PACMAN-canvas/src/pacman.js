@@ -109,11 +109,11 @@ class PlayablePac extends Pacman {
 		if (this.frozen || !State.isPlaying) return
 		this.sprite.update(this)
 		this.#notEaten++
-		for (let i=0,denom=ceil(this.step)*2; i<denom; i++)
-			this.#behavior(denom)
+		for (const _ of range(this.stepDiv))
+			this.#behavior(this.stepDiv)
 	}
-	#behavior(denom=1) {
-		if (this.tileJustUpdated(denom)) {
+	#behavior(divisor=1) {
+		if (this.tileJustUpdated(divisor)) {
 			this.#step = this.#getStep()
 		}
 		if (!this.#turning && this.collidedWithWall()) {
@@ -123,16 +123,16 @@ class PlayablePac extends Pacman {
 		}
 		this.#stopped = false
 		this.#eaten(this)
-		this.#setCornering(denom)
-		this.setNextPos(denom)
+		this.#setCornering(divisor)
+		this.setNextPos(divisor)
 		this.#endCornering()
 		this.#turnAround()
 	}
-	#setCornering(denom=1) {
+	#setCornering(divisor=1) {
 		const dir = this.#preDir
 		if (this.canTurn && dir) {
 			this.#turning ||= true
-			this.setNextPos(denom,this.orient=dir)
+			this.setNextPos(divisor,this.orient=dir)
 		}
 	}
 	#endCornering() {
