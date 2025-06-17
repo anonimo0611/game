@@ -21,7 +21,7 @@ export const Lives = function() {
 		ctx.save()
 		ctx.translate(size, CvsH-size)
 		ctx.clearRect(0,0, size*5, size)
-		for (let i of range(_left))
+		for (const i of range(_left))
 			sprite.draw({radius,centerPos:Vec2(size*i+T,T)})
 		ctx.restore()
 	}

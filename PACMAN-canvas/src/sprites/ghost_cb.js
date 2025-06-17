@@ -37,7 +37,7 @@ export default class {
 		ctx.lineWidth   = 8
 		ctx.lineCap     = 'square'
 		ctx.strokeStyle = '#000'
-		for (let i of [0,1]) {
+		for (const i of [0,1]) {
 			ctx.beginPath() // Eyes
 			ctx.moveTo([-15, 22][i],  0)
 			ctx.lineTo([-15, 22][i], -7)
@@ -107,7 +107,7 @@ export default class {
 	 /**@type {[L:number, R:number]}*/eyesLR
 	) {
 		const {ctx}= this
-		for (let i of [1,0]) {
+		for (const i of [1,0]) {
 			console.log(i)
 			// Eyeballs
 			ctx.beginPath()
