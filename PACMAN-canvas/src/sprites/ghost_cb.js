@@ -108,7 +108,6 @@ export default class {
 	) {
 		const {ctx}= this
 		for (const i of [1,0]) {
-			console.log(i)
 			// Eyeballs
 			ctx.beginPath()
 			ctx.ellipse(ballsLR[i], -33, 11, 16, 0,0, PI*2)

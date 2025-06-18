@@ -4,8 +4,8 @@ import {Ctrl}     from './control.js'
 import {Lives}    from './lives.js'
 import {drawText} from './message.js'
 
-let _score=0,_hiSco=0
-let _saveS=0,_saveH=0
+let _score = 0, _hiSco = 0
+let _saveS = 0, _saveH = 0
 
 export const Score = new class {
 	static {$ready(this.setup)}
@@ -36,7 +36,7 @@ export const Score = new class {
 	#onGameOver() {
 		const hiSco = localStorage.anopac_hiscore|0
 		if (!Ctrl.isPractice && _hiSco > hiSco)
-			localStorage.anopac_hiscore=_hiSco
+			localStorage.anopac_hiscore = _hiSco
 	}
 	add(points=0) {
 		const score = _score + points
