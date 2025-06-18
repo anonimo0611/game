@@ -7,8 +7,8 @@ BaseStep = TileSize/4.5,
 /** Shorthand of TileSize */
 T = TileSize,
 
-DotPts = 10,
-PowPts = 50,
+ScoreOfDot = 10,
+ScoreOfPow = 50,
 
 /** Blinking interval in frames */
 PowDotInterval = 15,

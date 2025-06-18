@@ -161,10 +161,10 @@ class PlayablePac extends Pacman {
 			: Player.trigger('Eaten')
 	}
 	#dotEaten() {
-		Score.add(DotPts)
+		Score.add(ScoreOfDot)
 	}
 	#powEaten() {
-		Score.add(PowPts)
+		Score.add(ScoreOfPow)
 		GhsMgr.setFrightMode()
 	}
 	#playSE() {
