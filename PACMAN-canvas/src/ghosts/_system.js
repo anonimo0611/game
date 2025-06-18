@@ -44,9 +44,7 @@ export class GhostState extends _State {
 		super()
 		this.init(Maze.House.isIn(tilePos)? 'Idle':'Walk')
 	}
-	to(/**@type {State}*/state) {
-		return super.to(state)
-	}
+	to(/**@type {State}*/state) {return super.to(state)}
 }
 
 export const GhsMgr = new class extends Common {
@@ -181,14 +179,15 @@ export const DotCounter = function() {
 		const timeOut = Game.level <= 4 ? 4e3 : 3e3
 		const gLimit  = limitTable[idx-1][0] // global
 		const pLimit  = limitTable[idx-1][min(Game.level,3)] // personal
-		;(Player.instance.timeNotEaten >= timeOut)? fn()
-		:(!Game.restarted || _globalCounter < 0)
-			? (pCounters[idx] >= pLimit)
-				&& fn()
-			: (_globalCounter == gLimit)
-				&& fn(idx == GhsType.Guzuta)
-				&& (_globalCounter = -1)
-	}
+		;(Player.instance.timeNotEaten >= timeOut)
+			? fn()
+			:(!Game.restarted || _globalCounter < 0)
+				? (pCounters[idx] >= pLimit)
+					&& fn()
+				: (_globalCounter == gLimit)
+					&& fn(idx == GhsType.Guzuta)
+					&& (_globalCounter = -1)
+		}
 	function reset() {
 		!Game.restarted && pCounters.fill(0)
 		_globalCounter = Game.restarted? 0 : -1
