@@ -4,7 +4,6 @@ import {Maze}   from './maze.js'
 import {Player} from './pacman.js'
 import {GhsMgr} from './ghosts/_system.js'
 
-const CW = CvsW
 export class Actor extends Common {
 	#x = 0
 	#y = 0
@@ -62,7 +61,7 @@ export class Actor extends Common {
 		Ctx.setAlpha(this.#fadeIn?.alpha ?? this.maxAlpha)
 	}
 	centering() {
-		this.x = (CvsW-T)/2
+		this.x = (CW-T)/2
 	}
 	tileJustUpdated(divisor=1) {
 		return this.inFrontOfTile

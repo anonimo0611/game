@@ -28,11 +28,11 @@ export class CoffBrk {
 	}
 	pacman  = new Pacman
 	akabei  = new Ghost
-	pacVelX = -CvsW/180
+	pacVelX = -CW/180
 
 	/** @protected */
 	constructor() {
-		this.pacman.y = this.akabei.y = (CvsH/2 - T/2)
+		this.pacman.y = this.akabei.y = (CH/2 - T/2)
 		$onNS('.CB',{Quit:this.end, blur_focus:this.pause})
 	}
 	movePacman() {
@@ -67,9 +67,9 @@ class Scene1 extends CoffBrk {
 	constructor() {
 		super()
 		this.isFright = false
-		this.akaVelX  = -CvsW / 156.4
-		this.pacman.x =  CvsW + T*1
-		this.akabei.x =  CvsW + T*3
+		this.akaVelX  = -CW / 156.4
+		this.pacman.x =  CW + T*1
+		this.akabei.x =  CW + T*3
 	}
 	moveAkabei() {
 		if (Ticker.elapsedTime > 400)
@@ -89,7 +89,7 @@ class Scene1 extends CoffBrk {
 			break
 		case R:
 			akabei.x > T*7.5    && this.movePacman()
-			akabei.x > CvsW+T*9 && this.end()
+			akabei.x > CW+T*9 && this.end()
 			break
 		}
 	}
@@ -108,8 +108,8 @@ class Scene2 extends CoffBrk {
 		this.isRipped = false
 		this.sprite   = Sprite.stakeClothes
 		this.akaVelX  = this.pacVelX
-		this.pacman.x = CvsW + T*3
-		this.akabei.x = CvsW + T*16
+		this.pacman.x = CW + T*3
+		this.akabei.x = CW + T*16
 	}
 	moveAkabei({akabei:aka, akaVelX:v}=this) {
 		const {CaughtX,AkaMinX}= this.sprite
@@ -152,15 +152,15 @@ class Scene2 extends CoffBrk {
 class Scene3 extends CoffBrk {
 	constructor() {
 		super()
-		this.pacVelX  = -CvsW / 200
-		this.akaVelX  = -CvsW / 200
-		this.pacman.x =  CvsW + T*3
-		this.akabei.x =  CvsW + T*10
+		this.pacVelX  = -CW / 200
+		this.akaVelX  = -CW / 200
+		this.pacman.x =  CW + T*3
+		this.akabei.x =  CW + T*10
 	}
 	moveAkabei({akabei:aka}=this) {
 		aka.x += this.akaVelX
 		aka.x < -T*8 && (aka.dir = R) && (this.akaVelX *= -1)
-		aka.x > (T*9 + CvsW) && aka.dir == R && this.end()
+		aka.x > (T*9 + CW) && aka.dir == R && this.end()
 	}
 	update() {
 		this.movePacman()

@@ -18,7 +18,7 @@ U='Up', R='Right', D='Down', L='Left',
 
 dBody = document.getElementsByTagName('body')[0],
 
-[Bg,HUD,,Ctx,CvsW,CvsH]= [
+[Bg,HUD,,Ctx,CW,CH]= [
 	canvas2D('cvs_bg' ,  T*Cols, T*Rows),
 	canvas2D('cvs_hud',  T*Cols, T*Rows),...
 	canvas2D('cvs_main', T*Cols, T*Rows).vals

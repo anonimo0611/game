@@ -86,7 +86,7 @@ export const Ctrl = new class {
 		const cfg = {ctx, size:T*0.68, style:'bold', scaleX:.7}
 		ctx.save()
 		ctx.translate(T*0.1, T*18)
-		ctx.clearRect(0, -T, CvsW, T*3)
+		ctx.clearRect(0, -T, CW, T*3)
 		if (Ctrl.isCheatMode || spd != 'x1.0') {
 			drawText(0, lh*0, ColTbl[+(spd != 'x1.0') ], 'Speed'+spd,  cfg)
 			drawText(0, lh*1, ColTbl[+Ctrl.invincible ], 'Invincible', cfg)

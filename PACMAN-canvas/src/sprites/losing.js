@@ -15,7 +15,7 @@ export class Losing {
 	draw({x=0,y=0}={}) {
 		const {ctx}= this
 		const clampedX = (ctx == Ctx)
-			? clamp(x, PacR, CvsW-PacR) : x
+			? clamp(x, PacR, CW-PacR) : x
 		ctx.save()
 		ctx.translate(clampedX, y)
 		ctx.lineWidth = T/6
