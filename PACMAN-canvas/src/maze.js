@@ -63,7 +63,8 @@ class PowDot {
 		this.#disp ^= +(Ticker.count % PowDotInterval == 0)
 		for (const [,tPos] of PowMap) this.#draw(tPos)
 	}
-	#draw(/**@type {Vector2}*/t) {
+	/** @param {Vector2} t */
+	#draw(t) {
 		if (!State.isPlaying
 		 || Ticker.paused
 		 || this.#disp)
