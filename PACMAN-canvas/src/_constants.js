@@ -53,11 +53,12 @@ Color = freeze(new class {
 PacScale  = 0.9,
 PacRadius = T*PacScale,
 PacStep   = freeze(new class {
-	Base     = BaseStep
-	SlowRate = 0.98
-	Eating   = this.Base * 0.86
-	EneEat   = this.Base * 0.95
-	Energize = this.Base * 1.10
+	SlowLevel = 13   // Slow down after this level
+	SlowRate  = 0.98 // Deceleration rate at SlowLevel
+	Base      = BaseStep
+	Eating    = this.Base * 0.86 // Eating normal dot
+	Energized = this.Base * 1.10 // After eating Power dot
+	EneEat    = this.Base * 0.95 // Energized + eating dot
 }),
 
 GhsScale = 1.1,
@@ -65,9 +66,9 @@ GhsType  = /**@type {const}*/({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4}),
 GhsNames = /**@type {const}*/(['Akabei','Pinky','Aosuke','Guzuta']),
 GhsStep  = freeze(new class {
 	Base     = BaseStep  * 1.07
-	Idle     = this.Base * 0.50
-	GoOut    = this.Base * 0.50
-	Fright   = this.Base * 0.60
-	InTunnel = this.Base * 0.60
-	Escape   = this.Base * 1.40
+	Idle     = this.Base * 0.50 // Waiting at the house
+	GoOut    = this.Base * 0.50 // Going out of the house
+	Fright   = this.Base * 0.60 // Frightened ghost
+	InTunnel = this.Base * 0.60 // When in the tunnel
+	Escape   = this.Base * 1.40 // Eyes escaping to the house
 })

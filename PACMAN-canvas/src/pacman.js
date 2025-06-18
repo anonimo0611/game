@@ -11,6 +11,8 @@ import {Actor}   from './actor.js'
 import {GhsMgr}  from './ghosts/_system.js'
 import Sprite    from './sprites/pacman.js'
 
+const Step = PacStep
+
 export const Player = function() {
 	/** @type {PlayablePac} */
 	let player
@@ -52,13 +54,13 @@ class PlayablePac extends Pacman {
 	}
 	get baseSpeed() {
 		return Game.moveSpeed
-			* (Game.level<13 ? 1 : PacStep.SlowRate)
+			* (Game.level<Step.SlowLevel ? 1 : Step.SlowRate)
 	}
 	#getStep() {
 		const eating = Maze.hasDot(this.tileIdx)
 		return(GhsMgr.isFright
-			? (eating? PacStep.EneEat : PacStep.Energize)
-			: (eating? PacStep.Eating : PacStep.Base)
+			? (eating? Step.EneEat : Step.Energized)
+			: (eating? Step.Eating : Step.Base)
 		) * this.baseSpeed
 	}
 	#allowKey(/**@type {KeyboardEvent}*/e) {
