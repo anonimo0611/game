@@ -9,12 +9,11 @@ import Sprite   from '../sprites/ghost_cb.js'
 export class CoffBrk {
 	static #scene = /**@type {?(Scene1|Scene2|Scene3)}*/(null)
 	static {
-		$on('CoffBrk', /**@type {(_:unknown,num:1|2|3)=> void}*/
-			((_,num)=> this.#begin(num)))
-	}
-	static #begin(/**@type {1|2|3}*/num) {
-		Sound.play('cutscene', {loop:1^Number(num == 2)})
-		CoffBrk.#scene = new[Scene1,Scene2,Scene3][num-1]
+		$on('CoffBrk',
+			/**@type {(_:unknown,n:number)=> void}*/(_,n)=> {
+			Sound.play('cutscene', {loop:1^Number(n == 2)})
+			CoffBrk.#scene = new[Scene1,Scene2,Scene3][n-1]
+		})
 	}
 	static update() {
 		this.#scene?.update()
@@ -26,6 +25,7 @@ export class CoffBrk {
 	static get intermissionLevel() {
 		return {2:1, 5:2, 9:3}[Game.level] ?? -1
 	}
+
 	pacman  = new Pacman
 	akabei  = new Ghost
 	pacVelX = -CW/180
