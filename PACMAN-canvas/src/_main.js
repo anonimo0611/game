@@ -74,15 +74,16 @@ export const Game = new class {
 		if (!Sound.loaded || Confirm.opened || keyRepeat(e))
 			return
 		switch(e.key) {
-		case 'Escape': return Game.#pause()
-		case 'Delete': return function() {
+		case 'Escape':
+			Game.#pause()
+			break
+		case 'Delete':
 			e.ctrlKey
 				? State.to('Quit')
 				: State.isPlaying && Game.#confirm()
-			}()
+			break
 		default:
-			if (qS(':not(#startBtn):focus') != null)
-				return
+			if (!qS(':not(#startBtn):focus')) break
 			if (Dir.from(e,{wasd:true}) || e.key == '\x20') {
 				State.isTitle && State.to('Start')
 				Ticker.paused && Game.#pause()

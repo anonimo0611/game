@@ -33,7 +33,7 @@ export class Actor extends Common {
 	set orient(dir) {this.#orient = dir}
 
 	/** @param {Direction} dir */
-	setMovDir(dir) {this.#movDir = dir}
+	setMoveDir(dir) {this.#movDir = dir}
 
 	get maxAlpha()   {return 1}
 	get step()       {return 0}
