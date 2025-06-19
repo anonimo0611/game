@@ -32,7 +32,7 @@ class PlayablePac extends Pacman {
 	#stopped  = true
 	#eatIdx   = /**@type {0|1}*/(0)
 	#preDir   = /**@type {?Direction}*/(null)
-	#nextTurn = /**@type {?Direction}*/(null)
+	#nextDir  = /**@type {?Direction}*/(null)
 
 	get closed()       {return State.isPlaying == false}
 	get showCenter()   {return Ctrl.showGridLines}
@@ -75,7 +75,7 @@ class PlayablePac extends Pacman {
 		const dir = this.#allowKey(e)
 		if (!dir) return
 		if (this.#turning) {
-			this.#nextTurn = dir
+			this.#nextDir = dir
 			return
 		}
 		if (this.hasAdjWall(dir)) {
@@ -119,9 +119,9 @@ class PlayablePac extends Pacman {
 			this.#step = this.#getStep()
 		}
 		if (!this.#turning && this.collidedWithWall()) {
-			this.pos = this.tilePos.mul(T)
 			this.#preDir  = null
 			this.#stopped = true
+			this.pos = this.tilePos.mul(T)
 			return
 		}
 		this.#stopped = false
@@ -140,10 +140,10 @@ class PlayablePac extends Pacman {
 	}
 	#endCornering() {
 		if (this.#turning && this.inBackOfTile) {
+			this.#preDir  = this.#nextDir
+			this.#nextDir = null
+			this.#turning = false
 			this.setMoveDir(this.orient)
-			this.#preDir   = this.#nextTurn
-			this.#nextTurn = null
-			this.#turning  = false
 		}
 	}
 	#turnAround() {
