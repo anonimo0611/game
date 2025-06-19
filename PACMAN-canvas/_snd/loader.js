@@ -1,8 +1,8 @@
-const {Sound:SoundJS}= createjs
-const Instance = /**@type {{[id:string]:createjs.AbstractSoundInstance}}}*/({})
-
 /** @typedef {import('_manifest.js').SoundType} SoundType */
 import {Manifest,ConfigMap,Ids} from './_manifest.js'
+
+const {Sound:SoundJS}= createjs
+const Instance = /**@type {{[key in SoundType]:createjs.AbstractSoundInstance}}*/({})
 
 export class SoundMgr {
 	static #loaded   = false
