@@ -88,7 +88,7 @@ class Scene1 extends CoffBrk {
 			pacman.dir = akabei.dir = R
 			break
 		case R:
-			akabei.x > T*7.5    && this.movePacman()
+			akabei.x > T*7.5  && this.movePacman()
 			akabei.x > CW+T*9 && this.end()
 			break
 		}
