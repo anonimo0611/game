@@ -12,7 +12,7 @@ import {RunTimer} from './_run_timer.js'
 
 const CHAR = 0
 const DEMO = 1
-const SmallTextSize = T*0.68
+const SmallSize = T*0.68
 
 let _attract = /**@type {?Attract}*/(null)
 
@@ -48,11 +48,11 @@ export class Attract {
 	setActors() {
 		for (const where of this.ghsList.keys())
 			for (const i of range(GhsType.Max))
-				this.setActor(where, i, where == DEMO)
+				this.setActor(where, i)
 	}
-	setActor(where=0, gIdx=0, isDemo=false) {
-		const g = new Ghost(isDemo? L:R, {idx:gIdx, animFlag:+isDemo})
-		if (isDemo) {
+	setActor(where=0, gIdx=0) {
+		const g = new Ghost(where? L:R, {idx:gIdx,animFlag:where})
+		if (where) {
 			g.setPos(CW+(T*6)+(T*2*gIdx), T*19)
 			g.idx == 0 && this.pacman.setPos(g.x-T*3.5, g.y)
 		}
@@ -85,9 +85,9 @@ export class Attract {
 			drawDot(Ctx, 10, 24)
 			this.powDisp && drawDot(Ctx, 10, 26, true)
 			drawText(12.0, 25, null, ScoreOfDot)
-			drawText(14.3, 25, null, 'PTS', {size:SmallTextSize})
+			drawText(14.3, 25, null, 'PTS', {size:SmallSize})
 			drawText(12.0, 27, null, ScoreOfPow)
-			drawText(14.3, 27, null, 'PTS', {size:SmallTextSize})
+			drawText(14.3, 27, null, 'PTS', {size:SmallSize})
 		}
 		if (et > 90) {
 			if (this.pacman.dir == L && this.powDisp) {
@@ -96,7 +96,7 @@ export class Attract {
 			if (Ctrl.extendPts > 0) {
 				const {BonusText:color}= Color
 				drawText( 2.0, 30, color, `BONUS　PACMAN　FOR　${Ctrl.extendPts}`)
-				drawText(24.3, 30, color, 'PTS', {size:SmallTextSize})
+				drawText(24.3, 30, color, 'PTS', {size:SmallSize})
 			}
 		}
 		if (et > 105) {
