@@ -47,7 +47,7 @@ export class CoffBrk {
 		akabei.sprite.draw({aIdx, ...cfg, ...pos})
 	}
 	pause() {
-		Sound.allPaused = Ticker.pause()
+		Sound.paused(Ticker.pause())
 	}
 	draw() {
 		State.last('FlashMaze')
