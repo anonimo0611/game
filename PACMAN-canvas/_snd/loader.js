@@ -55,7 +55,7 @@ export class SoundMgr {
 	 */
 	play(id, cfg={}) {
 		const {duration:dur}= cfg
-		if (this.disabled || !Instance[id]) return
+		if (this.disabled) return
 		if (typeof dur == 'number' && dur > 0)
 			Instance[id].duration = dur
 		Instance[id].play(this.#configMerge(id, cfg))
