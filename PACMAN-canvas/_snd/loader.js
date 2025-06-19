@@ -1,5 +1,5 @@
 const {Sound:SoundJS}= createjs
-const Instance = /**@type {Map<string,createjs.AbstractSoundInstance>}*/(new Map)
+const Instance = /**@type {{[id:string]:createjs.AbstractSoundInstance}}}*/({})
 
 /** @typedef {import('_manifest.js').SoundType} SoundType */
 import {Manifest,ConfigMap,Ids} from './_manifest.js'
@@ -15,7 +15,7 @@ export class SoundMgr {
 			SoundJS.on('fileload', ()=> {
 				if (++amount < Manifest.length) return
 				SoundMgr.#disabled = false
-				Ids.forEach(i=> Instance.set(i, SoundJS.createInstance(i)))
+				Ids.forEach(i=> Instance[i] = SoundJS.createInstance(i))
 				resolve('All sound files loaded')
 			})
 		})
@@ -27,22 +27,21 @@ export class SoundMgr {
 	get vol()      {return SoundJS.volume * 10}
 	set vol(vol)   {SoundJS.volume = Number.isFinite(vol)? vol/10 : this.vol}
 
-	/** @param {boolean} bool */
-	set allPaused(bool) {Instance.forEach(i=> i.paused = bool)}
-
 	/**
 	 * @param {boolean} bool
 	 * @param {...SoundType} ids
 	 */
 	paused(bool, ...ids) {
-		ids.forEach(id=> {const i=Instance.get(id);i && (i.paused=bool)})
+		ids.length
+			? ids.forEach(id=> {Instance[id].paused=bool})
+			: values(Instance).forEach(i=> i.paused=bool)
 	}
 
 	/** @param {SoundType} id */
-	isPlaying(id)  {return Instance.get(id)?.playState === SoundJS.PLAY_SUCCEEDED}
+	isPlaying(id)  {return Instance[id].playState === SoundJS.PLAY_SUCCEEDED}
 
 	/** @param {SoundType} id */
-	isFinished(id) {return Instance.get(id)?.playState === SoundJS.PLAY_FINISHED}
+	isFinished(id) {return Instance[id].playState === SoundJS.PLAY_FINISHED}
 
 	/** @param {SoundType} id */
 	#configMerge(id, cfg={}) {
@@ -55,18 +54,17 @@ export class SoundMgr {
 	 * @param {{duration?:number,loop?:number}} cfg
 	 */
 	play(id, cfg={}) {
-		const instance = Instance.get(id)
 		const {duration:dur}= cfg
-		if (this.disabled || !instance) return
+		if (this.disabled || !Instance[id]) return
 		if (typeof dur == 'number' && dur > 0)
-			instance.duration = dur
-		instance.play(this.#configMerge(id, cfg))
+			Instance[id].duration = dur
+		Instance[id].play(this.#configMerge(id, cfg))
 	}
 
 	/** @param {...SoundType} ids */
 	stop(...ids) {
 		ids.length == 0 && SoundJS.stop()
-		ids.forEach(id=> Instance.get(id)?.stop())
+		ids.forEach(id=> Instance[id].stop())
 		return this
 	}
 }
