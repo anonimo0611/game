@@ -89,7 +89,7 @@ class PlayablePac extends Pacman {
 		this.#preDir = dir
 		if (this.inBackOfTile) {
 			this.orient = dir
-			this.movDir = Dir.opposite(this.dir)
+			this.setMovDir(this.revDir)
 		}
 	}
 	resetTimer() {
@@ -139,14 +139,14 @@ class PlayablePac extends Pacman {
 	}
 	#endCornering() {
 		if (this.#turning && this.inBackOfTile) {
-			this.movDir   = this.orient
+			this.setMovDir(this.orient)
 			this.#preDir  = this.#nextTurn
 			this.#turning = !!(this.#nextTurn=null)
 		}
 	}
 	#turnAround() {
-		Dir.opposite(this.orient) == this.dir
-			&& (this.movDir = this.orient)
+		this.revOrient == this.dir
+			&& this.setMovDir(this.orient)
 	}
 	#eaten({tileIdx:i}=this) {
 		if (!Maze.hasDot(i)) return

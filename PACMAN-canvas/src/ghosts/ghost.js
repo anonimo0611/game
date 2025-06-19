@@ -1,5 +1,4 @@
 import {Sound}  from '../../_snd/sound.js'
-import {Dir}    from '../../_lib/direction.js'
 import {Game}   from '../_main.js'
 import {State}  from '../state.js'
 import {Ctrl}   from '../control.js'
@@ -187,7 +186,7 @@ export class Ghost extends Actor {
 	#setNextDir() {
 		if (this.#revSig) {
 			this.#revSig = false
-			this.orient  = Dir.opposite(this.dir)
+			this.orient  = this.revDir
 			return
 		}
 		if (this.dir == this.orient)
@@ -198,7 +197,7 @@ export class Ghost extends Actor {
 		const dirs = this.TurnDirs.flatMap((dir,i)=> {
 			const test = this.getAdjTile(dir,tile)
 			const dist = Vec2.sqrMag(test,tgt)
-			return Dir.opposite(this.orient) != dir
+			return this.revOrient != dir
 				&& Maze.hasWall(test) == false
 				&& this.#canEnter({dir,test})? [{i,dir,dist}]:[]
 		})
@@ -220,8 +219,8 @@ export class Ghost extends Actor {
 		 || dir == R && pos.x > t.x*T
 		 || dir == U && pos.y < t.y*T
 		 || dir == D && pos.y > t.y*T) {
-			this.movDir = orient
-			this.pos = t.mul(T)
+			 this.pos = t.mul(T)
+			this.setMovDir(orient)
 			return true
 		}
 		return false

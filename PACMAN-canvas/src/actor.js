@@ -1,4 +1,5 @@
 import {Common} from '../_lib/common.js'
+import {Dir}    from '../_lib/direction.js'
 import {State}  from './state.js'
 import {Maze}   from './maze.js'
 import {Player} from './pacman.js'
@@ -26,11 +27,13 @@ export class Actor extends Common {
 
 	get dir()       {return this.#movDir}
 	get orient()    {return this.#orient}
+	get revDir()    {return Dir.opposite(this.dir)}
+	get revOrient() {return Dir.opposite(this.orient)}
 	set dir(dir)    {this.#movDir = this.orient = dir}
 	set orient(dir) {this.#orient = dir}
 
 	/** @param {Direction} dir */
-	set movDir(dir) {this.#movDir = dir}
+	setMovDir(dir) {this.#movDir = dir}
 
 	get maxAlpha()   {return 1}
 	get step()       {return 0}
