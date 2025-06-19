@@ -10,11 +10,12 @@ export default class {
 	#losing  = /**@type {?Losing}*/(null)
 	/**
 	 * @param {ExtendedContext2D} ctx
-	 * @param {0|1|2} mouseOpening
+	 * @param {0|1|2} mouthOpenings
+	 * 0=closed, 1=middle opened, 2=max opened
 	 */
-	constructor(ctx, mouseOpening=0) {
+	constructor(ctx, mouthOpenings=0) {
 		this.ctx = ctx
-		this.#mAngle = [0,OpenMid,OpenMax][mouseOpening]
+		this.#mAngle = [0,OpenMid,OpenMax][mouthOpenings]
 		freeze(this)
 	}
 	update({stopped=false}={}) {

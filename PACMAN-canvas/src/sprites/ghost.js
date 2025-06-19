@@ -61,9 +61,9 @@ export default class {
 		if (!isEscaping) {
 			ctx.save()
 			this.#resurrect?.setAlpha(ctx)
-			this.#angryGlow(x, y, isAngry, size)
+			this.#angryGlow({x,y, isAngry,size})
 			this.#body({aIdx,isRipped,isMended})
-			isFright && this.#frightFace(spriteIdx)
+			isFright && this.#frightFace({spriteIdx})
 			ctx.restore()
 		}
 		if (!isFright) {
@@ -75,7 +75,7 @@ export default class {
 		if (this.#resurrect?.update() === false)
 			this.#resurrect = null
 	}
-	#body({aIdx=0,isRipped=false,isMended=false}) {
+	#body({aIdx=0, isRipped=false, isMended=false}) {
 		const {ctx}= this
 		ctx.beginPath()
 		ctx.moveTo(+42, +26)
@@ -149,7 +149,7 @@ export default class {
 		}
 		ctx.restore()
 	}
-	#frightFace(spriteIdx=0) {
+	#frightFace({spriteIdx=0}) {
 		const {ctx}= this
 		ctx.fillStyle = ctx.strokeStyle = Color.FrightFaceTable[spriteIdx]
 		{// Eyes
@@ -164,8 +164,8 @@ export default class {
 		ctx.lineCap = ctx.lineJoin = 'round'
 		ctx.stroke()
 	}
-	#angryGlow(x=0, y=0, angry=false, size=T*2) {
-		if (!angry) return
+	#angryGlow({x=0,y=0, isAngry=false, size=T*2}) {
+		if (!isAngry) return
 		const {width:W}=Glow, S=W*1.2
 		Ctx.save()
 		Ctx.globalAlpha = this.#resurrect?.alpha ?? 1
