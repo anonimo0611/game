@@ -177,8 +177,8 @@ export class Ghost extends Actor {
 		!this.frozen && Sound.ghostArrivedAtHome()
 	}
 	#walkRails({step}=this) {
-		for (const _ of range(step)) {
-			this.setNextPos(step)
+		for (const _ of range(10)) {
+			this.setNextPos(10)
 			this.inBackOfTile && this.#setNextDir()
 			if (this.#setTurn(this)) break
 			if (this.crashWithPac()) break
@@ -222,7 +222,6 @@ export class Ghost extends Actor {
 		 || dir == D && pos.y > t.y*T) {
 			this.movDir = orient
 			this.pos = t.mul(T)
-			this.setNextPos(step)
 			return true
 		}
 		return false

@@ -111,9 +111,8 @@ class PlayablePac extends Pacman {
 		if (this.frozen || !State.isPlaying) return
 		this.sprite.update(this)
 		this.#notEaten++
-		const {step:divisor}= this
-		for (const _ of range(divisor))
-			this.#behavior(divisor)
+		for (const _ of range(10))
+			this.#behavior(10)
 	}
 	#behavior(divisor=1) {
 		if (this.tileJustUpdated(divisor)) {
