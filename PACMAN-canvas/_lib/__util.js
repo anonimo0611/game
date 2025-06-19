@@ -26,7 +26,7 @@ const isCombiKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
  * @param {number} [step]
  */
 const range = function*(from, to, step=1) {
-	if (step === 0) throw new Error('Step cannot be zero')
+	if (step === 0) throw new RangeError('The 3rd argument must not be zero')
 	if (to === undefined) [to,from] = [from,0]
 	if (step > 0) for (let i=from; i<to; i+=step) yield i
 	if (step < 0) for (let i=from; i>to; i+=step) yield i
