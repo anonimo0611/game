@@ -38,10 +38,10 @@ export class SoundMgr {
 	}
 
 	/** @param {SoundType} id */
-	isPlaying(id)  {return Instance[id].playState === SoundJS.PLAY_SUCCEEDED}
+	isPlaying(id)  {return Instance[id]?.playState === SoundJS.PLAY_SUCCEEDED}
 
 	/** @param {SoundType} id */
-	isFinished(id) {return Instance[id].playState === SoundJS.PLAY_FINISHED}
+	isFinished(id) {return Instance[id]?.playState === SoundJS.PLAY_FINISHED}
 
 	/** @param {SoundType} id */
 	#configMerge(id, cfg={}) {
