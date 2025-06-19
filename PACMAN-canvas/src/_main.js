@@ -83,7 +83,7 @@ export const Game = new class {
 				: State.isPlaying && Game.#confirm()
 			break
 		default:
-			if (!qS(':not(#startBtn):focus')) break
+			if (qS(':not(#startBtn):focus')) break
 			if (Dir.from(e,{wasd:true}) || e.key == '\x20') {
 				State.isTitle && State.to('Start')
 				Ticker.paused && Game.#pause()

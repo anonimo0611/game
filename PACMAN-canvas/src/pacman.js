@@ -120,7 +120,8 @@ class PlayablePac extends Pacman {
 		}
 		if (!this.#turning && this.collidedWithWall()) {
 			this.pos = this.tilePos.mul(T)
-			this.#stopped = !(this.#preDir=null)
+			this.#preDir  = null
+			this.#stopped = true
 			return
 		}
 		this.#stopped = false
@@ -140,8 +141,9 @@ class PlayablePac extends Pacman {
 	#endCornering() {
 		if (this.#turning && this.inBackOfTile) {
 			this.setMoveDir(this.orient)
-			this.#preDir  = this.#nextTurn
-			this.#turning = !!(this.#nextTurn=null)
+			this.#preDir   = this.#nextTurn
+			this.#nextTurn = null
+			this.#turning  = false
 		}
 	}
 	#turnAround() {
