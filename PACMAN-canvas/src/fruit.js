@@ -79,13 +79,14 @@ export const Fruit = new class {
 		Ctx.drawImage(HUD.cvs, x,y, w,h, x,y, w,h)
 	}
 	#setImages() {
-		const [x,y,w,h] = LvCounterRect
+		const {ctx}= HUD, [x,y,w,h]= LvCounterRect
 		const st = max(Game.level-LvCounterCols, 0)
+		ctx.save()
+		ctx.translate(x, y-1)
+		ctx.clearRect(0,0,w,h)
+		for (const i of range(st, Game.level))
+			Spr.draw(ctx, Fruit.number(i), w-T-(T*2*(i-st)), T)
+		ctx.restore()
 		Spr.cache(Fruit.number())
-		HUD.ctx.clearRect(x,y,w,h)
-		for(const idx of range(st, Game.level)) {
-			const pos = [x+w-T-(T*2*(idx-st)), y+T-1]
-			Spr.draw(HUD.ctx, Fruit.number(idx), ...pos)
-		}
 	}
 }
