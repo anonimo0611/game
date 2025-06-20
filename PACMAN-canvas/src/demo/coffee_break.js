@@ -9,13 +9,13 @@ import Sprite   from '../sprites/ghost_cb.js'
 export class CoffBrk {
 	static #scene = /**@type {?(Scene1|Scene2|Scene3)}*/(null)
 	static {
-		/** @type {(_:unknown,n:number)=> void} */
-		const beginFn = (_,n)=> this.#begin(n)
+		/** @type {(_:unknown,i:number)=> void} */
+		const beginFn = (_,i)=> this.#begin(i)
 		$on('CoffBrk', beginFn)
 	}
-	static #begin(sceneNum=0) {
-		Sound.play('cutscene', {loop:1^Number(sceneNum == 2)})
-		CoffBrk.#scene = new[Scene1,Scene2,Scene3][sceneNum-1]
+	static #begin(sceneIdx=0) {
+		Sound.play('cutscene', {loop:1^Number(sceneIdx == 2)})
+		CoffBrk.#scene = new[Scene1,Scene2,Scene3][sceneIdx-1]
 	}
 	static update() {
 		this.#scene?.update()

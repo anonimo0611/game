@@ -11,8 +11,8 @@ import * as Pts from '../sprites/points.js'
 import {Ghost}  from './ghost.js'
 import Target   from './show_targets.js'
 
+const PtsLst = Pts.Vals.Ghost
 const Ghosts = /**@type {Ghost[]}*/([])
-const Pts1st = Pts.Vals.Ghost[0]
 
 /**
  * Delay time(ms) for ghost to be left from the house in always chase mode
@@ -44,7 +44,9 @@ export class GhostState extends _State {
 		super()
 		this.init(Maze.House.isIn(tilePos)? 'Idle':'Walk')
 	}
-	to(/**@type {State}*/state) {return super.to(state)}
+	to(/**@type {State}*/state) {
+		return super.to(state)
+	}
 }
 
 export const GhsMgr = new class extends Common {
@@ -63,7 +65,7 @@ export const GhsMgr = new class extends Common {
 	get Elroy()     {return Elroy}
 	get isScatter() {return AlternateBetweenModes.isScatter}
 	get isFright()  {return FrightMode.session != null}
-	get score()     {return FrightMode.session?.score ?? Pts1st}
+	get score()     {return FrightMode.session?.score ?? PtsLst[0]}
 	get spriteIdx() {return FrightMode.session?.spriteIdx ?? 0}
 	get caughtAll() {return FrightMode.session?.caughtAll ?? false}
 	get hasEscape() {return Ghosts.some(g=> g.isEscaping)}
@@ -104,7 +106,7 @@ export const GhsMgr = new class extends Common {
 	}
 	#draw(onFront=true) {
 		Ghosts.forEach((_,i,a, g=a.at(-1-i))=> {
-			(g?.isFright != onFront) && g?.draw()
+			g && (g.isFright != onFront) && g.draw()
 		})
 	}
 	drawBehind() {
@@ -117,7 +119,7 @@ export const GhsMgr = new class extends Common {
 	}
 }
 
-const SCATTER=0, CHASE=1
+const SCATTER = 0, CHASE = 1
 const AlternateBetweenModes = function() {
 	{
 		let seq = {mode:SCATTER,update(){}}
@@ -235,7 +237,7 @@ const FrightMode = function() {
 	class Session {
 		#tCounter = 0; #fCounter  = 0;
 		#flashIdx = 1; #caughtCnt = 0;
-		get score()     {return Pts.Vals.Ghost[this.#caughtCnt-1]}
+		get score()     {return PtsLst[this.#caughtCnt-1]}
 		get spriteIdx() {return this.#fCounter? this.#flashIdx^1:0}
 		get caughtAll() {return this.#caughtCnt == GhsType.Max}
 

@@ -9,6 +9,7 @@ export class Actor extends Common {
 	#x = 0
 	#y = 0
 	radius  = T
+	stepDiv = 10
 	#fadeIn = /**@type {?FadeIn}*/(null)
 	#orient = /**@type {Direction}*/(L)
 	#movDir = /**@type {Direction}*/(L)
