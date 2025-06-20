@@ -115,8 +115,8 @@ class Scene2 extends CoffBrk {
 	}
 	moveAkabei({akabei:aka, akaVelX:v}=this) {
 		const {CaughtX,AkaMinX}= this.sprite
-		aka.x+v    > CaughtX && (aka.x+=v)
-		aka.x+v/10 > AkaMinX ?  (aka.x+=v/10):(aka.x=AkaMinX)
+		aka.x > CaughtX && (aka.x+=v)
+		aka.x > AkaMinX ?  (aka.x+=v/10):(aka.x=AkaMinX)
 		return (aka.x != AkaMinX)
 	}
 	update() {
@@ -161,8 +161,9 @@ class Scene3 extends CoffBrk {
 	}
 	moveAkabei({akabei:aka}=this) {
 		aka.x += this.akaVelX
-		aka.x < -T*8 && (aka.dir = R) && (this.akaVelX *= -1)
-		aka.x > (T*9 + CW) && aka.dir == R && this.end()
+		aka.dir == L
+			? aka.x < -T*8 && (aka.dir = R) && (this.akaVelX *= -1)
+			: aka.x > (T*9 + CW) && aka.dir == R && this.end()
 	}
 	update() {
 		this.movePacman()
