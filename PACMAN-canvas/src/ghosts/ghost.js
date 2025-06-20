@@ -49,8 +49,8 @@ export class Ghost extends Actor {
 		this.iniAlign = align
 		this.animFlag = animFlag
 		this.pos      = Vec2(col*T, row*T)
-		this.release  = this.release.bind(this)
 		this.color    = Color[GhsNames[idx]]
+		this.release  = this.release.bind(this)
 		this.state    = new Sys.GhostState(this)
 		this.sprite   = new Sprite(canvas2D(null, T*3, T*2).ctx)
 		freeze(this)
@@ -86,14 +86,14 @@ export class Ghost extends Actor {
 		return Vec2.sqrMag(this, Player.instance)
 	}
 	get step() {
-		return function(s) {
-			if (s.isIdle)     return GhsStep.Idle
-			if (s.isGoOut)    return GhsStep.GoOut
-			if (s.isEscaping) return GhsStep.Escape
-			if (s.isInTunnel) return GhsStep.InTunnel
-			if (s.isFright)   return GhsStep.Fright
-			if (s.isScatter)  return GhsStep.Base
-			return s.chaseStep
+		return function(g) {
+			if (g.isIdle)     return GhsStep.Idle
+			if (g.isGoOut)    return GhsStep.GoOut
+			if (g.isEscaping) return GhsStep.Escape
+			if (g.isInTunnel) return GhsStep.InTunnel
+			if (g.isFright)   return GhsStep.Fright
+			if (g.isScatter)  return GhsStep.Base
+			return g.chaseStep
 		}(this) * Game.moveSpeed
 	}
 	draw() {
@@ -118,7 +118,7 @@ export class Ghost extends Actor {
 		if (s.isIdle)   return this.#idle(this)
 		if (s.isGoOut)  return this.#goOut(this)
 		if (s.isReturn) return this.#returnToHome(this)
-		this.#walkRails(this)
+		this.#walkRails()
 	}
 	#idle({idx,step,orient,state,centerPos:{y:cy}}=this) {
 		if (!Ctrl.isChaseMode)
@@ -175,9 +175,9 @@ export class Ghost extends Actor {
 			: this.state.to('Idle') && this.#idle(this)
 		!this.frozen && Sound.ghostArrivedAtHome()
 	}
-	#walkRails({step}=this) {
-		for (const _ of range(10)) {
-			this.setNextPos(10)
+	#walkRails() {
+		for (const _ of range(this.stepDiv)) {
+			this.setNextPos(this.stepDiv)
 			this.inBackOfTile && this.#setNextDir()
 			if (this.#setTurn(this)) break
 			if (this.crashWithPac()) break
@@ -211,7 +211,7 @@ export class Ghost extends Actor {
 			|| (dir != U || this.isFright || this.isEscaping)
 			|| Maze.GhostNoEnter.has(test.hyphenated) == false
 	}
-	#setTurn({step,dir,orient,pos,tilePos:t}=this) {
+	#setTurn({dir,orient,pos,tilePos:t}=this) {
 		if (dir == orient
 		 || this.hasAdjWall(orient))
 			return false
@@ -219,8 +219,8 @@ export class Ghost extends Actor {
 		 || dir == R && pos.x > t.x*T
 		 || dir == U && pos.y < t.y*T
 		 || dir == D && pos.y > t.y*T) {
-			 this.pos = t.mul(T)
-			this.setMovDir(orient)
+			this.pos = t.mul(T)
+			this.setMoveDir(orient)
 			return true
 		}
 		return false
