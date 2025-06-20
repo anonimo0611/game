@@ -102,6 +102,7 @@ class Scene1 extends CoffBrk {
 		super.draw()
 	}
 }
+
 class Scene2 extends CoffBrk {
 	constructor() {
 		super()
@@ -113,8 +114,7 @@ class Scene2 extends CoffBrk {
 		this.pacman.x = CW + T*3
 		this.akabei.x = CW + T*16
 	}
-	moveAkabei({akabei:aka, akaVelX:v}=this) {
-		const {CaughtX,AkaMinX}= this.sprite
+	moveAkabei({akabei:aka, akaVelX:v, sprite:{CaughtX,AkaMinX}}=this) {
 		aka.x > CaughtX && (aka.x+=v)
 		aka.x > AkaMinX ?  (aka.x+=v/10):(aka.x=AkaMinX)
 		return (aka.x != AkaMinX)
@@ -151,6 +151,7 @@ class Scene2 extends CoffBrk {
 		super.draw()
 	}
 }
+
 class Scene3 extends CoffBrk {
 	constructor() {
 		super()
