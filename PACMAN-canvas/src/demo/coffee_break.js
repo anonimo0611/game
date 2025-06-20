@@ -45,8 +45,8 @@ export class CoffBrk {
 		this.pacman.sprite.draw(this.pacman, scale)
 	}
 	drawAkabei(cfg={}) {
-		const {akabei}=this, {aIdx,pos}=akabei
-		akabei.sprite.draw({aIdx, ...cfg, ...pos})
+		const {akabei:{pos}}= this
+		this.akabei.sprite.draw({...cfg, ...pos})
 	}
 	pause() {
 		Sound.paused(Ticker.pause())
