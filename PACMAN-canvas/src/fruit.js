@@ -82,7 +82,7 @@ export const Fruit = new class {
 		const {ctx}= HUD, [x,y,w,h]= LvCounterRect
 		const st = max(Game.level-LvCounterCols, 0)
 		ctx.save()
-		ctx.translate(x, y-1)
+		ctx.translate(x, y)
 		ctx.clearRect(0,0,w,h)
 		for (const i of range(st, Game.level))
 			Spr.draw(ctx, Fruit.number(i), w-T-(T*2*(i-st)), T)

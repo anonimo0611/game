@@ -241,7 +241,7 @@ export function draw(ctx, fruitIdx, x=T,y=T, scale=T/8) {
 	ctx.save()
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
-	ctx.translate(x, y)
+	ctx.translate(x, y-1)
 	ctx.scale(scale*Scale, scale*Scale)
 	Fns[fruitIdx](ctx)
 	ctx.restore()
