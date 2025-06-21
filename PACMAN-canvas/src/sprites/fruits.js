@@ -259,6 +259,6 @@ export const [current,cache]= function() {
 	const size = +Menu.css('--scale') * T
 	const {ctx}= canvas2D(null, size*8, size)
 	for (const i of Fns.keys())
-		draw(ctx, i, size/2+size*i, size/2, size/16)
+		draw(ctx, i, size/2+size*i, size/2+1, size/16)
 	Menu.css('--url',`url(${ctx.canvas.toDataURL()})`)
 }
