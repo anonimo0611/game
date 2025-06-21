@@ -1,7 +1,7 @@
 const {ctx}= Bg
-const ScaleTable = /**@type {readonly xyList[]}*/(
-	[[1,1],[-1,1],[-1,-1],[1,-1]]
-)
+
+/** @type {xy2dListAsConst} */
+const ScaleTable = [[1,1], [-1,1], [-1,-1], [1,-1]]
 
 import {Maze} from '../maze.js'
 export const Wall = new class {
@@ -14,24 +14,26 @@ export const Wall = new class {
 		this.#drawHouse(ctx.lineWidth/2)
 		ctx.restore()
 	}
-	#drawHouse(l=0) {
+
+	/** @param {number} hl Half of line width */
+	#drawHouse(hl) {
 		ctx.translate(CW/2, Maze.House.MiddleY)
 		ctx.newLinePath(
-			[-1.00*T-l, -1.95*T],[-3.45*T, -1.95*T],[-3.45*T,   +1.95*T],
-			[+3.45*T,   +1.95*T],[+3.45*T, -1.95*T],[+1.00*T+l, -1.95*T],
-			[+1.00*T+l, -1.60*T],[+3.10*T, -1.60*T],[+3.10*T,   +1.60*T],
-			[-3.10*T,   +1.60*T],[-3.10*T, -1.60*T],[-1.00*T-l, -1.60*T])
+			[-1.00*T-hl, -1.95*T],[-3.45*T, -1.95*T],[-3.45*T,    +1.95*T],
+			[+3.45*T,    +1.95*T],[+3.45*T, -1.95*T],[+1.00*T+hl, -1.95*T],
+			[+1.00*T+hl, -1.60*T],[+3.10*T, -1.60*T],[+3.10*T,    +1.60*T],
+			[-3.10*T,    +1.60*T],[-3.10*T, -1.60*T],[-1.00*T-hl, -1.60*T])
 		ctx.closePath()
 		ctx.stroke()
 	}
 
-	/** @param {{ci:number, x:number, y:number, type:number}} param */
-	#drawCorner({ci, x,y, type}) {
+	/** @param {{ci:number, x:number, y:number, type:number}} cfg */
+	#drawCorner({ci:cornerIdx, x,y, type}) {
 		ctx.save()
 		ctx.translate(x+T/2, y+T/2)
-		ctx.scale(...ScaleTable[ci])
+		ctx.scale(...ScaleTable[cornerIdx])
 		ctx.beginPath()
-		;(type == 2)
+		type == 2
 			? ctx.strokeLine(T/2,T/2, T/2-2,T/2-2)
 			: ctx.arc(T/2,T/2, (type? T-2:T/2), PI,PI*1.5)
 		ctx.stroke()
