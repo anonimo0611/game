@@ -1,6 +1,7 @@
 const {ctx}= Bg
-const ScaleTable = /**@type {readonly xyList[]}*/
-	([[1,1],[-1,1],[-1,-1],[1,-1]])
+const ScaleTable = /**@type {readonly xyList[]}*/(
+	[[1,1],[-1,1],[-1,-1],[1,-1]]
+)
 
 import {Maze} from '../maze.js'
 export const Wall = new class {
