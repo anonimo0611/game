@@ -1,5 +1,7 @@
 'use strict'
-/** @typedef {[x: number,y: number]} xyList */
+/** @typedef {[x:number, y:number]} xyList */
+/** @typedef {[x:number, y:number][]} xy2dList */
+/** @typedef {readonly (readonly [x:number, y:number])[]} xy2dListAsConst */
 /** @typedef {{x?:number,y?:number}} OptionalPos */
 /** @typedef {Vector2|{x:number,y:number}} Position */
 
@@ -26,7 +28,7 @@ class Vector2 {
 	 * @param {number|Position} [v1]
 	 * @param {number} [v2]
 	 */
-	#validXY(v1,v2) {
+	#parseXY(v1,v2) {
 		if (typeof v1 == 'object') {
 			return v1
 		}
@@ -44,7 +46,7 @@ class Vector2 {
 	 * @param {number} [v2]
 	 */
 	set(v1, v2) {
-		const {x,y}= this.#validXY(v1, v2)
+		const {x,y}= this.#parseXY(v1, v2)
 		this.x = x
 		this.y = y
 		return this
@@ -57,7 +59,7 @@ class Vector2 {
 	 * @param {number} [v2]
 	 */
 	eq(v1, v2) {
-		const {x,y}= this.#validXY(v1, v2)
+		const {x,y}= this.#parseXY(v1, v2)
 		return Vec2.eq(this, {x,y})
 	}
 
@@ -66,7 +68,7 @@ class Vector2 {
 	 * @param {number} [v2]
 	 */
 	add(v1, v2) {
-		const {x,y}= this.#validXY(v1, v2)
+		const {x,y}= this.#parseXY(v1, v2)
 		this.x += x
 		this.y += y
 		return this
@@ -77,7 +79,7 @@ class Vector2 {
 	 * @param {number} [v2]
 	 */
 	sub(v1, v2) {
-		const {x,y}= this.#validXY(v1, v2)
+		const {x,y}= this.#parseXY(v1, v2)
 		this.x -= x
 		this.y -= y
 		return this
