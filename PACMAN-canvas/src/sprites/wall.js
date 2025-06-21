@@ -14,12 +14,13 @@ export const Wall = new class {
 		this.#drawHouse(ctx.lineWidth/2)
 		ctx.restore()
 	}
-	#drawHouse(hl=0) {
+	#drawHouse(l=0) {
+		ctx.translate(CW/2, Maze.House.MiddleY)
 		ctx.newLinePath(
-			[13.00*T-hl,13.55*T],[10.55*T, 13.55*T],[10.55*T,   17.45*T],
-			[17.45*T,   17.45*T],[17.45*T, 13.55*T],[15.00*T+hl,13.55*T],
-			[15.00*T+hl,13.90*T],[17.10*T, 13.90*T],[17.10*T,   17.10*T],
-			[10.90*T,   17.10*T],[10.90*T, 13.90*T],[13.00*T-hl,13.90*T])
+			[-1.00*T-l, -1.95*T],[-3.45*T, -1.95*T],[-3.45*T,   +1.95*T],
+			[+3.45*T,   +1.95*T],[+3.45*T, -1.95*T],[+1.00*T+l, -1.95*T],
+			[+1.00*T+l, -1.60*T],[+3.10*T, -1.60*T],[+3.10*T,   +1.60*T],
+			[-3.10*T,   +1.60*T],[-3.10*T, -1.60*T],[-1.00*T-l, -1.60*T])
 		ctx.closePath()
 		ctx.stroke()
 	}
