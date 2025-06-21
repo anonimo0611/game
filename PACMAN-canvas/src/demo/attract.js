@@ -34,7 +34,7 @@ export class Attract {
 		return State.isAttract
 	}
 	powDisp = /**@type {0|1}*/(1)
-	ghsList = /**@type {Ghost[][]}*/([[],[]])
+	ghsList = /**@type {Ghost[][]}*/([])
 	pacman  = new Pacman
 	pacVelX = -CW/180
 	ghsVelX = -CW/169
@@ -46,7 +46,7 @@ export class Attract {
 		$onNS('.Attract', {click_keydown_blur:this.quit})
 	}
 	setActors() {
-		for (const where of this.ghsList.keys())
+		for (const where of [CHAR,DEMO])
 			for (const i of range(GhsType.Max))
 				this.setActor(where, i)
 	}
@@ -56,7 +56,7 @@ export class Attract {
 			g.setPos(CW+(T*6)+(T*2*gIdx), T*19)
 			g.idx == 0 && this.pacman.setPos(g.x-T*3.5, g.y)
 		}
-		this.ghsList[where].push(g)
+		(this.ghsList[where] ||= []).push(g)
 	}
 	drawGhost(where=0, gIdx=0, row=NaN) {
 		const ghost = this.ghsList[where][gIdx]
