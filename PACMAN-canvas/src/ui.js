@@ -17,7 +17,7 @@ MenuIds = /**@type {(keyof Menu)[]}*/(keys(Menu))
 ;/** @type {HTMLButtonElement[]} */
 (qSAll('.panelBtn')).forEach(btn=> {
 	$(btn).on('keydown pointerdown', e=> {
-		if (e.type == 'keydown' && !isEnterKey(e))
+		if (nonEnterKey(e.originalEvent))
 			return
 		$('.panel').toggle()
 		btn.classList.toggle('opened')
@@ -27,7 +27,7 @@ MenuIds = /**@type {(keyof Menu)[]}*/(keys(Menu))
 		if (!btn.offsetParent
 		 || tgt == btn
 		 || tgt.closest?.(btn.value))
-			return
+		 	return
 		$(btn.value).hide()
 		btn.classList.remove('opened')
 	})
