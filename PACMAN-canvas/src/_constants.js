@@ -2,12 +2,15 @@ const
 Rows     = 34,
 Cols     = 28,
 TileSize = 28,
-BaseStep = TileSize/4.5,
+MoveStep = TileSize/4.5,
 
 /** Shorthand of TileSize */
 T = TileSize,
 
+/** Small dots are 10 pts when PAC-NAN eats them */
 ScoreOfDot = 10,
+
+/** Large dots are 50 pts when PAC-NAN eats them */
 ScoreOfPow = 50,
 
 /** Blinking interval in frames */
@@ -55,7 +58,7 @@ PacRadius = T*PacScale,
 PacStep   = freeze(new class {
 	SlowLevel = 13   // After this level, Pacman slows down
 	SlowRate  = 0.98 // Deceleration rate at SlowLevel
-	Base      = BaseStep
+	Base      = MoveStep
 	Eating    = this.Base * 0.86 // Eating dot
 	Energized = this.Base * 1.10 // After eating Power dot
 	EneEat    = this.Base * 0.95 // Energized + Eating dot
@@ -65,7 +68,7 @@ GhsScale = 1.1,
 GhsType  = /**@type {const}*/({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4}),
 GhsNames = /**@type {const}*/(['Akabei','Pinky','Aosuke','Guzuta']),
 GhsStep  = freeze(new class {
-	Base     = BaseStep  * 1.07
+	Base     = MoveStep  * 1.07
 	Idle     = this.Base * 0.50 // Idling at the house
 	GoOut    = this.Base * 0.50 // Going out of the house
 	Fright   = this.Base * 0.60 // Frightened ghost
