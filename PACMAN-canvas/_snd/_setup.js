@@ -12,7 +12,6 @@ const volRg2 = ctrl('volRg2')
 		await SoundMgr.load()
 			? this.onLoaded()
 			: this.onFailed()
-		$('#titleScr,#volume').css('opacity', 1)
 	}
 	onLoaded() {
 		Sound.vol = localStorage.anopac_volume ?? 5
