@@ -14,10 +14,10 @@ const keyRepeat = e=>
 const wheelDeltaY = e=> /**@type {WheelEvent}*/
 	(e instanceof WheelEvent ? e : e.originalEvent)?.deltaY ?? 0
 
-/** @param {KeyboardEvent|JQuery.KeyboardEventBase} e */
-const isEnterKey = e=> /^(\x20|Enter)$/.test(e.key)
+/** @param {KeyboardEvent|JQuery.TriggeredEvent} e */
+const isEnterKey = e=> e.key && /^(\x20|Enter)$/.test(e.key)
 
-/** @param {KeyboardEvent|JQuery.KeyboardEventBase} e */
+/** @param {KeyboardEvent|JQuery.TriggeredEvent} e */
 const isCombiKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
 /**
