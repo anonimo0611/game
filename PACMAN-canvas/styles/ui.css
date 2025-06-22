@@ -3,7 +3,7 @@ html {
 	user-select: none;
 	&[data-cursor=hidden] {
 		body:not([data-state=Title]) #board {
-			cursor: none
+			cursor: none;
 		}
 	}
 }
@@ -81,7 +81,7 @@ button,
 	background: var(--bgcolor);
 	display: inline-block;
 	padding: .2em;
-	&:hover,&:focus,
+	&:hover, &:focus,
 	&.opened {border-color:var(--color-focus-border)}
 	&:active {border-color:var(--color-active-border)}
 	&:hover  {background:#036C}
@@ -109,7 +109,7 @@ button,
 		outline: solid 3px var(--active);
 	}
 	&:not(:checked) {
-		border-color:var(--color-border);
+		border-color: var(--color-border);
 		&:hover {border-color:#BBB}
 	}
 	&:checked  {
@@ -203,7 +203,7 @@ custom-menu {
 		border-width: 2px 0;
 		padding: .1em calc(var(--caret-size) + .2em) .1em .2em;
 		display: block;
-		&.selected,&:hover {background:#366}
+		&.selected, &:hover {background:#366}
 		&.selected {
 			border-color: var(--color-focus-border);
 			&:hover {background:#336;border-color:#66C}
@@ -243,8 +243,8 @@ custom-menu {
 		position: absolute;
 		z-index: 2;
 		top: 50%;
-		&.l {left: 1px;translate:0 -50%;rotate:+45deg}
-		&.r {right:1px;translate:0 -50%;rotate:-45deg;scale:-1 1}
+		&.l {left: 1px; translate:0 -50%; rotate:+45deg}
+		&.r {right:1px; translate:0 -50%; rotate:-45deg; scale:-1 1}
 		&[data-disabled=true] {opacity: 0.4}
 		transform-origin: center;
 	}
