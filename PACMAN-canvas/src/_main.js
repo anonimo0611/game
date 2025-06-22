@@ -1,11 +1,11 @@
 import './ghosts/ghost_sub.js'
+import {Menu}    from './ui.js'
 import {Sound}   from '../_snd/sound.js'
 import {Confirm} from '../_lib/confirm.js'
 import {Cursor}  from '../_lib/mouse.js'
 import {Dir}     from '../_lib/direction.js'
 import {State}   from './state.js'
 import {Ctrl}    from './control.js'
-import {Menu}    from './ui.js'
 import {Maze}    from './maze.js'
 import {Wall}    from './sprites/wall.js'
 import {Message} from './message.js'
@@ -145,10 +145,9 @@ export const Game = new class {
 			State.to('Title')
 			return
 		}
-		const imLv = CoffBrk.intermissionLevel
-		Ctrl.isPractice || imLv < 0
+		CoffBrk.intermissionLevel < 0
 			? State.to('NewLevel')
-			: State.to('CoffBrk', {data:imLv})
+			: State.to('CoffBrk')
 	}
 	#update() {
 		PtsMgr.update()

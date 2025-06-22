@@ -1,21 +1,19 @@
 import {Sound}  from '../../_snd/sound.js'
 import {Game}   from '../_main.js'
 import {State}  from '../state.js'
+import {Ctrl}   from '../control.js'
 import {Fruit}  from '../fruit.js'
 import {Pacman} from '../pacman.js'
 import {Ghost}  from '../ghosts/ghost.js'
 import Sprite   from '../sprites/ghost_cb.js'
 
 export class CoffBrk {
+	static {$on('CoffBrk',this.#begin)}
 	static #scene = /**@type {?(Scene1|Scene2|Scene3)}*/(null)
-	static {
-		/** @type {(_:unknown,i:number)=> void} */
-		const beginFn = (_,i)=> this.#begin(i)
-		$on('CoffBrk', beginFn)
-	}
-	static #begin(sceneIdx=0) {
-		Sound.play('cutscene', {loop:1^Number(sceneIdx == 2)})
-		CoffBrk.#scene = new[Scene1,Scene2,Scene3][sceneIdx-1]
+
+	static #begin(_={}, idx=CoffBrk.intermissionLevel) {
+		Sound.play('cutscene', {loop:1^Number(idx == 2)})
+		CoffBrk.#scene = new[Scene1,Scene2,Scene3][idx-1]
 	}
 	static update() {
 		this.#scene?.update()
@@ -25,6 +23,7 @@ export class CoffBrk {
 		return State.isCoffBrk
 	}
 	static get intermissionLevel() {
+		if (Ctrl.isPractice) return -1
 		return {2:1, 5:2, 9:3}[Game.level] ?? -1
 	}
 
@@ -45,8 +44,8 @@ export class CoffBrk {
 		this.pacman.sprite.draw(this.pacman, scale)
 	}
 	drawAkabei(cfg={}) {
-		const {akabei:{pos}}= this
-		this.akabei.sprite.draw({...cfg, ...pos})
+		const {akabei:{pos,aIdx}}= this
+		this.akabei.sprite.draw({aIdx, ...cfg, ...pos})
 	}
 	pause() {
 		Sound.paused(Ticker.pause())
