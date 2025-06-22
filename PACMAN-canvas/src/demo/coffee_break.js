@@ -11,9 +11,9 @@ export class CoffBrk {
 	static {$on('CoffBrk',this.#begin)}
 	static #scene = /**@type {?(Scene1|Scene2|Scene3)}*/(null)
 
-	static #begin(_={}, idx=CoffBrk.intermissionLevel) {
-		Sound.play('cutscene', {loop:1^Number(idx == 2)})
-		CoffBrk.#scene = new[Scene1,Scene2,Scene3][idx-1]
+	static #begin(_={}, num=CoffBrk.intermissionLevel) {
+		Sound.play('cutscene', {loop:1^Number(num == 2)})
+		CoffBrk.#scene = new[Scene1,Scene2,Scene3][num-1]
 	}
 	static update() {
 		this.#scene?.update()
