@@ -119,10 +119,11 @@ button,
 			content: '';
 			border: solid #000;
 			border-width: 0 0 .1em .1em;
-			width:  calc(.6em - 1px);
+			width:  calc(.6em - 2px);
 			height: calc(.4em - 1.5px);
 			box-sizing: border-box;
 			position: absolute;
+			top: 1px;
 			rotate: -45deg;
 		}
 	}

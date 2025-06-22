@@ -76,6 +76,8 @@ body:is([data-state=Attract],[data-state=CoffBrk]) {
 	position: absolute;
 	z-index: 100;
 	top: 6.9rem;
+	opacity: 0;
+	transition: opacity 300ms 10ms ease-out;
 }
 body[data-state] {
 	&:not([data-state=Title]) #titleScr {
@@ -258,6 +260,8 @@ body[data-state] {
 	position: absolute;
 	top:   .25em;
 	right: .15em;
+	opacity: 0;
+	transition: opacity 300ms 5ms ease-out;
 	canvas {
 		position: absolute;
 		top:   0;
