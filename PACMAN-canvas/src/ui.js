@@ -1,3 +1,8 @@
+$load(()=> {
+	$('#startBtn').prop({disabled:false})
+	$('#board').css('opacity', 1)
+})
+
 //---- Menus ----
 
 import * as _Menu from '../_lib/menu.js'
@@ -11,11 +16,13 @@ MenuIds = /**@type {(keyof Menu)[]}*/(keys(Menu))
 
 ;/** @type {HTMLButtonElement[]} */
 (qSAll('.panelBtn')).forEach(btn=> {
-	btn.addEventListener('pointerdown', _=> {
+	$(btn).on('keydown pointerdown', e=> {
+		if (e.type == 'keydown' && !isEnterKey(e))
+			return
 		$('.panel').toggle()
 		btn.classList.toggle('opened')
 	})
-	addEventListener('pointerdown', e=> {
+	$(dBody).on('keydown pointerdown', e=> {
 		const tgt = /**@type {Element}*/(e.target)
 		if (!btn.offsetParent
 		 || tgt == btn

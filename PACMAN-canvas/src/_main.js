@@ -71,7 +71,7 @@ export const Game = new class {
 	}
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
-		if (!Sound.loaded || Confirm.opened || keyRepeat(e))
+		if (Confirm.opened || keyRepeat(e))
 			return
 		switch(e.key) {
 		case 'Escape':
@@ -85,7 +85,7 @@ export const Game = new class {
 		default:
 			if (qS(':not(#startBtn):focus')) break
 			if (Dir.from(e,{wasd:true}) || e.key == '\x20') {
-				State.isTitle && State.to('Start')
+				State.isTitle && byId('startBtn')?.click()
 				Ticker.paused && Game.#pause()
 			}
 		}
