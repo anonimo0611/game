@@ -28,7 +28,7 @@ export default class {
 		aIdx       = 0,
 		spriteIdx  = 0,
 		size       = T*2,
-		orient     = /**@type {Direction}*/(L),
+		orient     = /**@type {Direction|'LowerR'}*/(L),
 		color      = Color.Akabei,
 		isFright   = false,
 		isBitten   = false,
