@@ -7,10 +7,7 @@ MoveStep = TileSize/4.5,
 /** Shorthand of TileSize */
 T = TileSize,
 
-/** Small dots are 10 pts when PAC-NAN eats them */
 ScoreOfDot = 10,
-
-/** Large dots are 50 pts when PAC-NAN eats them */
 ScoreOfPow = 50,
 
 /** Blinking interval in frames */
@@ -60,9 +57,9 @@ PacStep   = freeze(new class {
 	SlowLevel = 13   // After this level, Pacman slows down
 	SlowRate  = 0.98 // Deceleration rate at SlowLevel
 	Base      = MoveStep
-	Eating    = this.Base * 0.86 // Eating dot
-	Energized = this.Base * 1.10 // After eating Power dot
-	EneEat    = this.Base * 0.95 // Energized + Eating dot
+	Eating    = this.Base * 0.86
+	Energized = this.Base * 1.10
+	EneEat    = this.Base * 0.95 // Energized+Eating
 }),
 
 GhsScale = 1.1,
@@ -70,9 +67,9 @@ GhsType  = /**@type {const}*/({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4}),
 GhsNames = /**@type {const}*/(['Akabei','Pinky','Aosuke','Guzuta']),
 GhsStep  = freeze(new class {
 	Base     = MoveStep  * 1.07
-	Idle     = this.Base * 0.50 // Idling at the house
-	GoOut    = this.Base * 0.50 // Going out of the house
-	Fright   = this.Base * 0.60 // Frightened ghost
-	InTunnel = this.Base * 0.60 // When in the tunnel
-	Escape   = this.Base * 1.40 // Eyes escaping to the house
+	Idle     = this.Base * 0.50
+	GoOut    = this.Base * 0.50
+	Fright   = this.Base * 0.60
+	InTunnel = this.Base * 0.60
+	Escape   = this.Base * 1.40
 })
