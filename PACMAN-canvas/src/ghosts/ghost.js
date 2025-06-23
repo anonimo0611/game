@@ -239,7 +239,7 @@ export class Ghost extends Actor {
 			: this.#attack()
 		return true
 	}
-	#caught(/**@type {Function}*/fn) {
+	#caught(/**@type {()=>void}*/fn) {
 		this.#isFright = false
 		this.trigger('Cought').state.to('Bitten')
 		Timer.freeze()
