@@ -2,13 +2,12 @@ const
 Rows     = 34,
 Cols     = 28,
 TileSize = 28,
+DotScore = 10,
+PowScore = 50,
 MoveStep = TileSize/4.5,
 
 /** Shorthand of TileSize */
 T = TileSize,
-
-ScoreOfDot = 10,
-ScoreOfPow = 50,
 
 /** Blinking interval in frames */
 PowDotInterval = 15,
