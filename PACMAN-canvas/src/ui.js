@@ -22,11 +22,10 @@ MenuIds = /**@type {(keyof Menu)[]}*/(keys(Menu))
 		$('.panel').toggle()
 		btn.classList.toggle('opened')
 	})
-	$(dBody).on('keydown pointerdown', e=> {
-		const tgt = /**@type {Element}*/(e.target)
+	$('body').on('keydown pointerdown', e=> {
 		if (!btn.offsetParent
-		 || tgt == btn
-		 || tgt.closest?.(btn.value))
+		 || e.target == btn
+		 || e.target.closest(btn.value))
 		 	return
 		$(btn.value).hide()
 		btn.classList.remove('opened')
