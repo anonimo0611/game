@@ -19,7 +19,8 @@ PowDotInterval = 15,
 /** @typedef {'Up'|'Right'|'Down'|'Left'} Direction */
 U='Up', R='Right', D='Down', L='Left',
 
-dBody = document.getElementsByTagName('body')[0],
+/** The document body */
+dBody = document.body,
 
 [Bg,HUD,,Ctx,CW,CH]= [
 	canvas2D('cvs_bg' ,  T*Cols, T*Rows),
