@@ -68,32 +68,23 @@ export class DorpDown extends Menu {
 		$(this.cur)
 			.css('width',`${this.menu.offsetWidth}px`)
 			.on('pointerdown', ()=> this.toggle())
-			.on('keydown', this.#onKeydown.bind(this))
+			.on('keydown', e=> this.#onKeydown(e))
 		this.close()
 		this.cur.tabIndex = 0
 		this.select(this.index)
 		freeze(this)
 	}
-	/** @param {KeyboardEvent} e */
+	/** @param {JQuery.KeyDownEvent} e */
 	#onKeydown(e) {
-		const {size,index}= this
-		switch (e.key) {
-		case 'Tab':
-		case 'Escape':
-			this.close()
-			return
-		case '\x20':
-		case 'Enter':
-			this.closed
-				? this.open()
-				: this.select(index)
-			return
-		case 'ArrowUp':
-		case 'ArrowDown': {
-				const dir = e.key.endsWith('Up') ? -1:1
-				this.select((index+dir+size) % size, {close:false})
+		const {size,index:i}= this
+		match(e.key, {
+			'Tab_Escape': ()=> {this.close()},
+			'Enter_\x20': ()=> {this.closed? this.open() : this.select(i)},
+			'ArrowUp_ArrowDown': ()=> {
+				const dir = /Up$/.test(e.key) ? -1:1
+				this.select((i+dir+size) % size, {close:false})
 			}
-		}
+		})
 	}
 	select(idx=this.index, {close=true}={}) {
 		super.select(idx)

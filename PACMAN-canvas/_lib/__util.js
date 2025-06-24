@@ -36,6 +36,20 @@ const range = function*(from, to, step=1) {
 }
 
 /**
+ * @template T
+ * @param {string|number} key
+ * @param {{[key:string]:()=> T}} pattern
+ */
+const match = (key,pattern)=> {
+	if (hasOwn(pattern,key))
+		return pattern[key]()
+	for (const k in pattern)
+		if (k.split('_').some(k=> k == key))
+			return pattern[k]()
+	return pattern['_']?.() ?? undefined
+}
+
+/**
  * @param {string} selector
  * @return {?HTMLElement}
  */const qS = selector=> document.querySelector(selector)
