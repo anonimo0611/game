@@ -76,23 +76,24 @@ class Scene1 extends CoffBrk {
 		if (Ticker.elapsedTime > 400)
 			this.akabei.x += this.akaVelX
 	}
+	#reverse() {
+		this.isFright = true
+		this.pacVelX *= -1.08
+		this.akaVelX *= -0.60
+		this.pacman.dir = this.akabei.dir = R
+	}
 	update() {
-		const {pacman,akabei}= this
 		this.moveAkabei()
-		switch (pacman.dir) {
-		case L:
-			this.movePacman()
-			if (pacman.x >= -T*9) break
-			this.isFright = true
-			this.pacVelX *= -1.08
-			this.akaVelX *= -0.60
-			pacman.dir = akabei.dir = R
-			break
-		case R:
-			akabei.x > T*7.5  && this.movePacman()
-			akabei.x > CW+T*9 && this.end()
-			break
-		}
+		match(this.pacman.dir, {
+			[L]:()=> {
+				this.movePacman()
+				this.pacman.x < -T*9 && this.#reverse()
+			},
+			[R]:()=> {
+				this.akabei.x > T*7.5  && this.movePacman()
+				this.akabei.x > CW+T*9 && this.end()
+			}
+		})
 	}
 	draw() {
 		const {pacman,isFright}= this
@@ -122,18 +123,15 @@ class Scene2 extends CoffBrk {
 		this.movePacman()
 		if (!this.counter && this.moveAkabei(this))
 			return
-		switch (this.counter++) {
-		case 90:
-			this.isRipped = true
-			this.akaEyes  = U
-			this.akabei.x -= T/4
-			break
-		case 90 + 60*1:
-			this.akaEyes = 'LowerR'
-			break
-		case 90 + 60*3:
-			this.end()
-		}
+		match(this.counter++, {
+			90:()=> {
+				this.akabei.x -= T/4
+				this.akaEyes  = U
+				this.isRipped = true
+			},
+			150:()=> {this.akaEyes = 'LowerR'},
+			270:()=> {this.end()},
+		})
 	}
 	draw() {
 		const {sprite:spr, akabei,akaVelX,akaEyes,isRipped}= this

@@ -71,24 +71,22 @@ export const Game = new class {
 	}
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
-		if (Confirm.opened || keyRepeat(e))
-			return
-		switch(e.key) {
-		case 'Escape':
-			Game.#pause()
-			break
-		case 'Delete':
-			e.ctrlKey
+		if (Confirm.opened || keyRepeat(e)) return
+		match(e.key, {
+			Escape:()=> Game.#pause(),
+			Delete:()=> {
+				e.ctrlKey
 				? State.to('Quit')
 				: State.isPlaying && Game.#confirm()
-			break
-		default:
-			if (qS(':not(#startBtn):focus')) break
-			if (Dir.from(e,{wasd:true}) || e.key == '\x20') {
-				State.isTitle && byId('startBtn')?.click()
-				Ticker.paused && Game.#pause()
+			},
+			_:()=> {
+				if (qS(':not(#startBtn):focus')) return
+				if (Dir.from(e,{wasd:true}) || e.key == '\x20') {
+					State.isTitle && byId('startBtn')?.click()
+					Ticker.paused && Game.#pause()
+				}
 			}
-		}
+		})
 	}
 	#onTitle() {
 		Cursor.default()

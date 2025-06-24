@@ -41,10 +41,10 @@ export const Ctrl = new class {
 		const data = Object.create(null)
 		MenuIds.forEach(id=> data[id] = Menu[id].index)
 		document.querySelectorAll('input').forEach(e=> {
-			switch(e.type) {
-			case 'range':   data[e.id]=e.value;  break
-			case 'checkbox':data[e.id]=e.checked;break
-			}
+			match(e.type, {
+			range:   ()=> {data[e.id] = e.value},
+			checkbox:()=> {data[e.id] = e.checked},
+			})
 		})
 		localStorage.anopacman = JSON.stringify(data)
 	}
@@ -53,10 +53,10 @@ export const Ctrl = new class {
 		const data = JSON.parse(localStorage.anopacman)
 		MenuIds.forEach(id=> Menu[id].index = data[id])
 		document.querySelectorAll('input').forEach(e=> {
-			switch(e.type) {
-			case 'range':   e.value  =data[e.id];break
-			case 'checkbox':e.checked=data[e.id];break
-			}
+			match(e.type, {
+			range:   ()=> {e.value   = data[e.id]},
+			checkbox:()=> {e.checked = data[e.id]},
+			})
 		})
 	}
 	#clearHiScore() {

@@ -86,15 +86,15 @@ export class Ghost extends Actor {
 		return Vec2.sqrMag(this, Player.instance)
 	}
 	get step() {
-		return function(g) {
-			if (g.isIdle)     return GhsStep.Idle
-			if (g.isGoOut)    return GhsStep.GoOut
-			if (g.isEscaping) return GhsStep.Escape
-			if (g.isInTunnel) return GhsStep.InTunnel
-			if (g.isFright)   return GhsStep.Fright
-			if (g.isScatter)  return GhsStep.Base
+		return function(g,s) {
+			if (g.isIdle)     return s.Idle
+			if (g.isGoOut)    return s.GoOut
+			if (g.isEscaping) return s.Escape
+			if (g.isInTunnel) return s.InTunnel
+			if (g.isFright)   return s.Fright
+			if (g.isScatter)  return s.Base
 			return g.chaseStep
-		}(this) * Game.moveSpeed
+		}(this,GhsStep) * Game.moveSpeed
 	}
 	draw() {
 		if (State.isStart) return
@@ -110,15 +110,18 @@ export class Ghost extends Actor {
 		this.sprite.update()
 		this.houseEntranceArrived
 			? this.#prepEnterHouse()
-			: State.isPlaying && this.#behavior(this)
+			: State.isPlaying && this.#behavior()
 	}
-	#behavior({state:s}=this) {
+	#behavior() {
 		this.#runaway >= 0 && this.#runaway--
-		if (this.frozen && !this.isEscaping) return
-		if (s.isIdle)   return this.#idle(this)
-		if (s.isGoOut)  return this.#goOut(this)
-		if (s.isReturn) return this.#returnToHome(this)
-		this.#walkRails()
+		if (this.frozen && !this.isEscaping)
+			return
+		match(this.state.current, {
+			Idle:  ()=> this.#idle(this),
+			GoOut: ()=> this.#goOut(this),
+			Return:()=> this.#returnToHome(this),
+			_: ()=> this.#walkRails(),
+		})
 	}
 	#idle({idx,step,orient,state,centerPos:{y:cy}}=this) {
 		if (!Ctrl.isChaseMode)

@@ -84,9 +84,9 @@ export class Attract {
 		if (et > 85) {
 			drawDot(Ctx, 10, 24)
 			this.powDisp && drawDot(Ctx, 10, 26, true)
-			drawText(12.0, 25, null, ScoreOfDot)
+			drawText(12.0, 25, null, DotScore)
 			drawText(14.3, 25, null, 'PTS', {size:SmallSize})
-			drawText(12.0, 27, null, ScoreOfPow)
+			drawText(12.0, 27, null, PowScore)
 			drawText(14.3, 27, null, 'PTS', {size:SmallSize})
 		}
 		if (et > 90) {

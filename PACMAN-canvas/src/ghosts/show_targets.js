@@ -30,11 +30,11 @@ export default new class {
 	/** @param {Ghost} g */
 	#strokeLines(g) {
 		if (!g.isChase || this.#disabled(g)) return
-		switch (g.idx) {
-		case GhsType.Pinky: this.#auxLines(g, 4); break
-		case GhsType.Aosuke:this.#auxLines(g, 2); break
-		case GhsType.Guzuta:this.#guzutaCircle(g);break
-		}
+		match(g.idx, {
+			[GhsType.Pinky]:  ()=> this.#auxLines(g, 4),
+			[GhsType.Aosuke]: ()=> this.#auxLines(g, 2),
+			[GhsType.Guzuta]: ()=> this.#guzutaCircle(g),
+		})
 	}
 	/** @param {Ghost} g */
 	#drawTargetMarker(g) {

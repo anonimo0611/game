@@ -8,13 +8,12 @@ export const Lives = function() {
 	const radius = T*.78, size = T*2
 	const sprite = new Sprite(ctx, 1)
 	function onChange() {
-		/** @type {Object<string,Function>} */
-		({
+		match(State.current, {
 			Title:  ()=> _left = Ctrl.livesMax-1,
 			Start:  ()=> _left += +1,
 			Ready:  ()=> _left += State.last('Start')? -1:0,
 			Restart:()=> _left += -1,
-		})[State.current]()
+		})
 		draw()
 	}
 	function draw() {
