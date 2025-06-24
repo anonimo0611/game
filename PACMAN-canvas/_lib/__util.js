@@ -41,8 +41,6 @@ const range = function*(from, to, step=1) {
  * @param {{[key:string]:()=> T}} pattern
  */
 const match = (key,pattern)=> {
-	if (hasOwn(pattern,key))
-		return pattern[key]()
 	for (const k in pattern)
 		if (k.split('_').some(k=> k == key))
 			return pattern[k]()
