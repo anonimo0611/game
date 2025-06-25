@@ -17,7 +17,7 @@ export const Player = function() {
 	/** @type {PlayablePac} */
 	let player
 	$on({Title_Restart_NewLevel:()=> player = new PlayablePac})
-	return new class extends Common {get instance() {return player}}
+	return new class extends Common {get i() {return player}}
 }()
 
 export class Pacman extends Actor {

@@ -50,12 +50,12 @@ export class Actor extends Common {
 	get inBackOfTile()  {return this.tilePixel >  T/2}
 
 	static update() {
-		Player.instance.update()
+		Player.i.update()
 		GhsMgr.update()
 	}
 	static draw() {
 		GhsMgr.drawBehind()
-		Player.instance.draw()
+		Player.i.draw()
 		GhsMgr.drawFront()
 	}
 	update(maxA=this.maxAlpha) {

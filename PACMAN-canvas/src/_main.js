@@ -6,6 +6,7 @@ import {Cursor}  from '../_lib/mouse.js'
 import {Dir}     from '../_lib/direction.js'
 import {State}   from './state.js'
 import {Ctrl}    from './control.js'
+import {Form}    from './control.js'
 import {Maze}    from './maze.js'
 import {Wall}    from './sprites/wall.js'
 import {Message} from './message.js'
@@ -18,6 +19,7 @@ import {PtsMgr}  from './points.js'
 import {Attract} from './demo/attract.js'
 import {CoffBrk} from './demo/coffee_break.js'
 
+export const $lvl = $byId('level')
 export const Game = new class {
 	static {$ready(this.setup)}
 	static setup() {
@@ -35,8 +37,8 @@ export const Game = new class {
 			Quit:     Game.#onQuit,
 			Restart:  Game.#levelBegins,
 		})
-		Menu.Level.on({change:Game.#resetLevel})
 		State.to('Title')
+		Menu.Level.on({change:Game.#resetLevel})
 	}
 	#level = 1
 	#restarted = false
@@ -58,7 +60,7 @@ export const Game = new class {
 	}
 	#setLevel(i=1) {
 		Game.#level = between(i, 1, 0xFF) && +i || 1
-		$level.text('Level'+this.levelStr).trigger('change')
+		$lvl.text('Level'+this.levelStr).trigger('change')
 	}
 	#confirm() {
 		!Ticker.paused && Game.#pause()
@@ -104,7 +106,7 @@ export const Game = new class {
 	}
 	#onLosing() {
 		Sound.play('losing')
-		Player.instance.sprite.setLosing()
+		Player.i.sprite.setLosing()
 		Lives.left > 0
 			? State.to('Restart', {delay:2200})
 			: State.to('GameOver',{delay:2000})
@@ -168,4 +170,4 @@ export const Game = new class {
 		Actor.draw()
 		Message.draw()
 	}
-}, $level = $byId('level')
+}; $load(()=> Form.dataset.readyState = 'loaded')

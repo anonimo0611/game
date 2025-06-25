@@ -1,8 +1,3 @@
-$load(()=> {
-	$('#startBtn').prop({disabled:false})
-	$('#board').css('opacity', 1)
-})
-
 //---- Menus ----
 
 import * as _Menu from '../_lib/menu.js'

@@ -1,6 +1,6 @@
 import {Sound}  from '../_snd/sound.js'
 import {Game}   from './_main.js'
-import {$level} from './_main.js'
+import {$lvl} from './_main.js'
 import {State}  from './state.js'
 import {Maze}   from './maze.js'
 import {PtsMgr} from './points.js'
@@ -25,7 +25,7 @@ export const Fruit = new class {
 	static setup() {
 		$on({Title_Ready: Fruit.#reset})
 		Player.on({Eaten: Fruit.#dotEaten})
-		$level.on({change:Fruit.#setImages})
+		$lvl.on({change:Fruit.#setImages})
 	}
 	get score() {
 		return Pts.Vals.Fruit[Fruit.number()]
@@ -49,7 +49,7 @@ export const Fruit = new class {
 			Fruit.#setTimerToHideTarget()
 		}
 	}
-	#collideWith(pos=Player.instance.centerPos) {
+	#collideWith(pos=Player.i.centerPos) {
 		if (_tgtDisp && collisionCircle(pos, TargetPos, T/2)) {
 			_tgtDisp = false
 			Timer.cancel(Fruit) && Sound.play('fruit')

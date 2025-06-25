@@ -10,7 +10,7 @@ export default new class {
 	draw(ghosts) {
 		if (!Ctrl.showTargets || !State.isPlaying) return
 		for (const g of ghosts) this.#strokeLines(g)
-		for (const g of ghosts) this.#drawTargetMarker(g)
+		for (const g of ghosts) this.#drawMarker(g)
 	}
 	/** @param {Ghost} g */
 	#disabled(g) {
@@ -29,15 +29,14 @@ export default new class {
 	}
 	/** @param {Ghost} g */
 	#strokeLines(g) {
-		if (!g.isChase || this.#disabled(g)) return
-		match(g.idx, {
+		g.isChase && match(g.idx, {
 			[GhsType.Pinky]:  ()=> this.#auxLines(g, 4),
 			[GhsType.Aosuke]: ()=> this.#auxLines(g, 2),
 			[GhsType.Guzuta]: ()=> this.#guzutaCircle(g),
 		})
 	}
 	/** @param {Ghost} g */
-	#drawTargetMarker(g) {
+	#drawMarker(g) {
 		if (this.#disabled(g)) return
 		const {x,y}= this.#getTargetPos(g)
 		Ctx.save()
@@ -48,21 +47,20 @@ export default new class {
 	}
 	/** @param {Ghost} g */
 	#auxLines(g, ofst=4) {
-		const {dir:pacDir,centerPos:pacPos}= Player.instance
-		const fwdXY = Player.instance.forwardPos(ofst).vals
+		const {centerPos:pacPos,dir}= Player.i
+		const fwdXY = Player.i.forwardPos(ofst).vals
+		const ofsXY = Vec2[dir].mul(ofst*T).add(pacPos).vals
 		Ctx.save()
-		Ctx.globalAlpha = 0.8
 		Ctx.lineWidth   = 6
-		Ctx.lineJoin    ='round'
 		Ctx.strokeStyle = g.color
-		Ctx.beginPath()
-		Ctx.moveTo(...pacPos.vals)
-		Ctx.lineTo(...Vec2[pacDir].mul(ofst*T).add(pacPos).vals)
-		pacDir == U && Ctx.lineTo(...fwdXY)
+		Ctx.setAlpha(0.8)
+		Ctx.newLinePath(pacPos.vals, ofsXY)
+		dir == U && Ctx.lineTo(...fwdXY)
 		Ctx.stroke()
 		if (g.idx == GhsType.Aosuke) {
+			const tgtXY = g.chasePos.vals
 			const akaXY = GhsMgr.akaCenter.vals
-			Ctx.newLinePath(akaXY, fwdXY, g.chasePos.vals).stroke()
+			Ctx.newLinePath(akaXY, fwdXY, tgtXY).stroke()
 			Ctx.fillCircle(...fwdXY, 8, g.color)
 			Ctx.fillCircle(...akaXY, 8, g.color)
 		}
@@ -70,10 +68,10 @@ export default new class {
 	}
 	/** @param {Ghost} g */
 	#guzutaCircle(g) {
-		const radius = T*8, {centerPos:pacPos}= Player.instance
+		const {centerPos}= Player.i, r = T*8
 		Ctx.save()
-		Ctx.globalAlpha = g.sqrMagToPacman < radius*radius ? 0.4 : 0.8
-		Ctx.strokeCircle(...pacPos.vals, radius, g.color, 6)
+		Ctx.setAlpha(g.sqrMagToPacman < r*r ? 0.4:0.8)
+		Ctx.strokeCircle(...centerPos.vals, r, g.color, 6)
 		Ctx.restore()
 	}
 }

@@ -178,7 +178,7 @@ export const DotCounter = function() {
 		const timeOut = Game.level <= 4 ? 4e3 : 3e3
 		const gLimit  = limitTable[idx-1][0] // global
 		const pLimit  = limitTable[idx-1][min(Game.level,3)] // personal
-		;(Player.instance.timeNotEaten >= timeOut)
+		;(Player.i.timeNotEaten >= timeOut)
 			? fn()
 			:(!Game.restarted || _globalCounter < 0)
 				? (pCounters[idx] >= pLimit)

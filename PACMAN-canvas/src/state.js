@@ -4,7 +4,7 @@
  */
 import _State from '../_lib/state.js'
 export const State = new class extends _State {
-	isTitle     = true
+	isTitle     = false
 	isAttract   = false
 	isStart     = false
 	isRestart   = false
@@ -19,7 +19,7 @@ export const State = new class extends _State {
 	isGameOver  = false
 	isQuit      = false
 
-	constructor() {super(),this.init()}
+	constructor() {super(),this.init(null)}
 
 	/** @param {StateType} [s] */
 	last(s)          {return /**@type {StateType}*/(super.last(s))}

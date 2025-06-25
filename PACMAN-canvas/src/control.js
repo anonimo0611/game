@@ -5,18 +5,18 @@ import {MenuIds}  from './ui.js'
 import {State}    from './state.js'
 import {drawText} from './message.js'
 
-const Form = document.forms[0]
+export const Form = document.forms[0]
 
 /** @param {string} id */
 export const ctrl = id=> /**@type {HTMLInputElement}*/(byId(id))
 
 export const Ctrl = new class {
-	static {$ready(this.setup)}
+	static {$load(this.setup)}
 	static setup() {
 		Ctrl.#restore()
-		Ctrl.#setupCtrls()
 		Ctrl.#drawInfo()
-		$on({resize:Ctrl.#fitToViewport}).trigger('resize')
+		Ctrl.#setup()
+		Ctrl.#fitToViewport()
 	}
 	get extendPts()     {return +Menu.Extend.value}
 	get livesMax()      {return ctrl('lvsRng').valueAsNumber}
@@ -27,15 +27,15 @@ export const Ctrl = new class {
 	get invincible()    {return ctrl('invChk').checked}
 	get showTargets()   {return ctrl('tgtChk').checked}
 	get showGridLines() {return ctrl('grdChk').checked}
-	get isPractice()    {return Ctrl.isCheatMode  ||!Ctrl.isDefaultMode}
-	get isCheatMode()   {return Ctrl.speedRate<.7 || Ctrl.showTargets || Ctrl.invincible}
-	get isDefaultMode() {return Ctrl.consecutive && Menu.Level.index == 0}
+	get isPractice()    {return this.isCheatMode  ||!this.isDefaultMode}
+	get isCheatMode()   {return this.speedRate<.7 || this.showTargets || this.invincible}
+	get isDefaultMode() {return this.consecutive && Menu.Level.index == 0}
 
 	#fitToViewport() {
 		const scale = min(
 			innerWidth /Form.offsetWidth * .98,
 			innerHeight/Form.offsetHeight)
-		Form.style.scale = min(1, round(scale*100)/100).toString()
+		Form.style.scale = min(1, scale).toFixed(2)
 	}
 	#save() {
 		const data = Object.create(null)
@@ -63,7 +63,7 @@ export const Ctrl = new class {
 		localStorage.removeItem('anopac_hiscore')
 		Score.reset()
 	}
-	#setDefault() {
+	#reset() {
 		Form.reset()
 		Ctrl.#update().#restore()
 	}
@@ -98,16 +98,17 @@ export const Ctrl = new class {
 		}
 		ctx.restore()
 	}
-	#setupCtrls() {
+	#setup() {
 		for (const menu of values(Menu)) {
-			menu.on({change:Ctrl.#update})
+			menu.on('change', Ctrl.#update)
 		}
+		$on('resize', Ctrl.#fitToViewport)
 		$('#clearHiScore').on({click:()=>
 			Confirm.open('Are you sure you want to clear high-score?',
 				null,Ctrl.#clearHiScore, 'No','Yes', 0)
 		})
-		$('input')    .on({input:Ctrl.#update})
-		$('#defBtn')  .on({click:Ctrl.#setDefault})
-		$('#startBtn').on({click:()=> State.to('Start')})
+		$('input')    .on('input', Ctrl.#update)
+		$('#resetBtn').on('click', Ctrl.#reset)
+		$('#startBtn').on('click', ()=> State.to('Start'))
 	}
 }, powChk = ctrl('powChk')

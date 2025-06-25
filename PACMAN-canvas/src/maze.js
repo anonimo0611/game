@@ -168,6 +168,7 @@ export const Maze = new class {
 		ctx.fillCircle(...v, T/(isPow? 2:8), color)
 	}
 	#drawDoor() {
-		Bg.ctx.fillRect(T*13, T*13.6, T*2, T/4, Color.Door)
+		const y = (Maze.House.EntranceTile.y+1.6)*T
+		Bg.ctx.fillRect(CW/2-T, y, T*2, T/4, Color.Door)
 	}
 }, {drawDot}=freeze(Maze)

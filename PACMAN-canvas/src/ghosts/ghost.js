@@ -1,14 +1,14 @@
-import {Sound}  from '../../_snd/sound.js'
-import {Game}   from '../_main.js'
-import {State}  from '../state.js'
-import {Ctrl}   from '../control.js'
-import {PtsMgr} from '../points.js'
-import {Maze}   from '../maze.js'
-import {Actor}  from '../actor.js'
-import {Player} from '../pacman.js'
-import {GhsMgr} from './_system.js'
-import * as Sys from './_system.js'
-import Sprite   from '../sprites/ghost.js'
+import {Sound}   from '../../_snd/sound.js'
+import {Game}    from '../_main.js'
+import {State}   from '../state.js'
+import {Ctrl}    from '../control.js'
+import {PtsMgr}  from '../points.js'
+import {Maze}    from '../maze.js'
+import {Actor}   from '../actor.js'
+import {Player}  from '../pacman.js'
+import {GhsMgr}  from './_system.js'
+import * as Sys  from './_system.js'
+import Sprite    from '../sprites/ghost.js'
 
 export class Ghost extends Actor {
 	#runaway   = -1
@@ -21,7 +21,7 @@ export class Ghost extends Actor {
 	// This section is overridden in subclasses
 	get isAngry()     {return false}
 	get chaseStep()   {return GhsStep.Base}
-	get chasePos()    {return Player.instance.centerPos}
+	get chasePos()    {return Player.i.centerPos}
 	get scatterTile() {return Vec2()}
 
 	get aIdx()        {return GhsMgr.animIndex & this.animFlag}
@@ -83,7 +83,7 @@ export class Ghost extends Actor {
 			&& abs(CW/2 - this.centerPos.x) <= this.step
 	}
 	get sqrMagToPacman() {
-		return Vec2.sqrMag(this, Player.instance)
+		return Vec2.sqrMag(this, Player.i)
 	}
 	get step() {
 		return function(g,s) {
@@ -132,7 +132,7 @@ export class Ghost extends Actor {
 		)
 	}
 	release(deactivateGlobalDotCnt=false) {
-		Player.instance.resetTimer()
+		Player.i.resetTimer()
 		this.state.isIdle && this.state.to('GoOut')
 		return deactivateGlobalDotCnt
 	}
@@ -229,7 +229,7 @@ export class Ghost extends Actor {
 		return false
 	}
 	crashWithPac({
-		pos     = Player.instance.pos,
+		pos     = Player.i.pos,
 		radius  = (this.isFright? T/2:T/3),
 		release = ()=> this.#setEscape()
 	}={}) {
