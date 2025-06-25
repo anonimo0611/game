@@ -8,28 +8,32 @@ import {Ghost}  from './ghost.js'
 export default new class {
 	/** @param {readonly Ghost[]} ghosts */
 	draw(ghosts) {
-		if (!Ctrl.showTargets || !State.isPlaying) return
+		if (!Ctrl.showTargets || !State.isPlaying)
+			return
 		for (const g of ghosts) this.#strokeLines(g)
 		for (const g of ghosts) this.#drawMarker(g)
 	}
 	/** @param {Ghost} g */
-	#disabled(g) {
-		return g.isIdle
-			|| g.isFright
-			|| g.isBitten
-			||(g.frozen && !g.isEscaping)
-	}
+	#markerSisabled = g=> (
+		   g.isFright
+		|| g.state.isIdle
+		|| g.state.isBitten
+		|| (Timer.frozen && !g.isEscaping)
+	)
+
 	/** @param {Ghost} g */
-	#getTargetPos(g) {
-		return (g.isGoOut || g.isEscaping)
+	#getTargetPos = g=>
+		(g.state.isGoOut || g.isEscaping)
 			? Maze.House.EntranceTile.add(.5).mul(T)
 			: g.isScatter
 				? g.originalTargetTile.add(.5).mul(T)
 				: g.chasePos
-	}
+
 	/** @param {Ghost} g */
 	#strokeLines(g) {
-		g.isChase && match(g.idx, {
+		if (Timer.frozen || !g.isChasing)
+			return
+		match(g.idx, {
 			[GhsType.Pinky]:  ()=> this.#auxLines(g, 4),
 			[GhsType.Aosuke]: ()=> this.#auxLines(g, 2),
 			[GhsType.Guzuta]: ()=> this.#guzutaCircle(g),
@@ -37,7 +41,8 @@ export default new class {
 	}
 	/** @param {Ghost} g */
 	#drawMarker(g) {
-		if (this.#disabled(g)) return
+		if (this.#markerSisabled(g))
+			return
 		const {x,y}= this.#getTargetPos(g)
 		Ctx.save()
 		Ctx.globalAlpha = 0.8

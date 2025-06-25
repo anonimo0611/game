@@ -63,12 +63,13 @@ export const GhsMgr = new class extends Common {
 	get animIndex() {return this.#aIdx}
 	get aInterval() {return Ticker.count % 6 == 0}
 	get Elroy()     {return Elroy}
+	get isChasing() {return AlternateBetweenModes.isChasing}
 	get isScatter() {return AlternateBetweenModes.isScatter}
 	get isFright()  {return FrightMode.session != null}
 	get score()     {return FrightMode.session?.score ?? PtsLst[0]}
 	get spriteIdx() {return FrightMode.session?.spriteIdx ?? 0}
 	get caughtAll() {return FrightMode.session?.caughtAll ?? false}
-	get hasEscape() {return Ghosts.some(g=> g.isEscaping)}
+	get hasEscape() {return Ghosts.some(g=> g.state.isEscaping)}
 	get akaCenter() {return Ghosts[GhsType.Akabei].centerPos}
 
 	#initialize(_={}, /**@type {Ghost[]}*/...ghosts) {
@@ -116,12 +117,14 @@ export const GhsMgr = new class extends Common {
 	}
 }
 
-const SCATTER = 0, CHASE = 1
+const SCATTER = 0
+const CHASING = 1
 const AlternateBetweenModes = function() {
 	{
 		let seq = {mode:SCATTER,update(){}}
 		$on({Title_Ready:()=> seq = genSequence()})
 		return {
+			get isChasing() {return seq.mode == CHASING},
 			get isScatter() {return seq.mode == SCATTER},
 			update() {State.isPlaying && seq.update()},
 		}
@@ -144,7 +147,7 @@ const AlternateBetweenModes = function() {
 		const durList  = genDurList()
 		const duration = ()=> durList[idx]/Game.speedRate
 		const Seq = {
-			mode: Ctrl.isChaseMode? CHASE:SCATTER,
+			mode: [SCATTER,CHASING][+Ctrl.isChaseMode],
 			update() {
 				if (Timer.frozen
 				 || GhsMgr.isFright
@@ -153,7 +156,7 @@ const AlternateBetweenModes = function() {
 				[cnt,Seq.mode] = [0,(++idx % 2)]
 				setReversalSig()
 			}
-		};return Seq.mode == CHASE ? {mode:CHASE,update(){}}:Seq
+		};return [Seq,{mode:CHASING,update(){}}][Seq.mode]
 	}
 }(),
 setReversalSig = ()=> {

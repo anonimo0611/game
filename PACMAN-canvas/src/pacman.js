@@ -108,7 +108,7 @@ class PlayablePac extends Pacman {
 	}
 	update() {
 		super.update()
-		if (this.frozen || !State.isPlaying) return
+		if (Timer.frozen || !State.isPlaying) return
 		this.sprite.update(this)
 		this.#notEaten++
 		for (const _ of range(this.stepDiv))

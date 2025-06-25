@@ -30,10 +30,13 @@ export class Ghost extends Actor {
 	get chaseTile()   {return this.chasePos.divInt(T)}
 	get isStarted()   {return this.#isStarted}
 	get isFright()    {return this.#isFright}
-	get isIdle()      {return this.state.isIdle}
-	get isGoOut()     {return this.state.isGoOut}
+	get isWalk()      {return this.state.isWalk}
 	get isBitten()    {return this.state.isBitten}
 	get isEscaping()  {return this.state.isEscaping}
+
+	get isCalmWalk()  {return this.isWalk && !this.isFright}
+	get isChasing()   {return GhsMgr.isChasing && this.isCalmWalk}
+	get isScatter()   {return GhsMgr.isScatter && this.isCalmWalk}
 
 	/** @param {Direction} dir */
 	constructor(dir=L, {col=0,row=0,idx=0,align=0,animFlag=1}={}) {
@@ -54,16 +57,6 @@ export class Ghost extends Actor {
 		this.state    = new Sys.GhostState(this)
 		this.sprite   = new Sprite(canvas2D(null, T*3, T*2).ctx)
 		freeze(this)
-	}
-	get isChase() {
-		return !this.isScatter
-			&&  this.state.isWalk
-	}
-	get isScatter() {
-		return GhsMgr.isScatter
-			&& !this.isFright
-			&& !this.isEscaping
-			&& !this.isAngry
 	}
 	get originalTargetTile() {
 		return this.state.isEscape
@@ -87,14 +80,14 @@ export class Ghost extends Actor {
 	}
 	get step() {
 		return function(g,s) {
-			if (g.isIdle)     return s.Idle
-			if (g.isGoOut)    return s.GoOut
-			if (g.isEscaping) return s.Escape
-			if (g.isInTunnel) return s.InTunnel
-			if (g.isFright)   return s.Fright
-			if (g.isScatter)  return s.Base
+			if (s.isIdle)     return GhsStep.Idle
+			if (s.isGoOut)    return GhsStep.GoOut
+			if (s.isEscaping) return GhsStep.Escape
+			if (g.isInTunnel) return GhsStep.InTunnel
+			if (g.isFright)   return GhsStep.Fright
+			if (g.isScatter)  return GhsStep.Base
 			return g.chaseStep
-		}(this,GhsStep) * Game.moveSpeed
+		}(this,this.state) * Game.moveSpeed
 	}
 	draw() {
 		if (State.isStart) return
@@ -114,7 +107,7 @@ export class Ghost extends Actor {
 	}
 	#behavior() {
 		this.#runaway >= 0 && this.#runaway--
-		if (this.frozen && !this.isEscaping)
+		if (Timer.frozen && !this.isEscaping)
 			return
 		match(this.state.current, {
 			Idle:  ()=> this.#idle(this),
@@ -176,7 +169,7 @@ export class Ghost extends Actor {
 		;(Ctrl.isChaseMode || this.idx == GhsType.Akabei)
 			? this.state.to('GoOut')
 			: this.state.to('Idle') && this.#idle(this)
-		!this.frozen && Sound.ghostArrivedAtHome()
+		!Timer.frozen && Sound.ghostArrivedAtHome()
 	}
 	#walkRails() {
 		for (const _ of range(this.stepDiv)) {
@@ -233,7 +226,7 @@ export class Ghost extends Actor {
 		radius  = (this.isFright? T/2:T/3),
 		release = ()=> this.#setEscape()
 	}={}) {
-		if (!this.state.isWalk
+		if (!this.isWalk
 		 || !this.isFright && Ctrl.invincible
 		 || !collisionCircle(this, pos, radius))
 			return false
