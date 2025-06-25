@@ -30,7 +30,7 @@ const releaseDelay = idx=> ({
 
 /** @typedef {'Idle'|'GoOut'|'Walk'|'Bitten'|'Escape'|'Return'} State */
 export class GhostState extends _State {
-	isIdle   = true
+	isIdle   = false
 	isGoOut  = false
 	isWalk   = false
 	isBitten = false

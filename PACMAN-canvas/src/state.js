@@ -19,7 +19,7 @@ export const State = new class extends _State {
 	isGameOver  = false
 	isQuit      = false
 
-	constructor() {super(),this.init(null)}
+	constructor() {super(),this.init()}
 
 	/** @param {StateType} [s] */
 	last(s)          {return /**@type {StateType}*/(super.last(s))}
