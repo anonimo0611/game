@@ -19,7 +19,6 @@ import {PtsMgr}  from './points.js'
 import {Attract} from './demo/attract.js'
 import {CoffBrk} from './demo/coffee_break.js'
 
-export const $lvl = $byId('level')
 export const Game = new class {
 	static {$ready(this.setup)}
 	static setup() {
@@ -60,7 +59,7 @@ export const Game = new class {
 	}
 	#setLevel(i=1) {
 		Game.#level = between(i, 1, 0xFF) && +i || 1
-		$lvl.text('Level'+this.levelStr).trigger('change')
+		$level.text('Level'+this.levelStr).trigger('change')
 	}
 	#confirm() {
 		!Ticker.paused && Game.#pause()
@@ -170,4 +169,6 @@ export const Game = new class {
 		Actor.draw()
 		Message.draw()
 	}
-}; $load(()=> Form.dataset.readyState = 'loaded')
+},
+$level = $byId('level')
+$load(()=> Form.dataset.readyState = 'loaded')
