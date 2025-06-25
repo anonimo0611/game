@@ -180,7 +180,7 @@ body[data-state] {
 			width: 100%;
 			display: block;
 		}
-		#defBtn {border-width: 4px}
+		#resetBtn {border-width: 4px}
 	}
 	output + label {
 		display: flex;
