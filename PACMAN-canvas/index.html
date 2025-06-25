@@ -4,8 +4,10 @@
 	<meta charset="UTF-8">
 	<title>PAC-MAN</title>
 	<link rel="icon" href="data:,">
-	<link rel="preload" as="font" type="font/woff2" href="res/Atari.woff2" crossorigin>
-	<link rel="preload" as="font" type="font/woff2" href="res/PacfontGood.woff2" crossorigin>
+	<link rel="preload" as="style" type="text/css"   href="styles/ui.css">
+	<link rel="preload" as="style" type="text/css"   href="styles/_main.css">
+	<link rel="preload" as="font"  type="font/woff2" href="res/Atari.woff2" crossorigin>
+	<link rel="preload" as="font"  type="font/woff2" href="res/PacfontGood.woff2" crossorigin>
 	<link rel="stylesheet" href="styles/ui.css">
 	<link rel="stylesheet" href="styles/_main.css">
 	<style>
@@ -24,7 +26,7 @@
 
 <body>
 
-<form id="board" onsubmit="return false">
+<form id="board" onsubmit="return false" data-ready-state="loading">
 	<header>
 		<h1>
 			<h-line>PAC</h-line>
@@ -130,7 +132,7 @@
 				<button class="CBBtn" value="1">Coffee Break 1</button>
 				<button class="CBBtn" value="2">Coffee Break 2</button>
 				<button class="CBBtn" value="3">Coffee Break 3</button>
-				<button id="defBtn">Return to Default</button>
+				<button id="resetBtn">Return to Default</button>
 			</li>
 		</ul>
 		<div id="keysPanel" class="panel">
@@ -165,7 +167,7 @@
 			</tr>
 			</table>
 		</div>
-		<button id="startBtn" disabled>PRESS　ARROWS　to　START</button>
+		<button id="startBtn">PRESS　ARROWS　to　START</button>
 	</div>
 </form>
 

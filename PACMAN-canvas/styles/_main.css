@@ -6,7 +6,7 @@ html, body {
 	overflow: hidden;
 }
 html {
-	font-size: 28px;
+	font-size: 26px;
 }
 body {
 	color: #FFF;
@@ -50,8 +50,10 @@ h1 {
 	position: relative;
 	transform-origin: center;
 	opacity: 0;
-	transition:  opacity 0ms 100ms;
-	will-change: opacity transform;
+	will-change: opacity scale;
+}
+#board[data-ready-state=loaded] {
+	opacity: 1;
 }
 #boardCanvases {
 	margin-top: 0.5rem;

@@ -6,17 +6,16 @@ export default class {
 	#StateSet = /**@type {Set<string>}*/(new Set)
 	get current() {return this.#state}
 
-	/** @param {string} [state] */
-	init(state) {
+	/** @param {?string} [initVal] */
+	init(initVal) {
 		entries(this)
 		.flatMap(([k,v])=> /^is[A-Z\d]*$/i.test(k)? [{k,v:(!!v)}]:[])
 		.forEach(({k,v})=> {
 			const state = k.substring(2)
 			this.#StateSet.add(state)
-			v === true && this.to(state)
 			defineProperty(this,k,{get(){return this.#state === state}})
 		})
-		state && this.#StateSet.has(state) && this.to(state)
+		initVal && this.#StateSet.has(initVal) && this.to(initVal)
 	}
 
 	/**
