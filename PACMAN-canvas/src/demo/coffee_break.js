@@ -41,7 +41,7 @@ export class CoffBrk {
 		this.pacman.sprite.update()
 	}
 	drawPacman(scale=1) {
-		this.pacman.sprite.draw(this.pacman, scale)
+		this.pacman.sprite.draw(this.pacman, {scale})
 	}
 	drawAkabei(cfg={}) {
 		const {akabei:{pos,aIdx}}= this

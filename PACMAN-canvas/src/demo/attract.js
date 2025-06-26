@@ -63,6 +63,9 @@ export class Attract {
 		row && ghost.setPos(5*T, row*T)
 		ghost.sprite.draw(ghost)
 	}
+	drawPacman({pacman:pac}=this) {
+		!Timer.frozen && pac.sprite.draw(pac)
+	}
 	draw() {
 		const et = Ticker.elapsedTime/100
 		Score.draw(),drawText(7, 5, null, 'CHARACTOR　/　NICKNAME')
@@ -102,16 +105,19 @@ export class Attract {
 		if (et > 105) {
 			for (const i of range(GhsType.Max))
 				this.drawGhost(DEMO, i)
-			this.pacman.sprite.draw(this.pacman)
+			this.drawPacman(this)
 			PtsMgr.drawGhostPts()
 		}
 		Fruit.drawLevelCounter()
 	}
 	update() {
-		if (Ticker.elapsedTime <= 1e4+500) return
+		if (Ticker.elapsedTime <= 1e4+500)
+			return
+		if (!Timer.frozen) {
+			this.updatePacman()
+			this.updateGhosts()
+		}
 		this.powDisp ^= +(Ticker.count % PowDotInterval == 0)
-		!Timer.frozen && this.updatePacman()
-		!Timer.frozen && this.updateGhosts()
 	}
 	updatePacman() {
 		this.pacman.sprite.update()
