@@ -29,7 +29,7 @@ export default class {
 		centerPos:{x,y}={x:0,y:0},
 		orient = /**@type {Direction}*/(L),
 		radius = PacRadius,
-		closed = false}={}, scale=1
+		closed = false}={}, {scale=1}={}
 	) {
 		const {ctx}  = this
 		const mAngle = (closed? 0:this.#mAngle)
