@@ -9,15 +9,13 @@ export class Losing {
 	#innerR = PacR/4
 	#outerR = PacR/2
 	constructor(ctx=Ctx) {
-		this.ctx    = ctx
-		this.isMain = ctx == Ctx
+		this.ctx = ctx
 		freeze(this)
 	}
 	draw({x=0,y=0}={}) {
 		const {ctx}= this
-		this.isMain && (x=clamp(x, PacR, CW-PacR))
 		ctx.save()
-		ctx.translate(x, y)
+		ctx.translate(x,y)
 		ctx.lineWidth = T/6
 		ctx.fillStyle = ctx.strokeStyle = Color.Pacman
 		this.#mAngle < PI - PI/DisDur

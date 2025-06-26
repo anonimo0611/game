@@ -15,6 +15,7 @@ export default class {
 	 */
 	constructor(ctx, mouthOpenings=0) {
 		this.ctx = ctx
+		this.isMain  = ctx.canvas.id == 'cvs_main'
 		this.#mAngle = [0,OpenMid,OpenMax][mouthOpenings]
 		freeze(this)
 	}
@@ -26,16 +27,16 @@ export default class {
 	}
 	draw({
 		centerPos:{x,y}={x:0,y:0},
-		orient     = /**@type {Direction}*/(L),
-		radius     = PacRadius,
-		frozen     = false,
-		closed     = false,
-		showCenter = false}={}, scale=1
+		orient = /**@type {Direction}*/(L),
+		radius = PacRadius,
+		closed = false}={}, scale=1
 	) {
-		if (frozen || this.#losing)
-			return this.#losing?.draw({x,y})
 		const {ctx}  = this
 		const mAngle = (closed? 0:this.#mAngle)
+		if (this.#losing) {
+			this.isMain && (x = clamp(x, radius, CW-radius))
+			return this.#losing.draw({x,y})
+		}
 		ctx.save()
 		ctx.translate(x,y)
 		ctx.rotate(Rotation[orient] * PI/2)
@@ -45,7 +46,6 @@ export default class {
 		ctx.fillStyle = Color.Pacman
 		ctx.fill()
 		ctx.restore()
-		showCenter && ctx.fillCircle(x,y, 3, Color.PacCenter)
 	}
 	setLosing() {this.#losing = new Losing(this.ctx)}
 }
