@@ -96,8 +96,11 @@ class PlayablePac extends Pacman {
 		this.#notEaten = 0
 	}
 	forwardPos(num=0) {
+		return Vec2[this.dir].mul(num*T).add(this.centerPos)
+	}
+	forwardOfst(num=0) {
 		const  ofstX = (this.dir == U ? -num : 0)
-		return Vec2[this.dir].mul(num*T).add(this.centerPos).add(ofstX*T, 0)
+		return this.forwardPos(num).add(ofstX*T, 0)
 	}
 	#drawCenter({centerPos:{x,y}}=this) {
 		Ctx.fillCircle(x,y, 3, Color.PacCenter)

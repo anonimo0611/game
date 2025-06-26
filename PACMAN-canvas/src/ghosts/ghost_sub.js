@@ -17,7 +17,7 @@ class Pinky extends Ghost {
 		super(D, {idx:1, col:13.5, row:15})
 	}
 	get chasePos() {
-		const {Tunnel}=Maze, {i:P}=Player, pos=P.forwardPos(4)
+		const {Tunnel}=Maze, {i:P}=Player, pos=P.forwardOfst(4)
 		Tunnel.isIn(P.centerPos,L) && P.dir == L && (pos.x=Tunnel.entranceR*T)
 		Tunnel.isIn(P.centerPos,R) && P.dir == R && (pos.x=Tunnel.entranceL*T)
 		return pos
@@ -30,7 +30,7 @@ class Aosuke extends Ghost {
 		super(U, {idx:2, col:11.5, row:15, align:-1})
 	}
 	get chasePos() {
-		const  pos = Player.i.forwardPos(2)
+		const  pos = Player.i.forwardOfst(2)
 		return pos.clone.sub(GhsMgr.akaCenter).add(pos)
 	}
 	get scatterTile() {return Vec2(27, 33)}

@@ -53,20 +53,20 @@ export default new class {
 	/** @param {Ghost} g */
 	#auxLines(g, ofst=4) {
 		const {centerPos:pacPos,dir}= Player.i
-		const fwdXY = Player.i.forwardPos(ofst).vals
-		const ofsXY = Vec2[dir].mul(ofst*T).add(pacPos).vals
+		const fwdXY = Player.i.forwardPos (ofst).vals
+		const ofsXY = Player.i.forwardOfst(ofst).vals
 		Ctx.save()
 		Ctx.lineWidth   = 6
 		Ctx.strokeStyle = g.color
 		Ctx.setAlpha(0.8)
-		Ctx.newLinePath(pacPos.vals, ofsXY)
-		dir == U && Ctx.lineTo(...fwdXY)
+		Ctx.newLinePath(pacPos.vals, fwdXY)
+		dir == U && Ctx.lineTo(...ofsXY)
 		Ctx.stroke()
 		if (g.idx == GhsType.Aosuke) {
 			const tgtXY = g.chasePos.vals
 			const akaXY = GhsMgr.akaCenter.vals
-			Ctx.newLinePath(akaXY, fwdXY, tgtXY).stroke()
-			Ctx.fillCircle(...fwdXY, 8, g.color)
+			Ctx.newLinePath(akaXY, ofsXY, tgtXY).stroke()
+			Ctx.fillCircle(...ofsXY, 8, g.color)
 			Ctx.fillCircle(...akaXY, 8, g.color)
 		}
 		Ctx.restore()
