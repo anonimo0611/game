@@ -9,7 +9,7 @@ export const Message = new class {
 	 * @param {string|number} text
 	 */
 	drawText(col, row, color='', text='',
-		{ctx=Ctx,scaleX=1,face='Atari',size=T,style=''}={}
+		{ctx=Ctx, scaleX=1, face='Atari', size=T, style=''}={}
 	) {
 		ctx.save()
 		ctx.scale(scaleX, 1)
