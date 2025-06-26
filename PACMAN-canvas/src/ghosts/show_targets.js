@@ -14,7 +14,7 @@ export default new class {
 		for (const g of ghosts) this.#drawMarker(g)
 	}
 	/** @param {Ghost} g */
-	#markerSisabled = g=> (
+	#markerDisabled = g=> (
 		   g.isFright
 		|| g.state.isIdle
 		|| g.state.isBitten
@@ -41,7 +41,7 @@ export default new class {
 	}
 	/** @param {Ghost} g */
 	#drawMarker(g) {
-		if (this.#markerSisabled(g))
+		if (this.#markerDisabled(g))
 			return
 		const {x,y}= this.#getTargetPos(g)
 		Ctx.save()
