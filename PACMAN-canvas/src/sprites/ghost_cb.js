@@ -15,15 +15,14 @@ export default class {
 		ctx.fillStyle = Color.GhostSkin
 		ctx.fill()
 	}
-	mendedStitch(idx=0) {
-		const {ctx}= this, coords = /**@type {xyList[]}*/
+	mendedStitch(aIdx=0) {
+		const {ctx}= this, path = /**@type {xyList[]}*/
 			([[39,8],[33,14],[24,8],[14,15],[26,20],[14,27],[25,33],[14,38]])
-		idx && coords.pop()
+		aIdx && path.pop()
 		ctx.lineWidth   = 3.5
 		ctx.strokeStyle = '#FFF'
-		ctx.newLinePath(...coords)
-		ctx.stroke()
-		coords.forEach(([x,y])=> ctx.fillCircle(x,y, ctx.lineWidth, '#FFF'))
+		ctx.newLinePath(...path).stroke()
+		path.forEach(xy=> ctx.fillCircle(...xy, ctx.lineWidth, '#FFF'))
 	}
 	bracketEyes() {
 		const {ctx}= this

@@ -9,30 +9,32 @@ export class Losing {
 	#innerR = PacR/4
 	#outerR = PacR/2
 	constructor(ctx=Ctx) {
-		this.ctx = ctx
+		this.ctx    = ctx
+		this.isMain = ctx == Ctx
 		freeze(this)
 	}
 	draw({x=0,y=0}={}) {
 		const {ctx}= this
-		const clampedX = (ctx == Ctx)
-			? clamp(x, PacR, CW-PacR) : x
+		this.isMain && (x=clamp(x, PacR, CW-PacR))
 		ctx.save()
-		ctx.translate(clampedX, y)
+		ctx.translate(x, y)
 		ctx.lineWidth = T/6
 		ctx.fillStyle = ctx.strokeStyle = Color.Pacman
 		this.#mAngle < PI - PI/DisDur
- 			? this.#disappear(this)
-	 		: this.#drawRadialLines(this)
+ 			? this.#disappear()
+	 		: this.#drawRadialLines()
 		ctx.restore()
 	}
-	#disappear({ctx}=this) {
-		const mAngle = this.#mAngle += PI/DisDur
+	#disappear() {
+		const {ctx}= this
+		this.#mAngle += PI/DisDur
 		ctx.beginPath()
 		ctx.moveTo(0,PacR*0.35)
-		ctx.arc(0,0, PacR, -PI/2+mAngle,-PI/2-mAngle)
+		ctx.arc(0,0, PacR, -PI/2+this.#mAngle,-PI/2-this.#mAngle)
 		ctx.fill()
 	}
-	#drawRadialLines({ctx}=this) {
+	#drawRadialLines() {
+		const {ctx}= this
 		const innerR = min(this.#innerR += PacR/2/LineDur, PacR/2)
 		const outerR = min(this.#outerR += PacR/1/LineDur, PacR/1)
 		if (this.#outerR >= PacR)
