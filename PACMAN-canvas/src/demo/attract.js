@@ -58,13 +58,13 @@ export class Attract {
 		}
 		(this.ghsList[where] ||= []).push(g)
 	}
-	drawGhost(where=0, gIdx=0, row=NaN) {
-		const ghost = this.ghsList[where][gIdx]
-		row && ghost.setPos(5*T, row*T)
-		ghost.sprite.draw(ghost)
-	}
 	drawPacman({pacman:pac}=this) {
 		!Timer.frozen && pac.sprite.draw(pac)
+	}
+	drawGhost(where=0, gIdx=0, row=NaN) {
+		const  ghost = this.ghsList[where][gIdx]
+		isFinite(row) && ghost.setPos(5*T, row*T)
+		ghost.sprite.draw(ghost)
 	}
 	draw() {
 		const et = Ticker.elapsedTime/100
@@ -88,8 +88,8 @@ export class Attract {
 			drawDot(Ctx, 10, 24)
 			this.powDisp && drawDot(Ctx, 10, 26, true)
 			drawText(12.0, 25, null, DotScore)
-			drawText(14.3, 25, null, 'PTS', {size:SmallSize})
 			drawText(12.0, 27, null, PowScore)
+			drawText(14.3, 25, null, 'PTS', {size:SmallSize})
 			drawText(14.3, 27, null, 'PTS', {size:SmallSize})
 		}
 		if (et > 90) {
@@ -103,16 +103,18 @@ export class Attract {
 			}
 		}
 		if (et > 105) {
-			for (const i of range(GhsType.Max))
+			for (const i of range(GhsType.Max)) {
 				this.drawGhost(DEMO, i)
+			}
 			this.drawPacman(this)
 			PtsMgr.drawGhostPts()
 		}
 		Fruit.drawLevelCounter()
 	}
 	update() {
-		if (Ticker.elapsedTime <= 1e4+500)
+		if (Ticker.elapsedTime <= 1e4+500) {
 			return
+		}
 		if (!Timer.frozen) {
 			this.updatePacman()
 			this.updateGhosts()
@@ -134,8 +136,10 @@ export class Attract {
 	updateGhosts() {
 		for (const g of this.ghsList[DEMO]) {
 			g.x += this.ghsVelX
-			g.crashWithPac({pos:this.pacman.pos, radius:T/4,
-				release:()=> GhsMgr.caughtAll && Attract.#begin()})
+			g.crashWithPac({
+				pos: this.pacman.pos, radius: T/4,
+				release() {GhsMgr.caughtAll && Attract.#begin()}
+			})
 		}
 	}
 	quit() {
