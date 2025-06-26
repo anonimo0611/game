@@ -193,8 +193,8 @@ export class Ghost extends Actor {
 		const dirs = this.TurnDirs.flatMap((dir,i)=> {
 			const test = this.getAdjTile(dir,tile)
 			const dist = Vec2.sqrMag(test,tgt)
-			return this.revOrient != dir
-				&& Maze.hasWall(test) == false
+			return Maze.hasWall(test) == false
+				&& this.revOrient != dir
 				&& this.#canEnter({dir,test})? [{i,dir,dist}]:[]
 		})
 		return this.isFright? randChoice(dirs).dir:
