@@ -1,124 +1,166 @@
-import {Dir}     from '../_lib/direction.js'
-import * as Menu from '../_lib/menu.js'
-import PacSprite from '../src/sprites/pacman.js'
-import {Ghost}   from './actor.js'
-import {_t,_s,_ghost,resize} from './_constants.js'
-export const {ctx:PvC}= canvas2D('previewCvs')
+import {Dir}      from '../_lib/direction.js'
+import {DorpDown} from '../_lib/menu.js'
+import {Ghost}    from './actor.js'
+import {T,S}      from './_constants.js'
+import {ghost}    from './_constants.js'
+import {resize}   from './_constants.js'
+import PacSprite  from '../src/sprites/pacman.js'
 
-const ActType = /**@type {const}*/({None:-1,Pacman:0,Akabei:1,Pinky:2,Aosuke:3,Guzuta:4,Frightened:5})
-const PacType = /**@type {const}*/({Normal:0,Losing:1})
-const GhsType = /**@type {const}*/({Normal:0,Mended:1,Exposed:2,Flashed:3})
+export const {ctx}= canvas2D('previewCvs')
 
-class AnimeData {
-	/** @param {{type?:number, subType?:number, pacman?:PacSprite, ghost?:Ghost}} params */
-	constructor({type,subType,pacman,ghost}={}) {
-		this.animIdx  = 0
-		this.flashIdx = 1
-		this.pacman   = pacman
-		this.ghost    = ghost
-		this.type     = type ?? -1
-		this.subType  = subType ?? -1
-		this.orient   = /**@type {Direction}*/(L)
-	}
-}
-const getOrient = ()=> /**@type {Direction}*/(
+const getOrient = ()=> /**@type {Direction}*/
+(
 	$('input[name=orient]:checked').attr('value')
 )
-;(function() { // Preview
-	let   data = new AnimeData()
-	const menu = new Menu.DorpDown('animSelect')
-	const radioSelector = '.radioButtons input'
 
-	function change(loop=false) {
-		const [type,subType]= menu.value.split(':').map(Number)
-		!loop && Timer.cancelAll()
+const Type = /**@type {const}*/
+({
+	Actor: {None: -1, Pacman:0, Akabei:1, Pinky:2, Aosuke:3, Guzuta:4, Fright:5},
+	Pacman:{Normal:0, Losing:1},
+	Ghost: {Normal:0, Mended:1, Exposed:2, Flashed:3}
+})
+
+class Data
+{
+	/**
+	 * @param {{
+	 * type?:    number,
+	 * subType?: number,
+	 * pacman?:  PacSprite,
+	 * ghost?:   Ghost}} param
+	 */
+	constructor({type,subType,pacman,ghost}={})
+	{
+		this.aIdx    = 0
+		this.fIdx    = 1
+		this.orient  = /**@type {Direction}*/(L)
+		this.pacman  = pacman
+		this.ghost   = ghost
+		this.type    = type ?? -1
+		this.subType = subType ?? -1
+	}
+}
+
+{ // Preview
+	let   data  = new Data()
+	const Menu  = new DorpDown('animMenu')
+	const $btns = $('.radioButtons input')
+
+	function change(isLoop=false)
+	{
+		!isLoop && Timer.cancelAll()
+		const [type,subType]= Menu.value.split(':').map(Number)
 		switch(type) {
-		case ActType.Pacman:
-			data = new AnimeData({type,subType,pacman:new PacSprite(PvC)})
-			if (setOrientCtrl({disabled:subType == PacType.Losing})) {
-				data.pacman?.setLosing()
-				Timer.set(2200, ()=> change(true), {key:'Losing'})
+			case Type.Actor.Pacman:
+			{
+				const pacman = new PacSprite(ctx)
+				data = new Data({type,subType,pacman})
+				if (setCtrl({disabled:subType==Type.Pacman.Losing}))
+				{
+					data.pacman?.setLosing()
+					Timer.set(2200, ()=> change(true), {key:'Losing'})
+				}
+				break
 			}
-			break
-		case ActType.Akabei:
-		case ActType.Pinky:
-		case ActType.Aosuke:
-		case ActType.Guzuta:
-			data = new AnimeData({type,subType,ghost:new Ghost(_s)})
-			setOrientCtrl({disabled:subType != GhsType.Normal})
-			break
-		case ActType.Frightened:
-			data = new AnimeData({type,subType,ghost:new Ghost(_s)})
-			setOrientCtrl({disabled:true})
-			break
-		case ActType.None:
-			data = new AnimeData()
-			Timer.cancelAll()
-			setOrientCtrl({disabled:true})
-			break
+			case Type.Actor.Akabei:
+			case Type.Actor.Pinky:
+			case Type.Actor.Aosuke:
+			case Type.Actor.Guzuta:
+			{
+				const ghost = new Ghost(S)
+				data = new Data({type,subType,ghost})
+				setCtrl({disabled:subType != Type.Ghost.Normal})
+				break
+			}
+			case Type.Actor.Fright:
+			{
+				const ghost = new Ghost(S)
+				data = new Data({type,subType,ghost})
+				setCtrl({disabled:true})
+				break
+			}
+			case Type.Actor.None:
+				data = new Data()
+				Timer.cancelAll()
+				setCtrl({disabled:true})
 		}
 	}
-	function setOrientCtrl({disabled=false}={}) {
-		$(radioSelector).prop({disabled})
-		!disabled && (data.orient = getOrient())
+	function setCtrl({disabled=false}={})
+	{
+		$btns.prop({disabled})
+		if (!disabled)
+			data.orient = getOrient()
 		return disabled
 	}
-	function drawPacman() {
-		PvC.save()
-		PvC.translate(_s*1.5/2, _s/2)
-		PvC.scale(_t/TileSize, _t/TileSize)
-		data.pacman?.draw({orient:data.orient,radius:PacScale*TileSize})
-		PvC.restore()
+	function drawPacman()
+	{
+		ctx.save()
+		ctx.translate(S*1.5/2, S/2)
+		ctx.scale(T/TileSize, T/TileSize)
+		data.pacman?.draw({orient:data.orient, radius:PacScale*TileSize})
+		ctx.restore()
 	}
-	function drawGhost() {
-		PvC.save()
-		data.subType == GhsType.Exposed
-			? PvC.translate(_s/3.3, _t/2)
-			: PvC.translate(_s/2.0, _t/2)
+	function drawGhost()
+	{
+		ctx.save()
+		data.subType == Type.Ghost.Exposed
+			? ctx.translate(S/3.3, T/2)
+			: ctx.translate(S/2.0, T/2)
+
 		data.ghost?.sprite.draw({
-			..._ghost,
-			mainCtx:   PvC,
+			...ghost,
+			mainCtx:   ctx,
 			color:     Color[GhsNames[data.type-1]],
-			aIdx:      data.animIdx,
+			aIdx:      data.aIdx,
 			orient:    data.orient,
-			spriteIdx: data.subType == GhsType.Flashed? data.flashIdx : 0,
-			isFright:  data.type    == ActType.Frightened,
-			isExposed: data.subType == GhsType.Exposed,
-			isMended:  data.subType == GhsType.Mended,
+			spriteIdx: data.subType == Type.Ghost.Flashed ? data.fIdx:0,
+			isFright:  data.type    == Type.Actor.Fright,
+			isExposed: data.subType == Type.Ghost.Exposed,
+			isMended:  data.subType == Type.Ghost.Mended,
 		})
-		PvC.restore()
+		ctx.restore()
 	}
-	function update() {
+	function update()
+	{
 		resize()
-		if (data.type < 0)
-			return
-		data.animIdx  ^= +(Ticker.count %  6 == 0)
-		data.flashIdx ^= +(Ticker.count % 14 == 0)
-		data.pacman?.update()
+		if (data.type >= 0) {
+			data.aIdx ^= +(Ticker.count %  6 == 0)
+			data.fIdx ^= +(Ticker.count % 14 == 0)
+			data.pacman?.update()
+		}
 	}
-	function draw() {
-		PvC.clear()
-		if (data.type < 0)
-			return
-		data.type == ActType.Pacman
-			? drawPacman()
-			: drawGhost()
+	function draw()
+	{
+		ctx.clear()
+		if (data.type >= 0) {
+			data.type == Type.Actor.Pacman
+				? drawPacman()
+				: drawGhost()
+		}
 	}
-	menu.on({change})
-	menu.$root.on('keydown', e=> {
-		// Enable switching of radio controls with the ← or → key
+
+	Menu.on({change})
+	Menu.$root.on('keydown', e=>
+	{
 		const dir = Dir.from(e)
-		if (dir) {
-			const vx  = Vec2[dir].x
-			const idx = +$(`${radioSelector}:enabled:checked`).data('idx')
-			if (!menu.closed || !vx || isNaN(idx)) return
-			$(radioSelector).eq((vx+idx+4) % 4).prop({checked:true}).trigger('change')
+		if (dir)
+		{
+			const len  = $btns.length
+			const idx  = +$btns.filter(':enabled:checked').data('idx')
+			const dirX = Vec2[dir].x
+			if (!Menu.closed || !dirX || isNaN(idx))
+				return
+			$btns.eq((dirX+idx+len) % len)
+				.prop({checked:true})
+				.trigger('change')
 		}
 	})
-	$(radioSelector).on('change', e=> {
-		data.orient = /**@type {Direction}*/(
+	$btns.on('change', e=>
+	{
+		data.orient = /**@type {Direction}*/
+		(
 			e.target.getAttribute('value')
 		)
 	})
-	Ticker.set(()=> {update(),draw()})
-})()
+	Ticker.set(update, draw)
+}

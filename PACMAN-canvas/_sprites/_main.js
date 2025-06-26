@@ -2,15 +2,17 @@ import '../_lib/mouse.js'
 import PacSprite  from '../src/sprites/pacman.js'
 import * as Pts   from '../src/sprites/points.js'
 import * as Fruit from '../src/sprites/fruits.js'
-import {GridSize,_t,_s,_gap,_ghost} from './_constants.js'
+import {GridSize,T,S,gap,ghost} from './_constants.js'
 
-export const View = function() {
+export const View = function()
+{
 	/** @param {number} colIdx */
-	const ofst = colIdx=> (_s*colIdx)+(_gap*colIdx)
+	const ofst = colIdx=> (S*colIdx)+(gap*colIdx)
 
-	function draw() {
+	function draw()
+	{
 		Ctx.save()
-		Ctx.translate(_gap, _gap/2)
+		Ctx.translate(gap, gap/2)
 		Ctx.clear()
 		drawGridLines()
 		drawFruits()
@@ -20,48 +22,62 @@ export const View = function() {
 		drawAkabei()
 		Ctx.restore()
 	}
-	function drawGridLines() {
+
+	function drawGridLines()
+	{
 		Ctx.save()
-		Ctx.translate(-_gap/2, 0)
+		Ctx.translate(-gap/2, 0)
 		Ctx.setLineDash([2,2])
-		Ctx.lineWidth = 2
+		Ctx.lineWidth   = 2
 		Ctx.strokeStyle = '#555'
 		const {x:Cols,y:Rows}= GridSize
 		const line = (x1=0,y1=0,x2=0,y2=0)=> Ctx.strokeLine(x1,y1,x2,y2)
-		for (const y of range(Cols+0)) line(ofst(y), 0, ofst(y), Rows*_s)
-		for (const x of range(Rows+1)) line(0, x*_s, Cols*_s+_gap, x*_s)
+		for (const y of range(Cols+0)) line(ofst(y), 0, ofst(y), Rows*S)
+		for (const x of range(Rows+1)) line(0, x*S, Cols*S+gap, x*S)
 		Ctx.restore()
 	}
-	function drawFruits() {
+
+	function drawFruits()
+	{
 		for (const i of range(8))
-			Fruit.draw(Ctx, i, ofst(i)+_s/2, _s/2, _s/16)
+		{
+			Fruit.draw(Ctx, i, ofst(i)+S/2, S/2, S/16)
+		}
 	}
-	function drawGhosts() {
+
+	function drawGhosts()
+	{
 		for (const row of range(1,6))
-			for (const col of range(0,8)) {
+		{
+			for (const col of range(0,8))
+			{
 				Ctx.save()
-				Ctx.translate(_t/2, _t/2)
+				Ctx.translate(T/2, T/2)
 				drawGhost(col, row)
 				Ctx.restore()
 			}
+		}
 	}
+
 	/**
 	 * @param {number} col
 	 * @param {number} row
 	 */
-	function drawGhost(col, row) {
-		const [x,y]= [ofst(col), row*_s]
-		if (row < 5) {
-			_ghost.sprite.draw({
-				..._ghost,x,y,
+	function drawGhost(col, row)
+	{
+		const [x,y]= [ofst(col), row*S]
+		if (row < 5)
+		{
+			ghost.sprite.draw({
+				...ghost,x,y,
 				aIdx:  +(col % 2 != 0),
 				orient:/**@type {const}*/([U,U,L,L,D,D,R,R])[col],
 				color: Color[GhsNames[row-1]],
 			})
 			return
 		}
-		_ghost.sprite.draw({
-			..._ghost,x,y,
+		ghost.sprite.draw({
+			...ghost,x,y,
 			orient:/**@type {const}*/([R,R,R,R,U,L,D,R])[col],
 			aIdx:     +(col % 2 != 0),
 			isFright:  (col <= 3),
@@ -69,80 +85,97 @@ export const View = function() {
 			spriteIdx:+(col >= 2),
 		})
 	}
-	function drawPoints() {
+
+	function drawPoints()
+	{
 		/**
 		 * @typedef {typeof Pts.Vals.All[number]} Pts
 		 * @type {(pts:Pts, x:number, y:number)=> void}
 		 */
-		const draw = (pts, x, y)=> {
-			const {ctx,w,h}= Pts.cache(pts, _s)
+		function draw(pts, x, y)
+		{
+			const {ctx,w,h}= Pts.cache(pts, S)
 			Ctx.save()
 			Ctx.translate(x, y)
 			Ctx.drawImage(ctx.canvas, -w/2, -h/2)
 			Ctx.restore()
 		}
-		const scoreLst = /**@type {const}*/([
+		const scoreLst = /**@type {const}*/
+		([
 			[200,400,800,1600,100,300,500,700],
 			[1000,2000,3000,5000]
 		])
-		scoreLst[0].forEach((pts,i)=> draw(pts, ofst(i)+_t, _s*6+_t))
-		scoreLst[1].forEach((pts,i)=> draw(pts, (_s+_gap/2)+_s*(2+_gap/_t)*i, _s*7+_s/2))
+		scoreLst[0].forEach((pts,i)=> draw(pts, ofst(i)+T, S*6+T))
+		scoreLst[1].forEach((pts,i)=> draw(pts, (S+gap/2)+S*(2+gap/T)*i, S*7+S/2))
 	}
+
 	function drawPacman() {
 		const dirs = /**@type {const}*/([U,U,L,L,D,D,R,R])
-		for (const i of range(-1,9)) {
-			const centerPos = Vec2(_t+ofst(i), _s*8.5)
-			const cfg = {centerPos, orient:dirs[i-1], radius:_t*PacScale}
+		for (const i of range(-1,9))
+		{
+			const centerPos = Vec2(T+ofst(i), S*8.5)
+			const cfg = {centerPos, orient:dirs[i-1], radius:T*PacScale}
 			new PacSprite(Ctx, i>0 ? (i%2 ? 1:2) : 0).draw(cfg)
 		}
 	}
-	function drawAkabei() {
-		/** @type {(x:number, y:number, cfg:object)=> void} */
-		const draw = (x,y, cfg)=> aka.sprite.draw({...aka, x,y, ...cfg})
-		const aka = _ghost, spr = aka.cbSprite.stakeClothes
 
-		Ctx.translate(_s/4, _s*9+_s/4-_gap/4)
-		;{//Expand clothes
+	function drawAkabei() {
+		const aka = ghost
+		const spr = aka.cbSprite.stakeClothes
+
+		Ctx.translate(S/4, S*9+S/4-gap/4)
+
+		/** @type {(x:number, y:number, cfg:object)=> void} */
+		const draw = (x,y, cfg)=>
+		{
+			aka.sprite.draw({...aka, x,y, ...cfg})
+		}
+		{// Expand clothes
 			const pos = Vec2.Zero, rates = [0.3, 0.5 ,1]
 			for (const i of range(3)) {
 				draw(...pos.vals, {aIdx:+(i==2)})
-				const nPos = Vec2(pos).add(_s*0.75, _s/4)
-				spr.expandClothes(+(i==2), rates[i], {...nPos,size:_s})
-				pos.x += _s*1.2 + ((i+1)*_gap)
+				const nPos = Vec2(pos).add(S*0.75, S/4)
+				spr.expandClothes(+(i==2), rates[i], {...nPos,size:S})
+				pos.x += S*1.2 + ((i+1)*gap)
 			}
 		}
-		;{//Stake and offcut
-			const s = _t/TileSize
+		{// Stake and offcut
+			const s = T/TileSize
 			const [sx,sy]= Vec2(spr.stakeSize).mul(s).vals
 			// Stake
 			Ctx.save()
-			Ctx.translate(_s*6.9, _s-_t/2-sy-3*s)
+			Ctx.translate(S*6.9, S-T/2-sy-3*s)
 			Ctx.scale(s, s)
 			spr.drawStake(Vec2.Zero)
 			Ctx.restore()
 			// Offcut
 			Ctx.save()
-			Ctx.translate(_s*6.9+sx, _s-_t/2-3*s)
+			Ctx.translate(S*6.9+sx, S-T/2-3*s)
 			Ctx.scale(s, s)
 			spr.drawOffcut(Vec2.Zero)
 			Ctx.restore()
 		}
-		draw(ofst(4.00),  0, {isRipped: true,orient:U})
-		draw(ofst(5.00),  0, {isRipped: true,orient:'LowerR'})
-		draw(ofst(0.00), _s, {isMended: true})
-		draw(ofst(1.00), _s, {isMended: true,aIdx:1})
-		draw(ofst(2.25), _s, {isExposed:true})
-		draw(ofst(4.25), _s, {isExposed:true,aIdx:1})
+		draw(ofst(4.00), 0, {isRipped: true,orient:U})
+		draw(ofst(5.00), 0, {isRipped: true,orient:'LowerR'})
+		draw(ofst(0.00), S, {isMended: true})
+		draw(ofst(1.00), S, {isMended: true,aIdx:1})
+		draw(ofst(2.25), S, {isExposed:true})
+		draw(ofst(4.25), S, {isExposed:true,aIdx:1})
 	}
+
 	return {draw}
 }()
 
-$('#brightRng').on('input', function() {
+$('#brightRng').on('input', function()
+{
 	const v = /**@type {HTMLInputElement}*/(this).value
 	Ctx.canvas.style.backgroundColor = `rgb(${v}% ${v}% ${v}%)`
 })
-$('#resetBtn').on('click', function() {
+
+$('#resetBtn').on('click', function()
+{
 	Array.from(document.forms).forEach(f=> f.reset())
 	$('[type=range]').trigger('input')
 })
+
 $load(()=> document.body.style.opacity = '1')
