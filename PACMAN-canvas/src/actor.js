@@ -36,9 +36,8 @@ export class Actor extends Common {
 	/** @param {Direction} dir */
 	setMoveDir(dir) {this.#movDir = dir}
 
-	get maxAlpha()   {return 1}
 	get step()       {return 0}
-	get frozen()     {return Timer.frozen}
+	get maxAlpha()   {return 1}
 	get isInTunnel() {return Maze.Tunnel.isIn(this.centerPos)}
 
 	get tilePixel() {

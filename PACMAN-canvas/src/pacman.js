@@ -99,16 +99,22 @@ class PlayablePac extends Pacman {
 		const  ofstX = (this.dir == U ? -num : 0)
 		return Vec2[this.dir].mul(num*T).add(this.centerPos).add(ofstX*T, 0)
 	}
+	#drawCenter({centerPos:{x,y}}=this) {
+		Ctx.fillCircle(x,y, 3, Color.PacCenter)
+	}
 	draw() {
-		if (State.isStart) return
+		if (State.isStart || Timer.frozen)
+			return
 		Ctx.save()
 		super.draw()
 		this.sprite.draw(this)
+		this.showCenter && this.#drawCenter(this)
 		Ctx.restore()
 	}
 	update() {
 		super.update()
-		if (Timer.frozen || !State.isPlaying) return
+		if (!State.isPlaying || Timer.frozen)
+			return
 		this.sprite.update(this)
 		this.#notEaten++
 		for (const _ of range(this.stepDiv))
@@ -151,7 +157,8 @@ class PlayablePac extends Pacman {
 			&& this.setMoveDir(this.orient)
 	}
 	#eaten({tileIdx:i}=this) {
-		if (!Maze.hasDot(i)) return
+		if (!Maze.hasDot(i))
+			return
 		this.#playSE()
 		this.resetTimer()
 		Maze.hasPow(i)
