@@ -115,8 +115,8 @@ class Scene2 extends CoffBrk {
 		this.akabei.x = CW + T*16
 	}
 	moveAkabei({akabei:aka, akaVelX:v, sprite:{CaughtX,AkaMinX}}=this) {
-		aka.x > CaughtX && (aka.x+=v)
-		aka.x > AkaMinX ?  (aka.x+=v/10):(aka.x=AkaMinX)
+		aka.x > CaughtX ? (aka.x+=v):
+		aka.x > AkaMinX ? (aka.x+=v/10):(aka.x=AkaMinX)
 		return (aka.x != AkaMinX)
 	}
 	update() {
