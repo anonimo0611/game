@@ -36,7 +36,7 @@ export class Ghost extends Actor {
 
 	get isCalmWalk()  {return this.isWalk && !this.isFright}
 	get isChasing()   {return GhsMgr.isChasing && this.isCalmWalk}
-	get isScatter()   {return GhsMgr.isScatter && this.isCalmWalk}
+	get isScatter()   {return GhsMgr.isScatter && this.isCalmWalk && !this.isAngry}
 
 	/** @param {Direction} dir */
 	constructor(dir=L, {col=0,row=0,idx=0,align=0,animFlag=1}={}) {
