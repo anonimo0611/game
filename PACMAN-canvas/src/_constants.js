@@ -61,7 +61,7 @@ PacStep   = freeze(new class {
 	EneEat    = this.Base * 0.95 // Energized+Eating
 }),
 
-GhsScale = 1.1,
+GhsScale = 1.08,
 GhsType  = /**@type {const}*/({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4}),
 GhsNames = /**@type {const}*/(['Akabei','Pinky','Aosuke','Guzuta']),
 GhsStep  = freeze(new class {

@@ -8,7 +8,7 @@ export const Wall = new class {
 	draw(color=Color.Wall) {
 		ctx.save()
 		ctx.clear()
-		ctx.lineWidth   = 3
+		ctx.lineWidth   = 3.5
 		ctx.strokeStyle = color
 		Maze.Map.forEach(this.#drawTile)
 		this.#drawHouse(ctx.lineWidth/2)
