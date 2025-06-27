@@ -8,12 +8,12 @@ import {Ghost}  from '../ghosts/ghost.js'
 import Sprite   from '../sprites/ghost_cb.js'
 
 export class CoffBrk {
-	static {$on('CoffBrk',this.#begin)}
+	static {$on('CoffBrk',this.#begin.bind(this))}
 	static #scene = /**@type {?(Scene1|Scene2|Scene3)}*/(null)
 
-	static #begin(_={}, num=CoffBrk.intermissionLevel) {
-		Sound.play('cutscene', {loop:1^Number(num == 2)})
-		CoffBrk.#scene = new[Scene1,Scene2,Scene3][num-1]
+	static #begin(_={}, num=this.number) {
+		Sound.play('cutscene', {loop:1^+(num == 2)})
+		this.#scene = new [Scene1,Scene2,Scene3][num-1]
 	}
 	static update() {
 		this.#scene?.update()
@@ -22,11 +22,10 @@ export class CoffBrk {
 		this.#scene?.draw()
 		return State.isCoffBrk
 	}
-	static get intermissionLevel() {
-		if (Ctrl.isPractice) return -1
-		return {2:1, 5:2, 9:3}[Game.level] ?? -1
+	static get number() {
+		return Ctrl.isPractice? -1:
+			({2:1, 5:2, 9:3}[Game.level] ?? -1)
 	}
-
 	pacman  = new Pacman
 	akabei  = new Ghost
 	pacVelX = -CW/180
@@ -51,8 +50,7 @@ export class CoffBrk {
 		Sound.paused(Ticker.pause())
 	}
 	draw() {
-		State.last('FlashMaze')
-			&& Fruit.drawLevelCounter()
+		State.last('FlashMaze') && Fruit.drawLevelCounter()
 	}
 	end() {
 		$off('.CB')
@@ -91,7 +89,7 @@ class Scene1 extends CoffBrk {
 			},
 			[R]:()=> {
 				this.akabei.x > T*7.5  && this.movePacman()
-				this.akabei.x > CW+T*9 && this.end()
+				this.akabei.x > T*9+CW && this.end()
 			}
 		})
 	}
@@ -114,10 +112,10 @@ class Scene2 extends CoffBrk {
 		this.pacman.x = CW + T*3
 		this.akabei.x = CW + T*16
 	}
-	moveAkabei({akabei:aka, akaVelX:v, sprite:{CaughtX,AkaMinX}}=this) {
-		aka.x > CaughtX ? (aka.x+=v):
-		aka.x > AkaMinX ? (aka.x+=v/10):(aka.x=AkaMinX)
-		return (aka.x != AkaMinX)
+	moveAkabei({akabei:a, akaVelX:v, sprite:spr}=this) {
+		a.x > spr.CaughtX ? (a.x+=v):
+		a.x > spr.AkaMinX ? (a.x+=v/10):(a.x=spr.AkaMinX)
+		return (a.x != spr.AkaMinX)
 	}
 	update() {
 		this.movePacman()
@@ -134,17 +132,19 @@ class Scene2 extends CoffBrk {
 		})
 	}
 	draw() {
-		const {sprite:spr, akabei,akaVelX,akaEyes,isRipped}= this
-		const aIdx = isRipped? 0 : (this.counter? 1 : akabei.aIdx)
+		const {akabei:a, sprite:spr, akaEyes,isRipped}= this
+		const aIdx = isRipped? 0 : (this.counter? 1 : a.aIdx)
 		spr.drawStake()
-		isRipped && spr.drawOffcut()
 		this.drawPacman()
-		this.drawAkabei({aIdx,orient:akaEyes,isRipped})
-		if (akabei.x + akaVelX < spr.CaughtX && !isRipped) {
-			const pos  = akabei.centerPos.add(T,0)
-			const rate = norm(spr.CaughtX, spr.AkaMinX, akabei.x)
-			spr.expandClothes(aIdx, rate, pos)
-		}
+		this.drawAkabei({aIdx,isRipped,orient:akaEyes})
+		match(+isRipped, {
+			1: ()=> spr.drawOffcut(),
+			0: ()=> { // Expand clothes
+				if (isRipped || a.x >= spr.CaughtX) return
+				const rate = norm(spr.CaughtX, spr.AkaMinX, a.x)
+				spr.clothes(aIdx, rate, a.centerPos.add(T,0))
+			}
+		})
 		super.draw()
 	}
 }

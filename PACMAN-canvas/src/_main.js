@@ -144,7 +144,7 @@ export const Game = new class {
 			State.to('Title')
 			return
 		}
-		CoffBrk.intermissionLevel < 0
+		CoffBrk.number < 0
 			? State.to('NewLevel')
 			: State.to('CoffBrk')
 	}
