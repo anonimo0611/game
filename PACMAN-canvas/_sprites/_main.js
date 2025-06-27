@@ -135,7 +135,7 @@ export const View = function()
 			for (const i of range(3)) {
 				draw(...pos.vals, {aIdx:+(i==2)})
 				const nPos = Vec2(pos).add(S*0.75, S/4)
-				spr.expandClothes(+(i==2), rates[i], {...nPos,size:S})
+				spr.clothes(+(i==2), rates[i], {...nPos,size:S})
 				pos.x += S*1.2 + ((i+1)*gap)
 			}
 		}
