@@ -48,8 +48,8 @@ const DotChipSet = new Set(['.','O'])
 const WallSet  = /**@type {Set<TileIdx>}*/(new Set)
 const DotSet   = /**@type {Set<TileIdx>}*/(new Set)
 const PowMap   = /**@type {Map<TileIdx,Vector2>}*/(new Map)
-const PenRect  = new Rect(10,13, 7,4)
-const PenOuter = new Rect( 9,12, 9,6)
+const PenRect  = new Rect(10, 13,  8, 5)
+const PenOuter = new Rect( 9, 12, 10, 7)
 
 class House {
 	get EntranceTile() {return Vec2(13, 12)}
