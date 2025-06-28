@@ -22,8 +22,8 @@ class AnimData
 	{
 		this.aIdx    = 0
 		this.fIdx    = 0
-		this.type    = type ?? -1
-		this.subType = subType ?? -1
+		this.type    = type
+		this.subType = subType
 		this.ghost   = ghsSprite
 		this.pacman  = new PacSprite(ctx)
 		this.orient  = /**@type {Direction}*/(L)
@@ -106,7 +106,7 @@ class AnimData
 	function update()
 	{
 		resize()
-		if (data && data.type >= 0) {
+		if (data) {
 			data.aIdx ^= +(Ticker.count %  6 == 0)
 			data.fIdx ^= +(Ticker.count % 14 == 1)
 			data.pacman?.update()
@@ -115,7 +115,7 @@ class AnimData
 	function draw()
 	{
 		ctx.clear()
-		if (data && data.type >= 0) {
+		if (data) {
 			data.type == Type.Actor.Pacman
 				? drawPacman()
 				: drawGhost()
