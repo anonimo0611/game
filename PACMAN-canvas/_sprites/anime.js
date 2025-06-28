@@ -1,17 +1,11 @@
-import {Dir}      from '../_lib/direction.js'
-import {DorpDown} from '../_lib/menu.js'
-import {Ghost}    from './actor.js'
-import {T,S}      from './_constants.js'
-import {ghost}    from './_constants.js'
-import {resize}   from './_constants.js'
-import PacSprite  from '../src/sprites/pacman.js'
+import PacSprite    from '../src/sprites/pacman.js'
+import GhsSprite    from '../src/sprites/ghost.js'
+import {Dir}        from '../_lib/direction.js'
+import {DorpDown}   from '../_lib/menu.js'
+import {ghsSprite}  from './_constants.js'
+import {T,S,resize} from './_constants.js'
 
 export const {ctx}= canvas2D('previewCvs')
-
-const getOrient = ()=> /**@type {Direction}*/
-(
-	$('input[name=orient]:checked').attr('value')
-)
 
 const Type = /**@type {const}*/
 ({
@@ -20,14 +14,14 @@ const Type = /**@type {const}*/
 	Ghost: {Normal:0, Mended:1, Exposed:2, Flashed:3}
 })
 
-class Data
+class AnimData
 {
 	/**
 	 * @param {{
 	 * type?:    number,
 	 * subType?: number,
 	 * pacman?:  PacSprite,
-	 * ghost?:   Ghost}} param
+	 * ghost?:   GhsSprite}} param
 	 */
 	constructor({type,subType,pacman,ghost}={})
 	{
@@ -41,55 +35,51 @@ class Data
 	}
 }
 
-{ // Preview
-	let   data  = new Data()
-	const Menu  = new DorpDown('animMenu')
-	const $btns = $('.radioButtons input')
+{// Preview
+	let   data = new AnimData()
+	const Menu = new DorpDown('animMenu')
+	const Btns = $('.radioButtons input')
 
-	function change(isLoop=false)
+	function change()
 	{
-		!isLoop && Timer.cancelAll()
+		Timer.cancel('Losing')
 		const [type,subType]= Menu.value.split(':').map(Number)
+
 		switch(type) {
-			case Type.Actor.Pacman:
+		case Type.Actor.None:
+			data = new AnimData()
+			btnDisabled(true)
+			break
+
+		case Type.Actor.Pacman:
+			data = new AnimData({type,subType,pacman:new PacSprite(ctx)})
+			if (btnDisabled(subType == Type.Pacman.Losing))
 			{
-				const pacman = new PacSprite(ctx)
-				data = new Data({type,subType,pacman})
-				if (setCtrl({disabled:subType==Type.Pacman.Losing}))
-				{
-					data.pacman?.setLosing()
-					Timer.set(2200, ()=> change(true), {key:'Losing'})
-				}
-				break
+				data.pacman?.setLosing()
+				Timer.set(2200, change, {key:'Losing'})
 			}
-			case Type.Actor.Akabei:
-			case Type.Actor.Pinky:
-			case Type.Actor.Aosuke:
-			case Type.Actor.Guzuta:
-			{
-				const ghost = new Ghost(S)
-				data = new Data({type,subType,ghost})
-				setCtrl({disabled:subType != Type.Ghost.Normal})
-				break
-			}
-			case Type.Actor.Fright:
-			{
-				const ghost = new Ghost(S)
-				data = new Data({type,subType,ghost})
-				setCtrl({disabled:true})
-				break
-			}
-			case Type.Actor.None:
-				data = new Data()
-				Timer.cancelAll()
-				setCtrl({disabled:true})
+			break
+
+		case Type.Actor.Akabei:
+		case Type.Actor.Pinky:
+		case Type.Actor.Aosuke:
+		case Type.Actor.Guzuta:
+		case Type.Actor.Fright:
+			data = new AnimData({type,subType,ghost:ghsSprite})
+			btnDisabled(
+				Type.Actor.Fright == type ||
+				Type.Ghost.Normal != subType
+			)
+			break
 		}
 	}
-	function setCtrl({disabled=false}={})
+	function btnDisabled(disabled=false)
 	{
-		$btns.prop({disabled})
+		Btns.prop({disabled})
 		if (!disabled)
-			data.orient = getOrient()
+			data.orient = /**@type {Direction}*/(
+				$('input[name=orient]:checked').attr('value')
+			)
 		return disabled
 	}
 	function drawPacman()
@@ -107,8 +97,8 @@ class Data
 			? ctx.translate(S/3.3, T/2)
 			: ctx.translate(S/2.0, T/2)
 
-		data.ghost?.sprite.draw({
-			...ghost,
+		data.ghost?.draw({
+			size:      S,
 			mainCtx:   ctx,
 			color:     Color[GhsNames[data.type-1]],
 			aIdx:      data.aIdx,
@@ -139,28 +129,30 @@ class Data
 		}
 	}
 
-	Menu.on({change})
-	Menu.$root.on('keydown', e=>
+	Menu.$root
+	.on({change})
+	.on('keydown', e=>
 	{
 		const dir = Dir.from(e)
-		if (dir)
-		{
-			const len  = $btns.length
-			const idx  = +$btns.filter(':enabled:checked').data('idx')
-			const dirX = Vec2[dir].x
-			if (!Menu.closed || !dirX || isNaN(idx))
-				return
-			$btns.eq((dirX+idx+len) % len)
-				.prop({checked:true})
-				.trigger('change')
-		}
+		if (!dir) return
+
+		const vx  = Vec2[dir].x
+		const len = +Btns.length
+		const idx = +Btns.filter(':enabled:checked').data('idx')
+		Menu.closed
+		&& vx
+		&& isFinite(idx)
+		&& Btns
+			.eq((vx+idx+len) % len)
+			.prop({checked:true})
+			.trigger('change')
 	})
-	$btns.on('change', e=>
+	Btns.on('change', e=>
 	{
-		data.orient = /**@type {Direction}*/
-		(
+		data.orient = /**@type {Direction}*/(
 			e.target.getAttribute('value')
 		)
 	})
+
 	Ticker.set(update, draw)
 }

@@ -1,18 +1,19 @@
 import '../_lib/mouse.js'
-import PacSprite  from '../src/sprites/pacman.js'
-import * as Pts   from '../src/sprites/points.js'
-import * as Fruit from '../src/sprites/fruits.js'
-import {GridSize,T,S,gap,ghost} from './_constants.js'
+import * as Pts    from '../src/sprites/points.js'
+import * as Fruit  from '../src/sprites/fruits.js'
+import PacSprite   from '../src/sprites/pacman.js'
+import GhsSpriteCb from '../src/sprites/ghost_cb.js'
+import {GridSize,T,S,GAP,ghsSprite} from './_constants.js'
 
 export const View = function()
 {
 	/** @param {number} colIdx */
-	const ofst = colIdx=> (S*colIdx)+(gap*colIdx)
+	const ofst = colIdx=> (S*colIdx)+(GAP*colIdx)
 
 	function draw()
 	{
 		Ctx.save()
-		Ctx.translate(gap, gap/2)
+		Ctx.translate(GAP, GAP/2)
 		Ctx.clear()
 		drawGridLines()
 		drawFruits()
@@ -26,14 +27,14 @@ export const View = function()
 	function drawGridLines()
 	{
 		Ctx.save()
-		Ctx.translate(-gap/2, 0)
+		Ctx.translate(-GAP/2, 0)
 		Ctx.setLineDash([2,2])
 		Ctx.lineWidth   = 2
 		Ctx.strokeStyle = '#555'
 		const {x:Cols,y:Rows}= GridSize
 		const line = (x1=0,y1=0,x2=0,y2=0)=> Ctx.strokeLine(x1,y1,x2,y2)
 		for (const y of range(Cols+0)) line(ofst(y), 0, ofst(y), Rows*S)
-		for (const x of range(Rows+1)) line(0, x*S, Cols*S+gap, x*S)
+		for (const x of range(Rows+1)) line(0, x*S, Cols*S+GAP, x*S)
 		Ctx.restore()
 	}
 
@@ -68,16 +69,16 @@ export const View = function()
 		const [x,y]= [ofst(col), row*S]
 		if (row < 5)
 		{
-			ghost.sprite.draw({
-				...ghost,x,y,
+			ghsSprite.draw({
+				x,y,size:S,
 				aIdx:  +(col % 2 != 0),
 				orient:/**@type {const}*/([U,U,L,L,D,D,R,R])[col],
 				color: Color[GhsNames[row-1]],
 			})
 			return
 		}
-		ghost.sprite.draw({
-			...ghost,x,y,
+		ghsSprite.draw({
+			x,y,size:S,
 			orient:/**@type {const}*/([R,R,R,R,U,L,D,R])[col],
 			aIdx:     +(col % 2 != 0),
 			isFright:  (col <= 3),
@@ -96,7 +97,7 @@ export const View = function()
 		{
 			const {ctx,w,h}= Pts.cache(pts, S)
 			Ctx.save()
-			Ctx.translate(x, y)
+			Ctx.translate(x,y)
 			Ctx.drawImage(ctx.canvas, -w/2, -h/2)
 			Ctx.restore()
 		}
@@ -106,7 +107,7 @@ export const View = function()
 			[1000,2000,3000,5000]
 		])
 		scoreLst[0].forEach((pts,i)=> draw(pts, ofst(i)+T, S*6+T))
-		scoreLst[1].forEach((pts,i)=> draw(pts, (S+gap/2)+S*(2+gap/T)*i, S*7+S/2))
+		scoreLst[1].forEach((pts,i)=> draw(pts, (S+GAP/2)+S*(2+GAP/T)*i, S*7+S/2))
 	}
 
 	function drawPacman() {
@@ -120,15 +121,15 @@ export const View = function()
 	}
 
 	function drawAkabei() {
-		const aka = ghost
-		const spr = aka.cbSprite.stakeClothes
+		const aka = ghsSprite
+		const spr = GhsSpriteCb.stakeClothes
 
-		Ctx.translate(S/4, S*9+S/4-gap/4)
+		Ctx.translate(S/4, S*9+S/4-GAP/4)
 
 		/** @type {(x:number, y:number, cfg:object)=> void} */
 		const draw = (x,y, cfg)=>
 		{
-			aka.sprite.draw({...aka, x,y, ...cfg})
+			aka.draw({size:S,x,y,...cfg})
 		}
 		{// Expand clothes
 			const pos = Vec2.Zero, rates = [0.3, 0.5 ,1]
@@ -136,7 +137,7 @@ export const View = function()
 				draw(...pos.vals, {aIdx:+(i==2)})
 				const nPos = Vec2(pos).add(S*0.75, S/4)
 				spr.clothes(+(i==2), rates[i], {...nPos,size:S})
-				pos.x += S*1.2 + ((i+1)*gap)
+				pos.x += S*1.2 + ((i+1)*GAP)
 			}
 		}
 		{// Stake and offcut
