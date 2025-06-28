@@ -31,7 +31,7 @@ class AnimData
 }
 
 {// Preview
-	let data = /** @type {?AnimData} */(null)
+	let data = /**@type {?AnimData}*/(null)
 
 	function change()
 	{
