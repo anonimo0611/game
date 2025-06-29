@@ -54,29 +54,27 @@ export const Wall = new class {
 	 */
 	#drawTile(c, i) {
 		const [tx,ty]=[i%W,i/W|0], [x,y]=[tx*T,ty*T], isL=(tx < W/2)
-		const cn   = +c? +c-1 : 'ABCD'.indexOf(c.toUpperCase())
-		const ofst = /[HV]/.test(c) || (c=='#' && isL) ? -LO:LO
+		const cn = +c? +c-1 : 'ABCD'.indexOf(c.toUpperCase())
+		const lo = /[HV]/.test(c) || c=='#' && isL || c=='=' ? -LO:LO
 
 		;/[a-d\d]/i.test(c) && Wall.#drawCorner(0,{cn,c,x,y})
 		;/[a-d]/   .test(c) && Wall.#drawCorner(1,{cn,c,x,y})
 		;/[A-D]/   .test(c) && Wall.#drawCorner(2,{cn,c,x,y})
 
 		match(c, {
-			'h_H':  ()=> ctx.strokeLine(x, y+T/2+ofst, x+T, y+T/2+ofst),
-			'v_V_#':()=> ctx.strokeLine(x+T/2+ofst, y, x+T/2+ofst, y+T),
+			'h_H':  ()=> ctx.strokeLine(x, y+T/2+lo, x+T, y+T/2+lo),
+			'v_V_#':()=> ctx.strokeLine(x+T/2+lo, y, x+T/2+lo, y+T),
 		})
-
 		ctx.save()
 		if (c=='#' || (!tx || tx == W-1) && +c) {
-			ctx.translate(x+(isL? -T/2+OO : T/2-OO)+T/2, y)
+			ctx.translate(x+T/2+(isL? -T/2+OO : T/2-OO), y)
 			ctx.strokeLine(0,0, 0,T)
 		}
 		if (/[_=]/.test(c) || ty == 1 && +c) {
 			const oY1 = /[=56]/.test(c) ? -T/2+OO : T/2-OO
-			const oY2 = (c=='=') ? -LO:LO
 			ctx.translate(x, y+T/2)
 			ctx.strokeLine(0,oY1, T,oY1)
-			!+c && ctx.strokeLine(0,oY2, T,oY2)
+			!+c && ctx.strokeLine(0,lo, T,lo)
 		}
 		ctx.restore()
 	}
