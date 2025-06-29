@@ -38,13 +38,13 @@ export const Wall = new class {
 		ctx.translate(x+T/2, y+T/2)
 		ctx.scale(...CornerScales[cn>3 ? cn-4:cn])
 		ctx.beginPath()
-		match(type, {
-			0:()=> /[A-D5-8]/.test(c)
-			     ? ctx.arc(T/2,T/2, T/2+LO, PI,PI*1.5)
-			     : ctx.arc(T/2,T/2, T/2-LO, PI,PI*1.5),
-			1:()=> ctx.arc(T/2,T/2, OO,     PI,PI*1.5),
-			2:()=> ctx.arc(T/2,T/2, T-OO,   PI,PI*1.5),
-		})
+		switch(type) {
+		case 0: /[A-D5-8]/.test(c)
+		     ? ctx.arc(T/2,T/2, T/2+LO, PI,PI*1.5)
+		     : ctx.arc(T/2,T/2, T/2-LO, PI,PI*1.5);break
+		case 1:ctx.arc(T/2,T/2, OO,     PI,PI*1.5);break
+		case 2:ctx.arc(T/2,T/2, T-OO,   PI,PI*1.5);break
+		}
 		ctx.stroke()
 		ctx.restore()
 	}
@@ -61,10 +61,11 @@ export const Wall = new class {
 		;/[a-d]/   .test(c) && Wall.#drawCorner(1,{cn,c,x,y})
 		;/[A-D]/   .test(c) && Wall.#drawCorner(2,{cn,c,x,y})
 
-		match(c, {
-			'h_H':  ()=> ctx.strokeLine(x, y+T/2+lo, x+T, y+T/2+lo),
-			'v_V_#':()=> ctx.strokeLine(x+T/2+lo, y, x+T/2+lo, y+T),
-		})
+		switch(c.toUpperCase()) {
+		case '#':
+		case 'V':ctx.strokeLine(x+T/2+lo, y, x+T/2+lo, y+T);break
+		case 'H':ctx.strokeLine(x, y+T/2+lo, x+T, y+T/2+lo);break
+		}
 		ctx.save()
 		if (c=='#' || (!tx || tx == W-1) && +c) {
 			ctx.translate(x+T/2+(isL? -T/2+OO : T/2-OO), y)
