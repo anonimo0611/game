@@ -39,10 +39,11 @@ const range = function*(from, to, step=1) {
  * @template T
  * @param {string|number} key
  * @param {{[key:string]:()=> T}} pattern
+ * @param {string} [separator]
  */
-const match = (key,pattern)=> {
+const match = (key,pattern,separator='_')=> {
 	for (const k in pattern)
-		if (k.split('_').some(k=> k == key))
+		if (k.split(separator).some(k=> k == key))
 			return pattern[k]()
 	return pattern['_']?.() ?? undefined
 }
