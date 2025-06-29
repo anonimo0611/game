@@ -14,7 +14,7 @@ export const Wall = new class {
 		ctx.clear()
 		ctx.lineWidth   = LW
 		ctx.strokeStyle = color
-		Maze.Map.forEach(this.#drawTile.bind(this))
+		Maze.Map.forEach(this.#drawTile)
 		this.#drawHouse()
 		ctx.restore()
 	}
@@ -57,14 +57,13 @@ export const Wall = new class {
 		const cn   = +c? +c-1 : 'ABCD'.indexOf(c.toUpperCase())
 		const ofst = /[HV]/.test(c) || (c=='#' && isL) ? -LO:LO
 
-		;/[a-d\d]/i.test(c) && this.#drawCorner(0,{cn,c,x,y})
-		;/[a-d]/   .test(c) && this.#drawCorner(1,{cn,c,x,y})
-		;/[A-D]/   .test(c) && this.#drawCorner(2,{cn,c,x,y})
+		;/[a-d\d]/i.test(c) && Wall.#drawCorner(0,{cn,c,x,y})
+		;/[a-d]/   .test(c) && Wall.#drawCorner(1,{cn,c,x,y})
+		;/[A-D]/   .test(c) && Wall.#drawCorner(2,{cn,c,x,y})
 
 		match(c, {
-			h_H:()=> ctx.strokeLine(x, y+T/2+ofst, x+T, y+T/2+ofst),
-			v_V:()=> ctx.strokeLine(x+T/2+ofst, y, x+T/2+ofst, y+T),
-			'#':()=> ctx.strokeLine(x+T/2+ofst, y, x+T/2+ofst, y+T),
+			'h_H':  ()=> ctx.strokeLine(x, y+T/2+ofst, x+T, y+T/2+ofst),
+			'v_V_#':()=> ctx.strokeLine(x+T/2+ofst, y, x+T/2+ofst, y+T),
 		})
 
 		ctx.save()
