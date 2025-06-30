@@ -120,6 +120,8 @@ export const Maze = new class {
 			: PowMap.set(i, t)
 	}
 	get dotsLeft() {return DotSet.size}
+	Top    = 1
+	Bottom = Rows-3
 	Map    = MapArr
 	DotMax = MapArr.filter(c=> DotChipSet.has(c)).length
 	House  = freeze(new House)
@@ -129,6 +131,11 @@ export const Maze = new class {
 	hasDot  = (/**@type {TileIdx} */i)=> DotSet.has(i)
 	hasPow  = (/**@type {TileIdx} */i)=> PowMap.has(i)
 	hasWall = (/**@type {Position}*/p)=> WallSet.has(p.y*Cols+p.x)
+
+	/**
+	 * Whether tile `y` coords is the top/bottom of the maze excluding dead space
+	 * @param {number} y */
+	isTopOrBottom(y) {return y == Maze.Top || y == Maze.Bottom}
 
 	/**
 	 * These tiles(x-y) forbidden ghosts from entering upward

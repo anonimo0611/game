@@ -55,7 +55,7 @@ export const Wall = new class {
 	#drawTile(c, i) {
 		const [tx,ty]=[i%W,i/W|0], [x,y]=[tx*T,ty*T], isL=(tx < W/2)
 		const cn = +c? +c-1 : 'ABCD'.indexOf(c.toUpperCase())
-		const lo = /[HV]/.test(c) || c=='#' && isL || c=='=' ? -LO:LO
+		const lo = c=='#' && isL || c=='=' || /[HV]/.test(c) ? -LO:LO
 
 		;/[a-d\d]/i.test(c) && Wall.#drawCorner(0,{cn,c,x,y})
 		;/[a-d]/   .test(c) && Wall.#drawCorner(1,{cn,c,x,y})
@@ -71,7 +71,7 @@ export const Wall = new class {
 			ctx.translate(x+T/2+(isL? -T/2+OO : T/2-OO), y)
 			ctx.strokeLine(0,0, 0,T)
 		}
-		if (/[_=]/.test(c) || ty == 1 && +c) {
+		if (/[_=]/.test(c) || Maze.isTopOrBottom(ty) && +c) {
 			const oY1 = /[=56]/.test(c) ? -T/2+OO : T/2-OO
 			ctx.translate(x, y+T/2)
 			ctx.strokeLine(0,oY1, T,oY1)
