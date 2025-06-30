@@ -9,6 +9,7 @@ html {
 	font-size: 26px;
 }
 body {
+	color: #4c76d1;
 	color: #FFF;
 	background: #1B1B1C;
 	font: 1rem/1 Verdana, sans-serif;
@@ -50,20 +51,18 @@ h1 {
 	position: relative;
 	transform-origin: center;
 	opacity: 0;
+	transition:  opacity 400ms;
 	will-change: opacity, scale;
+	#boardCanvases {
+		margin-top: 0.5rem;
+		pointer-events: none;
+		canvas.sub {position: absolute}
+		canvas#cvs_bg  {z-index: -1}
+		canvas#cvs_hud {z-index: +1}
+	}
 }
 #board[data-ready-state=loaded] {
 	opacity: 1;
-}
-#boardCanvases {
-	margin-top: 0.5rem;
-	pointer-events: none;
-	canvas.sub {position: absolute}
-	canvas#cvs_bg  {z-index: -1}
-	canvas#cvs_hud {z-index: +1}
-}
-body:is([data-state=Attract],[data-state=CoffBrk]) {
-	:is(header,canvas.sub) {visibility: hidden}
 }
 
 #titleScr {
@@ -75,23 +74,25 @@ body:is([data-state=Attract],[data-state=CoffBrk]) {
 	position: absolute;
 	z-index: 100;
 	top: 6.9rem;
-}
-body[data-state] {
-	&:not([data-state=Title]) #titleScr {
-		display: none;
+	#startBtn {
+		text-align: center;
+		white-space: nowrap;
+		font: .8rem/1 Atari, sans-serif;
+		padding: .4rem 1.5rem .2rem;
+		position: absolute;
+		top: 21.85rem;
+		left: 50%;
+		translate: -50% 0;
 	}
 }
 
-#startBtn {
-	text-align: center;
-	white-space: nowrap;
-	font: .8rem/1 Atari, sans-serif;
-	padding: .4rem 1.5rem .2rem;
-	position: absolute;
-	top: 21.85rem;
-	left: 50%;
-	translate: -50% 0;
+body:not([data-state=Title]) #titleScr {
+	visibility: hidden;
 }
+body:is([data-state=Attract],[data-state=CoffBrk]) {
+	:is(header,canvas.sub) {visibility: hidden}
+}
+
 #debug {
 	white-space: pre;
 	position: fixed;
@@ -115,7 +116,7 @@ body[data-state] {
 		content: attr(data-caption);
 		display: block;
 	}
-	> li,th,td {
+	> li, th, td {
 		font: .8rem/1 sans-serif;
 		padding: .1rem 0;
 	}
