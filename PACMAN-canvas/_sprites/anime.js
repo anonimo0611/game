@@ -12,7 +12,7 @@ const Btns = $('.radioButtons input')
 const Type = /**@type {const}*/
 ({
 	Actor: {None: -1, Pacman:0, Akabei:1, Pinky:2, Aosuke:3, Guzuta:4, Fright:5},
-	Pacman:{Normal:0, Losing:1},
+	Pacman:{Normal:0, Dying: 1},
 	Ghost: {Normal:0, Mended:1, Exposed:2, Flashed:3}
 })
 
@@ -35,7 +35,7 @@ class AnimData
 
 	function change()
 	{
-		Timer.cancel('Losing')
+		Timer.cancel('Dying')
 		const [type,subType]= Menu.value.split(':').map(Number)
 
 		switch (type) {
@@ -46,10 +46,10 @@ class AnimData
 
 		case Type.Actor.Pacman:
 			data = new AnimData(type,subType)
-			if (btnDisabled(subType == Type.Pacman.Losing))
+			if (btnDisabled(subType == Type.Pacman.Dying))
 			{
-				data.pacman.setLosing()
-				Timer.set(2200, change, {key:'Losing'})
+				data.pacman.setDying()
+				Timer.set(2200, change, {key:'Dying'})
 			}
 			break
 

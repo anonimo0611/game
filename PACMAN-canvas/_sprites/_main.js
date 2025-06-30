@@ -32,9 +32,8 @@ export const View = function()
 		Ctx.lineWidth   = 2
 		Ctx.strokeStyle = '#555'
 		const {x:Cols,y:Rows}= GridSize
-		const line = (x1=0,y1=0,x2=0,y2=0)=> Ctx.strokeLine(x1,y1,x2,y2)
-		for (const y of range(Cols+0)) line(ofst(y), 0, ofst(y), Rows*S)
-		for (const x of range(Rows+1)) line(0, x*S, Cols*S+GAP, x*S)
+		for (const y of range(Cols+0)) Ctx.strokeLine(ofst(y), 0, ofst(y), Rows*S)
+		for (const x of range(Rows+1)) Ctx.strokeLine(0, x*S, Cols*S+GAP, x*S)
 		Ctx.restore()
 	}
 
