@@ -3,11 +3,11 @@ const OpenMid  = 30 * PI/180
 const OpenMax  = 60 * PI/180
 const Rotation = /**@type {const}*/({[R]:0, [D]:1, [L]:2, [U]:3})
 
-import {Losing} from './losing.js'
+import {Dying} from './pacman_dying.js'
 export default class {
 	#mAngle  =  0
 	#animDir = -1
-	#losing  = /**@type {?Losing}*/(null)
+	#dying   = /**@type {?Dying}*/(null)
 	/**
 	 * @param {ExtendedContext2D} ctx
 	 * @param {0|1|2} mouthOpenings
@@ -33,9 +33,9 @@ export default class {
 	) {
 		const {ctx}  = this
 		const mAngle = (closed? 0:this.#mAngle)
-		if (this.#losing) {
+		if (this.#dying) {
 			this.isMain && (x = clamp(x, radius, CW-radius))
-			return this.#losing.draw({x,y})
+			return this.#dying.draw({x,y})
 		}
 		ctx.save()
 		ctx.translate(x,y)
@@ -47,5 +47,5 @@ export default class {
 		ctx.fill()
 		ctx.restore()
 	}
-	setLosing() {this.#losing = new Losing(this.ctx)}
+	setDying() {this.#dying = new Dying(this.ctx)}
 }

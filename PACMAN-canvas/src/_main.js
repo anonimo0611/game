@@ -31,7 +31,7 @@ export const Game = new class {
 			Clear:    Game.#onClear,
 			FlashMaze:Game.#onFlashMaze,
 			NewLevel: Game.#onNewLevel,
-			Losing:   Game.#onLosing,
+			Dying:    Game.#onDying,
 			GameOver: Game.#onGameOver,
 			Quit:     Game.#onQuit,
 			Restart:  Game.#levelBegins,
@@ -103,9 +103,9 @@ export const Game = new class {
 	#onPlaying() {
 		!document.hasFocus() && Game.#pause(true)
 	}
-	#onLosing() {
-		Sound.play('losing')
-		Player.i.sprite.setLosing()
+	#onDying() {
+		Sound.play('dying')
+		Player.i.sprite.setDying()
 		Lives.left > 0
 			? State.to('Restart', {delay:2200})
 			: State.to('GameOver',{delay:2000})

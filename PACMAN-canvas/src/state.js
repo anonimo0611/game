@@ -1,6 +1,6 @@
 /**
  * @typedef {'Title'|'Attract'|'Start'|'Restart'|'NewLevel'|'Ready'|'Playing'|
- * 'Clear'|'FlashMaze'|'CoffBrk'|'Crashed'|'Losing'|'GameOver'|'Quit'} StateType
+ * 'Clear'|'FlashMaze'|'CoffBrk'|'Crashed'|'Dying'|'GameOver'|'Quit'} StateType
  */
 import _State from '../_lib/state.js'
 export const State = new class extends _State {
@@ -15,7 +15,7 @@ export const State = new class extends _State {
 	isFlashMaze = false
 	isCoffBrk   = false
 	isCrashed   = false
-	isLosing    = false
+	isDying     = false
 	isGameOver  = false
 	isQuit      = false
 

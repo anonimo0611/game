@@ -11,12 +11,12 @@ export const Form = document.forms[0]
 export const ctrl = id=> /**@type {HTMLInputElement}*/(byId(id))
 
 export const Ctrl = new class {
-	static {$load(this.setup)}
+	static {$ready(this.setup)}
 	static setup() {
 		Ctrl.#restore()
 		Ctrl.#drawInfo()
-		Ctrl.#setup()
 		Ctrl.#fitToViewport()
+		$load(Ctrl.#setup)
 	}
 	get extendPts()     {return +Menu.Extend.value}
 	get livesMax()      {return ctrl('lvsRng').valueAsNumber}
