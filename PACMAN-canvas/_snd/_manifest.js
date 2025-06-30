@@ -9,7 +9,7 @@ const SoundData = /**@type {const}*/({
     cutscene:{srcIdx:0, startTime: 8059, duration:5686},
     start:   {srcIdx:0, startTime:14233, duration:4500},
     //---- regular.ogg ----
-    losing:  {srcIdx:1, startTime:    0, duration:1749},
+    dying:   {srcIdx:1, startTime:    0, duration:1749},
     eat0:    {srcIdx:1, startTime: 1998, duration:  80},
     eat1:    {srcIdx:1, startTime: 2137, duration:  80},
     bitten:  {srcIdx:1, startTime: 2603, duration: 575},

@@ -14,14 +14,14 @@ const volRg2 = ctrl('volRg2')
 			: this.onFailed()
 	}
 	onLoaded() {
-		Sound.vol = localStorage.anopac_volume ?? 5
+		const vol = Number(localStorage.anopac_volume ?? 5)
 		$win.on({keydown:e=> this.onKeydown(e)})
 		$('#cvs_speaker')
 			.on({click:this.mute})
 			.on({wheel:this.onInput})
 		$('.volRng')
-			.prop({value:Sound.vol})
-			.prop({defaultValue:Sound.vol})
+			.attr({value:vol})
+			.attr({defaultValue:vol})
 			.on({input:this.onInput})
 	}
 	onFailed() {
@@ -30,7 +30,7 @@ const volRg2 = ctrl('volRg2')
 	onInput(/**@type {Event}*/e) {
 		const isInput = e.target instanceof HTMLInputElement
 		Sound.vol = (isInput? e.target : volRng).valueAsNumber
-		localStorage.anopac_volume =  Sound.vol
+		localStorage.anopac_volume = Sound.vol
 	}
 	onKeydown(/**@type {JQuery.KeyDownEvent}*/e) {
 		if (keyRepeat(e) || isCombiKey(e))
