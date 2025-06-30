@@ -135,7 +135,7 @@ export const Maze = new class {
 	/**
 	 * Whether tile `y` coords is the top/bottom of the maze excluding dead space
 	 * @param {number} y */
-	isTopOrBottom(y) {return y == Maze.Top || y == Maze.Bottom}
+	isTopOrBottom = y=> (y == Maze.Top || y == Maze.Bottom)
 
 	/**
 	 * These tiles(x-y) forbidden ghosts from entering upward
