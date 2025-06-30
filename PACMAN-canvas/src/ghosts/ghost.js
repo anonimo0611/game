@@ -244,7 +244,7 @@ export class Ghost extends Actor {
 	}
 	#attack() {
 		Sound.stopLoops()
-		State.to('Crashed').to('Losing', {delay:500})
+		State.to('Crashed').to('Dying', {delay:500})
 	}
 	#setFrightMode(_={}, bool=false) {
 		!this.isEscaping && (this.#isFright = bool)
