@@ -41,8 +41,7 @@ class Guzuta extends Ghost {
 		super(U, {idx:3, col:15.5, row:15, align:+1})
 	}
 	get chasePos() {
-		const  r = T*8
-		return this.sqrMagToPacman < r*r
+		return this.sqrMagToPacman < (T*8) ** 2
 			? Vec2(this.scatterTile).add(.5).mul(T)
 			: Player.i.centerPos
 	}

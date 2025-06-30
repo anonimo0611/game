@@ -146,17 +146,17 @@ const AlternateBetweenModes = function() {
 		let  [cnt,idx] = [-1,0]
 		const durList  = genDurList()
 		const duration = ()=> durList[idx]/Game.speedRate
-		const Seq = {
+		const seq = {
 			mode: [SCATTER,CHASING][+Ctrl.isChaseMode],
 			update() {
 				if (Timer.frozen
 				 || GhsMgr.isFright
 				 || Ticker.Interval*(++cnt) < duration())
 					return
-				[cnt,Seq.mode] = [0,(++idx % 2)]
+				[cnt,seq.mode] = [0,(++idx % 2)]
 				setReversalSig()
 			}
-		};return [Seq,{mode:CHASING,update(){}}][Seq.mode]
+		};return [seq,{mode:CHASING,update(){}}][seq.mode]
 	}
 }(),
 setReversalSig = ()=> {
