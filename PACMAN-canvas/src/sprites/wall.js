@@ -72,9 +72,9 @@ export const Wall = new class {
 			ctx.strokeLine(0,0, 0,T)
 		}
 		if (/[_=]/.test(c) || Maze.isTopOrBottom(ty) && +c) {
-			const oY1 = /[=56]/.test(c) ? -T/2+OO : T/2-OO
+			const oY = /[=56]/.test(c) ? -T/2+OO : T/2-OO
 			ctx.translate(x, y+T/2)
-			ctx.strokeLine(0,oY1, T,oY1)
+			ctx.strokeLine(0,oY, T,oY)
 			!+c && ctx.strokeLine(0,lo, T,lo)
 		}
 		ctx.restore()
