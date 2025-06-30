@@ -19,8 +19,8 @@ export class Rect {
 	contains(/**@type {Position}*/pos) {
 		const [x,y,w,h]=this.#vals
 		return (
-			between(pos?.x, x, x+w) &&
-			between(pos?.y, y, y+h) )
+			(pos.x >= x && pos.x < x+w) &&
+			(pos.y >= y && pos.y < y+h))
 	}
 	get vals() {return this.#vals}
 }
