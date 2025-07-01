@@ -16,7 +16,7 @@ const Step = PacStep
 export const Player = function() {
 	/** @type {PlayablePac} */
 	let player
-	$on({Title_Restart_NewLevel:()=> player = new PlayablePac})
+	State.on({Title_Restart_NewLevel:()=> player = new PlayablePac})
 	return new class extends Common {get i() {return player}}
 }()
 

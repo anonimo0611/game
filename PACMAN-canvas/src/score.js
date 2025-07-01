@@ -11,7 +11,7 @@ export const Score = new class {
 	static {$ready(this.setup)}
 	static setup() {
 		Score.reset()
-		$on({
+		State.on({
 			Quit:    Score.#restore,
 			Start:   Score.#onStart,
 			GameOver:Score.#onGameOver,

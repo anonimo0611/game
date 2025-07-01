@@ -22,9 +22,11 @@ import {CoffBrk} from './demo/coffee_break.js'
 export const Game = new class {
 	static {$ready(this.setup)}
 	static setup() {
-		$on({
+		$win.on({
 			blur:()=> Game.#pause(true),
 			keydown:  Game.#onKeydown,
+		})
+		State.on({
 			Title:    Game.#onTitle,
 			Start:    Game.#onStart,
 			Playing:  Game.#onPlaying,
@@ -36,7 +38,7 @@ export const Game = new class {
 			Quit:     Game.#onQuit,
 			Restart:  Game.#levelBegins,
 		})
-		State.to('Title')
+		.to('Title')
 		Menu.Level.on({change:Game.#resetLevel})
 	}
 	#level = 1

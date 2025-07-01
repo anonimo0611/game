@@ -20,7 +20,7 @@ export class Attract {
 	static {
 		$(RunTimer)  .on({begin:this.#begin})
 		$('.DemoBtn').on({click:this.#begin})
-		$on({Attract:()=> _attract = new Attract})
+		State.on({Attract:()=> _attract = new Attract})
 	}
 	static #begin() {
 		State.to('Attract')
@@ -62,7 +62,7 @@ export class Attract {
 		!Timer.frozen && pac.sprite.draw(pac)
 	}
 	drawGhost(where=0, gIdx=0, row=NaN) {
-		const  ghost = this.ghsList[where][gIdx]
+		const ghost = this.ghsList[where][gIdx]
 		isFinite(row) && ghost.setPos(5*T, row*T)
 		ghost.sprite.draw(ghost)
 	}

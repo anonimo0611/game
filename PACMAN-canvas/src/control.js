@@ -102,7 +102,7 @@ export const Ctrl = new class {
 		for (const menu of values(Menu)) {
 			menu.on('change', Ctrl.#update)
 		}
-		$on('resize', Ctrl.#fitToViewport)
+		$win.on('resize', Ctrl.#fitToViewport)
 		$('#clearHiScore').on({click:()=>
 			Confirm.open('Are you sure you want to clear high-score?',
 				null,Ctrl.#clearHiScore, 'No','Yes', 0)

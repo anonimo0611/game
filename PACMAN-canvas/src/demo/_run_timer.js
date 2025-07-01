@@ -16,4 +16,4 @@ export const RunTimer = function() {
 	}
 	return {update,reset:()=>{fcnt=0}}
 }()
-$on({Title_blur_click_focus_mousemove_keydown_resize_wheel:RunTimer.reset})
+$win.on('Title blur click focus mousemove keydown resize wheel',RunTimer.reset)

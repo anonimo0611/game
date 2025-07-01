@@ -6,7 +6,7 @@ import {Fruit}  from './fruit.js'
 import * as Pts from './sprites/points.js'
 
 const PtsMap = /**@type {Map<any, Points>}*/(new Map)
-$on({Title_Clear_Crashed:()=> PtsMap.clear()})
+State.on({Title_Clear_Crashed:()=> PtsMap.clear()})
 
 export const PtsMgr = new class {
 	/**

@@ -8,7 +8,7 @@ import {Ghost}  from '../ghosts/ghost.js'
 import Sprite   from '../sprites/ghost_cb.js'
 
 export class CoffBrk {
-	static {$on('CoffBrk',this.#begin.bind(this))}
+	static {State.on({CoffBrk:this.#begin.bind(this)})}
 	static #scene = /**@type {?(Scene1|Scene2|Scene3)}*/(null)
 
 	static #begin(_={}, num=this.number) {
@@ -18,7 +18,7 @@ export class CoffBrk {
 	static update() {
 		this.#scene?.update()
 	}
-	static draw()   {
+	static draw() {
 		this.#scene?.draw()
 		return State.isCoffBrk
 	}

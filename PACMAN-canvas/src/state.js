@@ -1,6 +1,8 @@
 /**
- * @typedef {'Title'|'Attract'|'Start'|'Restart'|'NewLevel'|'Ready'|'Playing'|
- * 'Clear'|'FlashMaze'|'CoffBrk'|'Crashed'|'Dying'|'GameOver'|'Quit'} StateType
+ * @typedef {'Title'|'Attract'|'Start'|'Restart'|'NewLevel'|'Ready'|
+ * 'Playing'|'Clear'|'FlashMaze'|'CoffBrk'|'Crashed'|'Dying'|'GameOver'|'Quit'|
+ * 'Title_Ready'|'Title_Clear_Crashed'|'Title_Restart_NewLevel'|
+ * 'Title_NewLevel'|'Title_Start_Ready_Restart'} StateType
  */
 import _State from '../_lib/state.js'
 export const State = new class extends _State {
@@ -28,11 +30,24 @@ export const State = new class extends _State {
 
 	/**
 	 * @param {StateType} s
-	 * @param {unknown} data
+	 * @param {any[]|JQuery.PlainObject|string|number|boolean} data
 	 */
 	#callback(s, data) {
 		Ticker.resetCount()
-		$trigger(dBody.dataset.state=s, data)
+		$win.trigger(dBody.dataset.state=s, data)
+	}
+
+	/**
+	 * @param {StateType|{[key in StateType]?:JQWindowHandler}} v
+	 * @param {JQWindowHandler} [fn]
+	 * @type {((state:{[key in StateType]?:JQWindowHandler})=> State)
+	 *      & ((state:StateType,fn:JQWindowHandler)=> State)}
+	 */
+	on = (v, fn)=> {
+		typeof(v) == 'string' && typeof fn == 'function'
+			? $win.on({[_toSp(v)]:fn})
+			: entries(v).forEach(([ev,fn])=> $win.on({[_toSp(ev)]:fn}))
+		return this
 	}
 
 	/**

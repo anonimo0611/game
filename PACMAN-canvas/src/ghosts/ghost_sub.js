@@ -1,4 +1,5 @@
 import {Maze}   from '../maze.js'
+import {State}  from '../state.js'
 import {Player} from '../pacman.js'
 import {GhsMgr} from './_system.js'
 import {Ghost}  from './ghost.js'
@@ -47,8 +48,6 @@ class Guzuta extends Ghost {
 	}
 	get scatterTile() {return Vec2(0, 33)}
 }
-
-const Classes = freeze([Akabei,Pinky,Aosuke,Guzuta])
-$on({Title_Restart_NewLevel:()=>
-	GhsMgr.trigger('Init', Classes.map(cls=> new cls))
+State.on('Title_Restart_NewLevel', ()=> {
+	GhsMgr.trigger('Init', [Akabei,Pinky,Aosuke,Guzuta].map(cls=> new cls))
 })

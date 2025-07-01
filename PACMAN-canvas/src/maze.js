@@ -97,10 +97,10 @@ export const Maze = new class {
 	static setup() {
 		for (const [i,c] of MapArr.entries())
 			!DotChipSet.has(c) && c.trim() && WallSet.add(i)
-		$on({Title_NewLevel: Maze.#reset})
-		$(powChk).on({change:Maze.#reset})
+		$(powChk).on({change:    Maze.#reset})
+		State.on({Title_NewLevel:Maze.#reset})
 	}
-	#reset(/**@type {Event}*/e) {
+	#reset(/**@type {JQuery.TriggeredEvent}*/e) {
 		if (e.target != powChk) {
 			Wall.draw()
 			Maze.#drawDoor()
@@ -133,7 +133,7 @@ export const Maze = new class {
 	hasWall = (/**@type {Position}*/p)=> WallSet.has(p.y*Cols+p.x)
 
 	/**
-	 * Whether tile `y` coords is the top/bottom of the maze excluding dead space
+	 * Whether tile `y` coord is the top/bottom of the maze excluding dead space
 	 * @param {number} y */
 	isTopOrBottom = y=> (y == Maze.Top || y == Maze.Bottom)
 
