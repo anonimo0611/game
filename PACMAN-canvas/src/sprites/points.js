@@ -19,7 +19,7 @@ const Data = /**@type {const}*/({
 		8: [1,0,3,0,4,1,4,2,3,3,1,3,0,4,0,5,1,6,3,6,4,5,4,4,3,3,1,3,0,2,0,1],
 	},
 	PosListFrom100To5000: { // [digit, x, y][]
-		 100: [[1,  -6.1, -3], [0, -2.1, -3], [0, 2.7, -3]],
+		 100: [[1,  -6.1, -3], [0, -2.3, -3], [0, 2.7, -3]],
 		 200: [[2,  -7.0, -3], [0, -1.0, -3], [0, 4.0, -3]],
 		 300: [[3,  -7.2, -3], [0, -1.2, -3], [0, 3.8, -3]],
 		 400: [[4,  -7.1, -3], [0, -1.2, -3], [0, 3.8, -3]],
@@ -52,15 +52,15 @@ export function cache(pts, size=TileSize*2) {
 	ctx.lineJoin    = ctx.lineCap = 'round'
 	ctx.strokeStyle = [Color.FruitPts,Color.GhostPts][idx]
 	Data.PosListFrom100To5000[pts]
-	?.forEach(([n,x,y],i)=> {
+	?.forEach(([digit,x,y],i)=> {
 		(pts == 1600 && i == 0)
 		? ctx.newLinePath([x,y],[x,y+6]) //narrow 1
 		: function() {
 			ctx.save()
 			ctx.translate(x,y)
 			ctx.newLinePath(.../**@type {xyList[]}*/
-				(chunk(Data.PathFrom0To8[n],2)))
-			;(n == 0 || n == 8) && ctx.closePath()
+				(chunk(Data.PathFrom0To8[digit],2)))
+			;(digit == 0 || digit == 8) && ctx.closePath()
 			ctx.restore()
 		}()
 		ctx.stroke()
