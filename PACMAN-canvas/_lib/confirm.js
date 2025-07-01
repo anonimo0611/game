@@ -6,10 +6,10 @@ export const Confirm = new class {
 	get #tempElm() {return /**@type {HTMLTemplateElement}*/(byId('confirm_t'))}
 	get #confirm() {return /**@type {HTMLDialogElement}  */(byId('confirm'))}
 
-	/** @param {MouseEvent} e */
+	/** @param {JQuery.TriggeredEvent} e */
 	#onMousedown = e=> {e.preventDefault()}
 
-	/** @param {KeyboardEvent} e */
+	/** @param {JQuery.KeyboardEventBase} e */
 	#onKeydown(e) {
 		const btns = $('#confirm button').get()
 		if (e.key == 'Escape') {

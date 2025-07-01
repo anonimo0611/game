@@ -49,6 +49,10 @@ const match = (key,pattern,separator='_')=> {
 }
 
 /**
+ * @param {string} str
+ */const _toSp = str=> str.trim().replace(/_/g,'\x20')
+
+/**
  * @param {string} selector
  * @return {?HTMLElement}
  */const qS = selector=> document.querySelector(selector)
@@ -129,10 +133,12 @@ const match = (key,pattern,separator='_')=> {
 const $win = $(window)
 const $doc = $(document)
 
-/** @param {Function} fn */
+/** @typedef {(events:JQuery.TriggeredEvent<Window & typeof globalThis>)=> void} JQWindowHandler */
+
+/** @param {JQWindowHandler} fn */
 const $ready = fn=> $doc.on({DOMContentLoaded:fn}) && $win
 
-/** @param {Function} fn */
+/** @param {JQWindowHandler} fn */
 const $load = fn=> $win.on({load:fn})
 
 /** @param {string} elementId */
@@ -140,43 +146,21 @@ const $byId = elementId=> $('#'+elementId)
 
 /**
  * @param {string} ns
- * @param {{[event:string]:Function}} cfg
+ * @param {{[event:string]:JQWindowHandler}} cfg
  */
 const $onNS = (ns,cfg)=> {
 	entries(cfg).forEach(([ev,fn])=> {
-		ev = ev.trim().replace(/[_\s]+|$/g,`${ns} `)
+		ev = ev.trim().replace(/[_\s]+|$/g,`${ns}\x20`)
 		$offon(ev,fn)
 	})
 	return $win
 }
 
 /** @param {string} event */
-const $off = event=> $win.off(event.trim().replace(/_/g,' '))
+const $off = event=> $win.off(_toSp(event))
 
 /**
  * @param {string} event
- * @param {Function} fn
+ * @param {JQWindowHandler} fn
  */
-const $offon = (event,fn)=> $off(event) && $on(event,fn)
-
-/**
- * @param {string} event
- * @param {*} [data]
- */
-const $trigger = (event,data)=> $win.trigger(event,data)
-
-/**
- * @param {string|object} arg
- * @param {Function} [fn]
- * @type {{
- *    (event:string, fn:Function):    JQuery<typeof globalThis>
- *    (arg:{[event:string]:Function}):JQuery<typeof globalThis>
- * }}
- */
-const $on = (arg, fn)=> {
-	const rep = (/**@type {string}*/str)=> str.trim().replace(/_/g,' ')
-	typeof(arg) != 'object'
-		? $win.on({[rep(arg)]:fn})
-		: entries(arg).forEach(([ev,fn])=> $win.on(rep(ev),fn))
-	return $win
-}
+const $offon = (event,fn)=> $off(event) && $win.on({[event]:fn})
