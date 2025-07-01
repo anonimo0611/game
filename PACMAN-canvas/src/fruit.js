@@ -23,7 +23,8 @@ let _fadeOut = /**@type {?FadeOut}*/(null)
 export const Fruit = new class {
 	static {$ready(this.setup)}
 	static setup() {
-		State. on({Title_Ready:Fruit.#reset})
+		State .on({Title: Fruit.#reset})
+		State .on({Ready: Fruit.#reset})
 		Player.on({Eaten: Fruit.#dotEaten})
 		$level.on({change:Fruit.#setImages})
 	}
