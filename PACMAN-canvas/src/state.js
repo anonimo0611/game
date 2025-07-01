@@ -1,8 +1,9 @@
 /**
- * @typedef {'Title'|'Attract'|'Start'|'Restart'|'NewLevel'|'Ready'|
- * 'Playing'|'Clear'|'FlashMaze'|'CoffBrk'|'Crashed'|'Dying'|'GameOver'|'Quit'|
- * 'Title_Ready'|'Title_Clear_Crashed'|'Title_Restart_NewLevel'|
- * 'Title_NewLevel'|'Title_Start_Ready_Restart'} StateType
+ * @typedef {'Title'|'Attract'|'Start'|'Restart'|'NewLevel'|
+ * 'Ready'|'Playing'|'Clear'|'FlashMaze'|'CoffBrk'|'Crashed'|
+ * 'Dying'|'GameOver'|'Quit'|'Title_Ready'|'Title_Clear_Crashed'|
+ * 'Title_Restart_NewLevel'|'Title_NewLevel'|'Title_Start_Ready_Restart'
+ * } StateType
  */
 import _State from '../_lib/state.js'
 export const State = new class extends _State {
