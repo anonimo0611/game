@@ -45,7 +45,7 @@ export const State = new class extends _State {
 	 *      & ((state:StateType,fn:JQWindowHandler)=> State)}
 	 */
 	on = (v, fn)=> {
-		typeof(v) == 'string' && typeof fn == 'function'
+		typeof(v) == 'string' && typeof(fn) == 'function'
 			? $win.on({[_toSp(v)]:fn})
 			: entries(v).forEach(([ev,fn])=> $win.on({[_toSp(ev)]:fn}))
 		return this
