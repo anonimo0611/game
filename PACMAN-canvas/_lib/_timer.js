@@ -1,8 +1,12 @@
 'use strict'
 const {Ticker,Timer} = function() {
 	/**
-	 * @typedef {{timeout:number, handler:Function,
-	 * ignoreFrozen:boolean, amount:number}} TimerData
+	 * @typedef {({
+	 * amount:  number;
+	 * timeout: number;
+	 * handler: Function;
+	 * ignoreFrozen: boolean;
+	 * })} TimerData
 	 */
 	const Interval = 1000/60
 	const TimerMap = /**@type {Map<any,TimerData>}*/(new Map)
@@ -95,7 +99,7 @@ const {Ticker,Timer} = function() {
 		 */
 		set(timeout, handler, {key,ignoreFrozen=Timer.frozen}={}) {
 			!Ticker.running && Ticker.set()
-			TimerMap.set(key??Symbol(),{timeout,handler,ignoreFrozen,amount:0})
+			TimerMap.set(key??Symbol(),{amount:0,timeout,handler,ignoreFrozen})
 		}
 		/** @param {...{ms:number,fn:Function}} seq */
 		sequence(...seq) {

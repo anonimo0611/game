@@ -40,7 +40,7 @@ export class Menu extends Common {
 		$(this.root).closest('form').on('reset', this.reset)
 	}
 	select(idx=0) {
-		if (!between(idx, 0, this.size-1))
+		if (idx<0 || idx>=this.size)
 			throw ReferenceError('List index out of range')
 		this.selectedItem.classList.remove('selected')
 		this.items[idx].classList.add('selected')

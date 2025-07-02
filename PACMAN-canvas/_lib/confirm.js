@@ -23,20 +23,20 @@ export const Confirm = new class {
 	}
 
 	/**
-	 * @param {string} content
-	 * @param {?Function} fn1
-	 * @param {?Function} fn2
-	 * @param {string} [btnTxt1]
-	 * @param {string} [btnTxt2]
-	 * @param {0|1} [cancelIdx]
+	 * @param {string} content   Dialog description
+	 * @param {?Function} fn1    Functions to assign to the left button
+	 * @param {?Function} fn2    Functions to assign to the right button
+	 * @param {string} [btn1Txt] Text of the left button
+	 * @param {string} [btn2Txt] Text of the right button
+	 * @param {0|1} [cancelIdx]  Button to assign when canceling; 0=left, 1=right(default)
 	 */
-	open(content, fn1,fn2, btnTxt1='Ok',btnTxt2='Cancel', cancelIdx=1) {
+	open(content, fn1,fn2, btn1Txt='Ok',btn2Txt='Cancel', cancelIdx=1) {
 		if (this.opened) return
 		document.body.append(this.#tempElm.content.cloneNode(true))
 		this.#opened = true
 		this.#cancel = cancelIdx
 		$('#confirm').find('button').each((i,btn)=> {
-			btn.textContent = [btnTxt1,btnTxt2][i]
+			btn.textContent = [btn1Txt,btn2Txt][i]
 			btn.onclick = ()=> {$off(NS),this.#remove([fn1,fn2][i])}
 		})
 		$onNS(NS,{keydown:  this.#onKeydown})

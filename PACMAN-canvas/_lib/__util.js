@@ -17,8 +17,10 @@ const wheelDeltaY = e=> /**@type {WheelEvent}*/
 /** @param {KeyboardEvent|JQuery.KeyboardEventBase} e */
 const isEnterKey = e=> /^(\x20|Enter)$/.test(e.key)
 
-/** @param {unknown} e */
-const nonEnterKey = e=> e instanceof KeyboardEvent && !isEnterKey(e)
+/** @param {KeyboardEvent|JQuery.KeyboardEventBase|JQuery.TriggeredEvent} e */
+const nonEnterKey = e=>
+	(e instanceof KeyboardEvent)? !isEnterKey(e):
+	(e.originalEvent instanceof KeyboardEvent) && !isEnterKey(e.originalEvent)
 
 /** @param {KeyboardEvent|JQuery.KeyboardEventBase} e */
 const isCombiKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
@@ -37,7 +39,7 @@ const range = function*(from, to, step=1) {
 
 /**
  * @template T
- * @param {string|number|undefined} key
+ * @param {string|number|undefined|null} key
  * @param {{[key:string|number]:()=> T}} pattern
  * @param {string} [separator]
  */
