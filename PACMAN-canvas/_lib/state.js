@@ -1,21 +1,26 @@
 export default class {
-	#state = ''
-	#last  = ''
+	#state   = ''
+	#last    = ''
+	#default = ''
 
 	/** @readonly */
 	#StateSet = /**@type {Set<string>}*/(new Set)
 	get current() {return this.#state}
+	get default() {return this.#default}
 
-	/** @param {string} [initVal] */
-	init(initVal) {
+	/** @param {string} [_default] */
+	init(_default) {
 		keys(this)
 		.flatMap(key=> /^is[A-Z\d]*$/i.test(key)? [key]:[])
-		.forEach(key=> {
+		.forEach((key,i)=> {
 			const state = key.substring(2)
 			this.#StateSet.add(state)
+			i == 0 && (this.#default = state)
 			defineProperty(this,key,{get(){return this.#state === state}})
 		})
-		initVal && this.#StateSet.has(initVal) && this.to(initVal)
+		_default
+			&& this.#StateSet.has(_default)
+			&& this.to(this.#default = _default)
 	}
 
 	/**

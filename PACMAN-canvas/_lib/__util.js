@@ -50,7 +50,8 @@ const match = (key,pattern,separator='_')=> {
 
 /**
  * @param {string} str
- */const _toSp = str=> str.trim().replace(/_/g,'\x20')
+ */const _toSp = (str,prefix='')=> str.indexOf('_') != -1
+ 	? prefix.trim()+str.trim().replace(/_/g,'\x20') : str.trim()
 
 /**
  * @param {string} selector
