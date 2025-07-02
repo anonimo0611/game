@@ -2,8 +2,6 @@ const FromWASD = new Map([['W',U],['A',L],['S',D],['D',R]])
 
 export const Dir = freeze(new class {
 	Up=U; Right=R; Down=D; Left=L;
-
-	/** @readonly */
 	Opposite = freeze({Up:D, Right:L, Down:U, Left:R})
 
 	/** @param {KeyboardEvent|JQuery.KeyboardEventBase} e */
