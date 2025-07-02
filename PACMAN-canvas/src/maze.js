@@ -72,22 +72,27 @@ class PowDot {
 	}
 }
 class Tunnel {
-	entranceL =  5.5
-	entranceR = 22.5
+	Y = 15
+	EntranceL =  5.5
+	EntranceR = 22.5
 	/**
 	 * @param {Vector2} centerPos
 	 * @param {'Left'|'Right'} [dir]
 	 */
 	isIn(centerPos, dir) {
 		const where = this.#where(centerPos)
-		if (dir == L) return (where == L)
-		if (dir == R) return (where == R)
-		return (where != null)
+		switch(dir) {
+		case L:  return (where == L)
+		case R:  return (where == R)
+		default: return (where != null)
+		}
 	}
 	/** @param {Vector2} centerPos */
 	#where({x, y}) {
-		if (int(y/T) == 15 && x/T <= this.entranceL) return L
-		if (int(y/T) == 15 && x/T >= this.entranceR) return R
+		if (int(y/T) == this.Y) {
+			if (x/T <= this.EntranceL) return L
+			if (x/T >= this.EntranceR) return R
+		}
 		return null
 	}
 }
