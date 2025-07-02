@@ -37,8 +37,8 @@ const range = function*(from, to, step=1) {
 
 /**
  * @template T
- * @param {string|number} key
- * @param {{[key:string]:()=> T}} pattern
+ * @param {string|number|undefined} key
+ * @param {{[key:string|number]:()=> T}} pattern
  * @param {string} [separator]
  */
 const match = (key,pattern,separator='_')=> {
