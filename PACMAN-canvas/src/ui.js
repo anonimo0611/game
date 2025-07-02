@@ -12,7 +12,7 @@ MenuIds = /**@type {(keyof Menu)[]}*/(keys(Menu))
 ;/** @type {HTMLButtonElement[]} */
 (qSAll('.panelBtn')).forEach(btn=> {
 	$(btn).on('keydown pointerdown', e=> {
-		if (nonEnterKey(e.originalEvent))
+		if (nonEnterKey(e))
 			return
 		$('.panel').toggle()
 		btn.classList.toggle('opened')

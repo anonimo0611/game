@@ -28,8 +28,8 @@ export class Actor extends Common {
 
 	get dir()       {return this.#movDir}
 	get orient()    {return this.#orient}
-	get revDir()    {return Dir.opposite(this.dir)}
-	get revOrient() {return Dir.opposite(this.orient)}
+	get revDir()    {return Dir.Opposite[this.dir]}
+	get revOrient() {return Dir.Opposite[this.orient]}
 	set dir(dir)    {this.#movDir = this.orient = dir}
 	set orient(dir) {this.#orient = dir}
 
