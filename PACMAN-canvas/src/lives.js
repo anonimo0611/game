@@ -25,7 +25,7 @@ export const Lives = function() {
 		ctx.restore()
 	}
 	$('#lvsRng').on({input:onChange})
-	State.on({Title_Start_Ready_Restart:onChange})
+	State.on({_Start_Ready_Restart:onChange})
 
 	return {
 		get left() {return _left},

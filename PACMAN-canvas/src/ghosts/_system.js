@@ -122,7 +122,7 @@ const CHASING = 1
 const AlternateBetweenModes = function() {
 	{
 		let seq = {mode:SCATTER,update(){}}
-		State.on({Title_Ready:()=> seq = genSequence()})
+		State.on({_Ready:()=> seq = genSequence()})
 		return {
 			get isChasing() {return seq.mode == CHASING},
 			get isScatter() {return seq.mode == SCATTER},
@@ -199,7 +199,7 @@ export const DotCounter = function() {
 			? _globalCounter++
 			: pCounters[Ghosts.findIndex(g=> g.state.isIdle)]++
 	}
-	State.on({Title_Ready:reset})
+	State.on({_Ready:reset})
 	$ready(()=> Player.on({Eaten:addCnt}))
 	return {release}
 }()
@@ -221,7 +221,7 @@ const Elroy = function() {
 			Sound.playSiren()
 		}
 	}
-	State.on({Title_NewLevel:()=> _part=0})
+	State.on({_NewLevel:()=> _part=0})
 	$ready(()=> Player.on({Eaten:onDotEaten}))
 	return {
 		get part()  {return _part},

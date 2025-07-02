@@ -97,8 +97,8 @@ export const Maze = new class {
 	static setup() {
 		for (const [i,c] of MapArr.entries())
 			!DotChipSet.has(c) && c.trim() && WallSet.add(i)
-		$(powChk).on({change:    Maze.#reset})
-		State.on({Title_NewLevel:Maze.#reset})
+		State.on({_NewLevel: Maze.#reset})
+		$(powChk).on({change:Maze.#reset})
 	}
 	#reset(/**@type {JQuery.TriggeredEvent}*/e) {
 		if (e.target != powChk) {

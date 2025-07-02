@@ -2,8 +2,8 @@
  * @typedef {(
  * 'Title'|'Attract'|'Start'|'Restart'|'NewLevel'|'Ready'|'Playing'|
  * 'Clear'|'FlashMaze'|'CoffBrk'|'Crashed'|'Dying'|'GameOver'|'Quit'|
- * 'Title_Ready'|'Title_NewLevel'|'Title_Restart_NewLevel'|
- * 'Title_Start_Ready_Restart'|'Title_Clear_Crashed')} StateType
+ * '_Ready'|'_NewLevel'|'_Restart_NewLevel'|'_Start_Ready_Restart'|'_Clear_Crashed'
+ * )} StateType
  */
 import _State from '../_lib/state.js'
 export const State = new class extends _State {
@@ -45,9 +45,10 @@ export const State = new class extends _State {
 	 *      & ((state:StateType,fn:JQWindowHandler)=> State)}
 	 */
 	on = (v, fn)=> {
-		typeof(v) == 'string' && typeof(fn) == 'function'
-			? $win.on({[_toSp(v)]:fn})
-			: entries(v).forEach(([ev,fn])=> $win.on({[_toSp(ev)]:fn}))
+		typeof(v)  == 'string' &&
+		typeof(fn) == 'function'
+			? $win.on({[_toSp(v,this.default)]:fn})
+			: entries(v).forEach(([ev,fn])=> $win.on({[_toSp(ev,this.default)]:fn}))
 		return this
 	}
 
