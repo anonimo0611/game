@@ -70,7 +70,7 @@ export const GhsMgr = new class extends Common {
 	get spriteIdx() {return FrightMode.session?.spriteIdx ?? 0}
 	get caughtAll() {return FrightMode.session?.caughtAll ?? false}
 	get hasEscape() {return Ghosts.some(g=> g.state.isEscaping)}
-	get akaCenter() {return Ghosts[GhsType.Akabei].centerPos}
+	get akaCenter() {return Ghosts[GhsType.Akabei].center}
 
 	#initialize(_={}, /**@type {Ghost[]}*/...ghosts) {
 		GhsMgr.#aIdx = 0

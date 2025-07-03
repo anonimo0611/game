@@ -19,8 +19,8 @@ class Pinky extends Ghost {
 	}
 	get chasePos() {
 		const {Tunnel}=Maze, {i:P}=Player, pos=P.forwardOfst(4)
-		Tunnel.isIn(P.centerPos,L) && P.dir == L && (pos.x=Tunnel.EntranceR*T)
-		Tunnel.isIn(P.centerPos,R) && P.dir == R && (pos.x=Tunnel.EntranceL*T)
+		Tunnel.isIn(P.center,L) && P.dir == L && (pos.x=Tunnel.EntranceR*T)
+		Tunnel.isIn(P.center,R) && P.dir == R && (pos.x=Tunnel.EntranceL*T)
 		return pos
 	}
 	get scatterTile() {return Vec2(3, 0)}
@@ -44,7 +44,7 @@ class Guzuta extends Ghost {
 	get chasePos() {
 		return this.sqrMagToPacman < (T*8) ** 2
 			? Vec2(this.scatterTile).add(.5).mul(T)
-			: Player.i.centerPos
+			: Player.i.center
 	}
 	get scatterTile() {return Vec2(0, 33)}
 }

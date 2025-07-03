@@ -142,7 +142,7 @@ class Scene2 extends CoffBrk {
 			: function() { // Expand clothes
 				if (isRipped || a.x >= spr.CaughtX) return
 				const rate = norm(spr.CaughtX, spr.AkaMinX, a.x)
-				spr.clothes(aIdx, rate, a.centerPos.add(T,0))
+				spr.clothes(aIdx, rate, a.center.add(T,0))
 			}()
 		super.draw()
 	}

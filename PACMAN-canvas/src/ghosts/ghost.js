@@ -21,7 +21,7 @@ export class Ghost extends Actor {
 	// This section is overridden in subclasses
 	get isAngry()     {return false}
 	get chaseStep()   {return GhsStep.Base}
-	get chasePos()    {return Player.i.centerPos}
+	get chasePos()    {return Player.i.center}
 	get scatterTile() {return Vec2()}
 
 	get aIdx()        {return GhsMgr.animIndex & this.animFlag}
@@ -73,7 +73,7 @@ export class Ghost extends Actor {
 	get houseEntranceArrived() {
 		return this.state.isEscape
 			&& this.tilePos.y == Maze.House.EntranceTile.y
-			&& abs(CW/2 - this.centerPos.x) <= this.step
+			&& abs(CW/2 - this.center.x) <= this.step
 	}
 	get sqrMagToPacman() {
 		return Vec2.sqrMag(this, Player.i)
@@ -116,7 +116,7 @@ export class Ghost extends Actor {
 			_: ()=> this.#walkRails(),
 		})
 	}
-	#idle({idx,step,orient,state,centerPos:{y:cy}}=this) {
+	#idle({idx,step,orient,state,center:{y:cy}}=this) {
 		if (!Ctrl.isChaseMode)
 			Sys.DotCounter.release(idx, this.release)
 		!state.isGoOut && this.move(
@@ -129,7 +129,7 @@ export class Ghost extends Actor {
 		this.state.isIdle && this.state.to('GoOut')
 		return deactivateGlobalDotCnt
 	}
-	#goOut({centerPos:{x:cx},y,step}=this) {
+	#goOut({center:{x:cx},y,step}=this) {
 		if (cx > CW/2+step
 		 || cx < CW/2-step)
 			return this.move(this.iniAlign<0 ? R:L)
@@ -228,7 +228,7 @@ export class Ghost extends Actor {
 	}={}) {
 		if (!this.isWalk
 		 || !this.isFright && Ctrl.invincible
-		 || !collisionCircle(this, pos, radius))
+		 || !circleCollision(this, pos, radius))
 			return false
 		this.isFright
 			? this.#caught(release)
@@ -240,7 +240,7 @@ export class Ghost extends Actor {
 		this.trigger('Cought').state.to('Bitten')
 		Timer.freeze()
 		Sound.play('bitten')
-		PtsMgr.set({key:GhsMgr, pos:this.centerPos}, fn)
+		PtsMgr.set({key:GhsMgr, pos:this.center}, fn)
 	}
 	#attack() {
 		Sound.stopLoops()

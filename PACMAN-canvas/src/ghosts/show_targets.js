@@ -52,7 +52,7 @@ export default new class {
 	}
 	/** @param {Ghost} g */
 	#auxLines(g, ofst=4) {
-		const {centerPos:pacPos,dir}= Player.i
+		const {center:pacPos,dir}= Player.i
 		const fwdXY = Player.i.forwardPos (ofst).vals
 		const ofsXY = Player.i.forwardOfst(ofst).vals
 		Ctx.save()
@@ -73,10 +73,10 @@ export default new class {
 	}
 	/** @param {Ghost} g */
 	#guzutaCircle(g) {
-		const {centerPos}= Player.i, r = T*8
+		const {center}= Player.i, r = T*8
 		Ctx.save()
 		Ctx.setAlpha(g.sqrMagToPacman < r*r ? 0.4:0.8)
-		Ctx.strokeCircle(...centerPos.vals, r, g.color, 6)
+		Ctx.strokeCircle(...center.vals, r, g.color, 6)
 		Ctx.restore()
 	}
 }

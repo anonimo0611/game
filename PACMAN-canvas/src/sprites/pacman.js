@@ -26,7 +26,7 @@ export default class {
 		this.#mAngle += OpenMax/Duration * (this.#animDir*=dir)
 	}
 	draw({
-		centerPos:{x,y}={x:0,y:0},
+		center:{x,y}={x:0,y:0},
 		orient = /**@type {Direction}*/(L),
 		radius = PacRadius,
 		closed = false}={}, {scale=1}={}

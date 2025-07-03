@@ -15,16 +15,16 @@ export class Actor extends Common {
 	#movDir = /**@type {Direction}*/(L)
 
 	/** @protected */
-	constructor()   {super()}
-	get x()         {return this.#x}
-	get y()         {return this.#y}
-	get pos()       {return Vec2(this)}
-	get centerPos() {return Vec2(this).add(T/2)}
-	get tilePos()   {return Vec2(this).add(T/2).divInt(T)}
-	get tileIdx()   {return Vec2.idx(this.tilePos,Cols)}
-	set x(num)      {this.#x = num}
-	set y(num)      {this.#y = num}
-	set pos(pos)    {this.setPos(pos)}
+	constructor() {super()}
+	get x()       {return this.#x}
+	get y()       {return this.#y}
+	get pos()     {return Vec2(this)}
+	get center()  {return Vec2(this).add(T/2)}
+	get tilePos() {return Vec2(this).add(T/2).divInt(T)}
+	get tileIdx() {return Vec2.idx(this.tilePos,Cols)}
+	set x(num)    {this.#x = num}
+	set y(num)    {this.#y = num}
+	set pos(pos)  {this.setPos(pos)}
 
 	get dir()       {return this.#movDir}
 	get orient()    {return this.#orient}
@@ -38,10 +38,10 @@ export class Actor extends Common {
 
 	get step()       {return 0}
 	get maxAlpha()   {return 1}
-	get isInTunnel() {return Maze.Tunnel.isIn(this.centerPos)}
+	get isInTunnel() {return Maze.Tunnel.isIn(this.center)}
 
 	get tilePixel() {
-		const  {x,y} = this.centerPos, v = Vec2[this.dir]
+		const  {x,y} = this.center, v = Vec2[this.dir]
 		const  count = v.x? x % T : y % T
 		return (v.x || v.y) > 0 ? count : T-count
 	}
@@ -89,8 +89,8 @@ export class Actor extends Common {
 
 	/** @param {Direction} dir */
 	collidedWithWall(dir=this.dir) {
-		const {step,centerPos}= this
-		const {x,y}= Vec2[dir].mul(T/2+step).add(centerPos).divInt(T)
+		const {step,center}= this
+		const {x,y}= Vec2[dir].mul(T/2+step).add(center).divInt(T)
 		return Maze.hasWall({x:(x+Cols) % Cols, y}) // x-axis loops
 	}
 

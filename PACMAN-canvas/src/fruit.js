@@ -49,8 +49,8 @@ export const Fruit = new class {
 			Fruit.#setTimerToHideTarget()
 		}
 	}
-	#collideWith(pos=Player.i.centerPos) {
-		if (_tgtDisp && collisionCircle(pos, TargetPos, T/2)) {
+	#collisionWithPac() {
+		if (_tgtDisp && circleCollision(Player.i.center, TargetPos, T/2)) {
 			_tgtDisp = false
 			Timer.cancel(Fruit) && Sound.play('fruit')
 			PtsMgr.set({key:Fruit, dur:2e3, pos:TargetPos})
@@ -61,7 +61,7 @@ export const Fruit = new class {
 			_fadeOut = null
 			_tgtDisp = false
 		}
-		Fruit.#collideWith()
+		Fruit.#collisionWithPac()
 	}
 	draw() {
 		if ((State.isTitle || State.isPlaying)

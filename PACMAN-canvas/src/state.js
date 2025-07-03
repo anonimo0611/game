@@ -41,8 +41,8 @@ export const State = new class extends _State {
 	/**
 	 * @param {StateType|{[key in StateType]?:JQWindowHandler}} v
 	 * @param {JQWindowHandler} [fn]
-	 * @type {((state:{[key in StateType]?:JQWindowHandler})=> State)
-	 *      & ((state:StateType,fn:JQWindowHandler)=> State)}
+	 * @type {((state:{[key in StateType]?:JQWindowHandler})=> this)
+	 *      & ((state:StateType,fn:JQWindowHandler)=> this)}
 	 */
 	on = (v, fn)=> {
 		typeof(v)  == 'string' &&

@@ -21,7 +21,7 @@ export const Lives = function() {
 		ctx.translate(size, CH-size)
 		ctx.clearRect(0,0, size*5, size)
 		for (const i of range(_left))
-			sprite.draw({radius,centerPos:{x:size*i+T, y:T}})
+			sprite.draw({radius,center:{x:size*i+T, y:T}})
 		ctx.restore()
 	}
 	$('#lvsRng').on({input:onChange})
