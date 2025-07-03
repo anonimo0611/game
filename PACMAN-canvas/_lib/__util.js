@@ -120,7 +120,7 @@ const match = (key,pattern,separator='_')=> {
  * @param {Position} v2
  * @param {number}   r1
  * @param {number}  [r2]
- */const collisionCircle = (v1,v2,r1,r2=r1)=>
+ */const circleCollision = (v1,v2,r1,r2=r1)=>
 	(v1.x-v2.x)**2 + (v1.y-v2.y)**2 <= (r1+(r2 ?? r1))**2
 
 /**
