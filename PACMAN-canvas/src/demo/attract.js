@@ -33,11 +33,11 @@ export class Attract {
 		_attract?.draw()
 		return State.isAttract
 	}
-	powDisp = /**@type {0|1}*/(1)
-	ghsList = /**@type {Ghost[][]}*/([])
-	pacman  = new Pacman
 	pacVelX = -CW/180
 	ghsVelX = -CW/169
+	pacman  = new Pacman
+	powDisp = /**@type {0|1}*/(1)
+	ghsList = /**@type {Ghost[][]}*/([])
 
 	/** @private */
 	constructor() {
@@ -57,14 +57,6 @@ export class Attract {
 			g.idx == 0 && this.pacman.setPos(g.x-T*3.5, g.y)
 		}
 		(this.ghsList[where] ||= []).push(g)
-	}
-	drawPacman({pacman:pac}=this) {
-		!Timer.frozen && pac.sprite.draw(pac)
-	}
-	drawGhost(where=0, gIdx=0, row=NaN) {
-		const ghost = this.ghsList[where][gIdx]
-		isFinite(row) && ghost.setPos(5*T, row*T)
-		ghost.sprite.draw(ghost)
 	}
 	draw() {
 		const et = Ticker.elapsedTime/100
@@ -103,22 +95,22 @@ export class Attract {
 			}
 		}
 		if (et > 105) {
-			for (const i of range(GhsType.Max)) {
+			for (const i of range(GhsType.Max))
 				this.drawGhost(DEMO, i)
-			}
-			this.drawPacman(this)
+			this.pacman.sprite.draw(this.pacman)
 			PtsMgr.drawGhostPts()
 		}
 		Fruit.drawLevelCounter()
 	}
+	drawGhost(where=0, gIdx=0, row=NaN) {
+		const ghost = this.ghsList[where][gIdx]
+		isFinite(row) && ghost.setPos(5*T, row*T)
+		ghost.sprite.draw(ghost)
+	}
 	update() {
-		if (Ticker.elapsedTime <= 1e4+500) {
-			return
-		}
-		if (!Timer.frozen) {
-			this.updatePacman()
-			this.updateGhosts()
-		}
+		if (Ticker.elapsedTime <= 1e4+500) return
+		!Timer.frozen && this.updatePacman()
+		!Timer.frozen && this.updateGhosts()
 		this.powDisp ^= +(Ticker.count % PowDotInterval == 0)
 	}
 	updatePacman() {
@@ -138,7 +130,7 @@ export class Attract {
 			g.x += this.ghsVelX
 			g.crashWithPac({
 				pos: this.pacman.pos, radius: T/4,
-				release() {GhsMgr.caughtAll && Attract.#begin()}
+				release:()=> GhsMgr.caughtAll && Attract.#begin()
 			})
 		}
 	}

@@ -23,6 +23,7 @@ export const Player = function() {
 export class Pacman extends Actor {
 	radius = PacRadius
 	sprite = new Sprite(Ctx)
+	get hidden()  {return Timer.frozen}
 	constructor() {super(),freeze(this)}
 }
 class PlayablePac extends Pacman {
@@ -106,7 +107,7 @@ class PlayablePac extends Pacman {
 		Ctx.fillCircle(x,y, 3, Color.PacCenter)
 	}
 	draw() {
-		if (State.isStart || Timer.frozen)
+		if (State.isStart)
 			return
 		Ctx.save()
 		super.draw()

@@ -27,16 +27,19 @@ export default class {
 	}
 	draw({
 		center:{x,y}={x:0,y:0},
+		hidden = false,
+		closed = false,
 		orient = /**@type {Direction}*/(L),
-		radius = PacRadius,
-		closed = false}={}, {scale=1}={}
+		radius = PacRadius}={}, {scale=1}={}
 	) {
-		const {ctx}  = this
-		const mAngle = (closed? 0:this.#mAngle)
+		if (hidden)
+			return
 		if (this.#dying) {
 			this.isMain && (x = clamp(x, radius, CW-radius))
 			return this.#dying.draw({x,y})
 		}
+		const {ctx}  = this
+		const mAngle = (closed? 0:this.#mAngle)
 		ctx.save()
 		ctx.translate(x,y)
 		ctx.rotate(Rotation[orient] * PI/2)
