@@ -1,13 +1,13 @@
-const Duration = 150/Ticker.Interval
+const Duration = 300/Ticker.Interval
 const OpenMid  = 30 * PI/180
 const OpenMax  = 60 * PI/180
 const Rotation = /**@type {const}*/({[R]:0, [D]:1, [L]:2, [U]:3})
 
 import {Dying} from './pacman_dying.js'
 export default class {
-	#mAngle  =  0
-	#animDir = -1
-	#dying   = /**@type {?Dying}*/(null)
+	#dyingSpr   = /**@type {?Dying}*/(null)
+	#animeAngle = 0
+	#mouthAngle = 0
 	/**
 	 * @param {ExtendedContext2D} ctx
 	 * @param {0|1|2} mouthOpenings
@@ -16,14 +16,14 @@ export default class {
 	constructor(ctx, mouthOpenings=0) {
 		this.ctx = ctx
 		this.isMain  = ctx.canvas.id == 'cvs_main'
-		this.#mAngle = [0,OpenMid,OpenMax][mouthOpenings]
+		this.#mouthAngle = [0,OpenMid,OpenMax][mouthOpenings]
 		freeze(this)
 	}
 	update({stopped=false}={}) {
-		if (stopped && this.#mAngle > OpenMid)
+		if (stopped && this.#mouthAngle > OpenMid)
 			return
-		const dir = between(this.#mAngle, 0, OpenMax) ? 1 : -1
-		this.#mAngle += OpenMax/Duration * (this.#animDir*=dir)
+		const rad = this.#animeAngle += PI/Duration
+		this.#mouthAngle = OpenMax * abs(Math.sin(rad))
 	}
 	draw({
 		center:{x,y}={x:0,y:0},
@@ -34,12 +34,12 @@ export default class {
 	) {
 		if (hidden)
 			return
-		if (this.#dying) {
+		if (this.#dyingSpr) {
 			this.isMain && (x = clamp(x, radius, CW-radius))
-			return this.#dying.draw({x,y})
+			return this.#dyingSpr.draw({x,y})
 		}
 		const {ctx}  = this
-		const mAngle = (closed? 0:this.#mAngle)
+		const mAngle = (closed? 0:this.#mouthAngle)
 		ctx.save()
 		ctx.translate(x,y)
 		ctx.rotate(Rotation[orient] * PI/2)
@@ -50,5 +50,5 @@ export default class {
 		ctx.fill()
 		ctx.restore()
 	}
-	setDying() {this.#dying = new Dying(this.ctx)}
+	setDying() {this.#dyingSpr = new Dying(this.ctx)}
 }
