@@ -1,6 +1,7 @@
 import {ctrl}     from '../src/control.js'
 import {Sound}    from './sound.js'
 import {SoundMgr} from './loader.js'
+import {Speaker}  from './speaker.js'
 
 let  _lstVol = NaN
 const volRng = ctrl('volRng')
@@ -14,7 +15,9 @@ const volRg2 = ctrl('volRg2')
 			: this.onFailed()
 	}
 	onLoaded() {
-		const vol = Number(localStorage.anopac_volume ?? 5)
+		const vol = Sound.vol =
+			Number(localStorage.anopac_volume ?? 5)
+		Speaker.draw(vol)
 		$win.on({keydown:e=> this.onKeydown(e)})
 		$('#cvs_speaker')
 			.on({click:this.mute})
@@ -30,7 +33,7 @@ const volRg2 = ctrl('volRg2')
 	onInput(/**@type {Event}*/e) {
 		const isInput = e.target instanceof HTMLInputElement
 		Sound.vol = (isInput? e.target : volRng).valueAsNumber
-		localStorage.anopac_volume = Sound.vol
+		Speaker.draw(localStorage.anopac_volume = Sound.vol)
 	}
 	onKeydown(/**@type {JQuery.KeyDownEvent}*/e) {
 		if (keyRepeat(e) || isCombiKey(e))

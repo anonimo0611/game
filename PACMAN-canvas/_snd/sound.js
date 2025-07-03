@@ -3,7 +3,6 @@ import {State}    from '../src/state.js'
 import {GhsMgr}   from '../src/ghosts/_system.js'
 import {SirenIds} from './_manifest.js'
 import {SoundMgr} from './loader.js'
-import {Speaker}  from './speaker.js'
 
 export const Sound = new class extends SoundMgr {
 	get sirenId()  {return SirenIds[GhsMgr.Elroy.part]}
@@ -12,10 +11,8 @@ export const Sound = new class extends SoundMgr {
 
 	get vol() {return super.vol}
 	set vol(vol) {
-		if (!Sound.disabled) {
+		if (!Sound.disabled)
 			super.vol = clamp(+vol, 0, 10)
-			Speaker.draw(Sound.vol)
-		}
 	}
 	playSiren() {
 		if (!GhsMgr.isFright && !GhsMgr.hasEscape)
