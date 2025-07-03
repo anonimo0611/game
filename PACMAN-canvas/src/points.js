@@ -28,7 +28,6 @@ class Points {
 		const spd  = Game.speedRate, fadeDur = 300
 		this.cache = Pts.cache(key.score)
 		this.pos   = pos
-		this.score = key.score
 		this.fade  = new FadeOut(fadeDur/spd, (dur-fadeDur)/spd)
 		Timer.set(dur/spd, ()=> {
 			Timer.unfreeze()
