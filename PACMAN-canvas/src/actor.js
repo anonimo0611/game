@@ -95,13 +95,14 @@ export class Actor extends Common {
 	}
 
 	/**
-	 * @param {number|OptionalPos} v
-	 * @param {number} [n]
+	 * @param {number|OptionalPos} a
+	 * @param {number} [b]
 	 * @type {((x:number, y:number)=>void) & ((pos:OptionalPos)=>void)}
 	 */
-	setPos = (v,n)=> {
-		let[x,y]= (typeof v == 'number')? [v,n] : [v.x,v.y]
-		this.#y = (y ??= this.y);(x ??= this.x);
+	setPos = (a,b)=> {
+		const pos = ({x=this.x,y=this.y})=> [x,y]
+		const[x,y]= (typeof a == 'number')? pos({x:a,y:b}) : pos(a)
+		this.#y = y
 		this.#x = function(r) { // x-axis move loops during play
 			if (!State.isPlaying) return
 			if (x < -r-T/2) return CW+T/2
