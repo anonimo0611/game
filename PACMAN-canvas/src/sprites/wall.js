@@ -1,11 +1,7 @@
-const {ctx}= Bg
-const W  = Cols
+const {ctx}= Bg, W = Cols
 const OO = 2 // Outer Offset
 const LO = 2 // Line Offset
 const LW = 3 // Line Width
-
-/** @type {xy2dListAsConst} */
-const CornerScales = [[1,1], [-1,1], [-1,-1], [1,-1]]
 
 import {Maze} from '../maze.js'
 export const Wall = new class {
@@ -19,24 +15,24 @@ export const Wall = new class {
 		ctx.restore()
 	}
 	#drawHouse() {
-		const o = LW/2
+		const [hl, ix, iy, ox, oy]= [LW/2, 3.1, 1.6, 3.4, 1.9]
 		ctx.translate(CW/2, Maze.House.MiddleY)
 		ctx.newLinePath(
-			[-1.0*T-o, -1.9*T],[-3.4*T, -1.9*T],[-3.4*T,    1.9*T],
-			[ 3.4*T,    1.9*T],[ 3.4*T, -1.9*T],[ 1.0*T+o, -1.9*T],
-			[ 1.0*T+o, -1.6*T],[ 3.1*T, -1.6*T],[ 3.1*T,    1.6*T],
-			[-3.1*T,    1.6*T],[-3.1*T, -1.6*T],[-1.0*T-o, -1.6*T])
+			[-T-hl, -oy*T],[-ox*T, -oy*T],[-ox*T, +oy*T],
+			[+ox*T, +oy*T],[+ox*T, -oy*T],[+T+hl, -oy*T],
+			[+T+hl, -iy*T],[+ix*T, -iy*T],[+ix*T, +iy*T],
+			[-ix*T, +iy*T],[-ix*T, -iy*T],[-T-hl, -iy*T])
 		ctx.closePath()
 		ctx.stroke()
 	}
 	/**
 	 * @param {number} type
-	 * @param {{cn:number, c:string, x:number, y:number}} cfg
+	 * @param {{ci:number, c:string, x:number, y:number}} cfg
 	 */
-	#drawCorner(type, {cn,c,x,y}) {
+	#drawCorner(type, {ci,c,x,y}) {
 		ctx.save()
 		ctx.translate(x+T/2, y+T/2)
-		ctx.scale(...CornerScales[cn>3 ? cn-4:cn])
+		ctx.scale(.../**@type {xy2dList}*/([[1,1],[-1,1],[-1,-1],[1,-1]])[ci])
 		ctx.beginPath()
 		switch(type) {
 		case 0: /[A-D5-8]/.test(c)
@@ -54,12 +50,12 @@ export const Wall = new class {
 	 */
 	#drawTile(c, i) {
 		const [tx,ty]=[i%W,i/W|0], [x,y]=[tx*T,ty*T], isL=(tx < W/2)
-		const cn = +c? +c-1 : 'ABCD'.indexOf(c.toUpperCase())
+		const ci = +c? +c-(+c>4 ? 5:1) : 'ABCD'.search(RegExp(c,'i'))
 		const lo = c=='#' && isL || c=='=' || /[HV]/.test(c) ? -LO:LO
 
-		;/[a-d\d]/i.test(c) && Wall.#drawCorner(0,{cn,c,x,y})
-		;/[a-d]/   .test(c) && Wall.#drawCorner(1,{cn,c,x,y})
-		;/[A-D]/   .test(c) && Wall.#drawCorner(2,{cn,c,x,y})
+		;/[a-d\d]/i.test(c) && Wall.#drawCorner(0,{ci,c,x,y})
+		;/[a-d]/   .test(c) && Wall.#drawCorner(1,{ci,c,x,y})
+		;/[A-D]/   .test(c) && Wall.#drawCorner(2,{ci,c,x,y})
 
 		switch(c.toUpperCase()) {
 		case '#':
