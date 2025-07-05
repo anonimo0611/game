@@ -6,9 +6,10 @@ export class Common {
 	}
 
 	/**
- 	 * @param {string|{[event:string]:Function}} arg
-	 * @param {Function} [fn]
-	 * @type {((event:string, fn:Function)=> this) & ((arg:{[event:string]:Function})=> this)}
+ 	 * @param {string|{[event:string]:JQWindowHandler}} arg
+	 * @param {JQWindowHandler} [fn]
+	 * @type {((event:string, fn:JQWindowHandler)=> this)
+	 *      & ((arg:{[event:string]:JQWindowHandler})=> this)}
 	 */
 	on = (arg, fn)=> {
 		typeof(arg) == 'object'

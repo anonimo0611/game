@@ -1,7 +1,6 @@
 'use strict'
 /** @typedef {[x:number, y:number]}   xyList */
 /** @typedef {[x:number, y:number][]} xy2dList */
-/** @typedef {readonly (readonly [x:number, y:number])[]} xy2dListAsConst */
 /** @typedef {{x?:number,y?:number}} OptionalPos */
 /** @typedef {Vector2|{x:number,y:number}} Position */
 

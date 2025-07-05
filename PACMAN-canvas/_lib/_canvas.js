@@ -75,7 +75,7 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 	 * @param {Cvs2DStyle} style
 	 * @param {number} lineWidth
 	 */
-	strokeCircle(x,y, r, style=this.fillStyle, lineWidth=1) {
+	strokeCircle(x,y, r, style=this.fillStyle, lineWidth=this.lineWidth) {
 		this.save()
 		this.beginPath()
 		style && (this.strokeStyle = style)
