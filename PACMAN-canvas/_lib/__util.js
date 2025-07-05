@@ -3,11 +3,12 @@ const {defineProperty,entries,freeze,hasOwn,keys,values}= Object
 const {abs,ceil,floor,max,min,PI,random,round,sqrt,trunc:int}= Math
 
 const dRoot = document.getElementsByTagName('html')[0]
-const byId  = (/**@type {string}*/elementId)=>
-	document.getElementById(elementId)
+
+/** @param {string} elementId */
+const byId  = elementId=> document.getElementById(elementId)
 
 /** @param {KeyboardEvent|JQuery.KeyboardEventBase} e */
-const keyRepeat = e=>
+const keyRepeat   = e=>
 	(e instanceof KeyboardEvent ? e : e.originalEvent)?.repeat ?? false
 
 /** @param {WheelEvent|JQuery.TriggeredEvent} e */
@@ -15,12 +16,14 @@ const wheelDeltaY = e=> /**@type {WheelEvent}*/
 	(e instanceof WheelEvent ? e : e.originalEvent)?.deltaY ?? 0
 
 /** @param {KeyboardEvent|JQuery.KeyboardEventBase} e */
-const isEnterKey = e=> /^(\x20|Enter)$/.test(e.key)
+const isEnterKey  = e=> /^(\x20|Enter)$/.test(e.key)
 
 /** @param {KeyboardEvent|JQuery.KeyboardEventBase|JQuery.TriggeredEvent} e */
 const nonEnterKey = e=>
-	(e instanceof KeyboardEvent)? !isEnterKey(e):
-	(e.originalEvent instanceof KeyboardEvent) && !isEnterKey(e.originalEvent)
+	(e instanceof KeyboardEvent)
+		? !isEnterKey(e)
+		: (e.originalEvent instanceof KeyboardEvent)
+			&& !isEnterKey(e.originalEvent)
 
 /** @param {KeyboardEvent|JQuery.KeyboardEventBase} e */
 const isCombiKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
@@ -50,13 +53,8 @@ const match = (key,pattern,separator='_')=> {
 	return pattern['_']?.() ?? undefined
 }
 
-/**
- * @param {string} str
- */const _toSp = (str,prefix='')=> str.indexOf('_') != -1
- 	? prefix.trim()+str.trim().replace(/_/g,'\x20') : str.trim()
-
-/**
- * @param {string} selector
+ /**
+ * @param  {string} selector
  * @return {?HTMLElement}
  */const qS = selector=> document.querySelector(selector)
 
@@ -70,6 +68,11 @@ const match = (key,pattern,separator='_')=> {
  * @type {(a:DistObject, b:DistObject)=> number}
  */const compareDist = (a,b)=>
 	(a.dist == b.dist)? (a.i-b.i) : (a.dist-b.dist)
+
+ /**
+ * @param {string} str
+ */const _toSp = (str,prefix='')=> str.indexOf('_') != -1
+ 	? prefix.trim()+str.trim().replace(/_/g,'\x20') : str.trim()
 
 /**
  * @param {number} x
@@ -136,16 +139,22 @@ const match = (key,pattern,separator='_')=> {
 const $win = $(window)
 const $doc = $(document)
 
-/** @typedef {(events:JQuery.TriggeredEvent<Window & typeof globalThis>)=> void} JQWindowHandler */
-
-/** @param {JQWindowHandler} fn */
-const $ready = fn=> $doc.on({DOMContentLoaded:fn}) && $win
+/** @typedef {(ev:JQuery.TriggeredEvent<Window & typeof globalThis>)=> any} JQWindowHandler */
 
 /** @param {JQWindowHandler} fn */
 const $load = fn=> $win.on({load:fn})
 
 /** @param {string} elementId */
 const $byId = elementId=> $('#'+elementId)
+
+/** @param {string} event */
+const $off  = event=> $win.off(_toSp(event))
+
+/**
+ * @param {string} event
+ * @param {JQWindowHandler} fn
+ */
+const $offon = (event,fn)=> $off(event).on({[event]:fn})
 
 /**
  * @param {string} ns
@@ -158,12 +167,3 @@ const $onNS = (ns,cfg)=> {
 	})
 	return $win
 }
-
-/** @param {string} event */
-const $off = event=> $win.off(_toSp(event))
-
-/**
- * @param {string} event
- * @param {JQWindowHandler} fn
- */
-const $offon = (event,fn)=> $off(event) && $win.on({[event]:fn})
