@@ -21,7 +21,7 @@ let _tgtDisp = true
 let _fadeOut = /**@type {?FadeOut}*/(null)
 
 export const Fruit = new class {
-	static {$ready(this.setup)}
+	static {$(this.setup)}
 	static setup() {
 		State .on({_Ready:Fruit.#reset})
 		Player.on({Eaten: Fruit.#dotEaten})

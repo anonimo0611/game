@@ -11,7 +11,7 @@ export const Form = document.forms[0]
 export const ctrl = id=> /**@type {HTMLInputElement}*/(byId(id))
 
 export const Ctrl = new class {
-	static {$ready(this.setup)}
+	static {$(this.setup)}
 	static setup() {
 		Ctrl.#restore()
 		Ctrl.#drawInfo()

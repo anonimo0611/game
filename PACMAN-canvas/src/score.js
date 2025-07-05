@@ -8,7 +8,7 @@ let _score = 0, _hiSco = 0
 let _saveS = 0, _saveH = 0
 
 export const Score = new class {
-	static {$ready(this.setup)}
+	static {$(this.setup)}
 	static setup() {
 		Score.reset()
 		State.on({

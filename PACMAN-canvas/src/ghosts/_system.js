@@ -15,7 +15,7 @@ const PtsLst = Pts.Vals.Ghost
 const Ghosts = /**@type {Ghost[]}*/([])
 
 /**
- * Delay time(ms) for ghost to be left from the house in always chase mode
+ * Delay time (ms) before the ghost departs from the house in always chase mode
  * @param {number} idx Index of ghosts waiting to start at house
  */
 const releaseDelay = idx=> ({
@@ -50,7 +50,7 @@ export class GhostState extends _State {
 }
 
 export const GhsMgr = new class extends Common {
-	static {$ready(this.setup)}
+	static {$(this.setup)}
 	static setup() {
 		State.on({
 			Playing:GhsMgr.#onPlaying,
@@ -200,7 +200,7 @@ export const DotCounter = function() {
 			: pCounters[Ghosts.findIndex(g=> g.state.isIdle)]++
 	}
 	State.on({_Ready:reset})
-	$ready(()=> Player.on({Eaten:addCnt}))
+	$(()=> Player.on({Eaten:addCnt}))
 	return {release}
 }()
 
@@ -222,7 +222,7 @@ const Elroy = function() {
 		}
 	}
 	State.on({_NewLevel:()=> _part=0})
-	$ready(()=> Player.on({Eaten:onDotEaten}))
+	$(()=> Player.on({Eaten:onDotEaten}))
 	return {
 		get part()  {return _part},
 		get step()  {return GhsStep.Base * spdRatesTable[_part]},

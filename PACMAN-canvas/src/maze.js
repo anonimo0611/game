@@ -98,7 +98,7 @@ class Tunnel {
 }
 
 export const Maze = new class {
-	static {$ready(this.setup)}
+	static {$(this.setup)}
 	static setup() {
 		for (const [i,c] of MapArr.entries())
 			!DotChipSet.has(c) && c.trim() && WallSet.add(i)
@@ -124,6 +124,8 @@ export const Maze = new class {
 			? drawDot(Bg.ctx, t.x, t.y)
 			: PowMap.set(i, t)
 	}
+
+
 	get dotsLeft() {return DotSet.size}
 	Top    = 1
 	Bottom = Rows-3

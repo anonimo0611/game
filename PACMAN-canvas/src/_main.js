@@ -20,7 +20,7 @@ import {Attract} from './demo/attract.js'
 import {CoffBrk} from './demo/coffee_break.js'
 
 export const Game = new class {
-	static {$ready(this.setup)}
+	static {$(this.setup)}
 	static setup() {
 		$win.on({
 			blur:()=> Game.#pause(true),
