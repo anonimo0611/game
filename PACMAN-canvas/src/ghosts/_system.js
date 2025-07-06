@@ -14,19 +14,24 @@ import Target   from './show_targets.js'
 const PtsLst = Pts.Vals.Ghost
 const Ghosts = /**@type {Ghost[]}*/([])
 
-/**
- * Delay time (ms) before the ghost departs from the house in always chase mode
- * @param {number} idx Index of ghosts waiting to start at house
- */
-const releaseDelay = idx=> ({
+/** Delay time (ms) before the ghost departs from the house in always chase mode */
+const ReleaseDelay = /**@type {const}*/([
 	// Pinky->Aosuke->Guzuta
-	 0:[1000,  500,  500], // <-After life is lost
-	 1:[1000, 4000, 4000], 2:[800, 2200, 4000], 3:[600, 1900, 3500],
-	 4:[ 600, 1900, 1500], 5:[500, 1300, 1200], 6:[500, 1300, 1200],
-	 7:[ 300,  700,  800], 8:[300,  700,  800], 9:[200,  800,  200],
-	10:[ 200,  800,  200],11:[100,  700,  200],12:[100,  700,  200],
-	13:[   0,  900,    0]
-})[Game.restarted? 0 : Game.clampedLv]?.[idx] ?? 0/Game.speedRate
+	[1000,  500,  500], // Restart
+	[1000, 4000, 4000], // Lv.1
+	[ 800, 2200, 4000], // Lv.2
+	[ 600, 1900, 3500], // Lv.3
+	[ 600, 1900, 1500], // Lv.4
+	[ 500, 1300, 1200], // Lv.5
+	[ 500, 1300, 1200], // Lv.6
+	[ 300,  700,  800], // Lv.7
+	[ 300,  700,  800], // Lv.8
+	[ 200,  800,  200], // Lv.9
+	[ 200,  800,  200], // Lv.10
+	[ 100,  700,  200], // Lv.11
+	[ 100,  700,  200], // Lv.12
+	[   0,  900,    0]  // Lv.13
+])
 
 /** @typedef {'Idle'|'GoOut'|'Walk'|'Bitten'|'Escape'|'Return'} State */
 export class GhostState extends _State {
@@ -85,8 +90,9 @@ export const GhsMgr = new class extends Common {
 	}
 	#setReleaseTimer() {
 		if (!Ctrl.isChaseMode) return
+		const lv = (Game.restarted? 0 : Game.clampedLv)
 		Timer.sequence(...Ghosts.slice(1).map((g,i)=>
-			({ms:releaseDelay(i), fn:g.release})))
+			({ms:ReleaseDelay[lv][i]/Game.speedRate, fn:g.release})))
 	}
 	setFrightMode() {
 		setReversalSig()
