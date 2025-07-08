@@ -92,11 +92,11 @@ export const Ctrl = new class {
 	}
 	#setup() {
 		for (const menu of values(Menu)) {
-			menu.on('change', Ctrl.#output)
+			menu.on({change:Ctrl.#output})
 		}
-		$win.on('resize', Ctrl.#fitToViewport)
-		$('input')    .on('input', Ctrl.#output)
-		$('#resetBtn').on('click', Ctrl.#reset)
-		$('#startBtn').on('click', ()=> State.to('Start'))
+		$win.on({resize:Ctrl.#fitToViewport})
+		$('input')    .on({input:Ctrl.#output})
+		$('#resetBtn').on({click:Ctrl.#reset})
+		$('#startBtn').on({click:()=> State.to('Start')})
 	}
 }, powChk = ctrl('powChk')

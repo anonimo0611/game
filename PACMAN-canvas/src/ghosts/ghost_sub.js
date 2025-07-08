@@ -49,6 +49,6 @@ class Guzuta extends Ghost {
 	get scatterTile() {return Vec2(0, 33)}
 }
 
-State.on('_Restart_NewLevel',()=> {
+State.on({_Restart_NewLevel:()=>
 	GhsMgr.trigger('Init', [Akabei,Pinky,Aosuke,Guzuta].map(cls=> new cls))
 })

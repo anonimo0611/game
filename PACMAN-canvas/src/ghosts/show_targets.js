@@ -45,7 +45,7 @@ export default new class {
 			return
 		const {x,y}= this.#getTargetPos(g)
 		Ctx.save()
-		Ctx.globalAlpha = 0.8
+		Ctx.setAlpha(0.8)
 		Ctx.fillCircle  (x,y, T*0.4, g.color)
 		Ctx.strokeCircle(x,y, T*0.4,'#FFF', 4)
 		Ctx.restore()

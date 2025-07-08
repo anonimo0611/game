@@ -31,27 +31,16 @@ export const State = new class extends _State {
 
 	/**
 	 * @param {StateType} s
-	 * @param {any[]|JQuery.PlainObject|string|number|boolean} data
+	 * @param {number|string|boolean|any[]} [data]
 	 */
 	#callback(s, data) {
 		Ticker.resetCount()
 		$win.trigger(dBody.dataset.state=s, data)
 	}
 
-	/**
-	 * @param {StateType|{[key in StateType]?:JQWindowHandler}} v
-	 * @param {JQWindowHandler} [fn]
-	 * @type {((state:{[key in StateType]?:JQWindowHandler})=> this)
-	 *      & ((state:StateType,fn:JQWindowHandler)=> this)}
-	 */
-	on = (v, fn)=> {
-		if (typeof v  == 'object') {
-			entries(v).forEach(([ev,fn])=> $win.on(_toSp(ev,this.default), fn))
-		}
-		if (typeof v  == 'string'
-		 && typeof fn == 'function') {
-			$win.on(_toSp(v,this.default), fn)
-		}
+	/** @param {{[key in StateType]?:JQWindowHandler}} v */
+	on(v) {
+		entries(v).forEach(([ev,fn])=> $win.on(_toSp(ev,this.default), fn))
 		return this
 	}
 

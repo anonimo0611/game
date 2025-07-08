@@ -30,7 +30,7 @@ const ReleaseDelay = /**@type {const}*/([
 	[ 200,  800,  200], // Lv.10
 	[ 100,  700,  200], // Lv.11
 	[ 100,  700,  200], // Lv.12
-	[   0,  900,    0]  // Lv.13
+	[   0,  900,    0], // Lv.13
 ])
 
 /** @typedef {'Idle'|'GoOut'|'Walk'|'Bitten'|'Escape'|'Return'} State */
