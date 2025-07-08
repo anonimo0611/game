@@ -1,5 +1,3 @@
-import {Confirm}  from '../_lib/confirm.js'
-import {Score}    from './score.js'
 import {Menu}     from './ui.js'
 import {MenuIds}  from './ui.js'
 import {State}    from './state.js'
@@ -14,7 +12,7 @@ export const Ctrl = new class {
 	static {$(this.setup)}
 	static setup() {
 		Ctrl.#restore()
-		Ctrl.#drawInfo()
+		Ctrl.#output()
 		Ctrl.#fitToViewport()
 		$load(Ctrl.#setup)
 	}
@@ -40,10 +38,10 @@ export const Ctrl = new class {
 	#save() {
 		const data = Object.create(null)
 		MenuIds.forEach(id=> data[id] = Menu[id].index)
-		document.querySelectorAll('input').forEach(e=> {
-			match(e.type, {
-			range:   ()=> {data[e.id] = e.value},
-			checkbox:()=> {data[e.id] = e.checked},
+		document.querySelectorAll('input').forEach(input=> {
+			match(input.type, {
+			range:   ()=> {data[input.id] = input.value},
+			checkbox:()=> {data[input.id] = input.checked},
 			})
 		})
 		localStorage.anopacman = JSON.stringify(data)
@@ -52,25 +50,18 @@ export const Ctrl = new class {
 		if (!localStorage.anopacman) return
 		const data = JSON.parse(localStorage.anopacman)
 		MenuIds.forEach(id=> Menu[id].index = data[id])
-		document.querySelectorAll('input').forEach(e=> {
-			match(e.type, {
-			range:   ()=> {e.value   = data[e.id]},
-			checkbox:()=> {e.checked = data[e.id]},
+		document.querySelectorAll('input').forEach(input=> {
+			match(input.type, {
+			range:   ()=> {input.value   = data[input.id]},
+			checkbox:()=> {input.checked = data[input.id]},
 			})
+			$(input).trigger('input')
 		})
-	}
-	#clearHiScore() {
-		localStorage.removeItem('anopac_hiscore')
-		Score.reset()
 	}
 	#reset() {
 		Form.reset()
-		Ctrl.#update().#restore()
-	}
-	#update() {
-		Ctrl.#save()
-		Ctrl.#drawInfo()
-		return this
+		Ctrl.#output()
+		Ctrl.#restore()
 	}
 	draw() {
 		if (!Ctrl.showGridLines) return
@@ -80,7 +71,8 @@ export const Ctrl = new class {
 		for (const x of range(0,Rows)) Ctx.strokeLine(0, T*x, Cols*T, T*x)
 		Ctx.restore()
 	}
-	#drawInfo() {
+	#output() {
+		Ctrl.#save()
 		const{ctx}= HUD, lh = 0.84, ColTbl = Color.InfoTable
 		const spd = 'x'+Ctrl.speedRate.toFixed(1)
 		const cfg = {ctx, size:T*0.68, style:'bold', scaleX:.7}
@@ -100,14 +92,10 @@ export const Ctrl = new class {
 	}
 	#setup() {
 		for (const menu of values(Menu)) {
-			menu.on('change', Ctrl.#update)
+			menu.on('change', Ctrl.#output)
 		}
 		$win.on('resize', Ctrl.#fitToViewport)
-		$('#clearHiScore').on({click:()=>
-			Confirm.open('Are you sure you want to clear high-score?',
-				null,Ctrl.#clearHiScore, 'No','Yes', 0)
-		})
-		$('input')    .on('input', Ctrl.#update)
+		$('input')    .on('input', Ctrl.#output)
 		$('#resetBtn').on('click', Ctrl.#reset)
 		$('#startBtn').on('click', ()=> State.to('Start'))
 	}

@@ -1,4 +1,5 @@
 import {Sound}    from '../_snd/sound.js'
+import {Confirm}  from '../_lib/confirm.js'
 import {State}    from './state.js'
 import {Ctrl}     from './control.js'
 import {Lives}    from './lives.js'
@@ -10,14 +11,15 @@ let _saveS = 0, _saveH = 0
 export const Score = new class {
 	static {$(this.setup)}
 	static setup() {
-		Score.reset()
+		Score.#reset()
+		Score.#setupCtrls()
 		State.on({
 			Quit:    Score.#restore,
 			Start:   Score.#onStart,
 			GameOver:Score.#onGameOver,
 		})
 	}
-	reset() {
+	#reset() {
 		_score = 0
 		_hiSco = localStorage.anopac_hiscore|0
 	}
@@ -37,6 +39,10 @@ export const Score = new class {
 		const hiSco = localStorage.anopac_hiscore|0
 		if (!Ctrl.isPractice && _hiSco > hiSco)
 			localStorage.anopac_hiscore = _hiSco
+	}
+	#clear() {
+		localStorage.removeItem('anopac_hiscore')
+		Score.#reset()
 	}
 	add(points=0) {
 		const score = _score + points
@@ -60,5 +66,11 @@ export const Score = new class {
 		Ctrl.isPractice
 			? drawText(14,1, null, 'PRACTICE')
 			: drawText(14,1, null, `HIGH　${_hiSco || '00'}`)
+	}
+	#setupCtrls() {
+		$('#clearHiScore').on({click:()=>
+			Confirm.open('Are you sure you want to clear high-score?',
+				null, Score.#clear, 'No','Yes', 0)
+		})
 	}
 }
