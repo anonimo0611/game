@@ -23,8 +23,7 @@ export class CoffBrk {
 		return State.isCoffBrk
 	}
 	static get number() {
-		return Ctrl.isPractice? -1:
-			({2:1, 5:2, 9:3}[Game.level] ?? -1)
+		return (!Ctrl.isPractice && {2:1, 5:2, 9:3}[Game.level]) || -1
 	}
 	pacman  = new Pacman
 	akabei  = new Ghost
@@ -81,17 +80,17 @@ class Scene1 extends CoffBrk {
 		this.pacman.dir = this.akabei.dir = R
 	}
 	update() {
-		this.moveAkabei()
-		match(this.pacman.dir, {
-			[L]:()=> {
+		(this.pacman.dir == L
+			?()=> {
 				this.movePacman()
 				this.pacman.x < -T*9 && this.#reverse()
-			},
-			[R]:()=> {
+			}
+			:()=> {
 				this.akabei.x > T*7.5  && this.movePacman()
 				this.akabei.x > T*9+CW && this.end()
 			}
-		})
+		)()
+		this.moveAkabei()
 	}
 	draw() {
 		const {pacman,isFright}= this
