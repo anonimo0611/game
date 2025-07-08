@@ -5,16 +5,9 @@ export class Common {
 		this.#target = eventTarget ?? this
 	}
 
-	/**
- 	 * @param {string|{[event:string]:JQWindowHandler}} arg
-	 * @param {JQWindowHandler} [fn]
-	 * @type {((event:string, fn:JQWindowHandler)=> this)
-	 *      & ((arg:{[event:string]:JQWindowHandler})=> this)}
-	 */
-	on = (arg, fn)=> {
-		typeof(arg) == 'object'
-			? $(this.#target).on(arg)
-			: $(this.#target).on({[arg]:fn})
+	/** @param {{[event:string]:JQWindowHandler}} arg */
+	on(arg) {
+		$(this.#target).on(arg)
 		return this
 	}
 
