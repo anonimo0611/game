@@ -15,8 +15,8 @@ const PtsLst = Pts.Vals.Ghost
 const Ghosts = /**@type {Ghost[]}*/([])
 
 /** Delay time (ms) before the ghost departs from the house in always chase mode */
-const ReleaseDelay = /**@type {const}*/([
-	// Pinky->Aosuke->Guzuta
+const ReleaseDelay = /**@type {const}*/
+([//Pinky->Aosuke->Guzuta
 	[1000,  500,  500], // Restart
 	[1000, 4000, 4000], // Lv.1
 	[ 800, 2200, 4000], // Lv.2
@@ -167,7 +167,7 @@ const AlternateBetweenModes = function() {
 }(),
 setReversalSig = ()=> {
 	$(Ghosts).trigger('Reverse')
-	!FrightMode.numOfSecs && $(Ghosts).trigger('Runaway')
+	FrightMode.numOfSecs == 0 && $(Ghosts).trigger('Runaway')
 }
 
 export const DotCounter = function() {
@@ -187,14 +187,13 @@ export const DotCounter = function() {
 		const timeOut = Game.level <= 4 ? 4e3 : 3e3
 		const gLimit  = limitTable[idx-1][0] // global
 		const pLimit  = limitTable[idx-1][min(Game.level,3)] // personal
-		;(Player.i.timeNotEaten >= timeOut)
-			? fn()
-			:(!Game.restarted || _globalCounter < 0)
-				? (pCounters[idx] >= pLimit)
-					&& fn()
-				: (_globalCounter == gLimit)
-					&& fn(idx == GhsType.Guzuta)
-					&& (_globalCounter = -1)
+		;(Player.i.timeNotEaten >= timeOut)? fn()
+		:(!Game.restarted || _globalCounter < 0)
+			? (pCounters[idx] >= pLimit)
+				&& fn()
+			: (_globalCounter == gLimit)
+				&& fn(idx == GhsType.Guzuta)
+				&& (_globalCounter = -1)
 		}
 	function reset() {
 		!Game.restarted && pCounters.fill(0)
@@ -227,7 +226,7 @@ const Elroy = function() {
 			Sound.playSiren()
 		}
 	}
-	State.on({_NewLevel:()=> _part=0})
+	State.on({_NewLevel:()=> _part = 0})
 	$(()=> Player.on({Eaten:onDotEaten}))
 	return {
 		get part()  {return _part},
@@ -239,7 +238,6 @@ const Elroy = function() {
 const FrightMode = function() {
 	let   _session  = /**@type {?Session}*/(null)
 	const TimeTable = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
-	const numOfSecs = ()=> TimeTable[Game.clampedLv-1]
 	class Session {
 		#tCounter = 0; #fCounter  = 0;
 		#flashIdx = 1; #caughtCnt = 0;
@@ -248,10 +246,10 @@ const FrightMode = function() {
 		get caughtAll() {return this.#caughtCnt == GhsType.Max}
 
 		/** @readonly */
-		dur = numOfSecs()
+		dur = TimeTable[Game.clampedLv-1]
 		constructor() {
 			_session = this.#toggle(true)
-			$(Ghosts).on('Cought', ()=> ++this.#caughtCnt)
+			$(Ghosts).on('Cought', ()=> this.#caughtCnt++)
 		}
 		#toggle(/**@type {boolean}*/bool) {
 			_session = null
@@ -259,19 +257,21 @@ const FrightMode = function() {
 			Sound.toggleFrightMode(bool)
 			return this
 		}
+		#flashing() {
+			const iv = (this.dur == 1 ? 12:14)/Game.speedRate|0
+			this.#flashIdx ^= Number(this.#fCounter++ % iv == 0)
+		}
 		update() {
 			if (!State.isPlaying || Timer.frozen) return
-			const t = (Game.interval * this.#tCounter++)/1000
-			const f = (this.dur == 1 ? 12:14)/Game.speedRate|0
-			this.#flashIdx ^= +!(this.#fCounter % f)
-			;(t >= this.dur-2) && this.#fCounter++
+			const t = (this.#tCounter++ * Game.interval)/1000
+			;(t >= this.dur-2) && this.#flashing()
 			;(t >= this.dur || this.caughtAll) && this.#toggle(false)
-		}
+ 		}
 	}
 	GhsMgr.on({Init:()=> _session = null})
 	return {
 		get session()   {return _session},
-		get numOfSecs() {return numOfSecs()},
+		get numOfSecs() {return _session?.dur ?? -1},
 		new() {(State.isAttract || this.numOfSecs) && new Session},
 	}
 }()
