@@ -34,9 +34,9 @@ export class Ghost extends Actor {
 	get isBitten()    {return this.state.isBitten}
 	get isEscaping()  {return this.state.isEscaping}
 
-	get isCalmWalk()  {return this.isWalk && !this.isFright}
-	get isChasing()   {return GhsMgr.isChasing && this.isCalmWalk}
-	get isScatter()   {return GhsMgr.isScatter && this.isCalmWalk && !this.isAngry}
+	get usually()     {return this.isWalk && !this.isFright}
+	get isChasing()   {return GhsMgr.isChasing && this.usually}
+	get isScatter()   {return GhsMgr.isScatter && this.usually && !this.isAngry}
 
 	/** @param {Direction} dir */
 	constructor(dir=L, {col=0,row=0,idx=0,align=0,animFlag=1}={}) {
@@ -190,12 +190,12 @@ export class Ghost extends Actor {
 	}
 	#getNextDir(tgt=this.targetTile) {
 		const tile = this.getAdjTile(this.dir)
-		const dirs = this.TurnDirs.flatMap((dir,i)=> {
+		const dirs = this.TurnDirs.flatMap((dir,idx)=> {
 			const test = this.getAdjTile(dir,tile)
 			const dist = Vec2.sqrMag(test,tgt)
 			return Maze.hasWall(test) == false
 				&& this.revOrient != dir
-				&& this.#canEnter({dir,test})? [{i,dir,dist}]:[]
+				&& this.#canEnter({dir,test})? [{idx,dir,dist}]:[]
 		})
 		return this.isFright? randChoice(dirs).dir:
 			(idx=> dirs.sort(compareDist)[idx].dir)
