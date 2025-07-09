@@ -64,10 +64,10 @@ const match = (key,pattern,separator='_')=> {
  	([...document.querySelectorAll(selector)])
 
 /**
- * @typedef {{dist:number, i:number}} DistObject
+ * @typedef {{dist:number, idx:number}} DistObject
  * @type {(a:DistObject, b:DistObject)=> number}
  */const compareDist = (a,b)=>
-	(a.dist == b.dist)? (a.i-b.i) : (a.dist-b.dist)
+	(a.dist == b.dist)? (a.idx-b.idx) : (a.dist-b.dist)
 
  /**
  * @param {string} str
