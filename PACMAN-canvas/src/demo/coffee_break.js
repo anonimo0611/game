@@ -8,11 +8,9 @@ import {Ghost}  from '../ghosts/ghost.js'
 import Sprite   from '../sprites/ghost_cb.js'
 
 export class CoffBrk {
-	static {State.on({CoffBrk:this.#begin.bind(this)})}
+	static {State.on({CoffBrk:this.#instantiate.bind(this)})}
 	static #scene = /**@type {?(Scene1|Scene2|Scene3)}*/(null)
-
-	static #begin(_={}, num=this.number) {
-		Sound.play('cutscene', {loop:1^+(num == 2)})
+	static #instantiate(_={}, num=this.number) {
 		this.#scene = new [Scene1,Scene2,Scene3][num-1]
 	}
 	static update() {
@@ -29,9 +27,10 @@ export class CoffBrk {
 	akabei  = new Ghost
 	pacVelX = -CW/180
 
-	/** @protected */
-	constructor() {
+	/** @protected @param {number} num */
+	constructor(num) {
 		this.pacman.y = this.akabei.y = (CH/2 - T/2)
+		Sound.play('cutscene', {loop:1^+(num == 2)})
 		$onNS('.CB',{Quit:this.end, blur_focus:this.pause})
 	}
 	movePacman() {
@@ -63,34 +62,32 @@ qSAll('button.CBBtn').forEach((e,i)=> {
 
 class Scene1 extends CoffBrk {
 	constructor() {
-		super()
+		super(1)
 		this.isFright = false
 		this.akaVelX  = -CW / 156.4
 		this.pacman.x =  CW + T*1
 		this.akabei.x =  CW + T*3
 	}
-	moveAkabei() {
-		if (Ticker.elapsedTime > 400)
-			this.akabei.x += this.akaVelX
-	}
-	#reverse() {
+	turnBack() {
 		this.isFright = true
 		this.pacVelX *= -1.08
 		this.akaVelX *= -0.60
 		this.pacman.dir = this.akabei.dir = R
 	}
+	moveLeft() {
+		this.movePacman()
+		this.pacman.x < -T*9 && this.turnBack()
+	}
+	moveRight() {
+		this.akabei.x > T*7.5  && this.movePacman()
+		this.akabei.x > T*9+CW && this.end()
+	}
 	update() {
-		(this.pacman.dir == L
-			?()=> {
-				this.movePacman()
-				this.pacman.x < -T*9 && this.#reverse()
-			}
-			:()=> {
-				this.akabei.x > T*7.5  && this.movePacman()
-				this.akabei.x > T*9+CW && this.end()
-			}
-		)()
-		this.moveAkabei()
+		if (Ticker.elapsedTime > 400)
+			this.akabei.x += this.akaVelX
+		this.pacman.dir == L
+			? this.moveLeft()
+			: this.moveRight()
 	}
 	draw() {
 		const {pacman,isFright}= this
@@ -102,7 +99,7 @@ class Scene1 extends CoffBrk {
 
 class Scene2 extends CoffBrk {
 	constructor() {
-		super()
+		super(2)
 		this.counter  = 0
 		this.akaEyes  = L
 		this.isRipped = false
@@ -149,7 +146,7 @@ class Scene2 extends CoffBrk {
 
 class Scene3 extends CoffBrk {
 	constructor() {
-		super()
+		super(3)
 		this.pacVelX  = -CW / 200
 		this.akaVelX  = -CW / 200
 		this.pacman.x =  CW + T*3

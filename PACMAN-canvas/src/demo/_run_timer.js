@@ -12,7 +12,7 @@ export const RunTimer = function() {
 			|| qS(':not(#startBtn):focus')
 		)? fcnt = 0
 		 : fcnt++ * Ticker.Interval > WaitTime
-			&& $(RunTimer).trigger('begin')
+			&& State.to('Attract')
 	}
 	return {update,reset:()=>{fcnt=0}}
 }()

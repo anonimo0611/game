@@ -17,13 +17,9 @@ const SmallSize = T*0.68
 let _attract = /**@type {?Attract}*/(null)
 
 export class Attract {
-	static {
-		$(RunTimer)  .on({begin:this.#begin})
-		$('.DemoBtn').on({click:this.#begin})
-		State.on({Attract:()=> _attract = new Attract})
-	}
-	static #begin() {
-		State.to('Attract')
+	static {State.on({Attract:this.#instantiate})}
+	static #instantiate() {
+		_attract = new Attract
 	}
 	static update() {
 		RunTimer .update()
@@ -130,7 +126,7 @@ export class Attract {
 			g.x += this.ghsVelX
 			g.crashWithPac({
 				pos: this.pacman.pos, radius: T/4,
-				release:()=> GhsMgr.caughtAll && Attract.#begin()
+				release:()=> GhsMgr.caughtAll && State.to('Attract')
 			})
 		}
 	}
@@ -139,4 +135,4 @@ export class Attract {
 		State.to('Title')
 		$off('.Attract')
 	}
-}
+} $('.DemoBtn').on({click:()=> State.to('Attract')})
