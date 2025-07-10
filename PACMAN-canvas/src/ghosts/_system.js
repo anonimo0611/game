@@ -132,7 +132,7 @@ const AlternateBetweenModes = function() {
 		return {
 			get isChasing() {return seq.mode == CHASING},
 			get isScatter() {return seq.mode == SCATTER},
-			update() {State.isPlaying && seq.update()},
+			update() {State.isPlaying && seq.update?.()},
 		}
 	}
 	function genDurList() {
@@ -242,7 +242,7 @@ const FrightMode = function() {
 		#tCounter = 0; #fCounter  = 0;
 		#flashIdx = 1; #caughtCnt = 0;
 		get score()     {return PtsLst[this.#caughtCnt-1]}
-		get spriteIdx() {return this.#flashIdx^1}
+		get spriteIdx() {return this.#fCounter && this.#flashIdx^1}
 		get caughtAll() {return this.#caughtCnt == GhsType.Max}
 
 		/** @readonly */
