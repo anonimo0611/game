@@ -1,6 +1,5 @@
 // The attract demo begins after 30 seconds of inactivity
-const WaitTime  = 1e3*30 // ms
-
+const  WaitTime = 1e3*30 // ms
 import {Confirm} from '../../_lib/confirm.js'
 import {State}   from '../state.js'
 export const RunTimer = function() {
@@ -10,10 +9,11 @@ export const RunTimer = function() {
 			|| !State.isTitle
 			|| Confirm.opened
 			|| qS(':not(#startBtn):focus')
-		)? fcnt = 0
-		 : fcnt++ * Ticker.Interval > WaitTime
-			&& State.to('Attract')
+		)? (fcnt=0)
+		 : (fcnt++)*Ticker.Interval > WaitTime
+		 	&& State.to('Attract')
 	}
-	return {update,reset:()=>{fcnt=0}}
+	$win.on(`Title blur click focus
+		mousemove keydown resize wheel`,()=>{fcnt=0})
+	return {update}
 }()
-$win.on('Title blur click focus mousemove keydown resize wheel',RunTimer.reset)
