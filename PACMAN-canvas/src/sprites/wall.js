@@ -25,11 +25,8 @@ export const Wall = new class {
 		ctx.closePath()
 		ctx.stroke()
 	}
-	/**
-	 * @param {number} type
-	 * @param {{ci:number, c:string, x:number, y:number}} cfg
-	 */
-	#drawCorner(type, {ci,c,x,y}) {
+	/** @param {{c:string, type:number, ci:number, x:number, y:number}} cfg */
+	#drawCorner({type,ci,c,x,y}) {
 		ctx.save()
 		ctx.translate(x+T/2, y+T/2)
 		ctx.scale(.../**@type {xy2dList}*/([[1,1],[-1,1],[-1,-1],[1,-1]])[ci])
@@ -50,12 +47,12 @@ export const Wall = new class {
 	 */
 	#drawTile(c, i) {
 		const [tx,ty]=[i%W,i/W|0], [x,y]=[tx*T,ty*T], isL=(tx < W/2)
-		const ci = +c? +c-(+c>4 ? 5:1) : 'ABCD'.search(RegExp(c,'i'))
+		const ci = +c? +c-(+c>4? 5:1):'ABCD'.search(c.toUpperCase())
 		const lo = c=='#' && isL || c=='=' || /[HV]/.test(c) ? -LO:LO
 
-		;/[a-d\d]/i.test(c) && Wall.#drawCorner(0,{ci,c,x,y})
-		;/[a-d]/   .test(c) && Wall.#drawCorner(1,{ci,c,x,y})
-		;/[A-D]/   .test(c) && Wall.#drawCorner(2,{ci,c,x,y})
+		;/[a-d\d]/i.test(c) && Wall.#drawCorner({type:0,ci,c,x,y})
+		;/[a-d]/   .test(c) && Wall.#drawCorner({type:1,ci,c,x,y})
+		;/[A-D]/   .test(c) && Wall.#drawCorner({type:2,ci,c,x,y})
 
 		switch(c.toUpperCase()) {
 		case '#':
