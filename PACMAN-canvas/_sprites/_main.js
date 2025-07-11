@@ -30,7 +30,7 @@ export const View = function()
 		Ctx.translate(-GAP/2, 0)
 		Ctx.setLineDash([2,2])
 		Ctx.lineWidth   = 2
-		Ctx.strokeStyle = '#555'
+		Ctx.strokeStyle = '#555555'
 		const {x:Cols,y:Rows}= GridSize
 		for (const y of range(Cols+0)) Ctx.strokeLine(ofst(y), 0, ofst(y), Rows*S)
 		for (const x of range(Rows+1)) Ctx.strokeLine(0, x*S, Cols*S+GAP, x*S)
