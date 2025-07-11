@@ -25,7 +25,7 @@ export const Wall = new class {
 		ctx.closePath()
 		ctx.stroke()
 	}
-	/** @param {{c:string, type:number, ci:number, x:number, y:number}} cfg */
+	/** @param {{type:number, ci:number, c:string, x:number, y:number}} cfg */
 	#drawCorner({type,ci,c,x,y}) {
 		ctx.save()
 		ctx.translate(x+T/2, y+T/2)
