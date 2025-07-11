@@ -47,7 +47,7 @@ export default new class {
 		Ctx.save()
 		Ctx.setAlpha(0.8)
 		Ctx.fillCircle  (x,y, T*0.4, g.color)
-		Ctx.strokeCircle(x,y, T*0.4,'#FFF', 4)
+		Ctx.strokeCircle(x,y, T*0.4,'#FFFFFF', 4)
 		Ctx.restore()
 	}
 	/** @param {Ghost} g */

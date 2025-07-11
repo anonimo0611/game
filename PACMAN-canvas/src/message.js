@@ -14,7 +14,7 @@ export const Message = new class {
 		ctx.save()
 		ctx.scale(scaleX, 1)
 		ctx.font = `${style} ${size}px ${face}`
-		ctx.fillStyle = color ?? '#FFF'
+		ctx.fillStyle = color ?? '#FFFFFF'
 		String(text).split('\n').forEach((txt,i)=>
 			ctx.fillText(txt, col*T+2, row*T-2 + size*i))
 		ctx.restore()
