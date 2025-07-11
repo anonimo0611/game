@@ -7,7 +7,7 @@ export const Speaker = new class {
 		const step = this.#step(vol)
 		ctx.clear()
 		ctx.save()
-		ctx.fillStyle = ctx.strokeStyle = '#FFF'
+		ctx.fillStyle = ctx.strokeStyle = '#FFFFFF'
 		ctx.translate(width/2, height/2)
 		ctx.scale(width/100, height/100)
 		this.#drawBody()
