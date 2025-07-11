@@ -29,14 +29,14 @@ export const Wall = new class {
 	#drawCorner({type,ci,c,x,y}) {
 		ctx.save()
 		ctx.translate(x+T/2, y+T/2)
-		ctx.scale(.../**@type {xy2dList}*/([[1,1],[-1,1],[-1,-1],[1,-1]])[ci])
+		ctx.rotate(ci*PI/2)
 		ctx.beginPath()
 		switch(type) {
 		case 0: /[A-D5-8]/.test(c)
-		     ? ctx.arc(T/2,T/2, T/2+LO, PI,PI*1.5)
-		     : ctx.arc(T/2,T/2, T/2-LO, PI,PI*1.5);break
-		case 1:ctx.arc(T/2,T/2, OO,     PI,PI*1.5);break
-		case 2:ctx.arc(T/2,T/2, T-OO,   PI,PI*1.5);break
+		     ? ctx.arc(T/2,T/2, T/2+LO, PI,PI*3/2)
+		     : ctx.arc(T/2,T/2, T/2-LO, PI,PI*3/2);break
+		case 1:ctx.arc(T/2,T/2, OO,     PI,PI*3/2);break
+		case 2:ctx.arc(T/2,T/2, T-OO,   PI,PI*3/2);break
 		}
 		ctx.stroke()
 		ctx.restore()
