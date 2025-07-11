@@ -15,7 +15,7 @@ const PtsLst = Pts.Vals.Ghost
 const Ghosts = /**@type {Ghost[]}*/([])
 
 /** Delay time (ms) before the ghost departs from the house in always chase mode */
-const ReleaseDelay = /**@type {const}*/
+const ReleaseTable = /**@type {const}*/
 ([//Pinky->Aosuke->Guzuta
 	[1000,  500,  500], // Restart
 	[1000, 4000, 4000], // Lv.1
@@ -92,7 +92,7 @@ export const GhsMgr = new class extends Common {
 		if (!Ctrl.isChaseMode) return
 		const lv = (Game.restarted? 0 : Game.clampedLv)
 		Timer.sequence(...Ghosts.slice(1).map((g,i)=>
-			({ms:ReleaseDelay[lv][i]/Game.speedRate, fn:g.release})))
+			({ms:ReleaseTable[lv][i]/Game.speedRate, fn:g.release})))
 	}
 	setFrightMode() {
 		setReversalSig()
@@ -132,7 +132,7 @@ const AlternateBetweenModes = function() {
 		return {
 			get isChasing() {return seq.mode == CHASING},
 			get isScatter() {return seq.mode == SCATTER},
-			update() {State.isPlaying && seq.update?.()},
+			update() {State.isPlaying && seq.update()},
 		}
 	}
 	function genDurList() {
