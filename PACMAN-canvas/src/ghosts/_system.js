@@ -101,17 +101,15 @@ export const GhsMgr = new class extends Common {
 	update() {
 		if (State.isPlaying
 		 || State.isAttract
-		 || State.isCoffBrk) {
+		 || State.isCoffBrk)
 			this.#aIdx ^= Number(!Timer.frozen && GhsMgr.aInterval)
-		}
 		AttackInWaves.update()
 		FrightMode.session?.update()
 		Ghosts.forEach(g=> g.update())
 	}
 	#draw(onFront=true) {
-		Ghosts.forEach((_,i,a, g=a.at(-1-i))=> {
-			g && (g.isFright != onFront) && g.draw()
-		})
+		Ghosts.forEach((_,i,a, g=a.at(-1-i))=>
+			g && (g.isFright != onFront) && g.draw())
 	}
 	drawBehind() {
 		GhsMgr.#draw(false)
@@ -184,7 +182,7 @@ export const DotCounter = function() {
 	 * @param {(deactivateGlobal?:boolean)=> boolean} fn Release ghost
 	 */
 	function release(idx, fn) {
-		const timeOut = Game.level <= 4 ? 4e3 : 3e3
+		const timeOut = Game.level <= 4 ? 4e3:3e3
 		const gLimit  = limitTable[idx-1][0] // global
 		const pLimit  = limitTable[idx-1][min(Game.level,3)] // personal
 		;(Player.i.timeNotEaten >= timeOut)? fn()
@@ -212,7 +210,6 @@ export const DotCounter = function() {
 const Elroy = function() {
 	let _part = 0
 	const Accelerations = freeze([1.00, 1.02, 1.05, 1.1])
-	const dotsLeftRates = freeze([1.50, 1.00, 0.50])
 	const dotsLeftTable = freeze([20,20,30,40,50,60,70,70,80,90,100,110,120])
 	function angry() {
 		return State.isPlaying
@@ -222,7 +219,7 @@ const Elroy = function() {
 	}
 	function onDotEaten() {
 		const left = dotsLeftTable[Game.clampedLv-1]
-		if (Maze.dotsLeft <= left*dotsLeftRates[_part])
+		if (Maze.dotsLeft <= left*[1.5, 1.0, 0.5][_part])
 			++_part && Sound.playSiren()
 	}
 	State.on({_NewLevel:()=> _part = 0})
@@ -241,21 +238,20 @@ const FrightMode = function() {
 		#tCounter = 0; #fCounter  = 0;
 		#flashIdx = 1; #caughtCnt = 0;
 		get score()     {return PtsLst[this.#caughtCnt-1]}
-		get spriteIdx() {return this.#fCounter && this.#flashIdx^1}
 		get caughtAll() {return this.#caughtCnt == GhsType.Max}
-
+		get spriteIdx() {return this.#fCounter && this.#flashIdx^1}
 		/** @readonly */
 		dur = TimeTable[Game.clampedLv-1]
 		constructor() {
-			if (this.dur == 0 && !State.isAttract) return
-			_session = this.#toggle(true)
-			$(Ghosts).on('Cought', ()=> this.#caughtCnt++)
+			if (this.dur != 0 || State.isAttract)
+				this.#toggle(true)
 		}
-		#toggle(/**@type {boolean}*/bool) {
-			_session = null
-			$(Ghosts).off('Cought').trigger('FrightMode', bool)
+		#toggle(bool=false) {
+			_session = bool? this : null
+			$(Ghosts)
+				.trigger('FrightMode', bool)
+				.offon('Cought', ()=> this.#caughtCnt++)
 			Sound.toggleFrightMode(bool)
-			return this
 		}
 		#flashing() {
 			const iv = (this.dur == 1 ? 12:14)/Game.speedRate|0
@@ -265,7 +261,7 @@ const FrightMode = function() {
 			if (!State.isPlaying || Timer.frozen) return
 			const et = (this.#tCounter++ * Game.interval)/1000
 			;(et >= this.dur-2) && this.#flashing()
-			;(et >= this.dur || this.caughtAll) && this.#toggle(false)
+			;(et >= this.dur || this.caughtAll) && this.#toggle()
  		}
 	}
 	GhsMgr.on({Init:()=> _session = null})
