@@ -147,14 +147,8 @@ const $load = fn=> $win.on({load:fn})
 /** @param {string} elementId */
 const $byId = elementId=> $('#'+elementId)
 
-/** @param {string} event */
-const $off  = event=> $win.off(_toSp(event))
-
-/**
- * @param {string} event
- * @param {JQWindowHandler} fn
- */
-const $offon = (event,fn)=> $off(event).on({[event]:fn})
+/** @param {string} events */
+const $off  = events=> $win.off(_toSp(events))
 
 /**
  * @param {string} ns
@@ -163,7 +157,15 @@ const $offon = (event,fn)=> $off(event).on({[event]:fn})
 const $onNS = (ns,cfg)=> {
 	entries(cfg).forEach(([ev,fn])=> {
 		ev = ev.trim().replace(/[_\s]+|$/g,`${ns}\x20`)
-		$offon(ev,fn)
+		$win.offon(ev,fn)
 	})
 	return $win
+}
+
+/**
+ * @param {string} events
+ * @param {Function} handler
+ */
+jQuery.fn.offon = function(events, handler) {
+    return $(this).off(events).on({[events]:handler})
 }
