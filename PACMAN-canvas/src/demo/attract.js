@@ -29,8 +29,8 @@ export class Attract {
 		_attract?.draw()
 		return State.isAttract
 	}
-	pacVelX = -CW/180
-	ghsVelX = -CW/169
+	pacVelX = -BW/180
+	ghsVelX = -BW/169
 	pacman  = new Pacman
 	powDisp = /**@type {0|1}*/(1)
 	ghsList = /**@type {Ghost[][]}*/([])
@@ -49,7 +49,7 @@ export class Attract {
 	setActor(where=0, gIdx=0) {
 		const g = new Ghost(where? L:R, {idx:gIdx,animFlag:where})
 		if (where) {
-			g.setPos(CW+(T*6)+(T*2*gIdx), T*19)
+			g.setPos(BW+(T*6)+(T*2*gIdx), T*19)
 			g.idx == 0 && this.pacman.setPos(g.x-T*3.5, g.y)
 		}
 		(this.ghsList[where] ||= []).push(g)

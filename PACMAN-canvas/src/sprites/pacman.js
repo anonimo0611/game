@@ -35,7 +35,7 @@ export default class {
 		if (hidden)
 			return
 		if (this.#dyingSpr) {
-			this.isMain && (x = clamp(x, radius, CW-radius))
+			this.isMain && (x = clamp(x, radius, BW-radius))
 			return this.#dyingSpr.draw({x,y})
 		}
 		const {ctx}  = this

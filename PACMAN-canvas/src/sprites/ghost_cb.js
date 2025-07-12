@@ -122,16 +122,16 @@ export default class {
 	static get stakeClothes() {return freeze(new StakeClothes)}
 }
 class StakeClothes {
-	CaughtX   = CW/2 + T/2
+	CaughtX   = BW/2 + T/2
 	AkaMinX   = this.CaughtX - T
 	stakeSize = Vec2(T*.18, T*.70).freeze()
 	stakePos  = freeze({
-		x: CW/2 + T*2 - this.stakeSize.x/2,
-		y: CH/2 + T*1 - this.stakeSize.y - T*.1
+		x: BW/2 + T*2 - this.stakeSize.x/2,
+		y: BH/2 + T*1 - this.stakeSize.y - T*.1
 	})
 	offcutPos = freeze({
-		x: CW/2 + T*2 + this.stakeSize.x/2,
-		y: CH/2 + T*1 - T*.1
+		x: BW/2 + T*2 + this.stakeSize.x/2,
+		y: BH/2 + T*1 - T*.1
 	})
 	drawStake({x, y}=this.stakePos) {
 		Ctx.fillRect(x,y, ...this.stakeSize.vals, '#FFF')

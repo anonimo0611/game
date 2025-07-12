@@ -73,7 +73,7 @@ export class Ghost extends Actor {
 	get houseEntranceArrived() {
 		return this.state.isEscape
 			&& this.tilePos.y == Maze.House.EntranceTile.y
-			&& abs(CW/2 - this.center.x) <= this.step
+			&& abs(BW/2 - this.center.x) <= this.step
 	}
 	get sqrMagToPacman() {
 		return Vec2.sqrMag(this, Player.i)
@@ -130,11 +130,11 @@ export class Ghost extends Actor {
 		return deactivateGlobalDotCnt
 	}
 	#goOut({center:{x:cx},y,step}=this) {
-		if (cx > CW/2+step
-		 || cx < CW/2-step)
+		if (cx > BW/2+step
+		 || cx < BW/2-step)
 			return this.move(this.iniAlign<0 ? R:L)
 
-		if (cx != CW/2)
+		if (cx != BW/2)
 			return this.centering()
 
 		if (y > Maze.House.EntranceTile.y*T+step)

@@ -18,11 +18,14 @@ U='Up', R='Right', D='Down', L='Left',
 /** The document body */
 dBody = document.body,
 
-[Bg,HUD,,Ctx,CW,CH]= [
-	canvas2D('cvs_bg' ,  T*Cols, T*Rows),
-	canvas2D('cvs_hud',  T*Cols, T*Rows),...
-	canvas2D('cvs_main', T*Cols, T*Rows).vals
-],
+/** Board width */
+BW = T*Cols,
+/** Board height */
+BH = T*Rows,
+
+Bg  = canvas2D('cvs_bg' ,  BW,BH),
+HUD = canvas2D('cvs_hud',  BW,BH),
+Ctx = canvas2D('cvs_main', BW,BH).ctx,
 
 Color = freeze(new class {
 	Grid      = '#FF0000'

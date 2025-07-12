@@ -124,8 +124,6 @@ export const Maze = new class {
 			? drawDot(Bg.ctx, t.x, t.y)
 			: PowMap.set(i, t)
 	}
-
-
 	get dotsLeft() {return DotSet.size}
 	Top    = 1
 	Bottom = Rows-3
@@ -183,6 +181,6 @@ export const Maze = new class {
 	}
 	#drawDoor() {
 		const y = (Maze.House.EntranceTile.y+1.6)*T
-		Bg.ctx.fillRect(CW/2-T, y, T*2, T/4, Color.Door)
+		Bg.ctx.fillRect(BW/2-T, y, T*2, T/4, Color.Door)
 	}
 }, {drawDot}=freeze(Maze)

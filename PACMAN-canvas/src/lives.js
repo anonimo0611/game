@@ -18,7 +18,7 @@ export const Lives = function() {
 	}
 	function draw() {
 		ctx.save()
-		ctx.translate(size, CH-size)
+		ctx.translate(size, BH-size)
 		ctx.clearRect(0,0, size*5, size)
 		for (const i of range(_left))
 			sprite.draw({radius,center:{x:size*i+T, y:T}})

@@ -65,7 +65,7 @@ export class Actor extends Common {
 		Ctx.setAlpha(this.#fadeIn?.alpha ?? this.maxAlpha)
 	}
 	centering() {
-		this.x = (CW-T)/2
+		this.x = (BW-T)/2
 	}
 	tileJustUpdated(divisor=1) {
 		return this.inFrontOfTile
@@ -105,8 +105,8 @@ export class Actor extends Common {
 		this.#y = y
 		this.#x = function(r) { // x-axis move loops during play
 			if (!State.isPlaying) return
-			if (x < -r-T/2) return CW+T/2
-			if (x > CW+T/2) return -r-T/2
+			if (x < -r-T/2) return BW+T/2
+			if (x > BW+T/2) return -r-T/2
 		}(this.radius) ?? x
 	}
 }

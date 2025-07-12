@@ -16,7 +16,7 @@ export const Wall = new class {
 	}
 	#drawHouse() {
 		const [hl,ix,iy,ox,oy]= [LW/2, 3.1, 1.6, 3.4, 1.9]
-		ctx.translate(CW/2, Maze.House.MiddleY)
+		ctx.translate(BW/2, Maze.House.MiddleY)
 		ctx.newLinePath(
 			[-T-hl, -oy*T],[-ox*T, -oy*T],[-ox*T, +oy*T],
 			[+ox*T, +oy*T],[+ox*T, -oy*T],[+T+hl, -oy*T],

@@ -12,10 +12,10 @@ import * as Spr from './sprites/fruits.js'
  ** @type {ReadonlySet<number>} */
 const AppearSet = new Set([70,170])
 const IdxTable  = freeze([0,1,2,2,3,3,4,4,5,5,6,6,7])
-const TargetPos = Vec2(CW/2, T*18.5).freeze()
+const TargetPos = Vec2(BW/2, T*18.5).freeze()
 
 const LvCounterCols = 7
-const LvCounterRect = freeze([T*2*6, CH-T*2, T*2*LvCounterCols, T*2])
+const LvCounterRect = freeze([T*2*6, BH-T*2, T*2*LvCounterCols, T*2])
 
 let _tgtDisp = true
 let _fadeOut = /**@type {?FadeOut}*/(null)

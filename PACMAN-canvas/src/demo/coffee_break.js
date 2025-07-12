@@ -25,11 +25,11 @@ export class CoffBrk {
 	}
 	pacman  = new Pacman
 	akabei  = new Ghost
-	pacVelX = -CW/180
+	pacVelX = -BW/180
 
 	/** @protected @param {number} num */
 	constructor(num) {
-		this.pacman.y = this.akabei.y = (CH/2 - T/2)
+		this.pacman.y = this.akabei.y = (BH/2 - T/2)
 		Sound.play('cutscene', {loop:1^+(num == 2)})
 		$onNS('.CB',{Quit:this.end, blur_focus:this.pause})
 	}
@@ -64,9 +64,9 @@ class Scene1 extends CoffBrk {
 	constructor() {
 		super(1)
 		this.isFright = false
-		this.akaVelX  = -CW / 156.4
-		this.pacman.x =  CW + T*1
-		this.akabei.x =  CW + T*3
+		this.akaVelX  = -BW / 156.4
+		this.pacman.x =  BW + T*1
+		this.akabei.x =  BW + T*3
 	}
 	turnBack() {
 		this.isFright = true
@@ -80,7 +80,7 @@ class Scene1 extends CoffBrk {
 	}
 	moveRight() {
 		this.akabei.x > T*7.5  && this.movePacman()
-		this.akabei.x > T*9+CW && this.end()
+		this.akabei.x > T*9+BW && this.end()
 	}
 	update() {
 		if (Ticker.elapsedTime > 400)
@@ -105,8 +105,8 @@ class Scene2 extends CoffBrk {
 		this.isRipped = false
 		this.sprite   = Sprite.stakeClothes
 		this.akaVelX  = this.pacVelX
-		this.pacman.x = CW + T*3
-		this.akabei.x = CW + T*16
+		this.pacman.x = BW + T*3
+		this.akabei.x = BW + T*16
 	}
 	moveAkabei({akabei:a, akaVelX:v, sprite:spr}=this) {
 		a.x > spr.CaughtX ? (a.x+=v):
@@ -147,16 +147,16 @@ class Scene2 extends CoffBrk {
 class Scene3 extends CoffBrk {
 	constructor() {
 		super(3)
-		this.pacVelX  = -CW / 200
-		this.akaVelX  = -CW / 200
-		this.pacman.x =  CW + T*3
-		this.akabei.x =  CW + T*10
+		this.pacVelX  = -BW / 200
+		this.akaVelX  = -BW / 200
+		this.pacman.x =  BW + T*3
+		this.akabei.x =  BW + T*10
 	}
 	moveAkabei({akabei:aka}=this) {
 		aka.x += this.akaVelX
 		aka.dir == L
 			? aka.x < -T*8 && (aka.dir = R) && (this.akaVelX *= -1)
-			: aka.x > (T*9 + CW) && aka.dir == R && this.end()
+			: aka.x > (T*9 + BW) && aka.dir == R && this.end()
 	}
 	update() {
 		this.movePacman()
