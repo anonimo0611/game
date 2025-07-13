@@ -4,7 +4,7 @@ import {DorpDown}   from '../_lib/menu.js'
 import {ghsSprite}  from './_constants.js'
 import {T,S,resize} from './_constants.js'
 
-export const {ctx}= canvas2D('previewCvs')
+export const {ctx}= canvas2D('preview')
 
 const Menu = new DorpDown('animMenu')
 const Btns = $('.radioButtons input')

@@ -21,7 +21,7 @@ export function resize()
 			GridSize.x*S+GAP*2,
 			GridSize.y*S+GAP*1
 		)
-		ctx.resize(T*3, T*2) && View.draw()
+		ctx.resize(T*3, T*2.1) && View.draw()
 		lastT = T
 	}
 }
