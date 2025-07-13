@@ -26,7 +26,7 @@
 
 <body>
 
-<form id="board" onsubmit="return false" data-ready-state="loading">
+<form id="container" onsubmit="return false" data-ready-state="loading">
 	<header>
 		<h1>
 			<h-line>PAC</h-line>
@@ -34,14 +34,14 @@
 		</h1>
 		<div id="level"></div>
 	</header>
-	<div id="boardCanvases">
-		<canvas id="cvs_bg"  class="sub"></canvas>
-		<canvas id="cvs_hud" class="sub"></canvas>
-		<canvas id="cvs_main"></canvas>
+	<div id="board">
+		<canvas id="board_bg"  class="sub"></canvas>
+		<canvas id="board_hud" class="sub"></canvas>
+		<canvas id="board_main"></canvas>
 	</div>
 	<div id="volume" class="volCtrl">
-		<label for="volRg2" id="speaker" title="Mute/Unmute (M)">
-			<canvas id="cvs_speaker"></canvas>
+		<label for="volRg2" title="Mute/Unmute (M)">
+			<canvas id="speaker"></canvas>
 			<input type="range" id="volRg2" class="volRng"
 				value="10" step="1" min="0" max="10" data-links="volRng">
 		</label>

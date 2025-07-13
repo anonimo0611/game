@@ -2,7 +2,7 @@ html {
 	-webkit-user-select: none;
 	user-select: none;
 	&[data-cursor=hidden] {
-		body:not([data-state=Title]) #board {
+		body:not([data-state=Title]) #container {
 			cursor: none;
 		}
 	}

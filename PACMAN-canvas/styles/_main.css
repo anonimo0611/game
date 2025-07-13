@@ -46,22 +46,22 @@ h1 {
 	translate: .1em 12.6rem;
 }
 
-#board {
+#container {
 	background: #000;
 	position: relative;
 	transform-origin: center;
 	opacity: 0;
 	transition:  opacity 400ms;
 	will-change: opacity, scale;
-	#boardCanvases {
+	#board {
 		margin-top: 0.5rem;
 		pointer-events: none;
 		canvas.sub {position: absolute}
-		canvas#cvs_bg  {z-index: -1}
-		canvas#cvs_hud {z-index: +1}
+		canvas#board_bg  {z-index: -1}
+		canvas#board_hud {z-index: +1}
 	}
 }
-#board[data-ready-state=loaded] {
+#container[data-ready-state=loaded] {
 	opacity: 1;
 }
 
