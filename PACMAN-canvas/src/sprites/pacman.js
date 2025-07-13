@@ -14,8 +14,8 @@ export default class {
 	 * 0=closed, 1=middle opened, 2=max opened
 	 */
 	constructor(ctx, mouthOpenings=0) {
-		this.ctx = ctx
-		this.isMain  = ctx.canvas.id == 'cvs_main'
+		this.ctx    = ctx
+		this.isMain = ctx.canvas.id == 'board_main'
 		this.#mouthAngle = [0,OpenMid,OpenMax][mouthOpenings]
 		freeze(this)
 	}
