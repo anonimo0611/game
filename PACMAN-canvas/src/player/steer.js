@@ -7,8 +7,9 @@ export class Steer {
 	#turn = false
 	#dir  = /**@type {?Direction}*/(null)
 	#next = /**@type {?Direction}*/(null)
-	constructor(p=Player.i) {
-		this.p = p
+	constructor(player=Player.i) {
+		/** @private @readonly */
+		this.p = player
 		$win.offon('keydown.Steer', this.#steer.bind(this))
 	}
 	#steer(/**@type {JQuery.KeyboardEventBase}*/e) {
@@ -37,18 +38,16 @@ export class Steer {
 		}
 	}
 	get canTurn() {
-		const {p}= this
 		return this.#dir != null
-			&& p.inFrontOfTile
-			&& p.collidedWithWall(this.#dir) === false
+			&& this.p.inFrontOfTile
+			&& this.p.collidedWithWall(this.#dir) === false
 	}
 	get stoppedAtWall() {
 		const {p}= this
 		if (!this.#turn && p.collidedWithWall()) {
 			p.pos = p.tilePos.mul(T)
 			return !(this.#dir = null)
-		}
-		return false
+		}return false
 	}
 	cornering(divisor=1) {
 		this.#setCornering(divisor)
