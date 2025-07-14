@@ -23,9 +23,9 @@ BW = T*Cols,
 /** Board height */
 BH = T*Rows,
 
-Bg  = canvas2D('cvs_bg' ,  BW,BH),
-HUD = canvas2D('cvs_hud',  BW,BH),
-Ctx = canvas2D('cvs_main', BW,BH).ctx,
+Bg  = canvas2D('board_bg' ,  BW,BH),
+HUD = canvas2D('board_hud',  BW,BH),
+Ctx = canvas2D('board_main', BW,BH).ctx,
 
 Color = freeze(new class {
 	Grid      = '#FF0000'

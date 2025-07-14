@@ -14,7 +14,7 @@ export const Message = new class {
 		ctx.save()
 		ctx.scale(scaleX, 1)
 		ctx.font = `${style} ${size}px ${face}`
-		ctx.fillStyle = color ?? '#FFFFFF'
+		ctx.fillStyle = color ?? 'white'
 		String(text).split('\n').forEach((txt,i)=>
 			ctx.fillText(txt, col*T+2, row*T-2 + size*i))
 		ctx.restore()
@@ -36,4 +36,4 @@ export const Message = new class {
 		 || State.isGameOver)
 		 	drawText( 9, 19, Color.Message3, 'GAME　　OVER')
 	}
-},{drawText}=Message
+}, {drawText}=Message

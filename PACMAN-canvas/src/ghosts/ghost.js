@@ -5,7 +5,7 @@ import {Ctrl}    from '../control.js'
 import {PtsMgr}  from '../points.js'
 import {Maze}    from '../maze.js'
 import {Actor}   from '../actor.js'
-import {Player}  from '../pacman.js'
+import {Player}  from '../player/player.js'
 import {GhsMgr}  from './_system.js'
 import * as Sys  from './_system.js'
 import Sprite    from '../sprites/ghost.js'
@@ -83,7 +83,7 @@ export class Ghost extends Actor {
 			if (s.isIdle)     return GhsStep.Idle
 			if (s.isGoOut)    return GhsStep.GoOut
 			if (s.isEscaping) return GhsStep.Escape
-			if (g.isInTunnel) return GhsStep.InTunnel
+			if (g.inTunnel)   return GhsStep.InTunnel
 			if (g.isFright)   return GhsStep.Fright
 			if (g.isScatter)  return GhsStep.Base
 			return g.chaseStep

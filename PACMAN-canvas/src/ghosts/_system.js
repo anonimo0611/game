@@ -4,7 +4,7 @@ import {Sound}  from '../../_snd/sound.js'
 import {Game}   from '../_main.js'
 import {State}  from '../state.js'
 import {Ctrl}   from '../control.js'
-import {Player} from '../pacman.js'
+import {Player} from '../player/player.js'
 import {Maze}   from '../maze.js'
 import {PtsMgr} from '../points.js'
 import * as Pts from '../sprites/points.js'
@@ -14,8 +14,8 @@ import Target   from './show_targets.js'
 const PtsLst = Pts.Vals.Ghost
 const Ghosts = /**@type {Ghost[]}*/([])
 
-/** Delay time (ms) before the ghost departs from the house in always chase mode */
-const ReleaseTable = /**@type {const}*/
+/** Wait time (ms) before the ghost leaves from the house in always chase mode */
+const WaitingTimes = /**@type {const}*/
 ([//Pinky->Aosuke->Guzuta
 	[1000,  500,  500], // Restart
 	[1000, 4000, 4000], // Lv.1
@@ -92,7 +92,7 @@ export const GhsMgr = new class extends Common {
 		if (!Ctrl.isChaseMode) return
 		const lv = (Game.restarted? 0 : Game.clampedLv)
 		Timer.sequence(...Ghosts.slice(1).map((g,i)=>
-			({ms:ReleaseTable[lv][i]/Game.speedRate, fn:g.release})))
+			({ms:WaitingTimes[lv][i]/Game.speedRate, fn:g.release})))
 	}
 	setFrightMode() {
 		setReversalSig()

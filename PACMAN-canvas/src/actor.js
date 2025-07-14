@@ -2,13 +2,12 @@ import {Common} from '../_lib/common.js'
 import {Dir}    from '../_lib/direction.js'
 import {State}  from './state.js'
 import {Maze}   from './maze.js'
-import {Player} from './pacman.js'
+import {Player} from './player/player.js'
 import {GhsMgr} from './ghosts/_system.js'
 
 export class Actor extends Common {
 	#x = 0
 	#y = 0
-	radius  = T
 	stepDiv = 10
 	#fadeIn = /**@type {?FadeIn}*/(null)
 	#orient = /**@type {Direction}*/(L)
@@ -16,6 +15,7 @@ export class Actor extends Common {
 
 	/** @protected */
 	constructor() {super()}
+	get radius()  {return T}
 	get x()       {return this.#x}
 	get y()       {return this.#y}
 	get pos()     {return Vec2(this)}
@@ -33,12 +33,11 @@ export class Actor extends Common {
 	set dir(dir)    {this.#movDir = this.orient = dir}
 	set orient(dir) {this.#orient = dir}
 
-	/** @param {Direction} dir */
-	setMoveDir(dir) {this.#movDir = dir}
-
-	get step()       {return 0}
-	get maxAlpha()   {return 1}
-	get isInTunnel() {return Maze.Tunnel.isIn(this.center)}
+	get step()      {return 0}
+	get maxAlpha()  {return 1}
+	get inTunnel()  {return Maze.Tunnel.isIn(this.center)}
+	get inTunnelL() {return Maze.Tunnel.isIn(this.center,L)}
+	get inTunnelR() {return Maze.Tunnel.isIn(this.center,R)}
 
 	get tilePixel() {
 		const  {x,y} = this.center, v = Vec2[this.dir]
@@ -74,6 +73,9 @@ export class Actor extends Common {
 	setNextPos(divisor=1, dir=this.dir) {
 		this.pos = Vec2[dir].mul(this.step/divisor).add(this)
 	}
+
+	/** @param {Direction} dir */
+	setMoveDir(dir) {this.#movDir = dir}
 
 	/** @param {Direction} dir */
 	move(dir) {this.setNextPos(1, this.dir=dir)}

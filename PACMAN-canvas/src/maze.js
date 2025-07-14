@@ -151,7 +151,7 @@ export const Maze = new class {
 	/**
 	 * If the target tile is on the upper side of the maze \
 	 * and the ghost is around the house, guide them outside of the area
-	 * @param {Ghost} ghost
+	 * @param {Ghost} Ghost
 	 */
 	ghostExitTile = ({originalTargetTile:o, tilePos:t})=>
 		o.y < 10 && PenOuter.contains(t)
