@@ -49,8 +49,9 @@ export class Steer {
 			return !(this.#dir = null)
 		}return false
 	}
-	cornering(divisor=1) {
+	move(divisor=1) {
 		this.#setCornering(divisor)
+		this.p.setNextPos(divisor)
 		this.#endCornering()
 		this.#turnAround()
 	}

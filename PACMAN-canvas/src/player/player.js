@@ -84,8 +84,7 @@ class PlayablePac extends Pacman {
 		}
 		this.#stopped = this.steer.stoppedAtWall
 		this.#eaten(this)
-		this.setNextPos(divisor)
-		this.steer.cornering(divisor)
+		this.steer.move(divisor)
 	}
 	#eaten({tileIdx:i}=this) {
 		if (!Maze.hasDot(i)) return
