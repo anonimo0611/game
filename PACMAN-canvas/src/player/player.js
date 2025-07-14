@@ -9,16 +9,16 @@ import {Pacman} from '../pacman.js'
 import {GhsMgr} from '../ghosts/_system.js'
 import {Steer}  from './steer.js'
 
-const Step = PacStep
+const {SlowLevel,SlowRate}= PacStep
 
 export const Player = function() {
-	let /**@type {PlayablePac}*/player
-	State.on({_Restart_NewLevel:()=> player = new PlayablePac})
+	let /** @type {PlayablePac} */player
+	State.on({_Restart_NewLevel:()=> player=new PlayablePac})
 	return new class extends Common {get i() {return player}}
 }()
 class PlayablePac extends Pacman {
 	#step     = this.#getStep()
-	#eatIdx   = /**@type {0|1} */(0)
+	#eatIdx   = /**@type {0|1}*/(0)
 	#notEaten = 0
 	#stopped  = true
 
@@ -40,13 +40,13 @@ class PlayablePac extends Pacman {
 	}
 	get baseSpeed() {
 		return Game.moveSpeed
-			* (Game.level < Step.SlowLevel ? 1 : Step.SlowRate)
+			* (Game.level < SlowLevel ? 1:SlowRate)
 	}
 	#getStep() {
 		const eating = Maze.hasDot(this.tileIdx)
 		return(GhsMgr.isFright
-			? (eating? Step.EneEat : Step.Energized)
-			: (eating? Step.Eating : Step.Base)
+			? (eating? PacStep.EneEat : PacStep.Energized)
+			: (eating? PacStep.Eating : PacStep.Base)
 		) * this.baseSpeed
 	}
 	resetTimer() {
