@@ -73,6 +73,7 @@ class PlayablePac extends Pacman {
 	update() {
 		super.update()
 		if (!State.isPlaying || Timer.frozen) return
+		TunnelEntry.update()
 		this.sprite.update(this)
 		this.#notEaten++
 		for (const _ of range(this.stepDiv))
@@ -82,7 +83,7 @@ class PlayablePac extends Pacman {
 		if (this.tileJustUpdated(divisor)) {
 			this.#step = this.#getStep()
 		}
-		this.#stopped = this.steer.stoppedAtWall
+		this.#stopped = this.steer.stopAtWall()
 		this.#eaten(this)
 		this.steer.move(divisor)
 	}
@@ -112,11 +113,11 @@ class PlayablePac extends Pacman {
 
 const TunnelEntry = new class {
 	#side = /**@type {?Direction}*/(null)
-	get side() {
+	get side() {return this.#side}
+	update() {
 		const {i:P}= Player
 		P.inTunnel == false && (this.#side = null)
 		P.inTunnelR && P.dir == R && (this.#side ||= R)
 		P.inTunnelL && P.dir == L && (this.#side ||= L)
-		return this.#side
 	}
 }

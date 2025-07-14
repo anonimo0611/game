@@ -42,12 +42,12 @@ export class Steer {
 			&& this.p.inFrontOfTile
 			&& this.p.collidedWithWall(this.#dir) === false
 	}
-	get stoppedAtWall() {
+	stopAtWall() {
 		const {p}= this
 		if (!this.#turn && p.collidedWithWall()) {
 			p.pos = p.tilePos.mul(T)
 			return !(this.#dir = null)
-		}return false
+		} return false
 	}
 	move(divisor=1) {
 		this.#setCornering(divisor)
