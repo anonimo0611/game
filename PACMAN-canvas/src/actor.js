@@ -8,23 +8,23 @@ import {GhsMgr} from './ghosts/_system.js'
 export class Actor extends Common {
 	#x = 0
 	#y = 0
-	stepDiv = 10
 	#fadeIn = /**@type {?FadeIn}*/(null)
 	#orient = /**@type {Direction}*/(L)
 	#movDir = /**@type {Direction}*/(L)
 
 	/** @protected */
-	constructor() {super()}
-	get radius()  {return T}
-	get x()       {return this.#x}
-	get y()       {return this.#y}
-	get pos()     {return Vec2(this)}
-	get center()  {return Vec2(this).add(T/2)}
-	get tilePos() {return Vec2(this).add(T/2).divInt(T)}
-	get tileIdx() {return Vec2.idx(this.tilePos,Cols)}
-	set x(num)    {this.#x = num}
-	set y(num)    {this.#y = num}
-	set pos(pos)  {this.setPos(pos)}
+	constructor()   {super()}
+	get radius()    {return T}
+	get stepDiv()   {return 10}
+	get x()         {return this.#x}
+	get y()         {return this.#y}
+	get pos()       {return Vec2(this)}
+	get center()    {return Vec2(this).add(T/2)}
+	get tilePos()   {return Vec2(this).add(T/2).divInt(T)}
+	get tileIdx()   {return Vec2.idx(this.tilePos,Cols)}
+	set x(num)      {this.#x = num}
+	set y(num)      {this.#y = num}
+	set pos(pos)    {this.setPos(pos)}
 
 	get dir()       {return this.#movDir}
 	get orient()    {return this.#orient}
