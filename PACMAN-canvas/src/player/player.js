@@ -22,7 +22,6 @@ class PlayablePac extends Pacman {
 	#notEaten = 0
 	#stopped  = true
 
-	get hidden()       {return Timer.frozen}
 	get tunnelEntry()  {return TunnelEntry.side}
 	get closed()       {return State.isPlaying == false}
 	get showCenter()   {return Ctrl.showGridLines}
