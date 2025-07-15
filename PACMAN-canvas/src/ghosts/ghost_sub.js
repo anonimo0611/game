@@ -1,6 +1,6 @@
 import {Maze}   from '../maze.js'
 import {State}  from '../state.js'
-import {Player} from '../player/player.js'
+import {player} from '../player/player.js'
 import {GhsMgr} from './_system.js'
 import {Ghost}  from './ghost.js'
 
@@ -19,8 +19,8 @@ class Pinky extends Ghost {
 	}
 	get scatterTile() {return Vec2(3, 0)}
 	get chasePos() {
-		const {i:P}=Player, {x,y}= P.forwardOfst(4)
-		switch(P.tunnelEntry) {
+		const {x,y}= player.forwardOfst(4)
+		switch(player.entryTunnel) {
 		case L:  return Vec2(Maze.Tunnel.EntranceR*T, y)
 		case R:  return Vec2(Maze.Tunnel.EntranceL*T, y)
 		default: return Vec2(x, y)
@@ -34,7 +34,7 @@ class Aosuke extends Ghost {
 	}
 	get scatterTile() {return Vec2(27, 33)}
 	get chasePos() {
-		const  pos = Player.i.forwardOfst(2)
+		const  pos = player.forwardOfst(2)
 		return pos.clone.sub(GhsMgr.akaCenter).add(pos)
 	}
 }
@@ -47,7 +47,7 @@ class Guzuta extends Ghost {
 	get chasePos() {
 		return this.sqrMagToPacman < (T*8) ** 2
 		? Vec2(this.scatterTile).add(.5).mul(T)
-		: Player.i.center
+		: player.center
 	}
 }
 

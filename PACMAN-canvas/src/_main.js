@@ -13,7 +13,7 @@ import {Score}     from './score.js'
 import {Lives}     from './lives.js'
 import {Fruit}     from './fruit.js'
 import {Actor}     from './actor.js'
-import {Player}    from './player/player.js'
+import {player}    from './player/player.js'
 import {PtsMgr}    from './points.js'
 import {Attract}   from './demo/attract.js'
 import {CoffBrk}   from './demo/coffee_break.js'
@@ -60,7 +60,7 @@ export const Game = new class {
 	}
 	#setLevel(i=1) {
 		Game.#level = between(i, 1, 0xFF) && +i || 1
-		$level.text('Level'+this.levelStr).trigger('change')
+		$Level.text('Level'+this.levelStr).trigger('change')
 	}
 	#confirm() {
 		!Ticker.paused && Game.#pause()
@@ -106,7 +106,7 @@ export const Game = new class {
 	}
 	#onDying() {
 		Sound.play('dying')
-		Player.i.sprite.setDying()
+		player.sprite.setDying()
 		Lives.left > 0
 			? State.to('Restart', {delay:2200})
 			: State.to('GameOver',{delay:2000})
@@ -171,5 +171,5 @@ export const Game = new class {
 		Message.draw()
 	}
 },
-$level = $byId('level')
+$Level = $byId('level')
 $load(()=> Form.dataset.readyState = 'loaded')

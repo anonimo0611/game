@@ -9,20 +9,13 @@ import {Pacman} from '../pacman.js'
 import {GhsMgr} from '../ghosts/_system.js'
 import {Steer}  from './steer.js'
 
-const {SlowLevel,SlowRate}= PacStep
-
-export const Player = function() {
-	let /** @type {PlayablePac} */player
-	State.on({_Restart_NewLevel:()=> player=new PlayablePac})
-	return new class extends Common {get i() {return player}}
-}()
-class PlayablePac extends Pacman {
-	#step     = this.#getStep()
-	#eatIdx   = /**@type {0|1}*/(0)
+const{SlowLevel,SlowRate}= PacStep
+class PlayerPac extends Pacman {
+	#step     = 0
+	#eatIdx   = 0
 	#notEaten = 0
 	#stopped  = true
-
-	get tunnelEntry()  {return TunnelEntry.side}
+	get entryTunnel()  {return EntryTunnel.side}
 	get closed()       {return State.isPlaying == false}
 	get showCenter()   {return Ctrl.showGridLines}
 	get step()         {return this.#step}
@@ -34,14 +27,14 @@ class PlayablePac extends Pacman {
 	constructor() {
 		super()
 		/** @private @readonly */
-		this.steer = new Steer(this)
+		this.steer = new Steer()
 		this.pos = Vec2(13.5, 24).mul(T)
 	}
 	get baseSpeed() {
 		return Game.moveSpeed
 			* (Game.level < SlowLevel ? 1:SlowRate)
 	}
-	#getStep() {
+	#getCurrentStep() {
 		const eating = Maze.hasDot(this.tileIdx)
 		return(GhsMgr.isFright
 			? (eating? PacStep.EneEat : PacStep.Energized)
@@ -72,16 +65,15 @@ class PlayablePac extends Pacman {
 	update() {
 		super.update()
 		if (!State.isPlaying || Timer.frozen) return
-		TunnelEntry.update()
+		EntryTunnel.update()
 		this.sprite.update(this)
 		this.#notEaten++
 		for (const _ of range(this.stepDiv))
 			this.#behavior(this.stepDiv)
 	}
 	#behavior(divisor=1) {
-		if (this.tileJustUpdated(divisor)) {
-			this.#step = this.#getStep()
-		}
+		if (this.#step == 0 || this.justInNewTile(divisor))
+			this.#step = this.#getCurrentStep()
 		this.steer.move(divisor)
 		this.#eaten(this)
 		this.#stopped = this.steer.stopAtWall()
@@ -110,13 +102,22 @@ class PlayablePac extends Pacman {
 	}
 }
 
-const TunnelEntry = new class {
+export let   player = new PlayerPac
+export const Player = function() {
+	State.on({_Restart_NewLevel:()=> player = new PlayerPac})
+	return new class extends Common {
+		get instance() {return player}
+		draw()   {return player.draw()}
+		update() {return player.update()}
+	}
+}()
+
+const EntryTunnel = new class {
 	#side = /**@type {?Direction}*/(null)
 	get side() {return this.#side}
 	update() {
-		const {i:P}= Player
-		P.inTunnel == false && (this.#side = null)
-		P.inTunnelR && P.dir == R && (this.#side ||= R)
-		P.inTunnelL && P.dir == L && (this.#side ||= L)
+		player.inTunnel == false && (this.#side = null)
+		player.inTunnelR && player.dir == R && (this.#side ||= R)
+		player.inTunnelL && player.dir == L && (this.#side ||= L)
 	}
 }

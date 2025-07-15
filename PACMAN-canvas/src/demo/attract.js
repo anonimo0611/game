@@ -32,7 +32,7 @@ export class Attract {
 	pacVelX = -BW/180
 	ghsVelX = -BW/169
 	pacman  = new Pacman
-	powDisp = /**@type {0|1}*/(1)
+	powDisp = 1
 	ghsList = /**@type {Ghost[][]}*/([])
 
 	/** @private */

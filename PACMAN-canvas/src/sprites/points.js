@@ -49,8 +49,8 @@ export function cache(pts, size=TileSize*2) {
 	ctx.save()
 	ctx.translate(w/2, h/2)
 	ctx.scale(size/16, size/16)
-	ctx.lineWidth   = 1.2
-	ctx.lineJoin    = ctx.lineCap = 'round'
+	ctx.lineWidth = 1.2
+	ctx.lineJoin  = ctx.lineCap = 'round'
 	ctx.strokeStyle = [Color.FruitPts,Color.GhostPts][idx]
 	Data.DigitOffsetXFrom[pts]?.forEach((x,i)=> {
 		const y = Data.DigitOffsetY

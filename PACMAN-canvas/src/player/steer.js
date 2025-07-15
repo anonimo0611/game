@@ -1,19 +1,17 @@
-import {Confirm} from '../../_lib/confirm.js';
-import {Dir}     from '../../_lib/direction.js';
 import {State}   from '../state.js';
-import {Player}  from './player.js';
+import {Dir}     from '../../_lib/direction.js';
+import {Confirm} from '../../_lib/confirm.js';
+import {player}  from './player.js';
 
 export class Steer {
 	#dir  = /**@type {?Direction}*/(null)
 	#next = /**@type {?Direction}*/(null)
 	#turning = false
-	constructor(player=Player.i) {
-		/** @private @readonly */
-		this.p = player
+	constructor() {
 		$win.offon('keydown.Steer', this.#steer.bind(this))
 	}
 	#steer(/**@type {JQuery.KeyboardEventBase}*/e) {
-		const {p}= this, dir = Dir.from(e,{wasd:true})
+		const dir = Dir.from(e,{wasd:true})
 		if (keyRepeat(e)
 		 || Confirm.opened
 		 || (dir == null)
@@ -23,56 +21,54 @@ export class Steer {
 			this.#next = dir
 			return
 		}
-		if (p.hasAdjWall(dir)) {
+		if (player.hasAdjWall(dir)) {
 			this.#dir = dir
 			return
 		}
-		if (State.isSt_Ready && Vec2[dir].x || p.stopped) {
-			[this.#dir, p.dir] = [null, dir]
+		if (State.isSt_Ready && Vec2[dir].x || player.stopped) {
+			[this.#dir, player.dir] = [null, dir]
 			return
 		}
 		this.#dir = dir
-		if (p.inBackOfTile) {
-			p.orient = dir
-			p.setMoveDir(p.revDir)
+		if (player.inBackOfTile) {
+			player.orient = dir
+			player.setMoveDir(player.revDir)
 		}
 	}
 	get canTurn() {
 		return this.#dir != null
-			&& this.p.inFrontOfTile
-			&& this.p.collidedWithWall(this.#dir) === false
+			&& player.inFrontOfTile
+			&& player.collidedWithWall(this.#dir) === false
 	}
 	stopAtWall() {
-		const {p}= this
-		if (!this.#turning && p.collidedWithWall()) {
-			p.pos = p.tilePos.mul(T)
+		if (!this.#turning && player.collidedWithWall()) {
+			player.pos = player.tilePos.mul(T)
 			return !(this.#dir = null)
 		} return false
 	}
 	move(divisor=1) {
 		this.#setCornering(divisor)
-		this.p.setNextPos(divisor)
+		player.setNextPos(divisor)
 		this.#endCornering()
 		this.#turnAround()
 	}
 	#setCornering(divisor=1) {
-		const {p}= this, dir = this.#dir
+		const dir = this.#dir
 		if (this.canTurn && dir) {
 			this.#turning ||= true
-			p.setNextPos(divisor, p.orient=dir)
+			player.setNextPos(divisor, player.orient=dir)
 		}
 	}
 	#endCornering() {
-		const {p}= this
-		if (this.#turning && p.inBackOfTile) {
+		if (this.#turning && player.inBackOfTile) {
 			this.#dir  = this.#next
 			this.#next = null
 			this.#turning = false
-			p.setMoveDir(p.orient)
+			player.setMoveDir(player.orient)
 		}
 	}
 	#turnAround() {
-		const {p}= this
-		p.revOrient == p.dir && p.setMoveDir(p.orient)
+		player.revOrient == player.dir
+			&& player.setMoveDir(player.orient)
 	}
 }

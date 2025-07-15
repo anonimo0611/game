@@ -1,7 +1,7 @@
 import {State}  from '../state.js'
 import {Ctrl}   from '../control.js'
 import {Maze}   from '../maze.js'
-import {Player} from '../player/player.js'
+import {player} from '../player/player.js'
 import {GhsMgr} from '../ghosts/_system.js'
 import {Ghost}  from './ghost.js'
 
@@ -52,14 +52,14 @@ export default new class {
 	}
 	/** @param {Ghost} g */
 	#auxLines(g, ofst=4) {
-		const {i:P}=Player, {center:pacPos,dir}=P
-		const fwdXY = P.forwardPos (ofst).vals
-		const ofsXY = P.forwardOfst(ofst).vals
+		const {center:pacPos,dir}= player
+		const fwdXY = player.forwardPos (ofst).vals
+		const ofsXY = player.forwardOfst(ofst).vals
 		Ctx.save()
 		Ctx.setAlpha(0.8)
 		Ctx.lineWidth   = 6
 		Ctx.strokeStyle = g.color
-		if (!(g.idx == GhsType.Pinky && P.inTunnel)) {
+		if (!(g.idx == GhsType.Pinky && player.inTunnel)) {
 			dir != U
 				? Ctx.newLinePath(pacPos.vals, fwdXY)
 				: Ctx.newLinePath(pacPos.vals, fwdXY).lineTo(...ofsXY)
@@ -75,10 +75,9 @@ export default new class {
 	}
 	/** @param {Ghost} g */
 	#guzutaCircle(g) {
-		const {center}= Player.i, r = T*8
 		Ctx.save()
-		Ctx.setAlpha(g.sqrMagToPacman < r*r ? 0.4:0.8)
-		Ctx.strokeCircle(...center.vals, r, g.color, 6)
+		Ctx.setAlpha(g.sqrMagToPacman < (T*8) ** 2 ? 0.4 : 0.8)
+		Ctx.strokeCircle(...player.center.vals, T*8, g.color, 6)
 		Ctx.restore()
 	}
 }

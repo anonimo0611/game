@@ -58,7 +58,7 @@ class House {
 	MiddleY = (this.EntranceTile.y+3.5)*T
 }
 class PowDot {
-	#disp = /**@type {0|1}*/(1)
+	#disp = 1
 	draw() {
 		this.#disp ^= +(Ticker.count % PowDotInterval == 0)
 		for (const [,tPos] of PowMap) this.#draw(tPos)

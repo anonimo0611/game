@@ -5,7 +5,7 @@ import {Ctrl}    from '../control.js'
 import {PtsMgr}  from '../points.js'
 import {Maze}    from '../maze.js'
 import {Actor}   from '../actor.js'
-import {Player}  from '../player/player.js'
+import {player}  from '../player/player.js'
 import {GhsMgr}  from './_system.js'
 import * as Sys  from './_system.js'
 import Sprite    from '../sprites/ghost.js'
@@ -21,7 +21,7 @@ export class Ghost extends Actor {
 	// This section is overridden in subclasses
 	get isAngry()     {return false}
 	get chaseStep()   {return GhsStep.Base}
-	get chasePos()    {return Player.i.center}
+	get chasePos()    {return player.center}
 	get scatterTile() {return Vec2()}
 
 	get aIdx()        {return GhsMgr.animIndex & this.animFlag}
@@ -76,7 +76,7 @@ export class Ghost extends Actor {
 			&& abs(BW/2 - this.center.x) <= this.step
 	}
 	get sqrMagToPacman() {
-		return Vec2.sqrMag(this, Player.i)
+		return Vec2.sqrMag(this, player)
 	}
 	get step() {
 		return function(g,s) {
@@ -125,7 +125,7 @@ export class Ghost extends Actor {
 		)
 	}
 	release(deactivateGlobalDotCnt=false) {
-		Player.i.resetTimer()
+		player.resetTimer()
 		this.state.isIdle && this.state.to('GoOut')
 		return deactivateGlobalDotCnt
 	}
@@ -222,9 +222,9 @@ export class Ghost extends Actor {
 		return false
 	}
 	crashWithPac({
-		pos     = Player.i.pos,
+		pos     = player.pos,
 		radius  = (this.isFright? T/2:T/3),
-		release = ()=> this.#setEscape()
+		release = ()=> this.#setEscape(),
 	}={}) {
 		if (!this.isWalk
 		 || !this.isFright && Ctrl.invincible
@@ -235,12 +235,13 @@ export class Ghost extends Actor {
 			: this.#attack()
 		return true
 	}
-	#caught(/**@type {()=>void}*/fn) {
+	/** @param {()=>void} release */
+	#caught(release) {
 		this.#isFright = false
 		this.trigger('Cought').state.to('Bitten')
 		Timer.freeze()
 		Sound.play('bitten')
-		PtsMgr.set({key:GhsMgr, pos:this.center}, fn)
+		PtsMgr.set({key:GhsMgr, pos:this.center}, release)
 	}
 	#attack() {
 		Sound.stopLoops()

@@ -4,10 +4,10 @@ import {Sound}  from '../../_snd/sound.js'
 import {Game}   from '../_main.js'
 import {State}  from '../state.js'
 import {Ctrl}   from '../control.js'
-import {Player} from '../player/player.js'
 import {Maze}   from '../maze.js'
 import {PtsMgr} from '../points.js'
 import * as Pts from '../sprites/points.js'
+import {Player} from '../player/player.js'
 import {Ghost}  from './ghost.js'
 import Target   from './show_targets.js'
 
@@ -64,7 +64,7 @@ export const GhsMgr = new class extends Common {
 		})
 		GhsMgr.on({Init:GhsMgr.#initialize})
 	}
-	#aIdx = /**@type {0|1}*/(0)
+	#aIdx = 0
 	get animIndex() {return this.#aIdx}
 	get aInterval() {return Ticker.count % 6 == 0}
 	get Elroy()     {return Elroy}
@@ -179,19 +179,20 @@ export const DotCounter = function() {
 		])
 	/**
 	 * @param {number} idx Pinky, Aosuke, Guzuta's index
-	 * @param {(deactivateGlobal?:boolean)=> boolean} fn Release ghost
+	 * @param {(deactivateGlobal?:boolean)=> boolean} releaseFn
 	 */
-	function release(idx, fn) {
+	function release(idx, releaseFn) {
 		const timeOut = Game.level <= 4 ? 4e3:3e3
 		const gLimit  = limitTable[idx-1][0] // global
 		const pLimit  = limitTable[idx-1][min(Game.level,3)] // personal
-		;(Player.i.timeNotEaten >= timeOut)? fn()
-		:(!Game.restarted || _globalCounter < 0)
-			? (pCounters[idx] >= pLimit)
-				&& fn()
-			: (_globalCounter == gLimit)
-				&& fn(idx == GhsType.Guzuta)
-				&& (_globalCounter = -1)
+		;(Player.instance.timeNotEaten >= timeOut)
+			? releaseFn()
+			: (!Game.restarted || _globalCounter < 0)
+				? (pCounters[idx] >= pLimit)
+					&& releaseFn()
+				: (_globalCounter == gLimit)
+					&& releaseFn(idx == GhsType.Guzuta)
+					&& (_globalCounter = -1)
 		}
 	function reset() {
 		!Game.restarted && pCounters.fill(0)

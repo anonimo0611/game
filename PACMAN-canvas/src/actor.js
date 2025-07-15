@@ -48,12 +48,12 @@ export class Actor extends Common {
 	get inBackOfTile()  {return this.tilePixel >  T/2}
 
 	static update() {
-		Player.i.update()
+		Player.update()
 		GhsMgr.update()
 	}
 	static draw() {
 		GhsMgr.drawBehind()
-		Player.i.draw()
+		Player.draw()
 		GhsMgr.drawFront()
 	}
 	update(maxA=this.maxAlpha) {
@@ -66,7 +66,7 @@ export class Actor extends Common {
 	centering() {
 		this.x = (BW-T)/2
 	}
-	tileJustUpdated(divisor=1) {
+	justInNewTile(divisor=1) {
 		return this.inFrontOfTile
 			&& this.tilePixel <= this.step/divisor
 	}
