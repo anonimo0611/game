@@ -4,9 +4,9 @@ import {State}   from '../state.js';
 import {Player}  from './player.js';
 
 export class Steer {
-	#turn = false
 	#dir  = /**@type {?Direction}*/(null)
 	#next = /**@type {?Direction}*/(null)
+	#turning = false
 	constructor(player=Player.i) {
 		/** @private @readonly */
 		this.p = player
@@ -17,9 +17,9 @@ export class Steer {
 		if (keyRepeat(e)
 		 || Confirm.opened
 		 || (dir == null)
-		 || (dir == this.#dir && !this.#turn))
+		 || (dir == this.#dir && !this.#turning))
 			return
-		if (this.#turn) {
+		if (this.#turning) {
 			this.#next = dir
 			return
 		}
@@ -44,7 +44,7 @@ export class Steer {
 	}
 	stopAtWall() {
 		const {p}= this
-		if (!this.#turn && p.collidedWithWall()) {
+		if (!this.#turning && p.collidedWithWall()) {
 			p.pos = p.tilePos.mul(T)
 			return !(this.#dir = null)
 		} return false
@@ -58,16 +58,16 @@ export class Steer {
 	#setCornering(divisor=1) {
 		const {p}= this, dir = this.#dir
 		if (this.canTurn && dir) {
-			this.#turn ||= true
+			this.#turning ||= true
 			p.setNextPos(divisor, p.orient=dir)
 		}
 	}
 	#endCornering() {
 		const {p}= this
-		if (this.#turn && p.inBackOfTile) {
+		if (this.#turning && p.inBackOfTile) {
 			this.#dir  = this.#next
 			this.#next = null
-			this.#turn = false
+			this.#turning = false
 			p.setMoveDir(p.orient)
 		}
 	}
