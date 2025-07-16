@@ -30,13 +30,12 @@ export class Ghost extends Actor {
 	get chaseTile()   {return this.chasePos.divInt(T)}
 	get isStarted()   {return this.#isStarted}
 	get isFright()    {return this.#isFright}
-	get isWalk()      {return this.state.isWalk}
 	get isBitten()    {return this.state.isBitten}
 	get isEscaping()  {return this.state.isEscaping}
 
-	get usually()     {return this.isWalk && !this.isFright}
-	get isChasing()   {return GhsMgr.isChasing && this.usually}
-	get isScatter()   {return GhsMgr.isScatter && this.usually && !this.isAngry}
+	get isWalking()   {return !this.isFright   && this.state.isWalk}
+	get isChasing()   {return GhsMgr.isChasing && this.isWalking}
+	get isScatter()   {return GhsMgr.isScatter && this.isWalking && !this.isAngry}
 
 	/** @param {Direction} dir */
 	constructor(dir=L, {col=0,row=0,idx=0,align=0,animFlag=1}={}) {
@@ -226,7 +225,7 @@ export class Ghost extends Actor {
 		radius  = (this.isFright? T/2:T/3),
 		release = ()=> this.#setEscape(),
 	}={}) {
-		if (!this.isWalk
+		if (!this.state.isWalk
 		 || !this.isFright && Ctrl.invincible
 		 || !circleCollision(this, pos, radius))
 			return false

@@ -20,7 +20,7 @@ class Pinky extends Ghost {
 	get scatterTile() {return Vec2(3, 0)}
 	get chasePos() {
 		const {x,y}= pacman.forwardOfst(4)
-		switch(pacman.tunnelEntered) {
+		switch(pacman.tunnelEntered.side) {
 		case L:  return Vec2(Maze.Tunnel.EntranceR*T, y)
 		case R:  return Vec2(Maze.Tunnel.EntranceL*T, y)
 		default: return Vec2(x, y)

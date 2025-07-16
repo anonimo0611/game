@@ -12,12 +12,12 @@ import {TunnelEntered} from './tunnel.js'
 
 const{SlowLevel,SlowRate}= PacStep
 class PlayerPac extends Pacman {
-	#step     = 0
-	#eatIdx   = 0
-	#notEaten = 0
-	#stopped  = true
-	#steer    = new SteerPacman()
-	#tunEnter = new TunnelEntered()
+	#step       = 0
+	#eatIdx     = 0
+	#notEaten   = 0
+	#stopped    = true
+	#steer      = new SteerPacman()
+	#tunEntered = new TunnelEntered()
 
 	get closed()        {return State.isPlaying == false}
 	get showCenter()    {return Ctrl.showGridLines}
@@ -25,7 +25,7 @@ class PlayerPac extends Pacman {
 	get translucent()   {return this.showCenter || Ctrl.invincible}
 	get step()          {return this.#step}
 	get stopped()       {return this.#stopped}
-	get tunnelEntered() {return this.#tunEnter.side}
+	get tunnelEntered() {return this.#tunEntered}
 	get timeNotEaten()  {return this.#notEaten * Game.interval}
 
 	constructor() {
@@ -68,7 +68,7 @@ class PlayerPac extends Pacman {
 		super.update()
 		if (!State.isPlaying || Timer.frozen) return
 		this.#notEaten++
-		this.#tunEnter.update()
+		this.#tunEntered.update()
 		this.sprite.update(this)
 		for (const _ of range(this.stepDiv))
 			this.#behavior(this.stepDiv)
