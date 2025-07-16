@@ -79,7 +79,7 @@ export const Fruit = new class {
 		const [x,y,w,h] = LvCounterRect
 		Ctx.drawImage(HUD.cvs, x,y, w,h, x,y, w,h)
 	}
-	#setImages() {
+	#setLevelCounter() {
 		const {ctx} = HUD, [x,y,w,h]=LvCounterRect
 		const begin = max(Game.level-LvCounterCols, 0)
 		ctx.save()
@@ -88,6 +88,9 @@ export const Fruit = new class {
 		for (const i of range(begin, Game.level))
 			Spr.draw(ctx, Fruit.number(i), w-T-(T*2*(i-begin)), T)
 		ctx.restore()
+	}
+	#setImages() {
 		Spr.cache(Fruit.number())
+		Fruit.#setLevelCounter()
 	}
 }
