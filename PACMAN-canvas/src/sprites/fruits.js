@@ -236,12 +236,12 @@ const Fns = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
  * @param {ExtendedContext2D} ctx
  * @param {number} fruitIdx
  */
-export function draw(ctx, fruitIdx, x=T,y=T, scale=T/8) {
+export function draw(ctx, fruitIdx, x=T,y=T-2, scale=T/8) {
 	const Scale = 1.05
 	ctx.save()
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
-	ctx.translate(x, y-1)
+	ctx.translate(x, y)
 	ctx.scale(scale*Scale, scale*Scale)
 	Fns[fruitIdx](ctx)
 	ctx.restore()
@@ -259,6 +259,6 @@ export const [current,cache]= function() {
 	const size = +Menu.css('--scale') * T
 	const {ctx}= canvas2D(null, size*8, size)
 	for (const i of Fns.keys())
-		draw(ctx, i, size/2+size*i, size/2+1, size/16)
+		draw(ctx, i, size/2+size*i, size/2, size/16)
 	Menu.css('--url',`url(${ctx.canvas.toDataURL()})`)
 }
