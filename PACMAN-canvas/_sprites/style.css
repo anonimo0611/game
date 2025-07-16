@@ -44,11 +44,8 @@ button {
 	width: 2em;
 	width: 3ch;
 }
-#canvas {
-	background: #000;
-}
 
-#animPreview {
+main > fieldset:first-child {
 	width: fit-content;
 	border: solid 2px #AAAAAA;
 	border-radius: .7em;
@@ -57,19 +54,19 @@ button {
 	padding: 0 1em 0 1em;
 	cursor: default;
 }
-#animPreview .ctrls {
+main > fieldset:first-child .ctrls {
 	display: flex;
 	gap: 20px;
 }
-#preview {
+#previewContainer {
 	position: relative;
 	align-self: center;
 }
-#preview canvas {
+#previewContainer canvas {
 	background: #444;
 	border-radius: 10px;
 }
-#select-anim {
+#selectAnim {
 	margin: 1em 0;
 	output {
 		text-align: center;
