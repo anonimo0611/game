@@ -11,7 +11,7 @@ export default class {
 	/** @param {string} [defaultVal] */
 	init(defaultVal) {
 		keys(this)
-		.flatMap(key=> /^is[A-Z\d]*$/i.test(key)? [key]:[])
+		.flatMap(key=> /^is[A-Z][a-zA-Z\d]*$/.test(key)? [key]:[])
 		.forEach((key,i)=> {
 			const state = key.substring(2)
 			this.#StateSet.add(state)
