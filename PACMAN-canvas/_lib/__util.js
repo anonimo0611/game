@@ -163,9 +163,12 @@ const $onNS = (ns,cfg)=> {
 }
 
 /**
- * @param {string} events
+ * @param {string}   events
  * @param {Function} handler
+ * @param {boolean} [force]
  */
-jQuery.fn.offon = function(events, handler) {
-    return $(this).off(events).on({[events]:handler})
+jQuery.fn.offon = function(events, handler, force) {
+	return (force === false)
+		? $(this).off(events)
+    	: $(this).off(events).on({[events]:handler})
 }
