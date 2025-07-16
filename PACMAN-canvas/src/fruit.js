@@ -4,7 +4,8 @@ import {$Level} from './_main.js'
 import {State}  from './state.js'
 import {Maze}   from './maze.js'
 import {PtsMgr} from './points.js'
-import {Player} from './player/player.js'
+import {Player} from './player/pacman.js'
+import {pacman} from './player/pacman.js'
 import * as Pts from './sprites/points.js'
 import * as Spr from './sprites/fruits.js'
 
@@ -50,8 +51,7 @@ export const Fruit = new class {
 		}
 	}
 	#collisionWithPac() {
-		const {instance:{center}}= Player
-		if (_tgtDisp && circleCollision(center, TargetPos, T/2)) {
+		if (_tgtDisp && circleCollision(pacman.center, TargetPos, T/2)) {
 			_tgtDisp = false
 			Timer.cancel(Fruit) && Sound.play('fruit')
 			PtsMgr.set({key:Fruit, dur:2e3, pos:TargetPos})

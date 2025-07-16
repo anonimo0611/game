@@ -5,7 +5,7 @@ import {Ctrl}    from '../control.js'
 import {PtsMgr}  from '../points.js'
 import {Maze}    from '../maze.js'
 import {Actor}   from '../actor.js'
-import {player}  from '../player/player.js'
+import {pacman}  from '../player/pacman.js'
 import {GhsMgr}  from './_system.js'
 import * as Sys  from './_system.js'
 import Sprite    from '../sprites/ghost.js'
@@ -21,7 +21,7 @@ export class Ghost extends Actor {
 	// This section is overridden in subclasses
 	get isAngry()     {return false}
 	get chaseStep()   {return GhsStep.Base}
-	get chasePos()    {return player.center}
+	get chasePos()    {return pacman.center}
 	get scatterTile() {return Vec2()}
 
 	get aIdx()        {return GhsMgr.animIndex & this.animFlag}
@@ -76,7 +76,7 @@ export class Ghost extends Actor {
 			&& abs(BW/2 - this.center.x) <= this.step
 	}
 	get sqrMagToPacman() {
-		return Vec2.sqrMag(this, player)
+		return Vec2.sqrMag(this, pacman)
 	}
 	get step() {
 		return function(g,s) {
@@ -125,7 +125,7 @@ export class Ghost extends Actor {
 		)
 	}
 	release(deactivateGlobalDotCnt=false) {
-		player.resetTimer()
+		pacman.resetTimer()
 		this.state.isIdle && this.state.to('GoOut')
 		return deactivateGlobalDotCnt
 	}
@@ -174,7 +174,7 @@ export class Ghost extends Actor {
 	#walkRails() {
 		for (const _ of range(this.stepDiv)) {
 			this.setNextPos(this.stepDiv)
-			this.inBackOfTile && this.#setNextDir()
+			this.inBackHalfOfTile && this.#setNextDir()
 			if (this.#setTurn(this)) break
 			if (this.crashWithPac()) break
 		}
@@ -222,7 +222,7 @@ export class Ghost extends Actor {
 		return false
 	}
 	crashWithPac({
-		pos     = player.pos,
+		pos     = pacman.pos,
 		radius  = (this.isFright? T/2:T/3),
 		release = ()=> this.#setEscape(),
 	}={}) {

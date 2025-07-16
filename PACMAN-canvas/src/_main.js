@@ -13,7 +13,7 @@ import {Score}     from './score.js'
 import {Lives}     from './lives.js'
 import {Fruit}     from './fruit.js'
 import {Actor}     from './actor.js'
-import {player}    from './player/player.js'
+import {pacman}    from './player/pacman.js'
 import {PtsMgr}    from './points.js'
 import {Attract}   from './demo/attract.js'
 import {CoffBrk}   from './demo/coffee_break.js'
@@ -106,7 +106,7 @@ export const Game = new class {
 	}
 	#onDying() {
 		Sound.play('dying')
-		player.sprite.setDying()
+		pacman.sprite.setDying()
 		Lives.left > 0
 			? State.to('Restart', {delay:2200})
 			: State.to('GameOver',{delay:2000})

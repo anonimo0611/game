@@ -2,7 +2,7 @@ import {Common} from '../_lib/common.js'
 import {Dir}    from '../_lib/direction.js'
 import {State}  from './state.js'
 import {Maze}   from './maze.js'
-import {Player} from './player/player.js'
+import {Player} from './player/pacman.js'
 import {GhsMgr} from './ghosts/_system.js'
 
 export class Actor extends Common {
@@ -44,8 +44,8 @@ export class Actor extends Common {
 		const  count = v.x? x % T : y % T
 		return (v.x || v.y) > 0 ? count : T-count
 	}
-	get inFrontOfTile() {return this.tilePixel <= T/2}
-	get inBackOfTile()  {return this.tilePixel >  T/2}
+	get inFrontHalfOfTile() {return this.tilePixel <= T/2}
+	get inBackHalfOfTile()  {return this.tilePixel >  T/2}
 
 	static update() {
 		Player.update()
@@ -66,8 +66,8 @@ export class Actor extends Common {
 	centering() {
 		this.x = (BW-T)/2
 	}
-	justInNewTile(divisor=1) {
-		return this.inFrontOfTile
+	justArrivedAtTile(divisor=1) {
+		return this.inFrontHalfOfTile
 			&& this.tilePixel <= this.step/divisor
 	}
 	setNextPos(divisor=1, dir=this.dir) {

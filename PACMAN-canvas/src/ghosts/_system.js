@@ -7,7 +7,8 @@ import {Ctrl}   from '../control.js'
 import {Maze}   from '../maze.js'
 import {PtsMgr} from '../points.js'
 import * as Pts from '../sprites/points.js'
-import {Player} from '../player/player.js'
+import {Player} from '../player/pacman.js'
+import {pacman} from '../player/pacman.js'
 import {Ghost}  from './ghost.js'
 import Target   from './show_targets.js'
 
@@ -179,20 +180,19 @@ export const DotCounter = function() {
 		])
 	/**
 	 * @param {number} idx Pinky, Aosuke, Guzuta's index
-	 * @param {(deactivateGlobal?:boolean)=> boolean} releaseFn
+	 * @param {(deactivateGlobal?:boolean)=> boolean} fn
 	 */
-	function release(idx, releaseFn) {
-		const timeOut = Game.level <= 4 ? 4e3:3e3
+	function release(idx, fn) {
+		const timeOut = (Game.level <= 4 ? 4e3:3e3)
 		const gLimit  = limitTable[idx-1][0] // global
 		const pLimit  = limitTable[idx-1][min(Game.level,3)] // personal
-		;(Player.instance.timeNotEaten >= timeOut)
-			? releaseFn()
-			: (!Game.restarted || _globalCounter < 0)
-				? (pCounters[idx] >= pLimit)
-					&& releaseFn()
-				: (_globalCounter == gLimit)
-					&& releaseFn(idx == GhsType.Guzuta)
-					&& (_globalCounter = -1)
+		;(pacman.timeNotEaten >= timeOut)? fn()
+		:(!Game.restarted || _globalCounter < 0)
+			? (pCounters[idx] >= pLimit)
+				&& fn()
+			: (_globalCounter == gLimit)
+				&& fn(idx == GhsType.Guzuta)
+				&& (_globalCounter = -1)
 		}
 	function reset() {
 		!Game.restarted && pCounters.fill(0)
