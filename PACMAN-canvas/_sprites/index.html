@@ -18,14 +18,14 @@
 
 <body>
 
-<div id="warpper">
-	<fieldset id="animPreview" class="noDrag">
+<main>
+	<fieldset class="noDrag">
 		<legend>Animation preview</legend>
 		<div class="ctrls">
-			<div id="preview">
-				<canvas id="previewCvs"></canvas>
+			<div id="previewContainer">
+				<canvas id="preview"></canvas>
 			</div>
-			<form id="select-anim">
+			<form id="selectAnim">
 				<custom-menu id="animMenu">
 					<mn-list>
 					<mn-item val="-1" class="selected">–––  Select Actor –––</mn-item>
@@ -65,8 +65,8 @@
 		</div>
 		<button type="button" id="resetBtn">Reset</button>
 	</form>
-	<canvas id="cvs_main"></canvas>
-</div>
+	<canvas id="board_main"></canvas>
+</main>
 
 </body>
 </html>
