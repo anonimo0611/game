@@ -166,13 +166,13 @@ const AttackInWaves = function() {
 }(),
 setReversalSig = ()=> {
 	$(Ghosts).trigger('Reverse')
-	FrightMode.session?.dur == 0 && $(Ghosts).trigger('Runaway')
+	FrightMode.session?.Dur == 0 && $(Ghosts).trigger('Runaway')
 }
 
 export const DotCounter = function() {
 	let _globalCounter = -1
 	const pCounters  = new Uint8Array(GhsType.Max)
-	const limitTable = /**@type {const}*/
+	const LimitTable = /**@type {const}*/
 		([//global,lv1,lv2,lv3+
 			[ 7,  0,  0, 0], // Pinky
 			[17, 30,  0, 0], // Aosuke
@@ -184,8 +184,8 @@ export const DotCounter = function() {
 	 */
 	function release(idx, fn) {
 		const timeOut = (Game.level <= 4 ? 4e3:3e3)
-		const gLimit  = limitTable[idx-1][0] // global
-		const pLimit  = limitTable[idx-1][min(Game.level,3)] // personal
+		const gLimit  = LimitTable[idx-1][0] // global
+		const pLimit  = LimitTable[idx-1][min(Game.level,3)] // personal
 		;(pacman.timeNotEaten >= timeOut)? fn()
 		:(!Game.restarted || _globalCounter < 0)
 			? (pCounters[idx] >= pLimit)
@@ -211,7 +211,7 @@ export const DotCounter = function() {
 const Elroy = function() {
 	let _part = 0
 	const Accelerations = freeze([1.00, 1.02, 1.05, 1.1])
-	const dotsLeftTable = freeze([20,20,30,40,50,60,70,70,80,90,100,110,120])
+	const DotsLeftTable = freeze([20,20,30,40,50,60,70,70,80,90,100,110,120])
 	function angry() {
 		return State.isPlaying
 			&& _part > 1
@@ -219,7 +219,7 @@ const Elroy = function() {
 			&& Ghosts[GhsType.Guzuta]?.isStarted === true
 	}
 	function onDotEaten() {
-		const left = dotsLeftTable[Game.clampedLv-1]
+		const left = DotsLeftTable[Game.clampedLv-1]
 		if (Maze.dotsLeft <= left*[1.5, 1.0, 0.5][_part])
 			++_part && Sound.playSiren()
 	}
@@ -242,27 +242,27 @@ const FrightMode = function() {
 		get caughtAll() {return this.#caughtCnt == GhsType.Max}
 		get spriteIdx() {return this.#fCounter && this.#flashIdx^1}
 		/** @readonly */
-		dur = TimeTable[Game.clampedLv-1]
+		Dur = TimeTable[Game.clampedLv-1]
 		constructor() {
-			if (this.dur != 0 || State.isAttract)
+			if (this.Dur != 0 || State.isAttract)
 				this.#toggle(true)
 		}
 		#toggle(bool=false) {
 			_session = bool? this : null
 			$(Ghosts)
 				.trigger('FrightMode', bool)
-				.offon('Cought', ()=> this.#caughtCnt++)
+				.offon('Cought', ()=> this.#caughtCnt++, bool)
 			Sound.toggleFrightMode(bool)
 		}
 		#flashing() {
-			const iv = (this.dur == 1 ? 12:14)/Game.speedRate|0
+			const iv = (this.Dur == 1 ? 12:14)/Game.speedRate|0
 			this.#flashIdx ^= Number(this.#fCounter++ % iv == 0)
 		}
 		update() {
 			if (!State.isPlaying || Timer.frozen) return
 			const et = (this.#tCounter++ * Game.interval)/1000
-			;(et >= this.dur-2) && this.#flashing()
-			;(et >= this.dur || this.caughtAll) && this.#toggle()
+			;(et >= this.Dur-2) && this.#flashing()
+			;(et >= this.Dur || this.caughtAll) && this.#toggle()
  		}
 	}
 	GhsMgr.on({Init:()=> _session = null})
