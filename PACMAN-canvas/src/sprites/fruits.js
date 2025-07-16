@@ -181,9 +181,9 @@ function bell(ctx=Ctx) {
 	// bell body
 	ctx.beginPath()
 	for (const s of [1,-1]) {
-		ctx.addLinePath([0,-5.7],[1.2*s,-5.7],[1.2*s,-5.4])
-		ctx.quadraticCurveTo(4.5*s, -4.5, 5.0*s, 1.4)
-		ctx.addLinePath([5.5*s,2.0],[5.5*s,4.2],[4.9*s,4.8],[0,4.8])
+		ctx.addLinePath([0,-5.8],[1.3*s,-5.8],[1.5*s,-5.3])
+		ctx.quadraticCurveTo(4.5*s, -4.2, 4.9*s, 1.2)
+		ctx.addLinePath([5.5*s,2.1],[5.5*s,4.3],[4.9*s,4.9],[0,4.9])
 	}
 	ctx.fillStyle = '#F8FF00'
 	ctx.fill()
@@ -192,22 +192,22 @@ function bell(ctx=Ctx) {
 	ctx.beginPath()
 	ctx.lineWidth	= 0.8
 	ctx.strokeStyle = '#0'
-	ctx.strokeLine(-3.5, 2, -3.4,0.8)
-	ctx.moveTo(-3, -1.0)
-	ctx.quadraticCurveTo(-2.7,-3.3,-1.8,-3.4)
+	ctx.strokeLine(-3.5, 2.3, -3.4,1.1)
+	ctx.moveTo(-3, -0.7)
+	ctx.quadraticCurveTo(-2.7,-3.0,-1.8,-3.1)
 	ctx.stroke()
-	ctx.strokeLine(-0.5,-4.7, 0.5,-4.7)
+	ctx.strokeLine(-0.5,-4.2, 0.5,-4.2)
 
 	// bell bottom
 	ctx.beginPath()
-	ctx.ellipse(0, 4.7, 4.4, 1, 0, 0, PI*2)
+	ctx.ellipse(0, 5.1, 4.6, 1, 0, 0, PI*2)
 	ctx.fillStyle = '#53A8FB'
 	ctx.fill()
-	ctx.fillCircle(1.2, 5.0, 1.4, '#FFFFFF')
+	ctx.fillCircle(1.2, 5.4, 1.4, '#FFFFFF')
 }
 function key(ctx=Ctx) {
 	// key metal
-	ctx.newLinePath([-1,-1.5],[-1.0, 5.5],[0,6.5],[1,5.5],[1,2.8])
+	ctx.newLinePath([-1,-1.5],[-1.0, 5.4],[0,6.4],[1,5.4],[1,2.8])
 	ctx.setLinePath([ 1, 1.8],[ 1.0,-1.5])
 	ctx.setLinePath([ 1, 0.6],[ 2.9, 0.6])
 	ctx.setLinePath([ 1, 3.9],[ 2.9, 3.9])
