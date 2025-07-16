@@ -196,14 +196,14 @@ function bell(ctx=Ctx) {
 	ctx.moveTo(-3, -0.7)
 	ctx.quadraticCurveTo(-2.7,-3.0,-1.8,-3.1)
 	ctx.stroke()
-	ctx.strokeLine(-0.5,-4.2, 0.5,-4.2)
+	ctx.strokeLine(-0.5,-4.3, 0.5,-4.3)
 
 	// bell bottom
 	ctx.beginPath()
-	ctx.ellipse(0, 5.1, 4.6, 1, 0, 0, PI*2)
+	ctx.ellipse(0, 4.9, 4.6, 1, 0, 0, PI*2)
 	ctx.fillStyle = '#53A8FB'
 	ctx.fill()
-	ctx.fillCircle(1.2, 5.4, 1.4, '#FFFFFF')
+	ctx.fillCircle(1.2, 5.3, 1.4, '#FFFFFF')
 }
 function key(ctx=Ctx) {
 	// key metal
