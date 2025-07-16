@@ -74,7 +74,7 @@ class PlayerPac extends Pacman {
 			this.#behavior(this.stepDiv)
 	}
 	#behavior(divisor=1) {
-		if (this.#step == 0 || this.justArrivedAtTile(divisor))
+		if (this.justArrivedAtTile(divisor))
 			this.#step = this.#getCurrentStep()
 		this.#eaten(this)
 		this.#steer.move(divisor)
