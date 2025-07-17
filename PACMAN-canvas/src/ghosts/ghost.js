@@ -16,7 +16,15 @@ export class Ghost extends Actor {
 	#isStarted = false
 	#isFright  = false
 
-	TurnDirs = /**@type {readonly Direction[]}*/([U,L,D,R])
+	/** @readonly */
+	sprite = new Sprite(canvas2D(null, T*3, T*2).ctx)
+
+	/** @readonly */
+	turnDirs = /**@type {readonly Direction[]}*/([U,L,D,R])
+
+	/** @readonly */idx
+	/** @readonly */init
+	/** @readonly */state
 
 	// This section is overridden in subclasses
 	get isAngry()     {return false}
@@ -24,7 +32,7 @@ export class Ghost extends Actor {
 	get chasePos()    {return pacman.center}
 	get scatterTile() {return Vec2()}
 
-	get aIdx()        {return GhsMgr.animIndex & this.animFlag}
+	get aIdx()        {return GhsMgr.animIndex & this.init.animFlag}
 	get spriteIdx()   {return GhsMgr.spriteIdx}
 	get maxAlpha()    {return Ctrl.showTargets ? 0.75:1}
 	get chaseTile()   {return this.chasePos.divInt(T)}
@@ -37,24 +45,23 @@ export class Ghost extends Actor {
 	get isChasing()   {return GhsMgr.isChasing && this.isWalking}
 	get isScatter()   {return GhsMgr.isScatter && this.isWalking && !this.isAngry}
 
-	/** @param {Direction} dir */
-	constructor(dir=L, {col=0,row=0,idx=0,align=0,animFlag=1}={}) {
+	/**
+	 * @param {Direction} dir
+	 * @param {{idx?:number, tile?:xyList, align?:-1|0|1, animFlag?:0|1}} cfg
+	 */
+	constructor(dir=L, {idx=0,tile:[col,row]=[0,0],align=0,animFlag=1}={}) {
 		super()
 		this.on({
 			FrightMode:  this.#setFrightMode,
 			Reverse:()=> this.#revSig  = true,
 			Runaway:()=> this.#runaway = 400/Game.interval,
 		})
-		this.dir      = dir
-		this.idx      = idx
-		this.initX    = col*T
-		this.iniAlign = align
-		this.animFlag = animFlag
-		this.pos      = Vec2(col*T, row*T)
-		this.color    = Color[GhsNames[idx]]
-		this.release  = this.release.bind(this)
-		this.state    = new Sys.GhostState(this)
-		this.sprite   = new Sprite(canvas2D(null, T*3, T*2).ctx)
+		this.idx   = idx
+		this.dir   = dir
+		this.pos   = Vec2(col*T, row*T)
+		this.state = new Sys.GhostState(this)
+		this.init  = freeze({x:col*T,align,animFlag})
+		this.leaveHouse = this.leaveHouse.bind(this)
 		freeze(this)
 	}
 	get originalTargetTile() {
@@ -117,21 +124,21 @@ export class Ghost extends Actor {
 	}
 	#idle({idx,step,orient,state,center:{y:cy}}=this) {
 		if (!Ctrl.isChaseMode)
-			Sys.DotCounter.release(idx, this.release)
+			Sys.DotCounter.release(idx,this.leaveHouse)
 		!state.isGoOut && this.move(
 			(cy+T*0.6-step > Maze.House.MiddleY && orient != D)? U:
 			(cy-T*0.6+step < Maze.House.MiddleY ? D:U)
 		)
 	}
-	release(deactivateGlobalDotCnt=false) {
+	leaveHouse(deactivateGlobalDotCnt=false) {
 		pacman.resetTimer()
 		this.state.isIdle && this.state.to('GoOut')
 		return deactivateGlobalDotCnt
 	}
-	#goOut({center:{x:cx},y,step}=this) {
+	#goOut({init,y,step,center:{x:cx}}=this) {
 		if (cx > BW/2+step
 		 || cx < BW/2-step)
-			return this.move(this.iniAlign<0 ? R:L)
+			return this.move(init.align<0 ? R:L)
 
 		if (cx != BW/2)
 			return this.centering()
@@ -148,20 +155,20 @@ export class Ghost extends Actor {
 		this.centering()
 		this.state.to('Return')
 	}
-	#returnToHome({step,x,y,initX,iniAlign}=this) {
+	#returnToHome({init,step,x,y}=this) {
 		if (y+step < Maze.House.MiddleY)
 			return this.setNextPos()
 
 		if (y != Maze.House.MiddleY)
 			return this.setPos({y:Maze.House.MiddleY})
 
-		if (!iniAlign || abs(x-initX) <= step) {
-			this.x   = initX
-			this.dir = iniAlign? (iniAlign<0 ? R:L) : U
+		if (!init.align || abs(x-init.x) <= step) {
+			this.x   = init.x
+			this.dir = init.align? (init.align<0 ? R:L) : U
 			this.#arrivedAtHome()
 			return
 		}
-		this.move(iniAlign<0 ? L:R)
+		this.move(init.align<0 ? L:R)
 	}
 	#arrivedAtHome() {
 		this.sprite.setResurrect()
@@ -189,7 +196,7 @@ export class Ghost extends Actor {
 	}
 	#getNextDir(tgt=this.targetTile) {
 		const tile = this.getAdjTile(this.dir)
-		const dirs = this.TurnDirs.flatMap((dir,idx)=> {
+		const dirs = this.turnDirs.flatMap((dir,idx)=> {
 			const test = this.getAdjTile(dir,tile)
 			const dist = Vec2.sqrMag(test,tgt)
 			return Maze.hasWall(test) == false

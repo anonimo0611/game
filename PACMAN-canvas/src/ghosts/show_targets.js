@@ -5,6 +5,9 @@ import {pacman} from '../player/pacman.js'
 import {GhsMgr} from '../ghosts/_system.js'
 import {Ghost}  from './ghost.js'
 
+/** @type {readonly string[]} */
+const Colors = GhsNames.map(n=> Color[n])
+
 export default new class {
 	/** @param {readonly Ghost[]} ghosts */
 	draw(ghosts) {
@@ -34,8 +37,8 @@ export default new class {
 		if (Timer.frozen || !g.isChasing)
 			return
 		match(g.idx, {
-			[GhsType.Pinky]:  ()=> this.#auxLines(g, 4),
-			[GhsType.Aosuke]: ()=> this.#auxLines(g, 2),
+			[GhsType.Pinky]:  ()=> this.#auxLines({g,ofst:4}),
+			[GhsType.Aosuke]: ()=> this.#auxLines({g,ofst:2}),
 			[GhsType.Guzuta]: ()=> this.#guzutaCircle(g),
 		})
 	}
@@ -46,20 +49,20 @@ export default new class {
 		const {x,y}= this.#getTargetPos(g)
 		Ctx.save()
 		Ctx.setAlpha(0.8)
-		Ctx.fillCircle  (x,y, T*0.4, g.color)
+		Ctx.fillCircle  (x,y, T*0.4, Colors[g.idx])
 		Ctx.strokeCircle(x,y, T*0.4, 'white', 4)
 		Ctx.restore()
 	}
-	/** @param {Ghost} g */
-	#auxLines(g, ofst=4) {
+	/** @param {{g:Ghost,ofst:number}} param */
+	#auxLines({g,ofst}) {
 		const {center:pacPos,dir}= pacman
 		const fwdXY = pacman.forwardPos (ofst).vals
 		const ofsXY = pacman.forwardOfst(ofst).vals
 		Ctx.save()
 		Ctx.setAlpha(0.8)
 		Ctx.lineWidth   = 6
-		Ctx.strokeStyle = g.color
-		if (!(g.idx == GhsType.Pinky && pacman.inTunnel)) {
+		Ctx.strokeStyle = Colors[g.idx]
+		if (g.idx != GhsType.Pinky || !pacman.inTunnel) {
 			dir != U
 				? Ctx.newLinePath(pacPos.vals, fwdXY)
 				: Ctx.newLinePath(pacPos.vals, fwdXY).lineTo(...ofsXY)
@@ -69,15 +72,16 @@ export default new class {
 			const tgtXY = g.chasePos.vals
 			const akaXY = GhsMgr.akaCenter.vals
 			Ctx.newLinePath(akaXY, ofsXY, tgtXY).stroke()
-			Ctx.fillCircle(...ofsXY, 8, g.color)
+			Ctx.fillCircle(...ofsXY, 8, Colors[g.idx])
 		}
 		Ctx.restore()
 	}
 	/** @param {Ghost} g */
 	#guzutaCircle(g) {
 		Ctx.save()
+		Ctx.translate(...pacman.center.vals)
 		Ctx.setAlpha(g.sqrMagToPacman < (T*8) ** 2 ? 0.4 : 0.8)
-		Ctx.strokeCircle(...pacman.center.vals, T*8, g.color, 6)
+		Ctx.strokeCircle(0,0, T*8, Colors[g.idx], 6)
 		Ctx.restore()
 	}
 }

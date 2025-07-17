@@ -1,9 +1,7 @@
 export default class {
+	/** @readonly */ctx
 	/** @param {ExtendedContext2D} ctx */
-	constructor(ctx) {
-		this.ctx = ctx
-		freeze(this)
-	}
+	constructor(ctx) {this.ctx = ctx}
 	rippedBody() {
 		const {ctx}= this
 		ctx.clearRect(38,-1, 6,25)

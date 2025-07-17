@@ -48,8 +48,8 @@ const DotChipSet = new Set(['.','O'])
 const WallSet  = /**@type {Set<TileIdx>}*/(new Set)
 const DotSet   = /**@type {Set<TileIdx>}*/(new Set)
 const PowMap   = /**@type {Map<TileIdx,Vector2>}*/(new Map)
-const PenRect  = new Rect(10, 13,  8, 5)
-const PenOuter = new Rect( 9, 12, 10, 7)
+const PenRect  = new Rect(10, 13,  8, 5).freeze()
+const PenOuter = new Rect( 9, 12, 10, 7).freeze()
 
 class House {
 	get EntranceTile() {return Vec2(13, 12)}
@@ -97,23 +97,24 @@ class Tunnel {
 	}
 }
 
-export const Maze = new class {
-	static {$(this.setup)}
-	static setup() {
+export const Maze = freeze(new class {
+	static {
 		for (const [i,c] of MapArr.entries())
 			!DotChipSet.has(c) && c.trim() && WallSet.add(i)
-		State.on({_NewLevel: Maze.#reset})
-		$(powChk).on({change:Maze.#reset})
+		State.on({_NewLevel: e=> this.reset(e)})
+		$(powChk).on({change:e=> this.reset(e)})
 	}
-	#reset(/**@type {JQuery.TriggeredEvent}*/e) {
+	static reset(
+	 /**@type {JQuery.TriggeredEvent}*/e
+	) {
 		if (e.target != powChk) {
 			Wall.draw()
-			Maze.#drawDoor()
+			this.drawDoor()
 		}
 		for (const [i,c] of MapArr.entries())
-			DotChipSet.has(c) && Maze.#setDot(i,c)
+			DotChipSet.has(c) && this.setDot(i,c)
 	}
-	#setDot(
+	static setDot(
 	 /**@type {TileIdx}*/i,
 	 /**@type {string} */chip
 	) {
@@ -124,7 +125,11 @@ export const Maze = new class {
 			? drawDot(Bg.ctx, t.x, t.y)
 			: PowMap.set(i, t)
 	}
-	get dotsLeft() {return DotSet.size}
+	static drawDoor() {
+		const y = (Maze.House.EntranceTile.y+1.6)*T
+		Bg.ctx.fillRect(BW/2-T, y, T*2, T/4, Color.Door)
+	}
+
 	Top    = 1
 	Bottom = Rows-3
 	Map    = MapArr
@@ -136,6 +141,8 @@ export const Maze = new class {
 	hasDot  = (/**@type {TileIdx} */i)=> DotSet.has(i)
 	hasPow  = (/**@type {TileIdx} */i)=> PowMap.has(i)
 	hasWall = (/**@type {Position}*/p)=> WallSet.has(p.y*Cols+p.x)
+
+	get dotsLeft() {return DotSet.size}
 
 	/**
 	 * Whether tile `y` coord is the top/bottom of the maze excluding dead space
@@ -179,8 +186,4 @@ export const Maze = new class {
 		const v = Vec2(col,row).add(.5).mul(T).vals
 		ctx.fillCircle(...v, T/(isPow? 2:8), color)
 	}
-	#drawDoor() {
-		const y = (Maze.House.EntranceTile.y+1.6)*T
-		Bg.ctx.fillRect(BW/2-T, y, T*2, T/4, Color.Door)
-	}
-}, {drawDot}=freeze(Maze)
+}), {drawDot}= Maze

@@ -47,7 +47,7 @@ export class Attract {
 				this.setActor(where, i)
 	}
 	setActor(where=0, gIdx=0) {
-		const g = new Ghost(where? L:R, {idx:gIdx,animFlag:where})
+		const g = new Ghost(where?L:R, {idx:gIdx,animFlag:where?1:0})
 		if (where) {
 			g.setPos(BW+(T*6)+(T*2*gIdx), T*19)
 			g.idx == 0 && this.pacman.setPos(g.x-T*3.5, g.y)

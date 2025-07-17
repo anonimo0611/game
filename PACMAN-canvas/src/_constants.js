@@ -34,11 +34,11 @@ Color = freeze(new class {
 	FlashWall = '#FFFFFF'
 	Door      = '#FFB8DE'
 	Pacman    = '#FFFF00'
-	PacCenter = '#FF0000'
 	Akabei    = '#EE0000'
 	Pinky     = '#FF99BB'
 	Aosuke    = '#00CCFF'
 	Guzuta    = '#FFBB00'
+	PacCenter = '#FF0000'
 	GhostEyes = '#3333FF'
 	GhostSkin = '#F4BEB0'
 	GhostPts  = '#33CCFF'
@@ -48,9 +48,9 @@ Color = freeze(new class {
 	Message2  = '#FFFF00'
 	Message3  = '#FF0000'
 	BonusText = '#FF9900'
-	InfoTable       = freeze(['#888888','#FF99EE'])
-	FrightBodyTable = freeze(['#3366AA','#FFFFFF'])
-	FrightFaceTable = freeze(['#FF99FF','#FF0000'])
+	InfoTexts    = freeze(['#888888','#FF99EE'])
+	FrightFaces  = freeze(['#FF99FF','#FF0000'])
+	FrightBodies = freeze(['#3366AA','#FFFFFF'])
 }),
 
 PacScale  = 0.9,

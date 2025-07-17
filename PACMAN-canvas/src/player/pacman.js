@@ -43,15 +43,15 @@ class PlayerPac extends Pacman {
 			: (eating? PacStep.Eating : PacStep.Base)
 		) * this.baseSpeed
 	}
-	resetTimer() {
-		this.#notEaten = 0
-	}
 	forwardPos(num=0) {
 		return Vec2[this.dir].mul(num*T).add(this.center)
 	}
 	forwardOfst(num=0) {
 		const  ofstX = (this.dir == U ? -num : 0)
 		return this.forwardPos(num).add(ofstX*T, 0)
+	}
+	resetTimer() {
+		this.#notEaten = 0
 	}
 	#drawCenter({center:{x,y}}=this) {
 		Ctx.fillCircle(x,y, 3, Color.PacCenter)
@@ -74,7 +74,7 @@ class PlayerPac extends Pacman {
 			this.#behavior(this.stepDiv)
 	}
 	#behavior(divisor=1) {
-		if (this.#step == 0 || this.justArrivedAtTile(divisor))
+		if (this.justArrivedAtTile(divisor))
 			this.#step = this.#getCurrentStep()
 		this.#eaten(this)
 		this.#steer.move(divisor)

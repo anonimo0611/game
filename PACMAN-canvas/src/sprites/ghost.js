@@ -3,6 +3,7 @@ export default class {
 	#fadeOut   = /**@type {?FadeOut}*/(null)
 	#resurrect = /**@type {?FadeIn} */(null)
 
+	/** @readonly */ctx
 	/** @readonly */#CBSprite
 	/** @readonly */#EyesDraw
 	/** @param {ExtendedContext2D} ctx */
@@ -17,19 +18,17 @@ export default class {
 			[D]:this.#eyesLookingDown,
 			LowerR:this.#CBSprite.bracketEyes
 		})
-		freeze(this)
 	}
 
 	get fadeOut()  {return this.#fadeOut}
 	setFadeOut()   {this.#fadeOut ||= new FadeOut(400)}
 	setResurrect() {this.#resurrect = new FadeIn (600)}
 	draw({
-		mainCtx=Ctx,x=0,y=0,
-		aIdx       = 0,
+		mainCtx=Ctx,
+		x=0,y=0,idx=0,aIdx=0,
 		spriteIdx  = 0,
 		size       = T*2,
 		orient     = /**@type {Direction|'LowerR'}*/(L),
-		color      = Color.Akabei,
 		isFright   = false,
 		isBitten   = false,
 		isEscaping = false,
@@ -52,7 +51,8 @@ export default class {
 		ctx.translate(size/2, size/2)
 		ctx.scale(size/(100/GhsScale), size/(100/GhsScale))
 		ctx.fillStyle = !isFright
-			? color : Color.FrightBodyTable[spriteIdx]
+			? Color[GhsNames[idx]]
+			: Color.FrightBodies[spriteIdx]
 
 		if (isExposed) {
 			this.#CBSprite.hadake(aIdx)
@@ -115,10 +115,10 @@ export default class {
 			// Eyeballs
 			ctx.beginPath()
 			ctx.ellipse(19.5*v, -17, 13,17, -8*v*PI/180, -3*PI/4, -PI/4, true)
-			ctx.fillStyle = '#FFF'
+			ctx.fillStyle = 'white'
 			ctx.fill()
 			// Eyes
-			ctx.fillCircle(18.5*v, -26, 8, (isRipped? '#000':Color.GhostEyes))
+			ctx.fillCircle(18.5*v, -26, 8, (isRipped? 'black':Color.GhostEyes))
 		}
 	}
 	#eyesLookingDown() {
@@ -127,7 +127,7 @@ export default class {
 			// Eyeballs
 			ctx.beginPath()
 			ctx.ellipse(19*v, -3, 13,17, 0, 40*PI/180, 140*PI/180, true)
-			ctx.fillStyle = '#FFF'
+			ctx.fillStyle = 'white'
 			ctx.fill()
 			// Eyes
 			ctx.fillCircle(19*v, 4, 8, Color.GhostEyes)
@@ -142,7 +142,7 @@ export default class {
 			// Eyeballs
 			ctx.beginPath()
 			ctx.ellipse([-16.5, 23][i], -11, 13,17, 0,0, PI*2)
-			ctx.fillStyle = '#FFF'
+			ctx.fillStyle = 'white'
 			ctx.fill()
 			// Eyes
 			ctx.fillCircle([-9.5, 29][i], -8,8, Color.GhostEyes)
@@ -151,7 +151,7 @@ export default class {
 	}
 	#frightFace({spriteIdx=0}) {
 		const {ctx}= this
-		ctx.fillStyle = ctx.strokeStyle = Color.FrightFaceTable[spriteIdx]
+		ctx.fillStyle = ctx.strokeStyle = Color.FrightFaces[spriteIdx]
 		{// Eyes
 			const size = 11
 			ctx.lineWidth = 11
@@ -178,6 +178,6 @@ export default class {
 const Glow = function() {
 	const {ctx,w,h}= canvas2D(null, T*5)
 	ctx.filter = `blur(${T*0.6}px)`
-	ctx.fillCircle(w/2, h/2, T, '#F00')
+	ctx.fillCircle(w/2, h/2, T, 'red')
 	return ctx.canvas
 }()

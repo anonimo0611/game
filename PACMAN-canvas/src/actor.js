@@ -67,7 +67,7 @@ export class Actor extends Common {
 		this.x = (BW-T)/2
 	}
 	justArrivedAtTile(divisor=1) {
-		return this.inFrontHalfOfTile
+		return this.step == 0 || this.inFrontHalfOfTile
 			&& this.tilePixel <= this.step/divisor
 	}
 	setNextPos(divisor=1, dir=this.dir) {

@@ -8,10 +8,9 @@ export class Dying {
 	#alpha  = 1
 	#innerR = PacR/4
 	#outerR = PacR/2
-	constructor(ctx=Ctx) {
-		this.ctx = ctx
-		freeze(this)
-	}
+
+	/** @readonly */ctx
+	constructor(ctx=Ctx) {this.ctx = ctx}
 	draw({x=0,y=0}={}) {
 		const {ctx}= this
 		ctx.save()

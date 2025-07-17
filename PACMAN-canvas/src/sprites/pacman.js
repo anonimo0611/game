@@ -8,6 +8,9 @@ export default class {
 	#dyingSpr   = /**@type {?Dying}*/(null)
 	#animeAngle = 0
 	#mouthAngle = 0
+
+	/** @readonly */ctx
+	/** @readonly */isMain
 	/**
 	 * @param {ExtendedContext2D} ctx
 	 * @param {0|1|2} mouthOpenings
@@ -17,7 +20,6 @@ export default class {
 		this.ctx    = ctx
 		this.isMain = ctx.canvas.id == 'board_main'
 		this.#mouthAngle = [0,OpenMid,OpenMax][mouthOpenings]
-		freeze(this)
 	}
 	update({stopped=false}={}) {
 		if (stopped && this.#mouthAngle > OpenMid)
