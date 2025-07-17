@@ -14,7 +14,9 @@ export class Rect {
 		this.w = w
 		this.h = h
 		this.#vals = freeze([x,y,w,h])
-		freeze(this)
+	}
+	freeze() {
+		return freeze(this)
 	}
 	contains(/**@type {Position}*/pos) {
 		const [x,y,w,h]=this.#vals

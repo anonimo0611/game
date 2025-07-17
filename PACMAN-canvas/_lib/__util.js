@@ -135,11 +135,12 @@ const match = (key,pattern,separator='_')=> {
 	 Math.sin(PI/180*deg)*r+cy]
 
 //---- jQuery utilities ------
-
+/**
+ * @typedef {(event: JQuery.TriggeredEvent<Window & typeof globalThis, undefined,
+ * Window & typeof globalThis, Window & typeof globalThis>)=> void} JQWindowHandler
+ */
 const $win = $(window)
 const $doc = $(document)
-
-/** @typedef {(ev:JQuery.TriggeredEvent<Window & typeof globalThis>)=> any} JQWindowHandler */
 
 /** @param {JQWindowHandler} fn */
 const $load = fn=> $win.on({load:fn})
