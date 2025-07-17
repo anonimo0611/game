@@ -70,9 +70,9 @@ export const View = function()
 		{
 			ghsSprite.draw({
 				x,y,size:S,
-				aIdx:  +(col % 2 != 0),
+				idx:  row-1,
+				aIdx: +(col % 2 != 0),
 				orient:/**@type {const}*/([U,U,L,L,D,D,R,R])[col],
-				color: Color[GhsNames[row-1]],
 			})
 			return
 		}

@@ -28,7 +28,7 @@ button {
 #sliders {
 	display: flex;
 	gap: 1em;
-	font-size: 20px;
+	font-size: 16px;
 	padding: 0 .2em .2em .2em;
 	border-radius: 0 0 0 .3em;
 	position: fixed;
@@ -37,12 +37,22 @@ button {
 	background: rgba(0 0 0 /.7);
 	z-index: 100;
 	cursor: default;
-}
-#sliders output {
-	text-align: right;
-	display: inline-block;
-	width: 2em;
-	width: 3ch;
+	button,
+	input,
+	output,
+	.unit {
+		font-size: 16px;
+		vertical-align: middle;
+	}
+	button {
+		padding: 0 .3em;
+	}
+	output {
+		text-align: right;
+		display: inline-block;
+		width: 2em;
+		width: 3ch;
+	}
 }
 
 main > fieldset:first-child {

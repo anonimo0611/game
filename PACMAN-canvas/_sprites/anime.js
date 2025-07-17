@@ -93,13 +93,13 @@ class AnimData
 		data?.ghost.draw({
 			size:      S,
 			mainCtx:   ctx,
-			color:     Color[GhsNames[data.type-1]],
+			idx:       data.type-1,
 			aIdx:      data.aIdx,
 			orient:    data.orient,
-			spriteIdx: data.subType == Type.Ghost.Flashed ? data.fIdx:0,
 			isFright:  data.type    == Type.Actor.Fright,
 			isExposed: data.subType == Type.Ghost.Exposed,
 			isMended:  data.subType == Type.Ghost.Mended,
+			spriteIdx: data.subType == Type.Ghost.Flashed ? data.fIdx:0,
 		})
 		ctx.restore()
 	}
@@ -122,7 +122,7 @@ class AnimData
 		}
 	}
 
-	Menu.$root
+	$(Menu.root)
 	.on({change})
 	.on('keydown', e=>
 	{
