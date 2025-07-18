@@ -106,8 +106,8 @@ class PlayerPac extends Pacman {
 
 export let   pacman = new PlayerPac
 export const Player = new class extends Common {
-	draw()   {return pacman.draw()}
-	update() {return pacman.update()}
+	draw()   {pacman.draw()}
+	update() {pacman.update()}
 }
 State.on({
 	_Restart_NewLevel:()=> pacman = new PlayerPac

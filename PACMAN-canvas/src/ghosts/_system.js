@@ -167,10 +167,7 @@ const AttackInWaves = function() {
 		};return [seq,{mode:CHASING,update(){}}][seq.mode]
 	}
 }(),
-setReversalSig = ()=> {
-	$(Ghosts).trigger('Reverse')
-	FrightMode.session?.Dur == 0 && $(Ghosts).trigger('Runaway')
-}
+setReversalSig = ()=> $(Ghosts).trigger('Reverse')
 
 export const DotCounter = function() {
 	let _globalCounter = -1
@@ -247,8 +244,9 @@ const FrightMode = function() {
 		/** @readonly */
 		Dur = TimeTable[Game.clampedLv-1]
 		constructor() {
-			if (this.Dur != 0 || State.isAttract)
-				this.#toggle(true)
+			(this.Dur == 0 && !State.isAttract)
+				? $(Ghosts).trigger('Runaway')
+				: this.#toggle(true)
 		}
 		#toggle(bool=false) {
 			_session = bool? this : null

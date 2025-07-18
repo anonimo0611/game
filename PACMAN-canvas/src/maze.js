@@ -53,15 +53,14 @@ const PenOuter = new Rect( 9, 12, 10, 7).freeze()
 
 class House {
 	get EntranceTile() {return Vec2(13, 12)}
-	/** @param {Vector2} tilePos */
-	isIn = tilePos=> PenRect.contains(tilePos)
+	isIn = (/**@type {Vector2}*/tile)=> PenRect.contains(tile)
 	MiddleY = (this.EntranceTile.y+3.5)*T
 }
 class PowDot {
 	#disp = 1
 	draw() {
 		this.#disp ^= +(Ticker.count % PowDotInterval == 0)
-		for (const [,tPos] of PowMap) this.#draw(tPos)
+		for (const [,tile] of PowMap) this.#draw(tile)
 	}
 	/** @param {Vector2} t */
 	#draw(t) {

@@ -63,7 +63,7 @@ export const Ctrl = new class {
 		Ctrl.#output()
 		Ctrl.#restore()
 	}
-	draw() {
+	#drawGridLines() {
 		if (!Ctrl.showGridLines) return
 		Ctx.save()
 		Ctx.strokeStyle = Color.Grid
@@ -98,5 +98,8 @@ export const Ctrl = new class {
 		$('input')    .on({input:Ctrl.#output})
 		$('#resetBtn').on({click:Ctrl.#reset})
 		$('#startBtn').on({click:()=> State.to('Start')})
+	}
+	draw() {
+		this.#drawGridLines()
 	}
 }, powChk = ctrl('powChk')
