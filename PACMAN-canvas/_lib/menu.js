@@ -1,162 +1,105 @@
-import {Dir}    from './direction.js'
-import {Common} from './common.js'
-
-export class Menu extends Common {
-	/** @readonly */root
-	/** @readonly */size
-	/** @readonly */defaultIndex
-
-	/** @protected */menu
-	/** @protected */items
-	/** @protected */$label
-
-	/** @protected */
-	constructor(
-		/**@type {string}*/id,
-		/**@type {string}*/type
-	) {
-		const
-		root  = /**@type {CustomMenu} */($byId(id).attr({type}) .get(0)),
-		menu  = /**@type {HTMLElement}*/($(root).find('mn-list').get(0)),
-		items = /**@type {MenuItem[]} */($(menu).find('mn-item').get())
-		if (!root || !menu || !items.length) {
-			throw ReferenceError('The menu structure is invalid')
-		}
-		super({eventTarget:menu})
-		this.root   = root
-		this.size   = items.length
-		this.menu   = menu
-		this.items  = items
-		this.reset  = this.reset.bind(this)
-		this.$label = $(root).closest('label')
+class Menu {
+	reset() {this.select(this.defaultIndex, {restore:true})}
+	get index()        {return +$(this.selectedItem).index()}
+	get value()        {return String(this.selectedItem.dataset.val) ?? ''}
+	get selectedItem() {return this.menu.querySelector('.selected') || this.lis[0]}
+	constructor(id) {
+		this.root = byId(this.id=id);
+		this.menu = this.root.querySelector('menu')
+		this.lis  = this.menu.querySelectorAll('li')
+		this.size = this.lis.length |0
 		this.defaultIndex = this.index
-
-		items.forEach(i=> $(i).css('--val', i.val))
-		$(this.root).closest('form').on({reset:this.reset})
+		this.selectedItem.classList.add('selected')
+		$(this.root).closest('form').on('reset', ()=> this.reset())
+		defineProperty(this.root, 'type', {get(){return 'menu'}})
 	}
-	get index()  {return $(this.selectedItem).index()}
-	get value()  {return $(this.selectedItem).prop('val')}
-	set index(i) {(i>=0 && i<this.size) && this.select(i)}
-
-	/** @returns {MenuItem} */
-	get selectedItem() {
-		return this.menu.querySelector('.selected') || this.items[0]
+	bindChange(fn) {
+		isFun(fn) && $(this.menu).on('change', fn)
 	}
 	select(idx=0) {
-		if (idx<0 || idx>=this.size) {
-			throw ReferenceError('List index out of range')
-		}
+		if (!this.lis[idx]) return
 		this.selectedItem.classList.remove('selected')
-		this.items[idx].classList.add('selected')
+		this.lis[idx].classList.add('selected')
+		$(this.menu).trigger('change');
 	}
-	reset() {this.select(this.defaultIndex)}
 }
-
-export class DorpDown extends Menu {
-	constructor(/**@type {string}*/id) {
-		super(id,'dropdown')
-		/** @private */
-		this.current = $('<output>').prependTo(this.root)[0]
-		this.items.forEach((li,i)=> {
-			li.onclick = ()=> this.select(i)
-			this.current.focus()
-		})
-		$('body')
-			.on('pointerdown', e=> {
-				!e.target.closest(`#${this.root.id}`)
-				&& this.select()
-			})
-		$(this.$label)
-			.on('pointerdown', e=> {
-				e.preventDefault()
-				this.current.focus()
-			})
+export class DorpDownMenu extends Menu {
+	open()   {$(this.menu).show();  return this}
+	close()  {$(this.menu).hide();  return this}
+	toggle() {$(this.menu).toggle();return this}
+	get closed() {return $(this.menu).is(':hidden') == true}
+	/** @param {string} id */
+	constructor(id) {
+		super(id)
+		this.lis.forEach((li, i)=> li.onclick= ()=> {this.select(i),this.current.focus()})
+		this.current = this.root.querySelector('.current')
 		$(this.current)
-			.on('keydown', e=> this.#onKeydown(e))
-			.on('pointerdown', ()=> this.toggle())
-			.css('width',`${this.menu.offsetWidth}px`)
-
-		this.close()
-		this.current.tabIndex = 0
-		this.select(this.index)
-		freeze(this)
-	}
-	close()  {$(this.menu).hide()}
-	open()   {$(this.menu).show()}
-	toggle() {$(this.menu).toggle()}
-	get closed() {return $(this.menu).is(':hidden')}
-
-	#onKeydown(/**@type {JQuery.KeyDownEvent}*/e) {
-		const {size,index:i}= this
-		match(e.key, {
-			'Tab_Escape': ()=> {
-				this.close()
-			},
-			'Enter_\x20': ()=> {
-				this.closed
-				? this.open()
-				: this.select(i)
-			},
-			'ArrowUp_ArrowDown': ()=> {
-				const dir = /Up$/.test(e.key) ? -1:1
-				this.select((i+dir+size) % size, {close:false})
+		.css('width',`${this.menu.offsetWidth}px`)
+		.on('keydown click', e=> {
+			if (e.type == 'click')
+				return this.toggle()
+			const {size,index}=this, dir=Dir.from(e)
+			switch (e.key) {
+			case 'Tab':
+			case 'Escape':
+				return this.close()
+			case '\x20':
+			case 'Enter':
+				e.preventDefault()
+				return this.closed? this.open() : this.select(index)
+			case 'ArrowUp':
+			case 'ArrowDown':
+				e.preventDefault()
+				this.select((index+Vec2(dir).y+size) % size, {close:false})
 			}
 		})
+		$(this.root).prev('label').on('click', ()=> this.current.focus())
+		$on('click', e=> {!this.closed && !e.target.closest(`#${id}`) && this.select()})
+		freeze(this).close().select(this.index)
 	}
 	select(idx=this.index, {close=true}={}) {
 		super.select(idx)
-		const {val,innerText}= this.selectedItem
-		$(this.current).css('--val',val).text(innerText)
+		$(this.current).attr('data-val', this.value).text(this.selectedItem.textContent)
 		close && this.close()
 	}
 }
-
-export class Slide extends Menu {
-	/** @private */width
-	/** @private */btnL
-	/** @private */btnR
-	constructor(/**@type {string}*/id) {
-		super(id,'slidemenu')
-		const{root}= this, wrap = this.$label.get(0) ?? root
-		this.btnR  = $('<span class="button r">').prependTo(root)[0]
-		this.btnL  = $('<span class="button l">').prependTo(root)[0]
-		this.width = this.#setWidth(this.btnL.offsetWidth*2)
-
-		$(root).on('keydown',e=>{this.#select(Dir.from(e))})
-		$(wrap).on('wheel',  e=>{this.#select(wheelDeltaY(e)>0 ? L:R)})
-		$(wrap).on('pointerdown', e=>{e.preventDefault(),root.focus()})
-
-		for (const [i,btn] of [this.btnL,this.btnR].entries()) {
-			$(btn).on('click', ()=> {this.#select(i? R:L)})
+export class SlideMenu extends Menu {
+	/** @param {string} id */
+	constructor(id) {
+		super(id)
+		const root = $(this.root)
+		const wrap = $(root).closest('.slidemenu-wrapper')
+		this.btnR  = $('<button class="r" tabindex=-1>').text('>').prependTo(root).get(0)
+		this.btnL  = $('<button class="l" tabindex=-1>').text('<').prependTo(root).get(0)
+		this.menu.style.setProperty('display','inline-flex')
+		const select = (e,dir)=> {
+			if (!dir) return
+			const val = this.index+Vec2({[U]:R,[D]:L}[dir] || dir).x
+			between(val, 0, this.size-1) && this.select(val)
+			e.type == 'click' && root.focus()
 		}
-		root.tabIndex = 0
-		this.select(this.index)
+		const onWeel  = e=> select(e, e.originalEvent.deltaY > 0 ? L:R)
+		const onClick = e=> select(e, e.target == this.btnL ? L:R)
+		root.prev('.label').on('click', ()=> root.focus())
+		root.find('button').on('click', onClick)
+		root.on('keydown', e=> select(e, Dir.from(e)))
+		wrap.length
+			? wrap.on('wheel', onWeel)
+			: root.on('wheel', onWeel)
+		this.#setWidth(this.btnL.offsetWidth*2).select(this.index)
 		freeze(this)
 	}
-	#select(/**@type {?Direction}*/dir) {
-		if (!dir) return
-		const v = Vec2[dir]
-		this.index += (v.x || -v.y)
-	}
-	#setWidth(/**@type {number}*/btnW) {
-		const width = max(...[...this.items].map(li=> li.offsetWidth))+btnW
-		$(this.root) .css('width',`${width}px`)
-		$(this.items).css('width',`${width}px`)
-		return width
+	#width = 0
+	#setWidth(btnW) {
+		this.#width = max(...[...this.lis].map(li=> li.offsetWidth)) + btnW
+		$(this.lis) .css('width', `${this.#width}px`)
+		$(this.root).css('width', `${this.#width}px`)
+		return this
 	}
 	select(idx=this.index) {
 		super.select(idx)
-		this.menu.style.transform  =`translateX(${-this.width*idx}px)`
-		this.btnL.dataset.disabled = String(idx == 0)
-		this.btnR.dataset.disabled = String(idx == this.size-1)
+		this.menu.style.transform = `translateX(${-this.#width*idx}px)`
+		this.btnL.disabled = (idx == 0)
+		this.btnR.disabled = (idx == this.size-1)
 	}
 }
-
-class CustomMenu extends HTMLElement{
-	get type() {return 'menu'}
-}
-class MenuItem extends HTMLElement{
-	get val()  {return $(this).attr('val') ?? ''}
-}
-customElements.define('custom-menu', CustomMenu)
-customElements.define('mn-item', MenuItem)
