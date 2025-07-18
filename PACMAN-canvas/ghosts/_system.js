@@ -15,8 +15,11 @@ import Target   from './show_targets.js'
 const PtsLst = Pts.Vals.Ghost
 const Ghosts = /**@type {Ghost[]}*/([])
 
-/** Wait time (ms) before the ghost leaves from the house in always chase mode */
-const WaitingTimes = /**@type {const}*/
+/**
+ * When always chase mode,
+ * standby time(ms) before the ghost leaves from the house
+ */
+const StandbyTimes = /**@type {const}*/
 ([//Pinky->Aosuke->Guzuta
 	[1000,  500,  500], // Restart
 	[1000, 4000, 4000], // Lv.1
@@ -93,11 +96,11 @@ export const GhsMgr = new class extends Common {
 		if (!Ctrl.isChaseMode) return
 		const lv = (Game.restarted? 0 : Game.clampedLv)
 		Timer.sequence(...Ghosts.slice(1).map((g,i)=>
-			({ms:WaitingTimes[lv][i]/Game.speedRate, fn:g.release})))
+			({ms:StandbyTimes[lv][i]/Game.speedRate,fn:g.leaveHouse})))
 	}
 	setFrightMode() {
-		setReversalSig()
 		FrightMode.new()
+		setReversalSig()
 	}
 	update() {
 		if (State.isPlaying
@@ -166,7 +169,7 @@ const AttackInWaves = function() {
 }(),
 setReversalSig = ()=> {
 	$(Ghosts).trigger('Reverse')
-	FrightMode.session?.Dur == 0 && $(Ghosts).trigger('Runaway')
+	!GhsMgr.isFright && $(Ghosts).trigger('Runaway')
 }
 
 export const DotCounter = function() {
