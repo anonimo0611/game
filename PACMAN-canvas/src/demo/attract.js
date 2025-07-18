@@ -46,10 +46,10 @@ export class Attract {
 			for (const i of range(GhsType.Max))
 				this.setActor(where, i)
 	}
-	setActor(where=0, gIdx=0) {
-		const g = new Ghost(where?L:R, {idx:gIdx,animFlag:where?1:0})
+	setActor(where=0, idx=0) {
+		const g = new Ghost(where?L:R, {idx,animFlag:where?1:0})
 		if (where) {
-			g.setPos(BW+(T*6)+(T*2*gIdx), T*19)
+			g.setPos(BW+(T*6)+(T*2*idx), T*19)
 			g.idx == 0 && this.pacman.setPos(g.x-T*3.5, g.y)
 		}
 		(this.ghsList[where] ||= []).push(g)
