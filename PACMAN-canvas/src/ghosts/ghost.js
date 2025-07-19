@@ -104,7 +104,6 @@ export class Ghost extends Actor {
 		Ctx.restore()
 	}
 	update() {
-		//if (this.idx == 0)$('#debug').text(this.#runaway)
 		super.update()
 		this.sprite.fadeOut?.update()
 		this.sprite.update()

@@ -99,8 +99,8 @@ export const GhsMgr = new class extends Common {
 			({ms:StandbyTimes[lv][i]/Game.speedRate,fn:g.leaveHouse})))
 	}
 	setFrightMode() {
-		setReversalSig()
 		FrightMode.new()
+		setReversalSig()
 	}
 	update() {
 		if (State.isPlaying
