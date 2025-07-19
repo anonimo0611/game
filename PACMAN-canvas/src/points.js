@@ -11,20 +11,17 @@ State.on({_Clear_Crashed:()=> PtsMap.clear()})
 export const PtsMgr = new class {
 	/**
 	 * @typedef {typeof Pts.Vals.All[number]} Pts
-	 * @typedef {{key:{score:Pts}, pos:Position, dur?:number}} PtsData
+	 * @typedef {{key:{score:Pts}, pos:Position, dur?:number, fn?:function}} PtsData
 	 * @type {(data:PtsData, fn?:function)=> void}
 	 */
-	set(data,fn)   {new Points(data,fn)}
+	set(data,fn)   {new Points({...data,fn})}
 	update()       {PtsMap.forEach(v=> v.update())}
 	drawFruitPts() {PtsMap.get(Fruit) ?.draw()}
 	drawGhostPts() {PtsMap.get(GhsMgr)?.draw()}
 }
 class Points {
-	/**
-	 * @param {PtsData}  data
-	 * @param {Function} [fn]
-	 */
-	constructor({key,pos,dur=1e3}, fn) {
+	/** @param {PtsData}  data */
+	constructor({key,pos,dur=1e3,fn}) {
 		const spd  = Game.speedRate, fadeDur = 300
 		this.cache = Pts.cache(key.score)
 		this.pos   = pos
