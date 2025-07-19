@@ -31,17 +31,10 @@ class PlayerPac extends Pacman {
 	constructor() {
 		super()
 		this.pos = Vec2(13.5, 24).mul(T)
+		$(()=> this.#updateMoveStep())
 	}
-	get baseSpeed() {
-		return Game.moveSpeed
-			* (Game.level < SlowLevel ? 1:SlowRate)
-	}
-	#getCurrentStep() {
-		const eating = Maze.hasDot(this.tileIdx)
-		return(GhsMgr.isFright
-			? (eating? PacStep.EneEat : PacStep.Energized)
-			: (eating? PacStep.Eating : PacStep.Base)
-		) * this.baseSpeed
+	resetTimer() {
+		this.#notEaten = 0
 	}
 	forwardPos(num=0) {
 		return Vec2[this.dir].mul(num*T).add(this.center)
@@ -50,8 +43,12 @@ class PlayerPac extends Pacman {
 		const  ofstX = (this.dir == U ? -num : 0)
 		return this.forwardPos(num).add(ofstX*T, 0)
 	}
-	resetTimer() {
-		this.#notEaten = 0
+	#updateMoveStep() {
+		const eating = Maze.hasDot(this.tileIdx)
+		this.#step = (GhsMgr.isFright
+			? (eating? PacStep.EneEat : PacStep.Energized)
+			: (eating? PacStep.Eating : PacStep.Base)
+		) * (Game.moveSpeed * (Game.level<SlowLevel ? 1:SlowRate))
 	}
 	#drawCenter({center:{x,y}}=this) {
 		Ctx.fillCircle(x,y, 3, Color.PacCenter)
@@ -75,7 +72,7 @@ class PlayerPac extends Pacman {
 	}
 	#behavior(divisor=1) {
 		if (this.justArrivedAtTile(divisor))
-			this.#step = this.#getCurrentStep()
+			this.#updateMoveStep()
 		this.#eaten(this)
 		this.#steer.move(divisor)
 		this.#stopped = this.#steer.stopAtWall()

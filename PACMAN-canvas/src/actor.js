@@ -15,7 +15,7 @@ export class Actor extends Common {
 	/** @protected */
 	constructor()   {super()}
 	get radius()    {return T}
-	get stepDiv()   {return 10}
+	get stepDiv()   {return ceil(this.step*2)}
 	get x()         {return this.#x}
 	get y()         {return this.#y}
 	get pos()       {return Vec2(this)}
@@ -67,7 +67,7 @@ export class Actor extends Common {
 		this.x = (BW-T)/2
 	}
 	justArrivedAtTile(divisor=1) {
-		return this.step == 0 || this.inFrontHalfOfTile
+		return this.inFrontHalfOfTile
 			&& this.tilePixel <= this.step/divisor
 	}
 	setNextPos(divisor=1, dir=this.dir) {
