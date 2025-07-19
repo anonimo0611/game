@@ -20,7 +20,7 @@ export const PtsMgr = new class {
 	drawGhostPts() {PtsMap.get(GhsMgr)?.draw()}
 }
 class Points {
-	/** @param {PtsData}  data */
+	/** @param {PtsData} data */
 	constructor({key,pos,dur=1e3,fn}) {
 		const spd  = Game.speedRate, fadeDur = 300
 		this.cache = Pts.cache(key.score)
