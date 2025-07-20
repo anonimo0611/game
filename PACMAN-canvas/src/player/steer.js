@@ -1,6 +1,6 @@
 import {Dir}     from '../../_lib/direction.js';
 import {Confirm} from '../../_lib/confirm.js';
-import {State}   from '../state.js';
+import {Ctrl}    from '../control.js';
 import {pacman as self} from './pacman.js';
 
 export class SteerPacman {
@@ -10,17 +10,13 @@ export class SteerPacman {
 	constructor() {
 		$win.offon('keydown.Steer', this.#steer.bind(this))
 	}
-	#allowKey(/**@type {KeyboardEvent}*/e) {
-		const dir = Dir.from(e,{wasd:true})
-		return keyRepeat(e)
-			|| Confirm.opened
-			|| (dir == null)
-			|| (dir == this.#dir && !this.#turning)
-			? null : dir
-	}
 	#steer(/**@type {KeyboardEvent}*/e) {
-		const dir = this.#allowKey(e)
-		if (!dir) return
+		const dir = Dir.from(e,{wasd:true})
+		if (keyRepeat(e)
+			|| dir == null
+			|| Confirm.opened
+			|| Ctrl.focused)
+			return
 
 		if (this.#turning) {
 			this.#next = dir
@@ -28,10 +24,6 @@ export class SteerPacman {
 		}
 		if (self.hasAdjWall(dir)) {
 			this.#dir = dir
-			return
-		}
-		if (State.isSt_Ready && Vec2[dir].x || self.stopped) {
-			[this.#dir, self.dir] = [null, dir]
 			return
 		}
 		this.#dir = dir

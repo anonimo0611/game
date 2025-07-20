@@ -17,6 +17,7 @@ export const Ctrl = new class {
 		$load(Ctrl.#setup)
 	}
 	get extendPts()     {return +Menu.Extend.value}
+	get focused()       {return qS(':not(#startBtn):focus')}
 	get livesMax()      {return ctrl('lvsRng').valueAsNumber}
 	get speedRate()     {return ctrl('spdRng').valueAsNumber}
 	get isChaseMode()   {return ctrl('chsChk').checked}
@@ -28,6 +29,7 @@ export const Ctrl = new class {
 	get isPractice()    {return this.isCheatMode  ||!this.isDefaultMode}
 	get isCheatMode()   {return this.speedRate<.7 || this.showTargets || this.invincible}
 	get isDefaultMode() {return this.consecutive && Menu.Level.index == 0}
+
 
 	#fitToViewport() {
 		const scale = min(
