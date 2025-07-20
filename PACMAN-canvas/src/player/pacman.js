@@ -23,7 +23,7 @@ class PlayerPac extends Pacman {
 	get showCenter()    {return Ctrl.showGridLines}
 	get maxAlpha()      {return this.translucent? 0.75:1}
 	get translucent()   {return this.showCenter || Ctrl.invincible}
-	get step()          {return this.#step}
+	get step()          {return this.#step ||= this.#getMoveStep()}
 	get stopped()       {return this.#stopped}
 	get tunnelEntered() {return this.#tunEntered}
 	get timeNotEaten()  {return this.#notEaten * Game.interval}
@@ -31,7 +31,6 @@ class PlayerPac extends Pacman {
 	constructor() {
 		super()
 		this.pos = Vec2(13.5, 24).mul(T)
-		$(()=> this.#updateMoveStep())
 	}
 	resetTimer() {
 		this.#notEaten = 0
@@ -43,9 +42,9 @@ class PlayerPac extends Pacman {
 		const  ofstX = (this.dir == U ? -num : 0)
 		return this.forwardPos(num).add(ofstX*T, 0)
 	}
-	#updateMoveStep() {
+	#getMoveStep() {
 		const eating = Maze.hasDot(this.tileIdx)
-		this.#step = (GhsMgr.isFright
+		return(GhsMgr.isFright
 			? (eating? PacStep.EneEat : PacStep.Energized)
 			: (eating? PacStep.Eating : PacStep.Base)
 		) * (Game.moveSpeed * (Game.level<SlowLevel ? 1:SlowRate))
@@ -72,7 +71,7 @@ class PlayerPac extends Pacman {
 	}
 	#behavior(divisor=1) {
 		if (this.justArrivedAtTile(divisor))
-			this.#updateMoveStep()
+			this.#step = this.#getMoveStep()
 		this.#eaten(this)
 		this.#steer.move(divisor)
 		this.#stopped = this.#steer.stopAtWall()
