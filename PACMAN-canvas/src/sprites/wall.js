@@ -60,7 +60,7 @@ export const Wall = new class {
 		case 'H':ctx.strokeLine(x, y+T/2+lo, x+T, y+T/2+lo);break
 		}
 		ctx.save()
-		if (c=='#' || (!tx || tx == W-1) && +c) {
+		if (c == '#' || (tx == 0 || tx == W-1) && +c) {
 			ctx.translate(x+T/2+(isL? -T/2+OO : T/2-OO), y)
 			ctx.strokeLine(0,0, 0,T)
 		}
