@@ -37,7 +37,7 @@ const StandbyTimes = /**@type {const}*/
 	[   0,  900,    0], // Lv.13
 ])
 
-/** @typedef {'Idle'|'GoOut'|'Walk'|'Bitten'|'Escape'|'Return'} State */
+/** @typedef {'Idle'|'GoOut'|'Walk'|'Bitten'|'Escape'|'Return'} StateType */
 export class GhostState extends _State {
 	isIdle   = false
 	isGoOut  = false
@@ -46,14 +46,14 @@ export class GhostState extends _State {
 	isEscape = false
 	isReturn = false
 
-	get current()    {return /**@type {State}*/(super.current)}
+	get current()    {return /**@type {StateType}*/(super.current)}
 	get isEscaping() {return this.isEscape || this.isReturn}
 
 	constructor(/**@type {Ghost}*/{tilePos}) {
 		super()
 		this.init(Maze.House.isIn(tilePos)? 'Idle':'Walk')
 	}
-	to(/**@type {State}*/state) {
+	to(/**@type {StateType}*/state) {
 		return super.to(state)
 	}
 }
@@ -167,7 +167,7 @@ const AttackInWaves = function() {
 		};return [seq,{mode:CHASING,update(){}}][seq.mode]
 	}
 }(),
-setReversalSig = ()=> $(Ghosts).trigger('Reverse')
+setReversalSig = ()=> {$(Ghosts).trigger('Reverse')}
 
 export const DotCounter = function() {
 	let _globalCounter = -1
