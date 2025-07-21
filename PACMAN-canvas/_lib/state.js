@@ -8,8 +8,7 @@ export default class {
 	get current() {return this.#state}
 	get default() {return this.#default}
 
-	/** @param {string} [defaultVal] */
-	init(defaultVal) {
+	init() {
 		keys(this)
 		.flatMap(key=> /^is[A-Z][a-zA-Z\d]*$/.test(key)? [key]:[])
 		.forEach((key,i)=> {
@@ -18,9 +17,6 @@ export default class {
 			i == 0 && (this.#default = state)
 			defineProperty(this,key,{get(){return this.#state === state}})
 		})
-		defaultVal
-			&& this.#StateSet.has(defaultVal)
-			&& this.to(this.#default = defaultVal)
 	}
 
 	/**
