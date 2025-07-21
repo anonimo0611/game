@@ -35,6 +35,7 @@ export class Actor extends Common {
 
 	get step()      {return 0}
 	get maxAlpha()  {return 1}
+	get inHouse()   {return Maze.House .isIn(this.tilePos)}
 	get inTunnel()  {return Maze.Tunnel.isIn(this.center)}
 	get inTunnelL() {return Maze.Tunnel.isIn(this.center,L)}
 	get inTunnelR() {return Maze.Tunnel.isIn(this.center,R)}

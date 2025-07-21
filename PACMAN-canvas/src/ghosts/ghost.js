@@ -39,7 +39,7 @@ export class Ghost extends Actor {
 	get isStarted()   {return this.#isStarted}
 	get isFright()    {return this.#isFright}
 	get isBitten()    {return this.state.isBitten}
-	get isEscaping()  {return this.state.isEscaping}
+	get isEscaping()  {return this.state.isEscape || this.state.isReturn}
 
 	get isWalking()   {return !this.isFright   && this.state.isWalk}
 	get isChasing()   {return GhsMgr.isChasing && this.isWalking}
@@ -59,9 +59,8 @@ export class Ghost extends Actor {
 		this.idx   = idx
 		this.dir   = dir
 		this.pos   = Vec2(col*T, row*T)
-		this.state = new Sys.GhostState(this)
+		this.state = new Sys.GhostState(this.inHouse)
 		this.init  = freeze({x:col*T,align,animFlag})
-		this.leaveHouse = this.leaveHouse.bind(this)
 		freeze(this)
 	}
 	get originalTargetTile() {
@@ -88,7 +87,7 @@ export class Ghost extends Actor {
 		return function(g,s) {
 			if (s.isIdle)     return GhsStep.Idle
 			if (s.isGoOut)    return GhsStep.GoOut
-			if (s.isEscaping) return GhsStep.Escape
+			if (g.isEscaping) return GhsStep.Escape
 			if (g.inTunnel)   return GhsStep.InTunnel
 			if (g.isFright)   return GhsStep.Fright
 			if (g.isScatter)  return GhsStep.Base
@@ -113,18 +112,17 @@ export class Ghost extends Actor {
 	}
 	#behavior() {
 		this.#runaway >= 0 && this.#runaway--
-		if (Timer.frozen && !this.isEscaping)
-			return
-		match(this.state.current, {
-			Idle:  ()=> this.#idle(this),
-			GoOut: ()=> this.#goOut(this),
-			Return:()=> this.#returnToHome(this),
-			_: ()=> this.#walkRails(),
-		})
+		if (Timer.frozen && !this.isEscaping) return
+		switch(this.state.current) {
+		case 'Idle':  return this.#idle(this)
+		case 'GoOut': return this.#goOut(this)
+		case 'Return':return this.#returnToHome(this)
+		}
+		this.#walkRails()
 	}
-	#idle({idx,step,orient,state,center:{y:cy}}=this) {
+	#idle({idx,orient,state,step,center:{y:cy}}=this) {
 		if (!Ctrl.isChaseMode)
-			Sys.DotCounter.release(idx,this.leaveHouse)
+			Sys.DotCounter.release(idx, d=> this.leaveHouse(d))
 		!state.isGoOut && this.move(
 			(cy+T*0.6-step > Maze.House.MiddleY && orient != D)? U:
 			(cy-T*0.6+step < Maze.House.MiddleY ? D:U)
@@ -135,7 +133,7 @@ export class Ghost extends Actor {
 		this.state.isIdle && this.state.to('GoOut')
 		return deactivateGlobalDotCnt
 	}
-	#goOut({init,y,step,center:{x:cx}}=this) {
+	#goOut({init,step,y,center:{x:cx}}=this) {
 		if (cx > BW/2+step
 		 || cx < BW/2-step)
 			return this.move(init.align<0 ? R:L)

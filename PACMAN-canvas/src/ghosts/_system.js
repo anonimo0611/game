@@ -45,13 +45,13 @@ export class GhostState extends _State {
 	isBitten = false
 	isEscape = false
 	isReturn = false
-
-	get current()    {return /**@type {StateType}*/(super.current)}
-	get isEscaping() {return this.isEscape || this.isReturn}
-
-	constructor(/**@type {Ghost}*/{tilePos}) {
+	constructor(inHouse=false) {
 		super()
-		this.init(Maze.House.isIn(tilePos)? 'Idle':'Walk')
+		this.init()
+		this.to(inHouse? 'Idle':'Walk')
+	}
+	get current() {
+		return /**@type {StateType}*/(super.current)
 	}
 	to(/**@type {StateType}*/state) {
 		return super.to(state)
@@ -78,7 +78,7 @@ export const GhsMgr = new class extends Common {
 	get score()     {return FrightMode.session?.score ?? PtsLst[0]}
 	get spriteIdx() {return FrightMode.session?.spriteIdx ?? 0}
 	get caughtAll() {return FrightMode.session?.caughtAll ?? false}
-	get hasEscape() {return Ghosts.some(g=> g.state.isEscaping)}
+	get hasEscape() {return Ghosts.some(g=> g.isEscaping)}
 	get akaCenter() {return Ghosts[GhsType.Akabei].center}
 
 	#initialize(_={}, /**@type {Ghost[]}*/...ghosts) {
@@ -90,13 +90,16 @@ export const GhsMgr = new class extends Common {
 	}
 	#onPlaying() {
 		Sound.playSiren()
-		GhsMgr.#setReleaseTimer()
+		Ctrl.isChaseMode && GhsMgr.#setReleaseTimer()
 	}
 	#setReleaseTimer() {
-		if (!Ctrl.isChaseMode) return
 		const lv = (Game.restarted? 0 : Game.clampedLv)
-		Timer.sequence(...Ghosts.slice(1).map((g,i)=>
-			({ms:StandbyTimes[lv][i]/Game.speedRate,fn:g.leaveHouse})))
+		Ctrl.isChaseMode && Timer.sequence(...
+			Ghosts.slice(1).map((g,i)=> ({
+				ms: StandbyTimes[lv][i]/Game.speedRate,
+				fn: ()=> g.leaveHouse()
+			}))
+		)
 	}
 	setFrightMode() {
 		FrightMode.new()
