@@ -30,7 +30,6 @@ export const Ctrl = new class {
 	get isCheatMode()   {return this.speedRate<.7 || this.showTargets || this.invincible}
 	get isDefaultMode() {return this.consecutive && Menu.Level.index == 0}
 
-
 	#fitToViewport() {
 		const scale = min(
 			innerWidth /Form.offsetWidth * .98,

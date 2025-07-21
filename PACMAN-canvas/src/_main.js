@@ -73,7 +73,8 @@ export const Game = new class {
 	}
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
-		if (Confirm.opened || keyRepeat(e)) return
+		if (Confirm.opened || keyRepeat(e))
+			return
 		match(e.key, {
 			Escape:()=> Game.#pause(),
 			Delete:()=> {

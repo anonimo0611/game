@@ -145,7 +145,8 @@ export const Maze = freeze(new class {
 
 	/**
 	 * Whether tile `y` coord is the top/bottom of the maze excluding dead space
-	 * @param {number} y */
+	 * @param {number} y
+	 */
 	isTopOrBottom = y=> (y == Maze.Top || y == Maze.Bottom)
 
 	/**
