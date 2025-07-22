@@ -80,7 +80,9 @@ export class Actor extends Common {
 	move(dir) {this.setNextPos(1, this.dir=dir)}
 
 	/** @param {Direction} dir */
-	hasAdjWall(dir) {return Maze.hasWall(this.getAdjTile(dir))}
+	hasAdjWall(dir) {
+		return Maze.hasWall(this.getAdjTile(dir))
+	}
 
 	/** @param {Direction} dir */
 	getAdjTile(dir, tile=this.tilePos) {
