@@ -41,7 +41,8 @@ D__________________________C\
 ////////////////////////////`])
 
 /** `.` and `O` represent normal and power cookies
- ** @type {ReadonlySet<string>} */
+ * @type {ReadonlySet<string>}
+ */
 const DotChipSet = new Set(['.','O'])
 
 /** @typedef {number} TileIdx */
@@ -56,20 +57,6 @@ class House {
 	get EntranceTile() {return Vec2(13, 12)}
 	isIn = (/**@type {Vector2}*/tile)=> PenRect.contains(tile)
 }
-class PowDot {
-	#disp = 1
-	draw() {
-		this.#disp ^= +(Ticker.count % PowDotInterval == 0)
-		for (const [,tile] of PowMap) this.#draw(tile)
-	}
-	/** @param {Vector2} t */
-	#draw(t) {
-		if (!State.isPlaying
-		 || Ticker.paused
-		 || this.#disp)
-			Maze.drawDot(Ctx, t.x, t.y, true)
-	}
-}
 class Tunnel {
 	Y = 15
 	EntranceL =  5.5
@@ -79,6 +66,16 @@ class Tunnel {
 			if (x/T <= this.EntranceL) return L
 			if (x/T >= this.EntranceR) return R
 		} return null
+	}
+}
+class PowDot {
+	#disp = 1
+	draw() {
+		this.#disp ^= +(Ticker.count % PowDotInterval == 0)
+		for (const [,tile] of PowMap) {
+			if (!State.isPlaying || Ticker.paused || this.#disp)
+				Maze.drawDot(Ctx, ...tile.vals, true)
+		}
 	}
 }
 
