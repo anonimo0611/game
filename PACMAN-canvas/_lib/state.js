@@ -17,6 +17,7 @@ export default class {
 			i == 0 && (this.#default = state)
 			defineProperty(this,key,{get(){return this.#state === state}})
 		})
+		return this
 	}
 
 	/**
