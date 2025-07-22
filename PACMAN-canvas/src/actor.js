@@ -32,12 +32,10 @@ export class Actor extends Common {
 	set pos(pos)    {this.setPos(pos)}
 
 	get dir()       {return this.#movDir}
-	get movDir()    {return this.#movDir}
 	get orient()    {return this.#orient}
 	get revDir()    {return Dir.Opposite[this.dir]}
 	get revOrient() {return Dir.Opposite[this.orient]}
 	set dir(dir)    {this.#movDir = this.orient = dir}
-	set movDir(dir) {this.#movDir = dir}
 	set orient(dir) {this.#orient = dir}
 
 	get tilePixel() {
