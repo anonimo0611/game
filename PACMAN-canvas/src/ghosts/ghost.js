@@ -59,7 +59,7 @@ export class Ghost extends Actor {
 		this.idx   = idx
 		this.dir   = dir
 		this.pos   = Vec2(col*T, row*T)
-		this.state = new Sys.GhostState(this.inHouse)
+		this.state = new Sys.GhostState(this)
 		this.init  = freeze({x:col*T,align,animFlag})
 		freeze(this)
 	}
@@ -242,7 +242,7 @@ export class Ghost extends Actor {
 	/** @param {()=>void} release */
 	#caught(release) {
 		this.#isFright = false
-		this.trigger('Cought').state.to('Bitten')
+		this.state.to('Bitten')
 		Timer.freeze()
 		Sound.play('bitten')
 		PtsMgr.set({key:GhsMgr, pos:this.center}, release)
@@ -252,6 +252,9 @@ export class Ghost extends Actor {
 		State.to('Crashed').to('Dying', {delay:500})
 	}
 	#setFrightMode(_={}, bool=false) {
+		!this.isEscaping && (this.#isFright = bool)
+	}
+	setFrightMode(bool=false) {
 		!this.isEscaping && (this.#isFright = bool)
 	}
 	#setEscape() {

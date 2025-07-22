@@ -45,16 +45,17 @@ export class GhostState extends _State {
 	isBitten = false
 	isEscape = false
 	isReturn = false
-	constructor(inHouse=false) {
+	/** @readonly */#owner
+	constructor(/**@type {Ghost}*/g) {
 		super()
-		this.init()
-		this.to(inHouse? 'Idle':'Walk')
+		this.init().to((this.#owner=g).inHouse? 'Idle':'Walk')
 	}
 	get current() {
 		return /**@type {StateType}*/(super.current)
 	}
-	to(/**@type {StateType}*/state) {
-		return super.to(state)
+	to(/**@type {StateType}*/s) {
+		$(this.#owner).trigger(s)
+		return super.to(s)
 	}
 }
 
@@ -255,7 +256,7 @@ const FrightMode = function() {
 			_session = bool? this : null
 			$(Ghosts)
 				.trigger('FrightMode', bool)
-				.offon('Cought', ()=> this.#caughtCnt++, bool)
+				.offon('Bitten', ()=> this.#caughtCnt++, bool)
 			Sound.toggleFrightMode(bool)
 		}
 		#flashing() {
