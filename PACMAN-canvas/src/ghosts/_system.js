@@ -37,7 +37,10 @@ const StandbyTimes = /**@type {const}*/
 	[   0,  900,    0], // Lv.13
 ])
 
-/** @typedef {'Idle'|'GoOut'|'Walk'|'Bitten'|'Escape'|'Return'} StateType */
+/**
+ * @extends {_State<Ghost,StateType>}
+ * @typedef {'Idle'|'GoOut'|'Walk'|'Bitten'|'Escape'|'Return'} StateType
+ */
 export class GhostState extends _State {
 	isIdle   = false
 	isGoOut  = false
@@ -45,17 +48,13 @@ export class GhostState extends _State {
 	isBitten = false
 	isEscape = false
 	isReturn = false
-	/** @readonly */#owner
 	constructor(/**@type {Ghost}*/g) {
-		super()
-		this.init().to((this.#owner=g).inHouse? 'Idle':'Walk')
+		super(g)
+		this.init().to(g.inHouse? 'Idle':'Walk')
 	}
-	get current() {
-		return /**@type {StateType}*/(super.current)
-	}
-	to(/**@type {StateType}*/s) {
-		$(this.#owner).trigger(s)
-		return super.to(s)
+	to(/**@type {StateType}*/state) {
+		$(this.owner).trigger(state)
+		return super.to(state)
 	}
 }
 

@@ -117,12 +117,12 @@ export class Ghost extends Actor {
 		case 'Idle':  return this.#idle(this)
 		case 'GoOut': return this.#goOut(this)
 		case 'Return':return this.#returnToHome(this)
+		default: this.#walkRails()
 		}
-		this.#walkRails()
 	}
 	#idle({idx,orient,state,step,center:{y:cy}}=this) {
 		if (!Ctrl.isChaseMode)
-			Sys.DotCounter.release(idx, d=> this.leaveHouse(d))
+			Sys.DotCounter.release(idx, b=> this.leaveHouse(b))
 		!state.isGoOut && this.move(
 			(cy+T*0.6-step > Maze.House.MiddleY && orient != D)? U:
 			(cy-T*0.6+step < Maze.House.MiddleY ? D:U)
@@ -252,9 +252,6 @@ export class Ghost extends Actor {
 		State.to('Crashed').to('Dying', {delay:500})
 	}
 	#setFrightMode(_={}, bool=false) {
-		!this.isEscaping && (this.#isFright = bool)
-	}
-	setFrightMode(bool=false) {
 		!this.isEscaping && (this.#isFright = bool)
 	}
 	#setEscape() {

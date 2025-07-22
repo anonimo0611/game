@@ -15,7 +15,12 @@ export class Actor extends Common {
 	/** @protected */
 	constructor()   {super()}
 	get radius()    {return T}
+	get maxAlpha()  {return 1}
+	get step()      {return 0}
 	get stepDiv()   {return ceil(this.step*2)}
+	get inHouse()   {return Maze.House.isIn(this.tilePos)}
+	get inTunnel()  {return Maze.Tunnel.wicthSide(this.center)}
+
 	get x()         {return this.#x}
 	get y()         {return this.#y}
 	get pos()       {return Vec2(this)}
@@ -32,13 +37,6 @@ export class Actor extends Common {
 	get revOrient() {return Dir.Opposite[this.orient]}
 	set dir(dir)    {this.#movDir = this.orient = dir}
 	set orient(dir) {this.#orient = dir}
-
-	get step()      {return 0}
-	get maxAlpha()  {return 1}
-	get inHouse()   {return Maze.House .isIn(this.tilePos)}
-	get inTunnel()  {return Maze.Tunnel.isIn(this.center)}
-	get inTunnelL() {return Maze.Tunnel.isIn(this.center,L)}
-	get inTunnelR() {return Maze.Tunnel.isIn(this.center,R)}
 
 	get tilePixel() {
 		const  {x,y} = this.center, v = Vec2[this.dir]

@@ -52,9 +52,9 @@ const PenRect  = new Rect(10, 13,  8, 5).freeze()
 const PenOuter = new Rect( 9, 12, 10, 7).freeze()
 
 class House {
+	MiddleY = (this.EntranceTile.y+3.5)*T
 	get EntranceTile() {return Vec2(13, 12)}
 	isIn = (/**@type {Vector2}*/tile)=> PenRect.contains(tile)
-	MiddleY = (this.EntranceTile.y+3.5)*T
 }
 class PowDot {
 	#disp = 1
@@ -74,25 +74,11 @@ class Tunnel {
 	Y = 15
 	EntranceL =  5.5
 	EntranceR = 22.5
-	/**
-	 * @param {Vector2} centerPos
-	 * @param {'Left'|'Right'} [dir]
-	 */
-	isIn(centerPos, dir) {
-		const where = this.#where(centerPos)
-		switch(dir) {
-		case L:  return (where == L)
-		case R:  return (where == R)
-		default: return (where != null)
-		}
-	}
-	/** @param {Vector2} centerPos */
-	#where({x, y}) {
+	wicthSide({x=0,y=0}) {
 		if (int(y/T) == this.Y) {
 			if (x/T <= this.EntranceL) return L
 			if (x/T >= this.EntranceR) return R
-		}
-		return null
+		} return null
 	}
 }
 

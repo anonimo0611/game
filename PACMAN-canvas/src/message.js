@@ -29,7 +29,8 @@ export const Message = new class {
 		if (State.isStart)
 			drawText( 9, 13, Color.Message1, 'PLAYER　ONE')
 
-		if (State.isSt_Ready)
+		if (State.isStart
+		 || State.isReady)
 			drawText(11, 19, Color.Message2, 'READY!')
 
 		if (State.isTitle

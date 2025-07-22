@@ -100,7 +100,7 @@ export class Attract {
 	}
 	drawGhost(where=0, gIdx=0, row=NaN) {
 		const ghost = this.ghsList[where][gIdx]
-		isFinite(row) && ghost.setPos(5*T, row*T)
+		isFinite(row) && ghost.setPos(T*5, T*row)
 		ghost.sprite.draw(ghost)
 	}
 	update() {
