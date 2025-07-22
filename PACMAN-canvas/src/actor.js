@@ -32,10 +32,12 @@ export class Actor extends Common {
 	set pos(pos)    {this.setPos(pos)}
 
 	get dir()       {return this.#movDir}
+	get movDir()    {return this.#movDir}
 	get orient()    {return this.#orient}
 	get revDir()    {return Dir.Opposite[this.dir]}
 	get revOrient() {return Dir.Opposite[this.orient]}
 	set dir(dir)    {this.#movDir = this.orient = dir}
+	set movDir(dir) {this.#movDir = dir}
 	set orient(dir) {this.#orient = dir}
 
 	get tilePixel() {
@@ -62,16 +64,14 @@ export class Actor extends Common {
 	draw() {
 		Ctx.setAlpha(this.#fadeIn?.alpha ?? this.maxAlpha)
 	}
-	centering() {
-		this.x = (BW-T)/2
+	setNextPos(divisor=1, dir=this.dir) {
+		this.pos = Vec2[dir].mul(this.step/divisor).add(this)
 	}
 	justArrivedAtTile(divisor=1) {
 		return this.inFrontHalfOfTile
 			&& this.tilePixel <= this.step/divisor
 	}
-	setNextPos(divisor=1, dir=this.dir) {
-		this.pos = Vec2[dir].mul(this.step/divisor).add(this)
-	}
+	centering() {this.x = (BW-T)/2}
 
 	/** @param {Direction} dir */
 	setMoveDir(dir) {this.#movDir = dir}
@@ -80,9 +80,7 @@ export class Actor extends Common {
 	move(dir) {this.setNextPos(1, this.dir=dir)}
 
 	/** @param {Direction} dir */
-	hasAdjWall(dir) {
-		return Maze.hasWall(this.getAdjTile(dir))
-	}
+	hasAdjWall = dir=> Maze.hasWall(this.getAdjTile(dir))
 
 	/** @param {Direction} dir */
 	getAdjTile(dir, tile=this.tilePos) {
@@ -103,8 +101,7 @@ export class Actor extends Common {
 	 * @type {((x:number, y:number)=>void) & ((pos:OptionalPos)=>void)}
 	 */
 	setPos = (a,b)=> {
-		const [x=this.x, y=this.y]=
-			(typeof a == 'object')? [a.x,a.y]:[a,b]
+		const [x=this.x, y=this.y]= (typeof a == 'object')? [a.x,a.y]:[a,b]
 		this.#y = y
 		this.#x = function(r) { // x-axis move loops during play
 			if (!State.isPlaying) return
