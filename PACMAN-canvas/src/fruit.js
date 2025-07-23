@@ -10,9 +10,10 @@ import * as Pts from './sprites/points.js'
 import * as Spr from './sprites/fruits.js'
 
 /** The fruit appear after 70 or 170 dots are cleared
- ** @type {ReadonlySet<number>} */
-const AppearSet = new Set([70,170])
-const IdxTable  = freeze([0,1,2,2,3,3,4,4,5,5,6,6,7])
+ * @type {ReadonlySet<number>}
+ */const AppearSet = new Set([70,170])
+
+const TypeTable = freeze([0,1,2,2,3,3,4,4,5,5,6,6,7])
 const TargetPos = Vec2(BW/2, T*18.5).freeze()
 
 const LvCounterCols = 7
@@ -32,7 +33,7 @@ export const Fruit = new class {
 		return Pts.Vals.Fruit[Fruit.number()]
 	}
 	number(i=Game.level-1) {
-		return IdxTable.at(i >= IdxTable.length ? -1 : i) ?? 0
+		return TypeTable.at(i >= TypeTable.length ? -1 : i) ?? 0
 	}
 	/** Disappearing is between 9 and 10 seconds */
 	#setTimerToHideTarget() {
