@@ -72,9 +72,9 @@ class PowDot {
 	#disp = 1
 	draw() {
 		this.#disp ^= +(Ticker.count % PowDotInterval == 0)
-		for (const [,tile] of PowMap) {
+		for (const [,{x,y}] of PowMap) {
 			if (!State.isPlaying || Ticker.paused || this.#disp)
-				Maze.drawDot(Ctx, ...tile.vals, true)
+				Maze.drawDot(Ctx, x,y, true)
 		}
 	}
 }
@@ -151,10 +151,10 @@ export const Maze = freeze(new class {
 	 * @param {{tileIdx:number, tilePos:Vector2}} tile
 	 * @returns {number} number of remaining dots
 	 */
-	clearBgDot({tileIdx:i,tilePos:t}) {
+	clearBgDot({tileIdx:i,tilePos:{x,y}}) {
 		DotSet.delete(i)
 		PowMap.delete(i)
-		drawDot(Bg.ctx, t.x, t.y, true, null)
+		drawDot(Bg.ctx, x,y, true, null)
 		return DotSet.size
 	}
 
@@ -166,7 +166,7 @@ export const Maze = freeze(new class {
 	 * @param {?Cvs2DStyle} color
 	 */
 	drawDot(ctx, col,row, isPow=false, color=Color.Dot) {
-		const v = Vec2(col,row).add(.5).mul(T).vals
-		ctx.fillCircle(...v, T/(isPow? 2:8), color)
+		const {x,y}= Vec2(col,row).add(.5).mul(T)
+		ctx.fillCircle(x,y, T/(isPow? 2:8), color)
 	}
 }), {drawDot}= Maze
