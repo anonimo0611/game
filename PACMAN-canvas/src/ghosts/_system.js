@@ -169,11 +169,10 @@ const AttackInWaves = function() {
 			}
 		};return [seq,{mode:CHASING,update(){}}][seq.mode]
 	}
-}(),
-setReversalSig = ()=> {$(Ghosts).trigger('Reverse')}
+}(), setReversalSig = ()=> {$(Ghosts).trigger('Reverse')}
 
 export const DotCounter = function() {
-	let _globalCounter = -1
+	let  _globalCounter = -1
 	const pCounters  = new Uint8Array(GhsType.Max)
 	const LimitTable = /**@type {const}*/
 		([//global,lv1,lv2,lv3+
@@ -182,7 +181,7 @@ export const DotCounter = function() {
 			[32, 60, 50, 0], // Guzuta
 		])
 	/**
-	 * @param {number} idx Pinky, Aosuke, Guzuta's index
+	 * @param {number} idx Index of Pinky, Aosuke or Guzuta
 	 * @param {(deactivateGlobal?:boolean)=> boolean} fn
 	 */
 	function release(idx, fn) {

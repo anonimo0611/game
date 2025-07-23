@@ -5,7 +5,7 @@ import {pacman} from '../player/pacman.js'
 import {GhsMgr} from '../ghosts/_system.js'
 import {Ghost}  from './ghost.js'
 
-/** @type {readonly string[]} */
+/** @type {readonly Cvs2DStyle[]} */
 const Colors = GhsNames.map(n=> Color[n])
 
 export default new class {
@@ -55,7 +55,7 @@ export default new class {
 	}
 	/** @param {{g:Ghost,ofst:number}} param */
 	#auxLines({g,ofst}) {
-		const {center:pacPos,dir}= pacman
+		const {center:{x,y},dir}= pacman
 		const fwdXY = pacman.forwardPos (ofst).vals
 		const ofsXY = pacman.forwardOfst(ofst).vals
 		Ctx.save()
@@ -64,8 +64,8 @@ export default new class {
 		Ctx.strokeStyle = Colors[g.idx]
 		if (g.idx != GhsType.Pinky || !pacman.inTunnel) {
 			dir != U
-				? Ctx.newLinePath(pacPos.vals, fwdXY)
-				: Ctx.newLinePath(pacPos.vals, fwdXY).lineTo(...ofsXY)
+				? Ctx.newLinePath([x,y], fwdXY)
+				: Ctx.newLinePath([x,y], fwdXY).lineTo(...ofsXY)
 			Ctx.stroke()
 		}
 		if (g.idx == GhsType.Aosuke) {

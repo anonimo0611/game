@@ -243,8 +243,8 @@ export class Ghost extends Actor {
 	#caught(release) {
 		this.#isFright = false
 		this.state.to('Bitten')
-		Timer.freeze()
 		Sound.play('bitten')
+		Timer.freeze()
 		PtsMgr.set({key:GhsMgr, pos:this.center}, release)
 	}
 	#attack() {
