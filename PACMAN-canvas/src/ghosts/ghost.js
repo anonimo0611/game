@@ -117,7 +117,7 @@ export class Ghost extends Actor {
 		case 'Idle':  return this.#idle(this)
 		case 'GoOut': return this.#goOut(this)
 		case 'Return':return this.#returnToHome(this)
-		default: this.#walkRails()
+		default: this.#walkPath()
 		}
 	}
 	#idle({idx,orient,state,step,center:{y:cy}}=this) {
@@ -175,7 +175,7 @@ export class Ghost extends Actor {
 			: this.state.to('Idle') && this.#idle(this)
 		!Timer.frozen && Sound.ghostArrivedAtHome()
 	}
-	#walkRails() {
+	#walkPath() {
 		for (const _ of range(this.stepDiv)) {
 			this.setNextPos(this.stepDiv)
 			this.inBackHalfOfTile && this.#setNextDir()
@@ -218,7 +218,8 @@ export class Ghost extends Actor {
 		if (dir == L && pos.x < t.x*T
 		 || dir == R && pos.x > t.x*T
 		 || dir == U && pos.y < t.y*T
-		 || dir == D && pos.y > t.y*T) {
+		 || dir == D && pos.y > t.y*T
+		) {
 			this.pos = t.mul(T)
 			this.setMoveDir(orient)
 			return true
@@ -227,7 +228,7 @@ export class Ghost extends Actor {
 	}
 	crashWithPac({
 		pos     = pacman.pos,
-		radius  = (this.isFright? T/2:T/3),
+		radius  = this.isFright? T/2:T/3,
 		release = ()=> this.#setEscape(),
 	}={}) {
 		if (!this.state.isWalk
@@ -239,8 +240,7 @@ export class Ghost extends Actor {
 			: this.#attack()
 		return true
 	}
-	/** @param {()=>void} release */
-	#caught(release) {
+	#caught(/**@type {()=>void}*/release) {
 		this.#isFright = false
 		this.state.to('Bitten')
 		Sound.play('bitten')

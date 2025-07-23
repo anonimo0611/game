@@ -211,7 +211,7 @@ export const DotCounter = function() {
 }()
 
 const Elroy = function() {
-	let _part = 0
+	let  _part = 0
 	const Accelerations = freeze([1.00, 1.02, 1.05, 1.1])
 	const DotsLeftTable = freeze([20,20,30,40,50,60,70,70,80,90,100,110,120])
 	function angry() {
