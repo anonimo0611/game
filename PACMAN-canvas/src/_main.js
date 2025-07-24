@@ -83,7 +83,7 @@ export const Game = new class {
 				: State.isPlaying && Game.#confirm()
 			},
 			_:()=> {
-				if (Ctrl.activeCtrl) return
+				if (Ctrl.activeElem) return
 				if (Dir.from(e,{wasd:true}) || e.key == '\x20') {
 					State.isTitle && byId('startBtn')?.click()
 					Ticker.paused && Game.#pause()

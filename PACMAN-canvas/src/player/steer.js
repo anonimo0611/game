@@ -15,7 +15,7 @@ export class SteerPacman {
 		if (keyRepeat(e)
 			|| dir == null
 			|| Confirm.opened
-			|| Ctrl.activeCtrl)
+			|| Ctrl.activeElem)
 			return
 
 		if (this.#turning) {
