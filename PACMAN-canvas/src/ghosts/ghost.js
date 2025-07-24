@@ -141,7 +141,7 @@ export class Ghost extends Actor {
 		if (cx != BW/2)
 			return this.centering()
 
-		if (y > Maze.House.EntranceTile.y*T+step)
+		if (y > Maze.House.EntranceTile.y*T)
 			return this.move(U)
 
 		this.dir = L
@@ -194,12 +194,13 @@ export class Ghost extends Actor {
 	}
 	#getNextDir(tgt=this.targetTile) {
 		const tile = this.getAdjTile(this.dir)
-		const dirs = this.turnDirs.flatMap((dir,idx)=> {
+		const dirs = this.turnDirs.flatMap
+		((dir,idx)=> {
 			const test = this.getAdjTile(dir,tile)
-			const dist = Vec2.sqrMag(test,tgt)
 			return Maze.hasWall(test) == false
 				&& this.revOrient != dir
-				&& this.#canEnter({dir,test})? [{idx,dir,dist}]:[]
+				&& this.#canEnter({dir,test})
+				? [{idx,dir,dist:Vec2.sqrMag(test,tgt)}]:[]
 		})
 		return this.isFright? randChoice(dirs).dir:
 			(idx=> dirs.sort(compareDist)[idx].dir)
@@ -211,16 +212,12 @@ export class Ghost extends Actor {
 			|| (dir != U || this.isFright || this.isEscaping)
 			|| !Maze.GhostNoEnter.has(test.hyphenated)
 	}
-	#setTurn({dir,orient,pos,tilePos:t}=this) {
-		if (dir == orient
-		 || this.hasAdjWall(orient))
-			return false
-		if (dir == L && pos.x < t.x*T
-		 || dir == R && pos.x > t.x*T
-		 || dir == U && pos.y < t.y*T
-		 || dir == D && pos.y > t.y*T
+	#setTurn({orient}=this) {
+		if (this.dir != orient
+		 && this.hasAdjWall(orient) == false
+		 && this.inBackHalfOfTile
 		) {
-			this.pos = t.mul(T)
+			this.pos = this.tilePos.mul(T)
 			this.setMoveDir(orient)
 			return true
 		}
