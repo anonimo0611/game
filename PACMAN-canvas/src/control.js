@@ -17,7 +17,7 @@ export const Ctrl = new class {
 		$load(Ctrl.#setup)
 	}
 	get extendPts()     {return +Menu.Extend.value}
-	get focused()       {return qS(':not(#startBtn):focus')}
+	get activeCtrl()    {return qS(':not(#startBtn):focus')}
 	get livesMax()      {return ctrl('lvsRng').valueAsNumber}
 	get speedRate()     {return ctrl('spdRng').valueAsNumber}
 	get isChaseMode()   {return ctrl('chsChk').checked}
