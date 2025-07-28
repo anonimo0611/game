@@ -17,9 +17,8 @@ const SmallSize = T*0.68
 let _attract = /**@type {?Attract}*/(null)
 
 export class Attract {
-	static {State.on({Attract:this.#instantiate})}
-	static #instantiate() {
-		_attract = new Attract
+	static {
+		State.on({Attract:()=> _attract = new Attract})
 	}
 	static update() {
 		RunTimer .update()

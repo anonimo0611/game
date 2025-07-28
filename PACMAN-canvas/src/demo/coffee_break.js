@@ -8,10 +8,13 @@ import {Ghost}  from '../ghosts/ghost.js'
 import Sprite   from '../sprites/ghost_cb.js'
 
 export class CoffBrk {
-	static {State.on({CoffBrk:this.#instantiate.bind(this)})}
 	static #scene = /**@type {?(Scene1|Scene2|Scene3)}*/(null)
-	static #instantiate(_={}, num=this.number) {
-		this.#scene = new [Scene1,Scene2,Scene3][num-1]
+	static {
+		State.on({CoffBrk:(_, num=this.number)=>
+			this.#scene = new [Scene1,Scene2,Scene3][num-1]})
+	}
+	static get number() {
+		return (!Ctrl.isPractice && {2:1, 5:2, 9:3}[Game.level]) || -1
 	}
 	static update() {
 		this.#scene?.update()
@@ -19,9 +22,6 @@ export class CoffBrk {
 	static draw() {
 		this.#scene?.draw()
 		return State.isCoffBrk
-	}
-	static get number() {
-		return (!Ctrl.isPractice && {2:1, 5:2, 9:3}[Game.level]) || -1
 	}
 	pacman  = new Pacman
 	akabei  = new Ghost
