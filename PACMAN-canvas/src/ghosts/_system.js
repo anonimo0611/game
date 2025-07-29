@@ -221,8 +221,8 @@ const Elroy = function() {
 			&& Ghosts[GhsType.Guzuta]?.isStarted === true
 	}
 	function onDotEaten() {
-		const left = DotsLeftTable[Game.clampedLv-1]
-		if (Maze.dotsLeft <= left*[1.5, 1.0, 0.5][_part])
+		const rem = DotsLeftTable[Game.clampedLv-1]
+		if (Maze.dotsLeft <= rem*[1.5, 1.0, 0.5][_part])
 			++_part && Sound.playSiren()
 	}
 	State.on({_NewLevel:()=> _part = 0})
