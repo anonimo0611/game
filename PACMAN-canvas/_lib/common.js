@@ -5,7 +5,7 @@ export class Common {
 		this.#target = eventTarget ?? this
 	}
 
-	/** @param {{[event:string]:JQWindowHandler}} arg */
+	/** @param {{[event:string]:(ev:JQuery.TriggeredEvent<any, undefined, any, any>)=>any}} arg */
 	on(arg) {
 		$(this.#target).on(arg)
 		return this
@@ -14,6 +14,7 @@ export class Common {
 	/** @param {string} eventType */
 	off(eventType) {
 		$(this.#target).off(eventType)
+		return this
 	}
 
 	/**
