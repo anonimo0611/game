@@ -1,7 +1,7 @@
 const
 Rows     = 34,
 Cols     = 28,
-TileSize = 26,
+TileSize = 27,
 DotScore = 10,
 PowScore = 50,
 MoveStep = TileSize/4.5,
