@@ -103,7 +103,6 @@ export const GhsMgr = new class extends Common {
 	}
 	setFrightMode() {
 		FrightMode.new()
-		setReversalSig()
 	}
 	update() {
 		if (State.isPlaying
@@ -246,7 +245,8 @@ const FrightMode = function() {
 		/** @readonly */
 		Dur = TimeTable[Game.clampedLv-1]
 		constructor() {
-			(this.Dur == 0 && !State.isAttract)
+			setReversalSig()
+			;(this.Dur == 0 && !State.isAttract)
 				? $(Ghosts).trigger('Runaway')
 				: this.#toggle(true)
 		}
