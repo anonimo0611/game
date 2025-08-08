@@ -1,5 +1,5 @@
 ﻿const Size = $('#volume').height()
-const{cvs,ctx}= canvas2D('cvs_speaker', Size)
+const{cvs,ctx}= canvas2D('speaker', Size)
 
 export const Speaker = new class {
 	draw(/**@type {number}*/vol) {
@@ -7,7 +7,7 @@ export const Speaker = new class {
 		const step = this.#step(vol)
 		ctx.clear()
 		ctx.save()
-		ctx.fillStyle = ctx.strokeStyle = '#FFFFFF'
+		ctx.fillStyle = ctx.strokeStyle = '#FFF'
 		ctx.translate(width/2, height/2)
 		ctx.scale(width/100, height/100)
 		this.#drawBody()
