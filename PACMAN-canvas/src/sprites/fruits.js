@@ -5,7 +5,7 @@ function cherry(ctx=Ctx) {
 		ctx.translate(x,y)
 
 		// red fruit
-		ctx.fillCircle(2.5, 2.5, 3, '#FF0000')
+		ctx.fillCircle(2.5, 2.5, 3, '#F00')
 		ctx.save()
  		ctx.globalCompositeOperation = 'destination-out'
 		ctx.beginPath()
@@ -18,7 +18,7 @@ function cherry(ctx=Ctx) {
 		ctx.newLinePath([1.1,2.9],[2.1,3.9])
 		ctx.lineCap = 'round'
 		ctx.lineWidth = 1.05
-		ctx.strokeStyle = '#FFFFFF'
+		ctx.strokeStyle = '#FFF'
 		ctx.stroke()
 		ctx.restore()
 	})
@@ -28,7 +28,7 @@ function cherry(ctx=Ctx) {
 	ctx.bezierCurveTo(-1,-2, 2,-4, 5,-5)
 	ctx.lineTo(5,-4)
 	ctx.bezierCurveTo(3,-4, 1, 0, 1, 2)
-	ctx.strokeStyle = '#FF9900'
+	ctx.strokeStyle = '#F90'
 	ctx.stroke()
 }
 function strawberry(ctx=Ctx) {
@@ -39,24 +39,24 @@ function strawberry(ctx=Ctx) {
 	ctx.bezierCurveTo(-5, 3,-2, 5, 0,  6)
 	ctx.bezierCurveTo( 3, 5, 5, 2, 5,  0)
 	ctx.bezierCurveTo( 5,-3, 3,-4, 0, -4)
-	ctx.fillStyle = ctx.strokeStyle = '#FF0000'
+	ctx.fillStyle = ctx.strokeStyle = '#F00'
 	ctx.fill()
 	ctx.stroke()
 
 	;[//white spots
 		[-4,-1],[-3,2],[-2, 0],[-1,4],[0, 2],
 		[ 0, 0],[ 2,4],[ 2,-1],[ 3,1],[4,-2]
-	].forEach(([x,y])=> ctx.fillCircle(x,y, .55, '#FFFFFF'))
+	].forEach(([x,y])=> ctx.fillCircle(x,y, .55, '#FFF'))
 
 	// green leaf
 	ctx.newLinePath([0,-4],[-3,-4],[0,-4],[-2,-3],[-1,-3],[0,-4])
 	ctx.addLinePath([0,-2],[ 0,-4],[1,-3],[ 2,-3],[ 0,-4],[3,-4])
 	ctx.closePath()
-	ctx.strokeStyle = '#00FF00'
+	ctx.strokeStyle = '#0F0'
 	ctx.stroke()
 
 	// stem
-	ctx.strokeStyle = '#FFFFFF'
+	ctx.strokeStyle = '#FFF'
 	ctx.strokeLine(0,-4, 0,-5)
 }
 function orange(ctx=Ctx) {
@@ -89,7 +89,7 @@ function orange(ctx=Ctx) {
 	ctx.bezierCurveTo(3,-5, 4,-4, 5,-4)
 	ctx.bezierCurveTo(4,-4, 4,-3, 3,-3)
 	ctx.bezierCurveTo(2,-3, 2,-4,.5,-4)
-	ctx.strokeStyle = ctx.fillStyle = '#00FF00'
+	ctx.strokeStyle = ctx.fillStyle = '#0F0'
 	ctx.stroke()
 	ctx.fill()
 }
@@ -106,21 +106,21 @@ function apple(ctx=Ctx) {
 	ctx.bezierCurveTo( 5,-3, 3,-4, 2,-4)
 	ctx.quadraticCurveTo(0,-4, 0,-3)
 	ctx.closePath()
-	ctx.fillStyle = '#FF0000'
+	ctx.fillStyle = '#F00'
 	ctx.fill()
 
 	// stem
 	ctx.beginPath()
 	ctx.moveTo(-1,-3)
 	ctx.quadraticCurveTo(-1,-5, 0,-5)
-	ctx.strokeStyle = '#FF9900'
+	ctx.strokeStyle = '#F90'
 	ctx.stroke()
 
 	// shine
 	ctx.beginPath()
 	ctx.moveTo(2,3)
 	ctx.quadraticCurveTo(3, 3, 3, 1)
-	ctx.strokeStyle = '#FFFFFF'
+	ctx.strokeStyle = '#FFF'
 	ctx.stroke()
 }
 function melon(ctx=Ctx) {
@@ -148,7 +148,7 @@ function melon(ctx=Ctx) {
 	;[//white spots
 		[ 0.0,-2.3],[-2,-1.2],[-4, 0.8],[-3.6, 3.2],[1, 0],
 	  	[-1.3, 2.0],[-1, 4.5],[ 3, 2.5],[ 1.0, 4.5]
-	].forEach(([x,y])=> ctx.fillCircle(x,y, 0.5, '#FFFFFF'))
+	].forEach(([x,y])=> ctx.fillCircle(x,y, 0.5, '#FFF'))
 }
 function gala(ctx=Ctx) {
 	const yellow = '#F8FF00'
@@ -158,7 +158,7 @@ function gala(ctx=Ctx) {
 		ctx.scale(scaleX, 1)
 		ctx.fillPolygon(yellow,[0,-2.6],[4.9,-2.4],[4.6,-.5],[2,1.6],[1.1,.5],[0,.5])
 		// blue wings
-		ctx.fillPolygon('#00AAFF',[4.6,-4.8],[6,-4.5],[6,.6],[1.6,4],[1.6,2],[4.6,-.6])
+		ctx.fillPolygon('#0AF',[4.6,-4.8],[6,-4.5],[6,.6],[1.6,4],[1.6,2],[4.6,-.6])
 		ctx.restore()
 	}
 	// yellow tail
@@ -203,7 +203,7 @@ function bell(ctx=Ctx) {
 	ctx.ellipse(0, 4.9, 4.6, 1, 0, 0, PI*2)
 	ctx.fillStyle = '#53A8FB'
 	ctx.fill()
-	ctx.fillCircle(1.2, 5.3, 1.4, '#FFFFFF')
+	ctx.fillCircle(1.2, 5.3, 1.4, '#FFF')
 }
 function key(ctx=Ctx) {
 	// key metal
@@ -213,7 +213,7 @@ function key(ctx=Ctx) {
 	ctx.setLinePath([ 1, 3.9],[ 2.9, 3.9])
 	ctx.save()
 	ctx.lineCap = 'butt'
-	ctx.strokeStyle = '#FFFFFF'
+	ctx.strokeStyle = '#FFF'
 	ctx.stroke()
 	ctx.restore()
 
