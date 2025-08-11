@@ -32,7 +32,7 @@ export class Ghost extends Actor {
 	get chasePos()    {return pacman.center}
 	get scatterTile() {return Vec2()}
 
-	get aIdx()        {return GhsMgr.animIndex & this.init.animFlag}
+	get animIdx()     {return GhsMgr.animIndex & this.init.animFlag}
 	get spriteIdx()   {return GhsMgr.spriteIdx}
 	get maxAlpha()    {return Ctrl.showTargets ? 0.75:1}
 	get chaseTile()   {return this.chasePos.divInt(T)}

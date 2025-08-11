@@ -68,9 +68,9 @@ export const GhsMgr = new class extends Common {
 		})
 		GhsMgr.on({Init:GhsMgr.#initialize})
 	}
-	#aIdx = 0
-	get animIndex() {return this.#aIdx}
-	get aInterval() {return Ticker.count % 6 == 0}
+	#animIdx = 0
+	get animIndex() {return this.#animIdx}
+	get animFlag()  {return Ticker.count % 6 == 0}
 	get Elroy()     {return Elroy}
 	get isChasing() {return AttackInWaves.isChasing}
 	get isScatter() {return AttackInWaves.isScatter}
@@ -82,7 +82,7 @@ export const GhsMgr = new class extends Common {
 	get akaCenter() {return Ghosts[GhsType.Akabei].center}
 
 	#initialize(_={}, /**@type {Ghost[]}*/...ghosts) {
-		GhsMgr.#aIdx = 0
+		GhsMgr.#animIdx = 0
 		ghosts.forEach((g,i)=> Ghosts[i] = g)
 	}
 	#onLevelEnds() {
@@ -108,7 +108,7 @@ export const GhsMgr = new class extends Common {
 		if (State.isPlaying
 		 || State.isAttract
 		 || State.isCoffBrk)
-			this.#aIdx ^= Number(!Timer.frozen && GhsMgr.aInterval)
+			this.#animIdx ^= Number(!Timer.frozen && GhsMgr.animFlag)
 		AttackInWaves.update()
 		FrightMode.session?.update()
 		Ghosts.forEach(g=> g.update())
@@ -220,8 +220,8 @@ const Elroy = function() {
 			&& Ghosts[GhsType.Guzuta]?.isStarted === true
 	}
 	function onDotEaten() {
-		const rem = DotsLeftTable[Game.clampedLv-1]
-		if (Maze.dotsLeft <= rem*[1.5, 1.0, 0.5][_part])
+		const rate = [1.5, 1.0, 0.5][_part]
+		if (Maze.dotsLeft <= DotsLeftTable[Game.clampedLv-1]*rate)
 			++_part && Sound.playSiren()
 	}
 	State.on({_NewLevel:()=> _part = 0})
