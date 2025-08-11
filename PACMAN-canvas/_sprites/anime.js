@@ -12,7 +12,7 @@ const Btns = $('.radioButtons input')
 const Type = /**@type {const}*/
 ({
 	Actor: {None: -1, Pacman:0, Akabei:1, Pinky:2, Aosuke:3, Guzuta:4, Fright:5},
-	Pacman:{Normal:0, Dying: 1},
+	Pacman:{Normal:0, Dying:1},
 	Ghost: {Normal:0, Mended:1, Exposed:2, Flashed:3}
 })
 
@@ -20,13 +20,13 @@ class AnimData
 {
 	constructor(type=0,subType=0)
 	{
-		this.aIdx    = 0
-		this.fIdx    = 0
-		this.type    = type
-		this.subType = subType
-		this.ghost   = ghsSprite
-		this.pacman  = new PacSprite(ctx)
-		this.orient  = /**@type {Direction}*/(L)
+		this.animIdx  = 0
+		this.flashIdx = 0
+		this.type     = type
+		this.subType  = subType
+		this.ghost    = ghsSprite
+		this.pacman   = new PacSprite(ctx)
+		this.orient   = /**@type {Direction}*/(L)
 	}
 }
 
@@ -94,12 +94,12 @@ class AnimData
 			size:      S,
 			mainCtx:   ctx,
 			idx:       data.type-1,
-			aIdx:      data.aIdx,
+			animIdx:   data.animIdx,
 			orient:    data.orient,
 			isFright:  data.type    == Type.Actor.Fright,
 			isExposed: data.subType == Type.Ghost.Exposed,
 			isMended:  data.subType == Type.Ghost.Mended,
-			spriteIdx: data.subType == Type.Ghost.Flashed ? data.fIdx:0,
+			spriteIdx: data.subType == Type.Ghost.Flashed ? data.flashIdx:0,
 		})
 		ctx.restore()
 	}
@@ -107,8 +107,8 @@ class AnimData
 	{
 		resize()
 		if (data) {
-			data.aIdx ^= +(Ticker.count %  6 == 0)
-			data.fIdx ^= +(Ticker.count % 14 == 1)
+			data.animIdx  ^= +(Ticker.count %  6 == 0)
+			data.flashIdx ^= +(Ticker.count % 14 == 1)
 			data.pacman?.update()
 		}
 	}
