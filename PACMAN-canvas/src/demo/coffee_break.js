@@ -41,8 +41,8 @@ export class CoffBrk {
 		this.pacman.sprite.draw(this.pacman, {scale})
 	}
 	drawAkabei(cfg={}) {
-		const {akabei:{pos,aIdx}}= this
-		this.akabei.sprite.draw({aIdx, ...cfg, ...pos})
+		const {akabei:{pos,animIdx}}= this
+		this.akabei.sprite.draw({animIdx, ...cfg, ...pos})
 	}
 	pause() {
 		Sound.paused(Ticker.pause())
@@ -129,7 +129,7 @@ class Scene2 extends CoffBrk {
 	}
 	draw() {
 		const {akabei:a, sprite:spr, akaEyes,isRipped}= this
-		const aIdx = isRipped? 0 : (this.counter? 1 : a.aIdx)
+		const aIdx = isRipped? 0 : (this.counter? 1 : a.animIdx)
 		spr.drawStake()
 		this.drawPacman()
 		this.drawAkabei({aIdx,isRipped,orient:akaEyes})
