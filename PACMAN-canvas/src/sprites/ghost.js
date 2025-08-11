@@ -24,8 +24,8 @@ export default class {
 	setFadeOut()   {this.#fadeOut ||= new FadeOut(400)}
 	setResurrect() {this.#resurrect = new FadeIn (600)}
 	draw({
-		mainCtx=Ctx,
-		x=0,y=0,idx=0,aIdx=0,
+		mainCtx=Ctx, x=0,y=0, idx=0,
+		animIdx    = 0,
 		spriteIdx  = 0,
 		size       = T*2,
 		orient     = /**@type {Direction|'LowerR'}*/(L),
@@ -55,14 +55,14 @@ export default class {
 			: Color.FrightBodies[spriteIdx]
 
 		if (isExposed) {
-			this.#CBSprite.hadake(aIdx)
+			this.#CBSprite.hadake(animIdx)
 			return finalize()
 		}
 		if (!isEscaping) {
 			ctx.save()
 			this.#resurrect?.setAlpha(ctx)
 			this.#angryGlow({x,y, isAngry,size})
-			this.#body({aIdx,isRipped,isMended})
+			this.#body({aIdx: animIdx,isRipped,isMended})
 			isFright && this.#frightFace({spriteIdx})
 			ctx.restore()
 		}
