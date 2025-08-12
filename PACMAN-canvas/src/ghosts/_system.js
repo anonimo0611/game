@@ -94,7 +94,7 @@ export const GhsMgr = new class extends Common {
 	}
 	#setReleaseTimer() {
 		const lv = (Game.restarted? 0 : Game.clampedLv)
-		Ctrl.isChaseMode && Timer.sequence(...
+		Timer.sequence(...
 			Ghosts.slice(1).map((g,i)=> ({
 				ms: StandbyTimes[lv][i]/Game.speedRate,
 				fn: ()=> g.leaveHouse()
