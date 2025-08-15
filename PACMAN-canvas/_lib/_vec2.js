@@ -105,7 +105,10 @@ class Vector2 {
 	freeze() {
 		return freeze(this)
 	}
-	toString() {return `{x:${this.x}, y:${this.y}}`}
+	toString() {
+		return `{x:${this.x}, y:${this.y}}`
+	}
+	void(){}
 }
 
 /**
