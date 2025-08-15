@@ -66,12 +66,12 @@ const match = (key,pattern,separator='_')=> {
  	([...document.querySelectorAll(selector)])
 
 /**
- * @typedef {{dist:number, idx:number}} DistObject
- * @type {(a:DistObject, b:DistObject)=> number}
+ * @typedef {{dist:number, idx:number}} DistComparator
+ * @type {(a:DistComparator, b:DistComparator)=> number}
  */const compareDist = (a,b)=>
 	(a.dist == b.dist)? (a.idx-b.idx) : (a.dist-b.dist)
 
- /**
+/**
  * @param {string} str
  */const _toSp = (str,prefix='')=> str.indexOf('_') != -1
  	? prefix.trim()+str.trim().replace(/_/g,'\x20') : str.trim()
