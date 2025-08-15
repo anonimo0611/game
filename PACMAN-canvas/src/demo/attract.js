@@ -1,14 +1,14 @@
-﻿import {State}    from '../state.js'
-import {Ctrl}     from '../control.js'
-import {Score}    from '../score.js'
-import {PtsMgr}   from '../points.js'
-import {Fruit}    from '../fruit.js'
-import {drawDot}  from '../maze.js'
-import {drawText} from '../message.js'
-import {Pacman}   from '../pacman.js'
-import {GhsMgr}   from '../ghosts/_system.js'
-import {Ghost}    from '../ghosts/ghost.js'
-import {RunTimer} from './_run_timer.js'
+﻿import {State}      from '../state.js'
+import {Ctrl}       from '../control.js'
+import {Score}      from '../score.js'
+import {PtsMgr}     from '../points.js'
+import {Fruit}      from '../fruit.js'
+import {drawDot}    from '../maze.js'
+import {drawText}   from '../message.js'
+import {Pacman}     from '../pacman.js'
+import {GhsMgr}     from '../ghosts/_system.js'
+import {Ghost}      from '../ghosts/ghost.js'
+import {RunTimer}   from './_run_timer.js'
 
 const CHAR = 0
 const DEMO = 1
@@ -48,8 +48,8 @@ export class Attract {
 	setActor(where=0, idx=0) {
 		const g = new Ghost(where?L:R, {idx,animFlag:where?1:0})
 		if (where) {
-			g.setPos(BW+(T*6)+(T*2*idx), T*19)
-			g.idx == 0 && this.pacman.setPos(g.x-T*3.5, g.y)
+			g.pos.set(BW+(T*6)+(T*2*idx), T*19)
+			g.idx == 0 && this.pacman.pos.set(g.x-T*3.5, g.y)
 		}
 		(this.ghsList[where] ||= []).push(g)
 	}
@@ -99,7 +99,7 @@ export class Attract {
 	}
 	drawGhost(where=0, gIdx=0, row=NaN) {
 		const ghost = this.ghsList[where][gIdx]
-		isFinite(row) && ghost.setPos(T*5, T*row)
+		isFinite(row) && ghost.pos.set(T*5, T*row)
 		ghost.sprite.draw(ghost)
 	}
 	update() {

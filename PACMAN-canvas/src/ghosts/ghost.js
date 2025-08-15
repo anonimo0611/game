@@ -61,7 +61,6 @@ export class Ghost extends Actor {
 		this.pos   = Vec2(col*T, row*T)
 		this.state = new Sys.GhostState(this)
 		this.init  = freeze({x:col*T,align,animFlag})
-		freeze(this)
 	}
 	get originalTargetTile() {
 		return this.state.isEscape
@@ -158,7 +157,7 @@ export class Ghost extends Actor {
 			return this.setNextPos()
 
 		if (y != Maze.House.MiddleY)
-			return this.setPos({y:Maze.House.MiddleY})
+			return this.pos.setY(Maze.House.MiddleY).void()
 
 		if (!init.align || abs(x-init.x) <= step) {
 			this.x   = init.x

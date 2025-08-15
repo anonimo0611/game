@@ -129,16 +129,16 @@ class Scene2 extends CoffBrk {
 	}
 	draw() {
 		const {akabei:a, sprite:spr, akaEyes,isRipped}= this
-		const aIdx = isRipped? 0 : (this.counter? 1 : a.animIdx)
+		const animIdx = isRipped? 0 : (this.counter? 1 : a.animIdx)
 		spr.drawStake()
 		this.drawPacman()
-		this.drawAkabei({aIdx,isRipped,orient:akaEyes})
+		this.drawAkabei({animIdx,isRipped,orient:akaEyes})
 		isRipped
 			? spr.drawOffcut()
 			: function() { // Expand clothes
 				if (isRipped || a.x >= spr.CaughtX) return
 				const rate = norm(spr.CaughtX, spr.AkaMinX, a.x)
-				spr.clothes(aIdx, rate, a.center.add(T,0))
+				spr.clothes(animIdx, rate, a.center.add(T,0))
 			}()
 		super.draw()
 	}

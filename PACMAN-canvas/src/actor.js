@@ -6,8 +6,7 @@ import {Player} from './player/pacman.js'
 import {GhsMgr} from './ghosts/_system.js'
 
 export class Actor extends Common {
-	#x = 0
-	#y = 0
+	pos     = Vec2()
 	#fadeIn = /**@type {?FadeIn}*/(null)
 	#orient = /**@type {Direction}*/(L)
 	#movDir = /**@type {Direction}*/(L)
@@ -21,15 +20,14 @@ export class Actor extends Common {
 	get inHouse()   {return Maze.House.isIn(this.tilePos)}
 	get inTunnel()  {return Maze.Tunnel.wicthSide(this.center)}
 
-	get x()         {return this.#x}
-	get y()         {return this.#y}
-	get pos()       {return Vec2(this)}
-	get center()    {return Vec2(this).add(T/2)}
-	get tilePos()   {return Vec2(this).add(T/2).divInt(T)}
+	get x()         {return this.pos.x}
+	get y()         {return this.pos.y}
+	set x(num)      {this.pos.x = num}
+	set y(num)      {this.pos.y = num}
+
+	get center()    {return this.pos.clone.add(T/2)}
+	get tilePos()   {return this.pos.clone.add(T/2).divInt(T)}
 	get tileIdx()   {return Vec2.idx(this.tilePos,Cols)}
-	set x(num)      {this.#x = num}
-	set y(num)      {this.#y = num}
-	set pos(pos)    {this.setPos(pos)}
 
 	get dir()       {return this.#movDir}
 	get orient()    {return this.#orient}
@@ -64,6 +62,13 @@ export class Actor extends Common {
 	}
 	setNextPos(divisor=1, dir=this.dir) {
 		this.pos = Vec2[dir].mul(this.step/divisor).add(this)
+		this.#xAxisLoops()
+	}
+	#xAxisLoops() {
+		this.x = function({x,radius:r}) {
+			if (x < -r-T/2) return BW+T/2
+			if (x > BW+T/2) return -r-T/2
+		}(this) ?? this.x
 	}
 	justArrivedAtTile(divisor=1) {
 		return this.inFrontHalfOfTile
@@ -91,20 +96,5 @@ export class Actor extends Common {
 		const {step,center}= this
 		const {x,y}= Vec2[dir].mul(T/2+step).add(center).divInt(T)
 		return Maze.hasWall({x:(x+Cols) % Cols, y}) // x-axis loops
-	}
-
-	/**
-	 * @param {number|OptionalPos} a
-	 * @param {number} [b]
-	 * @type {((x:number, y:number)=>void) & ((pos:OptionalPos)=>void)}
-	 */
-	setPos = (a,b)=> {
-		const [x=this.x, y=this.y]= (typeof a == 'object')? [a.x,a.y]:[a,b]
-		this.#y = y
-		this.#x = function(r) { // x-axis move loops during play
-			if (!State.isPlaying) return
-			if (x < -r-T/2) return BW+T/2
-			if (x > BW+T/2) return -r-T/2
-		}(this.radius) ?? x
 	}
 }
