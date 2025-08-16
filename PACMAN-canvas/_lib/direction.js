@@ -1,3 +1,4 @@
+const DirSet   = new Set([U,R,D,L])
 const FromWASD = new Map([['W',U],['A',L],['S',D],['D',R]])
 
 export const Dir = freeze(new class {
@@ -9,7 +10,7 @@ export const Dir = freeze(new class {
 		if (isCombiKey(e)) return null
 		const k = e.code.replace(/^(Arrow|Key)/,'')
 		return /**@type {?Direction}*/(
-			hasOwn(Dir,k)? k : (wasd && FromWASD.get(k)) || null
+			DirSet.has(k)? k : (wasd && FromWASD.get(k)) || null
 		)
 	}
 })
