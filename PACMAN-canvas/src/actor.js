@@ -62,17 +62,13 @@ export class Actor extends Common {
 	}
 	setNextPos(divisor=1, dir=this.dir) {
 		this.pos = Vec2[dir].mul(this.step/divisor).add(this)
-		this.#xAxisLoops()
+		this.xAxisLoops()
 	}
-	#xAxisLoops() {
+	xAxisLoops() {
 		this.x = function({x,radius:r}) {
 			if (x < -r-T/2) return BW+T/2
 			if (x > BW+T/2) return -r-T/2
 		}(this) ?? this.x
-	}
-	justArrivedAtTile(divisor=1) {
-		return this.inFrontHalfOfTile
-			&& this.tilePixel <= this.step/divisor
 	}
 	centering() {this.x = (BW-T)/2}
 
@@ -90,11 +86,13 @@ export class Actor extends Common {
 		const  v = Vec2[dir].add(tile)
 		return v.setX((v.x+Cols) % Cols) // x-axis loops
 	}
-
 	/** @param {Direction} dir */
 	collidedWithWall(dir=this.dir) {
 		const {step,center}= this
 		const {x,y}= Vec2[dir].mul(T/2+step).add(center).divInt(T)
 		return Maze.hasWall({x:(x+Cols) % Cols, y}) // x-axis loops
+	}
+	justArrivedAtTile(divisor=1) {
+		return this.inFrontHalfOfTile && this.tilePixel <= this.step/divisor
 	}
 }
