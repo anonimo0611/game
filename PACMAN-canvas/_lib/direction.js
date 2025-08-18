@@ -1,4 +1,4 @@
-/** @typedef {U|R|D|L} Direction */
+/** @typedef {'Up'|'Right'|'Down'|'Left'} Direction */
 const U='Up', R='Right', D='Down', L='Left'
 const DirSet  = new Set([U,R,D,L])
 const wasdMap = new Map([['W',U],['A',L],['S',D],['D',R]])
