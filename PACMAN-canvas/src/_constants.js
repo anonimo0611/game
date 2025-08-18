@@ -12,7 +12,7 @@ T = TileSize,
 /** Blinking interval in frames */
 PowDotInterval = 15,
 
-/** @typedef {U|R|D|L} Direction */
+/** @typedef {'Up'|'Right'|'Down'|'Left'} Direction */
 U='Up', R='Right', D='Down', L='Left',
 
 /** The document body */
