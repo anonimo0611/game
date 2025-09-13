@@ -62,7 +62,7 @@ export default class {
 			ctx.save()
 			this.#resurrect?.setAlpha(ctx)
 			this.#angryGlow({x,y, isAngry,size})
-			this.#body({aIdx: animIdx,isRipped,isMended})
+			this.#body({animIdx,isRipped,isMended})
 			isFright && this.#frightFace({spriteIdx})
 			ctx.restore()
 		}
@@ -75,19 +75,19 @@ export default class {
 		if (this.#resurrect?.update() === false)
 			this.#resurrect = null
 	}
-	#body({aIdx=0, isRipped=false, isMended=false}) {
+	#body({animIdx=0, isRipped=false, isMended=false}) {
 		const {ctx}= this
 		ctx.beginPath()
 		ctx.moveTo(+42, +26)
 		ctx.lineTo(+42, +11)
 		ctx.bezierCurveTo(+42,-60, -42,-60, -42,11)
 		ctx.lineTo(-42, +26)
-		aIdx == 0
+		animIdx == 0
 			? this.#foot0()
 			: this.#foot1()
 		ctx.fill()
 		isRipped && this.#CBSprite.rippedBody()
-		isMended && this.#CBSprite.mendedStitch(aIdx)
+		isMended && this.#CBSprite.mendedStitch(animIdx)
 	}
 	#foot0() {
 		const {ctx}= this
