@@ -71,7 +71,7 @@ export const View = function()
 			ghsSprite.draw({
 				x,y,size:S,
 				idx:  row-1,
-				aIdx: +(col % 2 != 0),
+				animIdx: +(col % 2 != 0),
 				orient:/**@type {const}*/([U,U,L,L,D,D,R,R])[col],
 			})
 			return
@@ -79,7 +79,7 @@ export const View = function()
 		ghsSprite.draw({
 			x,y,size:S,
 			orient:/**@type {const}*/([R,R,R,R,U,L,D,R])[col],
-			aIdx:     +(col % 2 != 0),
+			animIdx:  +(col % 2 != 0),
 			isFright:  (col <= 3),
 			isEscaping:(col >= 4),
 			spriteIdx:+(col >= 2),
@@ -133,7 +133,7 @@ export const View = function()
 		{// Expand clothes
 			const pos = Vec2.Zero, rates = [0.3, 0.5 ,1]
 			for (const i of range(3)) {
-				draw(...pos.vals, {aIdx:+(i==2)})
+				draw(...pos.vals, {animIdx:+(i==2)})
 				const nPos = Vec2(pos).add(S*0.75, S/4)
 				spr.clothes(+(i==2), rates[i], {...nPos,size:S})
 				pos.x += S*1.2 + ((i+1)*GAP)
