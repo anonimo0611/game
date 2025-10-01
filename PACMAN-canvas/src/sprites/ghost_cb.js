@@ -46,7 +46,7 @@ export default class {
 	hadake(aIdx=0) {
 		const {ctx}= this
 		ctx.save()
-		ctx.translate(T/2+T/10, T/2)
+		ctx.translate(T/2+T/4, T/2)
 		aIdx == 0
 			? this.#hadake0()
 			: this.#hadake1()
