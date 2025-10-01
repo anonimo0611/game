@@ -13,10 +13,10 @@ export default class {
 		ctx.fillStyle = Color.GhostSkin
 		ctx.fill()
 	}
-	mendedStitch(aIdx=0) {
+	mendedStitch(animIdx=0) {
 		const {ctx}= this, path = /**@type {xyList[]}*/
 			([[39,8],[33,14],[24,8],[14,15],[26,20],[14,27],[25,33],[14,38]])
-		aIdx && path.pop()
+		animIdx && path.pop()
 		ctx.lineWidth   = 3.5
 		ctx.strokeStyle = '#FFF'
 		ctx.newLinePath(...path).stroke()
@@ -43,11 +43,11 @@ export default class {
 		}
 		ctx.restore()
 	}
-	hadake(aIdx=0) {
+	hadake(animIdx=0) {
 		const {ctx}= this
 		ctx.save()
 		ctx.translate(T/2+T/4, T/2)
-		aIdx == 0
+		animIdx == 0
 			? this.#hadake0()
 			: this.#hadake1()
 		ctx.restore()
@@ -142,15 +142,15 @@ class StakeClothes {
 		Ctx.restore()
 	}
 	/**
-	 * @param {number} aIdx
+	 * @param {number} animIdx
 	 * @param {number} rate
 	 * @param {{x?:number, y?:number, size?:number}} cfg
 	 */
-	clothes(aIdx, rate, {x=0, y=0, size=T*2}={}) {
+	clothes(animIdx, rate, {x=0, y=0, size=T*2}={}) {
 		const v1 = lerp(-2,  5, rate)
 		const v2 = lerp( 4, 22, rate)
 		const v3 = lerp( 4, 50, rate)
-		const ls = (aIdx? -25:-36) // Left side
+		const ls = (animIdx? -25:-36) // Left side
 		Ctx.save()
 		Ctx.translate(x, y)
 		Ctx.scale(size/(100/GhsScale), size/(100/GhsScale))
