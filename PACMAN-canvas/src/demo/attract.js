@@ -1,14 +1,14 @@
-﻿import {State}      from '../state.js'
-import {Ctrl}       from '../control.js'
-import {Score}      from '../score.js'
-import {PtsMgr}     from '../points.js'
-import {Fruit}      from '../fruit.js'
-import {drawDot}    from '../maze.js'
-import {drawText}   from '../message.js'
-import {Pacman}     from '../pacman.js'
-import {GhsMgr}     from '../ghosts/_system.js'
-import {Ghost}      from '../ghosts/ghost.js'
-import {RunTimer}   from './_run_timer.js'
+﻿import {State}    from '../state.js'
+import {Ctrl}     from '../control.js'
+import {Score}    from '../score.js'
+import {PtsMgr}   from '../points.js'
+import {Fruit}    from '../fruit.js'
+import {drawDot}  from '../maze.js'
+import {drawText} from '../message.js'
+import {Pacman}   from '../pacman.js'
+import {GhsMgr}   from '../ghosts/_system.js'
+import {Ghost}    from '../ghosts/ghost.js'
+import {RunTimer} from './_run_timer.js'
 
 const CHAR = 0
 const DEMO = 1
@@ -19,14 +19,15 @@ let _attract = /**@type {?Attract}*/(null)
 export class Attract {
 	static {
 		State.on({Attract:()=> _attract = new Attract})
-	}
-	static update() {
-		RunTimer .update()
-		_attract?.update()
+		$('.DemoBtn').on({click:()=> State.to('Attract')})
 	}
 	static draw() {
 		_attract?.draw()
 		return State.isAttract
+	}
+	static update() {
+		RunTimer .update()
+		_attract?.update()
 	}
 	pacVelX = -BW/180
 	ghsVelX = -BW/169
@@ -134,4 +135,4 @@ export class Attract {
 		State.to('Title')
 		$off('.Attract')
 	}
-} $('.DemoBtn').on({click:()=> State.to('Attract')})
+}
