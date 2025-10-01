@@ -158,9 +158,9 @@ export const View = function()
 		draw(ofst(4.00), 0, {isRipped: true,orient:U})
 		draw(ofst(5.00), 0, {isRipped: true,orient:'LowerR'})
 		draw(ofst(0.00), S, {isMended: true})
-		draw(ofst(1.00), S, {isMended: true,aIdx:1})
+		draw(ofst(1.00), S, {isMended: true})
 		draw(ofst(2.25), S, {isExposed:true})
-		draw(ofst(4.25), S, {isExposed:true,aIdx:1})
+		draw(ofst(4.25), S, {isExposed:true,animIdx:1})
 	}
 
 	return {draw}
