@@ -34,8 +34,8 @@ export class Menu extends Common {
 		items.forEach(i=> $(i).css('--val', i.val))
 		$(this.root).closest('form').on({reset:this.reset})
 	}
-	get value()  {return $(this.selectedItem).prop('val')}
-	get index()  {return $(this.selectedItem).index()}
+	get value()  {return this.selectedItem.val}
+	get index()  {return this.selectedItem.index}
 	set index(i) {(i>=0 && i<this.size) && this.select(i)}
 
 	/** @returns {MenuItem} */
@@ -157,7 +157,8 @@ class CustomMenu extends HTMLElement{
 	get type() {return 'menu'}
 }
 class MenuItem extends HTMLElement{
-	get val()  {return $(this).attr('val') ?? ''}
+	get val()   {return $(this).attr('val') ?? ''}
+	get index() {return $(this).index()}
 }
 customElements.define('custom-menu', CustomMenu)
 customElements.define('mn-item', MenuItem)
