@@ -69,7 +69,7 @@ export const Game = new class {
 	}
 	/** @param {boolean} [force] */
 	#pause(force) {
-		State.isPlaying && Sound.paused(Ticker.pause(force))
+		State.isPlaying && Sound.pause(Ticker.pause(force))
 	}
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {

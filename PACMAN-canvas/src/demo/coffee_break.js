@@ -45,7 +45,7 @@ export class CoffBrk {
 		this.akabei.sprite.draw({animIdx, ...cfg, ...pos})
 	}
 	pause() {
-		Sound.paused(Ticker.pause())
+		Sound.pause(Ticker.pause())
 	}
 	draw() {
 		State.last('FlashMaze') && Fruit.drawLevelCounter()
