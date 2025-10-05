@@ -6,8 +6,8 @@
 
 class Vector2 {
 	x=0;y=0;
-	/** @returns {[x:number,y:number]} */
-	get vals()       {return [this.x,this.y]}
+	/** @returns {readonly [x:number,y:number]} */
+	get vals()       {return ([this.x,this.y])}
 	get hyphenated() {return `${this.x}-${this.y}`}
 	get string()     {return this.toString()}
 	get inverse()    {return this.clone.mul(-1)}

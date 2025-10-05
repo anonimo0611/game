@@ -7,7 +7,7 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		try {super()} catch(e){}
 		return Object.setPrototypeOf(cvs.getContext('2d',opts), new.target.prototype)
 	}
-	/** @returns {[width:number, height:number]} */
+	/** @returns {readonly [width:number, height:number]} */
 	get size()   {return [this.width, this.height]}
 	get width()  {return this.canvas.width}
 	get height() {return this.canvas.height}
@@ -98,14 +98,14 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		this.stroke()
 	}
 
-	/** @param {[x:number, y:number][]} c */
+	/** @param {(readonly [x:number, y:number])[]} c */
 	newLinePath(...c) {
 		this.beginPath()
 		this.setLinePath(...c)
 		return this
 	}
 
-	/** @param {[x:number, y:number][]} c */
+	/** @param {(readonly [x:number, y:number])[]} c */
 	setLinePath(...c) {
 		c.forEach(([x,y], i)=> {
 			!i ? this.moveTo(x,y)
@@ -114,7 +114,7 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		return this
 	}
 
-	/** @param {[x:number, y:number][]} c */
+	/** @param {(readonly [x:number, y:number])[]} c */
 	addLinePath(...c) {
 		c.forEach(([x,y])=> this.lineTo(x,y))
 		return this
@@ -122,7 +122,7 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 
 	/**
 	 * @param {Cvs2DStyle} style
-	 * @param {[x:number, y:number][]} c
+	 * @param {(readonly [x:number, y:number])[]} c
 	 */
 	fillPolygon(style, ...c) {
 		this.save()
