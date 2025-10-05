@@ -31,7 +31,7 @@ export class SoundMgr {
 	 * @param {boolean} bool
 	 * @param {...SoundType} ids
 	 */
-	paused(bool, ...ids) {
+	pause(bool, ...ids) {
 		ids.length
 			? ids.forEach(id=> {Instance[id].paused=bool})
 			: values(Instance).forEach(i=> i.paused=bool)

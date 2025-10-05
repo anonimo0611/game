@@ -17,8 +17,8 @@ Regular = /**@type {const}*/({ // regular.ogg
     bell:    {startTime: 3641, duration:2090},
     fruit:   {startTime: 5952, duration: 496},
 }),
-genItems = (/**@type {SoundData}*/data)=>
-    entries(data).map(([id,val])=> ({id,...val}))
+genSprite = (/**@type {SoundData}*/data)=>
+    [...entries(data).map(([id,val])=> ({id,...val}))]
 
 /**
  * @typedef {keyof Looped|keyof Regular} SoundType
@@ -38,6 +38,6 @@ ConfigMap = new Map([
 ,Ids      = /**@type {SoundType[]}*/([...keys(Looped),...keys(Regular)])
 ,SirenIds = /**@type {const}*/(['siren0','siren1','siren2','siren3'])
 ,Manifest = [
-    {src:'./res/looped.ogg', data:{channels:3, audioSprite:[...genItems(Looped)]}},
-    {src:'./res/regular.ogg',data:{channels:4, audioSprite:[...genItems(Regular)]}},
+    {src:'./res/looped.ogg', data:{channels:3, audioSprite:genSprite(Looped)}},
+    {src:'./res/regular.ogg',data:{channels:4, audioSprite:genSprite(Regular)}},
 ]
