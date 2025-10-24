@@ -41,6 +41,15 @@ class Vector2 {
 	}
 
 	/**
+	 * @param {number|Position} v1
+	 * @param {number} [v2]
+	 */
+	eq(v1, v2) {
+		const {x,y}= this.#parseXY(v1, v2)
+		return Vec2.eq(this, {x,y})
+	}
+
+	/**
 	 * @param {number|Position} [v1]
 	 * @param {number} [v2]
 	 */
@@ -50,17 +59,10 @@ class Vector2 {
 		this.y = y
 		return this
 	}
-	setX(/**@type {number}*/x) {return this.set(x, this.y)}
-	setY(/**@type {number}*/y) {return this.set(this.x, y)}
-
-	/**
-	 * @param {number|Position} v1
-	 * @param {number} [v2]
-	 */
-	eq(v1, v2) {
-		const {x,y}= this.#parseXY(v1, v2)
-		return Vec2.eq(this, {x,y})
-	}
+	setX(/**@type {number}*/x) {this.x  = x;return this}
+	setY(/**@type {number}*/y) {this.y  = y;return this}
+	addX(/**@type {number}*/x) {this.x += x;return this}
+	addY(/**@type {number}*/y) {this.y += y;return this}
 
 	/**
 	 * @param {number|Position} v1
