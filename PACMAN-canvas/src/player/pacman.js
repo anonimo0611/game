@@ -40,7 +40,7 @@ class PlayerPac extends Pacman {
 	}
 	forwardOfst(num=0) {
 		const  ofstX = (this.dir == U ? -num : 0)
-		return this.forwardPos(num).add(ofstX*T, 0)
+		return this.forwardPos(num).addX(ofstX*T)
 	}
 	#getMoveStep() {
 		const eating = Maze.hasDot(this.tileIdx)
