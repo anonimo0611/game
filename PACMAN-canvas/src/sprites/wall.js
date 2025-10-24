@@ -32,11 +32,15 @@ export const Wall = new class {
 		ctx.rotate(ci*PI/2)
 		ctx.beginPath()
 		switch(type) {
-		case 0: /[A-D5-8]/.test(c)
-		     ? ctx.arc(T/2,T/2, T/2+LO, PI,PI*3/2)
-		     : ctx.arc(T/2,T/2, T/2-LO, PI,PI*3/2);break
-		case 1:ctx.arc(T/2,T/2, OO,     PI,PI*3/2);break
-		case 2:ctx.arc(T/2,T/2, T-OO,   PI,PI*3/2);break
+		case 0: ctx.arc(T/2,T/2, T-OO,   PI,PI*3/2);break
+		case 1: ctx.arc(T/2,T/2, T/2+LO, PI,PI*3/2);break
+		case 2: ctx.arc(T/2,T/2, T/2-LO, PI,PI*3/2);break
+		case 3: ctx.arc(T/2,T/2, OO,     PI,PI*3/2);break
+		case 4:
+			ctx.setLinePath([-LO, T/3-LO], [-LO, T/2])
+			ctx.arc(T/3-LO,T/3-LO, T/3, PI,PI*3/2)
+			ctx.addLinePath([T/2, -LO], [T/3-LO, -LO])
+			break
 		}
 		ctx.stroke()
 		ctx.restore()
@@ -50,15 +54,15 @@ export const Wall = new class {
 		const ci = +c? +c-(+c>4? 5:1):'ABCD'.search(c.toUpperCase())
 		const lo = c=='#' && isL || c=='=' || /[HV]/.test(c)? -LO:LO
 
-		;/[a-d\d]/i.test(c) && Wall.#drawCorner({type:0,ci,c,x,y})
-		;/[a-d]/   .test(c) && Wall.#drawCorner({type:1,ci,c,x,y})
-		;/[A-D]/   .test(c) && Wall.#drawCorner({type:2,ci,c,x,y})
+		;[/[A-D]/,/[A-D]/,/[a-d1-4]/,/[a-d]/,/[5-8]/].forEach((r,i)=>
+			{r.test(c) && Wall.#drawCorner({type:i,ci,c,x,y})})
 
 		switch(c.toUpperCase()) {
 		case '#':
 		case 'V':ctx.strokeLine(x+T/2+lo, y, x+T/2+lo, y+T);break
 		case 'H':ctx.strokeLine(x, y+T/2+lo, x+T, y+T/2+lo);break
 		}
+
 		ctx.save()
 		if (c == '#' || (tx == 0 || tx == W-1) && +c) {
 			ctx.translate(x+T/2+(isL? -T/2+OO : T/2-OO), y)
