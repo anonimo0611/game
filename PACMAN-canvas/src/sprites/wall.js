@@ -1,6 +1,6 @@
 const {ctx}= Bg, W = Cols
 const OO = 2 // Outer Offset
-const LO = 2 // Line Offset
+const LO = 3 // Line Offset
 const LW = 3 // Line Width
 
 import {Maze} from '../maze.js'
@@ -37,9 +37,9 @@ export const Wall = new class {
 		case 2: ctx.arc(T/2,T/2, T/2-LO, PI,PI*3/2);break
 		case 3: ctx.arc(T/2,T/2, OO,     PI,PI*3/2);break
 		case 4:
-			ctx.setLinePath([-LO, T/2], [-LO, T/3-LO])
-			ctx.arc(T/3-LO,T/3-LO, T/3, PI,PI*3/2)
-			ctx.addLinePath([T/3-LO, -LO], [T/2, -LO])
+			ctx.moveTo(-LO, T/2)
+			ctx.arcTo (-LO, -LO, T/3-LO, -LO, T/3)
+			ctx.lineTo(T/2, -LO)
 			break
 		}
 		ctx.stroke()
@@ -52,10 +52,10 @@ export const Wall = new class {
 	#drawTile(c, i) {
 		const [tx,ty]=[i%W,i/W|0], [x,y]=[tx*T,ty*T], isL=(tx < W/2)
 		const ci = +c? +c-(+c>4? 5:1):'ABCD'.search(c.toUpperCase())
-		const lo = (c=='#' && isL)||(c=='=')|| /[HV]/.test(c)? -LO:LO
+		const lo = (c=='#' && isL)||(c=='=')||/[HV]/.test(c)? -LO:LO
 
 		;[/[A-D]/,/[A-D]/,/[a-d1-4]/,/[a-d]/,/[5-8]/].forEach(
-			(r,i)=> {r.test(c) && Wall.#drawCorner({type:i,ci,x,y})})
+			(r,i)=> r.test(c) && Wall.#drawCorner({type:i,ci,x,y}))
 
 		switch(c.toUpperCase()) {
 		case '#':
