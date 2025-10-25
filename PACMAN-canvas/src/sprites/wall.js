@@ -55,7 +55,7 @@ export const Wall = new class {
 		const lo = (c=='#' && isL)||(c=='=')||/[HV]/.test(c)? -LO:LO
 
 		;[/[A-D]/,/[A-D]/,/[a-d1-4]/,/[a-d]/,/[5-8]/].forEach(
-			(r,i)=> r.test(c) && Wall.#drawCorner({type:i,ci,x,y}))
+			(r,type)=> r.test(c) && Wall.#drawCorner({type,ci,x,y}))
 
 		switch(c.toUpperCase()) {
 		case '#':
