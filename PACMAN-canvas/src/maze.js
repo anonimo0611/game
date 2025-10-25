@@ -127,10 +127,10 @@ export const Maze = freeze(new class {
 	get dotsLeft() {return DotSet.size}
 
 	/**
-	 * Whether tile `y` coord is the top/bottom of the maze excluding dead space
-	 * @param {number} y
+	 * Whether tile `row` coord is the top/bottom of the maze excluding dead space
+	 * @param {number} row
 	 */
-	isTopOrBottom = y=> (y == Maze.Top || y == Maze.Bottom)
+	isTopOrBottom = row=> (row == Maze.Top || row == Maze.Bottom)
 
 	/**
 	 * These tiles(x-y) forbidden ghosts from entering upward
