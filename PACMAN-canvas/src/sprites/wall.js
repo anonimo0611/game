@@ -13,7 +13,7 @@ export const Wall = new class {
 		this.#drawHouse()
 	}
 	#drawHouse() {
-		const [ix,iy,ox,oy]= [3.1, 1.6, 3.4, 1.9].map(n=>n*T)
+		const [ix,iy,ox,oy]= [31,16,34,19].map(n=>n/10*T)
 		ctx.save()
 		ctx.translate(BW/2, Maze.House.MiddleY)
 		ctx.strokeRect(-ox, -oy, ox*2, oy*2)
