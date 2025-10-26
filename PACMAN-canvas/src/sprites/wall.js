@@ -6,22 +6,22 @@ const LW = 3 // Line Width
 import {Maze} from '../maze.js'
 export const Wall = new class {
 	draw(color=Color.Wall) {
-		ctx.save()
 		ctx.clear()
 		ctx.lineWidth   = LW
 		ctx.strokeStyle = color
 		Maze.Map.forEach(this.#drawTile)
 		this.#drawHouse()
-		ctx.restore()
 	}
 	#drawHouse() {
 		const [ix,iy,ox,oy]= [3.1, 1.6, 3.4, 1.9].map(n=>n*T)
+		ctx.save()
 		ctx.translate(BW/2, Maze.House.MiddleY)
 		ctx.strokeRect(-ox, -oy, ox*2, oy*2)
 		ctx.strokeRect(-ix, -iy, ix*2, iy*2)
-		ctx.clearRect (-T, -oy-LW/2, T*2, T)
+		ctx.clearRect (-T, -oy-LW,T*2, T/2)
 		ctx.strokeLine(-T-LW/2, -oy, -T-LW/2, -iy)
 		ctx.strokeLine(+T+LW/2, -oy, +T+LW/2, -iy)
+		ctx.restore()
 	}
 	/** @param {{type:number, ci:number, x:number, y:number}} cfg */
 	#drawCorner({type,ci,x,y}) {
@@ -48,8 +48,8 @@ export const Wall = new class {
 	 * @param {number} i Tile index
 	 */
 	#drawTile(c, i) {
-		const [tx,ty]=[i%W,i/W|0], [x,y]=[tx*T,ty*T], isL=(tx < W/2)
-		const lo = (c=='#' && isL)||(c=='=')||/[HV]/.test(c)? -LO:LO
+		const [n,tx,ty]= [Number(c),i%W,i/W|0], [x,y]= [tx*T,ty*T]
+		const lo = (c == '#' && tx<W/2) || /[VH=]/.test(c)? -LO:LO
 		switch(c.toUpperCase()) {
 		case '#':
 		case 'V':ctx.strokeLine(x+T/2+lo, y, x+T/2+lo, y+T);break
@@ -57,19 +57,19 @@ export const Wall = new class {
 		}
 		ctx.save()
 		{
-			const ci = +c? +c-(+c>4 ? 5:1):'ABCD'.search(c.toUpperCase())
+			const ci = n? n-(n>4? 5:1) : 'ABCD'.indexOf(c.toUpperCase())
 			;[/[A-D]/,/[A-D]/,/[a-d1-4]/,/[a-d]/,/[5-8]/].forEach(
 				(r,type)=> r.test(c) && Wall.#drawCorner({type,ci,x,y}))
 		}
-		if (c == '#' || (tx == 0 || tx == W-1) && +c) {
-			ctx.translate(x+T/2+(isL? -T/2+OO:T/2-OO), y)
+		if (c == '#' || (!tx || tx == W-1) && n) {
+			ctx.translate(x+T/2+(tx<W/2 ? -T/2+OO : T/2-OO), y)
 			ctx.strokeLine(0,0, 0,T)
 		}
-		if (/[_=]/.test(c) || Maze.isTopOrBottom(ty) && +c) {
-			const oY = /[=56]/.test(c)? -T/2+OO:T/2-OO
+		if (/[_=]/.test(c) || Maze.isTopOrBottom(ty) && n) {
+			const oY = /[=56]/.test(c) ? -T/2+OO : T/2-OO
 			ctx.translate(x, y+T/2)
 			ctx.strokeLine(0,oY, T,oY)
-			!+c && ctx.strokeLine(0,lo, T,lo)
+			!n && ctx.strokeLine(0,lo, T,lo)
 		}
 		ctx.restore()
 	}
