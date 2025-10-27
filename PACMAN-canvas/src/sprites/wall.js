@@ -49,18 +49,18 @@ export const Wall = new class {
 	 */
 	#drawTile(c, i) {
 		const [n,tx,ty]= [Number(c),i%W,i/W|0], [x,y]= [tx*T,ty*T]
+		const ci = n? n-(n>4? 5:1):'ABCD'.indexOf(c.toUpperCase())
 		const lo = (c == '#' && tx<W/2) || /[VH=]/.test(c)? -LO:LO
+
 		switch(c.toUpperCase()) {
 		case '#':
 		case 'V':ctx.strokeLine(x+T/2+lo, y, x+T/2+lo, y+T);break
 		case 'H':ctx.strokeLine(x, y+T/2+lo, x+T, y+T/2+lo);break
 		}
+		;[/[A-D]/,/[A-D]/,/[a-d1-4]/,/[a-d]/,/[5-8]/].forEach(
+			(r,type)=> r.test(c) && Wall.#drawCorner({type,ci,x,y}))
+
 		ctx.save()
-		{
-			const ci = n? n-(n>4? 5:1) : 'ABCD'.indexOf(c.toUpperCase())
-			;[/[A-D]/,/[A-D]/,/[a-d1-4]/,/[a-d]/,/[5-8]/].forEach(
-				(r,type)=> r.test(c) && Wall.#drawCorner({type,ci,x,y}))
-		}
 		if (c == '#' || (!tx || tx == W-1) && n) {
 			ctx.translate(x+T/2+(tx<W/2 ? -T/2+OO : T/2-OO), y)
 			ctx.strokeLine(0,0, 0,T)
