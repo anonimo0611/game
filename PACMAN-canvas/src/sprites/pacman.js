@@ -22,7 +22,7 @@ export default class {
 		this.#mouthAngle = [0,OpenMid,OpenMax][mouthOpenings]
 	}
 	update({stopped=false}={}) {
-		if (stopped && this.#mouthAngle > OpenMid)
+		if (stopped && this.#mouthAngle > OpenMid-PI/Duration/2)
 			return
 		const rad = this.#animeAngle += PI/Duration
 		this.#mouthAngle = OpenMax * abs(Math.sin(rad))
