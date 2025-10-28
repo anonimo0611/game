@@ -120,16 +120,12 @@ class Vector2 {
  */
 const
 Vec2 = (v1, v2)=> new Vector2(v1, v2)
-Vec2.Zero  = Vec2( 0, 0)
-Vec2.Up    = Vec2( 0,-1)
-Vec2.Right = Vec2( 1, 0)
-Vec2.Down  = Vec2( 0, 1)
-Vec2.Left  = Vec2(-1, 0)
+Object.defineProperty(Vec2, 'Zero', {get(){return Vec2( 0, 0)}})
+Object.defineProperty(Vec2, 'Up',   {get(){return Vec2( 0,-1)}})
+Object.defineProperty(Vec2, 'Right',{get(){return Vec2( 1, 0)}})
+Object.defineProperty(Vec2, 'Down', {get(){return Vec2( 0, 1)}})
+Object.defineProperty(Vec2, 'Left', {get(){return Vec2(-1, 0)}})
 
-for (const [k,v] of entries(Vec2)) {
-	v instanceof Vector2
-		&& defineProperty(Vec2, k, {get(){return v.clone}})
-}
 /**
  * @param {Position} v
  */Vec2.isValid = v=> v && Number.isFinite(v.x) && Number.isFinite(v.y)
