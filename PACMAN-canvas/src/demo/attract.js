@@ -10,8 +10,9 @@ import {GhsMgr}   from '../ghosts/_system.js'
 import {Ghost}    from '../ghosts/ghost.js'
 import {RunTimer} from './_run_timer.js'
 
-const CHAR = 0
-const DEMO = 1
+const WhereChar = 0
+const WhereDemo = 1
+const WhereMax  = 2
 const SmallSize = T*0.68
 
 let _attract = /**@type {?Attract}*/(null)
@@ -26,25 +27,25 @@ export class Attract {
 		return State.isAttract
 	}
 	static update() {
-		RunTimer .update()
+		 RunTimer.update()
 		_attract?.update()
 	}
 	pacVelX = -BW/180
 	ghsVelX = -BW/169
-	pacman  = new Pacman
 	powDisp = 1
+	pacman  = new Pacman
 	ghsList = /**@type {Ghost[][]}*/([])
 
 	/** @private */
 	constructor() {
 		this.setActors()
-		GhsMgr.trigger('Init', this.ghsList[DEMO])
+		GhsMgr.trigger('Init', this.ghsList[WhereDemo])
 		$onNS('.Attract', {click_keydown_blur:this.quit})
 	}
 	setActors() {
-		for (const where of [CHAR,DEMO])
+		for (const w of range(WhereMax))
 			for (const i of range(GhsType.Max))
-				this.setActor(where, i)
+				this.setActor(w, i)
 	}
 	setActor(where=0, idx=0) {
 		const g = new Ghost(where?L:R, {idx,animFlag:where?1:0})
@@ -57,19 +58,19 @@ export class Attract {
 	draw() {
 		const et = Ticker.elapsedTime/100
 		Score.draw(),drawText(7, 5, null, 'CHARACTOR　/　NICKNAME')
-		et > 10 && this.drawGhost(CHAR, GhsType.Akabei, 6)
+		et > 10 && this.drawGhost(WhereChar, GhsType.Akabei, 6)
 		et > 15 && drawText( 8,  7, Color.Akabei, 'OIKAKE----')
 		et > 20 && drawText(18,  7, Color.Akabei, '"AKABEI"')
 
-		et > 30 && this.drawGhost(CHAR, GhsType.Pinky,  9)
+		et > 30 && this.drawGhost(WhereChar, GhsType.Pinky,  9)
 		et > 35 && drawText( 8, 10, Color.Pinky, 'MACHIBUSE--')
 		et > 40 && drawText(19, 10, Color.Pinky, '"PINKY"')
 
-		et > 50 && this.drawGhost(CHAR, GhsType.Aosuke, 12)
+		et > 50 && this.drawGhost(WhereChar, GhsType.Aosuke, 12)
 		et > 55 && drawText( 8, 13, Color.Aosuke, 'KIMAGURE--')
 		et > 60 && drawText(18, 13, Color.Aosuke, '"AOSUKE"')
 
-		et > 70 && this.drawGhost(CHAR, GhsType.Guzuta, 15)
+		et > 70 && this.drawGhost(WhereChar, GhsType.Guzuta, 15)
 		et > 75 && drawText( 8, 16, Color.Guzuta, 'OTOBOKE---')
 		et > 80 && drawText(18, 16, Color.Guzuta, '"GUZUTA"')
 		if (et > 85) {
@@ -92,7 +93,7 @@ export class Attract {
 		}
 		if (et > 105) {
 			for (const i of range(GhsType.Max))
-				this.drawGhost(DEMO, i)
+				this.drawGhost(WhereDemo, i)
 			this.pacman.sprite.draw(this.pacman)
 			PtsMgr.drawGhostPts()
 		}
@@ -122,7 +123,7 @@ export class Attract {
 		}
 	}
 	updateGhosts() {
-		for (const g of this.ghsList[DEMO]) {
+		for (const g of this.ghsList[WhereDemo]) {
 			g.x += this.ghsVelX
 			g.crashWithPac({
 				pos: this.pacman.pos, radius: T/4,
