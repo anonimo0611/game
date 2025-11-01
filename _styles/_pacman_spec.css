@@ -139,6 +139,9 @@ img.button {
 		background: transparent;
 		font-weight: normal;
 	}
+	tbody td {
+		text-align: right;
+	}
 }
 
 /* Release time */
