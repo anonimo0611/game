@@ -43,4 +43,4 @@ class GameState extends _State {
 	to(s, {delay=(s == 'Quit' ? -1:0),data}={}) {
 		return super.to(s, {delay,data,fn:this.#callback})
 	}
-} export const State = new GameState()
+} export const State = freeze(new GameState)
