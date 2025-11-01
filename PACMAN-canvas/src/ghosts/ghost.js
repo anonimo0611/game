@@ -59,7 +59,7 @@ export class Ghost extends Actor {
 		this.idx   = idx
 		this.dir   = dir
 		this.pos   = Vec2(col*T, row*T)
-		this.state = new Sys.GhostState(this)
+		this.state = freeze(new Sys.GhostState(this))
 		this.init  = freeze({x:col*T,align,animFlag})
 	}
 	get originalTargetTile() {
