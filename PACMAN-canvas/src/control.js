@@ -1,6 +1,10 @@
+import {Dir}      from '../_lib/direction.js'
+import {Sound}    from '../_snd/sound.js'
+import {Confirm}  from '../_lib/confirm.js'
 import {Menu}     from './ui.js'
 import {MenuIds}  from './ui.js'
 import {State}    from './state.js'
+import {Score}    from './score.js'
 import {drawText} from './message.js'
 
 export const Form = document.forms[0]
@@ -11,6 +15,10 @@ export const ctrl = id=> /**@type {HTMLInputElement}*/(byId(id))
 export const Ctrl = new class {
 	static {$(this.setup)}
 	static setup() {
+		$win.on({
+			blur:_=> Ctrl.pause(true),
+			keydown: Ctrl.#onKeydown,
+		})
 		Ctrl.#restore()
 		Ctrl.#output()
 		Ctrl.#fitToViewport()
@@ -30,6 +38,10 @@ export const Ctrl = new class {
 	get isCheatMode()   {return this.speedRate<.7 || this.showTargets || this.invincible}
 	get isDefaultMode() {return this.consecutive && Menu.Level.index == 0}
 
+	/** @param {boolean} [force] */
+	pause(force) {
+		State.isPlaying && Sound.pause(Ticker.pause(force))
+	}
 	#fitToViewport() {
 		const scale = min(
 			innerWidth /Form.offsetWidth * .98,
@@ -40,10 +52,10 @@ export const Ctrl = new class {
 		const data = Object.create(null)
 		MenuIds.forEach(id=> data[id] = Menu[id].index)
 		document.querySelectorAll('input').forEach(input=> {
-			match(input.type, {
-			range:   ()=> {data[input.id] = input.value},
-			checkbox:()=> {data[input.id] = input.checked},
-			})
+			switch(input.type) {
+			case 'range':   data[input.id] = input.value;  break
+			case 'checkbox':data[input.id] = input.checked;break
+			}
 		})
 		localStorage.anopacman = JSON.stringify(data)
 	}
@@ -52,25 +64,11 @@ export const Ctrl = new class {
 		const data = JSON.parse(localStorage.anopacman)
 		MenuIds.forEach(id=> Menu[id].index = data[id])
 		document.querySelectorAll('input').forEach(input=> {
-			match(input.type, {
-			range:   ()=> {input.value   = data[input.id]},
-			checkbox:()=> {input.checked = data[input.id]},
-			})
-			$(input).trigger('input')
+			switch(input.type) {
+			case 'range':   input.value   = data[input.id];break
+			case 'checkbox':input.checked = data[input.id];break
+			}$(input).trigger('input')
 		})
-	}
-	#reset() {
-		Form.reset()
-		Ctrl.#output()
-		Ctrl.#restore()
-	}
-	#drawGridLines() {
-		if (!Ctrl.showGridLines) return
-		Ctx.save()
-		Ctx.strokeStyle = Color.Grid
-		for (const y of range(1,Cols)) Ctx.strokeLine(T*y, 0, T*y, Rows*T)
-		for (const x of range(0,Rows)) Ctx.strokeLine(0, T*x, Cols*T, T*x)
-		Ctx.restore()
 	}
 	#output() {
 		Ctrl.#save()
@@ -91,16 +89,51 @@ export const Ctrl = new class {
 		}
 		ctx.restore()
 	}
+	#reset() {
+		Form.reset()
+		Ctrl.#output()
+		Ctrl.#restore()
+	}
+	#quit(noConfirm=false) {
+		noConfirm
+			? State.to('Quit')
+			: State.isPlaying && Ctrl.#quitConfirm()
+	}
+	#clearHiScore() {
+		localStorage.removeItem('anopac_hiscore')
+		Score.reset()
+	}
+	#clearHiConfirm() {
+		Confirm.open('Are you sure you want to clear high-score?',
+			null, Ctrl.#clearHiScore, 'No','Yes', 0)
+	}
+	#quitConfirm() {
+		!Ticker.paused && this.pause()
+		Confirm.open('Are you sure you want to quit the game?',
+			this.pause, ()=> State.to('Quit'), 'Resume','Quit', 0)
+	}
+	/** @param {KeyboardEvent} e */
+	#onKeydown(e) {
+		if (Confirm.opened || keyRepeat(e)) return
+		switch(e.key) {
+		case 'Escape': return Ctrl.pause()
+		case 'Delete': return Ctrl.#quit(e.ctrlKey)
+		default:
+			if (Ctrl.activeElem) return
+			if (Dir.from(e,{wasd:true}) || e.key=='\x20') {
+				State.isTitle && byId('startBtn')?.click()
+				Ticker.paused && Ctrl.pause()
+			}
+		}
+	}
 	#setup() {
 		for (const menu of values(Menu)) {
 			menu.on({change:Ctrl.#output})
 		}
 		$win.on({resize:Ctrl.#fitToViewport})
 		$('input')    .on({input:Ctrl.#output})
+		$('#clearHi') .on({click:Ctrl.#clearHiConfirm})
 		$('#resetBtn').on({click:Ctrl.#reset})
 		$('#startBtn').on({click:()=> State.to('Start')})
-	}
-	draw() {
-		this.#drawGridLines()
 	}
 }, powChk = ctrl('powChk')

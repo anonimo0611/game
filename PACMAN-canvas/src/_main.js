@@ -1,9 +1,7 @@
 import './ghosts/ghost_sub.js'
 import {Menu}      from './ui.js'
 import {Sound}     from '../_snd/sound.js'
-import {Confirm}   from '../_lib/confirm.js'
 import {Cursor}    from '../_lib/mouse.js'
-import {Dir}       from '../_lib/direction.js'
 import {State}     from './state.js'
 import {Ctrl,Form} from './control.js'
 import {Maze}      from './maze.js'
@@ -21,10 +19,6 @@ import {CoffBrk}   from './demo/coffee_break.js'
 export const Game = new class {
 	static {$(this.setup)}
 	static setup() {
-		$win.on({
-			blur:()=> Game.#pause(true),
-			keydown:  Game.#onKeydown,
-		})
 		State.on({
 			Title:    Game.#onTitle,
 			Start:    Game.#onStart,
@@ -62,35 +56,6 @@ export const Game = new class {
 		Game.#level = between(i, 1, 0xFF) && +i || 1
 		$Level.text('Level'+this.levelStr).trigger('change')
 	}
-	#confirm() {
-		!Ticker.paused && Game.#pause()
-		Confirm.open('Are you sure you want to quit the game?',
-			Game.#pause, ()=> State.to('Quit'), 'Resume','Quit', 0)
-	}
-	/** @param {boolean} [force] */
-	#pause(force) {
-		State.isPlaying && Sound.pause(Ticker.pause(force))
-	}
-	/** @param {KeyboardEvent} e */
-	#onKeydown(e) {
-		if (Confirm.opened || keyRepeat(e))
-			return
-		match(e.key, {
-			Escape:()=> Game.#pause(),
-			Delete:()=> {
-				e.ctrlKey
-				? State.to('Quit')
-				: State.isPlaying && Game.#confirm()
-			},
-			_:()=> {
-				if (Ctrl.activeElem) return
-				if (Dir.from(e,{wasd:true}) || e.key == '\x20') {
-					State.isTitle && byId('startBtn')?.click()
-					Ticker.paused && Game.#pause()
-				}
-			}
-		})
-	}
 	#onTitle() {
 		Cursor.default()
 		Sound.stop()
@@ -103,7 +68,7 @@ export const Game = new class {
 		Timer.set(2200, Game.#levelBegins)
 	}
 	#onPlaying() {
-		!document.hasFocus() && Game.#pause(true)
+		!document.hasFocus() && Ctrl.pause(true)
 	}
 	#onDying() {
 		Sound.play('dying')
@@ -159,10 +124,18 @@ export const Game = new class {
 	}
 	#draw() {
 		Ctx.clear()
-		Ctrl.draw()
+		Game.#drawGrid()
 		Attract.draw() ||
 		CoffBrk.draw() ||
 		Game.#drawMain()
+	}
+	#drawGrid() {
+		if (!Ctrl.showGridLines) return
+		Ctx.save()
+		Ctx.strokeStyle = Color.Grid
+		for (const y of range(1,Cols)) Ctx.strokeLine(T*y, 0, T*y, Rows*T)
+		for (const x of range(0,Rows)) Ctx.strokeLine(0, T*x, Cols*T, T*x)
+		Ctx.restore()
 	}
 	#drawMain() {
 		Score.draw()
