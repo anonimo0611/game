@@ -17,12 +17,12 @@ export const Ctrl = new class {
 	static setup() {
 		$win.on({
 			blur:_=> Ctrl.pause(true),
+			load:    Ctrl.#setup,
 			keydown: Ctrl.#onKeydown,
 		})
 		Ctrl.#restore()
 		Ctrl.#output()
 		Ctrl.#fitToViewport()
-		$load(Ctrl.#setup)
 	}
 	get extendPts()     {return +Menu.Extend.value}
 	get activeElem()    {return qS(':not(#startBtn):focus')}
@@ -108,9 +108,9 @@ export const Ctrl = new class {
 			null, Ctrl.#clearHiScore, 'No','Yes', 0)
 	}
 	#quitConfirm() {
-		!Ticker.paused && this.pause()
+		!Ticker.paused && Ctrl.pause()
 		Confirm.open('Are you sure you want to quit the game?',
-			this.pause, ()=> State.to('Quit'), 'Resume','Quit', 0)
+			Ctrl.pause, ()=> State.to('Quit'), 'Resume','Quit', 0)
 	}
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
@@ -128,7 +128,7 @@ export const Ctrl = new class {
 	}
 	#setup() {
 		for (const menu of values(Menu)) {
-			menu.on({change:Ctrl.#output})
+			menu.on({change:Ctrl.#save})
 		}
 		$win.on({resize:Ctrl.#fitToViewport})
 		$('input')    .on({input:Ctrl.#output})
