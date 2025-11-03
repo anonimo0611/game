@@ -1,12 +1,14 @@
 import _State from '../_lib/state.js'
 /**
- * @extends {_State<globalThis,StateType>}
- * @typedef {(
- * 'Title'|'Attract'|'Start'|'Restart'|'NewLevel'|'Ready'|'Playing'|
- * 'Clear'|'FlashMaze'|'CoffBrk'|'Crashed'|'Dying'|'GameOver'|'Quit'|
- * '_Ready'|'_NewLevel'|'_Restart_NewLevel'|'_Start_Ready_Restart'|'_Clear_Crashed'
- * )} StateType
- */
+@typedef {(
+  'Title'|'Attract'|'Start'|'Restart'|'NewLevel'|'Ready'|'Playing'|
+  'Clear'|'FlashMaze'|'CoffBrk'|'Crashed'|'Dying'|'GameOver'|'Quit')} StateType
+@typedef {(
+  '_Ready'|'_NewLevel'|'_Restart_NewLevel'|
+  '_Start_Ready_Restart'|'_Clear_Crashed')} MultiState
+*/
+
+/** @extends {_State<globalThis,StateType>} */
 class GameState extends _State {
 	isTitle     = false
 	isAttract   = false
@@ -33,7 +35,9 @@ class GameState extends _State {
 		$win.trigger(dBody.dataset.state=s, data)
 	}
 
-	/** @param {{[key in StateType]?:JQWindowHandler}} v */
+	/**
+	 * @param {{[key in (StateType|MultiState)]?:JQWindowHandler}} v
+	 */
 	on(v) {return super.on(v)}
 
 	/**
