@@ -124,18 +124,10 @@ export const Game = new class {
 	}
 	#draw() {
 		Ctx.clear()
-		Game.#drawGrid()
+		Maze.drawGrid()
 		Attract.draw() ||
 		CoffBrk.draw() ||
 		Game.#drawMain()
-	}
-	#drawGrid() {
-		if (!Ctrl.showGridLines) return
-		Ctx.save()
-		Ctx.strokeStyle = Color.Grid
-		for (const y of range(1,Cols)) Ctx.strokeLine(T*y, 0, T*y, Rows*T)
-		for (const x of range(0,Rows)) Ctx.strokeLine(0, T*x, Cols*T, T*x)
-		Ctx.restore()
 	}
 	#drawMain() {
 		Score.draw()

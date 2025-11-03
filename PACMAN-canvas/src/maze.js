@@ -1,8 +1,8 @@
-import {Rect}   from '../_lib/rect.js'
-import {State}  from './state.js'
-import {Ghost}  from './ghosts/ghost.js'
-import {powChk} from './control.js'
-import {Wall}   from './sprites/wall.js'
+import {Rect}  from '../_lib/rect.js'
+import {State} from './state.js'
+import {Ghost} from './ghosts/ghost.js'
+import {Wall}  from './sprites/wall.js'
+import {Ctrl,powChk} from './control.js'
 
 const MapArr = freeze([... `\
 ////////////////////////////\
@@ -168,5 +168,15 @@ export const Maze = freeze(new class {
 	drawDot(ctx, col,row, isPow=false, color=Color.Dot) {
 		const {x,y}= Vec2(col,row).add(.5).mul(T)
 		ctx.fillCircle(x,y, T/(isPow? 2:8), color)
+	}
+	drawGrid() {
+		if (!Ctrl.showGridLines) return
+		console.time()
+		Ctx.save()
+		Ctx.strokeStyle = Color.Grid
+		for (const y of range(1,Cols)) Ctx.strokeLine(T*y, 0, T*y, Rows*T)
+		for (const x of range(0,Rows)) Ctx.strokeLine(0, T*x, Cols*T, T*x)
+		Ctx.restore()
+		console.timeEnd()
 	}
 }), {drawDot}= Maze
