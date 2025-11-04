@@ -1,11 +1,13 @@
 import _State from '../_lib/state.js'
 /**
-@typedef {(
+@typedef {
   'Title'|'Attract'|'Start'|'Restart'|'NewLevel'|'Ready'|'Playing'|
-  'Clear'|'FlashMaze'|'CoffBrk'|'Crashed'|'Dying'|'GameOver'|'Quit')} StateType
-@typedef {(
+  'Clear'|'FlashMaze'|'CoffBrk'|'Crashed'|'Dying'|'GameOver'|'Quit'
+} StateType
+@typedef {
   '_Ready'|'_NewLevel'|'_Restart_NewLevel'|
-  '_Start_Ready_Restart'|'_Clear_Crashed')} MultiState
+  '_Start_Ready_Restart'|'_Clear_Crashed'
+} MultiState
 */
 
 /** @extends {_State<globalThis,StateType>} */
