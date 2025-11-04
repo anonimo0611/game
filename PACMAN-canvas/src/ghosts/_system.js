@@ -34,7 +34,7 @@ const StandbyTimes = /**@type {const}*/
 	[ 200,  800,  200], // Lv.10
 	[ 100,  700,  200], // Lv.11
 	[ 100,  700,  200], // Lv.12
-	[   0,  900,    0], // Lv.13
+	[   0,  900,    0], // Lv.13+
 ])
 
 /**
@@ -114,8 +114,8 @@ export const GhsMgr = new class extends Common {
 		Ghosts.forEach(g=> g.update())
 	}
 	#draw(onFront=true) {
-		Ghosts.forEach((_,i,a, g=a.at(-1-i))=>
-			g && (g.isFright != onFront) && g.draw())
+		for (const g of Ghosts.toReversed())
+			(g.isFright != onFront) && g.draw()
 	}
 	drawBehind() {
 		GhsMgr.#draw(false)
