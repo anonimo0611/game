@@ -48,7 +48,7 @@ Color = freeze(new class {
 	Message2  = '#FF0'
 	Message3  = '#F00'
 	BonusText = '#F90'
-	InfoTexts    = freeze(['#888','#F9E'])
+	Inf          = freeze(['#888','#F9E'])
 	FrightFaces  = freeze(['#F9F','#F00'])
 	FrightBodies = freeze(['#36A','#FFF'])
 }),

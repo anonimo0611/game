@@ -27,7 +27,7 @@ export const Ctrl = new class {
 	get extendPts()     {return +Menu.Extend.value}
 	get activeElem()    {return qS(':not(#startBtn):focus')}
 	get livesMax()      {return input('lvsRng').valueAsNumber}
-	get speedRate()     {return input('spdRng').valueAsNumber}
+	get speed()         {return input('spdRng').valueAsNumber}
 	get isChaseMode()   {return input('chsChk').checked}
 	get consecutive()   {return input('onlChk').checked == false}
 	get unrestricted()  {return input('unrChk').checked}
@@ -35,7 +35,7 @@ export const Ctrl = new class {
 	get showTargets()   {return input('tgtChk').checked}
 	get showGridLines() {return input('grdChk').checked}
 	get isPractice()    {return this.isCheatMode  ||!this.isDefaultMode}
-	get isCheatMode()   {return this.speedRate<.7 || this.showTargets || this.invincible}
+	get isCheatMode()   {return this.speed<.7 || this.showTargets || this.invincible}
 	get isDefaultMode() {return this.consecutive && Menu.Level.index == 0}
 
 	/** @param {boolean} [force] */
@@ -72,20 +72,19 @@ export const Ctrl = new class {
 	}
 	#output() {
 		Ctrl.#save()
-		const{ctx}= HUD, lh = 0.84, ColTbl = Color.InfoTexts
-		const spd = 'x'+Ctrl.speedRate.toFixed(1)
-		const cfg = {ctx, size:T*0.68, style:'bold', scaleX:.7}
+		const{ctx}=HUD, h=0.84, spd=`x${Ctrl.speed.toFixed(1)}`
+		const cfg={ctx, size:T*0.68, scaleX:0.7, style:'bold'}
 		ctx.save()
 		ctx.translate(T*0.1, T*18)
-		ctx.clearRect(0, -T, BW, T*3)
+		ctx.clearRect(0,-T,BW,T*3)
 		if (Ctrl.isCheatMode || spd != 'x1.0') {
-			drawText(0, lh*0, ColTbl[+(spd != 'x1.0') ], 'Speed'+spd,  cfg)
-			drawText(0, lh*1, ColTbl[+Ctrl.invincible ], 'Invincible', cfg)
-			drawText(0, lh*2, ColTbl[+Ctrl.showTargets], 'Targets',    cfg)
+			drawText(0, h*0, Color.Inf[+(spd != 'x1.0') ], 'Speed'+spd, cfg)
+			drawText(0, h*1, Color.Inf[+Ctrl.invincible ], 'Invincible',cfg)
+			drawText(0, h*2, Color.Inf[+Ctrl.showTargets], 'Targets',   cfg)
 		}
 		if (Ctrl.unrestricted) {
 			ctx.translate(T*(Cols-5), T/2)
-			drawText(0, 0, ColTbl[1], 'Un-\nrestricted', cfg)
+			drawText(0,0, Color.Inf[1], 'Un-\nrestricted', cfg)
 		}
 		ctx.restore()
 	}
