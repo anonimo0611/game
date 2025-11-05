@@ -121,9 +121,9 @@ export const Game = new class {
 		Maze.drawGrid()
 		Attract.draw() ||
 		CoffBrk.draw() ||
-		Game.#drawPlayScene()
+		Game.#drawMain()
 	}
-	#drawPlayScene() {
+	#drawMain() {
 		Score.draw()
 		Maze.PowDot.draw()
 		Fruit.draw()
