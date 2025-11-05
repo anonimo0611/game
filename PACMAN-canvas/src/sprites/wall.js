@@ -3,14 +3,32 @@ const OO = 2 // Outer Offset
 const LO = 3 // Line Offset
 const LW = 3 // Line Width
 
-import {Maze} from '../maze.js'
+import {Maze}  from '../maze.js'
+import {State} from '../state.js'
 export const Wall = new class {
 	draw(color=Color.Wall) {
 		ctx.clear()
+		ctx.save()
 		ctx.lineWidth   = LW
 		ctx.strokeStyle = color
-		Maze.Map.forEach(this.#drawTile)
-		this.#drawHouse()
+		Maze.Map.forEach(Wall.#drawTile)
+		Wall.#drawHouse()
+		Wall.#drawDoor()
+		ctx.restore()
+	}
+	flashing(/**@type {function}*/fn) {
+		let count = 0
+		;(function redraw() {
+			if (++count > 8)
+				return Timer.set(500, fn)
+			Wall.draw([, Color.FlashWall][count % 2])
+			Timer.set(250, redraw)
+		})()
+	}
+	#drawDoor() {
+		if (State.isFlashMaze) return
+		const y = (Maze.House.EntranceTile.y+1.6)*T
+		Bg.ctx.fillRect(BW/2-T, y, T*2, T/4, Color.Door)
 	}
 	#drawHouse() {
 		const [ix,iy,ox,oy]= [31,16,34,19].map(n=>n/10*T)
