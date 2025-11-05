@@ -67,14 +67,15 @@ class PlayerPac extends Pacman {
 		this.#tunEntered.update()
 		this.sprite.update(this)
 		for (const _ of range(this.stepDiv))
-			this.#behavior(this.stepDiv)
+		   if (this.#behavior(this.stepDiv)) break
 	}
 	#behavior(divisor=1) {
 		if (this.justArrivedAtTile(divisor))
 			this.#step = this.#getMoveStep()
 		this.#eaten(this)
 		this.#steer.move(divisor)
-		this.#stopped = this.#steer.stopAtWall()
+		return this.#stopped =
+			this.#steer.stopAtWall()
 	}
 	#eaten({tileIdx:i}=this) {
 		if (!Maze.hasDot(i)) return
