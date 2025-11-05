@@ -1,19 +1,19 @@
 'use strict'
 const {Ticker,Timer} = function() {
 	/**
-	 * @typedef {({
-	 * amount:  number;
-	 * timeout: number;
-	 * handler: Function;
-	 * ignoreFrozen: boolean;
-	 * })} TimerData
-	 */
+	@typedef {{
+		amount:  number;
+		timeout: number;
+		handler: Function;
+		ignoreFrozen: boolean;
+	}} TimerData
+	*/
 	const Interval = 1000/60
 	const TimerMap = /**@type {Map<any,TimerData>}*/(new Map)
 	let _ticker    = /**@type {?Tick}*/(null)
 	let _paused    = false
-	let _fCounter  = 0 //frame  count
-	let _pCounter  = 0 //paused count
+	let _fCounter  = 0 // frame  count
+	let _pCounter  = 0 // paused count
 
 	const Ticker = freeze(new class {
 		Interval = Interval
@@ -71,7 +71,7 @@ const {Ticker,Timer} = function() {
 		}
 		timer(
 		 /**@type {TimerData}*/t,
-		 /**@type {unknown}*/key
+		 /**@type {unknown}*/  key
 		) {
 			if (Timer.frozen && !t.ignoreFrozen) return
 			if (Interval*t.amount++ < t.timeout) return

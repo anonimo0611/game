@@ -1,8 +1,10 @@
 'use strict'
-/** @typedef {[x:number, y:number]}   xyList */
-/** @typedef {[x:number, y:number][]} xy2dList */
-/** @typedef {{x?:number,y?:number}} OptionalPos */
-/** @typedef {Vector2|{x:number,y:number}} Position */
+/**
+@typedef {[x:number, y:number]}   xyList
+@typedef {[x:number, y:number][]} xy2dList
+@typedef {{x?:number,y?:number}}  OptionalPos
+@typedef {Vector2|{x:number,y:number}} Position
+*/
 
 class Vector2 {
 	x=0;y=0;
@@ -118,8 +120,7 @@ class Vector2 {
  * @param {number|Position} [v1]
  * @param {number} [v2]
  */
-const
-Vec2 = (v1, v2)=> new Vector2(v1, v2)
+const Vec2 = (v1, v2)=> new Vector2(v1, v2)
 Object.defineProperty(Vec2, 'Zero', {get(){return Vec2( 0, 0)}})
 Object.defineProperty(Vec2, 'Up',   {get(){return Vec2( 0,-1)}})
 Object.defineProperty(Vec2, 'Right',{get(){return Vec2( 1, 0)}})
