@@ -1,11 +1,11 @@
-import {ctrl}     from '../src/control.js'
+import {input}    from '../src/control.js'
 import {Sound}    from './sound.js'
 import {SoundMgr} from './loader.js'
 import {Speaker}  from './speaker.js'
 
 let  _lstVol = NaN
-const volRng = ctrl('volRng')
-const volRg2 = ctrl('volRg2')
+const volRng = input('volRng')
+const volRg2 = input('volRg2')
 
 ;(new class { // Register sound instances and set up controls
 	constructor() {this.setup()}
@@ -19,7 +19,7 @@ const volRg2 = ctrl('volRg2')
 			Number(localStorage.anopac_volume ?? 5)
 		Speaker.draw(vol)
 		$win.on({keydown:e=> this.onKeydown(e)})
-		$('#cvs_speaker')
+		$('#speaker')
 			.on({click:this.mute})
 			.on({wheel:this.onInput})
 		$('.volRng')
