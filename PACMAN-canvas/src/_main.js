@@ -82,13 +82,7 @@ export const Game = new class {
 		State.to('FlashMaze', {delay:1000})
 	}
 	#onFlashMaze() {
-		let count = 0
-		;(function redraw() {
-			if (++count > 8)
-				return Timer.set(500, Game.#levelEnds)
-			Wall.draw([, Color.FlashWall][count % 2])
-			Timer.set(250, redraw)
-		})()
+		Wall.flashing(Game.#levelEnds)
 	}
 	#onNewLevel() {
 		Game.#setLevel(Game.level+1)
@@ -127,9 +121,9 @@ export const Game = new class {
 		Maze.drawGrid()
 		Attract.draw() ||
 		CoffBrk.draw() ||
-		Game.#drawMain()
+		Game.#drawPlayScene()
 	}
-	#drawMain() {
+	#drawPlayScene() {
 		Score.draw()
 		Maze.PowDot.draw()
 		Fruit.draw()

@@ -89,10 +89,7 @@ export const Maze = freeze(new class {
 	static reset(
 	 /**@type {JQuery.TriggeredEvent}*/e
 	) {
-		if (e.target != powChk) {
-			Wall.draw()
-			this.drawDoor()
-		}
+		e.target != powChk && Wall.draw()
 		for (const [i,c] of MapArr.entries())
 			DotChipSet.has(c) && this.setDot(i,c)
 	}
@@ -107,11 +104,6 @@ export const Maze = freeze(new class {
 			? drawDot(Bg.ctx, t.x, t.y)
 			: PowMap.set(i, t)
 	}
-	static drawDoor() {
-		const y = (Maze.House.EntranceTile.y+1.6)*T
-		Bg.ctx.fillRect(BW/2-T, y, T*2, T/4, Color.Door)
-	}
-
 	Top    = 1
 	Bottom = Rows-3
 	Map    = MapArr

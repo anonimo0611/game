@@ -10,7 +10,7 @@ import {drawText} from './message.js'
 export const Form = document.forms[0]
 
 /** @param {string} id */
-export const ctrl = id=> /**@type {HTMLInputElement}*/(byId(id))
+export const input = id=> /**@type {HTMLInputElement}*/(byId(id))
 
 export const Ctrl = new class {
 	static {$(this.setup)}
@@ -26,14 +26,14 @@ export const Ctrl = new class {
 	}
 	get extendPts()     {return +Menu.Extend.value}
 	get activeElem()    {return qS(':not(#startBtn):focus')}
-	get livesMax()      {return ctrl('lvsRng').valueAsNumber}
-	get speedRate()     {return ctrl('spdRng').valueAsNumber}
-	get isChaseMode()   {return ctrl('chsChk').checked}
-	get consecutive()   {return ctrl('onlChk').checked == false}
-	get unrestricted()  {return ctrl('unrChk').checked}
-	get invincible()    {return ctrl('invChk').checked}
-	get showTargets()   {return ctrl('tgtChk').checked}
-	get showGridLines() {return ctrl('grdChk').checked}
+	get livesMax()      {return input('lvsRng').valueAsNumber}
+	get speedRate()     {return input('spdRng').valueAsNumber}
+	get isChaseMode()   {return input('chsChk').checked}
+	get consecutive()   {return input('onlChk').checked == false}
+	get unrestricted()  {return input('unrChk').checked}
+	get invincible()    {return input('invChk').checked}
+	get showTargets()   {return input('tgtChk').checked}
+	get showGridLines() {return input('grdChk').checked}
 	get isPractice()    {return this.isCheatMode  ||!this.isDefaultMode}
 	get isCheatMode()   {return this.speedRate<.7 || this.showTargets || this.invincible}
 	get isDefaultMode() {return this.consecutive && Menu.Level.index == 0}
@@ -136,4 +136,4 @@ export const Ctrl = new class {
 		$('#resetBtn').on({click:Ctrl.#reset})
 		$('#startBtn').on({click:()=> State.to('Start')})
 	}
-}, powChk = ctrl('powChk')
+}, powChk = input('powChk')
