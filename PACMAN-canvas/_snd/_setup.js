@@ -16,7 +16,7 @@ const Ev = new class { // Register sound instances and set up controls
 			: Ev.onFailed()
 	}
 	onLoaded() {
-		Speaker.draw(volume)
+		Speaker.draw(Sound.vol=volume)
 		$win.on({keydown:Ev.onKeydown})
 		$('#speaker')
 			.on({click:Ev.mute})
