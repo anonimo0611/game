@@ -70,7 +70,7 @@ button, input,
 [type=dropdown] > output,
 [type=slidemenu] {
 	color: #EEE;
-	font-size: 1em;
+	font-size: .9em;
 	border: solid 2px var(--color-border);
 	border-radius: .2em;
 	outline: 0;

@@ -135,7 +135,7 @@ body:is([data-state=Attract],[data-state=CoffBrk]) {
 	justify-content: center;
 	align-items: center;
 	.checkboxes, .buttons {
-		font-size: .76rem;
+		font-size: .74rem;
 		height: 100%;
 		display: flex;
 		gap: .2em;
@@ -217,6 +217,9 @@ body:is([data-state=Attract],[data-state=CoffBrk]) {
 	}
 	mn-item {
 		padding-top: .3em
+	}
+	small {
+		font-size: 80%;
 	}
 	output::before,
 	mn-item::before {
