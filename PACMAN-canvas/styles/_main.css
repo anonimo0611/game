@@ -135,7 +135,7 @@ body:is([data-state=Attract],[data-state=CoffBrk]) {
 	justify-content: center;
 	align-items: center;
 	.checkboxes, .buttons {
-		font-size: .74rem;
+		font-size: .76rem;
 		height: 100%;
 		display: flex;
 		gap: .2em;
@@ -144,8 +144,12 @@ body:is([data-state=Attract],[data-state=CoffBrk]) {
 		label,button {display: block}
 		[data-for=keys] {cursor: help}
 	}
+	.buttons button {
+		font-size: .9em;
+	}
 	> label:first-of-type  {
 		color: inherit;
+		font-size: 1.1em;
 		display: flex;
 		gap: .2em;
 		align-items: center;
@@ -161,7 +165,7 @@ body:is([data-state=Attract],[data-state=CoffBrk]) {
 
 #cfgPanel {
 	> li {
-		padding: .07em 0 !important;
+		padding: .15em 0 !important;
 		position: relative;
 		display: flex;
 		align-items: center;

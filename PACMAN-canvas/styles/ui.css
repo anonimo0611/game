@@ -80,7 +80,7 @@ button,
 .button[data-disabled=false] {
 	background: var(--bgcolor);
 	display: inline-block;
-	padding: .2em;
+	padding: .3em;
 	&:hover, &:focus,
 	&.opened {border-color:var(--color-focus-border)}
 	&:active {border-color:var(--color-active-border)}
