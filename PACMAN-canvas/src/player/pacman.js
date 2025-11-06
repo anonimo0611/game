@@ -15,7 +15,6 @@ class PlayerPac extends Pacman {
 	#step       = 0
 	#eatIdx     = 0
 	#notEaten   = 0
-	#stopped    = true
 	#steer      = new SteerPacman()
 	#tunEntered = new TunnelEntered()
 
@@ -24,7 +23,7 @@ class PlayerPac extends Pacman {
 	get maxAlpha()      {return this.translucent? 0.75:1}
 	get translucent()   {return this.showCenter || Ctrl.invincible}
 	get step()          {return this.#step ||= this.#getMoveStep()}
-	get stopped()       {return this.#stopped}
+	get stopped()       {return this.#steer.stopped}
 	get tunnelEntered() {return this.#tunEntered}
 	get timeNotEaten()  {return this.#notEaten * Game.interval}
 
@@ -66,16 +65,16 @@ class PlayerPac extends Pacman {
 		this.#notEaten++
 		this.#tunEntered.update()
 		this.sprite.update(this)
-		for (const _ of range(this.stepDiv))
-		   if (this.#behavior(this.stepDiv)) break
+		for (const _ of range(this.stepDiv)) {
+			this.#behavior()
+			if (this.stopped) break
+		}
 	}
-	#behavior(divisor=1) {
-		if (this.justArrivedAtTile(divisor))
+	#behavior() {
+		if (this.justArrivedAtTile(this.stepDiv))
 			this.#step = this.#getMoveStep()
 		this.#eaten(this)
-		this.#steer.move(divisor)
-		return this.#stopped =
-			this.#steer.stopAtWall()
+		this.#steer.update()
 	}
 	#eaten({tileIdx:i}=this) {
 		if (!Maze.hasDot(i)) return

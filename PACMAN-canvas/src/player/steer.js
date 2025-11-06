@@ -6,6 +6,7 @@ import {pacman as self} from './pacman.js';
 export class SteerPacman {
 	#dir  = /**@type {?Direction}*/(null)
 	#next = /**@type {?Direction}*/(null)
+	#stopped = true
 	#turning = false
 	constructor() {
 		$win.offon('keydown.Steer', this.#steer.bind(this))
@@ -32,30 +33,35 @@ export class SteerPacman {
 			self.setMoveDir(self.revDir)
 		}
 	}
+	get stopped() {
+		return this.#stopped
+	}
 	get canTurn() {
 		return this.#dir != null
 			&& self.inFrontHalfOfTile
 			&& self.collidedWithWall(this.#dir) === false
 	}
-	stopAtWall() {
-		if (!this.#turning
-		 && self.collidedWithWall()) {
-			self.pos = self.tilePos.mul(T)
-			return !(this.#dir = null)
-		}
-		return false
-	}
-	move(divisor=1) {
-		this.#setCornering(divisor)
-		self.setNextPos(divisor)
+	update() {
+		this.#setCornering()
+		self.setNextPos(self.stepDiv)
 		this.#endCornering()
 		this.#turnAround()
+		this.#stopAtWall()
 	}
-	#setCornering(divisor=1) {
+	#stopAtWall() {
+		this.#stopped = false
+		if (!this.#turning
+		 && self.collidedWithWall()) {
+			self.pos  = self.tilePos.mul(T)
+			this.#dir = null
+			this.#stopped = true
+		}
+	}
+	#setCornering() {
 		const dir = this.#dir
 		if (this.canTurn && dir) {
 			this.#turning ||= true
-			self.setNextPos(divisor, self.orient=dir)
+			self.setNextPos(self.stepDiv, self.orient=dir)
 		}
 	}
 	#endCornering() {
