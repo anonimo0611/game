@@ -8,12 +8,12 @@ import * as Pts from './sprites/points.js'
 const PtsMap = /**@type {Map<any, Points>}*/(new Map)
 State.on({_Clear_Crashed:()=> PtsMap.clear()})
 
+/**
+@typedef {typeof Pts.Vals.All[number]} Pts
+@typedef {{key:{score:Pts}, pos:Position, dur?:number, fn?:function}} PtsData
+*/
 export const PtsMgr = new class {
-	/**
-	 * @typedef {typeof Pts.Vals.All[number]} Pts
-	 * @typedef {{key:{score:Pts}, pos:Position, dur?:number, fn?:function}} PtsData
-	 * @type {(data:PtsData, fn?:function)=> void}
-	 */
+	/** @type {(data:PtsData, fn?:function)=> void} */
 	set(data,fn)   {new Points({...data,fn})}
 	update()       {PtsMap.forEach(v=> v.update())}
 	drawFruitPts() {PtsMap.get(Fruit) ?.draw()}
