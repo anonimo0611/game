@@ -108,14 +108,15 @@ export const GhsMgr = new class extends Common {
 		if (State.isPlaying
 		 || State.isAttract
 		 || State.isCoffBrk)
-			this.#animIdx ^= Number(!Timer.frozen && GhsMgr.animFlag)
+			this.#animIdx ^= +(!Timer.frozen && GhsMgr.animFlag)
 		AttackInWaves.update()
 		FrightMode.session?.update()
 		Ghosts.forEach(g=> g.update())
 	}
 	#draw(onFront=true) {
-		for (const g of Ghosts.toReversed())
-			(g.isFright != onFront) && g.draw()
+		Ghosts.toReversed().forEach(g=>
+			g.isFright != onFront && g.draw()
+		)
 	}
 	drawBehind() {
 		GhsMgr.#draw(false)
