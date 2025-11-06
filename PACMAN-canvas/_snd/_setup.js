@@ -6,26 +6,25 @@ import {Speaker}  from './speaker.js'
 let  _lstVol = NaN
 const volRng = input('volRng')
 const volRg2 = input('volRg2')
+const volume = +(localStorage.anopac_volume ?? 5)
 
-;(new class { // Register sound instances and set up controls
+const Ev = new class { // Register sound instances and set up controls
 	constructor() {this.setup()}
 	async setup() {
 		await SoundMgr.load()
-			? this.onLoaded()
-			: this.onFailed()
+			? Ev.onLoaded()
+			: Ev.onFailed()
 	}
 	onLoaded() {
-		const vol = Sound.vol =
-			Number(localStorage.anopac_volume ?? 5)
-		Speaker.draw(vol)
-		$win.on({keydown:e=> this.onKeydown(e)})
+		Speaker.draw(volume)
+		$win.on({keydown:Ev.onKeydown})
 		$('#speaker')
-			.on({click:this.mute})
-			.on({wheel:this.onInput})
+			.on({click:Ev.mute})
+			.on({wheel:Ev.onInput})
 		$('.volRng')
-			.attr({value:vol})
-			.attr({defaultValue:vol})
-			.on({input:this.onInput})
+			.attr({value:volume})
+			.attr({defaultValue:volume})
+			.on({input:Ev.onInput})
 	}
 	onFailed() {
 		$('.volCtrl').hide()
@@ -36,14 +35,12 @@ const volRg2 = input('volRg2')
 		Speaker.draw(localStorage.anopac_volume = Sound.vol)
 	}
 	onKeydown(/**@type {JQuery.KeyDownEvent}*/e) {
-		if (keyRepeat(e) || isCombiKey(e))
-			return
+		if (keyRepeat(e) || isCombiKey(e)) return
 		if (e.key.toUpperCase() == 'M'
-		 || e.target == volRg2 && isEnterKey(e))
-			this.mute()
+		 || e.target == volRg2 && isEnterKey(e)) Ev.mute()
 	}
 	mute() {
 		_lstVol = Sound.vol || (_lstVol || +volRng.max >> 1)
 		$(volRng).prop({value:Sound.vol? 0 : _lstVol}).trigger('input')
 	}
-})
+}
