@@ -39,11 +39,11 @@ export class Ghost extends Actor {
 	get isStarted()   {return this.#isStarted}
 	get isFright()    {return this.#isFright}
 	get isBitten()    {return this.state.isBitten}
-	get isEscaping()  {return this.state.isEscape || this.state.isReturn}
+	get isEscape()    {return this.state.isEscape || this.state.isReturn}
 
-	get isWalking()   {return !this.isFright   && this.state.isWalk}
-	get isChasing()   {return GhsMgr.isChasing && this.isWalking}
-	get isScatter()   {return GhsMgr.isScatter && this.isWalking && !this.isAngry}
+	get isNormWalk()  {return !this.isFright   && this.state.isWalk}
+	get isChasing()   {return GhsMgr.isChasing && this.isNormWalk}
+	get isScatter()   {return GhsMgr.isScatter && this.isNormWalk && !this.isAngry}
 
 	/**
 	 * @param {Direction} dir
@@ -84,12 +84,12 @@ export class Ghost extends Actor {
 	}
 	get step() {
 		return function(g,s) {
-			if (s.isIdle)     return GhsStep.Idle
-			if (s.isGoOut)    return GhsStep.GoOut
-			if (g.isEscaping) return GhsStep.Escape
-			if (g.inTunnel)   return GhsStep.InTunnel
-			if (g.isFright)   return GhsStep.Fright
-			if (g.isScatter)  return GhsStep.Base
+			if (s.isIdle)    return GhsStep.Idle
+			if (s.isGoOut)   return GhsStep.GoOut
+			if (g.isEscape)  return GhsStep.Escape
+			if (g.inTunnel)  return GhsStep.InTunnel
+			if (g.isFright)  return GhsStep.Fright
+			if (g.isScatter) return GhsStep.Base
 			return g.chaseStep
 		}(this,this.state) * Game.moveSpeed
 	}
@@ -111,7 +111,7 @@ export class Ghost extends Actor {
 	}
 	#behavior() {
 		this.#runaway >= 0 && this.#runaway--
-		if (Timer.frozen && !this.isEscaping) return
+		if (Timer.frozen && !this.isEscape) return
 		switch(this.state.current) {
 		case 'Idle':  return this.#idle(this)
 		case 'GoOut': return this.#goOut(this)
@@ -208,7 +208,7 @@ export class Ghost extends Actor {
 	/** @param {{dir:Direction, test:Vector2}} cfg */
 	#canEnter({dir,test}) {
 		return Ctrl.unrestricted
-			|| (dir != U || this.isFright || this.isEscaping)
+			|| (dir != U || this.isFright || this.isEscape)
 			|| !Maze.GhostNoEnter.has(test.hyphenated)
 	}
 	#setTurn({orient}=this) {
@@ -248,7 +248,7 @@ export class Ghost extends Actor {
 		State.to('Crashed').to('Dying', {delay:500})
 	}
 	#setFrightMode(_={}, bool=false) {
-		!this.isEscaping && (this.#isFright = bool)
+		!this.isEscape && (this.#isFright = bool)
 	}
 	#setEscape() {
 		Sound.ghostEscape()

@@ -63,8 +63,8 @@ export const GhsMgr = new class extends Common {
 	static setup() {
 		State.on({
 			Playing:GhsMgr.#onPlaying,
-			Clear:  GhsMgr.#onLevelEnds,
-			Crashed:GhsMgr.#onLevelEnds,
+			Clear:  GhsMgr.#onRoundEnds,
+			Crashed:GhsMgr.#onRoundEnds,
 		})
 		GhsMgr.on({Init:GhsMgr.#initialize})
 	}
@@ -78,14 +78,14 @@ export const GhsMgr = new class extends Common {
 	get score()     {return FrightMode.session?.score ?? PtsLst[0]}
 	get spriteIdx() {return FrightMode.session?.spriteIdx ?? 0}
 	get caughtAll() {return FrightMode.session?.caughtAll ?? false}
-	get hasEscape() {return Ghosts.some(g=> g.isEscaping)}
+	get hasEscape() {return Ghosts.some(g=> g.isEscape)}
 	get akaCenter() {return Ghosts[GhsType.Akabei].center}
 
 	#initialize(_={}, /**@type {Ghost[]}*/...ghosts) {
 		GhsMgr.#animIdx = 0
 		ghosts.forEach((g,i)=> Ghosts[i] = g)
 	}
-	#onLevelEnds() {
+	#onRoundEnds() {
 		Ghosts.forEach(g=> g.sprite.setFadeOut())
 	}
 	#onPlaying() {
