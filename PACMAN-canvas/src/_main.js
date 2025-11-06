@@ -44,9 +44,9 @@ export const Game = new class {
 	/** Level 13+ as the fastest, stepwise faster from level 1 to 13 */
 	get speedByLv() {return 1 - (13-Game.clampedLv) * .01}
 	get clampedLv() {return clamp(Game.level, 1, 13)}
-	get speedRate() {return State.isPlaying ? Ctrl.speed : 1}
-	get interval()  {return Game.speedRate * Ticker.Interval}
-	get moveSpeed() {return Game.speedRate * Game.speedByLv}
+	get speed()     {return State.isPlaying ? Ctrl.speed : 1}
+	get interval()  {return Game.speed * Ticker.Interval}
+	get moveSpeed() {return Game.speed * Game.speedByLv}
 
 	#resetLevel() {
 		Game.#restarted = false

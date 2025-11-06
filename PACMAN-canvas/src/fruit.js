@@ -37,9 +37,9 @@ export const Fruit = new class {
 	}
 	/** Disappearing is between 9 and 10 seconds */
 	#setTimerToHideTarget() {
-		const {speedRate:rate}=Game, fadeDur=300
-		const setFadeOut = ()=> _fadeOut = new FadeOut(fadeDur/rate)
-		Timer.set(randInt(9e3, 1e4-fadeDur)/rate, setFadeOut, {key:Fruit})
+		const {speed}=Game, fadeDur=300
+		const setFadeOut = ()=> _fadeOut = new FadeOut(fadeDur/speed)
+		Timer.set(randInt(9e3, 1e4-fadeDur)/speed, setFadeOut, {key:Fruit})
 	}
 	#reset() {
 		_fadeOut = null

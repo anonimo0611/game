@@ -22,7 +22,7 @@ export const PtsMgr = new class {
 class Points {
 	/** @param {PtsData} data */
 	constructor({key,pos,dur=1e3,fn}) {
-		const spd  = Game.speedRate, fadeDur = 300
+		const spd  = Game.speed, fadeDur = 300
 		this.pos   = pos
 		this.cache = Pts.cache(key.score)
 		this.fade  = new FadeOut(fadeDur/spd, (dur-fadeDur)/spd)
