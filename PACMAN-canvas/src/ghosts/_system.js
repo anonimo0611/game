@@ -96,7 +96,7 @@ export const GhsMgr = new class extends Common {
 		const lv = (Game.restarted? 0 : Game.clampedLv)
 		Timer.sequence(...
 			Ghosts.slice(1).map((g,i)=> ({
-				ms: StandbyTimes[lv][i]/Game.speedRate,
+				ms: StandbyTimes[lv][i]/Game.speed,
 				fn: ()=> g.leaveHouse()
 			}))
 		)
@@ -155,7 +155,7 @@ const AttackInWaves = function() {
 	function genSequence() {
 		let  [cnt,idx] = [-1,0]
 		const durList  = genDurList()
-		const duration = ()=> durList[idx]/Game.speedRate
+		const duration = ()=> durList[idx]/Game.speed
 		const seq = {
 			mode: [SCATTER,CHASING][+Ctrl.isChaseMode],
 			update() {
@@ -237,11 +237,10 @@ const FrightMode = function() {
 	let   _session  = /**@type {?Session}*/(null)
 	const TimeTable = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	class Session {
-		#tCounter = 0; #fCounter  = 0;
-		#flashIdx = 1; #caughtCnt = 0;
-		get score()     {return PtsLst[this.#caughtCnt-1]}
-		get caughtAll() {return this.#caughtCnt == GhsType.Max}
-		get spriteIdx() {return this.#fCounter && this.#flashIdx^1}
+		#tCnt=0; #fCnt=0; #cCnt=0; #fIdx=1;
+		get score()     {return PtsLst[this.#cCnt-1]}
+		get caughtAll() {return this.#cCnt == GhsType.Max}
+		get spriteIdx() {return this.#fCnt && this.#fIdx^1}
 		/** @readonly */
 		Dur = TimeTable[Game.clampedLv-1]
 		constructor() {
@@ -254,20 +253,24 @@ const FrightMode = function() {
 			_session = bool? this : null
 			$(Ghosts)
 				.trigger('FrightMode', bool)
-				.offon('Bitten', ()=> this.#caughtCnt++, bool)
+				.offon('Bitten', ()=> this.#cCnt++, bool)
 			Sound.toggleFrightMode(bool)
 		}
 		#flashing() {
-			const iv = (this.Dur == 1 ? 12:14)/Game.speedRate|0
-			this.#flashIdx ^= Number(this.#fCounter++ % iv == 0)
+			const iv = (this.Dur == 1 ? 12:14)/Game.speed|0
+			this.#fIdx ^= Number(this.#fCnt++ % iv == 0)
 		}
 		update() {
-			if (!State.isPlaying || Timer.frozen) return
-			const et = (this.#tCounter++ * Game.interval)/1000
-			;(et >= this.Dur-2) && this.#flashing()
-			;(et >= this.Dur || this.caughtAll) && this.#toggle()
+			if (State.isPlaying && !Timer.frozen) {
+				const et = (this.#tCnt++ * Game.interval)/1000
+				if (et >= this.Dur-2) this.#flashing()
+				if (et >= this.Dur || this.caughtAll) this.#toggle()
+			}
  		}
 	}
-	GhsMgr.on({Init:()=> _session = null})
-	return {get session() {return _session}, new() {new Session}}
+	GhsMgr.on({Init:()=> _session=null})
+	return {
+		new() {new Session},
+		get session() {return _session},
+	}
 }()
