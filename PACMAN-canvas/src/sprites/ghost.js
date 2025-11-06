@@ -25,17 +25,17 @@ export default class {
 	setResurrect() {this.#resurrect = new FadeIn (600)}
 	draw({
 		mainCtx=Ctx, x=0,y=0, idx=0,
-		animIdx    = 0,
-		spriteIdx  = 0,
-		size       = T*2,
-		orient     = /**@type {Direction|'LowerR'}*/(L),
-		isFright   = false,
-		isBitten   = false,
-		isEscaping = false,
-		isAngry    = false,
-		isRipped   = false,
-		isMended   = false,
-		isExposed  = false,
+		animIdx   = 0,
+		spriteIdx = 0,
+		size      = T*2,
+		orient    = /**@type {Direction|'LowerR'}*/(L),
+		isFright  = false,
+		isBitten  = false,
+		isEscape  = false,
+		isAngry   = false,
+		isRipped  = false,
+		isMended  = false,
+		isExposed = false,
 	}={}) {
 		if (isBitten) return
 		const {ctx}= this
@@ -58,7 +58,7 @@ export default class {
 			this.#CBSprite.hadake(animIdx)
 			return finalize()
 		}
-		if (!isEscaping) {
+		if (!isEscape) {
 			ctx.save()
 			this.#resurrect?.setAlpha(ctx)
 			this.#angryGlow({x,y, isAngry,size})
