@@ -6,7 +6,7 @@ import {Player} from './player/pacman.js'
 import {GhsMgr} from './ghosts/_system.js'
 
 export class Actor extends Common {
-	pos     = Vec2()
+	pos = Vec2()
 	#fadeIn = /**@type {?FadeIn}*/(null)
 	#orient = /**@type {Direction}*/(L)
 	#movDir = /**@type {Direction}*/(L)
@@ -16,7 +16,7 @@ export class Actor extends Common {
 	get radius()    {return T}
 	get maxAlpha()  {return 1}
 	get step()      {return 0}
-	get stepDiv()   {return ceil(this.step*2)}
+	get stepDiv()   {return ceil(this.step)}
 	get inHouse()   {return Maze.House.isIn(this.tilePos)}
 	get inTunnel()  {return Maze.Tunnel.wicthSide(this.center)}
 
