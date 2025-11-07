@@ -30,17 +30,17 @@ export class Ghost extends Actor {
 	get chaseStep()   {return GhsStep.Base}
 	get chasePos()    {return pacman.center}
 	get chaseTile()   {return this.chasePos.divInt(T)}
-	get scatterTile() {return Vec2()}
-	get animIdx()     {return GhsMgr.animIndex & this.init.animFlag}
+	get scatterTile() {return Vec2(24, 0)}
+	get maxAlpha()    {return Ctrl.showTargets? 0.75:1}
 	get spriteIdx()   {return GhsMgr.spriteIdx}
-	get maxAlpha()    {return Ctrl.showTargets ? 0.75:1}
+	get animIdx()     {return GhsMgr.animIndex &  this.init.animFlag}
+	get isChasing()   {return GhsMgr.isChasing && this.isNormWalk}
+	get isScatter()   {return GhsMgr.isScatter && this.isNormWalk && !this.isAngry}
 	get isStarted()   {return this.#isStarted}
 	get isFright()    {return this.#isFright}
 	get isBitten()    {return this.state.isBitten}
 	get isEscape()    {return this.state.isEscape || this.state.isReturn}
-	get isNormWalk()  {return !this.isFright   && this.state.isWalk}
-	get isChasing()   {return GhsMgr.isChasing && this.isNormWalk}
-	get isScatter()   {return GhsMgr.isScatter && this.isNormWalk && !this.isAngry}
+	get isNormWalk()  {return !this.isFright && this.state.isWalk}
 
 	/**
 	 * @param {Direction} dir
