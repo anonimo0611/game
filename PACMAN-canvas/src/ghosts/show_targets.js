@@ -21,12 +21,12 @@ export default new class {
 		   g.isFright
 		|| g.state.isIdle
 		|| g.state.isBitten
-		|| (Timer.frozen && !g.isEscaping)
+		|| (Timer.frozen && !g.isEscape)
 	)
 
 	/** @param {Ghost} g */
 	#getTargetPos = g=>
-		(g.state.isGoOut || g.isEscaping)
+		(g.state.isGoOut || g.isEscape)
 			? Maze.House.EntranceTile.add(.5).mul(T)
 			: g.isScatter
 				? g.originalTargetTile.add(.5).mul(T)

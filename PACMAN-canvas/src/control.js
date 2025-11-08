@@ -34,7 +34,7 @@ export const Ctrl = new class {
 	get invincible()    {return input('invChk').checked}
 	get showTargets()   {return input('tgtChk').checked}
 	get showGridLines() {return input('grdChk').checked}
-	get isPractice()    {return this.isCheatMode  ||!this.isDefaultMode}
+	get isPractice()    {return this.isCheatMode || !this.isDefaultMode}
 	get isCheatMode()   {return this.speed<.7 || this.showTargets || this.invincible}
 	get isDefaultMode() {return this.consecutive && Menu.Level.index == 0}
 
@@ -60,7 +60,8 @@ export const Ctrl = new class {
 		localStorage.anopacman = JSON.stringify(data)
 	}
 	#restore() {
-		if (!localStorage.anopacman) return
+		if (!localStorage.anopacman)
+			return
 		const data = JSON.parse(localStorage.anopacman)
 		MenuIds.forEach(id=> Menu[id].index = data[id])
 		document.querySelectorAll('input').forEach(input=> {
@@ -113,7 +114,8 @@ export const Ctrl = new class {
 	}
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
-		if (Confirm.opened || keyRepeat(e)) return
+		if (Confirm.opened || keyRepeat(e))
+			return
 		switch(e.key) {
 		case 'Escape': return Ctrl.pause()
 		case 'Delete': return Ctrl.#quit(e.ctrlKey)

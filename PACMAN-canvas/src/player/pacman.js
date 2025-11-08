@@ -7,22 +7,20 @@ import {Score}  from '../score.js'
 import {Maze}   from '../maze.js'
 import {Pacman} from '../pacman.js'
 import {GhsMgr} from '../ghosts/_system.js'
-import {SteerPacman}   from './steer.js'
+import {Steer}   from './steer.js'
 import {TunnelEntered} from './tunnel.js'
 
-const{SlowLevel,SlowRate}= PacStep
 class PlayerPac extends Pacman {
-	#step       = 0
 	#eatIdx     = 0
 	#notEaten   = 0
-	#steer      = new SteerPacman()
+	#steer      = new Steer()
 	#tunEntered = new TunnelEntered()
 
 	get closed()        {return State.isPlaying == false}
 	get showCenter()    {return Ctrl.showGridLines}
 	get maxAlpha()      {return this.translucent? 0.75:1}
 	get translucent()   {return this.showCenter || Ctrl.invincible}
-	get step()          {return this.#step ||= this.#getMoveStep()}
+	get step()          {return this.#steer.step}
 	get stopped()       {return this.#steer.stopped}
 	get tunnelEntered() {return this.#tunEntered}
 	get timeNotEaten()  {return this.#notEaten * Game.interval}
@@ -41,18 +39,12 @@ class PlayerPac extends Pacman {
 		const  ofstX = (this.dir == U ? -num : 0)
 		return this.forwardPos(num).addX(ofstX*T)
 	}
-	#getMoveStep() {
-		const eating = Maze.hasDot(this.tileIdx)
-		return(GhsMgr.isFright
-			? (eating? PacStep.EneEat : PacStep.Energized)
-			: (eating? PacStep.Eating : PacStep.Base)
-		) * (Game.moveSpeed * (Game.level<SlowLevel ? 1:SlowRate))
-	}
 	#drawCenter({center:{x,y}}=this) {
 		Ctx.fillCircle(x,y, 3, Color.PacCenter)
 	}
 	draw() {
-		if (State.isStart) return
+		if (State.isStart)
+			return
 		Ctx.save()
 		super.draw()
 		this.sprite.draw(this)
@@ -61,50 +53,47 @@ class PlayerPac extends Pacman {
 	}
 	update() {
 		super.update()
-		if (!State.isPlaying || Timer.frozen) return
+		if (!State.isPlaying || Timer.frozen)
+			return
 		this.#notEaten++
 		this.#tunEntered.update()
 		this.sprite.update(this)
-		for (const _ of range(this.stepDiv)) {
-			this.#behavior()
+		this.#behavior(this.stepDiv)
+	}
+	#behavior(divisor=1) {
+		for (const _ of range(divisor)) {
+			this.#steer.update(divisor)
+			this.#dotEaten(this)
 			if (this.stopped) break
 		}
 	}
-	#behavior() {
-		if (this.justArrivedAtTile(this.stepDiv))
-			this.#step = this.#getMoveStep()
-		this.#eaten(this)
-		this.#steer.update()
-	}
-	#eaten({tileIdx:i}=this) {
-		if (!Maze.hasDot(i)) return
+	#dotEaten({tileIdx:i}=this) {
+		if (!Maze.hasDot(i))
+			return
 		this.#playSE()
 		this.resetTimer()
 		Maze.hasPow(i)
-			? this.#powEaten()
-			: this.#dotEaten()
+			? this.#powerDotEaten()
+			: this.#smallDotEaten()
 		Maze.clearBgDot(this) == 0
 			? State.to('Clear')
 			: Player.trigger('Eaten')
 	}
-	#dotEaten() {
-		Score.add(DotScore)
-	}
-	#powEaten() {
+	#powerDotEaten() {
 		Score.add(PowScore)
 		GhsMgr.setFrightMode()
+	}
+	#smallDotEaten() {
+		Score.add(DotScore)
 	}
 	#playSE() {
 		const id = (this.#eatIdx ^= 1) ? 'eat1':'eat0'
 		Sound.play(id, {duration:(T/this.step)*Ticker.Interval*0.5})
 	}
 }
-
 export let   pacman = new PlayerPac
 export const Player = new class extends Common {
 	draw()   {pacman.draw()}
 	update() {pacman.update()}
 }
-State.on({
-	_Restart_NewLevel:()=> pacman = new PlayerPac
-})
+State.on({_Restart_NewLevel:()=> pacman = new PlayerPac})

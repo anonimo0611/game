@@ -162,7 +162,8 @@ export const Maze = freeze(new class {
 		ctx.fillCircle(x,y, T/(isPow? 2:8), color)
 	}
 	drawGrid() {
-		if (!Ctrl.showGridLines) return
+		if (!Ctrl.showGridLines)
+			return
 		Ctx.save()
 		Ctx.strokeStyle = Color.Grid
 		for (const y of range(1,Cols)) Ctx.strokeLine(T*y, 0, T*y, Rows*T)

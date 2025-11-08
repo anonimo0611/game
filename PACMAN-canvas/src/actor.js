@@ -64,6 +64,10 @@ export class Actor extends Common {
 		this.pos = Vec2[dir].mul(this.step/divisor).add(this)
 		this.xAxisLoops()
 	}
+	justArrivedAtTile(divisor=1) {
+		return this.inFrontHalfOfTile
+			&& this.tilePixel <= this.step/divisor
+	}
 	xAxisLoops() {
 		this.x = function({x,radius:r}) {
 			if (x < -r-T/2) return BW+T/2
@@ -79,8 +83,9 @@ export class Actor extends Common {
 	move(dir) {this.setNextPos(1, this.dir=dir)}
 
 	/** @param {Direction} dir */
-	hasAdjWall = dir=> Maze.hasWall(this.getAdjTile(dir))
-
+	hasAdjWall(dir) {
+		return Maze.hasWall(this.getAdjTile(dir))
+	}
 	/** @param {Direction} dir */
 	getAdjTile(dir, tile=this.tilePos) {
 		const  v = Vec2[dir].add(tile)
@@ -91,8 +96,5 @@ export class Actor extends Common {
 		const {step,center}= this
 		const {x,y}= Vec2[dir].mul(T/2+step).add(center).divInt(T)
 		return Maze.hasWall({x:(x+Cols) % Cols, y}) // x-axis loops
-	}
-	justArrivedAtTile(divisor=1) {
-		return this.inFrontHalfOfTile && this.tilePixel <= this.step/divisor
 	}
 }

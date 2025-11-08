@@ -105,10 +105,14 @@ export class Attract {
 		ghost.sprite.draw(ghost)
 	}
 	update() {
-		if (Ticker.elapsedTime <= 1e4+500) return
-		!Timer.frozen && this.updatePacman()
-		!Timer.frozen && this.updateGhosts()
-		this.powDisp ^= +(Ticker.count % PowDotInterval == 0)
+		if (Ticker.elapsedTime <= 1e4+500)
+			return
+		if  (!Timer.frozen) {
+			this.updatePacman()
+			this.updateGhosts()
+		}
+		this.powDisp ^=
+			+(Ticker.count % PowDotInterval == 0)
 	}
 	updatePacman() {
 		this.pacman.sprite.update()
