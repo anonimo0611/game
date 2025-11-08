@@ -38,7 +38,6 @@ Color = freeze(new class {
 	Pinky     = '#F9B'
 	Aosuke    = '#0CF'
 	Guzuta    = '#FB0'
-	PacCenter = '#F00'
 	GhostEyes = '#33F'
 	GhostSkin = '#F4BEB0'
 	GhostPts  = '#3CF'

@@ -60,9 +60,11 @@ export class Actor extends Common {
 		Ctx.setAlpha(this.#fadeIn?.alpha ?? this.maxAlpha)
 	}
 	/** @param {Cvs2DStyle} color */
-	drawCenter(color, isVisible=true) {
-		isVisible && Ctx.fillCircle(...this.center.vals, 3, color)
+	drawCenter(color='red', isVisible=true) {
+		const {x,y}= this.center
+		isVisible && Ctx.fillCircle(x,y, 3, color)
 	}
+
 	setNextPos(divisor=1, dir=this.dir) {
 		this.pos = Vec2[dir].mul(this.step/divisor).add(this)
 		this.xAxisLoops()
