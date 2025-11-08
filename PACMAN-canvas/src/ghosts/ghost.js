@@ -114,7 +114,7 @@ export class Ghost extends Actor {
 		case 'Idle':  return this.#idle(this)
 		case 'GoOut': return this.#goOut(this)
 		case 'Return':return this.#returnToHome(this)
-		default: this.#walkPath()
+		default: this.#walkPath(this.step+.5|0)
 		}
 	}
 	#idle({idx,orient,state,step,center:{y:cy}}=this) {
@@ -172,9 +172,9 @@ export class Ghost extends Actor {
 			: this.state.to('Idle') && this.#idle(this)
 		!Timer.frozen && Sound.ghostArrivedAtHome()
 	}
-	#walkPath() {
-		for (const _ of range(this.stepDiv)) {
-			this.setNextPos(this.stepDiv)
+	#walkPath(divisor=1) {
+		for (const _ of range(divisor)) {
+			this.setNextPos(divisor)
 			this.inBackHalfOfTile && this.#setNextDir()
 			if (this.#setTurn(this)) break
 			if (this.crashWithPac()) break

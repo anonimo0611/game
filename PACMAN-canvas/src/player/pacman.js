@@ -58,7 +58,7 @@ class PlayerPac extends Pacman {
 		this.#notEaten++
 		this.#tunEntered.update()
 		this.sprite.update(this)
-		this.#behavior(this.stepDiv)
+		this.#behavior(this.step+.5|0)
 	}
 	#behavior(divisor=1) {
 		for (const _ of range(divisor)) {

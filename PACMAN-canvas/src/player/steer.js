@@ -54,11 +54,14 @@ export class Steer {
 			self.setMoveDir(self.revDir)
 		}
 	}
+	#setMoveStep(divisor=1) {
+		self.justArrivedAtTile(divisor)
+		 && (this.#step=this.#stepInTile)
+	}
 	update(divisor=1) {
 		this.#setCornering(divisor)
 		self.setNextPos(divisor)
-		self.justArrivedAtTile(divisor)
-		 && (this.#step=this.#stepInTile)
+		this.#setMoveStep(divisor)
 		this.#endCornering()
 		this.#turnAround()
 		this.#stopAtWall()
@@ -67,7 +70,8 @@ export class Steer {
 		const dir = this.#dir
 		if (this.canTurn && dir) {
 			this.#turning ||= true
-			self.setNextPos(divisor, self.orient=dir)
+			self.orient = dir
+			self.setNextPos(divisor, dir)
 		}
 	}
 	#endCornering() {
