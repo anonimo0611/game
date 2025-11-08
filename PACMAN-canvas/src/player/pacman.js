@@ -39,25 +39,25 @@ class PlayerPac extends Pacman {
 		const  ofstX = (this.dir == U ? -num : 0)
 		return this.forwardPos(num).addX(ofstX*T)
 	}
-	#drawCenter({center:{x,y}}=this) {
-		Ctx.fillCircle(x,y, 3, Color.PacCenter)
+	drawCenter() {
+		this.showCenter && super.drawCenter(Color.PacCenter)
 	}
 	draw() {
 		if (State.isStart)
 			return
 		Ctx.save()
-		super.draw()
+		this.setFadeInAlpha()
 		this.sprite.draw(this)
-		this.showCenter && this.#drawCenter(this)
+		this.drawCenter()
 		Ctx.restore()
 	}
 	update() {
-		super.update()
+		this.updateFadeIn()
 		if (!State.isPlaying || Timer.frozen)
 			return
+		this.sprite.update(this)
 		this.#notEaten++
 		this.#tunEntered.update()
-		this.sprite.update(this)
 		this.#behavior(this.step+.5|0)
 	}
 	#behavior(divisor=1) {

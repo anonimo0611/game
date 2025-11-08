@@ -52,12 +52,15 @@ export class Actor extends Common {
 		Player.draw()
 		GhsMgr.drawFront()
 	}
-	update(maxA=this.maxAlpha) {
+	updateFadeIn(maxA=this.maxAlpha) {
 		State.isReady   && (this.#fadeIn ||= new FadeIn)?.update(maxA)
 		State.isPlaying && (this.#fadeIn &&= null)
 	}
-	draw() {
+	setFadeInAlpha() {
 		Ctx.setAlpha(this.#fadeIn?.alpha ?? this.maxAlpha)
+	}
+	drawCenter(/**@type {Cvs2DStyle}*/color) {
+		Ctx.fillCircle(...this.center.vals, 3, color)
 	}
 	setNextPos(divisor=1, dir=this.dir) {
 		this.pos = Vec2[dir].mul(this.step/divisor).add(this)

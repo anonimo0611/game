@@ -94,13 +94,13 @@ export class Ghost extends Actor {
 		if (State.isStart)
 			return
 		Ctx.save()
-		super.draw()
+		this.setFadeInAlpha()
 		this.sprite.fadeOut?.setAlpha(Ctx)
 		this.sprite.draw(this)
 		Ctx.restore()
 	}
 	update() {
-		super.update()
+		this.updateFadeIn()
 		this.sprite.fadeOut?.update()
 		this.sprite.update()
 		this.houseEntranceArrived
