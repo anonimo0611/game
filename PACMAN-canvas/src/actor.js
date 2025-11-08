@@ -59,8 +59,9 @@ export class Actor extends Common {
 	setFadeInAlpha() {
 		Ctx.setAlpha(this.#fadeIn?.alpha ?? this.maxAlpha)
 	}
-	drawCenter(/**@type {Cvs2DStyle}*/color) {
-		Ctx.fillCircle(...this.center.vals, 3, color)
+	/** @param {Cvs2DStyle} color */
+	drawCenter(color, isVisible=true) {
+		isVisible && Ctx.fillCircle(...this.center.vals, 3, color)
 	}
 	setNextPos(divisor=1, dir=this.dir) {
 		this.pos = Vec2[dir].mul(this.step/divisor).add(this)
