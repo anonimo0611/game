@@ -19,7 +19,7 @@ export class Steer {
 	get stopped() {return this.#stopped}
 
 	constructor() {
-		$(()=> this.#step = this.#stepInTile)
+		$(()=> this.#step = this.stepInTile)
 		$win.offon('keydown.Steer', this.#steer.bind(this))
 	}
 	get canTurn() {
@@ -27,7 +27,10 @@ export class Steer {
 			&& self.tileCenterReached === false
 			&& self.collidedWithWall(this.#dir) === false
 	}
-	get #stepInTile() {
+	get collidedWithWall() {
+		return !this.#turning && self.collidedWithWall()
+	}
+	get stepInTile() {
 		const eating = Maze.hasDot(self.tileIdx)
 		return (
 			GhsMgr.isFright
@@ -59,7 +62,7 @@ export class Steer {
 	}
 	#setMoveStep(divisor=1) {
 		self.justArrivedAtTile(divisor)
-			&& (this.#step=this.#stepInTile)
+			&& (this.#step=this.stepInTile)
 	}
 	update(divisor=1) {
 		this.#setCornering(divisor)
@@ -90,12 +93,8 @@ export class Steer {
 			&& self.setMoveDir(self.orient)
 	}
 	#stopAtWall() {
-		this.#stopped = false
-		if (!this.#turning
-		 && self.collidedWithWall()) {
-			self.pos  = self.tilePos.mul(T)
-			this.#dir = null
-			this.#stopped = true
-		}
+		(this.#stopped = this.collidedWithWall)
+			&& (self.pos  = self.tilePos.mul(T))
+			&& (this.#dir = null)
 	}
 }
