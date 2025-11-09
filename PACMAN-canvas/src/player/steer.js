@@ -15,14 +15,12 @@ export class Steer {
 	#step    = 0
 	#stopped = true
 	#turning = false
+	get step()    {return this.#step}
+	get stopped() {return this.#stopped}
+
 	constructor() {
+		$(()=> this.#step = this.#stepInTile)
 		$win.offon('keydown.Steer', this.#steer.bind(this))
-	}
-	get step() {
-		return this.#step ||= this.#stepInTile
-	}
-	get stopped() {
-		return this.#stopped
 	}
 	get canTurn() {
 		return this.#dir != null
@@ -61,7 +59,7 @@ export class Steer {
 	}
 	#setMoveStep(divisor=1) {
 		self.justArrivedAtTile(divisor)
-		 && (this.#step=this.#stepInTile)
+			&& (this.#step=this.#stepInTile)
 	}
 	update(divisor=1) {
 		this.#setCornering(divisor)
