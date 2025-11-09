@@ -175,7 +175,7 @@ export class Ghost extends Actor {
 	#walkPath(divisor=1) {
 		for (const _ of range(divisor)) {
 			this.setNextPos(divisor)
-			this.inBackHalfOfTile && this.#setNextDir()
+			this.tileCenterReached && this.#setNextDir()
 			if (this.#setTurn(this)) break
 			if (this.crashWithPac()) break
 		}
@@ -212,7 +212,7 @@ export class Ghost extends Actor {
 	#setTurn({orient}=this) {
 		if (this.dir != orient
 		 && this.hasAdjWall(orient) == false
-		 && this.inBackHalfOfTile
+		 && this.tileCenterReached
 		) {
 			this.pos = this.tilePos.mul(T)
 			this.setMoveDir(orient)

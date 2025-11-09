@@ -18,11 +18,16 @@ export class Steer {
 	constructor() {
 		$win.offon('keydown.Steer', this.#steer.bind(this))
 	}
-	get step()    {return this.#step ||= this.#stepInTile}
-	get stopped() {return this.#stopped}
-	get canTurn() {return this.#dir != null
-		&& self.inFrontHalfOfTile
-		&& self.collidedWithWall(this.#dir) === false
+	get step() {
+		return this.#step ||= this.#stepInTile
+	}
+	get stopped() {
+		return this.#stopped
+	}
+	get canTurn() {
+		return this.#dir != null
+			&& self.tileCenterReached === false
+			&& self.collidedWithWall(this.#dir) === false
 	}
 	get #stepInTile() {
 		const eating = Maze.hasDot(self.tileIdx)
@@ -49,7 +54,7 @@ export class Steer {
 			return
 		}
 		this.#dir = dir
-		if (self.inBackHalfOfTile) {
+		if (self.tileCenterReached) {
 			self.orient = dir
 			self.setMoveDir(self.revDir)
 		}
@@ -75,7 +80,7 @@ export class Steer {
 		}
 	}
 	#endCornering() {
-		if (this.#turning && self.inBackHalfOfTile) {
+		if (this.#turning && self.tileCenterReached) {
 			this.#dir  = this.#next
 			this.#next = null
 			this.#turning = false

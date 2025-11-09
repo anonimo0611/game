@@ -40,8 +40,9 @@ export class Actor extends Common {
 		const  count = v.x? x % T : y % T
 		return (v.x || v.y) > 0 ? count : T-count
 	}
-	get inFrontHalfOfTile() {return this.tilePixel <= T/2}
-	get inBackHalfOfTile()  {return this.tilePixel >  T/2}
+	get tileCenterReached() {
+		return this.tilePixel > T/2
+	}
 
 	static update() {
 		Player.update()
@@ -70,7 +71,7 @@ export class Actor extends Common {
 		this.xAxisLoops()
 	}
 	justArrivedAtTile(divisor=1) {
-		return this.inFrontHalfOfTile
+		return this.tileCenterReached === false
 			&& this.tilePixel <= this.step/divisor
 	}
 	xAxisLoops() {
