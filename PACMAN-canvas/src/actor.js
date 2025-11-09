@@ -35,15 +35,12 @@ export class Actor extends Common {
 	set dir(dir)    {this.#movDir = this.orient = dir}
 	set orient(dir) {this.#orient = dir}
 
+	get tileCenterReached() {return this.tilePixel > T/2}
 	get tilePixel() {
 		const  {x,y} = this.center, v = Vec2[this.dir]
 		const  count = v.x? x % T : y % T
 		return (v.x || v.y) > 0 ? count : T-count
 	}
-	get tileCenterReached() {
-		return this.tilePixel > T/2
-	}
-
 	static update() {
 		Player.update()
 		GhsMgr.update()
@@ -60,13 +57,10 @@ export class Actor extends Common {
 	setFadeInAlpha() {
 		Ctx.setAlpha(this.#fadeIn?.alpha ?? this.maxAlpha)
 	}
-	/** @param {Cvs2DStyle} color */
-	drawCenter(color, isVisible=true) {
-		const {x,y}= this.center
-		isVisible && Ctx.fillCircle(x,y, 3, color)
+	centering() {
+		this.x = (BW-T)/2
 	}
-	/** @param {number} divisor */
-	setNextPos(divisor, dir=this.dir) {
+	setNextPos(divisor=1, dir=this.dir) {
 		this.pos = Vec2[dir].mul(this.step/divisor).add(this)
 		this.xAxisLoops()
 	}
@@ -80,14 +74,14 @@ export class Actor extends Common {
 			if (x > BW+T/2) return -r-T/2
 		}(this) ?? this.x
 	}
-	centering() {this.x = (BW-T)/2}
-
 	/** @param {Direction} dir */
-	setMoveDir(dir) {this.#movDir = dir}
-
+	move(dir) {
+		this.setNextPos(1, this.dir=dir)
+	}
 	/** @param {Direction} dir */
-	move(dir) {this.setNextPos(1, this.dir=dir)}
-
+	setMoveDir(dir) {
+		this.#movDir = dir
+	}
 	/** @param {Direction} dir */
 	hasAdjWall(dir) {
 		return Maze.hasWall(this.getAdjTile(dir))
@@ -102,5 +96,10 @@ export class Actor extends Common {
 		const {step,center}= this
 		const {x,y}= Vec2[dir].mul(T/2+step).add(center).divInt(T)
 		return Maze.hasWall({x:(x+Cols) % Cols, y}) // x-axis loops
+	}
+	/** @param {Cvs2DStyle} color */
+	drawCenter(color, isVisible=true) {
+		const {x,y}= this.center
+		isVisible && Ctx.fillCircle(x,y, 3, color)
 	}
 }
