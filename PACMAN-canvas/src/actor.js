@@ -60,7 +60,7 @@ export class Actor extends Common {
 		Ctx.setAlpha(this.#fadeIn?.alpha ?? this.maxAlpha)
 	}
 	/** @param {Cvs2DStyle} color */
-	drawCenter(color='red', isVisible=true) {
+	drawCenter(color, isVisible=true) {
 		const {x,y}= this.center
 		isVisible && Ctx.fillCircle(x,y, 3, color)
 	}
