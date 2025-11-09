@@ -59,8 +59,8 @@ class PlayerPac extends Pacman {
 	}
 	#behavior(divisor=1) {
 		for (const _ of range(divisor)) {
-			this.#steer.update(divisor)
 			this.#dotEaten(this)
+			this.#steer.update(divisor)
 			if (this.stopped) break
 		}
 	}
