@@ -65,8 +65,8 @@ export class Actor extends Common {
 		const {x,y}= this.center
 		isVisible && Ctx.fillCircle(x,y, 3, color)
 	}
-
-	setNextPos(divisor=1, dir=this.dir) {
+	/** @param {number} divisor */
+	setNextPos(divisor, dir=this.dir) {
 		this.pos = Vec2[dir].mul(this.step/divisor).add(this)
 		this.xAxisLoops()
 	}

@@ -152,7 +152,7 @@ export class Ghost extends Actor {
 	}
 	#returnToHome({init,step,x,y}=this) {
 		if (y+step < Maze.House.MiddleY)
-			return this.setNextPos()
+			return this.move(D)
 
 		if (y != Maze.House.MiddleY)
 			return this.pos.setY(Maze.House.MiddleY).void()
