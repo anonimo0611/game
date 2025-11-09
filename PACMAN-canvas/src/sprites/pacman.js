@@ -1,4 +1,4 @@
-const Duration = 300/Ticker.Interval
+const Duration = 200/Ticker.Interval
 const OpenMid  = 30 * PI/180
 const OpenMax  = 60 * PI/180
 const Rotation = /**@type {const}*/({[R]:0, [D]:1, [L]:2, [U]:3})
