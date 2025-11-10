@@ -7,7 +7,7 @@ import {GhsMgr}  from '../ghosts/_system.js'
 import {pacman as self} from './pacman.js';
 
 const Step = PacStep
-const{SlowLevel,SlowRate}= PacStep
+const{SlowLevel,SlowRate}=Step
 
 export class Steer {
 	#dir  = /**@type {?Direction}*/(null)

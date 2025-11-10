@@ -74,8 +74,7 @@ export class Actor extends Common {
 			if (x > BW+T/2) return -r-T/2
 		}(this) ?? this.x
 	}
-	/** @param {Direction} dir */
-	move(dir) {
+	move(dir=this.dir) {
 		this.setNextPos(1, this.dir=dir)
 	}
 	/** @param {Direction} dir */
