@@ -25,14 +25,14 @@ export class Actor extends Common {
 	set y(num)      {this.pos.y = num}
 
 	get center()    {return this.pos.clone.add(T/2)}
-	get tilePos()   {return this.pos.clone.add(T/2).divInt(T)}
+	get tilePos()   {return this.center.divInt(T)}
 	get tileIdx()   {return Vec2.idx(this.tilePos,Cols)}
 
 	get dir()       {return this.#movDir}
 	get orient()    {return this.#orient}
 	get revDir()    {return Dir.Opposite[this.dir]}
 	get revOrient() {return Dir.Opposite[this.orient]}
-	set dir(dir)    {this.#movDir = this.orient = dir}
+	set dir(dir)    {this.#orient = this.#movDir = dir}
 	set orient(dir) {this.#orient = dir}
 
 	get tileCenterReached() {return this.tilePixel > T/2}
