@@ -158,7 +158,7 @@ export const Maze = freeze(new class {
 	 * @param {?Cvs2DStyle} color
 	 */
 	drawDot(ctx, col,row, isPow=false, color=Color.Dot) {
-		const {x,y}= Vec2(col,row).add(.5).mul(T)
+		const [x,y]= [col,row].map(n=>(n+.5)*T)
 		ctx.fillCircle(x,y, T/(isPow? 2:8), color)
 	}
 	drawGrid() {
