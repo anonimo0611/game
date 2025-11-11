@@ -9,7 +9,7 @@ const PtsMap = /**@type {Map<any, Points>}*/(new Map)
 State.on({_Clear_Crashed:()=> PtsMap.clear()})
 
 /**
-@typedef {typeof Pts.Vals.All[number]} Pts
+@typedef {typeof Pts.Score.All[number]} Pts
 @typedef {{key:{score:Pts}, pos:Position, dur?:number, fn?:function}} PtsData
 */
 export const PtsMgr = new class {

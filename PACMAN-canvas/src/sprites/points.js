@@ -1,10 +1,10 @@
 const FruitCvs = canvas2D(null)
 const GhostCvs = canvas2D(null)
 
-export const Vals = /**@type {const}*/({
+export const Score = /**@type {const}*/({
 	All:  [100,200,300,400,500,700,800,1e3,1600,2e3,3e3,5e3],
 	Ghost:[200,400,800,1600],
-	Fruit:[100,300,500,700,1e3,2e3,3e3,5e3]
+	Fruit:[100,300,500,700,1e3,2e3,3e3,5e3],
 })
 const Data = /**@type {const}*/({
 	PathFrom0To8: [
@@ -35,29 +35,30 @@ const Data = /**@type {const}*/({
 	}
 })
 /** @type {ReadonlySet<number>} */
-const GtsPtsSet = new Set(Vals.Ghost)
+const GtsPtsSet = new Set(Score.Ghost)
 
 /**
- * @typedef {typeof Vals.All[number]} PtsType
+ * @typedef {typeof Score.All[number]} PtsType
  * @param {PtsType} pts
  */
 export function cache(pts, size=TileSize*2) {
 	const idx  = +GtsPtsSet.has(pts)
-	const ctx  = [FruitCvs,GhostCvs][idx].ctx
-	const[w,h] = ctx.resize(size*1.5,size).size
+	const ctx  = [FruitCvs, GhostCvs][idx].ctx
+	const cst  = [Color.FruitPts, Color.GhostPts][idx]
+	const[w,h] = ctx.resize(size*1.5, size).size
 	ctx.clear()
 	ctx.save()
 	ctx.translate(w/2, h/2)
 	ctx.scale(size/16, size/16)
+	ctx.strokeStyle = cst
 	ctx.lineWidth = 1.2
 	ctx.lineJoin  = ctx.lineCap = 'round'
-	ctx.strokeStyle = [Color.FruitPts,Color.GhostPts][idx]
 	Data.DigitOffsetXFrom[pts]?.forEach((x,i)=> {
 		const y = Data.DigitOffsetY
 		const d = +pts.toString()[i]
-		pts == 1600 && i == 0
-		? ctx.newLinePath([x,y],[x,y+6]) //narrow 1
-		: function() {
+		pts == 1600 && i == 0 ?
+		ctx.newLinePath([x,y],[x,y+6]) : //narrow 1
+		function() {
 			ctx.save()
 			ctx.translate(x,y)
 			ctx.newLinePath(.../**@type {xyList[]}*/
@@ -68,5 +69,5 @@ export function cache(pts, size=TileSize*2) {
 		ctx.stroke()
 	})
 	ctx.restore()
-	return/**@type {const}*/({ctx,w,h})
+	return /**@type {const}*/({ctx,w,h})
 }

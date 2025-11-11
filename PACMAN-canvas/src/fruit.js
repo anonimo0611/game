@@ -30,7 +30,7 @@ export const Fruit = new class {
 		$Level.on({change:Fruit.#setImages})
 	}
 	get score() {
-		return Pts.Vals.Fruit[Fruit.number()]
+		return Pts.Score.Fruit[Fruit.number()]
 	}
 	number(i=Game.level-1) {
 		return TypeTable.at(i >= TypeTable.length ? -1 : i) ?? 0

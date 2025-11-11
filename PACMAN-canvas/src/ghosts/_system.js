@@ -12,7 +12,7 @@ import {pacman} from '../player/pacman.js'
 import {Ghost}  from './ghost.js'
 import Target   from './show_targets.js'
 
-const PtsLst = Pts.Vals.Ghost
+const PtsLst = Pts.Score.Ghost
 const Ghosts = /**@type {Ghost[]}*/([])
 
 /**
