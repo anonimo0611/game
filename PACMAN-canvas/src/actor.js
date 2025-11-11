@@ -35,12 +35,13 @@ export class Actor extends Common {
 	set dir(dir)    {this.#orient = this.#movDir = dir}
 	set orient(dir) {this.#orient = dir}
 
-	get tileCenterReached() {return this.tilePixel > T/2}
 	get tilePixel() {
 		const  {x,y} = this.center, v = Vec2[this.dir]
 		const  count = v.x? x % T : y % T
 		return (v.x || v.y) > 0 ? count : T-count
 	}
+	get tileCenterReached() {return this.tilePixel > T/2}
+
 	static update() {
 		Player.update()
 		GhsMgr.update()
