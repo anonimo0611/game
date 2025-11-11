@@ -81,7 +81,7 @@ export const View = function()
 			orient:/**@type {const}*/([R,R,R,R,U,L,D,R])[col],
 			animIdx:  +(col % 2 != 0),
 			isFright:  (col <= 3),
-			isEscaping:(col >= 4),
+			isEscape:  (col >= 4),
 			spriteIdx:+(col >= 2),
 		})
 	}
@@ -89,7 +89,7 @@ export const View = function()
 	function drawPoints()
 	{
 		/**
-		 * @typedef {typeof Pts.Vals.All[number]} Pts
+		 * @typedef {typeof Pts.Score.All[number]} Pts
 		 * @type {(pts:Pts, x:number, y:number)=> void}
 		 */
 		function draw(pts, x, y)
