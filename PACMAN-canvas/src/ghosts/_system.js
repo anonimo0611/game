@@ -205,8 +205,8 @@ export const DotCounter = function() {
 			? _globalCounter++
 			: pCounters[Ghosts.findIndex(g=> g.state.isIdle)]++
 	}
-	State.on({_Ready:reset})
-	$(()=> Player.on({Eaten:addCnt}))
+	State .on({_Ready:reset})
+	Player.on({Eaten:addCnt})
 	return {release}
 }()
 
@@ -220,13 +220,13 @@ const Elroy = function() {
 			&& Ghosts[GhsType.Akabei]?.isFright  === false
 			&& Ghosts[GhsType.Guzuta]?.isStarted === true
 	}
-	function onDotEaten() {
+	function dotEaten() {
 		const rate = [1.5, 1.0, 0.5][_part]
 		if (Maze.dotsLeft <= DotsLeftTable[Game.clampedLv-1]*rate)
 			++_part && Sound.playSiren()
 	}
-	State.on({_NewLevel:()=> _part = 0})
-	$(()=> Player.on({Eaten:onDotEaten}))
+	State .on({_NewLevel:()=> _part=0})
+	Player.on({Eaten:dotEaten})
 	return {
 		get part()  {return _part},
 		get angry() {return angry()},
