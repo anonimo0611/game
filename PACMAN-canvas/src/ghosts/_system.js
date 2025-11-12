@@ -90,7 +90,7 @@ export const GhsMgr = new class extends Common {
 	}
 	#onPlaying() {
 		Sound.playSiren()
-		Ctrl.isChaseMode && GhsMgr.#setReleaseTimer()
+		Ctrl.alwaysChase && GhsMgr.#setReleaseTimer()
 	}
 	#setReleaseTimer() {
 		const lv = (Game.restarted? 0 : Game.clampedLv)
@@ -158,7 +158,7 @@ const AttackInWaves = function() {
 		const durList  = genDurList()
 		const duration = ()=> durList[idx]/Game.speed
 		const seq = {
-			mode: [SCATTER,CHASING][+Ctrl.isChaseMode],
+			mode: [SCATTER,CHASING][+Ctrl.alwaysChase],
 			update() {
 				if (Timer.frozen
 				 || GhsMgr.isFright

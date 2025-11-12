@@ -28,15 +28,15 @@ export const Ctrl = new class {
 	get activeElem()    {return qS(':not(#startBtn):focus')}
 	get livesMax()      {return input('lvsRng').valueAsNumber}
 	get speed()         {return input('spdRng').valueAsNumber}
-	get isChaseMode()   {return input('chsChk').checked}
+	get alwaysChase()   {return input('chsChk').checked}
 	get consecutive()   {return input('onlChk').checked == false}
 	get unrestricted()  {return input('unrChk').checked}
 	get invincible()    {return input('invChk').checked}
 	get showTargets()   {return input('tgtChk').checked}
 	get showGridLines() {return input('grdChk').checked}
-	get isPractice()    {return this.isCheatMode || !this.isDefaultMode}
+	get isPractice()    {return this.isCheatMode || !this.isArcadeMode}
 	get isCheatMode()   {return this.speed<.7 || this.showTargets || this.invincible}
-	get isDefaultMode() {return this.consecutive && Menu.Level.index == 0}
+	get isArcadeMode()  {return this.consecutive && Menu.Level.index == 0}
 
 	/** @param {boolean} [force] */
 	pause(force) {

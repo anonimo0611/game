@@ -118,7 +118,7 @@ export class Ghost extends Actor {
 		}
 	}
 	#idle({idx,orient,state,step,center:{y:cy}}=this) {
-		if (!Ctrl.isChaseMode)
+		if (!Ctrl.alwaysChase)
 			Sys.DotCounter.release(idx, b=> this.leaveHouse(b))
 		!state.isGoOut && this.move(
 			(cy+T*0.6-step > Maze.House.MiddleY && orient != D)? U:
@@ -167,7 +167,7 @@ export class Ghost extends Actor {
 	}
 	#arrivedAtHome() {
 		this.sprite.setResurrect()
-		;(Ctrl.isChaseMode || this.idx == GhsType.Akabei)
+		;(Ctrl.alwaysChase || this.idx == GhsType.Akabei)
 			? this.state.to('GoOut')
 			: this.state.to('Idle') && this.#idle(this)
 		!Timer.frozen && Sound.ghostArrivedAtHome()
