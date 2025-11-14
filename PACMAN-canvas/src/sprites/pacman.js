@@ -1,4 +1,4 @@
-const Duration = 200/Ticker.Interval
+const Duration = 300/Ticker.Interval
 const OpenMid  = 30 * PI/180
 const OpenMax  = 60 * PI/180
 const Rotation = /**@type {const}*/({[R]:0, [D]:1, [L]:2, [U]:3})
@@ -46,7 +46,7 @@ export default class {
 		ctx.translate(x,y)
 		ctx.rotate(Rotation[orient] * PI/2)
 		ctx.beginPath()
-		ctx.moveTo(-radius*scale*0.35, 0)
+		ctx.moveTo(-radius*scale*0.3, 0)
 		ctx.arc(0,0,radius*scale, mAngle, PI*2-mAngle)
 		ctx.fillStyle = Color.Pacman
 		ctx.fill()
