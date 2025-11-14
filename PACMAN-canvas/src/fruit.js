@@ -66,8 +66,10 @@ export const Fruit = new class {
 		Fruit.#collisionWithPac()
 	}
 	draw() {
-		if ((State.isTitle || State.isPlaying)
-		 && !Ticker.paused && _tgtDisp) {
+		if (!State.isTitle
+		 && !State.isPlaying)
+			return
+		if (_tgtDisp && !Ticker.paused) {
 			Ctx.save()
 			Ctx.setAlpha(_fadeOut?.alpha)
 			Ctx.translate(...TargetPos.vals)
