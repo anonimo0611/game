@@ -100,7 +100,7 @@ export const Maze = freeze(new class {
 		const t = Vec2(i%Cols, i/Cols|0)
 		Maze.clearBgDot({tileIdx:i,tilePos:t})
 		DotSet.add(i)
-		!powChk.checked || chip == '.'
+		powChk.checked == false || chip == '.'
 			? drawDot(Bg.ctx, t.x, t.y)
 			: PowMap.set(i, t)
 	}
@@ -119,16 +119,16 @@ export const Maze = freeze(new class {
 	get dotsLeft() {return DotSet.size}
 
 	/**
-	 * Whether tile `row` coord is the top/bottom of the maze excluding dead space
-	 * @param {number} row
-	 */
-	isTopOrBottom = row=> (row == Maze.Top || row == Maze.Bottom)
-
-	/**
 	 * These tiles(x-y) forbidden ghosts from entering upward
 	 * @type {ReadonlySet<string>}
 	 */
 	GhostNoEnter = new Set(['12-11','12-23','15-11','15-23'])
+
+	/**
+	 * Whether tile `row` coord is the top/bottom of the maze excluding dead space
+	 * @param {number} row
+	 */
+	isTopOrBottom = row=> (row == Maze.Top) || (row == Maze.Bottom)
 
 	/**
 	 * If the target tile is on the upper side of the maze \
@@ -136,8 +136,8 @@ export const Maze = freeze(new class {
 	 * @param {Ghost} Ghost
 	 */
 	ghostExitTile = ({originalTargetTile:o, tilePos:t})=>
-		o.y < 10 && PenOuter.contains(t)
-			? Vec2((t.x > Cols/2) && (o.x > Cols/2) ? 21:6, 15) : o
+		o.y >= 10 || !PenOuter.contains(t)
+			? o : Vec2((t.x > Cols/2 && o.x > Cols/2)? 21:6, 15)
 
 	/**
 	 * @param {{tileIdx:number, tilePos:Vector2}} tile
