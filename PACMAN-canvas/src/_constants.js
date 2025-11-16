@@ -27,25 +27,25 @@ Bg  = canvas2D('board_bg' ,  BW,BH),
 HUD = canvas2D('board_hud',  BW,BH),
 Ctx = canvas2D('board_main', BW,BH).ctx,
 
-Color = /**@type {const}*/({
-	Grid:      '#F00',
-	Dot:       '#FFB8AE',
-	Wall:      '#58E',
-	FlashWall: '#FFF',
-	Door:      '#FFB8DE',
-	Pacman:    '#FF0',
-	Akabei:    '#E00',
-	Pinky:     '#F9B',
-	Aosuke:    '#0CF',
-	Guzuta:    '#FB0',
-	GhostEyes: '#33F',
-	GhostSkin: '#F4BEB0',
-	GhostPts:  '#3CF',
-	FruitPts:  '#FFB8FF',
-	Extend:    '#F55',
-	Inf:          ['#888','#F9E'],
-	FrightFaces:  ['#F9F','#F00'],
-	FrightBodies: ['#36A','#FFF'],
+Color = freeze(new class {
+	Grid      = '#F00'
+	Dot       = '#FFB8AE'
+	Wall      = '#58E'
+	FlashWall = '#FFF'
+	Door      = '#FFB8DE'
+	Pacman    = '#FF0'
+	Akabei    = '#E00'
+	Pinky     = '#F9B'
+	Aosuke    = '#0CF'
+	Guzuta    = '#FB0'
+	GhostEyes = '#33F'
+	GhostSkin = '#F4BEB0'
+	GhostPts  = '#3CF'
+	FruitPts  = '#FFB8FF'
+	Extend    = '#F55'
+	Inf          = freeze(['#888','#F9E'])
+	FrightFaces  = freeze(['#F9F','#F00'])
+	FrightBodies = freeze(['#36A','#FFF'])
 }),
 
 PacScale  = 0.9,
