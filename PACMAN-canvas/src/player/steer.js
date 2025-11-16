@@ -24,8 +24,8 @@ export class Steer {
 	}
 	get canTurn() {
 		return this.#dir != null
-			&& self.tileCenterReached === false
-			&& self.collidedWithWall(this.#dir) === false
+			&& self.passedTileCenter == false
+			&& self.collidedWithWall(this.#dir) == false
 	}
 	get collidedWithWall() {
 		return !this.#turning && self.collidedWithWall()
@@ -55,7 +55,7 @@ export class Steer {
 			return
 		}
 		this.#dir = dir
-		if (self.tileCenterReached) {
+		if (self.passedTileCenter) {
 			self.orient = dir
 			self.setMoveDir(self.revDir)
 		}
@@ -81,7 +81,7 @@ export class Steer {
 		}
 	}
 	#endCornering() {
-		if (this.#turning && self.tileCenterReached) {
+		if (this.#turning && self.passedTileCenter) {
 			this.#dir  = this.#next
 			this.#next = null
 			this.#turning = false

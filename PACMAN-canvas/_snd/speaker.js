@@ -21,8 +21,7 @@ export const Speaker = new class {
 			'8_9_10':   ()=> 3,
 			'3_4_5_6_7':()=> 2,
 			'1_2':      ()=> 1,
-			_: ()=> 0,
-		}) ?? -1
+		}) ?? 0
 	}
 	#drawBody() {
 		ctx.newLinePath(

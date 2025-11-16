@@ -4,10 +4,10 @@ import GhsSprite from '../src/sprites/ghost.js'
 
 let lastT = -1
 
-const SizeRng  = /**@type {HTMLInputElement}*/(byId('sizeRng'))
+const SizeRng = /**@type {HTMLInputElement}*/(byId('sizeRng'))
 
 export let T = 0, [S,GAP] = [0,0]
-export const GridSize  = Vec2(10,11).freeze()
+export const GridSize  = Vec2.new(10,11).freeze()
 export const ghsSprite = new GhsSprite(canvas2D(null).ctx)
 
 export function resize()

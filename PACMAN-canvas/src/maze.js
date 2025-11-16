@@ -40,22 +40,21 @@ D__________________________C\
 ////////////////////////////\
 ////////////////////////////`])
 
-/** `.` and `O` represent normal and power cookies
- * @type {ReadonlySet<string>}
- */
-const DotChipSet = new Set(['.','O'])
+/**
+ `.` and `O` represent normal and power cookies
+ @type {ReadonlySet<string>}
+*/const DotChipSet = new Set(['.','O'])
 
-/** @typedef {number} TileIdx */
-const WallSet  = /**@type {Set<TileIdx>}*/(new Set)
-const DotSet   = /**@type {Set<TileIdx>}*/(new Set)
-const PowMap   = /**@type {Map<TileIdx,Vector2>}*/(new Map)
+const WallSet  = /**@type {Set<number>}*/(new Set)
+const DotSet   = /**@type {Set<number>}*/(new Set)
+const PowMap   = /**@type {Map<number,Vec2>}*/(new Map)
 const PenRect  = new Rect(10, 13,  8, 5).freeze()
 const PenOuter = new Rect( 9, 12, 10, 7).freeze()
 
 class House {
 	MiddleY = (this.EntranceTile.y+3.5)*T
-	get EntranceTile() {return Vec2(13, 12)}
-	isIn = (/**@type {Vector2}*/tile)=> PenRect.contains(tile)
+	get EntranceTile() {return Vec2.new(13, 12)}
+	isIn = (/**@type {Vec2}*/tile)=> PenRect.contains(tile)
 }
 class Tunnel {
 	Y = 15
@@ -94,10 +93,10 @@ export const Maze = freeze(new class {
 			DotChipSet.has(c) && this.setDot(i,c)
 	}
 	static setDot(
-	 /**@type {TileIdx}*/i,
-	 /**@type {string} */chip
+	 /**@type {number}*/i,
+	 /**@type {string}*/chip
 	) {
-		const t = Vec2(i%Cols, i/Cols|0)
+		const t = Vec2.new(i%Cols, i/Cols|0)
 		Maze.clearBgDot({tileIdx:i,tilePos:t})
 		DotSet.add(i)
 		powChk.checked == false || chip == '.'
@@ -112,37 +111,37 @@ export const Maze = freeze(new class {
 	PowDot = freeze(new PowDot)
 	Tunnel = freeze(new Tunnel)
 
-	hasDot  = (/**@type {TileIdx} */i)=> DotSet.has(i)
-	hasPow  = (/**@type {TileIdx} */i)=> PowMap.has(i)
+	hasDot  = (/**@type {number}  */i)=> DotSet.has(i)
+	hasPow  = (/**@type {number}  */i)=> PowMap.has(i)
 	hasWall = (/**@type {Position}*/p)=> WallSet.has(p.y*Cols+p.x)
 
 	get dotsLeft() {return DotSet.size}
 
 	/**
-	 * These tiles(x-y) forbidden ghosts from entering upward
-	 * @type {ReadonlySet<string>}
-	 */
+	 These tiles(x-y) forbidden ghosts from entering upward
+	 @type {ReadonlySet<string>}
+	*/
 	GhostNoEnter = new Set(['12-11','12-23','15-11','15-23'])
 
 	/**
-	 * Whether tile `row` coord is the top/bottom of the maze excluding dead space
-	 * @param {number} row
-	 */
+	 Whether tile `row` coord is the top/bottom of the maze excluding dead space
+	 @param {number} row
+	*/
 	isTopOrBottom = row=> (row == Maze.Top) || (row == Maze.Bottom)
 
 	/**
-	 * If the target tile is on the upper side of the maze \
-	 * and the ghost is around the house, guide them outside of the area
-	 * @param {Ghost} Ghost
-	 */
+	 If the target tile is on the upper side of the maze \
+	 and the ghost is around the house, guide them outside of the area
+	 @param {Ghost} Ghost
+	*/
 	ghostExitTile = ({originalTargetTile:o, tilePos:t})=>
 		o.y >= 10 || !PenOuter.contains(t)
-			? o : Vec2((t.x > Cols/2 && o.x > Cols/2)? 21:6, 15)
+			? o : Vec2.new((t.x > Cols/2 && o.x > Cols/2 ? 21:6), 15)
 
 	/**
-	 * @param {{tileIdx:number, tilePos:Vector2}} tile
-	 * @returns {number} number of remaining dots
-	 */
+	 @param {{tileIdx:number, tilePos:Vec2}} tile
+	 @returns {number} Number of remaining dots
+	*/
 	clearBgDot({tileIdx:i,tilePos:{x,y}}) {
 		DotSet.delete(i)
 		PowMap.delete(i)
@@ -151,12 +150,12 @@ export const Maze = freeze(new class {
 	}
 
 	/**
-	 * @param {ExtendedContext2D} ctx
-	 * @param {number}  col
-	 * @param {number}  row
-	 * @param {boolean} isPow
-	 * @param {?Cvs2DStyle} color
-	 */
+	 @param {ExtendedContext2D} ctx
+	 @param {number}      col
+	 @param {number}      row
+	 @param {boolean}     isPow
+	 @param {?Cvs2DStyle} color
+	*/
 	drawDot(ctx, col,row, isPow=false, color=Color.Dot) {
 		const [x,y]= [col,row].map(n=>(n+.5)*T)
 		ctx.fillCircle(x,y, T/(isPow? 2:8), color)

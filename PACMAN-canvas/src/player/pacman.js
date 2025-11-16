@@ -27,7 +27,7 @@ class PlayerPac extends Pacman {
 
 	constructor() {
 		super()
-		this.pos = Vec2(13.5, 24).mul(T)
+		this.pos = Vec2.new(13.5, 24).mul(T)
 	}
 	resetTimer() {
 		this.#notEaten = 0

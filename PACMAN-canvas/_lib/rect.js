@@ -1,9 +1,9 @@
 export class Rect {
 	constructor(
-		/**@type {number}*/x,
-		/**@type {number}*/y,
-		/**@type {number}*/w,
-		/**@type {number}*/h,
+	/**@type {number}*/x,
+	/**@type {number}*/y,
+	/**@type {number}*/w,
+	/**@type {number}*/h,
 	) {
 		this.x = x
 		this.y = y

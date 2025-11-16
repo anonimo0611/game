@@ -1,7 +1,7 @@
 const Duration = 300/Ticker.Interval
 const OpenMid  = 30 * PI/180
 const OpenMax  = 60 * PI/180
-const Rotation = /**@type {const}*/({[R]:0, [D]:1, [L]:2, [U]:3})
+const Rotation = /** @type {const} */({[R]:0, [D]:1, [L]:2, [U]:3})
 
 import {Dying} from './pacman_dying.js'
 export default class {
@@ -12,10 +12,10 @@ export default class {
 	/** @readonly */ctx
 	/** @readonly */isMain
 	/**
-	 * @param {ExtendedContext2D} ctx
-	 * @param {0|1|2} mouthOpenings
-	 * 0=closed, 1=middle opened, 2=max opened
-	 */
+	 @param {ExtendedContext2D} ctx
+	 @param {0|1|2} mouthOpenings
+	 0=closed, 1=middle opened, 2=max opened
+	*/
 	constructor(ctx, mouthOpenings=0) {
 		this.ctx    = ctx
 		this.isMain = ctx.canvas.id == 'board_main'

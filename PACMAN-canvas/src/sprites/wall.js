@@ -41,7 +41,9 @@ export const Wall = new class {
 		ctx.strokeLine(+T+LW/2, -oy, +T+LW/2, -iy)
 		ctx.restore()
 	}
-	/** @param {{type:number, ci:number, x:number, y:number}} cfg */
+	/**
+	 @param {{type:number, ci:number, x:number, y:number}} cfg
+	*/
 	#drawCorner({type,ci,x,y}) {
 		ctx.save()
 		ctx.translate(x+T/2, y+T/2)
@@ -62,9 +64,9 @@ export const Wall = new class {
 		ctx.restore()
 	}
 	/**
-	 * @param {string} c Tile chip
-	 * @param {number} i Tile index
-	 */
+	 @param {string} c Tile chip
+	 @param {number} i Tile index
+	*/
 	#drawTile(c, i) {
 		const [n,tx,ty]= [Number(c),i%W,i/W|0], [x,y]= [tx*T,ty*T]
 		const ci = n? n-(n>4? 5:1):'ABCD'.indexOf(c.toUpperCase())

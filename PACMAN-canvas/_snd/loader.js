@@ -27,16 +27,6 @@ export class SoundMgr {
 	get vol()      {return SoundJS.volume * 10}
 	set vol(vol)   {SoundJS.volume = Number.isFinite(vol)? vol/10 : this.vol}
 
-	/**
-	 * @param {boolean} bool
-	 * @param {...SoundType} ids
-	 */
-	pause(bool, ...ids) {
-		ids.length
-			? ids.forEach(id=> {Instance[id].paused=bool})
-			: values(Instance).forEach(i=> i.paused=bool)
-	}
-
 	/** @param {SoundType} id */
 	isPlaying(id)  {return Instance[id]?.playState === SoundJS.PLAY_SUCCEEDED}
 
@@ -50,9 +40,19 @@ export class SoundMgr {
 	}
 
 	/**
-	 * @param {SoundType} id
-	 * @param {{duration?:number,loop?:number}} cfg
-	 */
+	 @param {boolean} bool
+	 @param {...SoundType} ids
+	*/
+	pause(bool, ...ids) {
+		ids.length
+			? ids.forEach(id=> {Instance[id].paused=bool})
+			: values(Instance).forEach(i=> i.paused=bool)
+	}
+
+	/**
+	 @param {SoundType} id
+	 @param {{duration?:number,loop?:number}} cfg
+	*/
 	play(id, cfg={}) {
 		const {duration:dur}= cfg
 		if (this.disabled) return
@@ -61,7 +61,9 @@ export class SoundMgr {
 		Instance[id].play(this.#configMerge(id, cfg))
 	}
 
-	/** @param {...SoundType} ids */
+	/**
+	 @param {...SoundType} ids
+	*/
 	stop(...ids) {
 		ids.length == 0 && SoundJS.stop()
 		ids.forEach(id=> Instance[id].stop())

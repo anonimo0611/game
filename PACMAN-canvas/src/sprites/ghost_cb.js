@@ -99,10 +99,11 @@ export default class {
 		ctx.fill()
 		this.#hadakeEyes([28,49],[34,56])
 	}
-	#hadakeEyes(
-	 /**@type {[L:number, R:number]}*/ballsLR,
-	 /**@type {[L:number, R:number]}*/eyesLR
-	) {
+	/**
+	 @param {[L:number, R:number]} ballsLR
+	 @param {[L:number, R:number]} eyesLR
+	*/
+	#hadakeEyes(ballsLR, eyesLR) {
 		const {ctx}= this
 		for (const i of [1,0]) {
 			// Eyeballs
@@ -122,7 +123,7 @@ export default class {
 class StakeClothes {
 	CaughtX   = BW/2 + T/2
 	AkaMinX   = this.CaughtX - T
-	stakeSize = Vec2(T*.18, T*.70).freeze()
+	stakeSize = Vec2.new(T*.18, T*.70).freeze()
 	stakePos  = freeze({
 		x: BW/2 + T*2 - this.stakeSize.x/2,
 		y: BH/2 + T*1 - this.stakeSize.y - T*.1
@@ -142,10 +143,10 @@ class StakeClothes {
 		Ctx.restore()
 	}
 	/**
-	 * @param {number} animIdx
-	 * @param {number} rate
-	 * @param {{x?:number, y?:number, size?:number}} cfg
-	 */
+	 @param {number} animIdx
+	 @param {number} rate
+	 @param {{x?:number, y?:number, size?:number}} cfg
+	*/
 	clothes(animIdx, rate, {x=0, y=0, size=T*2}={}) {
 		const v1 = lerp(-2,  5, rate)
 		const v2 = lerp( 4, 22, rate)

@@ -16,10 +16,10 @@ const PtsLst = Pts.Score.Ghost
 const Ghosts = /**@type {Ghost[]}*/([])
 
 /**
- * When always chase mode,
- * standby time(ms) before the ghost leaves from the house
- */
-const StandbyTimes = /**@type {const}*/
+ When always chase mode,
+ standby time(ms) before the ghost leaves from the house
+*/
+const StandbyTimes = /** @type {const} */
 ([//Pinky->Aosuke->Guzuta
 	[1000,  500,  500], // Restart
 	[1000, 4000, 4000], // Lv.1
@@ -38,9 +38,9 @@ const StandbyTimes = /**@type {const}*/
 ])
 
 /**
- * @extends {_State<Ghost,StateType>}
- * @typedef {'Idle'|'GoOut'|'Walk'|'Bitten'|'Escape'|'Return'} StateType
- */
+ @extends {_State<Ghost,StateType>}
+ @typedef {'Idle'|'GoOut'|'Walk'|'Bitten'|'Escape'|'Return'} StateType
+*/
 export class GhostState extends _State {
 	isIdle   = false
 	isGoOut  = false
@@ -174,16 +174,16 @@ const AttackInWaves = function() {
 export const DotCounter = function() {
 	let  _globalCounter = -1
 	const pCounters  = new Uint8Array(GhsType.Max)
-	const LimitTable = /**@type {const}*/
+	const LimitTable = /** @type {const} */
 		([//global,lv1,lv2,lv3+
 			[ 7,  0,  0, 0], // Pinky
 			[17, 30,  0, 0], // Aosuke
 			[32, 60, 50, 0], // Guzuta
 		])
 	/**
-	 * @param {number} idx Index of Pinky, Aosuke or Guzuta
-	 * @param {(deactivateGlobal?:boolean)=> boolean} fn
-	 */
+	 @param {number} idx Index of Pinky, Aosuke or Guzuta
+	 @param {(deactivateGlobal?:boolean)=> boolean} fn
+	*/
 	function release(idx, fn) {
 		const timeOut = (Game.level <= 4 ? 4e3:3e3)
 		const gLimit  = LimitTable[idx-1][0] // global
@@ -217,8 +217,8 @@ const Elroy = function() {
 	function angry() {
 		return State.isPlaying
 			&& _part > 1
-			&& Ghosts[GhsType.Akabei]?.isFright  === false
-			&& Ghosts[GhsType.Guzuta]?.isStarted === true
+			&& Ghosts[GhsType.Akabei]?.isFright  == false
+			&& Ghosts[GhsType.Guzuta]?.isStarted == true
 	}
 	function dotEaten() {
 		const rate = [1.5, 1.0, 0.5][_part]

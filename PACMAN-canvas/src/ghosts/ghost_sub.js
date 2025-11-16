@@ -16,13 +16,13 @@ class Pinky extends Ghost {
 	constructor() {
 		super(D, {idx:1, tile:[13.5, 15]})
 	}
-	get scatterTile() {return Vec2(3, 0)}
+	get scatterTile() {return Vec2.new(3, 0)}
 	get chasePos() {
 		const {x,y}= pacman.forwardOfst(4)
 		switch(pacman.tunnelEntered.side) {
-		case L:  return Vec2(Maze.Tunnel.EntranceR*T, y)
-		case R:  return Vec2(Maze.Tunnel.EntranceL*T, y)
-		default: return Vec2(x, y)
+		case L:  return Vec2.new(Maze.Tunnel.EntranceR*T, y)
+		case R:  return Vec2.new(Maze.Tunnel.EntranceL*T, y)
+		default: return Vec2.new(x, y)
 		}
 	}
 }
@@ -31,7 +31,7 @@ class Aosuke extends Ghost {
 	constructor() {
 		super(U, {idx:2, tile:[11.5, 15], align:-1})
 	}
-	get scatterTile() {return Vec2(27, 33)}
+	get scatterTile() {return Vec2.new(27, 33)}
 	get chasePos() {
 		const  pos = pacman.forwardOfst(2)
 		return pos.clone.sub(GhsMgr.akaCenter).add(pos)
@@ -42,10 +42,10 @@ class Guzuta extends Ghost {
 	constructor() {
 		super(U, {idx:3, tile:[15.5, 15], align:+1})
 	}
-	get scatterTile() {return Vec2(0, 33)}
+	get scatterTile() {return Vec2.new(0, 33)}
 	get chasePos() {
 		return this.sqrMagToPacman < (T*8) ** 2
-		? Vec2(this.scatterTile).add(.5).mul(T)
+		? Vec2.new(this.scatterTile).add(.5).mul(T)
 		: pacman.center
 	}
 }

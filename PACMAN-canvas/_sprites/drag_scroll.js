@@ -56,4 +56,4 @@
 
 /** @param {MouseEvent} e */
 const isNotDrag = e=> /**@type {Element}*/(e.target).closest('.noDrag')
-addEventListener('wheel',e=>{isNotDrag(e) && e.preventDefault()}, {passive:false})
+addEventListener('wheel', e=>{isNotDrag(e) && e.preventDefault()}, {passive:false})

@@ -8,23 +8,23 @@ const volRng = input('volRng')
 const volRg2 = input('volRg2')
 const volume = +(localStorage.anopac_volume ?? 5)
 
-const Ev = new class { // Register sound instances and set up controls
+const Ctrl = new class { // Register sound instances and set up controls
 	constructor() {this.setup()}
 	async setup() {
 		await SoundMgr.load()
-			? Ev.onLoaded()
-			: Ev.onFailed()
+			? Ctrl.onLoaded()
+			: Ctrl.onFailed()
 	}
 	onLoaded() {
 		Speaker.draw(Sound.vol=volume)
-		$win.on({keydown:Ev.onKeydown})
+		$win.on({keydown:Ctrl.onKeydown})
 		$('#speaker')
-			.on({click:Ev.mute})
-			.on({wheel:Ev.onInput})
+			.on({click:Ctrl.mute})
+			.on({wheel:Ctrl.onInput})
 		$('.volRng')
 			.attr({value:volume})
 			.attr({defaultValue:volume})
-			.on({input:Ev.onInput})
+			.on({input:Ctrl.onInput})
 	}
 	onFailed() {
 		$('.volCtrl').hide()
@@ -37,7 +37,7 @@ const Ev = new class { // Register sound instances and set up controls
 	onKeydown(/**@type {JQuery.KeyDownEvent}*/e) {
 		if (keyRepeat(e) || isCombiKey(e)) return
 		if (e.key.toUpperCase() == 'M'
-		 || e.target == volRg2 && isEnterKey(e)) Ev.mute()
+		 || e.target == volRg2 && isEnterKey(e)) Ctrl.mute()
 	}
 	mute() {
 		_lstVol = Sound.vol || (_lstVol || +volRng.max >> 1)

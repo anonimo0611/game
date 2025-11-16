@@ -6,7 +6,7 @@ import {Player} from './player/pacman.js'
 import {GhsMgr} from './ghosts/_system.js'
 
 export class Actor extends Common {
-	pos = Vec2()
+	pos = Vec2.Zero
 	#fadeIn = /**@type {?FadeIn}*/(null)
 	#orient = /**@type {Direction}*/(L)
 	#movDir = /**@type {Direction}*/(L)
@@ -37,10 +37,10 @@ export class Actor extends Common {
 
 	get tilePixel() {
 		const  {x,y} = this.center, v = Vec2[this.dir]
-		const  count = v.x? x % T : y % T
+		const  count = v.x? (x % T) : (y % T)
 		return (v.x || v.y) > 0 ? count : T-count
 	}
-	get tileCenterReached() {return this.tilePixel > T/2}
+	get passedTileCenter() {return this.tilePixel > T/2}
 
 	static update() {
 		Player.update()
@@ -66,7 +66,7 @@ export class Actor extends Common {
 		this.xAxisLoops()
 	}
 	justArrivedAtTile(divisor=1) {
-		return this.tileCenterReached === false
+		return this.passedTileCenter == false
 			&& this.tilePixel <= this.step/divisor
 	}
 	xAxisLoops() {

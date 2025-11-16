@@ -1,8 +1,8 @@
 /**
-@typedef {keyof Looped | keyof Regular} SoundType
-@typedef {{[key in SoundType]?:{startTime:number,duration:number}}} SoundData
+ @typedef {keyof Looped | keyof Regular} SoundType
+ @typedef {{[key in SoundType]?:{startTime:number,duration:number}}} SoundData
 */
-const Looped = /**@type {const}*/({ //looped.ogg
+const Looped = /**@type {const}*/({ // looped.ogg
     siren0:  {startTime:    0, duration: 402},
     siren1:  {startTime: 1402, duration: 327},
     siren2:  {startTime: 2730, duration: 298},
@@ -12,7 +12,7 @@ const Looped = /**@type {const}*/({ //looped.ogg
     cutscene:{startTime: 8059, duration:5686},
     start:   {startTime:14233, duration:4500},
 })
-const Regular = /**@type {const}*/({ //regular.ogg
+const Regular = /**@type {const}*/({ // regular.ogg
     dying:   {startTime:    0, duration:1749},
     eat0:    {startTime: 1998, duration:  80},
     eat1:    {startTime: 2137, duration:  80},
@@ -23,7 +23,9 @@ const Regular = /**@type {const}*/({ //regular.ogg
 const genSprite = (/**@type {SoundData}*/data)=>
     [...entries(data).map(([id,val])=> ({id,...val}))]
 
-/** @type {ReadonlyMap<string,{loop:number,volume:number}>} */
+/**
+ @type {ReadonlyMap<string,{loop:number,volume:number}>}
+*/
 export const
 ConfigMap = new Map([
     ['_normal', {loop: 0, volume:1.00}],

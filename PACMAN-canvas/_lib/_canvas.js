@@ -7,15 +7,16 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		try {super()} catch(e){}
 		return Object.setPrototypeOf(cvs.getContext('2d',opts), new.target.prototype)
 	}
+
 	/** @returns {readonly [width:number, height:number]} */
 	get size()   {return [this.width, this.height]}
 	get width()  {return this.canvas.width}
 	get height() {return this.canvas.height}
 
 	/**
-	 * @param {number} [w]
-	 * @param {number} [h]
-	 */
+	 @param {number} [w]
+	 @param {number} [h]
+	*/
 	resize(w, h=w) {
 		const cvs = this.canvas
 		w != cvs.width  && typeof(w) == 'number' && w>=0 && (cvs.width =w)
@@ -23,25 +24,26 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		return this
 	}
 
-	/** @param {number} alpha */
 	setAlpha(alpha=this.globalAlpha) {
 		this.globalAlpha = alpha
 		return this
 	}
 
-	/** @param {Cvs2DStyle} [style] */
+	/**
+	 @param {Cvs2DStyle} [style]
+	*/
 	clear(style) {
 		this.fillRect(0,0, this.width, this.height, style ?? null)
 		return this
 	}
 
 	/**
-	 * @param {number} x
-	 * @param {number} y
-	 * @param {number} w
-	 * @param {number} h
-	 * @param {?Cvs2DStyle} style
-	 */
+	 @param {number} x
+	 @param {number} y
+	 @param {number} w
+	 @param {number} h
+	 @param {?Cvs2DStyle} style
+	*/
 	fillRect(x,y, w,h, style=this.fillStyle) {
 		this.save()
 		style && (this.fillStyle = style)
@@ -52,11 +54,11 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 	}
 
 	/**
-	 * @param {number} x
-	 * @param {number} y
-	 * @param {number} radius
-	 * @param {?Cvs2DStyle} style
-	 */
+	 @param {number} x
+	 @param {number} y
+	 @param {number} radius
+	 @param {?Cvs2DStyle} style
+	*/
 	fillCircle(x,y, radius, style=this.fillStyle) {
 		this.save()
 		this.beginPath()
@@ -69,12 +71,12 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 	}
 
 	/**
-	 * @param {number} x
-	 * @param {number} y
-	 * @param {number} r
-	 * @param {Cvs2DStyle} style
-	 * @param {number} lineWidth
-	 */
+	 @param {number} x
+	 @param {number} y
+	 @param {number} r
+	 @param {Cvs2DStyle} style
+	 @param {number} lineWidth
+	*/
 	strokeCircle(x,y, r, style=this.fillStyle, lineWidth=this.lineWidth) {
 		this.save()
 		this.beginPath()
@@ -86,11 +88,11 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 	}
 
 	/**
-	 * @param {number} x1
-	 * @param {number} y1
-	 * @param {number} x2
-	 * @param {number} y2
-	 */
+	 @param {number} x1
+	 @param {number} y1
+	 @param {number} x2
+	 @param {number} y2
+	*/
 	strokeLine(x1, y1, x2, y2) {
 		this.beginPath()
 		this.moveTo(x1, y1)
@@ -98,14 +100,18 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		this.stroke()
 	}
 
-	/** @param {(readonly [x:number, y:number])[]} c */
+	/**
+	 @param {(readonly [x:number, y:number])[]} c
+	*/
 	newLinePath(...c) {
 		this.beginPath()
 		this.setLinePath(...c)
 		return this
 	}
 
-	/** @param {(readonly [x:number, y:number])[]} c */
+	/**
+	 @param {(readonly [x:number, y:number])[]} c
+	*/
 	setLinePath(...c) {
 		c.forEach(([x,y], i)=> {
 			!i ? this.moveTo(x,y)
@@ -114,16 +120,18 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		return this
 	}
 
-	/** @param {(readonly [x:number, y:number])[]} c */
+	/**
+	 @param {(readonly [x:number, y:number])[]} c
+	*/
 	addLinePath(...c) {
 		c.forEach(([x,y])=> this.lineTo(x,y))
 		return this
 	}
 
 	/**
-	 * @param {Cvs2DStyle} style
-	 * @param {(readonly [x:number, y:number])[]} c
-	 */
+	 @param {Cvs2DStyle} style
+	 @param {(readonly [x:number, y:number])[]} c
+	*/
 	fillPolygon(style, ...c) {
 		this.save()
 		this.newLinePath(...c)
@@ -145,9 +153,9 @@ class FadeIn {
 		this.#delay = delay
 	}
 	/**
-	 * @param {number} max max alpha
-	 * @returns {boolean} Determine if fade-in is in progress
-	 */
+	 @param {number} max max alpha
+	 @returns {boolean} Determine if fade-in is in progress
+	*/
 	update(max=1) {
 		if (++this.#count * Ticker.Interval < this.#delay || !this.working)
 			return false
@@ -155,7 +163,9 @@ class FadeIn {
 		this.#alpha = clamp(this.#alpha+max/rate, 0, max)
 		return this.working
 	}
-	/** @param {ExtendedContext2D} ctx */
+	/**
+	 @param {ExtendedContext2D} ctx
+	*/
 	setAlpha(ctx) {
 		ctx.globalAlpha = this.#alpha
 		return this.working
@@ -172,7 +182,9 @@ class FadeOut {
 		this.#duration = ms
 		this.#delay = delay
 	}
-	/** @returns {boolean} Determine if fade-out is in progress */
+	/**
+	 @returns {boolean} Determine if fade-out is in progress
+	*/
 	update() {
 		if (++this.#count * Ticker.Interval < this.#delay)
 			return false
@@ -180,7 +192,9 @@ class FadeOut {
 		this.#alpha = clamp(this.#alpha-1/rate, 0, 1)
 		return this.working
 	}
-	/** @param {ExtendedContext2D} ctx */
+	/**
+	 @param {ExtendedContext2D} ctx
+	*/
 	setAlpha(ctx) {
 		ctx.globalAlpha = this.#alpha
 		return this.working
@@ -188,10 +202,10 @@ class FadeOut {
 }
 
 /**
- * @param {?string} id ID of a canvas that exists in the document; If the `null` or does not exist, the canvas is created
- * @param {number} [width]  The default value uses the width attribute of canvas element
- * @param {number} [height] The default is the same as `width`, but if both `width` and `height` are undefined, use the heigt attribute of canvas element
- */
+ @param {?string} id ID of a canvas that exists in the document; If the `null` or does not exist, the canvas is created
+ @param {number} [width]  The default value uses the width attribute of canvas element
+ @param {number} [height] The default is the same as `width`, but if both `width` and `height` are undefined, use the heigt attribute of canvas element
+*/
 const canvas2D = (id, width, height=width)=> {
 	const cvs = id && byId(id) instanceof HTMLCanvasElement
 		? /**@type {HTMLCanvasElement}*/(byId(id))

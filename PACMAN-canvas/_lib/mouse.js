@@ -18,10 +18,10 @@ export const Cursor = new class {
 }
 
 /**
- * Enable mouse wheel on range controls.
- * Label elements must be block-level.
- * @param {HTMLInputElement} ctrl
- */
+ Enable mouse wheel on range controls.
+ Label elements must be block-level.
+ @param {HTMLInputElement} ctrl
+*/
 function setupCtrl(ctrl) {
 	const output = qS(`output[for~="${ctrl.id}"]`) ?? []
 	const ids    = ctrl.dataset.links?.trim().split(/\s+/) ?? []

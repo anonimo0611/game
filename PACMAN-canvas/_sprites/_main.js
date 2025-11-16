@@ -60,9 +60,9 @@ export const View = function()
 	}
 
 	/**
-	 * @param {number} col
-	 * @param {number} row
-	 */
+	 @param {number} col
+	 @param {number} row
+	*/
 	function drawGhost(col, row)
 	{
 		const [x,y]= [ofst(col), row*S]
@@ -89,9 +89,9 @@ export const View = function()
 	function drawPoints()
 	{
 		/**
-		 * @typedef {typeof Pts.Score.All[number]} Pts
-		 * @type {(pts:Pts, x:number, y:number)=> void}
-		 */
+		 @typedef {typeof Pts.Score.All[number]} Pts
+		 @type {(pts:Pts, x:number, y:number)=> void}
+		*/
 		function draw(pts, x, y)
 		{
 			const {ctx,w,h}= Pts.cache(pts, S)
@@ -100,7 +100,7 @@ export const View = function()
 			Ctx.drawImage(ctx.canvas, -w/2, -h/2)
 			Ctx.restore()
 		}
-		const scoreLst = /**@type {const}*/
+		const scoreLst = /** @type {const} */
 		([
 			[200,400,800,1600,100,300,500,700],
 			[1000,2000,3000,5000]
@@ -113,7 +113,7 @@ export const View = function()
 		const dirs = /**@type {const}*/([U,U,L,L,D,D,R,R])
 		for (const i of range(-1,9))
 		{
-			const center = Vec2(T+ofst(i), S*8.5)
+			const center = Vec2.new(T+ofst(i), S*8.5)
 			const cfg = {center, orient:dirs[i-1], radius:T*PacScale}
 			new PacSprite(Ctx, i>0 ? (i%2 ? 1:2) : 0).draw(cfg)
 		}
@@ -125,7 +125,9 @@ export const View = function()
 
 		Ctx.translate(S/4, S*9+S/4-GAP/4)
 
-		/** @type {(x:number, y:number, cfg:object)=> void} */
+		/**
+		 @type {(x:number, y:number, cfg:object)=> void}
+		*/
 		const draw = (x,y, cfg)=>
 		{
 			aka.draw({size:S,x,y,...cfg})
@@ -134,14 +136,14 @@ export const View = function()
 			const pos = Vec2.Zero, rates = [0.3, 0.5 ,1]
 			for (const i of range(3)) {
 				draw(...pos.vals, {animIdx:+(i==2)})
-				const nPos = Vec2(pos).add(S*0.75, S/4)
+				const nPos = Vec2.new(pos).add(S*0.75, S/4)
 				spr.clothes(+(i==2), rates[i], {...nPos,size:S})
 				pos.x += S*1.2 + ((i+1)*GAP)
 			}
 		}
 		{// Stake and offcut
 			const s = T/TileSize
-			const [sx,sy]= Vec2(spr.stakeSize).mul(s).vals
+			const [sx,sy]= Vec2.new(spr.stakeSize).mul(s).vals
 			// Stake
 			Ctx.save()
 			Ctx.translate(S*6.9, S-T/2-sy-3*s)

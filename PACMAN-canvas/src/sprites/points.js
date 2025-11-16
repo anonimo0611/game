@@ -38,9 +38,9 @@ const Data = /**@type {const}*/({
 const GtsPtsSet = new Set(Score.Ghost)
 
 /**
- * @typedef {typeof Score.All[number]} PtsType
- * @param {PtsType} pts
- */
+ @typedef {typeof Score.All[number]} PtsType
+ @param {PtsType} pts
+*/
 export function cache(pts, size=TileSize*2) {
 	const idx  = +GtsPtsSet.has(pts)
 	const ctx  = [FruitCvs, GhostCvs][idx].ctx
@@ -61,7 +61,7 @@ export function cache(pts, size=TileSize*2) {
 		function() {
 			ctx.save()
 			ctx.translate(x,y)
-			ctx.newLinePath(.../**@type {xyList[]}*/
+			ctx.newLinePath(.../** @type {xyList[]} */
 				(chunk(Data.PathFrom0To8[d],2)))
 			;(d == 0 || d == 8) && ctx.closePath()
 			ctx.restore()

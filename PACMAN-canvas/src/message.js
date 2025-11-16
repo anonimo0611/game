@@ -3,11 +3,11 @@ import {State}   from './state.js'
 
 export const Message = new class {
 	/**
-	 * @param {number} col
-	 * @param {number} row
-	 * @param {?Cvs2DStyle} color
-	 * @param {string|number} text
-	 */
+	 @param {number} col
+	 @param {number} row
+	 @param {?Cvs2DStyle} color
+	 @param {string|number} text
+	*/
 	drawText(col, row, color='', text='',
 		{ctx=Ctx, scaleX=1, face='Atari', size=T, style=''}={}
 	) {

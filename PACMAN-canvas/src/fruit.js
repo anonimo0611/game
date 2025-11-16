@@ -10,11 +10,11 @@ import * as Pts from './sprites/points.js'
 import * as Spr from './sprites/fruits.js'
 
 /** The fruit appear after 70 or 170 dots are cleared
- * @type {ReadonlySet<number>}
- */const AppearSet = new Set([70,170])
+ @type {ReadonlySet<number>}
+*/const AppearSet = new Set([70,170])
 
 const TypeTable = freeze([0,1,2,2,3,3,4,4,5,5,6,6,7])
-const TargetPos = Vec2(BW/2, T*18.5).freeze()
+const TargetPos = Vec2.new(BW/2, T*18.5).freeze()
 
 const LvCounterCols = 7
 const LvCounterRect = freeze([T*2*6, BH-T*2, T*2*LvCounterCols, T*2])
@@ -53,17 +53,15 @@ export const Fruit = new class {
 	}
 	#collisionWithPac() {
 		if (_tgtDisp && circleCollision(pacman.center, TargetPos, T/2)) {
-			_tgtDisp = false
+			Fruit.#reset()
 			Timer.cancel(Fruit) && Sound.play('fruit')
 			PtsMgr.set({key:Fruit, dur:2e3, pos:TargetPos})
 		}
 	}
 	update() {
-		if (_fadeOut?.update() === false) {
-			_fadeOut = null
-			_tgtDisp = false
-		}
-		Fruit.#collisionWithPac()
+		_fadeOut?.update() === false
+			? Fruit.#reset()
+			: Fruit.#collisionWithPac()
 	}
 	draw() {
 		if (!State.isTitle

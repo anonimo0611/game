@@ -6,10 +6,14 @@ export const Confirm = new class {
 	get #tempElm() {return /**@type {HTMLTemplateElement}*/(byId('confirm_t'))}
 	get #confirm() {return /**@type {HTMLDialogElement}  */(byId('confirm'))}
 
-	/** @param {JQuery.TriggeredEvent} e */
+	/**
+	 @param {JQuery.TriggeredEvent} e
+	*/
 	#onMousedown = e=> {e.preventDefault()}
 
-	/** @param {JQuery.KeyboardEventBase} e */
+	/**
+	 @param {JQuery.KeyboardEventBase} e
+	*/
 	#onKeydown(e) {
 		const btns = $('#confirm button').get()
 		if (e.key == 'Escape') {
@@ -23,13 +27,13 @@ export const Confirm = new class {
 	}
 
 	/**
-	 * @param {string} content   Dialog description
-	 * @param {?Function} fn1    Functions to assign to the left button
-	 * @param {?Function} fn2    Functions to assign to the right button
-	 * @param {string} [btn1Txt] Text of the left button
-	 * @param {string} [btn2Txt] Text of the right button
-	 * @param {0|1} [cancelIdx]  Button to assign when canceling; 0=left, 1=right(default)
-	 */
+	 @param {string} content   Dialog description
+	 @param {?Function} fn1    Functions to assign to the left button
+	 @param {?Function} fn2    Functions to assign to the right button
+	 @param {string} [btn1Txt] Text of the left button
+	 @param {string} [btn2Txt] Text of the right button
+	 @param {0|1} [cancelIdx]  Button to assign when canceling; 0=left, 1=right(default)
+	*/
 	open(content, fn1,fn2, btn1Txt='Ok',btn2Txt='Cancel', cancelIdx=1) {
 		if (this.opened) return
 		document.body.append(this.#tempElm.content.cloneNode(true))
@@ -45,7 +49,9 @@ export const Confirm = new class {
 		$(this.#confirm).fadeIn(300).get(0)?.showModal()
 	}
 
-	/** @param {?Function} fn */
+	/**
+	 @param {?Function} fn
+	*/
 	#remove(fn) {
 		$('#confirm').fadeOut(300, function() {
 			this.remove(), fn?.()

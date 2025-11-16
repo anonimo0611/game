@@ -1,3 +1,36 @@
+const Fns = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
+/**
+ @param {ExtendedContext2D} ctx
+ @param {number} fruitIdx
+*/
+export function draw(ctx, fruitIdx, x=T,y=T-2, scale=T/8) {
+	const Scale = 1.05
+	ctx.save()
+	ctx.lineWidth = 1
+	ctx.lineCap = ctx.lineJoin = 'round'
+	ctx.translate(x, y)
+	ctx.scale(scale*Scale, scale*Scale)
+	Fns[fruitIdx](ctx)
+	ctx.restore()
+}
+export const [current,cache]= function() {
+	const {cvs,ctx}= canvas2D(null,T*2)
+	function cache(/**@type {number}*/idx) {
+		ctx.clear()
+		draw(ctx, idx)
+	}
+	return [cvs,cache]
+}()
+
+{// Create a sprite sheet for menu icons
+	const Menu = $byId('LevelMenu')
+	const size = +Menu.css('--scale') * T
+	const {ctx}= canvas2D(null, size*8, size)
+	for (const i of Fns.keys())
+		draw(ctx, i, size/2+size*i, size/2, size/16)
+	Menu.css('--url',`url(${ctx.canvas.toDataURL()})`)
+}
+
 function cherry(ctx=Ctx) {
 	// both fruits
 	[[-6,-1],[-1,1]].forEach(([x,y],idx)=> {
@@ -31,6 +64,7 @@ function cherry(ctx=Ctx) {
 	ctx.strokeStyle = '#F90'
 	ctx.stroke()
 }
+
 function strawberry(ctx=Ctx) {
 	// red body
 	ctx.beginPath()
@@ -59,6 +93,7 @@ function strawberry(ctx=Ctx) {
 	ctx.strokeStyle = '#FFF'
 	ctx.strokeLine(0,-4, 0,-5)
 }
+
 function orange(ctx=Ctx) {
 	// orange body
 	ctx.beginPath()
@@ -93,6 +128,7 @@ function orange(ctx=Ctx) {
 	ctx.stroke()
 	ctx.fill()
 }
+
 function apple(ctx=Ctx) {
 	// red fruit
 	ctx.beginPath()
@@ -123,6 +159,7 @@ function apple(ctx=Ctx) {
 	ctx.strokeStyle = '#FFF'
 	ctx.stroke()
 }
+
 function melon(ctx=Ctx) {
 	// draw body
 	ctx.fillCircle(0, 1.5, 5.2, '#7BF331')
@@ -150,6 +187,7 @@ function melon(ctx=Ctx) {
 	  	[-1.3, 2.0],[-1, 4.5],[ 3, 2.5],[ 1.0, 4.5]
 	].forEach(([x,y])=> ctx.fillCircle(x,y, 0.5, '#FFF'))
 }
+
 function gala(ctx=Ctx) {
 	const yellow = '#F8FF00'
 	for (const scaleX of [1,-1]) {
@@ -171,12 +209,13 @@ function gala(ctx=Ctx) {
 	for (const scaleX of [1,-1]) {
 		ctx.scale(scaleX, 1)
 		ctx.setLinePath([0,-4.9],[3.8,-2.2],[3.0,-1.2],[1.3,-2.3])
-		ctx.quadraticCurveTo(+0.7,-2.7, 0.7,-1.4)
-		ctx.quadraticCurveTo(+0.4, 0.0, 0.0, 0.0)
+		ctx.quadraticCurveTo(0.7,-2.7, 0.7,-1.4)
+		ctx.quadraticCurveTo(0.4, 0.0, 0.0, 0.0)
 	}
 	ctx.fillStyle = '#FF3401'
 	ctx.fill()
 }
+
 function bell(ctx=Ctx) {
 	// bell body
 	ctx.beginPath()
@@ -205,6 +244,7 @@ function bell(ctx=Ctx) {
 	ctx.fill()
 	ctx.fillCircle(1.2, 5.3, 1.4, '#FFF')
 }
+
 function key(ctx=Ctx) {
 	// key metal
 	ctx.newLinePath([-1,-1.5],[-1.0, 5.4],[0,6.4],[1,5.4],[1,2.8])
@@ -229,36 +269,4 @@ function key(ctx=Ctx) {
 	// key hole
 	ctx.globalCompositeOperation = 'destination-out'
 	ctx.strokeLine(-1.2, -4.5, +1.2, -4.5)
-}
-const Fns = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
-
-/**
- * @param {ExtendedContext2D} ctx
- * @param {number} fruitIdx
- */
-export function draw(ctx, fruitIdx, x=T,y=T-2, scale=T/8) {
-	const Scale = 1.05
-	ctx.save()
-	ctx.lineWidth = 1
-	ctx.lineCap = ctx.lineJoin = 'round'
-	ctx.translate(x, y)
-	ctx.scale(scale*Scale, scale*Scale)
-	Fns[fruitIdx](ctx)
-	ctx.restore()
-}
-export const [current,cache]= function() {
-	const {cvs,ctx}= canvas2D(null,T*2)
-	function cache(/**@type {number}*/idx) {
-		ctx.clear()
-		draw(ctx, idx)
-	}
-	return [cvs,cache]
-}()
-{// Create a sprite sheet for menu icons
-	const Menu = $byId('LevelMenu')
-	const size = +Menu.css('--scale') * T
-	const {ctx}= canvas2D(null, size*8, size)
-	for (const i of Fns.keys())
-		draw(ctx, i, size/2+size*i, size/2, size/16)
-	Menu.css('--url',`url(${ctx.canvas.toDataURL()})`)
 }

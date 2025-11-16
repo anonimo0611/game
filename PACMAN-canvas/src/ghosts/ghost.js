@@ -24,13 +24,13 @@ export class Ghost extends Actor {
 	sprite = new Sprite(canvas2D(null, T*3, T*2).ctx)
 
 	/** @readonly */
-	turnDirs = /**@type {readonly Direction[]}*/([U,L,D,R])
+	turnDirs = /** @type {readonly Direction[]} */([U,L,D,R])
 
 	get isAngry()     {return false}
 	get chaseStep()   {return GhsStep.Base}
 	get chasePos()    {return pacman.center}
 	get chaseTile()   {return this.chasePos.divInt(T)}
-	get scatterTile() {return Vec2(24, 0)}
+	get scatterTile() {return Vec2.new(24, 0)}
 	get maxAlpha()    {return Ctrl.showTargets? 0.75:1}
 	get spriteIdx()   {return GhsMgr.spriteIdx}
 	get animIdx()     {return GhsMgr.animIndex &  this.init.animFlag}
@@ -43,9 +43,9 @@ export class Ghost extends Actor {
 	get isNormWalk()  {return !this.isFright && this.state.isWalk}
 
 	/**
-	 * @param {Direction} dir
-	 * @param {{idx?:number, tile?:xyList, align?:-1|0|1, animFlag?:0|1}} cfg
-	 */
+	 @param {Direction} dir
+	 @param {{idx?:number, tile?:xyList, align?:-1|0|1, animFlag?:0|1}} cfg
+	*/
 	constructor(dir=L, {idx=0,tile:[col,row]=[0,0],align=0,animFlag=1}={}) {
 		super()
 		this.on({
@@ -55,7 +55,7 @@ export class Ghost extends Actor {
 		})
 		this.idx   = idx
 		this.dir   = dir
-		this.pos   = Vec2(col*T, row*T)
+		this.pos   = Vec2.new(col*T, row*T)
 		this.state = freeze(new Sys.GhostState(this))
 		this.init  = freeze({x:col*T,align,animFlag})
 	}
@@ -175,7 +175,7 @@ export class Ghost extends Actor {
 	#walkPath(divisor=1) {
 		for (const _ of range(divisor)) {
 			this.setNextPos(divisor)
-			this.tileCenterReached && this.#setNextDir()
+			this.passedTileCenter && this.#setNextDir()
 			if (this.#setTurn(this)) break
 			if (this.crashWithPac()) break
 		}
@@ -203,7 +203,7 @@ export class Ghost extends Actor {
 			(idx=> dirs.sort(compareDist)[idx].dir)
 				(this.#runaway >= 0 ? dirs.length-1:0)
 	}
-	/** @param {{dir:Direction, test:Vector2}} cfg */
+	/** @param {{dir:Direction, test:Vec2}} cfg */
 	#canEnter({dir,test}) {
 		return Ctrl.unrestricted
 			|| (dir != U || this.isFright || this.isEscape)
@@ -212,7 +212,7 @@ export class Ghost extends Actor {
 	#setTurn({orient}=this) {
 		if (this.dir != orient
 		 && this.hasAdjWall(orient) == false
-		 && this.tileCenterReached
+		 && this.passedTileCenter
 		) {
 			this.pos = this.tilePos.mul(T)
 			this.setMoveDir(orient)
@@ -234,7 +234,7 @@ export class Ghost extends Actor {
 			: this.#attack()
 		return true
 	}
-	#caught(/**@type {()=>void}*/release) {
+	#caught(/** @type {()=>void} */release) {
 		this.#isFright = false
 		this.state.to('Bitten')
 		Sound.play('bitten')

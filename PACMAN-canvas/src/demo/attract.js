@@ -10,10 +10,8 @@ import {GhsMgr}   from '../ghosts/_system.js'
 import {Ghost}    from '../ghosts/ghost.js'
 import {RunTimer} from './_run_timer.js'
 
-const WhereChar = 0
-const WhereDemo = 1
-const WhereMax  = 2
-const SmallSize = T*0.68
+const Small = T*0.68
+const Where = freeze({Char:0,Demo:1,Max:2})
 
 let _attract = /**@type {?Attract}*/(null)
 
@@ -39,11 +37,11 @@ export class Attract {
 	/** @private */
 	constructor() {
 		this.setActors()
-		GhsMgr.trigger('Init', this.ghsList[WhereDemo])
+		GhsMgr.trigger('Init', this.ghsList[Where.Demo])
 		$onNS('.Attract', {click_keydown_blur:this.quit})
 	}
 	setActors() {
-		for (const w of range(WhereMax))
+		for (const w of range(Where.Max))
 			for (const i of range(GhsType.Max))
 				this.setActor(w, i)
 	}
@@ -58,19 +56,19 @@ export class Attract {
 	draw() {
 		const et = Ticker.elapsedTime/100
 		Score.draw(),drawText(7, 5, null, 'CHARACTOR　/　NICKNAME')
-		et > 10 && this.drawGhost(WhereChar, GhsType.Akabei, 6)
+		et > 10 && this.drawGhost(Where.Char, GhsType.Akabei, 6)
 		et > 15 && drawText( 8,  7, Color.Akabei, 'OIKAKE----')
 		et > 20 && drawText(18,  7, Color.Akabei, '"AKABEI"')
 
-		et > 30 && this.drawGhost(WhereChar, GhsType.Pinky,  9)
+		et > 30 && this.drawGhost(Where.Char, GhsType.Pinky,  9)
 		et > 35 && drawText( 8, 10, Color.Pinky, 'MACHIBUSE--')
 		et > 40 && drawText(19, 10, Color.Pinky, '"PINKY"')
 
-		et > 50 && this.drawGhost(WhereChar, GhsType.Aosuke, 12)
+		et > 50 && this.drawGhost(Where.Char, GhsType.Aosuke, 12)
 		et > 55 && drawText( 8, 13, Color.Aosuke, 'KIMAGURE--')
 		et > 60 && drawText(18, 13, Color.Aosuke, '"AOSUKE"')
 
-		et > 70 && this.drawGhost(WhereChar, GhsType.Guzuta, 15)
+		et > 70 && this.drawGhost(Where.Char, GhsType.Guzuta, 15)
 		et > 75 && drawText( 8, 16, Color.Guzuta, 'OTOBOKE---')
 		et > 80 && drawText(18, 16, Color.Guzuta, '"GUZUTA"')
 		if (et > 85) {
@@ -78,8 +76,8 @@ export class Attract {
 			this.powDisp && drawDot(Ctx, 10, 26, true)
 			drawText(12.0, 25, null, DotScore)
 			drawText(12.0, 27, null, PowScore)
-			drawText(14.3, 25, null, 'PTS', {size:SmallSize})
-			drawText(14.3, 27, null, 'PTS', {size:SmallSize})
+			drawText(14.3, 25, null, 'PTS', {size:Small})
+			drawText(14.3, 27, null, 'PTS', {size:Small})
 		}
 		if (et > 90) {
 			if (this.pacman.dir == L && this.powDisp) {
@@ -88,12 +86,12 @@ export class Attract {
 			if (Ctrl.extendPts > 0) {
 				const {BonusText:color}= Color
 				drawText( 2.0, 30, color, `BONUS　PACMAN　FOR　${Ctrl.extendPts}`)
-				drawText(24.3, 30, color, 'PTS', {size:SmallSize})
+				drawText(24.3, 30, color, 'PTS', {size:Small})
 			}
 		}
 		if (et > 105) {
 			for (const i of range(GhsType.Max))
-				this.drawGhost(WhereDemo, i)
+				this.drawGhost(Where.Demo, i)
 			this.pacman.sprite.draw(this.pacman)
 			PtsMgr.drawGhostPts()
 		}
@@ -127,7 +125,7 @@ export class Attract {
 		}
 	}
 	updateGhosts() {
-		for (const g of this.ghsList[WhereDemo]) {
+		for (const g of this.ghsList[Where.Demo]) {
 			g.x += this.ghsVelX
 			g.crashWithPac({
 				pos: this.pacman.pos, radius: T/4,

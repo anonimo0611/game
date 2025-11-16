@@ -24,21 +24,24 @@ const {Ticker,Timer} = function() {
 		get pausedCount() {return _pCounter}
 
 		/**
-		 * @param {Function} [updateFn]
-		 * @param {Function} [drawFn]
-		 */
+		 @param {Function} [updateFn]
+		 @param {Function} [drawFn]
+		*/
 		set(updateFn,drawFn) {new Tick(updateFn,drawFn)}
 
-		/** @param {boolean} [force] */
+		/**
+		 @param {boolean} [force]
+		*/
 		pause(force) {return _paused=!!(force? force : !_paused)}
+
 		stop()       {this.running && _ticker?.stop();return this}
 		resetCount() {this.running && _ticker?.resetCount()}
 	})
 	class Tick {
 		/**
-		 * @param {Function} [update]
-		 * @param {Function} [drawFn]
-		 */
+		 @param {Function} [update]
+		 @param {Function} [drawFn]
+		*/
 		constructor(update, drawFn) {
 			_ticker?.stop()
 			_ticker     = this
@@ -48,7 +51,10 @@ const {Ticker,Timer} = function() {
 			this.draw   = drawFn
 			requestAnimationFrame(this.loop)
 		}
-		loop(/**@type {number}*/ts) {
+		/**
+		 @param {number} ts
+		*/
+		loop(ts) {
 			if (this.stopped) return; requestAnimationFrame(this.loop)
 			if ((ts-(this.start||=ts))/Interval>=this.count)this.tick()
 		}
@@ -69,10 +75,11 @@ const {Ticker,Timer} = function() {
 			this.draw?.()
 			_pCounter++
 		}
-		timer(
-		 /**@type {TimerData}*/t,
-		 /**@type {unknown}*/  key
-		) {
+		/**
+		 @param {TimerData} t
+		 @param {unknown} key
+		*/
+		timer(t, key) {
 			if (Timer.frozen && !t.ignoreFrozen) return
 			if (Interval*t.amount++ < t.timeout) return
 			TimerMap.delete(key);t.handler()
@@ -93,15 +100,17 @@ const {Ticker,Timer} = function() {
 		freeze()    {this.#frozen = true; return this}
 		unfreeze()  {this.#frozen = false;return this}
 		/**
-		 * @param {number}   timeout
-		 * @param {Function} handler
-		 * @param {{key?:unknown,ignoreFrozen?:boolean}} config
-		 */
+		 @param {number}   timeout
+		 @param {Function} handler
+		 @param {{key?:unknown,ignoreFrozen?:boolean}} config
+		*/
 		set(timeout, handler, {key,ignoreFrozen=Timer.frozen}={}) {
 			!Ticker.running && Ticker.set()
 			TimerMap.set(key??Symbol(),{amount:0,timeout,handler,ignoreFrozen})
 		}
-		/** @param {...{ms:number,fn:Function}} seq */
+		/**
+		 @param {...{ms:number,fn:Function}} seq
+		*/
 		sequence(...seq) {
 			let idx=0, s=seq[idx]
 			function fire() {
@@ -111,7 +120,10 @@ const {Ticker,Timer} = function() {
 			Timer.set(s.ms, fire)
 		}
 		stop() {Ticker.stop();return this}
-		/** @param {unknown} key */
+
+		/**
+		 @param {unknown} key
+		*/
 		cancel(key) {TimerMap.delete(key);return this}
 		cancelAll() {TimerMap.clear();return this}
 	})
