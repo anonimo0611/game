@@ -70,7 +70,7 @@ class Tunnel {
 class PowDot {
 	#disp = 1
 	draw() {
-		this.#disp ^= +(Ticker.count % PowDotInterval == 0)
+		this.#disp ^= +!(Ticker.count % PowDotInterval)
 		for (const [,{x,y}] of PowMap) {
 			if (!State.isPlaying || Ticker.paused || this.#disp)
 				Maze.drawDot(Ctx, x,y, true)

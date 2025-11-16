@@ -103,16 +103,11 @@ export class Attract {
 		ghost.sprite.draw(ghost)
 	}
 	update() {
-		if (Ticker.elapsedTime <= 1e4+500)
-			return
-		if  (!Timer.frozen) {
-			this.updatePacman()
-			this.updateGhosts()
-		}
-		this.powDisp ^=
-			+(Ticker.count % PowDotInterval == 0)
+		if (Ticker.elapsedTime <= 1e4+500) return
+		this.powDisp ^= +!(Ticker.count % PowDotInterval)
+		!Timer.frozen && this.updateActors()
 	}
-	updatePacman() {
+	updateActors() {
 		this.pacman.sprite.update()
 		this.pacman.x += this.pacVelX
 		if (this.pacman.dir == L
@@ -123,6 +118,7 @@ export class Attract {
 			this.pacman.dir = R
 			GhsMgr.setFrightMode()
 		}
+		this.updateGhosts()
 	}
 	updateGhosts() {
 		for (const g of this.ghsList[Where.Demo]) {
