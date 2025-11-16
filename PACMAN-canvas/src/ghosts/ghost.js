@@ -53,11 +53,11 @@ export class Ghost extends Actor {
 			Reverse:()=> this.#revSig  = true,
 			Runaway:()=> this.#runaway = 400/Game.interval,
 		})
+		this.pos.set(col*T,row*T)
 		this.idx   = idx
 		this.dir   = dir
-		this.pos   = Vec2.new(col*T, row*T)
+		this.init  = freeze({...this.pos,align,animFlag})
 		this.state = freeze(new Sys.GhostState(this))
-		this.init  = freeze({x:col*T,align,animFlag})
 	}
 	get originalTargetTile() {
 		return this.state.isEscape

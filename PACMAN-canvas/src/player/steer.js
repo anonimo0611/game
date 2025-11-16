@@ -24,8 +24,8 @@ export class Steer {
 	}
 	get canTurn() {
 		return this.#dir != null
-			&& self.passedTileCenter == false
-			&& self.collidedWithWall(this.#dir) == false
+			&& !self.passedTileCenter
+			&& !self.collidedWithWall(this.#dir)
 	}
 	get collidedWithWall() {
 		return !this.#turning && self.collidedWithWall()

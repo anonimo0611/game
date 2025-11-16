@@ -18,11 +18,11 @@ class Pinky extends Ghost {
 	}
 	get scatterTile() {return Vec2.new(3, 0)}
 	get chasePos() {
-		const {x,y}= pacman.forwardOfst(4)
+		const pos = pacman.forwardOfst(4)
 		switch(pacman.tunnelEntered.side) {
-		case L:  return Vec2.new(Maze.Tunnel.EntranceR*T, y)
-		case R:  return Vec2.new(Maze.Tunnel.EntranceL*T, y)
-		default: return Vec2.new(x, y)
+		case L: return pos.set(Maze.Tunnel.EntranceR*T, pos.y)
+		case R: return pos.set(Maze.Tunnel.EntranceL*T, pos.y)
+		default:return pos
 		}
 	}
 }
@@ -45,7 +45,7 @@ class Guzuta extends Ghost {
 	get scatterTile() {return Vec2.new(0, 33)}
 	get chasePos() {
 		return this.sqrMagToPacman < (T*8) ** 2
-		? Vec2.new(this.scatterTile).add(.5).mul(T)
+		? this.scatterTile.add(.5).mul(T)
 		: pacman.center
 	}
 }
