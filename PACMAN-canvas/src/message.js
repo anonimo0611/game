@@ -22,19 +22,19 @@ export const Message = new class {
 	#drawPausedText() {
 		(!Confirm.opened && Ticker.paused)
 			&& (Ticker.pausedCount & 32) == 0
-			&& drawText(11, 19, Color.Message3, 'PAUSED')
+			&& drawText(11, 19, '#F00','PAUSED')
 	}
 	draw() {
 		this.#drawPausedText()
 		if (State.isStart)
-			drawText( 9, 13, Color.Message1, 'PLAYER　ONE')
+			drawText( 9, 13, '#0FF','PLAYER　ONE')
 
 		if (State.isStart
 		 || State.isReady)
-			drawText(11, 19, Color.Message2, 'READY!')
+			drawText(11, 19, '#FF0','READY!')
 
 		if (State.isTitle
 		 || State.isGameOver)
-		 	drawText( 9, 19, Color.Message3, 'GAME　　OVER')
+		 	drawText( 9, 19, '#F00','GAME　　OVER')
 	}
 }, {drawText}=Message

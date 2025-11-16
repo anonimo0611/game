@@ -84,7 +84,7 @@ export class Attract {
 				drawDot(Ctx, 4, 19, true)
 			}
 			if (Ctrl.extendPts > 0) {
-				const {BonusText:color}= Color
+				const color = '#F90'
 				drawText( 2.0, 30, color, `BONUS　PACMAN　FOR　${Ctrl.extendPts}`)
 				drawText(24.3, 30, color, 'PTS', {size:Small})
 			}
