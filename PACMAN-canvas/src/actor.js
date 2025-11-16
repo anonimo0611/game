@@ -51,6 +51,10 @@ export class Actor extends Common {
 		Player.draw()
 		GhsMgr.drawFront()
 	}
+	drawCenter(color='#F00') {
+		const {x,y}= this.center
+		Ctx.fillCircle(x,y, 3, color)
+	}
 	updateFadeIn(maxA=this.maxAlpha) {
 		State.isReady   && (this.#fadeIn ||= new FadeIn)?.update(maxA)
 		State.isPlaying && (this.#fadeIn &&= null)
@@ -78,28 +82,19 @@ export class Actor extends Common {
 	move(dir=this.dir) {
 		this.setNextPos(1, this.dir=dir)
 	}
-	/** @param {Direction} dir */
-	setMoveDir(dir) {
+	setMoveDir(/**@type {Direction}*/dir) {
 		this.#movDir = dir
 	}
-	/** @param {Direction} dir */
-	hasAdjWall(dir) {
+	hasAdjWall(/**@type {Direction}*/dir) {
 		return Maze.hasWall(this.getAdjTile(dir))
 	}
-	/** @param {Direction} dir */
-	getAdjTile(dir, tile=this.tilePos) {
+	getAdjTile(/**@type {Direction}*/dir, tile=this.tilePos) {
 		const  v = Vec2[dir].add(tile)
 		return v.setX((v.x+Cols) % Cols) // x-axis loops
 	}
-	/** @param {Direction} dir */
 	collidedWithWall(dir=this.dir) {
 		const {step,center}= this
 		const {x,y}= Vec2[dir].mul(T/2+step).add(center).divInt(T)
 		return Maze.hasWall({x:(x+Cols) % Cols, y}) // x-axis loops
-	}
-	/** @param {Cvs2DStyle} color */
-	drawCenter(color, isVisible=true) {
-		const {x,y}= this.center
-		isVisible && Ctx.fillCircle(x,y, 3, color)
 	}
 }

@@ -45,7 +45,7 @@ class PlayerPac extends Pacman {
 		Ctx.save()
 		this.setFadeInAlpha()
 		this.sprite.draw(this)
-		this.drawCenter('red',this.showCenter)
+		this.showCenter && this.drawCenter()
 		Ctx.restore()
 	}
 	update() {
