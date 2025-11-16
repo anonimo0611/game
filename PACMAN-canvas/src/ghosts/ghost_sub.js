@@ -20,8 +20,8 @@ class Pinky extends Ghost {
 	get chasePos() {
 		const pos = pacman.forwardOfst(4)
 		switch(pacman.tunnelEntered.side) {
-		case L: return pos.set(Maze.Tunnel.EntranceR*T, pos.y)
-		case R: return pos.set(Maze.Tunnel.EntranceL*T, pos.y)
+		case L: return pos.setX(Maze.Tunnel.EntranceR*T)
+		case R: return pos.setX(Maze.Tunnel.EntranceL*T)
 		default:return pos
 		}
 	}
