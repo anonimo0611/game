@@ -12,35 +12,29 @@ class Vec2 {
 	static get Left()  {return Vec2.new(-1, 0)}
 
 	/**
-	 @param {number|Position} [v1]
+	 @param {number|Position} v1
 	 @param {number} [v2]
 	 @returns {[x:number, y:number]}
 	*/
 	static #parseXY(v1, v2) {
-		if (typeof v1 == 'object') {
-			return [v1.x, v1.y]
-		}
 		if (typeof v1 == 'number'
-		 && typeof v2 == 'number') {
-			return [v1, v2]
-		}
-		v1 ??= 0
-		v2 ??= v1
-		return [v1, v2]
+		 && typeof v2 == 'number') return [v1, v2]
+		if (typeof v1 == 'object') return [v1.x, v1.y]
+		return [v1, v2 ?? v1]
 	}
 
 	/**
 	 @overload
-	 @param {number} scalar
+	 @param   {number} scalar
 	 @returns {Vec2}
 
 	 @overload
-	 @param {number} x
-	 @param {number} y
+	 @param   {number} x
+	 @param   {number} y
 	 @returns {Vec2}
 
 	 @overload
-	 @param {Position} pos
+	 @param   {Position} pos
 	 @returns {Vec2}
 
 	 @param {number|Position} v1
@@ -51,64 +45,67 @@ class Vec2 {
 	}
 
 	static eq(
-	/** @type{Position} */v1,
-	/** @type{Position} */v2
+	 /**@type {Position}*/v1,
+	 /**@type {Position}*/v2
 	){
-		return abs(v1.x-v2.x) < 1e-6 && abs(v1.y-v2.y) < 1e-6
+		return(
+			abs(v1.x-v2.x) < 1e-6 &&
+			abs(v1.y-v2.y) < 1e-6
+		)
 	}
 
 	static idx(
-	/** @type{Position} */v,
-	/** @type{number}   */cols
+	 /**@type {Position}*/v,
+	 /**@type {number}  */cols
 	){
 		return Number(v.y * cols + v.x)
 	}
 
 	static add(
-	 /** @type{Position} */v1,
-	 /** @type{Position} */v2
+	 /**@type {Position}*/v1,
+	 /**@type {Position}*/v2
 	){
 		return Vec2.new(v1).add(v2)
 	}
 
 	static sub(
-	 /** @type{Position} */v1,
-	 /** @type{Position} */v2
+	 /**@type {Position}*/v1,
+	 /**@type {Position}*/v2
 	){
 		return Vec2.new(v1).sub(v2)
 	}
 
 	static mul(
-	 /** @type{Position} */v,
-	 /** @type{number}   */scalar
+	 /**@type {Position}*/v,
+	 /**@type {number}  */scalar
 	){
 		return Vec2.new(v).mul(scalar)
 	}
 
 	static div(
-	 /** @type{Position} */v,
-	 /** @type{number}   */scalar
+	 /**@type {Position}*/v,
+	 /**@type {number}  */scalar
 	){
 		return Vec2.new(v).div(scalar)
 	}
 
 	static divInt(
-	 /** @type{Position} */v,
-	 /** @type{number}   */scalar
+	 /**@type {Position}*/v,
+	 /**@type {number}  */scalar
 	){
 		return Vec2.new(v).divInt(scalar)
 	}
 
 	static sqrMag(
-	 /** @type{Position} */v1,
-	 /** @type{Position} */v2
+	 /**@type {Position}*/v1,
+	 /**@type {Position}*/v2
 	){
 		return Vec2.sub(v1,v2).sqrMag
 	}
 
 	static distance(
-	 /** @type{Position} */v1,
-	 /** @type{Position} */v2
+	 /**@type {Position}*/v1,
+	 /**@type {Position}*/v2
 	){
 		return Vec2.sub(v1,v2).magnitude
 	}
@@ -122,12 +119,10 @@ class Vec2 {
 		this.x = x
 		this.y = y
 	}
-	x = 0; y = 0;
 
 	/**
 	 @returns {readonly [x:number,y:number]}
-	*/
-	get vals() {return ([this.x,this.y])}
+	*/get vals() {return ([this.x,this.y])}
 
 	get hyphenated() {return `${this.x}-${this.y}`}
 	get inverse()    {return this.clone.mul(-1)}
@@ -139,12 +134,12 @@ class Vec2 {
 
 	/**
 	 @overload
-	 @param {number} x
-	 @param {number} y
+	 @param   {number} x
+	 @param   {number} y
 	 @returns {boolean}
 
 	 @overload
-	 @param {Position} pos
+	 @param   {Position} pos
 	 @returns {boolean}
 
 	 @param {number|Position} v1
@@ -157,16 +152,16 @@ class Vec2 {
 
 	/**
 	 @overload
-	 @param {number} scalar
+	 @param   {number} scalar
 	 @returns {Vec2}
 
 	 @overload
-	 @param {number} x
-	 @param {number} y
+	 @param   {number} x
+	 @param   {number} y
 	 @returns {Vec2}
 
 	 @overload
-	 @param {Position} pos
+	 @param   {Position} pos
 	 @returns {Vec2}
 
 	 @param {number|Position} v1
@@ -178,23 +173,23 @@ class Vec2 {
 		this.y = y
 		return this
 	}
-	setX(/** @type {number} */x) {this.x  = x;return this}
-	setY(/** @type {number} */y) {this.y  = y;return this}
-	addX(/** @type {number} */x) {this.x += x;return this}
-	addY(/** @type {number} */y) {this.y += y;return this}
+	setX(/**@type {number}*/x) {this.x  = x;return this}
+	setY(/**@type {number}*/y) {this.y  = y;return this}
+	addX(/**@type {number}*/x) {this.x += x;return this}
+	addY(/**@type {number}*/y) {this.y += y;return this}
 
 	/**
 	 @overload
-	 @param {number} scalar
+	 @param   {number} scalar
 	 @returns {Vec2}
 
 	 @overload
-	 @param {number} x
-	 @param {number} y
+	 @param   {number} x
+	 @param   {number} y
 	 @returns {Vec2}
 
 	 @overload
-	 @param {Position} pos
+	 @param   {Position} pos
 	 @returns {Vec2}
 
 	 @param {number|Position} v1
@@ -209,16 +204,16 @@ class Vec2 {
 
 	/**
 	 @overload
-	 @param {number} x
+	 @param   {number} x
 	 @returns {Vec2}
 
 	 @overload
-	 @param {number} x
-	 @param {number} y
+	 @param   {number} x
+	 @param   {number} y
 	 @returns {Vec2}
 
 	 @overload
-	 @param {Position} pos
+	 @param   {Position} pos
 	 @returns {Vec2}
 
 	 @param {number|Position} v1
@@ -231,22 +226,22 @@ class Vec2 {
 		return this
 	}
 
-	mul(/** @type {number} */scalar) {
+	mul(/**@type {number}*/scalar) {
 		this.x *= scalar
 		this.y *= scalar
 		return this
 	}
-	div(/** @type {number} */scalar) {
+	div(/**@type {number}*/scalar) {
 		this.x /= scalar
 		this.y /= scalar
 		return this
 	}
-	divInt(/** @type {number} */scalar) {
+	divInt(/**@type {number}*/scalar) {
 		this.x = (this.x/scalar)|0
 		this.y = (this.y/scalar)|0
 		return this
 	}
-	distance(/** @type {Position} */v) {
+	distance(/**@type {Position}*/v) {
 		return Vec2.sub(this, v).magnitude
 	}
 	freeze() {
