@@ -61,7 +61,7 @@ const nonEnterKey = e=>
 
 /**
  @param {string} selector
-*/const qSAll = selector=> /** @type {HTMLElement[]} */
+*/const qSAll = selector=> /**@type {HTMLElement[]}*/
  	([...document.querySelectorAll(selector)])
 
 /**
