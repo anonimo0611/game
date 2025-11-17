@@ -60,7 +60,7 @@ class Tunnel {
 	Y = 15
 	EntranceL =  5.5
 	EntranceR = 22.5
-	wicthSide({x=0,y=0}) {
+	witchSide({x=0,y=0}) {
 		if (int(y/T) == this.Y) {
 			if (x/T <= this.EntranceL) return L
 			if (x/T >= this.EntranceR) return R
