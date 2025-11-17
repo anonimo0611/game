@@ -204,7 +204,7 @@ class Vec2 {
 
 	/**
 	 @overload
-	 @param   {number} x
+	 @param   {number} scalar
 	 @returns {Vec2}
 
 	 @overload
