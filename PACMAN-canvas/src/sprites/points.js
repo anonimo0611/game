@@ -61,7 +61,7 @@ export function cache(pts, size=TileSize*2) {
 		function() {
 			ctx.save()
 			ctx.translate(x,y)
-			ctx.newLinePath(.../** @type {xyList[]} */
+			ctx.newLinePath(.../**@type {xyList[]}*/
 				(chunk(Data.PathFrom0To8[d],2)))
 			;(d == 0 || d == 8) && ctx.closePath()
 			ctx.restore()
