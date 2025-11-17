@@ -24,7 +24,7 @@ export class Ghost extends Actor {
 	sprite = new Sprite(canvas2D(null, T*3, T*2).ctx)
 
 	/** @readonly */
-	turnDirs = /** @type {readonly Direction[]} */([U,L,D,R])
+	turnDirs = /**@type {readonly Direction[]}*/([U,L,D,R])
 
 	get isAngry()     {return false}
 	get chaseStep()   {return GhsStep.Base}
