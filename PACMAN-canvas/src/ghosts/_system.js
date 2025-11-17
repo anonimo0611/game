@@ -19,7 +19,7 @@ const Ghosts = /**@type {Ghost[]}*/([])
  When always chase mode,
  standby time(ms) before the ghost leaves from the house
 */
-const StandbyTimes = /** @type {const} */
+const StandbyTimes = /**@type {const}*/
 ([//Pinky->Aosuke->Guzuta
 	[1000,  500,  500], // Restart
 	[1000, 4000, 4000], // Lv.1

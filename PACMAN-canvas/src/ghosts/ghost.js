@@ -184,7 +184,6 @@ export class Ghost extends Actor {
 		if (this.#revSig) {
 			this.#revSig = false
 			this.orient  = this.revDir
-			return
 		}
 		if (this.dir == this.orient)
 			this.orient = this.#getNextDir()
