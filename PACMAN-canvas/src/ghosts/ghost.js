@@ -91,8 +91,7 @@ export class Ghost extends Actor {
 		}(this,this.state) * Game.moveSpeed
 	}
 	draw() {
-		if (State.isStart)
-			return
+		if (State.isStart) return
 		Ctx.save()
 		this.setFadeInAlpha()
 		this.sprite.fadeOut?.setAlpha(Ctx)
@@ -233,7 +232,7 @@ export class Ghost extends Actor {
 			: this.#attack()
 		return true
 	}
-	#caught(/** @type {()=>void} */release) {
+	#caught(release=()=>{}) {
 		this.#isFright = false
 		this.state.to('Bitten')
 		Sound.play('bitten')
