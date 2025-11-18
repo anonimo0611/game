@@ -7,10 +7,12 @@ import {State}    from './state.js'
 import {Score}    from './score.js'
 import {drawText} from './message.js'
 
-export const Form = document.forms[0]
-
-/** @param {string} id */
-export const input = id=> /**@type {HTMLInputElement}*/(byId(id))
+export const Form  = document.forms[0]
+export const input = (/**@type {string}*/id)=> {
+	if (!byId(id)) throw Error(
+		`There is no input element with the ID “${id}”.`)
+	return /**@type {HTMLInputElement}*/(byId(id))
+}
 
 export const Ctrl = new class {
 	static {$(this.setup)}
@@ -60,8 +62,7 @@ export const Ctrl = new class {
 		localStorage.anopacman = JSON.stringify(data)
 	}
 	#restore() {
-		if (!localStorage.anopacman)
-			return
+		if (!localStorage.anopacman) return
 		const data = JSON.parse(localStorage.anopacman)
 		MenuIds.forEach(id=> Menu[id].index = data[id])
 		document.querySelectorAll('input').forEach(input=> {
