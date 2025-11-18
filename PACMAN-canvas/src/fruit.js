@@ -25,7 +25,7 @@ let _fadeOut = /**@type {?FadeOut}*/(null)
 export const Fruit = new class {
 	static {$(this.setup)}
 	static setup() {
-		State .on({_Ready:Fruit.#reset})
+		State .on({_Ready:Fruit.#resetTarget})
 		Player.on({Eaten: Fruit.#dotEaten})
 		$Level.on({change:Fruit.#setImages})
 	}
@@ -33,37 +33,38 @@ export const Fruit = new class {
 		return Pts.Score.Fruit[Fruit.number()]
 	}
 	number(i=Game.level-1) {
-		return TypeTable.at(i >= TypeTable.length ? -1 : i) ?? 0
+		return TypeTable.at((i>=TypeTable.length)? -1:i) ?? 0
 	}
 	/** Disappearing is between 9 and 10 seconds */
-	#setTimerToHideTarget() {
+	#setHideTimer() {
 		const {speed}=Game, fadeDur=300
 		const setFadeOut = ()=> _fadeOut = new FadeOut(fadeDur/speed)
 		Timer.set(randInt(9e3, 1e4-fadeDur)/speed, setFadeOut, {key:Fruit})
 	}
-	#reset() {
+	#resetTarget() {
 		_fadeOut = null
 		_tgtDisp = State.isTitle
 	}
 	#dotEaten() {
 		if (AppearSet.has(Maze.DotMax - Maze.dotsLeft)) {
 			_tgtDisp = true
-			Fruit.#setTimerToHideTarget()
+			Fruit.#setHideTimer()
 		}
 	}
 	#collisionWithPac() {
-		if (_tgtDisp && circleCollision(pacman.center, TargetPos, T/2)) {
-			Fruit.#reset()
+		if (_tgtDisp
+		 && circleCollision(pacman.center, TargetPos, T/2)) {
+			Fruit.#resetTarget()
 			Timer.cancel(Fruit) && Sound.play('fruit')
 			PtsMgr.set({key:Fruit, dur:2e3, pos:TargetPos})
 		}
 	}
 	update() {
 		_fadeOut?.update() === false
-			? Fruit.#reset()
+			? Fruit.#resetTarget()
 			: Fruit.#collisionWithPac()
 	}
-	draw() {
+	drawTarget() {
 		if (!State.isTitle
 		 && !State.isPlaying)
 			return
