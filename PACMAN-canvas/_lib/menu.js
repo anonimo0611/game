@@ -20,7 +20,7 @@ export class Menu extends Common {
 		menu  = /**@type {HTMLElement}*/($(root).find('mn-list').get(0)),
 		items = /**@type {MenuItem[]} */($(menu).find('mn-item').get())
 		if (!root || !menu || !items.length) {
-			throw ReferenceError('The menu structure is invalid')
+			throw Error('The menu structure is invalid')
 		}
 		super({eventTarget:menu})
 		this.root   = root
@@ -44,7 +44,7 @@ export class Menu extends Common {
 	}
 	select(idx=0) {
 		if (idx<0 || idx>=this.size) {
-			throw ReferenceError('List index out of range')
+			throw RangeError('List index out of range')
 		}
 		this.selectedItem.classList.remove('selected')
 		this.items[idx].classList.add('selected')
