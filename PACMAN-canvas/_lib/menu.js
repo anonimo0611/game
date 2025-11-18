@@ -36,16 +36,17 @@ export class Menu extends Common {
 	}
 	get value()  {return this.selectedItem.val}
 	get index()  {return this.selectedItem.index}
-	set index(i) {(i>=0 && i<this.size) && this.select(i)}
+	set index(i) {this.select(i)}
 
 	/** @returns {MenuItem} */
 	get selectedItem() {
 		return this.menu.querySelector('.selected') || this.items[0]
 	}
+	/** @protected @param {number} idx */
+	checkRange(idx) {return !between(idx, 0, this.size-1)}
+
 	select(idx=0) {
-		if (idx<0 || idx>=this.size) {
-			throw RangeError('List index out of range')
-		}
+		if (this.checkRange(idx)) return
 		this.selectedItem.classList.remove('selected')
 		this.items[idx].classList.add('selected')
 		$(this.menu).trigger('change');
@@ -65,7 +66,7 @@ export class DorpDown extends Menu {
 		$('body')
 			.on('pointerdown', e=> {
 				!e.target.closest(`#${this.root.id}`)
-				&& this.select()
+				  && this.select()
 			})
 		$(this.$label)
 			.on('pointerdown', e=> {
@@ -80,13 +81,14 @@ export class DorpDown extends Menu {
 		this.close()
 		this.current.tabIndex = 0
 		this.select(this.index)
-		freeze(this)
 	}
 	close()  {$(this.menu).hide()}
 	open()   {$(this.menu).show()}
 	toggle() {$(this.menu).toggle()}
-	get closed() {return $(this.menu).is(':hidden')}
 
+	get closed() {
+		return $(this.menu).is(':hidden')
+	}
 	#onKeydown(/**@type {JQuery.KeyDownEvent}*/e) {
 		const {size,index:i}= this
 		match(e.key, {
@@ -114,25 +116,22 @@ export class DorpDown extends Menu {
 
 export class Slide extends Menu {
 	/** @private */width
-	/** @private */btnL
-	/** @private */btnR
+	/** @private */BtnSet
 	constructor(/**@type {string}*/id) {
 		super(id,'slidemenu')
-		const{root}= this, wrap = this.$label.get(0) ?? root
-		this.btnR  = $('<span class="button r">').prependTo(root)[0]
-		this.btnL  = $('<span class="button l">').prependTo(root)[0]
-		this.width = this.#setWidth(this.btnL.offsetWidth*2)
-
+		const{root}= this, wrap=(this.$label.get(0) ?? root)
+		this.BtnSet= freeze({
+			[R]: $('<span class="button r">').prependTo(root)[0],
+			[L]: $('<span class="button l">').prependTo(root)[0],
+		})
+		$(this.BtnSet[L]).on('click',()=> {this.#select(L)})
+		$(this.BtnSet[R]).on('click',()=> {this.#select(R)})
 		$(root).on('keydown',e=>{this.#select(Dir.from(e))})
 		$(wrap).on('wheel',  e=>{this.#select(wheelDeltaY(e)>0 ? L:R)})
 		$(wrap).on('pointerdown', e=>{e.preventDefault(),root.focus()})
-
-		for (const [i,btn] of [this.btnL,this.btnR].entries()) {
-			$(btn).on('click', ()=> {this.#select(i? R:L)})
-		}
 		root.tabIndex = 0
+		this.width = this.#setWidth(this.BtnSet[L].offsetWidth*2)
 		this.select(this.index)
-		freeze(this)
 	}
 	#select(/**@type {?Direction}*/dir) {
 		if (!dir) return
@@ -146,10 +145,11 @@ export class Slide extends Menu {
 		return width
 	}
 	select(idx=this.index) {
+		if (this.checkRange(idx)) return
 		super.select(idx)
-		this.menu.style.transform  =`translateX(${-this.width*idx}px)`
-		this.btnL.dataset.disabled = String(idx == 0)
-		this.btnR.dataset.disabled = String(idx == this.size-1)
+		this.menu.style.transform = `translateX(${-this.width*idx}px)`
+		this.BtnSet[L].dataset.disabled = String(idx == 0)
+		this.BtnSet[R].dataset.disabled = String(idx == this.size-1)
 	}
 }
 
