@@ -43,10 +43,10 @@ export class Menu extends Common {
 		return this.menu.querySelector('.selected') || this.items[0]
 	}
 	/** @protected @param {number} idx */
-	checkRange(idx) {return !between(idx, 0, this.size-1)}
+	validRange(idx) {return between(idx, 0, this.size-1)}
 
 	select(idx=0) {
-		if (this.checkRange(idx)) return
+		if (!this.validRange(idx)) return
 		this.selectedItem.classList.remove('selected')
 		this.items[idx].classList.add('selected')
 		$(this.menu).trigger('change');
@@ -145,7 +145,7 @@ export class Slide extends Menu {
 		return width
 	}
 	select(idx=this.index) {
-		if (this.checkRange(idx)) return
+		if (!this.validRange(idx)) return
 		super.select(idx)
 		this.menu.style.transform = `translateX(${-this.width*idx}px)`
 		this.BtnSet[L].dataset.disabled = String(idx == 0)
