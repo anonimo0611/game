@@ -19,8 +19,9 @@ const TargetPos = Vec2.new(BW/2, T*18.5).freeze()
 const LvCounterCols = 7
 const LvCounterRect = freeze([T*2*6, BH-T*2, T*2*LvCounterCols, T*2])
 
-let _tgtDisp = true
-let _fadeOut = /**@type {?FadeOut}*/(null)
+const FadeDur = 300
+let _tgtDisp  = true
+let _fadeOut  = /**@type {?FadeOut}*/(null)
 
 export const Fruit = new class {
 	static {$(this.setup)}
@@ -37,13 +38,15 @@ export const Fruit = new class {
 	}
 	/** Disappearing is between 9 and 10 seconds */
 	#setHideTimer() {
-		const {speed}=Game, fadeDur=300
-		const setFadeOut = ()=> _fadeOut = new FadeOut(fadeDur/speed)
-		Timer.set(randInt(9e3, 1e4-fadeDur)/speed, setFadeOut, {key:Fruit})
+		const delay = randInt(9e3, 1e4-FadeDur)/Game.speed
+		Timer.set(delay, Fruit.#setFadeOut, {key:Fruit})
 	}
 	#resetTarget() {
 		_fadeOut = null
 		_tgtDisp = State.isTitle
+	}
+	#setFadeOut() {
+		_fadeOut = new FadeOut(FadeDur/Game.speed)
 	}
 	#dotEaten() {
 		if (AppearSet.has(Maze.DotMax - Maze.dotsLeft)) {
@@ -51,9 +54,8 @@ export const Fruit = new class {
 			Fruit.#setHideTimer()
 		}
 	}
-	#collisionWithPac() {
-		if (_tgtDisp
-		 && circleCollision(pacman.center, TargetPos, T/2)) {
+	collidedWith(pos=pacman.center) {
+		if (_tgtDisp && circleCollision(pos,TargetPos,T/2)) {
 			Fruit.#resetTarget()
 			Timer.cancel(Fruit) && Sound.play('fruit')
 			PtsMgr.set({key:Fruit, dur:2e3, pos:TargetPos})
@@ -62,7 +64,7 @@ export const Fruit = new class {
 	update() {
 		_fadeOut?.update() === false
 			? Fruit.#resetTarget()
-			: Fruit.#collisionWithPac()
+			: Fruit.collidedWith()
 	}
 	drawTarget() {
 		if (!State.isTitle

@@ -225,7 +225,7 @@ export class Ghost extends Actor {
 	}={}) {
 		if (!this.state.isWalk
 		 || !this.isFright && Ctrl.invincible
-		 || !circleCollision(this, pos, radius))
+		 || !circleCollision(this,pos,radius))
 			return false
 		this.isFright
 			? this.#caught(release)
