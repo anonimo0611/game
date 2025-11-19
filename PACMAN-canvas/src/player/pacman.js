@@ -17,6 +17,7 @@ class PlayerPac extends Pacman {
 	#tunEntered = new TunnelEntered()
 
 	get closed()        {return State.isPlaying == false}
+	get dying()         {return State.isCrashed || State.isDying}
 	get showCenter()    {return Ctrl.showGridLines}
 	get maxAlpha()      {return this.translucent? 0.75:1}
 	get translucent()   {return this.showCenter || Ctrl.invincible}
@@ -39,18 +40,21 @@ class PlayerPac extends Pacman {
 		const  ofstX = (this.dir == U ? -num : 0)
 		return this.forwardPos(num).addX(ofstX*T)
 	}
+	drawCenter() {
+		if (!this.hidden && !this.dying && this.showCenter)
+			super.drawCenter()
+	}
 	draw() {
-		if (State.isStart)
-			return
+		if (State.isStart) return
 		Ctx.save()
 		this.setFadeInAlpha()
 		this.sprite.draw(this)
-		this.showCenter && this.drawCenter()
+		this.drawCenter()
 		Ctx.restore()
 	}
 	update() {
 		this.updateFadeIn()
-		if (!State.isPlaying || Timer.frozen)
+		if (this.closed || this.hidden)
 			return
 		this.sprite.update(this)
 		this.#notEaten++
