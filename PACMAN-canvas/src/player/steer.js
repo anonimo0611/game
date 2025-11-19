@@ -82,9 +82,9 @@ export class Steer {
 	}
 	#endCornering() {
 		if (this.#turning && self.passedTileCenter) {
+			this.#turning = false
 			this.#dir  = this.#next
 			this.#next = null
-			this.#turning = false
 			self.setMoveDir(self.orient)
 		}
 	}
