@@ -6,7 +6,7 @@ export const Lives = function() {
 	let   _left  = 0
 	const {ctx}  = HUD
 	const radius = T*.78, size = T*2
-	const sprite = new Sprite(ctx, 1)
+	const sprite = new Sprite(ctx,1)
 	function onChange() {
 		match(State.current, {
 			Title:  ()=> _left = Ctrl.livesMax-1,
@@ -26,7 +26,6 @@ export const Lives = function() {
 	}
 	$('#lvsRng').on({input:onChange})
 	State.on({_Start_Ready_Restart:onChange})
-
 	return {
 		get left() {return _left},
 		append() {++_left;draw()},
