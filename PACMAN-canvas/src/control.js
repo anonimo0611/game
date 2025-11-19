@@ -9,9 +9,9 @@ import {drawText} from './message.js'
 
 export const Form  = document.forms[0]
 export const input = (/**@type {string}*/id)=> {
-	if (!byId(id)) throw Error(
-		`There is no input element with the ID “${id}”.`)
-	return /**@type {HTMLInputElement}*/(byId(id))
+	if (byId(id) instanceof HTMLInputElement)
+		return /**@type {HTMLInputElement}*/(byId(id))
+	throw TypeError(`There is no input element with the ID “${id}”.`)
 }
 
 export const Ctrl = new class {
