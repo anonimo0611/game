@@ -12,8 +12,8 @@ export class Menu extends Common {
 
 	/** @protected */
 	constructor(
-		/**@type {string}*/id,
-		/**@type {string}*/type
+	 /**@type {string}*/id,
+	 /**@type {string}*/type
 	) {
 		const
 		root  = /**@type {CustomMenu} */($byId(id).attr({type}) .get(0)),

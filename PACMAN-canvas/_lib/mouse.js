@@ -1,20 +1,23 @@
 export const Cursor = new class {
 	static {
-		let timerId = 0, lstPos = {x:0, y:0}
-		$('body').on('mousemove', e=> {
-			// Hide cursor if not moved for 2 secs
+		let   timerId   = 0
+		const Distance  = 2
+		const LastPos   = Vec2.Zero
+		const HideDelay = 2000
+		document.body.addEventListener('mousemove', e=> {
+			Cursor.#setPos(e)
 			clearTimeout(timerId)
-			timerId = setTimeout(()=> Cursor.#setState('hidden'), 2e3)
-			const {pageX:x, pageY:y}= e
-			Vec2.sqrMag(lstPos,{x,y}) > 4 && Cursor.default()
-			lstPos = {x,y}
+			timerId = setTimeout(Cursor.hide, HideDelay)
+			Vec2.sqrMag(Cursor.pos,LastPos) > Distance**2 && Cursor.default()
+			LastPos.set(Cursor.pos)
 		})
 	}
-	hide()    {this.#setState('hidden')}
-	default() {this.#setState('default')}
-
-	/** @param {'default'|'hidden'} state */
-	#setState(state) {dRoot.dataset.cursor = state}
+	#pos = Vec2.Zero
+	#setPos   = (/**@type {MouseEvent}*/e)=> this.#pos.set(e.pageX,e.pageY)
+	#setState = (/**@type {string}*/state)=> {dRoot.dataset.cursor = state}
+	hide()    {Cursor.#setState('hidden')}
+	default() {Cursor.#setState('default')}
+	get pos() {return Cursor.#pos.clone}
 }
 
 /**
