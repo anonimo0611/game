@@ -54,8 +54,8 @@ export class Ghost extends Actor {
 			Runaway:()=> this.#runaway = 400/Game.interval,
 		})
 		this.pos.set(col*T,row*T)
-		this.idx   = idx
 		this.dir   = dir
+		this.idx   = idx
 		this.init  = freeze({...this.pos,align,animFlag})
 		this.state = freeze(new Sys.GhostState(this))
 	}
