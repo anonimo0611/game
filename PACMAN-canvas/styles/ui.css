@@ -56,6 +56,9 @@ dialog {
 	position: absolute;
 	z-index: 100;
 }
+[data-ready-state=loaded] .panel {
+	display: none;
+}
 
 form, dialog {
 	--color-label:        #6FD;
