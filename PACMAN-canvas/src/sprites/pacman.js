@@ -1,12 +1,12 @@
 const Duration = 300/Ticker.Interval
 const OpenMid  = 30 * PI/180
 const OpenMax  = 60 * PI/180
-const Rotation = /**@type {const}*/({[R]:0, [D]:1, [L]:2, [U]:3})
+const Rotation = new Map([[R,0],[D,PI/2],[L,PI],[U,PI*3/2]])
 
 import {Dying} from './pacman_dying.js'
 export default class {
 	#dyingSpr   = /**@type {?Dying}*/(null)
-	#animeAngle = 0
+	#angularV   = 0
 	#mouthAngle = 0
 
 	/** @readonly */ctx
@@ -24,8 +24,8 @@ export default class {
 	update({stopped=false}={}) {
 		if (stopped && this.#mouthAngle > OpenMid-PI/Duration/2)
 			return
-		const rad = this.#animeAngle += PI/Duration
-		this.#mouthAngle = OpenMax * abs(Math.sin(rad))
+		const v = this.#angularV += PI/Duration
+		this.#mouthAngle = OpenMax * abs(Math.sin(v))
 	}
 	draw({
 		center:{x,y}={x:0,y:0},
@@ -44,7 +44,7 @@ export default class {
 		const mAngle = (closed? 0:this.#mouthAngle)
 		ctx.save()
 		ctx.translate(x,y)
-		ctx.rotate(Rotation[orient] * PI/2)
+		ctx.rotate(Rotation.get(orient) ?? 0)
 		ctx.beginPath()
 		ctx.moveTo(-radius*scale*0.3, 0)
 		ctx.arc(0,0,radius*scale, mAngle, PI*2-mAngle)

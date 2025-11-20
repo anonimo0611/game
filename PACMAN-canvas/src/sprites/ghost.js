@@ -5,22 +5,11 @@ export default class {
 
 	/** @readonly */ctx
 	/** @readonly */#CBSprite
-	/** @readonly */#EyesDraw
 	/** @param {ExtendedContext2D} ctx */
 	constructor(ctx) {
 		this.ctx = ctx
 		this.#CBSprite = new CBSprite(ctx)
-		this.#EyesDraw = /**@type {const}*/
-		({
-			[L]:this.#eyesLookingLR,
-			[R]:this.#eyesLookingLR,
-			[U]:this.#eyesLookingUp,
-			[D]:this.#eyesLookingDown,
-			LowerR:this.#CBSprite.bracketEyes
-		})
 	}
-
-	get fadeOut()  {return this.#fadeOut}
 	setFadeOut()   {this.#fadeOut ||= new FadeOut(400)}
 	setResurrect() {this.#resurrect = new FadeIn (600)}
 	draw({
@@ -42,7 +31,7 @@ export default class {
 		const finalize = ()=> {
 			ctx.restore()
 			mainCtx.save()
-			mainCtx.setAlpha(this.fadeOut?.alpha)
+			mainCtx.setAlpha(this.#fadeOut?.alpha)
 			mainCtx.translate(x+size/4, y+size/4)
 			mainCtx.drawImage(ctx.canvas, -size/2, -size/2)
 			mainCtx.restore()
@@ -68,12 +57,18 @@ export default class {
 			ctx.restore()
 		}
 		if (!isFright) {
-			this.#EyesDraw[orient].call(this,{orient,isRipped})
+			match(orient, {
+				Left:  ()=> this.#eyesLookingLR,
+				Right: ()=> this.#eyesLookingLR,
+				Up:    ()=> this.#eyesLookingUp,
+				Down:  ()=> this.#eyesLookingDown,
+				LowerR:()=> this.#CBSprite.bracketEyes,
+			})?.call(this,{orient,isRipped})
 		}
 		finalize()
 	}
 	update() {
-		this.fadeOut?.update()
+		this.#fadeOut?.update()
 		if (this.#resurrect?.update() === false)
 			this.#resurrect = null
 	}
@@ -111,7 +106,7 @@ export default class {
 		ctx.bezierCurveTo(+13, 28, +22, 28, +26, 38)
 		ctx.bezierCurveTo(+29, 45, +41, 45, +42, 26)
 	}
-	#eyesLookingUp({isRipped=false}) {
+	#eyesLookingUp({isRipped=false}={}) {
 		const {ctx}= this
 		for (const v of [-1,+1]) {
 			// Eyeballs
@@ -135,8 +130,8 @@ export default class {
 			ctx.fillCircle(19*v, 4, 8, Color.GhostEyes)
 		}
 	}
-	/** @param {{orient:'Left'|'Right'}} orient */
-	#eyesLookingLR({orient}) {
+	/** @param {{orient?:L|R}} orient */
+	#eyesLookingLR({orient=L}={}) {
 		const {ctx}= this
 		ctx.save()
 		ctx.scale(Vec2[orient].x, 1)
