@@ -128,12 +128,16 @@ export const GhsMgr = new class extends Common {
 	}
 }
 
+const setReversalSig = ()=> {
+	$(Ghosts).trigger('Reverse')
+}
 const SCATTER = 0
 const CHASING = 1
 const AttackInWaves = function() {
+	const initSeq = (mode=SCATTER)=> ({mode,update(){}})
 	{
-		let seq = {mode:SCATTER,update(){}}
-		State.on({_Ready:()=> seq = genSequence()})
+		let seq = initSeq()
+		State.on({_Ready:()=> seq = genSeq()})
 		return {
 			get isChasing() {return seq.mode == CHASING},
 			get isScatter() {return seq.mode == SCATTER},
@@ -153,7 +157,7 @@ const AttackInWaves = function() {
 			Infinity,
 		])
 	}
-	function genSequence() {
+	function genSeq() {
 		let  [cnt,idx] = [-1,0]
 		const durList  = genDurList()
 		const duration = ()=> durList[idx]/Game.speed
@@ -167,14 +171,14 @@ const AttackInWaves = function() {
 				[cnt,seq.mode] = [0,(++idx % 2)]
 				setReversalSig()
 			}
-		};return [seq,{mode:CHASING,update(){}}][seq.mode]
+		};return seq.mode? initSeq(CHASING) : seq
 	}
-}(), setReversalSig = ()=> {$(Ghosts).trigger('Reverse')}
+}()
 
 export const DotCounter = function() {
 	let  _globalCounter = -1
 	const pCounters  = new Uint8Array(GhsType.Max)
-	const LimitTable = /** @type {const} */
+	const LimitTable = /**@type {const}*/
 		([//global,lv1,lv2,lv3+
 			[ 7,  0,  0, 0], // Pinky
 			[17, 30,  0, 0], // Aosuke
@@ -198,7 +202,7 @@ export const DotCounter = function() {
 		}
 	function reset() {
 		!Game.restarted && pCounters.fill(0)
-		_globalCounter = Game.restarted? 0 : -1
+		_globalCounter = Game.restarted? 0:-1
 	}
 	function addCnt() {
 		(Game.restarted && _globalCounter >= 0)

@@ -94,13 +94,11 @@ export class Ghost extends Actor {
 		if (State.isStart) return
 		Ctx.save()
 		this.setFadeInAlpha()
-		this.sprite.fadeOut?.setAlpha(Ctx)
 		this.sprite.draw(this)
 		Ctx.restore()
 	}
 	update() {
 		this.updateFadeIn()
-		this.sprite.fadeOut?.update()
 		this.sprite.update()
 		this.houseEntranceArrived
 			? this.#prepEnterHouse()
@@ -116,10 +114,10 @@ export class Ghost extends Actor {
 		default: this.#walkPath(this.step+.5|0)
 		}
 	}
-	#idle({idx,orient,state,step,center:{y:cy}}=this) {
+	#idle({idx,orient,step,center:{y:cy}}=this) {
 		if (!Ctrl.alwaysChase)
 			Sys.DotCounter.release(idx, b=> this.leaveHouse(b))
-		!state.isGoOut && this.move(
+		!this.state.isGoOut && this.move(
 			(cy+T*0.6-step > Maze.House.MiddleY && orient != D)? U:
 			(cy-T*0.6+step < Maze.House.MiddleY ? D:U)
 		)
