@@ -7,13 +7,13 @@ import {State}    from './state.js'
 import {Score}    from './score.js'
 import {drawText} from './message.js'
 
-export const Form = document.forms[0]
-
-export function input(/**@type {string}*/id) {
-	let element = byId(id)
-	if (element instanceof HTMLInputElement) return element
-	throw TypeError(`There is no input element with the ID “${id}”.`)
-}
+export const
+	Form  = document.forms[0],
+	input = (/**@type {string}*/id)=> {
+		let element = byId(id)
+		if (element instanceof HTMLInputElement) return element
+		throw TypeError(`There is no input element with the ID “${id}”.`)
+	}
 
 export const Ctrl = new class {
 	static {$(this.setup)}
