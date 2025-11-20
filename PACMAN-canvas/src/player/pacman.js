@@ -16,11 +16,11 @@ class PlayerPac extends Pacman {
 	#steer      = new Steer()
 	#tunEntered = new TunnelEntered()
 
-	get closed()        {return State.isPlaying == false}
-	get dying()         {return State.isCrashed || State.isDying}
-	get translucent()   {return Ctrl.invincible || this.showCenter}
 	get showCenter()    {return Ctrl.showGridLines}
-	get maxAlpha()      {return this.translucent? 0.75:1}
+	get translucent()   {return Ctrl.invincible || this.showCenter}
+	get dying()         {return State.isCrashed || State.isDying}
+	get closed()        {return State.isPlaying == false}
+	get maxAlpha()      {return this.translucent? .75:1}
 	get step()          {return this.#steer.step}
 	get stopped()       {return this.#steer.stopped}
 	get tunnelEntered() {return this.#tunEntered}

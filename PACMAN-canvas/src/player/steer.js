@@ -4,7 +4,7 @@ import {Game}    from '../_main.js'
 import {Ctrl}    from '../control.js';
 import {Maze}    from '../maze.js'
 import {GhsMgr}  from '../ghosts/_system.js'
-import {pacman as self} from './pacman.js';
+import {pacman}  from './pacman.js';
 
 const Step = PacStep
 const{SlowLevel,SlowRate}=Step
@@ -24,14 +24,14 @@ export class Steer {
 	}
 	get canTurn() {
 		return this.#dir != null
-			&& !self.passedTileCenter
-			&& !self.collidedWithWall(this.#dir)
+			&& !pacman.passedTileCenter
+			&& !pacman.collidedWithWall(this.#dir)
 	}
 	get collidedWithWall() {
-		return !this.#turning && self.collidedWithWall()
+		return !this.#turning && pacman.collidedWithWall()
 	}
 	get stepInTile() {
-		const eating = Maze.hasDot(self.tileIdx)
+		const eating = Maze.hasDot(pacman.tileIdx)
 		return (
 			GhsMgr.isFright
 			? (eating? Step.EneEat : Step.Energized)
@@ -50,23 +50,23 @@ export class Steer {
 			this.#next = dir
 			return
 		}
-		if (self.hasAdjWall(dir)) {
+		if (pacman.hasAdjWall(dir)) {
 			this.#dir = dir
 			return
 		}
 		this.#dir = dir
-		if (self.passedTileCenter) {
-			self.orient = dir
-			self.setMoveDir(self.revDir)
+		if (pacman.passedTileCenter) {
+			pacman.orient = dir
+			pacman.setMoveDir(pacman.revDir)
 		}
 	}
 	#setMoveStep(divisor=1) {
-		self.justArrivedAtTile(divisor)
+		pacman.justArrivedAtTile(divisor)
 			&& (this.#step = this.stepInTile)
 	}
 	update(divisor=1) {
 		this.#setCornering(divisor)
-		self.setNextPos(divisor)
+		pacman.setNextPos(divisor)
 		this.#setMoveStep(divisor)
 		this.#endCornering()
 		this.#turnAround()
@@ -76,25 +76,25 @@ export class Steer {
 		const dir = this.#dir
 		if (this.canTurn && dir) {
 			this.#turning ||= true
-			self.orient = dir
-			self.setNextPos(divisor, dir)
+			pacman.orient = dir
+			pacman.setNextPos(divisor, dir)
 		}
 	}
 	#endCornering() {
-		if (this.#turning && self.passedTileCenter) {
+		if (this.#turning && pacman.passedTileCenter) {
 			this.#turning = false
 			this.#dir  = this.#next
 			this.#next = null
-			self.setMoveDir(self.orient)
+			pacman.setMoveDir(pacman.orient)
 		}
 	}
 	#turnAround() {
-		self.revOrient == self.dir
-			&& self.setMoveDir(self.orient)
+		pacman.revOrient == pacman.dir
+			&& pacman.setMoveDir(pacman.orient)
 	}
 	#stopAtWall() {
 		(this.#stopped = this.collidedWithWall)
-			&& (self.pos  = self.tilePos.mul(T))
+			&& (pacman.pos  = pacman.tilePos.mul(T))
 			&& (this.#dir = null)
 	}
 }
