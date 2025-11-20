@@ -31,15 +31,15 @@ export const Ctrl = new class {
 	get activeElem()    {return qS(':not(#startBtn):focus')}
 	get livesMax()      {return input('lvsRng').valueAsNumber}
 	get speed()         {return input('spdRng').valueAsNumber}
-	get alwaysChase()   {return input('chsChk').checked}
 	get consecutive()   {return input('onlChk').checked == false}
+	get alwaysChase()   {return input('chsChk').checked}
 	get unrestricted()  {return input('unrChk').checked}
 	get invincible()    {return input('invChk').checked}
 	get showTargets()   {return input('tgtChk').checked}
 	get showGridLines() {return input('grdChk').checked}
-	get isPractice()    {return this.isCheatMode || !this.isArcadeMode}
-	get isCheatMode()   {return this.speed<.7 || this.showTargets || this.invincible}
+	get usingCheats()   {return this.speed<.7 || this.showTargets || this.invincible}
 	get isArcadeMode()  {return this.consecutive && Menu.Level.index == 0}
+	get isPractice()    {return this.usingCheats || !this.isArcadeMode}
 
 	/** @param {boolean} [force] */
 	pause(force) {
@@ -80,7 +80,7 @@ export const Ctrl = new class {
 		ctx.save()
 		ctx.translate(T*0.1, T*18)
 		ctx.clearRect(0,-T,BW,T*3)
-		if (Ctrl.isCheatMode || spd != 'x1.0') {
+		if (Ctrl.usingCheats || spd != 'x1.0') {
 			drawText(0, h*0, Color.Inf[+(spd != 'x1.0') ], 'Speed'+spd, cfg)
 			drawText(0, h*1, Color.Inf[+Ctrl.invincible ], 'Invincible',cfg)
 			drawText(0, h*2, Color.Inf[+Ctrl.showTargets], 'Targets',   cfg)
