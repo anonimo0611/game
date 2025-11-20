@@ -7,14 +7,14 @@ import {GhsMgr}  from '../ghosts/_system.js'
 import {pacman}  from './pacman.js';
 
 const Step = PacStep
-const{SlowLevel,SlowRate}=Step
+const {SlowLevel,SlowRate}= Step
 
 export class Steer {
-	#dir  = /**@type {?Direction}*/(null)
-	#next = /**@type {?Direction}*/(null)
-	#step    = 0
-	#stopped = true
-	#turning = false
+	#nextDir  = /**@type {?Direction}*/(null)
+	#nextTurn = /**@type {?Direction}*/(null)
+	#step     = 0
+	#stopped  = true
+	#turning  = false
 	get step()    {return this.#step}
 	get stopped() {return this.#stopped}
 
@@ -23,9 +23,9 @@ export class Steer {
 		$win.offon('keydown.Steer', this.#steer.bind(this))
 	}
 	get canTurn() {
-		return this.#dir != null
+		return this.#nextDir != null
 			&& !pacman.passedTileCenter
-			&& !pacman.collidedWithWall(this.#dir)
+			&& !pacman.collidedWithWall(this.#nextDir)
 	}
 	get collidedWithWall() {
 		return !this.#turning && pacman.collidedWithWall()
@@ -47,14 +47,14 @@ export class Steer {
 			return
 
 		if (this.#turning) {
-			this.#next = dir
+			this.#nextTurn = dir
 			return
 		}
 		if (pacman.hasAdjWall(dir)) {
-			this.#dir = dir
+			this.#nextDir = dir
 			return
 		}
-		this.#dir = dir
+		this.#nextDir = dir
 		if (pacman.passedTileCenter) {
 			pacman.orient = dir
 			pacman.setMoveDir(pacman.revDir)
@@ -73,7 +73,7 @@ export class Steer {
 		this.#stopAtWall()
 	}
 	#setCornering(divisor=1) {
-		const dir = this.#dir
+		const dir = this.#nextDir
 		if (this.canTurn && dir) {
 			this.#turning ||= true
 			pacman.orient = dir
@@ -82,19 +82,19 @@ export class Steer {
 	}
 	#endCornering() {
 		if (this.#turning && pacman.passedTileCenter) {
-			this.#turning = false
-			this.#dir  = this.#next
-			this.#next = null
+			this.#turning  = false
+			this.#nextDir  = this.#nextTurn
+			this.#nextTurn = null
 			pacman.setMoveDir(pacman.orient)
 		}
 	}
 	#turnAround() {
-		pacman.revOrient == pacman.dir
+		pacman.dir == pacman.revOrient
 			&& pacman.setMoveDir(pacman.orient)
 	}
 	#stopAtWall() {
 		(this.#stopped = this.collidedWithWall)
 			&& (pacman.pos  = pacman.tilePos.mul(T))
-			&& (this.#dir = null)
+			&& (this.#nextDir = null)
 	}
 }
