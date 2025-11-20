@@ -39,15 +39,16 @@ export default class {
 	}={}) {
 		if (isBitten) return
 		const {ctx}= this
-		ctx.clear()
-		ctx.save()
-		function finalize() {
+		const finalize = ()=> {
 			ctx.restore()
 			mainCtx.save()
+			mainCtx.setAlpha(this.fadeOut?.alpha)
 			mainCtx.translate(x+size/4, y+size/4)
 			mainCtx.drawImage(ctx.canvas, -size/2, -size/2)
 			mainCtx.restore()
 		}
+		ctx.clear()
+		ctx.save()
 		ctx.translate(size/2, size/2)
 		ctx.scale(size/(100/GhsScale), size/(100/GhsScale))
 		ctx.fillStyle = !isFright
@@ -72,6 +73,7 @@ export default class {
 		finalize()
 	}
 	update() {
+		this.fadeOut?.update()
 		if (this.#resurrect?.update() === false)
 			this.#resurrect = null
 	}
