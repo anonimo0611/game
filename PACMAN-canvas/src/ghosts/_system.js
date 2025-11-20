@@ -83,10 +83,10 @@ export const GhsMgr = new class extends Common {
 
 	#initialize(_={}, /**@type {Ghost[]}*/...ghosts) {
 		GhsMgr.#animIdx = 0
-		ghosts.forEach((g,i)=> Ghosts[i] = g)
+		ghosts.forEach((g,i)=> Ghosts[i]=g)
 	}
 	#onRoundEnds() {
-		Ghosts.forEach(g=> g.sprite.setFadeOut())
+		Ghosts.forEach((g)=> g.sprite.setFadeOut())
 	}
 	#onPlaying() {
 		Sound.playSiren()
@@ -111,11 +111,11 @@ export const GhsMgr = new class extends Common {
 			this.#animIdx ^= +(!Timer.frozen && GhsMgr.animFlag)
 		AttackInWaves.update()
 		FrightMode.session?.update()
-		Ghosts.forEach(g=> g.update())
+		Ghosts.forEach(g=>g.update())
 	}
 	#draw(onFront=true) {
-		Ghosts.toReversed().forEach(g=>
-			g.isFright != onFront && g.draw()
+		Ghosts.toReversed().forEach(
+			g=> (g.isFright != onFront) && g.draw()
 		)
 	}
 	drawBehind() {
@@ -242,11 +242,12 @@ const FrightMode = function() {
 		get score()     {return PtsLst[this.#cCnt-1]}
 		get caughtAll() {return this.#cCnt == GhsType.Max}
 		get spriteIdx() {return this.#fCnt && this.#fIdx^1}
+
 		/** @readonly */
-		Dur = TimeTable[Game.clampedLv-1]
+		Duration = TimeTable[Game.clampedLv-1]
 		constructor() {
 			setReversalSig()
-			;(this.Dur == 0 && !State.isAttract)
+			;(this.Duration == 0 && !State.isAttract)
 				? $(Ghosts).trigger('Runaway')
 				: this.#toggle(true)
 		}
@@ -258,14 +259,14 @@ const FrightMode = function() {
 			Sound.toggleFrightMode(bool)
 		}
 		#flashing() {
-			const iv = (this.Dur == 1 ? 12:14)/Game.speed|0
+			const iv = (this.Duration == 1 ? 12:14)/Game.speed|0
 			this.#fIdx ^= Number(this.#fCnt++ % iv == 0)
 		}
 		update() {
 			if (State.isPlaying && !Timer.frozen) {
 				const et = (this.#tCnt++ * Game.interval)/1000
-				if (et >= this.Dur-2) this.#flashing()
-				if (et >= this.Dur || this.caughtAll) this.#toggle()
+				if (et >= this.Duration-2) this.#flashing()
+				if (et >= this.Duration || this.caughtAll) this.#toggle()
 			}
  		}
 	}

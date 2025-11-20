@@ -43,6 +43,7 @@ Color = freeze(new class {
 	GhostPts  = '#3CF'
 	FruitPts  = '#FFB8FF'
 	Extend    = '#F55'
+	BonusTxt  = '#F90'
 	Inf          = freeze(['#888','#F9E'])
 	FrightFaces  = freeze(['#F9F','#F00'])
 	FrightBodies = freeze(['#36A','#FFF'])
