@@ -45,10 +45,10 @@ const nonEnterKey = e=>
 /**
  @template T
  @param {string|number|undefined|null} key
- @param {{[key:string|number]:()=> T}} pattern
+ @param {{[key:string|number]:(_:void)=> T}} pattern
  @param {string} [separator]
 */const match = (key,pattern,separator='_')=> {
-	for (const k in pattern)
+	for (const k of keys(pattern))
 		if (k.split(separator).some(k=> k == key))
 			return pattern[k]()
 	return pattern['_']?.() ?? undefined
