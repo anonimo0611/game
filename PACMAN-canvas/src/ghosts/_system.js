@@ -242,10 +242,10 @@ const FrightMode = function() {
 	let   _session  = /**@type {?Session}*/(null)
 	const TimeTable = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	class Session {
-		#tCnt=0; #fCnt=0; #cCnt=0; #fIdx=1;
-		get score()     {return PtsLst[this.#cCnt-1]}
-		get caughtAll() {return this.#cCnt == GhsType.Max}
-		get spriteIdx() {return this.#fCnt && this.#fIdx^1}
+		#time=0; #flash=0; #caught=0; #fIdx=1;
+		get score()     {return PtsLst[this.#caught-1]}
+		get caughtAll() {return this.#caught == GhsType.Max}
+		get spriteIdx() {return this.#flash && this.#fIdx^1}
 
 		/** @readonly */
 		Duration = TimeTable[Game.clampedLv-1]
@@ -259,16 +259,16 @@ const FrightMode = function() {
 			_session = bool? this : null
 			$(Ghosts)
 				.trigger('FrightMode', bool)
-				.offon('Bitten', ()=> this.#cCnt++, bool)
+				.offon('Bitten', ()=> this.#caught++, bool)
 			Sound.toggleFrightMode(bool)
 		}
 		#flashing() {
 			const iv = (this.Duration == 1 ? 12:14)/Game.speed|0
-			this.#fIdx ^= Number(this.#fCnt++ % iv == 0)
+			this.#fIdx ^= Number(this.#flash++ % iv == 0)
 		}
 		update() {
 			if (State.isPlaying && !Timer.frozen) {
-				const et = (this.#tCnt++ * Game.interval)/1000
+				const et = (this.#time++ * Game.interval)/1000
 				if (et >= this.Duration-2) this.#flashing()
 				if (et >= this.Duration || this.caughtAll) this.#toggle()
 			}
