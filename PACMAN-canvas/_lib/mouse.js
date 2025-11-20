@@ -1,14 +1,14 @@
 export const Cursor = new class {
 	static {
 		let   timerId   = 0
-		const Distance  = 2
 		const LastPos   = Vec2.Zero
+		const MoveRange = 2
 		const HideDelay = 2000
 		document.body.addEventListener('mousemove', e=> {
 			Cursor.#setPos(e)
 			clearTimeout(timerId)
 			timerId = setTimeout(Cursor.hide, HideDelay)
-			Vec2.sqrMag(Cursor.pos,LastPos) > Distance**2 && Cursor.default()
+			Vec2.sqrMag(Cursor.pos,LastPos) > MoveRange**2 && Cursor.default()
 			LastPos.set(Cursor.pos)
 		})
 	}
