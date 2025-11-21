@@ -1,7 +1,7 @@
 const Duration = 300/Ticker.Interval
 const OpenMid  = 30 * PI/180
 const OpenMax  = 60 * PI/180
-const Rotation = new Map([[R,0],[D,PI/2],[L,PI],[U,PI*3/2]])
+const Rotation = new Map([[R,0],[D,PI/2],[L,PI],[U,-PI/2]])
 
 import {Dying} from './pacman_dying.js'
 export default class {

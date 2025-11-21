@@ -50,10 +50,10 @@ export const Wall = new class {
 		ctx.rotate(ci*PI/2)
 		ctx.beginPath()
 		switch(type) {
-		case 0: ctx.arc(T/2,T/2, T-OO,   PI,PI*3/2);break
-		case 1: ctx.arc(T/2,T/2, T/2+LO, PI,PI*3/2);break
-		case 2: ctx.arc(T/2,T/2, T/2-LO, PI,PI*3/2);break
-		case 3: ctx.arc(T/2,T/2, OO,     PI,PI*3/2);break
+		case 0: ctx.arc(T/2,T/2, T-OO,   PI,-PI/2);break
+		case 1: ctx.arc(T/2,T/2, T/2+LO, PI,-PI/2);break
+		case 2: ctx.arc(T/2,T/2, T/2-LO, PI,-PI/2);break
+		case 3: ctx.arc(T/2,T/2, OO,     PI,-PI/2);break
 		case 4:
 			ctx.moveTo(-LO, T/2)
 			ctx.arcTo (-LO, -LO, T/3-LO, -LO, T/3)
