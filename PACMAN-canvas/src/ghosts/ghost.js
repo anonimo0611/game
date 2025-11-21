@@ -29,18 +29,19 @@ export class Ghost extends Actor {
 	get isAngry()     {return false}
 	get chaseStep()   {return GhsStep.Base}
 	get chasePos()    {return pacman.center}
-	get chaseTile()   {return this.chasePos.divInt(T)}
+	get maxAlpha()    {return Ctrl.showTargets? .75:1}
 	get scatterTile() {return Vec2.new(24, 0)}
-	get maxAlpha()    {return Ctrl.showTargets? 0.75:1}
+	get chaseTile()   {return this.chasePos.divInt(T)}
+	get isStarted()   {return this.#isStarted}
+	get isFright()    {return this.#isFright}
+	get isNormWalk()  {return this.state.isWalk && !this.isFright}
+	get isBitten()    {return this.state.isBitten}
+	get isEscape()    {return this.state.isEscape || this.state.isReturn}
+
 	get spriteIdx()   {return GhsMgr.spriteIdx}
 	get animIdx()     {return GhsMgr.animIndex &  this.init.animFlag}
 	get isChasing()   {return GhsMgr.isChasing && this.isNormWalk}
 	get isScatter()   {return GhsMgr.isScatter && this.isNormWalk && !this.isAngry}
-	get isStarted()   {return this.#isStarted}
-	get isFright()    {return this.#isFright}
-	get isBitten()    {return this.state.isBitten}
-	get isEscape()    {return this.state.isEscape || this.state.isReturn}
-	get isNormWalk()  {return !this.isFright && this.state.isWalk}
 
 	/**
 	 @param {Direction} dir
@@ -124,7 +125,8 @@ export class Ghost extends Actor {
 	}
 	leaveHouse(deactivateGlobalDotCnt=false) {
 		pacman.resetTimer()
-		this.state.isIdle && this.state.to('GoOut')
+		this.state.isIdle &&
+		this.state.to('GoOut')
 		return deactivateGlobalDotCnt
 	}
 	#goOut({init,step,y,center:{x:cx}}=this) {
