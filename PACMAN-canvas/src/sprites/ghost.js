@@ -1,17 +1,17 @@
 import CBSprite from './ghost_cb.js'
 export default class {
-	#fadeOut   = /**@type {?FadeOut}*/(null)
-	#resurrect = /**@type {?FadeIn} */(null)
-
 	/** @readonly */ctx
-	/** @readonly */#CBSprite
+	/** @readonly */#spr
 	/** @param {ExtendedContext2D} ctx */
 	constructor(ctx) {
-		this.ctx = ctx
-		this.#CBSprite = new CBSprite(ctx)
+		this.ctx  = ctx
+		this.#spr = new CBSprite(ctx)
 	}
+	#fadeOut   = /**@type {?FadeOut}*/(null)
+	#resurrect = /**@type {?FadeIn} */(null)
 	setFadeOut()   {this.#fadeOut ||= new FadeOut(400)}
 	setResurrect() {this.#resurrect = new FadeIn (600)}
+
 	draw({
 		mainCtx=Ctx, x=0,y=0, idx=0,
 		animIdx   = 0,
@@ -45,7 +45,7 @@ export default class {
 			: Color.FrightBodies[spriteIdx]
 
 		if (isExposed) {
-			this.#CBSprite.hadake(animIdx)
+			this.#spr.hadake(animIdx)
 			return finalize()
 		}
 		if (!isEscape) {
@@ -62,7 +62,7 @@ export default class {
 				Right: ()=> this.#eyesLookingLR,
 				Up:    ()=> this.#eyesLookingUp,
 				Down:  ()=> this.#eyesLookingDown,
-				LowerR:()=> this.#CBSprite.bracketEyes,
+				LowerR:()=> this.#spr.bracketEyes,
 			})?.call(this,{orient,isRipped})
 		}
 		finalize()
@@ -83,8 +83,8 @@ export default class {
 			? this.#foot0()
 			: this.#foot1()
 		ctx.fill()
-		isRipped && this.#CBSprite.rippedBody()
-		isMended && this.#CBSprite.mendedStitch(animIdx)
+		isRipped && this.#spr.rippedBody()
+		isMended && this.#spr.mendedStitch(animIdx)
 	}
 	#foot0() {
 		const {ctx}= this
