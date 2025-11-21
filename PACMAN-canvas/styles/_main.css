@@ -131,18 +131,23 @@ body:is([data-state=Attract],[data-state=CoffBrk]) {
 #cfg {
 	height: var(--height);
 	display: flex;
-	gap: .4em;
+	gap: .5em;
 	justify-content: center;
 	align-items: center;
 	.checkboxes, .buttons {
-		font-size: .76rem;
+		font-size: .75rem;
 		height: 100%;
 		display: flex;
 		gap: .2em;
 		flex-direction: column;
 		justify-content: center;
-		label,button {display: block}
+		label,button    {display: block}
 		[data-for=keys] {cursor: help}
+		[type=checkbox] {margin-right: .1em}
+		#chsChk + chk-label {
+			display: inline-block;
+			font-size: 94%;
+		}
 	}
 	.buttons button {
 		font-size: .9em;

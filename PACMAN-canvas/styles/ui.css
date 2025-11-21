@@ -83,7 +83,7 @@ button,
 .button[data-disabled=false] {
 	background: var(--bgcolor);
 	display: inline-block;
-	padding: .3em;
+	padding: .2em;
 	&:hover, &:focus,
 	&.opened {border-color:var(--color-focus-border)}
 	&:active {border-color:var(--color-active-border)}
@@ -104,8 +104,8 @@ button,
 	appearance: none;
 	border: solid 2px transparent;
 	border-radius: 2px;
-	width:  .7em;
-	height: .7em;
+	width:  .8em;
+	height: .8em;
 	position: relative;
 	&:focus {
 		outline-offset: 2px;
@@ -122,11 +122,10 @@ button,
 			content: '';
 			border: solid #000;
 			border-width: 0 0 .1em .1em;
-			width:  calc(.6em - 2px);
-			height: calc(.4em - 1.5px);
+			width:  calc(.7em - 2px);
+			height: calc(.5em - 1.5px);
 			box-sizing: border-box;
 			position: absolute;
-			top: 1px;
 			rotate: -45deg;
 		}
 	}
