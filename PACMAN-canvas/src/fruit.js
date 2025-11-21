@@ -16,8 +16,9 @@ import * as Spr from './sprites/fruits.js'
 const TypeTable = freeze([0,1,2,2,3,3,4,4,5,5,6,6,7])
 const TargetPos = Vec2.new(BW/2, T*18.5).freeze()
 
+const Size = T*2
 const LvCounterCols = 7
-const LvCounterRect = freeze([T*2*6, BH-T*2, T*2*LvCounterCols, T*2])
+const LvCounterRect = freeze([Size*6, BH-Size, Size*LvCounterCols, Size])
 
 const FadeDur = 300
 let _tgtDisp  = true
@@ -62,7 +63,7 @@ export const Fruit = new class {
 		}
 	}
 	update() {
-		_fadeOut?.update() === false
+		_fadeOut?.update() == false
 			? Fruit.#resetTarget()
 			: Fruit.collidedWith()
 	}
@@ -90,7 +91,7 @@ export const Fruit = new class {
 		ctx.translate(x, y)
 		ctx.clearRect(0,0,w,h)
 		for (const i of range(begin, Game.level))
-			Spr.draw(ctx, Fruit.number(i), w-T-(T*2*(i-begin)), T)
+			Spr.draw(ctx, Fruit.number(i), w-T-Size*(i-begin), T)
 		ctx.restore()
 	}
 	#setImages() {
