@@ -10,18 +10,18 @@ const Step = PacStep
 const {SlowLevel,SlowRate}= Step
 
 export class Steer {
-	#nextDir  = /**@type {?Direction}*/(null)
-	#nextTurn = /**@type {?Direction}*/(null)
 	#step     = 0
 	#stopped  = true
 	#turning  = false
-	get step()    {return this.#step}
-	get stopped() {return this.#stopped}
-
+	#nextDir  = /**@type {?Direction}*/(null)
+	#nextTurn = /**@type {?Direction}*/(null)
 	constructor() {
 		$(()=> this.#step = this.stepInTile)
 		$win.offon('keydown.Steer', this.#steer.bind(this))
 	}
+	get step()    {return this.#step}
+	get stopped() {return this.#stopped}
+
 	get canTurn() {
 		return this.#nextDir != null
 			&& !pacman.passedTileCenter
