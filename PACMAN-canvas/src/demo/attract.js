@@ -1,5 +1,5 @@
 ﻿import {State}    from '../state.js'
-import {puts}     from '../message.js'
+import {print}     from '../message.js'
 import {Ctrl}     from '../control.js'
 import {Score}    from '../score.js'
 import {PtsMgr}   from '../points.js'
@@ -51,39 +51,39 @@ export class Attract {
 	}
 	draw() {
 		Score.draw()
-		puts(7, 5, null, 'CHARACTOR　/　NICKNAME')
+		print(7, 5, null, 'CHARACTOR　/　NICKNAME')
 		const
 		et = Ticker.elapsedTime/100
 		et > 10 && this.drawCharaGhost(GhsType.Akabei, 6)
-		et > 15 && puts( 8,  7, Color.Akabei, 'OIKAKE----')
-		et > 20 && puts(18,  7, Color.Akabei, '"AKABEI"')
+		et > 15 && print( 8,  7, Color.Akabei, 'OIKAKE----')
+		et > 20 && print(18,  7, Color.Akabei, '"AKABEI"')
 
 		et > 30 && this.drawCharaGhost(GhsType.Pinky,  9)
-		et > 35 && puts( 8, 10, Color.Pinky, 'MACHIBUSE--')
-		et > 40 && puts(19, 10, Color.Pinky, '"PINKY"')
+		et > 35 && print( 8, 10, Color.Pinky, 'MACHIBUSE--')
+		et > 40 && print(19, 10, Color.Pinky, '"PINKY"')
 
 		et > 50 && this.drawCharaGhost(GhsType.Aosuke, 12)
-		et > 55 && puts( 8, 13, Color.Aosuke, 'KIMAGURE--')
-		et > 60 && puts(18, 13, Color.Aosuke, '"AOSUKE"')
+		et > 55 && print( 8, 13, Color.Aosuke, 'KIMAGURE--')
+		et > 60 && print(18, 13, Color.Aosuke, '"AOSUKE"')
 
 		et > 70 && this.drawCharaGhost(GhsType.Guzuta, 15)
-		et > 75 && puts( 8, 16, Color.Guzuta, 'OTOBOKE---')
-		et > 80 && puts(18, 16, Color.Guzuta, '"GUZUTA"')
+		et > 75 && print( 8, 16, Color.Guzuta, 'OTOBOKE---')
+		et > 80 && print(18, 16, Color.Guzuta, '"GUZUTA"')
 		if (et > 85) {
 			drawDot(Ctx, 10, 24)
 			drawDot(Ctx, 10, 26, true, !this.powDisp)
-			puts(12.0, 25, null, DotScore)
-			puts(12.0, 27, null, PowScore)
-			puts(14.3, 25, null,'PTS', {size:SmallSize})
-			puts(14.3, 27, null,'PTS', {size:SmallSize})
+			print(12.0, 25, null, DotScore)
+			print(12.0, 27, null, PowScore)
+			print(14.3, 25, null,'PTS', {size:SmallSize})
+			print(14.3, 27, null,'PTS', {size:SmallSize})
 		}
 		if (et > 90) {
 			if (this.pacman.dir == L) {
 				drawDot(Ctx, 4, 19, true, !this.powDisp)
 			}
 			if (Ctrl.extendPts > 0) {
-				puts( 2.0, 30, Orange, `BONUS　PACMAN　FOR　${Ctrl.extendPts}`)
-				puts(24.3, 30, Orange, 'PTS', {size:SmallSize})
+				print( 2.0, 30, Orange, `BONUS　PACMAN　FOR　${Ctrl.extendPts}`)
+				print(24.3, 30, Orange, 'PTS', {size:SmallSize})
 			}
 		}
 		if (et > 105) {
