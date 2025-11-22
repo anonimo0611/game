@@ -5,36 +5,36 @@ export const Message = new class {
 	/**
 	 @param {number} col
 	 @param {number} row
-	 @param {?Cvs2DStyle} color
+	 @param {?Cvs2DStyle}   color
 	 @param {string|number} text
 	*/
-	drawText(col, row, color='', text='',
-		{ctx=Ctx, scaleX=1, face='Atari', size=T, style=''}={}
+	drawText(col, row, color, text,
+		{scaleX=1, face='Atari', size=T, style=''}={}
 	) {
-		ctx.save()
-		ctx.scale(scaleX, 1)
-		ctx.font = `${style} ${size}px ${face}`
-		ctx.fillStyle = color ?? 'white'
-		String(text).split('\n').forEach((txt,i)=>
-			ctx.fillText(txt, col*T+2, row*T-2 + size*i))
-		ctx.restore()
+		Ctx.save()
+		Ctx.scale(scaleX, 1)
+		Ctx.font = `${style} ${size}px ${face}`
+		Ctx.fillStyle = color ?? 'white'
+			String(text).split('\n').forEach((txt,i)=>
+				Ctx.fillText(txt, col*T+2, row*T-2 + size*i))
+		Ctx.restore()
 	}
 	#drawPausedText() {
 		(!Confirm.opened && Ticker.paused)
 			&& (Ticker.pausedCount & 32) == 0
-			&& drawText(11, 19, '#F00','PAUSED')
+			&& puts(11, 19, '#F00','PAUSED')
 	}
 	draw() {
 		this.#drawPausedText()
 		if (State.isStart)
-			drawText( 9, 13, '#0FF','PLAYER　ONE')
+			puts( 9, 13, '#0FF','PLAYER　ONE')
 
 		if (State.isStart
 		 || State.isReady)
-			drawText(11, 19, '#FF0','READY!')
+			puts(11, 19, '#FF0','READY!')
 
 		if (State.isTitle
 		 || State.isGameOver)
-		 	drawText( 9, 19, '#F00','GAME　　OVER')
+		 	puts( 9, 19, '#F00','GAME　　OVER')
 	}
-}, {drawText}=Message
+}, {drawText:puts}=Message

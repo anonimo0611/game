@@ -1,106 +1,97 @@
 ﻿import {State}    from '../state.js'
+import {puts}     from '../message.js'
 import {Ctrl}     from '../control.js'
 import {Score}    from '../score.js'
 import {PtsMgr}   from '../points.js'
 import {Fruit}    from '../fruit.js'
 import {drawDot}  from '../maze.js'
-import {drawText} from '../message.js'
 import {Pacman}   from '../pacman.js'
 import {GhsMgr}   from '../ghosts/_system.js'
 import {Ghost}    from '../ghosts/ghost.js'
 import {RunTimer} from './_run_timer.js'
 
-const Small = T*0.68
-const Where = freeze({Char:0,Demo:1,Max:2})
-
 let _attract = /**@type {?Attract}*/(null)
+
+const {Orange}  = Color
+const SmallSize = T*0.68
 
 export class Attract {
 	static {
 		State.on({Attract:()=> _attract = new Attract})
 		$('.DemoBtn').on({click:()=> State.to('Attract')})
 	}
-	static draw() {
-		_attract?.draw()
-		return State.isAttract
-	}
 	static update() {
 		 RunTimer.update()
 		_attract?.update()
 	}
+	static draw() {
+		_attract?.draw()
+		return State.isAttract
+	}
+	pacman  = new Pacman
+	ghosts  = /**@type {Ghost[]}*/([])
+	powDisp = 1
 	pacVelX = -BW/180
 	ghsVelX = -BW/169
-	powDisp = 1
-	pacman  = new Pacman
-	ghsList = /**@type {Ghost[][]}*/([])
 
 	/** @private */
 	constructor() {
-		this.setActors()
-		GhsMgr.trigger('Init', this.ghsList[Where.Demo])
+		range(GhsType.Max).forEach(i=> this.setActor(i))
+		GhsMgr.trigger('Init', this.ghosts)
 		$onNS('.Attract', {click_keydown_blur:this.quit})
 	}
-	setActors() {
-		for (const w of range(Where.Max))
-			for (const i of range(GhsType.Max))
-				this.setActor(w, i)
+	setActor(type=0) {
+		const
+		g = new Ghost(L, {type,tile:[Cols+6+(type*2),19]})
+		g.type == 0 && this.pacman.pos.set(g.x-(T*3.5), g.y)
+		this.ghosts.push(g)
 	}
-	setActor(where=0, idx=0) {
-		const g = new Ghost(where?L:R, {idx,animFlag:where?1:0})
-		if (where) {
-			g.pos.set(BW+(T*6)+(T*2*idx), T*19)
-			g.idx == 0 && this.pacman.pos.set(g.x-T*3.5, g.y)
-		}
-		(this.ghsList[where] ||= []).push(g)
+	drawCharaGhost(type=0, row=0) {
+		this.ghosts[0].sprite.draw({type, x:T*5, y:T*row, orient:R})
 	}
 	draw() {
-		const et = Ticker.elapsedTime/100
-		Score.draw(),drawText(7,5, null,'CHARACTOR　/　NICKNAME')
-		et > 10 && this.drawGhost(Where.Char, GhsType.Akabei, 6)
-		et > 15 && drawText( 8, 7, Color.Akabei,'OIKAKE----')
-		et > 20 && drawText(18, 7, Color.Akabei,'"AKABEI"')
+		Score.draw()
+		puts(7, 5, null, 'CHARACTOR　/　NICKNAME')
+		const
+		et = Ticker.elapsedTime/100
+		et > 10 && this.drawCharaGhost(GhsType.Akabei, 6)
+		et > 15 && puts( 8,  7, Color.Akabei, 'OIKAKE----')
+		et > 20 && puts(18,  7, Color.Akabei, '"AKABEI"')
 
-		et > 30 && this.drawGhost(Where.Char, GhsType.Pinky,  9)
-		et > 35 && drawText( 8,10, Color.Pinky, 'MACHIBUSE--')
-		et > 40 && drawText(19,10, Color.Pinky, '"PINKY"')
+		et > 30 && this.drawCharaGhost(GhsType.Pinky,  9)
+		et > 35 && puts( 8, 10, Color.Pinky, 'MACHIBUSE--')
+		et > 40 && puts(19, 10, Color.Pinky, '"PINKY"')
 
-		et > 50 && this.drawGhost(Where.Char, GhsType.Aosuke, 12)
-		et > 55 && drawText( 8,13, Color.Aosuke,'KIMAGURE--')
-		et > 60 && drawText(18,13, Color.Aosuke,'"AOSUKE"')
+		et > 50 && this.drawCharaGhost(GhsType.Aosuke, 12)
+		et > 55 && puts( 8, 13, Color.Aosuke, 'KIMAGURE--')
+		et > 60 && puts(18, 13, Color.Aosuke, '"AOSUKE"')
 
-		et > 70 && this.drawGhost(Where.Char, GhsType.Guzuta, 15)
-		et > 75 && drawText( 8,16, Color.Guzuta,'OTOBOKE---')
-		et > 80 && drawText(18,16, Color.Guzuta,'"GUZUTA"')
+		et > 70 && this.drawCharaGhost(GhsType.Guzuta, 15)
+		et > 75 && puts( 8, 16, Color.Guzuta, 'OTOBOKE---')
+		et > 80 && puts(18, 16, Color.Guzuta, '"GUZUTA"')
 		if (et > 85) {
-			drawDot(Ctx, 10,24)
-			this.powDisp && drawDot(Ctx, 10,26, true)
-			drawText(12.0,25, null, DotScore)
-			drawText(12.0,27, null, PowScore)
-			drawText(14.3,25, null, 'PTS', {size:Small})
-			drawText(14.3,27, null, 'PTS', {size:Small})
+			drawDot(Ctx, 10, 24)
+			drawDot(Ctx, 10, 26, true, !this.powDisp)
+			puts(12.0, 25, null, DotScore)
+			puts(12.0, 27, null, PowScore)
+			puts(14.3, 25, null,'PTS', {size:SmallSize})
+			puts(14.3, 27, null,'PTS', {size:SmallSize})
 		}
 		if (et > 90) {
-			if (this.pacman.dir == L && this.powDisp) {
-				drawDot(Ctx, 4,19, true)
+			if (this.pacman.dir == L) {
+				drawDot(Ctx, 4, 19, true, !this.powDisp)
 			}
 			if (Ctrl.extendPts > 0) {
-				const {BonusTxt:c}= Color
-				drawText( 2.0,30, c,`BONUS　PACMAN　FOR　${Ctrl.extendPts}`)
-				drawText(24.3,30, c,'PTS', {size:Small})
+				puts( 2.0, 30, Orange, `BONUS　PACMAN　FOR　${Ctrl.extendPts}`)
+				puts(24.3, 30, Orange, 'PTS', {size:SmallSize})
 			}
 		}
 		if (et > 105) {
-			for (const i of range(GhsType.Max))
-				this.drawGhost(Where.Demo, i)
+			this.ghosts.forEach(g=> g.sprite.draw(g))
 			this.pacman.sprite.draw(this.pacman)
 			PtsMgr.drawGhostPts()
 		}
 		Fruit.drawLevelCounter()
-	}
-	drawGhost(where=0, gIdx=0, row=NaN) {
-		const ghost = this.ghsList[where][gIdx]
-		isFinite(row) && ghost.pos.set(T*5, T*row)
-		ghost.sprite.draw(ghost)
 	}
 	update() {
 		if (Ticker.elapsedTime <= 1e4+500) return
@@ -121,7 +112,7 @@ export class Attract {
 		this.updateGhosts()
 	}
 	updateGhosts() {
-		for (const g of this.ghsList[Where.Demo]) {
+		for (const g of this.ghosts) {
 			g.x += this.ghsVelX
 			g.crashWithPac({
 				pos: this.pacman.pos, radius: T/4,

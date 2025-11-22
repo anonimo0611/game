@@ -145,19 +145,18 @@ export const Maze = freeze(new class {
 	clearBgDot({tileIdx:i,tilePos:{x,y}}) {
 		DotSet.delete(i)
 		PowMap.delete(i)
-		drawDot(Bg.ctx, x,y, true, null)
+		drawDot(Bg.ctx, x,y, true, true)
 		return DotSet.size
 	}
 
 	/**
 	 @param {ExtendedContext2D} ctx
-	 @param {number}      col
-	 @param {number}      row
-	 @param {boolean}     isPow
-	 @param {?Cvs2DStyle} color
+	 @param {number} col
+	 @param {number} row
 	*/
-	drawDot(ctx, col,row, isPow=false, color=Color.Dot) {
-		const [x,y]= [col,row].map(n=>(n+.5)*T)
+	drawDot(ctx, col,row, isPow=false, hidden=false) {
+		const [x,y] = [col,row].map(n=>(n+.5)*T)
+		const color = !hidden? Color.Dot : null
 		ctx.fillCircle(x,y, T/(isPow? 2:8), color)
 	}
 	drawGrid() {

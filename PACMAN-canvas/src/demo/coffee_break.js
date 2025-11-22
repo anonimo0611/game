@@ -13,15 +13,15 @@ export class CoffBrk {
 		State.on({CoffBrk:(_, num=this.number)=>
 			this.#scene = new [Scene1,Scene2,Scene3][num-1]})
 	}
-	static get number() {
-		return (!Ctrl.isPractice && {2:1, 5:2, 9:3}[Game.level]) || -1
+	static update() {
+		this.#scene?.update()
 	}
 	static draw() {
 		this.#scene?.draw()
 		return State.isCoffBrk
 	}
-	static update() {
-		this.#scene?.update()
+	static get number() {
+		return (!Ctrl.isPractice && {2:1, 5:2, 9:3}[Game.level]) || -1
 	}
 	pacman  = new Pacman
 	akabei  = new Ghost

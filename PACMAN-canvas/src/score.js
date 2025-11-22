@@ -1,8 +1,8 @@
-import {Sound}    from '../_snd/sound.js'
-import {State}    from './state.js'
-import {Ctrl}     from './control.js'
-import {Lives}    from './lives.js'
-import {drawText} from './message.js'
+import {Sound} from '../_snd/sound.js'
+import {State} from './state.js'
+import {puts}  from './message.js'
+import {Ctrl}  from './control.js'
+import {Lives} from './lives.js'
 
 let _score = 0, _hiSco = 0
 let _saveS = 0, _saveH = 0
@@ -38,6 +38,20 @@ export const Score = new class {
 		if (!Ctrl.isPractice && _hiSco > hiSco)
 			localStorage.anopac_hiscore = _hiSco
 	}
+	get #UPDisp() {
+		return !State.isPlaying || Ticker.paused
+			? true : !!(Ticker.count & (Sound.ringing? 8:16))
+	}
+	get #UPColor() {
+		return (Sound.ringing? Color.Extend : null)
+	}
+	draw() {
+		puts(2,1, this.#UPColor, this.#UPDisp? '1UP':'')
+		puts(6,1, null, _score || '00')
+		Ctrl.isPractice
+			? puts(14,1, null, 'PRACTICE')
+			: puts(14,1, null, `HIGH　${_hiSco || '00'}`)
+	}
 	add(points=0) {
 		const score = _score + points
 		if (!Ctrl.isPractice && score > _hiSco) {
@@ -48,17 +62,5 @@ export const Score = new class {
 			Sound.play('bell')
 		}
 		_score = score
-	}
-	get #oneUpDisp() {
-		return !State.isPlaying || Ticker.paused
-			? true : !!(Ticker.count & (Sound.ringing? 8:16))
-	}
-	draw() {
-		const oneUpColor = (Sound.ringing? Color.Extend:null)
-		drawText(2,1, oneUpColor, (Score.#oneUpDisp? '1UP':''))
-		drawText(6,1, null, _score || '00')
-		Ctrl.isPractice
-			? drawText(14,1, null, 'PRACTICE')
-			: drawText(14,1, null, `HIGH　${_hiSco || '00'}`)
 	}
 }
