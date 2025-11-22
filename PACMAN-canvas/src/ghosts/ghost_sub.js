@@ -6,7 +6,7 @@ import {Ghost}  from './ghost.js'
 
 class Akabei extends Ghost {
 	constructor() {
-		super(L, {idx:0, tile:[13.5, 12]})
+		super(L, {type:0, tile:[13.5, 12]})
 	}
 	get isAngry()   {return GhsMgr.Elroy.angry}
 	get chaseStep() {return GhsMgr.Elroy.step}
@@ -14,7 +14,7 @@ class Akabei extends Ghost {
 
 class Pinky extends Ghost {
 	constructor() {
-		super(D, {idx:1, tile:[13.5, 15]})
+		super(D, {type:1, tile:[13.5, 15]})
 	}
 	get scatterTile() {
 		return Vec2.new(3, 0)
@@ -31,7 +31,7 @@ class Pinky extends Ghost {
 
 class Aosuke extends Ghost {
 	constructor() {
-		super(U, {idx:2, tile:[11.5, 15], align:-1})
+		super(U, {type:2, tile:[11.5, 15], align:-1})
 	}
 	get scatterTile() {
 		return Vec2.new(27, 33)
@@ -44,7 +44,7 @@ class Aosuke extends Ghost {
 
 class Guzuta extends Ghost {
 	constructor() {
-		super(U, {idx:3, tile:[15.5, 15], align:+1})
+		super(U, {type:3, tile:[15.5, 15], align:+1})
 	}
 	get scatterTile() {
 		return Vec2.new(0, 33)

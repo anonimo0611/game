@@ -1,14 +1,14 @@
-import {Sound}   from '../../_snd/sound.js'
-import {Game}    from '../_main.js'
-import {State}   from '../state.js'
-import {Ctrl}    from '../control.js'
-import {PtsMgr}  from '../points.js'
-import {Maze}    from '../maze.js'
-import {Actor}   from '../actor.js'
-import {pacman}  from '../player/pacman.js'
-import {GhsMgr}  from './_system.js'
-import * as Sys  from './_system.js'
-import Sprite    from '../sprites/ghost.js'
+import {Sound}  from '../../_snd/sound.js'
+import {Game}   from '../_main.js'
+import {State}  from '../state.js'
+import {Ctrl}   from '../control.js'
+import {PtsMgr} from '../points.js'
+import {Maze}   from '../maze.js'
+import {Actor}  from '../actor.js'
+import {pacman} from '../player/pacman.js'
+import {GhsMgr} from './_system.js'
+import * as Sys from './_system.js'
+import Sprite   from '../sprites/ghost.js'
 
 export class Ghost extends Actor {
 	#runaway   = -1
@@ -16,7 +16,7 @@ export class Ghost extends Actor {
 	#isStarted = false
 	#isFright  = false
 
-	/** @readonly */idx
+	/** @readonly */type
 	/** @readonly */init
 	/** @readonly */state
 
@@ -45,9 +45,9 @@ export class Ghost extends Actor {
 
 	/**
 	 @param {Direction} dir
-	 @param {{idx?:number, tile?:xyList, align?:-1|0|1, animFlag?:0|1}} cfg
+	 @param {{type?:number, tile?:xyList, align?:-1|0|1, animFlag?:0|1}} cfg
 	*/
-	constructor(dir=L, {idx=0,tile:[col,row]=[0,0],align=0,animFlag=1}={}) {
+	constructor(dir=L, {type=0,tile:[col,row]=[0,0],align=0,animFlag=1}={}) {
 		super()
 		this.on({
 			FrightMode:  this.#setFrightMode,
@@ -56,7 +56,7 @@ export class Ghost extends Actor {
 		})
 		this.pos.set(col*T,row*T)
 		this.dir   = dir
-		this.idx   = idx
+		this.type  = type
 		this.init  = freeze({...this.pos,align,animFlag})
 		this.state = freeze(new Sys.GhostState(this))
 	}
@@ -115,7 +115,7 @@ export class Ghost extends Actor {
 		default: this.#walkPath(this.step+.5|0)
 		}
 	}
-	#idle({idx,orient,step,center:{y:cy}}=this) {
+	#idle({type: idx,orient,step,center:{y:cy}}=this) {
 		if (!Ctrl.alwaysChase)
 			Sys.DotCounter.release(idx, b=> this.leaveHouse(b))
 		!this.state.isGoOut && this.move(
@@ -166,7 +166,7 @@ export class Ghost extends Actor {
 	}
 	#arrivedAtHome() {
 		this.sprite.setResurrect()
-		;(Ctrl.alwaysChase || this.idx == GhsType.Akabei)
+		;(Ctrl.alwaysChase || this.type == GhsType.Akabei)
 			? this.state.to('GoOut')
 			: this.state.to('Idle') && this.#idle(this)
 		!Timer.frozen && Sound.ghostArrivedAtHome()

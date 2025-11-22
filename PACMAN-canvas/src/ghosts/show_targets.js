@@ -36,7 +36,7 @@ export default new class {
 	#strokeLines(g) {
 		if (Timer.frozen || !g.isChasing)
 			return
-		match(g.idx, {
+		match(g.type, {
 			[GhsType.Pinky]:  ()=> this.#auxLines({g,ofst:4}),
 			[GhsType.Aosuke]: ()=> this.#auxLines({g,ofst:2}),
 			[GhsType.Guzuta]: ()=> this.#guzutaCircle(g),
@@ -49,7 +49,7 @@ export default new class {
 		const {x,y}= this.#getTargetPos(g)
 		Ctx.save()
 		Ctx.setAlpha(0.8)
-		Ctx.fillCircle  (x,y, T*0.4, Colors[g.idx])
+		Ctx.fillCircle  (x,y, T*0.4, Colors[g.type])
 		Ctx.strokeCircle(x,y, T*0.4, 'white', 4)
 		Ctx.restore()
 	}
@@ -61,18 +61,18 @@ export default new class {
 		Ctx.save()
 		Ctx.setAlpha(0.8)
 		Ctx.lineWidth   = 6
-		Ctx.strokeStyle = Colors[g.idx]
-		if (g.idx != GhsType.Pinky || !pacman.inTunnel) {
+		Ctx.strokeStyle = Colors[g.type]
+		if (g.type != GhsType.Pinky || !pacman.inTunnel) {
 			dir != U
 				? Ctx.newLinePath([x,y], fwdXY)
 				: Ctx.newLinePath([x,y], fwdXY).lineTo(...ofsXY)
 			Ctx.stroke()
 		}
-		if (g.idx == GhsType.Aosuke) {
+		if (g.type == GhsType.Aosuke) {
 			const tgtXY = g.chasePos.vals
 			const akaXY = GhsMgr.akaCenter.vals
 			Ctx.newLinePath(akaXY, ofsXY, tgtXY).stroke()
-			Ctx.fillCircle(...ofsXY, 8, Colors[g.idx])
+			Ctx.fillCircle(...ofsXY, 8, Colors[g.type])
 		}
 		Ctx.restore()
 	}
@@ -81,7 +81,7 @@ export default new class {
 		Ctx.save()
 		Ctx.translate(...pacman.center.vals)
 		Ctx.setAlpha(g.sqrMagToPacman < (T*8) ** 2 ? 0.4 : 0.8)
-		Ctx.strokeCircle(0,0, T*8, Colors[g.idx], 6)
+		Ctx.strokeCircle(0,0, T*8, Colors[g.type], 6)
 		Ctx.restore()
 	}
 }
