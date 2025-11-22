@@ -55,10 +55,10 @@ export const Ctrl = new class {
 		const data = Object.create(null)
 		MenuIds.forEach(id=> data[id] = Menu[id].index)
 		document.querySelectorAll('input').forEach(input=> {
-			switch(input.type) {
-			case 'range':   data[input.id] = input.value;  break
-			case 'checkbox':data[input.id] = input.checked;break
-			}
+			match(input.type, {
+			range:   ()=> {data[input.id] = input.value},
+			checkbox:()=> {data[input.id] = input.checked},
+			})
 		})
 		localStorage.anopacman = JSON.stringify(data)
 	}
@@ -67,10 +67,10 @@ export const Ctrl = new class {
 		const data = JSON.parse(localStorage.anopacman)
 		MenuIds.forEach(id=> Menu[id].index = data[id])
 		document.querySelectorAll('input').forEach(input=> {
-			switch(input.type) {
-			case 'range':   input.value   = data[input.id];break
-			case 'checkbox':input.checked = data[input.id];break
-			}$(input).trigger('input')
+			match(input.type, {
+			range:   ()=> {input.value   = data[input.id]},
+			checkbox:()=> {input.checked = data[input.id]},
+			});$(input).trigger('input')
 		})
 	}
 	#output() {
