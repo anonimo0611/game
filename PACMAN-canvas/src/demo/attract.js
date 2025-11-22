@@ -14,12 +14,13 @@ let _attract = /**@type {?Attract}*/(null)
 const{Orange}= Color, SmallSize = T*.68
 
 export class Attract {
-	static {
-		State.on({Attract:()=> _attract = new Attract})
+	static {State.on({Attract:this.new})}
+	static new() {
+		_attract = new Attract
 	}
 	static update() {
-		 RunTimer.update()
 		_attract?.update()
+		 RunTimer.update()
 	}
 	static draw() {
 		_attract?.draw()

@@ -8,10 +8,10 @@ import {Ghost}  from '../ghosts/ghost.js'
 import Sprite   from '../sprites/ghost_cb.js'
 
 export class CoffBrk {
-	static #scene = /**@type {?(Scene1|Scene2|Scene3)}*/(null)
-	static {
-		State.on({CoffBrk:(_, num=this.number)=>
-			this.#scene = new[Scene1,Scene2,Scene3][num-1]})
+	static #scene = /**@type {?Scene1|Scene2|Scene3}*/(null)
+	static {State.on({CoffBrk:(_,n=this.number)=> this.new(n)})}
+	static new(n=1) {
+		this.#scene = new [Scene1,Scene2,Scene3][n-1]
 	}
 	static update() {
 		this.#scene?.update()
@@ -21,7 +21,7 @@ export class CoffBrk {
 		return State.isCoffBrk
 	}
 	static get number() {
-		return (!Ctrl.isPractice && {2:1, 5:2, 9:3}[Game.level]) || -1
+		return !Ctrl.isPractice && {2:1, 5:2, 9:3}[Game.level] || -1
 	}
 	pacman  = new Pacman
 	akabei  = new Ghost
@@ -48,7 +48,8 @@ export class CoffBrk {
 		Sound.pause(Ticker.pause())
 	}
 	draw() {
-		State.last('FlashMaze') && Fruit.drawLevelCounter()
+		State.last('FlashMaze')
+			&& Fruit.drawLevelCounter()
 	}
 	end() {
 		$off('.CB')
@@ -70,8 +71,8 @@ class Scene1 extends CoffBrk {
 	}
 	turnBack() {
 		this.isFright = true
-		this.pacVelX *= -1.08
-		this.akaVelX *= -0.60
+		this.pacVelX *= -1.1
+		this.akaVelX *= -0.6
 		this.pacman.dir = this.akabei.dir = R
 	}
 	moveLeft() {
