@@ -70,7 +70,7 @@ export class Attract {
 		et > 80 && print(18, 16, Color.Guzuta, '"GUZUTA"')
 		if (et > 85) {
 			drawDot(Ctx, 10, 24)
-			drawDot(Ctx, 10, 26, true, !this.powDisp)
+			drawDot(Ctx, 10, 26, true, !!this.powDisp)
 			print(12.0, 25, null, DotScore)
 			print(12.0, 27, null, PowScore)
 			print(14.3, 25, null,'PTS', {size:SmallSize})
@@ -79,7 +79,7 @@ export class Attract {
 		if (et > 90) {
 			const {extendScore}= Ctrl
 			if (this.pacman.dir == L) {
-				drawDot(Ctx, 4, 19, true, !this.powDisp)
+				drawDot(Ctx, 4, 19, true, !!this.powDisp)
 			}
 			if (extendScore > 0) {
 				const text = `BONUS　PACMAN　FOR　${extendScore}`
