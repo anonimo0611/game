@@ -14,10 +14,8 @@ let _attract = /**@type {?Attract}*/(null)
 const{Orange}= Color, SmallSize = T*.68
 
 export class Attract {
-	static {State.on({Attract:this.new})}
-	static new() {
-		_attract = new Attract
-	}
+	static #begin() {_attract = new Attract}
+	static {State.on({Attract:this.#begin})}
 	static update() {
 		_attract?.update()
 		 RunTimer.update()

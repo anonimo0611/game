@@ -9,10 +9,8 @@ import Sprite   from '../sprites/ghost_cb.js'
 
 export class CoffBrk {
 	static #scene = /**@type {?Scene1|Scene2|Scene3}*/(null)
-	static {State.on({CoffBrk:(_,n=this.number)=> this.new(n)})}
-	static new(n=1) {
-		this.#scene = new [Scene1,Scene2,Scene3][n-1]
-	}
+	static #begin(n=1) {this.#scene=new[Scene1,Scene2,Scene3][n-1]}
+	static {State.on({CoffBrk:(_,n=this.number)=> this.#begin(n)})}
 	static update() {
 		this.#scene?.update()
 	}
