@@ -243,19 +243,18 @@ const FrightMode = function() {
 	const TimeTable = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	class Session {
 		#time=0; #flash=0; #caught=0; #fIdx=1;
+		/** @readonly */
+		Dur = TimeTable[Game.clampedLv-1]
 		get score()     {return Scores[this.#caught-1]}
 		get caughtAll() {return this.#caught == GhsType.Max}
 		get spriteIdx() {return this.#flash && this.#fIdx^1}
-
-		/** @readonly */
-		Duration = TimeTable[Game.clampedLv-1]
 		constructor() {
 			setReversalSig()
-			;(this.Duration == 0 && !State.isAttract)
+			this.Dur == 0 && !State.isAttract
 				? $(Ghosts).trigger('Runaway')
-				: this.#toggle(true)
+				: this.#set(true)
 		}
-		#toggle(bool=false) {
+		#set(bool=false) {
 			_session = bool? this : null
 			$(Ghosts)
 				.trigger('FrightMode', bool)
@@ -263,14 +262,14 @@ const FrightMode = function() {
 			Sound.toggleFrightMode(bool)
 		}
 		#flashing() {
-			const iv = (this.Duration == 1 ? 12:14)/Game.speed|0
-			this.#fIdx ^= Number(this.#flash++ % iv == 0)
+			const iv = (this.Dur == 1 ? 12:14)/Game.speed|0
+			this.#fIdx ^= +(this.#flash++ % iv == 0)
 		}
 		update() {
 			if (State.isPlaying && !Timer.frozen) {
 				const et = (this.#time++ * Game.interval)/1000
-				if (et >= this.Duration-2) this.#flashing()
-				if (et >= this.Duration || this.caughtAll) this.#toggle()
+				if (et>=this.Dur-2) this.#flashing()
+				if (et>=this.Dur || this.caughtAll) this.#set()
 			}
  		}
 	}
