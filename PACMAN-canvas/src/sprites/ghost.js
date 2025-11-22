@@ -13,7 +13,7 @@ export default class {
 	setResurrect() {this.#resurrect = new FadeIn (600)}
 
 	draw({
-		mainCtx=Ctx, x=0,y=0, idx=0,
+		mainCtx=Ctx, x=0,y=0, type=0,
 		animIdx   = 0,
 		spriteIdx = 0,
 		size      = T*2,
@@ -41,7 +41,7 @@ export default class {
 		ctx.translate(size/2, size/2)
 		ctx.scale(size/(100/GhsScale), size/(100/GhsScale))
 		ctx.fillStyle = !isFright
-			? Color[GhsNames[idx]]
+			? Color[GhsNames[type]]
 			: Color.FrightBodies[spriteIdx]
 
 		if (isExposed) {
