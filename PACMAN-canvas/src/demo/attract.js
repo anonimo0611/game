@@ -103,8 +103,8 @@ export class Attract {
 		if (this.pacman.dir == L
 		 && this.pacman.x <= T*4
 		) {
-			this.pacVelX *= -1.11
-			this.ghsVelX /= -2.14
+			this.pacVelX *= -1
+			this.ghsVelX /= -2
 			this.pacman.dir = R
 			GhsMgr.setFrightMode()
 		}
