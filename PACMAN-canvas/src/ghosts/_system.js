@@ -12,7 +12,7 @@ import {pacman} from '../player/pacman.js'
 import {Ghost}  from './ghost.js'
 import Target   from './show_targets.js'
 
-const PtsLst = Pts.Score.Ghost
+const Scores = Pts.Score.Ghost
 const Ghosts = /**@type {Ghost[]}*/([])
 
 /**
@@ -75,7 +75,7 @@ export const GhsMgr = new class extends Common {
 	get isChasing() {return AttackInWaves.isChasing}
 	get isScatter() {return AttackInWaves.isScatter}
 	get isFright()  {return FrightMode.session != null}
-	get score()     {return FrightMode.session?.score ?? PtsLst[0]}
+	get score()     {return FrightMode.session?.score ?? Scores[0]}
 	get spriteIdx() {return FrightMode.session?.spriteIdx ?? 0}
 	get caughtAll() {return FrightMode.session?.caughtAll ?? false}
 	get hasEscape() {return Ghosts.some(g=> g.isEscape)}
@@ -243,7 +243,7 @@ const FrightMode = function() {
 	const TimeTable = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	class Session {
 		#time=0; #flash=0; #caught=0; #fIdx=1;
-		get score()     {return PtsLst[this.#caught-1]}
+		get score()     {return Scores[this.#caught-1]}
 		get caughtAll() {return this.#caught == GhsType.Max}
 		get spriteIdx() {return this.#flash && this.#fIdx^1}
 
