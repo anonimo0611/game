@@ -70,7 +70,7 @@ export const View = function()
 		{
 			ghsSprite.draw({
 				x,y,size:S,
-				idx:  row-1,
+				type:  row-1,
 				animIdx: +(col % 2 != 0),
 				orient:/**@type {const}*/([U,U,L,L,D,D,R,R])[col],
 			})

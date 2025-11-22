@@ -93,7 +93,7 @@ class AnimData
 		data?.ghost.draw({
 			size:      S,
 			mainCtx:   ctx,
-			idx:       data.type-1,
+			type:      data.type-1,
 			animIdx:   data.animIdx,
 			orient:    data.orient,
 			isFright:  data.type    == Type.Actor.Fright,
