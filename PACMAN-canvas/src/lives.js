@@ -5,7 +5,7 @@ import Sprite  from './sprites/pacman.js'
 export const Lives = function() {
 	let   _left  = 0
 	const {ctx}  = HUD
-	const radius = T*.78, size = T*2
+	const Radius = T*.78, Size = T*2
 	const sprite = new Sprite(ctx,1)
 	function onChange() {
 		match(State.current, {
@@ -18,10 +18,10 @@ export const Lives = function() {
 	}
 	function draw() {
 		ctx.save()
-		ctx.translate(size, BH-size)
-		ctx.clearRect(0,0, size*5, size)
+		ctx.translate(Size, BH-Size)
+		ctx.clearRect(0,0, Size*5, Size)
 		for (const i of range(_left))
-			sprite.draw({radius,center:{x:size*i+T, y:T}})
+			sprite.draw({radius:Radius, center:{x:Size*i+T, y:T}})
 		ctx.restore()
 	}
 	$('#lvsRng').on({input:onChange})
