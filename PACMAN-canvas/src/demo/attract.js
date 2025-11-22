@@ -11,14 +11,11 @@ import {Ghost}    from '../ghosts/ghost.js'
 import {RunTimer} from './_run_timer.js'
 
 let _attract = /**@type {?Attract}*/(null)
-
-const {Orange}  = Color
-const SmallSize = T*0.68
+const{Orange}= Color, SmallSize = T*.68
 
 export class Attract {
 	static {
 		State.on({Attract:()=> _attract = new Attract})
-		$('.DemoBtn').on({click:()=> State.to('Attract')})
 	}
 	static update() {
 		 RunTimer.update()
@@ -28,11 +25,12 @@ export class Attract {
 		_attract?.draw()
 		return State.isAttract
 	}
-	pacman  = new Pacman
-	ghosts  = /**@type {Ghost[]}*/([])
 	powDisp = 1
 	pacVelX = -BW/180
 	ghsVelX = -BW/169
+
+	pacman = new Pacman
+	ghosts = /**@type {Ghost[]}*/([])
 
 	/** @private */
 	constructor() {
@@ -47,7 +45,7 @@ export class Attract {
 		this.ghosts.push(g)
 	}
 	drawCharaGhost(type=0, row=0) {
-		this.ghosts[0].sprite.draw({type, x:T*5, y:T*row, orient:R})
+		this.ghosts[0].sprite.draw({type,orient:R,x:(T*5),y:(T*row)})
 	}
 	draw() {
 		Score.draw()
@@ -78,12 +76,14 @@ export class Attract {
 			print(14.3, 27, null,'PTS', {size:SmallSize})
 		}
 		if (et > 90) {
+			const {extendScore}= Ctrl
 			if (this.pacman.dir == L) {
 				drawDot(Ctx, 4, 19, true, !this.powDisp)
 			}
-			if (Ctrl.extendPts > 0) {
-				print( 2.0, 30, Orange, `BONUS　PACMAN　FOR　${Ctrl.extendPts}`)
-				print(24.3, 30, Orange, 'PTS', {size:SmallSize})
+			if (extendScore > 0) {
+				const text = `BONUS　PACMAN　FOR　${extendScore}`
+				print( 2.0, 30, Orange, text)
+				print(24.3, 30, Orange,'PTS', {size:SmallSize})
 			}
 		}
 		if (et > 105) {
@@ -115,7 +115,7 @@ export class Attract {
 		for (const g of this.ghosts) {
 			g.x += this.ghsVelX
 			g.crashWithPac({
-				pos: this.pacman.pos, radius: T/4,
+				pos:this.pacman.pos, radius:T/4,
 				release:()=> GhsMgr.caughtAll && State.to('Attract')
 			})
 		}
@@ -125,4 +125,4 @@ export class Attract {
 		State.to('Title')
 		$off('.Attract')
 	}
-}
+} $('.DemoBtn').on({click:()=> State.to('Attract')})

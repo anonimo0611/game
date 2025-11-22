@@ -27,7 +27,7 @@ export const Ctrl = new class {
 		Ctrl.#output()
 		Ctrl.#fitToViewport()
 	}
-	get extendPts()     {return +Menu.Extend.value}
+	get extendScore()   {return +Menu.Extend.value}
 	get activeElem()    {return qS(':not(#startBtn):focus')}
 	get livesMax()      {return input('lvsRng').valueAsNumber}
 	get speed()         {return input('spdRng').valueAsNumber}

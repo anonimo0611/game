@@ -11,7 +11,7 @@ export class CoffBrk {
 	static #scene = /**@type {?(Scene1|Scene2|Scene3)}*/(null)
 	static {
 		State.on({CoffBrk:(_, num=this.number)=>
-			this.#scene = new [Scene1,Scene2,Scene3][num-1]})
+			this.#scene = new[Scene1,Scene2,Scene3][num-1]})
 	}
 	static update() {
 		this.#scene?.update()
