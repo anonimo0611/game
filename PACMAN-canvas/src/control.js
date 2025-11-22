@@ -4,7 +4,7 @@ import {Confirm} from '../_lib/confirm.js'
 import {Menu}    from './ui.js'
 import {MenuIds} from './ui.js'
 import {State}   from './state.js'
-import {print}    from './message.js'
+import {print}   from './message.js'
 import {Score}   from './score.js'
 
 export const

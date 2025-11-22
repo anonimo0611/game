@@ -1,6 +1,6 @@
 import {Sound} from '../_snd/sound.js'
 import {State} from './state.js'
-import {print}  from './message.js'
+import {print} from './message.js'
 import {Ctrl}  from './control.js'
 import {Lives} from './lives.js'
 
@@ -57,7 +57,7 @@ export const Score = new class {
 		if (!Ctrl.isPractice && score > _hiSco) {
 			_hiSco = score
 		}
-		if (between(Ctrl.extendPts, _score+1, score)) {
+		if (between(Ctrl.extendScore, _score+1, score)) {
 			Lives.append()
 			Sound.play('bell')
 		}
