@@ -3,32 +3,35 @@ const {defineProperty,entries,freeze,hasOwn,keys,values}= Object
 const {abs,ceil,floor,max,min,PI,random,round,sqrt,trunc:int}= Math
 const dRoot = document.getElementsByTagName('html')[0]
 
-/** @param {string} elementId */
-const byId = elementId=>
-	document.getElementById(elementId)
+/**
+ @param {string} elementId
+*/const byId = elementId=> document.getElementById(elementId)
 
-/**@param {WheelEvent|JQuery.TriggeredEvent} e */
-const wheelDeltaY = e=>
-	/**@type {WheelEvent}*/((e instanceof WheelEvent)? e : e.originalEvent)
-		?.deltaY ?? 0
+/**
+ @param {WheelEvent|JQuery.TriggeredEvent} e
+*/const wheelDeltaY = e=>
+	/**@type {WheelEvent}*/
+	(e instanceof WheelEvent? e : e.originalEvent)?.deltaY ?? 0
 
-/** @param {KeyboardEvent|JQuery.KeyboardEventBase} e */
-const keyRepeat = e=>
-	((e instanceof KeyboardEvent)? e : e.originalEvent)
-		?.repeat ?? false
+/**
+ @param {KeyboardEvent|JQuery.KeyboardEventBase} e
+*/const keyRepeat = e=>
+	(e instanceof KeyboardEvent? e : e.originalEvent)?.repeat ?? false
 
-/** @param {KeyboardEvent|JQuery.KeyboardEventBase} e */
-const isCombiKey = e=>
-	(e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
+/**
+ @param {KeyboardEvent|JQuery.KeyboardEventBase} e
+*/const isCombiKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
-/** @param {KeyboardEvent|JQuery.KeyboardEventBase} e */
-const isEnterKey = e=> /^(\x20|Enter)$/.test(e.key)
+/**
+ @param {KeyboardEvent|JQuery.KeyboardEventBase} e
+*/const isEnterKey = e=> /^(\x20|Enter)$/.test(e.key)
 
-/** @param {KeyboardEvent|JQuery.KeyboardEventBase|JQuery.TriggeredEvent} e */
+/**
+ @param {KeyboardEvent|JQuery.KeyboardEventBase|JQuery.TriggeredEvent} e */
 const nonEnterKey = e=>
 	(e instanceof KeyboardEvent)
 		? !isEnterKey(e)
-		: (e.originalEvent instanceof KeyboardEvent)
+		: e.originalEvent instanceof KeyboardEvent
 			&& !isEnterKey(e.originalEvent)
 
 /**

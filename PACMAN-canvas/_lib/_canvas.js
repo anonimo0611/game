@@ -2,14 +2,11 @@
 /** @typedef {string|CanvasGradient|CanvasPattern} Cvs2DStyle */
 
 class ExtendedContext2D extends CanvasRenderingContext2D {
-	/** @param {HTMLCanvasElement} cvs */
-	constructor(cvs, opts={}) {
+	constructor(/**@type {HTMLCanvasElement}*/cvs, opts={}) {
 		try {super()} catch(e){}
 		return Object.setPrototypeOf(cvs.getContext('2d',opts), new.target.prototype)
 	}
-
-	/** @returns {readonly [width:number, height:number]} */
-	get size()   {return [this.width, this.height]}
+	get size()   {return ({w:this.width, h:this.height})}
 	get width()  {return this.canvas.width}
 	get height() {return this.canvas.height}
 
@@ -211,7 +208,7 @@ const canvas2D = (id, width, height=width)=> {
 		? /**@type {HTMLCanvasElement}*/(byId(id))
 		: document.createElement('canvas')
 	const ctx  = new ExtendedContext2D(cvs).resize(width,height)
-	const [w,h]= ctx.size
+	const {w,h}= ctx.size
 	const vals = /**@type {readonly[cvs,ctx,w:number,h:number]}*/([cvs,ctx,w,h])
 	return freeze({cvs,ctx,w,h,vals})
 }
