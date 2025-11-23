@@ -1,5 +1,6 @@
 import CBSprite from './ghost_cb.js'
 export default class {
+	/** @typedef {Direction|'Bracket'} orient */
 	/** @readonly */ctx
 	/** @readonly */#spr
 	/** @param {ExtendedContext2D} ctx */
@@ -13,11 +14,12 @@ export default class {
 	setResurrect() {this.#resurrect = new FadeIn (600)}
 
 	draw({
-		mainCtx=Ctx, x=0,y=0, type=0,
+		mainCtx=Ctx,x=0,y=0,
+		type      = 0,
 		animIdx   = 0,
 		spriteIdx = 0,
 		size      = T*2,
-		orient    = /**@type {Direction|'LowerR'}*/(L),
+		orient    = /**@type {orient}*/(L),
 		isFright  = false,
 		isBitten  = false,
 		isEscape  = false,
@@ -58,18 +60,18 @@ export default class {
 		}
 		if (!isFright) {
 			match(orient, {
-				Left:  ()=> this.#eyesLookingLR,
-				Right: ()=> this.#eyesLookingLR,
-				Up:    ()=> this.#eyesLookingUp,
-				Down:  ()=> this.#eyesLookingDown,
-				LowerR:()=> this.#spr.bracketEyes,
+				Left:   ()=> this.#eyesLookingLR,
+				Right:  ()=> this.#eyesLookingLR,
+				Up:     ()=> this.#eyesLookingUp,
+				Down:   ()=> this.#eyesLookingDown,
+				Bracket:()=> this.#spr.bracketEyes,
 			})?.call(this,{orient,isRipped})
 		}
 		finalize()
 	}
 	update() {
 		this.#fadeOut?.update()
-		if (this.#resurrect?.update() === false)
+		if (this.#resurrect?.update() == false)
 			this.#resurrect = null
 	}
 	#body({animIdx=0, isRipped=false, isMended=false}) {

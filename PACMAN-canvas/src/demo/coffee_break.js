@@ -122,7 +122,7 @@ class Scene2 extends CoffBrk {
 				this.akaEyes  = U
 				this.isRipped = true
 			},
-			150:()=> {this.akaEyes = 'LowerR'},
+			150:()=> {this.akaEyes = 'Bracket'},
 			270:()=> {this.end()},
 		})
 	}
