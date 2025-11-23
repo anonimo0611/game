@@ -239,17 +239,16 @@ const Elroy = function() {
 }()
 
 const FrightMode = function() {
-	let   _session  = /**@type {?Session}*/(null)
+	let   _session  = /**@type {?Readonly<Session>}*/(null)
 	const TimeTable = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	class Session {
 		#time=0; #flash=0; #caught=0; #fIdx=1;
-		/** @readonly */
-		Dur = TimeTable[Game.clampedLv-1]
 		get score()     {return Scores[this.#caught-1]}
 		get caughtAll() {return this.#caught == GhsType.Max}
 		get spriteIdx() {return this.#flash && this.#fIdx^1}
 		constructor() {
 			setReversalSig()
+			this.Dur = TimeTable[Game.clampedLv-1]
 			this.Dur == 0 && !State.isAttract
 				? $(Ghosts).trigger('Runaway')
 				: this.#set(true)
