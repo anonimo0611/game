@@ -41,7 +41,8 @@ export default class _State {
 	 @param {{[key:string]:JQWindowHandler}} v
 	*/
 	on(v) {
-		entries(v).forEach(([ev,fn])=> $win.on(_toSp(ev,this.default), fn))
+		for (const [ev,fn] of entries(v))
+			$win.on(underscoreToSp(ev,this.default), fn)
 		return this
 	}
 

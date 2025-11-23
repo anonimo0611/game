@@ -75,7 +75,7 @@ const nonEnterKey = e=>
 
 /**
  @param {string} str
-*/const _toSp = (str,prefix='')=> str.indexOf('_') != -1
+*/const underscoreToSp = (str,prefix='')=> str.indexOf('_') != -1
  	? prefix.trim()+str.trim().replace(/_/g,'\x20')
 	: str.trim()
 
@@ -129,7 +129,7 @@ const nonEnterKey = e=>
  @param {number}   r1
  @param {number}  [r2]
 */const circleCollision = (v1,v2,r1,r2=r1)=>
-	(v1.x-v2.x)**2 + (v1.y-v2.y)**2 <= (r1+(r2 ?? r1))**2
+	(v1.x-v2.x)**2 + (v1.y-v2.y)**2 <= (r1+r2)**2
 
 /**
  @param {number} deg
@@ -158,7 +158,7 @@ const $doc = $(document)
 
 /**
  @param {string} events
-*/const $off = events=> $win.off(_toSp(events))
+*/const $off = events=> $win.off(underscoreToSp(events))
 
 /**
  @param {string} ns
