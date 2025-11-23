@@ -114,7 +114,7 @@ export const GhsMgr = new class extends Common {
 		Ghosts.forEach(g=>g.update())
 	}
 	#draw(onFront=true) {
-		Ghosts.toReversed().forEach(
+		reverse(Ghosts).forEach(
 			g=> (g.isFright != onFront) && g.draw()
 		)
 	}
