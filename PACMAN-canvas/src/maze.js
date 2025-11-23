@@ -135,8 +135,8 @@ export const Maze = freeze(new class {
 	 @param {Ghost} Ghost
 	*/
 	ghostExitTile = ({originalTargetTile:o, tilePos:t})=>
-		o.y >= 10 || !PenOuter.contains(t)
-			? o : Vec2.new((t.x > Cols/2 && o.x > Cols/2 ? 21:6), 15)
+		o.y < 10 && PenOuter.contains(t)
+			? o.set(t.x>Cols/2 && o.x>Cols/2 ? 21:6, 15) : o
 
 	/**
 	 @param {{tileIdx:number, tilePos:Vec2}} tile
