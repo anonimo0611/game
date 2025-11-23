@@ -47,6 +47,13 @@ const nonEnterKey = e=>
 
 /**
  @template T
+ @param {T[]} array
+*/const reverse = function*(array) {
+	for (let i=array.length-1; i>=0; i--) yield array[i]
+}
+
+/**
+ @template T
  @param {string|number|undefined|null} key
  @param {{[key:string|number]:(_:void)=> T}} pattern
  @param {string} [separator]
