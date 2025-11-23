@@ -115,9 +115,9 @@ export class Ghost extends Actor {
 		default: this.#walkPath(this.step+.5|0)
 		}
 	}
-	#idle({type: idx,orient,step,center:{y:cy}}=this) {
+	#idle({type,orient,step,center:{y:cy}}=this) {
 		if (!Ctrl.alwaysChase)
-			Sys.DotCounter.release(idx, b=> this.leaveHouse(b))
+			Sys.DotCounter.release(type, b=> this.leaveHouse(b))
 		!this.state.isGoOut && this.move(
 			(cy+T*0.6-step > Maze.House.MiddleY && orient != D)? U:
 			(cy-T*0.6+step < Maze.House.MiddleY ? D:U)
