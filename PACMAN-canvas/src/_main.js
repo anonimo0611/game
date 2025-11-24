@@ -1,20 +1,21 @@
 import './ghosts/ghost_sub.js'
-import {Menu}      from './ui.js'
-import {Sound}     from '../_snd/sound.js'
-import {Cursor}    from '../_lib/mouse.js'
-import {State}     from './state.js'
-import {Ctrl,Form} from './control.js'
-import {Maze}      from './maze.js'
-import {Wall}      from './sprites/wall.js'
-import {Message}   from './message.js'
-import {Score}     from './score.js'
-import {Lives}     from './lives.js'
-import {Fruit}     from './fruit.js'
-import {Actor}     from './actor.js'
-import {pacman}    from './player/pacman.js'
-import {PtsMgr}    from './points.js'
-import {Attract}   from './demo/attract.js'
-import {CoffBrk}   from './demo/coffee_break.js'
+import {Cursor}  from '../_lib/mouse.js'
+import {Sound}   from '../_snd/sound.js'
+import {Menu}    from './ui.js'
+import {State}   from './state.js'
+import {Message} from './message.js'
+import {Ctrl}    from './control.js'
+import {Form}    from './control.js'
+import {Maze}    from './maze.js'
+import {Wall}    from './sprites/wall.js'
+import {Score}   from './score.js'
+import {Lives}   from './lives.js'
+import {Fruit}   from './fruit.js'
+import {Actor}   from './actor.js'
+import {pacman}  from './player/pacman.js'
+import {PtsMgr}  from './points.js'
+import {Attract} from './demo/attract.js'
+import {CoffBrk} from './demo/coffee_break.js'
 
 export const Game = new class {
 	static {$(this.setup)}
@@ -101,7 +102,7 @@ export const Game = new class {
 	}
 	#levelEnds() {
 		Game.#restarted = false
-		if (!Ctrl.consecutive) {
+		if (!Ctrl.endlessMode) {
 			State.to('Title')
 			return
 		}

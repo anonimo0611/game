@@ -31,14 +31,14 @@ export const Ctrl = new class {
 	get activeElem()    {return qS(':not(#startBtn):focus')}
 	get livesMax()      {return input('lvsRng').valueAsNumber}
 	get speed()         {return input('spdRng').valueAsNumber}
-	get consecutive()   {return input('onlChk').checked == false}
+	get endlessMode()   {return input('onlChk').checked == false}
 	get alwaysChase()   {return input('chsChk').checked}
 	get unrestricted()  {return input('unrChk').checked}
 	get invincible()    {return input('invChk').checked}
 	get showTargets()   {return input('tgtChk').checked}
 	get showGridLines() {return input('grdChk').checked}
 	get usingCheats()   {return this.speed<.7 || this.showTargets || this.invincible}
-	get isArcadeMode()  {return this.consecutive && Menu.Level.index == 0}
+	get isArcadeMode()  {return this.endlessMode && Menu.Level.index == 0}
 	get isPractice()    {return this.usingCheats || !this.isArcadeMode}
 
 	/** @param {boolean} [force] */
@@ -133,6 +133,7 @@ export const Ctrl = new class {
 		for (const menu of values(Menu)) {
 			menu.on({change:Ctrl.#save})
 		}
+		values(Menu).forEach(m=> m.on({change:Ctrl.#save}))
 		$win.on({resize:Ctrl.#fitToViewport})
 		$('input')    .on({input:Ctrl.#output})
 		$('#clearHi') .on({click:Ctrl.#clearHiConfirm})
