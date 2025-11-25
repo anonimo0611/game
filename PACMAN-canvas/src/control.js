@@ -133,7 +133,6 @@ export const Ctrl = new class {
 		for (const menu of values(Menu)) {
 			menu.on({change:Ctrl.#save})
 		}
-		values(Menu).forEach(m=> m.on({change:Ctrl.#save}))
 		$win.on({resize:Ctrl.#fitToViewport})
 		$('input')    .on({input:Ctrl.#output})
 		$('#clearHi') .on({click:Ctrl.#clearHiConfirm})
