@@ -38,15 +38,15 @@ export const Score = new class {
 		if (!Ctrl.isPractice && _hiSco > hiSco)
 			localStorage.anopac_hiscore = _hiSco
 	}
-	get #UPDisp() {
+	get #showUP() {
 		return !State.isPlaying || Ticker.paused
 			? true : !!(Ticker.count & (Sound.ringing? 8:16))
 	}
-	get #UPColor() {
+	get #color() {
 		return (Sound.ringing? Color.Extend : null)
 	}
 	draw() {
-		drawText(2,1, this.#UPColor, this.#UPDisp? '1UP':'')
+		drawText(2,1, this.#color, this.#showUP? '1UP':'')
 		drawText(6,1, null, _score || '00')
 		Ctrl.isPractice
 			? drawText(14,1, null, 'PRACTICE')

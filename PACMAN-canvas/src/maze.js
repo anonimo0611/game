@@ -68,11 +68,11 @@ class Tunnel {
 	}
 }
 class PowDot {
-	#disp = 1
+	#show = 1
 	draw() {
-		this.#disp ^= +!(Ticker.count % PowDotInterval)
+		this.#show ^= +!(Ticker.count % PowDotInterval)
 		for (const [,{x,y}] of PowMap) {
-			if (!State.isPlaying || Ticker.paused || this.#disp)
+			if (!State.isPlaying || Ticker.paused || this.#show)
 				Maze.drawDot(Ctx, x,y, true)
 		}
 	}

@@ -21,7 +21,7 @@ const LvCounterCols = 7
 const LvCounterRect = freeze([Size*6, BH-Size, Size*LvCounterCols, Size])
 
 const FadeDur = 300
-let _tgtDisp  = true
+let _showTgt  = true
 let _fadeOut  = /**@type {?FadeOut}*/(null)
 
 export const Fruit = new class {
@@ -44,19 +44,19 @@ export const Fruit = new class {
 	}
 	#resetTarget() {
 		_fadeOut = null
-		_tgtDisp = State.isTitle
+		_showTgt = State.isTitle
 	}
 	#setFadeOut() {
 		_fadeOut = new FadeOut(FadeDur/Game.speed)
 	}
 	#dotEaten() {
 		if (AppearDots.has(Maze.MaxDot - Maze.dotsLeft)) {
-			_tgtDisp = true
+			_showTgt = true
 			Fruit.#setHideTimer()
 		}
 	}
 	intersectsWith(pos=pacman.center) {
-		if (_tgtDisp && circleCollision(pos,TargetPos,T/2)) {
+		if (_showTgt && circleCollision(pos,TargetPos,T/2)) {
 			Fruit.#resetTarget()
 			Timer.cancel(Fruit) && Sound.play('fruit')
 			PtsMgr.set({key:Fruit, dur:2e3, pos:TargetPos})
@@ -71,7 +71,7 @@ export const Fruit = new class {
 		if (!State.isTitle
 		 && !State.isPlaying)
 			return
-		if (_tgtDisp && !Ticker.paused) {
+		if (_showTgt && !Ticker.paused) {
 			Ctx.save()
 			Ctx.setAlpha(_fadeOut?.alpha)
 			Ctx.translate(...TargetPos.vals)

@@ -24,7 +24,7 @@ export class Attract {
 		_attract?.draw()
 		return State.isAttract
 	}
-	powDisp = 1
+	showPow = 1
 	pacVelX = -BW/180
 	ghsVelX = -BW/169
 
@@ -68,7 +68,7 @@ export class Attract {
 		et > 80 && drawText(18, 16, Color.Guzuta, '"GUZUTA"')
 		if (et > 85) {
 			drawDot(Ctx, 10, 24)
-			drawDot(Ctx, 10, 26, true, !!this.powDisp)
+			drawDot(Ctx, 10, 26, true, !!this.showPow)
 			drawText(12.0, 25, null, DotPts)
 			drawText(12.0, 27, null, PowPts)
 			drawText(14.3, 25, null,'PTS', {size:SmallSize})
@@ -77,7 +77,7 @@ export class Attract {
 		if (et > 90) {
 			const {extendScore}= Ctrl
 			if (this.pacman.dir == L) {
-				drawDot(Ctx, 4, 19, true, !!this.powDisp)
+				drawDot(Ctx, 4, 19, true, !!this.showPow)
 			}
 			if (extendScore > 0) {
 				const text = `BONUS　PACMAN　FOR　${extendScore}`
@@ -94,7 +94,7 @@ export class Attract {
 	}
 	update() {
 		if (Ticker.elapsedTime <= 1e4+500) return
-		this.powDisp ^= +!(Ticker.count % PowDotInterval)
+		this.showPow ^= +!(Ticker.count % PowDotInterval)
 		!Timer.frozen && this.updateActors()
 	}
 	updateActors() {
