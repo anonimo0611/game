@@ -212,3 +212,4 @@ const canvas2D = (id, width, height=width)=> {
 	const vals = /**@type {readonly[cvs,ctx,w:number,h:number]}*/([cvs,ctx,w,h])
 	return freeze({cvs,ctx,w,h,vals})
 }
+
