@@ -6,7 +6,7 @@ const Rotation = new Map([[R,0],[D,PI/2],[L,PI],[U,-PI/2]])
 import {Dying} from './pacman_dying.js'
 export default class {
 	#dyingSpr   = /**@type {?Dying}*/(null)
-	#angularV   = 0
+	#mouthPhase = 0
 	#mouthAngle = 0
 
 	/** @readonly */ctx
@@ -24,7 +24,7 @@ export default class {
 	update({stopped=false}={}) {
 		if (stopped && this.#mouthAngle > OpenMid-PI/Duration/2)
 			return
-		const v = this.#angularV += PI/Duration
+		const v = this.#mouthPhase  += PI/Duration
 		this.#mouthAngle = OpenMax * abs(Math.sin(v))
 	}
 	draw({
