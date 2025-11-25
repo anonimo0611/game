@@ -7,23 +7,23 @@ import {Score}  from '../score.js'
 import {Maze}   from '../maze.js'
 import {Pacman} from '../pacman.js'
 import {GhsMgr} from '../ghosts/_system.js'
-import {Steer}   from './steer.js'
-import {TunnelEntered} from './tunnel.js'
+import {Mover}   from './mover.js'
+import {TunnelEntryMgr} from './tunnel.js'
 
 class PlayerPac extends Pacman {
-	#eatIdx     = 0
-	#notEaten   = 0
-	#steer      = new Steer()
-	#tunEntered = new TunnelEntered()
+	#eatIdx   = 0
+	#notEaten = 0
+	#mover    = new Mover()
+	#tunMgr   = new TunnelEntryMgr()
 
 	get showCenter()    {return Ctrl.showGridLines}
-	get translucent()   {return Ctrl.invincible || this.showCenter}
+	get isSemiTrans()   {return Ctrl.invincible || this.showCenter}
 	get dying()         {return State.isCrashed || State.isDying}
-	get closed()        {return State.isPlaying == false}
-	get maxAlpha()      {return this.translucent? .75:1}
-	get step()          {return this.#steer.step}
-	get stopped()       {return this.#steer.stopped}
-	get tunnelEntered() {return this.#tunEntered}
+	get mouseClosed()   {return State.isPlaying == false}
+	get maxAlpha()      {return this.isSemiTrans? .75:1}
+	get step()          {return this.#mover.step}
+	get stopped()       {return this.#mover.stopped}
+	get tunnelEntered() {return this.#tunMgr}
 	get timeNotEaten()  {return this.#notEaten * Game.interval}
 
 	constructor() {
@@ -36,7 +36,7 @@ class PlayerPac extends Pacman {
 	forwardPos(num=0) {
 		return Vec2[this.dir].mul(num*T).add(this.center)
 	}
-	forwardOfst(num=0) {
+	offsetTarget(num=0) {
 		const  ofstX = (this.dir == U ? -num : 0)
 		return this.forwardPos(num).addX(ofstX*T)
 	}
@@ -54,17 +54,17 @@ class PlayerPac extends Pacman {
 	}
 	update() {
 		this.updateFadeIn()
-		if (this.closed || this.hidden)
+		if (this.mouseClosed || this.hidden)
 			return
 		this.sprite.update(this)
 		this.#notEaten++
-		this.#tunEntered.update()
+		this.#tunMgr.update()
 		this.#behavior(this.step+.5|0)
 	}
 	#behavior(divisor=1) {
 		for (const _ of range(divisor)) {
 			this.#dotEaten(this)
-			this.#steer.update(divisor)
+			this.#mover.update(divisor)
 			if (this.stopped) break
 		}
 	}
@@ -81,11 +81,11 @@ class PlayerPac extends Pacman {
 			: Player.trigger('Eaten')
 	}
 	#powerDotEaten() {
-		Score.add(PowScore)
+		Score.add(PowPts)
 		GhsMgr.setFrightMode()
 	}
 	#smallDotEaten() {
-		Score.add(DotScore)
+		Score.add(DotPts)
 	}
 	#playSE() {
 		const id = (this.#eatIdx ^= 1) ? 'eat1':'eat0'

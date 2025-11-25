@@ -15,26 +15,26 @@ export const Message = new class {
 		Ctx.scale(scaleX, 1)
 		Ctx.font = `${style} ${size}px ${face}`
 		Ctx.fillStyle = color ?? 'white'
-			String(text).split('\n').forEach((txt,i)=>
-				Ctx.fillText(txt, col*T+2, row*T-2 + size*i))
+		String(text).split('\n').forEach((txt,i)=>
+			Ctx.fillText(txt, col*T+2, row*T-2 + size*i))
 		Ctx.restore()
 	}
 	#drawPausedText() {
 		(!Confirm.opened && Ticker.paused)
 			&& (Ticker.pausedCount & 32) == 0
-			&& print(11, 19, '#F00','PAUSED')
+			&& drawText(11, 19, '#F00','PAUSED')
 	}
 	draw() {
 		this.#drawPausedText()
 		if (State.isStart)
-			print( 9, 13, '#0FF','PLAYER　ONE')
+			drawText( 9, 13, '#0FF','PLAYER　ONE')
 
 		if (State.isStart
 		 || State.isReady)
-			print(11, 19, '#FF0','READY!')
+			drawText(11, 19, '#FF0','READY!')
 
 		if (State.isTitle
 		 || State.isGameOver)
-		 	print( 9, 19, '#F00','GAME　　OVER')
+		 	drawText( 9, 19, '#F00','GAME　　OVER')
 	}
-}, {drawText:print}=Message
+}, {drawText}=Message

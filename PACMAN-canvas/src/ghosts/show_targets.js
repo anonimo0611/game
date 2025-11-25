@@ -56,8 +56,8 @@ export default new class {
 	/** @param {{g:Ghost,ofst:number}} param */
 	#auxLines({g,ofst}) {
 		const {center:{x,y},dir}= pacman
-		const fwdXY = pacman.forwardPos (ofst).vals
-		const ofsXY = pacman.forwardOfst(ofst).vals
+		const fwdXY = pacman.forwardPos(ofst).vals
+		const ofsXY = pacman.offsetTarget(ofst).vals
 		Ctx.save()
 		Ctx.setAlpha(0.8)
 		Ctx.lineWidth   = 6

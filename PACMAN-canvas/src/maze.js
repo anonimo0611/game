@@ -60,7 +60,7 @@ class Tunnel {
 	Y = 15
 	EntranceL =  5.5
 	EntranceR = 22.5
-	whichSide({x=0,y=0}) {
+	findSide({x=0,y=0}) {
 		if (int(y/T) == this.Y) {
 			if (x/T <= this.EntranceL) return L
 			if (x/T >= this.EntranceR) return R
@@ -106,7 +106,7 @@ export const Maze = freeze(new class {
 	Top    = 1
 	Bottom = Rows-3
 	Map    = MapArr
-	DotMax = MapArr.filter(c=> DotChipSet.has(c)).length
+	MaxDot = MapArr.filter(c=> DotChipSet.has(c)).length
 	House  = freeze(new House)
 	PowDot = freeze(new PowDot)
 	Tunnel = freeze(new Tunnel)
@@ -121,7 +121,7 @@ export const Maze = freeze(new class {
 	 These tiles(x-y) forbidden ghosts from entering upward
 	 @type {ReadonlySet<string>}
 	*/
-	GhostNoEnter = new Set(['12-11','12-23','15-11','15-23'])
+	GhostNoEnterCoords = new Set(['12-11','12-23','15-11','15-23'])
 
 	/**
 	 Whether tile `row` coord is the top/bottom of the maze excluding dead space
@@ -134,7 +134,7 @@ export const Maze = freeze(new class {
 	 and the ghost is around the house, guide them outside of the area
 	 @param {Ghost} Ghost
 	*/
-	ghostExitTile = ({originalTargetTile:o, tilePos:t})=>
+	getGhostExitTile = ({originalTargetTile:o, tilePos:t})=>
 		o.y < 10 && PenOuter.contains(t)
 			? o.set(t.x>Cols/2 && o.x>Cols/2 ? 21:6, 15) : o
 

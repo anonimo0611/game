@@ -1,6 +1,6 @@
 import {Sound} from '../_snd/sound.js'
 import {State} from './state.js'
-import {print} from './message.js'
+import {drawText} from './message.js'
 import {Ctrl}  from './control.js'
 import {Lives} from './lives.js'
 
@@ -46,11 +46,11 @@ export const Score = new class {
 		return (Sound.ringing? Color.Extend : null)
 	}
 	draw() {
-		print(2,1, this.#UPColor, this.#UPDisp? '1UP':'')
-		print(6,1, null, _score || '00')
+		drawText(2,1, this.#UPColor, this.#UPDisp? '1UP':'')
+		drawText(6,1, null, _score || '00')
 		Ctrl.isPractice
-			? print(14,1, null, 'PRACTICE')
-			: print(14,1, null, `HIGH　${_hiSco || '00'}`)
+			? drawText(14,1, null, 'PRACTICE')
+			: drawText(14,1, null, `HIGH　${_hiSco || '00'}`)
 	}
 	add(points=0) {
 		const score = _score + points

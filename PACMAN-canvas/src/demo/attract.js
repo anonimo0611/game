@@ -1,5 +1,5 @@
 ﻿import {State}    from '../state.js'
-import {print}    from '../message.js'
+import {drawText}    from '../message.js'
 import {Ctrl}     from '../control.js'
 import {Score}    from '../score.js'
 import {PtsMgr}   from '../points.js'
@@ -48,31 +48,31 @@ export class Attract {
 	}
 	draw() {
 		Score.draw()
-		print(7, 5, null, 'CHARACTOR　/　NICKNAME')
+		drawText(7, 5, null, 'CHARACTOR　/　NICKNAME')
 		const
 		et = Ticker.elapsedTime/100
 		et > 10 && this.drawCharaGhost(GhsType.Akabei, 6)
-		et > 15 && print( 8,  7, Color.Akabei, 'OIKAKE----')
-		et > 20 && print(18,  7, Color.Akabei, '"AKABEI"')
+		et > 15 && drawText( 8,  7, Color.Akabei, 'OIKAKE----')
+		et > 20 && drawText(18,  7, Color.Akabei, '"AKABEI"')
 
 		et > 30 && this.drawCharaGhost(GhsType.Pinky,  9)
-		et > 35 && print( 8, 10, Color.Pinky, 'MACHIBUSE--')
-		et > 40 && print(19, 10, Color.Pinky, '"PINKY"')
+		et > 35 && drawText( 8, 10, Color.Pinky, 'MACHIBUSE--')
+		et > 40 && drawText(19, 10, Color.Pinky, '"PINKY"')
 
 		et > 50 && this.drawCharaGhost(GhsType.Aosuke, 12)
-		et > 55 && print( 8, 13, Color.Aosuke, 'KIMAGURE--')
-		et > 60 && print(18, 13, Color.Aosuke, '"AOSUKE"')
+		et > 55 && drawText( 8, 13, Color.Aosuke, 'KIMAGURE--')
+		et > 60 && drawText(18, 13, Color.Aosuke, '"AOSUKE"')
 
 		et > 70 && this.drawCharaGhost(GhsType.Guzuta, 15)
-		et > 75 && print( 8, 16, Color.Guzuta, 'OTOBOKE---')
-		et > 80 && print(18, 16, Color.Guzuta, '"GUZUTA"')
+		et > 75 && drawText( 8, 16, Color.Guzuta, 'OTOBOKE---')
+		et > 80 && drawText(18, 16, Color.Guzuta, '"GUZUTA"')
 		if (et > 85) {
 			drawDot(Ctx, 10, 24)
 			drawDot(Ctx, 10, 26, true, !!this.powDisp)
-			print(12.0, 25, null, DotScore)
-			print(12.0, 27, null, PowScore)
-			print(14.3, 25, null,'PTS', {size:SmallSize})
-			print(14.3, 27, null,'PTS', {size:SmallSize})
+			drawText(12.0, 25, null, DotPts)
+			drawText(12.0, 27, null, PowPts)
+			drawText(14.3, 25, null,'PTS', {size:SmallSize})
+			drawText(14.3, 27, null,'PTS', {size:SmallSize})
 		}
 		if (et > 90) {
 			const {extendScore}= Ctrl
@@ -81,8 +81,8 @@ export class Attract {
 			}
 			if (extendScore > 0) {
 				const text = `BONUS　PACMAN　FOR　${extendScore}`
-				print( 2.0, 30, Orange, text)
-				print(24.3, 30, Orange,'PTS', {size:SmallSize})
+				drawText( 2.0, 30, Orange, text)
+				drawText(24.3, 30, Orange,'PTS', {size:SmallSize})
 			}
 		}
 		if (et > 105) {

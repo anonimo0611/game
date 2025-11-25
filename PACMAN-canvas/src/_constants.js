@@ -2,8 +2,8 @@ const
 Rows     = 34,
 Cols     = 28,
 TileSize = 27,
-DotScore = 10,
-PowScore = 50,
+DotPts   = 10,
+PowPts   = 50,
 MoveStep = TileSize/4.5,
 
 /** Shorthand of TileSize */

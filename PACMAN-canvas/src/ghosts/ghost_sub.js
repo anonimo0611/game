@@ -20,7 +20,7 @@ class Pinky extends Ghost {
 		return Vec2.new(3, 0)
 	}
 	get chasePos() {
-		const pos = pacman.forwardOfst(4)
+		const pos = pacman.offsetTarget(4)
 		switch(pacman.tunnelEntered.side) {
 		case L: return pos.setX(Maze.Tunnel.EntranceR*T)
 		case R: return pos.setX(Maze.Tunnel.EntranceL*T)
@@ -37,7 +37,7 @@ class Aosuke extends Ghost {
 		return Vec2.new(27, 33)
 	}
 	get chasePos() {
-		const  pos = pacman.forwardOfst(2)
+		const  pos = pacman.offsetTarget(2)
 		return pos.clone.sub(GhsMgr.akaCenter).add(pos)
 	}
 }

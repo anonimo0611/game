@@ -12,7 +12,7 @@ import {pacman} from '../player/pacman.js'
 import {Ghost}  from './ghost.js'
 import Target   from './show_targets.js'
 
-const Scores = Pts.Score.Ghost
+const PtsLst = Pts.GhostPts
 const Ghosts = /**@type {Ghost[]}*/([])
 
 /**
@@ -75,7 +75,7 @@ export const GhsMgr = new class extends Common {
 	get isChasing() {return AttackInWaves.isChasing}
 	get isScatter() {return AttackInWaves.isScatter}
 	get isFright()  {return FrightMode.session != null}
-	get score()     {return FrightMode.session?.score ?? Scores[0]}
+	get points()    {return FrightMode.session?.score ?? PtsLst[0]}
 	get spriteIdx() {return FrightMode.session?.spriteIdx ?? 0}
 	get caughtAll() {return FrightMode.session?.caughtAll ?? false}
 	get hasEscape() {return Ghosts.some(g=> g.isEscape)}
@@ -128,23 +128,23 @@ export const GhsMgr = new class extends Common {
 	}
 }
 
-const setReversalSig = ()=> {
+const queueDirectionReverse = ()=> {
 	$(Ghosts).trigger('Reverse')
 }
 const SCATTER = 0
 const CHASING = 1
 const AttackInWaves = function() {
-	const initSeq = (mode=SCATTER)=> ({mode,update(){}})
+	const initPhase = (mode=SCATTER)=> ({mode,update(){}})
 	{
-		let seq = initSeq()
-		State.on({_Ready:()=> seq = genSeq()})
+		let phase = initPhase()
+		State.on({_Ready:()=> phase = genPhase()})
 		return {
-			get isChasing() {return seq.mode == CHASING},
-			get isScatter() {return seq.mode == SCATTER},
-			update() {State.isPlaying && seq.update()},
+			get isChasing() {return phase.mode == CHASING},
+			get isScatter() {return phase.mode == SCATTER},
+			update() {State.isPlaying && phase.update()},
 		}
 	}
-	function genDurList() {
+	function genPhaseList() {
 		const {level:lv}= Game
 		return freeze([ // ms
 			lv <= 4 ? 4500 : 4000,
@@ -157,21 +157,21 @@ const AttackInWaves = function() {
 			Infinity,
 		])
 	}
-	function genSeq() {
-		let  [cnt,idx] = [-1,0]
-		const durList  = genDurList()
-		const duration = ()=> durList[idx]/Game.speed
-		const seq = {
+	function genPhase() {
+		let  [cnt,idx]  = [-1,0]
+		const phaseList = genPhaseList()
+		const duration  = ()=> phaseList[idx]/Game.speed
+		const phase = {
 			mode: [SCATTER,CHASING][+Ctrl.alwaysChase],
 			update() {
 				if (Timer.frozen
 				 || GhsMgr.isFright
 				 || Ticker.Interval*(++cnt) < duration())
 					return
-				[cnt,seq.mode] = [0,(++idx % 2)]
-				setReversalSig()
+				[cnt,phase.mode] = [0,(++idx % 2)]
+				queueDirectionReverse()
 			}
-		};return seq.mode? initSeq(CHASING) : seq
+		};return phase.mode? initPhase(CHASING) : phase
 	}
 }()
 
@@ -243,11 +243,11 @@ const FrightMode = function() {
 	const TimeTable = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	class Session {
 		#time=0; #flash=0; #caught=0; #fIdx=1;
-		get score()     {return Scores[this.#caught-1]}
+		get score()     {return PtsLst[this.#caught-1]}
 		get caughtAll() {return this.#caught == GhsType.Max}
 		get spriteIdx() {return this.#flash && this.#fIdx^1}
 		constructor() {
-			setReversalSig()
+			queueDirectionReverse()
 			this.Dur = TimeTable[Game.clampedLv-1]
 			this.Dur == 0 && !State.isAttract
 				? $(Ghosts).trigger('Runaway')

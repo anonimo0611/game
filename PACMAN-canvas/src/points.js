@@ -9,8 +9,8 @@ const PtsMap = /**@type {Map<any, Points>}*/(new Map)
 State.on({_Clear_Crashed:()=> PtsMap.clear()})
 
 /**
- @typedef {typeof Pts.Score.All[number]} Pts
- @typedef {{key:{score:Pts}, pos:Position, dur?:number, fn?:function}} PtsData
+ @typedef {typeof Pts.AllPts[number]} Pts
+ @typedef {{key:{points:Pts}, pos:Position, dur?:number, fn?:function}} PtsData
 */
 export const PtsMgr = new class {
 	/** @type {(data:PtsData, fn?:function)=> void} */
@@ -24,14 +24,14 @@ class Points {
 	constructor({key,pos,dur=1e3,fn}) {
 		const spd  = Game.speed, fadeDur = 300
 		this.pos   = pos
-		this.cache = Pts.cache(key.score)
+		this.cache = Pts.cache(key.points)
 		this.fade  = new FadeOut(fadeDur/spd, (dur-fadeDur)/spd)
 		Timer.set(dur/spd, ()=> {
 			Timer.unfreeze()
 			PtsMap.delete(key)
 			fn?.()
 		})
-		State.isPlaying && Score.add(key.score)
+		State.isPlaying && Score.add(key.points)
 		PtsMap.set(key, this)
 	}
 	update() {

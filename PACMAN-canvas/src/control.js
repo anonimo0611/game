@@ -4,7 +4,7 @@ import {Confirm} from '../_lib/confirm.js'
 import {Menu}    from './ui.js'
 import {MenuIds} from './ui.js'
 import {State}   from './state.js'
-import {print}   from './message.js'
+import {drawText}   from './message.js'
 import {Score}   from './score.js'
 
 export const
@@ -81,13 +81,13 @@ export const Ctrl = new class {
 		ctx.translate(T*0.1, T*18)
 		ctx.clearRect(0,-T,BW,T*3)
 		if (Ctrl.usingCheats || spd != 'x1.0') {
-			print(0, h*0, Color.Inf[+(spd != 'x1.0') ], 'Speed'+spd, cfg)
-			print(0, h*1, Color.Inf[+Ctrl.invincible ], 'Invincible',cfg)
-			print(0, h*2, Color.Inf[+Ctrl.showTargets], 'Targets',   cfg)
+			drawText(0, h*0, Color.Inf[+(spd != 'x1.0') ], 'Speed'+spd, cfg)
+			drawText(0, h*1, Color.Inf[+Ctrl.invincible ], 'Invincible',cfg)
+			drawText(0, h*2, Color.Inf[+Ctrl.showTargets], 'Targets',   cfg)
 		}
 		if (Ctrl.unrestricted) {
 			ctx.translate(T*(Cols-5), T/2)
-			print(0,0, Color.Inf[1], 'Un-\nrestricted', cfg)
+			drawText(0,0, Color.Inf[1], 'Un-\nrestricted', cfg)
 		}
 		ctx.restore()
 	}

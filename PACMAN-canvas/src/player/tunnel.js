@@ -1,7 +1,7 @@
 import {pacman} from './pacman.js';
 
 /** Save which side of the tunnel the player entered from */
-export class TunnelEntered {
+export class TunnelEntryMgr {
 	#side = /**@type {?('Left'|'Right')}*/(null)
 	get side() {return this.#side}
 	update() {

@@ -17,7 +17,7 @@ export class Actor extends Common {
 	get maxAlpha()  {return 1}
 	get step()      {return 0}
 	get inHouse()   {return Maze.House.isIn(this.tilePos)}
-	get inTunnel()  {return Maze.Tunnel.whichSide(this.center)}
+	get inTunnel()  {return Maze.Tunnel.findSide(this.center)}
 
 	get x()         {return this.pos.x}
 	get y()         {return this.pos.y}
@@ -55,8 +55,8 @@ export class Actor extends Common {
 		const {x,y}= this.center
 		Ctx.fillCircle(x,y, 3, color)
 	}
-	updateFadeIn(maxA=this.maxAlpha) {
-		State.isReady   && (this.#fadeIn ||= new FadeIn)?.update(maxA)
+	updateFadeIn(max=this.maxAlpha) {
+		State.isReady   && (this.#fadeIn ||= new FadeIn)?.update(max)
 		State.isPlaying && (this.#fadeIn &&= null)
 	}
 	setFadeInAlpha() {

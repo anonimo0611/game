@@ -2,7 +2,7 @@ export default class {
 	/** @readonly */ctx
 	/** @param {ExtendedContext2D} ctx */
 	constructor(ctx) {this.ctx = ctx}
-	rippedBody() {
+	drawHalfNakedBody() {
 		const {ctx}= this
 		ctx.clearRect(38,-1, 6,25)
 		ctx.clearRect(30,23,15,15)
@@ -13,7 +13,7 @@ export default class {
 		ctx.fillStyle = Color.GhostSkin
 		ctx.fill()
 	}
-	mendedStitch(animIdx=0) {
+	drawMendedSeam(animIdx=0) {
 		const {ctx}= this, path = /**@type {xyList[]}*/
 			([[39,8],[33,14],[24,8],[14,15],[26,20],[14,27],[25,33],[14,38]])
 		animIdx && path.pop()
@@ -22,7 +22,7 @@ export default class {
 		ctx.newLinePath(...path).stroke()
 		path.forEach(xy=> ctx.fillCircle(...xy, ctx.lineWidth, '#FFF'))
 	}
-	bracketEyes() {
+	drawBracketEyes() {
 		const {ctx}= this
 		ctx.save()
 		for (const v of [-1,+1]) {
@@ -43,16 +43,16 @@ export default class {
 		}
 		ctx.restore()
 	}
-	hadake(animIdx=0) {
+	drawHadake(animIdx=0) {
 		const {ctx}= this
 		ctx.save()
 		ctx.translate(T/2+T/4, T/2)
 		animIdx == 0
-			? this.#hadake0()
-			: this.#hadake1()
+			? this.#drawHadake0()
+			: this.#drawHadake1()
 		ctx.restore()
 	}
-	#hadake0() {
+	#drawHadake0() {
 		const {ctx}= this
 		// Body
 		ctx.save()
@@ -78,7 +78,7 @@ export default class {
 		ctx.fill()
 		this.#hadakeEyes([33,54],[39,61])
 	}
-	#hadake1() {
+	#drawHadake1() {
 		const {ctx}= this
 		// Body
 		ctx.save()
@@ -128,14 +128,14 @@ class StakeClothes {
 		x: BW/2 + T*2 - this.stakeSize.x/2,
 		y: BH/2 + T*1 - this.stakeSize.y - T*.1
 	})
-	offcutPos = freeze({
+	clothPos = freeze({
 		x: BW/2 + T*2 + this.stakeSize.x/2,
 		y: BH/2 + T*1 - T*.1
 	})
 	drawStake({x, y}=this.stakePos) {
 		Ctx.fillRect(x,y, ...this.stakeSize.vals, '#FFF')
 	}
-	drawOffcut({x, y}=this.offcutPos) {
+	drawCloth({x, y}=this.clothPos) {
 		const h = this.stakeSize.y
 		Ctx.save()
 		Ctx.translate(x, y)
@@ -147,7 +147,7 @@ class StakeClothes {
 	 @param {number} rate
 	 @param {{x?:number, y?:number, size?:number}} cfg
 	*/
-	clothes(animIdx, rate, {x=0, y=0, size=T*2}={}) {
+	stretchClothing(animIdx, rate, {x=0, y=0, size=T*2}={}) {
 		const v1 = lerp(-2,  5, rate)
 		const v2 = lerp( 4, 22, rate)
 		const v3 = lerp( 4, 50, rate)

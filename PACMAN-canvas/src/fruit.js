@@ -11,7 +11,7 @@ import * as Spr from './sprites/fruits.js'
 
 /** The fruit appear after 70 or 170 dots are cleared
  @type {ReadonlySet<number>}
-*/const AppearSet = new Set([70,170])
+*/const AppearDots = new Set([70,170])
 
 const TypeTable = freeze([0,1,2,2,3,3,4,4,5,5,6,6,7])
 const TargetPos = Vec2.new(BW/2, T*18.5).freeze()
@@ -31,8 +31,8 @@ export const Fruit = new class {
 		Player.on({Eaten: Fruit.#dotEaten})
 		$Level.on({change:Fruit.#setImages})
 	}
-	get score() {
-		return Pts.Score.Fruit[Fruit.number()]
+	get points() {
+		return Pts.FruitPts[Fruit.number()]
 	}
 	number(i=Game.level-1) {
 		return TypeTable.at((i>=TypeTable.length)? -1:i) ?? 0
@@ -50,7 +50,7 @@ export const Fruit = new class {
 		_fadeOut = new FadeOut(FadeDur/Game.speed)
 	}
 	#dotEaten() {
-		if (AppearSet.has(Maze.DotMax - Maze.dotsLeft)) {
+		if (AppearDots.has(Maze.MaxDot - Maze.dotsLeft)) {
 			_tgtDisp = true
 			Fruit.#setHideTimer()
 		}

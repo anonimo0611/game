@@ -70,7 +70,7 @@ export class Ghost extends Actor {
 	get targetTile() {
 		return Ctrl.unrestricted
 			? this.originalTargetTile
-			: Maze.ghostExitTile(this)
+			: Maze.getGhostExitTile(this)
 	}
 	get houseEntranceArrived() {
 		return this.state.isEscape
@@ -103,19 +103,19 @@ export class Ghost extends Actor {
 		this.sprite.update()
 		this.houseEntranceArrived
 			? this.#prepEnterHouse()
-			: State.isPlaying && this.#behavior()
+			: State.isPlaying && this.#processBehavior()
 	}
-	#behavior() {
+	#processBehavior() {
 		this.#runaway >= 0 && this.#runaway--
 		if (Timer.frozen && !this.isEscape) return
 		switch(this.state.current) {
-		case 'Idle':  return this.#idle(this)
+		case 'Idle':  return this.#idleInHouse(this)
 		case 'GoOut': return this.#goOut(this)
 		case 'Return':return this.#returnToHome(this)
 		default: this.#walkPath(this.step+.5|0)
 		}
 	}
-	#idle({type,orient,step,center:{y:cy}}=this) {
+	#idleInHouse({type,orient,step,center:{y:cy}}=this) {
 		if (!Ctrl.alwaysChase)
 			Sys.DotCounter.release(type, b=> this.leaveHouse(b))
 		!this.state.isGoOut && this.move(
@@ -168,7 +168,7 @@ export class Ghost extends Actor {
 		this.sprite.setResurrect()
 		;(Ctrl.alwaysChase || this.type == GhsType.Akabei)
 			? this.state.to('GoOut')
-			: this.state.to('Idle') && this.#idle(this)
+			: this.state.to('Idle') && this.#idleInHouse(this)
 		!Timer.frozen && Sound.ghostArrivedAtHome()
 	}
 	#walkPath(divisor=1) {
@@ -205,7 +205,7 @@ export class Ghost extends Actor {
 	#canEnter({dir,test}) {
 		return Ctrl.unrestricted
 			|| (dir != U || this.isFright || this.isEscape)
-			|| !Maze.GhostNoEnter.has(test.hyphenated)
+			|| !Maze.GhostNoEnterCoords.has(test.hyphenated)
 	}
 	#setTurn({orient}=this) {
 		if (this.dir != orient
