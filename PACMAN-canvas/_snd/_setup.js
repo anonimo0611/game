@@ -3,10 +3,10 @@ import {Sound}    from './sound.js'
 import {SoundMgr} from './loader.js'
 import {Speaker}  from './speaker.js'
 
-let  _lstVol = NaN
-const volRng = input('volRng')
-const volRg2 = input('volRg2')
-const volume = +(localStorage.anopac_volume ?? 5)
+let  _lstVol  = NaN
+const volRng  = input('volRng')
+const volRg2  = input('volRg2')
+const volume  = +(localStorage.anopac_volume ?? 5)
 
 const Ctrl = new class { // Register sound instances and set up controls
 	constructor() {this.setup()}
@@ -16,7 +16,7 @@ const Ctrl = new class { // Register sound instances and set up controls
 			: Ctrl.onFailed()
 	}
 	onLoaded() {
-		Speaker.draw(Sound.vol=volume)
+		Sound.vol = volume
 		$win.on({keydown:Ctrl.onKeydown})
 		$('#speaker')
 			.on({click:Ctrl.mute})
@@ -25,13 +25,14 @@ const Ctrl = new class { // Register sound instances and set up controls
 			.attr({value:volume})
 			.attr({defaultValue:volume})
 			.on({input:Ctrl.onInput})
+			.trigger('input')
 	}
 	onFailed() {
 		$('.volCtrl').hide()
 	}
 	onInput(/**@type {Event}*/e) {
 		const isInput = e.target instanceof HTMLInputElement
-		Sound.vol = (isInput? e.target : volRng).valueAsNumber
+		Sound.vol = (isInput? e.target:volRng).valueAsNumber
 		Speaker.draw(localStorage.anopac_volume = Sound.vol)
 	}
 	onKeydown(/**@type {JQuery.KeyDownEvent}*/e) {

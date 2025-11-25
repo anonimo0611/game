@@ -2,12 +2,15 @@
 const{cvs,ctx}= canvas2D('speaker', Size)
 
 export const Speaker = new class {
-	draw(/**@type {number}*/vol) {
+	draw(
+	 /**@type {number}*/    vol,
+	 /**@type {Cvs2DStyle}*/color='#FFF'
+	) {
 		const {width,height}= cvs
 		const step = this.#step(vol)
 		ctx.clear()
 		ctx.save()
-		ctx.fillStyle = ctx.strokeStyle = '#FFF'
+		ctx.fillStyle = ctx.strokeStyle = color
 		ctx.translate(width/2, height/2)
 		ctx.scale(width/100, height/100)
 		this.#drawBody()
