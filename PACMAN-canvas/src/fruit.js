@@ -55,7 +55,7 @@ export const Fruit = new class {
 			Fruit.#setHideTimer()
 		}
 	}
-	collidedWith(pos=pacman.center) {
+	intersectsWith(pos=pacman.center) {
 		if (_tgtDisp && circleCollision(pos,TargetPos,T/2)) {
 			Fruit.#resetTarget()
 			Timer.cancel(Fruit) && Sound.play('fruit')
@@ -65,7 +65,7 @@ export const Fruit = new class {
 	update() {
 		_fadeOut?.update() == false
 			? Fruit.#resetTarget()
-			: Fruit.collidedWith()
+			: Fruit.intersectsWith()
 	}
 	drawTarget() {
 		if (!State.isTitle

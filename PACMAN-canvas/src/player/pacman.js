@@ -18,12 +18,12 @@ class PlayerPac extends Pacman {
 
 	get showCenter()    {return Ctrl.showGridLines}
 	get isSemiTrans()   {return Ctrl.invincible || this.showCenter}
-	get dying()         {return State.isCrashed || State.isDying}
+	get dying()         {return State.isCaught || State.isDying}
 	get mouseClosed()   {return State.isPlaying == false}
 	get maxAlpha()      {return this.isSemiTrans? .75:1}
 	get step()          {return this.#mover.step}
 	get stopped()       {return this.#mover.stopped}
-	get tunnelEntered() {return this.#tunMgr}
+	get TunnelEntry()   {return this.#tunMgr}
 	get timeNotEaten()  {return this.#notEaten * Game.interval}
 
 	constructor() {

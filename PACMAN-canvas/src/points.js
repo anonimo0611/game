@@ -6,7 +6,7 @@ import {Fruit}  from './fruit.js'
 import * as Pts from './sprites/points.js'
 
 const PtsMap = /**@type {Map<any, Points>}*/(new Map)
-State.on({_Clear_Crashed:()=> PtsMap.clear()})
+State.on({_Caught_Clear:()=> PtsMap.clear()})
 
 /**
  @typedef {typeof Pts.AllPts[number]} Pts

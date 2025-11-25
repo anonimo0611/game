@@ -2,11 +2,11 @@ import _State from '../_lib/state.js'
 /**
 @typedef {
   'Title'|'Attract'|'Start'|'Restart'|'NewLevel'|'Ready'|'Playing'|
-  'Clear'|'FlashMaze'|'CoffBrk'|'Crashed'|'Dying'|'GameOver'|'Quit'
+  'Clear'|'FlashMaze'|'CoffBrk'|'Caught'|'Dying'|'GameOver'|'Quit'
 } StateType
 @typedef {
   '_Ready'|'_NewLevel'|'_Restart_NewLevel'|
-  '_Start_Ready_Restart'|'_Clear_Crashed'
+  '_Start_Ready_Restart'|'_Caught_Clear'
 } MultiState
 */
 
@@ -22,7 +22,7 @@ class GameState extends _State {
 	isClear     = false
 	isFlashMaze = false
 	isCoffBrk   = false
-	isCrashed   = false
+	isCaught    = false
 	isDying     = false
 	isGameOver  = false
 	isQuit      = false

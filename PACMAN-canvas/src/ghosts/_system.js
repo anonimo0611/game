@@ -64,7 +64,7 @@ export const GhsMgr = new class extends Common {
 		State.on({
 			Playing:GhsMgr.#onPlaying,
 			Clear:  GhsMgr.#onRoundEnds,
-			Crashed:GhsMgr.#onRoundEnds,
+			Caught: GhsMgr.#onRoundEnds,
 		})
 		GhsMgr.on({Init:GhsMgr.#initialize})
 	}

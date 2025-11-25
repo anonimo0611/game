@@ -113,7 +113,7 @@ export class Attract {
 	updateGhosts() {
 		for (const g of this.ghosts) {
 			g.x += this.ghsVelX
-			g.crashWithPac({
+			g.collidesWithPacman({
 				pos:this.pacman.pos, radius:T/4,
 				release:()=> GhsMgr.caughtAll && State.to('Attract')
 			})

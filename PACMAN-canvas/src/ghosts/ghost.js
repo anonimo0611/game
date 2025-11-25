@@ -176,7 +176,7 @@ export class Ghost extends Actor {
 			this.setNextPos(divisor)
 			this.passedTileCenter && this.#setNextDir()
 			if (this.#setTurn(this)) break
-			if (this.crashWithPac()) break
+			if (this.collidesWithPacman()) break
 		}
 	}
 	#setNextDir() {
@@ -218,7 +218,7 @@ export class Ghost extends Actor {
 		}
 		return false
 	}
-	crashWithPac({
+	collidesWithPacman({
 		pos     = pacman.pos,
 		radius  = this.isFright? T/2:T/3,
 		release = ()=> this.#setEscape(),
@@ -241,7 +241,7 @@ export class Ghost extends Actor {
 	}
 	#attack() {
 		Sound.stopLoops()
-		State.to('Crashed').to('Dying', {delay:500})
+		State.to('Caught').to('Dying', {delay:500})
 	}
 	#setFrightMode(_={}, bool=false) {
 		!this.isEscape && (this.#isFright = bool)
