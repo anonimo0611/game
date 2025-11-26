@@ -60,8 +60,8 @@ export default class {
 		}
 		if (!frightened) {
 			match(orient, {
-				Left:   ()=> this.#drawEyeHoriz,
-				Right:  ()=> this.#drawEyeHoriz,
+				Left:   ()=> this.#drawEyesHoriz,
+				Right:  ()=> this.#drawEyesHoriz,
 				Up:     ()=> this.#drawEyesUp,
 				Down:   ()=> this.#drawEyesDown,
 				Bracket:()=> this.#spr.drawBracketEyes,
@@ -133,7 +133,7 @@ export default class {
 		}
 	}
 	/** @param {{orient?:L|R}} orient */
-	#drawEyeHoriz({orient=L}={}) {
+	#drawEyesHoriz({orient=L}={}) {
 		const {ctx}= this
 		ctx.save()
 		ctx.scale(Vec2[orient].x, 1)
