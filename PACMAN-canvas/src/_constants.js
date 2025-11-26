@@ -26,26 +26,26 @@ Bg  = canvas2D('board_bg' ,  BW,BH),
 HUD = canvas2D('board_hud',  BW,BH),
 Ctx = canvas2D('board_main', BW,BH).ctx,
 
-Color = freeze(new class {
-	Grid      = '#F00'
-	Dot       = '#FFB8AE'
-	Wall      = '#58E'
-	FlashWall = '#FFF'
-	Door      = '#FFB8DE'
-	Pacman    = '#FF0'
-	Akabei    = '#E00'
-	Pinky     = '#F9B'
-	Aosuke    = '#0CF'
-	Guzuta    = '#FB0'
-	GhostEyes = '#33F'
-	GhostSkin = '#F4BEB0'
-	GhostPts  = '#3CF'
-	FruitPts  = '#FFB8FF'
-	Extend    = '#F55'
-	Orange    = '#F90'
-	Inf          = freeze(['#888','#F9E'])
-	FrightFaces  = freeze(['#F9F','#F00'])
-	FrightBodies = freeze(['#36A','#FFF'])
+Color = freeze({
+	Grid:       '#F00',
+	Dot:        '#FFB8AE',
+	Wall:       '#58E',
+	FlashWall:  '#FFF',
+	Door:       '#FFB8DE',
+	Pacman:     '#FF0',
+	Akabei:     '#E00',
+	Pinky:      '#F9B',
+	Aosuke:     '#0CF',
+	Guzuta:     '#FB0',
+	GhostEyes:  '#33F',
+	GhostSkin:  '#F4BEB0',
+	GhostPts:   '#3CF',
+	FruitPts:   '#FFB8FF',
+	Extend:     '#F55',
+	Orange:     '#F90',
+	Inf:         freeze(['#888','#F9E']),
+	FrightFaces: freeze(['#F9F','#F00']),
+	FrightBodies:freeze(['#36A','#FFF']),
 }),
 
 BaseSpeed    = TileSize /4.5,
@@ -59,7 +59,7 @@ PacSpeed  = freeze({
 	Base:      BaseSpeed,
 	Eating:    BaseSpeed * 0.86,
 	Energized: BaseSpeed * 1.10,
-	EneEat :   BaseSpeed * 0.95, // Energized+Eating
+	EneEat:    BaseSpeed * 0.95, // Energized+Eating
 }),
 GhsScale = 1.1,
 GhsType  = /**@type {const}*/({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4}),
