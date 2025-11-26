@@ -4,7 +4,6 @@ Cols     = 28,
 TileSize = 27,
 DotPts   = 10,
 PowPts   = 50,
-MoveStep = TileSize/4.5,
 
 /** Shorthand of TileSize */
 T = TileSize,
@@ -49,25 +48,27 @@ Color = freeze(new class {
 	FrightBodies = freeze(['#36A','#FFF'])
 }),
 
+BaseSpeed    = TileSize /4.5,
+GhsBaseSpeed = BaseSpeed*1.07,
+
 PacScale  = 0.9,
 PacRadius = T*PacScale,
-PacStep   = freeze(new class {
-	SlowLevel = 13   // After this level, Pacman slows down
-	SlowRate  = 0.98 // Deceleration rate at SlowLevel
-	Base      = MoveStep
-	Eating    = this.Base * 0.86
-	Energized = this.Base * 1.10
-	EneEat    = this.Base * 0.95 // Energized+Eating
+PacSpeed  = freeze({
+	SlowLevel: 13,   // After this level, Pacman slows down
+	SlowRate:  0.98, // Deceleration rate at SlowLevel
+	Base:      BaseSpeed,
+	Eating:    BaseSpeed * 0.86,
+	Energized: BaseSpeed * 1.10,
+	EneEat :   BaseSpeed * 0.95, // Energized+Eating
 }),
-
 GhsScale = 1.1,
 GhsType  = /**@type {const}*/({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4}),
 GhsNames = /**@type {const}*/(['Akabei','Pinky','Aosuke','Guzuta']),
-GhsStep  = freeze(new class {
-	Base     = MoveStep  * 1.07
-	Idle     = this.Base * 0.50
-	GoOut    = this.Base * 0.50
-	Fright   = this.Base * 0.60
-	InTunnel = this.Base * 0.60
-	Escape   = this.Base * 1.40
+GhsSpeed = freeze({
+	Base:     GhsBaseSpeed,
+	Idle:     GhsBaseSpeed * 0.50,
+	GoOut:    GhsBaseSpeed * 0.50,
+	Fright:   GhsBaseSpeed * 0.60,
+	InTunnel: GhsBaseSpeed * 0.60,
+	Escape:   GhsBaseSpeed * 1.40,
 })

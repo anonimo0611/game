@@ -1,5 +1,5 @@
 ﻿import {State}    from '../state.js'
-import {drawText}    from '../message.js'
+import {drawText} from '../message.js'
 import {Ctrl}     from '../control.js'
 import {Score}    from '../score.js'
 import {PtsMgr}   from '../points.js'

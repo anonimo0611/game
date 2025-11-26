@@ -6,36 +6,36 @@ import {Maze}    from '../maze.js'
 import {GhsMgr}  from '../ghosts/_system.js'
 import {pacman}  from './pacman.js';
 
-const Step = PacStep
-const {SlowLevel,SlowRate}= Step
+const Speed = PacSpeed
+const {SlowLevel,SlowRate}= Speed
 
 export class Mover {
-	#step     = 0
+	#speed    = 0
 	#stopped  = true
 	#turning  = false
 	#nextDir  = /**@type {?Direction}*/(null)
 	#nextTurn = /**@type {?Direction}*/(null)
 	constructor() {
-		$(()=> this.#step = this.stepInTile)
+		$(()=> this.#speed = this.tileSpeed)
 		$win.offon('keydown.Steer', this.#steer.bind(this))
 	}
-	get step()    {return this.#step}
+	get speed()   {return this.#speed}
 	get stopped() {return this.#stopped}
 
 	get canTurn() {
 		return this.#nextDir != null
 			&& !pacman.passedTileCenter
-			&& !pacman.collidedWithWall(this.#nextDir)
+			&& !pacman.collidesWithWall (this.#nextDir)
 	}
 	get collidedWithWall() {
-		return !this.#turning && pacman.collidedWithWall()
+		return !this.#turning && pacman.collidesWithWall()
 	}
-	get stepInTile() {
+	get tileSpeed() {
 		const eating = Maze.hasDot(pacman.tileIdx)
 		return (
-			GhsMgr.isFright
-			? (eating? Step.EneEat : Step.Energized)
-			: (eating? Step.Eating : Step.Base)
+			GhsMgr.isFrightMode
+			? (eating? Speed.EneEat : Speed.Energized)
+			: (eating? Speed.Eating : Speed.Base)
 		) * (Game.moveSpeed * (Game.level<SlowLevel ? 1:SlowRate))
 	}
 	#steer(/**@type {KeyboardEvent}*/e) {
@@ -60,19 +60,19 @@ export class Mover {
 			pacman.setMoveDir(pacman.revDir)
 		}
 	}
-	#setMoveStep(divisor=1) {
+	#setMoveSpeed(divisor=1) {
 		pacman.justArrivedAtTile(divisor)
-			&& (this.#step = this.stepInTile)
+			&& (this.#speed = this.tileSpeed)
 	}
 	update(divisor=1) {
-		this.#setCornering(divisor)
+		this.#turnCorner(divisor)
 		pacman.setNextPos(divisor)
-		this.#setMoveStep(divisor)
-		this.#endCornering()
+		this.#setMoveSpeed(divisor)
+		this.#finishTurningCorner()
 		this.#turnAround()
 		this.#stopAtWall()
 	}
-	#setCornering(divisor=1) {
+	#turnCorner(divisor=1) {
 		const dir = this.#nextDir
 		if (this.canTurn && dir) {
 			this.#turning ||= true
@@ -80,7 +80,7 @@ export class Mover {
 			pacman.setNextPos(divisor, dir)
 		}
 	}
-	#endCornering() {
+	#finishTurningCorner() {
 		if (this.#turning && pacman.passedTileCenter) {
 			this.#turning  = false
 			this.#nextDir  = this.#nextTurn

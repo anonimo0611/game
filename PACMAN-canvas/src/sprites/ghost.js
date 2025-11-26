@@ -15,20 +15,20 @@ export default class {
 
 	draw({
 		mainCtx=Ctx,x=0,y=0,
-		type      = 0,
-		animIdx   = 0,
-		spriteIdx = 0,
-		size      = T*2,
-		orient    = /**@type {orient}*/(L),
-		isFright  = false,
-		isBitten  = false,
-		isEscape  = false,
-		isAngry   = false,
-		isRipped  = false,
-		isMended  = false,
-		isExposed = false,
+		type       = 0,
+		animIdx    = 0,
+		spriteIdx  = 0,
+		size       = T*2,
+		orient     = /**@type {orient}*/(L),
+		frightened = false,
+		bitten     = false,
+		escaping   = false,
+		angry      = false,
+		ripped     = false,
+		mended     = false,
+		exposed    = false,
 	}={}) {
-		if (isBitten) return
+		if (bitten) return
 		const {ctx}= this
 		const finalize = ()=> {
 			ctx.restore()
@@ -42,30 +42,30 @@ export default class {
 		ctx.save()
 		ctx.translate(size/2, size/2)
 		ctx.scale(size/(100/GhsScale), size/(100/GhsScale))
-		ctx.fillStyle = !isFright
+		ctx.fillStyle = !frightened
 			? Color[GhsNames[type]]
 			: Color.FrightBodies[spriteIdx]
 
-		if (isExposed) {
+		if (exposed) {
 			this.#spr.drawHadake(animIdx)
 			return finalize()
 		}
-		if (!isEscape) {
+		if (!escaping) {
 			ctx.save()
 			this.#resurrect?.setAlpha(ctx)
-			this.#drawAngerGlow({x,y, isAngry,size})
-			this.#drawBody({animIdx,isRipped,isMended})
-			isFright && this.#frightFace({spriteIdx})
+			this.#drawAngerGlow({x,y, angry,size})
+			this.#drawBody({animIdx,ripped,mended})
+			frightened && this.#frightFace({spriteIdx})
 			ctx.restore()
 		}
-		if (!isFright) {
+		if (!frightened) {
 			match(orient, {
 				Left:   ()=> this.#drawEyeHoriz,
 				Right:  ()=> this.#drawEyeHoriz,
 				Up:     ()=> this.#drawEyesUp,
 				Down:   ()=> this.#drawEyesDown,
 				Bracket:()=> this.#spr.drawBracketEyes,
-			})?.call(this,{orient,isRipped})
+			})?.call(this,{orient,isRipped: ripped})
 		}
 		finalize()
 	}
@@ -74,7 +74,7 @@ export default class {
 		if (this.#resurrect?.update() == false)
 			this.#resurrect = null
 	}
-	#drawBody({animIdx=0, isRipped=false, isMended=false}) {
+	#drawBody({animIdx=0, ripped=false, mended=false}) {
 		const {ctx}= this
 		ctx.beginPath()
 		ctx.moveTo(+42, +26)
@@ -85,8 +85,8 @@ export default class {
 			? this.#drawFoot0()
 			: this.#drawFoot1()
 		ctx.fill()
-		isRipped && this.#spr.drawHalfNakedBody()
-		isMended && this.#spr.drawMendedSeam(animIdx)
+		ripped && this.#spr.drawHalfNakedBody()
+		mended && this.#spr.drawMendedSeam(animIdx)
 	}
 	#drawFoot0() {
 		const {ctx}= this
@@ -108,7 +108,7 @@ export default class {
 		ctx.bezierCurveTo(+13, 28, +22, 28, +26, 38)
 		ctx.bezierCurveTo(+29, 45, +41, 45, +42, 26)
 	}
-	#drawEyesUp({isRipped=false}={}) {
+	#drawEyesUp({ripped=false}={}) {
 		const {ctx}= this
 		for (const v of [-1,+1]) {
 			// Eyeballs
@@ -117,7 +117,7 @@ export default class {
 			ctx.fillStyle = 'white'
 			ctx.fill()
 			// Eyes
-			ctx.fillCircle(18.5*v, -26, 8, (isRipped? 'black':Color.GhostEyes))
+			ctx.fillCircle(18.5*v, -26, 8, (ripped? 'black':Color.GhostEyes))
 		}
 	}
 	#drawEyesDown() {
@@ -164,8 +164,8 @@ export default class {
 		ctx.lineCap = ctx.lineJoin = 'round'
 		ctx.stroke()
 	}
-	#drawAngerGlow({x=0,y=0, isAngry=false, size=T*2}) {
-		if (!isAngry) return
+	#drawAngerGlow({x=0,y=0, angry=false, size=T*2}) {
+		if (!angry) return
 		const {width:W}=Glow, S=W*1.2
 		Ctx.save()
 		Ctx.globalAlpha = this.#resurrect?.alpha ?? 1

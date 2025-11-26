@@ -7,31 +7,31 @@ import {Score}  from '../score.js'
 import {Maze}   from '../maze.js'
 import {Pacman} from '../pacman.js'
 import {GhsMgr} from '../ghosts/_system.js'
-import {Mover}   from './mover.js'
-import {TunnelEntryMgr} from './tunnel.js'
+import {Mover}  from './mover.js'
+import {TunnelEntry} from './tunnel.js'
 
 class PlayerPac extends Pacman {
-	#eatIdx   = 0
-	#notEaten = 0
-	#mover    = new Mover()
-	#tunMgr   = new TunnelEntryMgr()
+	#eatSEIdx = 0
+	#framesSinceEating = 0
+	#mover  = new Mover()
+	#tunMgr = new TunnelEntry()
 
-	get showCenter()    {return Ctrl.showGridLines}
-	get isSemiTrans()   {return Ctrl.invincible || this.showCenter}
-	get dying()         {return State.isCaught || State.isDying}
+	get showCenterDot() {return Ctrl.showGridLines}
+	get isSemiTrans()   {return Ctrl.invincible || this.showCenterDot}
+	get dying()         {return State.isPacCaught  || State.isPacDying}
 	get mouseClosed()   {return State.isPlaying == false}
 	get maxAlpha()      {return this.isSemiTrans? .75:1}
-	get step()          {return this.#mover.step}
+	get speed()         {return this.#mover.speed}
 	get stopped()       {return this.#mover.stopped}
 	get TunnelEntry()   {return this.#tunMgr}
-	get timeNotEaten()  {return this.#notEaten * Game.interval}
+	get timeNotEaten()  {return this.#framesSinceEating * Game.interval}
 
 	constructor() {
 		super()
 		this.pos.set(13.5*T, 24*T)
 	}
 	resetTimer() {
-		this.#notEaten = 0
+		this.#framesSinceEating = 0
 	}
 	forwardPos(num=0) {
 		return Vec2[this.dir].mul(num*T).add(this.center)
@@ -40,16 +40,16 @@ class PlayerPac extends Pacman {
 		const  ofstX = (this.dir == U ? -num : 0)
 		return this.forwardPos(num).addX(ofstX*T)
 	}
-	drawCenter() {
-		if (!this.hidden && !this.dying && this.showCenter)
-			super.drawCenter()
+	drawCenterDot() {
+		if (!this.hidden && !this.dying && this.showCenterDot)
+			super.drawCenterDot()
 	}
 	draw() {
-		if (State.isStart) return
+		if (State.isStarting) return
 		Ctx.save()
 		this.setFadeInAlpha()
 		this.sprite.draw(this)
-		this.drawCenter()
+		this.drawCenterDot()
 		Ctx.restore()
 	}
 	update() {
@@ -57,39 +57,39 @@ class PlayerPac extends Pacman {
 		if (this.mouseClosed || this.hidden)
 			return
 		this.sprite.update(this)
-		this.#notEaten++
+		this.#framesSinceEating++
 		this.#tunMgr.update()
-		this.#behavior(this.step+.5|0)
+		this.#processBehavior(this.speed+.5|0)
 	}
-	#behavior(divisor=1) {
+	#processBehavior(divisor=1) {
 		for (const _ of range(divisor)) {
-			this.#dotEaten(this)
+			this.#eatDot(this)
 			this.#mover.update(divisor)
 			if (this.stopped) break
 		}
 	}
-	#dotEaten({tileIdx:i}=this) {
+	#eatDot({tileIdx:i}=this) {
 		if (!Maze.hasDot(i))
 			return
-		this.#playSE()
+		this.#playEateSE()
 		this.resetTimer()
 		Maze.hasPow(i)
-			? this.#powerDotEaten()
-			: this.#smallDotEaten()
+			? this.#eatPowerDot()
+			: this.#eatSmallDot()
 		Maze.clearBgDot(this) == 0
-			? State.to('Clear')
+			? State.to('Cleared')
 			: Player.trigger('Eaten')
 	}
-	#powerDotEaten() {
+	#eatPowerDot() {
 		Score.add(PowPts)
 		GhsMgr.setFrightMode()
 	}
-	#smallDotEaten() {
+	#eatSmallDot() {
 		Score.add(DotPts)
 	}
-	#playSE() {
-		const id = (this.#eatIdx ^= 1) ? 'eat1':'eat0'
-		Sound.play(id, {duration:(T/this.step)*Ticker.Interval*0.5})
+	#playEateSE() {
+		const id = (this.#eatSEIdx ^= 1) ? 'eat1':'eat0'
+		Sound.play(id, {duration:(T/this.speed)*Ticker.Interval*0.5})
 	}
 }
 export let   pacman = new PlayerPac
@@ -97,4 +97,4 @@ export const Player = new class extends Common {
 	draw()   {pacman.draw()}
 	update() {pacman.update()}
 }
-State.on({_Restart_NewLevel:()=> pacman = new PlayerPac})
+State.on({_Restarted_NewLevel:()=> pacman = new PlayerPac})

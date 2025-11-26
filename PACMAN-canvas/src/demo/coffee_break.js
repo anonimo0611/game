@@ -7,16 +7,16 @@ import {Pacman} from '../pacman.js'
 import {Ghost}  from '../ghosts/ghost.js'
 import Sprite   from '../sprites/ghost_cb.js'
 
-export class CoffBrk {
+export class CoffBreak {
 	static #scene = /**@type {?Scene1|Scene2|Scene3}*/(null)
 	static #begin(n=1) {this.#scene=new[Scene1,Scene2,Scene3][n-1]}
-	static {State.on({CoffBrk:(_,n=this.number)=> this.#begin(n)})}
+	static {State.on({CoffBreak:(_,n=this.number)=> this.#begin(n)})}
 	static update() {
 		this.#scene?.update()
 	}
 	static draw() {
 		this.#scene?.draw()
-		return State.isCoffBrk
+		return State.isCoffBreak
 	}
 	static get number() {
 		return !Ctrl.isPractice && {2:1, 5:2, 9:3}[Game.level] || -1
@@ -29,7 +29,7 @@ export class CoffBrk {
 	constructor(num) {
 		this.pacman.y = this.akabei.y = (BH/2 - T/2)
 		Sound.play('cutscene', {loop:1^+(num == 2)})
-		$onNS('.CB',{Quit:this.end, blur_focus:this.pause})
+		$onNS('.CB',{Quitted:this.end, blur_focus:this.pause})
 	}
 	movePacman() {
 		this.pacman.x += this.pacVelX
@@ -46,29 +46,29 @@ export class CoffBrk {
 		Sound.pause(Ticker.pause())
 	}
 	draw() {
-		State.last('FlashMaze')
+		State.last('Flashing')
 			&& Fruit.drawLevelCounter()
 	}
 	end() {
 		$off('.CB')
-		CoffBrk.#scene = null
+		CoffBreak.#scene = null
 		State.to(State.last('Title') || 'NewLevel')
 	}
 }
 qSAll('button.CBBtn').forEach((btn,i)=> {
-	$(btn).on('click', ()=> State.to('CoffBrk', {data:i+1}))
+	$(btn).on('click', ()=> State.to('CoffBreak', {data:i+1}))
 })
 
-class Scene1 extends CoffBrk {
+class Scene1 extends CoffBreak {
 	constructor() {
 		super(1)
-		this.isFright = false
+		this.frightened = false
 		this.akaVelX  = -BW / 156.4
 		this.pacman.x =  BW + T*1
 		this.akabei.x =  BW + T*3
 	}
 	turnBack() {
-		this.isFright = true
+		this.frightened = true
 		this.pacVelX *= -1.1
 		this.akaVelX *= -0.6
 		this.pacman.dir = this.akabei.dir = R
@@ -89,19 +89,19 @@ class Scene1 extends CoffBrk {
 			: this.moveRight()
 	}
 	draw() {
-		const {pacman,isFright}= this
-		this.drawAkabei({isFright})
+		const {pacman,frightened}= this
+		this.drawAkabei({frightened})
 		this.drawPacman(pacman.dir == R ? 4:1)
 		super.draw()
 	}
 }
 
-class Scene2 extends CoffBrk {
+class Scene2 extends CoffBreak {
 	constructor() {
 		super(2)
 		this.counter  = 0
 		this.akaEyes  = L
-		this.isRipped = false
+		this.ripped   = false
 		this.sprite   = Sprite.stakeClothes
 		this.akaVelX  = this.pacVelX
 		this.pacman.x = BW + T*3
@@ -120,22 +120,22 @@ class Scene2 extends CoffBrk {
 			90:()=> {
 				this.akabei.x -= T/4
 				this.akaEyes  = U
-				this.isRipped = true
+				this.ripped   = true
 			},
 			150:()=> {this.akaEyes = 'Bracket'},
 			270:()=> {this.end()},
 		})
 	}
 	draw() {
-		const {akabei:a, sprite:spr, akaEyes,isRipped}= this
-		const animIdx = isRipped? 0 : (this.counter? 1 : a.animIdx)
+		const {akabei:a, sprite:spr, akaEyes,ripped}= this
+		const animIdx = ripped? 0 : (this.counter? 1 : a.animIdx)
 		spr.drawStake()
 		this.drawPacman()
-		this.drawAkabei({animIdx,isRipped,orient:akaEyes})
-		isRipped
+		this.drawAkabei({animIdx,ripped,orient:akaEyes})
+		ripped
 			? spr.drawCloth()
 			: function() { // Expand clothes
-				if (isRipped || a.x >= spr.CaughtX) return
+				if (ripped || a.x >= spr.CaughtX) return
 				const rate = norm(spr.CaughtX, spr.AkaMinX, a.x)
 				spr.stretchClothing(animIdx, rate, a.center.addX(T))
 			}()
@@ -143,7 +143,7 @@ class Scene2 extends CoffBrk {
 	}
 }
 
-class Scene3 extends CoffBrk {
+class Scene3 extends CoffBreak {
 	constructor() {
 		super(3)
 		this.pacVelX  = -BW / 200
@@ -164,8 +164,8 @@ class Scene3 extends CoffBrk {
 	draw() {
 		this.drawPacman()
 		this.akabei.dir == L
-			? this.drawAkabei({isMended: true})
-			: this.drawAkabei({isExposed:true})
+			? this.drawAkabei({mended: true})
+			: this.drawAkabei({exposed:true})
 		super.draw()
 	}
 }

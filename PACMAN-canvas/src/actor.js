@@ -15,9 +15,9 @@ export class Actor extends Common {
 	constructor()   {super()}
 	get radius()    {return T}
 	get maxAlpha()  {return 1}
-	get step()      {return 0}
+	get speed()     {return 0}
 	get inHouse()   {return Maze.House.isIn(this.tilePos)}
-	get inTunnel()  {return Maze.Tunnel.findSide(this.center)}
+	get inTunSide() {return Maze.Tunnel.findSide(this.center)}
 
 	get x()         {return this.pos.x}
 	get y()         {return this.pos.y}
@@ -51,7 +51,7 @@ export class Actor extends Common {
 		Player.draw()
 		GhsMgr.drawFront()
 	}
-	drawCenter(color='#F00') {
+	drawCenterDot(color='#F00') {
 		const {x,y}= this.center
 		Ctx.fillCircle(x,y, 3, color)
 	}
@@ -66,14 +66,14 @@ export class Actor extends Common {
 		this.x = (BW-T)/2
 	}
 	setNextPos(divisor=1, dir=this.dir) {
-		this.pos = Vec2[dir].mul(this.step/divisor).add(this)
-		this.xAxisLoops()
+		this.pos = Vec2[dir].mul(this.speed/divisor).add(this)
+		this.wrapXAxis()
 	}
 	justArrivedAtTile(divisor=1) {
 		return this.passedTileCenter == false
-			&& this.tilePixel <= this.step/divisor
+			&& this.tilePixel <= this.speed/divisor
 	}
-	xAxisLoops() {
+	wrapXAxis() {
 		this.x = function({x,radius:r}) {
 			if (x < -r-T/2) return BW+T/2
 			if (x > BW+T/2) return -r-T/2
@@ -92,9 +92,9 @@ export class Actor extends Common {
 		const  v = Vec2[dir].add(tile)
 		return v.setX((v.x+Cols) % Cols) // x-axis loops
 	}
-	collidedWithWall(dir=this.dir) {
-		const {step,center}= this
-		const {x,y}= Vec2[dir].mul(T/2+step).add(center).divInt(T)
+	collidesWithWall(dir=this.dir) {
+		const {speed,center}= this
+		const {x,y}= Vec2[dir].mul(T/2+speed).add(center).divInt(T)
 		return Maze.hasWall({x:(x+Cols) % Cols, y}) // x-axis loops
 	}
 }

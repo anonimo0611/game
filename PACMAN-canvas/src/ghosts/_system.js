@@ -39,18 +39,18 @@ const StandbyTimes = /**@type {const}*/
 
 /**
  @extends {_State<Ghost,StateType>}
- @typedef {'Idle'|'GoOut'|'Walk'|'Bitten'|'Escape'|'Return'} StateType
+ @typedef {'Idle'|'GoingOut'|'Walking'|'Bitten'|'Escaping'|'Returning'} StateType
 */
 export class GhostState extends _State {
-	isIdle   = false
-	isGoOut  = false
-	isWalk   = false
-	isBitten = false
-	isEscape = false
-	isReturn = false
+	isIdle      = false
+	isGoingOut  = false
+	isWalking   = false
+	isBitten    = false
+	isEscaping  = false
+	isReturning = false
 	constructor(/**@type {Ghost}*/g) {
 		super(g)
-		this.init().to(g.inHouse? 'Idle':'Walk')
+		this.init().to(g.inHouse? 'Idle':'Walking')
 	}
 	to(/**@type {StateType}*/state) {
 		$(this.owner).trigger(state)
@@ -62,24 +62,24 @@ export const GhsMgr = new class extends Common {
 	static {$(this.setup)}
 	static setup() {
 		State.on({
-			Playing:GhsMgr.#onPlaying,
-			Clear:  GhsMgr.#onRoundEnds,
-			Caught: GhsMgr.#onRoundEnds,
+			Playing:  GhsMgr.#onPlaying,
+			Cleared:  GhsMgr.#onRoundEnds,
+			PacCaught:GhsMgr.#onRoundEnds,
 		})
 		GhsMgr.on({Init:GhsMgr.#initialize})
 	}
 	#animIdx = 0
-	get animIndex() {return this.#animIdx}
-	get animFlag()  {return Ticker.count % 6 == 0}
-	get Elroy()     {return Elroy}
-	get isChasing() {return AttackInWaves.isChasing}
-	get isScatter() {return AttackInWaves.isScatter}
-	get isFright()  {return FrightMode.session != null}
-	get points()    {return FrightMode.session?.score ?? PtsLst[0]}
-	get spriteIdx() {return FrightMode.session?.spriteIdx ?? 0}
-	get caughtAll() {return FrightMode.session?.caughtAll ?? false}
-	get hasEscape() {return Ghosts.some(g=> g.isEscape)}
-	get akaCenter() {return Ghosts[GhsType.Akabei].center}
+	get animIndex()      {return this.#animIdx}
+	get animFlag()       {return Ticker.count % 6 == 0}
+	get CruiseElroy()    {return CruiseElroy}
+	get isChaseMode()    {return AttackInWaves.isChaseMode}
+	get isScatterMode()  {return AttackInWaves.isScatterMode}
+	get isFrightMode()   {return FrightMode.session != null}
+	get points()         {return FrightMode.session?.score ?? PtsLst[0]}
+	get spriteIdx()      {return FrightMode.session?.spriteIdx ?? 0}
+	get caughtAll()      {return FrightMode.session?.caughtAll ?? false}
+	get akaCenterPos()   {return Ghosts[GhsType.Akabei].center}
+	get areAnyEscaping() {return Ghosts.some(g=> g.escaping)}
 
 	#initialize(_={}, /**@type {Ghost[]}*/...ghosts) {
 		GhsMgr.#animIdx = 0
@@ -97,7 +97,7 @@ export const GhsMgr = new class extends Common {
 		Timer.sequence(...
 			Ghosts.slice(1).map((g,i)=> ({
 				ms: StandbyTimes[lv][i]/Game.speed,
-				fn: ()=> g.leaveHouse()
+				fn: ()=> g.prepGoOut()
 			}))
 		)
 	}
@@ -107,7 +107,7 @@ export const GhsMgr = new class extends Common {
 	update() {
 		if (State.isPlaying
 		 || State.isAttract
-		 || State.isCoffBrk)
+		 || State.isCoffBreak)
 			this.#animIdx ^= +(!Timer.frozen && GhsMgr.animFlag)
 		AttackInWaves.update()
 		FrightMode.session?.update()
@@ -115,7 +115,7 @@ export const GhsMgr = new class extends Common {
 	}
 	#draw(onFront=true) {
 		reverse(Ghosts).forEach(
-			g=> (g.isFright != onFront) && g.draw()
+			g=> (g.frightened != onFront) && g.draw()
 		)
 	}
 	drawBehind() {
@@ -131,16 +131,15 @@ export const GhsMgr = new class extends Common {
 const queueDirectionReverse = ()=> {
 	$(Ghosts).trigger('Reverse')
 }
-const SCATTER = 0
-const CHASING = 1
+const SCATTER = 0, CHACE = 1
 const AttackInWaves = function() {
 	const initPhase = (mode=SCATTER)=> ({mode,update(){}})
 	{
 		let phase = initPhase()
 		State.on({_Ready:()=> phase = genPhase()})
 		return {
-			get isChasing() {return phase.mode == CHASING},
-			get isScatter() {return phase.mode == SCATTER},
+			get isChaseMode()   {return phase.mode == CHACE},
+			get isScatterMode() {return phase.mode == SCATTER},
 			update() {State.isPlaying && phase.update()},
 		}
 	}
@@ -162,22 +161,22 @@ const AttackInWaves = function() {
 		const phaseList = genPhaseList()
 		const duration  = ()=> phaseList[idx]/Game.speed
 		const phase = {
-			mode: [SCATTER,CHASING][+Ctrl.alwaysChase],
+			mode: [SCATTER,CHACE][+Ctrl.alwaysChase],
 			update() {
 				if (Timer.frozen
-				 || GhsMgr.isFright
+				 || GhsMgr.isFrightMode
 				 || Ticker.Interval*(++cnt) < duration())
 					return
 				[cnt,phase.mode] = [0,(++idx % 2)]
 				queueDirectionReverse()
 			}
-		};return phase.mode? initPhase(CHASING) : phase
+		};return phase.mode? initPhase(CHACE) : phase
 	}
 }()
 
 export const DotCounter = function() {
 	let  _globalCounter = -1
-	const pCounters  = new Uint8Array(GhsType.Max)
+	const personalCounters = new Uint8Array(GhsType.Max)
 	const LimitTable = /**@type {const}*/
 		([//global,lv1,lv2,lv3+
 			[ 7,  0,  0, 0], // Pinky
@@ -185,56 +184,61 @@ export const DotCounter = function() {
 			[32, 60, 50, 0], // Guzuta
 		])
 	/**
-	 @param {number} idx Index of Pinky, Aosuke or Guzuta
+	 @param {number} i Index of Pinky, Aosuke or Guzuta
 	 @param {(deactivateGlobal?:boolean)=> boolean} fn
 	*/
-	function release(idx, fn) {
-		const timeOut = (Game.level <= 4 ? 4e3:3e3)
-		const gLimit  = LimitTable[idx-1][0] // global
-		const pLimit  = LimitTable[idx-1][min(Game.level,3)] // personal
-		;(pacman.timeNotEaten >= timeOut)? fn()
+	function release(i, fn) {
+		const lvIdx   = min(Game.level,3)
+		const timeout = (Game.level<=4 ? 4e3:3e3)
+		const gLimit  = LimitTable[i-1][0] // global
+		const pLimit  = LimitTable[i-1][lvIdx] // personal
+		;(pacman.timeNotEaten >= timeout)? fn()
 		:(!Game.restarted || _globalCounter < 0)
-			? (pCounters[idx] >= pLimit)
+			? (personalCounters[i] >= pLimit)
 				&& fn()
 			: (_globalCounter == gLimit)
-				&& fn(idx == GhsType.Guzuta)
+				&& fn(i == GhsType.Guzuta)
 				&& (_globalCounter = -1)
 		}
 	function reset() {
-		!Game.restarted && pCounters.fill(0)
+		!Game.restarted && personalCounters.fill(0)
 		_globalCounter = Game.restarted? 0:-1
 	}
-	function addCnt() {
+	function increaseCounter() {
 		(Game.restarted && _globalCounter >= 0)
 			? _globalCounter++
-			: pCounters[Ghosts.findIndex(g=> g.state.isIdle)]++
+			: incPreferredGhostCounter()
+	}
+	function incPreferredGhostCounter() {
+		const idx = Ghosts.findIndex(g=> g.state.isIdle)
+		idx != -1 && personalCounters[idx]++
 	}
 	State .on({_Ready:reset})
-	Player.on({Eaten:addCnt})
+	Player.on({Eaten:increaseCounter})
 	return {release}
 }()
 
-const Elroy = function() {
+const CruiseElroy = function() {
 	let  _part = 0
 	const Accelerations = freeze([1.00, 1.02, 1.05, 1.1])
 	const DotsLeftTable = freeze([20,20,30,40,50,60,70,70,80,90,100,110,120])
 	function angry() {
 		return State.isPlaying
 			&& _part > 1
-			&& Ghosts[GhsType.Akabei]?.isFright  == false
-			&& Ghosts[GhsType.Guzuta]?.isStarted == true
+			&& Ghosts[GhsType.Akabei]?.frightened == false
+			&& Ghosts[GhsType.Guzuta]?.started == true
 	}
-	function dotEaten() {
+	function onDotEaten() {
 		const rate = [1.5, 1.0, 0.5][_part]
 		if (Maze.dotsLeft <= DotsLeftTable[Game.clampedLv-1]*rate)
 			++_part && Sound.playSiren()
 	}
 	State .on({_NewLevel:()=> _part=0})
-	Player.on({Eaten:dotEaten})
+	Player.on({Eaten:onDotEaten})
 	return {
 		get part()  {return _part},
 		get angry() {return angry()},
-		get step()  {return GhsStep.Base * Accelerations[_part]},
+		get speed() {return GhsSpeed.Base * Accelerations[_part]},
 	}
 }()
 
@@ -250,7 +254,7 @@ const FrightMode = function() {
 			queueDirectionReverse()
 			this.Dur = TimeTable[Game.clampedLv-1]
 			this.Dur == 0 && !State.isAttract
-				? $(Ghosts).trigger('Runaway')
+				? $(Ghosts).trigger('FleeTime')
 				: this.#set(true)
 		}
 		#set(bool=false) {

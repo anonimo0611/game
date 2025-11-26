@@ -1,11 +1,11 @@
-import {Dir}     from '../_lib/direction.js'
-import {Sound}   from '../_snd/sound.js'
-import {Confirm} from '../_lib/confirm.js'
-import {Menu}    from './ui.js'
-import {MenuIds} from './ui.js'
-import {State}   from './state.js'
-import {drawText}   from './message.js'
-import {Score}   from './score.js'
+import {Dir}      from '../_lib/direction.js'
+import {Sound}    from '../_snd/sound.js'
+import {Confirm}  from '../_lib/confirm.js'
+import {Menu}     from './ui.js'
+import {MenuIds}  from './ui.js'
+import {State}    from './state.js'
+import {drawText} from './message.js'
+import {Score}    from './score.js'
 
 export const
 	Form  = document.forms[0],
@@ -98,7 +98,7 @@ export const Ctrl = new class {
 	}
 	#quit(noConfirm=false) {
 		noConfirm
-			? State.to('Quit')
+			? State.to('Quitted')
 			: State.isPlaying && Ctrl.#quitConfirm()
 	}
 	#clearHiScore() {
@@ -112,7 +112,7 @@ export const Ctrl = new class {
 	#quitConfirm() {
 		!Ticker.paused && Ctrl.pause()
 		Confirm.open('Are you sure you want to quit the game?',
-			Ctrl.pause, ()=> State.to('Quit'), 'Resume','Quit', 0)
+			Ctrl.pause, ()=> State.to('Quitted'), 'Resume','Quit', 0)
 	}
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
@@ -137,6 +137,6 @@ export const Ctrl = new class {
 		$('input')    .on({input:Ctrl.#output})
 		$('#clearHi') .on({click:Ctrl.#clearHiConfirm})
 		$('#resetBtn').on({click:Ctrl.#reset})
-		$('#startBtn').on({click:()=> State.to('Start')})
+		$('#startBtn').on({click:()=> State.to('Starting')})
 	}
 }, powChk = input('powChk')

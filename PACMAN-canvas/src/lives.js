@@ -9,10 +9,10 @@ export const Lives = function() {
 	const sprite = new Sprite(ctx,1)
 	function onChange() {
 		match(State.current, {
-			Title:  ()=> _left = Ctrl.livesMax-1,
-			Start:  ()=> _left += +1,
-			Ready:  ()=> _left += State.last('Start')? -1:0,
-			Restart:()=> _left += -1,
+			Title:    ()=> _left = Ctrl.livesMax-1,
+			Starting: ()=> _left += +1,
+			Ready:    ()=> _left += State.last('Starting')? -1:0,
+			Restarted:()=> _left += -1,
 		})
 		draw()
 	}
@@ -25,7 +25,7 @@ export const Lives = function() {
 		ctx.restore()
 	}
 	$('#lvsRng').on({input:onChange})
-	State.on({_Start_Ready_Restart:onChange})
+	State.on({_Starting_Ready_Restarted:onChange})
 	return {
 		get left() {return _left},
 		append() {++_left;draw()},

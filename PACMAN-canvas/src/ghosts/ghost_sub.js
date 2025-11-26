@@ -8,8 +8,8 @@ class Akabei extends Ghost {
 	constructor() {
 		super(L, {type:0, tile:[13.5, 12]})
 	}
-	get isAngry()   {return GhsMgr.Elroy.angry}
-	get chaseStep() {return GhsMgr.Elroy.step}
+	get angry()      {return GhsMgr.CruiseElroy.angry}
+	get chaseSpeed() {return GhsMgr.CruiseElroy.speed}
 }
 
 class Pinky extends Ghost {
@@ -38,7 +38,7 @@ class Aosuke extends Ghost {
 	}
 	get chasePos() {
 		const  pos = pacman.offsetTarget(2)
-		return pos.clone.sub(GhsMgr.akaCenter).add(pos)
+		return pos.clone.sub(GhsMgr.akaCenterPos).add(pos)
 	}
 }
 
@@ -56,6 +56,6 @@ class Guzuta extends Ghost {
 	}
 }
 
-State.on({_Restart_NewLevel:()=>
+State.on({_Restarted_NewLevel:()=>
 	GhsMgr.trigger('Init', [Akabei,Pinky,Aosuke,Guzuta].map(cls=> new cls))
 })

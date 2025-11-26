@@ -18,23 +18,23 @@ export default new class {
 	}
 	/** @param {Ghost} g */
 	#markerDisabled = g=> (
-		   g.isFright
+		   g.frightened
 		|| g.state.isIdle
 		|| g.state.isBitten
-		|| (Timer.frozen && !g.isEscape)
+		|| (Timer.frozen && !g.escaping)
 	)
 
 	/** @param {Ghost} g */
 	#getTargetPos = g=>
-		(g.state.isGoOut || g.isEscape)
+		(g.state.isGoingOut || g.escaping)
 			? Maze.House.EntranceTile.add(.5).mul(T)
-			: g.isScatter
+			: g.scattering
 				? g.originalTargetTile.add(.5).mul(T)
 				: g.chasePos
 
 	/** @param {Ghost} g */
 	#strokeLines(g) {
-		if (Timer.frozen || !g.isChasing)
+		if (Timer.frozen || !g.chasing)
 			return
 		match(g.type, {
 			[GhsType.Pinky]:  ()=> this.#auxLines({g,ofst:4}),
@@ -62,7 +62,7 @@ export default new class {
 		Ctx.setAlpha(0.8)
 		Ctx.lineWidth   = 6
 		Ctx.strokeStyle = Colors[g.type]
-		if (g.type != GhsType.Pinky || !pacman.inTunnel) {
+		if (g.type != GhsType.Pinky || !pacman.inTunSide) {
 			dir != U
 				? Ctx.newLinePath([x,y], fwdXY)
 				: Ctx.newLinePath([x,y], fwdXY).lineTo(...ofsXY)
@@ -70,7 +70,7 @@ export default new class {
 		}
 		if (g.type == GhsType.Aosuke) {
 			const tgtXY = g.chasePos.vals
-			const akaXY = GhsMgr.akaCenter.vals
+			const akaXY = GhsMgr.akaCenterPos.vals
 			Ctx.newLinePath(akaXY, ofsXY, tgtXY).stroke()
 			Ctx.fillCircle(...ofsXY, 8, Colors[g.type])
 		}

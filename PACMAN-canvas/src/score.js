@@ -1,19 +1,19 @@
-import {Sound} from '../_snd/sound.js'
-import {State} from './state.js'
+import {Sound}    from '../_snd/sound.js'
+import {State}    from './state.js'
 import {drawText} from './message.js'
-import {Ctrl}  from './control.js'
-import {Lives} from './lives.js'
+import {Ctrl}     from './control.js'
+import {Lives}    from './lives.js'
 
-let _score = 0, _hiSco = 0
-let _saveS = 0, _saveH = 0
+let _score  = 0, _hiSco  = 0
+let _savedS = 0, _savedH = 0
 
 export const Score = new class {
 	static {$(this.setup)}
 	static setup() {
 		Score.reset()
 		State.on({
-			Quit:    Score.#restore,
-			Start:   Score.#onStart,
+			Quitted: Score.#restore,
+			Starting:Score.#onStarting,
 			GameOver:Score.#onGameOver,
 		})
 	}
@@ -22,14 +22,14 @@ export const Score = new class {
 		_hiSco = localStorage.anopac_hiscore|0
 	}
 	#save() {
-		_saveS = _score
-		_saveH = _hiSco
+		_savedS = _score
+		_savedH = _hiSco
 	}
 	#restore() {
-		_score = _saveS
-		_hiSco = _saveH
+		_score = _savedS
+		_hiSco = _savedH
 	}
-	#onStart() {
+	#onStarting() {
 		Score.#save()
 		_score = 0
 	}

@@ -1,12 +1,12 @@
 import _State from '../_lib/state.js'
 /**
 @typedef {
-  'Title'|'Attract'|'Start'|'Restart'|'NewLevel'|'Ready'|'Playing'|
-  'Clear'|'FlashMaze'|'CoffBrk'|'Caught'|'Dying'|'GameOver'|'Quit'
+  'Title'|'Attract'|'Starting'|'Restarted'|'NewLevel'|'Ready'|'Playing'|
+  'Cleared'|'Flashing'|'CoffBreak'|'PacCaught'|'PacDying'|'GameOver'|'Quitted'
 } StateType
 @typedef {
-  '_Ready'|'_NewLevel'|'_Restart_NewLevel'|
-  '_Start_Ready_Restart'|'_Caught_Clear'
+  '_Ready'|'_NewLevel'|'_Restarted_NewLevel'|
+  '_Starting_Ready_Restarted'|'_PacDying_Cleared'
 } MultiState
 */
 
@@ -14,18 +14,18 @@ import _State from '../_lib/state.js'
 class GameState extends _State {
 	isTitle     = false
 	isAttract   = false
-	isStart     = false
+	isStarting  = false
 	isReady     = false
 	isPlaying   = false
-	isRestart   = false
+	isRestarted = false
 	isNewLevel  = false
-	isClear     = false
-	isFlashMaze = false
-	isCoffBrk   = false
-	isCaught    = false
-	isDying     = false
+	isCleared   = false
+	isFlashing  = false
+	isCoffBreak = false
+	isPacCaught = false
+	isPacDying  = false
 	isGameOver  = false
-	isQuit      = false
+	isQuitted   = false
 	constructor() {super(globalThis),this.init()}
 
 	/**
@@ -46,7 +46,7 @@ class GameState extends _State {
 	 @param {StateType} s
 	 @param {{delay?:number,data?:unknown}} config
 	*/
-	to(s, {delay=(s == 'Quit' ? -1:0),data}={}) {
+	to(s, {delay=(s == 'Quitted' ? -1:0),data}={}) {
 		return super.to(s, {delay,data,fn:this.#callback})
 	}
 } export const State = freeze(new GameState)

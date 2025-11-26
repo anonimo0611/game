@@ -26,7 +26,7 @@ export class Dying {
 		const {ctx}= this
 		this.#mAngle += PI/DisDur
 		ctx.beginPath()
-		ctx.moveTo(0,PacR*0.35)
+		ctx.moveTo(0,PacR*0.3)
 		ctx.arc(0,0, PacR, -PI/2+this.#mAngle,-PI/2-this.#mAngle)
 		ctx.fill()
 	}

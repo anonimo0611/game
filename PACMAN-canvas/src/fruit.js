@@ -28,7 +28,7 @@ export const Fruit = new class {
 	static {$(this.setup)}
 	static setup() {
 		State .on({_Ready:Fruit.#resetTarget})
-		Player.on({Eaten: Fruit.#dotEaten})
+		Player.on({Eaten: Fruit.#onDotEaten})
 		$Level.on({change:Fruit.#setImages})
 	}
 	get points() {
@@ -49,7 +49,7 @@ export const Fruit = new class {
 	#setFadeOut() {
 		_fadeOut = new FadeOut(FadeDur/Game.speed)
 	}
-	#dotEaten() {
+	#onDotEaten() {
 		if (AppearDots.has(Maze.MaxDot - Maze.dotsLeft)) {
 			_showTgt = true
 			Fruit.#setHideTimer()

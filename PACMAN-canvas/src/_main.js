@@ -1,36 +1,36 @@
 import './ghosts/ghost_sub.js'
-import {Cursor}  from '../_lib/mouse.js'
-import {Sound}   from '../_snd/sound.js'
-import {Menu}    from './ui.js'
-import {State}   from './state.js'
-import {Message} from './message.js'
-import {Ctrl}    from './control.js'
-import {Form}    from './control.js'
-import {Maze}    from './maze.js'
-import {Wall}    from './sprites/wall.js'
-import {Score}   from './score.js'
-import {Lives}   from './lives.js'
-import {Fruit}   from './fruit.js'
-import {Actor}   from './actor.js'
-import {pacman}  from './player/pacman.js'
-import {PtsMgr}  from './points.js'
-import {Attract} from './demo/attract.js'
-import {CoffBrk} from './demo/coffee_break.js'
+import {Cursor}    from '../_lib/mouse.js'
+import {Sound}     from '../_snd/sound.js'
+import {Menu}      from './ui.js'
+import {State}     from './state.js'
+import {Message}   from './message.js'
+import {Ctrl}      from './control.js'
+import {Form}      from './control.js'
+import {Maze}      from './maze.js'
+import {Wall}      from './sprites/wall.js'
+import {Score}     from './score.js'
+import {Lives}     from './lives.js'
+import {Fruit}     from './fruit.js'
+import {Actor}     from './actor.js'
+import {pacman}    from './player/pacman.js'
+import {PtsMgr}    from './points.js'
+import {Attract}   from './demo/attract.js'
+import {CoffBreak} from './demo/coffee_break.js'
 
 export const Game = new class {
 	static {$(this.setup)}
 	static setup() {
 		State.on({
 			Title:    Game.#onTitle,
-			Start:    Game.#onStart,
+			Starting: Game.#onStarting,
 			Playing:  Game.#onPlaying,
-			Clear:    Game.#onClear,
-			FlashMaze:Game.#onFlashMaze,
+			Cleared:  Game.#onCleared,
+			Flashing: Game.#onFlashing,
 			NewLevel: Game.#onNewLevel,
-			Dying:    Game.#onDying,
+			PacDying: Game.#onDying,
 			GameOver: Game.#onGameOver,
-			Quit:     Game.#onQuit,
-			Restart:  Game.#levelBegins,
+			Quitted:  Game.#onQuitted,
+			Restarted:Game.#levelBegins,
 		})
 		.to('Title')
 		Menu.Level.on({change:Game.#resetLevel})
@@ -63,7 +63,7 @@ export const Game = new class {
 		Game.#resetLevel()
 		Ticker.set(Game.#update, Game.#draw)
 	}
-	#onStart() {
+	#onStarting() {
 		Cursor.hide()
 		Sound.play('start')
 		Timer.set(2200, Game.#levelBegins)
@@ -75,14 +75,14 @@ export const Game = new class {
 		Sound.play('dying')
 		pacman.sprite.setDying()
 		Lives.left > 0
-			? State.to('Restart', {delay:2200})
-			: State.to('GameOver',{delay:2000})
+			? State.to('Restarted',{delay:2200})
+			: State.to('GameOver', {delay:2000})
 	}
-	#onClear() {
+	#onCleared() {
 		Sound.stopLoops()
-		State.to('FlashMaze', {delay:1000})
+		State.to('Flashing', {delay:1000})
 	}
-	#onFlashMaze() {
+	#onFlashing() {
 		Wall.flashing(Game.#levelEnds)
 	}
 	#onNewLevel() {
@@ -92,12 +92,12 @@ export const Game = new class {
 	#onGameOver() {
 		State.to('Title', {delay:2500})
 	}
-	#onQuit() {
+	#onQuitted() {
 		Ticker.stop()
 		State.to('Title')
 	}
 	#levelBegins() {
-		Game.#restarted = State.isRestart
+		Game.#restarted = State.isRestarted
 		State.to('Ready').to('Playing', {delay:2200})
 	}
 	#levelEnds() {
@@ -106,22 +106,22 @@ export const Game = new class {
 			State.to('Title')
 			return
 		}
-		CoffBrk.number < 0
+		CoffBreak.number < 0
 			? State.to('NewLevel')
-			: State.to('CoffBrk')
+			: State.to('CoffBreak')
 	}
 	#update() {
 		PtsMgr.update()
 		Fruit.update()
 		Actor.update()
 		Attract.update()
-		CoffBrk.update()
+		CoffBreak.update()
 	}
 	#draw() {
 		Ctx.clear()
 		Maze.drawGrid()
-		Attract.draw() ||
-		CoffBrk.draw() ||
+		Attract.draw()   ||
+		CoffBreak.draw() ||
 		Game.#drawMain()
 	}
 	#drawMain() {
