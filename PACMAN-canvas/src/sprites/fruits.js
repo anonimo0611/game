@@ -42,7 +42,7 @@ function cherry(ctx=Ctx) {
 		ctx.save()
  		ctx.globalCompositeOperation = 'destination-out'
 		ctx.beginPath()
-	  	ctx.arc(2.5, 2.5, 3, (idx? 0 : PI/4), PI*2)
+	  	ctx.arc(2.5, 2.5, 3, 0, PI*2)
 		ctx.lineWidth = 0.5
 		ctx.stroke()
 		ctx.restore()
@@ -263,10 +263,12 @@ function key(ctx=Ctx) {
 	ctx.bezierCurveTo(-3.5, -6.8, +3.5,-6.8, +3.6,-4.3)
 	ctx.arcTo(+3.6, -1.3, +2.5, -1.3, 0.8)
 	ctx.arcTo(-3.6, -1.3, -3.6, -2.5, 0.8)
+	{// hole
+		const [x,y,w,h,r]= [-1.7, -5, 1.7*2, 1, .5]
+		ctx.roundRect
+			? ctx.roundRect(x,y,w,h,r)
+			: ctx.rect(x,y,w,h)
+	}
 	ctx.fillStyle = '#68B9FC'
-	ctx.fill()
-
-	// key hole
-	ctx.globalCompositeOperation = 'destination-out'
-	ctx.strokeLine(-1.2, -4.5, +1.2, -4.5)
+	ctx.fill('evenodd')
 }
