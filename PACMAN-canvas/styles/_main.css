@@ -51,8 +51,6 @@ h1 {
 	position: relative;
 	transform-origin: center;
 	opacity: 0;
-	transition:  opacity 400ms;
-	will-change: opacity, scale;
 	#board {
 		margin-top: 0.5rem;
 		pointer-events: none;
@@ -89,7 +87,7 @@ h1 {
 body:not([data-state=Title]) #titleScr {
 	visibility: hidden;
 }
-body:is([data-state=Attract],[data-state=CoffBrk]) {
+body:is([data-state=Attract],[data-state=CoffBreak]) {
 	:is(header,canvas.sub) {visibility: hidden}
 }
 

@@ -5,7 +5,7 @@ import {SirenIds} from './_manifest.js'
 import {SoundMgr} from './loader.js'
 
 export const Sound = new class extends SoundMgr {
-	get sirenId()  {return SirenIds[GhsMgr.Elroy.part]}
+	get sirenId()  {return SirenIds[GhsMgr.CruiseElroy.part]}
 	get ringing()  {return Sound.isPlaying('bell')}
 	get disabled() {return super.disabled || State.isAttract}
 
@@ -15,11 +15,11 @@ export const Sound = new class extends SoundMgr {
 			super.vol = clamp(+vol, 0, 10)
 	}
 	playSiren() {
-		if (!GhsMgr.isFright && !GhsMgr.hasEscape)
+		if (!GhsMgr.isFrightMode && !GhsMgr.areAnyEscaping)
 			Sound.stopLoops().play(Sound.sirenId)
 	}
 	playFright() {
-		if (!GhsMgr.hasEscape)
+		if (!GhsMgr.areAnyEscaping)
 			Sound.stopSiren().play('fright')
 	}
 	stopSiren = ()=> Sound.stop(...SirenIds)
@@ -33,8 +33,8 @@ export const Sound = new class extends SoundMgr {
 		Sound.stopSiren().stop('fright').play('escape')
 	}
 	ghostArrivedAtHome() {
-		if (!GhsMgr.hasEscape) {
-			const id = GhsMgr.isFright? 'fright' : Sound.sirenId
+		if (!GhsMgr.areAnyEscaping) {
+			const id = GhsMgr.isFrightMode? 'fright' : Sound.sirenId
 			Sound.stop('escape').play(id)
 		}
 	}

@@ -80,8 +80,8 @@ export const View = function()
 			x,y,size:S,
 			orient:/**@type {const}*/([R,R,R,R,U,L,D,R])[col],
 			animIdx:  +(col % 2 != 0),
-			isFright:  (col <= 3),
-			isEscape:  (col >= 4),
+			frightened:(col <= 3),
+			escaping:  (col >= 4),
 			spriteIdx:+(col >= 2),
 		})
 	}
@@ -89,7 +89,7 @@ export const View = function()
 	function drawPoints()
 	{
 		/**
-		 @typedef {typeof Pts.Score.All[number]} Pts
+		 @typedef {typeof Pts.AllPts[number]} Pts
 		 @type {(pts:Pts, x:number, y:number)=> void}
 		*/
 		function draw(pts, x, y)
@@ -100,13 +100,13 @@ export const View = function()
 			Ctx.drawImage(ctx.canvas, -w/2, -h/2)
 			Ctx.restore()
 		}
-		const scoreLst = /** @type {const} */
+		const ptsTable = /** @type {const} */
 		([
 			[200,400,800,1600,100,300,500,700],
 			[1000,2000,3000,5000]
 		])
-		scoreLst[0].forEach((pts,i)=> draw(pts, ofst(i)+T, S*6+T))
-		scoreLst[1].forEach((pts,i)=> draw(pts, (S+GAP/2)+S*(2+GAP/T)*i, S*7+S/2))
+		ptsTable[0].forEach((pts,i)=> draw(pts, ofst(i)+T, S*6+T))
+		ptsTable[1].forEach((pts,i)=> draw(pts, (S+GAP/2)+S*(2+GAP/T)*i, S*7+S/2))
 	}
 
 	function drawPacman() {
@@ -137,7 +137,7 @@ export const View = function()
 			for (const i of range(3)) {
 				draw(...pos.vals, {animIdx:+(i==2)})
 				const nPos = Vec2.new(pos).add(S*0.75, S/4)
-				spr.clothes(+(i==2), rates[i], {...nPos,size:S})
+				spr.stretchClothing(+(i==2), rates[i], {...nPos,size:S})
 				pos.x += S*1.2 + ((i+1)*GAP)
 			}
 		}
@@ -154,15 +154,15 @@ export const View = function()
 			Ctx.save()
 			Ctx.translate(S*6.9+sx, S-T/2-3*s)
 			Ctx.scale(s, s)
-			spr.drawOffcut(Vec2.Zero)
+			spr.drawCloth(Vec2.Zero)
 			Ctx.restore()
 		}
-		draw(ofst(4.00), 0, {isRipped: true,orient:U})
-		draw(ofst(5.00), 0, {isRipped: true,orient:'Bracket'})
-		draw(ofst(0.00), S, {isMended: true})
-		draw(ofst(1.00), S, {isMended: true,animIdx:1})
-		draw(ofst(2.25), S, {isExposed:true})
-		draw(ofst(4.25), S, {isExposed:true,animIdx:1})
+		draw(ofst(4.00), 0, {ripped: true,orient:U})
+		draw(ofst(5.00), 0, {ripped: true,orient:'Bracket'})
+		draw(ofst(0.00), S, {mended: true})
+		draw(ofst(1.00), S, {mended: true,animIdx:1})
+		draw(ofst(2.25), S, {exposed:true})
+		draw(ofst(4.25), S, {exposed:true,animIdx:1})
 	}
 
 	return {draw}
