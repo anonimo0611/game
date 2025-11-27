@@ -11,7 +11,6 @@ import {Ghost}    from '../ghosts/ghost.js'
 import {RunTimer} from './_run_timer.js'
 
 let _attract = /**@type {?Attract}*/(null)
-const{Orange}= Color, SmallSize = T*.68
 
 export class Attract {
 	static #begin() {_attract = new Attract}
@@ -49,7 +48,7 @@ export class Attract {
 	draw() {
 		Score.draw()
 		drawText(7, 5, null, 'CHARACTOR　/　NICKNAME')
-		const
+		const Small = {size:T*.68},
 		et = Ticker.elapsedTime/100
 		et > 10 && this.drawCharaGhost(GhsType.Akabei, 6)
 		et > 15 && drawText( 8,  7, Color.Akabei, 'OIKAKE----')
@@ -71,8 +70,8 @@ export class Attract {
 			drawDot(Ctx, 10, 26, true, !!this.showPow)
 			drawText(12.0, 25, null, DotPts)
 			drawText(12.0, 27, null, PowPts)
-			drawText(14.3, 25, null,'PTS', {size:SmallSize})
-			drawText(14.3, 27, null,'PTS', {size:SmallSize})
+			drawText(14.3, 25, null,'PTS',Small)
+			drawText(14.3, 27, null,'PTS',Small)
 		}
 		if (et > 90) {
 			const {extendScore}= Ctrl
@@ -81,8 +80,8 @@ export class Attract {
 			}
 			if (extendScore > 0) {
 				const text = `BONUS　PACMAN　FOR　${extendScore}`
-				drawText( 2.0, 30, Orange, text)
-				drawText(24.3, 30, Orange,'PTS', {size:SmallSize})
+				drawText( 2.0, 30, Color.Orange, text)
+				drawText(24.3, 30, Color.Orange,'PTS',Small)
 			}
 		}
 		if (et > 105) {
