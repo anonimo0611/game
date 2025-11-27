@@ -1,8 +1,8 @@
 const Fns = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
 /**
- * @param {ExtendedContext2D} ctx
- * @param {number} fruitIdx
- */
+ @param {ExtendedContext2D} ctx
+ @param {number} fruitIdx
+*/
 export function draw(ctx, fruitIdx, x=T,y=T-2, scale=T/8) {
 	const Scale = 1.05
 	ctx.save()
@@ -33,7 +33,7 @@ export const [current,cache]= function() {
 
 function cherry(ctx=Ctx) {
 	// both fruits
-	[[-6,-1],[-1,1]].forEach(([x,y],idx)=> {
+	[[-6,-1],[-1,1]].forEach(([x,y])=> {
 		ctx.save()
 		ctx.translate(x,y)
 
@@ -42,7 +42,7 @@ function cherry(ctx=Ctx) {
 		ctx.save()
  		ctx.globalCompositeOperation = 'destination-out'
 		ctx.beginPath()
-	  	ctx.arc(2.5, 2.5, 3, (idx? 0 : PI/4), PI*2)
+	  	ctx.arc(2.5, 2.5, 3, 0, PI*2)
 		ctx.lineWidth = 0.5
 		ctx.stroke()
 		ctx.restore()
@@ -209,8 +209,8 @@ function gala(ctx=Ctx) {
 	for (const scaleX of [1,-1]) {
 		ctx.scale(scaleX, 1)
 		ctx.setLinePath([0,-4.9],[3.8,-2.2],[3.0,-1.2],[1.3,-2.3])
-		ctx.quadraticCurveTo(+0.7,-2.7, 0.7,-1.4)
-		ctx.quadraticCurveTo(+0.4, 0.0, 0.0, 0.0)
+		ctx.quadraticCurveTo(0.7,-2.7, 0.7,-1.4)
+		ctx.quadraticCurveTo(0.4, 0.0, 0.0, 0.0)
 	}
 	ctx.fillStyle = '#FF3401'
 	ctx.fill()
@@ -263,10 +263,12 @@ function key(ctx=Ctx) {
 	ctx.bezierCurveTo(-3.5, -6.8, +3.5,-6.8, +3.6,-4.3)
 	ctx.arcTo(+3.6, -1.3, +2.5, -1.3, 0.8)
 	ctx.arcTo(-3.6, -1.3, -3.6, -2.5, 0.8)
+	{// hole
+		const [x,y,w,h,r]= [-1.7, -5, 1.7*2, 1, .5]
+		ctx.roundRect
+			? ctx.roundRect(x,y,w,h,r)
+			: ctx.rect(x,y,w,h)
+	}
 	ctx.fillStyle = '#68B9FC'
-	ctx.fill()
-
-	// key hole
-	ctx.globalCompositeOperation = 'destination-out'
-	ctx.strokeLine(-1.2, -4.5, +1.2, -4.5)
+	ctx.fill('evenodd')
 }
