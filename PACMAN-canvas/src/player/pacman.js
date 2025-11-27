@@ -11,10 +11,9 @@ import {Mover}  from './controller.js'
 import {TunnelEntry} from './tunnel.js'
 
 class PlayerPac extends Pacman {
-	#mover    = new Mover()
-	#tunEntry = new TunnelEntry()
-	#eatSEIdx = 0
-	#framesSinceEating = 0
+	#mover    = new Mover
+	#tunEntry = new TunnelEntry
+	#eatSEIdx = 0;#framesSinceEating = 0;
 
 	get showCenterDot() {return Ctrl.showGridLines}
 	get isSemiTrans()   {return Ctrl.invincible || this.showCenterDot}
