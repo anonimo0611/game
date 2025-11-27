@@ -12,11 +12,11 @@ class Vec2 {
 	static get Left()  {return Vec2.new(-1, 0)}
 
 	/**
-	 @param {number|Position} v1
+	 @param {number|Position} [v1]
 	 @param {number} [v2]
 	 @returns {[x:number, y:number]}
 	*/
-	static #parseXY(v1, v2) {
+	static #parseXY(v1=0, v2) {
 		if (typeof v1 == 'number'
 		 && typeof v2 == 'number') return [v1, v2]
 		if (typeof v1 == 'object') return [v1.x, v1.y]
@@ -25,7 +25,7 @@ class Vec2 {
 
 	/**
 	 @overload
-	 @param   {number} scalar
+	 @param   {number} [scalar]
 	 @returns {Vec2}
 
 	 @overload
@@ -37,7 +37,7 @@ class Vec2 {
 	 @param   {Position} pos
 	 @returns {Vec2}
 
-	 @param {number|Position} v1
+	 @param {number|Position} [v1]
 	 @param {number} [v2]
 	*/
 	static new(v1,v2) {
