@@ -9,15 +9,15 @@ export const Message = new class {
 	 @param {string|number} text
 	*/
 	drawText(col, row, color, text,
-		{scaleX=1, face='Atari', size=T, style=''}={}
+		{ctx=Ctx, scaleX=1, face='Atari', size=T, style=''}={}
 	) {
-		Ctx.save()
-		Ctx.scale(scaleX, 1)
-		Ctx.font = `${style} ${size}px ${face}`
-		Ctx.fillStyle = color ?? 'white'
+		ctx.save()
+		ctx.scale(scaleX, 1)
+		ctx.font = `${style} ${size}px ${face}`
+		ctx.fillStyle = color ?? 'white'
 		String(text).split('\n').forEach((txt,i)=>
-			Ctx.fillText(txt, col*T+2, row*T-2 + size*i))
-		Ctx.restore()
+			ctx.fillText(txt, col*T+2, row*T-2 + size*i))
+		ctx.restore()
 	}
 	#drawPausedText() {
 		(!Confirm.opened && Ticker.paused)

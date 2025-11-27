@@ -7,14 +7,14 @@ import {Score}  from '../score.js'
 import {Maze}   from '../maze.js'
 import {Pacman} from '../pacman.js'
 import {GhsMgr} from '../ghosts/_system.js'
-import {Mover}  from './mover.js'
+import {Mover}  from './controller.js'
 import {TunnelEntry} from './tunnel.js'
 
 class PlayerPac extends Pacman {
+	#mover    = new Mover()
+	#tunEntry = new TunnelEntry()
 	#eatSEIdx = 0
 	#framesSinceEating = 0
-	#mover  = new Mover()
-	#tunMgr = new TunnelEntry()
 
 	get showCenterDot() {return Ctrl.showGridLines}
 	get isSemiTrans()   {return Ctrl.invincible || this.showCenterDot}
@@ -23,7 +23,7 @@ class PlayerPac extends Pacman {
 	get maxAlpha()      {return this.isSemiTrans? .75:1}
 	get speed()         {return this.#mover.speed}
 	get stopped()       {return this.#mover.stopped}
-	get TunnelEntry()   {return this.#tunMgr}
+	get TunnelEntry()   {return this.#tunEntry}
 	get timeNotEaten()  {return this.#framesSinceEating * Game.interval}
 
 	constructor() {
@@ -58,7 +58,7 @@ class PlayerPac extends Pacman {
 			return
 		this.sprite.update(this)
 		this.#framesSinceEating++
-		this.#tunMgr.update()
+		this.#tunEntry.update()
 		this.#processBehavior(this.speed+.5|0)
 	}
 	#processBehavior(divisor=1) {
