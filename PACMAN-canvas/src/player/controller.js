@@ -14,13 +14,9 @@ class MoveState {
 	nextDir  = /**@type {?Direction}*/(null)
 	nextTurn = /**@type {?Direction}*/(null)
 }
-class Steer {
-	/** @param {MoveState} ms */
-	constructor(ms) {
-		this.s = ms
-		$win.offon('keydown.Steer', this.#onKeydown.bind(this))
-	}
-	#onKeydown(/**@type {KeyboardEvent}*/e) {
+/** @param {MoveState} s */
+function setSteerEvent(s) {
+	$win.offon('keydown.Steer', e=> {
 		const dir = Dir.from(e,{wasd:true})
 		if (keyRepeat(e)
 			|| dir == null
@@ -28,20 +24,20 @@ class Steer {
 			|| Ctrl.activeElem)
 			return
 
-		if (this.s.turning) {
-			this.s.nextTurn = dir
+		if (s.turning) {
+			s.nextTurn = dir
 			return
 		}
 		if (pacman.hasAdjWall(dir)) {
-			this.s.nextDir = dir
+			s.nextDir = dir
 			return
 		}
-		this.s.nextDir = dir
+		s.nextDir = dir
 		if (pacman.passedTileCenter) {
 			pacman.orient = dir
 			pacman.setMoveDir(pacman.revDir)
 		}
-	}
+	})
 }
 export class Mover {
 	#speed   = 0
@@ -49,7 +45,7 @@ export class Mover {
 	constructor() {
 		/** @private */
 		this.s = new MoveState
-		new Steer(this.s)
+		setSteerEvent(this.s)
 		$(()=> this.#speed = this.tileSpeed)
 	}
 	get speed()   {return this.#speed}
