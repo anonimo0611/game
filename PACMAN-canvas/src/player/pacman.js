@@ -13,7 +13,7 @@ import {TunnelEntry} from './tunnel.js'
 class PlayerPac extends Pacman {
 	#mover    = new Mover
 	#tunEntry = new TunnelEntry
-	#eatSE_index = 0
+	#eatSE_Index = 0
 	#framesSinceEating = 0
 
 	get showCenterDot() {return Ctrl.showGridLines}
