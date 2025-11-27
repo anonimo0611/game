@@ -88,7 +88,7 @@ class PlayerPac extends Pacman {
 		Score.add(DotPts)
 	}
 	#playEateSE() {
-		const id = (this.#eatSE_index ^= 1) ? 'eat1':'eat0'
+		const id = (this.#eatSE_Index ^= 1) ? 'eat1':'eat0'
 		Sound.play(id, {duration:(T/this.speed)*Ticker.Interval*0.5})
 	}
 }

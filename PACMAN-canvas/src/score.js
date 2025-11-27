@@ -12,7 +12,7 @@ export const Score = new class {
 	static setup() {
 		Score.reset()
 		State.on({
-			Quitted: Score.#restore,
+			Quit:    Score.#restore,
 			Starting:Score.#onStarting,
 			GameOver:Score.#onGameOver,
 		})

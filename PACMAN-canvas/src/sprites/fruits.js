@@ -33,7 +33,7 @@ export const [current,cache]= function() {
 
 function cherry(ctx=Ctx) {
 	// both fruits
-	[[-6,-1],[-1,1]].forEach(([x,y],idx)=> {
+	[[-6,-1],[-1,1]].forEach(([x,y])=> {
 		ctx.save()
 		ctx.translate(x,y)
 

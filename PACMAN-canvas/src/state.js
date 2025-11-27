@@ -2,7 +2,7 @@ import _State from '../_lib/state.js'
 /**
 @typedef {
   'Title'|'Attract'|'Starting'|'Restarted'|'NewLevel'|'Ready'|'Playing'|
-  'Cleared'|'Flashing'|'CoffBreak'|'PacCaught'|'PacDying'|'GameOver'|'Quitted'
+  'Cleared'|'Flashing'|'CoffBreak'|'PacCaught'|'PacDying'|'GameOver'|'Quit'
 } StateType
 @typedef {
   '_Ready'|'_NewLevel'|'_Restarted_NewLevel'|
@@ -25,7 +25,7 @@ class GameState extends _State {
 	isPacCaught = false
 	isPacDying  = false
 	isGameOver  = false
-	isQuitted   = false
+	isQuit      = false
 	constructor() {super(globalThis),this.init()}
 
 	/**
@@ -46,7 +46,7 @@ class GameState extends _State {
 	 @param {StateType} s
 	 @param {{delay?:number,data?:unknown}} config
 	*/
-	to(s, {delay=(s == 'Quitted' ? -1:0),data}={}) {
+	to(s, {delay=(s == 'Quit' ? -1:0),data}={}) {
 		return super.to(s, {delay,data,fn:this.#callback})
 	}
 } export const State = freeze(new GameState)

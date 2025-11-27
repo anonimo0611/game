@@ -29,7 +29,7 @@ export const Game = new class {
 			NewLevel: Game.#onNewLevel,
 			PacDying: Game.#onDying,
 			GameOver: Game.#onGameOver,
-			Quitted:  Game.#onQuitted,
+			Quit:     Game.#onQuit,
 			Restarted:Game.#levelBegins,
 		})
 		.to('Title')
@@ -92,7 +92,7 @@ export const Game = new class {
 	#onGameOver() {
 		State.to('Title', {delay:2500})
 	}
-	#onQuitted() {
+	#onQuit() {
 		Ticker.stop()
 		State.to('Title')
 	}

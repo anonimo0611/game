@@ -98,7 +98,7 @@ export const Ctrl = new class {
 	}
 	#quit(noConfirm=false) {
 		noConfirm
-			? State.to('Quitted')
+			? State.to('Quit')
 			: State.isPlaying && Ctrl.#quitConfirm()
 	}
 	#clearHiScore() {
@@ -112,7 +112,7 @@ export const Ctrl = new class {
 	#quitConfirm() {
 		!Ticker.paused && Ctrl.pause()
 		Confirm.open('Are you sure you want to quit the game?',
-			Ctrl.pause, ()=> State.to('Quitted'), 'Resume','Quit', 0)
+			Ctrl.pause, ()=> State.to('Quit'), 'Resume','Quit', 0)
 	}
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {

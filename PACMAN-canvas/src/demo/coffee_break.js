@@ -29,7 +29,7 @@ export class CoffBreak {
 	constructor(num) {
 		this.pacman.y = this.akabei.y = (BH/2 - T/2)
 		Sound.play('cutscene', {loop:1^+(num == 2)})
-		$onNS('.CB',{Quitted:this.end, blur_focus:this.pause})
+		$onNS('.CB',{Quit:this.end, blur_focus:this.pause})
 	}
 	movePacman() {
 		this.pacman.x += this.pacVelX
