@@ -9,7 +9,7 @@ MenuIds = /**@type {(keyof Menu)[]}*/(keys(Menu));
 
 //---- Panels ----
 
-/** @type {HTMLButtonElement[]} */
+/** @type {NodeListOf<HTMLButtonElement>} */
 (qSAll('.panelBtn')).forEach(btn=> {
 	$(btn).on('keydown pointerdown', e=> {
 		if (nonEnterKey(e))

@@ -8,16 +8,11 @@ import {Ghost}  from '../ghosts/ghost.js'
 import Sprite   from '../sprites/ghost_cb.js'
 
 export class CoffBreak {
+	static {State.on({CoffBreak:(_,n=this.number)=> this.#begin(n)})}
 	static #scene = /**@type {?Scene1|Scene2|Scene3}*/(null)
 	static #begin(n=1) {this.#scene=new[Scene1,Scene2,Scene3][n-1]}
-	static {State.on({CoffBreak:(_,n=this.number)=> this.#begin(n)})}
-	static update() {
-		this.#scene?.update()
-	}
-	static draw() {
-		this.#scene?.draw()
-		return State.isCoffBreak
-	}
+	static update() {this.#scene?.update()}
+	static draw() {return this.#scene?.draw() ?? State.isCoffBreak}
 	static get number() {
 		return !Ctrl.isPractice && {2:1, 5:2, 9:3}[Game.level] || -1
 	}
@@ -46,18 +41,17 @@ export class CoffBreak {
 		Sound.pause(Ticker.pause())
 	}
 	draw() {
-		State.last('Flashing')
-			&& Fruit.drawLevelCounter()
+		State.wasFlashing && Fruit.drawLevelCounter()
+		return true
 	}
 	end() {
 		$off('.CB')
 		CoffBreak.#scene = null
-		State.to(State.last('Title') || 'NewLevel')
+		State.wasTitle
+			? State.toTitle()
+			: State.toNewLevel()
 	}
 }
-qSAll('button.CBBtn').forEach((btn,i)=> {
-	$(btn).on('click', ()=> State.to('CoffBreak', {data:i+1}))
-})
 
 class Scene1 extends CoffBreak {
 	constructor() {
@@ -92,7 +86,7 @@ class Scene1 extends CoffBreak {
 		const {pacman,frightened}= this
 		this.drawAkabei({frightened})
 		this.drawPacman(pacman.dir == R ? 4:1)
-		super.draw()
+		return super.draw()
 	}
 }
 
@@ -139,7 +133,7 @@ class Scene2 extends CoffBreak {
 				const rate = norm(spr.CaughtX, spr.AkaMinX, a.x)
 				spr.stretchClothing(animIdx, rate, a.center.addX(T))
 			}()
-		super.draw()
+		return super.draw()
 	}
 }
 
@@ -166,6 +160,6 @@ class Scene3 extends CoffBreak {
 		this.akabei.dir == L
 			? this.drawAkabei({mended: true})
 			: this.drawAkabei({exposed:true})
-		super.draw()
+		return super.draw()
 	}
 }

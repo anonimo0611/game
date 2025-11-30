@@ -6,16 +6,19 @@ import {State}   from '../state.js'
 const WaitTime = 1e3*30 // ms
 
 export const RunTimer = function() {
-	let _cnt = 0
+	let _cnt=0
 	function update() {
-		!document.hasFocus()
+		if (!document.hasFocus()
 		  || !State.isTitle
 		  || Confirm.opened
-		  || Ctrl.activeElem
-		? _cnt=0
-		: _cnt++ * Ticker.Interval > WaitTime
-			&& State.to('Attract')
+		  || Ctrl.activeElem) {
+			return _cnt=0
+		}
+		Ticker.Interval*_cnt++ > WaitTime
+			&& State.toAttract()
+		return _cnt
 	}
-	$win.on(`Title blur click focus mousemove keydown resize wheel`, ()=> _cnt=0)
+	$win.on(`Title blur click focus
+		mousemove keydown resize wheel`, ()=> _cnt=0)
 	return {update}
 }()

@@ -26,7 +26,7 @@ export class Actor extends Common {
 
 	get center()    {return this.pos.clone.add(T/2)}
 	get tilePos()   {return this.center.divInt(T)}
-	get tileIdx()   {return Vec2.idx(this.tilePos,Cols)}
+	get tileIdx()   {return this.tilePos.toIdx(Cols)}
 
 	get dir()       {return this.#movDir}
 	get orient()    {return this.#orient}
@@ -90,11 +90,11 @@ export class Actor extends Common {
 	}
 	getAdjTile(/**@type {Direction}*/dir, tile=this.tilePos) {
 		const  v = Vec2[dir].add(tile)
-		return v.setX((v.x+Cols) % Cols) // x-axis loops
+		return v.setX((v.x+Cols) % Cols) // x-axis wrap
 	}
 	collidesWithWall(dir=this.dir) {
 		const {speed,center}= this
 		const {x,y}= Vec2[dir].mul(T/2+speed).add(center).divInt(T)
-		return Maze.hasWall({x:(x+Cols) % Cols, y}) // x-axis loops
+		return Maze.hasWall({x:(x+Cols) % Cols, y}) // x-axis wrap
 	}
 }

@@ -77,7 +77,6 @@ export class Mover {
 		this.#setMoveSpeed(divisor)
 		this.#finishTurningCorner()
 		this.#turnAround()
-		this.#stopAtWall()
 	}
 	#turnCorner(divisor=1) {
 		const dir = this.s.nextDir
@@ -100,7 +99,7 @@ export class Mover {
 		pacman.dir == pacman.revOrient
 			&& pacman.setMoveDir(pacman.orient)
 	}
-	#stopAtWall() {
+	stopAtWall() {
 		(this.#stopped = this.collidedWithWall)
 			&& (pacman.pos = pacman.tilePos.mul(T))
 			&& (this.s.nextDir = null)

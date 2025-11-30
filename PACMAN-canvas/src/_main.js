@@ -32,7 +32,7 @@ export const Game = new class {
 			Quit:     Game.#onQuit,
 			Restarted:Game.#levelBegins,
 		})
-		.to('Title')
+		.toTitle()
 		Menu.Level.on({change:Game.#resetLevel})
 	}
 	#level = 1
@@ -46,8 +46,8 @@ export const Game = new class {
 	get speedByLv() {return 1 - (13-Game.clampedLv) * .01}
 	get clampedLv() {return clamp(Game.level, 1, 13)}
 	get speed()     {return State.isPlaying ? Ctrl.speed : 1}
-	get interval()  {return Game.speed * Ticker.Interval}
 	get moveSpeed() {return Game.speed * Game.speedByLv}
+	get interval()  {return Game.speed * Ticker.Interval}
 
 	#resetLevel() {
 		Game.#restarted = false
@@ -75,12 +75,12 @@ export const Game = new class {
 		Sound.play('dying')
 		pacman.sprite.setDying()
 		Lives.left > 0
-			? State.to('Restarted',{delay:2200})
-			: State.to('GameOver', {delay:2000})
+			? State.toRestart ({delay:2200})
+			: State.toGameOver({delay:2000})
 	}
 	#onCleared() {
 		Sound.stopLoops()
-		State.to('Flashing', {delay:1000})
+		State.toFlashing({delay:1000})
 	}
 	#onFlashing() {
 		Wall.flashing(Game.#levelEnds)
@@ -90,25 +90,25 @@ export const Game = new class {
 		Game.#levelBegins()
 	}
 	#onGameOver() {
-		State.to('Title', {delay:2500})
+		State.toTitle({delay:2500})
 	}
 	#onQuit() {
 		Ticker.stop()
-		State.to('Title')
+		State.toTitle()
 	}
 	#levelBegins() {
 		Game.#restarted = State.isRestarted
-		State.to('Ready').to('Playing', {delay:2200})
+		State.toReady().toPlaying({delay:2200})
 	}
 	#levelEnds() {
 		Game.#restarted = false
 		if (!Ctrl.endlessMode) {
-			State.to('Title')
+			State.toTitle()
 			return
 		}
 		CoffBreak.number < 0
-			? State.to('NewLevel')
-			: State.to('CoffBreak')
+			? State.toNewLevel()
+			: State.toCoffBreak()
 	}
 	#update() {
 		PtsMgr.update()

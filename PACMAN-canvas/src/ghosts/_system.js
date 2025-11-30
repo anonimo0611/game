@@ -50,11 +50,19 @@ export class GhostState extends _State {
 	isReturning = false
 	constructor(/**@type {Ghost}*/g) {
 		super(g)
-		this.init().to(g.inHouse? 'Idle':'Walking')
+		this.init().owner.inHouse
+			? this.toIdle()
+			: this.toWalking()
 	}
-	to(/**@type {StateType}*/state) {
+	get toIdle()      {return this.ret('Idle')}
+	get toGoingOut()  {return this.ret('GoingOut')}
+	get toWalking()   {return this.ret('Walking')}
+	get toBitten()    {return this.ret('Bitten')}
+	get toEscaping()  {return this.ret('Escaping')}
+	get toReturning() {return this.ret('Returning')}
+	set(/**@type {StateType}*/state) {
 		$(this.owner).trigger(state)
-		return super.to(state)
+		return super.set(state)
 	}
 }
 
@@ -97,7 +105,7 @@ export const GhsMgr = new class extends Common {
 		Timer.sequence(...
 			Ghosts.slice(1).map((g,i)=> ({
 				ms: StandbyTimes[lv][i]/Game.speed,
-				fn: ()=> g.prepGoOut()
+				fn: ()=> g.leaveHouse()
 			}))
 		)
 	}
@@ -187,7 +195,7 @@ export const DotCounter = function() {
 	 @param {number} i Index of Pinky, Aosuke or Guzuta
 	 @param {(deactivateGlobal?:boolean)=> boolean} fn
 	*/
-	function release(i, fn) {
+	function releaseIfReady(i, fn) {
 		const lvIdx   = min(Game.level,3)
 		const timeout = (Game.level<=4 ? 4e3:3e3)
 		const gLimit  = LimitTable[i-1][0] // global
@@ -215,7 +223,7 @@ export const DotCounter = function() {
 	}
 	State .on({_Ready:reset})
 	Player.on({Eaten:increaseCounter})
-	return {release}
+	return {releaseIfReady}
 }()
 
 const CruiseElroy = function() {
@@ -257,12 +265,12 @@ const FrightMode = function() {
 				? $(Ghosts).trigger('FleeTime')
 				: this.#set(true)
 		}
-		#set(bool=false) {
-			_session = bool? this : null
+		#set(on=false) {
+			_session = on? this : null
 			$(Ghosts)
-				.trigger('FrightMode', bool)
-				.offon('Bitten', ()=> this.#caught++, bool)
-			Sound.toggleFrightMode(bool)
+				.trigger('FrightMode',on)
+				.offon('Bitten',()=> this.#caught++,on)
+			Sound.toggleFrightMode(on)
 		}
 		#flashing() {
 			const iv = (this.Dur == 1 ? 12:14)/Game.speed|0

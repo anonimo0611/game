@@ -13,22 +13,14 @@ import {RunTimer} from './_run_timer.js'
 let _attract = /**@type {?Attract}*/(null)
 
 export class Attract {
-	static #begin() {_attract = new Attract}
 	static {State.on({Attract:this.#begin})}
-	static update() {
-		_attract?.update()
-		 RunTimer.update()
-	}
-	static draw() {
-		_attract?.draw()
-		return State.isAttract
-	}
-	showPow = 1
-	pacVelX = -BW/180
-	ghsVelX = -BW/169
-
-	pacman = new Pacman
+	static #begin() {_attract = new Attract}
+	static update() {!RunTimer.update() && _attract?.update()}
+	static draw() {return _attract?.draw() ?? State.isAttract}
+	powIdx = 1
 	ghosts = /**@type {Ghost[]}*/([])
+	pacman = new Pacman
+	subAct = new EnergizerAct(this.pacman,this.ghosts)
 
 	/** @private */
 	constructor() {
@@ -36,38 +28,44 @@ export class Attract {
 		GhsMgr.trigger('Init', this.ghosts)
 		$onNS('.Attract', {click_keydown_blur:this.quit})
 	}
+	get subActStarted() {
+		return Ticker.elapsedTime > 1e4+500
+	}
 	setActor(type=0) {
 		const
 		g = new Ghost(L, {type,tile:[Cols+6+(type*2),19]})
 		g.type == 0 && this.pacman.pos.set(g.x-(T*3.5), g.y)
 		this.ghosts.push(g)
 	}
-	drawCharaGhost(type=0, row=0) {
-		this.ghosts[0].sprite.draw({type,orient:R,x:(T*5),y:(T*row)})
+	update() {
+		if (this.subActStarted) {
+			this.subAct.update()
+			this.powIdx ^= +!(Ticker.count % PowDotInterval)
+		}
 	}
 	draw() {
 		Score.draw()
 		drawText(7, 5, null, 'CHARACTOR　/　NICKNAME')
-		const Small = {size:T*.68},
+		const Small ={size:T*.68},
 		et = Ticker.elapsedTime/100
-		et > 10 && this.drawCharaGhost(GhsType.Akabei, 6)
+		et > 10 && this.drawGhostOnTable(GhsType.Akabei, 6)
 		et > 15 && drawText( 8,  7, Color.Akabei, 'OIKAKE----')
 		et > 20 && drawText(18,  7, Color.Akabei, '"AKABEI"')
 
-		et > 30 && this.drawCharaGhost(GhsType.Pinky,  9)
+		et > 30 && this.drawGhostOnTable(GhsType.Pinky,  9)
 		et > 35 && drawText( 8, 10, Color.Pinky, 'MACHIBUSE--')
 		et > 40 && drawText(19, 10, Color.Pinky, '"PINKY"')
 
-		et > 50 && this.drawCharaGhost(GhsType.Aosuke, 12)
+		et > 50 && this.drawGhostOnTable(GhsType.Aosuke, 12)
 		et > 55 && drawText( 8, 13, Color.Aosuke, 'KIMAGURE--')
 		et > 60 && drawText(18, 13, Color.Aosuke, '"AOSUKE"')
 
-		et > 70 && this.drawCharaGhost(GhsType.Guzuta, 15)
+		et > 70 && this.drawGhostOnTable(GhsType.Guzuta, 15)
 		et > 75 && drawText( 8, 16, Color.Guzuta, 'OTOBOKE---')
 		et > 80 && drawText(18, 16, Color.Guzuta, '"GUZUTA"')
 		if (et > 85) {
 			drawDot(Ctx, 10, 24)
-			drawDot(Ctx, 10, 26, true, !!this.showPow)
+			drawDot(Ctx, 10, 26, true, !!this.powIdx)
 			drawText(12.0, 25, null, DotPts)
 			drawText(12.0, 27, null, PowPts)
 			drawText(14.3, 25, null,'PTS',Small)
@@ -76,7 +74,7 @@ export class Attract {
 		if (et > 90) {
 			const {extendScore}= Ctrl
 			if (this.pacman.dir == L) {
-				drawDot(Ctx, 4, 19, true, !!this.showPow)
+				drawDot(Ctx, 4, 19, true, !!this.powIdx)
 			}
 			if (extendScore > 0) {
 				const text = `BONUS　PACMAN　FOR　${extendScore}`
@@ -84,19 +82,33 @@ export class Attract {
 				drawText(24.3, 30, Color.Orange,'PTS',Small)
 			}
 		}
-		if (et > 105) {
-			this.ghosts.forEach(g=> g.sprite.draw(g))
-			this.pacman.sprite.draw(this.pacman)
-			PtsMgr.drawGhostPts()
-		}
+		if (this.subActStarted)
+			this.subAct.draw()
 		Fruit.drawLevelCounter()
+		return true
+	}
+	drawGhostOnTable(type=0, row=0) {
+		this.ghosts[0].sprite.draw({type,orient:R,x:(T*5),y:(T*row)})
+	}
+	quit() {
+		_attract = null
+		State.toTitle()
+		$off('.Attract')
+	}
+}
+
+class EnergizerAct {
+	pacVelX = -BW/180
+	ghsVelX = -BW/169
+	constructor(
+	 /**@type {Pacman} */pacman,
+	 /**@type {Ghost[]}*/ghosts
+	) {
+		this.pacman = pacman
+		this.ghosts = ghosts
 	}
 	update() {
-		if (Ticker.elapsedTime <= 1e4+500) return
-		this.showPow ^= +!(Ticker.count % PowDotInterval)
-		!Timer.frozen && this.updateActors()
-	}
-	updateActors() {
+		if (Timer.frozen) return
 		this.pacman.sprite.update()
 		this.pacman.x += this.pacVelX
 		if (this.pacman.dir == L
@@ -114,13 +126,13 @@ export class Attract {
 			g.x += this.ghsVelX
 			g.collidesWithPacman({
 				pos:this.pacman.pos, radius:T/4,
-				release:()=> GhsMgr.caughtAll && State.to('Attract')
+				release:()=> GhsMgr.caughtAll && State.toAttract()
 			})
 		}
 	}
-	quit() {
-		_attract = null
-		State.to('Title')
-		$off('.Attract')
+	draw() {
+		this.ghosts.forEach(g=> g.sprite.draw(g))
+		this.pacman.sprite.draw(this.pacman)
+		PtsMgr.drawGhostPts()
 	}
-} $('.DemoBtn').on({click:()=> State.to('Attract')})
+}

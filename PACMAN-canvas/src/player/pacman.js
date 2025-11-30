@@ -18,7 +18,7 @@ class PlayerPac extends Pacman {
 
 	get showCenterDot() {return Ctrl.showGridLines}
 	get isSemiTrans()   {return Ctrl.invincible || this.showCenterDot}
-	get dying()         {return State.isPacCaught  || State.isPacDying}
+	get dying()         {return State.isPacCaught || State.isPacDying}
 	get mouseClosed()   {return State.isPlaying == false}
 	get maxAlpha()      {return this.isSemiTrans? .75:1}
 	get speed()         {return this.#mover.speed}
@@ -67,6 +67,7 @@ class PlayerPac extends Pacman {
 			this.#mover.update(divisor)
 			if (this.stopped) break
 		}
+		this.#mover.stopAtWall()
 	}
 	#eatDot({tileIdx:i}=this) {
 		if (!Maze.hasDot(i))
@@ -77,7 +78,7 @@ class PlayerPac extends Pacman {
 			? this.#eatPowerDot()
 			: this.#eatSmallDot()
 		Maze.clearBgDot(this) == 0
-			? State.to('Cleared')
+			? State.toCleared()
 			: Player.trigger('Eaten')
 	}
 	#eatPowerDot() {

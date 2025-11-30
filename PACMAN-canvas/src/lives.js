@@ -5,29 +5,32 @@ import Sprite  from './sprites/pacman.js'
 export const Lives = function() {
 	let   _left  = 0
 	const {ctx}  = HUD
-	const Radius = T*.78, Size = T*2
+	const radius = T*.78, size = T*2
 	const sprite = new Sprite(ctx,1)
+
 	function onChange() {
-		match(State.current, {
-			Title:    ()=> _left = Ctrl.livesMax-1,
-			Starting: ()=> _left += +1,
-			Ready:    ()=> _left += State.last('Starting')? -1:0,
-			Restarted:()=> _left += -1,
-		})
-		draw()
+		switch(State.current) {
+		case 'Title':    return reset()
+		case 'Starting': return add(+1)
+		case 'Ready':    return add(State.wasStart? -1:0)
+		case 'Restarted':return add(-1)
+		}
 	}
-	function draw() {
+	function draw(left=0) {
 		ctx.save()
-		ctx.translate(Size, BH-Size)
-		ctx.clearRect(0,0, Size*5, Size)
-		for (const i of range(_left))
-			sprite.draw({radius:Radius, center:{x:Size*i+T, y:T}})
+		ctx.translate(size, BH-size)
+		ctx.clearRect(0,0, size*5, size)
+		for (const i of range(left))
+			sprite.draw({radius,center:{x:size*i+T, y:T}})
 		ctx.restore()
 	}
+	function reset()  {draw(_left = Ctrl.livesMax-1)}
+	function add(n=0) {draw(_left += n)}
+
 	$('#lvsRng').on({input:onChange})
 	State.on({_Starting_Ready_Restarted:onChange})
 	return {
+		append() {add(1)},
 		get left() {return _left},
-		append() {++_left;draw()},
 	}
 }()

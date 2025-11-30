@@ -22,10 +22,13 @@ export default class {
 		this.#mouthAngle = [0,OpenMid,OpenMax][mouthOpenings]
 	}
 	update({stopped=false}={}) {
-		if (stopped && this.#mouthAngle > OpenMid-PI/Duration/2)
+		if (stopped) {
+			if (this.#mouthAngle <= OpenMid)
+				this.#mouthAngle = OpenMid
 			return
-		const p = this.#mouthPhase += PI/Duration
-		this.#mouthAngle = OpenMax * abs(Math.sin(p))
+		}
+		const phase = this.#mouthPhase += PI/Duration
+		this.#mouthAngle = OpenMax * abs(Math.sin(phase))
 	}
 	draw({
 		center:{x,y}={x:0,y:0},
