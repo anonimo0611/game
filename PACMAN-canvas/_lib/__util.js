@@ -71,8 +71,8 @@ const nonEnterKey = e=>
 
 /**
  @param {string} selector
-*/const qSAll = selector=> /**@type {HTMLElement[]}*/
- 	([...document.querySelectorAll(selector)])
+*/const qSAll = selector=> /**@type {NodeListOf<HTMLElement>}*/
+ 	(document.querySelectorAll(selector))
 
 /**
  @typedef {{dist:number, idx:number}} DistComparator
@@ -148,12 +148,8 @@ const nonEnterKey = e=>
 
 //---- jQuery utilities ------
 
+const $win = $(window)
 const $doc = $(document)
-
-/**
- @typedef {(event: JQuery.TriggeredEvent<Window & typeof globalThis, undefined,
- Window & typeof globalThis, Window & typeof globalThis>)=> void} JQWindowHandler
-*/const $win = $(window)
 
 /**
  @param {JQWindowHandler} fn

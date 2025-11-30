@@ -58,6 +58,8 @@ class Vec2 {
 	 /**@type {Position}*/v,
 	 /**@type {number}  */cols
 	){
+		if (cols < 0)
+			throw RangeError('Colms must be a positive number.')
 		return Number(v.y * cols + v.x)
 	}
 
@@ -243,6 +245,9 @@ class Vec2 {
 	}
 	distance(/**@type {Position}*/v) {
 		return Vec2.sub(this, v).magnitude
+	}
+	toIdx(/**@type {number}*/cols) {
+		return Vec2.idx(this, cols)
 	}
 	freeze() {
 		return freeze(this)

@@ -8,7 +8,7 @@ export class Common {
 	}
 
 	/**
-	 @param {{[event:string]:(ev:JQuery.TriggeredEvent<any, undefined, any, any>)=>any}} arg
+	 @param {{[event:string]:(e:JQuery.TriggeredEvent)=>any}} arg
 	*/
 	on(arg) {
 		$(this.#target).on(arg)

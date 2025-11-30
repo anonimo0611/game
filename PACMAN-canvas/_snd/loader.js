@@ -40,13 +40,13 @@ export class SoundMgr {
 	}
 
 	/**
-	 @param {boolean} bool
+	 @param {boolean} enable
 	 @param {...SoundType} ids
 	*/
-	pause(bool, ...ids) {
+	pause(enable, ...ids) {
 		ids.length
-			? ids.forEach(id=> {Instance[id].paused=bool})
-			: values(Instance).forEach(i=> i.paused=bool)
+			? ids.forEach(id=> {Instance[id].paused=enable})
+			: values(Instance).forEach(i=> i.paused=enable)
 	}
 
 	/**

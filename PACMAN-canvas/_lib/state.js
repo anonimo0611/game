@@ -1,3 +1,4 @@
+/** @typedef {{delay?:number,data?:number|string|boolean|any[]}} config} */
 /** @template Owner,State */
 export default class _State {
 	/**@type {Owner} */ #owner
@@ -23,12 +24,24 @@ export default class _State {
 	}
 
 	/**
+	 @protected
+	 @param {State} s
+	*/
+	ret(s) {
+		/** @type {(cfg:config)=> this} */
+		return ({delay=0,data}={})=> {
+			this.set(s, {delay,data})
+			return this
+		}
+	}
+
+	/**
 	 @param {State} state
 	 @param {{data?:unknown,delay?:number,fn?:Function}} config
 	*/
-	to(state, {data,delay=-1,fn}={}) {
+	set(state, {data,delay=-1,fn}={}) {
 		if (delay >= 0) {
-			Timer.set(delay, ()=> this.to(state,{delay:-1,data}))
+			Timer.set(delay, ()=> this.set(state,{delay:-1,data}))
 			return this
 		}
 		this.#last  = this.current

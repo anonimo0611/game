@@ -25,9 +25,9 @@ export const Sound = new class extends SoundMgr {
 	stopSiren = ()=> Sound.stop(...SirenIds)
 	stopLoops = ()=> Sound.stopSiren().stop('fright','escape')
 
-	toggleFrightMode(/**@type {boolean}*/f) {
-		f? Sound.playFright()
-		 : Sound.playSiren()
+	toggleFrightMode(/**@type {boolean}*/on) {
+		on? Sound.playFright()
+		  : Sound.playSiren()
 	}
 	ghostEscape() {
 		Sound.stopSiren().stop('fright').play('escape')
