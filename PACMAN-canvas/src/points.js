@@ -10,7 +10,7 @@ State.on({_PacDying_Cleared:()=> PtsMap.clear()})
 
 /**
  @typedef {typeof Pts.AllPts[number]} Pts
- @typedef {{key:{points:Pts}, pos:Position, dur?:number, fn?:function}} PtsData
+ @typedef {{key:{points:Pts}, pos:Readonly<Position>, dur?:number, fn?:function}} PtsData
 */
 export const PtsMgr = new class {
 	/** @type {(data:PtsData, fn?:function)=> void} */

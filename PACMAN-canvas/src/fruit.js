@@ -1,4 +1,5 @@
 import {Sound}  from '../_snd/sound.js'
+import {Rect}   from '../_lib/rect.js'
 import {Game}   from './_main.js'
 import {$Level} from './_main.js'
 import {State}  from './state.js'
@@ -18,11 +19,11 @@ const TargetPos = Vec2.new(BW/2, T*18.5).freeze()
 
 const Size = T*2
 const LvCounterCols = 7
-const LvCounterRect = freeze([Size*6, BH-Size, Size*LvCounterCols, Size])
+const LvCounterRect = new Rect(Size*6, BH-Size, Size*LvCounterCols, Size).freeze()
 
 const FadeDur = 300
-let _showTgt  = true
-let _fadeOut  = /**@type {?FadeOut}*/(null)
+let  _showTgt = true
+let  _fadeOut = /**@type {?FadeOut}*/(null)
 
 export const Fruit = new class {
 	static {$(this.setup)}
@@ -81,11 +82,11 @@ export const Fruit = new class {
 		PtsMgr.drawFruitPts()
 	}
 	drawLevelCounter() {
-		const [x,y,w,h] = LvCounterRect
+		const [x,y,w,h] = LvCounterRect.vals
 		Ctx.drawImage(HUD.cvs, x,y, w,h, x,y, w,h)
 	}
 	#setLevelCounter() {
-		const {ctx} = HUD, [x,y,w,h]=LvCounterRect
+		const {ctx} = HUD, [x,y,w,h]=LvCounterRect.vals
 		const begin = max(Game.level-LvCounterCols, 0)
 		ctx.save()
 		ctx.translate(x, y)
