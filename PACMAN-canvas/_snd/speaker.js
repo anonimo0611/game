@@ -21,9 +21,9 @@ export const Speaker = new class {
 	}
 	#step(/**@type {number}*/vol) {
 		return match(vol, {
-			'8_9_10':   ()=> 3,
-			'3_4_5_6_7':()=> 2,
-			'1_2':      ()=> 1,
+			'8|9|10':   ()=> 3,
+			'3|4|5|6|7':()=> 2,
+			'1|2':      ()=> 1,
 		}) ?? 0
 	}
 	#drawBody() {
