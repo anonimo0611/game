@@ -2,26 +2,25 @@ export class Rect {
 	constructor(
 	/**@type {number}*/x,
 	/**@type {number}*/y,
-	/**@type {number}*/w,
-	/**@type {number}*/h,
+	/**@type {number}*/width,
+	/**@type {number}*/height,
 	) {
 		this.x = x
 		this.y = y
-		this.w = w
-		this.h = h
+		this.width  = width
+		this.height = height
 	}
 	freeze() {
 		return freeze(this)
 	}
-	contains(/**@type {Position}*/pos) {
-		const {x,y,w,h}=this
+	contains(/**@type {Readonly<Position>}*/pos) {
+		const {x,y,width:w,height:h}=this
 		return (
 			(pos.x >= x && pos.x < x+w) &&
 			(pos.y >= y && pos.y < y+h))
 	}
-	/** @returns {readonly [x:number, y:number, w:number, h:number]} */
+	/** @returns {readonly [x:number, y:number, width:number, height:number]} */
 	get vals() {
-		const {x,y,w,h}=this
-		return ([x,y,w,h])
+		return ([this.x, this.y, this.width, this.height])
 	}
 }

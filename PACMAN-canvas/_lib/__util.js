@@ -47,7 +47,7 @@ const nonEnterKey = e=>
 
 /**
  @template T
- @param {T[]} array
+ @param {readonly T[]} array
 */const reverse = function*(array) {
 	for (let i=array.length-1; i>=0; i--) yield array[i]
 }
@@ -76,7 +76,7 @@ const nonEnterKey = e=>
 
 /**
  @typedef {{dist:number, idx:number}} DistComparator
- @type    {(a:DistComparator, b:DistComparator)=> number}
+ @type    {(a:Readonly<DistComparator>, b:Readonly<DistComparator>)=> number}
 */const compareDist = (a,b)=>
 	(a.dist == b.dist)? (a.idx-b.idx) : (a.dist-b.dist)
 
@@ -119,7 +119,8 @@ const nonEnterKey = e=>
  @template T
  @param {readonly T[]} array
  @returns {T}
-*/const randChoice = array=> array[randInt(0, array.length-1)]
+*/
+const randChoice = array=> array[randInt(0, array.length-1)]
 
 /**
  @template T
@@ -131,10 +132,10 @@ const nonEnterKey = e=>
         (_,i)=> a.slice(i*size, i*size + size))
 
 /**
- @param {Position} v1
- @param {Position} v2
- @param {number}   r1
- @param {number}  [r2]
+ @param {Readonly<Position>} v1
+ @param {Readonly<Position>} v2
+ @param {number}  r1
+ @param {number} [r2]
 */const circleCollision = (v1,v2,r1,r2=r1)=>
 	(v1.x-v2.x)**2 + (v1.y-v2.y)**2 <= (r1+r2)**2
 
