@@ -65,7 +65,7 @@ export default class {
 				Up:     ()=> this.#drawEyesUp,
 				Down:   ()=> this.#drawEyesDown,
 				Bracket:()=> this.#spr.drawBracketEyes,
-			})?.call(this,{orient,isRipped: ripped})
+			})?.call(this,{orient,ripped})
 		}
 		finalize()
 	}
