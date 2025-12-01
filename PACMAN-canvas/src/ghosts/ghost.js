@@ -11,7 +11,7 @@ import * as Sys from './_system.js'
 import Sprite   from '../sprites/ghost.js'
 
 export class Ghost extends Actor {
-	#fleeFrames = -1
+	#fleeTime   = -1
 	#reversal   = false
 	#started    = false
 	#frightened = false
@@ -52,8 +52,8 @@ export class Ghost extends Actor {
 		super()
 		this.on({
 			FrightMode:   this.#setFrightMode,
-			Reverse: ()=> this.#reversal   = true,
-			FleeTime:()=> this.#fleeFrames = 400/Game.interval,
+			Reverse: ()=> this.#reversal = true,
+			FleeTime:()=> this.#fleeTime = 400/Game.interval,
 		})
 		this.pos.set(col*T,row*T)
 		this.dir   = dir
@@ -108,7 +108,7 @@ export class Ghost extends Actor {
 				&& this.#processBehavior()
 	}
 	#processBehavior() {
-		this.#fleeFrames >= 0 && this.#fleeFrames--
+		this.#fleeTime >= 0 && this.#fleeTime--
 		if (Timer.frozen && !this.escaping) return
 		switch(this.state.current) {
 		case 'Idle':     return this.#idleInHouse(this)
@@ -201,7 +201,7 @@ export class Ghost extends Actor {
 		})
 		return this.frightened? randChoice(dirs).dir:
 			(idx=> dirs.sort(compareDist)[idx].dir)
-				(this.#fleeFrames >= 0 ? dirs.length-1:0)
+				(this.#fleeTime >= 0 ? dirs.length-1:0)
 	}
 	/** @param {{dir:Direction, test:Vec2}} cfg */
 	#canEnter({dir,test}) {
