@@ -57,7 +57,7 @@ const nonEnterKey = e=>
  @param {string|number|undefined|null} key
  @param {{[key:string|number]:(_:void)=> T}} pattern
  @param {string} [separator]
-*/const match = (key,pattern,separator='_')=> {
+*/const match = (key,pattern,separator='|')=> {
 	for (const k of keys(pattern))
 		if (k.split(separator).some(k=> k == key))
 			return pattern[k]()
@@ -76,7 +76,7 @@ const nonEnterKey = e=>
 
 /**
  @typedef {{dist:number, idx:number}} DistComparator
- @type    {(a:Readonly<DistComparator>, b:Readonly<DistComparator>)=> number}
+ @type {(a:Readonly<DistComparator>, b:Readonly<DistComparator>)=> number}
 */const compareDist = (a,b)=>
 	(a.dist == b.dist)? (a.idx-b.idx) : (a.dist-b.dist)
 
