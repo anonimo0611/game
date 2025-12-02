@@ -1,22 +1,32 @@
-import {Sound}  from '../../_snd/sound.js'
-import {Game}   from '../_main.js'
-import {State}  from '../state.js'
-import {Ctrl}   from '../control.js'
-import {Fruit}  from '../fruit.js'
-import {Pacman} from '../pacman.js'
-import {Ghost}  from '../ghosts/ghost.js'
-import Sprite   from '../sprites/ghost_cb.js'
+import {Sound}   from '../../_snd/sound.js'
+import {Game}    from '../_main.js'
+import {State}   from '../state.js'
+import {Ctrl}    from '../control.js'
+import {Fruit}   from '../fruit.js'
+import {Ghost}   from '../ghosts/ghost.js'
+import {PacMan}  from './pacman.js'
+import Sprite    from '../sprites/ghost_cb.js'
 
 export class CoffBreak {
-	static {State.on({CoffBreak:(_,n=this.number)=> this.#begin(n)})}
 	static #scene = /**@type {?Scene1|Scene2|Scene3}*/(null)
-	static #begin(n=1) {this.#scene=new[Scene1,Scene2,Scene3][n-1]}
-	static update() {this.#scene?.update()}
-	static draw() {return this.#scene?.draw() ?? State.isCoffBreak}
-	static get number() {
-		return !Ctrl.isPractice && {2:1, 5:2, 9:3}[Game.level] || -1
+	static {State.on({CoffBreak:this.#begin})}
+
+	static #begin(_={}, n=this.number) {
+		CoffBreak.#scene = new [Scene1,Scene2,Scene3][n-1]
 	}
-	pacman  = new Pacman
+	static update() {
+		CoffBreak.#scene?.update()
+	}
+	static draw() {
+		CoffBreak.#scene?.draw()
+		return State.isCoffBreak
+	}
+	static get number() {
+		const sceneNum = {2:1, 5:2, 9:3}[Game.level]
+		return !Ctrl.isPractice && sceneNum || -1
+	}
+
+	pacman  = new PacMan
 	akabei  = new Ghost
 	pacVelX = -BW/180
 
@@ -42,7 +52,6 @@ export class CoffBreak {
 	}
 	draw() {
 		State.wasFlashing && Fruit.drawLevelCounter()
-		return true
 	}
 	end() {
 		$off('.CB')
@@ -86,7 +95,7 @@ class Scene1 extends CoffBreak {
 		const {pacman,frightened}= this
 		this.drawAkabei({frightened})
 		this.drawPacman(pacman.dir == R ? 4:1)
-		return super.draw()
+		super.draw()
 	}
 }
 
@@ -133,7 +142,7 @@ class Scene2 extends CoffBreak {
 				const rate = norm(spr.CaughtX, spr.AkaMinX, a.x)
 				spr.stretchClothing(animIdx, rate, a.center.addX(T))
 			}()
-		return super.draw()
+		super.draw()
 	}
 }
 
@@ -160,6 +169,6 @@ class Scene3 extends CoffBreak {
 		this.akabei.dir == L
 			? this.drawAkabei({mended: true})
 			: this.drawAkabei({exposed:true})
-		return super.draw()
+		super.draw()
 	}
 }

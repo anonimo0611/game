@@ -8,17 +8,14 @@ const WaitTime = 1e3*30 // ms
 export const RunTimer = function() {
 	let _cnt=0
 	function update() {
-		if (!document.hasFocus()
+		(!document.hasFocus()
 		  || !State.isTitle
 		  || Confirm.opened
-		  || Ctrl.activeElem) {
-			return _cnt=0
-		}
-		Ticker.Interval*_cnt++ > WaitTime
+		  || Ctrl.activeElem)
+		? _cnt=0
+		: _cnt++ * Ticker.Interval > WaitTime
 			&& State.toAttract()
-		return _cnt
 	}
-	$win.on(`Title blur click focus
-		mousemove keydown resize wheel`, ()=> _cnt=0)
+	$win.on(`Title blur click focus mousemove keydown resize wheel`, ()=> _cnt=0)
 	return {update}
 }()

@@ -43,7 +43,7 @@ D__________________________C\
 /**
  `.` and `O` represent normal and power cookies
  @type {ReadonlySet<string>}
-*/const DotChipSet = new Set(['.','O'])
+*/const DotChipSet = new Set([...'.O'])
 
 const WallSet  = /**@type {Set<number>}*/(new Set)
 const DotSet   = /**@type {Set<number>}*/(new Set)

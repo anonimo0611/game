@@ -5,22 +5,31 @@ import {Score}    from '../score.js'
 import {PtsMgr}   from '../points.js'
 import {Fruit}    from '../fruit.js'
 import {drawDot}  from '../maze.js'
-import {Pacman}   from '../pacman.js'
 import {GhsMgr}   from '../ghosts/_system.js'
 import {Ghost}    from '../ghosts/ghost.js'
+import {PacMan}   from './pacman.js'
 import {RunTimer} from './_run_timer.js'
 
-let _attract = /**@type {?Attract}*/(null)
-
 export class Attract {
+	static #attract = /**@type {?Attract}*/(null)
 	static {State.on({Attract:this.#begin})}
-	static #begin() {_attract = new Attract}
-	static update() {!RunTimer.update() && _attract?.update()}
-	static draw() {return _attract?.draw() ?? State.isAttract}
+
+	static #begin() {
+		Attract.#attract = new Attract
+	}
+	static update() {
+		RunTimer.update()
+		Attract.#attract?.update()
+	}
+	static draw() {
+		Attract.#attract?.draw()
+		return State.isAttract
+	}
+
 	powIdx = 1
 	ghosts = /**@type {Ghost[]}*/([])
-	pacman = new Pacman
-	subAct = new EnergizerAct(this.pacman,this.ghosts)
+	pacman = new PacMan
+	subAct = new EnergizerAct(this.pacman, this.ghosts)
 
 	/** @private */
 	constructor() {
@@ -85,13 +94,12 @@ export class Attract {
 		if (this.subActStarted)
 			this.subAct.draw()
 		Fruit.drawLevelCounter()
-		return true
 	}
 	drawGhostOnTable(type=0, row=0) {
 		this.ghosts[0].sprite.draw({type,orient:R,x:(T*5),y:(T*row)})
 	}
 	quit() {
-		_attract = null
+		Attract.#attract = null
 		State.toTitle()
 		$off('.Attract')
 	}
@@ -101,7 +109,7 @@ class EnergizerAct {
 	pacVelX = -BW/180
 	ghsVelX = -BW/169
 	constructor(
-	 /**@type {Pacman} */pacman,
+	 /**@type {PacMan} */pacman,
 	 /**@type {Ghost[]}*/ghosts
 	) {
 		this.pacman = pacman

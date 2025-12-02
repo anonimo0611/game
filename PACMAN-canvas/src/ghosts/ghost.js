@@ -11,20 +11,21 @@ import * as Sys from './_system.js'
 import Sprite   from '../sprites/ghost.js'
 
 export class Ghost extends Actor {
-	#fleeTime   = -1
-	#reversal   = false
-	#started    = false
-	#frightened = false
-
 	/** @readonly */type
 	/** @readonly */init
 	/** @readonly */state
 
 	/** @readonly */
-	sprite = new Sprite(canvas2D(null, T*3, T*2).ctx)
+	sprite  = new Sprite(canvas2D(null, T*3, T*2).ctx)
+	#fadeIn = new Actor.SpawnFadeIn
 
 	/** @readonly */
 	turnDirs = /**@type {readonly Direction[]}*/([U,L,D,R])
+
+	#fleeTime   = -1
+	#reversal   = false
+	#started    = false
+	#frightened = false
 
 	get angry()       {return false}
 	get chaseSpeed()  {return GhsSpeed.Base}
@@ -95,12 +96,12 @@ export class Ghost extends Actor {
 	draw() {
 		if (State.isStarting) return
 		Ctx.save()
-		this.setFadeInAlpha()
+		this.#fadeIn.setAlpha(this.maxAlpha)
 		this.sprite.draw(this)
 		Ctx.restore()
 	}
 	update() {
-		this.updateFadeIn()
+		this.#fadeIn.update(this.maxAlpha)
 		this.sprite.update()
 		this.houseEntranceArrived
 			? this.#enterHouse()

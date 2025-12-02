@@ -5,9 +5,32 @@ import {Maze}   from './maze.js'
 import {Player} from './player/pacman.js'
 import {GhsMgr} from './ghosts/_system.js'
 
+class SpawnFadeIn {
+	#fadeIn = /**@type {?FadeIn}*/(new FadeIn)
+	setAlpha(max=1) {
+		!State.isReady
+			? Ctx.setAlpha(max)
+			: Ctx.setAlpha(this.#fadeIn?.alpha)
+	}
+	update(max=1) {
+		State.isReady   && this.#fadeIn?.update(max)
+		State.isPlaying &&(this.#fadeIn &&= null)
+	}
+}
+
 export class Actor extends Common {
+	/** @readonly */
+	static SpawnFadeIn = SpawnFadeIn
+	static update() {
+		Player.update()
+		GhsMgr.update()
+	}
+	static draw() {
+		GhsMgr.drawBehind()
+		Player.draw()
+		GhsMgr.drawFront()
+	}
 	pos = Vec2.Zero
-	#fadeIn = /**@type {?FadeIn}*/(null)
 	#orient = /**@type {Direction}*/(L)
 	#movDir = /**@type {Direction}*/(L)
 
@@ -40,27 +63,12 @@ export class Actor extends Common {
 		const  count = v.x? (x % T) : (y % T)
 		return (v.x || v.y) > 0 ? count : T-count
 	}
-	get passedTileCenter() {return this.tilePixel > T/2}
-
-	static update() {
-		Player.update()
-		GhsMgr.update()
-	}
-	static draw() {
-		GhsMgr.drawBehind()
-		Player.draw()
-		GhsMgr.drawFront()
+	get passedTileCenter() {
+		return this.tilePixel > T/2
 	}
 	drawCenterDot(color='#F00') {
 		const {x,y}= this.center
 		Ctx.fillCircle(x,y, 3, color)
-	}
-	updateFadeIn(max=this.maxAlpha) {
-		State.isReady   && (this.#fadeIn ||= new FadeIn)?.update(max)
-		State.isPlaying && (this.#fadeIn &&= null)
-	}
-	setFadeInAlpha() {
-		Ctx.setAlpha(this.#fadeIn?.alpha ?? this.maxAlpha)
 	}
 	centering() {
 		this.x = (BW-T)/2

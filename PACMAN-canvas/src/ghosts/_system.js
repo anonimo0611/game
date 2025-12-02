@@ -265,12 +265,12 @@ const FrightMode = function() {
 				? $(Ghosts).trigger('FleeTime')
 				: this.#set(true)
 		}
-		#set(on=false) {
-			_session = on? this : null
+		#set(isOn=false) {
+			_session = (isOn? this:null)
 			$(Ghosts)
-				.trigger('FrightMode',on)
-				.offon('Bitten',()=> this.#caught++,on)
-			Sound.toggleFrightMode(on)
+				.trigger('FrightMode',isOn)
+				.offon('Bitten',()=> this.#caught++,isOn)
+			Sound.toggleFrightMode(isOn)
 		}
 		#flashing() {
 			const iv = (this.Dur == 1 ? 12:14)/Game.speed|0
@@ -279,8 +279,8 @@ const FrightMode = function() {
 		update() {
 			if (State.isPlaying && !Timer.frozen) {
 				const et = (this.#time++ * Game.interval)/1000
-				if (et>=this.Dur-2) this.#flashing()
-				if (et>=this.Dur || this.caughtAll) this.#set()
+				;(et>=this.Dur-2) && this.#flashing()
+				;(et>=this.Dur || this.caughtAll) && this.#set()
 			}
  		}
 	}

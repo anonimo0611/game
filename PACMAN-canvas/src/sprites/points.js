@@ -56,7 +56,7 @@ export function cache(pts, size=TileSize*2) {
 		const y = Data.DigitOffsetY
 		const d = +pts.toString()[i]
 		pts == 1600 && i == 0 ?
-		ctx.newLinePath([x,y],[x,y+6]) : //narrow 1
+		ctx.newLinePath([x,y],[x,y+6]): //narrow 1
 		function() {
 			ctx.save()
 			ctx.translate(x,y)

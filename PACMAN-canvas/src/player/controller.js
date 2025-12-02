@@ -4,19 +4,89 @@ import {Game}    from '../_main.js'
 import {Ctrl}    from '../control.js';
 import {Maze}    from '../maze.js'
 import {GhsMgr}  from '../ghosts/_system.js'
-import {pacman}  from './pacman.js';
+import { Actor } from '../actor.js';
 
 const Speed = PacSpeed
 const {SlowLevel,SlowRate}= Speed
 
-class MoveState {
+class State {
 	turning  = false
 	nextDir  = /**@type {?Direction}*/(null)
 	nextTurn = /**@type {?Direction}*/(null)
 }
-/** @param {MoveState} s */
-function setSteerEvent(s) {
-	$win.offon('keydown.Steer', e=> {
+export class MoveControl extends Actor {
+	#speed   = 0
+	#stopped = true
+
+	get speed()   {return this.#speed}
+	get stopped() {return this.#stopped}
+
+	constructor() {
+		super()
+		/** @private */
+		this.s = new State
+		setSteerEvent(this, this.s)
+		$(()=> this.#speed = this.tileSpeed)
+	}
+	get canTurn() {
+		return this.s.nextDir != null
+			&& !this.passedTileCenter
+			&& !this.collidesWithWall(this.s.nextDir)
+	}
+	get collidedWithWall() {
+		return !this.s.turning && this.collidesWithWall()
+	}
+	get tileSpeed() {
+		const eating = Maze.hasDot(this.tileIdx)
+		return (
+			GhsMgr.isFrightMode
+			? (eating? Speed.EneEat : Speed.Energized)
+			: (eating? Speed.Eating : Speed.Base)
+		) * (Game.moveSpeed * (Game.level<SlowLevel ? 1:SlowRate))
+	}
+	#setMoveSpeed(divisor=1) {
+		this.justArrivedAtTile(divisor)
+			&& (this.#speed = this.tileSpeed)
+	}
+	update(divisor=1) {
+		this.#turnCorner(divisor)
+		this.setNextPos(divisor)
+		this.#setMoveSpeed(divisor)
+		this.#finishTurningCorner()
+		this.#turnAround()
+	}
+	#turnCorner(divisor=1) {
+		const dir = this.s.nextDir
+		if (this.canTurn && dir) {
+			this.s.turning ||= true
+			this.orient = dir
+			this.setNextPos(divisor, dir)
+		}
+	}
+	#finishTurningCorner() {
+		if (this.s.turning && this.passedTileCenter) {
+			this.s.turning  = false
+			this.s.nextDir  = this.s.nextTurn
+			this.s.nextTurn = null
+			this.setMoveDir(this.orient)
+		}
+	}
+	#turnAround() {
+		this.dir == this.revOrient
+			&& this.setMoveDir(this.orient)
+	}
+	stopAtWall() {
+		(this.#stopped = this.collidedWithWall)
+			&& (this.pos = this.tilePos.mul(T))
+			&& (this.s.nextDir = null)
+	}
+}
+
+function setSteerEvent(
+ /**@type {MoveControl}*/m,
+ /**@type {State}*/s
+) {
+	$win.offon('keydown.PacSteer', e=> {
 		const dir = Dir.from(e,{wasd:true})
 		if (keyRepeat(e)
 			|| dir == null
@@ -28,80 +98,14 @@ function setSteerEvent(s) {
 			s.nextTurn = dir
 			return
 		}
-		if (pacman.hasAdjWall(dir)) {
+		if (m.hasAdjWall(dir)) {
 			s.nextDir = dir
 			return
 		}
 		s.nextDir = dir
-		if (pacman.passedTileCenter) {
-			pacman.orient = dir
-			pacman.setMoveDir(pacman.revDir)
+		if (m.passedTileCenter) {
+			m.orient = dir
+			m.setMoveDir(m.revDir)
 		}
 	})
-}
-export class Mover {
-	#speed   = 0
-	#stopped = true
-	constructor() {
-		/** @private */
-		this.s = new MoveState
-		setSteerEvent(this.s)
-		$(()=> this.#speed = this.tileSpeed)
-	}
-	get speed()   {return this.#speed}
-	get stopped() {return this.#stopped}
-
-	get canTurn() {
-		return this.s.nextDir != null
-			&& !pacman.passedTileCenter
-			&& !pacman.collidesWithWall(this.s.nextDir)
-	}
-	get collidedWithWall() {
-		return !this.s.turning && pacman.collidesWithWall()
-	}
-	get tileSpeed() {
-		const eating = Maze.hasDot(pacman.tileIdx)
-		return (
-			GhsMgr.isFrightMode
-			? (eating? Speed.EneEat : Speed.Energized)
-			: (eating? Speed.Eating : Speed.Base)
-		) * (Game.moveSpeed * (Game.level<SlowLevel ? 1:SlowRate))
-	}
-	#setMoveSpeed(divisor=1) {
-		pacman.justArrivedAtTile(divisor)
-			&& (this.#speed = this.tileSpeed)
-	}
-	update(divisor=1) {
-		this.#turnCorner(divisor)
-		pacman.setNextPos(divisor)
-		this.#setMoveSpeed(divisor)
-		this.#finishTurningCorner()
-		this.#turnAround()
-	}
-	#turnCorner(divisor=1) {
-		const dir = this.s.nextDir
-		if (this.canTurn && dir) {
-			this.s.turning ||= true
-			pacman.orient = dir
-			pacman.setNextPos(divisor, dir)
-		}
-	}
-	#finishTurningCorner() {
-		const {s}= this
-		if (s.turning && pacman.passedTileCenter) {
-			s.turning  = false
-			s.nextDir  = s.nextTurn
-			s.nextTurn = null
-			pacman.setMoveDir(pacman.orient)
-		}
-	}
-	#turnAround() {
-		pacman.dir == pacman.revOrient
-			&& pacman.setMoveDir(pacman.orient)
-	}
-	stopAtWall() {
-		(this.#stopped = this.collidedWithWall)
-			&& (pacman.pos = pacman.tilePos.mul(T))
-			&& (this.s.nextDir = null)
-	}
 }
