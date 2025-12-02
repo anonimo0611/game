@@ -9,5 +9,5 @@ export class PlayerState {
 	get isSemiTrans() {return Ctrl.invincible   || this.showCenter}
 	get dying()       {return State.isPacCaught || State.isPacDying}
 	get mouseClosed() {return State.isPlaying == false}
-
 }
+
