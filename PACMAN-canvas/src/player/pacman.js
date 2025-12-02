@@ -12,21 +12,6 @@ import {TunnelEntry} from './tunnel.js'
 import {MoveControl} from './controller.js'
 
 class PacMan {
-	/** @readonly */
-	sprite = new Sprite(Ctx)
-	pos = Vec2.Zero
-	get x()           {return this.pos.x}
-	get y()           {return this.pos.y}
-	get maxAlpha()    {return this.isSemiTrans? .75:1}
-	get radius()      {return PacRadius}
-	get hidden()      {return Timer.frozen}
-	get showCenter()  {return Ctrl.showGridLines}
-	get isSemiTrans() {return Ctrl.invincible   || this.showCenter}
-	get dying()       {return State.isPacCaught || State.isPacDying}
-	get mouseClosed() {return State.isPlaying == false}
-}
-
-class PlayerPac extends PacMan {
 	#eatSoundIndex     = 0
 	#framesSinceEating = 0
 
@@ -34,6 +19,20 @@ class PlayerPac extends PacMan {
 	#tunEntry = new TunnelEntry
 	#fadeIn   = new Actor.SpawnFadeIn
 
+	/** @readonly */
+	sprite = new Sprite(Ctx)
+
+	get x()            {return this.pos.x}
+	get y()            {return this.pos.y}
+	get maxAlpha()     {return this.isSemiTrans? .75:1}
+	get radius()       {return PacRadius}
+	get hidden()       {return Timer.frozen}
+	get showCenter()   {return Ctrl.showGridLines}
+	get isSemiTrans()  {return Ctrl.invincible   || this.showCenter}
+	get dying()        {return State.isPacCaught || State.isPacDying}
+	get mouseClosed()  {return State.isPlaying == false}
+
+	get pos()          {return this.#mover.pos}
 	get dir()          {return this.#mover.dir}
 	get orient()       {return this.#mover.orient}
 	get center()       {return this.#mover.center}
@@ -43,7 +42,6 @@ class PlayerPac extends PacMan {
 	get timeNotEaten() {return this.#framesSinceEating * Game.interval}
 
 	constructor() {
-		super()
 		this.#mover.pos.set(13.5*T, 24*T)
 	}
 	forwardPos(num=0) {
@@ -81,7 +79,6 @@ class PlayerPac extends PacMan {
 		for (const _ of range(divisor)) {
 			this.#eatDot(this.#mover.tileIdx)
 			this.#mover.update(divisor)
-			this.pos = this.#mover.pos
 			if (this.stopped) break
 		}
 		this.#mover.stopAtWall()
@@ -111,13 +108,15 @@ class PlayerPac extends PacMan {
 	}
 }
 
-export let   pacman = new PlayerPac
-export const Player = new class extends Common {
-	draw()   {pacman.draw()}
-	update() {pacman.update()}
-}
-const reset = ()=> {
-	$win.off('keydown.PacSteer')
-	pacman = new PlayerPac
-}
-State.on({_Restarted_NewLevel:reset})
+export let   pacman = new PacMan()
+export const Player = new class
+	extends Common {
+		draw()   {pacman.draw()}
+		update() {pacman.update()}
+	}
+State.on({
+	_Restarted_NewLevel:()=> {
+		$win.off('keydown.PacSteer')
+		pacman = new PacMan
+	}
+})
