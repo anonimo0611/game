@@ -166,7 +166,7 @@ const $doc = $(document)
 
 /**
  @param {string} ns
- @param {{[event:string]:JQWindowHandler}} cfg
+ @param {{[event:string]:(e:JQuery.TriggeredEvent)=> unknown}} cfg
 */const $onNS = (ns,cfg)=> {
 	entries(cfg).forEach(([ev,fn])=> {
 		ev = ev.trim().replace(/[_\s]+|$/g,`${ns}\x20`)

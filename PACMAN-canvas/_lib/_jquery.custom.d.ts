@@ -1,5 +1,5 @@
 type JQWindowHandler = (event: JQuery.TriggeredEvent<Window & typeof globalThis, undefined,
-	Window & typeof globalThis, Window & typeof globalThis>)=> unknown
+	Window & typeof globalThis, Window & typeof globalThis>)=> any
 
 interface JQuery {
 	offon<TType extends string>(
