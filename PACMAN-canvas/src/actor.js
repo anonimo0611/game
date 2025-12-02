@@ -2,7 +2,7 @@ import {Common} from '../_lib/common.js'
 import {Dir}    from '../_lib/direction.js'
 import {State}  from './state.js'
 import {Maze}   from './maze.js'
-import {Player} from './player/pacman.js'
+import {Player} from './player/player.js'
 import {GhsMgr} from './ghosts/_system.js'
 
 class SpawnFadeIn {

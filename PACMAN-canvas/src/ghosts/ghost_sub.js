@@ -1,6 +1,6 @@
 import {Maze}   from '../maze.js'
 import {State}  from '../state.js'
-import {player} from '../player/pacman.js'
+import {player} from '../player/player.js'
 import {GhsMgr} from './_system.js'
 import {Ghost}  from './ghost.js'
 

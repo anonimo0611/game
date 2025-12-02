@@ -1,7 +1,7 @@
 import {State}  from '../state.js'
 import {Ctrl}   from '../control.js'
 import {Maze}   from '../maze.js'
-import {player} from '../player/pacman.js'
+import {player} from '../player/player.js'
 import {GhsMgr} from '../ghosts/_system.js'
 import {Ghost}  from './ghost.js'
 
