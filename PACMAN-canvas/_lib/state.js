@@ -29,7 +29,7 @@ export default class _State {
 	*/
 	ret(s) {
 		/** @type {(cfg:config)=> this} */
-		return ({delay=-1,data}={})=> {
+		return ({delay,data}={})=> {
 			this.set(s, {delay,data})
 			return this
 		}
