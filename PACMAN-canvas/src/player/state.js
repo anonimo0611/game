@@ -1,5 +1,5 @@
-import {Ctrl}   from '../control.js'
-import {State}  from '../state.js'
+import {Ctrl}  from '../control.js'
+import {State} from '../state.js'
 
 export class PlayerState {
 	get radius()      {return PacRadius}
@@ -9,4 +9,5 @@ export class PlayerState {
 	get isSemiTrans() {return Ctrl.invincible   || this.showCenter}
 	get dying()       {return State.isPacCaught || State.isPacDying}
 	get mouseClosed() {return State.isPlaying == false}
+
 }
