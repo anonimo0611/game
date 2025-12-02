@@ -80,7 +80,7 @@ export class Ghost extends Actor {
 			&& abs(BW/2 - this.center.x) <= this.speed
 	}
 	get sqrMagToPacman() {
-		return Vec2.sqrMag(this, pacman)
+		return Vec2.sqrMag(this, pacman.pos)
 	}
 	get speed() {
 		return function(g,s) {

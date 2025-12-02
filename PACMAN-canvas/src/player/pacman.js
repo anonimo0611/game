@@ -22,22 +22,21 @@ class PacMan {
 	/** @readonly */
 	sprite = new Sprite(Ctx)
 
-	get x()            {return this.pos.x}
-	get y()            {return this.pos.y}
-	get maxAlpha()     {return this.isSemiTrans? .75:1}
-	get radius()       {return PacRadius}
+	get pos()          {return this.#mover.pos}
+	get center()       {return this.#mover.center}
+	get dir()          {return this.#mover.dir}
+	get orient()       {return this.#mover.orient}
+	get speed()        {return this.#mover.speed}
+	get stopped()      {return this.#mover.stopped}
+	get inTunSide()    {return this.#mover.inTunSide}
+
 	get hidden()       {return Timer.frozen}
+	get radius()       {return PacRadius}
 	get showCenter()   {return Ctrl.showGridLines}
 	get isSemiTrans()  {return Ctrl.invincible   || this.showCenter}
 	get dying()        {return State.isPacCaught || State.isPacDying}
 	get mouseClosed()  {return State.isPlaying == false}
-
-	get pos()          {return this.#mover.pos}
-	get dir()          {return this.#mover.dir}
-	get orient()       {return this.#mover.orient}
-	get center()       {return this.#mover.center}
-	get speed()        {return this.#mover.speed}
-	get stopped()      {return this.#mover.stopped}
+	get maxAlpha()     {return this.isSemiTrans? .75:1}
 	get TunnelEntry()  {return this.#tunEntry}
 	get timeNotEaten() {return this.#framesSinceEating * Game.interval}
 
@@ -77,13 +76,14 @@ class PacMan {
 	}
 	#processBehavior(divisor=1) {
 		for (const _ of range(divisor)) {
-			this.#eatDot(this.#mover.tileIdx)
+			this.#eatDot()
 			this.#mover.update(divisor)
 			if (this.stopped) break
 		}
 		this.#mover.stopAtWall()
 	}
-	#eatDot(/**@type {number}*/tileIdx) {
+	#eatDot() {
+		const {tileIdx}=this.#mover
 		if (!Maze.hasDot(tileIdx))
 			return
 		this.#playEateSE()
