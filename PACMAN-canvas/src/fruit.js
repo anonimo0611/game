@@ -6,7 +6,7 @@ import {State}  from './state.js'
 import {Maze}   from './maze.js'
 import {PtsMgr} from './points.js'
 import {Player} from './player/pacman.js'
-import {pacman} from './player/pacman.js'
+import {player} from './player/pacman.js'
 import * as Pts from './sprites/points.js'
 import * as Spr from './sprites/fruits.js'
 
@@ -56,7 +56,7 @@ export const Fruit = new class {
 			Fruit.#setHideTimer()
 		}
 	}
-	intersectsWith(pos=pacman.center) {
+	intersectsWith(pos=player.center) {
 		if (_showTgt && circleCollision(pos,TargetPos,T/2)) {
 			Fruit.#resetTarget()
 			Timer.cancel(Fruit) && Sound.play('fruit')

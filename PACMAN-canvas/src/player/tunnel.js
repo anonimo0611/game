@@ -1,12 +1,12 @@
-import {pacman} from './pacman.js';
+import {player} from './pacman.js';
 
 /** Save which side of the tunnel the player entered from */
 export class TunnelEntry {
 	#side = /**@type {?('Left'|'Right')}*/(null)
 	get side() {return this.#side}
 	update() {
-		pacman.inTunSide == null && (this.#side = null)
-		pacman.inTunSide == R && pacman.dir == R && (this.#side ||= R)
-		pacman.inTunSide == L && pacman.dir == L && (this.#side ||= L)
+		player.inTunSide == null && (this.#side = null)
+		player.inTunSide == R && player.dir == R && (this.#side ||= R)
+		player.inTunSide == L && player.dir == L && (this.#side ||= L)
 	}
 }

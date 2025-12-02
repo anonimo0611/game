@@ -108,15 +108,15 @@ class PacMan {
 	}
 }
 
-export let   pacman = new PacMan()
+export let   player = new PacMan()
 export const Player = new class
 	extends Common {
-		draw()   {pacman.draw()}
-		update() {pacman.update()}
+		draw()   {player.draw()}
+		update() {player.update()}
 	}
 State.on({
 	_Restarted_NewLevel:()=> {
 		$win.off('keydown.PacSteer')
-		pacman = new PacMan
+		player = new PacMan
 	}
 })

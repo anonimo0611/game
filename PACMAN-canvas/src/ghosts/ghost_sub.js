@@ -1,6 +1,6 @@
 import {Maze}   from '../maze.js'
 import {State}  from '../state.js'
-import {pacman} from '../player/pacman.js'
+import {player} from '../player/pacman.js'
 import {GhsMgr} from './_system.js'
 import {Ghost}  from './ghost.js'
 
@@ -20,8 +20,8 @@ class Pinky extends Ghost {
 		return Vec2.new(3, 0)
 	}
 	get chasePos() {
-		const pos = pacman.offsetTarget(4)
-		switch(pacman.TunnelEntry.side) {
+		const pos = player.offsetTarget(4)
+		switch(player.TunnelEntry.side) {
 		case L: return pos.setX(Maze.Tunnel.EntranceR*T)
 		case R: return pos.setX(Maze.Tunnel.EntranceL*T)
 		default:return pos
@@ -37,7 +37,7 @@ class Aosuke extends Ghost {
 		return Vec2.new(27, 33)
 	}
 	get chasePos() {
-		const  pos = pacman.offsetTarget(2)
+		const  pos = player.offsetTarget(2)
 		return pos.clone.sub(GhsMgr.akaCenterPos).add(pos)
 	}
 }
@@ -52,7 +52,7 @@ class Guzuta extends Ghost {
 	get chasePos() {
 		return this.sqrMagToPacman < (T*8) ** 2
 		? this.scatterTile.add(.5).mul(T)
-		: pacman.center
+		: player.center
 	}
 }
 

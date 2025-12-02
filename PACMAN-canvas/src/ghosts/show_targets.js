@@ -1,7 +1,7 @@
 import {State}  from '../state.js'
 import {Ctrl}   from '../control.js'
 import {Maze}   from '../maze.js'
-import {pacman} from '../player/pacman.js'
+import {player} from '../player/pacman.js'
 import {GhsMgr} from '../ghosts/_system.js'
 import {Ghost}  from './ghost.js'
 
@@ -55,14 +55,14 @@ export default new class {
 	}
 	/** @param {{g:Ghost,ofst:number}} param */
 	#auxLines({g,ofst}) {
-		const {center:{x,y},dir}= pacman
-		const fwdXY = pacman.forwardPos(ofst).vals
-		const ofsXY = pacman.offsetTarget(ofst).vals
+		const {center:{x,y},dir}= player
+		const fwdXY = player.forwardPos(ofst).vals
+		const ofsXY = player.offsetTarget(ofst).vals
 		Ctx.save()
 		Ctx.setAlpha(0.8)
 		Ctx.lineWidth   = 6
 		Ctx.strokeStyle = Colors[g.type]
-		if (g.type != GhsType.Pinky || !pacman.inTunSide) {
+		if (g.type != GhsType.Pinky || !player.inTunSide) {
 			dir != U
 				? Ctx.newLinePath([x,y], fwdXY)
 				: Ctx.newLinePath([x,y], fwdXY).lineTo(...ofsXY)
@@ -79,7 +79,7 @@ export default new class {
 	/** @param {Ghost} g */
 	#guzutaCircle(g) {
 		Ctx.save()
-		Ctx.translate(...pacman.center.vals)
+		Ctx.translate(...player.center.vals)
 		Ctx.setAlpha(g.sqrMagToPacman < (T*8) ** 2 ? 0.4 : 0.8)
 		Ctx.strokeCircle(0,0, T*8, Colors[g.type], 6)
 		Ctx.restore()

@@ -8,7 +8,7 @@ import {Maze}   from '../maze.js'
 import {PtsMgr} from '../points.js'
 import * as Pts from '../sprites/points.js'
 import {Player} from '../player/pacman.js'
-import {pacman} from '../player/pacman.js'
+import {player} from '../player/pacman.js'
 import {Ghost}  from './ghost.js'
 import Target   from './show_targets.js'
 
@@ -200,7 +200,7 @@ export const DotCounter = function() {
 		const timeout = (Game.level<=4 ? 4e3:3e3)
 		const gLimit  = LimitTable[i-1][0] // global
 		const pLimit  = LimitTable[i-1][lvIdx] // personal
-		;(pacman.timeNotEaten >= timeout)? fn()
+		;(player.timeNotEaten >= timeout)? fn()
 		:(!Game.restarted || _globalCounter < 0)
 			? (personalCounters[i] >= pLimit)
 				&& fn()
