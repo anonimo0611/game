@@ -9,7 +9,7 @@ import { Actor } from '../actor.js';
 const Speed = PacSpeed
 const {SlowLevel,SlowRate}= Speed
 
-class State {
+class MoveState {
 	turning  = false
 	nextDir  = /**@type {?Direction}*/(null)
 	nextTurn = /**@type {?Direction}*/(null)
@@ -24,8 +24,8 @@ export class MoveControl extends Actor {
 	constructor() {
 		super()
 		/** @private */
-		this.s = new State
-		setSteerEvent(this, this.s)
+		this.s = new MoveState
+		setSteerEvent(this.s, this)
 		$(()=> this.#speed = this.tileSpeed)
 	}
 	get canTurn() {
@@ -83,8 +83,8 @@ export class MoveControl extends Actor {
 }
 
 function setSteerEvent(
- /**@type {MoveControl}*/m,
- /**@type {State}*/s
+ /**@type {MoveState}  */s,
+ /**@type {MoveControl}*/m
 ) {
 	$win.offon('keydown.PacSteer', e=> {
 		const dir = Dir.from(e,{wasd:true})
