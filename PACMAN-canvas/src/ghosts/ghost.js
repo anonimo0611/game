@@ -105,10 +105,9 @@ export class Ghost extends Actor {
 		this.sprite.update()
 		this.houseEntranceArrived
 			? this.#enterHouse()
-			: State.isPlaying
-				&& this.#processBehavior()
+			: State.isPlaying && this.#update()
 	}
-	#processBehavior() {
+	#update() {
 		this.#fleeTime >= 0 && this.#fleeTime--
 		if (Timer.frozen && !this.escaping) return
 		switch(this.state.current) {
