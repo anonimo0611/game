@@ -37,9 +37,10 @@ export const Ctrl = new class {
 	get invincible()    {return input('invChk').checked}
 	get showTargets()   {return input('tgtChk').checked}
 	get showGridLines() {return input('grdChk').checked}
-	get usingCheats()   {return this.speed<.7 || this.showTargets || this.invincible}
-	get isArcadeMode()  {return this.endlessMode && Menu.Level.index == 0}
+	get pacSemiTrans()  {return this.invincible  || this.showGridLines}
+	get usingCheats()   {return this.invincible  || this.speed<.7 || this.showTargets}
 	get isPractice()    {return this.usingCheats || !this.isArcadeMode}
+	get isArcadeMode()  {return this.endlessMode && Menu.Level.index == 0}
 
 	/** @param {boolean} [force] */
 	pause(force) {

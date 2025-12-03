@@ -200,13 +200,14 @@ export const DotCounter = function() {
 		const timeout = (Game.level<=4 ? 4e3:3e3)
 		const gLimit  = LimitTable[i-1][0] // global
 		const pLimit  = LimitTable[i-1][lvIdx] // personal
-		;(player.timeNotEaten >= timeout)? fn()
-		:(!Game.restarted || _globalCounter < 0)
-			? (personalCounters[i] >= pLimit)
-				&& fn()
-			: (_globalCounter == gLimit)
-				&& fn(i == GhsType.Guzuta)
-				&& (_globalCounter = -1)
+		;(player.timeSinceLastEating >= timeout)
+			? fn()
+			: (!Game.restarted || _globalCounter < 0)
+				? (personalCounters[i] >= pLimit)
+					&& fn()
+				: (_globalCounter == gLimit)
+					&& fn(i == GhsType.Guzuta)
+					&& (_globalCounter = -1)
 		}
 	function reset() {
 		!Game.restarted && personalCounters.fill(0)

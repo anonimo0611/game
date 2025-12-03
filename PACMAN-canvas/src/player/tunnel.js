@@ -1,7 +1,7 @@
 import {player} from './player.js';
 
 /** Save which side of the tunnel the player entered from */
-export class TunnelEntry {
+export class TunEntry {
 	#side = /**@type {?('Left'|'Right')}*/(null)
 	get side() {return this.#side}
 	update() {

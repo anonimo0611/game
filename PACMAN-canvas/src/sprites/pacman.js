@@ -33,7 +33,8 @@ export default class {
 	draw({
 		center:{x,y}={x:0,y:0},
 		orient = /**@type {Direction}*/(L),
-		hidden = false, mouseClosed = false,
+		hidden = false,
+		closed = false,
 		radius = PacRadius}={}, {scale=1}={}
 	) {
 		if (hidden)
@@ -43,7 +44,7 @@ export default class {
 			return this.#dyingSpr.draw({x,y})
 		}
 		const {ctx}  = this
-		const mAngle = (mouseClosed? 0:this.#mouthAngle)
+		const mAngle = (closed? 0:this.#mouthAngle)
 		ctx.save()
 		ctx.translate(x,y)
 		ctx.rotate(Rotation.get(orient) ?? 0)
