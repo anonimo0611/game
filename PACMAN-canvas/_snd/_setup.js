@@ -1,11 +1,11 @@
-import {input}    from '../src/control.js'
+import {inputs}   from '../src/inputs.js'
 import {Sound}    from './sound.js'
 import {SoundMgr} from './loader.js'
 import {Speaker}  from './speaker.js'
 
 let  _lstVol  = NaN
-const volRng  = input('volRng')
-const volRg2  = input('volRg2')
+const volRng  = inputs.volRng
+const volRg2  = inputs.volRg2
 const volume  = +(localStorage.anopac_volume ?? 5)
 
 const Ctrl = new class { // Register sound instances and set up controls
