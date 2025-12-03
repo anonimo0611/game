@@ -6,15 +6,9 @@ import {MenuIds}  from './ui.js'
 import {State}    from './state.js'
 import {drawText} from './message.js'
 import {Score}    from './score.js'
+import {inputs}   from './inputs.js'
 
-export const
-	Form  = document.forms[0],
-	input = (/**@type {string}*/id)=> {
-		let element = byId(id)
-		if (element instanceof HTMLInputElement) return element
-		throw TypeError(`There is no input element with the ID “${id}”.`)
-	}
-
+export const Form = document.forms[0]
 export const Ctrl = new class {
 	static {$(this.setup)}
 	static setup() {
@@ -29,14 +23,14 @@ export const Ctrl = new class {
 	}
 	get extendScore()   {return +Menu.Extend.value}
 	get activeElem()    {return qS(':not(#startBtn):focus')}
-	get livesMax()      {return input('lvsRng').valueAsNumber}
-	get speed()         {return input('spdRng').valueAsNumber}
-	get endlessMode()   {return input('onlChk').checked == false}
-	get alwaysChase()   {return input('chsChk').checked}
-	get unrestricted()  {return input('unrChk').checked}
-	get invincible()    {return input('invChk').checked}
-	get showTargets()   {return input('tgtChk').checked}
-	get showGridLines() {return input('grdChk').checked}
+	get livesMax()      {return inputs.lvsRng.valueAsNumber}
+	get speed()         {return inputs.spdRng.valueAsNumber}
+	get endlessMode()   {return inputs.onlChk.checked == false}
+	get alwaysChase()   {return inputs.chsChk.checked}
+	get unrestricted()  {return inputs.unrChk.checked}
+	get invincible()    {return inputs.invChk.checked}
+	get showTargets()   {return inputs.tgtChk.checked}
+	get showGridLines() {return inputs.grdChk.checked}
 	get pacSemiTrans()  {return this.invincible  || this.showGridLines}
 	get usingCheats()   {return this.invincible  || this.speed<.7 || this.showTargets}
 	get isPractice()    {return this.usingCheats || !this.isArcadeMode}
@@ -144,4 +138,4 @@ export const Ctrl = new class {
 		$('#coffBtn2').on({click:()=> State.toCoffBreak({data:2})})
 		$('#coffBtn3').on({click:()=> State.toCoffBreak({data:3})})
 	}
-}, powChk = input('powChk')
+}, powChk = inputs.powChk
