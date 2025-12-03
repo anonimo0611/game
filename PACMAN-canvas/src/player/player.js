@@ -8,9 +8,9 @@ import {Score}    from '../score.js'
 import {Maze}     from '../maze.js'
 import {Actor}    from '../actor.js'
 import {GhsMgr}   from '../ghosts/_system.js'
+import  Sprite    from '../sprites/pacman.js'
 import {Mover}    from './controller.js'
 import {TunEntry} from './tunnel.js'
-import  Sprite    from '../sprites/pacman.js'
 
 class PlayerPac {
 	#eatSoundIndex   = 0

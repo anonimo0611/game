@@ -3,8 +3,8 @@ import {Confirm} from '../../_lib/confirm.js';
 import {Game}    from '../_main.js'
 import {Ctrl}    from '../control.js';
 import {Maze}    from '../maze.js'
+import {Actor}   from '../actor.js';
 import {GhsMgr}  from '../ghosts/_system.js'
-import { Actor } from '../actor.js';
 
 const Speed = PacSpeed
 const {SlowLevel,SlowRate}= Speed
