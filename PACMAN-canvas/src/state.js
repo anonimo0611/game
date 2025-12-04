@@ -1,12 +1,12 @@
 import _State from '../_lib/state.js'
 /**
 @typedef {
-  'Title'|'Attract'|'Starting'|'Restarted'|'NewLevel'|'Ready'|'Playing'|
+  'Title'|'Attract'|'Intro'|'Restarted'|'NewLevel'|'Ready'|'InGame'|
   'Cleared'|'Flashing'|'CoffBreak'|'PacCaught'|'PacDying'|'GameOver'|'Quit'
 } StateType
 @typedef {
   '_Ready'|'_NewLevel'|'_Restarted_NewLevel'|
-  '_Starting_Ready_Restarted'|'_PacDying_Cleared'
+  '_Intro_Ready_Restarted'|'_PacDying_Cleared'
 } MultiState
 */
 
@@ -14,9 +14,9 @@ import _State from '../_lib/state.js'
 class GameState extends _State {
 	isTitle     = false
 	isAttract   = false
-	isStarting  = false
+	isIntro     = false
 	isReady     = false
-	isPlaying   = false
+	isInGame    = false
 	isRestarted = false
 	isNewLevel  = false
 	isCleared   = false
@@ -30,9 +30,9 @@ class GameState extends _State {
 
 	get toTitle()     {return this.ret('Title')}
 	get toAttract()   {return this.ret('Attract')}
-	get toStart()     {return this.ret('Starting')}
+	get toIntro()     {return this.ret('Intro')}
 	get toReady()     {return this.ret('Ready')}
-	get toPlaying()   {return this.ret('Playing')}
+	get toInGame()    {return this.ret('InGame')}
 	get toRestart()   {return this.ret('Restarted')}
 	get toNewLevel()  {return this.ret('NewLevel')}
 	get toCleared()   {return this.ret('Cleared')}
@@ -43,9 +43,10 @@ class GameState extends _State {
 	get toGameOver()  {return this.ret('GameOver')}
 	get toQuit()      {return this.ret('Quit')}
 
-	get wasTitle()    {return !!this.last('Title')}
-	get wasStart()    {return !!this.last('Starting')}
-	get wasFlashing() {return !!this.last('Flashing')}
+	get wasTitle()    {return this.was('Title')}
+	get wasIntro()    {return this.was('Intro')}
+	get wasFlashing() {return this.was('Flashing')}
+	get isStartMode() {return this.isIntro || this.isReady}
 
 	/**
 	 @param {StateType} s

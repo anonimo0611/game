@@ -58,20 +58,20 @@ export class Attract {
 		const Small ={size:T*.68},
 		et = Ticker.elapsedTime/100
 		et > 10 && this.drawGhostOnTable(GhsType.Akabei, 6)
-		et > 15 && drawText( 8,  7, Color.Akabei, 'OIKAKE----')
-		et > 20 && drawText(18,  7, Color.Akabei, '"AKABEI"')
+		et > 15 && drawText( 8,  7, Colors.Akabei, 'OIKAKE----')
+		et > 20 && drawText(18,  7, Colors.Akabei, '"AKABEI"')
 
 		et > 30 && this.drawGhostOnTable(GhsType.Pinky,  9)
-		et > 35 && drawText( 8, 10, Color.Pinky, 'MACHIBUSE--')
-		et > 40 && drawText(19, 10, Color.Pinky, '"PINKY"')
+		et > 35 && drawText( 8, 10, Colors.Pinky, 'MACHIBUSE--')
+		et > 40 && drawText(19, 10, Colors.Pinky, '"PINKY"')
 
 		et > 50 && this.drawGhostOnTable(GhsType.Aosuke, 12)
-		et > 55 && drawText( 8, 13, Color.Aosuke, 'KIMAGURE--')
-		et > 60 && drawText(18, 13, Color.Aosuke, '"AOSUKE"')
+		et > 55 && drawText( 8, 13, Colors.Aosuke, 'KIMAGURE--')
+		et > 60 && drawText(18, 13, Colors.Aosuke, '"AOSUKE"')
 
 		et > 70 && this.drawGhostOnTable(GhsType.Guzuta, 15)
-		et > 75 && drawText( 8, 16, Color.Guzuta, 'OTOBOKE---')
-		et > 80 && drawText(18, 16, Color.Guzuta, '"GUZUTA"')
+		et > 75 && drawText( 8, 16, Colors.Guzuta, 'OTOBOKE---')
+		et > 80 && drawText(18, 16, Colors.Guzuta, '"GUZUTA"')
 		if (et > 85) {
 			drawDot(Ctx, 10, 24)
 			drawDot(Ctx, 10, 26, true, !!this.powIdx)
@@ -87,8 +87,8 @@ export class Attract {
 			}
 			if (extendScore > 0) {
 				const text = `BONUS　PACMAN　FOR　${extendScore}`
-				drawText( 2.0, 30, Color.Orange, text)
-				drawText(24.3, 30, Color.Orange,'PTS',Small)
+				drawText( 2.0, 30, Colors.Orange, text)
+				drawText(24.3, 30, Colors.Orange,'PTS',Small)
 			}
 		}
 		if (this.subActStarted)

@@ -43,7 +43,7 @@ const GtsPtsSet = new Set(GhostPts)
 export function cache(pts, size=TileSize*2) {
 	const idx  = +GtsPtsSet.has(pts)
 	const ctx  = [FruitCvs, GhostCvs][idx].ctx
-	const cst  = [Color.FruitPts, Color.GhostPts][idx]
+	const cst  = [Colors.FruitPts, Colors.GhostPts][idx]
 	const{w,h} = ctx.resize(size*1.5, size).size
 	ctx.clear()
 	ctx.save()

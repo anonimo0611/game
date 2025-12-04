@@ -11,8 +11,8 @@ export const Lives = function() {
 	function onChange() {
 		switch(State.current) {
 		case 'Title':    return reset()
-		case 'Starting': return add(+1)
-		case 'Ready':    return add(State.wasStart? -1:0)
+		case 'Intro':    return add(+1)
+		case 'Ready':    return add(State.wasIntro? -1:0)
 		case 'Restarted':return add(-1)
 		}
 	}
@@ -28,7 +28,7 @@ export const Lives = function() {
 	function add(n=0) {draw(_left += n)}
 
 	$('#lvsRng').on({input:onChange})
-	State.on({_Starting_Ready_Restarted:onChange})
+	State.on({_Intro_Ready_Restarted:onChange})
 	return {
 		append() {add(1)},
 		get left() {return _left},

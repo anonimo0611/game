@@ -43,8 +43,8 @@ export default class {
 		ctx.translate(size/2, size/2)
 		ctx.scale(size/(100/GhsScale), size/(100/GhsScale))
 		ctx.fillStyle = !frightened
-			? Color[GhsNames[type]]
-			: Color.FrightBodies[spriteIdx]
+			? Colors[GhsNames[type]]
+			: Palette.FrightBody[spriteIdx]
 
 		if (exposed) {
 			this.#spr.drawHadake(animIdx)
@@ -55,7 +55,7 @@ export default class {
 			this.#resurrect?.setAlpha(ctx)
 			this.#drawAngerGlow({x,y, angry,size})
 			this.#drawBody({animIdx,ripped,mended})
-			frightened && this.#frightFace({spriteIdx})
+			frightened && this.#drawFrightFace({spriteIdx})
 			ctx.restore()
 		}
 		if (!frightened) {
@@ -117,7 +117,7 @@ export default class {
 			ctx.fillStyle = 'white'
 			ctx.fill()
 			// Eyes
-			ctx.fillCircle(18.5*v, -26, 8, (ripped? 'black':Color.GhostEyes))
+			ctx.fillCircle(18.5*v, -26, 8, (ripped? 'black':Colors.GhostEyes))
 		}
 	}
 	#drawEyesDown() {
@@ -129,7 +129,7 @@ export default class {
 			ctx.fillStyle = 'white'
 			ctx.fill()
 			// Eyes
-			ctx.fillCircle(19*v, 4, 8, Color.GhostEyes)
+			ctx.fillCircle(19*v, 4, 8, Colors.GhostEyes)
 		}
 	}
 	/** @param {{orient?:L|R}} orient */
@@ -144,13 +144,13 @@ export default class {
 			ctx.fillStyle = 'white'
 			ctx.fill()
 			// Eyes
-			ctx.fillCircle([-9.5, 29][i], -8,8, Color.GhostEyes)
+			ctx.fillCircle([-9.5, 29][i], -8,8, Colors.GhostEyes)
 		}
 		ctx.restore()
 	}
-	#frightFace({spriteIdx=0}) {
+	#drawFrightFace({spriteIdx=0}) {
 		const {ctx}= this
-		ctx.fillStyle = ctx.strokeStyle = Color.FrightFaces[spriteIdx]
+		ctx.fillStyle = ctx.strokeStyle = Palette.FrightFace[spriteIdx]
 		{// Eyes
 			const size = 11
 			ctx.lineWidth = 11

@@ -31,7 +31,7 @@ class Points {
 			PtsMap.delete(key)
 			fn?.()
 		})
-		State.isPlaying && Score.add(key.points)
+		State.isInGame && Score.add(key.points)
 		PtsMap.set(key, this)
 	}
 	update() {

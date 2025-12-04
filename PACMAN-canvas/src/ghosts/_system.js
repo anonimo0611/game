@@ -70,7 +70,7 @@ export const GhsMgr = new class extends Common {
 	static {$(this.setup)}
 	static setup() {
 		State.on({
-			Playing:  GhsMgr.#onPlaying,
+			InGame:   GhsMgr.#onInGame,
 			Cleared:  GhsMgr.#onRoundEnds,
 			PacCaught:GhsMgr.#onRoundEnds,
 		})
@@ -96,7 +96,7 @@ export const GhsMgr = new class extends Common {
 	#onRoundEnds() {
 		Ghosts.forEach((g)=> g.sprite.setFadeOut())
 	}
-	#onPlaying() {
+	#onInGame() {
 		Sound.playSiren()
 		Ctrl.alwaysChase && GhsMgr.#setReleaseTimer()
 	}
@@ -113,7 +113,7 @@ export const GhsMgr = new class extends Common {
 		FrightMode.new()
 	}
 	update() {
-		if (State.isPlaying
+		if (State.isInGame
 		 || State.isAttract
 		 || State.isCoffBreak)
 			this.#animIdx ^= +(!Timer.frozen && GhsMgr.animFlag)
@@ -148,7 +148,7 @@ const AttackInWaves = function() {
 		return {
 			get isChaseMode()   {return phase.mode == CHACE},
 			get isScatterMode() {return phase.mode == SCATTER},
-			update() {State.isPlaying && phase.update()},
+			update() {State.isInGame && phase.update()},
 		}
 	}
 	function genPhaseList() {
@@ -223,7 +223,7 @@ export const DotCounter = function() {
 		idx != -1 && personalCounters[idx]++
 	}
 	State .on({_Ready:reset})
-	Player.on({Eaten:increaseCounter})
+	Player.on({AteDot:increaseCounter})
 	return {releaseIfReady}
 }()
 
@@ -232,7 +232,7 @@ const CruiseElroy = function() {
 	const Accelerations = freeze([1.00, 1.02, 1.05, 1.1])
 	const DotsLeftTable = freeze([20,20,30,40,50,60,70,70,80,90,100,110,120])
 	function angry() {
-		return State.isPlaying
+		return State.isInGame
 			&& _part > 1
 			&& Ghosts[GhsType.Akabei]?.frightened == false
 			&& Ghosts[GhsType.Guzuta]?.started == true
@@ -243,7 +243,7 @@ const CruiseElroy = function() {
 			++_part && Sound.playSiren()
 	}
 	State .on({_NewLevel:()=> _part=0})
-	Player.on({Eaten:onDotEaten})
+	Player.on({AteDot:onDotEaten})
 	return {
 		get part()  {return _part},
 		get angry() {return angry()},
@@ -278,7 +278,7 @@ const FrightMode = function() {
 			this.#fIdx ^= +(this.#flash++ % iv == 0)
 		}
 		update() {
-			if (State.isPlaying && !Timer.frozen) {
+			if (State.isInGame && !Timer.frozen) {
 				const et = (this.#time++ * Game.interval)/1000
 				;(et>=this.Dur-2) && this.#flashing()
 				;(et>=this.Dur || this.caughtAll) && this.#set()

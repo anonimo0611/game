@@ -94,7 +94,7 @@ export class Ghost extends Actor {
 		}(this,this.state) * Game.moveSpeed
 	}
 	draw() {
-		if (State.isStarting) return
+		if (State.isIntro ) return
 		Ctx.save()
 		this.#fadeIn.setAlpha(this.maxAlpha)
 		this.sprite.draw(this)
@@ -105,7 +105,7 @@ export class Ghost extends Actor {
 		this.sprite.update()
 		this.houseEntranceArrived
 			? this.#enterHouse()
-			: State.isPlaying && this.#update()
+			: State.isInGame && this.#update()
 	}
 	#update() {
 		this.#fleeTime >= 0 && this.#fleeTime--

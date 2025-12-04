@@ -22,12 +22,12 @@ export const Game = new class {
 	static setup() {
 		State.on({
 			Title:    Game.#onTitle,
-			Starting: Game.#onStarting,
-			Playing:  Game.#onPlaying,
+			Intro:    Game.#onIntro,
+			InGame:   Game.#onInGame,
 			Cleared:  Game.#onCleared,
 			Flashing: Game.#onFlashing,
 			NewLevel: Game.#onNewLevel,
-			PacDying: Game.#onDying,
+			PacDying: Game.#onPacDying,
 			GameOver: Game.#onGameOver,
 			Quit:     Game.#onQuit,
 			Restarted:Game.#levelBegins,
@@ -45,7 +45,7 @@ export const Game = new class {
 	/** Level 13+ as the fastest, stepwise faster from level 1 to 13 */
 	get speedByLv() {return 1 - (13-Game.clampedLv) * .01}
 	get clampedLv() {return clamp(Game.level, 1, 13)}
-	get speed()     {return State.isPlaying ? Ctrl.speed : 1}
+	get speed()     {return State.isInGame ? Ctrl.speed : 1}
 	get moveSpeed() {return Game.speed * Game.speedByLv}
 	get interval()  {return Game.speed * Ticker.Interval}
 
@@ -63,15 +63,15 @@ export const Game = new class {
 		Game.#resetLevel()
 		Ticker.set(Game.#update, Game.#draw)
 	}
-	#onStarting() {
+	#onIntro() {
 		Cursor.hide()
 		Sound.play('start')
 		Timer.set(2200, Game.#levelBegins)
 	}
-	#onPlaying() {
+	#onInGame() {
 		!document.hasFocus() && Ctrl.pause(true)
 	}
-	#onDying() {
+	#onPacDying() {
 		Sound.play('dying')
 		player.sprite.setDying()
 		Lives.left > 0
@@ -98,7 +98,7 @@ export const Game = new class {
 	}
 	#levelBegins() {
 		Game.#restarted = State.isRestarted
-		State.toReady().toPlaying({delay:2200})
+		State.toReady().toInGame({delay:2200})
 	}
 	#levelEnds() {
 		Game.#restarted = false

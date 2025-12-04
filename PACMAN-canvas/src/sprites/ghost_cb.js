@@ -10,7 +10,7 @@ export default class {
 		ctx.newLinePath([40, 1],[40,23],[35,23])
 		ctx.quadraticCurveTo(28, 32, 35, 32)
 		ctx.addLinePath([43,32],[43,42],[9,42],[9,38],[18,32],[26,25],[21,20],[19,19])
-		ctx.fillStyle = Color.GhostSkin
+		ctx.fillStyle = Colors.GhostSkin
 		ctx.fill()
 	}
 	drawMendedSeam(animIdx=0) {
@@ -62,7 +62,7 @@ export default class {
 		ctx.addLinePath([61, -30],[54, -16])
 		ctx.quadraticCurveTo(49, -4, 40, 4)
 		ctx.addLinePath([56,5],[56,22],[37,22],[37,16])
-		ctx.fillStyle = Color.GhostSkin
+		ctx.fillStyle = Colors.GhostSkin
 		ctx.fill()
 		ctx.restore()
 
@@ -88,7 +88,7 @@ export default class {
 		ctx.addLinePath([51,-28],[51,-11])
 		ctx.quadraticCurveTo(50, -1, 45, 4)
 		ctx.addLinePath([63,4],[63,22],[44,22],[44,16],[12,16])
-		ctx.fillStyle = Color.GhostSkin
+		ctx.fillStyle = Colors.GhostSkin
 		ctx.fill()
 		ctx.restore()
 
@@ -114,7 +114,7 @@ export default class {
 			// Eyes
 			ctx.beginPath()
 			ctx.ellipse(eyesLR[i], -33, 5, 9, 0,0, PI*2)
-			ctx.fillStyle = Color.GhostEyes
+			ctx.fillStyle = Colors.GhostEyes
 			ctx.fill()
 		}
 	}
@@ -139,7 +139,7 @@ class StakeClothes {
 		const h = this.stakeSize.y
 		Ctx.save()
 		Ctx.translate(x, y)
-		Ctx.fillPolygon(Color.Akabei, [0,-4],[0,-h],[-T,0],[-4,0],[-4,-4])
+		Ctx.fillPolygon(Colors.Akabei, [0,-4],[0,-h],[-T,0],[-4,0],[-4,-4])
 		Ctx.restore()
 	}
 	/**
@@ -160,7 +160,7 @@ class StakeClothes {
 		Ctx.quadraticCurveTo(-8,-4, v1, 3)
 		Ctx.quadraticCurveTo(v2, 9, v3, 9)
 		Ctx.addLinePath([v3,43],[ls,43],[ls,20],[-8,20])
-		Ctx.fillStyle = Color.Akabei
+		Ctx.fillStyle = Colors.Akabei
 		Ctx.fill()
 		Ctx.restore()
 	}

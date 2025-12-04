@@ -26,7 +26,7 @@ Bg  = canvas2D('board_bg' ,  BW,BH),
 HUD = canvas2D('board_hud',  BW,BH),
 Ctx = canvas2D('board_main', BW,BH).ctx,
 
-Color = freeze(new class {
+Colors = freeze(new class {
 	Grid      = '#F00'
 	Dot       = '#FFB8AE'
 	Wall      = '#58E'
@@ -43,9 +43,11 @@ Color = freeze(new class {
 	FruitPts  = '#FFB8FF'
 	Extend    = '#F55'
 	Orange    = '#F90'
-	Inf          = freeze(['#888','#F9E'])
-	FrightFaces  = freeze(['#F9F','#F00'])
-	FrightBodies = freeze(['#36A','#FFF'])
+}),
+Palette = freeze({
+	Info:       freeze(['#888','#F9E']),
+	FrightFace: freeze(['#F9F','#F00']),
+	FrightBody: freeze(['#36A','#FFF']),
 }),
 
 BaseSpeed    = TileSize /4.5,

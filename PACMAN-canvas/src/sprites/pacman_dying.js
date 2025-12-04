@@ -16,7 +16,7 @@ export class Dying {
 		ctx.save()
 		ctx.translate(x,y)
 		ctx.lineWidth = T/6
-		ctx.fillStyle = ctx.strokeStyle = Color.Pacman
+		ctx.fillStyle = ctx.strokeStyle = Colors.Pacman
 		this.#mAngle < PI - PI/DisDur
  			? this.#disappear()
 	 		: this.#drawRadialLines()

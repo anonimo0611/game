@@ -38,7 +38,7 @@ export const Ctrl = new class {
 
 	/** @param {boolean} [force] */
 	pause(force) {
-		State.isPlaying && Sound.pause(Ticker.pause(force))
+		State.isInGame && Sound.pause(Ticker.pause(force))
 	}
 	#fitToViewport() {
 		const scale = min(
@@ -76,13 +76,13 @@ export const Ctrl = new class {
 		ctx.translate(T*0.1, T*18)
 		ctx.clearRect(0,-T,BW,T*3)
 		if (Ctrl.usingCheats || spd != 'x1.0') {
-			drawText(0, h*0, Color.Inf[+(spd != 'x1.0') ], 'Speed'+spd, cfg)
-			drawText(0, h*1, Color.Inf[+Ctrl.invincible ], 'Invincible',cfg)
-			drawText(0, h*2, Color.Inf[+Ctrl.showTargets], 'Targets',   cfg)
+			drawText(0, h*0, Palette.Info[+(spd != 'x1.0') ], 'Speed'+spd, cfg)
+			drawText(0, h*1, Palette.Info[+Ctrl.invincible ], 'Invincible',cfg)
+			drawText(0, h*2, Palette.Info[+Ctrl.showTargets], 'Targets',   cfg)
 		}
 		if (Ctrl.unrestricted) {
 			ctx.translate(T*(Cols-5), T/2)
-			drawText(0,0, Color.Inf[1], 'Un-\nrestricted', cfg)
+			drawText(0,0, Palette.Info[1], 'Un-\nrestricted', cfg)
 		}
 		ctx.restore()
 	}
@@ -94,7 +94,7 @@ export const Ctrl = new class {
 	#quit(noConfirm=false) {
 		noConfirm
 			? State.toQuit()
-			: State.isPlaying && Ctrl.#quitConfirm()
+			: State.isInGame && Ctrl.#quitConfirm()
 	}
 	#clearHiScore() {
 		localStorage.removeItem('anopac_hiscore')
@@ -132,7 +132,7 @@ export const Ctrl = new class {
 		$('input')    .on({input:Ctrl.#output})
 		$('#clearHi') .on({click:Ctrl.#clearHiConfirm})
 		$('#resetBtn').on({click:Ctrl.#reset})
-		$('#startBtn').on({click:()=> State.toStart()})
+		$('#startBtn').on({click:()=> State.toIntro()})
 		$('#demoBtn') .on({click:()=> State.toAttract()})
 		$('#coffBtn1').on({click:()=> State.toCoffBreak({data:1})})
 		$('#coffBtn2').on({click:()=> State.toCoffBreak({data:2})})

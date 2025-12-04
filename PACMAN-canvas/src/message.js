@@ -26,11 +26,10 @@ export const Message = new class {
 	}
 	draw() {
 		this.#drawPausedMessage()
-		if (State.isStarting)
+		if (State.isIntro)
 			drawText( 9, 13, '#0FF','PLAYER　ONE')
 
-		if (State.isStarting
-		 || State.isReady)
+		if (State.isStartMode)
 			drawText(11, 19, '#FF0','READY!')
 
 		if (State.isTitle

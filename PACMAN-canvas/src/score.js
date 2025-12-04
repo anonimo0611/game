@@ -13,7 +13,7 @@ export const Score = new class {
 		Score.reset()
 		State.on({
 			Quit:    Score.#restore,
-			Starting:Score.#onStarting,
+			Intro:   Score.#onIntro,
 			GameOver:Score.#onGameOver,
 		})
 	}
@@ -29,7 +29,7 @@ export const Score = new class {
 		_score = _savedS
 		_hiSco = _savedH
 	}
-	#onStarting() {
+	#onIntro() {
 		Score.#save()
 		_score = 0
 	}
@@ -39,11 +39,11 @@ export const Score = new class {
 			localStorage.anopac_hiscore = _hiSco
 	}
 	get #showUP() {
-		return !State.isPlaying || Ticker.paused
+		return !State.isInGame || Ticker.paused
 			? true : !!(Ticker.count & (Sound.ringing? 8:16))
 	}
 	get #color() {
-		return (Sound.ringing? Color.Extend : null)
+		return (Sound.ringing? Colors.Extend : null)
 	}
 	draw() {
 		drawText(2,1, this.#color, this.#showUP? '1UP':'')

@@ -28,9 +28,9 @@ let  _fadeOut = /**@type {?FadeOut}*/(null)
 export const Fruit = new class {
 	static {$(this.setup)}
 	static setup() {
-		State .on({_Ready:Fruit.#resetTarget})
-		Player.on({Eaten: Fruit.#onDotEaten})
-		$Level.on({change:Fruit.#setImages})
+		State .on({_Ready: Fruit.#resetTarget})
+		Player.on({AteDot: Fruit.#onDotEaten})
+		$Level.on({change: Fruit.#setImages})
 	}
 	get points() {
 		return Pts.FruitPts[Fruit.number()]
@@ -70,7 +70,7 @@ export const Fruit = new class {
 	}
 	drawTarget() {
 		if (!State.isTitle
-		 && !State.isPlaying)
+		 && !State.isInGame)
 			return
 		if (_showTgt && !Ticker.paused) {
 			Ctx.save()

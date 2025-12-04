@@ -51,7 +51,7 @@ export default class {
 		ctx.beginPath()
 		ctx.moveTo(-radius*scale*0.3, 0)
 		ctx.arc(0,0,radius*scale, mAngle, PI*2-mAngle)
-		ctx.fillStyle = Color.Pacman
+		ctx.fillStyle = Colors.Pacman
 		ctx.fill()
 		ctx.restore()
 	}

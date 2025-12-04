@@ -6,7 +6,7 @@ const LW = 3 // Line Width
 import {Maze}  from '../maze.js'
 import {State} from '../state.js'
 export const Wall = new class {
-	draw(color=Color.Wall) {
+	draw(color=Colors.Wall) {
 		ctx.clear()
 		ctx.save()
 		ctx.lineWidth   = LW
@@ -21,14 +21,14 @@ export const Wall = new class {
 		;(function redraw() {
 			if (++count > 8)
 				return Timer.set(500, fn)
-			Wall.draw([, Color.FlashWall][count % 2])
+			Wall.draw([, Colors.FlashWall][count % 2])
 			Timer.set(250, redraw)
 		})()
 	}
 	#drawDoor() {
 		if (State.isFlashing) return
 		const y = (Maze.House.EntranceTile.y+1.6)*T
-		Bg.ctx.fillRect(BW/2-T, y, T*2, T/4, Color.Door)
+		Bg.ctx.fillRect(BW/2-T, y, T*2, T/4, Colors.Door)
 	}
 	#drawHouse() {
 		const [ix,iy,ox,oy]= [31,16,34,19].map(n=>n/10*T)

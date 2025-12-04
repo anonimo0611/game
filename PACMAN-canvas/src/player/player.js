@@ -16,17 +16,16 @@ class PlayerPac {
 	#eatSoundIndex   = 0
 	#sinceLastEating = 0
 
-	#mover    = new Mover
+	#mover    = new Mover(13.5, 24)
 	#tunEntry = new TunEntry
 	#fadeIn   = new Actor.SpawnFadeIn
 
 	/** @readonly */
 	sprite = new Sprite(Ctx)
 
-	constructor()   {this.#mover.pos.set(13.5*T, 24*T)}
 	get radius()    {return PacRadius}
 	get hidden()    {return Timer.frozen}
-	get closed()    {return State.isPlaying == false}
+	get closed()    {return State.isInGame == false}
 	get maxAlpha()  {return Ctrl.pacSemiTrans? .75:1}
 
 	get dir()       {return this.#mover.dir}
@@ -51,14 +50,11 @@ class PlayerPac {
 		this.#sinceLastEating = 0
 	}
 	drawCenterDot() {
-		if (!this.hidden
-		 && !State.isPacCaught
-		 && !State.isPacDying
-		 && Ctrl.showGridLines)
+		if (!this.hidden && Ctrl.showGridLines)
 			this.#mover.drawCenterDot()
 	}
 	draw() {
-		if (State.isStarting)
+		if (State.isIntro )
 			return
 		Ctx.save()
 		this.#fadeIn.setAlpha(this.maxAlpha)
@@ -93,7 +89,7 @@ class PlayerPac {
 			: this.#eatSmallDot()
 		Maze.clearBgDot(this.#mover) == 0
 			? State.toCleared()
-			: Player.trigger('Eaten')
+			: Player.trigger('AteDot')
 	}
 	#eatPowerDot() {
 		Score.add(PowPts)

@@ -72,7 +72,7 @@ class PowDot {
 	draw() {
 		this.#show ^= +!(Ticker.count % PowDotInterval)
 		for (const {x,y} of PowMap.values()) {
-			if (!State.isPlaying || Ticker.paused || this.#show)
+			if (!State.isInGame || Ticker.paused || this.#show)
 				Maze.drawDot(Ctx, x,y, true)
 		}
 	}
@@ -156,7 +156,7 @@ export const Maze = freeze(new class {
 	*/
 	drawDot(ctx, col,row, isPow=false, visible=true) {
 		const [x,y] = [col,row].map(n=>(n+.5)*T)
-		const color = visible? Color.Dot : null
+		const color = visible? Colors.Dot : null
 		ctx.fillCircle(x,y, T/(isPow? 2:8), color)
 	}
 	drawGrid() {
@@ -166,7 +166,7 @@ export const Maze = freeze(new class {
 		Ctx.beginPath()
 		for (const y of range(1,Cols)) Ctx.setLinePath([T*y, 0], [T*y, Rows*T])
 		for (const x of range(0,Rows)) Ctx.setLinePath([0, T*x], [Cols*T, T*x])
-		Ctx.strokeStyle = Color.Grid
+		Ctx.strokeStyle = Colors.Grid
 		Ctx.stroke()
 		Ctx.restore()
 	}

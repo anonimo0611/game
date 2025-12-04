@@ -13,11 +13,10 @@ class SpawnFadeIn {
 			: Ctx.setAlpha(this.#fadeIn?.alpha)
 	}
 	update(max=1) {
-		State.isReady   && this.#fadeIn?.update(max)
-		State.isPlaying &&(this.#fadeIn &&= null)
+		State.isReady  && this.#fadeIn?.update(max)
+		State.isInGame &&(this.#fadeIn &&= null)
 	}
 }
-
 export class Actor extends Common {
 	/** @readonly */
 	static SpawnFadeIn = SpawnFadeIn
