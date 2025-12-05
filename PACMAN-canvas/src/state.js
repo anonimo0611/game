@@ -26,7 +26,7 @@ class GameState extends _State {
 	isPacDying  = false
 	isGameOver  = false
 	isQuit      = false
-	constructor() {super(globalThis),this.init()}
+
 
 	get toTitle()     {return this.ret('Title')}
 	get toAttract()   {return this.ret('Attract')}
@@ -47,6 +47,8 @@ class GameState extends _State {
 	get wasIntro()    {return this.was('Intro')}
 	get wasFlashing() {return this.was('Flashing')}
 	get isStartMode() {return this.isIntro || this.isReady}
+
+	constructor() {super(globalThis),this.init()}
 
 	/**
 	 @param {StateType} s
