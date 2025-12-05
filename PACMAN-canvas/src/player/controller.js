@@ -54,8 +54,9 @@ export class Mover extends Actor {
 		this.#turnAround()
 	}
 	#setMoveSpeed(divisor=1) {
-		this.justArrivedAtTile(divisor)
-			&& (this.#speed = this.tileSpeed)
+		if (this.justArrivedAtTile(divisor)) {
+			this.#speed = this.tileSpeed
+		}
 	}
 	#turnCorner(divisor=1) {
 		const dir = this.s.nextDir
@@ -74,13 +75,18 @@ export class Mover extends Actor {
 		}
 	}
 	#turnAround() {
-		this.dir == this.revOrient
-			&& this.setMoveDir(this.orient)
+		if (this.dir == this.revOrient) {
+			this.setMoveDir(this.orient)
+		}
+	}
+	#processStop() {
+		return (this.#stopped = !this.canMove)
 	}
 	stopAtWall() {
-		(this.#stopped = !this.canMove)
-			&& (this.pos = this.tilePos.mul(T))
-			&& (this.s.nextDir = null)
+		if (this.#processStop()) {
+			this.pos = this.tilePos.mul(T)
+			this.s.nextDir = null
+		}
 	}
 }
 
