@@ -165,17 +165,16 @@ const AttackInWaves = function() {
 		])
 	}
 	function genPhase() {
-		let  [cnt,idx]  = [-1,0]
-		const phaseList = genPhaseList()
-		const duration  = ()=> phaseList[idx]/Game.speed
+		let  [time,idx] = [-1,0]
+		const list  = genPhaseList()
 		const phase = {
 			mode: [SCATTER,CHACE][+Ctrl.alwaysChase],
 			update() {
 				if (Timer.frozen
 				 || GhsMgr.isFrightMode
-				 || Ticker.Interval*(++cnt) < duration())
+				 || Game.interval*(++time) < list[idx])
 					return
-				[cnt,phase.mode] = [0,(++idx % 2)]
+				[time,phase.mode] = [0,(++idx % 2)]
 				queueDirectionReverse()
 			}
 		};return phase.mode? initPhase(CHACE) : phase
@@ -266,7 +265,7 @@ const FrightMode = function() {
 				? $(Ghosts).trigger('FleeTime')
 				: this.#set(true)
 		}
-		#set(isOn=false) {
+		#set(/**@type {boolean}*/isOn) {
 			_session = (isOn? this:null)
 			$(Ghosts)
 				.trigger('FrightMode',isOn)
@@ -281,7 +280,7 @@ const FrightMode = function() {
 			if (State.isInGame && !Timer.frozen) {
 				const et = (this.#time++ * Game.interval)/1000
 				;(et>=this.Dur-2) && this.#flashing()
-				;(et>=this.Dur || this.caughtAll) && this.#set()
+				;(et>=this.Dur || this.caughtAll) && this.#set(false)
 			}
  		}
 	}

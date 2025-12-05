@@ -18,7 +18,7 @@ class TurnState {
 export class Mover extends Actor {
 	#speed   = 0
 	#stopped = true
-	get speed()   {return this.#speed ||= this.tileSpeed}
+	get speed()   {return (this.#speed ||= this.tileSpeed)}
 	get stopped() {return this.#stopped}
 
 	constructor(col=0,row=0) {
@@ -44,6 +44,7 @@ export class Mover extends Actor {
 			? (eating? Speed.EneEat : Speed.Energized)
 			: (eating? Speed.Eating : Speed.Base)
 		) * (Game.moveSpeed * (Game.level<SlowLevel ? 1:SlowRate))
+	      * Ticker.dt
 	}
 	update(divisor=1) {
 		this.#turnCorner(divisor)

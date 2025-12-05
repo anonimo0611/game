@@ -50,27 +50,28 @@ Palette = freeze({
 	FrightBody: freeze(['#36A','#FFF']),
 }),
 
-BaseSpeed    = TileSize /4.5,
-GhsBaseSpeed = BaseSpeed*1.07,
+FPS = 60,
+PacSpdPerSec = TileSize/4.5 * FPS,
+GhsSpdPerSec = PacSpdPerSec * 1.07,
 
 PacScale  = 0.9,
 PacRadius = T*PacScale,
 PacSpeed  = freeze({
 	SlowLevel: 13,   // After this level, Pacman slows down
 	SlowRate:  0.98, // Deceleration rate at SlowLevel
-	Base:      BaseSpeed,
-	Eating:    BaseSpeed * 0.86,
-	Energized: BaseSpeed * 1.10,
-	EneEat:    BaseSpeed * 0.95, // Energized+Eating
+	Base:      PacSpdPerSec,
+	Eating:    PacSpdPerSec * 0.86,
+	Energized: PacSpdPerSec * 1.10,
+	EneEat:    PacSpdPerSec * 0.95, // Energized+Eating
 }),
 GhsScale = 1.1,
 GhsType  = /**@type {const}*/({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4}),
 GhsNames = /**@type {const}*/(['Akabei','Pinky','Aosuke','Guzuta']),
 GhsSpeed = freeze({
-	Base:     GhsBaseSpeed,
-	Idle:     GhsBaseSpeed * 0.50,
-	GoOut:    GhsBaseSpeed * 0.50,
-	Fright:   GhsBaseSpeed * 0.60,
-	InTunnel: GhsBaseSpeed * 0.60,
-	Escape:   GhsBaseSpeed * 1.40,
+	Base:     GhsSpdPerSec,
+	Idle:     GhsSpdPerSec * 0.50,
+	GoOut:    GhsSpdPerSec * 0.50,
+	Fright:   GhsSpdPerSec * 0.60,
+	InTunnel: GhsSpdPerSec * 0.60,
+	Escape:   GhsSpdPerSec * 1.40,
 })

@@ -91,7 +91,7 @@ export class Ghost extends Actor {
 			if (g.frightened) return GhsSpeed.Fright
 			if (g.scattering) return GhsSpeed.Base
 			return g.chaseSpeed
-		}(this,this.state) * Game.moveSpeed
+		}(this,this.state) * Game.moveSpeed * Ticker.dt
 	}
 	draw() {
 		if (State.isIntro ) return
