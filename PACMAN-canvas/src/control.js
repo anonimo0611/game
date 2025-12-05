@@ -14,9 +14,9 @@ export const Ctrl = new class {
 	static setup() {
 		$win.on({
 			blur:_=> Ctrl.pause(true),
-			load:    Ctrl.#setup,
 			keydown: Ctrl.#onKeydown,
 		})
+		Ctrl.#setup()
 		Ctrl.#restore()
 		Ctrl.#output()
 		Ctrl.#fitToViewport()
