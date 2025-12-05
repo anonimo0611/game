@@ -61,10 +61,9 @@ export default class _State {
 
 	/**
 	 @param   {State} [state]
-	 @returns {State|''}
+	 @returns {boolean}
 	*/
-	last(state) {
-		const last = this.#last ?? ''
-		return state? (state === last ? last:'') : last
+	was(state) {
+		return state === this.#last
 	}
 }
