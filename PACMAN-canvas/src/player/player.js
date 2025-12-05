@@ -100,7 +100,7 @@ class PlayerPac {
 	}
 	#playEateSE() {
 		const id  = (this.#eatSoundIndex ^= 1)? 'eat1':'eat0'
-		const dur = (T/this.#mover.speed)*Ticker.Interval*0.5
+		const dur = (T/this.#mover.speed)*Game.interval*0.5
 		Sound.play(id, {duration:dur})
 	}
 }

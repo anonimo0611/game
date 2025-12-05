@@ -62,7 +62,7 @@ PacSpeed  = freeze({
 	Base:      PacSpdPerSec,
 	Eating:    PacSpdPerSec * 0.86,
 	Energized: PacSpdPerSec * 1.10,
-	EneEat:    PacSpdPerSec * 0.95, // Energized+Eating
+	EneEating: PacSpdPerSec * 0.95, // Energized+Eating
 }),
 GhsScale = 1.1,
 GhsType  = /**@type {const}*/({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4}),
