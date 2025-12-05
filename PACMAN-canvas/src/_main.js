@@ -133,4 +133,3 @@ export const Game = new class {
 	}
 },
 $Level = $byId('level')
-$load(()=> Form.dataset.readyState = 'loaded')

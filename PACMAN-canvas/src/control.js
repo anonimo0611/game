@@ -14,9 +14,9 @@ export const Ctrl = new class {
 	static setup() {
 		$win.on({
 			blur:_=> Ctrl.pause(true),
+			load:    Ctrl.#setup,
 			keydown: Ctrl.#onKeydown,
 		})
-		Ctrl.#setup()
 		Ctrl.#restore()
 		Ctrl.#output()
 		Ctrl.#fitToViewport()
@@ -128,7 +128,6 @@ export const Ctrl = new class {
 		for (const menu of values(Menu)) {
 			menu.on({change:Ctrl.#save})
 		}
-		$win.on({resize:Ctrl.#fitToViewport})
 		$('input')    .on({input:Ctrl.#output})
 		$('#clearHi') .on({click:Ctrl.#clearHiConfirm})
 		$('#resetBtn').on({click:Ctrl.#reset})
@@ -137,5 +136,7 @@ export const Ctrl = new class {
 		$('#coffBtn1').on({click:()=> State.toCoffBreak({data:1})})
 		$('#coffBtn2').on({click:()=> State.toCoffBreak({data:2})})
 		$('#coffBtn3').on({click:()=> State.toCoffBreak({data:3})})
+		$win.on({resize:Ctrl.#fitToViewport})
+		Form.dataset.readyState = 'loaded'
 	}
 }, powChk = inputs.powChk
