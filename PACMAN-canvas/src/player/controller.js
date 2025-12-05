@@ -83,7 +83,6 @@ export class Mover extends Actor {
 		return (this.#stopped = !this.canMove)
 	}
 	stopAtWall() {
-		// Reassign to 'stopped'
 		if (this.setStopped()) {
 			this.pos = this.tilePos.mul(T)
 			this.s.nextDir = null
@@ -119,4 +118,5 @@ function setSteerEvent({s,m}) {
 			m.setMoveDir(m.revDir)
 		}
 	})
+
 }
