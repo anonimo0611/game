@@ -20,6 +20,7 @@ const {Ticker,Timer} = function() {
 		get paused()      {return _paused}
 		get count()       {return _fCounter}
 		get running()     {return _ticker instanceof Tick}
+		get dt()          {return _ticker?.dt ?? 0}
 		get elapsedTime() {return _fCounter * Interval}
 		get pausedCount() {return _pCounter}
 
@@ -45,6 +46,8 @@ const {Ticker,Timer} = function() {
 		constructor(update, drawFn) {
 			_ticker?.stop()
 			_ticker     = this
+			this.dt     = 0
+			this.lastTS = 0
 			this.start  = this.count = this.stopped = 0
 			this.loop   = this.loop.bind(this)
 			this.update = update
@@ -55,10 +58,19 @@ const {Ticker,Timer} = function() {
 		 @param {number} ts
 		*/
 		loop(ts) {
-			if (this.stopped) return; requestAnimationFrame(this.loop)
-			if ((ts-(this.start||=ts))/Interval>=this.count)this.tick()
+			if (this.stopped) return
+			requestAnimationFrame(this.loop)
+			this.dt = (ts-(this.lastTS||=ts))/1000
+			this.lastTS  = ts
+			if ((ts-(this.start||=ts))/Interval > this.count)
+				this.tick(ts)
+			this.draw?.()
 		}
-		tick() {
+
+		/**
+		 @param {number} ts
+		*/
+		tick(ts) {
 			!_paused
 				? this.proc()
 				: this.pausedProc()
@@ -67,7 +79,6 @@ const {Ticker,Timer} = function() {
 		proc() {
 			TimerMap.forEach(this.timer)
 			this.update?.()
-			this.draw?.()
 			_pCounter = 0
 			_fCounter++
 		}
