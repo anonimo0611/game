@@ -82,7 +82,7 @@ class PlayerPac {
 	#eatDot({tileIdx:i}= this.#mover) {
 		if (!Maze.hasDot(i))
 			return
-		this.#playEateSE()
+		this.#playEatSE()
 		this.resetTimer()
 		Maze.hasPow(i)
 			? this.#eatPowerDot()
@@ -98,8 +98,8 @@ class PlayerPac {
 	#eatSmallDot() {
 		Score.add(DotPts)
 	}
-	#playEateSE() {
-		const id  = (this.#eatIdx ^= 1)? 'eat1' : 'eat0'
+	#playEatSE() {
+		const id  = (this.#eatIdx ^= 1)? 'eat1':'eat0'
 		const dur = (T/this.speed) * Ticker.Interval * .5
 		Sound.play(id, {duration:dur})
 	}

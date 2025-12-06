@@ -134,7 +134,7 @@ class EnergizerAct {
 			g.x += this.ghsVelX
 			g.collidesWithPacman({
 				pos:this.pacman.pos, radius:T/4,
-				release:()=> GhsMgr.caughtAll && State.toAttract()
+				release() {GhsMgr.caughtAll && State.toAttract()}
 			})
 		}
 	}

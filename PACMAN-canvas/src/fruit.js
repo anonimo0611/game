@@ -14,8 +14,8 @@ import * as Spr from './sprites/fruits.js'
  @type {ReadonlySet<number>}
 */const AppearDots = new Set([70,170])
 
-const TypeTable = freeze([0,1,2,2,3,3,4,4,5,5,6,6,7])
-const TargetPos = Vec2.new(BW/2, T*18.5).freeze()
+const TargetPos  = Vec2.new(BW/2, T*18.5).freeze()
+const FruitTable = freeze([0,1,2,2,3,3,4,4,5,5,6,6,7])
 
 const Size = T*2
 const LvCounterCols = 7
@@ -35,10 +35,13 @@ export const Fruit = new class {
 	get points() {
 		return Pts.FruitPts[Fruit.number()]
 	}
-	number(i=Game.level-1) {
-		return TypeTable.at((i>=TypeTable.length)? -1:i) ?? 0
+	/** Pass the game-level to reference the fruit table */
+	number(i=Game.level) {
+		if (i < 1) throw RangeError('Must be one or greater.')
+		// Levels 13+ will always default to the key symbol
+		return FruitTable.at( min(i-1, FruitTable.length-1) ) ?? 0
 	}
-	/** Disappearing is between 9 and 10 seconds */
+	/**  Disappearing is between 9 and 10 seconds */
 	#setHideTimer() {
 		const delay = randInt(9e3, 1e4-FadeDur)/Game.speed
 		Timer.set(delay, Fruit.#setFadeOut, {key:Fruit})
@@ -92,7 +95,7 @@ export const Fruit = new class {
 		ctx.translate(x, y)
 		ctx.clearRect(0,0,w,h)
 		for (const i of range(begin, Game.level))
-			Spr.draw(ctx, Fruit.number(i), w-T-Size*(i-begin), T)
+			Spr.draw(ctx, Fruit.number(i+1), w-T-Size*(i-begin), T)
 		ctx.restore()
 	}
 	#setImages() {

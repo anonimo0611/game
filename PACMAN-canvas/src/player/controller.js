@@ -71,9 +71,9 @@ export class Mover extends Actor {
 	}
 	#finishTurningCorner() {
 		if (this.s.turning && this.passedTileCenter) {
-			this.s.turning  = false
 			this.s.nextDir  = this.s.nextTurn
 			this.s.nextTurn = null
+			this.s.turning  = false
 			this.setMoveDir(this.orient)
 		}
 	}
