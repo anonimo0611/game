@@ -72,13 +72,16 @@ export class Actor extends Common {
 	centering() {
 		this.x = (BW-T)/2
 	}
-	setNextPos(divisor=1, dir=this.dir) {
-		this.pos = Vec2[dir].mul(this.speed/divisor).add(this)
+	move(dir=this.dir) {
+		this.setNextPos(this.speed, this.dir=dir)
+	}
+	setNextPos(spd=this.speed, dir=this.dir) {
+		this.pos = Vec2[dir].mul(spd).add(this)
 		this.wrapXAxis()
 	}
-	justArrivedAtTile(divisor=1) {
+	justArrivedAtTile(spd=this.speed) {
 		return this.passedTileCenter == false
-			&& this.tilePixel <= this.speed/divisor
+			&& this.tilePixel <= spd
 	}
 	wrapXAxis() {
 		this.x = function({x,radius:r}) {
@@ -86,11 +89,14 @@ export class Actor extends Common {
 			if (x > BW+T/2) return -r-T/2
 		}(this) ?? this.x
 	}
-	move(dir=this.dir) {
-		this.setNextPos(1, this.dir=dir)
+	#fixPosition() {
+		Vec2[this.dir].y
+			? (this.x = this.tilePos.x * T)
+			: (this.y = this.tilePos.y * T)
 	}
 	setMoveDir(/**@type {Direction}*/dir) {
 		this.#movDir = dir
+		this.#fixPosition()
 	}
 	hasAdjWall(/**@type {Direction}*/dir) {
 		return Maze.hasWall(this.getAdjTile(dir))

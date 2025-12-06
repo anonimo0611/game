@@ -8,7 +8,7 @@ import {Actor}   from '../actor.js';
 import {GhsMgr}  from '../ghosts/_system.js'
 
 const Spd = PacSpeed
-const {SlowLevel:SlowLv,SlowRate}= Spd
+const {SlowLevel,SlowRate}= Spd
 
 class TurnState {
 	turning  = false
@@ -39,31 +39,34 @@ export class Mover extends Actor {
 	}
 	get tileSpeed() {
 		return (
-			(Maze.hasDot(this.tileIdx)
-			  ? (GhsMgr.isFrightMode? Spd.EneEating : Spd.Eating)
-			  : (GhsMgr.isFrightMode? Spd.Energized : Spd.Base))
-			* (Game.moveSpeed * (Game.level<SlowLv ? 1 : SlowRate))
-			* Ticker.dt
+			 (Game.moveSpeed*(Game.level<SlowLevel ? 1 : SlowRate))
+			*(Maze.hasDot(this.tileIdx)
+				? (GhsMgr.isFrightMode? Spd.EneEating : Spd.Eating)
+				: (GhsMgr.isFrightMode? Spd.Energized : Spd.Base))
 		)
 	}
-	update(divisor=1) {
-		this.#turnCorner(divisor)
-		this.setNextPos(divisor)
-		this.#setMoveSpeed(divisor)
+	/** @param {number} spd */
+	update(spd) {
+		this.#turnCorner(spd)
+		this.setNextPos(spd)
+		this.#setMoveSpeed(spd)
 		this.#finishTurningCorner()
 		this.#turnAround()
+		this.#stopAtWall()
 	}
-	#setMoveSpeed(divisor=1) {
-		if (this.justArrivedAtTile(divisor)) {
+	/** @param {number} spd */
+	#setMoveSpeed(spd) {
+		if (this.justArrivedAtTile(spd)) {
 			this.#speed = this.tileSpeed
 		}
 	}
-	#turnCorner(divisor=1) {
+	/** @param {number} spd */
+	#turnCorner(spd) {
 		const dir = this.s.nextDir
 		if (this.canTurn && dir) {
 			this.s.turning ||= true
 			this.orient = dir
-			this.setNextPos(divisor, dir)
+			this.setNextPos(spd, dir)
 		}
 	}
 	#finishTurningCorner() {
@@ -79,11 +82,11 @@ export class Mover extends Actor {
 			this.setMoveDir(this.orient)
 		}
 	}
-	setStopped() {
+	#stopMove() {
 		return (this.#stopped = !this.canMove)
 	}
-	stopAtWall() {
-		if (this.setStopped()) {
+	#stopAtWall() {
+		if (this.#stopMove()) {
 			this.pos = this.tilePos.mul(T)
 			this.s.nextDir = null
 		}
@@ -118,5 +121,4 @@ function setSteerEvent({s,m}) {
 			m.setMoveDir(m.revDir)
 		}
 	})
-
 }

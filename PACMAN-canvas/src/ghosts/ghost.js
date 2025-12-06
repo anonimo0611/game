@@ -83,7 +83,7 @@ export class Ghost extends Actor {
 		return Vec2.sqrMag(this, player.pos)
 	}
 	get speed() {
-		return function(g,s) {
+		return function(g,{state:s}=g) {
 			if (s.isIdle)     return GhsSpeed.Idle
 			if (s.isGoingOut) return GhsSpeed.GoOut
 			if (g.escaping)   return GhsSpeed.Escape
@@ -91,7 +91,7 @@ export class Ghost extends Actor {
 			if (g.frightened) return GhsSpeed.Fright
 			if (g.scattering) return GhsSpeed.Base
 			return g.chaseSpeed
-		}(this,this.state) * Game.moveSpeed * Ticker.dt
+		}(this) * Game.moveSpeed
 	}
 	draw() {
 		if (State.isIntro ) return
@@ -114,7 +114,7 @@ export class Ghost extends Actor {
 		case 'Idle':     return this.#idleInHouse(this)
 		case 'GoingOut': return this.#goingOut(this)
 		case 'Returning':return this.#returnToHome(this)
-		default: this.#walkPath(this.speed+.5|0)
+		default: this.#walkPath(this.speed*2|0)
 		}
 	}
 	#idleInHouse({type,orient,speed,center:{y:cy}}=this) {
@@ -173,9 +173,9 @@ export class Ghost extends Actor {
 			: this.state.toIdle() && this.#idleInHouse(this)
 		!Timer.frozen && Sound.ghostArrivedAtHome()
 	}
-	#walkPath(divisor=1) {
-		for (const _ of range(divisor)) {
-			this.setNextPos(divisor)
+	#walkPath(steps=1) {
+		for (const _ of range(steps)) {
+			this.setNextPos(this.speed/steps)
 			this.passedTileCenter && this.#setNextDir()
 			if (this.#makeTurn(this)) break
 			if (this.collidesWithPacman()) break
@@ -212,9 +212,7 @@ export class Ghost extends Actor {
 	#makeTurn({orient}=this) {
 		if (this.dir != orient
 		 && this.hasAdjWall(orient) == false
-		 && this.passedTileCenter
-		) {
-			this.pos = this.tilePos.mul(T)
+		 && this.passedTileCenter) {
 			this.setMoveDir(orient)
 			return true
 		}

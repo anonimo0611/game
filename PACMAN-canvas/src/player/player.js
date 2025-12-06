@@ -13,7 +13,7 @@ import {Mover}    from './controller.js'
 import {TunEntry} from './tunnel.js'
 
 class PlayerPac {
-	#eatSoundIndex   = 0
+	#eatIdx = 0
 	#sinceLastEating = 0
 
 	#mover    = new Mover(13.5, 24)
@@ -28,6 +28,7 @@ class PlayerPac {
 	get closed()    {return State.isInGame == false}
 	get maxAlpha()  {return Ctrl.pacSemiTrans? .75:1}
 
+	get speed()     {return this.#mover.speed}
 	get dir()       {return this.#mover.dir}
 	get orient()    {return this.#mover.orient}
 	get pos()       {return this.#mover.pos}
@@ -69,15 +70,14 @@ class PlayerPac {
 		this.#sinceLastEating++
 		this.#tunEntry.update()
 		this.sprite.update(this)
-		this.#update(this.#mover.speed+.5|0)
+		this.#update(this.speed*2|0)
 	}
-	#update(divisor=1) {
-		for (const _ of range(divisor)) {
+	#update(steps=1) {
+		for (const _ of range(steps)) {
 			this.#eatDot(this.#mover)
-			this.#mover.update(divisor)
+			this.#mover.update(this.speed/steps)
 			if (this.stopped) break
 		}
-		this.#mover.stopAtWall()
 	}
 	#eatDot({tileIdx:i}= this.#mover) {
 		if (!Maze.hasDot(i))
@@ -99,8 +99,8 @@ class PlayerPac {
 		Score.add(DotPts)
 	}
 	#playEateSE() {
-		const id  = (this.#eatSoundIndex ^= 1)? 'eat1':'eat0'
-		const dur = (T/this.#mover.speed)*Game.interval*0.5
+		const id  = (this.#eatIdx ^= 1)? 'eat1' : 'eat0'
+		const dur = (T/this.speed) * Ticker.Interval * .5
 		Sound.play(id, {duration:dur})
 	}
 }
