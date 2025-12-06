@@ -27,7 +27,6 @@ class GameState extends _State {
 	isGameOver  = false
 	isQuit      = false
 
-
 	get toTitle()     {return this.ret('Title')}
 	get toAttract()   {return this.ret('Attract')}
 	get toIntro()     {return this.ret('Intro')}
