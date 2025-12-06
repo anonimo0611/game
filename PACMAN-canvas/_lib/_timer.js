@@ -8,19 +8,23 @@ const {Ticker,Timer} = function() {
 		ignoreFrozen: boolean;
 	}} TimerData
 	*/
-	const Interval = 1000/60
+	const FPS      = 60
+	const Interval = 1000/FPS
 	const TimerMap = /**@type {Map<any,TimerData>}*/(new Map)
-	let _ticker    = /**@type {?Tick}*/(null)
-	let _paused    = false
+
 	let _fCounter  = 0 // frame  count
 	let _pCounter  = 0 // paused count
+	let _paused    = false
+	let _ticker    = /**@type {?Tick}*/(null)
 
 	const Ticker = freeze(new class {
 		Interval = Interval
 		get paused()      {return _paused}
-		get count()       {return _fCounter}
+		get delta()       {return(_ticker?.dtSec ?? 0)*FPS}
+		get deltaMs()     {return _ticker?.dtMs  ?? 0}
+		get deltaSec()    {return _ticker?.dtSec ?? 0}
 		get running()     {return _ticker instanceof Tick}
-		get dt()          {return _ticker?.dt ?? 0}
+		get count()       {return _fCounter}
 		get elapsedTime() {return _fCounter * Interval}
 		get pausedCount() {return _pCounter}
 
@@ -38,20 +42,24 @@ const {Ticker,Timer} = function() {
 		stop()       {this.running && _ticker?.stop();return this}
 		resetCount() {this.running && _ticker?.resetCount()}
 	})
+
 	class Tick {
 		/**
-		 @param {Function} [update]
+		 @param {Function} [updateFn]
 		 @param {Function} [drawFn]
 		*/
-		constructor(update, drawFn) {
+		constructor(updateFn, drawFn) {
 			_ticker?.stop()
-			_ticker     = this
-			this.dt     = 0
-			this.lastTS = 0
-			this.start  = this.count = this.stopped = 0
-			this.loop   = this.loop.bind(this)
-			this.update = update
-			this.draw   = drawFn
+			_ticker      = this
+			this.count   = 0
+			this.start   = 0
+			this.lastTS  = 0
+			this.dtMs    = 0
+			this.dtSec   = 0
+			this.stopped = false
+			this.loop    = this.loop.bind(this)
+			this.update  = updateFn
+			this.draw    = drawFn
 			requestAnimationFrame(this.loop)
 		}
 		/**
@@ -59,32 +67,28 @@ const {Ticker,Timer} = function() {
 		*/
 		loop(ts) {
 			if (this.stopped) return
+			if (this.lastTS == 0) {
+				this.lastTS = this.start = 0
+			}
 			requestAnimationFrame(this.loop)
-			this.dt = (ts-(this.lastTS||=ts))/1000
-			this.lastTS  = ts
-			if ((ts-(this.start||=ts))/Interval > this.count)
-				this.tick(ts)
+			this.dtMs  = ts - this.lastTS
+			this.dtSec = this.dtMs/1000
+			if ((ts-this.start)/Interval > this.count)
+				this.tick()
+			this.lastTS = ts
 			this.draw?.()
 		}
-
-		/**
-		 @param {number} ts
-		*/
-		tick(ts) {
+		tick() {
 			!_paused
-				? this.proc()
-				: this.pausedProc()
+				? this.updateGame()
+				: _pCounter++
 			this.count++
 		}
-		proc() {
+		updateGame() {
 			TimerMap.forEach(this.timer)
 			this.update?.()
 			_pCounter = 0
 			_fCounter++
-		}
-		pausedProc() {
-			this.draw?.()
-			_pCounter++
 		}
 		/**
 		 @param {TimerData} t
@@ -98,13 +102,14 @@ const {Ticker,Timer} = function() {
 		stop() {
 			TimerMap.clear()
 			Timer.unfreeze()
-			this.stopped = 1
+			this.stopped = true
 			_ticker   = null
 			_paused   = false
 			_fCounter = _pCounter = 0
 		}
 		resetCount() {_fCounter = 0}
 	}
+
 	const Timer = freeze(new class {
 		#frozen = false
 		get frozen(){return this.#frozen}
@@ -130,13 +135,18 @@ const {Ticker,Timer} = function() {
 			}
 			Timer.set(s.ms, fire)
 		}
-		stop() {Ticker.stop();return this}
-
-		/**
-		 @param {unknown} key
-		*/
-		cancel(key) {TimerMap.delete(key);return this}
-		cancelAll() {TimerMap.clear();return this}
+		stop() {
+			Ticker.stop()
+			return this
+		}
+		cancel(/**@type {unknown}*/key) {
+			TimerMap.delete(key)
+			return this
+		}
+		cancelAll() {
+			TimerMap.clear()
+			return this
+		}
 	})
 	return {Ticker,Timer}
 }()
