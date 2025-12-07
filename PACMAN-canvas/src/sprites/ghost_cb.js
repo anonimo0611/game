@@ -18,7 +18,7 @@ export default class {
 			([[39,8],[33,14],[24,8],[14,15],[26,20],[14,27],[25,33],[14,38]])
 		animIdx && path.pop()
 		ctx.lineWidth   = 3.5
-		ctx.strokeStyle = '#FFF'
+		ctx.strokeStyle = 'white'
 		ctx.newLinePath(...path).stroke()
 		path.forEach(xy=> ctx.fillCircle(...xy, ctx.lineWidth, '#FFF'))
 	}
@@ -28,12 +28,12 @@ export default class {
 		for (const v of [-1,+1]) {
 			ctx.beginPath() // Eyeball
 			ctx.ellipse(19*v, -14, 13,16, 0, PI/2.2, PI*2.2)
-			ctx.fillStyle = '#FFF'
+			ctx.fillStyle = 'white'
 			ctx.fill()
 		}
 		ctx.lineWidth   = 8
 		ctx.lineCap     = 'square'
-		ctx.strokeStyle = '#000'
+		ctx.strokeStyle = 'black'
 		for (const i of [0,1]) {
 			ctx.beginPath() // Eyes
 			ctx.moveTo([-15, 22][i],  0)
@@ -109,7 +109,7 @@ export default class {
 			// Eyeballs
 			ctx.beginPath()
 			ctx.ellipse(ballsLR[i], -33, 11, 16, 0,0, PI*2)
-			ctx.fillStyle = '#FFF'
+			ctx.fillStyle = 'white'
 			ctx.fill()
 			// Eyes
 			ctx.beginPath()
@@ -133,7 +133,7 @@ class StakeClothes {
 		y: BH/2 + T*1 - T*.1
 	})
 	drawStake({x, y}=this.stakePos) {
-		Ctx.fillRect(x,y, ...this.stakeSize.vals, '#FFF')
+		Ctx.fillRect(x,y, ...this.stakeSize.vals, 'white')
 	}
 	drawCloth({x, y}=this.clothPos) {
 		const h = this.stakeSize.y

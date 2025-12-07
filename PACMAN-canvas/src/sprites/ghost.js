@@ -12,7 +12,6 @@ export default class {
 	#resurrect = /**@type {?FadeIn} */(null)
 	setFadeOut()   {this.#fadeOut ||= new FadeOut(400)}
 	setResurrect() {this.#resurrect = new FadeIn (600)}
-
 	draw({
 		mainCtx=Ctx,x=0,y=0,
 		type       = 0,
@@ -42,6 +41,9 @@ export default class {
 		ctx.save()
 		ctx.translate(size/2, size/2)
 		ctx.scale(size/(100/GhsScale), size/(100/GhsScale))
+		ctx.lineWidth = 5
+		ctx.lineJoin  = 'round'
+		ctx.lineCap   = 'round'
 		ctx.fillStyle = !frightened
 			? Colors[GhsNames[type]]
 			: Palette.FrightBody[spriteIdx]
@@ -53,20 +55,25 @@ export default class {
 		if (!escaping) {
 			ctx.save()
 			this.#resurrect?.setAlpha(ctx)
-			this.#drawAngerGlow({x,y, angry,size})
+			this.#drawAngerGlow({x,y,angry,size})
 			this.#drawBody({animIdx,ripped,mended})
-			frightened && this.#drawFrightFace({spriteIdx})
+			if (frightened) {
+				ctx.fillStyle   =
+				ctx.strokeStyle = Palette.FrightFace[spriteIdx]
+				this.#drawFrightFace()
+			}
 			ctx.restore()
 		}
-		if (!frightened) {
-			match(orient, {
-				Left:   ()=> this.#drawEyesHoriz,
-				Right:  ()=> this.#drawEyesHoriz,
-				Up:     ()=> this.#drawEyesUp,
-				Down:   ()=> this.#drawEyesDown,
-				Bracket:()=> this.#spr.drawBracketEyes,
-			})?.call(this,{orient,ripped})
-		}
+		(()=> {
+			if (frightened) return
+			switch(orient) {
+			case 'Left':   return this.#drawEyesHoriz(L)
+			case 'Right':  return this.#drawEyesHoriz(R)
+			case 'Up':     return this.#drawEyesUp(ripped)
+			case 'Down':   return this.#drawEyesDown()
+			case 'Bracket':return this.#spr.drawBracketEyes()
+			}
+		})()
 		finalize()
 	}
 	update() {
@@ -108,60 +115,43 @@ export default class {
 		ctx.bezierCurveTo(+13, 28, +22, 28, +26, 38)
 		ctx.bezierCurveTo(+29, 45, +41, 45, +42, 26)
 	}
-	#drawEyesUp({ripped=false}={}) {
+	#drawEyeBall(x=0,y=0,rX=0,rY=0,rot=0,st=0,ed=PI*2) {
 		const {ctx}= this
+		ctx.beginPath()
+		ctx.ellipse(x,y,rX,rY,rot,st,ed, true)
+		ctx.fillStyle = 'white'
+		ctx.fill()
+	}
+	#drawEyesUp(ripped=false) {
 		for (const v of [-1,+1]) {
-			// Eyeballs
-			ctx.beginPath()
-			ctx.ellipse(19.5*v, -17, 13,17, -8*v*PI/180, -3*PI/4, -PI/4, true)
-			ctx.fillStyle = 'white'
-			ctx.fill()
-			// Eyes
-			ctx.fillCircle(18.5*v, -26, 8, (ripped? 'black':Colors.GhostEyes))
+			this.#drawEyeBall  (19.5*v, -17, 13, 17, -8*v*PI/180, -3*PI/4, -PI/4)
+			this.ctx.fillCircle(18.5*v, -26,  8,(ripped?'black':Colors.GhostEyes))
 		}
 	}
 	#drawEyesDown() {
-		const {ctx}= this
 		for (const v of [-1,+1]) {
-			// Eyeballs
-			ctx.beginPath()
-			ctx.ellipse(19*v, -3, 13,17, 0, 40*PI/180, 140*PI/180, true)
-			ctx.fillStyle = 'white'
-			ctx.fill()
-			// Eyes
-			ctx.fillCircle(19*v, 4, 8, Colors.GhostEyes)
+			this.#drawEyeBall  (19*v, -3, 13, 17, 0, 40*PI/180, 140*PI/180)
+			this.ctx.fillCircle(19*v, +4,  8, Colors.GhostEyes)
 		}
 	}
-	/** @param {{orient?:L|R}} orient */
-	#drawEyesHoriz({orient=L}={}) {
-		const {ctx}= this
-		ctx.save()
-		ctx.scale(Vec2[orient].x, 1)
+	/** @param {L|R} orient */
+	#drawEyesHoriz(orient) {
+		const v = (Vec2[orient].x < 0 ? -1:1)
 		for (const i of [0,1]) {
-			// Eyeballs
-			ctx.beginPath()
-			ctx.ellipse([-16.5, 23][i], -11, 13,17, 0,0, PI*2)
-			ctx.fillStyle = 'white'
-			ctx.fill()
-			// Eyes
-			ctx.fillCircle([-9.5, 29][i], -8,8, Colors.GhostEyes)
+			this.#drawEyeBall  ([-16.5*v, 23*v][i], -11, 13, 17, 0, 0, PI*2)
+			this.ctx.fillCircle([ -9.5*v, 29*v][i],  -8,  8, Colors.GhostEyes)
 		}
-		ctx.restore()
 	}
-	#drawFrightFace({spriteIdx=0}) {
+	#drawFrightFace() {
 		const {ctx}= this
-		ctx.fillStyle = ctx.strokeStyle = Palette.FrightFace[spriteIdx]
 		{// Eyes
 			const size = 11
-			ctx.lineWidth = 11
-			ctx.fillRect(-15-size/2, -11-size/2, size, size)
-			ctx.fillRect(+15-size/2, -11-size/2, size, size)
+			ctx.fillRect(-15-size/2, -size*1.5, size, size)
+			ctx.fillRect(+15-size/2, -size*1.5, size, size)
 		}
 		// Mouth
 		ctx.newLinePath([-36,17],[-30, 9],[-25, 9],[-15,17],[-11,17],[-3, 9])
 		ctx.addLinePath([ +3, 9],[+11,17],[+15,17],[+25, 9],[+30, 9],[36,17])
-		ctx.lineWidth = 5
-		ctx.lineCap = ctx.lineJoin = 'round'
 		ctx.stroke()
 	}
 	#drawAngerGlow({x=0,y=0, angry=false, size=T*2}) {

@@ -1,9 +1,11 @@
+export {AllPts,GhostPts,FruitPts,cache}
+
 const FruitCvs = canvas2D(null)
 const GhostCvs = canvas2D(null)
 
-export const AllPts   = /**@type {const}*/([100,200,300,400,500,700,800,1e3,1600,2e3,3e3,5e3])
-export const GhostPts = /**@type {const}*/([200,400,800,1600])
-export const FruitPts = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
+const AllPts   = /**@type {const}*/([100,200,300,400,500,700,800,1e3,1600,2e3,3e3,5e3])
+const GhostPts = /**@type {const}*/([200,400,800,1600])
+const FruitPts = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
 
 const Data = /**@type {const}*/({
 	PathFrom0To8: [
@@ -40,7 +42,7 @@ const GtsPtsSet = new Set(GhostPts)
  @typedef {typeof AllPts[number]} PtsType
  @param {PtsType} pts
 */
-export function cache(pts, size=TileSize*2) {
+function cache(pts, size=TileSize*2) {
 	const idx  = +GtsPtsSet.has(pts)
 	const ctx  = [FruitCvs, GhostCvs][idx].ctx
 	const cst  = [Colors.FruitPts, Colors.GhostPts][idx]
