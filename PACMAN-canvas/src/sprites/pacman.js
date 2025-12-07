@@ -44,13 +44,14 @@ export default class {
 			return this.#dyingSpr.draw({x,y})
 		}
 		const {ctx}  = this
-		const mAngle = (closed? 0:this.#mouthAngle)
+		const PacR   = radius*scale
+		const mAngle =(closed? 0:this.#mouthAngle)
 		ctx.save()
 		ctx.translate(x,y)
 		ctx.rotate(Rotation.get(orient) ?? 0)
 		ctx.beginPath()
-		ctx.moveTo(-radius*scale*0.3, 0)
-		ctx.arc(0,0,radius*scale, mAngle, PI*2-mAngle)
+		ctx.moveTo(-PacR*0.3, 0)
+		ctx.arc(0, 0, PacR, mAngle, PI*2-mAngle)
 		ctx.fillStyle = Colors.Pacman
 		ctx.fill()
 		ctx.restore()

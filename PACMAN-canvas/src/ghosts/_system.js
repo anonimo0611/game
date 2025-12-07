@@ -265,7 +265,8 @@ const FrightMode = function() {
 				? $(Ghosts).trigger('FleeTime')
 				: this.#set(true)
 		}
-		#set(/**@type {boolean}*/isOn) {
+		/** @param {boolean} isOn */
+		#set(isOn) {
 			_session = (isOn? this:null)
 			$(Ghosts)
 				.trigger('FrightMode',isOn)
