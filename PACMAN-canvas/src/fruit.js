@@ -41,7 +41,7 @@ export const Fruit = new class {
 		// Levels 13+ will always default to the key symbol
 		return FruitTable.at( min(i-1, FruitTable.length-1) ) ?? 0
 	}
-	/**  Disappearing is between 9 and 10 seconds */
+	/** Disappearing is between 9 and 10 seconds */
 	#setHideTimer() {
 		const delay = randInt(9e3, 1e4-FadeDur)/Game.speed
 		Timer.set(delay, Fruit.#setFadeOut, {key:Fruit})
