@@ -16,9 +16,10 @@ class PlayerPac {
 	#eatIdx = 0
 	#sinceLastEating = 0
 
-	#mover    = new Mover(13.5, 24)
-	#tunEntry = new TunEntry
-	#fadeIn   = new Actor.SpawnFadeIn
+	/** @private */
+	mov        = new Mover(13.5, 24)
+	#tunEntry  = new TunEntry
+	#spawnFade = new Actor.SpawnFade
 
 	/** @readonly */
 	sprite = new Sprite(Ctx)
@@ -28,13 +29,11 @@ class PlayerPac {
 	get closed()    {return State.isInGame == false}
 	get maxAlpha()  {return Ctrl.pacSemiTrans? .75:1}
 
-	get speed()     {return this.#mover.speed}
-	get dir()       {return this.#mover.dir}
-	get orient()    {return this.#mover.orient}
-	get pos()       {return this.#mover.pos}
-	get center()    {return this.#mover.center}
-	get stopped()   {return this.#mover.stopped}
-	get inTunSide() {return this.#mover.inTunSide}
+	get dir()       {return this.mov.dir}
+	get orient()    {return this.mov.orient}
+	get pos()       {return this.mov.pos}
+	get center()    {return this.mov.center}
+	get inTunSide() {return this.mov.inTunSide}
 	get tunEntry()  {return this.#tunEntry}
 
 	get timeSinceLastEating() {
@@ -52,42 +51,43 @@ class PlayerPac {
 	}
 	drawCenterDot() {
 		if (!this.hidden && Ctrl.showGridLines)
-			this.#mover.drawCenterDot()
+			Actor.drawCenterDot(this.center)
 	}
 	draw() {
 		if (State.isIntro )
 			return
 		Ctx.save()
-		this.#fadeIn.setAlpha(this.maxAlpha)
+		this.#spawnFade.setAlpha(this.maxAlpha)
 		this.sprite.draw(this)
 		this.drawCenterDot()
 		Ctx.restore()
 	}
 	update() {
-		this.#fadeIn.update(this.maxAlpha)
+		this.#spawnFade.update(this.maxAlpha)
 		if (this.closed || this.hidden)
 			return
 		this.#sinceLastEating++
 		this.#tunEntry.update()
-		this.sprite.update(this)
-		this.#update(this.speed*2|0)
+		this.sprite.update(this.mov)
+		this.#update(this.mov.speed*2|0)
 	}
 	#update(steps=1) {
+		const {tileIdx,speed}= this.mov
 		for (const _ of range(steps)) {
-			this.#eatDot(this.#mover)
-			this.#mover.update(this.speed/steps)
-			if (this.stopped) break
+			this.#eatDot(tileIdx)
+			this.mov.update(speed/steps)
+			if (this.mov.stopped) break
 		}
 	}
-	#eatDot({tileIdx:i}= this.#mover) {
-		if (!Maze.hasDot(i))
+	#eatDot(tileIdx=-1) {
+		if (!Maze.hasDot(tileIdx))
 			return
 		this.#playEatSE()
 		this.resetTimer()
-		Maze.hasPow(i)
+		Maze.hasPow(tileIdx)
 			? this.#eatPowerDot()
 			: this.#eatSmallDot()
-		Maze.clearBgDot(this.#mover) == 0
+		Maze.clearBgDot(this.mov) == 0
 			? State.toCleared()
 			: Player.trigger('AteDot')
 	}
@@ -100,7 +100,7 @@ class PlayerPac {
 	}
 	#playEatSE() {
 		const id  = (this.#eatIdx ^= 1)? 'eat1':'eat0'
-		const dur = (T/this.speed) * Ticker.Interval * .5
+		const dur = (T/this.mov.speed) * Ticker.Interval * .5
 		Sound.play(id, {duration:dur})
 	}
 }

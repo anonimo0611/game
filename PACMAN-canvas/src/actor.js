@@ -5,7 +5,7 @@ import {Maze}   from './maze.js'
 import {Player} from './player/player.js'
 import {GhsMgr} from './ghosts/_system.js'
 
-class SpawnFadeIn {
+class SpawnFade {
 	#fadeIn = /**@type {?FadeIn}*/(new FadeIn)
 	setAlpha(max=1) {
 		!State.isReady
@@ -19,7 +19,7 @@ class SpawnFadeIn {
 }
 export class Actor extends Common {
 	/** @readonly */
-	static SpawnFadeIn = SpawnFadeIn
+	static SpawnFade = SpawnFade
 	static update() {
 		Player.update()
 		GhsMgr.update()
@@ -28,6 +28,10 @@ export class Actor extends Common {
 		GhsMgr.drawBehind()
 		Player.draw()
 		GhsMgr.drawFront()
+	}
+	/** @param {Vec2} pos */
+	static drawCenterDot({x,y}, color='#F00') {
+		Ctx.fillCircle(x,y, 3, color)
 	}
 	pos = Vec2.Zero
 	#orient = /**@type {Direction}*/(L)
@@ -64,10 +68,6 @@ export class Actor extends Common {
 	}
 	get passedTileCenter() {
 		return this.tilePixel > T/2
-	}
-	drawCenterDot(color='#F00') {
-		const {x,y}= this.center
-		Ctx.fillCircle(x,y, 3, color)
 	}
 	centering() {
 		this.x = (BW-T)/2
