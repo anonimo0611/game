@@ -79,10 +79,6 @@ export class Actor extends Common {
 		this.pos = Vec2[dir].mul(spd).add(this)
 		this.wrapXAxis()
 	}
-	justArrivedAtTile(spd=this.speed) {
-		return this.passedTileCenter == false
-			&& this.tilePixel <= spd
-	}
 	wrapXAxis() {
 		this.x = function({x,radius:r}) {
 			if (x < -r-T/2) return BW+T/2
@@ -104,6 +100,10 @@ export class Actor extends Common {
 	getAdjTile(/**@type {Direction}*/dir, tile=this.tilePos) {
 		const  v = Vec2[dir].add(tile)
 		return v.setX((v.x+Cols) % Cols) // x-axis wrap
+	}
+	justArrivedAtTile(spd=this.speed) {
+		return this.passedTileCenter == false
+			&& this.tilePixel <= spd
 	}
 	collidesWithWall(dir=this.dir) {
 		const {speed,center}= this

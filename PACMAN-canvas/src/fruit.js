@@ -93,7 +93,7 @@ export const Fruit = new class {
 		const begin = max(Game.level-LvCounterCols, 0)
 		ctx.save()
 		ctx.translate(x, y)
-		ctx.clearRect(0,0,w,h)
+		ctx.clearRect(0, 0, w, h)
 		for (const i of range(begin, Game.level))
 			Spr.draw(ctx, Fruit.number(i+1), w-T-Size*(i-begin), T)
 		ctx.restore()

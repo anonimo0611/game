@@ -30,7 +30,7 @@ export const Lives = function() {
 	$('#lvsRng').on({input:onChange})
 	State.on({_Intro_Ready_Restarted:onChange})
 	return {
-		append() {add(1)},
+		append()   {add(1)},
 		get left() {return _left},
 	}
 }()
