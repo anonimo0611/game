@@ -23,8 +23,8 @@ BW = T*Cols,
 /** Board height */
 BH = T*Rows,
 
-Bg  = canvas2D('board_bg' ,  BW,BH),
-HUD = canvas2D('board_hud',  BW,BH),
+Bg  = canvas2D('board_bg' ,  BW,BH).ctx,
+HUD = canvas2D('board_hud',  BW,BH).ctx,
 Ctx = canvas2D('board_main', BW,BH).ctx,
 
 Colors = freeze(new class {

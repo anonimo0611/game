@@ -100,7 +100,7 @@ export const Maze = freeze(new class {
 		Maze.clearBgDot({tileIdx:i,tilePos:t})
 		DotSet.add(i)
 		powChk.checked == false || chip == '.'
-			? drawDot(Bg.ctx, t.x, t.y)
+			? drawDot(Bg, t.x, t.y)
 			: PowMap.set(i, t)
 	}
 	Top    = 1
@@ -145,7 +145,7 @@ export const Maze = freeze(new class {
 	clearBgDot({tileIdx:i,tilePos:{x,y}}) {
 		DotSet.delete(i)
 		PowMap.delete(i)
-		drawDot(Bg.ctx, x,y, true, false)
+		drawDot(Bg, x,y, true, false)
 		return DotSet.size
 	}
 

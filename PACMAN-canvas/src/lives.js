@@ -3,11 +3,7 @@ import {Ctrl}  from './control.js'
 import Sprite  from './sprites/pacman.js'
 
 export const Lives = function() {
-	let   _left  = 0
-	const {ctx}  = HUD
-	const radius = T*.78, size = T*2
-	const sprite = new Sprite(ctx,1)
-
+	let _left = 0
 	function onChange() {
 		switch(State.current) {
 		case 'Title':    return reset()
@@ -17,12 +13,14 @@ export const Lives = function() {
 		}
 	}
 	function draw(left=0) {
-		ctx.save()
-		ctx.translate(size, BH-size)
-		ctx.clearRect(0,0, size*5, size)
+		const sprite = new Sprite(HUD, 1)
+		const radius = T*.78, size = T*2
+		HUD.save()
+		HUD.translate(size, BH-size)
+		HUD.clearRect(0,0, size*5, size)
 		for (const i of range(left))
 			sprite.draw({radius,center:{x:size*i+T, y:T}})
-		ctx.restore()
+		HUD.restore()
 	}
 	function reset()  {draw(_left = Ctrl.livesMax-1)}
 	function add(n=0) {draw(_left += n)}

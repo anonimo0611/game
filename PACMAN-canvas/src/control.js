@@ -34,7 +34,7 @@ export const Ctrl = new class {
 	get pacSemiTrans()  {return this.invincible  || this.showGridLines}
 	get usingCheats()   {return this.invincible  || this.speed<.7 || this.showTargets}
 	get isPractice()    {return this.usingCheats || !this.isArcadeMode}
-	get isArcadeMode()  {return this.endlessMode && Menu.Level.index == 0}
+	get isArcadeMode()  {return this.endlessMode && !Menu.Level.index}
 
 	/** @param {boolean} [force] */
 	pause(force) {
@@ -69,22 +69,22 @@ export const Ctrl = new class {
 		})
 	}
 	#output() {
+		const spd = 'x'+Ctrl.speed.toFixed(1), lh = 0.84
+		const cfg = {ctx:HUD, size:T*0.68, scaleX:0.7, style:'bold'}
 		Ctrl.#save()
-		const{ctx}=HUD, h=0.84, spd=`x${Ctrl.speed.toFixed(1)}`
-		const cfg={ctx, size:T*0.68, scaleX:0.7, style:'bold'}
-		ctx.save()
-		ctx.translate(T*0.1, T*18)
-		ctx.clearRect(0,-T,BW,T*3)
+		HUD.save()
+		HUD.translate(T*0.1, T*18)
+		HUD.clearRect(0, -T, BW, T*3)
 		if (Ctrl.usingCheats || spd != 'x1.0') {
-			drawText(0, h*0, Palette.Info[+(spd != 'x1.0') ], 'Speed'+spd, cfg)
-			drawText(0, h*1, Palette.Info[+Ctrl.invincible ], 'Invincible',cfg)
-			drawText(0, h*2, Palette.Info[+Ctrl.showTargets], 'Targets',   cfg)
+			drawText(0, lh*0, Palette.Info[+(spd != 'x1.0') ], 'Speed'+spd, cfg)
+			drawText(0, lh*1, Palette.Info[+Ctrl.invincible ], 'Invincible',cfg)
+			drawText(0, lh*2, Palette.Info[+Ctrl.showTargets], 'Targets',   cfg)
 		}
 		if (Ctrl.unrestricted) {
-			ctx.translate(T*(Cols-5), T/2)
+			HUD.translate(T*(Cols-5), T/2)
 			drawText(0,0, Palette.Info[1], 'Un-\nrestricted', cfg)
 		}
-		ctx.restore()
+		HUD.restore()
 	}
 	#reset() {
 		Form.reset()
@@ -118,7 +118,7 @@ export const Ctrl = new class {
 		case 'Delete': return Ctrl.#quit(e.ctrlKey)
 		default:
 			if (Ctrl.activeElem) return
-			if (Dir.from(e,{wasd:true}) || e.key=='\x20') {
+			if (Dir.from(e,{wasd:true}) || e.key == '\x20') {
 				State.isTitle && byId('startBtn')?.click()
 				Ticker.paused && Ctrl.pause()
 			}

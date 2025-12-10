@@ -18,8 +18,8 @@ const TargetPos  = Vec2.new(BW/2, T*18.5).freeze()
 const FruitTable = freeze([0,1,2,2,3,3,4,4,5,5,6,6,7])
 
 const Size = T*2
-const LvCounterCols = 7
-const LvCounterRect = new Rect(Size*6, BH-Size, Size*LvCounterCols, Size).freeze()
+const LevelsCols = 7
+const LevelsRect = new Rect(Size*6, BH-Size, Size*LevelsCols, Size).freeze()
 
 const FadeDur = 300
 let  _showTgt = true
@@ -60,7 +60,7 @@ export const Fruit = new class {
 		}
 	}
 	intersectsWith(pos=player.center) {
-		if (_showTgt && circleCollision(pos,TargetPos,T/2)) {
+		if (_showTgt && circleCollision(pos, TargetPos, T/2)) {
 			Fruit.#resetTarget()
 			Timer.cancel(Fruit) && Sound.play('fruit')
 			PtsMgr.set({key:Fruit, dur:2e3, pos:TargetPos})
@@ -85,18 +85,18 @@ export const Fruit = new class {
 		PtsMgr.drawFruitPts()
 	}
 	drawLevelCounter() {
-		const [x,y,w,h] = LvCounterRect.vals
-		Ctx.drawImage(HUD.cvs, x,y, w,h, x,y, w,h)
+		const [x,y,w,h] = LevelsRect.vals
+		Ctx.drawImage(HUD.canvas, x,y, w,h, x,y, w,h)
 	}
 	#setLevelCounter() {
-		const {ctx} = HUD, [x,y,w,h]=LvCounterRect.vals
-		const begin = max(Game.level-LvCounterCols, 0)
-		ctx.save()
-		ctx.translate(x, y)
-		ctx.clearRect(0, 0, w, h)
-		for (const i of range(begin, Game.level))
-			Spr.draw(ctx, Fruit.number(i+1), w-T-Size*(i-begin), T)
-		ctx.restore()
+		const [x,y,w,h]  = LevelsRect.vals
+		const startLevel = max(Game.level-LevelsCols, 0)
+		HUD.save()
+		HUD.clearRect(x,y,w,h)
+		HUD.translate(x,y)
+		for (const i of range(startLevel, Game.level))
+			Spr.draw(HUD, Fruit.number(i+1), w-T-Size*(i-startLevel),T)
+		HUD.restore()
 	}
 	#setImages() {
 		Spr.cache(Fruit.number())
