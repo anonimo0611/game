@@ -48,7 +48,7 @@ export class CoffBreak {
 		this.akabei.sprite.draw({animIdx, ...cfg, ...pos})
 	}
 	pause() {
-		Sound.pause(Ticker.pause())
+		Sound.pause( Ticker.pause() )
 	}
 	draw() {
 		State.wasFlashing && Fruit.drawLevelCounter()

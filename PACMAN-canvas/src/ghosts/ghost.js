@@ -17,13 +17,13 @@ export class Ghost extends Actor {
 
 	/** @readonly */
 	sprite  = new Sprite(canvas2D(null, T*3, T*2).ctx)
-	#fadeIn = new Actor.SpawnFadeIn
+	#fadeIn = new Actor.SpawnFade
 
 	/** @readonly */
 	turnDirs = /**@type {readonly Direction[]}*/([U,L,D,R])
 
 	#fleeTime   = -1
-	#reversal   = false
+	#revSignal  = false
 	#started    = false
 	#frightened = false
 
@@ -53,7 +53,7 @@ export class Ghost extends Actor {
 		super()
 		this.on({
 			FrightMode:   this.#setFrightMode,
-			Reverse: ()=> this.#reversal = true,
+			Reverse: ()=> this.#revSignal = true,
 			FleeTime:()=> this.#fleeTime = 400/Game.interval,
 		})
 		this.pos.set(col*T,row*T)
@@ -119,7 +119,7 @@ export class Ghost extends Actor {
 	}
 	#idleInHouse({type,orient,speed,center:{y:cy}}=this) {
 		if (!Ctrl.alwaysChase)
-			Sys.DotCounter.releaseIfReady(type,g=>this.leaveHouse(g))
+			Sys.DotCounter.releaseIfReady(type, g=> this.leaveHouse(g))
 		!this.state.isGoingOut && this.move(
 			(cy+T*0.6-speed > Maze.House.MiddleY && orient != D)? U:
 			(cy-T*0.6+speed < Maze.House.MiddleY ? D:U)
@@ -182,8 +182,8 @@ export class Ghost extends Actor {
 		}
 	}
 	#setNextDir() {
-		if (this.#reversal) {
-			this.#reversal = false
+		if (this.#revSignal) {
+			this.#revSignal = false
 			this.orient = this.revDir
 		}
 		if (this.dir == this.orient)
@@ -211,8 +211,8 @@ export class Ghost extends Actor {
 	}
 	#makeTurn({orient}=this) {
 		if (this.dir != orient
-		 && this.hasAdjWall(orient) == false
-		 && this.passedTileCenter) {
+		 && this.passedTileCenter
+		 && this.hasAdjWall(orient) == false) {
 			this.setMoveDir(orient)
 			return true
 		}
@@ -225,7 +225,7 @@ export class Ghost extends Actor {
 	}={}) {
 		if (!this.state.isWalking
 		 || !this.frightened && Ctrl.invincible
-		 || !circleCollision(this,pos,radius))
+		 || !circleCollision(this, pos, radius))
 			return false
 		this.frightened
 			? this.#setBittenState(release)
@@ -244,7 +244,7 @@ export class Ghost extends Actor {
 		State.toPacCaught().toPacDying({delay:500})
 	}
 	#setFrightMode(_={}, on=false) {
-		!this.escaping && (this.#frightened = on)
+		!this.escaping && (this.#frightened=on)
 	}
 	#setEscapeState() {
 		Sound.ghostEscape()

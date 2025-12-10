@@ -38,7 +38,7 @@ export const Ctrl = new class {
 
 	/** @param {boolean} [force] */
 	pause(force) {
-		State.isInGame && Sound.pause(Ticker.pause(force))
+		State.isInGame && Sound.pause( Ticker.pause(force) )
 	}
 	#fitToViewport() {
 		const scale = min(

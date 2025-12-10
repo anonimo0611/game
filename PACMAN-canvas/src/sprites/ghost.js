@@ -123,9 +123,10 @@ export default class {
 		ctx.fill()
 	}
 	#drawEyesUp(ripped=false) {
+		const eyesColor = (ripped? 'black' : Colors.GhostEyes)
 		for (const v of [-1,+1]) {
 			this.#drawEyeBall  (19.5*v, -17, 13, 17, -8*v*PI/180, -3*PI/4, -PI/4)
-			this.ctx.fillCircle(18.5*v, -26,  8,(ripped?'black':Colors.GhostEyes))
+			this.ctx.fillCircle(18.5*v, -26,  8, eyesColor)
 		}
 	}
 	#drawEyesDown() {

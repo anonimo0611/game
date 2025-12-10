@@ -78,7 +78,7 @@ export const GhsMgr = new class extends Common {
 	}
 	#animIdx = 0
 	get animIndex()      {return this.#animIdx}
-	get animFlag()       {return Ticker.count % 6 == 0}
+	get animInterval()   {return Ticker.count % 6 == 0}
 	get CruiseElroy()    {return CruiseElroy}
 	get isChaseMode()    {return AttackInWaves.isChaseMode}
 	get isScatterMode()  {return AttackInWaves.isScatterMode}
@@ -116,7 +116,7 @@ export const GhsMgr = new class extends Common {
 		if (State.isInGame
 		 || State.isAttract
 		 || State.isCoffBreak)
-			this.#animIdx ^= +(!Timer.frozen && GhsMgr.animFlag)
+			this.#animIdx ^= +(!Timer.frozen && GhsMgr.animInterval)
 		AttackInWaves.update()
 		FrightMode.session?.update()
 		Ghosts.forEach(g=>g.update())
@@ -136,7 +136,7 @@ export const GhsMgr = new class extends Common {
 	}
 }
 
-const queueDirectionReverse = ()=> {
+const signalDirectionReversal = ()=> {
 	$(Ghosts).trigger('Reverse')
 }
 const SCATTER = 0, CHACE = 1
@@ -175,7 +175,7 @@ const AttackInWaves = function() {
 				 || Game.interval*(++time) < list[idx])
 					return
 				[time,phase.mode] = [0,(++idx % 2)]
-				queueDirectionReverse()
+				signalDirectionReversal()
 			}
 		};return phase.mode? initPhase(CHACE) : phase
 	}
@@ -259,7 +259,7 @@ const FrightMode = function() {
 		get caughtAll() {return this.#caught == GhsType.Max}
 		get spriteIdx() {return this.#flash && this.#fIdx^1}
 		constructor() {
-			queueDirectionReverse()
+			signalDirectionReversal()
 			this.Dur = TimeTable[Game.clampedLv-1]
 			this.Dur == 0 && !State.isAttract
 				? $(Ghosts).trigger('FleeTime')

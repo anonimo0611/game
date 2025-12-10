@@ -263,12 +263,8 @@ function key(ctx=Ctx) {
 	ctx.bezierCurveTo(-3.5, -6.8, +3.5,-6.8, +3.6,-4.3)
 	ctx.arcTo(+3.6, -1.3, +2.5, -1.3, 0.8)
 	ctx.arcTo(-3.6, -1.3, -3.6, -2.5, 0.8)
-	{// hole
-		const [x,y,w,h,r]= [-1.7, -5, 1.7*2, 1, .5]
-		ctx.roundRect
-			? ctx.roundRect(x,y,w,h,r)
-			: ctx.rect(x,y,w,h)
-	}
+	// hole
+	ctx.roundRect(-1.7, -5, 1.7*2, 1, .5)
 	ctx.fillStyle = '#68B9FC'
 	ctx.fill('evenodd')
 }

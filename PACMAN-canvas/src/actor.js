@@ -30,7 +30,7 @@ export class Actor extends Common {
 		GhsMgr.drawFront()
 	}
 	/** @param {Vec2} pos */
-	static drawCenterDot({x,y}, color='#F00') {
+	static drawCenterDot({x,y}, color='red') {
 		Ctx.fillCircle(x,y, 3, color)
 	}
 	pos = Vec2.Zero
@@ -40,7 +40,6 @@ export class Actor extends Common {
 	/** @protected */
 	constructor()   {super()}
 	get radius()    {return T}
-	get maxAlpha()  {return 1}
 	get speed()     {return 0}
 	get inHouse()   {return Maze.House.isIn(this.tilePos)}
 	get inTunSide() {return Maze.Tunnel.findSide(this.center)}
@@ -95,7 +94,7 @@ export class Actor extends Common {
 		this.#fixPosition()
 	}
 	hasAdjWall(/**@type {Direction}*/dir) {
-		return Maze.hasWall(this.getAdjTile(dir))
+		return Maze.hasWall( this.getAdjTile(dir) )
 	}
 	getAdjTile(/**@type {Direction}*/dir, tile=this.tilePos) {
 		const  v = Vec2[dir].add(tile)
