@@ -1,4 +1,4 @@
-const {ctx}= Bg, W = Cols
+const W  = Cols
 const OO = 2 // Outer Offset
 const LO = 3 // Line Offset
 const LW = 3 // Line Width
@@ -7,14 +7,14 @@ import {Maze}  from '../maze.js'
 import {State} from '../state.js'
 export const Wall = new class {
 	draw(color=Colors.Wall) {
-		ctx.clear()
-		ctx.save()
-		ctx.lineWidth   = LW
-		ctx.strokeStyle = color
+		Bg.clear()
+		Bg.save()
+		Bg.lineWidth   = LW
+		Bg.strokeStyle = color
 		Maze.Map.forEach(Wall.#drawTile)
 		Wall.#drawHouse()
 		Wall.#drawDoor()
-		ctx.restore()
+		Bg.restore()
 	}
 	flashing(/**@type {function}*/fn) {
 		let count = 0
@@ -28,40 +28,40 @@ export const Wall = new class {
 	#drawDoor() {
 		if (State.isFlashing) return
 		const y = (Maze.House.EntranceTile.y+1.6)*T
-		Bg.ctx.fillRect(BW/2-T, y, T*2, T/4, Colors.Door)
+		Bg.fillRect(BW/2-T, y, T*2, T/4, Colors.Door)
 	}
 	#drawHouse() {
 		const [ix,iy,ox,oy]= [31,16,34,19].map(n=>n/10*T)
-		ctx.save()
-		ctx.translate(BW/2, Maze.House.MiddleY)
-		ctx.strokeRect(-ox, -oy, ox*2, oy*2)
-		ctx.strokeRect(-ix, -iy, ix*2, iy*2)
-		ctx.clearRect (-T, -oy-LW,T*2, T/2)
-		ctx.strokeLine(-T-LW/2, -oy, -T-LW/2, -iy)
-		ctx.strokeLine(+T+LW/2, -oy, +T+LW/2, -iy)
-		ctx.restore()
+		Bg.save()
+		Bg.translate(BW/2, Maze.House.MiddleY)
+		Bg.strokeRect(-ox, -oy, ox*2, oy*2)
+		Bg.strokeRect(-ix, -iy, ix*2, iy*2)
+		Bg.clearRect (-T, -oy-LW,T*2, T/2)
+		Bg.strokeLine(-T-LW/2, -oy, -T-LW/2, -iy)
+		Bg.strokeLine(+T+LW/2, -oy, +T+LW/2, -iy)
+		Bg.restore()
 	}
 	/**
 	 @param {{type:number, ci:number, x:number, y:number}} cfg
 	*/
 	#drawCorner({type,ci,x,y}) {
-		ctx.save()
-		ctx.translate(x+T/2, y+T/2)
-		ctx.rotate(ci*PI/2)
-		ctx.beginPath()
+		Bg.save()
+		Bg.translate(x+T/2, y+T/2)
+		Bg.rotate(ci*PI/2)
+		Bg.beginPath()
 		switch(type) {
-		case 0: ctx.arc(T/2,T/2, T-OO,   PI,-PI/2);break
-		case 1: ctx.arc(T/2,T/2, T/2+LO, PI,-PI/2);break
-		case 2: ctx.arc(T/2,T/2, T/2-LO, PI,-PI/2);break
-		case 3: ctx.arc(T/2,T/2, OO,     PI,-PI/2);break
+		case 0: Bg.arc(T/2,T/2, T-OO,   PI,-PI/2);break
+		case 1: Bg.arc(T/2,T/2, T/2+LO, PI,-PI/2);break
+		case 2: Bg.arc(T/2,T/2, T/2-LO, PI,-PI/2);break
+		case 3: Bg.arc(T/2,T/2, OO,     PI,-PI/2);break
 		case 4:
-			ctx.moveTo(-LO, T/2)
-			ctx.arcTo (-LO, -LO, T/3-LO, -LO, T/3)
-			ctx.lineTo(T/2, -LO)
+			Bg.moveTo(-LO, T/2)
+			Bg.arcTo (-LO, -LO, T/3-LO, -LO, T/3)
+			Bg.lineTo(T/2, -LO)
 			break
 		}
-		ctx.stroke()
-		ctx.restore()
+		Bg.stroke()
+		Bg.restore()
 	}
 	/**
 	 @param {string} c Tile chip
@@ -74,23 +74,23 @@ export const Wall = new class {
 
 		switch(c.toUpperCase()) {
 		case '#':
-		case 'V':ctx.strokeLine(x+T/2+lo, y, x+T/2+lo, y+T);break
-		case 'H':ctx.strokeLine(x, y+T/2+lo, x+T, y+T/2+lo);break
+		case 'V':Bg.strokeLine(x+T/2+lo, y, x+T/2+lo, y+T);break
+		case 'H':Bg.strokeLine(x, y+T/2+lo, x+T, y+T/2+lo);break
 		}
 		;[/[A-D]/,/[A-D]/,/[a-d1-4]/,/[a-d]/,/[5-8]/].forEach(
 			(r,type)=> r.test(c) && Wall.#drawCorner({type,ci,x,y}))
 
-		ctx.save()
+		Bg.save()
 		if (c == '#' || (!tx || tx == W-1) && n) {
-			ctx.translate(x+T/2+(tx<W/2 ? -T/2+OO : T/2-OO), y)
-			ctx.strokeLine(0,0, 0,T)
+			Bg.translate(x+T/2+(tx<W/2 ? -T/2+OO : T/2-OO), y)
+			Bg.strokeLine(0,0, 0,T)
 		}
 		if (/[_=]/.test(c) || Maze.isTopOrBottom(ty) && n) {
 			const oY = /[=56]/.test(c) ? -T/2+OO : T/2-OO
-			ctx.translate(x, y+T/2)
-			ctx.strokeLine(0,oY, T,oY)
-			!n && ctx.strokeLine(0,lo, T,lo)
+			Bg.translate(x, y+T/2)
+			Bg.strokeLine(0,oY, T,oY)
+			!n && Bg.strokeLine(0,lo, T,lo)
 		}
-		ctx.restore()
+		Bg.restore()
 	}
 }
