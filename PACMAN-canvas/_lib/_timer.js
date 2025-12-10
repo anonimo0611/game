@@ -68,7 +68,7 @@ const {Ticker,Timer} = function() {
 		loop(ts) {
 			if (this.stopped) return
 			if (this.lastTS == 0) {
-				this.lastTS = this.start = 0
+				this.lastTS = this.start = ts
 			}
 			requestAnimationFrame(this.loop)
 			this.dtMs  = ts - this.lastTS
