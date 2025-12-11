@@ -139,7 +139,6 @@ export const GhsMgr = new class extends Common {
 	#draw(onFront=true) {
 		reverse(Ghosts)
 		.filter (g=> g.isFrightened != onFront)
-		.filter (g=> g.state.isBitten == false)
 		.forEach(g=> g.draw())
 	}
 }
