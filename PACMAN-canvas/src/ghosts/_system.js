@@ -78,7 +78,6 @@ export const GhsMgr = new class extends Common {
 	}
 	#animIdx = 0
 	get animIndex()      {return this.#animIdx}
-	get animInterval()   {return Ticker.count % 6 == 0}
 	get CruiseElroy()    {return CruiseElroy}
 	get isChaseMode()    {return AttackInWaves.isChaseMode}
 	get isScatterMode()  {return AttackInWaves.isScatterMode}
@@ -87,14 +86,14 @@ export const GhsMgr = new class extends Common {
 	get spriteIdx()      {return FrightMode.session?.spriteIdx ?? 0}
 	get caughtAll()      {return FrightMode.session?.caughtAll ?? false}
 	get akaCenterPos()   {return Ghosts[GhsType.Akabei].center}
-	get areAnyEscaping() {return Ghosts.some(g=> g.escaping)}
+	get areAnyEscaping() {return Ghosts.some(g=> g.isEscaping)}
 
 	#initialize(_={}, /**@type {Ghost[]}*/...ghosts) {
 		GhsMgr.#animIdx = 0
-		ghosts.forEach((g,i)=> Ghosts[i]=g)
+		ghosts.forEach((g,i)=> Ghosts[i] = g)
 	}
 	#onRoundEnds() {
-		Ghosts.forEach((g)=> g.sprite.setFadeOut())
+		Ghosts.forEach(g=> g.sprite.setFadeOut())
 	}
 	#onInGame() {
 		Sound.playSiren()
@@ -113,18 +112,21 @@ export const GhsMgr = new class extends Common {
 		FrightMode.new()
 	}
 	update() {
+		AttackInWaves.update()
+		FrightMode.session?.update()
+		GhsMgr.#updateAnimation()
+		GhsMgr.#updateGhosts()
+	}
+	#updateAnimation() {
+		if (Timer.frozen)
+			return
 		if (State.isInGame
 		 || State.isAttract
 		 || State.isCoffBreak)
-			this.#animIdx ^= +(!Timer.frozen && GhsMgr.animInterval)
-		AttackInWaves.update()
-		FrightMode.session?.update()
-		Ghosts.forEach(g=>g.update())
+			GhsMgr.#animIdx ^= +(Ticker.count % 6 == 0)
 	}
-	#draw(onFront=true) {
-		reverse(Ghosts).forEach(
-			g=> (g.frightened != onFront) && g.draw()
-		)
+	#updateGhosts() {
+		Ghosts.forEach(g=> g.update())
 	}
 	drawBehind() {
 		GhsMgr.#draw(false)
@@ -133,6 +135,12 @@ export const GhsMgr = new class extends Common {
 		Target.draw(Ghosts)
 		GhsMgr.#draw(true)
 		PtsMgr.drawGhostPts()
+	}
+	#draw(onFront=true) {
+		reverse(Ghosts)
+		.filter (g=> g.isFrightened != onFront)
+		.filter (g=> g.state.isBitten == false)
+		.forEach(g=> g.draw())
 	}
 }
 
@@ -233,8 +241,8 @@ const CruiseElroy = function() {
 	function angry() {
 		return State.isInGame
 			&& _part > 1
-			&& Ghosts[GhsType.Akabei]?.frightened == false
-			&& Ghosts[GhsType.Guzuta]?.started == true
+			&& Ghosts[GhsType.Akabei]?.isFrightened == false
+			&& Ghosts[GhsType.Guzuta]?.isStarted == true
 	}
 	function onDotEaten() {
 		const rate = [1.5, 1.0, 0.5][_part]
@@ -269,8 +277,8 @@ const FrightMode = function() {
 		#set(isOn) {
 			_session = (isOn? this:null)
 			$(Ghosts)
-				.trigger('FrightMode',isOn)
-				.offon('Bitten',()=> this.#caught++,isOn)
+				.trigger('FrightMode', isOn)
+				.offon('Bitten', ()=> this.#caught++, isOn)
 			Sound.toggleFrightMode(isOn)
 		}
 		#flashing() {
@@ -280,8 +288,8 @@ const FrightMode = function() {
 		update() {
 			if (State.isInGame && !Timer.frozen) {
 				const et = (this.#time++ * Game.interval)/1000
-				;(et>=this.Dur-2) && this.#flashing()
-				;(et>=this.Dur || this.caughtAll) && this.#set(false)
+				if (et >= this.Dur-2) this.#flashing()
+				if (et >= this.Dur || this.caughtAll) this.#set(false)
 			}
  		}
 	}

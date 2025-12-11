@@ -18,23 +18,23 @@ export default new class {
 	}
 	/** @param {Ghost} g */
 	#markerDisabled = g=> (
-		   g.frightened
+		   g.isFrightened
 		|| g.state.isIdle
 		|| g.state.isBitten
-		|| (Timer.frozen && !g.escaping)
+		|| (Timer.frozen && !g.isEscaping)
 	)
 
 	/** @param {Ghost} g */
 	#getTargetPos = g=>
-		(g.state.isGoingOut || g.escaping)
+		(g.state.isGoingOut || g.isEscaping)
 			? Maze.House.EntranceTile.add(.5).mul(T)
-			: g.scattering
+			: g.isScattering
 				? g.originalTargetTile.add(.5).mul(T)
 				: g.chasePos
 
 	/** @param {Ghost} g */
 	#strokeLines(g) {
-		if (Timer.frozen || !g.chasing)
+		if (Timer.frozen || !g.isChasing)
 			return
 		match(g.type, {
 			[GhsType.Pinky]:  ()=> this.#auxLines({g,ofst:4}),

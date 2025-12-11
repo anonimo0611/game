@@ -65,13 +65,13 @@ export class CoffBreak {
 class Scene1 extends CoffBreak {
 	constructor() {
 		super(1)
-		this.frightened = false
+		this.isFrightened = false
 		this.akaVelX  = -BW / 156.4
 		this.pacman.x =  BW + T*1
 		this.akabei.x =  BW + T*3
 	}
 	turnBack() {
-		this.frightened = true
+		this.isFrightened = true
 		this.pacVelX *= -1.1
 		this.akaVelX *= -0.6
 		this.pacman.dir = this.akabei.dir = R
@@ -92,8 +92,8 @@ class Scene1 extends CoffBreak {
 			: this.moveRight()
 	}
 	draw() {
-		const {pacman,frightened}= this
-		this.drawAkabei({frightened})
+		const {pacman,isFrightened}= this
+		this.drawAkabei({isFrightened})
 		this.drawPacman(pacman.dir == R ? 4:1)
 		super.draw()
 	}
@@ -104,7 +104,7 @@ class Scene2 extends CoffBreak {
 		super(2)
 		this.counter  = 0
 		this.akaEyes  = L
-		this.ripped   = false
+		this.isRipped = false
 		this.sprite   = Sprite.stakeClothes
 		this.akaVelX  = this.pacVelX
 		this.pacman.x = BW + T*3
@@ -123,22 +123,22 @@ class Scene2 extends CoffBreak {
 			90:()=> {
 				this.akabei.x -= T/4
 				this.akaEyes  = U
-				this.ripped   = true
+				this.isRipped = true
 			},
 			150:()=> {this.akaEyes = 'Bracket'},
 			270:()=> {this.end()},
 		})
 	}
 	draw() {
-		const {akabei:a, sprite:spr, akaEyes,ripped}= this
-		const animIdx = ripped? 0 : (this.counter? 1 : a.animIdx)
+		const {akabei:a, sprite:spr, akaEyes,isRipped}= this
+		const animIdx = isRipped? 0 : (this.counter? 1 : a.animIdx)
 		spr.drawStake()
 		this.drawPacman()
-		this.drawAkabei({animIdx,ripped,orient:akaEyes})
-		ripped
+		this.drawAkabei({animIdx,isRipped,orient:akaEyes})
+		isRipped
 			? spr.drawCloth()
 			: function() { // Expand clothes
-				if (ripped || a.x >= spr.CaughtX) return
+				if (isRipped || a.x >= spr.CaughtX) return
 				const rate = norm(spr.CaughtX, spr.AkaMinX, a.x)
 				spr.stretchClothing(animIdx, rate, a.center.addX(T))
 			}()
@@ -167,8 +167,8 @@ class Scene3 extends CoffBreak {
 	draw() {
 		this.drawPacman()
 		this.akabei.dir == L
-			? this.drawAkabei({mended: true})
-			: this.drawAkabei({exposed:true})
+			? this.drawAkabei({isMended: true})
+			: this.drawAkabei({isExposed:true})
 		super.draw()
 	}
 }
