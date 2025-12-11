@@ -132,7 +132,7 @@ class EnergizerAct {
 	updateGhosts() {
 		for (const g of this.ghosts) {
 			g.x += this.ghsVelX
-			g.collidesWithPacman({
+			g.collidesWith({
 				pos:this.pacman.pos, radius:T/4,
 				release() {GhsMgr.caughtAll && State.toAttract()}
 			})
