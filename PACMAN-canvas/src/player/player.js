@@ -49,7 +49,7 @@ class PlayerPac {
 	resetTimer() {
 		this.#sinceLastEating = 0
 	}
-	drawCenterDot() {
+	#drawCenterDot() {
 		if (!this.hidden && Ctrl.showGridLines)
 			Actor.drawCenterDot(this.center)
 	}
@@ -59,7 +59,7 @@ class PlayerPac {
 		Ctx.save()
 		this.#spawnFade.setAlpha(this.maxAlpha)
 		this.sprite.draw(this)
-		this.drawCenterDot()
+		this.#drawCenterDot()
 		Ctx.restore()
 	}
 	update() {
