@@ -86,7 +86,7 @@ export const Fruit = new class {
 	}
 	drawLevelCounter() {
 		const [x,y,w,h] = LevelsRect.vals
-		Ctx.drawImage(HUD.canvas, x,y, w,h, x,y, w,h)
+		Ctx.drawImage(HUD.canvas, x,y,w,h)
 	}
 	#setLevelCounter() {
 		const [x,y,w,h]  = LevelsRect.vals

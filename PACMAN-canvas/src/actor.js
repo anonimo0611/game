@@ -39,8 +39,9 @@ export class Actor extends Common {
 
 	/** @protected */
 	constructor()   {super()}
-	get radius()    {return T}
 	get speed()     {return 0}
+	get radius()    {return T}
+	get size()      {return this.radius*2}
 	get inHouse()   {return Maze.House.isIn(this.tilePos)}
 	get inTunSide() {return Maze.Tunnel.findSide(this.center)}
 
@@ -79,10 +80,11 @@ export class Actor extends Common {
 		this.wrapXAxis()
 	}
 	wrapXAxis() {
-		this.x = function({x,radius:r}) {
-			if (x < -r-T/2) return BW+T/2
-			if (x > BW+T/2) return -r-T/2
-		}(this) ?? this.x
+		this.x = function({x,size}) {
+			if (x < -size)   return BW+size
+			if (x > BW+size) return -size
+			return x
+		}(this)
 	}
 	#fixPosition() {
 		Vec2[this.dir].y

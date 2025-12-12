@@ -19,13 +19,13 @@ export const Message = new class {
 			ctx.fillText(txt, col*T+2, row*T-2 + size*i))
 		ctx.restore()
 	}
-	#drawPausedMessage() {
+	#drawPausedText() {
 		(!Confirm.opened && Ticker.paused)
 			&& (Ticker.pausedCount & 32) == 0
 			&& drawText(11, 19, '#F00','PAUSED')
 	}
 	draw() {
-		this.#drawPausedMessage()
+		this.#drawPausedText()
 		if (State.isIntro)
 			drawText( 9, 13, '#0FF','PLAYER　ONE')
 
