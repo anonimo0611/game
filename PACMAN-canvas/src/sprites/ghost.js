@@ -32,15 +32,16 @@ export default class {
 		const finalize = ()=> {
 			ctx.restore()
 			mainCtx.save()
-			mainCtx.setAlpha(this.#fadeOut?.alpha)
 			mainCtx.translate(x+size/4, y+size/4)
+			mainCtx.scale(GhsScale, GhsScale)
+			mainCtx.setAlpha(this.#fadeOut?.alpha)
 			mainCtx.drawImage(ctx.canvas, -size/2, -size/2)
 			mainCtx.restore()
 		}
 		ctx.clear()
 		ctx.save()
 		ctx.translate(size/2, size/2)
-		ctx.scale(size/(100/GhsScale), size/(100/GhsScale))
+		ctx.scale(size/100, size/100)
 		ctx.lineWidth = 5
 		ctx.lineJoin  = 'round'
 		ctx.lineCap   = 'round'
