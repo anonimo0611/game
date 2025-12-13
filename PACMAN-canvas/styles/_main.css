@@ -51,6 +51,7 @@ h1 {
 	position: relative;
 	transform-origin: center;
 	opacity: 0;
+	transition: opacity .3s;
 	#board {
 		margin-top: 0.5rem;
 		pointer-events: none;
