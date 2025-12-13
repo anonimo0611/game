@@ -50,7 +50,7 @@ export class Mover extends Actor {
 		this.#turnCorner(spd)
 		this.setNextPos(spd)
 		this.#setMoveSpeed(spd)
-		this.#finishTurningCorner()
+		this.#finishCornering()
 		this.#turnAround()
 		this.#stopAtWall()
 	}
@@ -68,7 +68,7 @@ export class Mover extends Actor {
 			this.setNextPos(spd, dir)
 		}
 	}
-	#finishTurningCorner() {
+	#finishCornering() {
 		if (this.s.turning && this.passedTileCenter) {
 			this.s.nextDir  = this.s.nextTurn
 			this.s.nextTurn = null
