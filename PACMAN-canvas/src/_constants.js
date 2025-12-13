@@ -19,9 +19,9 @@ U='Up', R='Right', D='Down', L='Left',
 dBody = document.body,
 
 /** Board width */
-BW = T*Cols,
+BW = Cols*T,
 /** Board height */
-BH = T*Rows,
+BH = Rows*T,
 
 Bg  = canvas2D('board_bg' ,  BW,BH).ctx,
 HUD = canvas2D('board_hud',  BW,BH).ctx,
@@ -52,7 +52,7 @@ Palette = freeze(new class {
 }),
 
 PacScale  = 0.9,
-PacRadius = T*PacScale,
+PacRadius = PacScale*T,
 PacSpeed  = freeze(new class {
 	SlowLevel = 13   // After this level, Pacman slows down
 	SlowRate  = 0.98 // Deceleration rate at SlowLevel

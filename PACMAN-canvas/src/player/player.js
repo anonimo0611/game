@@ -105,9 +105,6 @@ class PlayerPac {
 	}
 }
 let   player = new PlayerPac
-const Player = new class extends Common {
-	draw()   {player.draw()}
-	update() {player.update()}
-},
+const Player = new Common,
 reset = ()=> {player = new PlayerPac}
 State.on({_Restarted_NewLevel:reset})

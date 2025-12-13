@@ -29,6 +29,7 @@ export class CoffBreak {
 	pacman  = new PacMan
 	akabei  = new Ghost
 	pacVelX = -BW/180
+	akaVelX = -BW/180
 
 	/** @protected @param {number} num */
 	constructor(num) {
@@ -36,9 +37,13 @@ export class CoffBreak {
 		Sound.play('cutscene', {loop:1^+(num == 2)})
 		$onNS('.CB',{Quit:this.end, blur_focus:this.pause})
 	}
-	movePacman() {
-		this.pacman.x += this.pacVelX
+	movePac() {
+		this.pacman.x += this.pacVelX * Ticker.delta
 		this.pacman.sprite.update()
+	}
+	/** @param {number} rate */
+	moveAka(rate=1) {
+		this.akabei.x += this.akaVelX * Ticker.delta * rate
 	}
 	drawPacman(scale=1) {
 		this.pacman.sprite.draw(this.pacman, {scale})
@@ -77,16 +82,16 @@ class Scene1 extends CoffBreak {
 		this.pacman.dir = this.akabei.dir = R
 	}
 	moveLeft() {
-		this.movePacman()
+		this.movePac()
 		this.pacman.x < -T*9 && this.turnBack()
 	}
 	moveRight() {
-		this.akabei.x > T*7.5  && this.movePacman()
+		this.akabei.x > T*7.5  && this.movePac()
 		this.akabei.x > T*9+BW && this.end()
 	}
 	update() {
 		if (Ticker.elapsedTime > 400)
-			this.akabei.x += this.akaVelX
+			this.moveAka()
 		this.pacman.dir == L
 			? this.moveLeft()
 			: this.moveRight()
@@ -106,18 +111,18 @@ class Scene2 extends CoffBreak {
 		this.akaEyes  = L
 		this.isRipped = false
 		this.sprite   = Sprite.stakeClothes
-		this.akaVelX  = this.pacVelX
 		this.pacman.x = BW + T*3
 		this.akabei.x = BW + T*16
 	}
-	moveAkabei({akabei:a, akaVelX:v, sprite:spr}=this) {
-		a.x > spr.CaughtX ? (a.x+=v):
-		a.x > spr.AkaMinX ? (a.x+=v/10):(a.x=spr.AkaMinX)
+	moveAka() {
+		const {akabei:a, sprite:spr}= this
+		a.x > spr.CaughtX ? super.moveAka(1.0):
+		a.x > spr.AkaMinX ? super.moveAka(0.1):(a.x=spr.AkaMinX)
 		return (a.x != spr.AkaMinX)
 	}
 	update() {
-		this.movePacman()
-		if (!this.counter && this.moveAkabei(this))
+		this.movePac()
+		if (!this.counter && this.moveAka())
 			return
 		match(this.counter++, {
 			90:()=> {
@@ -149,20 +154,19 @@ class Scene2 extends CoffBreak {
 class Scene3 extends CoffBreak {
 	constructor() {
 		super(3)
-		this.pacVelX  = -BW / 200
-		this.akaVelX  = -BW / 200
-		this.pacman.x =  BW + T*3
-		this.akabei.x =  BW + T*10
+		this.pacman.x =  BW + T*6
+		this.akabei.x =  BW + T*13
 	}
-	moveAkabei({akabei:aka}=this) {
-		aka.x += this.akaVelX
+	moveAka() {
+		const {akabei:aka}= this
+		super.moveAka()
 		aka.dir == L
-			? aka.x < -T*8 && (aka.dir = R) && (this.akaVelX *= -1)
-			: aka.x > (T*9 + BW) && aka.dir == R && this.end()
+			? aka.x < -T*10 && (aka.dir = R) && (this.akaVelX *= -1)
+			: aka.x > (T*13 + BW) && aka.dir == R && this.end()
 	}
 	update() {
-		this.movePacman()
-		this.moveAkabei(this)
+		this.movePac()
+		this.moveAka()
 	}
 	draw() {
 		this.drawPacman()

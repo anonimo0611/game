@@ -118,7 +118,7 @@ class EnergizerAct {
 	update() {
 		if (Timer.frozen) return
 		this.pacman.sprite.update()
-		this.pacman.x += this.pacVelX
+		this.pacman.x += this.pacVelX * Ticker.delta
 		if (this.pacman.dir == L
 		 && this.pacman.x <= T*4
 		) {
@@ -131,7 +131,7 @@ class EnergizerAct {
 	}
 	updateGhosts() {
 		this.ghosts.forEach(g=> {
-			g.x += this.ghsVelX
+			g.x += this.ghsVelX * Ticker.delta
 			g.collidesWith(this.pacman.pos, T/4, this.#end)
 		})
 	}

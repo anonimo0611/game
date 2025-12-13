@@ -2,7 +2,7 @@ import {Common} from '../_lib/common.js'
 import {Dir}    from '../_lib/direction.js'
 import {State}  from './state.js'
 import {Maze}   from './maze.js'
-import {Player} from './player/player.js'
+import {player} from './player/player.js'
 import {GhsMgr} from './ghosts/_system.js'
 
 class SpawnFade {
@@ -21,19 +21,20 @@ export class Actor extends Common {
 	/** @readonly */
 	static SpawnFade = SpawnFade
 	static update() {
-		Player.update()
+		player.update()
 		GhsMgr.update()
 	}
-	/** @param {{draw:()=>void}} player */
-	static draw(player) {
+	/** @param {{draw():void}} pacman */
+	static draw(pacman) {
 		GhsMgr.drawBehind()
-		player.draw()
+		pacman.draw()
 		GhsMgr.drawFront()
 	}
 	/** @param {Vec2} pos */
 	static drawCenterDot({x,y}, color='red') {
 		Ctx.fillCircle(x,y, 3, color)
 	}
+
 	pos = Vec2.Zero
 	#orient = /**@type {Direction}*/(L)
 	#movDir = /**@type {Direction}*/(L)
