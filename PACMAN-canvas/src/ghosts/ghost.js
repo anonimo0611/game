@@ -40,7 +40,6 @@ export class Ghost extends Actor {
 	get isScattering() {return GhsMgr.isScatterMode && this.isWalking && !this.isAngry}
 	get isStarted()    {return this.#started}
 	get isFrightened() {return this.#frightened}
-	get isBitten()     {return this.state.isBitten}
 	get isWalking()    {return this.state.isWalking && !this.isFrightened}
 	get isEscaping()   {return this.state.isEscaping || this.state.isReturning}
 
@@ -217,11 +216,11 @@ export class Ghost extends Actor {
 		}
 		return false
 	}
-	collidesWith({
+	collidesWith(
 		pos     = player.pos,
 		radius  = this.isFrightened? T/2:T/3,
 		release = ()=> this.#setEscapeState(),
-	}={}) {
+	) {
 		if (!this.state.isWalking
 		 || !this.isFrightened && Ctrl.invincible
 		 || !circleCollision(this, pos, radius))

@@ -21,13 +21,11 @@ export default class {
 		orient       = /**@type {orient}*/(L),
 		isAngry      = false,
 		isFrightened = false,
-		isBitten     = false,
 		isEscaping   = false,
 		isRipped     = false,
 		isMended     = false,
 		isExposed    = false,
 	}={}) {
-		if (isBitten) return
 		const {ctx}= this
 		const finalize = ()=> {
 			ctx.restore()

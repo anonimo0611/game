@@ -2,9 +2,9 @@
 import {drawText} from '../message.js'
 import {Ctrl}     from '../control.js'
 import {Score}    from '../score.js'
-import {PtsMgr}   from '../points.js'
 import {Fruit}    from '../fruit.js'
 import {drawDot}  from '../maze.js'
+import {Actor}    from '../actor.js'
 import {GhsMgr}   from '../ghosts/_system.js'
 import {Ghost}    from '../ghosts/ghost.js'
 import {PacMan}   from './pacman.js'
@@ -92,7 +92,7 @@ export class Attract {
 			}
 		}
 		if (this.subActStarted)
-			this.subAct.draw()
+			Actor.draw(this.pacman)
 		Fruit.drawLevelCounter()
 	}
 	drawGhostOnTable(type=0, row=0) {
@@ -130,17 +130,12 @@ class EnergizerAct {
 		this.updateGhosts()
 	}
 	updateGhosts() {
-		for (const g of this.ghosts) {
+		this.ghosts.forEach(g=> {
 			g.x += this.ghsVelX
-			g.collidesWith({
-				pos:this.pacman.pos, radius:T/4,
-				release() {GhsMgr.caughtAll && State.toAttract()}
-			})
-		}
+			g.collidesWith(this.pacman.pos, T/4, this.#end)
+		})
 	}
-	draw() {
-		this.ghosts.forEach(g=> g.sprite.draw(g))
-		this.pacman.sprite.draw(this.pacman)
-		PtsMgr.drawGhostPts()
+	#end() {
+		GhsMgr.caughtAll && State.toAttract()
 	}
 }

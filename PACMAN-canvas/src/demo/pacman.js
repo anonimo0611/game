@@ -7,4 +7,5 @@ export class PacMan extends Actor {
 	constructor() {super()}
 	get radius()  {return PacRadius}
 	get hidden()  {return Timer.frozen}
+	draw() {this.sprite.draw(this)}
 }

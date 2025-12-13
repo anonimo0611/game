@@ -127,7 +127,7 @@ export const Game = new class {
 		Score.draw()
 		Maze.PowDot.draw()
 		Fruit.drawTarget()
-		Actor.draw()
+		Actor.draw(player)
 		Message.draw()
 	}
 },

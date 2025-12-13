@@ -7,8 +7,8 @@ import {Maze}    from '../maze.js'
 import {Actor}   from '../actor.js';
 import {GhsMgr}  from '../ghosts/_system.js'
 
-const Spd = PacSpeed
-const {SlowLevel,SlowRate}= Spd
+const  Speed = PacSpeed
+const {SlowLevel,SlowRate}= Speed
 
 class TurnState {
 	turning  = false
@@ -18,32 +18,32 @@ class TurnState {
 export class Mover extends Actor {
 	#speed   = 0
 	#stopped = true
-	get speed()   {return this.#speed ||= this.tileSpeed}
-	get stopped() {return this.#stopped}
-
 	constructor(col=0,row=0) {
 		super()
 		/** @private */
 		this.s = new TurnState
 		this.pos.set(col*T, row*T)
 		$win.off('keydown.PacSteer')
-		setSteerEvent({m:this,s:this.s})
+		setSteerEvent({m:this, s:this.s})
 	}
-	get canMove() {
-		return this.s.turning || !this.collidesWithWall()
-	}
+	get speed()   {return this.#speed ||= this.tileSpeed}
+	get stopped() {return this.#stopped}
+	get canMove() {return this.s.turning || !this.collidesWithWall()}
 	get canTurn() {
-		return this.s.nextDir != null
+		return  this.s.nextDir != null
 			&& !this.passedTileCenter
 			&& !this.collidesWithWall(this.s.nextDir)
 	}
 	get tileSpeed() {
 		return (
-			 (Game.moveSpeed*(Game.level<SlowLevel ? 1 : SlowRate))
+			 (Game.moveSpeed*(Game.level<SlowLevel ? 1:SlowRate))
 			*(Maze.hasDot(this.tileIdx)
-				? (GhsMgr.isFrightMode? Spd.EneEating : Spd.Eating)
-				: (GhsMgr.isFrightMode? Spd.Energized : Spd.Base))
+				? (GhsMgr.isFrightMode? Speed.EneEating:Speed.Eating)
+				: (GhsMgr.isFrightMode? Speed.Energized:Speed.Base))
 		)
+	}
+	#stopMove() {
+		return (this.#stopped = !this.canMove)
 	}
 	/** @param {number} spd */
 	update(spd) {
@@ -56,9 +56,8 @@ export class Mover extends Actor {
 	}
 	/** @param {number} spd */
 	#setMoveSpeed(spd) {
-		if (this.justArrivedAtTile(spd)) {
+		if (this.justArrivedAtTile(spd))
 			this.#speed = this.tileSpeed
-		}
 	}
 	/** @param {number} spd */
 	#turnCorner(spd) {
@@ -78,12 +77,8 @@ export class Mover extends Actor {
 		}
 	}
 	#turnAround() {
-		if (this.dir == this.revOrient) {
+		if (this.dir == this.revOrient)
 			this.setMoveDir(this.orient)
-		}
-	}
-	#stopMove() {
-		return (this.#stopped = !this.canMove)
 	}
 	#stopAtWall() {
 		if (this.#stopMove()) {

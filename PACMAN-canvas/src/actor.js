@@ -24,9 +24,10 @@ export class Actor extends Common {
 		Player.update()
 		GhsMgr.update()
 	}
-	static draw() {
+	/** @param {{draw:()=>void}} player */
+	static draw(player) {
 		GhsMgr.drawBehind()
-		Player.draw()
+		player.draw()
 		GhsMgr.drawFront()
 	}
 	/** @param {Vec2} pos */
