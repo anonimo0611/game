@@ -81,10 +81,10 @@ export const View = function()
 		ghsSprite.draw({
 			x,y,size:S,
 			orient:/**@type {const}*/([R,R,R,R,U,L,D,R])[col],
-			animIdx:  +(col % 2 != 0),
-			frightened:(col <= 3),
-			escaping:  (col >= 4),
-			spriteIdx:+(col >= 2),
+			animIdx:    +(col % 2 != 0),
+			spriteIdx:  +(col >= 2),
+			isFrightened:(col <= 3),
+			isEscaping:  (col >= 4),
 		})
 	}
 
@@ -159,12 +159,12 @@ export const View = function()
 			spr.drawCloth(Vec2.Zero)
 			Ctx.restore()
 		}
-		draw(ofst(4.00), 0, {ripped: true,orient:U})
-		draw(ofst(5.00), 0, {ripped: true,orient:'Bracket'})
-		draw(ofst(0.00), S, {mended: true})
-		draw(ofst(1.00), S, {mended: true,animIdx:1})
-		draw(ofst(2.25), S, {exposed:true})
-		draw(ofst(4.25), S, {exposed:true,animIdx:1})
+		draw(ofst(4.00), 0, {isRipped: true,orient:U})
+		draw(ofst(5.00), 0, {isRipped: true,orient:'Bracket'})
+		draw(ofst(0.00), S, {isMended: true})
+		draw(ofst(1.00), S, {isMended: true,animIdx:1})
+		draw(ofst(2.25), S, {isExposed:true})
+		draw(ofst(4.25), S, {isExposed:true,animIdx:1})
 	}
 
 	return {draw}

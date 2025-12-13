@@ -91,15 +91,15 @@ class AnimData
 			: ctx.translate(S/2.0, T/2)
 
 		data?.ghost.draw({
-			size:      S,
-			mainCtx:   ctx,
-			type:      data.type-1,
-			animIdx:   data.animIdx,
-			orient:    data.orient,
-			frightened:data.type    == Type.Actor.Fright,
-			exposed:   data.subType == Type.Ghost.Exposed,
-			mended:    data.subType == Type.Ghost.Mended,
-			spriteIdx: data.subType == Type.Ghost.Flashed ? data.flashIdx:0,
+			size:        S,
+			mainCtx:     ctx,
+			type:        data.type-1,
+			animIdx:     data.animIdx,
+			orient:      data.orient,
+			isFrightened:data.type    == Type.Actor.Fright,
+			isExposed:   data.subType == Type.Ghost.Exposed,
+			isMended:    data.subType == Type.Ghost.Mended,
+			spriteIdx:   data.subType == Type.Ghost.Flashed ? data.flashIdx:0,
 		})
 		ctx.restore()
 	}
