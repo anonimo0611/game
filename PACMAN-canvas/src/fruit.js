@@ -33,13 +33,13 @@ export const Fruit = new class {
 		$Level.on({change: Fruit.#setImages})
 	}
 	get points() {
-		return Pts.FruitPts[Fruit.number()]
+		return Pts.FruitPts[Fruit.getType()]
 	}
 	/** Pass the game-level to reference the fruit table */
-	number(i=Game.level) {
-		if (i < 1) throw RangeError('Must be one or greater.')
+	getType(lv=Game.level) {
+		if (lv < 1) throw RangeError('Must be one or greater.')
 		// Levels 13+ will always default to the key symbol
-		return FruitTable.at( min(i-1, FruitTable.length-1) ) ?? 0
+		return FruitTable.at( min(lv-1, FruitTable.length-1) ) ?? 0
 	}
 	/** Disappearing is between 9 and 10 seconds */
 	#setHideTimer() {
@@ -95,11 +95,11 @@ export const Fruit = new class {
 		HUD.clearRect(x,y,w,h)
 		HUD.translate(x,y)
 		for (const i of range(startLevel, Game.level))
-			Spr.draw(HUD, Fruit.number(i+1), w-T-Size*(i-startLevel),T)
+			Spr.draw(HUD, Fruit.getType(i+1), w-T-Size*(i-startLevel),T)
 		HUD.restore()
 	}
 	#setImages() {
-		Spr.cache(Fruit.number())
+		Spr.cache(Fruit.getType)
 		Fruit.#setLevelCounter()
 	}
 }

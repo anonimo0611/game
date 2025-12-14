@@ -1,32 +1,34 @@
-const Fns = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
+const Scaling  = 1.05
+const CacheCtx = canvas2D(null,T*2).ctx
+const FruitFns = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
+
 /**
  @param {ExtendedContext2D} ctx
  @param {number} fruitIdx
 */
 export function draw(ctx, fruitIdx, x=T,y=T-2, scale=T/8) {
-	const Scale = 1.05
+	if (!FruitFns[fruitIdx])
+		throw RangeError(`Index ${fruitIdx} is outside of fruit range (0-${FruitFns.length-1}).`)
 	ctx.save()
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
 	ctx.translate(x, y)
-	ctx.scale(scale*Scale, scale*Scale)
-	Fns[fruitIdx](ctx)
+	ctx.scale(scale*Scaling, scale*Scaling)
+	FruitFns[fruitIdx](ctx)
 	ctx.restore()
 }
-export const [current,cache]= function() {
-	const {cvs,ctx}= canvas2D(null,T*2)
-	function cache(/**@type {number}*/idx) {
-		ctx.clear()
-		draw(ctx, idx)
-	}
-	return [cvs,cache]
-}()
+/** @param {()=> number} idx */
+export function cache(idx) {
+	CacheCtx.clear()
+	draw(CacheCtx, idx())
+}
+export const current = CacheCtx.canvas
 
 {// Create a sprite sheet for menu icons
 	const Menu = $byId('LevelMenu')
 	const size = +Menu.css('--scale') * T
 	const {ctx}= canvas2D(null, size*8, size)
-	for (const i of Fns.keys())
+	for (const i of FruitFns.keys())
 		draw(ctx, i, size/2+size*i, size/2, size/16)
 	Menu.css('--url',`url(${ctx.canvas.toDataURL()})`)
 }
