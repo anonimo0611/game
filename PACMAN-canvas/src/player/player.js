@@ -27,7 +27,7 @@ class PlayerPac {
 	get radius()    {return PacRadius}
 	get hidden()    {return Timer.frozen}
 	get closed()    {return State.isInGame == false}
-	get maxAlpha()  {return Ctrl.pacSemiTrans? .75:1}
+	get maxAlpha()  {return Ctrl.semiTransPac? .75:1}
 
 	get dir()       {return this.mov.dir}
 	get orient()    {return this.mov.orient}
