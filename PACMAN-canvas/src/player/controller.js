@@ -107,7 +107,7 @@ function setSteerEvent({s,m}) {
 			return
 		}
 		if (State.isStartMode && Vec2[dir].x) {
-			[m.dir,s.nextTurn]= [dir,null]
+			m.dir = dir
 			return
 		}
 		s.nextDir = dir
