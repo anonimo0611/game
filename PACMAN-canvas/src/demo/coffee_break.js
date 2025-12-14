@@ -45,10 +45,10 @@ export class CoffBreak {
 	moveAka(rate=1) {
 		this.akabei.x += this.akaVelX * Ticker.delta * rate
 	}
-	drawPacman(scale=1) {
+	drawPac(scale=1) {
 		this.pacman.sprite.draw(this.pacman, {scale})
 	}
-	drawAkabei(cfg={}) {
+	drawAka(cfg={}) {
 		const {akabei:{pos,animIdx}}= this
 		this.akabei.sprite.draw({animIdx, ...cfg, ...pos})
 	}
@@ -98,8 +98,8 @@ class Scene1 extends CoffBreak {
 	}
 	draw() {
 		const {pacman,isFrightened}= this
-		this.drawAkabei({isFrightened})
-		this.drawPacman(pacman.dir == R ? 4:1)
+		this.drawAka({isFrightened})
+		this.drawPac(pacman.dir == R ? 4:1)
 		super.draw()
 	}
 }
@@ -138,8 +138,8 @@ class Scene2 extends CoffBreak {
 		const {akabei:a, sprite:spr, akaEyes,isRipped}= this
 		const animIdx = isRipped? 0 : (this.counter? 1 : a.animIdx)
 		spr.drawStake()
-		this.drawPacman()
-		this.drawAkabei({animIdx,isRipped,orient:akaEyes})
+		this.drawPac()
+		this.drawAka({animIdx,isRipped,orient:akaEyes})
 		isRipped
 			? spr.drawCloth()
 			: function() { // Expand clothes
@@ -169,10 +169,10 @@ class Scene3 extends CoffBreak {
 		this.moveAka()
 	}
 	draw() {
-		this.drawPacman()
+		this.drawPac()
 		this.akabei.dir == L
-			? this.drawAkabei({isMended: true})
-			: this.drawAkabei({isExposed:true})
+			? this.drawAka({isMended: true})
+			: this.drawAka({isExposed:true})
 		super.draw()
 	}
 }
