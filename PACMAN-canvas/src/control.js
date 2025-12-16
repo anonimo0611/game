@@ -42,8 +42,8 @@ export const Ctrl = new class {
 	}
 	#fitToViewport() {
 		const scale = min(
-			innerWidth /Form.offsetWidth * .98,
-			innerHeight/Form.offsetHeight)
+			(innerWidth *devicePixelRatio)/Form.offsetWidth*.98,
+			(innerHeight*devicePixelRatio)/Form.offsetHeight)
 		Form.style.scale = min(1, scale).toFixed(2)
 	}
 	#save() {
@@ -92,9 +92,7 @@ export const Ctrl = new class {
 		Ctrl.#restore()
 	}
 	#quit(noConfirm=false) {
-		if (State.isTitle)
-			return
-		noConfirm
+		(!State.isTitle && noConfirm)
 			? State.toQuit()
 			: State.isInGame && Ctrl.#quitConfirm()
 	}

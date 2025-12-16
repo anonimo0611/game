@@ -88,9 +88,16 @@ export const GhsMgr = new class extends Common {
 	get akaCenterPos()   {return Ghosts[GhsType.Akabei].center}
 	get areAnyEscaping() {return Ghosts.some(g=> g.isEscaping)}
 
-	#initialize(_={}, /**@type {Ghost[]}*/...ghosts) {
+	/**
+	 @param {unknown} _
+	 @param {Ghost[]} ghosts
+	*/
+	#initialize(_, ...ghosts) {
 		GhsMgr.#animIdx = 0
-		ghosts.forEach((g,i)=> Ghosts[i] = g)
+		for (const i of range(ghosts.length)) {
+			Ghosts[i]?.sprite.ctx.init()
+			Ghosts[i] = ghosts[i]
+		}
 	}
 	#onRoundEnds() {
 		Ghosts.forEach(g=> g.sprite.setFadeOut())

@@ -35,6 +35,12 @@ export const Fruit = new class {
 	get points() {
 		return Pts.FruitPts[Fruit.getType()]
 	}
+	get showTarget() {
+		return (State.isTitle || State.isInGame) && _showTgt
+	}
+	get #intersectsWithPlayer () {
+		return circleCollision(player.center, TargetPos, T/2)
+	}
 	/** Pass the game-level to reference the fruit table */
 	getType(lv=Game.level) {
 		if (lv < 1) throw RangeError('Must be one or greater.')
@@ -59,8 +65,8 @@ export const Fruit = new class {
 			Fruit.#setHideTimer()
 		}
 	}
-	intersectsWith(pos=player.center) {
-		if (_showTgt && circleCollision(pos, TargetPos, T/2)) {
+	#checkIntersects() {
+		if (this.showTarget && this.#intersectsWithPlayer) {
 			Fruit.#resetTarget()
 			Timer.cancel(Fruit) && Sound.play('fruit')
 			PtsMgr.set({key:Fruit, dur:2e3, pos:TargetPos})
@@ -69,17 +75,14 @@ export const Fruit = new class {
 	update() {
 		_fadeOut?.update() == false
 			? Fruit.#resetTarget()
-			: Fruit.intersectsWith()
+			: Fruit.#checkIntersects()
 	}
 	drawTarget() {
-		if (!State.isTitle
-		 && !State.isInGame)
-			return
-		if (_showTgt && !Ticker.paused) {
+		if (this.showTarget && !Ticker.paused)  {
 			Ctx.save()
 			Ctx.setAlpha(_fadeOut?.alpha)
 			Ctx.translate(...TargetPos.vals)
-			Ctx.drawImage(Spr.current, -T,-T)
+			Spr.Cache.draw()
 			Ctx.restore()
 		}
 		PtsMgr.drawFruitPts()
@@ -99,7 +102,7 @@ export const Fruit = new class {
 		HUD.restore()
 	}
 	#setImages() {
-		Spr.cache(Fruit.getType)
+		Spr.Cache.update(Fruit.getType)
 		Fruit.#setLevelCounter()
 	}
 }

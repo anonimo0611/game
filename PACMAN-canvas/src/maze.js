@@ -157,7 +157,7 @@ export const Maze = freeze(new class {
 	drawDot(ctx, col,row, isPow=false, visible=true) {
 		const [x,y] = [col,row].map(n=>(n+.5)*T)
 		const color = visible? Colors.Dot : null
-		ctx.fillCircle(x,y, T/(isPow? 2:8), color)
+		ctx.fillCircle(x,y, T/(isPow? 2:9), color)
 	}
 	drawGrid() {
 		if (!Ctrl.showGridLines)

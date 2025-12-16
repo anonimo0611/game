@@ -127,9 +127,9 @@ class EnergizerAct {
 			this.pacman.dir = R
 			GhsMgr.setFrightMode()
 		}
-		this.updateGhosts()
+		this.#updateGhosts()
 	}
-	updateGhosts() {
+	#updateGhosts() {
 		this.ghosts.forEach(g=> {
 			g.x += this.ghsVelX * Ticker.delta
 			g.collidesWith(this.pacman.pos, T/4, this.#end)

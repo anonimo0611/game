@@ -1,7 +1,7 @@
 const
 Rows      = 34,
 Cols      = 28,
-TileSize  = 27,
+TileSize  = 31,
 DotPts    = 10,
 PowPts    = 50,
 BaseSpeed = TileSize / 4.5,

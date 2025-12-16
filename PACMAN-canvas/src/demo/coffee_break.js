@@ -154,8 +154,8 @@ class Scene2 extends CoffBreak {
 class Scene3 extends CoffBreak {
 	constructor() {
 		super(3)
-		this.pacman.x =  BW + T*6
-		this.akabei.x =  BW + T*13
+		this.pacman.x = BW + T*6
+		this.akabei.x = BW + T*13
 	}
 	moveAka() {
 		const {akabei:aka}= this

@@ -7,8 +7,9 @@ const FruitFns = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
  @param {number} fruitIdx
 */
 export function draw(ctx, fruitIdx, x=T,y=T-2, scale=T/8) {
-	if (!FruitFns[fruitIdx])
+	if (!FruitFns[fruitIdx]) {
 		throw RangeError(`Index ${fruitIdx} is outside of fruit range (0-${FruitFns.length-1}).`)
+	}
 	ctx.save()
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
@@ -17,12 +18,15 @@ export function draw(ctx, fruitIdx, x=T,y=T-2, scale=T/8) {
 	FruitFns[fruitIdx](ctx)
 	ctx.restore()
 }
-/** @param {()=> number} idx */
-export function cache(idx) {
-	CacheCtx.clear()
-	draw(CacheCtx, idx())
+export const Cache = new class {
+	/** @param {()=> number} idx */
+	update(idx) {
+		draw(CacheCtx.clear(), idx())
+	}
+	draw() {
+		Ctx.drawImage(CacheCtx.canvas, -T,-T)
+	}
 }
-export const current = CacheCtx.canvas
 
 {// Create a sprite sheet for menu icons
 	const Menu = $byId('LevelMenu')
