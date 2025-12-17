@@ -98,18 +98,15 @@ function setSteerEvent({s,m}) {
 		 || Ctrl.activeElem
 		) return
 
-		if (s.turning) {
-			s.nextTurn = dir
-			return
-		}
-		if (m.hasAdjWall(dir)) {
-			s.nextDir = dir
-			return
-		}
-		if (State.isStartMode && Vec2[dir].x) {
-			m.dir = dir
-			return
-		}
+		if (s.turning)
+			return void(s.nextTurn = dir)
+
+		if (m.hasAdjWall(dir))
+			return void(s.nextDir = dir)
+
+		if (State.isStartMode && Vec2[dir].x)
+			return void(m.dir = dir)
+
 		s.nextDir = dir
 		if (m.passedTileCenter) {
 			m.orient = dir

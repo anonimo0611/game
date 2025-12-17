@@ -54,7 +54,7 @@ class PlayerPac {
 			Actor.drawCenterDot(this.center)
 	}
 	draw() {
-		if (State.isIntro )
+		if (State.isIntro)
 			return
 		Ctx.save()
 		this.#spawnFade.setAlpha(this.maxAlpha)
