@@ -203,7 +203,7 @@ custom-menu {
 		background: var(--bgcolor);
 		border: solid transparent;
 		border-width: 2px 0;
-		padding: .1em calc(var(--caret-size) + .2em) .1em .2em;
+		padding: .1em calc(var(--caret-size) * 1.5) .1em .2em;
 		display: block;
 		&.selected, &:hover {background:#366}
 		&.selected {

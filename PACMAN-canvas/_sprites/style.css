@@ -81,6 +81,7 @@ main > fieldset:first-child .ctrls {
 	output {
 		text-align: center;
 		text-indent: calc(-1 * var(--caret-size));
+		&::after {right: .5em}
 	}
 	[val="-1"] {
 		text-align: center;
