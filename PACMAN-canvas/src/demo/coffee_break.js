@@ -140,9 +140,9 @@ class Scene2 extends CoffBreak {
 		spr.drawStake()
 		this.drawPac()
 		this.drawAka({animIdx,isRipped,orient:akaEyes})
-		isRipped
-			? spr.drawCloth()
-			: function() { // Expand clothes
+		isRipped?
+			spr.drawCloth():
+			function() { // Expand clothes
 				if (isRipped || a.x >= spr.CaughtX) return
 				const rate = norm(spr.CaughtX, spr.AkaMinX, a.x)
 				spr.stretchClothing(animIdx, rate, a.center.addX(T))
