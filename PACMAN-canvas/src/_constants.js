@@ -1,7 +1,7 @@
 const
 Rows      = 34,
 Cols      = 28,
-TileSize  = 31/devicePixelRatio|0,
+TileSize  = 31,
 DotPts    = 10,
 PowPts    = 50,
 BaseSpeed = TileSize/4.5,
@@ -73,4 +73,3 @@ GhsSpeed = freeze(new class {
 	InTunnel = this.Base * 0.60
 	Escape   = this.Base * 1.40
 })
-dRoot.style.setProperty('--tile-size',`${TileSize}px`)
