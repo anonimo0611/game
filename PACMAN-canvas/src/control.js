@@ -42,8 +42,8 @@ export const Ctrl = new class {
 	}
 	#fitToViewport() {
 		const scale = min(
-			(innerWidth *devicePixelRatio)/Form.offsetWidth*.98,
-			(innerHeight*devicePixelRatio)/Form.offsetHeight)
+			innerWidth /Form.offsetWidth*.98,
+			innerHeight/Form.offsetHeight)
 		Form.style.scale = min(1, scale).toFixed(2)
 	}
 	#save() {
