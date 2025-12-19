@@ -1,13 +1,22 @@
 const
 Rows      = 34,
 Cols      = 28,
-TileSize  = 31,
+TileSize  = 31/devicePixelRatio|0,
 DotPts    = 10,
 PowPts    = 50,
-BaseSpeed = TileSize / 4.5,
+BaseSpeed = TileSize/4.5,
+
+/** The document body */
+dBody = document.body,
 
 /** Shorthand of TileSize */
 T = TileSize,
+
+/** Board width */
+BW = Cols * T,
+
+/** Board height */
+BH = Rows * T,
 
 /** Blinking interval in frames */
 PowDotInterval = 15,
@@ -15,17 +24,9 @@ PowDotInterval = 15,
 /** @typedef {'Up'|'Right'|'Down'|'Left'} Direction */
 U='Up', R='Right', D='Down', L='Left',
 
-/** The document body */
-dBody = document.body,
-
-/** Board width */
-BW = Cols*T,
-/** Board height */
-BH = Rows*T,
-
-Bg  = canvas2D('board_bg' ,  BW,BH).ctx,
-HUD = canvas2D('board_hud',  BW,BH).ctx,
-Ctx = canvas2D('board_main', BW,BH).ctx,
+Bg   = canvas2D('board_bg' ,  BW,BH).ctx,
+HUD  = canvas2D('board_hud',  BW,BH).ctx,
+Ctx  = canvas2D('board_main', BW,BH).ctx,
 
 Colors = freeze(new class {
 	Grid      = '#F00'
@@ -72,3 +73,4 @@ GhsSpeed = freeze(new class {
 	InTunnel = this.Base * 0.60
 	Escape   = this.Base * 1.40
 })
+dRoot.style.setProperty('--tile-size',`${TileSize}px`)
