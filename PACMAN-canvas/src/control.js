@@ -92,7 +92,9 @@ export const Ctrl = new class {
 		Ctrl.#restore()
 	}
 	#quit(noConfirm=false) {
-		(!State.isTitle && noConfirm)
+		if (State.isTitle)
+			return
+		noConfirm
 			? State.toQuit()
 			: State.isInGame && Ctrl.#quitConfirm()
 	}
