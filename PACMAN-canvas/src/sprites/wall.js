@@ -1,7 +1,7 @@
 const W  = Cols
 const HT = T/2
 const OO = 2 // Outer Offset
-const LO = 3 // Line Offset
+const LO = 4 // Line Offset
 const LW = 3 // Line Width
 
 import {Maze}  from '../maze.js'
