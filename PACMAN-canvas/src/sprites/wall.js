@@ -54,7 +54,8 @@ export const Wall = new class {
 		case 1: Bg.arc(HT,HT, HT+LO, PI,-PI/2);break
 		case 2: Bg.arc(HT,HT, HT-LO, PI,-PI/2);break
 		case 3: Bg.arc(HT,HT, OO,    PI,-PI/2);break
-		case 4: Bg.moveTo(-LO,  HT)
+		case 4:
+			Bg.moveTo(-LO,  HT)
 			Bg.arcTo (-LO, -LO, T/3-LO, -LO, T/3)
 			Bg.lineTo( HT, -LO)
 			break
@@ -67,8 +68,8 @@ export const Wall = new class {
 	 @param {number} i Tile index
 	*/
 	#drawTile(c, i) {
-		const [n,tx,ty]= [Number(c),i%W,int(i/W)], [x,y]= [tx*T,ty*T]
-		const ci = n? n-(n>4 ? 5:1) : 'ABCD'.indexOf(c.toUpperCase())
+		const [tx,ty]= [i%W,i/W|0], [x,y]= [tx*T,ty*T], n = +c
+		const ci = n? n-(n>4 ? 5:1):'ABCD'.indexOf(c.toUpperCase())
 		const lo = (c == '#' && tx<W/2) || /[VH=]/.test(c) ? -LO:LO
 
 		switch(c.replace('#','V').toUpperCase()) {
