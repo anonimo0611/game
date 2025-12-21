@@ -46,10 +46,10 @@ Colors = freeze(new class {
 	Extend    = '#F55'
 	Orange    = '#F90'
 }),
-Palette = freeze(new class {
-	Info       = freeze(['#888','#F9E'])
-	FrightFace = freeze(['#F9F','#F00'])
-	FrightBody = freeze(['#36A','#FFF'])
+Palette = /**@type {const}*/({
+	Info      : ['#888','#F9E'],
+	FrightFace: ['#F9F','#F00'],
+	FrightBody: ['#36A','#FFF'],
 }),
 
 PacScale  = 0.9,

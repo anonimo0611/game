@@ -128,15 +128,15 @@ export const Ctrl = new class {
 	}
 	#setup() {
 		values(Menu).forEach(m=> m.on({change:Ctrl.#save}))
-		$win.on('resize',Ctrl.#fitToViewport)
-		$('input')    .on('input',Ctrl.#output)
-		$('#clearHi') .on('click',Ctrl.#clearHiConfirm)
-		$('#resetBtn').on('click',Ctrl.#reset)
-		$('#startBtn').on('click',()=> State.toIntro())
-		$('#demoBtn') .on('click',()=> State.toAttract())
-		$('#coffBtn1').on('click',()=> State.toCoffBreak({data:1}))
-		$('#coffBtn2').on('click',()=> State.toCoffBreak({data:2}))
-		$('#coffBtn3').on('click',()=> State.toCoffBreak({data:3}))
+		$win.on({resize:Ctrl.#fitToViewport})
+		$('input')    .on({input:Ctrl.#output})
+		$('#clearHi') .on({click:Ctrl.#clearHiConfirm})
+		$('#resetBtn').on({click:Ctrl.#reset})
+		$('#startBtn').on({click:()=> State.toIntro()})
+		$('#demoBtn') .on({click:()=> State.toAttract()})
+		$('#coffBtn1').on({click:()=> State.toCoffBreak({data:1})})
+		$('#coffBtn2').on({click:()=> State.toCoffBreak({data:2})})
+		$('#coffBtn3').on({click:()=> State.toCoffBreak({data:3})})
 		$(Form).attr('data-ready-state','loaded')
 	}
 }, powChk = inputs.powChk
