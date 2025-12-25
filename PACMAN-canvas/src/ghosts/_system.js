@@ -48,18 +48,20 @@ export class GhostState extends _State {
 	isBitten    = false
 	isEscaping  = false
 	isReturning = false
+
+	toIdle      = this.ret('Idle')
+	toGoingOut  = this.ret('GoingOut')
+	toWalking   = this.ret('Walking')
+	toBitten    = this.ret('Bitten')
+	toEscaping  = this.ret('Escaping')
+	toReturning = this.ret('Returning')
+
 	constructor(/**@type {Ghost}*/g) {
 		super(g)
 		this.init().owner.inHouse
 			? this.toIdle()
 			: this.toWalking()
 	}
-	get toIdle()      {return this.ret('Idle')}
-	get toGoingOut()  {return this.ret('GoingOut')}
-	get toWalking()   {return this.ret('Walking')}
-	get toBitten()    {return this.ret('Bitten')}
-	get toEscaping()  {return this.ret('Escaping')}
-	get toReturning() {return this.ret('Returning')}
 	set(/**@type {StateType}*/state) {
 		$(this.owner).trigger(state)
 		return super.set(state)
@@ -180,7 +182,7 @@ const AttackInWaves = function() {
 		])
 	}
 	function genPhase() {
-		let  [time,idx] = [-1,0]
+		let [time,idx] = [-1,0]
 		const list  = genPhaseList()
 		const phase = {
 			mode: [SCATTER,CHACE][+Ctrl.alwaysChase],

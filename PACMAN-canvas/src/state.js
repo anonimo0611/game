@@ -27,20 +27,20 @@ class GameState extends _State {
 	isGameOver  = false
 	isQuit      = false
 
-	get toTitle()     {return this.ret('Title')}
-	get toAttract()   {return this.ret('Attract')}
-	get toIntro()     {return this.ret('Intro')}
-	get toReady()     {return this.ret('Ready')}
-	get toInGame()    {return this.ret('InGame')}
-	get toRestart()   {return this.ret('Restarted')}
-	get toNewLevel()  {return this.ret('NewLevel')}
-	get toCleared()   {return this.ret('Cleared')}
-	get toFlashing()  {return this.ret('Flashing')}
-	get toCoffBreak() {return this.ret('CoffBreak')}
-	get toPacCaught() {return this.ret('PacCaught')}
-	get toPacDying()  {return this.ret('PacDying')}
-	get toGameOver()  {return this.ret('GameOver')}
-	get toQuit()      {return this.ret('Quit')}
+	toTitle     = this.ret('Title')
+	toAttract   = this.ret('Attract')
+	toIntro     = this.ret('Intro')
+	toReady     = this.ret('Ready')
+	toInGame    = this.ret('InGame')
+	toRestart   = this.ret('Restarted')
+	toNewLevel  = this.ret('NewLevel')
+	toCleared   = this.ret('Cleared')
+	toFlashing  = this.ret('Flashing')
+	toCoffBreak = this.ret('CoffBreak')
+	toPacCaught = this.ret('PacCaught')
+	toPacDying  = this.ret('PacDying')
+	toGameOver  = this.ret('GameOver')
+	toQuit      = this.ret('Quit')
 
 	get wasTitle()    {return this.was('Title')}
 	get wasIntro()    {return this.was('Intro')}

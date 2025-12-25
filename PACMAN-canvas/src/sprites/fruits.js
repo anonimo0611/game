@@ -8,8 +8,7 @@ const FruitFns = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
 */
 export function draw(ctx, fruitIdx, x=T,y=T-2, scale=T/8) {
 	if (!FruitFns[fruitIdx]) {
-		throw RangeError(`Index ${fruitIdx} is outside `
-		    +`of fruit range (0-${FruitFns.length-1}).`)
+		throw RangeError('Index refers outside the fruit-table range.')
 	}
 	ctx.save()
 	ctx.lineWidth = 1
