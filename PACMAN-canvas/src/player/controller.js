@@ -16,23 +16,23 @@ class TurnState {
 	nextTurn = /**@type {?Direction}*/(null)
 }
 export class Mover extends Actor {
+	/** @private */
+	state    = new TurnState
 	#speed   = 0
 	#stopped = true
 	constructor(col=0,row=0) {
 		super()
-		/** @private */
-		this.s = new TurnState
 		this.pos.set(col*T, row*T)
 		$win.off('keydown.PacSteer')
-		setSteerEvent({m:this, s:this.s})
+		setSteerEvent(this, this.state)
 	}
 	get speed()   {return this.#speed ||= this.tileSpeed}
 	get stopped() {return this.#stopped}
-	get canMove() {return this.s.turning || !this.collidesWithWall()}
+	get canMove() {return this.state.turning || !this.collidesWithWall()}
 	get canTurn() {
-		return  this.s.nextDir != null
+		return  this.state.nextDir != null
 			&& !this.passedTileCenter
-			&& !this.collidesWithWall(this.s.nextDir)
+			&& !this.collidesWithWall(this.state.nextDir)
 	}
 	get tileSpeed() {
 		return (
@@ -61,18 +61,18 @@ export class Mover extends Actor {
 	}
 	/** @param {number} spd */
 	#turnCorner(spd) {
-		const dir = this.s.nextDir
+		const dir = this.state.nextDir
 		if (this.canTurn && dir) {
-			this.s.turning ||= true
+			this.state.turning ||= true
 			this.orient = dir
 			this.setNextPos(spd, dir)
 		}
 	}
 	#finishCornering() {
-		if (this.s.turning && this.passedTileCenter) {
-			this.s.nextDir  = this.s.nextTurn
-			this.s.nextTurn = null
-			this.s.turning  = false
+		if (this.state.turning && this.passedTileCenter) {
+			this.state.nextDir  = this.state.nextTurn
+			this.state.nextTurn = null
+			this.state.turning  = false
 			this.setMoveDir(this.orient)
 		}
 	}
@@ -83,13 +83,16 @@ export class Mover extends Actor {
 	#stopAtWall() {
 		if (this.#stopMove()) {
 			this.pos = this.tilePos.mul(T)
-			this.s.nextDir = null
+			this.state.nextDir = null
 		}
 	}
 }
 
-/** @param {{s:TurnState,m:Mover}} param */
-function setSteerEvent({s,m}) {
+/**
+ @param {Mover} move
+ @param {TurnState} state
+*/
+function setSteerEvent(move, state) {
 	$win.on('keydown.PacSteer', e=> {
 		const dir = Dir.from(e,{wasd:true})
 		if (keyRepeat(e)
@@ -98,19 +101,19 @@ function setSteerEvent({s,m}) {
 		 || Ctrl.activeElem
 		) return
 
-		if (s.turning)
-			return void(s.nextTurn = dir)
+		if (state.turning)
+			return void(state.nextTurn = dir)
 
-		if (m.hasAdjWall(dir))
-			return void(s.nextDir = dir)
+		if (move.hasAdjWall(dir))
+			return void(state.nextDir = dir)
 
 		if (State.isStartMode && Vec2[dir].x)
-			return void(m.dir = dir)
+			return void(move.dir = dir)
 
-		s.nextDir = dir
-		if (m.passedTileCenter) {
-			m.orient = dir
-			m.setMoveDir(m.revDir)
+		state.nextDir = dir
+		if (move.passedTileCenter) {
+			move.orient = dir
+			move.setMoveDir(move.revDir)
 		}
 	})
 }
