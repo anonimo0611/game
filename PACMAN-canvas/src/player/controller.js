@@ -7,8 +7,8 @@ import {Maze}    from '../maze.js'
 import {Actor}   from '../actor.js';
 import {GhsMgr}  from '../ghosts/_system.js'
 
-const  Speed = PacSpeed
-const {SlowLevel,SlowRate}= Speed
+const EventNS = '.PacSteer'
+const Spd = PacSpeed, {SlowLevel,SlowRate}= Spd
 
 class TurnState {
 	turning  = false
@@ -23,7 +23,6 @@ export class Mover extends Actor {
 	constructor(col=0,row=0) {
 		super()
 		this.pos.set(col*T, row*T)
-		$win.off('keydown.PacSteer')
 		setSteerEvent(this, this.state)
 	}
 	get speed()   {return this.#speed ||= this.tileSpeed}
@@ -31,15 +30,15 @@ export class Mover extends Actor {
 	get canMove() {return this.state.turning || !this.collidesWithWall()}
 	get canTurn() {
 		return  this.state.nextDir != null
-			&& !this.passedTileCenter
-			&& !this.collidesWithWall(this.state.nextDir)
+		    && !this.passedTileCenter
+		    && !this.collidesWithWall(this.state.nextDir)
 	}
 	get tileSpeed() {
 		return (
-			 (Game.moveSpeed*(Game.level<SlowLevel ? 1:SlowRate))
-			*(Maze.hasDot(this.tileIdx)
-				? (GhsMgr.isFrightMode? Speed.EneEating:Speed.Eating)
-				: (GhsMgr.isFrightMode? Speed.Energized:Speed.Base))
+			(Game.moveSpeed*(Game.level<SlowLevel ? 1:SlowRate))*
+			(Maze.hasDot(this.tileIdx)
+				? (GhsMgr.isFrightMode? Spd.EneEating:Spd.Eating)
+				: (GhsMgr.isFrightMode? Spd.Energized:Spd.Base))
 		)
 	}
 	#stopMove() {
@@ -93,7 +92,7 @@ export class Mover extends Actor {
  @param {TurnState} state
 */
 function setSteerEvent(move, state) {
-	$win.on('keydown.PacSteer', e=> {
+	$win.offon(`keydown${EventNS}`, e=> {
 		const dir = Dir.from(e,{wasd:true})
 		if (keyRepeat(e)
 		 || dir == null
