@@ -279,12 +279,10 @@ const FrightMode = function() {
 			signalDirectionReversal()
 			this.Dur = TimeTable[Game.clampedLv-1]
 			this.Dur == 0 && !State.isAttract
-				? $(Ghosts).trigger('FleeTime')
-				: this.#set(true)
+				? $(Ghosts).trigger('FleeTime') : this.#set(true)
 		}
-		/** @param {boolean} isOn */
-		#set(isOn) {
-			_session = (isOn? this:null)
+		#set(isOn=true) {
+			_session = (isOn? this : null)
 			$(Ghosts)
 				.trigger('FrightMode', isOn)
 				.offon('Bitten', ()=> this.#caught++, isOn)
