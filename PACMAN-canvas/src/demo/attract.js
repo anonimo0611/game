@@ -7,7 +7,7 @@ import {drawDot}  from '../maze.js'
 import {Actor}    from '../actor.js'
 import {GhsMgr}   from '../ghosts/_system.js'
 import {Ghost}    from '../ghosts/ghost.js'
-import {PacMan}   from './pacman.js'
+import {PacMan}   from '../pacman.js'
 import {RunTimer} from './_run_timer.js'
 
 export class Attract {
@@ -55,7 +55,7 @@ export class Attract {
 	draw() {
 		Score.draw()
 		drawText(7, 5, null, 'CHARACTOR　/　NICKNAME')
-		const Small ={size:T*.68},
+		const Small = {size:T*.68},
 		et = Ticker.elapsedTime/100
 		et > 10 && this.drawGhostOnTable(GhsType.Akabei, 6)
 		et > 15 && drawText( 8,  7, Colors.Akabei, 'OIKAKE----')

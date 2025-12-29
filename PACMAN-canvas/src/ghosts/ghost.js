@@ -221,8 +221,7 @@ export class Ghost extends Actor {
 		radius  = this.isFrightened? T/2:T/3,
 		release = ()=> this.#setEscapeState(),
 	) {
-		if (!Maze.dotsLeft
-		 || !this.state.isWalking
+		if (!this.state.isWalking
 		 || !this.isFrightened && Ctrl.invincible
 		 || !circleCollision(this, pos, radius))
 			return false

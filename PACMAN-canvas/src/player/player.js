@@ -7,34 +7,29 @@ import {State}    from '../state.js'
 import {Score}    from '../score.js'
 import {Maze}     from '../maze.js'
 import {Actor}    from '../actor.js'
+import {PacMan}   from '../pacman.js'
 import {GhsMgr}   from '../ghosts/_system.js'
-import  Sprite    from '../sprites/pacman.js'
 import {Mover}    from './controller.js'
 import {TunEntry} from './tunnel.js'
 
-class PlayerPac {
+class PlayerPac extends PacMan {
 	#eatIdx = 0
 	#sinceLastEating = 0
 
-	/** @private */
-	mov        = new Mover(13.5, 24)
+	/** @private @type {Mover} */
+	mov        = new Mover(this)
 	#tunEntry  = new TunEntry
 	#spawnFade = new Actor.SpawnFade
 
-	/** @readonly */
-	sprite = new Sprite(Ctx)
-
-	get radius()    {return PacRadius}
-	get hidden()    {return Timer.frozen}
-	get closed()    {return State.isInGame == false}
-	get maxAlpha()  {return Ctrl.semiTransPac? .75:1}
-
-	get dir()       {return this.mov.dir}
-	get orient()    {return this.mov.orient}
-	get pos()       {return this.mov.pos}
-	get center()    {return this.mov.center}
-	get inTunSide() {return this.mov.inTunSide}
-	get tunEntry()  {return this.#tunEntry}
+	constructor() {
+		super()
+		this.pos.set(13.5*T, 24*T)
+	}
+	get closed()   {return State.isInGame == false}
+	get maxAlpha() {return Ctrl.semiTransPac? .75:1}
+	get speed()    {return this.mov.speed}
+	get stopped()  {return this.mov.stopped}
+	get tunEntry() {return this.#tunEntry}
 
 	get timeSinceLastEating() {
 		return (this.#sinceLastEating * Game.interval)
@@ -68,11 +63,11 @@ class PlayerPac {
 			return
 		this.#sinceLastEating++
 		this.#tunEntry.update()
-		this.sprite.update(this.mov)
+		this.sprite.update(this)
 		this.#update(this.mov.speed*2|0)
 	}
 	#update(steps=1) {
-		const {tileIdx,speed}= this.mov
+		const {tileIdx,speed}= this
 		for (const _ of range(steps)) {
 			this.#eatDot(tileIdx)
 			this.mov.update(speed/steps)
@@ -87,7 +82,7 @@ class PlayerPac {
 		Maze.hasPow(tileIdx)
 			? this.#eatPowerDot()
 			: this.#eatSmallDot()
-		Maze.clearBgDot(this.mov) == 0
+		Maze.clearBgDot(this) == 0
 			? State.toCleared()
 			: Player.trigger('AteDot')
 	}

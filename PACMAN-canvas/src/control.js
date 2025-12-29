@@ -69,7 +69,7 @@ export const Ctrl = new class {
 		})
 	}
 	#output() {
-		const spd = 'x'+Ctrl.speed.toFixed(1), lh = 0.84
+		const spd = 'x'+Ctrl.speed.toFixed(1), lh = 0.9
 		const cfg = {ctx:HUD, size:T*0.68, scaleX:0.7, style:'bold'}
 		Ctrl.#save()
 		HUD.save()

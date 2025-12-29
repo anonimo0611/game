@@ -47,10 +47,7 @@ function cherry(ctx=Ctx) {
 		ctx.fillCircle(2.5, 2.5, 3, '#F00')
 		ctx.save()
  		ctx.globalCompositeOperation = 'destination-out'
-		ctx.beginPath()
-	  	ctx.arc(2.5, 2.5, 3, 0, PI*2)
-		ctx.lineWidth = 0.5
-		ctx.stroke()
+		ctx.strokeCircle(2.5, 2.5, 3, undefined, 0.5)
 		ctx.restore()
 
 		// white shine
