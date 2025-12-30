@@ -25,7 +25,7 @@ export class Mover {
 		this.state = new TurnState
 		setSteerEvent(this.actor, this.state)
 	}
-	get speed()   {return this.#speed}
+	get speed()   {return this.#speed ||= this.#tileSpeed}
 	get stopped() {return this.#stopped}
 	get #canMove() {
 		return  this.state.turning
