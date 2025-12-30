@@ -1,6 +1,5 @@
 import './ghosts/ghost_sub.js'
 import {Cursor}    from '../_lib/mouse.js'
-import {Sound}     from '../_snd/sound.js'
 import {Menu}      from './ui.js'
 import {State}     from './state.js'
 import {Message}   from './message.js'
@@ -15,6 +14,7 @@ import {player}    from './player/player.js'
 import {PtsMgr}    from './points.js'
 import {Attract}   from './demo/attract.js'
 import {CoffBreak} from './demo/coffee_break.js'
+import {Sound}     from '../_snd/sound.js'
 
 export const Game = new class {
 	static {$(this.setup)}

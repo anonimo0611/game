@@ -48,13 +48,12 @@ export class Ghost extends Actor {
 	 @param {{type?:number, tile?:xyList, align?:-1|0|1}} cfg
 	*/
 	constructor(dir=L, {type=0,tile:[col,row]=[0,0],align=0}={}) {
-		super()
+		super(col*T,row*T)
 		this.on({
 			FrightMode:   this.#setFrightMode,
 			Reverse: ()=> this.#revSignal = true,
 			FleeTime:()=> this.#fleeTime  = 400/Game.interval,
 		})
-		this.pos.set(col*T,row*T)
 		this.dir   = dir
 		this.type  = type
 		this.init  = freeze({align,x:col*T})

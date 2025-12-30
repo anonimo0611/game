@@ -4,7 +4,7 @@ import {State}   from '../state.js'
 import {Ctrl}    from '../control.js'
 import {Fruit}   from '../fruit.js'
 import {Ghost}   from '../ghosts/ghost.js'
-import {PacMan}  from '../pacman.js'
+import {PacMan}  from '../actor.js'
 import Sprite    from '../sprites/ghost_cb.js'
 
 export class CoffBreak {

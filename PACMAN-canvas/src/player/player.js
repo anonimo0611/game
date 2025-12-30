@@ -7,7 +7,7 @@ import {State}    from '../state.js'
 import {Score}    from '../score.js'
 import {Maze}     from '../maze.js'
 import {Actor}    from '../actor.js'
-import {PacMan}   from '../pacman.js'
+import {PacMan}   from '../actor.js'
 import {GhsMgr}   from '../ghosts/_system.js'
 import {Mover}    from './controller.js'
 import {TunEntry} from './tunnel.js'
@@ -21,10 +21,7 @@ class PlayerPac extends PacMan {
 	#tunEntry  = new TunEntry
 	#spawnFade = new Actor.SpawnFade
 
-	constructor() {
-		super()
-		this.pos.set(13.5*T, 24*T)
-	}
+	constructor()  {super(13.5*T, 24*T)}
 	get closed()   {return State.isInGame == false}
 	get maxAlpha() {return Ctrl.semiTransPac? .75:1}
 	get speed()    {return this.mov.speed}

@@ -3,8 +3,8 @@ import {Dir}    from '../_lib/direction.js'
 import {State}  from './state.js'
 import {Maze}   from './maze.js'
 import {player} from './player/player.js'
-import {PacMan} from './pacman.js'
 import {GhsMgr} from './ghosts/_system.js'
+import Sprite   from './sprites/pacman.js'
 
 class SpawnFade {
 	#fadeIn = /**@type {?FadeIn}*/(new FadeIn)
@@ -18,9 +18,11 @@ class SpawnFade {
 		State.isInGame &&(this.#fadeIn &&= null)
 	}
 }
+
 export class Actor extends Common {
-	/** @readonly */
-	static SpawnFade = SpawnFade
+	static get SpawnFade() {
+		return SpawnFade
+	}
 	static update() {
 		player.update()
 		GhsMgr.update()
@@ -32,8 +34,8 @@ export class Actor extends Common {
 		GhsMgr.drawFront()
 	}
 	/** @param {Vec2} pos */
-	static drawCenterDot({x,y}, color='red') {
-		Ctx.fillCircle(x,y, 3, color)
+	static drawCenterDot({x,y}, r=3, color='red') {
+		Ctx.fillCircle(x,y, r, color)
 	}
 
 	pos = Vec2.Zero
@@ -41,7 +43,7 @@ export class Actor extends Common {
 	#movDir = /**@type {Direction}*/(L)
 
 	/** @protected */
-	constructor()   {super()}
+	constructor(x=0,y=0) {super();this.pos.set(x,y)}
 	get speed()     {return 0}
 	get radius()    {return T}
 	get size()      {return this.radius*2}
@@ -116,4 +118,12 @@ export class Actor extends Common {
 	justArrivedAtTile(spd=this.speed) {
 		return !this.passedTileCenter && this.tilePixel <= spd
 	}
+}
+export class PacMan extends Actor {
+	/** @readonly */
+	sprite = new Sprite(Ctx)
+	constructor(x=0,y=0) {super(x,y)}
+	get radius() {return PacRadius}
+	get hidden() {return Timer.frozen}
+	draw() {this.sprite.draw(this)}
 }

@@ -7,7 +7,7 @@ import {drawDot}  from '../maze.js'
 import {Actor}    from '../actor.js'
 import {GhsMgr}   from '../ghosts/_system.js'
 import {Ghost}    from '../ghosts/ghost.js'
-import {PacMan}   from '../pacman.js'
+import {PacMan}   from '../actor.js'
 import {RunTimer} from './_run_timer.js'
 
 export class Attract {

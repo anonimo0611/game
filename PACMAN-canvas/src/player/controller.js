@@ -16,11 +16,13 @@ class TurnState {
 	nextTurn = /**@type {?Direction}*/(null)
 }
 export class Mover {
+	/** @private */actor
+	/** @private */state
 	#speed   = 0
 	#stopped = true
 	constructor(/**@type {Actor}*/actor) {
-		/**@private*/this.actor = actor
-		/**@private*/this.state = new TurnState
+		this.actor = actor
+		this.state = new TurnState
 		setSteerEvent(this.actor, this.state)
 	}
 	get speed()   {return this.#speed}
