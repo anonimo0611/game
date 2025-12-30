@@ -16,26 +16,25 @@ class TurnState {
 	nextTurn = /**@type {?Direction}*/(null)
 }
 export class Mover {
-	/** @private */
-	state    = new TurnState
 	#speed   = 0
 	#stopped = true
 	constructor(/**@type {Actor}*/actor) {
-		this.actor = actor
+		/**@private*/this.actor = actor
+		/**@private*/this.state = new TurnState
 		setSteerEvent(this.actor, this.state)
 	}
 	get speed()   {return this.#speed}
 	get stopped() {return this.#stopped}
-	get canMove() {
+	get #canMove() {
 		return  this.state.turning
 		    || !this.actor.collidesWithWall()
 	}
-	get canTurn() {
+	get #canTurn() {
 		return  this.state.nextDir != null
 		    && !this.actor.passedTileCenter
 		    && !this.actor.collidesWithWall(this.state.nextDir)
 	}
-	get tileSpeed() {
+	get #tileSpeed() {
 		return (
 			 (Game.moveSpeed*(Game.level<SlowLevel ? 1:SlowRate))
 			*(Maze.hasDot(this.actor.tileIdx)
@@ -44,7 +43,7 @@ export class Mover {
 		)
 	}
 	#stopMove() {
-		return (this.#stopped = !this.canMove)
+		return (this.#stopped = !this.#canMove)
 	}
 	/** @param {number} spd */
 	update(spd) {
@@ -58,12 +57,12 @@ export class Mover {
 	/** @param {number} spd */
 	#setMoveSpeed(spd) {
 		if (this.actor.justArrivedAtTile(spd))
-			this.#speed = this.tileSpeed
+			this.#speed = this.#tileSpeed
 	}
 	/** @param {number} spd */
 	#turnCorner(spd) {
 		const dir = this.state.nextDir
-		if (this.canTurn && dir) {
+		if (this.#canTurn && dir) {
 			this.state.turning ||= true
 			this.actor.orient = dir
 			this.actor.setNextPos(spd, dir)

@@ -3,6 +3,7 @@ import {Dir}    from '../_lib/direction.js'
 import {State}  from './state.js'
 import {Maze}   from './maze.js'
 import {player} from './player/player.js'
+import {PacMan} from './pacman.js'
 import {GhsMgr} from './ghosts/_system.js'
 
 class SpawnFade {
@@ -24,7 +25,7 @@ export class Actor extends Common {
 		player.update()
 		GhsMgr.update()
 	}
-	/** @param {{draw():void}} pacman */
+	/** @param {PacMan} pacman */
 	static draw(pacman) {
 		GhsMgr.drawBehind()
 		pacman.draw()
