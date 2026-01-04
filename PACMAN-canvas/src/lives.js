@@ -4,18 +4,16 @@ import {inputs} from './inputs.js'
 import Sprite   from './sprites/pacman.js'
 
 export const Lives = function() {
-	let _left = 0
-	function onChange() {
-		switch(State.current) {
-		case 'Title':    return reset()
-		case 'Intro':    return add(+1)
-		case 'Ready':    return add(State.wasIntro? -1:0)
-		case 'Restarted':return add(-1)
-		}
-	}
-	function draw(left=0) {
-		const sprite = new Sprite(HUD, 1)
-		const radius = T*.78, size = T*2
+	let   _left  = 0
+	const sprite = new Sprite(HUD, 1)
+	const radius = T*.78, size = T*2
+	State.on({
+		Title:    ()=> reset(),
+		Intro:    ()=> add(+1),
+		Ready:    ()=> add(State.wasIntro? -1:0),
+		Restarted:()=> add(-1),
+	})
+	function draw(left=3) {
 		HUD.save()
 		HUD.translate(size, BH-size)
 		HUD.clearRect(0,0, size*(+inputs.lvsRng.max), size)
@@ -25,9 +23,7 @@ export const Lives = function() {
 	}
 	function reset()  {draw(_left = Ctrl.livesMax-1)}
 	function add(n=0) {draw(_left += n)}
-
-	$(inputs.lvsRng).on({input:onChange})
-	State.on({_Intro_Ready_Restarted:onChange})
+	$(inputs.lvsRng).on({input:reset})
 	return {
 		append()   {add(1)},
 		get left() {return _left},

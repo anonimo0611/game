@@ -5,8 +5,7 @@ import _State from '../_lib/state.js'
   'Cleared'|'Flashing'|'CoffBreak'|'PacCaught'|'PacDying'|'GameOver'|'Quit'
 } StateType
 @typedef {
-  '_Ready'|'_NewLevel'|'_Restarted_NewLevel'|
-  '_Intro_Ready_Restarted'|'_PacDying_Cleared'
+  '_Ready'|'_NewLevel'|'_Restarted_NewLevel'|'_PacDying_Cleared'
 } MultiState
 */
 
