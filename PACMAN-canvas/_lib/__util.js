@@ -19,16 +19,8 @@ const dRoot = document.getElementsByTagName('html')[0]
 */const isCombiKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
 /**
- @param {KeyboardEvent|JQuery.KeyboardEventBase} e
-*/const isEnterKey = e=> /^(\x20|Enter)$/.test(e.key)
-
-/**
  @param {KeyboardEvent|JQuery.KeyboardEventBase|JQuery.TriggeredEvent} e
-*/const nonEnterKey = e=>
-	e instanceof KeyboardEvent
-		? !isEnterKey(e)
-		: e.originalEvent instanceof KeyboardEvent
-			&& !isEnterKey(e.originalEvent)
+*/const isEnterKey = e=> /^(\x20|Enter)$/.test(e?.key ?? '')
 
 /**
  @template T
