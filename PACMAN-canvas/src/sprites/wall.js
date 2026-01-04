@@ -1,8 +1,8 @@
-const W  = Cols
 const HT = T/2
-const OO = 2 // Outer Offset
-const LO = 4 // Line Offset
 const LW = 3 // Line Width
+const LO = 4 // Line Offset
+const OO = 2 // Outer Offset
+const CornerToIndex = trMap('12345678abcdABCD',cycleRange(4))
 
 import {Maze}  from '../maze.js'
 import {State} from '../state.js'
@@ -68,28 +68,27 @@ export const Wall = new class {
 	 @param {number} i Tile index
 	*/
 	#drawTile(c, i) {
-		const [tx,ty]= [i%W,i/W|0], [x,y]= [tx*T,ty*T], n = +c
-		const ci = n? n-(n>4 ? 5:1):'ABCD'.indexOf(c.toUpperCase())
-		const lo = (c == '#' && tx<W/2) || /[VH=]/.test(c) ? -LO:LO
+		const [tx,ty]= [i%Cols,i/Cols|0], [x,y]= [tx*T,ty*T]
+		const lo = (c == '#' && tx<Cols/2) || /[VH=]/.test(c) ? -LO:LO
 
+		;[/[A-D]/,/[A-D]/,/[a-d1-4]/,/[a-d]/,/[5-8]/].forEach((r,i)=> {
+			const ci = CornerToIndex.get(c) ?? -1
+			ci>=0 && r.test(c) && Wall.#drawCorner({type:i,ci,x,y})
+		})
 		switch(c.replace('#','V').toUpperCase()) {
 		case 'V':Bg.strokeLine(x+HT+lo, y, x+HT+lo, y+T);break
 		case 'H':Bg.strokeLine(x, y+HT+lo, x+T, y+HT+lo);break
 		}
-
-		[/[A-D]/,/[A-D]/,/[a-d1-4]/,/[a-d]/,/[5-8]/].forEach(
-			(r,i)=> r.test(c) && Wall.#drawCorner({type:i,ci,x,y}))
-
 		Bg.save()
-		if (c == '#' || (!tx || tx == W-1) && n) {
-			Bg.translate(x+(tx<W/2 ? OO:T-OO), y)
+		if (c == '#' || (!tx || tx == Cols-1) && +c) {
+			Bg.translate(x+(tx<Cols/2 ? OO:T-OO), y)
 			Bg.strokeLine(0,0,0,T)
 		}
-		if (/[_=]/.test(c) || Maze.isTopOrBottom(ty) && n) {
+		if (/[_=]/.test(c) || Maze.isTopOrBottom(ty) && +c) {
 			const oY = /[=56]/.test(c) ? OO:T-OO
 			Bg.translate(x, y)
 			Bg.strokeLine(0, oY, T, oY)
-			!n && Bg.strokeLine(0, HT+lo, T, HT+lo)
+			isNaN(+c) && Bg.strokeLine(0, HT+lo, T, HT+lo)
 		}
 		Bg.restore()
 	}

@@ -56,15 +56,15 @@ function cache(pts, size=TileSize*2) {
 	ctx.lineJoin  = ctx.lineCap = 'round'
 	Data.DigitOffsetXFrom[pts]?.forEach((x,i)=> {
 		const y = Data.DigitOffsetY
-		const d = +pts.toString()[i]
-		pts == 1600 && i == 0 ?
-		ctx.newLinePath([x,y],[x,y+6]): //narrow 1
-		function() {
+		 pts == 1600 && i == 0
+		?ctx.newLinePath([x,y],[x,y+6]) //narrow 1
+		:function() {
+			const d = +pts.toString()[i]
 			ctx.save()
 			ctx.translate(x,y)
-			ctx.newLinePath(.../**@type {xyList[]}*/
-				(chunk(Data.PathFrom0To8[d],2)))
-			;(d == 0 || d == 8) && ctx.closePath()
+			ctx.beginPath()
+			ctx.setVertices(Data.PathFrom0To8[d])
+			if ([0,8].includes(d)) ctx.closePath()
 			ctx.restore()
 		}()
 		ctx.stroke()
