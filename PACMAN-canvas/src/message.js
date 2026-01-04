@@ -13,10 +13,12 @@ export const Message = new class {
 	) {
 		ctx.save()
 		ctx.scale(scaleX, 1)
-		ctx.font = `${style} ${size}px ${face}`
+     	ctx.textAlign = 'left'
+        ctx.textBaseline = 'ideographic'
+		ctx.font = `${style} ${size}px "${face}"`
 		ctx.fillStyle = color ?? 'white'
 		String(text).split('\n').forEach((txt,i)=>
-			ctx.fillText(txt, col*T+2, row*T-2 + size*i))
+			ctx.fillText(txt, col*T+2, row*T+2 + size*i))
 		ctx.restore()
 	}
 	#drawPausedText() {
