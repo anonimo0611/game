@@ -4,15 +4,11 @@ const {abs,ceil,floor,max,min,PI,random,round,sqrt,trunc:int}= Math
 const dRoot = document.getElementsByTagName('html')[0]
 
 /**
- @param {string} elementId
-*/const byId = elementId=> document.getElementById(elementId)
-
-/**
  @param {WheelEvent|JQuery.TriggeredEvent} e
 */const wheelDeltaY = e=>
-	/**@type {WheelEvent}*/
-	(e instanceof WheelEvent? e : e.originalEvent)?.deltaY ?? 0
-
+	e instanceof WheelEvent? e.deltaY
+		: e.originalEvent instanceof WheelEvent
+			? e.originalEvent.deltaY : 0
 /**
  @param {KeyboardEvent|JQuery.KeyboardEventBase} e
 */const keyRepeat = e=>
@@ -27,18 +23,25 @@ const dRoot = document.getElementsByTagName('html')[0]
 */const isEnterKey = e=> /^(\x20|Enter)$/.test(e.key)
 
 /**
- @param {KeyboardEvent|JQuery.KeyboardEventBase|JQuery.TriggeredEvent} e */
-const nonEnterKey = e=>
-	(e instanceof KeyboardEvent)
+ @param {KeyboardEvent|JQuery.KeyboardEventBase|JQuery.TriggeredEvent} e
+*/const nonEnterKey = e=>
+	e instanceof KeyboardEvent
 		? !isEnterKey(e)
 		: e.originalEvent instanceof KeyboardEvent
 			&& !isEnterKey(e.originalEvent)
 
 /**
+ @template T
+ @param {readonly T[]} array
+*/const reverse = function*(array) {
+	for (let i=array.length-1; i>=0; i--) yield array[i]
+}
+
+/**
  @param {number} from
  @param {number} [to]
  @param {number} [step]
-*/const range = function*(from, to, step=1) {
+*/const range = function*(from,to,step=1) {
 	if (step === 0) throw new RangeError('The 3rd argument must not be zero')
 	if (to === undefined) [to,from] = [from,0]
 	if (step > 0) for (let i=from; i<to; i+=step) yield i
@@ -47,9 +50,15 @@ const nonEnterKey = e=>
 
 /**
  @template T
- @param {readonly T[]} array
-*/const reverse = function*(array) {
-	for (let i=array.length-1; i>=0; i--) yield array[i]
+ @param {...T} args
+*/const cycle = function*(...args) {while(1) yield* args}
+
+/**
+ @param {number} from
+ @param {number} [to]
+ @param {number} [step]
+*/const cycleRange = function*(from,to,step) {
+	while(1) yield* range(from,to,step)
 }
 
 /**
@@ -65,6 +74,10 @@ const match = (key, patterns, separator='|')=> {
 			return patterns[key]()
     return patterns['_']?.() ?? undefined
 }
+
+/**
+ @param {string} elementId
+*/const byId = elementId=> document.getElementById(elementId)
 
 /**
  @param  {string} selector
@@ -121,17 +134,20 @@ const match = (key, patterns, separator='|')=> {
  @template T
  @param {readonly T[]} array
  @returns {T}
-*/
-const randChoice = array=> array[randInt(0, array.length-1)]
+*/const randChoice = array=> array[randInt(0, array.length-1)]
 
 /**
  @template T
- @param {readonly T[]} a
- @param {number} size
- @returns {T[][]}
-*/const chunk = (a, size)=>
-    Array.from({length:ceil(a.length/size)},
-        (_,i)=> a.slice(i*size, i*size + size))
+ @param {string} str
+ @param {Iterable<T>} iterable
+*/const trMap = (str,iterable)=> {
+    const map = /**@type {Map<String,T>}*/(new Map)
+    const itr = iterable[Symbol.iterator]()
+    for(const char of str) {
+        const {value,done}= itr.next()
+        if (done) break; map.set(char,value)
+    } return map
+}
 
 /**
  @param {Readonly<Position>} v1
@@ -152,7 +168,6 @@ const randChoice = array=> array[randInt(0, array.length-1)]
 //---- jQuery utilities ------
 
 const $win = $(window)
-const $doc = $(document)
 
 /**
  @param {JQWindowHandler} fn
@@ -172,7 +187,7 @@ const $doc = $(document)
 */const $onNS = (ns,cfg)=> {
 	entries(cfg).forEach(([ev,fn])=> {
 		ev = ev.trim().replace(/[_\s]+|$/g,`${ns}\x20`)
-		$win.offon(ev,fn)
+		$win.off(ev).on(ev,fn)
 	})
 	return $win
 }

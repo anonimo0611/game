@@ -1,23 +1,23 @@
 export const Cursor = new class {
-	static {
+	constructor() {
 		let   timerId   = 0
 		const LastPos   = Vec2.Zero
 		const MoveRange = 2
 		const HideDelay = 2000
-		document.body.addEventListener('mousemove', e=> {
-			Cursor.#setPos(e)
+		addEventListener('mousemove', e=> {
+			this.#setPos(e)
 			clearTimeout(timerId)
-			timerId = setTimeout(Cursor.hide, HideDelay)
-			Vec2.sqrMag(Cursor.pos,LastPos) > MoveRange**2 && Cursor.default()
-			LastPos.set(Cursor.pos)
-		})
+			timerId = setTimeout(()=> this.hide(), HideDelay)
+			Vec2.sqrMag(this.pos,LastPos) > MoveRange**2 && this.default()
+			LastPos.set(this.pos)
+		}, {passive:true})
 	}
 	#pos = Vec2.Zero
 	#setPos   = (/**@type {MouseEvent}*/e)=> this.#pos.set(e.pageX,e.pageY)
 	#setState = (/**@type {string}*/state)=> {dRoot.dataset.cursor = state}
-	hide()    {Cursor.#setState('hidden')}
-	default() {Cursor.#setState('default')}
-	get pos() {return Cursor.#pos.clone}
+	hide()    {this.#setState('hidden')}
+	default() {this.#setState('default')}
+	get pos() {return this.#pos.clone}
 }
 
 /**
@@ -49,4 +49,7 @@ function setupCtrl(ctrl) {
 	$(label || ctrl).on({wheel:onWheel})
 	$(ctrl).on('input',onInput).trigger('input')
 }
-$load(()=> $('input[type=range]').get().forEach(setupCtrl))
+$load(()=> {
+	/**@type {HTMLInputElement[]}*/
+	($('input[type=range]').get()).forEach(setupCtrl)
+})

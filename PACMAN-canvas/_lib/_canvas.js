@@ -26,9 +26,7 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		return this
 	}
 
-	/**
-	 @param {Cvs2DStyle} [style]
-	*/
+	/** @param {Cvs2DStyle} [style] */
 	clear(style) {
 		this.fillRect(0,0, this.width, this.height, style ?? null)
 		return this
@@ -100,18 +98,22 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		this.stroke()
 	}
 
-	/**
-	 @param {(readonly [x:number, y:number])[]} c
-	*/
+	/** @param {(readonly [x:number, y:number])[]} c */
 	newLinePath(...c) {
 		this.beginPath()
 		this.setLinePath(...c)
 		return this
 	}
 
-	/**
-	 @param {(readonly [x:number, y:number])[]} c
-	*/
+	/** @param {readonly number[]} v */
+	setVertices(v) {
+		for (const i of range(0, v.length, 2))
+			!i ? this.moveTo(v[i], v[i+1])
+			   : this.lineTo(v[i], v[i+1])
+		return this
+	}
+
+	/** @param {(readonly [x:number, y:number])[]} c */
 	setLinePath(...c) {
 		c.forEach(([x,y], i)=> {
 			!i ? this.moveTo(x,y)
@@ -120,9 +122,7 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		return this
 	}
 
-	/**
-	 @param {(readonly [x:number, y:number])[]} c
-	*/
+	/** @param {(readonly [x:number, y:number])[]} c */
 	addLinePath(...c) {
 		c.forEach(([x,y])=> this.lineTo(x,y))
 		return this
@@ -163,9 +163,7 @@ class FadeIn {
 		this.#alpha = clamp(this.#alpha+max/rate, 0, max)
 		return this.working
 	}
-	/**
-	 @param {ExtendedContext2D} ctx
-	*/
+	/** @param {ExtendedContext2D} ctx */
 	setAlpha(ctx) {
 		ctx.globalAlpha = this.#alpha
 		return this.working
@@ -182,9 +180,7 @@ class FadeOut {
 		this.#duration = ms
 		this.#delay = delay
 	}
-	/**
-	 @returns {boolean} Determine if fade-out is in progress
-	*/
+	/** @returns {boolean} Determine if fade-out is in progress */
 	update() {
 		if (++this.#count * Ticker.Interval < this.#delay)
 			return false
@@ -192,9 +188,7 @@ class FadeOut {
 		this.#alpha = clamp(this.#alpha-1/rate, 0, 1)
 		return this.working
 	}
-	/**
-	 @param {ExtendedContext2D} ctx
-	*/
+	/** @param {ExtendedContext2D} ctx */
 	setAlpha(ctx) {
 		ctx.globalAlpha = this.#alpha
 		return this.working
@@ -213,5 +207,5 @@ const canvas2D = (id, width, height=width)=> {
 	const ctx  = new ExtendedContext2D(cvs).resize(width,height)
 	const {w,h}= ctx.size
 	const vals = /**@type {readonly[cvs,ctx,w:number,h:number]}*/([cvs,ctx,w,h])
-	return freeze({cvs,ctx,w,h,vals})
+	return /**@type {const}*/({cvs,ctx,w,h,vals})
 }
