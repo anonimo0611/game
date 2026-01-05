@@ -58,9 +58,11 @@ PacSpeed  = freeze(new class {
 	Energized = this.Base * 1.10
 	EneEating = this.Base * 0.95 // Energized+Eating
 }),
-GhsScale = 1.1,
-GhsType  = /**@type {const}*/({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4}),
-GhsNames = /**@type {const}*/(['Akabei','Pinky','Aosuke','Guzuta']),
+GhsScale =  1.1,
+GhsType   = /**@type {const}*/({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4}),
+GhsNames  = /**@type {const}*/(['Akabei','Pinky','Aosuke','Guzuta']),
+GhsColors = GhsNames.map(name=> Colors[name]),
+
 GhsSpeed = freeze(new class {
 	Base     = BaseSpeed * 1.07
 	Idle     = this.Base * 0.50
