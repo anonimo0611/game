@@ -25,8 +25,7 @@ export class Attract {
 		Attract.#attract?.draw()
 		return State.isAttract
 	}
-
-	powIdx = 1
+	powShow = 1
 	ghosts = /**@type {Ghost[]}*/([])
 	pacman = new PacMan
 	subAct = new EnergizerAct(this.pacman, this.ghosts)
@@ -49,46 +48,44 @@ export class Attract {
 	update() {
 		if (this.subActStarted) {
 			this.subAct.update()
-			this.powIdx ^= +!(Ticker.count % PowDotInterval)
+			this.powShow ^= +!(Ticker.count % PowDotInterval)
 		}
 	}
+	GhsEntries = /**@type {const}*/([
+		// time, col1, col2, row, txt1, txt2
+		[10, 8, 18,  6, 'OIKAKE----', '"AKABEI"'],
+		[30, 8, 19,  9, 'MACHIBUSE--','"PINKY"' ],
+		[50, 8, 18, 12, 'KIMAGURE--', '"AOSUKE"'],
+		[70, 8, 18, 15, 'OTOBOKE---', '"GUZUTA"'],
+	])
 	draw() {
 		Score.draw()
 		drawText(7, 5, null, 'CHARACTOR　/　NICKNAME')
-		const Small = {size:T*.68},
-		et = Ticker.elapsedTime/100
-		et > 10 && this.drawGhostOnTable(GhsType.Akabei, 6)
-		et > 15 && drawText( 8,  7, Colors.Akabei, 'OIKAKE----')
-		et > 20 && drawText(18,  7, Colors.Akabei, '"AKABEI"')
-
-		et > 30 && this.drawGhostOnTable(GhsType.Pinky,  9)
-		et > 35 && drawText( 8, 10, Colors.Pinky, 'MACHIBUSE--')
-		et > 40 && drawText(19, 10, Colors.Pinky, '"PINKY"')
-
-		et > 50 && this.drawGhostOnTable(GhsType.Aosuke, 12)
-		et > 55 && drawText( 8, 13, Colors.Aosuke, 'KIMAGURE--')
-		et > 60 && drawText(18, 13, Colors.Aosuke, '"AOSUKE"')
-
-		et > 70 && this.drawGhostOnTable(GhsType.Guzuta, 15)
-		et > 75 && drawText( 8, 16, Colors.Guzuta, 'OTOBOKE---')
-		et > 80 && drawText(18, 16, Colors.Guzuta, '"GUZUTA"')
+		const et = (Ticker.elapsedTime/100), Small ={size:T*.68}
+		this.GhsEntries.forEach(([t,col1,col2,row,txt1,txt2],i)=> {
+			et > t    && this.drawGhostOnTable(i,row)
+			et > t+ 5 && drawText(col1, row+1, GhsColors[i], txt1)
+			et > t+10 && drawText(col2, row+1, GhsColors[i], txt2)
+		})
 		if (et > 85) {
-			drawDot(Ctx, 10, 24)
-			drawDot(Ctx, 10, 26, true, !!this.powIdx)
-			drawText(12.0, 25, null, DotPts)
-			drawText(12.0, 27, null, PowPts)
-			drawText(14.3, 25, null,'PTS',Small)
-			drawText(14.3, 27, null,'PTS',Small)
+			/**@type {const}*/([
+			 [25, DotPts, true],
+			 [27, PowPts, !!this.powShow],
+			]).forEach(([row,pts,showDot],i)=> {
+				drawDot(Ctx, 10, row-1, !!i, showDot)
+				drawText(12.0, row, null, pts)
+				drawText(14.3, row, null,'PTS', Small)
+			})
 		}
 		if (et > 90) {
 			const {extendScore}= Ctrl
 			if (this.pacman.dir == L) {
-				drawDot(Ctx, 4, 19, true, !!this.powIdx)
+				drawDot(Ctx, 4, 19, true, !!this.powShow)
 			}
 			if (extendScore > 0) {
 				const text = `BONUS　PACMAN　FOR　${extendScore}`
 				drawText( 2.0, 30, Colors.Orange, text)
-				drawText(24.3, 30, Colors.Orange,'PTS',Small)
+				drawText(24.3, 30, Colors.Orange,'PTS', Small)
 			}
 		}
 		if (this.subActStarted)
