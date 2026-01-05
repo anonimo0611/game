@@ -5,9 +5,6 @@ import {player} from '../player/player.js'
 import {GhsMgr} from '../ghosts/_system.js'
 import {Ghost}  from './ghost.js'
 
-/** @type {readonly Cvs2DStyle[]} */
-const ghostColors = GhsNames.map(n=> Colors[n])
-
 export default new class {
 	/** @param {readonly Ghost[]} ghosts */
 	draw(ghosts) {
@@ -49,7 +46,7 @@ export default new class {
 		const {x,y}= this.#getTargetPos(g)
 		Ctx.save()
 		Ctx.setAlpha(0.8)
-		Ctx.fillCircle  (x,y, T*0.4, ghostColors[g.type])
+		Ctx.fillCircle  (x,y, T*0.4, GhsColors[g.type])
 		Ctx.strokeCircle(x,y, T*0.4, 'white', 4)
 		Ctx.restore()
 	}
@@ -61,7 +58,7 @@ export default new class {
 		Ctx.save()
 		Ctx.setAlpha(0.8)
 		Ctx.lineWidth   = 6
-		Ctx.strokeStyle = ghostColors[g.type]
+		Ctx.strokeStyle = GhsColors[g.type]
 		if (g.type != GhsType.Pinky || !player.inTunSide) {
 			dir != U
 				? Ctx.newLinePath([x,y], fwdXY)
@@ -72,7 +69,7 @@ export default new class {
 			const tgtXY = g.chasePos.vals
 			const akaXY = GhsMgr.akaCenterPos.vals
 			Ctx.newLinePath(akaXY, ofsXY, tgtXY).stroke()
-			Ctx.fillCircle(...ofsXY, 8, ghostColors[g.type])
+			Ctx.fillCircle(...ofsXY, 8, GhsColors[g.type])
 		}
 		Ctx.restore()
 	}
@@ -81,7 +78,7 @@ export default new class {
 		Ctx.save()
 		Ctx.translate(...player.center.vals)
 		Ctx.setAlpha(g.sqrMagToPacman < (T*8) ** 2 ? 0.4 : 0.8)
-		Ctx.strokeCircle(0,0, T*8, ghostColors[g.type], 6)
+		Ctx.strokeCircle(0,0, T*8, GhsColors[g.type], 6)
 		Ctx.restore()
 	}
 }
