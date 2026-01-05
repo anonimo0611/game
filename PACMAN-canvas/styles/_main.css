@@ -45,14 +45,13 @@ h1 {
 }
 #level {
 	font: small-caps .8rem/1 Atari;
+	transform-origin: 0 center;
+	translate: .5em 12.7rem;
 	scale: 0.82 1;
-	translate: .1em 12.6rem;
 }
 
 #container {
-	--padding-top: .5rem;
 	background: #000;
-	padding-top: var(--padding-top);
 	position: relative;
 	transform-origin: center;
 	visibility: hidden;
@@ -60,6 +59,7 @@ h1 {
 	transition: visibility .3s, opacity .3s;
 	#board {
 		pointer-events: none;
+		margin-top: 0.5em;
 		width:  calc(1rem * var(--grid-cols));
 		height: calc(1rem * var(--grid-rows));
 		canvas {
@@ -91,7 +91,7 @@ h1 {
 		font: .8rem/1 Atari, sans-serif;
 		padding: .4rem 1.5rem .2rem;
 		position: absolute;
-		top: 21.85rem;
+		top: 21.75rem;
 		left: 50%;
 		translate: -50% 0;
 	}
@@ -101,7 +101,7 @@ body:not([data-state=Title]) #titleScr {
 	visibility: hidden;
 }
 body:is([data-state=Attract],[data-state=CoffBreak]) {
-	:is(header,canvas.sub) {visibility: hidden}
+	:is(header,canvas:not(#board_main)) {visibility: hidden}
 }
 
 #debug {
