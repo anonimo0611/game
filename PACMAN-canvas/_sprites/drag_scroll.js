@@ -23,7 +23,7 @@
 	addEventListener('mousedown', e=>
 	{
 		if (isNotDrag(e) || e.buttons != 1) return
-		target = dRoot
+		target = document.documentElement
 		StateMap.set(target, new State(e))
 		e.stopPropagation()
 	})
