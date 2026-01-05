@@ -177,7 +177,8 @@ const $win = $(window)
  @param {{[event:string]:(e:JQuery.TriggeredEvent)=> unknown}} cfg
 */const $onNS = (ns,cfg)=> {
 	entries(cfg).forEach(([ev,fn])=> {
-		ev = ev.trim().replace(/[_\s]+|$/g,`${ns}\x20`)
+		ns = ns[0] != '.' ? `.${ns}` : ns
+		ev = ev.trim().replace(/[_\s]+/g,`${ns}\x20`) + ns
 		$win.off(ev).on(ev,fn)
 	})
 	return $win
