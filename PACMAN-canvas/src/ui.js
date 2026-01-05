@@ -17,7 +17,7 @@ MenuIds = /**@type {(keyof Menu)[]}*/(keys(Menu));
 		$('.panel').toggle()
 		$(btn).toggleClass('opened')
 	})
-	$(dBody).on('keydown pointerdown', e=> {
+	$('body').on('keydown pointerdown', e=> {
 		if (!btn.offsetParent
 		|| e.target == btn
 		|| qS(btn.value)?.contains(e.target))

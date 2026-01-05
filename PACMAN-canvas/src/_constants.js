@@ -1,13 +1,10 @@
 const
-Rows      = 34,
-Cols      = 28,
 TileSize  = 31,
+Cols      = 28,
+Rows      = 34,
 DotPts    = 10,
 PowPts    = 50,
 BaseSpeed = TileSize/4.5,
-
-/** The document body */
-dBody = document.body,
 
 /** Shorthand of TileSize */
 T = TileSize,
@@ -51,7 +48,6 @@ Palette = /**@type {const}*/({
 	FrightFace: ['#F9F','#F00'],
 	FrightBody: ['#36A','#FFF'],
 }),
-
 PacScale  = 0.9,
 PacRadius = PacScale*T,
 PacSpeed  = freeze(new class {
