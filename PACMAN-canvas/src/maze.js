@@ -67,12 +67,17 @@ class Tunnel {
 		} return null
 	}
 }
-class PowDot {
+export class Blinker {
 	#show = 1
+	get show() {return this.#show != 0}
+	update() {
+		this.#show ^= +(Ticker.count % 15 == 0)
+	}
+}
+class PowDotsRenderer extends Blinker {
 	draw() {
-		this.#show ^= +!(Ticker.count % PowDotInterval)
 		for (const {x,y} of PowMap.values()) {
-			if (!State.isInGame || Ticker.paused || this.#show)
+			if (!State.isInGame || Ticker.paused || this.show)
 				Maze.drawDot(Ctx, x,y, true)
 		}
 	}
@@ -103,13 +108,13 @@ export const Maze = freeze(new class {
 			? drawDot(Bg, t.x, t.y)
 			: PowMap.set(i, t)
 	}
-	Top    = 1
-	Bottom = Rows-3
-	Map    = MapArr
-	MaxDot = MapArr.filter(c=> DotChipSet.has(c)).length
-	House  = freeze(new House)
-	PowDot = freeze(new PowDot)
-	Tunnel = freeze(new Tunnel)
+	Top     = 1
+	Bottom  = Rows-3
+	Map     = MapArr
+	MaxDot  = MapArr.filter(c=> DotChipSet.has(c)).length
+	House   = freeze(new House)
+	Tunnel  = freeze(new Tunnel)
+	PowDots = freeze(new PowDotsRenderer)
 
 	hasDot  = (/**@type {number}  */i)=> DotSet.has(i)
 	hasPow  = (/**@type {number}  */i)=> PowMap.has(i)

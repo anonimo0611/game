@@ -15,9 +15,6 @@ BW = Cols * T,
 /** Board height */
 BH = Rows * T,
 
-/** Blinking interval in frames */
-PowDotInterval = 15,
-
 /** @typedef {'Up'|'Right'|'Down'|'Left'} Direction */
 U='Up', R='Right', D='Down', L='Left',
 

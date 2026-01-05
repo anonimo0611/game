@@ -112,6 +112,7 @@ export const Game = new class {
 	#update() {
 		PtsMgr.update()
 		Fruit.update()
+		Maze.PowDots.update()
 		Actor.update()
 		Attract.update()
 		CoffBreak.update()
@@ -125,7 +126,7 @@ export const Game = new class {
 	}
 	#drawMain() {
 		Score.draw()
-		Maze.PowDot.draw()
+		Maze.PowDots.draw()
 		Fruit.drawTarget()
 		Actor.draw(player)
 		Message.draw()
