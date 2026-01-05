@@ -1,7 +1,6 @@
 'use strict'
 const {defineProperty,entries,freeze,hasOwn,keys,values}= Object
 const {abs,ceil,floor,max,min,PI,random,round,sqrt,trunc:int}= Math
-const dRoot = document.getElementsByTagName('html')[0]
 
 /**
  @param {WheelEvent|JQuery.TriggeredEvent} e

@@ -1,3 +1,4 @@
+const dRoot = document.documentElement
 export const Cursor = new class {
 	constructor() {
 		let   timerId   = 0
