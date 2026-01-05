@@ -6,7 +6,10 @@ html, body {
 	overflow: hidden;
 }
 html {
-	font-size: 31px;
+	--tile-size: 31px;
+	--grid-cols: 28;
+	--grid-rows: 34;
+	font-size: var(--tile-size);
 }
 body {
 	color: #4c76d1;
@@ -47,20 +50,29 @@ h1 {
 }
 
 #container {
+	--padding-top: .5rem;
 	background: #000;
+	padding-top: var(--padding-top);
 	position: relative;
 	transform-origin: center;
+	visibility: hidden;
 	opacity: 0;
-	transition: opacity .3s;
+	transition: visibility .3s, opacity .3s;
 	#board {
-		margin-top: 0.5rem;
 		pointer-events: none;
-		canvas.sub {position: absolute}
-		canvas#board_bg  {z-index: -1}
-		canvas#board_hud {z-index: +1}
+		width:  calc(1rem * var(--grid-cols));
+		height: calc(1rem * var(--grid-rows));
+		canvas {
+			position: absolute;
+			top: var(--padding-top);
+		}
+		canvas#board_bg   {z-index: 1}
+		canvas#board_main {z-index: 2}
+		canvas#board_hud  {z-index: 3}
 	}
 }
 #container[data-ready-state=loaded] {
+	visibility: visible;
 	opacity: 1;
 }
 
