@@ -43,7 +43,7 @@ export default class {
 		ctx.lineJoin  = 'round'
 		ctx.lineCap   = 'round'
 		ctx.fillStyle = !isFrightened
-			? Colors[GhsNames[type]]
+			? GhsColors[type]
 			: Palette.FrightBody[spriteIdx]
 
 		if (isExposed) {
