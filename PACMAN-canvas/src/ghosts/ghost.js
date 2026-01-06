@@ -114,12 +114,12 @@ export class Ghost extends Actor {
 		default: this.#walkPath(this.speed*2|0)
 		}
 	}
-	#idleInHouse({type,orient,speed,center:{y:cy}}=this) {
+	#idleInHouse({type,orient,center:{y:cy}}=this) {
 		if (!Ctrl.alwaysChase)
 			Sys.DotCounter.releaseIfReady(type, g=> this.leaveHouse(g))
 		!this.state.isGoingOut && this.move(
-			(cy+T*0.6-speed > Maze.House.MiddleY && orient != D)? U:
-			(cy-T*0.6+speed < Maze.House.MiddleY ? D:U)
+			(cy > Maze.House.MiddleY-T/2 && orient != D)? U:
+			(cy < Maze.House.MiddleY+T/2 ? D:U)
 		)
 	}
 	leaveHouse(deactivateGlobalDotCnt=false) {
