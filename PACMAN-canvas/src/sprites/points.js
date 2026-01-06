@@ -8,7 +8,8 @@ const GhostPts = /**@type {const}*/([200,400,800,1600])
 const FruitPts = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
 
 const Data = /**@type {const}*/({
-	PathFrom0To8: [
+	CommonDigitYOffset: -3,
+	DigitVertices0to8: [
 		[1,0,2,0,3,1,3,5,2,6,1,6,0,5,0,1],
 		[0,1,1,0,1,6,0,6,2,6],
 		[0,2,0,1,1,0,3,0,4,1,4,2,0,6,4,6],
@@ -19,8 +20,7 @@ const Data = /**@type {const}*/({
 		[0,1,0,0,4,0,4,1,2,4,2,6],
 		[1,0,3,0,4,1,4,2,3,3,1,3,0,4,0,5,1,6,3,6,4,5,4,4,3,3,1,3,0,2,0,1],
 	],
-	DigitOffsetY: -3,
-	DigitOffsetXFrom: {
+	NumKerningMap: {
 		 100: [ -6.1, -2.3, 2.7],
 		 200: [ -7.0, -1.0, 4.0],
 		 300: [ -7.2, -1.2, 3.8],
@@ -54,16 +54,16 @@ function cache(pts, size=TileSize*2) {
 	ctx.strokeStyle = cst
 	ctx.lineWidth = 1.2
 	ctx.lineJoin  = ctx.lineCap = 'round'
-	Data.DigitOffsetXFrom[pts]?.forEach((x,i)=> {
-		const y = Data.DigitOffsetY
-		 pts == 1600 && i == 0
+	Data.NumKerningMap[pts]?.forEach((x,i)=> {
+		const y = Data.CommonDigitYOffset
+		pts == 1600 && i == 0
 		?ctx.newLinePath([x,y],[x,y+6]) //narrow 1
 		:function() {
 			const d = +pts.toString()[i]
 			ctx.save()
 			ctx.translate(x,y)
 			ctx.beginPath()
-			ctx.setVertices(Data.PathFrom0To8[d])
+			ctx.setVertices(Data.DigitVertices0to8[d])
 			if ([0,8].includes(d)) ctx.closePath()
 			ctx.restore()
 		}()
