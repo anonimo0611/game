@@ -8,7 +8,7 @@ import {Actor}   from '../actor.js';
 import {GhsMgr}  from '../ghosts/_system.js'
 
 const Spd = PacSpeed
-const {SlowLevel,SlowRate}= Spd
+const{SlowLevel,SlowRate}= Spd
 
 class TurnState {
 	turning  = false
@@ -32,9 +32,10 @@ export class Mover {
 		    || !this.actor.collidesWithWall()
 	}
 	get #canTurn() {
-		return  this.state.nextDir != null
+		const {nextDir}=this.state
+		return nextDir != null
 		    && !this.actor.passedTileCenter
-		    && !this.actor.collidesWithWall(this.state.nextDir)
+		    && !this.actor.collidesWithWall(nextDir)
 	}
 	get #tileSpeed() {
 		return (
