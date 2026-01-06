@@ -12,6 +12,8 @@ export class CoffBreak {
 	static {State.on({CoffBreak:this.#begin})}
 
 	static #begin(_={}, n=this.number) {
+		if (!between(n,1,3))
+			throw RangeError('The scene number must be 1-3.')
 		CoffBreak.#scene = new [Scene1,Scene2,Scene3][n-1]
 	}
 	static update() {
@@ -25,7 +27,6 @@ export class CoffBreak {
 		const sceneNum = {2:1, 5:2, 9:3}[Game.level]
 		return !Ctrl.isPractice && sceneNum || -1
 	}
-
 	pacman  = new PacMan
 	akabei  = new Ghost
 	pacVelX = -BW/180
