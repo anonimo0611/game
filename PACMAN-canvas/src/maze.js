@@ -83,6 +83,12 @@ class PowDotsRenderer extends Blinker {
 	}
 }
 
+	/**
+	 These tiles(x-y) forbidden ghosts from entering upward
+	 @type {ReadonlySet<string>}
+	*/
+	const GhostNoEnterCoords = new Set(['12-11','12-23','15-11','15-23'])
+
 export const Maze = freeze(new class {
 	static {
 		for (const [i,c] of MapArr.entries())
@@ -126,7 +132,7 @@ export const Maze = freeze(new class {
 	 These tiles(x-y) forbidden ghosts from entering upward
 	 @type {ReadonlySet<string>}
 	*/
-	GhostNoEnterCoords = new Set(['12-11','12-23','15-11','15-23'])
+	GhostNoUpTiles = new Set(['12-11','12-23','15-11','15-23'])
 
 	/**
 	 Whether tile `row` coord is the top/bottom of the maze excluding dead space
