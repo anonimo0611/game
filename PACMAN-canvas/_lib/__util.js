@@ -81,10 +81,9 @@ const match = (key, patterns, separator='|')=> {
  	(document.querySelectorAll(selector))
 
 /**
- @typedef {{dist:number, idx:number}} DistComparator
- @type {(a:Readonly<DistComparator>, b:Readonly<DistComparator>)=> number}
-*/const compareDist = (a,b)=>
-	(a.dist == b.dist)? (a.idx-b.idx) : (a.dist-b.dist)
+ @typedef {{dist:number, idx:number}} DistEntry
+ @type {(a:Readonly<DistEntry>, b:Readonly<DistEntry>)=> number}
+*/const compareDist = (a,b)=> a.dist-b.dist || a.idx-b.idx
 
 /**
  @param {string} str
