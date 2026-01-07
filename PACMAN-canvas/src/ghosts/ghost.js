@@ -42,6 +42,7 @@ export class Ghost extends Actor {
 	get isFrightened() {return this.#frightened}
 	get isWalking()    {return this.state.isWalking && !this.isFrightened}
 	get isEscaping()   {return this.state.isEscaping || this.state.isReturning}
+	get ignoreOneway() {return this.isFrightened || this.isEscaping}
 
 	/**
 	 @param {Direction} dir
@@ -201,10 +202,9 @@ export class Ghost extends Actor {
 				(this.#fleeTime >= 0 ? dirs.length-1:0)
 	}
 	/** @param {{dir:Direction,test:Vec2}} testTile */
-	#canEnterTile({dir,test:{x,y}}) {
-		return (this.isFrightened || this.isEscaping)
-			|| (Ctrl.unrestricted || dir != U)
-			|| !Maze.GhostNoUpTiles.has(`${x}-${y}`)
+	#canEnterTile({dir,test:{hyphenated:xy}}) {
+		return (Ctrl.unrestricted || this.ignoreOneway)
+		 || !Maze.GhostNoEntryTiles.has(xy+dir)
 	}
 	#makeTurn({orient}=this) {
 		if (this.dir != orient
