@@ -123,7 +123,8 @@ export const Maze = freeze(new class {
 	get dotsLeft() {return DotSet.size}
 
 	/**
-	 A set of tiles(x-yDir) that restrict ghost entry from specific directions
+	 Tiles where the specified direction is disallowed for ghost navigation
+	 Format ex: `${x}-${y}${Direction}`
 	 @type {ReadonlySet<string>}
 	*/
 	GhostNoEntryTiles = new Set(['12-11Up','12-23Up','15-11Up','15-23Up'])
