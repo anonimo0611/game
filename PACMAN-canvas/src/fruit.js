@@ -23,7 +23,7 @@ const LevelsRect = new Rect(Size*6, BH-Size, Size*LevelsCols, Size).freeze()
 
 const FadeDur = 300
 let  _showTgt = true
-let  _fadeOut = /**@type {?FadeOut}*/(null)
+let  _fadeOut = /**@type {?Fade}*/(null)
 
 export const Fruit = new class {
 	static {$(this.setup)}
@@ -57,7 +57,7 @@ export const Fruit = new class {
 		_showTgt = State.isTitle
 	}
 	#setFadeOut() {
-		_fadeOut = new FadeOut(FadeDur/Game.speed)
+		_fadeOut = Fade.out(FadeDur/Game.speed)
 	}
 	#onDotEaten() {
 		if (AppearDots.has(Maze.MaxDot - Maze.dotsLeft)) {

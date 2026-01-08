@@ -49,7 +49,7 @@ class PlayerPac extends PacMan {
 		if (State.isIntro)
 			return
 		Ctx.save()
-		this.#spawnFade.setAlpha(this.maxAlpha)
+		this.#spawnFade.apply(this.maxAlpha)
 		this.sprite.draw(this)
 		this.#drawCenterDot()
 		Ctx.restore()

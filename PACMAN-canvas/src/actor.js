@@ -7,8 +7,8 @@ import {GhsMgr} from './ghosts/_system.js'
 import Sprite   from './sprites/pacman.js'
 
 class SpawnFade {
-	#fadeIn = /**@type {?FadeIn}*/(new FadeIn)
-	setAlpha(max=1) {
+	#fadeIn = /**@type {?Fade}*/(Fade.in(500))
+	apply(max=1) {
 		!State.isReady
 			? Ctx.setAlpha(max)
 			: Ctx.setAlpha(this.#fadeIn?.alpha)

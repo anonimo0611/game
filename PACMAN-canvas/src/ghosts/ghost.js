@@ -94,7 +94,7 @@ export class Ghost extends Actor {
 	draw() {
 		if (State.isIntro) return
 		Ctx.save()
-		this.#fadeIn.setAlpha(this.maxAlpha)
+		this.#fadeIn.apply(this.maxAlpha)
 		this.sprite.draw(this)
 		Ctx.restore()
 	}
@@ -204,7 +204,7 @@ export class Ghost extends Actor {
 	/** @param {{dir:Direction,test:Vec2}} testTile */
 	#canEnterTile({dir,test:{hyphenated:xy}}) {
 		return (Ctrl.unrestricted || this.ignoreOneway)
-		 || !Maze.GhostNoEntryTiles.has(xy+dir)
+			|| !Maze.GhostNoEntryTiles.has(xy+dir)
 	}
 	#makeTurn({orient}=this) {
 		if (this.dir != orient

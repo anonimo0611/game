@@ -25,7 +25,7 @@ class Points {
 		const spd  = Game.speed, fadeDur = 300
 		this.pos   = pos
 		this.cache = Pts.cache(key.points)
-		this.fade  = new FadeOut(fadeDur/spd, (dur-fadeDur)/spd)
+		this.fade  = Fade.out(fadeDur/spd, (dur-fadeDur)/spd)
 		Timer.set(dur/spd, ()=> {
 			Timer.unfreeze()
 			PtsMap.delete(key)

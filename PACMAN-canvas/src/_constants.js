@@ -18,9 +18,9 @@ BH = Rows * T,
 /** @typedef {'Up'|'Right'|'Down'|'Left'} Direction */
 U='Up', R='Right', D='Down', L='Left',
 
-Bg   = canvas2D('board_bg' ,  BW,BH).ctx,
-HUD  = canvas2D('board_hud',  BW,BH).ctx,
-Ctx  = canvas2D('board_main', BW,BH).ctx,
+Bg  = canvas2D('board_bg' ,  BW,BH).ctx,
+HUD = canvas2D('board_hud',  BW,BH).ctx,
+Ctx = canvas2D('board_main', BW,BH).ctx,
 
 Colors = freeze(new class {
 	Grid      = '#F00'

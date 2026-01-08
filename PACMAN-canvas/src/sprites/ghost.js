@@ -8,10 +8,10 @@ export default class {
 		this.ctx  = ctx
 		this.#spr = new CBSprite(ctx)
 	}
-	#fadeOut   = /**@type {?FadeOut}*/(null)
-	#resurrect = /**@type {?FadeIn} */(null)
-	setFadeOut()   {this.#fadeOut ||= new FadeOut(400)}
-	setResurrect() {this.#resurrect = new FadeIn (600)}
+	#fadeOut   = /**@type {?Fade}*/(null)
+	#resurrect = /**@type {?Fade} */(null)
+	setFadeOut()   {this.#fadeOut ||= Fade.out(400)}
+	setResurrect() {this.#resurrect = Fade.in (600)}
 	draw({
 		mainCtx=Ctx,x=0,y=0,
 		type         = 0,
@@ -52,7 +52,7 @@ export default class {
 		}
 		if (!isEscaping) {
 			ctx.save()
-			this.#resurrect?.setAlpha(ctx)
+			this.#resurrect?.apply(ctx)
 			this.#drawAngerGlow({x,y,isAngry,size})
 			this.#drawBody({animIdx,isRipped,isMended})
 			if (isFrightened) {
