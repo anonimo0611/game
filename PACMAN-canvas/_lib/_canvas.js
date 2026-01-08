@@ -142,45 +142,47 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 }
 
 class Fade {
-	/** @readonly */static IN  = 0
-	/** @readonly */static OUT = 1
-    static in (ms=500, delay=0) {return new Fade(ms, delay, Fade.IN)}
-    static out(ms=500, delay=0) {return new Fade(ms, delay, Fade.OUT)}
+	/** @readonly */
+	static Type = /**@type {const}*/({IN:0, OUT:1})
+	static in (ms=500, delay=0) {return new Fade(ms,delay,Fade.Type.IN)}
+	static out(ms=500, delay=0) {return new Fade(ms,delay,Fade.Type.OUT)}
+	#type; #delay; #duration
+	#count = 0
+	#alpha = 0
 
-    #type     = 0
-    #count    = 0
-    #delay    = 0
-    #alpha    = 0
-    #duration = 0
+	/**
+	 @private
+	 @param {number} ms
+	 @param {number} delay
+	 @param {0|1} type
+	*/
+	constructor(ms, delay, type=Fade.Type.IN) {
+		this.#delay    = delay
+		this.#duration = ms
+		this.#type = this.#alpha = type
+	}
+	get working()	{return this.isInMode? this.#alpha<1 : this.#alpha>0}
+	get alpha() 	{return this.#alpha}
+	get isInMode()	{return this.#type == Fade.Type.IN}
+	get isOutMode() {return this.#type == Fade.Type.OUT}
 
-	/** @private */
-    constructor(ms=500, delay=0, type=Fade.IN) {
-        this.#delay    = delay
-        this.#duration = ms
-        this.#type = this.#alpha = type
-    }
-    get working()   {return this.isInMode? this.#alpha<1 : this.#alpha>0}
-    get alpha()     {return this.#alpha}
-	get isInMode()  {return this.#type == Fade.IN}
-	get isOutMode() {return this.#type == Fade.OUT}
-
-    /**
-     @param {number} maxAlpha
-     @returns {boolean}
-    */
-    update(maxAlpha=1) {
-        this.#count += Ticker.Interval;
-        if (this.#count < this.#delay) return true;
-        const step  = (maxAlpha/(this.#duration/Ticker.Interval));
-        this.#alpha = this.isInMode
-        	? Math.min(this.#alpha+step, maxAlpha)
-            : Math.max(this.#alpha-step, 0)
-        return this.working;
-    }
-    /** @param {CanvasRenderingContext2D} ctx */
-    apply(ctx) {
-        ctx.globalAlpha = this.#alpha;
-    }
+	/**
+	 @param {number} maxAlpha
+	 @returns {boolean}
+	*/
+	update(maxAlpha=1) {
+		this.#count += Ticker.Interval
+		if (this.#count < this.#delay) return true
+		const step	= (maxAlpha/(this.#duration/Ticker.Interval))
+		this.#alpha = this.isInMode
+			? Math.min(this.#alpha+step, maxAlpha)
+			: Math.max(this.#alpha-step, 0)
+		return this.working;
+	}
+	/** @param {CanvasRenderingContext2D} ctx */
+	apply(ctx) {
+		ctx.globalAlpha = this.#alpha
+	}
 }
 
 /**

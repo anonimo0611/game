@@ -20,7 +20,7 @@ const {Ticker,Timer} = function() {
 	const Ticker = freeze(new class {
 		Interval = Interval
 		get paused()      {return _paused}
-		get delta()       {return(_ticker?.dtSec ?? 0)*FPS}
+		get delta()       {return (this.deltaMs/Interval) || 0}
 		get deltaMs()     {return _ticker?.dtMs  ?? 0}
 		get deltaSec()    {return _ticker?.dtSec ?? 0}
 		get running()     {return _ticker instanceof Tick}
@@ -29,8 +29,8 @@ const {Ticker,Timer} = function() {
 		get pausedCount() {return _pCounter}
 
 		/**
-		 @param {Function} [updateFn]
-		 @param {Function} [drawFn]
+		 @param {()=> void} [updateFn]
+		 @param {()=> void} [drawFn]
 		*/
 		set(updateFn,drawFn) {new Tick(updateFn,drawFn)}
 
@@ -45,8 +45,8 @@ const {Ticker,Timer} = function() {
 
 	class Tick {
 		/**
-		 @param {Function} [updateFn]
-		 @param {Function} [drawFn]
+		 @param {()=> void} [updateFn]
+		 @param {()=> void} [drawFn]
 		*/
 		constructor(updateFn, drawFn) {
 			_ticker?.stop()
@@ -62,6 +62,7 @@ const {Ticker,Timer} = function() {
 			this.draw    = drawFn
 			requestAnimationFrame(this.loop)
 		}
+
 		/**
 		 @param {number} ts
 		*/
@@ -116,8 +117,8 @@ const {Ticker,Timer} = function() {
 		freeze()    {this.#frozen = true; return this}
 		unfreeze()  {this.#frozen = false;return this}
 		/**
-		 @param {number}   timeout
-		 @param {Function} handler
+		 @param {number}    timeout
+		 @param {()=> void} handler
 		 @param {{key?:unknown,ignoreFrozen?:boolean}} config
 		*/
 		set(timeout, handler, {key,ignoreFrozen=Timer.frozen}={}) {
@@ -125,7 +126,7 @@ const {Ticker,Timer} = function() {
 			TimerMap.set(key??Symbol(),{amount:0,timeout,handler,ignoreFrozen})
 		}
 		/**
-		 @param {...{ms:number,fn:Function}} seq
+		 @param {...{ms:number,fn:()=> void}} seq
 		*/
 		sequence(...seq) {
 			let idx=0, s=seq[idx]
