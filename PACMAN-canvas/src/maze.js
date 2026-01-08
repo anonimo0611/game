@@ -67,14 +67,14 @@ class Tunnel {
 		} return null
 	}
 }
-export class Blinker {
+export class PowBlinker {
 	#show = 1
 	get show() {return this.#show != 0}
 	update() {
 		this.#show ^= +(Ticker.count % 15 == 0)
 	}
 }
-class PowDotsRenderer extends Blinker {
+class PowDotsRenderer extends PowBlinker {
 	draw() {
 		for (const {x,y} of PowMap.values()) {
 			if (!State.isInGame || Ticker.paused || this.show)

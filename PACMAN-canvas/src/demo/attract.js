@@ -1,15 +1,15 @@
-﻿import {State}    from '../state.js'
-import {drawText} from '../message.js'
-import {Ctrl}     from '../control.js'
-import {Score}    from '../score.js'
-import {Fruit}    from '../fruit.js'
-import {Blinker}  from '../maze.js'
-import {drawDot}  from '../maze.js'
-import {Actor}    from '../actor.js'
-import {GhsMgr}   from '../ghosts/_system.js'
-import {Ghost}    from '../ghosts/ghost.js'
-import {PacMan}   from '../actor.js'
-import {RunTimer} from './_run_timer.js'
+﻿import {State}      from '../state.js'
+import {drawText}   from '../message.js'
+import {Ctrl}       from '../control.js'
+import {Score}      from '../score.js'
+import {Fruit}      from '../fruit.js'
+import {drawDot}    from '../maze.js'
+import {PowBlinker} from '../maze.js'
+import {Actor}      from '../actor.js'
+import {GhsMgr}     from '../ghosts/_system.js'
+import {Ghost}      from '../ghosts/ghost.js'
+import {PacMan}     from '../actor.js'
+import {RunTimer}   from './_run_timer.js'
 
 export class Attract {
 	static #attract = /**@type {?Attract}*/(null)
@@ -26,10 +26,10 @@ export class Attract {
 		Attract.#attract?.draw()
 		return State.isAttract
 	}
-	ghosts = /**@type {Ghost[]}*/([])
-	blink  = new Blinker
-	pacman = new PacMan
-	subAct = new EnergizerAct(this.pacman, this.ghosts)
+	ghosts   = /**@type {Ghost[]}*/([])
+	powBlink = new PowBlinker
+	pacman   = new PacMan
+	subAct   = new EnergizerAct(this.pacman, this.ghosts)
 
 	/** @private */
 	constructor() {
@@ -40,9 +40,6 @@ export class Attract {
 	get subActStarted() {
 		return Ticker.elapsedTime > 1e4+500
 	}
-	get showPow() {
-		return this.subActStarted? this.blink.show : true
-	}
 	setActor(type=0) {
 		const
 		g = new Ghost(L, {type,tile:[Cols+6+(type*2),19]})
@@ -50,8 +47,10 @@ export class Attract {
 		this.ghosts.push(g)
 	}
 	update() {
-		this.blink.update()
-		this.subActStarted && this.subAct.update()
+		if (this.subActStarted) {
+			this.subAct.update()
+			this.powBlink.update()
+		}
 	}
 	GhsEntries = /**@type {const}*/([
 		// time, col1, col2, row, txt1, txt2
@@ -72,7 +71,7 @@ export class Attract {
 		if (et > 85) {
 			/**@type {const}*/([
 			 [25, DotPts, true],
-			 [27, PowPts, this.showPow],
+			 [27, PowPts, this.powBlink.show],
 			]).forEach(([row,pts,showDot],i)=> {
 				drawDot(Ctx, 10, row-1, i==1, showDot)
 				drawText(12.0, row, null, pts)
@@ -82,7 +81,7 @@ export class Attract {
 		if (et > 90) {
 			const {extendScore}= Ctrl
 			if (this.pacman.dir == L) {
-				drawDot(Ctx, 4, 19, true, this.showPow)
+				drawDot(Ctx, 4, 19, true, this.powBlink.show)
 			}
 			if (extendScore > 0) {
 				const text = `BONUS　PACMAN　FOR　${extendScore}`
