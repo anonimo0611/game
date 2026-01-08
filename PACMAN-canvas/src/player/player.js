@@ -21,7 +21,7 @@ class PlayerPac extends PacMan {
 	#tunEntry  = new TunEntry
 	#spawnFade = new Actor.SpawnFade
 
-	constructor()  {super(13.5*T, 24*T)}
+	constructor()  {super(13.5, 24)}
 	get closed()   {return State.isInGame == false}
 	get maxAlpha() {return Ctrl.semiTransPac? .75:1}
 	get speed()    {return this.mov.speed}

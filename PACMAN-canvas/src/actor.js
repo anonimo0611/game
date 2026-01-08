@@ -43,7 +43,7 @@ export class Actor extends Common {
 	#movDir = /**@type {Direction}*/(L)
 
 	/** @protected */
-	constructor(x=0,y=0) {super();this.pos.set(x,y)}
+	constructor(col=0,row=0) {super();this.pos.set(col*T,row*T)}
 	get speed()     {return 0}
 	get radius()    {return T}
 	get size()      {return this.radius*2}
@@ -122,7 +122,7 @@ export class Actor extends Common {
 export class PacMan extends Actor {
 	/** @readonly */
 	sprite = new Sprite(Ctx)
-	constructor(x=0,y=0) {super(x,y)}
+	constructor(col=0,row=0) {super(col,row)}
 	get radius() {return PacRadius}
 	get hidden() {return Timer.frozen}
 	draw() {this.sprite.draw(this)}

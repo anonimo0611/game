@@ -49,7 +49,7 @@ export class Ghost extends Actor {
 	 @param {{type?:number, tile?:xyList, align?:-1|0|1}} cfg
 	*/
 	constructor(dir=L, {type=0,tile:[col,row]=[0,0],align=0}={}) {
-		super(col*T,row*T)
+		super(col,row)
 		this.on({
 			FrightMode:   this.#setFrightMode,
 			Reverse: ()=> this.#revSignal = true,

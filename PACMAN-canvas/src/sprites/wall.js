@@ -17,7 +17,7 @@ export const Wall = new class {
 		Wall.#drawDoor()
 		Bg.restore()
 	}
-	flashing(/**@type {function}*/fn) {
+	flashing(/**@type {()=> void}*/fn) {
 		let count = 0
 		;(function redraw() {
 			if (++count > 8) return Timer.set(500, fn)
