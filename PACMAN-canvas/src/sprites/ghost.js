@@ -8,7 +8,7 @@ export default class {
 		this.#spr = new CBSprite(this.ctx)
 	}
 	#fadeOut   = /**@type {?Fade}*/(null)
-	#resurrect = /**@type {?Fade} */(null)
+	#resurrect = /**@type {?Fade}*/(null)
 	setFadeOut()   {this.#fadeOut ||= Fade.out(400)}
 	setResurrect() {this.#resurrect = Fade.in (600)}
 	draw({
