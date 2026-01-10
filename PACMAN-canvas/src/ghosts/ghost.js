@@ -16,7 +16,7 @@ export class Ghost extends Actor {
 	/** @readonly */state
 
 	/** @readonly */
-	sprite  = new Sprite(canvas2D(null, T*3, T*2).ctx)
+	sprite  = new Sprite
 	#fadeIn = new Actor.SpawnFade
 
 	/** @readonly */

@@ -3,10 +3,9 @@ export default class {
 	/** @typedef {Direction|'Bracket'} orient */
 	/** @readonly */ctx
 	/** @readonly */#spr
-	/** @param {ExtendedContext2D} ctx */
-	constructor(ctx) {
-		this.ctx  = ctx
-		this.#spr = new CBSprite(ctx)
+	constructor(w=T*3, h=T*2) {
+		this.ctx  = canvas2D(null, w, h).ctx
+		this.#spr = new CBSprite(this.ctx)
 	}
 	#fadeOut   = /**@type {?Fade}*/(null)
 	#resurrect = /**@type {?Fade} */(null)

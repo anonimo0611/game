@@ -10,6 +10,7 @@ import {GhsMgr}     from '../ghosts/_system.js'
 import {Ghost}      from '../ghosts/ghost.js'
 import {PacMan}     from '../actor.js'
 import {RunTimer}   from './_run_timer.js'
+import Sprite       from '../sprites/ghost.js'
 
 export class Attract {
 	static #attract = /**@type {?Attract}*/(null)
@@ -26,30 +27,16 @@ export class Attract {
 		Attract.#attract?.draw()
 		return State.isAttract
 	}
-	ghosts   = /**@type {Ghost[]}*/([])
-	powBlink = new PowBlinker
-	pacman   = new PacMan
-	subAct   = new EnergizerAct(this.pacman, this.ghosts)
+	pow    = new PowBlinker
+	subAct = new EnergizerAct()
+	ghsSpr = new Sprite(T*2, T*2)
 
 	/** @private */
-	constructor() {
-		range(GhsType.Max).forEach(i=> this.setActor(i))
-		GhsMgr.trigger('Init', this.ghosts)
-		$onNS('.Attract', {click_keydown_blur:this.quit})
-	}
-	get subActStarted() {
-		return Ticker.elapsedTime > 1e4+500
-	}
-	setActor(type=0) {
-		const
-		g = new Ghost(L, {type,tile:[Cols+6+(type*2),19]})
-		g.type == 0 && this.pacman.pos.set(g.x-(T*3.5), g.y)
-		this.ghosts.push(g)
-	}
+	constructor() {$onNS('.Attract', {click_keydown_blur:this.quit})}
 	update() {
-		if (this.subActStarted) {
+		if (this.subAct.started) {
 			this.subAct.update()
-			this.powBlink.update()
+			this.pow.update()
 		}
 	}
 	GhsEntries = /**@type {const}*/([
@@ -70,7 +57,7 @@ export class Attract {
 		})
 		if (et > 85) {
 			[[25, DotPts, +true],
-			 [27, PowPts, +this.powBlink.show],
+			 [27, PowPts, +this.pow.show],
 			].forEach(([row,pts,showDot],i)=> {
 				drawDot(Ctx, 10, row-1, i==1, !!showDot)
 				drawText(12.0, row, null, pts)
@@ -79,8 +66,8 @@ export class Attract {
 		}
 		if (et > 90) {
 			const {extendScore}= Ctrl
-			if (this.pacman.dir == L) {
-				drawDot(Ctx, 4, 19, true, this.powBlink.show)
+			if (this.subAct.outward) {
+				drawDot(Ctx, 4, 19, true, this.pow.show)
 			}
 			if (extendScore > 0) {
 				const text = `BONUS　PACMAN　FOR　${extendScore}`
@@ -88,11 +75,11 @@ export class Attract {
 				drawText(24.3, 30, Colors.Orange,'PTS', Small)
 			}
 		}
-		this.subActStarted && Actor.draw(this.pacman)
+		this.subAct.draw()
 		Fruit.drawLevelCounter()
 	}
 	drawGhostOnTable(type=0, row=0) {
-		this.ghosts[0].sprite.draw({type,orient:R,x:(T*5),y:(T*row)})
+		this.ghsSpr.draw({type,orient:R,x:(T*5),y:(T*row)})
 	}
 	quit() {
 		Attract.#attract = null
@@ -102,33 +89,43 @@ export class Attract {
 }
 
 class EnergizerAct {
-	pacVelX = -BW/180
-	ghsVelX = -BW/169
-	constructor(
-	 /**@type {PacMan} */pacman,
-	 /**@type {Ghost[]}*/ghosts
-	) {
-		this.pacman = pacman
-		this.ghosts = ghosts
+	#pacvx  = -BW/180
+	#ghsvx  = -BW/169
+	#pacman = new PacMan
+	#ghosts = /**@type {Ghost[]}*/([])
+	get started() {return Ticker.elapsedTime > 1e4+500}
+	get outward() {return this.#pacman.dir == L}
+	constructor() {
+		range(GhsType.Max).forEach(i=> this.#setActor(i))
+		GhsMgr.trigger('Init', this.#ghosts)
+	}
+	#setActor(type=0) {
+		const
+		g = new Ghost(L, {type,tile:[Cols+6+(type*2),19]})
+		g.type == 0 && this.#pacman.pos.set(g.x-(T*3.5), g.y)
+		this.#ghosts.push(g)
 	}
 	update() {
 		if (Timer.frozen) return
-		this.pacman.sprite.update()
-		this.pacman.x += this.pacVelX * Ticker.delta
-		if (this.pacman.dir == L
-		 && this.pacman.x <= T*4
+		this.#pacman.sprite.update()
+		this.#pacman.x += this.#pacvx * Ticker.delta
+		if (this.#pacman.dir == L
+		 && this.#pacman.x <= T*4
 		) {
-			this.pacVelX *= -1
-			this.ghsVelX /= -2
-			this.pacman.dir = R
+			this.#pacvx *= -1
+			this.#ghsvx /= -2
+			this.#pacman.dir = R
 			GhsMgr.setFrightMode()
 		}
 		this.#updateGhosts()
 	}
+	draw() {
+		this.started && Actor.draw(this.#pacman)
+	}
 	#updateGhosts() {
-		this.ghosts.forEach(g=> {
-			g.x += this.ghsVelX * Ticker.delta
-			g.collidesWith(this.pacman.pos, T/4, this.#end)
+		this.#ghosts.forEach(g=> {
+			g.x += this.#ghsvx * Ticker.delta
+			g.collidesWith(this.#pacman.pos, T/4, this.#end)
 		})
 	}
 	#end() {

@@ -69,10 +69,8 @@ class Tunnel {
 }
 export class PowBlinker {
 	#show = 1
-	get show() {return this.#show != 0}
-	update() {
-		this.#show ^= +(Ticker.count % 15 == 0)
-	}
+	get show() {return this.#show == 1}
+	update() {this.#show ^= +(Ticker.count % 15 == 0)}
 }
 class PowDotsRenderer extends PowBlinker {
 	draw() {
@@ -105,8 +103,8 @@ export const Maze = freeze(new class {
 		Maze.clearBgDot({tileIdx:i,tilePos:t})
 		DotSet.add(i)
 		powChk.checked == false || chip == '.'
-			? drawDot(Bg, t.x, t.y)
-			: PowMap.set(i, t)
+			? drawDot(Bg,...t.vals)
+			: PowMap.set(i,t)
 	}
 	Top     = 1
 	Bottom  = Rows-3
