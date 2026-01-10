@@ -57,7 +57,7 @@ export class Attract {
 		[10, 8, 18,  6, 'OIKAKE----', '"AKABEI"'],
 		[30, 8, 19,  9, 'MACHIBUSE--','"PINKY"' ],
 		[50, 8, 18, 12, 'KIMAGURE--', '"AOSUKE"'],
-		[70, 8, 18, 15, 'OTOBOKE---', '"GUZUTA"'],
+		[70, 8, 18, 15, 'OTOBOKE---', '"GUZUTA"']
 	])
 	draw() {
 		Score.draw()
@@ -69,11 +69,10 @@ export class Attract {
 			et > t+10 && drawText(col2, row+1, GhsColors[i], txt2)
 		})
 		if (et > 85) {
-			/**@type {const}*/([
-			 [25, DotPts, true],
-			 [27, PowPts, this.powBlink.show],
-			]).forEach(([row,pts,showDot],i)=> {
-				drawDot(Ctx, 10, row-1, i==1, showDot)
+			[[25, DotPts, +true],
+			 [27, PowPts, +this.powBlink.show],
+			].forEach(([row,pts,showDot],i)=> {
+				drawDot(Ctx, 10, row-1, i==1, !!showDot)
 				drawText(12.0, row, null, pts)
 				drawText(14.3, row, null,'PTS', Small)
 			})
