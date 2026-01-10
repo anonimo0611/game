@@ -163,7 +163,7 @@ class Scene3 extends CoffBreak {
 		super.moveAka()
 		aka.dir == L
 			? aka.x < -T*10 && (aka.dir = R) && (this.akaVelX *= -1)
-			: aka.x > (T*13 + BW) && aka.dir == R && this.end()
+			: aka.x > (T*13+BW) && this.end()
 	}
 	update() {
 		this.movePac()
