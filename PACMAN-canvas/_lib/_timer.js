@@ -20,7 +20,7 @@ const {Ticker,Timer} = function() {
 	const Ticker = freeze(new class {
 		Interval = Interval
 		get paused()      {return _paused}
-		get delta()       {return (this.deltaMs/Interval) || 0}
+		get delta()       {return this.deltaMs/Interval}
 		get deltaMs()     {return _ticker?.dtMs  ?? 0}
 		get deltaSec()    {return _ticker?.dtSec ?? 0}
 		get running()     {return _ticker instanceof Tick}

@@ -144,21 +144,21 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 class Fade {
 	/** @readonly */
 	static Type = /**@type {const}*/({IN:0, OUT:1})
-	static in (ms=500, delay=0) {return new Fade(ms,delay,Fade.Type.IN)}
-	static out(ms=500, delay=0) {return new Fade(ms,delay,Fade.Type.OUT)}
+	static in (dur=500, delay=0) {return new Fade(dur,delay,Fade.Type.IN)}
+	static out(dur=500, delay=0) {return new Fade(dur,delay,Fade.Type.OUT)}
 	#type; #delay; #duration
 	#count = 0
 	#alpha = 0
 
 	/**
 	 @private
-	 @param {number} ms
+	 @param {number} dur
 	 @param {number} delay
 	 @param {0|1} type
 	*/
-	constructor(ms, delay, type=Fade.Type.IN) {
+	constructor(dur, delay, type=Fade.Type.IN) {
 		this.#delay    = delay
-		this.#duration = ms
+		this.#duration = dur
 		this.#type = this.#alpha = type
 	}
 	get working()	{return this.isInMode? this.#alpha<1 : this.#alpha>0}
@@ -177,7 +177,7 @@ class Fade {
 		this.#alpha = this.isInMode
 			? Math.min(this.#alpha+step, maxAlpha)
 			: Math.max(this.#alpha-step, 0)
-		return this.working;
+		return this.working
 	}
 	/** @param {CanvasRenderingContext2D} ctx */
 	apply(ctx) {
