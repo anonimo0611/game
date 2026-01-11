@@ -21,9 +21,15 @@ export default class {
 		this.isMain = ctx.canvas.id == 'board_main'
 		this.#mouthAngle = [0,OpenMid,OpenMax][mouthOpenings]
 	}
-	update({stopped=false}={}) {
+	update({stopped=false,hidden=false}={}) {
+		if (hidden)
+			return
+		if (this.#dyingSpr) {
+			this.#dyingSpr.update()
+			return
+		}
 		if (stopped) {
-			if (this.#mouthAngle <= OpenMid)
+			if (this.#mouthAngle < OpenMid)
 				this.#mouthAngle = OpenMid
 			return
 		}

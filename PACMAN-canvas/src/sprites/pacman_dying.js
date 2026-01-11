@@ -1,45 +1,55 @@
 const PacR    = PacRadius
 const DisDur  = 1149/Ticker.Interval
 const LineDur =  300/Ticker.Interval
-const FadeDur =  300/Ticker.Interval
 
 export class Dying {
-	#mAngle = 0
-	#alpha  = 1
-	#innerR = PacR/4
-	#outerR = PacR/2
+	#mAngle  = 0
+	#innerR  = PacR/4
+	#outerR  = PacR/2
+	#fadeOut = Fade.out(300)
 
 	/** @readonly */ctx
 	constructor(ctx=Ctx) {this.ctx = ctx}
+	get isDisintegrate() {
+		return this.#mAngle < PI-PI/DisDur
+	}
+	update() {
+		if (this.isDisintegrate) {
+ 			this.#mAngle += PI/DisDur
+			return
+		}
+		if (this.#outerR <= PacR) {
+			this.#innerR += PacR/2/LineDur
+			this.#outerR += PacR/1/LineDur
+			return
+		}
+		this.#fadeOut.update()
+	}
 	draw({x=0,y=0}={}) {
 		const {ctx}= this
 		ctx.save()
 		ctx.translate(x,y)
 		ctx.lineWidth = T/6
 		ctx.fillStyle = ctx.strokeStyle = Colors.Pacman
-		this.#mAngle < PI - PI/DisDur
- 			? this.#disappear()
-	 		: this.#drawRadialLines()
+		this.isDisintegrate
+ 			? this.#drawDisintegrate()
+	 		: this.#drawRadialBurst()
 		ctx.restore()
 	}
-	#disappear() {
+	#drawDisintegrate() {
 		const {ctx}= this
-		this.#mAngle += PI/DisDur
 		ctx.beginPath()
 		ctx.moveTo(0, PacR*0.3)
 		ctx.arc(0, 0, PacR, -PI/2+this.#mAngle, -PI/2-this.#mAngle)
 		ctx.fill()
 	}
-	#drawRadialLines() {
+	#drawRadialBurst() {
 		const {ctx}= this
-		const innerR = min(this.#innerR += PacR/2/LineDur, PacR/2)
-		const outerR = min(this.#outerR += PacR/1/LineDur, PacR/1)
-		if (this.#outerR >= PacR)
-			ctx.globalAlpha = max(this.#alpha -= 1/FadeDur, 0)
+		ctx.setAlpha(this.#fadeOut?.alpha)
 		for (const deg of range(0, 360, 360/10)) {
 			ctx.beginPath()
-	 		ctx.moveTo(...circumPosition(deg, innerR))
-	     	ctx.lineTo(...circumPosition(deg, outerR))
+	 		ctx.moveTo(...circumPosition(deg, this.#innerR))
+	     	ctx.lineTo(...circumPosition(deg, this.#outerR))
 	     	ctx.stroke()
 		}
 	}

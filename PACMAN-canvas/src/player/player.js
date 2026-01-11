@@ -56,11 +56,11 @@ class PlayerPac extends PacMan {
 	}
 	update() {
 		this.#spawnFade.update(this.maxAlpha)
+		this.sprite.update(this)
 		if (this.closed || this.hidden)
 			return
 		this.#sinceLastEating++
 		this.#tunEntry.update()
-		this.sprite.update(this)
 		this.#update(this.mov.speed*2|0)
 	}
 	#update(steps=1) {
