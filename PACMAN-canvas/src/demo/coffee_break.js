@@ -11,7 +11,7 @@ export class CoffBreak {
 	static #scene = /**@type {?Scene1|Scene2|Scene3}*/(null)
 	static {State.on({CoffBreak:this.#begin})}
 
-	static #begin(_={}, n=this.number) {
+	static #begin(_={}, n=CoffBreak.number) {
 		if (!between(n,1,3))
 			throw RangeError('The scene number must be 1-3.')
 		CoffBreak.#scene = new [Scene1,Scene2,Scene3][n-1]
