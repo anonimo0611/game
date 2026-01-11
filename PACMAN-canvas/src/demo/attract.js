@@ -28,7 +28,7 @@ export class Attract {
 		return State.isAttract
 	}
 	pow    = new PowBlinker
-	subAct = new EnergizerAct()
+	subAct = new EnergizerAct
 	ghsSpr = new Sprite(T*2, T*2)
 
 	/** @private */
