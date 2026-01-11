@@ -8,7 +8,7 @@ const SizeRng = /**@type {HTMLInputElement}*/(byId('sizeRng'))
 
 export let T = 0, [S,GAP] = [0,0]
 export const GridSize  = Vec2.new(10,11).freeze()
-export const ghsSprite = new GhsSprite(canvas2D(null).ctx)
+export const ghsSprite = new GhsSprite()
 
 export function resize()
 {

@@ -6,7 +6,7 @@ import {Speaker}  from './speaker.js'
 let  _lstVol  = NaN
 const volRng  = inputs.volRng
 const volRg2  = inputs.volRg2
-const volume  = +(localStorage.anopac_volume ?? 5)
+const initVol = +(localStorage.anopac_volume ?? 5)
 
 const Ctrl = new class { // Register sound instances and set up controls
 	constructor() {this.setup()}
@@ -16,14 +16,14 @@ const Ctrl = new class { // Register sound instances and set up controls
 			: Ctrl.onFailed()
 	}
 	onLoaded() {
-		Sound.vol = volume
+		Sound.vol = initVol
 		$win.on({keydown:Ctrl.onKeydown})
 		$('#speaker')
 			.on({click:Ctrl.mute})
 			.on({wheel:Ctrl.onInput})
 		$('.volRng')
-			.attr({value:volume})
-			.attr({defaultValue:volume})
+			.attr({value:initVol})
+			.attr({defaultValue:initVol})
 			.on({input:Ctrl.onInput})
 			.trigger('input')
 	}
