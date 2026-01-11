@@ -7,8 +7,7 @@ import {Maze}    from '../maze.js'
 import {Actor}   from '../actor.js';
 import {GhsMgr}  from '../ghosts/_system.js'
 
-const Spd = PacSpeed
-const{SlowLevel,SlowRate}= Spd
+const Spd = PacSpeed, {SlowLevel,SlowRate}= Spd
 
 class TurnState {
 	turning  = false
@@ -23,30 +22,29 @@ export class Mover {
 	constructor(/**@type {Actor}*/actor) {
 		this.actor = actor
 		this.state = new TurnState
-		setSteerEvent(this.actor, this.state)
+		setSteerEvent({actor,state:this.state})
 	}
 	get speed()   {return this.#speed ||= this.#tileSpeed}
 	get stopped() {return this.#stopped}
-	get #canMove() {
-		return  this.state.turning
-		    || !this.actor.collidesWithWall()
+	get canMove() {
+		const {state:s,actor:a}= this
+		return s.turning || !a.collidesWithWall()
 	}
 	get #canTurn() {
-		const {nextDir}=this.state
+		const {actor:a,state:{nextDir}}=this
 		return nextDir != null
-		    && !this.actor.passedTileCenter
-		    && !this.actor.collidesWithWall(nextDir)
+		    && !a.passedTileCenter
+		    && !a.collidesWithWall(nextDir)
 	}
 	get #tileSpeed() {
+		const slowRate = (Game.level<SlowLevel ? 1:SlowRate)
 		return (
-			 (Game.moveSpeed*(Game.level<SlowLevel ? 1:SlowRate))
-			*(Maze.hasDot(this.actor.tileIdx)
-				? (GhsMgr.isFrightMode? Spd.EneEating:Spd.Eating)
-				: (GhsMgr.isFrightMode? Spd.Energized:Spd.Base))
+			Game.moveSpeed * slowRate * (
+			Maze.hasDot(this.actor.tileIdx)
+			  ?(GhsMgr.isFrightMode? Spd.EneEating : Spd.Eating)
+			  :(GhsMgr.isFrightMode? Spd.Energized : Spd.Base)
+			)
 		)
-	}
-	#stopMove() {
-		return (this.#stopped = !this.#canMove)
 	}
 	/** @param {number} spd */
 	update(spd) {
@@ -64,38 +62,38 @@ export class Mover {
 	}
 	/** @param {number} spd */
 	#turnCorner(spd) {
-		const dir = this.state.nextDir
-		if (this.#canTurn && dir) {
-			this.state.turning ||= true
-			this.actor.orient = dir
-			this.actor.setNextPos(spd, dir)
+		const {state:s,actor:a}= this
+		if (this.#canTurn && s.nextDir) {
+			s.turning ||= true
+			a.orient = s.nextDir
+			a.setNextPos(spd, s.nextDir)
 		}
 	}
 	#finishCornering() {
-		if (this.state.turning && this.actor.passedTileCenter) {
-			this.state.nextDir  = this.state.nextTurn
-			this.state.nextTurn = null
-			this.state.turning  = false
-			this.actor.setMoveDir(this.actor.orient)
+		const {state:s,actor:a}= this
+		if (s.turning && a.passedTileCenter) {
+			s.nextDir  = s.nextTurn
+			s.turning  = false
+			s.nextTurn = null
+			a.setMoveDir(a.orient)
 		}
 	}
 	#turnAround() {
-		if (this.actor.dir == this.actor.revOrient)
-			this.actor.setMoveDir(this.actor.orient)
+		const {actor:a}= this
+		if (a.dir == a.revOrient)
+			a.setMoveDir(a.orient)
 	}
 	#stopAtWall() {
-		if (this.#stopMove()) {
-			this.state.nextDir = null
-			this.actor.pos = this.actor.tilePos.mul(T)
-		}
+		const {state:s,actor:a,canMove}= this
+		if (!canMove) {
+			a.pos = a.tilePos.mul(T)
+			s.nextDir = null
+		} this.#stopped = !canMove
 	}
 }
 
-/**
- @param {Actor} actor
- @param {TurnState} state
-*/
-function setSteerEvent(actor, state) {
+/** @param {{actor:Actor, state:TurnState}} _ */
+function setSteerEvent({actor,state}) {
 	$win.offon('keydown.PacSteer', e=> {
 		const dir = Dir.from(e,{wasd:true})
 		if (keyRepeat(e)
