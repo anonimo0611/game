@@ -3,21 +3,22 @@ const DisDur  = 1149/Ticker.Interval
 const LineDur =  300/Ticker.Interval
 
 export class Dying {
-	#mAngle  = 0
+	#arkAng  = 0
 	#innerR  = PacR/4
 	#outerR  = PacR/2
 	#fadeOut = Fade.out(300)
 
 	/** @readonly */ctx
 	constructor(ctx=Ctx) {this.ctx = ctx}
-	get isDisintegrate() {
-		return this.#mAngle < PI-PI/DisDur
+	get isSplitting() {
+		return this.#arkAng < PI-PI/DisDur
 	}
 	update() {
-		if (this.isDisintegrate) {
- 			this.#mAngle += PI/DisDur
-			return
-		}
+		this.isSplitting
+			? this.#arkAng += PI/DisDur
+			: this.#updateRadialBurst()
+	}
+	#updateRadialBurst() {
 		if (this.#outerR <= PacR) {
 			this.#innerR += PacR/2/LineDur
 			this.#outerR += PacR/1/LineDur
@@ -31,16 +32,16 @@ export class Dying {
 		ctx.translate(x,y)
 		ctx.lineWidth = T/6
 		ctx.fillStyle = ctx.strokeStyle = Colors.Pacman
-		this.isDisintegrate
- 			? this.#drawDisintegrate()
+		this.isSplitting
+ 			? this.#drawSplittingBody()
 	 		: this.#drawRadialBurst()
 		ctx.restore()
 	}
-	#drawDisintegrate() {
+	#drawSplittingBody() {
 		const {ctx}= this
 		ctx.beginPath()
 		ctx.moveTo(0, PacR*0.3)
-		ctx.arc(0, 0, PacR, -PI/2+this.#mAngle, -PI/2-this.#mAngle)
+		ctx.arc(0, 0, PacR, -PI/2+this.#arkAng, -PI/2-this.#arkAng)
 		ctx.fill()
 	}
 	#drawRadialBurst() {

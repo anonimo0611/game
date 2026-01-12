@@ -158,7 +158,6 @@ const signalDirectionReversal = ()=> {
 }
 const SCATTER = 0, CHACE = 1
 const AttackInWaves = function() {
-	const initPhase = (mode=SCATTER)=> ({mode,update(){}})
 	{
 		let phase = initPhase()
 		State.on({_Ready:()=> phase = genPhase()})
@@ -167,6 +166,9 @@ const AttackInWaves = function() {
 			get isScatterMode() {return phase.mode == SCATTER},
 			update() {State.isInGame && phase.update()},
 		}
+	}
+	function initPhase(mode=SCATTER){
+		return ({mode,update(){}})
 	}
 	function genPhaseList() {
 		const {level:lv}= Game

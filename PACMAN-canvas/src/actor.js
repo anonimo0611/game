@@ -111,8 +111,7 @@ export class Actor extends Common {
 		return v.setX((v.x+Cols) % Cols) // x-axis wrap
 	}
 	collidesWithWall(dir=this.dir) {
-		const {speed,center}= this
-		const {x,y}= Vec2[dir].mul(T/2+speed).add(center).divInt(T)
+		const {x,y}= Vec2[dir].mul(T/2+1).add(this.center).divInt(T)
 		return Maze.hasWall({x:(x+Cols) % Cols, y}) // x-axis wrap
 	}
 	justArrivedAtTile(spd=this.speed) {

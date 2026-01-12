@@ -25,7 +25,7 @@ class PlayerPac extends PacMan {
 	get closed()   {return State.isInGame == false}
 	get maxAlpha() {return Ctrl.semiTransPac? .75:1}
 	get speed()    {return this.mov.speed}
-	get stopped()  {return this.mov.stopped}
+	get onWall()   {return this.mov.onWall}
 	get tunEntry() {return this.#tunEntry}
 
 	get timeSinceLastEating() {
@@ -68,7 +68,7 @@ class PlayerPac extends PacMan {
 		for (const _ of range(steps)) {
 			this.#eatDot(tileIdx)
 			this.mov.update(speed/steps)
-			if (this.mov.stopped) break
+			if (this.mov.onWall) break
 		}
 	}
 	#eatDot(tileIdx=-1) {

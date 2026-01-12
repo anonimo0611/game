@@ -17,15 +17,15 @@ class TurnState {
 export class Mover {
 	/** @private */actor
 	/** @private */state
-	#speed   = 0
-	#stopped = true
+	#speed  = 0
+	#onWall = false
 	constructor(/**@type {Actor}*/actor) {
 		this.actor = actor
 		this.state = new TurnState
 		setSteerEvent({actor,state:this.state})
 	}
-	get speed()   {return this.#speed ||= this.#tileSpeed}
-	get stopped() {return this.#stopped}
+	get speed()  {return this.#speed ||= this.#tileSpeed}
+	get onWall() {return this.#onWall}
 	get canMove() {
 		const {state:s,actor:a}= this
 		return s.turning || !a.collidesWithWall()
@@ -88,7 +88,7 @@ export class Mover {
 		if (!canMove) {
 			a.pos = a.tilePos.mul(T)
 			s.nextDir = null
-		} this.#stopped = !canMove
+		} this.#onWall = !canMove
 	}
 }
 

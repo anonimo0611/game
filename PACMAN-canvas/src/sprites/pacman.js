@@ -21,15 +21,14 @@ export default class {
 		this.isMain = ctx.canvas.id == 'board_main'
 		this.#mouthAngle = [0,OpenMid,OpenMax][mouthOpenings]
 	}
-	update({stopped=false,hidden=false}={}) {
-		if (hidden)
-			return
-		if (this.#dyingSpr) {
-			this.#dyingSpr.update()
-			return
-		}
-		if (stopped) {
-			if (this.#mouthAngle < OpenMid)
+	update({closed=false,hidden=false,onWall=false}={}) {
+		this.#dyingSpr
+			? this.#dyingSpr.update()
+			: !closed && !hidden && this.#chew(onWall)
+	}
+	#chew(onWall=false) {
+		if (onWall) {
+			if (this.#mouthAngle <= OpenMid)
 				this.#mouthAngle = OpenMid
 			return
 		}
