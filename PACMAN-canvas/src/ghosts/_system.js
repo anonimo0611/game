@@ -84,7 +84,7 @@ export const GhsMgr = new class extends Common {
 	get isChaseMode()    {return AttackInWaves.isChaseMode}
 	get isScatterMode()  {return AttackInWaves.isScatterMode}
 	get isFrightMode()   {return FrightMode.session != null}
-	get points()         {return FrightMode.session?.score ?? PtsLst[0]}
+	get points()         {return FrightMode.session?.points ?? PtsLst[0]}
 	get spriteIdx()      {return FrightMode.session?.spriteIdx ?? 0}
 	get caughtAll()      {return FrightMode.session?.caughtAll ?? false}
 	get akaCenterPos()   {return Ghosts[GhsType.Akabei].center}
@@ -273,8 +273,8 @@ const FrightMode = function() {
 	let   _session  = /**@type {?Readonly<Session>}*/(null)
 	const TimeTable = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	class Session {
-		#time=0; #flash=0; #caught=0; #fIdx=1;
-		get score()     {return PtsLst[this.#caught-1]}
+		#time=0; #flash=0; #caught=0; #fIdx=1; #phase=0;
+		get points()    {return PtsLst[this.#caught-1]}
 		get caughtAll() {return this.#caught == GhsType.Max}
 		get spriteIdx() {return this.#flash && this.#fIdx^1}
 		constructor() {
@@ -291,8 +291,9 @@ const FrightMode = function() {
 			Sound.toggleFrightMode(isOn)
 		}
 		#flashing() {
-			const iv = (this.Dur == 1 ? 12:14)/Game.speed|0
-			this.#fIdx ^= +(this.#flash++ % iv == 0)
+			const iv = (this.Dur == 1 ? 12:13)/Game.speed|0
+			if (this.#flash++ % iv == 0)
+				if (++this.#phase < 10) this.#fIdx ^= 1
 		}
 		update() {
 			if (State.isInGame && !Timer.frozen) {

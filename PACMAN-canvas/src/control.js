@@ -113,7 +113,7 @@ export const Ctrl = new class {
 	}
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
-		if (Confirm.opened|| keyRepeat(e))
+		if (Confirm.opened || keyRepeat(e))
 			return
 		switch(e.key) {
 		case 'Escape': return Ctrl.pause()

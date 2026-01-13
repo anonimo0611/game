@@ -40,9 +40,9 @@ export class Mover {
 		const slowRate = (Game.level<SlowLevel ? 1:SlowRate)
 		return (
 			Game.moveSpeed * slowRate * (
-			Maze.hasDot(this.actor.tileIdx)
-			  ?(GhsMgr.isFrightMode? Spd.EneEating : Spd.Eating)
-			  :(GhsMgr.isFrightMode? Spd.Energized : Spd.Base)
+			  Maze.hasDot(this.actor.tileIdx)
+			    ?(GhsMgr.isFrightMode? Spd.EneEating : Spd.Eating)
+			    :(GhsMgr.isFrightMode? Spd.Energized : Spd.Base)
 			)
 		)
 	}
