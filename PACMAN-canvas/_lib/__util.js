@@ -1,6 +1,6 @@
 'use strict'
 const {defineProperty,entries,freeze,hasOwn,keys,values}= Object
-const {abs,ceil,floor,max,min,PI,random,round,sqrt,trunc:int}= Math
+const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 
 /**
  @param {WheelEvent|JQuery.TriggeredEvent} e
@@ -19,7 +19,7 @@ const {abs,ceil,floor,max,min,PI,random,round,sqrt,trunc:int}= Math
 
 /**
  @param {KeyboardEvent|JQuery.KeyboardEventBase|JQuery.TriggeredEvent} e
-*/const isEnterKey = e=> /^(\x20|Enter)$/.test(e?.key ?? '')
+*/const isEnterKey = e=> (e.key === '\x20' || e.key === 'Enter')
 
 /**
  @template T
@@ -109,6 +109,12 @@ const match = (key, patterns, separator='|')=> {
 */const randInt = (min,max)=> int(random() * (max-min+1) + min)
 
 /**
+ @template T
+ @param {readonly T[]} array
+ @returns {T}
+*/const randChoice = array=> array[randInt(0, array.length-1)]
+
+/**
  @param {number} n
  @param {number} min
  @param {number} max
@@ -119,12 +125,6 @@ const match = (key, patterns, separator='|')=> {
  @param {number} min
  @param {number} max
 */const between = (n,min,max)=> (n >= min && n <= max)
-
-/**
- @template T
- @param {readonly T[]} array
- @returns {T}
-*/const randChoice = array=> array[randInt(0, array.length-1)]
 
 /**
  @template T

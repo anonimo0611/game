@@ -140,8 +140,7 @@ export class Slide extends Menu {
 	}
 	#setWidth(/**@type {number}*/btnW) {
 		const width = max(...[...this.items].map(li=> li.offsetWidth))+btnW
-		$(this.root) .css('width',`${width}px`)
-		$(this.items).css('width',`${width}px`)
+		$([this.root,...this.items]).css('width',`${width}px`)
 		return width
 	}
 	select(idx=this.index) {
