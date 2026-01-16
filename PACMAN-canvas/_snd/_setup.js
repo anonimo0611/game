@@ -20,7 +20,7 @@ const Ctrl = new class { // Register sound instances and set up controls
 		$win.on({keydown:Ctrl.onKeydown})
 		$('#speaker')
 			.on({click:Ctrl.mute})
-			.onWheel(Ctrl.mute)
+			.onWheel(Ctrl.onInput)
 		$('.volRng')
 			.attr({value:initVol})
 			.attr({defaultValue:initVol})

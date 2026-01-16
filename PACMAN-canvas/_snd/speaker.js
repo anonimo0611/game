@@ -1,16 +1,17 @@
-﻿const Size = $('#volume').height()
+﻿const Size  = $('#volume').height()
 const{cvs,ctx}= canvas2D('speaker', Size)
 
 export const Speaker = new class {
-	draw(
-	 /**@type {number}*/    vol,
-	 /**@type {Cvs2DStyle}*/color='#FFF'
-	) {
+	/** @readonly*/color
+	/** @param {Cvs2DStyle} color */
+	constructor(color='#FFF') {this.color=color}
+
+	draw(/**@type {number}*/vol) {
 		const {width,height}= cvs
 		const step = this.#step(vol)
 		ctx.clear()
 		ctx.save()
-		ctx.fillStyle = ctx.strokeStyle = color
+		ctx.fillStyle = ctx.strokeStyle = this.color
 		ctx.translate(width/2, height/2)
 		ctx.scale(width/100, height/100)
 		this.#drawBody()
@@ -54,9 +55,7 @@ export const Speaker = new class {
 		].forEach(([x,rX,rY,st,ed], idx)=> {
 			ctx.save()
 			ctx.setAlpha(step <= idx && vol/10 || 1)
-			ctx.beginPath()
-			ctx.ellipse(x,0, rX,rY, 0, st,ed)
-			ctx.stroke()
+			ctx.setEllipse(x,0, rX,rY, 0, st,ed, null, this.color)
 			ctx.restore()
 		})
 		ctx.restore()
