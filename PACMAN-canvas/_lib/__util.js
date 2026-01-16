@@ -3,12 +3,6 @@ const {defineProperty,entries,freeze,hasOwn,keys,values}= Object
 const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 
 /**
- @param {WheelEvent|JQuery.TriggeredEvent} e
-*/const wheelDeltaY = e=>
-	e instanceof WheelEvent? e.deltaY
-		: e.originalEvent instanceof WheelEvent
-			? e.originalEvent.deltaY : 0
-/**
  @param {KeyboardEvent|JQuery.KeyboardEventBase} e
 */const keyRepeat = e=>
 	(e instanceof KeyboardEvent? e : e.originalEvent)?.repeat ?? false
@@ -172,6 +166,14 @@ const $win = $(window)
 */const $off = events=> $win.off(underscoreToSp(events))
 
 /**
+ @param {Window|HTMLElement} node
+ @param {(ev:WheelEvent)=> void} fn
+*/const $onWheel = (node, fn)=> {
+	node.addEventListener('wheel', fn, {passive:false})
+	return $(node)
+}
+
+/**
  @param {string} ns
  @param {{[event:string]:(e:JQuery.TriggeredEvent)=> unknown}} cfg
 */const $onNS = (ns,cfg)=> {
@@ -191,4 +193,11 @@ const $win = $(window)
 	return (force === false)
 		? $(this).off(events)
     	: $(this).off(events).on({[events]:handler})
+}
+/**
+ @param {(ev:WheelEvent)=> void} handler
+*/jQuery.fn.onWheel = function(handler) {
+    return this.each(function() {
+        this.addEventListener('wheel', handler, {passive:false});
+    })
 }

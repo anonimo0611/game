@@ -126,9 +126,9 @@ export class Slide extends Menu {
 		})
 		$(this.BtnSet[L]).on('click',()=> {this.#select(L)})
 		$(this.BtnSet[R]).on('click',()=> {this.#select(R)})
-		$(root).on('keydown',e=>{this.#select(Dir.from(e))})
-		$(wrap).on('wheel',  e=>{this.#select(wheelDeltaY(e)>0 ? L:R)})
+		$(wrap).onWheel(e=>{this.#select(e.deltaY>0 ? L:R)})
 		$(wrap).on('pointerdown', e=>{e.preventDefault(),root.focus()})
+		$(root).on('keydown',e=>{this.#select(Dir.from(e))})
 		root.tabIndex = 0
 		this.width = this.#setWidth(this.BtnSet[L].offsetWidth*2)
 		this.select(this.index)

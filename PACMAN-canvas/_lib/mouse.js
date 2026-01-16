@@ -24,7 +24,7 @@ export const Cursor = function() {
  @param {HTMLInputElement} ctrl
 */
 function setupCtrl(ctrl) {
-	const output = qS(`output[for~="${ctrl.id}"]`) ?? []
+	const output = $(`output[for~="${ctrl.id}"]`).text(ctrl.value).get(0)
 	const ids    = ctrl.dataset.links?.trim().split(/\s+/) ?? []
 	const label  = ctrl.closest('label') || qS(`label[for="${ctrl.id}"]`)
 	const links  = ids.map(id=> qS(`input#${id}`)).filter(e=> e!=null)
@@ -32,7 +32,7 @@ function setupCtrl(ctrl) {
 	/** @param {WheelEvent} e */
 	function onWheel(e) {
 		e.preventDefault()
-		0 < wheelDeltaY(e)
+		0 < e.deltaY
 			? ctrl.stepDown()
 			: ctrl.stepUp()
 		$(ctrl).trigger('input')
@@ -43,8 +43,7 @@ function setupCtrl(ctrl) {
 			.prop({value})
 			.css({'--ratio':`${norm(+min,+max,+value)*100}%`})
 	}
-	$(output).text(ctrl.value)
-	$(label || ctrl).on({wheel:onWheel})
+	$(label || ctrl).onWheel(onWheel)
 	$(ctrl).on('input',onInput).trigger('input')
 }
 $load(()=> {

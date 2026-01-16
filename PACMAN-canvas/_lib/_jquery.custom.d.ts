@@ -7,4 +7,5 @@ interface JQuery {
 		handler: JQuery.TypeEventHandler<TElement, undefined, TElement, TElement, TType>,
 		force?:  boolean,
 	):this;
+	onWheel(handler: (ev:WheelEvent)=> void):this;
 }
