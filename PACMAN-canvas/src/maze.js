@@ -128,7 +128,7 @@ export const Maze = freeze(new class {
 	GhostNoEntryTiles = new Set(['12-11Up','12-23Up','15-11Up','15-23Up'])
 
 	/**
-	 Whether tile `row` coord is the top/bottom of the maze excluding dead space
+	 Whether tile `row` coord is the top/bottom of the maze excluding dead space \
 	 @param {number} row
 	*/
 	isTopOrBottom = row=> (row == Maze.Top) || (row == Maze.Bottom)
