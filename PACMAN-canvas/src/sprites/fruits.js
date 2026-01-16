@@ -241,10 +241,7 @@ function bell(ctx=Ctx) {
 	ctx.strokeLine(-0.5,-4.3, 0.5,-4.3)
 
 	// bell bottom
-	ctx.beginPath()
-	ctx.ellipse(0, 4.9, 4.6, 1, 0, 0, PI*2)
-	ctx.fillStyle = '#53A8FB'
-	ctx.fill()
+	ctx.setEllipse(0, 4.9, 4.6, 1, 0, 0, PI*2, '#53A8FB')
 	ctx.fillCircle(1.2, 5.3, 1.4, '#FFF')
 }
 

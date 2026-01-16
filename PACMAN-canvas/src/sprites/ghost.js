@@ -63,6 +63,7 @@ export default class {
 		}
 		(()=> {
 			if (isFrightened) return
+			ctx.fillStyle = '#FFF'
 			switch(orient) {
 			case 'Left':   return this.#drawEyesHoriz(L)
 			case 'Right':  return this.#drawEyesHoriz(R)
@@ -112,23 +113,16 @@ export default class {
 		ctx.bezierCurveTo(+13, 28, +22, 28, +26, 38)
 		ctx.bezierCurveTo(+29, 45, +41, 45, +42, 26)
 	}
-	#drawEyeBall(x=0,y=0,rX=0,rY=0,rot=0,st=0,ed=PI*2) {
-		const {ctx}= this
-		ctx.beginPath()
-		ctx.ellipse(x,y,rX,rY,rot,st,ed, true)
-		ctx.fillStyle = 'white'
-		ctx.fill()
-	}
 	#drawEyesUp(isRipped=false) {
 		const eyesColor = (isRipped? 'black' : Colors.GhostEyes)
 		for (const v of [-1,+1]) {
-			this.#drawEyeBall  (19.5*v, -17, 13, 17, -8*v*PI/180, -3*PI/4, -PI/4)
+			this.ctx.setEllipse(19.5*v, -17, 13, 17, -8*v*PI/180, -PI/4, -3*PI/4)
 			this.ctx.fillCircle(18.5*v, -26,  8, eyesColor)
 		}
 	}
 	#drawEyesDown() {
 		for (const v of [-1,+1]) {
-			this.#drawEyeBall  (19*v, -3, 13, 17, 0, 40*PI/180, 140*PI/180)
+			this.ctx.setEllipse(19*v, -3, 13, 17, 0, 140*PI/180, 40*PI/180)
 			this.ctx.fillCircle(19*v, +4,  8, Colors.GhostEyes)
 		}
 	}
@@ -136,7 +130,7 @@ export default class {
 	#drawEyesHoriz(orient) {
 		const v = (Vec2[orient].x < 0 ? -1:1)
 		for (const i of [0,1]) {
-			this.#drawEyeBall  ([-16.5*v, 23*v][i], -11, 13, 17, 0, 0, PI*2)
+			this.ctx.setEllipse([-16.5*v, 23*v][i], -11, 13, 17, 0, 0, PI*2)
 			this.ctx.fillCircle([ -9.5*v, 29*v][i],  -8,  8, Colors.GhostEyes)
 		}
 	}
