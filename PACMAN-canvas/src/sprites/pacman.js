@@ -33,7 +33,7 @@ export default class {
 			return
 		}
 		const phase = this.#mouthPhase += PI/Duration
-		this.#mouthAngle = OpenMax * abs(Math.sin(phase))
+		this.#mouthAngle = OpenMax * abs(sin(phase))
 	}
 	draw({
 		center:{x,y}={x:0,y:0},
