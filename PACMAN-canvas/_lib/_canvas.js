@@ -75,13 +75,44 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 	 @param {Cvs2DStyle} style
 	 @param {number} lineWidth
 	*/
-	strokeCircle(x,y, r, style=this.fillStyle, lineWidth=this.lineWidth) {
+	strokeCircle(x,y, r, style=this.strokeStyle, lineWidth=this.lineWidth) {
 		this.save()
 		this.beginPath()
 		style && (this.strokeStyle = style)
 		this.arc(x,y, r, 0, PI*2)
 		this.lineWidth = lineWidth
 		this.stroke()
+		this.restore()
+	}
+
+	/**
+	 @param {number} x
+	 @param {number} y
+	 @param {number} rX  radiusX
+	 @param {number} rY  radiusY
+	 @param {number} rot rotaion
+	 @param {number} st  startAngle
+	 @param {number} ed  endAngle
+	 @param {?Cvs2DStyle} [fill]   fillStyle
+	 @param {Cvs2DStyle}  [stroke] storkeStyle
+	 @param {number}  [lw]    lineWIdth
+	 @param {boolean} [close] Close the path
+	*/
+	setEllipse(x,y,rX,rY,rot,st,ed,fill=this.fillStyle,stroke,lw=this.lineWidth,close=false
+	) {
+		this.save()
+		this.beginPath()
+		this.ellipse(x,y,rX,rY,rot,st,ed)
+		close && this.closePath()
+		if (fill) {
+			this.fillStyle = fill
+			this.fill()
+		}
+		if (stroke) {
+			this.strokeStyle = stroke
+			this.lineWidth = lw
+			this.stroke()
+		}
 		this.restore()
 	}
 
@@ -98,18 +129,18 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		this.stroke()
 	}
 
-	/** @param {(readonly [x:number, y:number])[]} c */
-	newLinePath(...c) {
-		this.beginPath()
-		this.setLinePath(...c)
-		return this
-	}
-
 	/** @param {readonly number[]} v */
 	setVertices(v) {
 		for (const i of range(0, v.length, 2))
 			!i ? this.moveTo(v[i], v[i+1])
 			   : this.lineTo(v[i], v[i+1])
+		return this
+	}
+
+	/** @param {(readonly [x:number, y:number])[]} c */
+	newLinePath(...c) {
+		this.beginPath()
+		this.setLinePath(...c)
 		return this
 	}
 
