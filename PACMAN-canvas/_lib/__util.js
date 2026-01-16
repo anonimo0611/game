@@ -166,14 +166,6 @@ const $win = $(window)
 */const $off = events=> $win.off(underscoreToSp(events))
 
 /**
- @param {Window|HTMLElement} node
- @param {(ev:WheelEvent)=> void} fn
-*/const $onWheel = (node, fn)=> {
-	node.addEventListener('wheel', fn, {passive:false})
-	return $(node)
-}
-
-/**
  @param {string} ns
  @param {{[event:string]:(e:JQuery.TriggeredEvent)=> unknown}} cfg
 */const $onNS = (ns,cfg)=> {
