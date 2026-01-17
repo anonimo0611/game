@@ -47,6 +47,7 @@ D__________________________C\
 
 const WallSet  = /**@type {Set<number>}*/(new Set)
 const DotSet   = /**@type {Set<number>}*/(new Set)
+const EatenSet = /**@type {Set<number>}*/(new Set)
 const PowMap   = /**@type {Map<number,Vec2>}*/(new Map)
 const PenRect  = new Rect(10, 13,  8, 5).freeze()
 const PenOuter = new Rect( 9, 12, 10, 7).freeze()
@@ -91,6 +92,7 @@ export const Maze = freeze(new class {
 	static reset(
 	 /**@type {JQuery.TriggeredEvent}*/e
 	) {
+		EatenSet.clear()
 		e.target != powChk && Wall.draw()
 		for (const [i,c] of MapArr.entries())
 			DotChipSet.has(c) && this.setDot(i,c)
@@ -100,7 +102,6 @@ export const Maze = freeze(new class {
 	 /**@type {string}*/chip
 	) {
 		const t = Vec2.new(i%Cols, i/Cols|0)
-		Maze.clearBgDot({tileIdx:i,tilePos:t})
 		DotSet.add(i)
 		powChk.checked == false || chip == '.'
 			? drawDot(Bg,...t.vals)
@@ -121,14 +122,14 @@ export const Maze = freeze(new class {
 	get dotsLeft() {return DotSet.size}
 
 	/**
-	 Tiles where the specified direction is disallowed for ghost navigation
+	 Tiles where the specified direction is disallowed for ghost navigation \
 	 Format ex: `${x}-${y}${Direction}`
 	 @type {ReadonlySet<string>}
 	*/
 	GhostNoEntryTiles = new Set(['12-11Up','12-23Up','15-11Up','15-23Up'])
 
 	/**
-	 Whether tile `row` coord is the top/bottom of the maze excluding dead space \
+	 Whether tile `row` coord is the top/bottom of the maze excluding dead space
 	 @param {number} row
 	*/
 	isTopOrBottom = row=> (row == Maze.Top) || (row == Maze.Bottom)
@@ -143,13 +144,13 @@ export const Maze = freeze(new class {
 			? o.set(t.x>Cols/2 && o.x>Cols/2 ? 21:6, 15) : o
 
 	/**
-	 @param {{tileIdx:number, tilePos:Vec2}} tile
+	 @param   {number} i Tile index
 	 @returns {number} Number of remaining dots
 	*/
-	clearBgDot({tileIdx:i,tilePos:{x,y}}) {
+	clearDot(i) {
 		DotSet.delete(i)
 		PowMap.delete(i)
-		drawDot(Bg, x,y, true, false)
+		EatenSet.add(i)
 		return DotSet.size
 	}
 
@@ -162,6 +163,11 @@ export const Maze = freeze(new class {
 		const [x,y] = [col,row].map(n=>(n+.5)*T)
 		const color = visible? Colors.Dot : null
 		ctx.fillCircle(x,y, T/(isPow? 2:9), color)
+	}
+	fillEatenDots() {
+		Ctx.fillStyle = 'black'
+		for (const i of EatenSet)
+			Ctx.fillRect((i%Cols)*T, (i/Cols|0)*T, T,T)
 	}
 	drawGrid() {
 		if (!Ctrl.showGridLines)

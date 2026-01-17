@@ -79,7 +79,7 @@ class PlayerPac extends PacMan {
 		Maze.hasPow(tileIdx)
 			? this.#eatPowerDot()
 			: this.#eatSmallDot()
-		Maze.clearBgDot(this) == 0
+		Maze.clearDot(tileIdx) == 0
 			? State.toCleared()
 			: Player.trigger('AteDot')
 	}
