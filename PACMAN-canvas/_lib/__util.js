@@ -26,11 +26,12 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
  @param {number} from
  @param {number} [to]
  @param {number} [step]
-*/const range = function*(from,to,step=1) {
+*/const range = function*(from,to,step) {
+	if (to   === undefined) [to,from] = [from,0]
+    if (step === undefined) step = from < to ? 1 : -1
 	if (step === 0) throw new RangeError('The 3rd argument must not be zero')
-	if (to === undefined) [to,from] = [from,0]
-	if (step > 0) for (let i=from; i<to; i+=step) yield i
-	if (step < 0) for (let i=from; i>to; i+=step) yield i
+    if (step > 0) for (let i=from; i<to; i+=step) yield i
+    if (step < 0) for (let i=from; i>to; i+=step) yield i
 }
 
 /**
@@ -184,12 +185,12 @@ const $win = $(window)
 */jQuery.fn.offon = function(events, handler, force) {
 	return (force === false)
 		? $(this).off(events)
-    	: $(this).off(events).on({[events]:handler})
+		: $(this).off(events).on({[events]:handler})
 }
 /**
  @param {(ev:WheelEvent)=> void} handler
 */jQuery.fn.onWheel = function(handler) {
-    return this.each(function() {
-        this.addEventListener('wheel', handler, {passive:false});
-    })
+	return this.each(function() {
+		this.addEventListener('wheel', handler, {passive:false})
+	})
 }

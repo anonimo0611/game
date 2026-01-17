@@ -61,18 +61,16 @@ const {Ticker,Timer} = function() {
 		 @param {number} ts
 		*/
 		loop(ts) {
-			if (this.stopped) return;
-			if (this.lastTS === 0)
-				this.lastTS = ts
+			if (this.stopped) return
 			requestAnimationFrame(this.loop)
+			if (this.lastTS === 0)
+				this.lastTS = this.acc = ts
 			const delta = ts - this.lastTS
 			this.lastTS = ts
 			this.acc += delta
 			if (this.acc >= Interval) {
 				this.tick()
-				this.acc -= Interval
-				if (this.acc > Interval)
-					this.acc = 0
+				this.acc %= Interval
 			}
 			this.draw?.()
 		}
