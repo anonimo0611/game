@@ -20,9 +20,6 @@ const {Ticker,Timer} = function() {
 	const Ticker = freeze(new class {
 		Interval = Interval
 		get paused()      {return _paused}
-		get delta()       {return this.deltaMs/Interval}
-		get deltaMs()     {return _ticker?.dtMs  ?? 0}
-		get deltaSec()    {return _ticker?.dtSec ?? 0}
 		get running()     {return _ticker instanceof Tick}
 		get count()       {return _fCounter}
 		get elapsedTime() {return _fCounter * Interval}
@@ -51,39 +48,41 @@ const {Ticker,Timer} = function() {
 		constructor(updateFn, drawFn) {
 			_ticker?.stop()
 			_ticker      = this
-			this.count   = 0
+			this.acc     = 0
 			this.start   = 0
 			this.lastTS  = 0
-			this.dtMs    = 0
-			this.dtSec   = 0
 			this.stopped = false
 			this.loop    = this.loop.bind(this)
 			this.update  = updateFn
 			this.draw    = drawFn
 			requestAnimationFrame(this.loop)
 		}
-
 		/**
 		 @param {number} ts
 		*/
 		loop(ts) {
-			if (this.stopped) return
-			if (this.lastTS == 0) {
-				this.lastTS = this.start = ts
-			}
+			if (this.stopped) return;
+			if (this.lastTS === 0)
+				this.lastTS = ts
 			requestAnimationFrame(this.loop)
-			this.dtMs  = ts - this.lastTS
-			this.dtSec = this.dtMs/1000
-			if ((ts-this.start)/Interval > this.count)
-				this.tick()
+			const delta = ts - this.lastTS
 			this.lastTS = ts
+			this.acc += delta
+			if (this.acc >= Interval) {
+				this.tick()
+				this.acc -= Interval
+				if (this.acc > Interval)
+					this.acc = 0
+			}
 			this.draw?.()
 		}
 		tick() {
-			!_paused
-				? this.updateGame()
-				: _pCounter++
-			this.count++
+			if (_paused) {
+				_pCounter++
+				this.acc = 0
+				return
+			}
+			this.updateGame()
 		}
 		updateGame() {
 			TimerMap.forEach(this.timer)
