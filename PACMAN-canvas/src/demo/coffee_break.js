@@ -39,12 +39,12 @@ export class CoffBreak {
 		$onNS('.CB',{Quit:this.end, blur_focus:this.pause})
 	}
 	movePac() {
-		this.pacman.x += this.pacvx * Ticker.delta
+		this.pacman.x += this.pacvx
 		this.pacman.sprite.update()
 	}
 	/** @param {number} rate */
 	moveAka(rate=1) {
-		this.akabei.x += this.akavx * Ticker.delta * rate
+		this.akabei.x += this.akavx * rate
 	}
 	drawPac(scale=1) {
 		this.pacman.sprite.draw(this.pacman, {scale})

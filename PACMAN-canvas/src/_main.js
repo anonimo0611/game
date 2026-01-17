@@ -46,7 +46,7 @@ export const Game = new class {
 	get clampedLv() {return clamp(Game.level, 1, 13)}
 	get speed()     {return State.isInGame? Ctrl.speed : 1}
 	get interval()  {return Game.speed * Ticker.Interval}
-	get moveSpeed() {return Game.speed * Game.speedByLv * Ticker.delta}
+	get moveSpeed() {return Game.speed * Game.speedByLv}
 
 	#resetLevel() {
 		Game.#restarted = false
@@ -57,7 +57,7 @@ export const Game = new class {
 		$Level.text('Level'+this.levelStr).trigger('change')
 	}
 	#onTitle() {
-		Cursor.default()
+		Cursor.show()
 		Sound.stop()
 		Game.#resetLevel()
 		Ticker.set(Game.#update, Game.#draw)
