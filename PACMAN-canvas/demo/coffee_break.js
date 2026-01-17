@@ -11,7 +11,9 @@ export class CoffBreak {
 	static #scene = /**@type {?Scene1|Scene2|Scene3}*/(null)
 	static {State.on({CoffBreak:this.#begin})}
 
-	static #begin(_={}, n=this.number) {
+	static #begin(_={}, n=CoffBreak.number) {
+		if (!between(n,1,3))
+			throw RangeError('The scene number must be 1-3.')
 		CoffBreak.#scene = new [Scene1,Scene2,Scene3][n-1]
 	}
 	static update() {
@@ -25,11 +27,10 @@ export class CoffBreak {
 		const sceneNum = {2:1, 5:2, 9:3}[Game.level]
 		return !Ctrl.isPractice && sceneNum || -1
 	}
-
-	pacman  = new PacMan
-	akabei  = new Ghost
-	pacVelX = -BW/180
-	akaVelX = -BW/180
+	pacvx  = -BW/180
+	akavx  = -BW/180
+	pacman = new PacMan
+	akabei = new Ghost
 
 	/** @protected @param {number} num */
 	constructor(num) {
@@ -38,12 +39,12 @@ export class CoffBreak {
 		$onNS('.CB',{Quit:this.end, blur_focus:this.pause})
 	}
 	movePac() {
-		this.pacman.x += this.pacVelX * Ticker.delta
+		this.pacman.x += this.pacvx
 		this.pacman.sprite.update()
 	}
 	/** @param {number} rate */
 	moveAka(rate=1) {
-		this.akabei.x += this.akaVelX * Ticker.delta * rate
+		this.akabei.x += this.akavx * rate
 	}
 	drawPac(scale=1) {
 		this.pacman.sprite.draw(this.pacman, {scale})
@@ -71,14 +72,14 @@ class Scene1 extends CoffBreak {
 	constructor() {
 		super(1)
 		this.isFrightened = false
-		this.akaVelX  = -BW / 156.4
+		this.akavx    = -BW / 156.4
 		this.pacman.x =  BW + T*1
 		this.akabei.x =  BW + T*3
 	}
 	turnBack() {
 		this.isFrightened = true
-		this.pacVelX *= -1.1
-		this.akaVelX *= -0.6
+		this.pacvx *= -1.1
+		this.akavx *= -0.6
 		this.pacman.dir = this.akabei.dir = R
 	}
 	moveLeft() {
@@ -161,8 +162,8 @@ class Scene3 extends CoffBreak {
 		const {akabei:aka}= this
 		super.moveAka()
 		aka.dir == L
-			? aka.x < -T*10 && (aka.dir = R) && (this.akaVelX *= -1)
-			: aka.x > (T*13 + BW) && aka.dir == R && this.end()
+			? aka.x < -T*10 && (aka.dir = R) && (this.akavx *= -1)
+			: aka.x > (T*13+BW) && this.end()
 	}
 	update() {
 		this.movePac()
