@@ -67,8 +67,9 @@ h1 {
 			top: var(--padding-top);
 		}
 		canvas#board_bg   {z-index: 1}
-		canvas#board_main {z-index: 2}
-		canvas#board_hud  {z-index: 3}
+		canvas#board_grid {z-index: 2;opacity:0}
+		canvas#board_main {z-index: 3}
+		canvas#board_hud  {z-index: 4}
 	}
 }
 #container[data-ready-state=loaded] {
@@ -101,7 +102,7 @@ body:not([data-state=Title]) #titleScr {
 	visibility: hidden;
 }
 body:is([data-state=Attract],[data-state=CoffBreak]) {
-	:is(header,canvas:not(#board_main)) {visibility: hidden}
+	:is(header,canvas:not(#board_main,#board_grid)) {visibility: hidden}
 }
 
 #debug {
