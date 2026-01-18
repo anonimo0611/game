@@ -146,9 +146,9 @@ export const Maze = freeze(new class {
 	 @returns {number} Number of remaining dots
 	*/
 	clearDot({tileIdx:i,tilePos:{x,y}}) {
-		const ofst = (T-DotR*2.5)/2
 		DotSet.delete(i)
 		PowMap.delete(i)
+		const ofst = (T-DotR*2.5)/2
 		Bg.fillRect(x*T+ofst, y*T+ofst, T-ofst*2, T-ofst*2)
 		return DotSet.size
 	}

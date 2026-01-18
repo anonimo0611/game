@@ -238,7 +238,7 @@ export class Ghost extends Actor {
 	}
 	#setPacCaughtState() {
 		Sound.stopLoops()
-		State.toPacCaught().toPacDying({delay:500})
+		State.toPacCaught().toPacDying({delay:800})
 	}
 	#setFrightMode(_={}, on=false) {
 		!this.isEscaping && (this.#frightened=on)
