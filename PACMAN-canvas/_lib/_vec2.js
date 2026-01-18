@@ -1,7 +1,7 @@
 'use strict'
 /**
  @typedef {[x:number, y:number]}   xyList
- @typedef {[x:number, y:number][]} xy2dList
+ @typedef {readonly [x:number, y:number][]} xy2dList
  @typedef {{x:number, y:number}}   Position
 */
 class Vec2 {
@@ -123,7 +123,7 @@ class Vec2 {
 	}
 
 	/**
-	 @returns {readonly [x:number,y:number]}
+	 @returns {[x:number,y:number]}
 	*/get vals() {return [this.x,this.y]}
 
 	get hyphenated() {return `${this.x}-${this.y}`}
