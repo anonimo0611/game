@@ -77,7 +77,6 @@ const {Ticker,Timer} = function() {
 		tick() {
 			if (_paused) {
 				_pCounter++
-				this.acc = 0
 				return
 			}
 			this.updateGame()
