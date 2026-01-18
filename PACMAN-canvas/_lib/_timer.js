@@ -69,17 +69,15 @@ const {Ticker,Timer} = function() {
 			this.lastTS = ts
 			this.acc += delta
 			if (this.acc >= Interval) {
-				this.tick()
 				this.acc %= Interval
+				this.tick()
 			}
 			this.draw?.()
 		}
 		tick() {
-			if (_paused) {
-				_pCounter++
-				return
-			}
-			this.updateGame()
+			_paused
+				? _pCounter++
+				: this.updateGame()
 		}
 		updateGame() {
 			TimerMap.forEach(this.timer)
