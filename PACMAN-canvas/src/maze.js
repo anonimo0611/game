@@ -47,8 +47,7 @@ D__________________________C\
 
 const WallSet  = /**@type {Set<number>}*/(new Set)
 const DotSet   = /**@type {Set<number>}*/(new Set)
-const EatenSet = /**@type {Set<number>}*/(new Set)
-const PowMap   = /**@type {Map<number,Vec2>}*/(new Map)
+const PowMap   = /**@type {Map<number,Position>}*/(new Map)
 const PenRect  = new Rect(10, 13,  8, 5).freeze()
 const PenOuter = new Rect( 9, 12, 10, 7).freeze()
 
@@ -92,7 +91,6 @@ export const Maze = freeze(new class {
 	static reset(
 	 /**@type {JQuery.TriggeredEvent}*/e
 	) {
-		EatenSet.clear()
 		e.target != powChk && Wall.draw()
 		for (const [i,c] of MapArr.entries())
 			DotChipSet.has(c) && this.setDot(i,c)
@@ -101,11 +99,11 @@ export const Maze = freeze(new class {
 	 /**@type {number}*/i,
 	 /**@type {string}*/chip
 	) {
-		const t = Vec2.new(i%Cols, i/Cols|0)
+		const {x,y}= Vec2.new(i%Cols, i/Cols|0)
 		DotSet.add(i)
 		powChk.checked == false || chip == '.'
-			? drawDot(Bg,...t.vals)
-			: PowMap.set(i,t)
+			? drawDot(Bg,x,y)
+			: PowMap.set(i,{x,y})
 	}
 	Top     = 1
 	Bottom  = Rows-3
@@ -144,13 +142,14 @@ export const Maze = freeze(new class {
 			? o.set(t.x>Cols/2 && o.x>Cols/2 ? 21:6, 15) : o
 
 	/**
-	 @param   {number} i Tile index
+	 @param {{tileIdx:number,tilePos:Vec2}} tile
 	 @returns {number} Number of remaining dots
 	*/
-	clearDot(i) {
+	clearDot({tileIdx:i,tilePos:{x,y}}) {
+		const ofst = (T-DotR*2.5)/2
 		DotSet.delete(i)
 		PowMap.delete(i)
-		EatenSet.add(i)
+		Bg.fillRect(x*T+ofst, y*T+ofst, T-ofst*2, T-ofst*2)
 		return DotSet.size
 	}
 
@@ -162,21 +161,6 @@ export const Maze = freeze(new class {
 	drawDot(ctx, col,row, isPow=false, visible=true) {
 		const [x,y] = [col,row].map(n=>(n+.5)*T)
 		const color = visible? Colors.Dot : null
-		ctx.fillCircle(x,y, T/(isPow? 2:9), color)
-	}
-	fillEatenDots() {
-		Ctx.fillStyle = 'black'
-		for (const i of EatenSet)
-			Ctx.fillRect((i%Cols)*T, (i/Cols|0)*T, T,T)
-	}
-	drawGrid() {
-		if (!Ctrl.showGridLines)
-			return
-		Ctx.save()
-		Ctx.beginPath()
-		Ctx.strokeStyle = Colors.Grid
-		for (const y of range(1,Cols)) Ctx.strokeLine(T*y, 0, T*y, Rows*T)
-		for (const x of range(0,Rows)) Ctx.strokeLine(0, T*x, Cols*T, T*x)
-		Ctx.restore()
+		ctx.fillCircle(x,y, (isPow? PowR:DotR), color)
 	}
 }), {drawDot}= Maze

@@ -119,14 +119,12 @@ export const Game = new class {
 	}
 	#draw() {
 		Ctx.clear()
-		Maze.drawGrid()
 		Attract.draw()   ||
 		CoffBreak.draw() ||
 		Game.#drawMain()
 	}
 	#drawMain() {
 		Score.draw()
-		Maze.fillEatenDots()
 		Maze.PowDots.draw()
 		Fruit.drawTarget()
 		Actor.draw(player)

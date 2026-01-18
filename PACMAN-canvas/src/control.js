@@ -72,6 +72,7 @@ export const Ctrl = new class {
 		const spd = 'x'+Ctrl.speed.toFixed(1), lh = 0.9
 		const cfg = {ctx:HUD, size:T*0.68, scaleX:0.7, style:'bold'}
 		Ctrl.#save()
+		Ctrl.#toggleGrid()
 		HUD.save()
 		HUD.translate(T*0.1, T*18)
 		HUD.clearRect(0, -T, BW, T*3)
@@ -126,7 +127,16 @@ export const Ctrl = new class {
 			}
 		}
 	}
+	#toggleGrid() {
+		Grid.canvas.style.opacity = String(+Ctrl.showGridLines)
+	}
+	#setupGrid() {
+		Grid.strokeStyle = Colors.Grid
+		for (const y of range(1,Cols)) Grid.strokeLine(T*y, 0, T*y, Rows*T)
+		for (const x of range(0,Rows)) Grid.strokeLine(0, T*x, Cols*T, T*x)
+	}
 	#setup() {
+		Ctrl.#setupGrid()
 		values(Menu).forEach(m=> m.on({change:Ctrl.#save}))
 		$win.on({resize:Ctrl.#fitToViewport})
 		$('input')    .on({input:Ctrl.#output})

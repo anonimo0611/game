@@ -42,7 +42,7 @@ const GtsPtsSet = new Set(GhostPts)
  @typedef {typeof AllPts[number]} PtsType
  @param {PtsType} pts
 */
-function cache(pts, size=TileSize*2) {
+function cache(pts, size=T*2) {
 	const idx  = +GtsPtsSet.has(pts)
 	const ctx  = [FruitCvs, GhostCvs][idx].ctx
 	const cst  = [Colors.FruitPts, Colors.GhostPts][idx]

@@ -9,6 +9,10 @@ BaseSpeed = TileSize/4.5,
 /** Shorthand of TileSize */
 T = TileSize,
 
+/** Cookie radius */
+PowR = T/2,
+DotR = T/9,
+
 /** Board width */
 BW = Cols * T,
 
@@ -18,9 +22,10 @@ BH = Rows * T,
 /** @typedef {'Up'|'Right'|'Down'|'Left'} Direction */
 U='Up', R='Right', D='Down', L='Left',
 
-Bg  = canvas2D('board_bg' ,  BW,BH).ctx,
-HUD = canvas2D('board_hud',  BW,BH).ctx,
-Ctx = canvas2D('board_main', BW,BH).ctx,
+Bg   = canvas2D('board_bg' ,  BW,BH).ctx,
+Grid = canvas2D('board_grid', BW,BH).ctx,
+HUD  = canvas2D('board_hud',  BW,BH).ctx,
+Ctx  = canvas2D('board_main', BW,BH).ctx,
 
 Colors = freeze(new class {
 	Grid      = '#F00'
@@ -55,7 +60,7 @@ PacSpeed  = freeze(new class {
 	Energized = this.Base * 1.10
 	EneEating = this.Base * 0.95 // Energized+Eating
 }),
-GhsScale =  1.1,
+GhsScale  = 1.1,
 GhsType   = /**@type {const}*/({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4}),
 GhsNames  = /**@type {const}*/(['Akabei','Pinky','Aosuke','Guzuta']),
 GhsColors = GhsNames.map(name=> Colors[name]),
