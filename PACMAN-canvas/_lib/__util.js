@@ -16,13 +16,6 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 */const isEnterKey = e=> (e.key === '\x20' || e.key === 'Enter')
 
 /**
- @template T
- @param {readonly T[]} array
-*/const reverse = function*(array) {
-	for (let i=array.length-1; i>=0; i--) yield array[i]
-}
-
-/**
  @param {number} from
  @param {number} [to]
  @param {number} [step]
