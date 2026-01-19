@@ -33,7 +33,6 @@ export class Ghost extends Actor {
 	get chasePos()     {return player.center}
 	get scatterTile()  {return Vec2.new(24, 0)}
 	get chaseTile()    {return this.chasePos.divInt(T)}
-
 	get spriteIdx()    {return GhsMgr.spriteIdx}
 	get animIdx()      {return GhsMgr.animIndex}
 	get isChasing()    {return GhsMgr.isChaseMode   && this.isWalking}
@@ -72,11 +71,6 @@ export class Ghost extends Actor {
 			? this.originalTargetTile
 			: Maze.getGhostExitTile(this)
 	}
-	get houseEntranceArrived() {
-		return this.state.isEscaping
-			&& this.tilePos.y == Maze.House.EntranceTile.y
-			&& abs(BW/2 - this.center.x) <= this.speed
-	}
 	get sqrMagToPacman() {
 		return Vec2.sqrMag(this, player.pos)
 	}
@@ -101,9 +95,7 @@ export class Ghost extends Actor {
 	update() {
 		this.#fadeIn.update(this.maxAlpha)
 		this.sprite.update()
-		this.houseEntranceArrived
-			? this.#enterHouse()
-			: State.isInGame && this.#update()
+		State.isInGame && this.#update()
 	}
 	#update() {
 		this.#fleeTime >= 0 && this.#fleeTime--
@@ -112,15 +104,29 @@ export class Ghost extends Actor {
 		case 'Idle':     return this.#idleInHouse(this)
 		case 'GoingOut': return this.#goingOut(this)
 		case 'Returning':return this.#returnToHome(this)
-		default: this.#walkPath(this.speed*2|0)
+		default: this.#moveStepped(this.speed*2|0)
 		}
 	}
-	#idleInHouse({type,orient,center:{y:cy}}=this) {
+	#moveStepped(steps=1) {
+		for (let i=0; i<steps; i++) {
+			this.#tickMove(this.speed/steps)
+			this.passedTileCenter && this.#setNextDir()
+			if (this.#makeTurn(this)) break
+			if (this.collidesWith())  break
+		}
+	}
+	#tickMove(spd=this.speed) {
+		!this.houseEntranceArrived(spd)
+			? this.setNextPos(spd)
+			: this.#enterHouse()
+	}
+	#idleInHouse({type,speed,orient,center:{y:cy}}=this) {
 		if (!Ctrl.alwaysChase)
 			Sys.DotCounter.releaseIfReady(type, g=> this.leaveHouse(g))
+		if (this.state.isGoingOut) return
 		!this.state.isGoingOut && this.move(
-			(cy > Maze.House.MiddleY-T/2 && orient != D)? U:
-			(cy < Maze.House.MiddleY+T/2 ? D:U)
+			(cy > Maze.House.MiddleY-T*0.6 && orient != D)? U:
+			(cy < Maze.House.MiddleY+T*0.5 ? D:U)
 		)
 	}
 	leaveHouse(deactivateGlobalDotCnt=false) {
@@ -143,6 +149,11 @@ export class Ghost extends Actor {
 		this.dir = L
 		this.#started ||= true
 		this.state.toWalking()
+	}
+	houseEntranceArrived(spd=this.speed) {
+		return this.state.isEscaping
+			&& this.tilePos.y == Maze.House.EntranceTile.y
+			&& abs(BW/2 - this.center.x) <= spd
 	}
 	#enterHouse() {
 		this.dir = D
@@ -170,14 +181,6 @@ export class Ghost extends Actor {
 			? this.state.toGoingOut()
 			: this.state.toIdle() && this.#idleInHouse(this)
 		!Timer.frozen && Sound.ghostArrivedAtHome()
-	}
-	#walkPath(steps=1) {
-		for (const _ of range(steps)) {
-			this.setNextPos(this.speed/steps)
-			this.passedTileCenter && this.#setNextDir()
-			if (this.#makeTurn(this)) break
-			if (this.collidesWith())  break
-		}
 	}
 	#setNextDir() {
 		if (this.#revSignal) {
