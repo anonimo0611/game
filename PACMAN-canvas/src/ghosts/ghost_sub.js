@@ -50,7 +50,7 @@ class Guzuta extends Ghost {
 		return Vec2.new(0, 33)
 	}
 	get chasePos() {
-		return this.sqrMagToPacman < (T*8) ** 2
+		return Vec2.sqrMag(this, player.pos) < (T*8) ** 2
 		? this.scatterTile.add(.5).mul(T)
 		: player.center
 	}

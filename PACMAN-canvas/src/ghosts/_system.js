@@ -146,10 +146,11 @@ export const GhsMgr = new class extends Common {
 		PtsMgr.drawGhostPts()
 	}
 	#draw(onFront=true) {
-		reverse(Ghosts)
-		.filter (g=> g.isFrightened != onFront)
-		.filter (g=> g.state.isBitten == false)
-		.forEach(g=> g.draw())
+		Ghosts
+			.toReversed()
+			.filter (g=> g.isFrightened != onFront)
+			.filter (g=> g.state.isBitten == false)
+			.forEach(g=> g.draw())
 	}
 }
 

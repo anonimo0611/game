@@ -77,7 +77,7 @@ export default new class {
 	#guzutaCircle(g) {
 		Ctx.save()
 		Ctx.translate(...player.center.vals)
-		Ctx.setAlpha(g.sqrMagToPacman < (T*8) ** 2 ? 0.4 : 0.8)
+		Ctx.setAlpha(Vec2.sqrMag(g, player.pos) < (T*8) ** 2 ? 0.4 : 0.8)
 		Ctx.strokeCircle(0,0, T*8, GhsColors[g.type], 6)
 		Ctx.restore()
 	}

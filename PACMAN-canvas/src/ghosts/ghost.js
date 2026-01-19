@@ -10,18 +10,14 @@ import {GhsMgr} from './_system.js'
 import * as Sys from './_system.js'
 import Sprite   from '../sprites/ghost.js'
 
+const TurnPriority = /**@type {readonly Direction[]}*/([U,L,D,R])
+
 export class Ghost extends Actor {
 	/** @readonly */type
 	/** @readonly */init
 	/** @readonly */state
-
-	/** @readonly */
-	sprite  = new Sprite
+	/** @readonly */sprite = new Sprite
 	#fadeIn = new Actor.SpawnFade
-
-	/** @readonly */
-	turnDirs = /**@type {readonly Direction[]}*/([U,L,D,R])
-
 	#fleeTime   = -1
 	#revSignal  = false
 	#started    = false
@@ -71,9 +67,6 @@ export class Ghost extends Actor {
 			? this.originalTargetTile
 			: Maze.getGhostExitTile(this)
 	}
-	get sqrMagToPacman() {
-		return Vec2.sqrMag(this, player.pos)
-	}
 	get speed() {
 		return function(g,{state:s}=g) {
 			if (s.isIdle)       return GhsSpeed.Idle
@@ -120,10 +113,9 @@ export class Ghost extends Actor {
 			? this.setNextPos(spd)
 			: this.#enterHouse()
 	}
-	#idleInHouse({type,speed,orient,center:{y:cy}}=this) {
+	#idleInHouse({type,orient,center:{y:cy}}=this) {
 		if (!Ctrl.alwaysChase)
 			Sys.DotCounter.releaseIfReady(type, g=> this.leaveHouse(g))
-		if (this.state.isGoingOut) return
 		!this.state.isGoingOut && this.move(
 			(cy > Maze.House.MiddleY-T*0.6 && orient != D)? U:
 			(cy < Maze.House.MiddleY+T*0.5 ? D:U)
@@ -192,22 +184,22 @@ export class Ghost extends Actor {
 	}
 	#getNextDir(tgt=this.targetTile) {
 		const tile = this.getAdjTile(this.dir)
-		const dirs = this.turnDirs.flatMap
-		((dir,idx)=> {
-			const test = this.getAdjTile(dir,tile)
+		const dirs = TurnPriority.flatMap((dir,idx)=>
+		{
+			const testTile = this.getAdjTile(dir,tile)
 			return this.revOrient != dir
-				&& Maze.hasWall(test) == false
-				&& this.#canEnterTile({dir,test})
-				? [{idx,dir,dist:Vec2.sqrMag(test,tgt)}]:[]
+				&& !Maze.hasWall(testTile)
+				&& !this.#isRestrictedTile({dir,testTile})
+				? [{idx,dir,dist:Vec2.sqrMag(testTile,tgt)}]:[]
 		})
 		return this.isFrightened? randChoice(dirs).dir:
 			(idx=> dirs.sort(compareDist)[idx].dir)
 				(this.#fleeTime >= 0 ? dirs.length-1:0)
 	}
-	/** @param {{dir:Direction,test:Vec2}} testTile */
-	#canEnterTile({dir,test:{hyphenated:xy}}) {
+	/** @param {{dir:Direction,testTile:Vec2}} testTile */
+	#isRestrictedTile({dir,testTile:{hyphenated:xy}}) {
 		return (Ctrl.unrestricted || this.ignoreOneway)
-			|| !Maze.GhostNoEntryTiles.has(xy+dir)
+			? false : Maze.GhostNoEntryTiles.has(xy+dir)
 	}
 	#makeTurn({orient}=this) {
 		if (this.dir != orient
