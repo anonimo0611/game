@@ -65,7 +65,7 @@ class PlayerPac extends PacMan {
 	}
 	#update(steps=1) {
 		const {tileIdx,speed}= this
-		for (let i=0; i<steps; i++) {
+		for (const _ of range(steps)) {
 			this.#eatDot(tileIdx)
 			this.mov.update(speed/steps)
 			if (this.mov.onWall) break
