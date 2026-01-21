@@ -38,7 +38,7 @@ export const Fruit = new class {
 	get showTarget() {
 		return (State.isTitle || State.isInGame) && _showTgt
 	}
-	get #intersectsWithPlayer () {
+	get #intersectsWithPlayer() {
 		return circleCollision(player.center, TargetPos, T/2)
 	}
 	/** Pass the game-level to reference the fruit table */
