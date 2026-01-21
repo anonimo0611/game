@@ -61,5 +61,5 @@ export default class {
 		ctx.fill()
 		ctx.restore()
 	}
-	setDying() {this.#dyingSpr = new Dying(this.ctx)}
+	setDying(r=PacRadius) {this.#dyingSpr = new Dying(this.ctx,r)}
 }

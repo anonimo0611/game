@@ -1,27 +1,31 @@
-const PacR    = PacRadius
-const DisDur  = 1149/Ticker.Interval
-const LineDur =  300/Ticker.Interval
+const SplitDur = 1149/Ticker.Interval
+const BurstDur =  300/Ticker.Interval
 
 export class Dying {
+	#innerR
+	#outerR
 	#arkAng  = 0
-	#innerR  = PacR/4
-	#outerR  = PacR/2
 	#fadeOut = Fade.out(300)
-
 	/** @readonly */ctx
-	constructor(ctx=Ctx) {this.ctx = ctx}
+	/** @readonly */r
+	constructor(ctx=Ctx, radius=TileSize) {
+		this.ctx = ctx
+		this.r = radius
+		this.#innerR = radius/4
+		this.#outerR = radius/2
+	}
 	get isSplitting() {
-		return this.#arkAng < PI-PI/DisDur
+		return this.#arkAng < PI-PI/SplitDur
 	}
 	update() {
 		this.isSplitting
-			? this.#arkAng += PI/DisDur
+			? this.#arkAng += PI/SplitDur
 			: this.#updateRadialBurst()
 	}
 	#updateRadialBurst() {
-		if (this.#outerR <= PacR) {
-			this.#innerR += PacR/2/LineDur
-			this.#outerR += PacR/1/LineDur
+		if (this.#outerR <= this.r) {
+			this.#innerR += this.r*0.4/BurstDur
+			this.#outerR += this.r*1.0/BurstDur
 			return
 		}
 		this.#fadeOut.update()
@@ -30,7 +34,7 @@ export class Dying {
 		const {ctx}= this
 		ctx.save()
 		ctx.translate(x,y)
-		ctx.lineWidth = T/6
+		ctx.lineWidth = this.r*0.21
 		ctx.fillStyle = ctx.strokeStyle = Colors.Pacman
 		this.isSplitting
  			? this.#drawSplittingBody()
@@ -40,8 +44,8 @@ export class Dying {
 	#drawSplittingBody() {
 		const {ctx}= this
 		ctx.beginPath()
-		ctx.moveTo(0, PacR*0.3)
-		ctx.arc(0, 0, PacR, -PI/2+this.#arkAng, -PI/2-this.#arkAng)
+		ctx.moveTo(0, this.r*0.3)
+		ctx.arc(0, 0, this.r, -PI/2+this.#arkAng, -PI/2-this.#arkAng)
 		ctx.fill()
 	}
 	#drawRadialBurst() {
