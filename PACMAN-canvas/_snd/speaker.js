@@ -21,11 +21,12 @@ export const Speaker = new class {
 		ctx.restore()
 	}
 	#step(/**@type {number}*/vol) {
-		return match(vol, {
-			'8|9|10':   ()=> 3,
-			'3|4|5|6|7':()=> 2,
-			'1|2':      ()=> 1,
-		}) ?? 0
+		return (function() {
+			if (between(vol,8,9)) return 3
+			if (between(vol,3,7)) return 2
+			if (between(vol,1,2)) return 1
+			return 0
+		})()
 	}
 	#drawBody() {
 		ctx.newLinePath(
