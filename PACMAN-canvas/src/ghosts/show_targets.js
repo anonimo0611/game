@@ -4,6 +4,7 @@ import {Maze}   from '../maze.js'
 import {player} from '../player/player.js'
 import {GhsMgr} from '../ghosts/_system.js'
 import {Ghost}  from './ghost.js'
+import {GuzutaThreshold} from './ghost_sub.js'
 
 export default new class {
 	/** @param {readonly Ghost[]} ghosts */
@@ -31,13 +32,13 @@ export default new class {
 
 	/** @param {Ghost} g */
 	#strokeLines(g) {
-		if (Timer.frozen || !g.isChasing)
+		if (Timer.frozen
+		 || g.type == GhsType.Akabei
+		 || g.isChasing == false)
 			return
-		match(g.type, {
-			[GhsType.Pinky]:  ()=> this.#auxLines({g,ofst:4}),
-			[GhsType.Aosuke]: ()=> this.#auxLines({g,ofst:2}),
-			[GhsType.Guzuta]: ()=> this.#guzutaCircle(g),
-		})
+		g.type == GhsType.Guzuta
+			? this.#guzutaCircle(g)
+			: this.#auxLines(g, g.chaseOffset)
 	}
 	/** @param {Ghost} g */
 	#drawMarker(g) {
@@ -50,8 +51,11 @@ export default new class {
 		Ctx.strokeCircle(x,y, T*0.4, 'white', 4)
 		Ctx.restore()
 	}
-	/** @param {{g:Ghost,ofst:number}} param */
-	#auxLines({g,ofst}) {
+	/**
+	 @param {Ghost}  g
+	 @param {number} ofst
+	*/
+	#auxLines(g, ofst) {
 		const {center:{x,y},dir}= player
 		const fwdXY = player.forwardPos(ofst).vals
 		const ofsXY = player.offsetTarget(ofst).vals
@@ -59,7 +63,8 @@ export default new class {
 		Ctx.setAlpha(0.8)
 		Ctx.lineWidth   = 6
 		Ctx.strokeStyle = GhsColors[g.type]
-		if (g.type != GhsType.Pinky || !player.inTunSide) {
+		if (g.type == GhsType.Pinky && !player.inTunSide
+		 || g.type == GhsType.Aosuke) {
 			dir != U
 				? Ctx.newLinePath([x,y], fwdXY)
 				: Ctx.newLinePath([x,y], fwdXY).lineTo(...ofsXY)
@@ -77,8 +82,8 @@ export default new class {
 	#guzutaCircle(g) {
 		Ctx.save()
 		Ctx.translate(...player.center.vals)
-		Ctx.setAlpha(Vec2.sqrMag(g, player.pos) < (T*8) ** 2 ? 0.4 : 0.8)
-		Ctx.strokeCircle(0,0, T*8, GhsColors[g.type], 6)
+		Ctx.setAlpha(g.chasePos.eq(player.center) ? 0.8 : 0.4)
+		Ctx.strokeCircle(0,0, T*GuzutaThreshold, GhsColors[g.type], 6)
 		Ctx.restore()
 	}
 }
