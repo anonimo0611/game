@@ -91,20 +91,23 @@ export class DorpDown extends Menu {
 	}
 	#onKeydown(/**@type {JQuery.KeyDownEvent}*/e) {
 		const {size,index:i}= this
-		match(e.key, {
-			'Tab|Escape': ()=> {
-				this.close()
-			},
-			'Enter|\x20': ()=> {
-				this.closed
-				? this.open()
-				: this.select(i)
-			},
-			'ArrowUp|ArrowDown': ()=> {
-				const dir = /Up$/.test(e.key) ? -1:1
-				this.select((i+dir+size) % size, {close:false})
-			}
-		})
+		switch(e.key) {
+		case 'Tab':
+		case 'Escape':
+			this.close()
+			break
+		case 'Enter':
+		case '\x20':
+			this.closed
+			? this.open()
+			: this.select(i)
+			break
+		case 'ArrowUp':
+		case 'ArrowDown':
+			const dir = /Up$/.test(e.key) ? -1:1
+			this.select((i+dir+size) % size, {close:false})
+			break
+		}
 	}
 	select(idx=this.index, {close=true}={}) {
 		super.select(idx)
