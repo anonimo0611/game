@@ -27,6 +27,7 @@ export class Ghost extends Actor {
 	get maxAlpha()     {return Ctrl.showTargets? .75:1}
 	get chaseSpeed()   {return GhsSpeed.Base}
 	get chasePos()     {return player.center}
+	get chaseOffset()  {return 0}
 	get scatterTile()  {return Vec2.new(24, 0)}
 	get chaseTile()    {return this.chasePos.divInt(T)}
 	get spriteIdx()    {return GhsMgr.spriteIdx}
