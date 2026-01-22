@@ -27,7 +27,7 @@ export const Wall = new class {
 	}
 	#drawDoor() {
 		if (State.isFlashing) return
-		const y = (Maze.House.EntranceTile.y+1.6)*T
+		const y = (Maze.House.EntryTile.y+1.6)*T
 		Bg.fillRect(BW/2-T, y, T*2, T/4, Colors.Door)
 	}
 	#drawHouse() {

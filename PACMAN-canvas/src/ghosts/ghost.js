@@ -58,7 +58,7 @@ export class Ghost extends Actor {
 	}
 	get originalTargetTile() {
 		return this.state.isEscaping
-			? Maze.House.EntranceTile
+			? Maze.House.EntryTile
 			: this.isScattering
 				? this.scatterTile
 				: this.chaseTile
@@ -136,7 +136,7 @@ export class Ghost extends Actor {
 		if (cx != BW/2)
 			return this.centering()
 
-		if (y > Maze.House.EntranceTile.y*T)
+		if (y > Maze.House.EntryTile.y*T)
 			return this.move(U)
 
 		this.dir = L
@@ -145,7 +145,7 @@ export class Ghost extends Actor {
 	}
 	houseEntranceArrived(spd=this.speed) {
 		return this.state.isEscaping
-			&& this.tilePos.y == Maze.House.EntranceTile.y
+			&& this.tilePos.y == Maze.House.EntryTile.y
 			&& abs(BW/2 - this.center.x) <= spd
 	}
 	#enterHouse() {

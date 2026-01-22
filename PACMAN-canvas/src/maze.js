@@ -1,8 +1,8 @@
-import {Rect}  from '../_lib/rect.js'
-import {State} from './state.js'
-import {Ghost} from './ghosts/ghost.js'
-import {Wall}  from './sprites/wall.js'
-import {Ctrl,powChk} from './control.js'
+import {Rect}   from '../_lib/rect.js'
+import {State}  from './state.js'
+import {Ghost}  from './ghosts/ghost.js'
+import {Wall}   from './sprites/wall.js'
+import {powChk} from './control.js'
 
 const MapArr = freeze([... `\
 ////////////////////////////\
@@ -52,18 +52,19 @@ const PenRect  = new Rect(10, 13,  8, 5).freeze()
 const PenOuter = new Rect( 9, 12, 10, 7).freeze()
 
 class House {
-	MiddleY = (this.EntranceTile.y+3.5)*T
-	get EntranceTile() {return Vec2.new(13, 12)}
+	MiddleY = (this.EntryTile.y+3.5)*T
+	get EntryTile() {return Vec2.new(13, 12)}
 	isIn = (/**@type {Vec2}*/tile)=> PenRect.contains(tile)
 }
 class Tunnel {
-	Y = 15
-	EntranceL =  5.5
-	EntranceR = 22.5
+	Row = 15
+	EntryColL =  5.5
+	EntryColR = 22.5
+	/** Position in pixels */
 	findSide({x=0,y=0}) {
-		if (int(y/T) == this.Y) {
-			if (x/T <= this.EntranceL) return L
-			if (x/T >= this.EntranceR) return R
+		if (int(y/T) == this.Row) {
+			if (x/T <= this.EntryColL) return L
+			if (x/T >= this.EntryColR) return R
 		} return null
 	}
 }

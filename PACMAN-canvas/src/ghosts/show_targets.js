@@ -25,7 +25,7 @@ export default new class {
 	/** @param {Ghost} g */
 	#getTargetPos = g=>
 		(g.state.isGoingOut || g.isEscaping)
-			? Maze.House.EntranceTile.add(.5).mul(T)
+			? Maze.House.EntryTile.add(.5).mul(T)
 			: g.isScattering
 				? g.originalTargetTile.add(.5).mul(T)
 				: g.chasePos

@@ -27,18 +27,12 @@ export class Attract {
 		Attract.#attract?.draw()
 		return State.isAttract
 	}
-	pow    = new PowBlinker
-	subAct = new EnergizerAct
 	ghsSpr = new Sprite(T*2, T*2)
+	subAct = new EnergizerAct
 
 	/** @private */
 	constructor() {$onNS('.Attract', {click_keydown_blur:this.quit})}
-	update() {
-		if (this.subAct.started) {
-			this.subAct.update()
-			this.pow.update()
-		}
-	}
+	update() {this.subAct.update()}
 	GhsEntries = /**@type {const}*/([
 		// time, col1, col2, row, txt1, txt2
 		[10, 8, 18,  6, 'OIKAKE----', '"AKABEI"'],
@@ -57,7 +51,7 @@ export class Attract {
 		})
 		if (et > 85) {
 			[[25, DotPts, +true],
-			 [27, PowPts, +this.pow.show],
+			 [27, PowPts, +this.subAct.pow.show],
 			].forEach(([row,pts,showDot],i)=> {
 				drawDot(Ctx, 10, row-1, i==1, !!showDot)
 				drawText(12.0, row, null, pts)
@@ -67,7 +61,7 @@ export class Attract {
 		if (et > 90) {
 			const {extendScore}= Ctrl
 			if (this.subAct.outward) {
-				drawDot(Ctx, 4, 19, true, this.pow.show)
+				drawDot(Ctx, 4, 19, true, this.subAct.pow.show)
 			}
 			if (extendScore > 0) {
 				const text = `BONUS　PACMAN　FOR　${extendScore}`
@@ -89,10 +83,11 @@ export class Attract {
 }
 
 class EnergizerAct {
-	#pacvx  = -BW/180
-	#ghsvx  = -BW/169
+	pow = new PowBlinker
 	#pacman = new PacMan
 	#ghosts = /**@type {Ghost[]}*/([])
+	#pacvx  = -BW/180
+	#ghsvx  = -BW/169
 	get started() {return Ticker.elapsedTime > 1e4+500}
 	get outward() {return this.#pacman.dir == L}
 	constructor() {
@@ -106,7 +101,9 @@ class EnergizerAct {
 		this.#ghosts.push(g)
 	}
 	update() {
-		if (Timer.frozen) return
+		if (!this.started || Timer.frozen)
+			return
+		this.pow.update()
 		this.#pacman.sprite.update()
 		this.#pacman.x += this.#pacvx
 		if (this.#pacman.dir == L
