@@ -41,20 +41,6 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 }
 
 /**
- @template T
- @param {string|number} key
- @param {{[key:string|number]:(_:void)=>T}} patterns
- @param {string} [separator]
-*/
-const match = (key, patterns, separator='|')=> {
-    const keyStr = String(key)
-    for (const key of keys(patterns))
-        if (key !== '_' && key.split(separator).some(k=> k === keyStr))
-			return patterns[key]()
-    return patterns['_']?.() ?? undefined
-}
-
-/**
  @param {string} elementId
 */const byId = elementId=> document.getElementById(elementId)
 
