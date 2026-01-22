@@ -16,15 +16,19 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 */const isEnterKey = e=> (e.key === '\x20' || e.key === 'Enter')
 
 /**
- @param {number} from
- @param {number} [to]
+ @param {number} v1
+ @param {number} [v2]
  @param {number} [step]
-*/const range = function*(from,to,step) {
-	if (to   === undefined) [to,from] = [from,0]
-    if (step === undefined) step = from < to ? 1 : -1
-	if (step === 0) throw new RangeError('The 3rd argument must not be zero')
-    if (step > 0) for (let i=from; i<to; i+=step) yield i
-    if (step < 0) for (let i=from; i>to; i+=step) yield i
+ @type {{
+    (stop:number): Generator<number, void, unknown>;
+    (start:number, stop:number, step?:number|undefined): Generator<number,void,unknown>;
+ }}
+*/const range = function*(v1,v2,step=1) {
+	const [start,stop]= (v2 === undefined ? [0,v1]:[v1,v2])
+	if (!arguments.length) throw TypeError('Range expected at least 1 argument, got 0')
+	if (step === 0) throw RangeError('The 3rd argument must not be zero')
+    if (step > 0) for (let i=start; i<stop; i+=step) yield i
+    if (step < 0) for (let i=start; i>stop; i+=step) yield i
 }
 
 /**
@@ -33,11 +37,18 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 */const cycle = function*(...args) {while(1) yield* args}
 
 /**
- @param {number} from
- @param {number} [to]
+ @param {number} v1
+ @param {number} [v2]
  @param {number} [step]
-*/const cycleRange = function*(from,to,step) {
-	while(1) yield* range(from,to,step)
+ @type {{
+    (stop:number): Generator<number, void, unknown>;
+    (start:number, stop:number, step?:number|undefined): Generator<number,void,unknown>;
+ }}
+*/const cycleRange = function*(v1,v2,step=1) {
+	const [start,stop]= (v2 === undefined ? [0,v1]:[v1,v2])
+    if (step > 0 && start >= stop) return
+    if (step < 0 && start <= stop) return
+	while(1) yield* v2 === undefined ? range(v1) : range(v1,v2,step)
 }
 
 /**
