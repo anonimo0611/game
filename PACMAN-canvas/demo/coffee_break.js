@@ -125,15 +125,19 @@ class Scene2 extends CoffBreak {
 		this.movePac()
 		if (!this.counter && this.moveAka())
 			return
-		match(this.counter++, {
-			90:()=> {
-				this.akabei.x -= T/4
-				this.akaEyes  = U
-				this.isRipped = true
-			},
-			150:()=> {this.akaEyes = 'Bracket'},
-			270:()=> {this.end()},
-		})
+		switch(this.counter++) {
+		case 90:
+			this.akabei.x -= T/4
+			this.akaEyes  = U
+			this.isRipped = true
+			break
+		case 150:
+			this.akaEyes = 'Bracket'
+			break
+		case 270:
+			this.end()
+			break
+		}
 	}
 	draw() {
 		const {akabei:a, sprite:spr, akaEyes,isRipped}= this
