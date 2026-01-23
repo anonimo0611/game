@@ -43,6 +43,7 @@ export const Confirm = new class {
 		$(this.#confirm).fadeIn(300).get(0)?.showModal()
 		$('#confirm').find('button').each((i,btn)=> {
 			if (i == cancelIdx) btn.focus()
+			btn.classList.add(cancelIdx == i ? 'cancel':'ok')
 			btn.textContent = [btn1Txt,btn2Txt][i]
 			btn.onclick = ()=> {$off(NS),this.#remove([fn1,fn2][i])}
 		})
