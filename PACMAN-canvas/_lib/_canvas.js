@@ -36,6 +36,29 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 	}
 
 	/**
+	 @param {number} cx center x
+	 @param {number} cy center y
+	 @param {number} r  radius
+	 @param {?Cvs2DStyle} [fill]  fillStyle
+	 @param {Cvs2DStyle} [stroke] strokeStyle
+	 @param {number} [lw] lineWidth
+	*/
+	setSquare(cx, cy, r, fill=this.fillStyle, stroke, lw=this.lineWidth) {
+		if (fill || fill === null) {
+			this.save()
+			this.fillRect(cx-r, cy-r, r*2, r*2, fill)
+			this.restore()
+		}
+		if (stroke) {
+			this.save()
+			this.strokeStyle = stroke
+			this.lineWidth = lw
+			this.strokeRect(cx-r, cy-r, r*2, r*2)
+			this.restore()
+		}
+	}
+
+	/**
 	 @param {number} x
 	 @param {number} y
 	 @param {number} w

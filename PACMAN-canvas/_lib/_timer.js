@@ -1,5 +1,5 @@
 'use strict'
-const {Ticker,Timer} = function() {
+const {Ticker,Timer}= function() {
 	/**
 	@typedef {{
 		amount:  number;
@@ -8,11 +8,10 @@ const {Ticker,Timer} = function() {
 		ignoreFrozen: boolean;
 	}} TimerData
 	*/
+	const TimerMap = /**@type {Map<any,TimerData>}*/(new Map)
 	const FPS      = 60
 	const Interval = 1000/FPS
-	const TimerMap = /**@type {Map<any,TimerData>}*/(new Map)
 
-	let _stopped   = true
 	let _paused    = false
 	let _ticker    = /**@type {?Tick}*/(null)
 	let _fCounter  = 0 // frame  count
@@ -43,7 +42,6 @@ const {Ticker,Timer} = function() {
 		stop()  {
 			Ticker.reset()
 			_ticker  = null
-			_stopped = true
 		}
 		reset() {
 			_paused = false
@@ -61,7 +59,6 @@ const {Ticker,Timer} = function() {
 		constructor(updateFn, drawFn) {
 			Ticker.stop()
 			_ticker      = this
-			_stopped     = false
 			this.acc     = 0
 			this.start   = 0
 			this.lastTS  = 0
@@ -72,7 +69,7 @@ const {Ticker,Timer} = function() {
 		}
 		/** @param {number} ts */
 		loop(ts) {
-			if (_stopped) return
+			if (!_ticker) return
 			requestAnimationFrame(this.loop)
 			if (this.lastTS === 0)
 				this.lastTS = this.acc = ts
@@ -80,7 +77,7 @@ const {Ticker,Timer} = function() {
 			this.lastTS = ts
 			this.acc += delta
 			if (this.acc >= Interval) {
-				this.acc %= Interval
+				this.acc -= Interval
 				this.tick()
 			}
 			this.draw?.()
@@ -108,9 +105,9 @@ const {Ticker,Timer} = function() {
 	}
 	const Timer = freeze(new class {
 		#frozen = false
-		get frozen(){return this.#frozen}
-		freeze()    {this.#frozen = true; return this}
-		unfreeze()  {this.#frozen = false;return this}
+		get frozen() {return this.#frozen}
+		freeze()   {this.#frozen = true; return this}
+		unfreeze() {this.#frozen = false;return this}
 		/**
 		 @param {number}    timeout
 		 @param {()=> void} handler
