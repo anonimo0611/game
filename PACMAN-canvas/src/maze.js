@@ -143,14 +143,13 @@ export const Maze = freeze(new class {
 			? o.set(t.x>Cols/2 && o.x>Cols/2 ? 21:6, 15) : o
 
 	/**
-	 @param {{tileIdx:number,tilePos:Vec2}} tile
+	 @param {{tileIdx:number,tileMid:Vec2}} tile
 	 @returns {number} Number of remaining dots
 	*/
-	clearDot({tileIdx:i,tilePos:{x,y}}) {
+	clearDot({tileIdx:i,tileMid:{x,y}}) {
 		DotSet.delete(i)
 		PowMap.delete(i)
-		const ofst = (T-DotR*2.5)/2
-		Bg.fillRect(x*T+ofst, y*T+ofst, T-ofst*2, T-ofst*2)
+		Bg.setSquare(x*T,y*T, DotR+1)
 		return DotSet.size
 	}
 
@@ -160,8 +159,8 @@ export const Maze = freeze(new class {
 	 @param {number} row
 	*/
 	drawDot(ctx, col,row, isPow=false, visible=true) {
-		const [x,y] = [col,row].map(n=>(n+.5)*T)
-		const color = visible? Colors.Dot : null
-		ctx.fillCircle(x,y, (isPow? PowR:DotR), color)
+		if (!visible) return
+		const {x,y} = Vec2.new(col,row).add(.5).mul(T)
+		ctx.fillCircle(x,y, (isPow? PowR:DotR), Colors.Dot)
 	}
 }), {drawDot}= Maze

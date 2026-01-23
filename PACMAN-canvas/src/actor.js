@@ -57,6 +57,7 @@ export class Actor extends Common {
 
 	get center()    {return this.pos.clone.add(T/2)}
 	get tilePos()   {return this.center.divInt(T)}
+	get tileMid()   {return this.tilePos.add(.5)}
 	get tileIdx()   {return this.tilePos.toIdx(Cols)}
 
 	get dir()       {return this.#movDir}

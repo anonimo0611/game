@@ -105,12 +105,12 @@ export const Ctrl = new class {
 	}
 	#clearHiConfirm() {
 		Confirm.open('Are you sure you want to clear high-score?',
-			null, Ctrl.#clearHiScore, 'No','Yes', 0)
+			null, Ctrl.#clearHiScore, 'No','Yes')
 	}
 	#quitConfirm() {
 		!Ticker.paused && Ctrl.pause()
 		Confirm.open('Are you sure you want to quit the game?',
-			Ctrl.pause, ()=> State.toQuit(), 'Resume','Quit', 0)
+			Ctrl.pause, ()=> State.toQuit(), 'Resume','Quit')
 	}
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
