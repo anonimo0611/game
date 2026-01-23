@@ -41,7 +41,11 @@ dialog {
 			margin:  .3em;
 			padding: .4em 1em .3em;
 		}
+		button.cancel {
+			border-width: 1px;
+		}
 		button.ok {
+			font-weight: bold;
 			border-width: 3px;
 		}
 	}
