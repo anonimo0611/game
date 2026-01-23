@@ -100,11 +100,13 @@ export const Maze = freeze(new class {
 	 /**@type {number}*/i,
 	 /**@type {string}*/chip
 	) {
-		const {x,y}= Vec2.new(i%Cols, i/Cols|0)
+		const t = Vec2.new(i%Cols, i/Cols|0)
+		const m = Vec2.new(t).add(.5)
 		DotSet.add(i)
-		powChk.checked == false || chip == '.'
-			? drawDot(Bg,x,y)
-			: PowMap.set(i,{x,y})
+		clearDot({tileIdx:i,tileMid:m})
+		!powChk.checked || chip == '.'
+			? drawDot(Bg,...t.vals)
+			: PowMap.set(i, t)
 	}
 	Top     = 1
 	Bottom  = Rows-3
@@ -149,7 +151,7 @@ export const Maze = freeze(new class {
 	clearDot({tileIdx:i,tileMid:{x,y}}) {
 		DotSet.delete(i)
 		PowMap.delete(i)
-		Bg.setSquare(x*T,y*T, DotR+1)
+		Bg.setSquare(x*T, y*T, DotR+1)
 		return DotSet.size
 	}
 
@@ -163,4 +165,4 @@ export const Maze = freeze(new class {
 		const {x,y} = Vec2.new(col,row).add(.5).mul(T)
 		ctx.fillCircle(x,y, (isPow? PowR:DotR), Colors.Dot)
 	}
-}), {drawDot}= Maze
+}), {drawDot,clearDot}= Maze
