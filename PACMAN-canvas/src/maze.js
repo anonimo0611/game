@@ -100,7 +100,7 @@ export const Maze = freeze(new class {
 	 /**@type {number}*/i,
 	 /**@type {string}*/chip
 	) {
-		const t = Vec2.new(i%Cols, i/Cols|0)
+		const t = Vec2.fromIdx(i,Cols)
 		const m = Vec2.new(t).add(.5)
 		DotSet.add(i)
 		clearDot({tileIdx:i,tileMid:m})

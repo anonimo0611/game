@@ -68,7 +68,7 @@ export const Wall = new class {
 	 @param {number} i Tile index
 	*/
 	#drawTile(c, i) {
-		const [tx,ty]= [i%Cols,i/Cols|0], [x,y]= [tx*T,ty*T]
+		const [tx,ty]= Vec2.fromIdx(i,Cols).vals, [x,y]= [tx*T,ty*T]
 		const lo = (c == '#' && tx<Cols/2) || /[VH=]/.test(c) ? -LO:LO
 
 		;[/[A-D]/,/[A-D]/,/[a-d1-4]/,/[a-d]/,/[5-8]/].forEach((r,i)=> {
