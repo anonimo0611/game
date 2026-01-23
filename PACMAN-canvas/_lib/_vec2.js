@@ -1,8 +1,7 @@
 'use strict'
 /**
- @typedef {[x:number, y:number]}   xyList
- @typedef {readonly [x:number, y:number][]} xy2dList
- @typedef {{x:number, y:number}}   Position
+ @typedef {[x:number, y:number]} xyList
+ @typedef {{x:number, y:number}} Position
 */
 class Vec2 {
 	static get Zero()  {return Vec2.new( 0, 0)}
