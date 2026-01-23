@@ -55,11 +55,19 @@ class Vec2 {
 
 	static idx(
 	 /**@type {Readonly<Position>}*/v,
-	 /**@type {number}  */cols
+	 /**@type {number}*/cols
 	){
-		if (cols < 0)
-			throw RangeError('Colms must be a positive number.')
+		if (cols <= 0) throw RangeError('Column count must be greater than zero')
 		return Number(v.y * cols + v.x)
+	}
+
+	static fromIdx(
+	 /**@type {number}*/idx,
+	 /**@type {number}*/cols
+	){
+		if (idx  <  0) throw RangeError('Index cannot be negative')
+		if (cols <= 0) throw RangeError('Column count must be greater than zero')
+		return Vec2.new(idx%Cols, idx/Cols|0)
 	}
 
 	static add(
