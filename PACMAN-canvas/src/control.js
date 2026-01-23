@@ -105,7 +105,7 @@ export const Ctrl = new class {
 	}
 	#clearHiConfirm() {
 		Confirm.open('Are you sure you want to clear high-score?',
-			null, Ctrl.#clearHiScore, 'No','Yes')
+			null, Ctrl.#clearHiScore, 'Cancel','Clear')
 	}
 	#quitConfirm() {
 		!Ticker.paused && Ctrl.pause()
