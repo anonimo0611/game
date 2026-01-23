@@ -143,34 +143,38 @@ body:is([data-state=Attract],[data-state=CoffBreak]) {
 #cfg {
 	height: var(--height);
 	display: flex;
-	gap: .5em;
+	gap: .4em;
 	justify-content: center;
 	align-items: center;
 	.checkboxes, .buttons {
-		font-size: .75rem;
 		height: 100%;
 		display: flex;
-		gap: .2em;
+		gap: .15em;
 		flex-direction: column;
 		justify-content: center;
-		label,button    {display: block}
+		label {
+			font-size: .75rem;
+			display: flex;
+			gap: .3em;
+			align-content: center;
+			input {font-size: inherit}
+		}
 		[data-for=keys] {cursor: help}
-		[type=checkbox] {margin-right: .1em}
-		#chsChk + chk-label {
+		label:has(#chsChk) chk-label {
 			display: inline-block;
 			font-size: 94%;
 		}
 	}
 	.buttons button {
-		font-size: .9em;
+		font-size: .65rem;
 	}
 	> label:first-of-type  {
 		color: inherit;
-		font-size: 1.1em;
-		display: flex;
-		gap: .2em;
-		align-items: center;
+		font-size: 1em;
 		font-variant: small-caps;
+		display: flex;
+		gap: .25em;
+		align-items: center;
 	}
 	#cfgBtn {
 		line-height: 0;
@@ -208,6 +212,9 @@ body:is([data-state=Attract],[data-state=CoffBreak]) {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+	}
+	input[type=checkbox] {
+		font-size: .75rem;
 	}
 	[for=unrChk] {
 		scale: .95 1;
