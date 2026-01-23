@@ -101,11 +101,12 @@ class EnergizerAct {
 		this.#ghosts.push(g)
 	}
 	update() {
-		if (!this.started || Timer.frozen)
-			return
-		this.pow.update()
-		this.#pacman.sprite.update()
-		this.#pacman.x += this.#pacvx
+		if (!this.started) return
+		if (!Timer.frozen) {
+			this.#pacman.sprite.update()
+			this.#pacman.x += this.#pacvx
+			this.#updateGhosts()
+		}
 		if (this.#pacman.dir == L
 		 && this.#pacman.x <= T*4
 		) {
@@ -114,7 +115,7 @@ class EnergizerAct {
 			this.#pacman.dir = R
 			GhsMgr.setFrightMode()
 		}
-		this.#updateGhosts()
+		this.pow.update()
 	}
 	draw() {
 		this.started && Actor.draw(this.#pacman)
