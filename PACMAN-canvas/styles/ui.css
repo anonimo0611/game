@@ -180,10 +180,13 @@ custom-menu {
 	cursor: default;
 }
 [type=dropdown] {
-	--caret-size: 1em;
+	--caret-size: 1.1em;
 	output {
 		padding: .1em .2em;
 		box-sizing: border-box;
+	}
+	output, mn-list {
+		font-size: 1rem;
 	}
 	output::after {
 		--size: calc(var(--caret-size)/3);
@@ -194,11 +197,16 @@ custom-menu {
 		width:  var(--size);
 		height: var(--size);
 		right:  var(--size);
-		top: calc(50% - var(--size)/2);
+		top:   calc(50% - var(--size)/3);
+		right: calc(3px + .2em);
 		translate: 0 -50%;
 		rotate: -45deg;
 	}
 	mn-list {
+		line-height: 1;
+		padding-top:    .05rem;
+		padding-bottom: .05rem;
+		box-sizing: border-box;
 		display: block;
 		position: absolute;
 		z-index: 100;
@@ -207,7 +215,7 @@ custom-menu {
 		background: var(--bgcolor);
 		border: solid transparent;
 		border-width: 2px 0;
-		padding: .1em calc(var(--caret-size) * 1.5) .1em .2em;
+		padding: .1em calc(var(--caret-size)) .1em .3em;
 		display: block;
 		&.selected, &:hover {background:#366}
 		&.selected {

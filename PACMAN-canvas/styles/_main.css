@@ -232,22 +232,20 @@ body:is([data-state=Attract],[data-state=CoffBreak]) {
 	--t: calc(1rem * var(--scale));
 	--width: calc(var(--t)*8);
 	text-transform: uppercase;
-	font: 0.9rem/1 sans-serif;
 	margin-left: 0;
 	output, mn-item {
+		font: 0.8rem/1 sans-serif;
 		display: flex;
 		gap: .2em;
 		align-items: center;
 	}
 	output {
-		padding-top:    .4em;
-		padding-bottom: .3em;
+		padding-top:    .2rem;
+		padding-bottom: .2rem;
 	}
 	mn-item {
-		padding-top: .3em
-	}
-	small {
-		font-size: 80%;
+		padding-top:    0;
+		padding-bottom: 0;
 	}
 	output::before,
 	mn-item::before {
@@ -255,7 +253,6 @@ body:is([data-state=Attract],[data-state=CoffBreak]) {
 		--size: var(--width) var(--t);
 		content: '';
 		background: no-repeat var(--x) 0/var(--size) var(--url);
-		margin-top: -.3em;
 		width:  var(--t);
 		height: var(--t);
 	}
