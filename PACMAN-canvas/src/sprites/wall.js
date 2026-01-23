@@ -68,8 +68,8 @@ export const Wall = new class {
 	 @param {number} i Tile index
 	*/
 	#drawTile(c, i) {
-		const [tx,ty]= Vec2.fromIdx(i,Cols).vals, [x,y]= [tx*T,ty*T]
-		const lo = (c == '#' && tx<Cols/2) || /[VH=]/.test(c) ? -LO:LO
+		const t  = Vec2.fromIdx(i,Cols), {x,y}= Vec2.mul(t,T)
+		const lo = (c == '#' && t.x<Cols/2) || /[VH=]/.test(c) ? -LO:LO
 
 		;[/[A-D]/,/[A-D]/,/[a-d1-4]/,/[a-d]/,/[5-8]/].forEach((r,i)=> {
 			const ci = CornerToIndex.get(c) ?? -1
@@ -80,11 +80,11 @@ export const Wall = new class {
 		case 'H':Bg.strokeLine(x, y+HT+lo, x+T, y+HT+lo);break
 		}
 		Bg.save()
-		if (c == '#' || (!tx || tx == Cols-1) && +c) {
-			Bg.translate(x+(tx<Cols/2 ? OO:T-OO), y)
+		if (c == '#' || (!t.x || t.x == Cols-1) && +c) {
+			Bg.translate(x+(t.x<Cols/2 ? OO:T-OO), y)
 			Bg.strokeLine(0,0,0,T)
 		}
-		if (/[_=]/.test(c) || Maze.isTopOrBottom(ty) && +c) {
+		if (/[_=]/.test(c) || Maze.isTopOrBottom(t.y) && +c) {
 			const oY = /[=56]/.test(c) ? OO:T-OO
 			Bg.translate(x, y)
 			Bg.strokeLine(0, oY, T, oY)
