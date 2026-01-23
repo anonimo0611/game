@@ -241,7 +241,7 @@ body:is([data-state=Attract],[data-state=CoffBreak]) {
 	}
 	output {
 		padding-top:    .2rem;
-		padding-bottom: .2rem;
+		padding-bottom: .1rem;
 	}
 	mn-item {
 		padding-top:    0;
@@ -255,6 +255,7 @@ body:is([data-state=Attract],[data-state=CoffBreak]) {
 		background: no-repeat var(--x) 0/var(--size) var(--url);
 		width:  var(--t);
 		height: var(--t);
+		translate: 0 -.1rem;
 	}
 }
 #ExtendMenu {
