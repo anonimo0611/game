@@ -38,8 +38,11 @@ dialog {
 		display: flex;
 		justify-content: flex-end;
 		button {
-			margin: .3em;
-			padding:.4em 1em;
+			margin:  .3em;
+			padding: .4em 1em .3em;
+		}
+		button.ok {
+			border-width: 3px;
 		}
 	}
 }
@@ -83,7 +86,7 @@ button,
 .button[data-disabled=false] {
 	background: var(--bgcolor);
 	display: inline-block;
-	padding: .2em;
+	padding: .4em .4em .3em;
 	&:hover, &:focus,
 	&.opened {border-color:var(--color-focus-border)}
 	&:active {border-color:var(--color-active-border)}
