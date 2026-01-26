@@ -25,7 +25,6 @@ class PlayerPac extends PacMan {
 	get closed()   {return State.isInGame == false}
 	get maxAlpha() {return Ctrl.semiTransPac? .75:1}
 	get speed()    {return this.mov.speed}
-	get onWall()   {return this.mov.onWall}
 	get tunEntry() {return this.#tunEntry}
 
 	get timeSinceLastEating() {
@@ -92,7 +91,7 @@ class PlayerPac extends PacMan {
 	}
 	#playEatSE() {
 		const id  = (this.#eatIdx ^= 1)? 'eat1':'eat0'
-		const dur = (T/this.mov.speed) * Ticker.Interval * .5
+		const dur = (T/this.speed) * Ticker.Interval * .5
 		Sound.play(id, {duration:dur})
 	}
 }
