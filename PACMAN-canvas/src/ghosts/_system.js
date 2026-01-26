@@ -96,10 +96,10 @@ export const GhsMgr = new class extends Common {
 	*/
 	#initialize(_, ...ghosts) {
 		GhsMgr.#animIdx = 0
-		for (const i of range(ghosts.length)) {
+		range(GhsType.Max).forEach(i=> {
 			Ghosts[i]?.sprite.ctx.init()
 			Ghosts[i] = ghosts[i]
-		}
+		})
 	}
 	#onRoundEnds() {
 		Ghosts.forEach(g=> g.sprite.setFadeOut())
@@ -233,7 +233,8 @@ export const DotCounter = function() {
 			: incPreferredGhostCounter()
 	}
 	function incPreferredGhostCounter() {
-		const idx = Ghosts.findIndex(g=> g.state.isIdle)
+		const
+		idx = Ghosts.findIndex(g=> g.state.isIdle)
 		idx != -1 && personalCounters[idx]++
 	}
 	State .on({_Ready:reset})
