@@ -123,17 +123,18 @@ button,
 		border-color: var(--color-border);
 		&:hover {border-color:#BBB}
 	}
-	&:checked  {
+	&:checked {
 		background:#9CF;
 		&:hover,&:focus {background:var(--active)}
 		&::before {
 			content: '';
 			border: solid #000;
 			border-width: 0 0 .1em .1em;
-			width:  calc(.7em - 2px);
-			height: calc(.5em - 1.5px);
+			width:  calc(.7em - 3px);
+			height: calc(.5em - 2px);
 			box-sizing: border-box;
 			position: absolute;
+			translate: 1px 0;
 			rotate: -45deg;
 		}
 	}

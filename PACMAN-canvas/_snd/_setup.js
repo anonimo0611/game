@@ -8,7 +8,8 @@ const volRng  = inputs.volRng
 const volRg2  = inputs.volRg2
 const initVol = +(localStorage.anopac_volume ?? 5)
 
-const Ctrl = new class { // Register sound instances and set up controls
+/** Register sound instances and set up controls */
+const Ctrl = new class {
 	constructor() {this.setup()}
 	async setup() {
 		await SoundMgr.load()

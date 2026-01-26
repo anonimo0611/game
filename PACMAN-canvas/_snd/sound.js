@@ -9,10 +9,12 @@ export const Sound = new class extends SoundMgr {
 	get ringing()  {return Sound.isPlaying('bell')}
 	get disabled() {return super.disabled || State.isAttract}
 
-	get vol() {return super.vol}
+	get vol() {
+		return super.vol
+	}
 	set vol(vol) {
-		if (!Sound.disabled)
-			super.vol = clamp(+vol, 0, 10)
+		if (Sound.disabled) return
+		super.vol = clamp(+vol, 0, 10)
 	}
 	playSiren() {
 		if (!GhsMgr.isFrightMode && !GhsMgr.areAnyEscaping)

@@ -159,7 +159,9 @@ body:is([data-state=Attract],[data-state=CoffBreak]) {
 			align-content: center;
 			input {font-size: inherit}
 		}
-		[data-for=keys] {cursor: help}
+		[data-for=keys] {
+			cursor: help
+		}
 		label:has(#chsChk) chk-label {
 			display: inline-block;
 			font-size: 94%;
