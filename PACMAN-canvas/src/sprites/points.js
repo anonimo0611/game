@@ -52,7 +52,7 @@ function cache(pts, size=T*2) {
 	ctx.strokeStyle = color
 	ctx.lineWidth = 1.2
 	ctx.lineJoin  = ctx.lineCap = 'round'
-	KerningMap[pts]?.forEach((x,i)=> {
+	KerningMap[pts].forEach((x,i)=> {
 		const path = (pts == 1600 && i == 0)
 			? NarrowOnePath
 			: DigitPath0to8[+pts.toString()[i]]
