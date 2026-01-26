@@ -144,7 +144,7 @@ export const View = function()
 			}
 		}
 		{// Stake and offcut
-			const s = T/TileSize
+			const s = T/T
 			const [sx,sy]= Vec2.new(spr.stakeSize).mul(s).vals
 			// Stake
 			Ctx.save()
