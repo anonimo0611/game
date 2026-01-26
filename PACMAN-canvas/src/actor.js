@@ -18,26 +18,9 @@ class SpawnFade {
 		State.isInGame &&(this.#fadeIn &&= null)
 	}
 }
-
 export class Actor extends Common {
-	static get SpawnFade() {
-		return SpawnFade
-	}
-	static update() {
-		player.update()
-		GhsMgr.update()
-	}
-	/** @param {PacMan} pacman */
-	static draw(pacman) {
-		GhsMgr.drawBehind()
-		pacman.draw()
-		GhsMgr.drawFront()
-	}
-	/** @param {Vec2} pos */
-	static drawCenterDot({x,y}, r=3, color='red') {
-		Ctx.fillCircle(x,y, r, color)
-	}
-
+	/** @readonly */
+	static SpawnFade = SpawnFade
 	pos = Vec2.Zero
 	#orient = /**@type {Direction}*/(L)
 	#movDir = /**@type {Direction}*/(L)
@@ -118,6 +101,21 @@ export class Actor extends Common {
 	justArrivedAtTile(spd=this.speed) {
 		return !this.passedTileCenter && this.tilePixel <= spd
 	}
+	drawCenterDot({r=3,color='red'}={}) {
+		Ctx.fillCircle(...this.pos.vals, r, color)
+	}
+}
+export const Actors = {
+	update() {
+		player.update()
+		GhsMgr.update()
+	},
+	/** @param {PacMan} pacman */
+	draw(pacman) {
+		GhsMgr.drawBehind()
+		pacman.draw()
+		GhsMgr.drawFront()
+	},
 }
 export class PacMan extends Actor {
 	/** @readonly */

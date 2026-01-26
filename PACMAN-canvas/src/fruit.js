@@ -11,14 +11,13 @@ import * as Pts from './sprites/points.js'
 import * as Spr from './sprites/fruits.js'
 
 /** The fruit appear after 70 or 170 dots are cleared
- @type {ReadonlySet<number>}
-*/const AppearDots = new Set([70,170])
+@type {ReadonlySet<number>} */
+const AppearDots = new Set([70,170])
 
-const TargetPos  = Vec2.new(BW/2, T*18.5).freeze()
-const FruitTable = freeze([0,1,2,2,3,3,4,4,5,5,6,6,7])
-
-const Size = T*2
+const Size       = T*2
 const LevelsCols = 7
+const FruitTable = freeze([0,1,2,2,3,3,4,4,5,5,6,6,7])
+const TargetPos  = Vec2.new(BW/2, T*18.5).freeze()
 const LevelsRect = new Rect(Size*6, BH-Size, Size*LevelsCols, Size).freeze()
 
 const FadeDur = 300
@@ -66,7 +65,7 @@ export const Fruit = new class {
 		}
 	}
 	#checkIntersects() {
-		if (this.showTarget && this.#intersectsWithPlayer) {
+		if (Fruit.showTarget && Fruit.#intersectsWithPlayer) {
 			Fruit.#resetTarget()
 			Timer.cancel(Fruit) && Sound.play('fruit')
 			PtsMgr.set({key:Fruit, dur:2e3, pos:TargetPos})
@@ -78,7 +77,7 @@ export const Fruit = new class {
 			: Fruit.#checkIntersects()
 	}
 	drawTarget() {
-		if (this.showTarget && !Ticker.paused)  {
+		if (Fruit.showTarget && !Ticker.paused)  {
 			Ctx.save()
 			Ctx.setAlpha(_fadeOut?.alpha)
 			Ctx.translate(...TargetPos.vals)

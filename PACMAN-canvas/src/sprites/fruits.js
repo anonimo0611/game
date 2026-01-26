@@ -4,18 +4,18 @@ const FruitFns = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
 
 /**
  @param {ExtendedContext2D} ctx
- @param {number} fruitIdx
+ @param {number} idx
 */
-export function draw(ctx, fruitIdx, x=T,y=T-2, scale=T/8) {
-	if (!FruitFns[fruitIdx]) {
-		throw RangeError('Index refers outside the fruit-table range.')
+export function draw(ctx, idx, x=T,y=T-2, scale=T/8) {
+	if (!FruitFns[idx]) {
+		throw RangeError(`Index ${idx} refers outside the range.`)
 	}
 	ctx.save()
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
 	ctx.translate(x, y)
 	ctx.scale(scale*Scaling, scale*Scaling)
-	FruitFns[fruitIdx](ctx)
+	FruitFns[idx](ctx)
 	ctx.restore()
 }
 export const Cache = new class {

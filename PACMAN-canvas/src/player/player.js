@@ -41,9 +41,9 @@ class PlayerPac extends PacMan {
 	resetTimer() {
 		this.#sinceLastEating = 0
 	}
-	#drawCenterDot() {
+	drawCenterDot() {
 		if (!this.hidden && Ctrl.showGridLines)
-			Actor.drawCenterDot(this.center)
+			super.drawCenterDot()
 	}
 	draw() {
 		if (State.isIntro)
@@ -51,7 +51,7 @@ class PlayerPac extends PacMan {
 		Ctx.save()
 		this.#spawnFade.apply(this.maxAlpha)
 		this.sprite.draw(this)
-		this.#drawCenterDot()
+		this.drawCenterDot()
 		Ctx.restore()
 	}
 	update() {

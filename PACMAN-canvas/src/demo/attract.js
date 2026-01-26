@@ -5,29 +5,20 @@ import {Score}      from '../score.js'
 import {Fruit}      from '../fruit.js'
 import {drawDot}    from '../maze.js'
 import {PowBlinker} from '../maze.js'
-import {Actor}      from '../actor.js'
+import {Actors}     from '../actor.js'
 import {GhsMgr}     from '../ghosts/_system.js'
 import {Ghost}      from '../ghosts/ghost.js'
 import {PacMan}     from '../actor.js'
-import {RunTimer}   from './_run_timer.js'
-import Sprite       from '../sprites/ghost.js'
+import GhostSprite  from '../sprites/ghost.js'
 
 export class Attract {
-	static #attract = /**@type {?Attract}*/(null)
 	static {State.on({Attract:this.#begin})}
+	static #attract = /**@type {?Attract}*/(null)
+	static #begin() {Attract.#attract = new Attract}
+	static draw()   {Attract.#attract?.draw()}
+	static update() {Attract.#attract?.update()}
 
-	static #begin() {
-		Attract.#attract = new Attract
-	}
-	static update() {
-		RunTimer.update()
-		Attract.#attract?.update()
-	}
-	static draw() {
-		Attract.#attract?.draw()
-		return State.isAttract
-	}
-	ghsSpr = new Sprite(T*2, T*2)
+	ghsSpr = new GhostSprite(T*2, T*2)
 	subAct = new EnergizerAct
 
 	/** @private */
@@ -118,7 +109,7 @@ class EnergizerAct {
 		this.pow.update()
 	}
 	draw() {
-		this.started && Actor.draw(this.#pacman)
+		this.started && Actors.draw(this.#pacman)
 	}
 	#updateGhosts() {
 		this.#ghosts.forEach(g=> {

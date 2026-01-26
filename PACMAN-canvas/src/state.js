@@ -45,6 +45,7 @@ class GameState extends _State {
 	get wasIntro()    {return this.was('Intro')}
 	get wasFlashing() {return this.was('Flashing')}
 	get isStartMode() {return this.isIntro || this.isReady}
+	get isDemoScene() {return this.isAttract || this.isCoffBreak}
 
 	constructor() {super(globalThis),this.init()}
 
@@ -61,6 +62,7 @@ class GameState extends _State {
 	 @param {{[key in (StateType|MultiState)]?:JQWindowHandler}} v
 	*/
 	on(v) {return super.on(v)}
+
 
 	/**
 	 @param {StateType} s

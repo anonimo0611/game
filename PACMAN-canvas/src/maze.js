@@ -40,10 +40,9 @@ D__________________________C\
 ////////////////////////////\
 ////////////////////////////`])
 
-/**
- `.` and `O` represent normal and power cookies
- @type {ReadonlySet<string>}
-*/const DotChipSet = new Set([...'.O'])
+/** `.` and `O` represent normal and power cookies
+@type {ReadonlySet<string>} */
+const DotChips = new Set([...'.O'])
 
 const WallSet  = /**@type {Set<number>}*/(new Set)
 const DotSet   = /**@type {Set<number>}*/(new Set)
@@ -85,7 +84,7 @@ class PowDotsRenderer extends PowBlinker {
 export const Maze = freeze(new class {
 	static {
 		for (const [i,c] of MapArr.entries())
-			!DotChipSet.has(c) && c.trim() && WallSet.add(i)
+			!DotChips.has(c) && c.trim() && WallSet.add(i)
 		State.on({_NewLevel: e=> this.reset(e)})
 		$(powChk).on({change:e=> this.reset(e)})
 	}
@@ -94,24 +93,24 @@ export const Maze = freeze(new class {
 	) {
 		e.target != powChk && Wall.draw()
 		for (const [i,c] of MapArr.entries())
-			DotChipSet.has(c) && this.setDot(i,c)
+			DotChips.has(c) && this.setDot(i,c)
 	}
 	static setDot(
 	 /**@type {number}*/i,
 	 /**@type {string}*/chip
 	) {
-		const t = Vec2.fromIdx(i,Cols)
-		const m = Vec2.new(t).add(.5)
-		DotSet.add(i)
+		const t = Vec2.new(i%Cols, i/Cols|0)
+		const m = t.clone.add(.5)
 		clearDot({tileIdx:i,tileMid:m})
-		!powChk.checked || chip == '.'
+		DotSet.add(i)
+		powChk.checked == false || chip == '.'
 			? drawDot(Bg,...t.vals)
-			: PowMap.set(i, t)
+			: PowMap.set(i,t)
 	}
 	Top     = 1
 	Bottom  = Rows-3
 	Map     = MapArr
-	MaxDot  = MapArr.filter(c=> DotChipSet.has(c)).length
+	MaxDot  = MapArr.filter(c=> DotChips.has(c)).length
 	House   = freeze(new House)
 	Tunnel  = freeze(new Tunnel)
 	PowDots = freeze(new PowDotsRenderer)
@@ -149,9 +148,10 @@ export const Maze = freeze(new class {
 	 @returns {number} Number of remaining dots
 	*/
 	clearDot({tileIdx:i,tileMid:{x,y}}) {
+		const r = DotR+1
 		DotSet.delete(i)
 		PowMap.delete(i)
-		Bg.setSquare(x*T, y*T, DotR+1)
+		Bg.fillRect(x*T-r, y*T-r, r*2, r*2)
 		return DotSet.size
 	}
 
@@ -162,7 +162,7 @@ export const Maze = freeze(new class {
 	*/
 	drawDot(ctx, col,row, isPow=false, visible=true) {
 		if (!visible) return
-		const {x,y} = Vec2.new(col,row).add(.5).mul(T)
+		const [x,y] = [col,row].map(v=> (v+0.5)*T)
 		ctx.fillCircle(x,y, (isPow? PowR:DotR), Colors.Dot)
 	}
 }), {drawDot,clearDot}= Maze

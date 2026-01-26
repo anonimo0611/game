@@ -17,7 +17,7 @@ export const Wall = new class {
 		Wall.#drawDoor()
 		Bg.restore()
 	}
-	flashing(/**@type {()=> void}*/fn) {
+	setFlashing(/**@type {()=> void}*/fn) {
 		let count = 0
 		;(function redraw() {
 			if (++count > 8) return Timer.set(500, fn)
@@ -68,7 +68,7 @@ export const Wall = new class {
 	 @param {number} i Tile index
 	*/
 	#drawTile(c, i) {
-		const t  = Vec2.fromIdx(i,Cols), {x,y}= Vec2.mul(t,T)
+		const t  = Vec2.new(i%Cols,i/Cols|0), {x,y}= Vec2.mul(t,T)
 		const lo = (c == '#' && t.x<Cols/2) || /[VH=]/.test(c) ? -LO:LO
 
 		;[/[A-D]/,/[A-D]/,/[a-d1-4]/,/[a-d]/,/[5-8]/].forEach((r,i)=> {

@@ -130,8 +130,7 @@ export const GhsMgr = new class extends Common {
 		if (Timer.frozen)
 			return
 		if (State.isInGame
-		 || State.isAttract
-		 || State.isCoffBreak)
+		 || State.isDemoScene)
 			GhsMgr.#animIdx ^= +(Ticker.count % 6 == 0)
 	}
 	#updateGhosts() {

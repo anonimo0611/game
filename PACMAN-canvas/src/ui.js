@@ -19,8 +19,8 @@ MenuIds = /**@type {(keyof Menu)[]}*/(keys(Menu))
 	})
 	$('body').on('keydown pointerdown', e=> {
 		if (!btn.offsetParent
-		|| e.target == btn
-		|| qS(btn.value)?.contains(e.target))
+		 || e.target == btn
+		 || qS(btn.value)?.contains(e.target))
 			return
 		$(btn.value).hide()
 		$(btn).removeClass('opened')

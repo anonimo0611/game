@@ -137,7 +137,7 @@ export const Ctrl = new class {
 	}
 	#setup() {
 		Ctrl.#setupGrid()
-		values(Menu).forEach(m=> m.on({change:Ctrl.#save}))
+		values(Menu).forEach(m=> m.onChange(Ctrl.#save))
 		$win.on({resize:Ctrl.#fitToViewport})
 		$('input')    .on({input:Ctrl.#output})
 		$('#clearHi') .on({click:Ctrl.#clearHiConfirm})

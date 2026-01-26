@@ -7,26 +7,21 @@ import {Ghost}   from '../ghosts/ghost.js'
 import {PacMan}  from '../actor.js'
 import Sprite    from '../sprites/ghost_cb.js'
 
-export class CoffBreak {
-	static #scene = /**@type {?Scene1|Scene2|Scene3}*/(null)
-	static {State.on({CoffBreak:this.#begin})}
+const sceneNum = (lv=0)=>
+	!Ctrl.isPractice && ({2:1, 5:2, 9:3}[lv]) || -1
 
-	static #begin(_={}, n=CoffBreak.number) {
+export class CoffBreak {
+	static {State.on({CoffBreak:this.#begin})}
+	static #scene = /**@type {?Scene1|Scene2|Scene3}*/(null)
+	static #begin(_={}, n=CoffBreak.num) {
 		if (!between(n,1,3))
-			throw RangeError('The scene number must be 1-3.')
+			throw RangeError('The scene number must be 1-3')
 		CoffBreak.#scene = new [Scene1,Scene2,Scene3][n-1]
 	}
-	static update() {
-		CoffBreak.#scene?.update()
-	}
-	static draw() {
-		CoffBreak.#scene?.draw()
-		return State.isCoffBreak
-	}
-	static get number() {
-		const sceneNum = {2:1, 5:2, 9:3}[Game.level]
-		return !Ctrl.isPractice && sceneNum || -1
-	}
+	static get num() {return sceneNum(Game.level)}
+	static draw()    {CoffBreak.#scene?.draw()}
+	static update()  {CoffBreak.#scene?.update()}
+
 	pacvx  = -BW/180
 	akavx  = -BW/180
 	pacman = new PacMan
