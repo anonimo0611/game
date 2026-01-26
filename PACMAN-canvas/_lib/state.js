@@ -1,4 +1,3 @@
-/** @typedef {{delay?:number,data?:number|string|boolean|any[]}} config} */
 /** @template Owner,State */
 export default class _State {
 	/**@type {Owner} */ #owner
@@ -24,6 +23,7 @@ export default class _State {
 	}
 
 	/**
+	 @typedef {{delay?:number,data?:number|string|boolean|any[]}} config
 	 @protected
 	 @param {State} s
 	*/

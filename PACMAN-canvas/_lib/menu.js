@@ -1,11 +1,9 @@
-import {Dir}    from './direction.js'
-import {Common} from './common.js'
+import {Dir} from './direction.js'
 
-export class Menu extends Common {
-	/** @readonly */root
-	/** @readonly */size
-	/** @readonly */defaultIndex
-
+class Menu {
+	/** @readonly  */root
+	/** @readonly  */size
+	/** @readonly  */defaultIndex
 	/** @protected */menu
 	/** @protected */items
 	/** @protected */$label
@@ -22,7 +20,6 @@ export class Menu extends Common {
 		if (!root || !menu || !items.length) {
 			throw Error('The menu structure is invalid')
 		}
-		super({eventTarget:menu})
 		this.root   = root
 		this.size   = items.length
 		this.menu   = menu
@@ -49,8 +46,10 @@ export class Menu extends Common {
 		if (!this.isInRange(idx)) return
 		this.selectedItem.classList.remove('selected')
 		this.items[idx].classList.add('selected')
-		$(this.menu).trigger('change');
+		$(this.menu).trigger('change')
 	}
+	onChange (/**@type {()=>void}*/handler) {$(this.menu).on ({change:handler})}
+	offChange(/**@type {()=>void}*/handler) {$(this.menu).off({change:handler})}
 	reset() {this.select(this.defaultIndex)}
 }
 
@@ -65,8 +64,7 @@ export class DorpDown extends Menu {
 		})
 		$('body')
 			.on('pointerdown', e=> {
-				!e.target.closest(`#${this.root.id}`)
-				  && this.select()
+				!this.root.contains(e.target) && this.close()
 			})
 		$(this.$label)
 			.on('pointerdown', e=> {
@@ -103,9 +101,11 @@ export class DorpDown extends Menu {
 			: this.select(i)
 			break
 		case 'ArrowUp':
-		case 'ArrowDown':
-			const dir = /Up$/.test(e.key) ? -1:1
-			this.select((i+dir+size) % size, {close:false})
+		case 'ArrowDown':{
+				e.preventDefault()
+				const dir = e.key.endsWith(U) ? -1:1
+				this.select((i+dir+size) % size, {close:false})
+			}
 			break
 		}
 	}
@@ -118,45 +118,46 @@ export class DorpDown extends Menu {
 }
 
 export class Slide extends Menu {
-	/** @private */width
-	/** @private */BtnSet
+	#BtnSet
+	#width=0
 	constructor(/**@type {string}*/id) {
 		super(id,'slidemenu')
 		const{root}= this, wrap=(this.$label.get(0) ?? root)
-		this.BtnSet= freeze({
-			[R]: $('<span class="button r">').prependTo(root)[0],
-			[L]: $('<span class="button l">').prependTo(root)[0],
+		this.#BtnSet= freeze({
+			[R]:$('<span class="button r">').prependTo(root)[0],
+			[L]:$('<span class="button l">').prependTo(root)[0],
 		})
-		$(this.BtnSet[L]).on('click',()=> {this.#select(L)})
-		$(this.BtnSet[R]).on('click',()=> {this.#select(R)})
+		$(this.#BtnSet[L]).on('click',()=> {this.#select(L)})
+		$(this.#BtnSet[R]).on('click',()=> {this.#select(R)})
 		$(wrap).onWheel(e=>{this.#select(e.deltaY>0 ? L:R)})
 		$(wrap).on('pointerdown', e=>{e.preventDefault(),root.focus()})
 		$(root).on('keydown',e=>{this.#select(Dir.from(e))})
 		root.tabIndex = 0
-		this.width = this.#setWidth(this.BtnSet[L].offsetWidth*2)
+		this.#setWidth(this.#BtnSet[L].offsetWidth*2)
 		this.select(this.index)
 	}
 	#select(/**@type {?Direction}*/dir) {
 		if (!dir) return
-		const v = Vec2[dir]
-		this.index += (v.x || -v.y)
+		const dirV = Vec2[dir]
+		const next = this.index+(dirV.x || -dirV.y)
+		this.isInRange(next) && this.select(next)
 	}
 	#setWidth(/**@type {number}*/btnW) {
 		const width = max(...[...this.items].map(li=> li.offsetWidth))+btnW
 		$([this.root,...this.items]).css('width',`${width}px`)
-		return width
+		this.#width = width
 	}
 	select(idx=this.index) {
 		if (!this.isInRange(idx)) return
 		super.select(idx)
-		this.menu.style.transform = `translateX(${-this.width*idx}px)`
-		this.BtnSet[L].dataset.disabled = String(idx == 0)
-		this.BtnSet[R].dataset.disabled = String(idx == this.size-1)
+		this.menu.style.transform = `translateX(${-this.#width*idx}px)`
+		this.#BtnSet[L].dataset.disabled = String(idx == 0)
+		this.#BtnSet[R].dataset.disabled = String(idx == this.size-1)
 	}
 }
 
 class CustomMenu extends HTMLElement{
-	get type() {return 'menu'}
+	get type()  {return 'menu'}
 }
 class MenuItem extends HTMLElement{
 	get val()   {return $(this).attr('val') ?? ''}

@@ -3,10 +3,10 @@ const DirSet  = new Set([U,R,D,L])
 const WasdMap = new Map([['W',U],['A',L],['S',D],['D',R]])
 
 export const Dir = new class {
-	/** @readonly */U = U;
-	/** @readonly */R = R;
-	/** @readonly */D = D;
-	/** @readonly */L = L;
+	/** @readonly */U = U
+	/** @readonly */R = R
+	/** @readonly */D = D
+	/** @readonly */L = L
 
 	/** @readonly */
 	Opposite = freeze({[U]:D, [R]:L, [D]:U, [L]:R})

@@ -8,22 +8,22 @@ const {Ticker,Timer}= function() {
 		ignoreFrozen: boolean;
 	}} TimerData
 	*/
-	const TimerMap = /**@type {Map<any,TimerData>}*/(new Map)
 	const FPS      = 60
 	const Interval = 1000/FPS
+	const TimerMap = /**@type {Map<any,TimerData>}*/(new Map)
 
-	let _paused    = false
-	let _ticker    = /**@type {?Tick}*/(null)
-	let _fCounter  = 0 // frame  count
-	let _pCounter  = 0 // paused count
+	let _ticker = /**@type {?Tick}*/(null)
+	let _paused = false
+	let _fCount = 0 // frame  count
+	let _pCount = 0 // paused count
 
 	const Ticker = freeze(new class {
 		Interval = Interval
+		get count()       {return _fCount}
+		get pausedCount() {return _pCount}
 		get paused()      {return _paused}
 		get running()     {return _ticker instanceof Tick}
-		get count()       {return _fCounter}
-		get elapsedTime() {return _fCounter * Interval}
-		get pausedCount() {return _pCounter}
+		get elapsedTime() {return _fCount*Interval}
 
 		/**
 		 @param {()=> void} [updateFn]
@@ -37,40 +37,39 @@ const {Ticker,Timer}= function() {
 			return _paused = !!(force? force : !_paused)
 		}
 		resetCount() {
-			_fCounter = 0
+			_fCount = 0
 		}
 		stop()  {
-			Ticker.reset()
-			_ticker  = null
+			_ticker?.stop()
 		}
 		reset() {
+			_fCount =
+			_pCount = 0
 			_paused = false
-			_fCounter =
-			_pCounter = 0
 			TimerMap.clear()
 			Timer.unfreeze()
 		}
 	})
+
 	class Tick {
 		/**
 		 @param {()=> void} [updateFn]
 		 @param {()=> void} [drawFn]
 		*/
 		constructor(updateFn, drawFn) {
-			Ticker.stop()
-			_ticker      = this
-			this.acc     = 0
-			this.start   = 0
-			this.lastTS  = 0
-			this.loop    = this.loop.bind(this)
-			this.update  = updateFn
-			this.draw    = drawFn
-			requestAnimationFrame(this.loop)
+			_ticker?.stop()
+			_ticker     = this
+			this.acc    = 0
+			this.start  = 0
+			this.lastTS = 0
+			this.update = updateFn
+			this.draw   = drawFn
+			this.loop   = this.loop.bind(this)
+			this.rAFId  = requestAnimationFrame(this.loop)
 		}
 		/** @param {number} ts */
 		loop(ts) {
-			if (!_ticker) return
-			requestAnimationFrame(this.loop)
+			this.rAFId = requestAnimationFrame(this.loop)
 			if (this.lastTS === 0)
 				this.lastTS = this.acc = ts
 			const delta = ts - this.lastTS
@@ -84,14 +83,14 @@ const {Ticker,Timer}= function() {
 		}
 		tick() {
 			_paused
-				? _pCounter++
+				? _pCount++
 				: this.updateGame()
 		}
 		updateGame() {
 			TimerMap.forEach(this.timer)
 			this.update?.()
-			_pCounter = 0
-			_fCounter++
+			_pCount = 0
+			_fCount++
 		}
 		/**
 		 @param {TimerData} t
@@ -102,10 +101,18 @@ const {Ticker,Timer}= function() {
 			if (Interval*t.amount++ < t.timeout) return
 			TimerMap.delete(key);t.handler()
 		}
+		stop()  {
+			Ticker.reset()
+			_ticker = null
+			cancelAnimationFrame(this.rAFId)
+		}
 	}
-	const Timer = freeze(new class {
+
+	const Timer = new class {
 		#frozen = false
-		get frozen() {return this.#frozen}
+		get frozen() {
+			return this.#frozen
+		}
 		freeze()   {this.#frozen = true; return this}
 		unfreeze() {this.#frozen = false;return this}
 		/**
@@ -114,8 +121,8 @@ const {Ticker,Timer}= function() {
 		 @param {{key?:unknown,ignoreFrozen?:boolean}} config
 		*/
 		set(timeout, handler, {key,ignoreFrozen=Timer.frozen}={}) {
-			!Ticker.running && Ticker.set()
-			TimerMap.set(key??Symbol(),{amount:0,timeout,handler,ignoreFrozen})
+			if (!Ticker.running) Ticker.set()
+			TimerMap.set(key ?? Symbol(),{amount:0,timeout,handler,ignoreFrozen})
 		}
 		/** @param {...{ms:number,fn:()=> void}} seq */
 		sequence(...seq) {
@@ -126,10 +133,6 @@ const {Ticker,Timer}= function() {
 			}
 			Timer.set(s.ms, fire)
 		}
-		stop() {
-			Ticker.stop()
-			return this
-		}
 		/** @param {unknown} key */
 		cancel(key) {
 			TimerMap.delete(key)
@@ -139,6 +142,7 @@ const {Ticker,Timer}= function() {
 			TimerMap.clear()
 			return this
 		}
-	})
+	}
+
 	return {Ticker,Timer}
 }()

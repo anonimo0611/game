@@ -16,7 +16,7 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 */const isEnterKey = e=> (e.key === '\x20' || e.key === 'Enter')
 
 /**
- @param {number} v1
+ @param {number}  v1
  @param {number} [v2]
  @param {number} [step]
  @type {{
@@ -30,11 +30,6 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
     if (step > 0) for (let i=start; i<stop; i+=step) yield i
     if (step < 0) for (let i=start; i>stop; i+=step) yield i
 }
-
-/**
- @template T
- @param {...T} args
-*/const cycle = function*(...args) {while(1) yield* args}
 
 /**
  @param {number} v1

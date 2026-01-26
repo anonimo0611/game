@@ -1,52 +1,50 @@
 const dRoot = document.documentElement
 
+/** Automatically hides the cursor after a period of inactivity. */
 export const Cursor = function() {
 	let   timerId   = 0
-	const MoveRange = 2
+	const Threshold = 2
 	const HideDelay = 2000
-	const currPos   = Vec2.Zero
+	const CurrPos   = Vec2.Zero
 	const LastPos   = Vec2.Zero
 	addEventListener('mousemove', e=> {
-		currPos.set(e.pageX,e.pageY)
+		CurrPos.set(e.pageX,e.pageY)
 		clearTimeout(timerId)
 		timerId = setTimeout(hide,HideDelay)
-		Vec2.sqrMag(currPos,LastPos) > MoveRange**2 && show()
-		LastPos.set(currPos)
+		Vec2.sqrMag(CurrPos,LastPos) > Threshold**2 && show()
+		LastPos.set(CurrPos)
 	}, {passive:true})
 	function hide() {dRoot.dataset.cursor = 'hidden'}
 	function show() {dRoot.dataset.cursor = 'default'}
-	return {get pos() {return currPos.asObj},hide,show}
+	return {get pos() {return CurrPos.asObj},hide,show}
 }()
 
 /**
- Enable mouse wheel on range controls.
- Label elements must be block-level.
+ Enables mouse wheel interactions for range input elements.
  @param {HTMLInputElement} ctrl
 */
-function setupCtrl(ctrl) {
-	const output = $(`output[for~="${ctrl.id}"]`).text(ctrl.value).get(0)
+function setupRngCtrl(ctrl) {
+	const output = $(`output[for~="${ctrl.id}"]`).text(ctrl.value).get(0) ?? ''
 	const ids    = ctrl.dataset.links?.trim().split(/\s+/) ?? []
 	const label  = ctrl.closest('label') || qS(`label[for="${ctrl.id}"]`)
 	const links  = ids.map(id=> qS(`input#${id}`)).filter(e=> e!=null)
 
-	/** @param {WheelEvent} e */
-	function onWheel(e) {
+	$(label || ctrl).onWheel(e=> {
 		e.preventDefault()
 		0 < e.deltaY
 			? ctrl.stepDown()
 			: ctrl.stepUp()
 		$(ctrl).trigger('input')
-	}
-	function onInput() {
+	})
+	$(ctrl).on('input', ()=> {
 		const {value,min,max}= ctrl
-		$([ctrl,output, ...new Set(links)])
+		$([...new Set([ctrl,output,...links])])
 			.prop({value})
-			.css({'--ratio':`${norm(+min,+max,+value)*100}%`})
-	}
-	$(label || ctrl).onWheel(onWheel)
-	$(ctrl).on('input',onInput).trigger('input')
+			.css('--ratio',`${norm(+min,+max,+value)*100}%`)
+	})
+	.trigger('input')
 }
 $load(()=> {
 	/**@type {NodeListOf<HTMLInputElement>}*/
-	(qSAll('input[type=range]')).forEach(setupCtrl)
+	(qSAll('input[type=range]')).forEach(setupRngCtrl)
 })

@@ -26,36 +26,16 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		return this
 	}
 
-	/** @param {Cvs2DStyle} [style] */
+	/**
+	 @param {Cvs2DStyle} [style]
+	*/
 	clear(style) {
 		this.fillRect(0,0, this.width, this.height, style ?? null)
 		return this
 	}
 	init() {
 		this.resize(0,0).clear()
-	}
-
-	/**
-	 @param {number} cx center x
-	 @param {number} cy center y
-	 @param {number} r  radius
-	 @param {?Cvs2DStyle} [fill]  fillStyle
-	 @param {Cvs2DStyle} [stroke] strokeStyle
-	 @param {number} [lw] lineWidth
-	*/
-	setSquare(cx, cy, r, fill=this.fillStyle, stroke, lw=this.lineWidth) {
-		if (fill || fill === null) {
-			this.save()
-			this.fillRect(cx-r, cy-r, r*2, r*2, fill)
-			this.restore()
-		}
-		if (stroke) {
-			this.save()
-			this.strokeStyle = stroke
-			this.lineWidth = lw
-			this.strokeRect(cx-r, cy-r, r*2, r*2)
-			this.restore()
-		}
+		return this
 	}
 
 	/**
@@ -72,6 +52,7 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 			? this.clearRect(x, y, w, h)
 			: super.fillRect(x, y, w, h)
 		this.restore()
+		return this
 	}
 
 	/**
@@ -89,6 +70,7 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		this.arc(x,y, radius, 0, PI*2)
 		this.fill()
 		this.restore()
+		return this
 	}
 
 	/**
@@ -106,37 +88,41 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		this.lineWidth = lineWidth
 		this.stroke()
 		this.restore()
+		return this
 	}
 
 	/**
 	 @param {number} x
 	 @param {number} y
-	 @param {number} rX  radiusX
-	 @param {number} rY  radiusY
-	 @param {number} rot rotaion
-	 @param {number} st  startAngle
-	 @param {number} ed  endAngle
-	 @param {?Cvs2DStyle} [fill]   fillStyle
-	 @param {Cvs2DStyle}  [stroke] storkeStyle
-	 @param {number}  [lw]    lineWIdth
-	 @param {boolean} [close] Close the path
+	 @param {number} radiusX
+	 @param {number} radiusY
+	 @param {number} rotation
+	 @param {number} stAngle
+	 @param {number} edAngle
+	 @param {?Cvs2DStyle}[fillStyle]
+	 @param {Cvs2DStyle} [strokeStyle]
+	 @param {number}     [lineWidth]
+	 @param {boolean}    [closePath]
 	*/
-	setEllipse(x,y,rX,rY,rot,st,ed,fill=this.fillStyle,stroke,lw=this.lineWidth,close=false
+	setEllipse(x,y,radiusX,radiusY,rotation,stAngle,edAngle,
+		fillStyle = this.fillStyle, strokeStyle,
+		lineWidth = this.lineWidth, closePath=false
 	) {
 		this.save()
 		this.beginPath()
-		this.ellipse(x,y,rX,rY,rot,st,ed)
-		close && this.closePath()
-		if (fill) {
-			this.fillStyle = fill
+		this.ellipse(x,y,radiusX,radiusY,rotation,stAngle,edAngle)
+		closePath && this.closePath()
+		if (fillStyle) {
+			this.fillStyle = fillStyle
 			this.fill()
 		}
-		if (stroke) {
-			this.strokeStyle = stroke
-			this.lineWidth = lw
+		if (strokeStyle) {
+			this.strokeStyle = strokeStyle
+			this.lineWidth = lineWidth
 			this.stroke()
 		}
 		this.restore()
+		return this
 	}
 
 	/**
@@ -150,99 +136,105 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		this.moveTo(x1, y1)
 		this.lineTo(x2, y2)
 		this.stroke()
-	}
-
-	/** @param {readonly number[]} v */
-	setVertices(v) {
-		for (const i of range(0, v.length, 2))
-			!i ? this.moveTo(v[i], v[i+1])
-			   : this.lineTo(v[i], v[i+1])
 		return this
 	}
 
-	/** @param {(readonly [x:number, y:number])[]} c */
-	newLinePath(...c) {
+	/**
+	 @param {(readonly [x:number, y:number])[]} path
+	*/
+	newLinePath(...path) {
 		this.beginPath()
-		this.setLinePath(...c)
+		this.setLinePath(...path)
 		return this
 	}
 
-	/** @param {(readonly [x:number, y:number])[]} c */
-	setLinePath(...c) {
-		c.forEach(([x,y], i)=> {
+	/**
+	 @param {(readonly [x:number, y:number])[]} path
+	*/
+	setLinePath(...path) {
+		path.forEach(([x,y], i)=> {
 			!i ? this.moveTo(x,y)
 			   : this.lineTo(x,y)
 		})
 		return this
 	}
 
-	/** @param {(readonly [x:number, y:number])[]} c */
-	addLinePath(...c) {
-		c.forEach(([x,y])=> this.lineTo(x,y))
+	/**
+	 @param {(readonly [x:number, y:number])[]} path
+	*/
+	addLinePath(...path) {
+		path.forEach(([x,y])=> this.lineTo(x,y))
 		return this
 	}
 
 	/**
 	 @param {Cvs2DStyle} style
-	 @param {(readonly [x:number, y:number])[]} c
+	 @param {(readonly [x:number, y:number])[]} path
 	*/
-	fillPolygon(style, ...c) {
+	fillPolygon(style, ...path) {
 		this.save()
-		this.newLinePath(...c)
+		this.newLinePath(...path)
 		this.fillStyle = style
+		this.closePath()
 		this.fill()
 		this.restore()
+		return this
 	}
 }
 
 class Fade {
-	/** @readonly */
-	static Type = /**@type {const}*/({IN:0, OUT:1})
-	static in (dur=500, delay=0) {return new Fade(dur,delay,Fade.Type.IN)}
-	static out(dur=500, delay=0) {return new Fade(dur,delay,Fade.Type.OUT)}
-	#type; #delay; #duration
+    /** @readonly */static IN  = 0
+    /** @readonly */static OUT = 1
+	static in (dur=500, delay=0) {return new Fade(dur,delay,Fade.IN)}
+	static out(dur=500, delay=0) {return new Fade(dur,delay,Fade.OUT)}
+
+	#type  = /**@type {0|1}*/(0)
+	#dur   = 0
+	#delay = 0
 	#count = 0
 	#alpha = 0
 
+	get type()    {return this.#type}
+	get alpha()   {return this.#alpha}
+	get running() {return this.#type == 0 ? this.#alpha<1 : this.#alpha>0}
+
 	/**
 	 @private
-	 @param {number} dur
+	 @param {number} duration
 	 @param {number} delay
-	 @param {0|1} type
+	 @param {0|1} type Fade.IN or Fade.OUT
 	*/
-	constructor(dur, delay, type=Fade.Type.IN) {
-		this.#delay    = delay
-		this.#duration = dur
-		this.#type = this.#alpha = type
+	constructor(duration, delay, type=Fade.IN) {
+		this.#type  = type
+		this.#alpha = type
+		this.#dur   = duration
+		this.#delay = delay
 	}
-	get working()	{return this.isInMode? this.#alpha<1 : this.#alpha>0}
-	get alpha() 	{return this.#alpha}
-	get isInMode()	{return this.#type == Fade.Type.IN}
-	get isOutMode() {return this.#type == Fade.Type.OUT}
 
 	/**
 	 @param {number} maxAlpha
-	 @returns {boolean}
+	 @returns {boolean} Whether the fade animation is currently active
 	*/
 	update(maxAlpha=1) {
 		this.#count += Ticker.Interval
 		if (this.#count < this.#delay) return true
-		const step	= (maxAlpha/(this.#duration/Ticker.Interval))
-		this.#alpha = this.isInMode
+		const step	= (maxAlpha/(this.#dur/Ticker.Interval))
+		this.#alpha = this.#type == Fade.IN
 			? Math.min(this.#alpha+step, maxAlpha)
 			: Math.max(this.#alpha-step, 0)
-		return this.working
+		return this.running
 	}
-	/** @param {CanvasRenderingContext2D} ctx */
-	apply(ctx) {
-		ctx.globalAlpha = this.#alpha
-	}
+
+	/**
+	 @param {CanvasRenderingContext2D} ctx
+	*/
+	apply(ctx) {ctx.globalAlpha = this.#alpha}
 }
 
 /**
- @param {?string} id ID of a canvas that exists in the document; If the `null` or does not exist, the canvas is created
- @param {number} [width]  The default value uses the width attribute of canvas element
- @param {number} [height] The default is the same as `width`, but if both `width` and `height` are undefined, use the heigt attribute of canvas element
+ @param {?string} id The ID of an existing canvas element. If null or not found, a new canvas is created.
+ @param {number} [width]  The desired width. Defaults to the element's attribute if omitted.
+ @param {number} [height] The desired height. Defaults to `width` if provided; otherwise, defaults to the element's attribute.
 */
 const canvas2D = (id, width, height=width)=> {
 	const cvs = id && byId(id) instanceof HTMLCanvasElement
