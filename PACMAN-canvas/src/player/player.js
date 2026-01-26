@@ -25,6 +25,7 @@ class PlayerPac extends PacMan {
 	get closed()   {return State.isInGame == false}
 	get maxAlpha() {return Ctrl.semiTransPac? .75:1}
 	get speed()    {return this.mov.speed}
+	get onWall()   {return this.mov.onWall}
 	get tunEntry() {return this.#tunEntry}
 
 	get timeSinceLastEating() {
