@@ -18,6 +18,7 @@ import {Sound}   from '../_snd/sound.js'
 export const Game = new class {
 	static {$(this.setup)}
 	static setup() {
+		Ticker.set(Game.#update, Game.#draw)
 		State.on({
 			Title:    Game.#onTitle,
 			Intro:    Game.#onIntro,
@@ -56,10 +57,10 @@ export const Game = new class {
 		$Level.text('Level'+this.levelStr).trigger('change')
 	}
 	#onTitle() {
-		Cursor.show()
 		Sound.stop()
+		Ticker.reset()
+		Cursor.show()
 		Game.#resetLevel()
-		Ticker.set(Game.#update, Game.#draw)
 	}
 	#onIntro() {
 		Cursor.hide()
@@ -91,7 +92,7 @@ export const Game = new class {
 		State.toTitle({delay:2500})
 	}
 	#onQuit() {
-		Ctrl.pause(false)
+		Ticker.reset()
 		State.toTitle()
 	}
 	#levelBegins() {
