@@ -80,8 +80,10 @@ export class Mover {
 	}
 	#turnAround() {
 		const {actor:a}= this
-		if (a.dir == a.revOrient)
+		if (a.dir == a.revOrient) {
 			a.setMoveDir(a.orient)
+			this.#speed = this.#tileSpeed
+		}
 	}
 	#stopAtWall() {
 		const {state:s,actor:a,canMove}= this
