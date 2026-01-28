@@ -20,7 +20,6 @@ export class Ghost extends Actor {
 	#fadeIn = new Actor.SpawnFade
 	#fleeTime   = -1
 	#revSignal  = false
-	#started    = false
 	#frightened = false
 
 	get isAngry()      {return false}
@@ -34,7 +33,6 @@ export class Ghost extends Actor {
 	get animIdx()      {return GhsMgr.animIndex}
 	get isChasing()    {return GhsMgr.isChaseMode   && this.isWalking}
 	get isScattering() {return GhsMgr.isScatterMode && this.isWalking && !this.isAngry}
-	get isStarted()    {return this.#started}
 	get isFrightened() {return this.#frightened}
 	get isWalking()    {return this.state.isWalking && !this.isFrightened}
 	get isEscaping()   {return this.state.isEscaping || this.state.isReturning}
@@ -140,7 +138,6 @@ export class Ghost extends Actor {
 			return this.move(U)
 
 		this.dir = L
-		this.#started ||= true
 		this.state.toWalking()
 	}
 	houseEntranceArrived(spd=this.speed) {

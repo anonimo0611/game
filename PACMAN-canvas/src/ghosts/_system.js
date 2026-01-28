@@ -250,7 +250,7 @@ const CruiseElroy = function() {
 		return State.isInGame
 			&& _part > 1
 			&& Ghosts[GhsType.Akabei]?.isFrightened == false
-			&& Ghosts[GhsType.Guzuta]?.isStarted == true
+			&& Ghosts[GhsType.Guzuta]?.state.isIdle == false
 	}
 	function onDotEaten() {
 		const rate = [1.5, 1.0, 0.5][_part]

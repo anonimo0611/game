@@ -22,7 +22,7 @@ const RunTimer  = new class {
     }
 }
 
-/** @typedef {import('state.js').StateType} StateType */
+/** @typedef {import('../state.js').StateType} StateType */
 /** @typedef {{update():void,draw?():void}} Scene */
 /** @type {{[key in StateType]?:Scene}} */
 const Scenes ={Title:RunTimer,Attract,CoffBreak}
