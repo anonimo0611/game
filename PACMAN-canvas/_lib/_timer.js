@@ -83,8 +83,11 @@ const {Ticker,Timer}= function() {
 		}
 		tick() {
 			_paused
-				? _pCount++
+				? this.updatePausing()
 				: this.updateGame()
+		}
+		updatePausing() {
+			_pCount++
 		}
 		updateGame() {
 			TimerMap.forEach(this.timer)

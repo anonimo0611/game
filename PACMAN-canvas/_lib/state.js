@@ -1,5 +1,7 @@
+/** @typedef {number|string|boolean|any[]} Data */
 /** @template Owner,State */
 export default class _State {
+	#queue = Promise.resolve()
 	/**@type {Owner} */ #owner
 	/**@type {State} */ #state
 	/**@type {State} */ #last
@@ -9,6 +11,7 @@ export default class _State {
 	constructor(owner) {this.#owner = owner}
 	get owner()   {return this.#owner}
 	get current() {return this.#state}
+	get last()    {return this.#last}
 	get default() {return this.#default}
 
 	init() {
@@ -23,12 +26,11 @@ export default class _State {
 	}
 
 	/**
-	 @typedef {{delay?:number,data?:number|string|boolean|any[]}} config
 	 @protected
 	 @param {State} s
 	*/
 	ret(s) {
-		/** @type {(cfg:config)=> this} */
+		/** @type {(cfg:{delay?:number,data?:Data})=> this} */
 		return ({delay,data}={})=> {
 			this.set(s, {delay,data})
 			return this
@@ -37,16 +39,18 @@ export default class _State {
 
 	/**
 	 @param {State} state
-	 @param {{data?:unknown,delay?:number,fn?:Function}} config
+	 @param {{data?:Data,delay?:number,fn?:(state:State,data?:Data)=> void}} config
 	*/
 	set(state, {data,delay=-1,fn}={}) {
 		if (delay >= 0) {
 			Timer.set(delay, ()=> this.set(state,{delay:-1,data}))
 			return this
 		}
-		this.#last  = this.current
-		this.#state = state
-		fn?.(state,data)
+		this.#queue = this.#queue.then(async()=> {
+			this.#last  = this.current
+			this.#state = state
+			fn?.(state,data)
+		})
 		return this
 	}
 
