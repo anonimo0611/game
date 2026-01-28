@@ -1,4 +1,4 @@
-/** @typedef {import('_manifest.js').SoundType} SoundType */
+/** @typedef {import('./_manifest.js').SoundType} SoundType */
 import {Manifest,ConfigMap,Ids} from './_manifest.js'
 
 const {Sound:SoundJS}= createjs
