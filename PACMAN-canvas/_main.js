@@ -92,6 +92,7 @@ export const Game = new class {
 		State.toTitle({delay:2500})
 	}
 	#onQuit() {
+		Ticker.reset()
 		State.toTitle()
 	}
 	#levelBegins() {

@@ -68,7 +68,7 @@ class GameState extends _State {
 	 @param {StateType} s
 	 @param {{delay?:number,data?:Data}} config
 	*/
-	set(s, {delay=-1,data}={}) {
+	set(s, {delay=(s == 'Quit' ? -1:0),data}={}) {
 		return super.set(s, {delay,data,fn:this.#callback})
 	}
 } export const State = freeze(new GameState)
