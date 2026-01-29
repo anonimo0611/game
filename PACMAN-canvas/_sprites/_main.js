@@ -143,8 +143,8 @@ export const View = function()
 				pos.x += S*1.2 + ((i+1)*GAP)
 			}
 		}
-		{// Stake and offcut
-			const s = T/T
+		{// Stake and Cloth
+			const s = T/TileSize
 			const [sx,sy]= Vec2.new(spr.stakeSize).mul(s).vals
 			// Stake
 			Ctx.save()
@@ -152,7 +152,7 @@ export const View = function()
 			Ctx.scale(s, s)
 			spr.drawStake(Vec2.Zero)
 			Ctx.restore()
-			// Offcut
+			// Cloth
 			Ctx.save()
 			Ctx.translate(S*6.9+sx, S-T/2-3*s)
 			Ctx.scale(s, s)
