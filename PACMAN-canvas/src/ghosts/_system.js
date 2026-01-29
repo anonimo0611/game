@@ -39,19 +39,19 @@ const StandbyTimes = /**@type {const}*/
 
 /**
  @extends {_State<Ghost,StateType>}
- @typedef {'Idle'|'GoingOut'|'Walking'|'Bitten'|'Escaping'|'Returning'} StateType
+ @typedef {'Idle'|'GoingOut'|'Roaming'|'Bitten'|'Escaping'|'Returning'} StateType
 */
 export class GhostState extends _State {
 	isIdle      = false
 	isGoingOut  = false
-	isWalking   = false
+	isRoaming   = false
 	isBitten    = false
 	isEscaping  = false
 	isReturning = false
 
 	toIdle      = this.ret('Idle')
 	toGoingOut  = this.ret('GoingOut')
-	toWalking   = this.ret('Walking')
+	toRoaming   = this.ret('Roaming')
 	toBitten    = this.ret('Bitten')
 	toEscaping  = this.ret('Escaping')
 	toReturning = this.ret('Returning')
@@ -60,7 +60,7 @@ export class GhostState extends _State {
 		super(g)
 		this.init().owner.inHouse
 			? this.toIdle()
-			: this.toWalking()
+			: this.toRoaming()
 	}
 	set(/**@type {StateType}*/state) {
 		$(this.owner).trigger(state)
@@ -250,7 +250,7 @@ const CruiseElroy = function() {
 		return State.isInGame
 			&& _part > 1
 			&& Ghosts[GhsType.Akabei]?.isFrightened == false
-			&& Ghosts[GhsType.Guzuta]?.state.isIdle == false
+			&& Ghosts[GhsType.Guzuta]?.isStarted == true
 	}
 	function onDotEaten() {
 		const rate = [1.5, 1.0, 0.5][_part]

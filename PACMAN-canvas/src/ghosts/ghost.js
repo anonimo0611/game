@@ -19,6 +19,7 @@ export class Ghost extends Actor {
 	/** @readonly */sprite = new Sprite
 	#fadeIn = new Actor.SpawnFade
 	#fleeTime   = -1
+	#started    = false
 	#revSignal  = false
 	#frightened = false
 
@@ -31,10 +32,11 @@ export class Ghost extends Actor {
 	get chaseTile()    {return this.chasePos.divInt(T)}
 	get spriteIdx()    {return GhsMgr.spriteIdx}
 	get animIdx()      {return GhsMgr.animIndex}
-	get isChasing()    {return GhsMgr.isChaseMode   && this.isWalking}
-	get isScattering() {return GhsMgr.isScatterMode && this.isWalking && !this.isAngry}
+	get isStarted()    {return this.#started}
+	get isChasing()    {return GhsMgr.isChaseMode   && this.isNormal}
+	get isScattering() {return GhsMgr.isScatterMode && this.isNormal && !this.isAngry}
 	get isFrightened() {return this.#frightened}
-	get isWalking()    {return this.state.isWalking && !this.isFrightened}
+	get isNormal()     {return this.state.isRoaming && !this.isFrightened}
 	get isEscaping()   {return this.state.isEscaping || this.state.isReturning}
 	get ignoreOneway() {return this.isFrightened || this.isEscaping}
 
@@ -122,6 +124,7 @@ export class Ghost extends Actor {
 	}
 	leaveHouse(deactivateGlobalDotCnt=false) {
 		player.resetTimer()
+		this.#started ||= true
 		this.state.isIdle &&
 		this.state.toGoingOut()
 		return deactivateGlobalDotCnt
@@ -138,7 +141,7 @@ export class Ghost extends Actor {
 			return this.move(U)
 
 		this.dir = L
-		this.state.toWalking()
+		this.state.toRoaming()
 	}
 	houseEntranceArrived(spd=this.speed) {
 		return this.state.isEscaping
@@ -213,7 +216,7 @@ export class Ghost extends Actor {
 		radius  = this.isFrightened? T/2:T/3,
 		release = ()=> this.#setEscapeState(),
 	) {
-		if (!this.state.isWalking
+		if (!this.state.isRoaming
 		 || !this.isFrightened && Ctrl.invincible
 		 || !circleCollision(this, pos, radius))
 			return false
