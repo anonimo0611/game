@@ -29,7 +29,7 @@ class PlayerPac extends PacMan {
 	get tunEntry() {return this.#tunEntry}
 
 	get timeSinceLastEating() {
-		return (this.#sinceLastEating * Game.interval)
+		return this.#sinceLastEating
 	}
 	forwardPos(num=0) {
 		return Vec2[this.dir].mul(num*T).add(this.center)
@@ -59,7 +59,7 @@ class PlayerPac extends PacMan {
 		this.sprite.update(this)
 		if (this.closed || this.hidden)
 			return
-		this.#sinceLastEating++
+		this.#sinceLastEating += Game.interval
 		this.#tunEntry.update()
 		this.#update(this.mov.speed+.5|0)
 	}

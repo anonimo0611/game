@@ -166,7 +166,7 @@ const AttackInWaves = function() {
 		}
 	}
 	function create(lv=1) {
-		let time = -1, idx = 0
+		let idx  = 0, et = 0
 		let mode = Ctrl.alwaysChase? CHASE:SCATTER
 		const list = /**@type {const}*/([
 			{mode:SCATTER, dur:lv <= 4 ? 4500 : 4000},
@@ -179,11 +179,10 @@ const AttackInWaves = function() {
 			{mode:CHASE,   dur:Infinity},
 		])
 		function update() {
-			if (Timer.frozen
-			 || GhsMgr.isFrightMode
-			 || Game.interval*(++time) < list[idx].dur)
+			if ((Timer.frozen || GhsMgr.isFrightMode)
+			 || (et+=Game.interval) < list[idx].dur)
 				return
-			[time,mode]= [0,list[++idx].mode]
+			[et,mode]= [0,list[++idx].mode]
 			signalDirectionReversal()
 		}
 		return {
@@ -267,7 +266,7 @@ const FrightMode = function() {
 	let   _session  = /**@type {?Readonly<Session>}*/(null)
 	const TimeTable = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	class Session {
-		#time=0; #flash=0; #caught=0; #fIdx=1; #phase=0;
+		#et=0; #flash=0; #caught=0; #fIdx=1
 		get points()    {return PtsLst[this.#caught-1]}
 		get caughtAll() {return this.#caught == GhsType.Max}
 		get spriteIdx() {return this.#flash && this.#fIdx^1}
@@ -285,15 +284,14 @@ const FrightMode = function() {
 			Sound.toggleFrightMode(isOn)
 		}
 		#flashing() {
-			const iv = (this.Dur == 1 ? 12:13)/Game.speed|0
-			if (this.#flash++ % iv == 0)
-				if (++this.#phase < 10) this.#fIdx ^= 1
+			const iv = (this.Dur == 1 ? 12:14)/Game.speed|0
+			this.#flash++ % iv == 0 && (this.#fIdx ^= 1)
 		}
 		update() {
 			if (State.isInGame && !Timer.frozen) {
-				const et = (this.#time++ * Game.interval)/1000
-				if (et >= this.Dur-2) this.#flashing()
-				if (et >= this.Dur || this.caughtAll) this.#set(false)
+				const et = this.#et += Game.interval
+				if (et/1e3 >= this.Dur-2) this.#flashing()
+				if (et/1e3 >= this.Dur || this.caughtAll) this.#set(false)
 			}
  		}
 	}
