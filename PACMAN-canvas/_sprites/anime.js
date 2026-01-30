@@ -70,16 +70,14 @@ class AnimData
 	{
 		Btns.prop({disabled})
 		if (!disabled && data)
-			data.orient = /**@type {Direction}*/(
-				$('input[name=orient]:checked').attr('value')
-			)
+			data.orient = /**@type {Direction}*/
+				($('input[name=orient]:checked').attr('value'))
 		return disabled
 	}
 	function drawPacman()
 	{
 		ctx.save()
 		ctx.translate(S*1.5/2, S/2)
-		ctx.scale(T/T, T/T)
 		data?.pacman.draw({orient:data.orient, radius:PacScale*T})
 		ctx.restore()
 	}
