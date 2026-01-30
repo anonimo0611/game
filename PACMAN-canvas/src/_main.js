@@ -74,8 +74,8 @@ export const Game = new class {
 		Sound.play('dying')
 		player.sprite.setDying()
 		Lives.left > 0
-			? State.toRestart ({delay:2200})
-			: State.toGameOver({delay:2000})
+			? State.toRestarted({delay:2200})
+			: State.toGameOver ({delay:2000})
 	}
 	#onCleared() {
 		Sound.stopLoops()
