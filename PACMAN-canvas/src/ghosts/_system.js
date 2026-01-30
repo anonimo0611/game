@@ -96,10 +96,7 @@ export const GhsMgr = new class extends Common {
 	*/
 	#initialize(_, ...ghosts) {
 		GhsMgr.#animIdx = 0
-		range(GhsType.Max).forEach(i=> {
-			Ghosts[i]?.sprite.ctx.init()
-			Ghosts[i] = ghosts[i]
-		})
+		ghosts.forEach((g,i)=> Ghosts[i] = g)
 	}
 	#onRoundEnds() {
 		Ghosts.forEach(g=> g.sprite.setFadeOut())

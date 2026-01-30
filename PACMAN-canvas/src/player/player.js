@@ -61,7 +61,7 @@ class PlayerPac extends PacMan {
 			return
 		this.#sinceLastEating++
 		this.#tunEntry.update()
-		this.#update(this.mov.speed*2|0)
+		this.#update(this.mov.speed+.5|0)
 	}
 	#update(steps=1) {
 		for (const _ of range(steps)) {

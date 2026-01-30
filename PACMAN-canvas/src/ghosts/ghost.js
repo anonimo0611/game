@@ -98,7 +98,7 @@ export class Ghost extends Actor {
 		case 'Idle':     return this.#idleInHouse(this)
 		case 'GoingOut': return this.#goingOut(this)
 		case 'Returning':return this.#returnToHome(this)
-		default: this.#moveStepped(this.speed*2|0)
+		default: this.#moveStepped(this.speed+.5|0)
 		}
 	}
 	#moveStepped(steps=1) {
