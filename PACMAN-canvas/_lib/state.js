@@ -1,10 +1,16 @@
-/** @typedef {number|string|boolean|any[]} Data */
-/** @template Owner,State */
+/**
+ @typedef {{delay?:number,data?:Data}} Config
+ @typedef {number|string|boolean|any[]} Data
+*/
+/**
+ @template Owner
+ @template {string} State
+*/
 export default class _State {
-	/**@type {Owner} */ #owner
-	/**@type {State} */ #state
-	/**@type {State} */ #last
-	/**@type {string}*/ #default
+	/**@type {Owner}*/ #owner
+	/**@type {State}*/ #state
+	/**@type {State}*/ #last
+	/**@type {State}*/ #default
 
 	/** @param {Owner} owner */
 	constructor(owner) {this.#owner = owner}
@@ -12,12 +18,13 @@ export default class _State {
 	get current() {return this.#state}
 	get default() {return this.#default}
 
-	init() {
+	init(autoMethod=false) {
 		keys(this)
 		.flatMap(key=> /^is[A-Z][a-zA-Z\d]*$/.test(key)? [key]:[])
 		.forEach((key,i)=> {
-			const state = key.substring(2)
+			const state = /**@type {State}*/(key.substring(2))
 			i == 0 && (this.#default = state)
+			autoMethod && (/**@type {any}*/(this)[`to${state}`] = this.ret(state))
 			defineProperty(this,key,{get(){return this.#state === state}})
 		})
 		return this
@@ -25,11 +32,10 @@ export default class _State {
 
 	/**
 	 @protected
-	 @typedef {{delay?:number,data?:Data}} config
 	 @param {State} s
 	*/
 	ret(s) {
-		/** @type {(cfg:config)=> this} */
+		/** @type {(cfg:Config)=> this} */
 		return ({delay,data}={})=> {
 			this.set(s, {delay,data})
 			return this
@@ -56,7 +62,7 @@ export default class _State {
 	*/
 	on(v) {
 		for (const [ev,fn] of entries(v))
-			$win.on(underscoreToSp(ev,this.default), fn)
+			$win.on(underscoreToSp(ev,String(this.default)), fn)
 		return this
 	}
 
