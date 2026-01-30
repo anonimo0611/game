@@ -33,10 +33,6 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 		this.fillRect(0,0, this.width, this.height, style ?? null)
 		return this
 	}
-	init() {
-		this.resize(0,0).clear()
-		return this
-	}
 
 	/**
 	 @param {number} x

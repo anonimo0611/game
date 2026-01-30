@@ -72,9 +72,8 @@ const {Ticker,Timer}= function() {
 			this.rAFId = requestAnimationFrame(this.loop)
 			if (this.lastTS === 0)
 				this.lastTS = this.acc = ts
-			const delta = ts - this.lastTS
+			this.acc += (ts - this.lastTS)
 			this.lastTS = ts
-			this.acc += delta
 			if (this.acc >= Interval) {
 				this.acc -= Interval
 				this.tick()
