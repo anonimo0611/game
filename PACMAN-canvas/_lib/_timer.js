@@ -12,7 +12,7 @@ const {Ticker,Timer}= function() {
 	const Interval = 1000/FPS
 	const TimerMap = /**@type {Map<any,TimerData>}*/(new Map)
 
-	let _ticker = /**@type {?Tick}*/(null)
+	let _ticker = /**@type {?TickerCore }*/(null)
 	let _paused = false
 	let _fCount = 0 // frame  count
 	let _pCount = 0 // paused count
@@ -22,7 +22,7 @@ const {Ticker,Timer}= function() {
 		get count()       {return _fCount}
 		get pausedCount() {return _pCount}
 		get paused()      {return _paused}
-		get running()     {return _ticker instanceof Tick}
+		get running()     {return _ticker instanceof TickerCore }
 		get elapsedTime() {return _fCount*Interval}
 
 		/**
@@ -30,7 +30,7 @@ const {Ticker,Timer}= function() {
 		 @param {()=> void} [drawFn]
 		*/
 		set(updateFn,drawFn) {
-			new Tick(updateFn,drawFn)
+			new TickerCore(updateFn,drawFn)
 		}
 		/** @param {boolean} [force] */
 		pause(force) {
@@ -51,7 +51,7 @@ const {Ticker,Timer}= function() {
 		}
 	})
 
-	class Tick {
+	class TickerCore {
 		/**
 		 @param {()=> void} [updateFn]
 		 @param {()=> void} [drawFn]
