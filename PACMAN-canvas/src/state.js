@@ -9,7 +9,13 @@ import _State from '../_lib/state.js'
 } MultiState
 */
 
-/** @extends {_State<globalThis,StateType>} */
+/**
+ @extends {_State<globalThis,StateType>}
+ @typedef {import('../_lib/state.js').Config} Config
+ @typedef {import('../_lib/state.js').Data} Data
+ @typedef {{[K in StateType as `to${K}`]:(cfg?:Config)=> IState}} Methods
+ @typedef {GameState & Methods} IState
+*/
 class GameState extends _State {
 	isTitle     = false
 	isAttract   = false
@@ -26,31 +32,15 @@ class GameState extends _State {
 	isGameOver  = false
 	isQuit      = false
 
-	toTitle     = this.ret('Title')
-	toAttract   = this.ret('Attract')
-	toIntro     = this.ret('Intro')
-	toReady     = this.ret('Ready')
-	toInGame    = this.ret('InGame')
-	toRestart   = this.ret('Restarted')
-	toNewLevel  = this.ret('NewLevel')
-	toCleared   = this.ret('Cleared')
-	toFlashing  = this.ret('Flashing')
-	toCoffBreak = this.ret('CoffBreak')
-	toPacCaught = this.ret('PacCaught')
-	toPacDying  = this.ret('PacDying')
-	toGameOver  = this.ret('GameOver')
-	toQuit      = this.ret('Quit')
-
 	get wasTitle()    {return this.was('Title')}
 	get wasIntro()    {return this.was('Intro')}
 	get wasFlashing() {return this.was('Flashing')}
 	get isStartMode() {return this.isIntro || this.isReady}
 	get isDemoScene() {return this.isAttract || this.isCoffBreak}
 
-	constructor() {super(globalThis),this.init()}
+	constructor() {super(globalThis),this.init(true)}
 
 	/**
-	 @typedef {import('../_lib/state.js').Data} Data
 	 @param {StateType} s
 	 @param {Data} [data]
 	*/
@@ -68,7 +58,7 @@ class GameState extends _State {
 	 @param {StateType} s
 	 @param {{delay?:number,data?:Data}} config
 	*/
-	set(s, {delay=(s == 'Quit' ? -1:0),data}={}) {
+	set(s, {delay=-1,data}={}) {
 		return super.set(s, {delay,data,fn:this.#callback})
 	}
-} export const State = freeze(new GameState)
+} export const State = /**@type {Readonly<IState>}*/(freeze(new GameState))
