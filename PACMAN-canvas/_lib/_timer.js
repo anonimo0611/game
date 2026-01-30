@@ -60,21 +60,19 @@ const {Ticker,Timer}= function() {
 			_ticker?.stop()
 			_ticker     = this
 			this.acc    = 0
-			this.start  = 0
-			this.lastTS = 0
+			this.lstTS  = 0
 			this.update = updateFn
 			this.draw   = drawFn
-			this.loop   = this.loop.bind(this)
 			this.rAFId  = requestAnimationFrame(this.loop)
 		}
 		/** @param {number} ts */
-		loop(ts) {
+		loop = ts=> {
 			this.rAFId = requestAnimationFrame(this.loop)
-			if (this.lastTS === 0)
-				this.lastTS = this.acc = ts
-			this.acc += (ts - this.lastTS)
-			this.lastTS = ts
-			if (this.acc >= Interval) {
+			if (this.lstTS === 0)
+				this.lstTS = this.acc = ts
+			this.acc += (ts - this.lstTS)
+			this.lstTS = ts
+			while(this.acc >= Interval) {
 				this.acc -= Interval
 				this.tick()
 			}
