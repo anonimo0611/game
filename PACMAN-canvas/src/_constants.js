@@ -19,7 +19,6 @@ BW = Cols * T,
 /** Board height */
 BH = Rows * T,
 
-/** @typedef {'Up'|'Right'|'Down'|'Left'} Direction */
 U='Up', R='Right', D='Down', L='Left',
 
 Bg   = canvas2D('board_bg' ,  BW,BH).ctx,

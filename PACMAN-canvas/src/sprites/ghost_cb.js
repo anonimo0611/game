@@ -14,7 +14,7 @@ export default class {
 		ctx.fill()
 	}
 	drawMendedSeam(animIdx=0) {
-		const {ctx}= this, path = /**@type {xyList[]}*/
+		const {ctx}= this, path = /**@type {xyTuple[]}*/
 			([[39,8],[33,14],[24,8],[14,15],[26,20],[14,27],[25,33],[14,38]])
 		animIdx && path.pop()
 		ctx.lineWidth   = 3.5
@@ -145,7 +145,7 @@ class StakeClothes {
 	/**
 	 @param {number} animIdx
 	 @param {number} rate
-	 @param {{x?:number, y?:number, size?:number}} cfg
+	 @param {{x?:number, y?:number, size?:number}} options
 	*/
 	stretchClothing(animIdx, rate, {x=0, y=0, size=T*2}={}) {
 		const v1 = lerp(-2,  5, rate)

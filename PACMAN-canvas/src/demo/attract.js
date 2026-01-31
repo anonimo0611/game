@@ -22,7 +22,7 @@ export class Attract {
 	subAct = new EnergizerAct
 
 	/** @private */
-	constructor() {$win.one('click keydown blur',this.quit)}
+	constructor() {$onNS('.Attract',{click_keydown_blur:this.quit})}
 	update() {this.subAct.update()}
 	GhsEntries = /**@type {const}*/([
 		// time, col1, col2, row, txt1, txt2
@@ -67,6 +67,7 @@ export class Attract {
 		this.ghsSpr.draw({type,orient:R,x:(T*5),y:(T*row)})
 	}
 	quit() {
+		$off('.Attract')
 		Attract.#attract = null
 		State.toTitle()
 	}

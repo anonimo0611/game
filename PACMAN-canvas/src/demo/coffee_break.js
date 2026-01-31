@@ -44,9 +44,9 @@ export class CoffBreak {
 	drawPac(scale=1) {
 		this.pacman.sprite.draw(this.pacman, {scale})
 	}
-	drawAka(cfg={}) {
+	drawAka(data={}) {
 		const {akabei:{pos,animIdx}}= this
-		this.akabei.sprite.draw({animIdx, ...cfg, ...pos})
+		this.akabei.sprite.draw({animIdx, ...data, ...pos})
 	}
 	pause() {
 		Sound.pause( Ticker.pause() )
@@ -57,7 +57,6 @@ export class CoffBreak {
 	end() {
 		$off('.CB')
 		CoffBreak.#scene = null
-		State.isQuit ||
 		State.wasTitle
 			? State.toTitle()
 			: State.toNewLevel()

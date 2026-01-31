@@ -42,7 +42,7 @@ export class Ghost extends Actor {
 
 	/**
 	 @param {Direction} dir
-	 @param {{type?:number, tile?:xyList, align?:-1|0|1}} cfg
+	 @param {{type?:number, tile?:xyTuple, align?:-1|0|1}} options
 	*/
 	constructor(dir=L, {type=0,tile:[col,row]=[0,0],align=0}={}) {
 		super(col,row)
@@ -54,7 +54,7 @@ export class Ghost extends Actor {
 		this.dir   = dir
 		this.type  = type
 		this.init  = freeze({align,x:col*T})
-		this.state = freeze(new Sys.GhostState(this))
+		this.state = Sys.createGhsState(this)
 	}
 	get originalTargetTile() {
 		return this.state.isEscaping

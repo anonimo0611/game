@@ -38,35 +38,30 @@ const StandbyTimes = /**@type {const}*/
 ])
 
 /**
- @extends {_State<Ghost,StateType>}
- @typedef {'Idle'|'GoingOut'|'Roaming'|'Bitten'|'Escaping'|'Returning'} StateType
+ @typedef {typeof GhsStates[number]} GhsStateType
 */
-export class GhostState extends _State {
-	isIdle      = false
-	isGoingOut  = false
-	isRoaming   = false
-	isBitten    = false
-	isEscaping  = false
-	isReturning = false
-
-	toIdle      = this.ret('Idle')
-	toGoingOut  = this.ret('GoingOut')
-	toRoaming   = this.ret('Roaming')
-	toBitten    = this.ret('Bitten')
-	toEscaping  = this.ret('Escaping')
-	toReturning = this.ret('Returning')
-
+const GhsStates = /**@type {const}*/(
+	['Idle','GoingOut','Roaming','Bitten','Escaping','Returning'])
+/**
+ @extends {_State<Ghost,GhsStateType>}
+ @typedef {GhsState & Is & To} IGhsState
+ @typedef {{[K in GhsStateType as `is${K}`]:boolean}} Is
+ @typedef {{[K in GhsStateType as `to${K}`]:()=> IGhsState}} To
+*/
+class GhsState extends _State {
 	constructor(/**@type {Ghost}*/g) {
 		super(g)
-		this.init().owner.inHouse
-			? this.toIdle()
-			: this.toRoaming()
+		this.init(GhsStates).owner.inHouse
+			? this.to('Idle')
+			: this.to('Roaming')
 	}
-	set(/**@type {StateType}*/state) {
-		$(this.owner).trigger(state)
-		return super.set(state)
+	to(/**@type {GhsStateType}*/s) {
+		$(this.owner).trigger(s)
+		return super.to(s)
 	}
 }
+export const createGhsState = (/**@type {Ghost}*/g)=>
+	/**@type {IGhsState}*/(freeze(new GhsState(g)))
 
 export const GhsMgr = new class extends Common {
 	static {$(this.setup)}
@@ -289,9 +284,9 @@ const FrightMode = function() {
 		}
 		update() {
 			if (State.isInGame && !Timer.frozen) {
-				const et = this.#et += Game.interval
-				if (et/1e3 >= this.Dur-2) this.#flashing()
-				if (et/1e3 >= this.Dur || this.caughtAll) this.#set(false)
+				const et = (this.#et += Game.interval)/1e3
+				if (et >= this.Dur-2) this.#flashing()
+				if (et >= this.Dur || this.caughtAll) this.#set(false)
 			}
  		}
 	}

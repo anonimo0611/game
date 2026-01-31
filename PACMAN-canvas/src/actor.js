@@ -107,17 +107,17 @@ export class Actor extends Common {
 	}
 }
 
-export const Actors = {
+export const Actors = new class {
 	update() {
 		player.update()
 		GhsMgr.update()
-	},
+	}
 	/** @param {PacMan} pacman */
 	draw(pacman) {
 		GhsMgr.drawBehind()
 		pacman.draw()
 		GhsMgr.drawFront()
-	},
+	}
 }
 
 export class PacMan extends Actor {

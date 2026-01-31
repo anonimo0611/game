@@ -42,7 +42,7 @@ export const Wall = new class {
 		Bg.restore()
 	}
 	/**
-	 @param {{type:number, ci:number, x:number, y:number}} cfg
+	 @param {{type:number, ci:number, x:number, y:number}} cornerData
 	*/
 	#drawCorner({type,ci,x,y}) {
 		Bg.save()

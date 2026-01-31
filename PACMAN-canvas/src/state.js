@@ -1,48 +1,25 @@
-import _State from '../_lib/state.js'
+import StateBase from '../_lib/state.js'
 /**
-@typedef {
-  'Title'|'Attract'|'Intro'|'Restarted'|'NewLevel'|'Ready'|'InGame'|
-  'Cleared'|'Flashing'|'CoffBreak'|'PacCaught'|'PacDying'|'GameOver'|'Quit'
-} StateType
-@typedef {
-  '_Ready'|'_NewLevel'|'_Restarted_NewLevel'|'_PacDying_Cleared'
-} MultiState
-*/
+ @typedef {typeof States[number]} StateType
+ @typedef {'_Ready'|'_NewLevel'|'_Restarted_NewLevel'|'_PacDying_Cleared'} MultiState
+*/const States = /**@type {const}*/(['Title','Attract','Intro','Ready','InGame','Restarted',
+	'NewLevel','Cleared','Flashing','CoffBreak','PacCaught','PacDying','GameOver','Quit'])
 
 /**
- @extends {_State<globalThis,StateType>}
- @typedef {import('../_lib/state.js').Config} Config
- @typedef {import('../_lib/state.js').Data} Data
- @typedef {{[K in StateType as `to${K}`]:(cfg?:Config)=> IState}} Methods
- @typedef {GameState & Methods} IState
+ @extends {StateBase<globalThis,StateType>}
+ @typedef {{[K in StateType as `is${K}`]:boolean}} Is
+ @typedef {{[K in StateType as`was${K}`]:boolean}} Was
+ @typedef {{[K in StateType as `to${K}`]:(opt?:StateOptions)=> IGameState}} To
+ @typedef {GameState & Is & Was & To} IGameState
 */
-class GameState extends _State {
-	isTitle     = false
-	isAttract   = false
-	isIntro     = false
-	isReady     = false
-	isInGame    = false
-	isRestarted = false
-	isNewLevel  = false
-	isCleared   = false
-	isFlashing  = false
-	isCoffBreak = false
-	isPacCaught = false
-	isPacDying  = false
-	isGameOver  = false
-	isQuit      = false
-
-	get wasTitle()    {return this.was('Title')}
-	get wasIntro()    {return this.was('Intro')}
-	get wasFlashing() {return this.was('Flashing')}
-	get isStartMode() {return this.isIntro || this.isReady}
-	get isDemoScene() {return this.isAttract || this.isCoffBreak}
-
-	constructor() {super(globalThis),this.init(true)}
+class GameState extends StateBase {
+	constructor() {super(globalThis),this.init(States)}
+	get isStartMode() {return this.is('Intro')   || this.is('Ready')}
+	get isDemoScene() {return this.is('Attract') || this.is('CoffBreak')}
 
 	/**
 	 @param {StateType} s
-	 @param {Data} [data]
+	 @param {JQData} [data]
 	*/
 	#callback(s, data) {
 		Ticker.resetCount()
@@ -56,9 +33,10 @@ class GameState extends _State {
 
 	/**
 	 @param {StateType} s
-	 @param {{delay?:number,data?:Data}} config
+	 @param {{delay?:number,data?:JQData}} options
 	*/
-	set(s, {delay=-1,data}={}) {
-		return super.set(s, {delay,data,fn:this.#callback})
+	to(s, {delay=(s == 'Quit' ? -1 : 0),data}={}) {
+		return super.to(s, {delay,data,fn:this.#callback})
 	}
-} export const State = /**@type {Readonly<IState>}*/(freeze(new GameState))
+}
+export const State = /**@type {Readonly<IGameState>}*/(freeze(new GameState))

@@ -20,6 +20,7 @@ export const Game = new class {
 	static setup() {
 		Ticker.set(Game.#update, Game.#draw)
 		State.on({
+			Quit:     Game.#onQuit,
 			Title:    Game.#onTitle,
 			Intro:    Game.#onIntro,
 			InGame:   Game.#onInGame,
@@ -28,7 +29,6 @@ export const Game = new class {
 			NewLevel: Game.#onNewLevel,
 			PacDying: Game.#onPacDying,
 			GameOver: Game.#onGameOver,
-			Quit:     Game.#onQuit,
 			Restarted:Game.#levelBegins,
 		})
 		.toTitle()
@@ -89,7 +89,7 @@ export const Game = new class {
 		Game.#levelBegins()
 	}
 	#onGameOver() {
-		State.toTitle({delay:2500})
+		Timer.set(2500, Game.#onQuit)
 	}
 	#onQuit() {
 		Ticker.reset()
@@ -102,7 +102,7 @@ export const Game = new class {
 	#levelEnds() {
 		Game.#restarted = false
 		if (!Ctrl.endlessMode) {
-			State.toTitle()
+			Game.#onQuit()
 			return
 		}
 		Demo.CoffBreakNum < 0

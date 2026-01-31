@@ -70,20 +70,20 @@ export const Ctrl = new class {
 	}
 	#output() {
 		const spd = 'x'+Ctrl.speed.toFixed(1), lh = 0.9
-		const cfg = {ctx:HUD, size:T*0.68, scaleX:0.7, style:'bold'}
+		const opt = {ctx:HUD, size:T*0.68, scaleX:0.7, style:'bold'}
 		Ctrl.#save()
 		Ctrl.#toggleGrid()
 		HUD.save()
 		HUD.translate(T*0.1, T*18)
 		HUD.clearRect(0, -T, BW, T*3)
 		if (Ctrl.usingCheats || spd != 'x1.0') {
-			drawText(0, lh*0, Palette.Info[+(spd != 'x1.0') ], 'Speed'+spd, cfg)
-			drawText(0, lh*1, Palette.Info[+Ctrl.invincible ], 'Invincible',cfg)
-			drawText(0, lh*2, Palette.Info[+Ctrl.showTargets], 'Targets',   cfg)
+			drawText(0, lh*0, Palette.Info[+(spd != 'x1.0') ], 'Speed'+spd, opt)
+			drawText(0, lh*1, Palette.Info[+Ctrl.invincible ], 'Invincible',opt)
+			drawText(0, lh*2, Palette.Info[+Ctrl.showTargets], 'Targets',   opt)
 		}
 		if (Ctrl.unrestricted) {
 			HUD.translate(T*(Cols-5), T/2)
-			drawText(0,0, Palette.Info[1], 'Un-\nrestricted', cfg)
+			drawText(0,0, Palette.Info[1], 'Un-\nrestricted', opt)
 		}
 		HUD.restore()
 	}
