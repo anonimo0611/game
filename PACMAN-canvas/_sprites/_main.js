@@ -116,8 +116,8 @@ export const View = function()
 		for (const i of range(-1,9))
 		{
 			const center = Vec2.new(T+ofst(i), S*8.5)
-			const cfg = {center, orient:dirs[i-1], radius:T*PacScale}
-			new PacSprite(Ctx, i>0 ? (i%2 ? 1:2) : 0).draw(cfg)
+			const params = {center, orient:dirs[i-1], radius:T*PacScale}
+			new PacSprite(Ctx, i>0 ? (i%2 ? 1:2) : 0).draw(params)
 		}
 	}
 
@@ -128,11 +128,11 @@ export const View = function()
 		Ctx.translate(S/4, S*9+S/4-GAP/4)
 
 		/**
-		 @type {(x:number, y:number, cfg:object)=> void}
+		 @type {(x:number, y:number, params:object)=> void}
 		*/
-		const draw = (x,y, cfg)=>
+		const draw = (x,y, params)=>
 		{
-			aka.draw({size:S,x,y,...cfg})
+			aka.draw({size:S,x,y,...params})
 		}
 		{// Expand clothes
 			const pos = Vec2.Zero, rates = [0.3, 0.5 ,1]
