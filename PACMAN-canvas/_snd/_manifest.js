@@ -27,7 +27,7 @@ const genSprite = (/**@type {SoundData}*/data)=>
  @type {ReadonlyMap<string,{loop:number,volume:number}>}
 */
 export const
-ConfigMap = new Map([
+OptsMap = new Map([
     ['_normal', {loop: 0, volume:1.00}],
     ['eat',     {loop: 0, volume:0.70}],
     ['bell',    {loop: 0, volume:0.70}],
