@@ -54,9 +54,9 @@ class Menu {
 }
 
 export class DorpDown extends Menu {
+	/** @private @readonly */current
 	constructor(/**@type {string}*/id) {
 		super(id,'dropdown')
-		/** @private */
 		this.current = $('<output>').prependTo(this.root)[0]
 		this.items.forEach((li,i)=> {
 			li.onclick = ()=> this.select(i)

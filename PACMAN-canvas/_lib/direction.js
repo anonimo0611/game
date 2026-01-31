@@ -15,7 +15,7 @@ export const Dir = new class {
 	from(e, {wasd=false}={}) {
 		if (isCombiKey(e)) return null
 		const k = e.code.replace(/^(Arrow|Key)/,'')
-		return /**@type {?('Up'|'Right'|'Down'|'Left')}*/(
+		return /**@type {?Direction}*/(
 			DirSet.has(k)? k : (wasd && WasdMap.get(k)) || null
 		)
 	}

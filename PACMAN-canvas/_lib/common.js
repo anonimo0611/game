@@ -1,31 +1,31 @@
 export class Common {
 	#target
-	/** @param {{eventTarget?:any}} [cfg] */
-	constructor({eventTarget}={}) {
-		this.#target = eventTarget ?? this
+	/** @param {*} [eventTarget] */
+	constructor(eventTarget=this) {
+		this.#target = eventTarget
 	}
 
-	/** @param {{[event:string]:(e:JQuery.TriggeredEvent)=> any}} arg */
+	/** @param {JQTriggerHandlers} arg */
 	on(arg) {
 		$(this.#target).on(arg)
 		return this
 	}
 
-	/** @param {{[event:string]:(e:JQuery.TriggeredEvent)=> any}} arg */
-	offHandlers(arg) {
-		$(this.#target).off(arg)
-		return this
-	}
-
-	/** @param {string} ev */
+	/**
+	 @overload @param {string} ev @returns {this}
+	 @overload @param {JQTriggerHandlers} ev @returns {this}
+	 @param {string|JQTriggerHandlers} ev
+	*/
 	off(ev) {
-		$(this.#target).off(ev)
+		typeof ev == 'string'
+			? $(this.#target).off(ev)
+			: $(this.#target).off(ev)
 		return this
 	}
 
 	/**
 	 @param {string} event
-	 @param {number|string|boolean|any[]} [data]
+	 @param {JQData} [data]
 	*/
 	trigger(event, data) {
 		$(this.#target).trigger(event, data)

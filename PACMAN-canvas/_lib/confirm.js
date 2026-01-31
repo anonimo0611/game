@@ -1,7 +1,7 @@
 import {Dir} from './direction.js'
 export const Confirm = new class {
-	#cancel = /**@type {0|1}*/(0)
 	#opened = false
+	#cancel = /**@type {0|1}*/(0)
 	get opened()   {return this.#opened}
 	get #tempElm() {return /**@type {HTMLTemplateElement}*/(byId('confirm_t'))}
 	get #confirm() {return /**@type {HTMLDialogElement}  */(byId('confirm'))}
@@ -35,10 +35,10 @@ export const Confirm = new class {
 		document.body.append(this.#tempElm.content.cloneNode(true))
 		$(this.#confirm).find('.content').text(content)
 		$('#confirm').find('button').each((i,btn)=> {
-			if (i == autoFocus) btn.autofocus = true
+			i == autoFocus && (btn.autofocus=true)
 			btn.classList.add(i == cancelIdx ? 'cancel':'ok')
 			btn.textContent = [btn1Txt,btn2Txt][i]
-			btn.onclick = ()=> {$off(NS),this.#remove([fn1,fn2][i])}
+			btn.onclick = ()=> {$off(NS);this.#remove([fn1,fn2][i])}
 		})
 		$(this.#confirm).fadeIn(300).get(0)?.showModal()
 		$onNS(NS,{keydown:this.#onKeydown})

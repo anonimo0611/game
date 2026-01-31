@@ -1,5 +1,4 @@
 'use strict'
-/** @typedef {string|CanvasGradient|CanvasPattern} Cvs2DStyle */
 
 class ExtendedContext2D extends CanvasRenderingContext2D {
 	constructor(/**@type {HTMLCanvasElement}*/cvs, opts={}) {

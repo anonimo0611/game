@@ -1,54 +1,53 @@
 /**
- @typedef {{delay?:number,data?:Data}} Config
- @typedef {number|string|boolean|any[]} Data
-*/
-/**
  @template Owner
  @template {string} State
 */
 export default class _State {
-	/**@type {Owner}*/ #owner
-	/**@type {State}*/ #state
-	/**@type {State}*/ #last
-	/**@type {State}*/ #default
+	#owner
+	#state   = /**@type {State}*/('')
+	#last    = /**@type {State}*/('')
+	#default = /**@type {State}*/('')
 
-	/** @param {Owner} owner */
+	/** @protected @param {Owner} owner */
 	constructor(owner) {this.#owner = owner}
+
 	get owner()   {return this.#owner}
 	get current() {return this.#state}
+	get last()    {return this.#last}
 	get default() {return this.#default}
 
-	init(autoMethod=false) {
-		keys(this)
-		.flatMap(key=> /^is[A-Z][a-zA-Z\d]*$/.test(key)? [key]:[])
-		.forEach((key,i)=> {
-			const state = /**@type {State}*/(key.substring(2))
-			i == 0 && (this.#default = state)
-			autoMethod && (/**@type {any}*/(this)[`to${state}`] = this.ret(state))
-			defineProperty(this,key,{get(){return this.#state === state}})
+	/** @param {readonly State[]} [states] */
+	init(states) {
+		states?.forEach((/**@type {State}*/s,i)=> {
+			const self = /**@type {any}*/(this)
+			i == 0 && (this.#default = this.#last = s)
+			self[`to${s}`] = (/**@type {StateOptions}*/opt)=> this.to(s,opt)
+			defineProperty(this,`is${s}`, {get(){return this.#state === s}})
+			defineProperty(this,`was${s}`,{get(){return this.#last  === s}})
 		})
 		return this
 	}
 
 	/**
-	 @protected
-	 @param {State} s
+	 @param {State} state
 	*/
-	ret(s) {
-		/** @type {(cfg:Config)=> this} */
-		return ({delay,data}={})=> {
-			this.set(s, {delay,data})
-			return this
-		}
+	is(state) {
+		return this.#state == state
+	}
+	/**
+	 @param {State} [state]
+	*/
+	was(state) {
+		return state === this.#last
 	}
 
 	/**
 	 @param {State} state
-	 @param {{data?:Data,delay?:number,fn?:(state:State,data?:Data)=>void}} config
+	 @param {{data?:JQData,delay?:number,fn?:(state:State,data?:JQData)=>void}} opts
 	*/
-	set(state, {data,delay=-1,fn}={}) {
+	to(state, {data,delay=-1,fn}={}) {
 		if (delay >= 0) {
-			Timer.set(delay, ()=> this.set(state,{delay:-1,data}))
+			Timer.set(delay, ()=> this.to(state,{delay:-1,data}))
 			return this
 		}
 		this.#last  = this.current
@@ -64,13 +63,5 @@ export default class _State {
 		for (const [ev,fn] of entries(v))
 			$win.on(underscoreToSp(ev,String(this.default)), fn)
 		return this
-	}
-
-	/**
-	 @param   {State} [state]
-	 @returns {boolean}
-	*/
-	was(state) {
-		return state === this.#last
 	}
 }

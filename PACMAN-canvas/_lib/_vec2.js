@@ -1,8 +1,4 @@
 'use strict'
-/**
- @typedef {[x:number, y:number]} xyList
- @typedef {{x:number, y:number}} Position
-*/
 class Vec2 {
 	static get Zero()  {return Vec2.new( 0, 0)}
 	static get Up()    {return Vec2.new( 0,-1)}
@@ -101,8 +97,7 @@ class Vec2 {
 		this.x = x
 		this.y = y
 	}
-	/** @type {[x:number,y:number]} */
-	get vals()       {return [this.x,this.y]}
+	get vals()       {return /**@type {[x:number,y:number]}*/([this.x,this.y])}
 	get hyphenated() {return `${this.x}-${this.y}`}
 	get asObj()      {return {x:this.x, y:this.y}}
 	get asInt()      {return Vec2.new(this.x|0,this.y|0)}
@@ -227,11 +222,11 @@ class Vec2 {
 	toIdx(/**@type {number}*/cols) {
 		return Vec2.idx(this,cols)
 	}
+	toString() {
+		return /**@type {const}*/(`{x:${this.x}, y:${this.y}}`)
+	}
 	freeze() {
 		return freeze(this)
-	}
-	toString() {
-		return `{x:${this.x}, y:${this.y}}`
 	}
 	void(){}
 }

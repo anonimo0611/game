@@ -115,7 +115,8 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
     const itr = iterable[Symbol.iterator]()
     for(const char of str) {
         const {value,done}= itr.next()
-        if (done) break; map.set(char,value)
+        if (done) break
+		map.set(char,value)
     } return map
 }
 
@@ -153,9 +154,9 @@ const $win = $(window)
 
 /**
  @param {string} ns
- @param {{[event:string]:(e:JQuery.TriggeredEvent)=> unknown}} cfg
-*/const $onNS = (ns,cfg)=> {
-	entries(cfg).forEach(([ev,fn])=> {
+ @param {{[event:string]:(e:JQuery.TriggeredEvent)=> void}} events
+*/const $onNS = (ns,events)=> {
+	entries(events).forEach(([ev,fn])=> {
 		ns = ns[0] != '.' ? `.${ns}` : ns
 		ev = ev.trim().replace(/[_\s]+/g,`${ns}\x20`) + ns
 		$win.off(ev).on(ev,fn)

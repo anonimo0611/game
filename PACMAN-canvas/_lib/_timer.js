@@ -22,7 +22,7 @@ const {Ticker,Timer}= function() {
 		get count()       {return _fCount}
 		get pausedCount() {return _pCount}
 		get paused()      {return _paused}
-		get running()     {return _ticker instanceof TickerCore }
+		get running()     {return _ticker instanceof TickerCore}
 		get elapsedTime() {return _fCount*Interval}
 
 		/**
@@ -118,13 +118,13 @@ const {Ticker,Timer}= function() {
 		/**
 		 @param {number}    timeout
 		 @param {()=> void} handler
-		 @param {{key?:unknown,ignoreFrozen?:boolean}} config
+		 @param {{key?:unknown,ignoreFrozen?:boolean}} otps
 		*/
 		set(timeout, handler, {key,ignoreFrozen=Timer.frozen}={}) {
 			if (!Ticker.running) Ticker.set()
 			TimerMap.set(key ?? Symbol(),{amount:0,timeout,handler,ignoreFrozen})
 		}
-		/** @param {...{ms:number,fn:()=> void}} seq */
+		/** @param {...{ms:number,fn():void}} seq */
 		sequence(...seq) {
 			let idx=0, s=seq[idx]
 			function fire() {
