@@ -136,6 +136,11 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 	[Math.cos(PI/180*deg)*r+cx,
 	 Math.sin(PI/180*deg)*r+cy]
 
+/**
+ @param {string} str
+*/const capitalize = str=>
+	str[0].toUpperCase()+str.slice(1)
+
 //---- jQuery utilities ------
 
 const $win = $(window)
