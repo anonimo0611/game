@@ -1,5 +1,8 @@
 const {Sound:SoundJS}= createjs
-/** @typedef {{duration?:number,loop?:number}} PlayOpts */
+/**
+ @typedef {{interrupt?:string,delay?:number,duration?:number,
+ offset?:number,loop?:number,volume?:number,pan?:number}} PlayOpts
+*/
 /** @template {string} T */
 export class SoundMgr {
 	#loaded   = false
@@ -8,12 +11,11 @@ export class SoundMgr {
 
 	/** @private @readonly */setup
 	/** @private @readonly */optsMap
-
 	/**
 	 @param {{onLoaded():void,onFailed():void}} setup
      @param {Object[]} manifest
      @param {T[]} ids
-     @param {ReadonlyMap<string,{loop:number,volume:number}>} optsMap
+     @param {ReadonlyMap<string,PlayOpts>} optsMap
     */
 	constructor(setup, manifest, ids, optsMap) {
 		this.setup   = setup
