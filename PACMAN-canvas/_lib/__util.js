@@ -3,6 +3,18 @@ const {fromEntries,defineProperty,entries,freeze,hasOwn,keys,values}= Object
 const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 
 /**
+ @template {object} T
+ @param {T} o
+ @returns {Readonly<(keyof T)[]>}
+*/const typedKeys = o=> /**@type {(keyof T)[]}*/(keys(o))
+
+/**
+ @template {object} T
+ @param {T} o
+ @returns {[keyof T, T[keyof T]][]}
+*/const typedEntries = o=> /**@type {any}*/(entries(o))
+
+/**
  @param {KeyboardEvent|JQuery.KeyboardEventBase} e
 */const keyRepeat = e=>
 	(e instanceof KeyboardEvent? e : e.originalEvent)?.repeat ?? false
@@ -135,11 +147,6 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 */const circumPosition = (deg, r, cx=0, cy=0)=>
 	[Math.cos(PI/180*deg)*r+cx,
 	 Math.sin(PI/180*deg)*r+cy]
-
-/**
- @param {string} str
-*/const capitalize = str=>
-	str[0].toUpperCase()+str.slice(1)
 
 //---- jQuery utilities ------
 
