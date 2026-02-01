@@ -11,30 +11,30 @@ const initVol = +(localStorage.anopac_volume ?? 5)
 export const Setup = new class {
 	onLoaded() {
 		Sound.vol = initVol
-		$win.on({keydown:Setup.onKeydown})
+		$win.on({keydown:Setup.#onKeydown})
 		$('#speaker')
-			.on({click:Setup.mute})
-			.onWheel(Setup.onInput)
+			.on({click:Setup.#mute})
+			.onWheel(Setup.#onInput)
 		$('.volRng')
 			.attr({value:initVol})
 			.attr({defaultValue:initVol})
-			.on({input:Setup.onInput})
+			.on({input:Setup.#onInput})
 			.trigger('input')
 	}
 	onFailed() {
 		$('.volCtrl').hide()
 	}
-	onInput(/**@type {Event}*/e) {
+	#onInput(/**@type {Event}*/e) {
 		const isInput = e.target instanceof HTMLInputElement
 		Sound.vol = (isInput? e.target:volRng).valueAsNumber
 		Speaker.draw(localStorage.anopac_volume = Sound.vol)
 	}
-	onKeydown(/**@type {JQuery.KeyDownEvent}*/e) {
+	#onKeydown(/**@type {JQuery.KeyDownEvent}*/e) {
 		if (keyRepeat(e) || isCombiKey(e)) return
 		if (e.key.toUpperCase() == 'M'
-		 || e.target == volRg2 && isEnterKey(e)) Setup.mute()
+		 || e.target == volRg2 && isEnterKey(e)) Setup.#mute()
 	}
-	mute() {
+	#mute() {
 		_lstVol = Sound.vol || (_lstVol || +volRng.max >> 1)
 		$(volRng).prop({value:Sound.vol? 0 : _lstVol}).trigger('input')
 	}

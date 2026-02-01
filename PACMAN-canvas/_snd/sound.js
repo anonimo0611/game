@@ -1,9 +1,8 @@
 import {State}    from '../src/state.js'
 import {GhsMgr}   from '../src/ghosts/_system.js'
 import {Setup}    from './_setup.js'
-import {SirenIds} from './_manifest.js'
 import {SoundMgr} from './manager.js'
-import {Manifest,OptsMap,Ids} from './_manifest.js'
+import {Manifest,SirenIds} from './_manifest.js'
 
 /**
  @typedef {import('./_manifest.js').SoundType} SoundType
@@ -11,16 +10,16 @@ import {Manifest,OptsMap,Ids} from './_manifest.js'
 */
 /**
  @extends {SoundMgr<SoundType>}
- @typedef {{[K in SoundType as`play${Capitalize<K>}`]:(opts?:PlayOpts)=> void}} PlayMethods
- @typedef {{[K in SoundType as`stop${Capitalize<K>}`]:()=> ISound}} StopMethods
+ @typedef {{[K in SoundType as`play${K}`]:(opts?:PlayOpts)=> void}} PlayMethods
+ @typedef {{[K in SoundType as`stop${K}`]:()=> ISound}} StopMethods
  @typedef {SoundCore & PlayMethods & StopMethods} ISound
 */
 class SoundCore extends SoundMgr {
 	constructor() {
-		super(Setup,Manifest,Ids,OptsMap)
+		super(Setup,Manifest)
 	}
 	get sirenId()  {return SirenIds[GhsMgr.CruiseElroy.part]}
-	get ringing()  {return this.isPlaying('bell')}
+	get ringing()  {return this.isPlaying('Bell')}
 	get disabled() {return super.disabled || State.isAttract}
 
 	get vol() {

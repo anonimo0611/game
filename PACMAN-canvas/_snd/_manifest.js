@@ -1,44 +1,40 @@
 /**
- @typedef {keyof Looped | keyof Regular} SoundType
- @typedef {{[key in SoundType]?:{startTime:number,duration:number}}} SoundData
+ @typedef {import('./manager.js').ManifestOpts} ManifestOpts
+ @typedef {{[K in SoundType]?:ManifestOpts}} SoundData
+ @typedef {keyof typeof Manifest.opts} SoundType
 */
-const Looped = /**@type {const}*/({ // looped.ogg
-    siren0:   {startTime:    0, duration: 402},
-    siren1:   {startTime: 1402, duration: 327},
-    siren2:   {startTime: 2730, duration: 298},
-    siren3:   {startTime: 4028, duration: 265},
-    fright:   {startTime: 6561, duration: 538},
-    eyesGhost:{startTime: 5292, duration: 268},
-    cutscene: {startTime: 8059, duration:5686},
-    start:    {startTime:14233, duration:4500},
+const looped = /**@type {const}*/({ // looped.ogg
+    Siren0:   {startTime:    0, duration: 402, volume:0.80, loop:-1},
+    Siren1:   {startTime: 1402, duration: 327, volume:0.80, loop:-1},
+    Siren2:   {startTime: 2730, duration: 298, volume:0.80, loop:-1},
+    Siren3:   {startTime: 4028, duration: 265, volume:0.80, loop:-1},
+    Fright:   {startTime: 6561, duration: 538, volume:0.55, loop:-1},
+    EyesGhost:{startTime: 5292, duration: 268, volume:0.90, loop:-1},
+    Cutscene: {startTime: 8059, duration:5686, volume:1.00, loop: 1},
+    Start:    {startTime:14233, duration:4500},
 })
-const Regular = /**@type {const}*/({ // regular.ogg
-    dying:    {startTime:    0, duration:1749},
-    eat0:     {startTime: 1998, duration:  80},
-    eat1:     {startTime: 2137, duration:  80},
-    bitten:   {startTime: 2603, duration: 575},
-    bell:     {startTime: 3641, duration:2090},
-    fruit:    {startTime: 5952, duration: 496},
+const regular = /**@type {const}*/({ // regular.ogg
+    Dying:    {startTime:    0, duration:1749},
+    Eat0:     {startTime: 1998, duration:  80, volume:0.70},
+    Eat1:     {startTime: 2137, duration:  80, volume:0.70},
+    Bitten:   {startTime: 2603, duration: 575},
+    Bell:     {startTime: 3641, duration:2090},
+    Fruit:    {startTime: 5952, duration: 496},
 })
-const genSprite = (/**@type {SoundData}*/data)=>
-    [...entries(data).map(([id,val])=> ({id,...val}))]
 
 /**
- @type {ReadonlyMap<string,{loop:number,volume:number}>}
-*/
-export const
-OptsMap = new Map([
-    ['_normal',  {loop: 0, volume:1.00}],
-    ['eat',      {loop: 0, volume:0.70}],
-    ['bell',     {loop: 0, volume:0.70}],
-    ['cutscene', {loop: 1, volume:1.00}],
-    ['fright',   {loop:-1, volume:0.55}],
-    ['siren',    {loop:-1, volume:0.80}],
-    ['eyesGhost',{loop:-1, volume:0.90}],
-])
-,Ids      = /**@type {SoundType[]}*/(keys({...Looped,...Regular}))
-,SirenIds = /**@type {const}*/(['siren0','siren1','siren2','siren3'])
-,Manifest = [
-    {src:'./res/looped.ogg', data:{channels:3, audioSprite:genSprite(Looped)}},
-    {src:'./res/regular.ogg',data:{channels:4, audioSprite:genSprite(Regular)}},
-]
+ @template {Record<string,ManifestOpts>} T
+ @returns {({[K in keyof T]:{id:K} & T[K]}[keyof T])[]}
+*/const genSprite = (/**@type {T}*/data)=>
+    [...typedEntries(data).map(([id,val])=> ({id,...val}))]
+
+export const SirenIds =
+    /**@type {const}*/(['Siren0','Siren1','Siren2','Siren3'])
+
+export const Manifest = {
+    opts: /**@type {const}*/({...looped,...regular}),
+    manifest: [
+        {src:'./res/looped.ogg', data:{channels:3, audioSprite:genSprite(looped)}},
+        {src:'./res/regular.ogg',data:{channels:4, audioSprite:genSprite(regular)}},
+    ]
+}

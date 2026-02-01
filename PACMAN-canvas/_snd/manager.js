@@ -1,54 +1,52 @@
 const {Sound:SoundJS}= createjs
 /**
- @typedef {{interrupt?:string,delay?:number,duration?:number,
- offset?:number,loop?:number,volume?:number,pan?:number}} PlayOpts
+ @typedef {{startTime:number,duration:number,volume?:number,loop?:number}} ManifestOpts
+ @typedef {{interrupt?:string,delay?:number,duration?:number,offset?:number,loop?:number,volume?:number,pan?:number}} PlayOpts
 */
+/**
+ @template T
+ @typedef {{src:string,data:{channels:number,audioSprite:({id:T} & ManifestOpts)[]}}[]} Manifest
+*/
+
 /** @template {string} T */
 export class SoundMgr {
 	#loaded   = false
 	#disabled = true
-	#instance = /**@type {{[key in T]:createjs.AbstractSoundInstance}}*/({})
+	#instance = /**@type {{[K in T]:createjs.AbstractSoundInstance}}*/({})
 
-	/** @private @readonly */setup
-	/** @private @readonly */optsMap
+	/** @private @readonly */opts
 	/**
-	 @param {{onLoaded():void,onFailed():void}} setup
-     @param {Object[]} manifest
-     @param {T[]} ids
-     @param {ReadonlyMap<string,PlayOpts>} optsMap
+	 @param {{onLoaded?():void,onFailed?():void}} setup
+     @param {{manifest:Manifest<T>,opts:{[key in T]:ManifestOpts}}} manifest
     */
-	constructor(setup, manifest, ids, optsMap) {
-		this.setup   = setup
-		this.optsMap = optsMap
+	constructor(setup={}, {manifest,opts}) {
+		this.opts = opts
+		const ids = typedKeys(opts)
 		new Promise((resolve,reject)=> {
 			let amount = 0;
 			SoundJS.registerSounds(manifest)
 			SoundJS.on('fileerror', reject)
 			SoundJS.on('fileload', ()=> {
 				if (++amount < manifest.length) return
-				ids.forEach(i=> this.#instance[i] = SoundJS.createInstance(i))
+				ids.forEach(id=> {
+					this.#instance[id] = SoundJS.createInstance(id)
+					const
+					self = /**@type {any}*/(this)
+					self[`play${id}`] = (opts={})=> this.play(id,opts)
+					self[`stop${id}`] = ()=> this.stop(id)
+				})
 				resolve('All sound files loaded')
-				this.#addMethods(ids)
 				this.#disabled = false
 			})
 		})
-		.then (()=> this.#onLoaded())
-		.catch(()=> this.#onFailed())
-	}
-	#addMethods(/**@type {T[]}*/ids) {
-		ids.forEach(id=> {
-			const self = /**@type {any}*/(this)
-			self[`play${capitalize(id)}`] = (opts={})=> this.play(id,opts)
-			self[`stop${capitalize(id)}`] = ()=> this.stop(id)
+		.then (()=> {
+			this.#loaded = true
+			setup.onLoaded?.()
 		})
-	}
-	#onLoaded() {
-		this.#loaded = true
-		this.setup.onLoaded()
-	}
-	#onFailed() {
-		this.#loaded = false
-		this.setup.onFailed()
+		.catch(()=> {
+			this.#loaded = false
+			setup.onFailed?.()
+		})
 	}
 	get loaded()   {return this.#loaded}
 	get disabled() {return this.#disabled}
@@ -64,7 +62,7 @@ export class SoundMgr {
 	/** @param {T} id */
 	#mergeOpts(id, opts={}) {
 		const prefix = id.match(/^\D+/)?.[0] || ''
-		return {...this.optsMap.get(prefix) ?? this.optsMap.get('_normal'), ...opts}
+		return {...this.opts[id], ...opts}
 	}
 
 	/**
