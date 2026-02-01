@@ -2,7 +2,6 @@ import {Dir}      from '../_lib/direction.js'
 import {Sound}    from '../_snd/sound.js'
 import {Confirm}  from '../_lib/confirm.js'
 import {Menu}     from './ui.js'
-import {MenuIds}  from './ui.js'
 import {State}    from './state.js'
 import {drawText} from './message.js'
 import {Score}    from './score.js'
@@ -48,7 +47,7 @@ export const Ctrl = new class {
 	}
 	#save() {
 		const data = Object.create(null)
-		MenuIds.forEach(id=> data[id] = Menu[id].index)
+		typedKeys(Menu).forEach(id=> data[id] = Menu[id].index)
 		document.querySelectorAll('input').forEach(input=> {
 			switch(input.type) {
 			case 'range':   data[input.id] = input.value;  break
@@ -60,7 +59,7 @@ export const Ctrl = new class {
 	#restore() {
 		if (!localStorage.anopacman) return
 		const data = JSON.parse(localStorage.anopacman)
-		MenuIds.forEach(id=> Menu[id].index = data[id])
+		typedKeys(Menu).forEach(id=> Menu[id].index = data[id])
 		document.querySelectorAll('input').forEach(input=> {
 			switch(input.type) {
 			case 'range':   input.value   = data[input.id];break
