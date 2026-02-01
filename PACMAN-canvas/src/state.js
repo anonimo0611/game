@@ -14,8 +14,8 @@ import StateBase from '../_lib/state.js'
 */
 class GameState extends StateBase {
 	constructor() {super(globalThis),this.init(States)}
-	get isStartMode() {return this.is('Intro')   || this.is('Ready')}
-	get isDemoScene() {return this.is('Attract') || this.is('CoffBreak')}
+	get isStartMode() {return State.isIntro   || State.isReady}
+	get isDemoScene() {return State.isAttract || State.isCoffBreak}
 
 	/**
 	 @param {StateType} s
