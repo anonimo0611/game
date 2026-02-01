@@ -173,7 +173,7 @@ export class Ghost extends Actor {
 		;(Ctrl.alwaysChase || this.type == GhsType.Akabei)
 			? this.state.toGoingOut()
 			: this.state.toIdle() && this.#idleInHouse(this)
-		!Timer.frozen && Sound.ghostArrivedAtHome()
+		!Timer.frozen && Sound.onGhostReturned()
 	}
 	#setNextDir() {
 		if (this.#revSignal) {
@@ -240,7 +240,7 @@ export class Ghost extends Actor {
 		!this.isEscaping && (this.#frightened=on)
 	}
 	#setEscapeState() {
-		Sound.ghostEscape()
+		Sound.playGhostEscaping()
 		this.state.toEscaping()
 	}
 }
