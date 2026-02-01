@@ -17,7 +17,7 @@ export class SoundMgr {
 	/** @private @readonly */opts
 	/**
 	 @param {{onLoaded?():void,onFailed?():void}} setup
-     @param {{manifest:Manifest<T>,opts:{[key in T]:ManifestOpts}}} manifest
+     @param {{manifest:Manifest<T>,opts:{[key in T]:Readonly<ManifestOpts>}}} manifest
     */
 	constructor(setup={}, {manifest,opts}) {
 		this.opts = opts
@@ -59,11 +59,11 @@ export class SoundMgr {
 	/** @param {T} id */
 	isFinished(id) {return this.#instance[id]?.playState === SoundJS.PLAY_FINISHED}
 
-	/** @param {T} id */
-	#mergeOpts(id, opts={}) {
-		const prefix = id.match(/^\D+/)?.[0] || ''
-		return {...this.opts[id], ...opts}
-	}
+	/**
+	 @param {T} id
+	 @param {Readonly<PlayOpts>} opts
+	*/
+	#mergeOpts(id, opts={}) {return {...this.opts[id], ...opts}}
 
 	/**
 	 @param {boolean} enable
@@ -78,7 +78,7 @@ export class SoundMgr {
 
 	/**
 	 @param {T} id
-	 @param {PlayOpts} opts
+	 @param {Readonly<PlayOpts>} opts
 	*/
 	play(id, opts={}) {
 		if (this.disabled) return

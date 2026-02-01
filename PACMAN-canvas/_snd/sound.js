@@ -15,9 +15,7 @@ import {Manifest,SirenIds} from './_manifest.js'
  @typedef {SoundCore & PlayMethods & StopMethods} ISound
 */
 class SoundCore extends SoundMgr {
-	constructor() {
-		super(Setup,Manifest)
-	}
+	constructor()  {super(Setup,Manifest)}
 	get sirenId()  {return SirenIds[GhsMgr.CruiseElroy.part]}
 	get ringing()  {return this.isPlaying('Bell')}
 	get disabled() {return super.disabled || State.isAttract}

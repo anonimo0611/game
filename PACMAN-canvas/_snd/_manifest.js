@@ -32,7 +32,7 @@ export const SirenIds =
     /**@type {const}*/(['Siren0','Siren1','Siren2','Siren3'])
 
 export const Manifest = {
-    opts: /**@type {const}*/({...looped,...regular}),
+    opts: {...looped,...regular},
     manifest: [
         {src:'./res/looped.ogg', data:{channels:3, audioSprite:genSprite(looped)}},
         {src:'./res/regular.ogg',data:{channels:4, audioSprite:genSprite(regular)}},
