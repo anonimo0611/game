@@ -5,8 +5,16 @@ import {SirenIds} from './_manifest.js'
 import {SoundMgr} from './manager.js'
 import {Manifest,OptsMap,Ids} from './_manifest.js'
 
-/** @typedef {import('./_manifest.js').SoundType} SoundType */
-/** @extends {SoundMgr<SoundType>} */
+/**
+ @typedef {import('./_manifest.js').SoundType} SoundType
+ @typedef {import('./manager.js').PlayOpts} PlayOpts
+*/
+/**
+ @extends {SoundMgr<SoundType>}
+ @typedef {{[K in SoundType as`play${Capitalize<K>}`]:(opts?:PlayOpts)=> void}} PlayMethods
+ @typedef {{[K in SoundType as`stop${Capitalize<K>}`]:()=> ISound}} StopMethods
+ @typedef {SoundCore & PlayMethods & StopMethods} ISound
+*/
 class SoundCore extends SoundMgr {
 	constructor() {
 		super(Setup,Manifest,Ids,OptsMap)
@@ -23,28 +31,30 @@ class SoundCore extends SoundMgr {
 		super.vol = clamp(+vol, 0, 10)
 	}
 	playSiren() {
-		if (!GhsMgr.isFrightMode && !GhsMgr.areAnyEscaping)
-			Sound.stopLoops().play(Sound.sirenId)
+		if (GhsMgr.isFrightMode
+		 || GhsMgr.areAnyEscaping) return
+		Sound.stopLoops().play(Sound.sirenId)
 	}
-	playFright() {
-		if (!GhsMgr.areAnyEscaping)
-			Sound.stopSiren().play('fright')
-	}
-	stopSiren = ()=> this.stop(...SirenIds)
-	stopLoops = ()=> this.stopSiren().stop('fright','escape')
-
 	toggleFrightMode(/**@type {boolean}*/on) {
-		on? this.playFright()
-		  : this.playSiren()
+		on? Sound.#onFrightMode()
+		  : Sound.playSiren()
 	}
 	ghostEscape() {
-		this.stopSiren().stop('fright').play('escape')
+		Sound.stopSiren().stopFright().playEscape()
+	}
+	#onFrightMode() {
+		if (GhsMgr.areAnyEscaping) return
+		Sound.stopSiren().playFright()
 	}
 	ghostArrivedAtHome() {
-		if (!GhsMgr.areAnyEscaping) {
-			const id = GhsMgr.isFrightMode? 'fright' : this.sirenId
-			this.stop('escape').play(id)
-		}
+		if (GhsMgr.areAnyEscaping) return
+		Sound.stopEscape()
+		GhsMgr.isFrightMode
+			? Sound.playFright()
+			: Sound.play(Sound.sirenId)
 	}
+	stopSiren = ()=> Sound.stop(...SirenIds)
+	stopLoops = ()=> Sound.stopSiren().stopFright().stopEscape()
 }
-export const Sound = new SoundCore()
+/** @type {ISound} */
+export const Sound = /**@type {any}*/(new SoundCore)

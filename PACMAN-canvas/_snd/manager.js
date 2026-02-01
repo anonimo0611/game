@@ -1,5 +1,5 @@
 const {Sound:SoundJS}= createjs
-
+/** @typedef {{duration?:number,loop?:number}} PlayOpts */
 /** @template {string} T */
 export class SoundMgr {
 	#loaded   = false
@@ -16,7 +16,7 @@ export class SoundMgr {
      @param {ReadonlyMap<string,{loop:number,volume:number}>} optsMap
     */
 	constructor(setup, manifest, ids, optsMap) {
-		this.setup  = setup
+		this.setup   = setup
 		this.optsMap = optsMap
 		new Promise((resolve,reject)=> {
 			let amount = 0;
@@ -26,17 +26,25 @@ export class SoundMgr {
 				if (++amount < manifest.length) return
 				ids.forEach(i=> this.#instance[i] = SoundJS.createInstance(i))
 				resolve('All sound files loaded')
+				this.#addMethods(ids)
 				this.#disabled = false
 			})
 		})
-		.then (()=> this.onLoaded())
-		.catch(()=> this.onFailed())
+		.then (()=> this.#onLoaded())
+		.catch(()=> this.#onFailed())
 	}
-	onLoaded() {
+	#addMethods(/**@type {T[]}*/ids) {
+		ids.forEach(id=> {
+			const self = /**@type {any}*/(this)
+			self[`play${capitalize(id)}`] = (opts={})=> this.play(id,opts)
+			self[`stop${capitalize(id)}`] = ()=> this.stop(id)
+		})
+	}
+	#onLoaded() {
 		this.#loaded = true
 		this.setup.onLoaded()
 	}
-	onFailed() {
+	#onFailed() {
 		this.#loaded = false
 		this.setup.onFailed()
 	}
@@ -70,7 +78,7 @@ export class SoundMgr {
 
 	/**
 	 @param {T} id
-	 @param {{duration?:number,loop?:number}} opts
+	 @param {PlayOpts} opts
 	*/
 	play(id, opts={}) {
 		if (this.disabled) return
@@ -83,7 +91,7 @@ export class SoundMgr {
 	 @param {...T} ids
 	*/
 	stop(...ids) {
-		if (this.disabled) return
+		if (this.disabled) return this
 		ids.length == 0 && SoundJS.stop()
 		ids.forEach(id=> this.#instance[id].stop())
 		return this
