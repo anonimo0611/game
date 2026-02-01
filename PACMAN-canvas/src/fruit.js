@@ -67,7 +67,7 @@ export const Fruit = new class {
 	#checkIntersects() {
 		if (Fruit.showTarget && Fruit.#intersectsWithPlayer) {
 			Fruit.#resetTarget()
-			Timer.cancel(Fruit) && Sound.play('fruit')
+			Timer.cancel(Fruit) && Sound.playFruit()
 			PtsMgr.set({key:Fruit, dur:2e3, pos:TargetPos})
 		}
 	}

@@ -90,9 +90,10 @@ class PlayerPac extends PacMan {
 		Score.add(DotPts)
 	}
 	#playEatSE() {
-		const id  = (this.#eatIdx ^= 1)? 'eat1':'eat0'
-		const dur = (T/this.speed) * Ticker.Interval * .5
-		Sound.play(id, {duration:dur})
+		const duration = (T/this.speed) * Ticker.Interval * .5
+		;(this.#eatIdx ^= 1)
+			? Sound.playEat0({duration})
+			: Sound.playEat1({duration})
 	}
 }
 let   player = new PlayerPac

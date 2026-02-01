@@ -59,7 +59,7 @@ export const Score = new class {
 		}
 		if (between(Ctrl.extendScore, _score+1, score)) {
 			Lives.append()
-			Sound.play('bell')
+			Sound.playBell()
 		}
 		_score = score
 	}

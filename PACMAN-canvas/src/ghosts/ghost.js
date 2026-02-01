@@ -226,7 +226,7 @@ export class Ghost extends Actor {
 		return true
 	}
 	#setBittenState(release=()=>{}) {
-		Sound.play('bitten')
+		Sound.playBitten()
 		this.#frightened = false
 		this.state.toBitten()
 		Timer.freeze()

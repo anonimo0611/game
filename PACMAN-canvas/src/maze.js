@@ -101,7 +101,7 @@ export const Maze = freeze(new class {
 	) {
 		const t = Vec2.new(i%Cols, i/Cols|0)
 		const m = t.clone.add(.5)
-		clearDot({tileIdx:i,tileMid:m})
+		clearBgDot({tileIdx:i,tileMid:m})
 		DotSet.add(i)
 		powChk.checked == false || chip == '.'
 			? drawDot(Bg,...t.vals)
@@ -165,4 +165,4 @@ export const Maze = freeze(new class {
 		const [x,y] = [col,row].map(v=> (v+0.5)*T)
 		ctx.fillCircle(x,y, (isPow? PowR:DotR), Colors.Dot)
 	}
-}), {drawDot,clearDot}= Maze
+}), {drawDot,clearDot: clearBgDot}= Maze
