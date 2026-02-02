@@ -23,22 +23,25 @@ export class Ghost extends Actor {
 	#revSignal  = false
 	#frightened = false
 
-	get isAngry()      {return false}
+	get animIdx()      {return GhsMgr.animIndex}
+	get spriteIdx()    {return GhsMgr.spriteIdx}
 	get maxAlpha()     {return Ctrl.showTargets? .75:1}
+
+	get chaseOffset()  {return 0}
 	get chaseSpeed()   {return GhsSpeed.Base}
 	get chasePos()     {return player.center}
-	get chaseOffset()  {return 0}
-	get scatterTile()  {return Vec2.new(24, 0)}
 	get chaseTile()    {return this.chasePos.divInt(T)}
-	get spriteIdx()    {return GhsMgr.spriteIdx}
-	get animIdx()      {return GhsMgr.animIndex}
+	get scatterTile()  {return Vec2.new(24, 0)}
+
+	get isAngry()      {return false}
 	get isStarted()    {return this.#started}
+	get isFrightened() {return this.#frightened}
+	get ignoreOneway() {return this.isFrightened || this.isEscaping}
+	get isNormal()     {return this.state.isRoaming  && this.isFrightened == false}
+	get isEscaping()   {return this.state.isEscaping || this.state.isReturning}
+
 	get isChasing()    {return GhsMgr.isChaseMode   && this.isNormal}
 	get isScattering() {return GhsMgr.isScatterMode && this.isNormal && !this.isAngry}
-	get isFrightened() {return this.#frightened}
-	get isNormal()     {return this.state.isRoaming && !this.isFrightened}
-	get isEscaping()   {return this.state.isEscaping || this.state.isReturning}
-	get ignoreOneway() {return this.isFrightened || this.isEscaping}
 
 	/**
 	 @param {Direction} dir
