@@ -6,13 +6,10 @@ import {Manifest,SirenIds} from './_manifest.js'
 
 /**
  @typedef {import('./_manifest.js').SoundType} SoundType
- @typedef {import('./manager.js').PlayOpts} PlayOpts
-*/
-/**
- @extends {SoundMgr<SoundType>}
  @typedef {{[K in SoundType as`play${K}`]:(opts?:PlayOpts)=> void}} PlayMethods
  @typedef {{[K in SoundType as`stop${K}`]:()=> ISound}} StopMethods
  @typedef {SoundCore & PlayMethods & StopMethods} ISound
+ @extends {SoundMgr<SoundType>}
 */
 class SoundCore extends SoundMgr {
 	constructor()  {super(Setup,Manifest)}

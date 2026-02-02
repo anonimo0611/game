@@ -1,7 +1,6 @@
 /**
- @typedef {import('./manager.js').ManifestOpts} ManifestOpts
- @typedef {{[K in SoundType]?:ManifestOpts}} SoundData
  @typedef {keyof typeof Manifest.opts} SoundType
+ @typedef {{[K in SoundType]?:ManifestOpts}} SoundData
 */
 const looped = /**@type {const}*/({ // looped.ogg
     Siren0:   {startTime:    0, duration: 402, volume:0.80, loop:-1},
@@ -22,14 +21,9 @@ const regular = /**@type {const}*/({ // regular.ogg
     Fruit:    {startTime: 5952, duration: 496},
 })
 
-/**
- @template {Record<string,ManifestOpts>} T
- @returns {({[K in keyof T]:{id:K} & T[K]}[keyof T])[]}
-*/const genSprite = (/**@type {T}*/data)=>
-    [...typedEntries(data).map(([id,val])=> ({id,...val}))]
-
-export const SirenIds =
-    /**@type {const}*/(['Siren0','Siren1','Siren2','Siren3'])
+/** @type {GenAudioSprite} */
+const genSprite = d=> [...typedEntries(d).map(([id,val])=> ({id,...val}))]
+export const SirenIds = /**@type {const}*/(['Siren0','Siren1','Siren2','Siren3'])
 
 export const Manifest = {
     opts: {...looped,...regular},

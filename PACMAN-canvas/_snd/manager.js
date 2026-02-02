@@ -1,12 +1,4 @@
 const {Sound:SoundJS}= createjs
-/**
- @typedef {{startTime:number,duration:number,volume?:number,loop?:number}} ManifestOpts
- @typedef {{interrupt?:string,delay?:number,duration?:number,offset?:number,loop?:number,volume?:number,pan?:number}} PlayOpts
-*/
-/**
- @template T
- @typedef {{src:string,data:{channels:number,audioSprite:({id:T} & ManifestOpts)[]}}[]} Manifest
-*/
 
 /** @template {string} T */
 export class SoundMgr {
