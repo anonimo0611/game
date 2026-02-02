@@ -44,7 +44,7 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 }
 
 /**
- @param {number} v1
+ @param {number}  v1
  @param {number} [v2]
  @param {number} [step]
  @type {{

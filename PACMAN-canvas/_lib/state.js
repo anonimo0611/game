@@ -4,15 +4,15 @@
 */
 export default class _State {
 	#owner
-	#state   = /**@type {State}*/('')
-	#last    = /**@type {State}*/('')
-	#default = /**@type {State}*/('')
+	#last    = /**@type {?State}*/(null)
+	#default = /**@type {State} */('')
+	#current = /**@type {State} */('')
 
 	/** @protected @param {Owner} owner */
 	constructor(owner) {this.#owner = owner}
 
 	get owner()   {return this.#owner}
-	get current() {return this.#state}
+	get current() {return this.#current}
 	get last()    {return this.#last}
 	get default() {return this.#default}
 
@@ -20,10 +20,10 @@ export default class _State {
 	init(states) {
 		states?.forEach((/**@type {State}*/s,i)=> {
 			const self = /**@type {any}*/(this)
-			i == 0 && (this.#default = this.#last = s)
+			i == 0 && (this.#default = s)
 			self[`to${s}`] = (/**@type {StateOptions}*/opt)=> this.to(s,opt)
-			defineProperty(this,`is${s}`, {get(){return this.#state === s}})
-			defineProperty(this,`was${s}`,{get(){return this.#last  === s}})
+			defineProperty(this,`is${s}`, {get(){return this.#current === s}})
+			defineProperty(this,`was${s}`,{get(){return this.#last    === s}})
 		})
 		return this
 	}
@@ -32,7 +32,7 @@ export default class _State {
 	 @param {State} state
 	*/
 	is(state) {
-		return this.#state == state
+		return this.#current == state
 	}
 	/**
 	 @param {State} [state]
@@ -51,7 +51,7 @@ export default class _State {
 			return this
 		}
 		this.#last  = this.current
-		this.#state = state
+		this.#current = state
 		fn?.(state,data)
 		return this
 	}
