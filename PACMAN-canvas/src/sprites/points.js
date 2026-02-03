@@ -19,7 +19,7 @@ const DigitPath0to8 = freeze([
 	`M1,0 L3,0 L4,1 L4,2 L3,3 L1,3 L0,4 L0,5
 	 L1,6 L3,6 L4,5 L4,4 L3,3 L1,3 L0,2 L0,1 Z`].map(newPath2D))
 
-const KerningMap = freeze({
+const KerningMap = /**@type {const}*/({
 	 100: [ -6.1, -2.3, 2.7],
 	 200: [ -7.0, -1.0, 4.0],
 	 300: [ -7.2, -1.2, 3.8],
