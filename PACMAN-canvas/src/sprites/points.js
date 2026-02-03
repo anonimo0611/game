@@ -6,7 +6,7 @@ const AllPts   = /**@type {const}*/([100,200,300,400,500,700,800,1e3,1600,2e3,3e
 const GhostPts = /**@type {const}*/([200,400,800,1600])
 const FruitPts = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
 
-const NarrowOnePath = new Path2D('M0,0 L0,6')
+const NarrowOnePath = newPath2D('M0,0 L0,6')
 const DigitPath0to8 = freeze([
 	'M1,0 L2,0 L3,1 L3,5 L2,6 L1,6 L0,5 L0,1 Z',
 	'M0,1 L1,0 L1,6 L0,6 L2,6',
@@ -17,7 +17,7 @@ const DigitPath0to8 = freeze([
 	'M3,0 L1,0 L0,1 L0,5 L1,6 L2,6 L3,5 L3,3 L0,3',
 	'M0,1 L0,0 L4,0 L4,1 L2,4 L2,6',
 	`M1,0 L3,0 L4,1 L4,2 L3,3 L1,3 L0,4 L0,5
-	 L1,6 L3,6 L4,5 L4,4 L3,3 L1,3 L0,2 L0,1 Z`].map(d=> new Path2D(d)))
+	 L1,6 L3,6 L4,5 L4,4 L3,3 L1,3 L0,2 L0,1 Z`].map(newPath2D))
 
 const KerningMap = freeze({
 	 100: [ -6.1, -2.3, 2.7],
