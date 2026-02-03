@@ -32,7 +32,7 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
  @param {number} [v2]
  @param {number} [step]
  @type {{
-    (stop:number): Generator<number, void, unknown>;
+    (stop:number): Generator<number,void,unknown>;
     (start:number, stop:number, step?:number|undefined): Generator<number,void,unknown>;
  }}
 */const range = function*(v1,v2,step=1) {
@@ -48,7 +48,7 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
  @param {number} [v2]
  @param {number} [step]
  @type {{
-    (stop:number): Generator<number, void, unknown>;
+    (stop:number): Generator<number,void,unknown>;
     (start:number, stop:number, step?:number|undefined): Generator<number,void,unknown>;
  }}
 */const cycleRange = function*(v1,v2,step=1) {
@@ -84,16 +84,17 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 	: str.trim()
 
 /**
- @param {number} x
- @param {number} y
- @param {number} s
-*/const lerp = (x,y,s)=> x + (y-x) * s
+ @param {number} a start
+ @param {number} b end
+ @param {number} ratio 0.0-1.0
+*/const lerp = (a,b,ratio)=> a + (b-a) * ratio
 
 /**
- @param {number} x
- @param {number} y
- @param {number} p
-*/const norm = (x,y,p)=> (p-x) / (y-x)
+ @param {number} min
+ @param {number} max
+ @param {number} val
+ @returns {number} 0.0-1.0
+*/const norm = (min,max,val)=> (max === min)? 0 : (val-min)/(max-min)
 
 /**
  @param {number} min
@@ -110,7 +111,7 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
  @param {number} n
  @param {number} min
  @param {number} max
-*/const clamp = (n,min,max)=> Math.min(Math.max(n,min), max)
+*/const clamp = (n,min=0,max=1)=> Math.min(Math.max(n,min), max)
 
 /**
  @param {number} n
@@ -133,12 +134,12 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 }
 
 /**
- @param {Readonly<Position>} v1
- @param {Readonly<Position>} v2
- @param {number}  r1
- @param {number} [r2]
-*/const circleCollision = (v1,v2,r1,r2=r1)=>
-	(v1.x-v2.x)**2 + (v1.y-v2.y)**2 <= (r1+r2)**2
+ @param {Readonly<Position>} pos1
+ @param {Readonly<Position>} pos2
+ @param {number}  r1  radius1
+ @param {number} [r2] radius2
+*/const circleCollision = (pos1,pos2,r1,r2=r1)=>
+	(pos1.x-pos2.x)**2 + (pos1.y-pos2.y)**2 <= (r1+r2)**2
 
 /**
  @param {number} deg
@@ -153,8 +154,8 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 const $win = $(window)
 
 /**
- @param {JQWindowHandler} fn
-*/const $load = fn=> $win.on({load:fn})
+ @param {JQWindowHandler} handler
+*/const $load = handler=> $win.on({load:handler})
 
 /**
  @param {string} elementId
@@ -166,9 +167,9 @@ const $win = $(window)
 
 /**
  @param {string} ns
- @param {{[event:string]:(e:JQuery.TriggeredEvent)=> void}} events
-*/const $onNS = (ns,events)=> {
-	entries(events).forEach(([ev,fn])=> {
+ @param {JQTriggerWindowHandlers} eventHandlers
+*/const $onNS = (ns,eventHandlers)=> {
+	entries(eventHandlers).forEach(([ev,fn])=> {
 		ns = ns[0] != '.' ? `.${ns}` : ns
 		ev = ev.trim().replace(/[_\s]+/g,`${ns}\x20`) + ns
 		$win.off(ev).on(ev,fn)

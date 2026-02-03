@@ -131,16 +131,15 @@ export class Slide extends Menu {
 		$(this.#BtnSet[R]).on('click',()=> {this.#select(R)})
 		$(wrap).onWheel(e=>{this.#select(e.deltaY>0 ? L:R)})
 		$(wrap).on('pointerdown', e=>{e.preventDefault(),root.focus()})
-		$(root).on('keydown',e=>{this.#select(Dir.from(e))})
+		$(root).on('keydown', e=>{this.#select(Dir.from(e))})
 		root.tabIndex = 0
 		this.#setWidth(this.#BtnSet[L].offsetWidth*2)
 		this.select(this.index)
 	}
 	#select(/**@type {?Direction}*/dir) {
 		if (!dir) return
-		const dirV = Vec2[dir]
-		const next = this.index+(dirV.x || -dirV.y)
-		this.isInRange(next) && this.select(next)
+		const v = Vec2[dir], idx = this.index+(v.x || -v.y)
+		this.isInRange(idx) && this.select(idx)
 	}
 	#setWidth(/**@type {number}*/btnW) {
 		const width = max(...[...this.items].map(li=> li.offsetWidth))+btnW
@@ -148,7 +147,6 @@ export class Slide extends Menu {
 		this.#width = width
 	}
 	select(idx=this.index) {
-		if (!this.isInRange(idx)) return
 		super.select(idx)
 		this.menu.style.transform = `translateX(${-this.#width*idx}px)`
 		this.#BtnSet[L].dataset.disabled = String(idx == 0)

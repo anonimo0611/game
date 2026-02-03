@@ -22,6 +22,7 @@ type JQWindowHandler = (event: JQuery.TriggeredEvent<Window & typeof globalThis,
 
 type JQTriggerHandler  = (event:JQuery.TriggeredEvent)=> void
 type JQTriggerHandlers = {[event:string]:JQTriggerHandler}
+type JQTriggerWindowHandlers = {[event:string]:JQWindowHandler}
 
 interface JQuery {
 	offon<TType extends string>(

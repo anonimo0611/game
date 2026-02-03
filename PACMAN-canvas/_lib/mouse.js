@@ -3,20 +3,22 @@ const dRoot = document.documentElement
 /** Automatically hides the cursor after a period of inactivity. */
 export const Cursor = function() {
 	let   timerId   = 0
-	const Threshold = 2
-	const HideDelay = 2000
-	const CurrPos   = Vec2.Zero
-	const LastPos   = Vec2.Zero
+	const threshold = 2
+	const hideDelay = 2000
+	const currPos   = Vec2.Zero
+	const lastPos   = Vec2.Zero
 	addEventListener('mousemove', e=> {
-		CurrPos.set(e.pageX,e.pageY)
+		currPos.set(e.pageX,e.pageY)
 		clearTimeout(timerId)
-		timerId = setTimeout(hide,HideDelay)
-		Vec2.sqrMag(CurrPos,LastPos) > Threshold**2 && show()
-		LastPos.set(CurrPos)
+		timerId = setTimeout(Cursor.hide,hideDelay)
+		Vec2.sqrMag(currPos,lastPos) > threshold**2 && Cursor.show()
+		lastPos.set(currPos)
 	}, {passive:true})
-	function hide() {dRoot.dataset.cursor = 'hidden'}
-	function show() {dRoot.dataset.cursor = 'default'}
-	return {get pos() {return CurrPos.asObj},hide,show}
+	return {
+		get pos() {return currPos.asObj},
+		hide() {dRoot.dataset.cursor = 'hidden'},
+		show() {dRoot.dataset.cursor = 'default'},
+	}
 }()
 
 /**
