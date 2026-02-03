@@ -144,13 +144,13 @@ class StakeClothes {
 	}
 	/**
 	 @param {number} animIdx
-	 @param {number} rate
+	 @param {number} ratio
 	 @param {{x?:number, y?:number, size?:number}} options
 	*/
-	stretchClothing(animIdx, rate, {x=0, y=0, size=T*2}={}) {
-		const v1 = lerp(-2,  5, rate)
-		const v2 = lerp( 4, 22, rate)
-		const v3 = lerp( 4, 50, rate)
+	stretchClothing(animIdx, ratio, {x=0, y=0, size=T*2}={}) {
+		const v1 = lerp(-2,  5, ratio)
+		const v2 = lerp( 4, 22, ratio)
+		const v3 = lerp( 4, 50, ratio)
 		const ls = (animIdx? -25:-36) // Left side
 		Ctx.save()
 		Ctx.translate(x, y)
