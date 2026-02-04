@@ -61,7 +61,7 @@ class GhsState extends _State {
 	}
 }
 export const createGhsState = (/**@type {Ghost}*/g)=>
-	/**@type {IGhsState}*/(freeze(new GhsState(g)))
+	/**@type {Readonly<IGhsState>}*/(freeze(new GhsState(g)))
 
 export const GhsMgr = new class extends Common {
 	static {$(this.setup)}

@@ -216,7 +216,7 @@ export class Ghost extends Actor {
 	}
 	collidesWith(
 		pos     = player.pos,
-		radius  = this.isFrightened? T/2:T/3,
+		radius  = T*(this.isFrightened? .5 : .4),
 		release = ()=> this.#setEscapeState(),
 	) {
 		if (!this.state.isRoaming
