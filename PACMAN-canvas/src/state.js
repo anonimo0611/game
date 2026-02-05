@@ -1,13 +1,12 @@
 import StateBase from '../_lib/state.js'
-/**
- @typedef {typeof States[number]} StateType
- @typedef {'_Ready'|'_NewLevel'|'_Restarted_NewLevel'|'_PacDying_Cleared'} MultiState
-*/const States = /**@type {const}*/(['Title','Attract','Intro','Ready','InGame','Restarted',
+
+/** @typedef {typeof States[number]} StateType */
+const States = /**@type {const}*/(['Title','Attract','Intro','Ready','InGame','Restarted',
 	'NewLevel','Cleared','Flashing','CoffBreak','PacCaught','PacDying','GameOver','Quit'])
 
-/** @extends {StateBase<globalThis,StateType,GameState>} */
+/** @extends {StateBase<GameState,globalThis,StateType>} */
 class GameState extends StateBase {
-	constructor() {super(globalThis),this.init(States)}
+	constructor() {super(globalThis), this.init(States)}
 	get isStartMode() {return State.isIntro   || State.isReady}
 	get isDemoScene() {return State.isAttract || State.isCoffBreak}
 
@@ -21,6 +20,7 @@ class GameState extends StateBase {
 	}
 
 	/**
+	 @typedef {'_Ready'|'_NewLevel'|'_Restarted_NewLevel'|'_PacDying_Cleared'} MultiState
 	 @param {{[key in (StateType|MultiState)]?:JQWindowHandler}} v
 	*/
 	on(v) {return super.on(v)}
@@ -29,8 +29,8 @@ class GameState extends StateBase {
 	 @param {StateType} s
 	 @param {{delay?:number,data?:JQData}} options
 	*/
-	to(s, {delay=(s == 'Quit' ? -1 : 0),data}={}) {
-		return super.to(s, {delay,data,fn:this.#callback})
+	to(s, {data,delay=(s == 'Quit' ? -1 : 0)}={}) {
+		return super.to(s, {data,delay,fn:this.#callback})
 	}
 }
 export const State = freeze(new GameState)
