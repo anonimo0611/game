@@ -37,18 +37,12 @@ const StandbyTimes = /**@type {const}*/
 	[   0,  900,    0], // Lv.13+
 ])
 
-/**
- @typedef {typeof GhsStates[number]} GhsStateType
-*/
+/** @typedef {typeof GhsStates[number]} GhsStateType */
 const GhsStates = /**@type {const}*/(
 	['Idle','GoingOut','Roaming','Bitten','Escaping','Returning'])
-/**
- @extends {_State<Ghost,GhsStateType>}
- @typedef {GhsState & Is & To} IGhsState
- @typedef {{[K in GhsStateType as `is${K}`]:boolean}} Is
- @typedef {{[K in GhsStateType as `to${K}`]:()=> IGhsState}} To
-*/
-class GhsState extends _State {
+
+/** @extends {_State<Ghost,GhsStateType,GhsState>} */
+export class GhsState extends _State {
 	constructor(/**@type {Ghost}*/g) {
 		super(g)
 		this.init(GhsStates).owner.inHouse
@@ -60,8 +54,6 @@ class GhsState extends _State {
 		return super.to(s)
 	}
 }
-export const createGhsState = (/**@type {Ghost}*/g)=>
-	/**@type {Readonly<IGhsState>}*/(freeze(new GhsState(g)))
 
 export const GhsMgr = new class extends Common {
 	static {$(this.setup)}

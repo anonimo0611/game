@@ -64,14 +64,14 @@ export const Game = new class {
 	}
 	#onIntro() {
 		Cursor.hide()
-		Sound.playStart()
+		Sound.playStartBGM()
 		Timer.set(2200, Game.#levelBegins)
 	}
 	#onInGame() {
 		!document.hasFocus() && Ctrl.pause(true)
 	}
 	#onPacDying() {
-		Sound.playDying()
+		Sound.playDyingSE()
 		player.sprite.setDying()
 		Lives.left > 0
 			? State.toRestarted({delay:2200})

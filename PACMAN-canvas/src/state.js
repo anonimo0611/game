@@ -5,13 +5,7 @@ import StateBase from '../_lib/state.js'
 */const States = /**@type {const}*/(['Title','Attract','Intro','Ready','InGame','Restarted',
 	'NewLevel','Cleared','Flashing','CoffBreak','PacCaught','PacDying','GameOver','Quit'])
 
-/**
- @extends {StateBase<globalThis,StateType>}
- @typedef {{[K in StateType as `is${K}`]:boolean}} Is
- @typedef {{[K in StateType as`was${K}`]:boolean}} Was
- @typedef {{[K in StateType as `to${K}`]:(opt?:StateOptions)=> IGameState}} To
- @typedef {GameState & Is & Was & To} IGameState
-*/
+/** @extends {StateBase<globalThis,StateType,GameState>} */
 class GameState extends StateBase {
 	constructor() {super(globalThis),this.init(States)}
 	get isStartMode() {return State.isIntro   || State.isReady}
@@ -39,4 +33,4 @@ class GameState extends StateBase {
 		return super.to(s, {delay,data,fn:this.#callback})
 	}
 }
-export const State = /**@type {Readonly<IGameState>}*/(freeze(new GameState))
+export const State = freeze(new GameState)

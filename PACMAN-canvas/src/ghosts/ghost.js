@@ -57,7 +57,7 @@ export class Ghost extends Actor {
 		this.dir   = dir
 		this.type  = type
 		this.init  = freeze({align,x:col*T})
-		this.state = Sys.createGhsState(this)
+		this.state = freeze(new Sys.GhsState(this))
 	}
 	get originalTargetTile() {
 		return this.state.isEscaping
@@ -229,7 +229,7 @@ export class Ghost extends Actor {
 		return true
 	}
 	#setBittenState(release=()=>{}) {
-		Sound.playBitten()
+		Sound.playBittenSE()
 		this.#frightened = false
 		this.state.toBitten()
 		Timer.freeze()
