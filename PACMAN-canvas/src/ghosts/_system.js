@@ -41,7 +41,7 @@ const StandbyTimes = /**@type {const}*/
 const GhsStates = /**@type {const}*/(
 	['Idle','GoingOut','Roaming','Bitten','Escaping','Returning'])
 
-/** @extends {_State<Ghost,GhsStateType,GhsState>} */
+/** @extends {_State<GhsState,Ghost,GhsStateType>} */
 export class GhsState extends _State {
 	constructor(/**@type {Ghost}*/g) {
 		super(g)
