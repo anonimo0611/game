@@ -1,37 +1,39 @@
 const {Sound:SoundJS}= createjs
 
-/** @template {string} T */
-export class SoundMgr {
+/**
+ @import {SoundDef as Def} from "./_sound.d.ts"
+ @template {string} S
+*/
+class SoundMgr {
 	#loaded   = false
 	#disabled = true
-	#instance = /**@type {{[K in T]:createjs.AbstractSoundInstance}}*/({})
+	#playOpts = /**@type {{[K in S]:Def.Data<S>}}*/({})
+	#instance = /**@type {{[K in S]:createjs.AbstractSoundInstance}}*/({})
 
-	/** @private @readonly */opts
 	/**
-	 @param {{onLoaded?():void,onFailed?():void}} setup
-     @param {{manifest:Manifest<T>,opts:{[key in T]:Readonly<ManifestOpts>}}} manifest
+	 @param {Def.Setup} setup
+     @param {Def.Manifest<S>} m
     */
-	constructor(setup={}, {manifest,opts}) {
-		this.opts = opts
-		const ids = typedKeys(opts)
+	constructor(setup={}, m) {
 		new Promise((resolve,reject)=> {
 			let amount = 0;
-			SoundJS.registerSounds(manifest)
+			m.flat().forEach(s=> s.data.audioSprite.forEach(d=> this.#playOpts[d.id]=d))
+			SoundJS.registerSounds(/**@type {object[]}*/(m))
 			SoundJS.on('fileerror', reject)
 			SoundJS.on('fileload', ()=> {
-				if (++amount < manifest.length) return
-				ids.forEach(id=> {
-					this.#instance[id] = SoundJS.createInstance(id)
+				if (++amount < m.length) return
+				typedKeys(this.#playOpts).forEach(id=> {
 					const
 					self = /**@type {any}*/(this)
 					self[`play${id}`] = (opts={})=> this.play(id,opts)
 					self[`stop${id}`] = ()=> this.stop(id)
+					this.#instance[id] = SoundJS.createInstance(id)
 				})
 				resolve('All sound files loaded')
 				this.#disabled = false
 			})
 		})
-		.then (()=> {
+		.then(()=> {
 			this.#loaded = true
 			setup.onLoaded?.()
 		})
@@ -45,21 +47,23 @@ export class SoundMgr {
 	get vol()      {return SoundJS.volume * 10}
 	set vol(vol)   {SoundJS.volume = Number.isFinite(vol)? vol/10 : this.vol}
 
-	/** @param {T} id */
+	/** @param {S} id */
 	isPlaying(id)  {return this.#instance[id]?.playState === SoundJS.PLAY_SUCCEEDED}
 
-	/** @param {T} id */
+	/** @param {S} id */
 	isFinished(id) {return this.#instance[id]?.playState === SoundJS.PLAY_FINISHED}
 
 	/**
-	 @param {T} id
-	 @param {Readonly<PlayOpts>} opts
+	 @param {S} id
+	 @param {Readonly<Def.Opts>} opts
 	*/
-	#mergeOpts(id, opts={}) {return {...this.opts[id], ...opts}}
+	#mergeOpts(id, opts) {
+		return {...this.#playOpts[id], ...opts}
+	}
 
 	/**
 	 @param {boolean} enable
-	 @param {...T} ids
+	 @param {S[]} ids
 	*/
 	pause(enable, ...ids) {
 		if (this.disabled) return
@@ -69,18 +73,18 @@ export class SoundMgr {
 	}
 
 	/**
-	 @param {T} id
-	 @param {Readonly<PlayOpts>} opts
+	 @param {S} id
+	 @param {Readonly<Def.Opts>} opts
 	*/
 	play(id, opts={}) {
 		if (this.disabled) return
 		if (typeof(opts.duration) == 'number' && opts.duration > 0)
 			this.#instance[id].duration = opts.duration
-		this.#instance[id].play(this.#mergeOpts(id, opts))
+		this.#instance[id].play(this.#mergeOpts(id,opts))
 	}
 
 	/**
-	 @param {...T} ids
+	 @param {S[]} ids
 	*/
 	stop(...ids) {
 		if (this.disabled) return this
@@ -89,3 +93,10 @@ export class SoundMgr {
 		return this
 	}
 }
+
+/**
+@typedef {{
+   new <S extends string,Self>(setup:Def.Setup,m:Def.Manifest<S>):
+   SoundMgr<S> & Def.Play<S> & Def.Stop<S,Self>
+}} SoundMgrConstructor
+*/ export default/**@type {SoundMgrConstructor}*/(SoundMgr)

@@ -1,20 +1,18 @@
 import {State}    from '../src/state.js'
 import {GhsMgr}   from '../src/ghosts/_system.js'
 import {Setup}    from './_setup.js'
-import {SoundMgr} from './manager.js'
-import {Manifest,SirenIds} from './_manifest.js'
+import {SirenIds} from './_manifest.js'
+import {Manifest} from './_manifest.js'
+import SoundMgr   from './manager.js'
 
 /**
  @typedef {import('./_manifest.js').SoundType} SoundType
- @typedef {{[K in SoundType as`play${K}`]:(opts?:PlayOpts)=> void}} PlayMethods
- @typedef {{[K in SoundType as`stop${K}`]:()=> ISound}} StopMethods
- @typedef {SoundCore & PlayMethods & StopMethods} ISound
- @extends {SoundMgr<SoundType>}
+ @extends {SoundMgr<SoundType,SoundCore>}
 */
 class SoundCore extends SoundMgr {
-	constructor()  {super(Setup,Manifest)}
+	constructor()  {super(Setup, Manifest)}
 	get sirenId()  {return SirenIds[GhsMgr.CruiseElroy.part]}
-	get ringing()  {return this.isPlaying('Bell')}
+	get ringing()  {return this.isPlaying('BellSE')}
 	get disabled() {return super.disabled || State.isAttract}
 
 	get vol() {
@@ -30,7 +28,7 @@ class SoundCore extends SoundMgr {
 		Sound.stopLoops().play(Sound.sirenId)
 	}
 	playGhostEscaping() {
-		Sound.stopSiren().stopFright().playEyesGhost()
+		Sound.stopSiren().stopFrightSE().playEyesSE()
 	}
 	toggleFrightMode(/**@type {boolean}*/on) {
 		on? Sound.#onFrightMode()
@@ -38,17 +36,16 @@ class SoundCore extends SoundMgr {
 	}
 	#onFrightMode() {
 		if (GhsMgr.areAnyEscaping) return
-		Sound.stopSiren().playFright()
+		Sound.stopSiren().playFrightSE()
 	}
 	onGhostReturned() {
 		if (GhsMgr.areAnyEscaping) return
-		Sound.stopEyesGhost()
+		Sound.stopEyesSE()
 		GhsMgr.isFrightMode
-			? Sound.playFright()
+			? Sound.playFrightSE()
 			: Sound.play(Sound.sirenId)
 	}
 	stopSiren = ()=> Sound.stop(...SirenIds)
-	stopLoops = ()=> Sound.stopSiren().stopFright().stopEyesGhost()
+	stopLoops = ()=> Sound.stopSiren().stopFrightSE().stopEyesSE()
 }
-/** @type {ISound} */
-export const Sound = /**@type {any}*/(new SoundCore)
+export const Sound = new SoundCore()
