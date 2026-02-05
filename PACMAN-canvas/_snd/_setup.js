@@ -16,8 +16,7 @@ export const Setup = new class {
 			.on({click:Setup.#mute})
 			.onWheel(Setup.#onInput)
 		$('.volRng')
-			.attr({value:initVol})
-			.attr({defaultValue:initVol})
+			.attr({value:initVol,defaultValue:initVol})
 			.on({input:Setup.#onInput})
 			.trigger('input')
 	}
@@ -30,9 +29,11 @@ export const Setup = new class {
 		Speaker.draw(localStorage.anopac_volume = Sound.vol)
 	}
 	#onKeydown(/**@type {JQuery.KeyDownEvent}*/e) {
-		if (keyRepeat(e) || isCombiKey(e)) return
+		if (keyRepeat(e) || isCombiKey(e))
+			return
 		if (e.key.toUpperCase() == 'M'
-		 || e.target == volRg2 && isEnterKey(e)) Setup.#mute()
+		 || e.target == volRg2 && isEnterKey(e))
+		 	Setup.#mute()
 	}
 	#mute() {
 		_lstVol = Sound.vol || (_lstVol || +volRng.max >> 1)

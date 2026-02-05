@@ -7,7 +7,7 @@ import SoundMgr   from './manager.js'
 
 /**
  @typedef {import('./_manifest.js').SoundType} SoundType
- @extends {SoundMgr<SoundType,SoundCore>}
+ @extends {SoundMgr<SoundCore,SoundType>}
 */
 class SoundCore extends SoundMgr {
 	constructor()  {super(Setup, Manifest)}

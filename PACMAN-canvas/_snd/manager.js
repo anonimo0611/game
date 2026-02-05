@@ -16,7 +16,7 @@ class SoundMgr {
     */
 	constructor(setup={}, m) {
 		new Promise((resolve,reject)=> {
-			let amount = 0;
+			let amount = 0
 			m.flat().forEach(s=> s.data.audioSprite.forEach(d=> this.#playOpts[d.id]=d))
 			SoundJS.registerSounds(/**@type {object[]}*/(m))
 			SoundJS.on('fileerror', reject)
@@ -25,11 +25,11 @@ class SoundMgr {
 				typedKeys(this.#playOpts).forEach(id=> {
 					const
 					self = /**@type {any}*/(this)
-					self[`play${id}`] = (opts={})=> this.play(id,opts)
-					self[`stop${id}`] = ()=> this.stop(id)
+					self[`play${id}`]  = (opts={})=> this.play(id,opts)
+					self[`stop${id}`]  = ()=> this.stop(id)
 					this.#instance[id] = SoundJS.createInstance(id)
 				})
-				resolve('All sound files loaded')
+				resolve('succeed')
 				this.#disabled = false
 			})
 		})
@@ -96,7 +96,7 @@ class SoundMgr {
 
 /**
 @typedef {{
-   new <S extends string,Self>(setup:Def.Setup,m:Def.Manifest<S>):
+   new <Self,S extends string>(setup:Def.Setup,m:Def.Manifest<S>):
    SoundMgr<S> & Def.Play<S> & Def.Stop<S,Self>
 }} SoundMgrConstructor
 */ export default/**@type {SoundMgrConstructor}*/(SoundMgr)
