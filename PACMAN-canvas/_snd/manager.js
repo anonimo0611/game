@@ -7,7 +7,7 @@ const {Sound:SoundJS}= createjs
 class SoundMgr {
 	#loaded   = false
 	#disabled = true
-	#playOpts = /**@type {{[K in S]:Def.Data<S>}}*/({})
+	#playOpts = /**@type {{[K in S]:Readonly<Def.Data<S>>}}*/({})
 	#instance = /**@type {{[K in S]:createjs.AbstractSoundInstance}}*/({})
 
 	/**
@@ -96,7 +96,8 @@ class SoundMgr {
 
 /**
 @typedef {{
-   new <Self,S extends string>(setup:Def.Setup,m:Def.Manifest<S>):
+   new <Self,S extends string>
+   (setup:Def.Setup, manifest:Def.Manifest<S>):
    SoundMgr<S> & Def.Play<S> & Def.Stop<S,Self>
-}} SoundMgrConstructor
-*/ export default/**@type {SoundMgrConstructor}*/(SoundMgr)
+}} Constructor
+*/ export default/**@type {Constructor}*/(SoundMgr)
