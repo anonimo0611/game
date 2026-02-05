@@ -6,14 +6,14 @@
 class StateBase {
 	#owner
 	#last    = /**@type {?State}*/(null)
+	#curr    = /**@type {State} */('')
 	#default = /**@type {State} */('')
-	#current = /**@type {State} */('')
 
 	/** @protected @param {Owner} owner */
 	constructor(owner) {this.#owner = owner}
 
 	get owner()   {return this.#owner}
-	get current() {return this.#current}
+	get current() {return this.#curr}
 	get last()    {return this.#last}
 	get default() {return this.#default}
 
@@ -23,15 +23,15 @@ class StateBase {
 			const self = /**@type {any}*/(this)
 			i == 0 && (this.#default = s)
 			self[`to${s}`] = (/**@type {StateDef.Opts}*/opt)=> this.to(s,opt)
-			defineProperty(this,`is${s}`, {get(){return this.#current === s}})
-			defineProperty(this,`was${s}`,{get(){return this.#last    === s}})
+			defineProperty(this,`is${s}`, {get(){return this.#curr === s}})
+			defineProperty(this,`was${s}`,{get(){return this.#last === s}})
 		})
 		return this
 	}
 
 	/** @param {State} state */
 	is(state) {
-		return this.#current == state
+		return this.#curr == state
 	}
 
 	/** @param {State} [state] */
@@ -48,15 +48,15 @@ class StateBase {
 
 	/**
 	 @param {State} state
-	 @param {{data?:JQData,delay?:number,fn?:(state:State,data?:JQData)=>void}} opts
+	 @param {{data?:JQData, delay?:number, fn?:(state:State,data?:JQData)=> void}} opts
 	*/
 	to(state, {data,delay=-1,fn}={}) {
 		if (delay >= 0) {
 			Timer.set(delay, ()=> this.to(state,{delay:-1,data}))
 			return this
 		}
-		this.#last  = this.current
-		this.#current = state
+		this.#last = this.current
+		this.#curr = state
 		fn?.(state,data)
 		return this
 	}
@@ -64,7 +64,7 @@ class StateBase {
 
 /**
 @typedef {{
-   new <Owner,State extends string,Self=any>(owner:Owner):
+   new <Self,Owner,State extends string>(owner:Owner):
    StateBase<Owner,State> & StateDef.Props<Owner,State,Self>
-}} Constructor
-*/ export default /**@type {Constructor}*/(StateBase)
+}} StateBaseConstructor
+*/ export default /**@type {StateBaseConstructor}*/(StateBase)

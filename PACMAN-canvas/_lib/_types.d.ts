@@ -13,11 +13,11 @@ type Cvs2DStyle = string|CanvasGradient|CanvasPattern
 
 // jQuery
 
-type JQWin  = Window & typeof globalThis
+type Global = Window & typeof globalThis
 type JQData = any[]|JQuery.PlainObject|string|number|boolean
 
 type JQWindowHandlers  ={[event:string]:JQWindowHandler}
-type JQWindowHandler   = (event:JQuery.TriggeredEvent<JQWin,undefined,JQWin,JQWin>)=> void
+type JQWindowHandler   = (event:JQuery.TriggeredEvent<Global,undefined,Global,Global>)=> void
 
 type JQTriggerHandlers ={[event:string]:JQTriggerHandler}
 type JQTriggerHandler  = (event:JQuery.TriggeredEvent)=> void
