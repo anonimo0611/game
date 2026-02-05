@@ -1,8 +1,9 @@
 /**
+ @import {StateDef} from "./_state.d.ts"
  @template Owner
  @template {string} State
 */
-export default class _State {
+class StateBase {
 	#owner
 	#last    = /**@type {?State}*/(null)
 	#default = /**@type {State} */('')
@@ -21,24 +22,28 @@ export default class _State {
 		states?.forEach((/**@type {State}*/s,i)=> {
 			const self = /**@type {any}*/(this)
 			i == 0 && (this.#default = s)
-			self[`to${s}`] = (/**@type {StateOptions}*/opt)=> this.to(s,opt)
+			self[`to${s}`] = (/**@type {StateDef.Opts}*/opt)=> this.to(s,opt)
 			defineProperty(this,`is${s}`, {get(){return this.#current === s}})
 			defineProperty(this,`was${s}`,{get(){return this.#last    === s}})
 		})
 		return this
 	}
 
-	/**
-	 @param {State} state
-	*/
+	/** @param {State} state */
 	is(state) {
 		return this.#current == state
 	}
-	/**
-	 @param {State} [state]
-	*/
+
+	/** @param {State} [state] */
 	was(state) {
 		return state === this.#last
+	}
+
+	/** @param {JQWindowHandlers} v */
+	on(v) {
+		for (const [ev,fn] of entries(v))
+			$win.on(underscoreToSp(ev,String(this.default)), fn)
+		return this
 	}
 
 	/**
@@ -55,13 +60,11 @@ export default class _State {
 		fn?.(state,data)
 		return this
 	}
-
-	/**
-	 @param {{[key:string]:JQWindowHandler}} v
-	*/
-	on(v) {
-		for (const [ev,fn] of entries(v))
-			$win.on(underscoreToSp(ev,String(this.default)), fn)
-		return this
-	}
 }
+
+/**
+@typedef {{
+   new <Owner,State extends string,Self=any>(owner:Owner):
+   StateBase<Owner,State> & StateDef.Props<Owner,State,Self>
+}} Constructor
+*/ export default /**@type {Constructor}*/(StateBase)

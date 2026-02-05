@@ -167,7 +167,7 @@ const $win = $(window)
 
 /**
  @param {string} ns
- @param {JQTriggerWindowHandlers} eventHandlers
+ @param {JQWindowHandlers} eventHandlers
 */const $onNS = (ns,eventHandlers)=> {
 	entries(eventHandlers).forEach(([ev,fn])=> {
 		ns = ns[0] != '.' ? `.${ns}` : ns

@@ -1,33 +1,31 @@
-/*--- Vector2 ---*/
+// Coordinates
 
 type xyTuple  = [x:number, y:number]
 type Position = {x:number, y:number}
 
-/*--- Direction ---*/
+// Direction
 
 type Direction = 'Up'|'Right'|'Down'|'Left'
 
-/*--- Canvas API ---*/
+// Canvas API
 
 type Cvs2DStyle = string|CanvasGradient|CanvasPattern
 
+// jQuery
 
-/*--- jQuery ---*/
-
+type JQWin  = Window & typeof globalThis
 type JQData = any[]|JQuery.PlainObject|string|number|boolean
-type StateOptions = {delay?:number,data?:JQData}
 
-type JQWindowHandler = (event: JQuery.TriggeredEvent<Window & typeof globalThis, undefined,
-	Window & typeof globalThis, Window & typeof globalThis>)=> void
+type JQWindowHandlers  ={[event:string]:JQWindowHandler}
+type JQWindowHandler   = (event:JQuery.TriggeredEvent<JQWin,undefined,JQWin,JQWin>)=> void
 
+type JQTriggerHandlers ={[event:string]:JQTriggerHandler}
 type JQTriggerHandler  = (event:JQuery.TriggeredEvent)=> void
-type JQTriggerHandlers = {[event:string]:JQTriggerHandler}
-type JQTriggerWindowHandlers = {[event:string]:JQWindowHandler}
 
 interface JQuery {
 	offon<TType extends string>(
 		events:  TType,
-		handler: JQuery.TypeEventHandler<TElement, undefined, TElement, TElement, TType>,
+		handler: JQuery.TypeEventHandler<TElement,undefined,TElement,TElement,TType>,
 		force?:  boolean,
 	):this;
 	onWheel(handler: (event:WheelEvent)=> void):this;
