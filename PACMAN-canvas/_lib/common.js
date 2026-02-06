@@ -24,6 +24,15 @@ export class Common {
 	}
 
 	/**
+	 @param {string}   events
+	 @param {JQTriggerHandler} handler
+	 @param {boolean} [force]
+	*/offon(events, handler, force) {
+		$(this.#target).offon(events, handler, force)
+		return this
+	}
+
+	/**
 	 @param {string} event
 	 @param {JQData} [data]
 	*/

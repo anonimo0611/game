@@ -28,5 +28,9 @@ interface JQuery {
 		handler: JQuery.TypeEventHandler<TElement,undefined,TElement,TElement,TType>,
 		force?:  boolean,
 	):this;
+	onNS<TType extends string>(
+		event: TType,
+		eventHandlers: JQTriggerHandlers
+	):this
 	onWheel(handler: (event:WheelEvent)=> void):this;
 }

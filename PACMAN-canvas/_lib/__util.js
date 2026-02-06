@@ -167,24 +167,28 @@ const $win = $(window)
 
 /**
  @param {string} ns
- @param {JQWindowHandlers} eventHandlers
-*/const $onNS = (ns,eventHandlers)=> {
-	entries(eventHandlers).forEach(([ev,fn])=> {
-		ns = ns[0] != '.' ? `.${ns}` : ns
-		ev = ev.trim().replace(/[_\s]+/g,`${ns}\x20`) + ns
-		$win.off(ev).on(ev,fn)
-	})
-	return $win
-}
+ @param {JQWindowHandlers} events
+*/const $onNS = (ns,events)=> $win.onNS(ns, events)
 
 /**
+ @param {string} ns
+ @param {JQTriggerHandlers} events}
+*/jQuery.fn.onNS = function(ns, events) {
+    ns = ns[0] != '.' ? `.${ns}` : ns
+    entries(events).forEach(([ev,fn])=> {
+        const evNS = ev.trim().replace(/[_\s]+/g,`${ns}\x20`) + ns
+        this.off(evNS).on(evNS,fn)
+    })
+    return this
+}
+/**
  @param {string}   events
- @param {Function} handler
+ @param {JQTriggerHandler} handler
  @param {boolean} [force]
 */jQuery.fn.offon = function(events, handler, force) {
 	return (force === false)
-		? $(this).off(events)
-		: $(this).off(events).on({[events]:handler})
+		? this.off(events)
+		: this.off(events).on(events, handler)
 }
 /**
  @param {(ev:WheelEvent)=> void} handler
