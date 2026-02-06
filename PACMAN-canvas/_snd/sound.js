@@ -3,11 +3,15 @@ import {GhsMgr}   from '../src/ghosts/_system.js'
 import {Setup}    from './_setup.js'
 import {SirenIds} from './_manifest.js'
 import {Manifest} from './_manifest.js'
-import SoundMgr   from './manager.js'
+import {SoundMgr} from './manager.js'
 
 /**
- @typedef {import('./_manifest.js').SoundType} SoundType
- @extends {SoundMgr<SoundCore,SoundType>}
+ @import  {SoundDef as Def} from './_sound.d.ts'
+ @typedef {import('./_manifest.js').SoundType} T
+ @extends {SoundMgr<T>}
+ @typedef {{[K in T as`play${K}`]:(opts?:Def.Opts)=> void}} Play
+ @typedef {{[K in T as`stop${K}`]:(...ids:T[])=> IState}} Stop
+ @typedef {SoundCore & Play & Stop} IState
 */
 class SoundCore extends SoundMgr {
 	constructor()  {super(Setup, Manifest)}
@@ -27,16 +31,16 @@ class SoundCore extends SoundMgr {
 		 || GhsMgr.areAnyEscaping) return
 		Sound.stopLoops().play(Sound.sirenId)
 	}
-	playGhostEscaping() {
-		Sound.stopSiren().stopFrightSE().playEyesSE()
-	}
 	toggleFrightMode(/**@type {boolean}*/on) {
-		on? Sound.#onFrightMode()
+		on? Sound.#playFrightened()
 		  : Sound.playSiren()
 	}
-	#onFrightMode() {
+	#playFrightened() {
 		if (GhsMgr.areAnyEscaping) return
 		Sound.stopSiren().playFrightSE()
+	}
+	playEscapaingEyes() {
+		Sound.stopSiren().stopFrightSE().playEyesSE()
 	}
 	onGhostReturned() {
 		if (GhsMgr.areAnyEscaping) return
@@ -48,4 +52,4 @@ class SoundCore extends SoundMgr {
 	stopSiren = ()=> Sound.stop(...SirenIds)
 	stopLoops = ()=> Sound.stopSiren().stopFrightSE().stopEyesSE()
 }
-export const Sound = new SoundCore()
+export const Sound = /**@type {IState}*/(new SoundCore)

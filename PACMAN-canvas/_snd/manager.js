@@ -1,10 +1,10 @@
 const {Sound:SoundJS}= createjs
 
 /**
- @import {SoundDef as Def} from "./_sound.d.ts"
+ @import {SoundDef as Def} from './_sound.d.ts'
  @template {string} S
 */
-class SoundMgr {
+export class SoundMgr {
 	#loaded   = false
 	#disabled = true
 	#playOpts = /**@type {{[K in S]:Readonly<Def.Data<S>>}}*/({})
@@ -93,11 +93,3 @@ class SoundMgr {
 		return this
 	}
 }
-
-/**
-@typedef {{
-   new <Self,S extends string>
-   (setup:Def.Setup, manifest:Def.Manifest<S>):
-   SoundMgr<S> & Def.Play<S> & Def.Stop<S,Self>
-}} Constructor
-*/ export default/**@type {Constructor}*/(SoundMgr)
