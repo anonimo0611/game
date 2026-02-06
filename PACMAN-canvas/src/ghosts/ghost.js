@@ -243,7 +243,7 @@ export class Ghost extends Actor {
 		!this.isEscaping && (this.#frightened=on)
 	}
 	#setEscapeState() {
-		Sound.playGhostEscaping()
+		Sound.playEscapaingEyes()
 		this.state.toEscaping()
 	}
 }
