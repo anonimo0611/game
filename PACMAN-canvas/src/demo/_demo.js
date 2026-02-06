@@ -18,6 +18,7 @@ const RunTimer  = new class {
 		 || Ctrl.activeElem
 		)? (this.#cnt = 0)
          : (this.#cnt+=Ticker.Interval) > WaiteTime
+		 	&& document.hasFocus()
 		 	&& State.toAttract()
     }
 }
