@@ -41,7 +41,7 @@ const StandbyTimes = /**@type {const}*/
 const States = /**@type {const}*/(
 	['Idle','GoingOut','Roaming','Bitten','Escaping','Returning'])
 
-const StateTypes = /**@type {{readonly [key in GhsStateType]:key}}*/
+const StateTypes = /**@type {{readonly [K in GhsStateType]:K}}*/
 	(fromEntries(States.map(id=>[id,id])))
 
 /** @extends {_State<GhsState,Ghost,GhsStateType>} */
