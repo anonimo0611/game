@@ -1,18 +1,18 @@
 const {Sound:SoundJS}= createjs
 
 /**
- @import {SoundDef as Def} from './_sound.d.ts'
+ @import   {Sound} from './_sound.d.ts'
  @template {string} S
 */
 export class SoundMgr {
 	#loaded   = false
 	#disabled = true
-	#playOpts = /**@type {{[K in S]:Readonly<Def.Data<S>>}}*/({})
+	#playOpts = /**@type {{[K in S]:Readonly<Sound.Data<S>>}}*/({})
 	#instance = /**@type {{[K in S]:createjs.AbstractSoundInstance}}*/({})
 
 	/**
-	 @param {Def.Setup} setup
-     @param {Def.Manifest<S>} m
+	 @param {Sound.Setup} setup
+     @param {Sound.Manifest<S>} m
     */
 	constructor(setup={}, m) {
 		new Promise((resolve,reject)=> {
@@ -55,7 +55,7 @@ export class SoundMgr {
 
 	/**
 	 @param {S} id
-	 @param {Readonly<Def.Opts>} opts
+	 @param {Readonly<Sound.Opts>} opts
 	*/
 	#mergeOpts(id, opts) {
 		return {...this.#playOpts[id], ...opts}
@@ -74,7 +74,7 @@ export class SoundMgr {
 
 	/**
 	 @param {S} id
-	 @param {Readonly<Def.Opts>} opts
+	 @param {Readonly<Sound.Opts>} opts
 	*/
 	play(id, opts={}) {
 		if (this.disabled) return

@@ -6,10 +6,10 @@ import {Manifest} from './_manifest.js'
 import {SoundMgr} from './manager.js'
 
 /**
- @import  {SoundDef as Def} from './_sound.d.ts'
- @typedef {import('./_manifest.js').SoundType} T
  @extends {SoundMgr<T>}
- @typedef {{[K in T as`play${K}`]:(opts?:Def.Opts)=> void}} Play
+ @typedef {import('./_manifest.js').SoundType} T
+ @typedef {import('./_sound.d.ts').Sound.Opts} opts
+ @typedef {{[K in T as`play${K}`]:(opts?:opts)=> void}}   Play
  @typedef {{[K in T as`stop${K}`]:(...ids:T[])=> ISound}} Stop
  @typedef {SoundCore & Play & Stop} ISound
 */
