@@ -10,8 +10,8 @@ import {SoundMgr} from './manager.js'
  @typedef {import('./_manifest.js').SoundType} T
  @extends {SoundMgr<T>}
  @typedef {{[K in T as`play${K}`]:(opts?:Def.Opts)=> void}} Play
- @typedef {{[K in T as`stop${K}`]:(...ids:T[])=> IState}} Stop
- @typedef {SoundCore & Play & Stop} IState
+ @typedef {{[K in T as`stop${K}`]:(...ids:T[])=> ISound}} Stop
+ @typedef {SoundCore & Play & Stop} ISound
 */
 class SoundCore extends SoundMgr {
 	constructor()  {super(Setup, Manifest)}
@@ -52,4 +52,4 @@ class SoundCore extends SoundMgr {
 	stopSiren = ()=> Sound.stop(...SirenIds)
 	stopLoops = ()=> Sound.stopSiren().stopFrightSE().stopEyesSE()
 }
-export const Sound = /**@type {IState}*/(new SoundCore)
+export const Sound = /**@type {ISound}*/(new SoundCore)
