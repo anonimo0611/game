@@ -1,7 +1,6 @@
 function getCtrl(/**@type {string}*/id) {
 	let elem = document.getElementById(id)
-	if (elem instanceof HTMLInputElement
-	 || elem instanceof HTMLButtonElement) return elem
+	if (elem instanceof HTMLElement) return elem
 	throw TypeError(`There is no input/button element with the ID “${id}”.`)
 }
 /** @typedef {typeof inputIds[number]} InputIds */
