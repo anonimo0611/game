@@ -14,11 +14,11 @@ html {
 
 dialog {
 	color: #FFF;
-	background: #333;
+	background: rgba(0 0 38 / 0.6);
 	font: 2vmin sans-serif;
 	margin: 0;
 	padding: .2rem;
-	border: solid 2px var(--color-border);
+	border: solid 2px #444;
 	border-radius: .4em;
 	position: fixed;
 	top:  50%;
