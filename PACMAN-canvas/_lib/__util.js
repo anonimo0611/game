@@ -15,6 +15,13 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 */const typedEntries = o=> /**@type {any}*/(entries(o))
 
 /**
+ @template {string} T
+ @param {readonly T[]} array
+*/const toEnumObject = array=>
+    /**@type {{readonly [K in T]:K}}*/
+    (fromEntries(array.map(k=> [k,k])))
+
+/**
  @param {KeyboardEvent|JQuery.KeyboardEventBase} e
 */const keyRepeat = e=>
 	(e instanceof KeyboardEvent? e : e.originalEvent)?.repeat ?? false
