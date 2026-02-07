@@ -1,5 +1,4 @@
 const {Sound:SoundJS}= createjs
-
 /**
  @import   {Sound} from './_sound.d.ts'
  @template {string} S
