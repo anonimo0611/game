@@ -38,21 +38,21 @@ const StandbyTimes = /**@type {const}*/
 	[   0,  900,    0], // Lv.13+
 ])
 
-/** @typedef {typeof GhsStates[number]} GhsStateType */
-const GhsStates = /**@type {const}*/(
+/** @typedef {typeof States[number]} StateType */
+const States = /**@type {const}*/(
 	['Idle','GoingOut','Roaming','Bitten','Escaping','Returning'])
 
-const GhsStateTypes = toEnumObject(GhsStates)
+const StateTypes = toEnumObject(States)
 
-/** @extends {_State<GhsState,Ghost,GhsStateType>} */
+/** @extends {_State<GhsState,Ghost,StateType>} */
 export class GhsState extends _State {
 	constructor(/**@type {Ghost}*/g) {
 		super(g)
-		this.init(GhsStates).owner.inHouse
+		this.init(States).owner.inHouse
 			? this.to('Idle')
 			: this.to('Roaming')
 	}
-	to(/**@type {GhsStateType}*/s) {
+	to(/**@type {StateType}*/s) {
 		$(this.owner).trigger(s)
 		return super.to(s)
 	}
@@ -265,7 +265,7 @@ const FrightMode = function() {
 			_session = (isOn? this : null)
 			$(Ghosts)
 				.trigger(Events.FrightMode, isOn)
-				.offon(GhsStateTypes.Bitten, ()=> this.#caught++, isOn)
+				.offon(StateTypes.Bitten, ()=> this.#caught++, isOn)
 			Sound.toggleFrightMode(isOn)
 		}
 		#flashing() {
