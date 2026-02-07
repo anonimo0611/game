@@ -3,9 +3,9 @@
     "baseUrl": "./",
     "module": "ES2022",
     "target": "esnext",
-    "moduleResolution": "Bundler",
     "checkJs": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
+    "strictPropertyInitialization": true,
   },
 }
