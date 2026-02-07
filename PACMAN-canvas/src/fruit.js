@@ -6,7 +6,6 @@ import {State}  from './state.js'
 import {Maze}   from './maze.js'
 import {PtsMgr} from './points.js'
 import {Player} from './player/player.js'
-import {player} from './player/player.js'
 import * as Pts from './sprites/points.js'
 import * as Spr from './sprites/fruits.js'
 
@@ -38,7 +37,7 @@ export const Fruit = new class {
 		return (State.isTitle || State.isInGame) && _showTgt
 	}
 	get #intersectsWithPlayer() {
-		return circleCollision(player.center, TargetPos, T/2)
+		return circleCollision(Player.core.center, TargetPos, T/2)
 	}
 	/** Pass the game-level to reference the fruit table */
 	getType(lv=Game.level) {

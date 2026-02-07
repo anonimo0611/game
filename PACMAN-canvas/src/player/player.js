@@ -10,6 +10,8 @@ import {GhsMgr}   from '../ghosts/_system.js'
 import {Mover}    from './controller.js'
 import {TunEntry} from './tunnel.js'
 
+const AteDotEvent = 'AteDot'
+
 class PlayerCore extends PacMan {
 	#eatIdx = 0
 	#sinceLastEating = 0
@@ -28,13 +30,6 @@ class PlayerCore extends PacMan {
 
 	get timeSinceLastEating() {
 		return this.#sinceLastEating
-	}
-	forwardPos(num=0) {
-		return Vec2[this.dir].mul(num*T).add(this.center)
-	}
-	offsetTarget(num=0) {
-		const  ofstX = (this.dir == U ? -num : 0)
-		return this.forwardPos(num).addX(ofstX*T)
 	}
 	resetTimer() {
 		this.#sinceLastEating = 0
@@ -95,11 +90,22 @@ class PlayerCore extends PacMan {
 	}
 }
 
-const AteDotEvent = 'AteDot'
-export let player = new PlayerCore
-State.on({_Restarted_NewLevel:()=> player = new PlayerCore})
-
-export const Player =  {
-	/** @param {JQTriggerHandler} handler */
-	onAte(handler) {$(this).on(AteDotEvent,handler)}
-}
+export const Player = function() {
+	let core = new PlayerCore
+	function init() {
+		!State.wasIntro && (core = new PlayerCore)
+	}
+	State.on({_Ready:init})
+	return {
+		get core() {return core},
+		forwardPos(num=0) {
+			return Vec2[core.dir].mul(num*T).add(core.center)
+		},
+		offsetTarget(num=0) {
+			const  ofstX = (core.dir == U ? -num : 0)
+			return this.forwardPos(num).addX(ofstX*T)
+		},
+		/** @param {JQTriggerHandler} handler */
+		onAte(handler) {$(this).on(AteDotEvent, handler)},
+	}
+}()

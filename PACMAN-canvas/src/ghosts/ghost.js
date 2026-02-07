@@ -5,7 +5,7 @@ import {Ctrl}   from '../control.js'
 import {PtsMgr} from '../points.js'
 import {Maze}   from '../maze.js'
 import {Actor}  from '../actor.js'
-import {player} from '../player/player.js'
+import {Player} from '../player/player.js'
 import {GhsMgr} from './_system.js'
 import {Events} from './_system.js'
 import * as Sys from './_system.js'
@@ -31,7 +31,7 @@ export class Ghost extends Actor {
 
 	get chaseOffset()  {return 0}
 	get chaseSpeed()   {return GhsSpeed.Base}
-	get chasePos()     {return player.center}
+	get chasePos()     {return Player.core.center}
 	get chaseTile()    {return this.chasePos.divInt(T)}
 	get scatterTile()  {return Vec2.new(24, 0)}
 
@@ -59,7 +59,7 @@ export class Ghost extends Actor {
 		this.dir   = dir
 		this.type  = type
 		this.init  = freeze({align,x:col*T})
-		this.state = freeze(new Sys.GhsState(this))
+		this.state = new Sys.GhsState(this)
 	}
 	get originalTargetTile() {
 		return this.state.isEscaping
@@ -128,7 +128,7 @@ export class Ghost extends Actor {
 		)
 	}
 	leaveHouse(deactivateGlobalDotCnt=false) {
-		player.resetTimer()
+		Player.core.resetTimer()
 		this.#started ||= true
 		this.state.isIdle &&
 		this.state.toGoingOut()
@@ -217,7 +217,7 @@ export class Ghost extends Actor {
 		return false
 	}
 	collidesWith(
-		pos     = player.pos,
+		pos     = Player.core.pos,
 		radius  = T*(this.isFrightened? .5 : .4),
 		release = ()=> this.#setEscapeState(),
 	) {

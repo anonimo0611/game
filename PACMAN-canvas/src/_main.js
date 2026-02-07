@@ -10,7 +10,7 @@ import {Score}   from './score.js'
 import {Lives}   from './lives.js'
 import {Fruit}   from './fruit.js'
 import {Actors}  from './actor.js'
-import {player}  from './player/player.js'
+import {Player}  from './player/player.js'
 import {PtsMgr}  from './points.js'
 import {Demo}    from './demo/_demo.js'
 import {Sound}   from '../_snd/sound.js'
@@ -29,17 +29,16 @@ export const Game = new class {
 			NewLevel: Game.#onNewLevel,
 			PacDying: Game.#onPacDying,
 			GameOver: Game.#onGameOver,
-			Restarted:Game.#levelBegins,
 		})
 		.toTitle()
 		Menu.Level.onChange(Game.#resetLevel)
 	}
-	#level = 1
-	#restarted = false
+	#level   = 1
+	#hasDied = false
 
-	get level()     {return Game.#level}
-	get levelStr()  {return Game.#level.toString().padStart(2,'0')}
-	get restarted() {return Game.#restarted}
+	get level()    {return Game.#level}
+	get levelStr() {return Game.#level.toString().padStart(2,'0')}
+	get hasDied()  {return Game.#hasDied}
 
 	/** Level 13+ as the fastest, stepwise faster from level 1 to 13 */
 	get speedByLv() {return 1 - (13-Game.clampedLv) * .01}
@@ -49,7 +48,7 @@ export const Game = new class {
 	get moveSpeed() {return Game.speed * Game.speedByLv}
 
 	#resetLevel() {
-		Game.#restarted = false
+		Game.#hasDied = false
 		Game.#setLevel(Menu.Level.index+1)
 	}
 	#setLevel(i=1) {
@@ -72,9 +71,9 @@ export const Game = new class {
 	}
 	#onPacDying() {
 		Sound.playDyingSE()
-		player.sprite.setDying()
+		Player.core.sprite.setDying()
 		Lives.left > 0
-			? State.toRestarted({delay:2200})
+			? Timer.set(2200, Game.#levelBegins)
 			: State.toGameOver ({delay:2000})
 	}
 	#onCleared() {
@@ -96,11 +95,11 @@ export const Game = new class {
 		State.toTitle()
 	}
 	#levelBegins() {
-		Game.#restarted = State.isRestarted
+		Game.#hasDied = State.isPacDying
 		State.toReady().toInGame({delay:2200})
 	}
 	#levelEnds() {
-		Game.#restarted = false
+		Game.#hasDied = false
 		if (!Ctrl.endlessMode) {
 			Game.#onQuit()
 			return
@@ -126,7 +125,7 @@ export const Game = new class {
 		Score.draw()
 		Maze.PowDots.draw()
 		Fruit.drawTarget()
-		Actors.draw(player)
+		Actors.draw(Player.core)
 		Message.draw()
 	}
 },

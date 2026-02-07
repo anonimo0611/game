@@ -1,7 +1,7 @@
 import {State}  from '../state.js'
 import {Ctrl}   from '../control.js'
 import {Maze}   from '../maze.js'
-import {player} from '../player/player.js'
+import {Player} from '../player/player.js'
 import {GhsMgr} from '../ghosts/_system.js'
 import {Ghost}  from './ghost.js'
 import {GuzutaThreshold} from './ghost_sub.js'
@@ -56,14 +56,14 @@ export default new class {
 	 @param {number} ofst
 	*/
 	#auxLines(g, ofst) {
-		const {center:{x,y},dir}= player
-		const fwdXY = player.forwardPos(ofst).vals
-		const ofsXY = player.offsetTarget(ofst).vals
+		const {center:{x,y},dir,inTunSide}= Player.core
+		const fwdXY = Player.forwardPos(ofst).vals
+		const ofsXY = Player.offsetTarget(ofst).vals
 		Ctx.save()
 		Ctx.setAlpha(0.8)
 		Ctx.lineWidth   = 6
 		Ctx.strokeStyle = GhsColors[g.type]
-		if (g.type == GhsType.Pinky && !player.inTunSide
+		if (g.type == GhsType.Pinky && !inTunSide
 		 || g.type == GhsType.Aosuke) {
 			dir != U
 				? Ctx.newLinePath([x,y], fwdXY)
@@ -80,9 +80,10 @@ export default new class {
 	}
 	/** @param {Ghost} g */
 	#guzutaCircle(g) {
+		const {center}= Player.core
 		Ctx.save()
-		Ctx.translate(...player.center.vals)
-		Ctx.setAlpha(g.chasePos.eq(player.center) ? 0.8 : 0.4)
+		Ctx.translate(...center.vals)
+		Ctx.setAlpha(g.chasePos.eq(center) ? 0.8 : 0.4)
 		Ctx.strokeCircle(0,0, T*GuzutaThreshold, GhsColors[g.type], 6)
 		Ctx.restore()
 	}

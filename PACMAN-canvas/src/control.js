@@ -7,7 +7,7 @@ import {drawText} from './message.js'
 import {Score}    from './score.js'
 import {inputs,btns} from './inputs.js'
 
-const UserSettingsSey = 'anopacman'
+const UserSettingsKey = 'anopacman'
 
 export const Form = document.forms[0]
 export const Ctrl = new class {
@@ -56,11 +56,11 @@ export const Ctrl = new class {
 			case 'checkbox':data[input.id] = input.checked;break
 			}
 		})
-		localStorage[UserSettingsSey] = JSON.stringify(data)
+		localStorage[UserSettingsKey] = JSON.stringify(data)
 	}
 	#restore() {
-		if (!localStorage[UserSettingsSey]) return
-		const data = JSON.parse(localStorage[UserSettingsSey])
+		if (!localStorage[UserSettingsKey]) return
+		const data = JSON.parse(localStorage[UserSettingsKey])
 		typedKeys(Menu).forEach(id=> Menu[id].index = data[id])
 		document.querySelectorAll('input').forEach(input=> {
 			switch(input.type) {

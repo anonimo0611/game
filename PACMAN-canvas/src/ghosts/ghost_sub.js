@@ -1,6 +1,6 @@
 import {Maze}   from '../maze.js'
 import {State}  from '../state.js'
-import {player} from '../player/player.js'
+import {Player} from '../player/player.js'
 import {GhsMgr} from './_system.js'
 import {Ghost}  from './ghost.js'
 
@@ -21,8 +21,8 @@ class Pinky extends Ghost {
 	get chaseOffset() {return 4}
 	get scatterTile() {return Vec2.new(3, 0)}
 	get chasePos() {
-		const pos = player.offsetTarget(this.chaseOffset)
-		switch(player.tunEntry.side) {
+		const pos = Player.offsetTarget(this.chaseOffset)
+		switch(Player.core.tunEntry.side) {
 		case L: return pos.setX(Maze.Tunnel.EntryColR*T)
 		case R: return pos.setX(Maze.Tunnel.EntryColL*T)
 		default:return pos
@@ -37,7 +37,7 @@ class Aosuke extends Ghost {
 	get chaseOffset() {return 2}
 	get scatterTile() {return Vec2.new(27, 33)}
 	get chasePos() {
-		const  pos = player.offsetTarget(this.chaseOffset)
+		const  pos = Player.offsetTarget(this.chaseOffset)
 		return pos.clone.sub(GhsMgr.akaCenterPos).add(pos)
 	}
 }
@@ -46,16 +46,12 @@ class Guzuta extends Ghost {
 	constructor() {
 		super(U, {type:3, tile:[15.5, 15], align:+1})
 	}
-	get scatterTile() {
-		return Vec2.new(0, 33)
-	}
+	get scatterTile() {return Vec2.new(0, 33)}
 	get chasePos() {
-		return Vec2.sqrMag(this, player.pos) < (T*GuzutaThreshold)**2
-			? this.scatterTile.add(.5).mul(T)
-			: player.center
+		const {center,pos}= Player.core
+		return Vec2.sqrMag(this, pos) < (T*GuzutaThreshold)**2
+			? this.scatterTile.add(.5).mul(T) : center
 	}
 }
-
-State.on({_Restarted_NewLevel:()=>
-	GhsMgr.initialize([Akabei,Pinky,Aosuke,Guzuta].map(cls=> new cls))
-})
+const Classes = freeze([Akabei,Pinky,Aosuke,Guzuta])
+State.on({_Ready:()=> GhsMgr.initialize(Classes.map(cls=> new cls))})

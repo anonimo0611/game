@@ -8,10 +8,9 @@ export const Lives = function() {
 	const sprite = new Sprite(HUD, 1)
 	const radius = T*.78, size = T*2
 	State.on({
-		Title:    ()=> reset(),
-		Intro:    ()=> add(+1),
-		Ready:    ()=> add(State.wasIntro? -1:0),
-		Restarted:()=> add(-1),
+		Title:()=> reset(),
+		Intro:()=> add(+1),
+		Ready:()=> add(State.wasNewLevel? 0:-1),
 	})
 	function draw(left=3) {
 		HUD.save()
@@ -21,8 +20,8 @@ export const Lives = function() {
 			sprite.draw({radius,center:{x:size*i+T, y:T}})
 		HUD.restore()
 	}
-	function reset()  {draw(_left = Ctrl.livesMax-1)}
 	function add(n=0) {draw(_left += n)}
+	function reset()  {draw(_left = Ctrl.livesMax-1)}
 	$(inputs.lvsRng).on({input:reset})
 	return {
 		append()   {add(1)},

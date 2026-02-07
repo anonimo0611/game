@@ -7,7 +7,6 @@ import {Maze}   from '../maze.js'
 import {PtsMgr} from '../points.js'
 import * as Pts from '../sprites/points.js'
 import {Player} from '../player/player.js'
-import {player} from '../player/player.js'
 import {Ghost}  from './ghost.js'
 import Target   from './show_targets.js'
 
@@ -92,7 +91,7 @@ export const GhsMgr = new class {
 		Ctrl.alwaysChase && GhsMgr.#setReleaseTimer()
 	}
 	#setReleaseTimer() {
-		const lv = (Game.restarted? 0 : Game.clampedLv)
+		const lv = (Game.hasDied? 0 : Game.clampedLv)
 		Timer.sequence(...
 			Ghosts.slice(1).map((g,i)=> ({
 				ms: StandbyTimes[lv][i]/Game.speed,
@@ -196,9 +195,9 @@ export const DotCounter = function() {
 		const timeout = (Game.level<=4 ? 4e3:3e3)
 		const gLimit  = LimitTable[i-1][0] // global
 		const pLimit  = LimitTable[i-1][lvIdx] // personal
-		;(player.timeSinceLastEating >= timeout)
+		;(Player.core.timeSinceLastEating >= timeout)
 			? fn()
-			: (!Game.restarted || _globalCounter < 0)
+			: (!Game.hasDied || _globalCounter < 0)
 				? (personalCounters[i] >= pLimit)
 					&& fn()
 				: (_globalCounter == gLimit)
@@ -206,11 +205,11 @@ export const DotCounter = function() {
 					&& (_globalCounter = -1)
 		}
 	function reset() {
-		!Game.restarted && personalCounters.fill(0)
-		_globalCounter = Game.restarted? 0:-1
+		!Game.hasDied && personalCounters.fill(0)
+		_globalCounter = Game.hasDied? 0:-1
 	}
 	function increaseCounter() {
-		(Game.restarted && _globalCounter >= 0)
+		(Game.hasDied && _globalCounter >= 0)
 			? _globalCounter++
 			: incPreferredGhostCounter()
 	}

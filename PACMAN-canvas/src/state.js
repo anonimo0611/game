@@ -1,8 +1,9 @@
 import StateBase from '../_lib/state.js'
 
 /** @typedef {typeof States[number]} StateType */
-const States = /**@type {const}*/(['Title','Attract','Intro','Ready','InGame','Restarted',
-	'NewLevel','Cleared','Flashing','CoffBreak','PacCaught','PacDying','GameOver','Quit'])
+const States = /**@type {const}*/([
+	'Title','Attract','Intro','Ready','InGame','NewLevel','Cleared',
+	'Flashing','CoffBreak','PacCaught','PacDying','GameOver','Quit'])
 
 /** @extends {StateBase<GameState,globalThis,StateType>} */
 class GameState extends StateBase {
@@ -20,7 +21,7 @@ class GameState extends StateBase {
 	}
 
 	/**
-	 @typedef {'_Ready'|'_NewLevel'|'_Restarted_NewLevel'|'_PacDying_Cleared'} MultiState
+	 @typedef {'_Ready'|'_NewLevel'|'_PacDying_Cleared'} MultiState
 	 @param {{[key in (StateType|MultiState)]?:JQWindowHandler}} v
 	*/
 	on(v) {return super.on(v)}
@@ -33,4 +34,4 @@ class GameState extends StateBase {
 		return super.to(s, {data,delay,fn:this.#callback})
 	}
 }
-export const State = freeze(new GameState)
+export const State = new GameState

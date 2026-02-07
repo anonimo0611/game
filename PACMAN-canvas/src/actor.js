@@ -1,7 +1,7 @@
 import {Dir}    from '../_lib/direction.js'
 import {State}  from './state.js'
 import {Maze}   from './maze.js'
-import {player} from './player/player.js'
+import {Player} from './player/player.js'
 import {GhsMgr} from './ghosts/_system.js'
 import Sprite   from './sprites/pacman.js'
 
@@ -108,7 +108,7 @@ export class Actor {
 
 export const Actors = new class {
 	update() {
-		player.update()
+		Player.core.update()
 		GhsMgr.update()
 	}
 	/** @param {PacMan} pacman */
