@@ -7,10 +7,12 @@ import {Maze}   from '../maze.js'
 import {Actor}  from '../actor.js'
 import {player} from '../player/player.js'
 import {GhsMgr} from './_system.js'
+import {Events} from './_system.js'
 import * as Sys from './_system.js'
 import Sprite   from '../sprites/ghost.js'
 
-const TurnPriority = /**@type {readonly Direction[]}*/([U,L,D,R])
+const TurnPriority =
+	/**@type {readonly Direction[]}*/([U,L,D,R])
 
 export class Ghost extends Actor {
 	/** @readonly */type
@@ -20,7 +22,7 @@ export class Ghost extends Actor {
 	#fadeIn = new Actor.SpawnFade
 	#fleeTime   = -1
 	#started    = false
-	#revSignal  = false
+	#revSig     = false
 	#frightened = false
 
 	get animIdx()      {return GhsMgr.animIndex}
@@ -49,10 +51,10 @@ export class Ghost extends Actor {
 	*/
 	constructor(dir=L, {type=0,tile:[col,row]=[0,0],align=0}={}) {
 		super(col,row)
-		this.on({
-			FrightMode:   this.#setFrightMode,
-			Reverse: ()=> this.#revSignal = true,
-			FleeTime:()=> this.#fleeTime  = 400/Game.interval,
+		$(this).on({
+		 [Events.FrightMode]:  this.#setFrightMode,
+		 [Events.Reverse]: _=> this.#revSig   = true,
+		 [Events.FleeTime]:_=> this.#fleeTime = 400/Game.interval,
 		})
 		this.dir   = dir
 		this.type  = type
@@ -179,8 +181,8 @@ export class Ghost extends Actor {
 		!Timer.frozen && Sound.onGhostReturned()
 	}
 	#setNextDir() {
-		if (this.#revSignal) {
-			this.#revSignal = false
+		if (this.#revSig) {
+			this.#revSig = false
 			this.orient = this.revDir
 		}
 		if (this.dir == this.orient)

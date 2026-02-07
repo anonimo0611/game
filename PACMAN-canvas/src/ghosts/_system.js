@@ -1,5 +1,4 @@
 import _State   from '../../_lib/state.js'
-import {Common} from '../../_lib/common.js'
 import {Sound}  from '../../_snd/sound.js'
 import {Game}   from '../_main.js'
 import {State}  from '../state.js'
@@ -14,6 +13,9 @@ import Target   from './show_targets.js'
 
 const PtsLst = Pts.GhostPts
 const Ghosts = /**@type {Ghost[]}*/([])
+
+export const Events = toEnumObject(
+	['FrightMode','Reverse','FleeTime'])
 
 /**
  When always chase mode,
@@ -37,18 +39,17 @@ const StandbyTimes = /**@type {const}*/
 	[   0,  900,    0], // Lv.13+
 ])
 
-/** @typedef {typeof States[number]} GhsStateType */
-const States = /**@type {const}*/(
+/** @typedef {typeof GhsStates[number]} GhsStateType */
+const GhsStates = /**@type {const}*/(
 	['Idle','GoingOut','Roaming','Bitten','Escaping','Returning'])
 
-const StateTypes = /**@type {{readonly [K in GhsStateType]:K}}*/
-	(fromEntries(States.map(id=>[id,id])))
+const GhsStateTypes = toEnumObject(GhsStates)
 
 /** @extends {_State<GhsState,Ghost,GhsStateType>} */
 export class GhsState extends _State {
 	constructor(/**@type {Ghost}*/g) {
 		super(g)
-		this.init(States).owner.inHouse
+		this.init(GhsStates).owner.inHouse
 			? this.to('Idle')
 			: this.to('Roaming')
 	}
@@ -58,7 +59,7 @@ export class GhsState extends _State {
 	}
 }
 
-export const GhsMgr = new class extends Common {
+export const GhsMgr = new class {
 	static {$(this.setup)}
 	static setup() {
 		State.on({
@@ -66,7 +67,6 @@ export const GhsMgr = new class extends Common {
 			Cleared:  GhsMgr.#onRoundEnds,
 			PacCaught:GhsMgr.#onRoundEnds,
 		})
-		GhsMgr.on({Init:GhsMgr.#initialize})
 	}
 	#animIdx = 0
 	get animIndex()      {return this.#animIdx}
@@ -80,11 +80,7 @@ export const GhsMgr = new class extends Common {
 	get akaCenterPos()   {return Ghosts[GhsType.Akabei].center}
 	get areAnyEscaping() {return Ghosts.some(g=> g.isEscaping)}
 
-	/**
-	 @param {unknown} _
-	 @param {Ghost[]} ghosts
-	*/
-	#initialize(_, ...ghosts) {
+	initialize(/**@type {readonly Ghost[]}*/ghosts) {
 		GhsMgr.#animIdx = 0
 		ghosts.forEach((g,i)=> Ghosts[i] = g)
 	}
@@ -141,7 +137,7 @@ export const GhsMgr = new class extends Common {
 }
 
 const signalDirectionReversal = ()=> {
-	$(Ghosts).trigger('Reverse')
+	$(Ghosts).trigger(Events.Reverse)
 }
 const AttackInWaves = function() {
 	const SCATTER = 0
@@ -223,8 +219,8 @@ export const DotCounter = function() {
 		idx = Ghosts.findIndex(g=> g.state.isIdle)
 		idx != -1 && personalCounters[idx]++
 	}
-	State .on({_Ready:reset})
-	Player.on({AteDot:increaseCounter})
+	State.on({_Ready:reset})
+	Player.onAte(increaseCounter)
 	return {releaseIfReady}
 }()
 
@@ -243,8 +239,8 @@ const CruiseElroy = function() {
 		if (Maze.dotsLeft <= DotsLeftTable[Game.clampedLv-1]*rate)
 			++_part && Sound.playSiren()
 	}
-	State .on({_NewLevel:()=> _part=0})
-	Player.on({AteDot:onDotEaten})
+	State.on({_NewLevel:()=> _part=0})
+	Player.onAte(onDotEaten)
 	return {
 		get part()  {return _part},
 		get angry() {return angry()},
@@ -264,13 +260,13 @@ const FrightMode = function() {
 			signalDirectionReversal()
 			this.Dur = TimeTable[Game.clampedLv-1]
 			this.Dur == 0 && !State.isAttract
-				? $(Ghosts).trigger('FleeTime') : this.#set(true)
+				? $(Ghosts).trigger(Events.FleeTime) : this.#set(true)
 		}
 		#set(isOn=true) {
 			_session = (isOn? this : null)
 			$(Ghosts)
-				.trigger('FrightMode', isOn)
-				.offon(StateTypes.Bitten, ()=> this.#caught++, isOn)
+				.trigger(Events.FrightMode, isOn)
+				.offon(GhsStateTypes.Bitten, ()=> this.#caught++, isOn)
 			Sound.toggleFrightMode(isOn)
 		}
 		#flashing() {
@@ -285,9 +281,9 @@ const FrightMode = function() {
 			}
  		}
 	}
-	GhsMgr.on({Init:()=> _session=null})
+	State.on({_Ready:()=> _session = null})
 	return {
-		new() {new Session},
+		new() {new Session()},
 		get session() {return _session},
 	}
 }()

@@ -13,10 +13,10 @@ import GhostSprite  from '../sprites/ghost.js'
 
 export class Attract {
 	static {State.on({Attract:this.#begin})}
-	static #attract = /**@type {?Attract}*/(null)
-	static #begin() {Attract.#attract = new Attract}
-	static draw()   {Attract.#attract?.draw()}
-	static update() {Attract.#attract?.update()}
+	static #instance = /**@type {?Attract}*/(null)
+	static #begin() {Attract.#instance = new Attract}
+	static draw()   {Attract.#instance?.draw()}
+	static update() {Attract.#instance?.update()}
 
 	ghsSpr = new GhostSprite(T*2, T*2)
 	subAct = new EnergizerAct
@@ -68,7 +68,7 @@ export class Attract {
 	}
 	quit() {
 		$off('.Attract')
-		Attract.#attract = null
+		Attract.#instance = null
 		State.toTitle()
 	}
 }
@@ -83,7 +83,7 @@ class EnergizerAct {
 	get outward() {return this.#pacman.dir == L}
 	constructor() {
 		range(GhsType.Max).forEach(i=> this.#setActor(i))
-		GhsMgr.trigger('Init', this.#ghosts)
+		GhsMgr.initialize(this.#ghosts)
 	}
 	#setActor(type=0) {
 		const

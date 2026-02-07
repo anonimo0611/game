@@ -7,6 +7,8 @@ import {drawText} from './message.js'
 import {Score}    from './score.js'
 import {inputs,btns} from './inputs.js'
 
+const UserSettingsSey = 'anopacman'
+
 export const Form = document.forms[0]
 export const Ctrl = new class {
 	static {$(this.setup)}
@@ -54,11 +56,11 @@ export const Ctrl = new class {
 			case 'checkbox':data[input.id] = input.checked;break
 			}
 		})
-		localStorage.anopacman = JSON.stringify(data)
+		localStorage[UserSettingsSey] = JSON.stringify(data)
 	}
 	#restore() {
-		if (!localStorage.anopacman) return
-		const data = JSON.parse(localStorage.anopacman)
+		if (!localStorage[UserSettingsSey]) return
+		const data = JSON.parse(localStorage[UserSettingsSey])
 		typedKeys(Menu).forEach(id=> Menu[id].index = data[id])
 		document.querySelectorAll('input').forEach(input=> {
 			switch(input.type) {
@@ -99,7 +101,7 @@ export const Ctrl = new class {
 			: State.isInGame && Ctrl.#quitConfirm()
 	}
 	#clearHiScore() {
-		localStorage.removeItem('anopac_hiscore')
+		localStorage.removeItem(Score.HiScoreKey)
 		Score.reset()
 	}
 	#clearHiConfirm() {

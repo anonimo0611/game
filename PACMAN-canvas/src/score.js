@@ -8,6 +8,8 @@ let _score  = 0, _hiSco  = 0
 let _savedS = 0, _savedH = 0
 
 export const Score = new class {
+	/** @readonly */
+	HiScoreKey = 'anopac_hiscore'
 	static {$(this.setup)}
 	static setup() {
 		Score.reset()
@@ -34,9 +36,9 @@ export const Score = new class {
 		_score = 0
 	}
 	#onGameOver() {
-		const hiSco = localStorage.anopac_hiscore|0
+		const hiSco = localStorage[Score.HiScoreKey]|0
 		if (!Ctrl.isPractice && _hiSco > hiSco)
-			localStorage.anopac_hiscore = _hiSco
+			localStorage[Score.HiScoreKey] = _hiSco
 	}
 	get #showUP() {
 		return !State.isInGame || Ticker.paused

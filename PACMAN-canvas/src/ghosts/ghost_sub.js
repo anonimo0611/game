@@ -57,5 +57,5 @@ class Guzuta extends Ghost {
 }
 
 State.on({_Restarted_NewLevel:()=>
-	GhsMgr.trigger('Init', [Akabei,Pinky,Aosuke,Guzuta].map(cls=> new cls))
+	GhsMgr.initialize([Akabei,Pinky,Aosuke,Guzuta].map(cls=> new cls))
 })

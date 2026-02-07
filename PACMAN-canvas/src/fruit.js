@@ -27,8 +27,8 @@ let  _fadeOut = /**@type {?Fade}*/(null)
 export const Fruit = new class {
 	static {$(this.setup)}
 	static setup() {
+		Player.onAte(Fruit.#onDotEaten)
 		State .on({_Ready: Fruit.#resetTarget})
-		Player.on({AteDot: Fruit.#onDotEaten})
 		$Level.on({change: Fruit.#setImages})
 	}
 	get points() {

@@ -13,12 +13,11 @@ const RunTimer  = new class {
 			mousemove keydown resize wheel`, ()=> this.#cnt = 0)
     }
     update() {
-        (!document.hasFocus()
+        ;(!document.hasFocus()
 		 || Confirm.opened
 		 || Ctrl.activeElem
 		)? (this.#cnt = 0)
          : (this.#cnt+=Ticker.Interval) > WaiteTime
-		 	&& document.hasFocus()
 		 	&& State.toAttract()
     }
 }

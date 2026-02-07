@@ -1,4 +1,3 @@
-import {Common} from '../_lib/common.js'
 import {Dir}    from '../_lib/direction.js'
 import {State}  from './state.js'
 import {Maze}   from './maze.js'
@@ -19,7 +18,7 @@ class SpawnFade {
 	}
 }
 
-export class Actor extends Common {
+export class Actor {
 	/** @readonly */
 	static SpawnFade = SpawnFade
 	pos = Vec2.Zero
@@ -27,7 +26,7 @@ export class Actor extends Common {
 	#movDir = /**@type {Direction}*/(L)
 
 	/** @protected */
-	constructor(col=0,row=0) {super();this.pos.set(col*T,row*T)}
+	constructor(col=0,row=0) {this.pos.set(col*T,row*T)}
 	get speed()     {return 0}
 	get radius()    {return T}
 	get size()      {return this.radius*2}

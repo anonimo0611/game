@@ -1,6 +1,4 @@
-export {player,Player}
 import {Sound}    from '../../_snd/sound.js'
-import {Common}   from '../../_lib/common.js'
 import {Game}     from '../_main.js'
 import {Ctrl}     from '../control.js'
 import {State}    from '../state.js'
@@ -12,7 +10,7 @@ import {GhsMgr}   from '../ghosts/_system.js'
 import {Mover}    from './controller.js'
 import {TunEntry} from './tunnel.js'
 
-class PlayerPac extends PacMan {
+class PlayerCore extends PacMan {
 	#eatIdx = 0
 	#sinceLastEating = 0
 
@@ -80,7 +78,7 @@ class PlayerPac extends PacMan {
 			: this.#eatSmallDot()
 		Maze.clearDot(this) == 0
 			? State.toCleared()
-			: Player.trigger('AteDot')
+			: $(Player).trigger(AteDotEvent)
 	}
 	#eatPowerDot() {
 		Score.add(PowPts)
@@ -96,7 +94,12 @@ class PlayerPac extends PacMan {
 			: Sound.playEatSE1({duration})
 	}
 }
-let   player = new PlayerPac
-const Player = new Common,
-reset = ()=> {player = new PlayerPac}
-State.on({_Restarted_NewLevel:reset})
+
+const AteDotEvent = 'AteDot'
+export let player = new PlayerCore
+State.on({_Restarted_NewLevel:()=> player = new PlayerCore})
+
+export const Player =  {
+	/** @param {JQTriggerHandler} handler */
+	onAte(handler) {$(this).on(AteDotEvent,handler)}
+}
