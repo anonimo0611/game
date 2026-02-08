@@ -1,3 +1,7 @@
+// Scene
+
+interface Scene {update():void, draw?():void}
+
 // Coordinates
 
 type xyTuple  = [x:number, y:number]

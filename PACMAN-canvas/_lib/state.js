@@ -1,5 +1,5 @@
 /**
- @import {StateDef as Def} from "./_state.d.ts"
+ @import {StateDef as Def} from "./_state.d"
  @template Owner
  @template {string} State
 */
