@@ -1,6 +1,6 @@
 const {Sound:SoundJS}= createjs
 /**
- @import   {Sound} from './_sound.d.ts'
+ @import   {Sound} from './_sound.d'
  @template {string} S
 */
 export class SoundMgr {
