@@ -74,7 +74,7 @@ export const Game = new class {
 		Player.core.sprite.setDying()
 		Lives.left > 0
 			? Timer.set(2200, Game.#levelBegins)
-			: State.toGameOver ({delay:2000})
+			: State.toGameOver({delay:2000})
 	}
 	#onCleared() {
 		Sound.stopLoops()
@@ -88,7 +88,7 @@ export const Game = new class {
 		Game.#levelBegins()
 	}
 	#onGameOver() {
-		Timer.set(2500, Game.#onQuit)
+		State.toTitle({delay:2500})
 	}
 	#onQuit() {
 		Ticker.reset()
@@ -101,7 +101,7 @@ export const Game = new class {
 	#levelEnds() {
 		Game.#hasDied = false
 		if (!Ctrl.endlessMode) {
-			Game.#onQuit()
+			State.toTitle()
 			return
 		}
 		Demo.CoffBreakNum < 0
