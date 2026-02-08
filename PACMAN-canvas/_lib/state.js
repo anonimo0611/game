@@ -5,9 +5,10 @@
 */
 class StateBase {
 	#owner
-	#last    = /**@type {?State}*/(null)
-	#curr    = /**@type {State} */('')
-	#default = /**@type {State} */('')
+	#eventBus = $({})
+	#last     = /**@type {?State}*/(null)
+	#curr     = /**@type {State} */('')
+	#default  = /**@type {State} */('')
 
 	/** @protected @param {Owner} owner */
 	constructor(owner) {this.#owner = owner}
@@ -46,6 +47,11 @@ class StateBase {
 		return this
 	}
 
+	/** @param {JQTriggerHandler} handler */
+	onChange(handler) {
+		$(this.#eventBus).on('change', handler)
+	}
+
 	/**
 	 @param {State} state
 	 @param {{data?:JQData, delay?:number, fn?:(state:State,data?:JQData)=> void}} opts
@@ -58,6 +64,7 @@ class StateBase {
 		this.#last = this.current
 		this.#curr = state
 		fn?.(state,data)
+		$(this.#eventBus).trigger('change')
 		return this
 	}
 }
