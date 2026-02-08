@@ -76,7 +76,9 @@ export const Fruit = new class {
 			: Fruit.#checkIntersects()
 	}
 	drawTarget() {
-		if (Fruit.showTarget && !Ticker.paused)  {
+		if (State.isInGame && Ticker.paused)
+			return
+		if (Fruit.showTarget)  {
 			Ctx.save()
 			Ctx.setAlpha(_fadeOut?.alpha)
 			Ctx.translate(...TargetPos.vals)

@@ -4,7 +4,7 @@ import {State}     from '../state.js'
 import {Attract}   from './attract.js'
 import {CoffBreak} from './coffee_break.js'
 
-const Events = 'scroll_pointerdown_mousemove_keydown_resize_wheel'
+const Events = 'pointerdown_mousemove_keydown_scroll_resize_wheel'
 
 /** Attract Mode will begin after a period of inactivity. */
 const RunTimer = new class {
@@ -31,9 +31,7 @@ const RunTimer = new class {
 	}
 }
 
-/** @typedef {import('../state.js').StateType} StateType */
-/** @typedef {{update():void,draw?():void}} Scene */
-/** @type {{[key in StateType]?:Scene}} */
+/** @type {{[K in import('../state').StateType]?:Scene}} */
 const Scenes ={Title:RunTimer,Attract,CoffBreak}
 export const Demo = {
 	get CoffBreakNum() {return CoffBreak.num},

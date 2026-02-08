@@ -115,7 +115,7 @@ export class Ghost extends Actor {
 		}
 	}
 	#tickMove(spd=this.speed) {
-		!this.houseEntranceArrived(spd)
+		!this.#houseEntranceArrived(spd)
 			? this.setNextPos(spd)
 			: this.#enterHouse()
 	}
@@ -148,7 +148,7 @@ export class Ghost extends Actor {
 		this.dir = L
 		this.state.toRoaming()
 	}
-	houseEntranceArrived(spd=this.speed) {
+	#houseEntranceArrived(spd=this.speed) {
 		return this.state.isEscaping
 			&& this.tilePos.y == Maze.House.EntryTile.y
 			&& abs(BW/2 - this.center.x) <= spd

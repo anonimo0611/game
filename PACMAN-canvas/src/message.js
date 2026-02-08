@@ -27,7 +27,9 @@ export const Message = new class {
 			&& drawText(11, 19, '#F00','PAUSED')
 	}
 	draw() {
-		this.#drawPausedText()
+		if (State.isInGame)
+			this.#drawPausedText()
+
 		if (State.isIntro)
 			drawText( 9, 13, '#0FF','PLAYER　ONE')
 
