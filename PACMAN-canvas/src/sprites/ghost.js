@@ -1,11 +1,11 @@
 import CBSprite from './ghost_cb.js'
 export default class {
 	/** @typedef {Direction|'Bracket'} orient */
-	/** @readonly */ctx
-	/** @readonly */#spr
+	/** @private @readonly */ctx
+	/** @private @readonly */spr
 	constructor(w=T*3, h=T*2) {
-		this.ctx  = canvas2D(null, w, h).ctx
-		this.#spr = new CBSprite(this.ctx)
+		this.ctx = canvas2D(null, w, h).ctx
+		this.spr = new CBSprite(this.ctx)
 	}
 	#fadeOut   = /**@type {?Fade}*/(null)
 	#resurrect = /**@type {?Fade}*/(null)
@@ -46,7 +46,7 @@ export default class {
 			: Palette.FrightBody[spriteIdx]
 
 		if (isExposed) {
-			this.#spr.drawHadake(animIdx)
+			this.spr.drawHadake(animIdx)
 			return finalize()
 		}
 		if (!isEscaping) {
@@ -69,7 +69,7 @@ export default class {
 			case 'Right':  return this.#drawEyesHoriz(R)
 			case 'Up':     return this.#drawEyesUp(isRipped)
 			case 'Down':   return this.#drawEyesDown()
-			case 'Bracket':return this.#spr.drawBracketEyes()
+			case 'Bracket':return this.spr.drawBracketEyes()
 			}
 		})()
 		finalize()
@@ -90,8 +90,8 @@ export default class {
 			? this.#drawFoot0()
 			: this.#drawFoot1()
 		ctx.fill()
-		isRipped && this.#spr.drawHalfNakedBody()
-		isMended && this.#spr.drawMendedSeam(animIdx)
+		isRipped && this.spr.drawHalfNakedBody()
+		isMended && this.spr.drawMendedSeam(animIdx)
 	}
 	#drawFoot0() {
 		const {ctx}= this

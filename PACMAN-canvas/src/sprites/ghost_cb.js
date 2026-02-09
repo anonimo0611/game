@@ -1,5 +1,5 @@
 export default class {
-	/** @readonly */ctx
+	/** @private @readonly */ctx
 	/** @param {ExtendedContext2D} ctx */
 	constructor(ctx) {this.ctx = ctx}
 	drawHalfNakedBody() {
@@ -25,8 +25,8 @@ export default class {
 	drawBracketEyes() {
 		const {ctx}= this
 		ctx.save()
-		for (const v of [-1,+1]) {
-			ctx.beginPath() // Eyeball
+		for (const v of [-1,+1]) { // Eyeball
+			ctx.beginPath()
 			ctx.ellipse(19*v, -14, 13,16, 0, PI/2.2, PI*2.2)
 			ctx.fillStyle = 'white'
 			ctx.fill()
@@ -34,8 +34,8 @@ export default class {
 		ctx.lineWidth   = 8
 		ctx.lineCap     = 'square'
 		ctx.strokeStyle = 'black'
-		for (const i of [0,1]) {
-			ctx.beginPath() // Eyes
+		for (const i of [0,1]) { // Eyes
+			ctx.beginPath()
 			ctx.moveTo([-15, 22][i],  0)
 			ctx.lineTo([-15, 22][i], -7)
 			ctx.lineTo([ -7, 30][i], -7)
@@ -118,9 +118,16 @@ export default class {
 			ctx.fill()
 		}
 	}
-	static get stakeClothes() {return freeze(new StakeClothes)}
 }
-class StakeClothes {
+
+/** @param {ExtendedContext2D} ctx */
+export function snagSpr(ctx) {
+	return freeze( new Snag(ctx) )
+}
+class Snag {
+	/** @private @readonly */ctx
+	/** @param {ExtendedContext2D} ctx */
+	constructor(ctx) {this.ctx = ctx}
 	CaughtX   = BW/2 + T/2
 	AkaMinX   = this.CaughtX - T
 	stakeSize = Vec2.new(T*.18, T*.70).freeze()
@@ -128,40 +135,41 @@ class StakeClothes {
 		x: BW/2 + T*2 - this.stakeSize.x/2,
 		y: BH/2 + T*1 - this.stakeSize.y - T*.1
 	})
-	clothPos = freeze({
+	shardPos = freeze({
 		x: BW/2 + T*2 + this.stakeSize.x/2,
 		y: BH/2 + T*1 - T*.1
 	})
-	drawStake({x, y}=this.stakePos) {
-		Ctx.fillRect(x,y, ...this.stakeSize.vals, 'white')
+	drawStake({x,y}= this.stakePos) {
+		this.ctx.fillRect(x,y, ...this.stakeSize.vals, 'white')
 	}
-	drawCloth({x, y}=this.clothPos) {
-		const h = this.stakeSize.y
-		Ctx.save()
-		Ctx.translate(x, y)
-		Ctx.fillPolygon(Colors.Akabei, [0,-4],[0,-h],[-T,0],[-4,0],[-4,-4])
-		Ctx.restore()
+	drawShard({x,y}= this.shardPos) {
+		const {ctx}= this, h=this.stakeSize.y
+		ctx.save()
+		ctx.translate(x, y)
+		ctx.fillPolygon(Colors.Akabei, [0,-4],[0,-h],[-T,0],[-4,0],[-4,-4])
+		ctx.restore()
 	}
 	/**
 	 @param {number} animIdx
 	 @param {number} ratio
 	 @param {{x?:number, y?:number, size?:number}} options
 	*/
-	stretchClothing(animIdx, ratio, {x=0, y=0, size=T*2}={}) {
+	drawSnaggedClothing(animIdx, ratio, {x=0, y=0, size=T*2}={}) {
+		const {ctx}= this
 		const v1 = lerp(-2,  5, ratio)
 		const v2 = lerp( 4, 22, ratio)
 		const v3 = lerp( 4, 50, ratio)
 		const ls = (animIdx? -25:-36) // Left side
-		Ctx.save()
-		Ctx.translate(x, y)
-		Ctx.scale(size/(100/GhsScale), size/(100/GhsScale))
-		Ctx.beginPath()
-		Ctx.moveTo(-8, -10)
-		Ctx.quadraticCurveTo(-8,-4, v1, 3)
-		Ctx.quadraticCurveTo(v2, 9, v3, 9)
-		Ctx.addLinePath([v3,43],[ls,43],[ls,20],[-8,20])
-		Ctx.fillStyle = Colors.Akabei
-		Ctx.fill()
-		Ctx.restore()
+		ctx.save()
+		ctx.translate(x, y)
+		ctx.scale(size/(100/GhsScale), size/(100/GhsScale))
+		ctx.beginPath()
+		ctx.moveTo(-8, -10)
+		ctx.quadraticCurveTo(-8,-4, v1, 3)
+		ctx.quadraticCurveTo(v2, 9, v3, 9)
+		ctx.addLinePath([v3,43],[ls,43],[ls,20],[-8,20])
+		ctx.fillStyle = Colors.Akabei
+		ctx.fill()
+		ctx.restore()
 	}
 }
