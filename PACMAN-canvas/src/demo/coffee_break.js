@@ -5,7 +5,7 @@ import {Ctrl}    from '../control.js'
 import {Fruit}   from '../fruit.js'
 import {Ghost}   from '../ghosts/ghost.js'
 import {PacMan}  from '../actor.js'
-import Sprite    from '../sprites/ghost_cb.js'
+import {snagSpr} from '../sprites/ghost_cb.js'
 
 const sceneNum = (lv=0)=>
 	!Ctrl.isPractice && ({2:1, 5:2, 9:3}[lv]) || -1
@@ -106,7 +106,7 @@ class Scene2 extends CoffBreak {
 		this.counter  = 0
 		this.akaEyes  = L
 		this.isRipped = false
-		this.sprite   = Sprite.stakeClothes
+		this.sprite   = snagSpr(Ctx)
 		this.pacman.x = BW + T*3
 		this.akabei.x = BW + T*16
 	}
@@ -135,17 +135,18 @@ class Scene2 extends CoffBreak {
 		return (a.x != spr.AkaMinX)
 	}
 	draw() {
-		const {akabei:a, sprite:spr, akaEyes,isRipped}= this
-		const animIdx = isRipped? 0 : (this.counter? 1 : a.animIdx)
+		const {akabei:a,  sprite:spr, akaEyes,isRipped}= this
+		const aIdx = isRipped? 0 : (this.counter? 1 : a.animIdx)
 		spr.drawStake()
 		this.drawPac()
-		this.drawAka({animIdx,isRipped,orient:akaEyes})
+		this.drawAka({animIdx: aIdx,isRipped,orient:akaEyes})
 		isRipped?
-			spr.drawCloth():
-			function() { // Expand clothes
+			spr.drawShard():
+			function() { // Snagged Clothing
 				if (isRipped || a.x >= spr.CaughtX) return
+				const pos   = a.center.addX(T)
 				const ratio = norm(spr.CaughtX, spr.AkaMinX, a.x)
-				spr.stretchClothing(animIdx, ratio, a.center.addX(T))
+				spr.drawSnaggedClothing(aIdx, ratio, pos)
 			}()
 		super.draw()
 	}
