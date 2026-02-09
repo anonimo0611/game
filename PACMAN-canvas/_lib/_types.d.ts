@@ -4,8 +4,8 @@ interface Scene {update():void, draw?():void}
 
 // Coordinates
 
-type xyTuple  = [x:number, y:number]
-type Position = {x:number, y:number}
+type xyTuple  = Readonly<[x:number, y:number]>
+type Position = Readonly<{x:number, y:number}>
 
 // Direction
 
