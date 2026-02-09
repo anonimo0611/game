@@ -101,11 +101,11 @@ class Vec2 {
 	get hyphenated() {return `${this.x}-${this.y}`}
 	get asObj()      {return {x:this.x, y:this.y}}
 	get asInt()      {return Vec2.new(this.x|0,this.y|0)}
-	get inverse()    {return this.clone.mul(-1)}
-	get sqrMag()     {return this.x**2 + this.y**2}
-	get magnitude()  {return sqrt(this.sqrMag)}
 	get clone()      {return Vec2.new(this.x,  this.y)}
 	get normalized() {return Vec2.new(this.x/this.magnitude, this.y/this.magnitude)}
+	get magnitude()  {return sqrt(this.sqrMag)}
+	get sqrMag()     {return this.x**2 + this.y**2}
+	get inverse()    {return this.clone.mul(-1)}
 
 	/**
 	 @overload
