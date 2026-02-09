@@ -1,8 +1,9 @@
-function getCtrl(/**@type {string}*/id) {
+function getCtrl(id='') {
 	let elem = document.getElementById(id)
 	if (elem instanceof HTMLElement) return elem
-	throw TypeError(`There is no input/button element with the ID “${id}”.`)
+	throw TypeError(`There is no element with the ID “${id}”.`)
 }
+
 /** @typedef {typeof inputIds[number]} InputIds */
 const inputIds = /**@type {const}*/
 	(['lvsRng','spdRng','onlChk','chsChk','unrChk',
@@ -12,10 +13,8 @@ const inputIds = /**@type {const}*/
 const buttonIds = /**@type {const}*/
 	(['clear','reset','start','demo','coff1','coff2','coff3'])
 
-export const inputs =
-	/**@type {{[key in InputIds]:HTMLInputElement}}*/
+export const inputs = /**@type {{[K in InputIds]:HTMLInputElement}}*/
 	(fromEntries(inputIds.map(id=>[id,getCtrl(id)])))
 
-export const btns =
-	/**@type {{[key in ButtonIds]:HTMLButtonElement}}*/
+export const btns = /**@type {{[K in ButtonIds]:HTMLButtonElement}}*/
 	(fromEntries(buttonIds.map(id=>[id,getCtrl(id+'Btn')])))
