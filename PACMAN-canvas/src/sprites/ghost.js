@@ -1,8 +1,8 @@
 import CBSprite from './ghost_cb.js'
 export default class {
 	/** @typedef {Direction|'Bracket'} orient */
-	/** @private @readonly */ctx
-	/** @private @readonly */spr
+	/** @readonly */ctx
+	/** @readonly */spr
 	constructor(w=T*3, h=T*2) {
 		this.ctx = canvas2D(null, w, h).ctx
 		this.spr = new CBSprite(this.ctx)

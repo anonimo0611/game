@@ -9,8 +9,8 @@ export default class {
 	#mouthPhase = 0
 	#mouthAngle = 0
 
-	/** @private @readonly */ctx
-	/** @private @readonly */isMain
+	/** @readonly */ctx
+	/** @readonly */isMain
 	/**
 	 @param {ExtendedContext2D} ctx
 	 @param {0|1|2} mouthOpenings

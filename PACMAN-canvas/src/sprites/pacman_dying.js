@@ -6,8 +6,8 @@ export class Dying {
 	#outerR
 	#arkAng  = 0
 	#fadeOut = Fade.out(300)
-	/** @private @readonly */ctx
-	/** @private @readonly */r
+	/** @readonly */ctx
+	/** @readonly */r
 	constructor(ctx=Ctx, radius=PacRadius) {
 		this.ctx = ctx
 		this.r = radius

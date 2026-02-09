@@ -1,5 +1,5 @@
 export default class {
-	/** @private @readonly */ctx
+	/** @readonly */ctx
 	/** @param {ExtendedContext2D} ctx */
 	constructor(ctx) {this.ctx = ctx}
 	drawHalfNakedBody() {
@@ -125,7 +125,7 @@ export function snagSpr(ctx) {
 	return freeze( new Snag(ctx) )
 }
 class Snag {
-	/** @private @readonly */ctx
+	/** @readonly */ctx
 	/** @param {ExtendedContext2D} ctx */
 	constructor(ctx) {this.ctx = ctx}
 	CaughtX   = BW/2 + T/2
