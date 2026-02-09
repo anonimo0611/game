@@ -108,14 +108,14 @@ class EnergizerAct {
 		}
 		this.pow.update()
 	}
-	draw() {
-		this.started && Actors.draw(this.#pacman)
-	}
 	#updateGhosts() {
 		this.#ghosts.forEach(g=> {
 			g.x += this.#ghsvx
 			g.collidesWith(this.#pacman.pos, T/4, this.#end)
 		})
+	}
+	draw() {
+		this.started && Actors.draw(this.#pacman)
 	}
 	#end() {
 		GhsMgr.caughtAll && State.toAttract()

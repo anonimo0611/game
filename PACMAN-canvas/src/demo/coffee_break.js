@@ -33,6 +33,9 @@ export class CoffBreak {
 		Sound.playCoffBGM({loop:1^+(num == 2)})
 		$onNS('.CB',{Quit:this.end, blur_focus:this.pause})
 	}
+	pause() {
+		Sound.pause( Ticker.pause() )
+	}
 	movePac() {
 		this.pacman.x += this.pacvx
 		this.pacman.sprite.update()
@@ -47,9 +50,6 @@ export class CoffBreak {
 	drawAka(data={}) {
 		const {akabei:{pos,animIdx}}= this
 		this.akabei.sprite.draw({animIdx, ...data, ...pos})
-	}
-	pause() {
-		Sound.pause( Ticker.pause() )
 	}
 	draw() {
 		State.wasFlashing && Fruit.drawLevelCounter()
@@ -71,26 +71,26 @@ class Scene1 extends CoffBreak {
 		this.pacman.x =  BW + T*1
 		this.akabei.x =  BW + T*3
 	}
-	turnBack() {
-		this.isFrightened = true
-		this.pacvx *= -1.1
-		this.akavx *= -0.6
-		this.pacman.dir = this.akabei.dir = R
-	}
-	moveLeft() {
-		this.movePac()
-		this.pacman.x < -T*9 && this.turnBack()
-	}
-	moveRight() {
-		this.akabei.x > T*7.5  && this.movePac()
-		this.akabei.x > T*9+BW && this.end()
-	}
 	update() {
 		if (Ticker.elapsedTime > 400)
 			this.moveAka()
 		this.pacman.dir == L
 			? this.moveLeft()
 			: this.moveRight()
+	}
+	moveLeft() {
+		this.movePac()
+		this.pacman.x < -T*9 && this.turnBack()
+	}
+	turnBack() {
+		this.isFrightened = true
+		this.pacvx *= -1.1
+		this.akavx *= -0.6
+		this.pacman.dir = this.akabei.dir = R
+	}
+	moveRight() {
+		this.akabei.x > T*7.5  && this.movePac()
+		this.akabei.x > T*9+BW && this.end()
 	}
 	draw() {
 		const {pacman,isFrightened}= this
@@ -110,12 +110,6 @@ class Scene2 extends CoffBreak {
 		this.pacman.x = BW + T*3
 		this.akabei.x = BW + T*16
 	}
-	moveAka() {
-		const {akabei:a, sprite:spr}= this
-		a.x > spr.CaughtX ? super.moveAka(1.0):
-		a.x > spr.AkaMinX ? super.moveAka(0.1):(a.x=spr.AkaMinX)
-		return (a.x != spr.AkaMinX)
-	}
 	update() {
 		this.movePac()
 		if (!this.counter && this.moveAka())
@@ -133,6 +127,12 @@ class Scene2 extends CoffBreak {
 			this.end()
 			break
 		}
+	}
+	moveAka() {
+		const {akabei:a, sprite:spr}= this
+		a.x > spr.CaughtX ? super.moveAka(1.0):
+		a.x > spr.AkaMinX ? super.moveAka(0.1):(a.x=spr.AkaMinX)
+		return (a.x != spr.AkaMinX)
 	}
 	draw() {
 		const {akabei:a, sprite:spr, akaEyes,isRipped}= this
@@ -157,16 +157,16 @@ class Scene3 extends CoffBreak {
 		this.pacman.x = BW + T*6
 		this.akabei.x = BW + T*13
 	}
+	update() {
+		this.movePac()
+		this.moveAka()
+	}
 	moveAka() {
 		const {akabei:aka}= this
 		super.moveAka()
 		aka.dir == L
 			? aka.x < -T*10 && (aka.dir = R) && (this.akavx *= -1)
 			: aka.x > (T*13+BW) && this.end()
-	}
-	update() {
-		this.movePac()
-		this.moveAka()
 	}
 	draw() {
 		this.drawPac()
