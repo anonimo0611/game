@@ -1,8 +1,8 @@
 import '../_lib/mouse.js'
-import * as Pts    from '../src/sprites/points.js'
-import * as Fruit  from '../src/sprites/fruits.js'
-import PacSprite   from '../src/sprites/pacman.js'
-import GhsSpriteCb from '../src/sprites/ghost_cb.js'
+import * as Pts   from '../src/sprites/points.js'
+import * as Fruit from '../src/sprites/fruits.js'
+import PacSprite  from '../src/sprites/pacman.js'
+import {snagSpr}  from '../src/sprites/ghost_cb.js'
 import {GridSize,T,S,GAP,ghsSprite} from './_constants.js'
 
 export const View = function()
@@ -123,7 +123,7 @@ export const View = function()
 
 	function drawAkabei() {
 		const aka = ghsSprite
-		const spr = GhsSpriteCb.stakeClothes
+		const spr = snagSpr(Ctx)
 
 		Ctx.translate(S/4, S*9+S/4-GAP/4)
 
@@ -134,16 +134,16 @@ export const View = function()
 		{
 			aka.draw({size:S,x,y,...params})
 		}
-		{// Expand clothes
+		{// Snagged Clothing
 			const pos = Vec2.Zero, rates = [0.3, 0.5 ,1]
 			for (const i of range(3)) {
 				draw(...pos.vals, {animIdx:+(i==2)})
 				const nPos = Vec2.new(pos).add(S*0.75, S/4)
-				spr.stretchClothing(+(i==2), rates[i], {...nPos,size:S})
+				spr.drawSnaggedClothing(+(i==2), rates[i], {...nPos,size:S})
 				pos.x += S*1.2 + ((i+1)*GAP)
 			}
 		}
-		{// Stake and Cloth
+		{// Stake and Shard
 			const s = T/TileSize
 			const [sx,sy]= Vec2.new(spr.stakeSize).mul(s).vals
 			// Stake
@@ -152,11 +152,11 @@ export const View = function()
 			Ctx.scale(s, s)
 			spr.drawStake(Vec2.Zero)
 			Ctx.restore()
-			// Cloth
+			// Shard
 			Ctx.save()
 			Ctx.translate(S*6.9+sx, S-T/2-3*s)
 			Ctx.scale(s, s)
-			spr.drawCloth(Vec2.Zero)
+			spr.drawShard(Vec2.Zero)
 			Ctx.restore()
 		}
 		draw(ofst(4.00), 0, {isRipped: true,orient:U})
