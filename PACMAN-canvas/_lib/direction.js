@@ -9,7 +9,7 @@ export const Dir = new class {
 	/** @readonly */L = L
 
 	/** @readonly */
-	Opposite = freeze({[U]:D, [R]:L, [D]:U, [L]:R})
+	Opposite = freeze({Up:D, Right:L, Down:U, Left:R})
 
 	/** @param {KeyboardEvent|JQuery.KeyboardEventBase} e */
 	from(e, {wasd=false}={}) {
