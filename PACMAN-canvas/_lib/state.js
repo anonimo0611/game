@@ -5,10 +5,12 @@
 */
 class StateBase {
 	#owner
-	#eventBus = $({})
 	#last     = /**@type {?State}*/(null)
 	#curr     = /**@type {State} */('')
 	#default  = /**@type {State} */('')
+
+	/** @readonly */
+	#eventBus = $({})
 
 	/** @protected @param {Owner} owner */
 	constructor(owner) {this.#owner = owner}
