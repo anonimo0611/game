@@ -1,21 +1,21 @@
-// Scene
+//---- Scene ----
 
 interface Scene {update():void, draw?():void}
 
-// Coordinates
+//---- Coordinates ----
 
 type xyTuple  = Readonly<[x:number, y:number]>
 type Position = Readonly<{x:number, y:number}>
 
-// Direction
+//---- Direction ----
 
 type Direction = 'Up'|'Right'|'Down'|'Left'
 
-// Canvas API
+//---- Canvas API ----
 
 type Cvs2DStyle = string|CanvasGradient|CanvasPattern
 
-// jQuery
+//---- jQuery ----
 
 type Global = Window & typeof globalThis
 type JQData = any[]|JQuery.PlainObject|string|number|boolean
