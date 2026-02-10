@@ -1,4 +1,4 @@
-import {inputs}  from '../src/inputs.js'
+import {inputs}  from '../src/ui.js'
 import {Sound}   from './sound.js'
 import {Speaker} from './speaker.js'
 
