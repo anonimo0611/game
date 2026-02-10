@@ -1,11 +1,10 @@
 import {Dir}      from '../_lib/direction.js'
 import {Sound}    from '../_snd/sound.js'
 import {Confirm}  from '../_lib/confirm.js'
-import {Menu}     from './ui.js'
 import {State}    from './state.js'
 import {drawText} from './message.js'
 import {Score}    from './score.js'
-import {inputs,btns} from './inputs.js'
+import {Menu,inputs,btns} from './ui.js'
 
 const UserSettingsKey = 'anopacman'
 
