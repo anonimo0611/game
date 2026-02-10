@@ -126,7 +126,7 @@ export default class {
 			this.ctx.fillCircle(19*v, +4,  8, Colors.GhostEyes)
 		}
 	}
-	/** @param {L|R} orient */
+	/** @param {Horizontal} orient */
 	#drawEyesHoriz(orient) {
 		const v = (Vec2[orient].x < 0 ? -1:1)
 		for (const i of [0,1]) {
