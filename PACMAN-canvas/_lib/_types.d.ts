@@ -9,7 +9,9 @@ type Position = Readonly<{x:number, y:number}>
 
 //---- Direction ----
 
-type Direction = 'Up'|'Right'|'Down'|'Left'
+type Direction  = 'Up'|'Right'|'Down'|'Left'
+type Vertical   = 'Up'|'Down'
+type Horizontal = 'Left'|'Right'
 
 //---- Canvas API ----
 
