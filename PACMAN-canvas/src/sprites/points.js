@@ -1,8 +1,9 @@
-export {AllPts,GhostPts,FruitPts,cache}
+export {GhostPts,FruitPts,cache}
 
 const FruitCvs = canvas2D(null)
 const GhostCvs = canvas2D(null)
-const AllPts   = /**@type {const}*/([100,200,300,400,500,700,800,1e3,1600,2e3,3e3,5e3])
+
+/** @typedef {(typeof FruitPts | typeof GhostPts)[number]} PtsType */
 const GhostPts = /**@type {const}*/([200,400,800,1600])
 const FruitPts = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
 
@@ -36,10 +37,7 @@ const KerningMap = /**@type {const}*/({
 /** @type {ReadonlySet<number>} */
 const GtsPtsSet = new Set(GhostPts)
 
-/**
- @typedef {typeof AllPts[number]} PtsType
- @param {PtsType} pts
-*/
+/** @param {PtsType} pts */
 function cache(pts, size=T*2) {
 	const idx   = +GtsPtsSet.has(pts)
 	const ctx   = [FruitCvs, GhostCvs][idx].ctx
