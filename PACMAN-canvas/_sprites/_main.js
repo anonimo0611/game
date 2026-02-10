@@ -91,8 +91,8 @@ export const View = function()
 	function drawPoints()
 	{
 		/**
-		 @typedef {typeof Pts.AllPts[number]} Pts
-		 @type {(pts:Pts, x:number, y:number)=> void}
+		 @import {PtsType} from '../src/sprites/points'
+		 @type {(pts:PtsType, x:number, y:number)=> void}
 		*/
 		function draw(pts, x, y)
 		{
