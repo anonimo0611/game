@@ -1,6 +1,8 @@
+import * as _Menu  from '../_lib/menu.js'
+import {panelBtns} from './inputs.js';
+
 //---- Menus ----
 
-import * as _Menu from '../_lib/menu.js'
 export const Menu = freeze({
 	Level: new _Menu.DorpDown('LevelMenu'),
 	Extend:new _Menu.Slide('ExtendMenu'),
@@ -8,8 +10,7 @@ export const Menu = freeze({
 
 //---- Panels ----
 
-;/** @type {NodeListOf<HTMLButtonElement>} */
-(qSAll('.panelBtn')).forEach(btn=> {
+panelBtns.forEach(btn=> {
 	$(btn).on('keydown pointerdown', e=> {
 		if (e.key && !isEnterKey(e))
 			return

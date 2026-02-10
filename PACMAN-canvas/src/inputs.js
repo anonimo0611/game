@@ -13,8 +13,14 @@ const inputIds = /**@type {const}*/
 const buttonIds = /**@type {const}*/
 	(['clear','reset','start','demo','coff1','coff2','coff3'])
 
-export const inputs = /**@type {{[K in InputIds]:HTMLInputElement}}*/
+export const inputs =
+	/**@type {{[K in InputIds]:HTMLInputElement}}*/
 	(fromEntries(inputIds.map(id=>[id,getCtrl(id)])))
 
-export const btns = /**@type {{[K in ButtonIds]:HTMLButtonElement}}*/
+export const btns =
+	/**@type {{[K in ButtonIds]:HTMLButtonElement}}*/
 	(fromEntries(buttonIds.map(id=>[id,getCtrl(id+'Btn')])))
+
+export const panelBtns =
+	/**@type {NodeListOf<HTMLButtonElement>}*/
+	(document.querySelectorAll('.panelBtn'))
