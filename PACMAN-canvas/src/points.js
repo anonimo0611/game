@@ -9,8 +9,8 @@ const PtsMap = /**@type {Map<any,Points>}*/(new Map)
 State.on({_PacDying_Cleared:()=> PtsMap.clear()})
 
 /**
- @typedef {typeof Pts.AllPts[number]} Pts
- @typedef {{key:{points:Pts}, pos:Readonly<Position>, dur?:number, fn?:function}} PtsData
+ @import  {PtsType} from './sprites/points'
+ @typedef {{key:{points:PtsType}, pos:Position, dur?:number, fn?:function}} PtsData
 */
 export const PtsMgr = new class {
 	/** @type {(data:PtsData, fn?:function)=> void} */
