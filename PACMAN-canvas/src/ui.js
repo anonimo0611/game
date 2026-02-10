@@ -1,9 +1,3 @@
-function getCtrl(id='') {
-	let elem = document.getElementById(id)
-	if (elem instanceof HTMLElement) return elem
-	throw TypeError(`There is no element with the ID “${id}”.`)
-}
-
 //---- Inputs ----
 
 /** @typedef {typeof inputIds[number]} InputIds */
@@ -13,7 +7,7 @@ const inputIds = /**@type {const}*/
 
 export const inputs =
 	/**@type {{[K in InputIds]:HTMLInputElement}}*/
-	(fromEntries(inputIds.map(id=>[id,getCtrl(id)])))
+	(fromEntries(inputIds.map(id=>[id,requireElem(id)])))
 
 //---- Buttons ----
 
@@ -23,7 +17,7 @@ const buttonIds = /**@type {const}*/
 
 export const btns =
 	/**@type {{[K in ButtonIds]:HTMLButtonElement}}*/
-	(fromEntries(buttonIds.map(id=>[id,getCtrl(id+'Btn')])))
+	(fromEntries(buttonIds.map(id=>[id,requireElem(id+'Btn')])))
 
 const panelBtns =
 	/**@type {NodeListOf<HTMLButtonElement>}*/
