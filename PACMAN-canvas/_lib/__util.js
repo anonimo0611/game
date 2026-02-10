@@ -70,6 +70,14 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 */const byId = elementId=> document.getElementById(elementId)
 
 /**
+ @param {string} id
+ @throws {ReferenceError} If no element exists with the given ID.
+*/const requireElem = id=> {
+	const elem = byId(id); if (elem) return elem
+	throw ReferenceError(`There is no element with the ID “${id}”.`)
+}
+
+/**
  @param  {string} selector
  @return {?HTMLElement}
 */const qS = selector=> document.querySelector(selector)
@@ -141,8 +149,8 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 }
 
 /**
- @param {Readonly<Position>} pos1
- @param {Readonly<Position>} pos2
+ @param {Position} pos1
+ @param {Position} pos2
  @param {number}  r1  radius1
  @param {number} [r2] radius2
 */const circleCollision = (pos1,pos2,r1,r2=r1)=>
