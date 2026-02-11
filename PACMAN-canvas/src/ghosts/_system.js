@@ -259,9 +259,10 @@ const FrightMode = function() {
 			signalDirectionReversal()
 			this.Dur = TimeTable[Game.clampedLv-1]
 			this.Dur == 0 && !State.isAttract
-				? $(Ghosts).trigger(Events.FleeTime) : this.#set(true)
+				? $(Ghosts).trigger(Events.FleeTime)
+				: this.#set(true)
 		}
-		#set(isOn=true) {
+		#set(isOn=false) {
 			_session = (isOn? this : null)
 			$(Ghosts)
 				.trigger(Events.FrightMode, isOn)
@@ -276,7 +277,7 @@ const FrightMode = function() {
 			if (State.isInGame && !Timer.frozen) {
 				const et = (this.#et += Game.interval)/1e3
 				if (et >= this.Dur-2) this.#flashing()
-				if (et >= this.Dur || this.caughtAll) this.#set(false)
+				if (et >= this.Dur || this.caughtAll) this.#set()
 			}
  		}
 	}
