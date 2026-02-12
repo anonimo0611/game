@@ -53,6 +53,7 @@ export class Ghost extends Actor {
 	constructor(dir=L, {type=0,tile:[col,row]=[0,0],align=0}={}) {
 		super(col,row)
 		$(this).on({
+		 [Events.RoundEnds]:   this.#onRoundEnds,
 		 [Events.FrightMode]:  this.#setFrightMode,
 		 [Events.Reverse]: _=> this.#revSig   = true,
 		 [Events.FleeTime]:_=> this.#fleeTime = 400/Game.interval,
@@ -84,9 +85,6 @@ export class Ghost extends Actor {
 			if (g.isScattering) return GhsSpeed.Base
 			return g.chaseSpeed
 		}(this) * Game.moveSpeed
-	}
-	setFadeOut() {
-		this.#fader = new Actor.SpawnFader(400,true)
 	}
 	draw() {
 		if (State.isIntro) return
@@ -248,5 +246,8 @@ export class Ghost extends Actor {
 	#setEscapeState() {
 		Sound.playEscapaingEyes()
 		this.state.toEscaping()
+	}
+	#onRoundEnds() {
+		this.#fader.set(400,true)
 	}
 }

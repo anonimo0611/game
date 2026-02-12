@@ -14,7 +14,7 @@ const PtsLst = Pts.GhostPts
 const Ghosts = /**@type {Ghost[]}*/([])
 
 export const Events = toEnumObject(
-	['FrightMode','Reverse','FleeTime'])
+	['FrightMode','Reverse','FleeTime','RoundEnds'])
 
 /**
  When always chase mode,
@@ -84,7 +84,7 @@ export const GhsMgr = new class {
 		ghosts.forEach((g,i)=> Ghosts[i] = g)
 	}
 	#onRoundEnds() {
-		Ghosts.forEach(g=> g.setFadeOut())
+		$(Ghosts).trigger(Events.RoundEnds)
 	}
 	#onInGame() {
 		Sound.playSiren()
