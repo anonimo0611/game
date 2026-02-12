@@ -76,20 +76,17 @@ export const Fruit = new class {
 			: Fruit.#checkIntersects()
 	}
 	drawTarget() {
-		if (State.isInGame && Ticker.paused)
+		if (State.isInGame && Ticker.paused) {
 			return
-		if (Fruit.showTarget)  {
-			Ctx.save()
-			Ctx.setAlpha(_fadeOut?.alpha)
-			Ctx.translate(...TargetPos.vals)
-			Spr.Cache.draw()
-			Ctx.restore()
+		}
+		if (Fruit.showTarget) {
+			Spr.Cache.draw(Fg, TargetPos, _fadeOut?.alpha)
 		}
 		PtsMgr.drawFruitPts()
 	}
 	drawLevelCounter() {
 		const [x,y,w,h] = LevelsRect.vals
-		Ctx.drawImage(HUD.canvas, x,y,w,h, x,y,w,h)
+		Fg.drawImage(HUD.canvas, x,y,w,h, x,y,w,h)
 	}
 	#setLevelCounter() {
 		const [x,y,w,h]  = LevelsRect.vals

@@ -116,8 +116,8 @@ export const Game = new class {
 		Actors.update()
 	}
 	#draw() {
-		Ctx.clear()
-		State.isDemoScene
+		Fg.clear()
+		State.isDemoMode
 			? Demo.draw()
 			: Game.#drawMain()
 	}

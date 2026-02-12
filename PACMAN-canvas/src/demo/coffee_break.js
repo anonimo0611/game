@@ -45,11 +45,12 @@ export class CoffBreak {
 		this.akabei.x += this.akavx * rate
 	}
 	drawPac(scale=1) {
-		this.pacman.sprite.draw(this.pacman, {scale})
+		const {pacman:{center,orient}}= this
+		this.pacman.sprite.draw({center,orient,scale})
 	}
 	drawAka(data={}) {
 		const {akabei:{pos,animIdx}}= this
-		this.akabei.sprite.draw({animIdx, ...data, ...pos})
+		this.akabei.sprite.draw(Fg,{animIdx, ...data, ...pos})
 	}
 	draw() {
 		State.wasFlashing && Fruit.drawLevelCounter()
@@ -93,9 +94,9 @@ class Scene1 extends CoffBreak {
 		this.akabei.x > T*9+BW && this.end()
 	}
 	draw() {
-		const {pacman,isFrightened}= this
+		const {pacman:{dir},isFrightened}= this
 		this.drawAka({isFrightened})
-		this.drawPac(pacman.dir == R ? 4:1)
+		this.drawPac(dir == R ? 4:1)
 		super.draw()
 	}
 }
@@ -106,7 +107,7 @@ class Scene2 extends CoffBreak {
 		this.counter  = 0
 		this.akaEyes  = L
 		this.isRipped = false
-		this.sprite   = snagSpr(Ctx)
+		this.sprite   = snagSpr(Fg)
 		this.pacman.x = BW + T*3
 		this.akabei.x = BW + T*16
 	}

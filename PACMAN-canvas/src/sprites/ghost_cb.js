@@ -1,6 +1,6 @@
 export default class {
 	/** @readonly */ctx
-	/** @param {ExtendedContext2D} ctx */
+	/** @param {EnhancedCtx2D} ctx */
 	constructor(ctx) {this.ctx = ctx}
 	drawHalfNakedBody() {
 		const {ctx}= this
@@ -120,13 +120,13 @@ export default class {
 	}
 }
 
-/** @param {ExtendedContext2D} ctx */
+/** @param {EnhancedCtx2D} ctx */
 export function snagSpr(ctx) {
 	return freeze( new Snag(ctx) )
 }
 class Snag {
 	/** @readonly */ctx
-	/** @param {ExtendedContext2D} ctx */
+	/** @param {EnhancedCtx2D} ctx */
 	constructor(ctx) {this.ctx = ctx}
 	CaughtX   = BW/2 + T/2
 	AkaMinX   = this.CaughtX - T

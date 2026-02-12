@@ -9,7 +9,7 @@ const States = /**@type {const}*/([
 class GameState extends StateBase {
 	constructor() {super(globalThis), this.init(States)}
 	get isStartMode() {return State.isIntro   || State.isReady}
-	get isDemoScene() {return State.isAttract || State.isCoffBreak}
+	get isDemoMode()  {return State.isAttract || State.isCoffBreak}
 
 	/**
 	 @param {StateType} s

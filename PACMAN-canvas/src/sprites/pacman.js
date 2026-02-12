@@ -10,15 +10,15 @@ export default class {
 	#mouthAngle = 0
 
 	/** @readonly */ctx
-	/** @readonly */isMain
+	/** @readonly */isBoard
 	/**
-	 @param {ExtendedContext2D} ctx
+	 @param {EnhancedCtx2D} ctx
 	 @param {0|1|2} mouthOpenings
 	 0=closed, 1=middle opened, 2=max opened
 	*/
 	constructor(ctx, mouthOpenings=0) {
-		this.ctx    = ctx
-		this.isMain = ctx.canvas.id == 'board_main'
+		this.ctx     = ctx
+		this.isBoard = ctx.canvas.id == 'board_main'
 		this.#mouthAngle = [0,OpenMid,OpenMax][mouthOpenings]
 	}
 	update({closed=false,hidden=false,onWall=false}={}) {
@@ -38,20 +38,23 @@ export default class {
 	draw({
 		center:{x,y}={x:0,y:0},
 		orient = /**@type {Direction}*/(L),
+		alpha  = 1,
+		scale  = 1,
 		hidden = false,
 		closed = false,
-		radius = PacRadius}={}, {scale=1}={}
+		radius = PacRadius}={}
 	) {
 		if (hidden)
 			return
 		if (this.#dyingSpr) {
-			this.isMain && (x = clamp(x, radius, BW-radius))
+			this.isBoard && (x = clamp(x, radius, BW-radius))
 			return this.#dyingSpr.draw({x,y})
 		}
 		const {ctx}  = this
 		const PacR   = radius*scale
 		const mAngle =(closed? 0:this.#mouthAngle)
 		ctx.save()
+		ctx.setAlpha(alpha)
 		ctx.translate(x,y)
 		ctx.rotate(Rotation.get(orient) ?? 0)
 		ctx.beginPath()

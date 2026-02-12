@@ -1,26 +1,14 @@
 import {Dir}    from '../_lib/direction.js'
-import {State}  from './state.js'
 import {Maze}   from './maze.js'
 import {Player} from './player/player.js'
 import {GhsMgr} from './ghosts/_system.js'
 import Sprite   from './sprites/pacman.js'
-
-class SpawnFade {
-	#fadeIn = /**@type {?Fade}*/(Fade.in(500))
-	apply(max=1) {
-		!State.isReady
-			? Ctx.setAlpha(max)
-			: Ctx.setAlpha(this.#fadeIn?.alpha)
-	}
-	update(max=1) {
-		State.isReady  && this.#fadeIn?.update(max)
-		State.isInGame &&(this.#fadeIn &&= null)
-	}
-}
+import {SpawnFader} from './actor_fader.js'
 
 export class Actor {
 	/** @readonly */
-	static SpawnFade = SpawnFade
+	static SpawnFader = SpawnFader
+
 	pos = Vec2.Zero
 	#orient = /**@type {Direction}*/(L)
 	#movDir = /**@type {Direction}*/(L)
@@ -102,7 +90,7 @@ export class Actor {
 		return !this.passedTileCenter && this.tilePixel <= spd
 	}
 	drawCenterDot({r=3,color='red'}={}) {
-		Ctx.fillCircle(...this.center.vals, r, color)
+		Fg.fillCircle(...this.center.vals, r, color)
 	}
 }
 
@@ -121,7 +109,7 @@ export const Actors = new class {
 
 export class PacMan extends Actor {
 	/** @readonly */
-	sprite = new Sprite(Ctx)
+	sprite = new Sprite(Fg)
 	constructor(col=0,row=0) {super(col,row)}
 	get radius() {return PacRadius}
 	get hidden() {return Timer.frozen}

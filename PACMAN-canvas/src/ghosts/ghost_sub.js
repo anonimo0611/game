@@ -53,5 +53,6 @@ class Guzuta extends Ghost {
 			? this.scatterTile.add(.5).mul(T) : center
 	}
 }
+
 const Classes = freeze([Akabei,Pinky,Aosuke,Guzuta])
 State.on({_Ready:()=> GhsMgr.initialize(Classes.map(cls=> new cls))})

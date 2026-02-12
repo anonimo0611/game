@@ -40,10 +40,10 @@ class Points {
 	draw() {
 		const sideOfst = T*1.25
 		const {pos:{x,y},cache:{ctx,w,h}}= this
-		Ctx.save()
-		Ctx.setAlpha(this.fade?.alpha)
-		Ctx.translate(clamp(x, sideOfst, BW-sideOfst), y)
-		Ctx.drawImage(ctx.canvas, -w/2,-h/2)
-		Ctx.restore()
+		Fg.save()
+		Fg.setAlpha(this.fade?.alpha)
+		Fg.translate(clamp(x, sideOfst, BW-sideOfst), y)
+		Fg.drawImage(ctx.canvas, -w/2,-h/2)
+		Fg.restore()
 	}
 }

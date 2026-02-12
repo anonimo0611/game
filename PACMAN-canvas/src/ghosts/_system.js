@@ -84,7 +84,7 @@ export const GhsMgr = new class {
 		ghosts.forEach((g,i)=> Ghosts[i] = g)
 	}
 	#onRoundEnds() {
-		Ghosts.forEach(g=> g.sprite.setFadeOut())
+		Ghosts.forEach(g=> g.setFadeOut())
 	}
 	#onInGame() {
 		Sound.playSiren()
@@ -112,7 +112,7 @@ export const GhsMgr = new class {
 		if (Timer.frozen)
 			return
 		if (State.isInGame
-		 || State.isDemoScene)
+		 || State.isDemoMode)
 			GhsMgr.#animIdx ^= +(Ticker.count % 6 == 0)
 	}
 	#updateGhosts() {

@@ -8,7 +8,8 @@ export class Dying {
 	#fadeOut = Fade.out(300)
 	/** @readonly */ctx
 	/** @readonly */r
-	constructor(ctx=Ctx, radius=PacRadius) {
+	/** @param {EnhancedCtx2D} ctx */
+	constructor(ctx, radius=PacRadius) {
 		this.ctx = ctx
 		this.r = radius
 		this.#innerR = radius/4

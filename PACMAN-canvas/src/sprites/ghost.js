@@ -7,16 +7,17 @@ export default class {
 		this.ctx = canvas2D(null, w, h).ctx
 		this.spr = new CBSprite(this.ctx)
 	}
-	#fadeOut   = /**@type {?Fade}*/(null)
 	#resurrect = /**@type {?Fade}*/(null)
-	setFadeOut()   {this.#fadeOut ||= Fade.out(400)}
-	setResurrect() {this.#resurrect = Fade.in (600)}
-	draw({
-		mainCtx=Ctx,x=0,y=0,
+	setResurrect() {this.#resurrect ||= Fade.in(600)}
+
+	/** @param {EnhancedCtx2D} mainCtx */
+	draw(mainCtx, {
+		x=0,y=0,
 		type         = 0,
 		animIdx      = 0,
 		spriteIdx    = 0,
 		size         = T*2,
+		alpha        = 1,
 		orient       = /**@type {orient}*/(L),
 		isAngry      = false,
 		isFrightened = false,
@@ -29,8 +30,8 @@ export default class {
 		const finalize = ()=> {
 			ctx.restore()
 			mainCtx.save()
+			mainCtx.setAlpha(alpha)
 			mainCtx.translate(x+size/4, y+size/4)
-			mainCtx.setAlpha(this.#fadeOut?.alpha)
 			mainCtx.drawImage(ctx.canvas, -size/2, -size/2)
 			mainCtx.restore()
 		}
@@ -52,7 +53,7 @@ export default class {
 		if (!isEscaping) {
 			ctx.save()
 			this.#resurrect?.apply(ctx)
-			this.#drawAngerGlow({x,y,isAngry,size})
+			this.#drawAngerGlow(mainCtx, {x,y,isAngry,size})
 			this.#drawBody({animIdx,isRipped,isMended})
 			if (isFrightened) {
 				ctx.fillStyle   =
@@ -75,7 +76,6 @@ export default class {
 		finalize()
 	}
 	update() {
-		this.#fadeOut?.update()
 		if (this.#resurrect?.update() == false)
 			this.#resurrect = null
 	}
@@ -146,14 +146,15 @@ export default class {
 		ctx.addLinePath([ +3, 9],[+11,17],[+15,17],[+25, 9],[+30, 9],[36,17])
 		ctx.stroke()
 	}
-	#drawAngerGlow({x=0,y=0, isAngry=false, size=T*2}) {
+	/** @param {EnhancedCtx2D} mainCtx */
+	#drawAngerGlow(mainCtx, {x=0,y=0, isAngry=false, size=T*2}) {
 		if (!isAngry) return
 		const {width:W}=Glow, S=W*1.2
-		Ctx.save()
-		Ctx.globalAlpha = this.#resurrect?.alpha ?? 1
-		Ctx.translate(x+size/4, y+size/4)
-		Ctx.drawImage(Glow, 0,0, W,W, -S/2,-S/2, S,S)
-		Ctx.restore()
+		mainCtx.save()
+		mainCtx.globalAlpha = this.#resurrect?.alpha ?? 1
+		mainCtx.translate(x+size/4, y+size/4)
+		mainCtx.drawImage(Glow, 0,0, W,W, -S/2,-S/2, S,S)
+		mainCtx.restore()
 	}
 }
 const Glow = function() {

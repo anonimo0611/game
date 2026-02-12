@@ -9,6 +9,7 @@ import {PacMan}   from '../actor.js'
 import {GhsMgr}   from '../ghosts/_system.js'
 import {Mover}    from './controller.js'
 import {TunEntry} from './tunnel.js'
+import {SpawnFader} from '../actor_fader.js'
 
 const AteDotEvent = 'AteDot'
 
@@ -17,13 +18,14 @@ class PlayerCore extends PacMan {
 	#sinceLastEating = 0
 
 	/** @private @type {Mover} */
-	mov        = new Mover(this)
-	#tunEntry  = new TunEntry
-	#spawnFade = new Actor.SpawnFade
+	mov       = new Mover(this)
+	#fader    = new Actor.SpawnFader
+	#tunEntry = new TunEntry
 
 	constructor()  {super(13.5, 24)}
 	get closed()   {return State.isInGame == false}
 	get maxAlpha() {return Ctrl.semiTransPac? .75:1}
+	get alpha()    {return this.#fader.alpha(this.maxAlpha)}
 	get speed()    {return this.mov.speed}
 	get onWall()   {return this.mov.onWall}
 	get tunEntry() {return this.#tunEntry}
@@ -41,15 +43,12 @@ class PlayerCore extends PacMan {
 	draw() {
 		if (State.isIntro)
 			return
-		Ctx.save()
-		this.#spawnFade.apply(this.maxAlpha)
 		this.sprite.draw(this)
 		this.drawCenterDot()
-		Ctx.restore()
 	}
 	update() {
-		this.#spawnFade.update(this.maxAlpha)
 		this.sprite.update(this)
+		this.#fader.update(this.maxAlpha)
 		if (this.closed || this.hidden)
 			return
 		this.#sinceLastEating += Game.interval
@@ -60,7 +59,7 @@ class PlayerCore extends PacMan {
 		for (const _ of range(steps)) {
 			this.#eatDot(this.tileIdx)
 			this.mov.update(this.speed/steps)
-			if (this.mov.onWall) break
+			if (this.onWall) break
 		}
 	}
 	#eatDot(tileIdx=-1) {

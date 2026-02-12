@@ -19,7 +19,7 @@ export class Ghost extends Actor {
 	/** @readonly */init
 	/** @readonly */state
 	/** @readonly */sprite = new Sprite
-	#fadeIn = new Actor.SpawnFade
+	#fader = new Actor.SpawnFader
 	#fleeTime   = -1
 	#started    = false
 	#revSig     = false
@@ -28,6 +28,7 @@ export class Ghost extends Actor {
 	get animIdx()      {return GhsMgr.animIndex}
 	get spriteIdx()    {return GhsMgr.spriteIdx}
 	get maxAlpha()     {return Ctrl.showTargets? .75:1}
+	get alpha()        {return this.#fader.alpha(this.maxAlpha)}
 
 	get chaseOffset()  {return 0}
 	get chaseSpeed()   {return GhsSpeed.Base}
@@ -84,16 +85,16 @@ export class Ghost extends Actor {
 			return g.chaseSpeed
 		}(this) * Game.moveSpeed
 	}
+	setFadeOut() {
+		this.#fader = new Actor.SpawnFader(400,true)
+	}
 	draw() {
 		if (State.isIntro) return
-		Ctx.save()
-		this.#fadeIn.apply(this.maxAlpha)
-		this.sprite.draw(this)
-		Ctx.restore()
+		this.sprite.draw(Fg,this)
 	}
 	update() {
-		this.#fadeIn.update(this.maxAlpha)
 		this.sprite.update()
+		this.#fader.update(this.maxAlpha)
 		State.isInGame && this.#update()
 	}
 	#update() {

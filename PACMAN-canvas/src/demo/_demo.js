@@ -4,24 +4,18 @@ import {State}     from '../state.js'
 import {Attract}   from './attract.js'
 import {CoffBreak} from './coffee_break.js'
 
-const Events = 'pointerdown_mousemove_keydown_scroll_resize_wheel'
+const Events = 'blur_focus_pointerdown_mousemove_keydown_scroll_resize_wheel'
 
 /** Attract Mode will begin after a period of inactivity. */
 const RunTimer = new class {
 	#cnt = 0
+	reset() {this.#cnt = 0}
 	constructor() {State.onChange(()=> this.sync())}
-	reset()  {this.#cnt = 0}
-	pause()  {Ticker.pause(true) && this.reset()}
-	resume() {Ticker.pause(false)}
 	sync() {
 		this.reset()
-		!State.isTitle?
+		State.isTitle == false ?
 			$off('.RunTimer'):
-			$onNS('RunTimer', {
-				blur:    ()=> this.pause(),
-				focus:   ()=> this.resume(),
-				[Events]:()=> this.reset(),
-			})
+			$onNS('RunTimer', {[Events]:()=> this.reset()})
 	}
 	update() {
 		(!document.hasFocus() || Confirm.opened || Ctrl.activeElem)

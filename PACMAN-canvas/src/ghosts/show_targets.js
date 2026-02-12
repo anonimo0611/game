@@ -6,6 +6,8 @@ import {GhsMgr} from '../ghosts/_system.js'
 import {Ghost}  from './ghost.js'
 import {GuzutaThreshold} from './ghost_sub.js'
 
+const ctx = Fg
+
 export default new class {
 	/** @param {readonly Ghost[]} ghosts */
 	draw(ghosts) {
@@ -45,11 +47,11 @@ export default new class {
 		if (this.#markerDisabled(g))
 			return
 		const {x,y}= this.#getTargetPos(g)
-		Ctx.save()
-		Ctx.setAlpha(0.8)
-		Ctx.fillCircle  (x,y, T*0.4, GhsColors[g.type])
-		Ctx.strokeCircle(x,y, T*0.4, 'white', 4)
-		Ctx.restore()
+		ctx.save()
+		ctx.setAlpha(0.8)
+		ctx.fillCircle  (x,y, T*0.4, GhsColors[g.type])
+		ctx.strokeCircle(x,y, T*0.4, 'white', 4)
+		ctx.restore()
 	}
 	/**
 	 @param {Ghost}  g
@@ -59,32 +61,32 @@ export default new class {
 		const {center:{x,y},dir,inTunSide}= Player.core
 		const fwdXY = Player.forwardPos(ofst).vals
 		const ofsXY = Player.offsetTarget(ofst).vals
-		Ctx.save()
-		Ctx.setAlpha(0.8)
-		Ctx.lineWidth   = 6
-		Ctx.strokeStyle = GhsColors[g.type]
+		ctx.save()
+		ctx.setAlpha(0.8)
+		ctx.lineWidth   = 6
+		ctx.strokeStyle = GhsColors[g.type]
 		if (g.type == GhsType.Pinky && !inTunSide
 		 || g.type == GhsType.Aosuke) {
 			dir != U
-				? Ctx.newLinePath([x,y], fwdXY)
-				: Ctx.newLinePath([x,y], fwdXY).lineTo(...ofsXY)
-			Ctx.stroke()
+				? ctx.newLinePath([x,y], fwdXY)
+				: ctx.newLinePath([x,y], fwdXY).lineTo(...ofsXY)
+			ctx.stroke()
 		}
 		if (g.type == GhsType.Aosuke) {
 			const tgtXY = g.chasePos.vals
 			const akaXY = GhsMgr.akaCenterPos.vals
-			Ctx.newLinePath(akaXY, ofsXY, tgtXY).stroke()
-			Ctx.fillCircle(...ofsXY, 8, GhsColors[g.type])
+			ctx.newLinePath(akaXY, ofsXY, tgtXY).stroke()
+			ctx.fillCircle(...ofsXY, 8, GhsColors[g.type])
 		}
-		Ctx.restore()
+		ctx.restore()
 	}
 	/** @param {Ghost} g */
 	#guzutaCircle(g) {
 		const {center}= Player.core
-		Ctx.save()
-		Ctx.translate(...center.vals)
-		Ctx.setAlpha(g.chasePos.eq(center) ? 0.8 : 0.4)
-		Ctx.strokeCircle(0,0, T*GuzutaThreshold, GhsColors[g.type], 6)
-		Ctx.restore()
+		ctx.save()
+		ctx.translate(...center.vals)
+		ctx.setAlpha(g.chasePos.eq(center) ? 0.8 : 0.4)
+		ctx.strokeCircle(0,0, T*GuzutaThreshold, GhsColors[g.type], 6)
+		ctx.restore()
 	}
 }

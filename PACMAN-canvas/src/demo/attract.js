@@ -22,7 +22,11 @@ export class Attract {
 	subAct = new EnergizerAct
 
 	/** @private */
-	constructor() {$onNS('.Attract',{click_keydown_blur:this.quit})}
+	constructor() {
+		!document.hasFocus()
+			? this.quit()
+			: $onNS('.Attract',{click_keydown_blur:this.quit})
+	}
 	update() {this.subAct.update()}
 	GhsEntries = /**@type {const}*/([
 		// time, col1, col2, row, txt1, txt2
@@ -44,7 +48,7 @@ export class Attract {
 			[[25, DotPts, +true],
 			 [27, PowPts, +this.subAct.pow.show],
 			].forEach(([row,pts,showDot],i)=> {
-				drawDot(Ctx, 10, row-1, i==1, !!showDot)
+				drawDot(Fg, 10, row-1, i==1, !!showDot)
 				drawText(12.0, row, null, pts)
 				drawText(14.3, row, null,'PTS', Small)
 			})
@@ -52,7 +56,7 @@ export class Attract {
 		if (et > 90) {
 			const {extendScore}= Ctrl
 			if (this.subAct.outward) {
-				drawDot(Ctx, 4, 19, true, this.subAct.pow.show)
+				drawDot(Fg, 4, 19, true, this.subAct.pow.show)
 			}
 			if (extendScore > 0) {
 				const text = `BONUS　PACMAN　FOR　${extendScore}`
@@ -64,7 +68,7 @@ export class Attract {
 		Fruit.drawLevelCounter()
 	}
 	drawGhostOnTable(type=0, row=0) {
-		this.ghsSpr.draw({type,orient:R,x:(T*5),y:(T*row)})
+		this.ghsSpr.draw(Fg,{type,orient:R,x:(T*5),y:(T*row)})
 	}
 	quit() {
 		$off('.Attract')

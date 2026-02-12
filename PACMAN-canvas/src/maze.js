@@ -76,7 +76,7 @@ class PowDotsRenderer extends PowBlinker {
 	draw() {
 		for (const {x,y} of PowMap.values()) {
 			if (!State.isInGame || Ticker.paused || this.show)
-				Maze.drawDot(Ctx, x,y, true)
+				Maze.drawDot(Fg, x,y, true)
 		}
 	}
 }
@@ -156,7 +156,7 @@ export const Maze = freeze(new class {
 	}
 
 	/**
-	 @param {ExtendedContext2D} ctx
+	 @param {EnhancedCtx2D} ctx
 	 @param {number} col
 	 @param {number} row
 	*/
