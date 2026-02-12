@@ -178,45 +178,47 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 }
 
 class Fade {
-	/** @readonly */ static IN	= 0;
-	/** @readonly */ static OUT = 1;
-	static in (dur=500, delay=0) {return new Fade(dur, delay, Fade.IN)}
-	static out(dur=500, delay=0) {return new Fade(dur, delay, Fade.OUT)}
+	/** @readonly */ static IN  = 0
+	/** @readonly */ static OUT = 1
+	static set(dur=500, {delay=0,isFadeOut=false}={}) {
+		return new Fade(dur, delay, isFadeOut? 1:0)
+	}
+	static in (dur=500, delay=0) {return new Fade(dur, delay, 0)}
+	static out(dur=500, delay=0) {return new Fade(dur, delay, 1)}
 
-	#elapsed = 0;
-	#type; #dur; #delay; #alpha;
-
+	#et=0; #type; #dur; #delay; #alpha;
 	/**
+	 @private
 	 @param {number} duration
 	 @param {number} delay
-	 @param {0|1} type Fade.IN or Fade.OUT
+	 @param {0|1} type Fade.IN / Fade.OUT
 	*/
 	constructor(duration, delay, type=Fade.IN) {
 		this.#type	= type
 		this.#dur	= duration
 		this.#delay = delay
-		this.#alpha = type == Fade.IN ? 0:1
+		this.#alpha = (type == Fade.IN) ? 0:1
 	}
 	get alpha()   {return this.#alpha}
 	get type()	  {return this.#type}
  	get isIn()	  {return this.#type == Fade.IN}
  	get isOut()   {return this.#type == Fade.OUT}
-	get running() {return this.#elapsed < (this.#delay+this.#dur)}
+	get running() {return this.#et < (this.#delay+this.#dur)}
 
 	/**
-	 @param {number} maxAlpha
+	 @param   {number}  maxAlpha
 	 @returns {boolean} Whether the fade animation is currently active
 	*/
-	update(maxAlpha = 1) {
-		this.#elapsed += Ticker.Interval
-		if (this.#elapsed < this.#delay) {
-			this.#alpha = this.#type == Fade.IN ? 0 : maxAlpha
+	update(maxAlpha=1) {
+		this.#et += Ticker.Interval
+		if (this.#et < this.#delay) {
+			this.#alpha = (this.#type == Fade.IN)? 0:maxAlpha
 			return true
 		}
-		const progress = Math.min((this.#elapsed-this.#delay)/this.#dur, 1)
+		const prog = Math.min((this.#et-this.#delay)/this.#dur, 1)
 		this.#type == Fade.IN
-			? (this.#alpha = progress*maxAlpha)
-			: (this.#alpha = (1-progress)*maxAlpha)
+			? (this.#alpha = prog*maxAlpha)
+			: (this.#alpha = (1-prog)*maxAlpha)
 		return this.running
 	}
 
