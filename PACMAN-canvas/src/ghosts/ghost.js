@@ -248,6 +248,6 @@ export class Ghost extends Actor {
 		this.state.toEscaping()
 	}
 	#onRoundEnds() {
-		this.#fader.set(400,true)
+		this.#fader = new Actor.SpawnFader(400,true)
 	}
 }
