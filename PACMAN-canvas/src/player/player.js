@@ -9,7 +9,6 @@ import {PacMan}   from '../actor.js'
 import {GhsMgr}   from '../ghosts/_system.js'
 import {Mover}    from './controller.js'
 import {TunEntry} from './tunnel.js'
-import {SpawnFader} from '../actor_fader.js'
 
 const AteDotEvent = 'AteDot'
 
