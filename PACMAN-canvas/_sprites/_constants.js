@@ -17,7 +17,7 @@ export function resize()
 	{
 		[S,GAP] = [T*2,T*.25],
 		ghsSprite.ctx.resize(S*4, S*3)
-		Ctx.resize(
+		Fg.resize(
 			GridSize.x*S+GAP*2,
 			GridSize.y*S+GAP*1
 		)

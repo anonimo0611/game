@@ -88,9 +88,9 @@ class AnimData
 			? ctx.translate(S/3.3, T/2)
 			: ctx.translate(S/2.0, T/2)
 
-		data?.ghost.draw({
+		data?.ghost.draw(ctx,
+		{
 			size:        S,
-			mainCtx:     ctx,
 			type:        data.type-1,
 			animIdx:     data.animIdx,
 			orient:      data.orient,

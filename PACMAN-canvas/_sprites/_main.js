@@ -9,41 +9,42 @@ export const View = function()
 {
 	/** @param {number} colIdx */
 	const ofst = colIdx=> (S*colIdx)+(GAP*colIdx)
+	const ctx  = Fg
 
 	function draw()
 	{
-		Ctx.save()
-		Ctx.translate(GAP, GAP/2)
-		Ctx.clear()
+		ctx.save()
+		ctx.translate(GAP, GAP/2)
+		ctx.clear()
 		drawGridLines()
 		drawFruits()
 		drawGhosts()
 		drawPoints()
 		drawPacman()
 		drawAkabei()
-		Ctx.restore()
+		ctx.restore()
 	}
 
 	function drawGridLines()
 	{
-		Ctx.save()
-		Ctx.translate(-GAP/2, 0)
-		Ctx.setLineDash([2,2])
-		Ctx.beginPath()
+		ctx.save()
+		ctx.translate(-GAP/2, 0)
+		ctx.setLineDash([2,2])
+		ctx.beginPath()
 		const {x:Cols,y:Rows}= GridSize
-		for (const y of range(Cols+0)) Ctx.setLinePath([ofst(y), 0], [ofst(y), Rows*S])
-		for (const x of range(Rows+1)) Ctx.setLinePath([0, x*S], [Cols*S+GAP, x*S])
-		Ctx.lineWidth   = 2
-		Ctx.strokeStyle = '#555555'
-		Ctx.stroke()
-		Ctx.restore()
+		for (const y of range(Cols+0)) ctx.setLinePath([ofst(y), 0], [ofst(y), Rows*S])
+		for (const x of range(Rows+1)) ctx.setLinePath([0, x*S], [Cols*S+GAP, x*S])
+		ctx.lineWidth   = 2
+		ctx.strokeStyle = '#555555'
+		ctx.stroke()
+		ctx.restore()
 	}
 
 	function drawFruits()
 	{
 		for (const i of range(8))
 		{
-			Fruit.draw(Ctx, i, ofst(i)+S/2, S/2, S/16)
+			Fruit.draw(ctx, i, ofst(i)+S/2, S/2, S/16)
 		}
 	}
 
@@ -53,10 +54,10 @@ export const View = function()
 		{
 			for (const col of range(0,8))
 			{
-				Ctx.save()
-				Ctx.translate(T/2, T/2)
+				ctx.save()
+				ctx.translate(T/2, T/2)
 				drawGhost(col, row)
-				Ctx.restore()
+				ctx.restore()
 			}
 		}
 	}
@@ -70,7 +71,8 @@ export const View = function()
 		const [x,y]= [ofst(col), row*S]
 		if (row < 5)
 		{
-			ghsSprite.draw({
+			ghsSprite.draw(ctx,
+			{
 				x,y,size:S,
 				type:  row-1,
 				animIdx: +(col % 2 != 0),
@@ -78,7 +80,8 @@ export const View = function()
 			})
 			return
 		}
-		ghsSprite.draw({
+		ghsSprite.draw(ctx,
+		{
 			x,y,size:S,
 			orient:/**@type {const}*/([R,R,R,R,U,L,D,R])[col],
 			animIdx:    +(col % 2 != 0),
@@ -96,11 +99,11 @@ export const View = function()
 		*/
 		function draw(pts, x, y)
 		{
-			const {ctx,w,h}= Pts.cache(pts, S)
-			Ctx.save()
-			Ctx.translate(x,y)
-			Ctx.drawImage(ctx.canvas, -w/2, -h/2)
-			Ctx.restore()
+			const {ctx:cache,w,h}= Pts.cache(pts, S)
+			ctx.save()
+			ctx.translate(x,y)
+			ctx.drawImage(cache.canvas, -w/2, -h/2)
+			ctx.restore()
 		}
 		const ptsTable = /** @type {const} */
 		([
@@ -117,22 +120,22 @@ export const View = function()
 		{
 			const center = Vec2.new(T+ofst(i), S*8.5)
 			const params = {center, orient:dirs[i-1], radius:T*PacScale}
-			new PacSprite(Ctx, i>0 ? (i%2 ? 1:2) : 0).draw(params)
+			new PacSprite(ctx, i>0 ? (i%2 ? 1:2) : 0).draw(params)
 		}
 	}
 
 	function drawAkabei() {
 		const aka = ghsSprite
-		const spr = snagSpr(Ctx)
+		const spr = snagSpr(ctx)
 
-		Ctx.translate(S/4, S*9+S/4-GAP/4)
+		ctx.translate(S/4, S*9+S/4-GAP/4)
 
 		/**
 		 @type {(x:number, y:number, params:object)=> void}
 		*/
 		const draw = (x,y, params)=>
 		{
-			aka.draw({size:S,x,y,...params})
+			aka.draw(ctx,{size:S,x,y,...params})
 		}
 		{// Snagged Clothing
 			const pos = Vec2.Zero, rates = [0.3, 0.5 ,1]
@@ -147,17 +150,17 @@ export const View = function()
 			const s = T/TileSize
 			const [sx,sy]= Vec2.new(spr.stakeSize).mul(s).vals
 			// Stake
-			Ctx.save()
-			Ctx.translate(S*6.9, S-T/2-sy-3*s)
-			Ctx.scale(s, s)
+			ctx.save()
+			ctx.translate(S*6.9, S-T/2-sy-3*s)
+			ctx.scale(s, s)
 			spr.drawStake(Vec2.Zero)
-			Ctx.restore()
+			ctx.restore()
 			// Shard
-			Ctx.save()
-			Ctx.translate(S*6.9+sx, S-T/2-3*s)
-			Ctx.scale(s, s)
+			ctx.save()
+			ctx.translate(S*6.9+sx, S-T/2-3*s)
+			ctx.scale(s, s)
 			spr.drawShard(Vec2.Zero)
-			Ctx.restore()
+			ctx.restore()
 		}
 		draw(ofst(4.00), 0, {isRipped: true,orient:U})
 		draw(ofst(5.00), 0, {isRipped: true,orient:'Bracket'})
@@ -173,7 +176,7 @@ export const View = function()
 $('#brightRng').on('input', function()
 {
 	const v = /**@type {HTMLInputElement}*/(this).value
-	Ctx.canvas.style.backgroundColor = `rgb(${v}% ${v}% ${v}%)`
+	Fg.canvas.style.backgroundColor = `rgb(${v}% ${v}% ${v}%)`
 })
 
 $('#resetBtn').on('click', function()
