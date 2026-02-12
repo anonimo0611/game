@@ -11,14 +11,18 @@ import {Events} from './_system.js'
 import * as Sys from './_system.js'
 import Sprite   from '../sprites/ghost.js'
 
-const TurnPriority =
-	/**@type {readonly Direction[]}*/([U,L,D,R])
+/** Flee time when frightened duration is 0s */
+const FleeTimeMax = 400
+
+/** @type {readonly Direction[]} */
+const TurnPriority = [U,L,D,R]
 
 export class Ghost extends Actor {
 	/** @readonly */type
 	/** @readonly */init
 	/** @readonly */state
 	/** @readonly */sprite = new Sprite
+
 	#fader = new Actor.SpawnFader
 	#fleeTime   = -1
 	#started    = false
@@ -52,16 +56,16 @@ export class Ghost extends Actor {
 	*/
 	constructor(dir=L, {type=0,tile:[col,row]=[0,0],align=0}={}) {
 		super(col,row)
-		$(this).on({
-		 [Events.RoundEnds]:   this.#onRoundEnds,
-		 [Events.FrightMode]:  this.#setFrightMode,
-		 [Events.Reverse]: _=> this.#revSig   = true,
-		 [Events.FleeTime]:_=> this.#fleeTime = 400/Game.interval,
-		})
 		this.dir   = dir
 		this.type  = type
 		this.init  = freeze({align,x:col*T})
 		this.state = new Sys.GhsState(this)
+		$(this).on({
+			[Events.Reverse]:   this.#setReverse,
+			[Events.FleeTime]:  this.#setFleeTime,
+			[Events.FrightMode]:this.#setFrightMode,
+			[Events.RoundEnds]: this.#setFadeOut,
+		})
 	}
 	get originalTargetTile() {
 		return this.state.isEscaping
@@ -240,14 +244,20 @@ export class Ghost extends Actor {
 		Sound.stopLoops()
 		State.toPacCaught().toPacDying({delay:800})
 	}
-	#setFrightMode(_={}, on=false) {
-		!this.isEscaping && (this.#frightened=on)
-	}
 	#setEscapeState() {
 		Sound.playEscapaingEyes()
 		this.state.toEscaping()
 	}
-	#onRoundEnds() {
+	#setReverse() {
+		this.#revSig = true
+	}
+	#setFleeTime() {
+		this.#fleeTime = FleeTimeMax/Game.interval
+	}
+	#setFrightMode(_={}, on=false) {
+		!this.isEscaping && (this.#frightened=on)
+	}
+	#setFadeOut() {
 		this.#fader = new Actor.SpawnFader(400,true)
 	}
 }
