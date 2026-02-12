@@ -4,21 +4,13 @@ export class SpawnFader {
 		/** @private @type {Fade} */
 		this.fader = Fade.set(dur,{isFadeOut})
 	}
-	set(dur=500, isFadeOut=false) {
-		this.fader = Fade.set(dur,{isFadeOut})
-	}
 	alpha(max=1) {
 		if (State.isDemoMode) return 1
-		const {fader}= this
-		return fader.isIn
-			? State.isReady? fader.alpha:max
-			: fader.alpha
+		const  f = this.fader
+		return f.isIn? (State.isReady? f.alpha:max) : f.alpha
 	}
 	update(max=1) {
-		const {fader}= this
-		if (!fader.running) return
-		fader.isIn
-			? State.isReady && fader.update(max)
-			: fader.update(max)
+		const f = this.fader; if (!f.running) return
+		f.isIn? State.isReady && f.update(max) : f.update(max)
 	}
 }
