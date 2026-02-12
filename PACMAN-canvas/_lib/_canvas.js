@@ -1,6 +1,6 @@
 'use strict'
 
-class ExtendedContext2D extends CanvasRenderingContext2D {
+class EnhancedCtx2D extends CanvasRenderingContext2D {
 	constructor(/**@type {HTMLCanvasElement}*/cvs, opts={}) {
 		try {super()} catch(e){}
 		return Object.setPrototypeOf(cvs.getContext('2d',opts), new.target.prototype)
@@ -178,45 +178,45 @@ class ExtendedContext2D extends CanvasRenderingContext2D {
 }
 
 class Fade {
-    /** @readonly */static IN  = 0
-    /** @readonly */static OUT = 1
-	static in (dur=500, delay=0) {return new Fade(dur,delay,Fade.IN)}
-	static out(dur=500, delay=0) {return new Fade(dur,delay,Fade.OUT)}
+	/** @readonly */ static IN	= 0;
+	/** @readonly */ static OUT = 1;
+	static in (dur=500, delay=0) {return new Fade(dur, delay, Fade.IN)}
+	static out(dur=500, delay=0) {return new Fade(dur, delay, Fade.OUT)}
 
-	#type  = /**@type {0|1}*/(0)
-	#dur   = 0
-	#delay = 0
-	#count = 0
-	#alpha = 0
-
-	get type()    {return this.#type}
-	get alpha()   {return this.#alpha}
-	get running() {return this.#type == 0 ? this.#alpha<1 : this.#alpha>0}
+	#elapsed = 0;
+	#type; #dur; #delay; #alpha;
 
 	/**
-	 @private
 	 @param {number} duration
 	 @param {number} delay
 	 @param {0|1} type Fade.IN or Fade.OUT
 	*/
 	constructor(duration, delay, type=Fade.IN) {
-		this.#type  = type
-		this.#alpha = type
-		this.#dur   = duration
+		this.#type	= type
+		this.#dur	= duration
 		this.#delay = delay
+		this.#alpha = type == Fade.IN ? 0:1
 	}
+	get alpha()   {return this.#alpha}
+	get type()	  {return this.#type}
+ 	get isIn()	  {return this.#type == Fade.IN}
+ 	get isOut()   {return this.#type == Fade.OUT}
+	get running() {return this.#elapsed < (this.#delay+this.#dur)}
 
 	/**
 	 @param {number} maxAlpha
 	 @returns {boolean} Whether the fade animation is currently active
 	*/
-	update(maxAlpha=1) {
-		this.#count += Ticker.Interval
-		if (this.#count < this.#delay) return true
-		const step	= (maxAlpha/(this.#dur/Ticker.Interval))
-		this.#alpha = this.#type == Fade.IN
-			? Math.min(this.#alpha+step, maxAlpha)
-			: Math.max(this.#alpha-step, 0)
+	update(maxAlpha = 1) {
+		this.#elapsed += Ticker.Interval
+		if (this.#elapsed < this.#delay) {
+			this.#alpha = this.#type == Fade.IN ? 0 : maxAlpha
+			return true
+		}
+		const progress = Math.min((this.#elapsed-this.#delay)/this.#dur, 1)
+		this.#type == Fade.IN
+			? (this.#alpha = progress*maxAlpha)
+			: (this.#alpha = (1-progress)*maxAlpha)
 		return this.running
 	}
 
@@ -239,7 +239,7 @@ const canvas2D = (id, width, height=width)=> {
 	const cvs = id && byId(id) instanceof HTMLCanvasElement
 		? /**@type {HTMLCanvasElement}*/(byId(id))
 		: document.createElement('canvas')
-	const ctx  = new ExtendedContext2D(cvs).resize(width,height)
+	const ctx  = new EnhancedCtx2D(cvs).resize(width,height)
 	const {w,h}= ctx.size
 	const vals = /**@type {readonly[cvs,ctx,w:number,h:number]}*/([cvs,ctx,w,h])
 	return /**@type {const}*/({cvs,ctx,w,h,vals})

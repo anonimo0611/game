@@ -13,7 +13,7 @@ export class Rect {
 	freeze() {
 		return freeze(this)
 	}
-	contains(/**@type {Readonly<Position>}*/pos) {
+	contains(/**@type {Position}*/pos) {
 		const {x,y,w:w,h:h}=this
 		return (
 			(pos.x >= x && pos.x < x+w) &&
