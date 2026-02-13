@@ -20,8 +20,7 @@ export const btns =
 	(fromEntries(buttonIds.map(id=>[id,requireElem(id+'Btn')])))
 
 const panelBtns =
-	/**@type {NodeListOf<HTMLButtonElement>}*/
-	(document.querySelectorAll('.panelBtn'))
+	/**@type {NodeListOf<HTMLButtonElement>}*/(qSAll('.panelBtn'))
 
 //---- Menus ----
 

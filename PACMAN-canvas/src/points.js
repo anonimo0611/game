@@ -9,11 +9,13 @@ const PtsMap = /**@type {Map<any,Points>}*/(new Map)
 State.on({_PacDying_Cleared:()=> PtsMap.clear()})
 
 /**
- @import  {PtsType} from './sprites/points'
- @typedef {{key:{points:PtsType}, pos:Position, dur?:number, fn?:function}} PtsData
+ @typedef {{
+	key:{points:import('./sprites/points').PtsType},
+	pos:Position, dur?:number, fn?:()=> void}
+} PtsData
 */
 export const PtsMgr = new class {
-	/** @type {(data:PtsData, fn?:function)=> void} */
+	/** @type {(data:PtsData, fn?:()=> void)=> void} */
 	set(data,fn)   {new Points({...data,fn})}
 	update()       {PtsMap.forEach(v=> v.update())}
 	drawFruitPts() {PtsMap.get(Fruit) ?.draw()}

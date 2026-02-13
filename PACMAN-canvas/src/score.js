@@ -44,11 +44,11 @@ export const Score = new class {
 		return !State.isInGame || Ticker.paused
 			? true : !!(Ticker.count & (Sound.ringing? 8:16))
 	}
-	get #rigingColor() {
+	get #fgColorUP() {
 		return (Sound.ringing? Colors.Extend : null)
 	}
 	draw() {
-		drawText(2,1, this.#rigingColor, this.#showUP? '1UP':'')
+		drawText(2,1, this.#fgColorUP, this.#showUP? '1UP':'')
 		drawText(6,1, null, _score || '00')
 		Ctrl.isPractice
 			? drawText(14,1, null, 'PRACTICE')
