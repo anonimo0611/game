@@ -10,8 +10,8 @@ export default class {
 	#resurrect = /**@type {?Fade}*/(null)
 	setResurrect() {this.#resurrect ||= Fade.in(600)}
 
-	/** @param {EnhancedCtx2D} mainCtx */
-	draw(mainCtx, {
+	/** @param {EnhancedCtx2D} main */
+	draw(main, {
 		x=0,y=0,
 		type         = 0,
 		animIdx      = 0,
@@ -29,19 +29,18 @@ export default class {
 		const {ctx}= this
 		const finalize = ()=> {
 			ctx.restore()
-			mainCtx.save()
-			mainCtx.setAlpha(alpha)
-			mainCtx.translate(x+size/4, y+size/4)
-			mainCtx.drawImage(ctx.canvas, -size/2, -size/2)
-			mainCtx.restore()
+			main.save()
+			main.setAlpha(alpha)
+			main.translate(x+size/4, y+size/4)
+			main.drawImage(ctx.canvas, -size/2, -size/2)
+			main.restore()
 		}
 		ctx.clear()
 		ctx.save()
 		ctx.translate(size/2, size/2)
 		ctx.scale(size/(100/GhsScale), size/(100/GhsScale))
 		ctx.lineWidth = 5
-		ctx.lineJoin  = 'round'
-		ctx.lineCap   = 'round'
+		ctx.lineJoin  = ctx.lineCap = 'round'
 		ctx.fillStyle = !isFrightened
 			? GhsColors[type]
 			: Palette.FrightBody[spriteIdx]
@@ -53,7 +52,7 @@ export default class {
 		if (!isEscaping) {
 			ctx.save()
 			this.#resurrect?.apply(ctx)
-			this.#drawAngerGlow(mainCtx, {x,y,isAngry,size})
+			this.#drawAngerGlow(main, {x,y,isAngry,size})
 			this.#drawBody({animIdx,isRipped,isMended})
 			if (isFrightened) {
 				ctx.fillStyle   =
@@ -114,7 +113,7 @@ export default class {
 		ctx.bezierCurveTo(+29, 45, +41, 45, +42, 26)
 	}
 	#drawEyesUp(isRipped=false) {
-		const eyesColor = (isRipped? 'black' : Colors.GhostEyes)
+		const eyesColor = (isRipped? 'black':Colors.GhostEyes)
 		for (const v of [-1,+1]) {
 			this.ctx.setEllipse(19.5*v, -17, 13, 17, -8*v*PI/180, -PI/4, -3*PI/4)
 			this.ctx.fillCircle(18.5*v, -26,  8, eyesColor)
@@ -146,15 +145,15 @@ export default class {
 		ctx.addLinePath([ +3, 9],[+11,17],[+15,17],[+25, 9],[+30, 9],[36,17])
 		ctx.stroke()
 	}
-	/** @param {EnhancedCtx2D} mainCtx */
-	#drawAngerGlow(mainCtx, {x=0,y=0, isAngry=false, size=T*2}) {
+	/** @param {EnhancedCtx2D} ctx */
+	#drawAngerGlow(ctx, {x=0,y=0, isAngry=false, size=T*2}) {
 		if (!isAngry) return
 		const {width:W}=Glow, S=W*1.2
-		mainCtx.save()
-		mainCtx.globalAlpha = this.#resurrect?.alpha ?? 1
-		mainCtx.translate(x+size/4, y+size/4)
-		mainCtx.drawImage(Glow, 0,0, W,W, -S/2,-S/2, S,S)
-		mainCtx.restore()
+		ctx.save()
+		ctx.globalAlpha = this.#resurrect?.alpha ?? 1
+		ctx.translate(x+size/4, y+size/4)
+		ctx.drawImage(Glow, 0,0, W,W, -S/2,-S/2, S,S)
+		ctx.restore()
 	}
 }
 const Glow = function() {

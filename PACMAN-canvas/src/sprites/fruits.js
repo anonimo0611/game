@@ -46,8 +46,7 @@ export const Cache = new class {
 	Menu.css('--url',`url(${ctx.canvas.toDataURL()})`)
 }
 
-/** @param {EnhancedCtx2D} ctx */
-function cherry(ctx) {
+function cherry(ctx=Fg) {
 	// both fruits
 	[[-6,-1],[-1,1]].forEach(([x,y])=> {
 		ctx.save()
@@ -78,8 +77,7 @@ function cherry(ctx) {
 	ctx.stroke()
 }
 
-/** @param {EnhancedCtx2D} ctx */
-function strawberry(ctx) {
+function strawberry(ctx=Fg) {
 	// red body
 	ctx.beginPath()
 	ctx.moveTo(-1,-4)
@@ -108,8 +106,7 @@ function strawberry(ctx) {
 	ctx.strokeLine(0,-4, 0,-5)
 }
 
-/** @param {EnhancedCtx2D} ctx */
-function orange(ctx) {
+function orange(ctx=Fg) {
 	// orange body
 	ctx.beginPath()
 	ctx.moveTo(-2,-2)
@@ -144,8 +141,7 @@ function orange(ctx) {
 	ctx.fill()
 }
 
-/** @param {EnhancedCtx2D} ctx */
-function apple(ctx) {
+function apple(ctx=Fg) {
 	// red fruit
 	ctx.beginPath()
 	ctx.moveTo(-2, -3)
@@ -176,8 +172,7 @@ function apple(ctx) {
 	ctx.stroke()
 }
 
-/** @param {EnhancedCtx2D} ctx */
-function melon(ctx) {
+function melon(ctx=Fg) {
 	// draw body
 	ctx.fillCircle(0, 1.5, 5.2, '#7BF331')
 
@@ -205,8 +200,7 @@ function melon(ctx) {
 	].forEach(([x,y])=> ctx.fillCircle(x,y, 0.5, '#FFF'))
 }
 
-/** @param {EnhancedCtx2D} ctx */
-function gala(ctx) {
+function gala(ctx=Fg) {
 	const yellow = '#F8FF00'
 	for (const scaleX of [1,-1]) {
 		// yellow body
@@ -234,8 +228,7 @@ function gala(ctx) {
 	ctx.fill()
 }
 
-/** @param {EnhancedCtx2D} ctx */
-function bell(ctx) {
+function bell(ctx=Fg) {
 	// bell body
 	ctx.beginPath()
 	for (const s of [1,-1]) {
@@ -261,8 +254,7 @@ function bell(ctx) {
 	ctx.fillCircle(1.2, 5.3, 1.4, '#FFF')
 }
 
-/** @param {EnhancedCtx2D} ctx */
-function key(ctx) {
+function key(ctx=Fg) {
 	// key metal
 	ctx.newLinePath([-1,-1.5],[-1.0, 5.4],[0,6.4],[1,5.4],[1,2.8])
 	ctx.setLinePath([ 1, 1.8],[ 1.0,-1.5])

@@ -24,24 +24,19 @@ export default class {
 	}
 	drawBracketEyes() {
 		const {ctx}= this
-		ctx.save()
 		for (const v of [-1,+1]) { // Eyeball
-			ctx.beginPath()
-			ctx.ellipse(19*v, -14, 13,16, 0, PI/2.2, PI*2.2)
-			ctx.fillStyle = 'white'
-			ctx.fill()
+			ctx.setEllipse(19*v, -14, 13,16, 0, PI/2.2, PI*2.2)
 		}
 		ctx.lineWidth   = 8
 		ctx.lineCap     = 'square'
 		ctx.strokeStyle = 'black'
 		for (const i of [0,1]) { // Eyes
-			ctx.beginPath()
-			ctx.moveTo([-15, 22][i],  0)
-			ctx.lineTo([-15, 22][i], -7)
-			ctx.lineTo([ -7, 30][i], -7)
-			ctx.stroke()
+			ctx.newLinePath(
+				[[-15, 22][i],  0],
+				[[-15, 22][i], -7],
+				[[ -7, 30][i], -7],
+			).stroke()
 		}
-		ctx.restore()
 	}
 	drawHadake(animIdx=0) {
 		const {ctx}= this
