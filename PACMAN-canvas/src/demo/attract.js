@@ -96,28 +96,27 @@ class EnergizerAct {
 		this.#ghosts.push(g)
 	}
 	update() {
-		if (!this.started)
-			return
-		if (!Timer.frozen) {
-			this.#move()
-			if (this.#pacman.dir == L
-			 && this.#pacman.x <= T*4)
-				this.#turnBack()
-		} this.pow.update()
-	}
-	#turnBack() {
-		this.#pacvx *= -1
-		this.#ghsvx /= -2
-		this.#pacman.dir = R
-		GhsMgr.setFrightMode()
+		if (!this.started) return
+		this.pow.update()
+		this.#move()
+		if (this.#pacman.dir == L
+		 && this.#pacman.x <= T*4)
+			this.#turnBack()
 	}
 	#move() {
+		if (Timer.frozen) return
 		this.#pacman.sprite.update()
 		this.#pacman.x += this.#pacvx
 		this.#ghosts.forEach(g=> {
 			g.x += this.#ghsvx
 			g.collidesWith(this.#pacman.pos, T/4, this.#end)
 		})
+	}
+	#turnBack() {
+		this.#pacvx *= -1
+		this.#ghsvx /= -2
+		this.#pacman.dir = R
+		GhsMgr.setFrightMode()
 	}
 	draw() {this.started && Actors.draw(this.#pacman)}
 	#end() {GhsMgr.caughtAll && State.toAttract()}
