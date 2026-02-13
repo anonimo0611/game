@@ -11,8 +11,8 @@ export class SoundMgr {
 
 	/**
 	 @param {Sound.Setup} setup
-     @param {Sound.Manifest<S>} m
-    */
+	 @param {Sound.Manifest<S>} m
+	*/
 	constructor(setup={}, m) {
 		new Promise((resolve,reject)=> {
 			let amount = 0
