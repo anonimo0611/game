@@ -11,8 +11,8 @@ State.on({_PacDying_Cleared:()=> PtsMap.clear()})
 /**
  @typedef {{
 	key:{points:import('./sprites/points').PtsType},
-	pos:Position, dur?:number, fn?:()=> void}
-} PtsData
+	pos:Position, dur?:number, fn?:()=> void
+}} PtsData
 */
 export const PtsMgr = new class {
 	/** @type {(data:PtsData, fn?:()=> void)=> void} */
