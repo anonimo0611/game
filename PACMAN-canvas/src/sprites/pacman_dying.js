@@ -54,9 +54,9 @@ export class Dying {
 		ctx.setAlpha(this.#fadeOut?.alpha)
 		for (const deg of range(0, 360, 360/10)) {
 			ctx.beginPath()
-	 		ctx.moveTo(...circumPosition(deg, this.#innerR))
-	     	ctx.lineTo(...circumPosition(deg, this.#outerR))
-	     	ctx.stroke()
+			ctx.moveTo(...circumPosition(deg, this.#innerR))
+			ctx.lineTo(...circumPosition(deg, this.#outerR))
+			ctx.stroke()
 		}
 	}
 }
