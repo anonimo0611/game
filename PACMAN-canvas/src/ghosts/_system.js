@@ -14,7 +14,7 @@ const PtsLst = Pts.GhostPts
 const Ghosts = /**@type {Ghost[]}*/([])
 
 export const Events = toEnumObject(
-	['FrightMode','Reverse','FleeTime','RoundEnds'])
+	['Ready','Reverse','FrightMode','FleeTime','RoundEnds'])
 
 /**
  When always chase mode,
@@ -63,6 +63,7 @@ export const GhsMgr = new class {
 	static setup() {
 		State.on({
 			InGame:   GhsMgr.#onInGame,
+			Ready:    GhsMgr.#onReady,
 			Cleared:  GhsMgr.#onRoundEnds,
 			PacCaught:GhsMgr.#onRoundEnds,
 		})
@@ -83,9 +84,9 @@ export const GhsMgr = new class {
 		GhsMgr.#animIdx = 0
 		ghosts.forEach((g,i)=> Ghosts[i] = g)
 	}
-	#onRoundEnds() {
-		$(Ghosts).trigger(Events.RoundEnds)
-	}
+	#onReady()     {$(Ghosts).trigger(Events.Ready)}
+	#onRoundEnds() {$(Ghosts).trigger(Events.RoundEnds)}
+
 	#onInGame() {
 		Sound.playSiren()
 		Ctrl.alwaysChase && GhsMgr.#setReleaseTimer()

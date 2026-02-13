@@ -3,12 +3,8 @@ import {Maze}   from './maze.js'
 import {Player} from './player/player.js'
 import {GhsMgr} from './ghosts/_system.js'
 import Sprite   from './sprites/pacman.js'
-import {SpawnFader} from './actor_fader.js'
 
 export class Actor {
-	/** @readonly */
-	static SpawnFader = SpawnFader
-
 	pos = Vec2.Zero
 	#orient = /**@type {Direction}*/(L)
 	#movDir = /**@type {Direction}*/(L)

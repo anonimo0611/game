@@ -4,36 +4,44 @@ import {Ctrl}     from '../control.js'
 import {State}    from '../state.js'
 import {Score}    from '../score.js'
 import {Maze}     from '../maze.js'
-import {Actor}    from '../actor.js'
 import {PacMan}   from '../actor.js'
 import {GhsMgr}   from '../ghosts/_system.js'
 import {Mover}    from './controller.js'
 import {TunEntry} from './tunnel.js'
 
-const AteDotEvent = 'AteDot'
+const Events = toEnumObject(['Ready','AteDot'])
 
 class PlayerCore extends PacMan {
-	#eatIdx = 0
-	#sinceLastEating = 0
+	#fader  = /**@type {?Fade}*/(null)
+	#eatIdx = 0; #sinceLastEating = 0
 
 	/** @private @type {Mover} */
-	mov       = new Mover(this)
-	#fader    = new Actor.SpawnFader
+	mov = new Mover(this)
 	#tunEntry = new TunEntry
 
-	constructor()  {super(13.5, 24)}
+	constructor()  {
+		super(13.5, 24)
+		$(this).on(Events.Ready, this.#setFadeIn)
+	}
 	get closed()   {return State.isInGame == false}
-	get maxAlpha() {return Ctrl.semiTransPac? .75:1}
-	get alpha()    {return this.#fader.alpha(this.maxAlpha)}
 	get speed()    {return this.mov.speed}
 	get onWall()   {return this.mov.onWall}
 	get tunEntry() {return this.#tunEntry}
+	get alpha()    {return this.#fader?.alpha ?? this.maxAlpha}
+	get maxAlpha() {return Ctrl.semiTransPac? .75:1}
 
 	get timeSinceLastEating() {
 		return this.#sinceLastEating
 	}
 	resetTimer() {
 		this.#sinceLastEating = 0
+	}
+	forwardPos(num=0) {
+		return Vec2[this.dir].mul(num*T).add(this.center)
+	}
+	offsetTarget(num=0) {
+		const  ofstX = (this.dir == U ? -num : 0)
+		return this.forwardPos(num).addX(ofstX*T)
 	}
 	drawCenterDot() {
 		if (!this.hidden && Ctrl.showGridLines)
@@ -47,7 +55,7 @@ class PlayerCore extends PacMan {
 	}
 	update() {
 		this.sprite.update(this)
-		this.#fader.update(this.maxAlpha)
+		this.#fader?.update(this.maxAlpha)
 		if (this.closed || this.hidden)
 			return
 		this.#sinceLastEating += Game.interval
@@ -71,7 +79,7 @@ class PlayerCore extends PacMan {
 			: this.#eatSmallDot()
 		Maze.clearDot(this) == 0
 			? State.toCleared()
-			: $(Player).trigger(AteDotEvent)
+			: $(Player).trigger(Events.AteDot)
 	}
 	#eatPowerDot() {
 		Score.add(PowPts)
@@ -86,24 +94,22 @@ class PlayerCore extends PacMan {
 			? Sound.playEatSE0({duration})
 			: Sound.playEatSE1({duration})
 	}
+	#setFadeIn() {this.#fader = Fade.in()}
 }
 
 export const Player = function() {
-	let core = new PlayerCore
+	let core = new PlayerCore()
 	function init() {
-		!State.wasIntro && (core = new PlayerCore)
+		if (!State.wasIntro) core = new PlayerCore()
+		if (State.isReady) $(core).trigger(Events.Ready)
 	}
 	State.on({_Ready:init})
 	return {
 		get core() {return core},
-		forwardPos(num=0) {
-			return Vec2[core.dir].mul(num*T).add(core.center)
+		onAte(/**@type {JQTriggerHandler}*/handler) {
+			$(this).on(Events.AteDot, handler)
 		},
-		offsetTarget(num=0) {
-			const  ofstX = (core.dir == U ? -num : 0)
-			return this.forwardPos(num).addX(ofstX*T)
-		},
-		/** @param {JQTriggerHandler} handler */
-		onAte(handler) {$(this).on(AteDotEvent, handler)},
+		forwardPos:  (num=0)=> core.forwardPos(num),
+		offsetTarget:(num=0)=> core.offsetTarget(num),
 	}
 }()

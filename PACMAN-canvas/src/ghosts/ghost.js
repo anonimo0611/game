@@ -23,7 +23,7 @@ export class Ghost extends Actor {
 	/** @readonly */state
 	/** @readonly */sprite = new Sprite
 
-	#fader = new Actor.SpawnFader
+	#fader = /**@type {?Fade}*/(null)
 	#fleeTime   = -1
 	#started    = false
 	#revSig     = false
@@ -31,8 +31,8 @@ export class Ghost extends Actor {
 
 	get animIdx()      {return GhsMgr.animIndex}
 	get spriteIdx()    {return GhsMgr.spriteIdx}
+	get alpha()        {return this.#fader?.alpha ?? this.maxAlpha}
 	get maxAlpha()     {return Ctrl.showTargets? .75:1}
-	get alpha()        {return this.#fader.alpha(this.maxAlpha)}
 
 	get chaseOffset()  {return 0}
 	get chaseSpeed()   {return GhsSpeed.Base}
@@ -56,16 +56,17 @@ export class Ghost extends Actor {
 	*/
 	constructor(dir=L, {type=0,tile:[col,row]=[0,0],align=0}={}) {
 		super(col,row)
+		$(this).on({
+			[Events.Ready]:     this.#setFadeIn,
+			[Events.RoundEnds]: this.#setFadeOut,
+			[Events.Reverse]:   this.#setReverse,
+			[Events.FleeTime]:  this.#setFleeTime,
+			[Events.FrightMode]:this.#setFrightMode,
+		})
 		this.dir   = dir
 		this.type  = type
 		this.init  = freeze({align,x:col*T})
 		this.state = new Sys.GhsState(this)
-		$(this).on({
-			[Events.Reverse]:   this.#setReverse,
-			[Events.FleeTime]:  this.#setFleeTime,
-			[Events.FrightMode]:this.#setFrightMode,
-			[Events.RoundEnds]: this.#setFadeOut,
-		})
 	}
 	get originalTargetTile() {
 		return this.state.isEscaping
@@ -96,7 +97,7 @@ export class Ghost extends Actor {
 	}
 	update() {
 		this.sprite.update()
-		this.#fader.update(this.maxAlpha)
+		this.#fader?.update(this.maxAlpha)
 		State.isInGame && this.#update()
 	}
 	#update() {
@@ -257,7 +258,6 @@ export class Ghost extends Actor {
 	#setFrightMode(_={}, on=false) {
 		!this.isEscaping && (this.#frightened=on)
 	}
-	#setFadeOut() {
-		this.#fader = new Actor.SpawnFader(400,true)
-	}
+	#setFadeIn()  {this.#fader = Fade.in()}
+	#setFadeOut() {this.#fader = Fade.out(400)}
 }
