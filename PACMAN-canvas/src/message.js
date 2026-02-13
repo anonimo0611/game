@@ -13,8 +13,8 @@ export const Message = new class {
 	) {
 		ctx.save()
 		ctx.scale(scaleX, 1)
-     	ctx.textAlign = 'left'
-        ctx.textBaseline = 'ideographic'
+		ctx.textAlign = 'left'
+		ctx.textBaseline = 'ideographic'
 		ctx.font = `${style} ${size}px "${face}"`
 		ctx.fillStyle = color ?? 'white'
 		String(text).split('\n').forEach((txt,i)=>
