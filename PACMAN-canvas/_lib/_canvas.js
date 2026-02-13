@@ -201,8 +201,8 @@ class Fade {
 	}
 	get alpha()   {return this.#alpha}
 	get type()	  {return this.#type}
- 	get isIn()	  {return this.#type == Fade.IN}
- 	get isOut()   {return this.#type == Fade.OUT}
+	get isIn()	  {return this.#type == Fade.IN}
+	get isOut()   {return this.#type == Fade.OUT}
 	get running() {return this.#et < (this.#delay+this.#dur)}
 
 	/**

@@ -18,8 +18,8 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
  @template {string} T
  @param {readonly T[]} array
 */const toEnumObject = array=>
-    /**@type {{readonly [K in T]:K}}*/
-    (fromEntries(array.map(k=> [k,k])))
+	/**@type {{readonly [K in T]:K}}*/
+	(fromEntries(array.map(k=> [k,k])))
 
 /**
  @param {KeyboardEvent|JQuery.KeyboardEventBase} e
@@ -39,15 +39,15 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
  @param {number} [v2]
  @param {number} [step]
  @type {{
-    (stop:number): Generator<number,void,unknown>;
-    (start:number, stop:number, step?:number|undefined): Generator<number,void,unknown>;
+	(stop:number): Generator<number,void,unknown>;
+	(start:number, stop:number, step?:number|undefined): Generator<number,void,unknown>;
  }}
 */const range = function*(v1,v2,step=1) {
 	const [start,stop]= (v2 === undefined ? [0,v1]:[v1,v2])
 	if (!arguments.length) throw TypeError('Range expected at least 1 argument, got 0')
 	if (step === 0) throw RangeError('The 3rd argument must not be zero')
-    if (step > 0) for (let i=start; i<stop; i+=step) yield i
-    if (step < 0) for (let i=start; i>stop; i+=step) yield i
+	if (step > 0) for (let i=start; i<stop; i+=step) yield i
+	if (step < 0) for (let i=start; i>stop; i+=step) yield i
 }
 
 /**
@@ -55,13 +55,13 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
  @param {number} [v2]
  @param {number} [step]
  @type {{
-    (stop:number): Generator<number,void,unknown>;
-    (start:number, stop:number, step?:number|undefined): Generator<number,void,unknown>;
+	(stop:number): Generator<number,void,unknown>;
+	(start:number, stop:number, step?:number|undefined): Generator<number,void,unknown>;
  }}
 */const cycleRange = function*(v1,v2,step=1) {
 	const [start,stop]= (v2 === undefined ? [0,v1]:[v1,v2])
-    if (step > 0 && start >= stop) return
-    if (step < 0 && start <= stop) return
+	if (step > 0 && start >= stop) return
+	if (step < 0 && start <= stop) return
 	while(1) yield* v2 === undefined ? range(v1) : range(v1,v2,step)
 }
 
@@ -85,7 +85,7 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 /**
  @param {string} selector
 */const qSAll = selector=> /**@type {NodeListOf<HTMLElement>}*/
- 	(document.querySelectorAll(selector))
+	(document.querySelectorAll(selector))
 
 /**
  @typedef {{dist:number, idx:number}} DistEntry
@@ -95,7 +95,7 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 /**
  @param {string} str
 */const underscoreToSp = (str,prefix='')=> str.indexOf('_') != -1
- 	? prefix.trim()+str.trim().replace(/_/g,'\x20')
+	? prefix.trim()+str.trim().replace(/_/g,'\x20')
 	: str.trim()
 
 /**
@@ -139,13 +139,13 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
  @param {string} str
  @param {Iterable<T>} iterable
 */const trMap = (str,iterable)=> {
-    const map = /**@type {Map<String,T>}*/(new Map)
-    const itr = iterable[Symbol.iterator]()
-    for(const char of str) {
-        const {value,done}= itr.next()
-        if (done) break
+	const map = /**@type {Map<String,T>}*/(new Map)
+	const itr = iterable[Symbol.iterator]()
+	for(const char of str) {
+		const {value,done}= itr.next()
+		if (done) break
 		map.set(char,value)
-    } return map
+	} return map
 }
 
 /**
@@ -189,12 +189,12 @@ const $win = $(window)
  @param {string} ns
  @param {JQTriggerHandlers} events}
 */jQuery.fn.onNS = function(ns, events) {
-    ns = ns[0] != '.' ? `.${ns}` : ns
-    entries(events).forEach(([ev,fn])=> {
-        const evNS = ev.trim().replace(/[_\s]+/g,`${ns}\x20`) + ns
-        this.off(evNS).on(evNS,fn)
-    })
-    return this
+	ns = ns[0] != '.' ? `.${ns}` : ns
+	entries(events).forEach(([ev,fn])=> {
+		const evNS = ev.trim().replace(/[_\s]+/g,`${ns}\x20`) + ns
+		this.off(evNS).on(evNS,fn)
+	})
+	return this
 }
 /**
  @param {string}   events
