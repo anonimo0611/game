@@ -6,8 +6,6 @@ import {GhsMgr} from '../ghosts/_system.js'
 import {Ghost}  from './ghost.js'
 import {GuzutaThreshold} from './ghost_sub.js'
 
-const ctx = Fg
-
 export default new class {
 	/** @param {readonly Ghost[]} ghosts */
 	draw(ghosts) {
@@ -47,11 +45,11 @@ export default new class {
 		if (this.#markerDisabled(g))
 			return
 		const {x,y}= this.#getTargetPos(g)
-		ctx.save()
-		ctx.setAlpha(0.8)
-		ctx.fillCircle  (x,y, T*0.4, GhsColors[g.type])
-		ctx.strokeCircle(x,y, T*0.4, 'white', 4)
-		ctx.restore()
+		Fg.save()
+		Fg.setAlpha(0.8)
+		Fg.fillCircle  (x,y, T*0.4, GhsColors[g.type])
+		Fg.strokeCircle(x,y, T*0.4, 'white', 4)
+		Fg.restore()
 	}
 	/**
 	 @param {Ghost}  g
@@ -61,32 +59,32 @@ export default new class {
 		const {center:{x,y},dir,inTunSide}= Player.core
 		const fwdXY = Player.forwardPos(ofst).vals
 		const ofsXY = Player.offsetTarget(ofst).vals
-		ctx.save()
-		ctx.setAlpha(0.8)
-		ctx.lineWidth   = 6
-		ctx.strokeStyle = GhsColors[g.type]
+		Fg.save()
+		Fg.setAlpha(0.8)
+		Fg.lineWidth   = 6
+		Fg.strokeStyle = GhsColors[g.type]
 		if (g.type == GhsType.Pinky && !inTunSide
 		 || g.type == GhsType.Aosuke) {
 			dir != U
-				? ctx.newLinePath([x,y], fwdXY)
-				: ctx.newLinePath([x,y], fwdXY).lineTo(...ofsXY)
-			ctx.stroke()
+				? Fg.newLinePath([x,y], fwdXY)
+				: Fg.newLinePath([x,y], fwdXY).lineTo(...ofsXY)
+			Fg.stroke()
 		}
 		if (g.type == GhsType.Aosuke) {
 			const tgtXY = g.chasePos.vals
 			const akaXY = GhsMgr.akaCenterPos.vals
-			ctx.newLinePath(akaXY, ofsXY, tgtXY).stroke()
-			ctx.fillCircle(...ofsXY, 8, GhsColors[g.type])
+			Fg.newLinePath(akaXY, ofsXY, tgtXY).stroke()
+			Fg.fillCircle(...ofsXY, 8, GhsColors[g.type])
 		}
-		ctx.restore()
+		Fg.restore()
 	}
 	/** @param {Ghost} g */
 	#guzutaCircle(g) {
 		const {center}= Player.core
-		ctx.save()
-		ctx.translate(...center.vals)
-		ctx.setAlpha(g.chasePos.eq(center) ? 0.8 : 0.4)
-		ctx.strokeCircle(0,0, T*GuzutaThreshold, GhsColors[g.type], 6)
-		ctx.restore()
+		Fg.save()
+		Fg.translate(...center.vals)
+		Fg.setAlpha(g.chasePos.eq(center) ? 0.8 : 0.4)
+		Fg.strokeCircle(0,0, T*GuzutaThreshold, GhsColors[g.type], 6)
+		Fg.restore()
 	}
 }
