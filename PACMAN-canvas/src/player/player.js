@@ -15,17 +15,17 @@ class PlayerCore extends PacMan {
 	#fader  = /**@type {?Fade}*/(null)
 	#eatIdx = 0; #sinceLastEating = 0
 
-	/** @private @type {Mover} */
-	mov = new Mover(this)
-	#tunEntry = new TunEntry
+	/** @type {Mover} */
+	#mov = new Mover(this)
+	#tunEntry = new TunEntry()
 
 	constructor()  {
 		super(13.5, 24)
 		$(this).on(Events.Ready, this.#setFadeIn)
 	}
 	get closed()   {return State.isInGame == false}
-	get speed()    {return this.mov.speed}
-	get onWall()   {return this.mov.onWall}
+	get speed()    {return this.#mov.speed}
+	get onWall()   {return this.#mov.onWall}
 	get tunEntry() {return this.#tunEntry}
 	get alpha()    {return this.#fader?.alpha ?? this.maxAlpha}
 	get maxAlpha() {return Ctrl.semiTransPac? .75:1}
@@ -60,12 +60,12 @@ class PlayerCore extends PacMan {
 			return
 		this.#sinceLastEating += Game.interval
 		this.#tunEntry.update()
-		this.#update(this.mov.speed+.5|0)
+		this.#update(this.#mov.speed+.5|0)
 	}
 	#update(steps=1) {
 		for (const _ of range(steps)) {
 			this.#eatDot(this.tileIdx)
-			this.mov.update(this.speed/steps)
+			this.#mov.update(this.speed/steps)
 			if (this.onWall) break
 		}
 	}
