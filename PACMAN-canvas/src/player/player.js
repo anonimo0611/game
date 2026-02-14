@@ -9,30 +9,26 @@ import {GhsMgr}   from '../ghosts/_system.js'
 import {Mover}    from './controller.js'
 import {TunEntry} from './tunnel.js'
 
-const Events = toEnumObject(['Ready','AteDot'])
+let  _fader = /**@type {?Fade}*/(null)
+const AteDotEvent = 'AteDot'
 
 class PlayerCore extends PacMan {
-	#fader  = /**@type {?Fade}*/(null)
-	#eatIdx = 0; #sinceLastEating = 0
+	#eatIdx = 0
+	#sinceLastEating = 0
 
-	/** @type {Mover} */
-	#mov = new Mover(this)
-	#tunEntry = new TunEntry()
+	/**@type {Mover}*/
+	#mov      = new Mover(this)
+	#tunEntry = new TunEntry
 
-	constructor()  {
-		super(13.5, 24)
-		$(this).on(Events.Ready, this.#setFadeIn)
-	}
-	get closed()   {return State.isInGame == false}
 	get speed()    {return this.#mov.speed}
 	get onWall()   {return this.#mov.onWall}
 	get tunEntry() {return this.#tunEntry}
-	get alpha()    {return this.#fader?.alpha ?? this.maxAlpha}
+	get alpha()    {return _fader?.alpha ?? this.maxAlpha}
 	get maxAlpha() {return Ctrl.semiTransPac? .75:1}
+	get closed()   {return State.isInGame == false}
+	get timeSinceLastEating() {return this.#sinceLastEating}
 
-	get timeSinceLastEating() {
-		return this.#sinceLastEating
-	}
+	constructor() {super(13.5, 24)}
 	resetTimer() {
 		this.#sinceLastEating = 0
 	}
@@ -55,7 +51,7 @@ class PlayerCore extends PacMan {
 	}
 	update() {
 		this.sprite.update(this)
-		this.#fader?.update(this.maxAlpha)
+		_fader?.update(this.maxAlpha)
 		if (this.closed || this.hidden)
 			return
 		this.#sinceLastEating += Game.interval
@@ -79,7 +75,7 @@ class PlayerCore extends PacMan {
 			: this.#eatSmallDot()
 		Maze.clearDot(this) == 0
 			? State.toCleared()
-			: $(Player).trigger(Events.AteDot)
+			: $(Player).trigger(AteDotEvent)
 	}
 	#eatPowerDot() {
 		Score.add(PowPts)
@@ -89,25 +85,24 @@ class PlayerCore extends PacMan {
 		Score.add(DotPts)
 	}
 	#playEatSE() {
-		const duration = (T/this.speed) * Ticker.Interval * .5
+		const duration = (T/this.speed)*Ticker.Interval*.5
 		;(this.#eatIdx ^= 1)
 			? Sound.playEatSE0({duration})
 			: Sound.playEatSE1({duration})
 	}
-	#setFadeIn() {this.#fader = Fade.in()}
 }
 
 export const Player = function() {
-	let core = new PlayerCore()
+	let core = new PlayerCore
 	function init() {
-		if (!State.wasIntro) core = new PlayerCore()
-		if (State.isReady) $(core).trigger(Events.Ready)
+		!State.wasIntro && (core = new PlayerCore)
+		_fader = State.isTitle? null : Fade.in()
 	}
 	State.on({_Ready:init})
 	return {
 		get core() {return core},
 		onAte(/**@type {JQTriggerHandler}*/handler) {
-			$(this).on(Events.AteDot, handler)
+			$(this).on(AteDotEvent, handler)
 		},
 		forwardPos:  (num=0)=> core.forwardPos(num),
 		offsetTarget:(num=0)=> core.offsetTarget(num),
