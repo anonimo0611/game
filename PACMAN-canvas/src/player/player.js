@@ -9,8 +9,7 @@ import {GhsMgr}   from '../ghosts/_system.js'
 import {Mover}    from './controller.js'
 import {TunEntry} from './tunnel.js'
 
-let  _fader = /**@type {?Fade}*/(null)
-const AteDotEvent = 'AteDot'
+let _fader = /**@type {?Fade}*/(null)
 
 class PlayerCore extends PacMan {
 	#eatIdx = 0
@@ -75,7 +74,7 @@ class PlayerCore extends PacMan {
 			: this.#eatSmallDot()
 		Maze.clearDot(this) == 0
 			? State.toCleared()
-			: $(Player).trigger(AteDotEvent)
+			: $(Player).trigger('AteDot')
 	}
 	#eatPowerDot() {
 		Score.add(PowPts)
@@ -102,7 +101,7 @@ export const Player = function() {
 	return {
 		get core() {return core},
 		onAte(/**@type {JQTriggerHandler}*/handler) {
-			$(this).on(AteDotEvent, handler)
+			$(this).on('AteDot', handler)
 		},
 		forwardPos:  (num=0)=> core.forwardPos(num),
 		offsetTarget:(num=0)=> core.offsetTarget(num),
