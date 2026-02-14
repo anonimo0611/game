@@ -18,6 +18,7 @@ class PlayerCore extends PacMan {
 	/**@type {Mover}*/
 	#mov      = new Mover(this)
 	#tunEntry = new TunEntry
+	constructor() {super(13.5, 24)}
 
 	get speed()    {return this.#mov.speed}
 	get onWall()   {return this.#mov.onWall}
@@ -27,7 +28,6 @@ class PlayerCore extends PacMan {
 	get closed()   {return State.isInGame == false}
 	get timeSinceLastEating() {return this.#sinceLastEating}
 
-	constructor() {super(13.5, 24)}
 	resetTimer() {
 		this.#sinceLastEating = 0
 	}
@@ -91,19 +91,17 @@ class PlayerCore extends PacMan {
 	}
 }
 
-export const Player = function() {
-	let core = new PlayerCore
-	function init() {
-		!State.wasIntro && (core = new PlayerCore)
+export const Player = new class {
+	static {State.on({_Ready:_=> Player.init()})}
+	#core = new PlayerCore
+	get core() {return this.#core}
+	init() {
+		!State.wasIntro && (this.#core = new PlayerCore)
 		_fader = State.isTitle? null : Fade.in()
 	}
-	State.on({_Ready:init})
-	return {
-		get core() {return core},
-		onAte(/**@type {JQTriggerHandler}*/handler) {
-			$(this).on('AteDot', handler)
-		},
-		forwardPos:  (num=0)=> core.forwardPos(num),
-		offsetTarget:(num=0)=> core.offsetTarget(num),
+	onAte(/**@type {JQTriggerHandler}*/handler) {
+		$(this).on('AteDot', handler)
 	}
-}()
+	forwardPos   = (num=0)=> this.#core.forwardPos(num)
+	offsetTarget = (num=0)=> this.#core.offsetTarget(num)
+}
