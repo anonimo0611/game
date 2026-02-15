@@ -6,13 +6,9 @@ import {PtsMgr} from '../points.js'
 import {Maze}   from '../maze.js'
 import {Actor}  from '../actor.js'
 import {Player} from '../player/player.js'
-import {GhsMgr} from './_system.js'
-import {Events} from './_system.js'
-import * as Sys from './_system.js'
 import Sprite   from '../sprites/ghost.js'
-
-/** Flee time when frightened duration is 0s */
-const FleeTimeMax = 400
+import * as Sys from './_system.js'
+import {GhsMgr,Events as Evt} from './_system.js'
 
 /** @type {readonly Direction[]} */
 const TurnPriority = [U,L,D,R]
@@ -24,11 +20,29 @@ export class Ghost extends Actor {
 	/** @readonly */sprite = new Sprite
 
 	#fader = /**@type {?Fade}*/(null)
-	#fleeTime   = -1
+	#fleeTmr    = -1
 	#started    = false
 	#revSig     = false
 	#frightened = false
 
+	/**
+	 @param {Direction} dir
+	 @param {{type?:number, tile?:xyTuple, align?:-1|0|1}} options
+	*/
+	constructor(dir=L, {type=0,tile:[col,row]=[0,0],align=0}={}) {
+		super(col,row)
+		this.dir   = dir
+		this.type  = type
+		this.init  = freeze({align,x:col*T})
+		this.state = new Sys.GhsState(this)
+		$(this).on({
+		 [Evt.Reverse]:   ()=> this.#revSig  = true,
+		 [Evt.Ready]:     ()=> this.#fader   = Fade.in (500),
+		 [Evt.RoundEnds]: ()=> this.#fader   = Fade.out(400),
+		 [Evt.FleeTime]:  ()=> this.#fleeTmr = 400/Game.interval,
+		 [Evt.FrightMode]:(_,on=true)=> this.#setFrightMode(on),
+		})
+	}
 	get animIdx()      {return GhsMgr.animIndex}
 	get spriteIdx()    {return GhsMgr.spriteIdx}
 	get alpha()        {return this.#fader?.alpha ?? this.maxAlpha}
@@ -50,24 +64,6 @@ export class Ghost extends Actor {
 	get isChasing()    {return GhsMgr.isChaseMode   && this.isNormal}
 	get isScattering() {return GhsMgr.isScatterMode && this.isNormal && !this.isAngry}
 
-	/**
-	 @param {Direction} dir
-	 @param {{type?:number, tile?:xyTuple, align?:-1|0|1}} options
-	*/
-	constructor(dir=L, {type=0,tile:[col,row]=[0,0],align=0}={}) {
-		super(col,row)
-		$(this).on({
-			[Events.Ready]:     this.#setFadeIn,
-			[Events.RoundEnds]: this.#setFadeOut,
-			[Events.Reverse]:   this.#setReverse,
-			[Events.FleeTime]:  this.#setFleeTime,
-			[Events.FrightMode]:this.#setFrightMode,
-		})
-		this.dir   = dir
-		this.type  = type
-		this.init  = freeze({align,x:col*T})
-		this.state = new Sys.GhsState(this)
-	}
 	get originalTargetTile() {
 		return this.state.isEscaping
 			? Maze.House.EntryTile
@@ -101,7 +97,7 @@ export class Ghost extends Actor {
 		State.isInGame && this.#update()
 	}
 	#update() {
-		this.#fleeTime >= 0 && this.#fleeTime--
+		this.#fleeTmr >= 0 && this.#fleeTmr--
 		if (Timer.frozen && !this.isEscaping) return
 		switch(this.state.current) {
 		case 'Idle':     return this.#idleInHouse(this)
@@ -204,7 +200,7 @@ export class Ghost extends Actor {
 		})
 		return this.isFrightened? randChoice(dirs).dir:
 			(idx=> dirs.sort(compareDist)[idx].dir)
-				(this.#fleeTime >= 0 ? dirs.length-1:0)
+				(this.#fleeTmr >= 0 ? dirs.length-1:0)
 	}
 	/** @param {{dir:Direction,testTile:Vec2}} testTile */
 	#isRestrictedTile({dir,testTile:{hyphenated:xy}}) {
@@ -245,19 +241,11 @@ export class Ghost extends Actor {
 		Sound.stopLoops()
 		State.toPacCaught().toPacDying({delay:800})
 	}
+	#setFrightMode(on=true) {
+		!this.isEscaping && (this.#frightened=on)
+	}
 	#setEscapeState() {
 		Sound.playEscapaingEyes()
 		this.state.toEscaping()
 	}
-	#setReverse() {
-		this.#revSig = true
-	}
-	#setFleeTime() {
-		this.#fleeTime = FleeTimeMax/Game.interval
-	}
-	#setFrightMode(_={}, on=false) {
-		!this.isEscaping && (this.#frightened=on)
-	}
-	#setFadeIn()  {this.#fader = Fade.in()}
-	#setFadeOut() {this.#fader = Fade.out(400)}
 }
