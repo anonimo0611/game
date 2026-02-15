@@ -176,8 +176,8 @@ export class Ghost extends Actor {
 	#arrivedAtHome() {
 		this.sprite.setResurrect()
 		;(Ctrl.alwaysChase || this.type == GhsType.Akabei)
-			? (this.state.toGoingOut())
-			: (this.state.toIdle(), this.#idleInHouse(this))
+			? this.state.toGoingOut()
+			: this.state.toIdle() && this.#idleInHouse(this)
 		!Timer.frozen && Sound.onGhostReturned()
 	}
 	#setNextDir() {
