@@ -97,7 +97,7 @@ export const Player = new class {
 	get core() {return this.#core}
 	init() {
 		!State.wasIntro && (this.#core = new PlayerCore)
-		_fader = State.isTitle? null : Fade.in()
+		_fader = State.isTitle? null : Fade.in(500)
 	}
 	onAte(/**@type {JQTriggerHandler}*/handler) {
 		$(this).on('AteDot', handler)
