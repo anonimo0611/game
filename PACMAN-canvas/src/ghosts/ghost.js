@@ -8,7 +8,7 @@ import {Actor}  from '../actor.js'
 import {Player} from '../player/player.js'
 import Sprite   from '../sprites/ghost.js'
 import * as Sys from './_system.js'
-import {GhsMgr,Events as Evt} from './_system.js'
+import {GhsMgr as Mgr,Events as Evt} from './_system.js'
 
 /** @type {readonly Direction[]} */
 const TurnPriority = [U,L,D,R]
@@ -43,8 +43,18 @@ export class Ghost extends Actor {
 		 [Evt.FrightMode]:(_,on=true)=> this.#setFrightMode(on),
 		})
 	}
-	get animIdx()      {return GhsMgr.animIndex}
-	get spriteIdx()    {return GhsMgr.spriteIdx}
+	get animIdx()      {return Mgr.animIndex}
+	get spriteIdx()    {return Mgr.spriteIdx}
+	get isChasing()    {return Mgr.isChaseMode   && this.isNormal}
+	get isScattering() {return Mgr.isScatterMode && this.isNormal}
+
+	get isAngry()      {return false}
+	get isStarted()    {return this.#started}
+	get isFrightened() {return this.#frightened}
+	get ignoreOneway() {return this.isFrightened || this.isEscaping}
+	get isNormal()     {return this.state.isRoaming && !this.isFrightened}
+	get isEscaping()   {return this.state.isEscaping || this.state.isReturning}
+
 	get alpha()        {return this.#fader?.alpha ?? this.maxAlpha}
 	get maxAlpha()     {return Ctrl.showTargets? .75:1}
 
@@ -53,16 +63,6 @@ export class Ghost extends Actor {
 	get chasePos()     {return Player.core.center}
 	get chaseTile()    {return this.chasePos.divInt(T)}
 	get scatterTile()  {return Vec2.new(24, 0)}
-
-	get isAngry()      {return false}
-	get isStarted()    {return this.#started}
-	get isFrightened() {return this.#frightened}
-	get ignoreOneway() {return this.isFrightened || this.isEscaping}
-	get isNormal()     {return this.state.isRoaming  && this.isFrightened == false}
-	get isEscaping()   {return this.state.isEscaping || this.state.isReturning}
-
-	get isChasing()    {return GhsMgr.isChaseMode   && this.isNormal}
-	get isScattering() {return GhsMgr.isScatterMode && this.isNormal && !this.isAngry}
 
 	get originalTargetTile() {
 		return this.state.isEscaping
@@ -235,7 +235,7 @@ export class Ghost extends Actor {
 		this.#frightened = false
 		this.state.toBitten()
 		Timer.freeze()
-		PtsMgr.set({key:GhsMgr, pos:this.center}, release)
+		PtsMgr.set({key:Mgr, pos:this.center}, release)
 	}
 	#setPacCaughtState() {
 		Sound.stopLoops()
