@@ -8,7 +8,7 @@ import {Actor}  from '../actor.js'
 import {Player} from '../player/player.js'
 import Sprite   from '../sprites/ghost.js'
 import * as Sys from './_system.js'
-import {GhsMgr as Mgr,Events as Evt} from './_system.js'
+import {GhsMgr,Events as Evt} from './_system.js'
 
 /** @type {readonly Direction[]} */
 const TurnPriority = [U,L,D,R]
@@ -43,17 +43,17 @@ export class Ghost extends Actor {
 		 [Evt.FrightMode]:(_,on=true)=> this.#setFrightMode(on),
 		})
 	}
-	get animIdx()      {return Mgr.animIndex}
-	get spriteIdx()    {return Mgr.spriteIdx}
-	get isChasing()    {return Mgr.isChaseMode   && this.isNormal}
-	get isScattering() {return Mgr.isScatterMode && this.isNormal}
+	get animIdx()      {return GhsMgr.animIndex}
+	get spriteIdx()    {return GhsMgr.spriteIdx}
+	get isChasing()    {return GhsMgr.isChaseMode   && this.isNormal}
+	get isScattering() {return GhsMgr.isScatterMode && this.isNormal}
 
 	get isAngry()      {return false}
 	get isStarted()    {return this.#started}
 	get isFrightened() {return this.#frightened}
 	get ignoreOneway() {return this.isFrightened || this.isEscaping}
 	get isNormal()     {return this.state.isRoaming && !this.isFrightened}
-	get isEscaping()   {return this.state.isEscaping || this.state.isReturning}
+	get isEscaping()   {return this.state.isEscapingEyes}
 
 	get alpha()        {return this.#fader?.alpha ?? this.maxAlpha}
 	get maxAlpha()     {return Ctrl.showTargets? .75:1}
@@ -176,8 +176,8 @@ export class Ghost extends Actor {
 	#arrivedAtHome() {
 		this.sprite.setResurrect()
 		;(Ctrl.alwaysChase || this.type == GhsType.Akabei)
-			? this.state.toGoingOut()
-			: this.state.toIdle() && this.#idleInHouse(this)
+			? (this.state.toGoingOut())
+			: (this.state.toIdle(), this.#idleInHouse(this))
 		!Timer.frozen && Sound.onGhostReturned()
 	}
 	#setNextDir() {
@@ -235,7 +235,7 @@ export class Ghost extends Actor {
 		this.#frightened = false
 		this.state.toBitten()
 		Timer.freeze()
-		PtsMgr.set({key:Mgr, pos:this.center}, release)
+		PtsMgr.set({key:GhsMgr, pos:this.center}, release)
 	}
 	#setPacCaughtState() {
 		Sound.stopLoops()

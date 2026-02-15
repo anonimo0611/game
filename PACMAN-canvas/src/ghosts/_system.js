@@ -49,8 +49,11 @@ export class GhsState extends _State {
 	constructor(/**@type {Ghost}*/g) {
 		super(g)
 		this.init(States).owner.inHouse
-			? this.to('Idle')
-			: this.to('Roaming')
+			? this.toIdle()
+			: this.toRoaming()
+	}
+	get isEscapingEyes() {
+		return this.isEscaping || this.isReturning
 	}
 	to(/**@type {StateType}*/s) {
 		$(this.owner).trigger(s)

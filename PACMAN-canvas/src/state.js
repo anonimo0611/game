@@ -1,5 +1,6 @@
 import StateBase from '../_lib/state.js'
 
+/** @import  {StateDef as Def} from '../_lib/_state.d' */
 /** @typedef {typeof States[number]} StateType */
 const States = /**@type {const}*/([
 	'Title','Attract','Intro','Ready','InGame','NewLevel','Cleared',
@@ -8,8 +9,8 @@ const States = /**@type {const}*/([
 /** @extends {StateBase<GameState,globalThis,StateType>} */
 class GameState extends StateBase {
 	constructor() {super(globalThis), this.init(States)}
-	get isStartMode() {return State.isIntro   || State.isReady}
-	get isDemoMode()  {return State.isAttract || State.isCoffBreak}
+	get isDemoMode()  {return this.isAttract || this.isCoffBreak}
+	get isStartMode() {return this.isIntro   || this.isReady}
 
 	/**
 	 @param {StateType} s
