@@ -26,10 +26,11 @@ export const Cursor = function() {
  @param {HTMLInputElement} ctrl
 */
 function setupRngCtrl(ctrl) {
-	const output = $(`output[for~="${ctrl.id}"]`).text(ctrl.value).get(0) ?? ''
+	const output = $(`output[for~="${ctrl.id}"]`).text(ctrl.value).get(0)
 	const ids    = ctrl.dataset.links?.trim().split(/\s+/) ?? []
 	const label  = ctrl.closest('label') || qS(`label[for="${ctrl.id}"]`)
-	const links  = ids.map(id=> qS(`input#${id}`)).filter(e=> e!=null)
+	const links  = ids.map(id=> qS(`input#${id}`)).filter(e=> e != null)
+	const target = [...new Set([ctrl,output,...links])].filter(e=> e != null)
 
 	$(label || ctrl).onWheel(e=> {
 		e.preventDefault()
@@ -40,7 +41,7 @@ function setupRngCtrl(ctrl) {
 	})
 	$(ctrl).on('input', ()=> {
 		const {value,min,max}= ctrl
-		$([...new Set([ctrl,output,...links])])
+		$(target)
 			.prop({value})
 			.css('--ratio',`${norm(+min,+max,+value)*100}%`)
 	})

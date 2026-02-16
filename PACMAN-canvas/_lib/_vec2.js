@@ -1,4 +1,5 @@
 'use strict'
+
 class Vec2 {
 	static get Zero()  {return Vec2.new( 0, 0)}
 	static get Up()    {return Vec2.new( 0,-1)}

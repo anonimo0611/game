@@ -40,7 +40,7 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
  @param {number} [step]
  @type {{
 	(stop:number): Generator<number,void,unknown>;
-	(start:number, stop:number, step?:number|undefined): Generator<number,void,unknown>;
+	(start:number, stop:number, step?:number): Generator<number,void,unknown>;
  }}
 */const range = function*(v1,v2,step=1) {
 	const [start,stop]= (v2 === undefined ? [0,v1]:[v1,v2])
@@ -56,7 +56,7 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
  @param {number} [step]
  @type {{
 	(stop:number): Generator<number,void,unknown>;
-	(start:number, stop:number, step?:number|undefined): Generator<number,void,unknown>;
+	(start:number, stop:number, step?:number): Generator<number,void,unknown>;
  }}
 */const cycleRange = function*(v1,v2,step=1) {
 	const [start,stop]= (v2 === undefined ? [0,v1]:[v1,v2])

@@ -75,5 +75,6 @@ class StateBase {
 @typedef {{
    new <Self,Owner,State extends string>(owner:Owner):
    StateBase<Owner,State> & Def.Props<Owner,State,Self>
-}} StateBaseConstructor
-*/ export default /**@type {StateBaseConstructor}*/(StateBase)
+}} Constructor
+*/
+export default /**@type {Constructor}*/(StateBase)

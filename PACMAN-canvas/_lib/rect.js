@@ -14,7 +14,7 @@ export class Rect {
 		return freeze(this)
 	}
 	contains(/**@type {Position}*/pos) {
-		const {x,y,w:w,h:h}=this
+		const {x,y,w,h}= this
 		return (
 			(pos.x >= x && pos.x < x+w) &&
 			(pos.y >= y && pos.y < y+h))

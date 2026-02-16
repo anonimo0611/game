@@ -12,7 +12,7 @@ const {Ticker,Timer}= function() {
 	const Interval = 1000/FPS
 	const TimerMap = /**@type {Map<any,TimerData>}*/(new Map)
 
-	let _ticker = /**@type {?TickerCore }*/(null)
+	let _ticker = /**@type {?TickerCore}*/(null)
 	let _paused = false
 	let _fCount = 0 // frame  count
 	let _pCount = 0 // paused count
