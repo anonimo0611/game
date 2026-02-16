@@ -30,7 +30,7 @@ export class CoffBreak {
 	/** @protected @param {number} num */
 	constructor(num) {
 		this.pacman.y = this.akabei.y = (BH/2 - T/2)
-		Sound.playCoffBGM({loop:1^+(num == 2)})
+		Sound.playCoffBGM({loop:(num == 2) ? 0:1})
 		$onNS('.CB',{Quit:this.end, blur_focus:this.pause})
 	}
 	pause() {
@@ -136,11 +136,11 @@ class Scene2 extends CoffBreak {
 		return (a.x != spr.AkaMinX)
 	}
 	draw() {
-		const {akabei:a,  sprite:spr, akaEyes,isRipped}= this
+		const {akabei:a, sprite:spr, akaEyes,isRipped}= this
 		const aIdx = isRipped? 0 : (this.counter? 1 : a.animIdx)
 		spr.drawStake()
 		this.drawPac()
-		this.drawAka({animIdx: aIdx,isRipped,orient:akaEyes})
+		this.drawAka({isRipped,animIdx:aIdx,orient:akaEyes})
 		isRipped?
 			spr.drawShard():
 			function() { // Snagged Clothing
