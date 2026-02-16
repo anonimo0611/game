@@ -10,8 +10,8 @@ class Akabei extends Ghost {
 	constructor() {
 		super(L, {type:0, tile:[13.5, 12]})
 	}
-	get isAngry()      {return GhsMgr.CruiseElroy.angry}
 	get chaseSpeed()   {return GhsMgr.CruiseElroy.speed}
+	get isAngry()      {return GhsMgr.CruiseElroy.angry}
 	get isScattering() {return super.isScattering && !this.isAngry}
 }
 
