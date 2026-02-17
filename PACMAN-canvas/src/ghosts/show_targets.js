@@ -21,7 +21,6 @@ export default new class {
 		|| g.state.isBitten
 		|| (Timer.frozen && !g.isEscaping)
 	)
-
 	/** @param {Ghost} g */
 	#getTargetPos = g=>
 		(g.state.isGoingOut || g.isEscaping)

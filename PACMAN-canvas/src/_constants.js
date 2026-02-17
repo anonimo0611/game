@@ -1,9 +1,9 @@
 const
-TileSize  = 31,
 Cols      = 28,
 Rows      = 34,
 DotPts    = 10,
 PowPts    = 50,
+TileSize  = int(screen.height/Rows),
 BaseSpeed = TileSize/4.5,
 
 /** Shorthand of TileSize */
@@ -21,10 +21,10 @@ BH = Rows * T,
 
 U='Up', R='Right', D='Down', L='Left',
 
-Bg    = canvas2D('board_bg' ,  BW,BH).ctx,
-Fg    = canvas2D('board_main', BW,BH).ctx,
-HUD   = canvas2D('board_hud',  BW,BH).ctx,
-Grid  = canvas2D('board_grid', BW,BH).ctx,
+Bg   = canvas2D('board_bg' ,  BW,BH).ctx,
+Fg   = canvas2D('board_main', BW,BH).ctx,
+HUD  = canvas2D('board_hud',  BW,BH).ctx,
+Grid = canvas2D('board_grid', BW,BH).ctx,
 
 Colors = freeze(new class {
 	Grid      = '#F00'
@@ -71,3 +71,5 @@ GhsSpeed  = freeze(new class {
 	InTunnel = this.Base * 0.60
 	Escape   = this.Base * 1.40
 })
+
+$root.css('--tile-size',`${TileSize}px`)
