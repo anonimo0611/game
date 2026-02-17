@@ -1,6 +1,6 @@
 const {Sound:SoundJS}= createjs
 /**
- @import   {Sound} from './_sound.d'
+ @import {Sound} from './_sound.d'
  @template {string} S
 */
 export class SoundMgr {
@@ -8,7 +8,6 @@ export class SoundMgr {
 	#disabled = true
 	#playOpts = /**@type {{[K in S]:Readonly<Sound.Data<S>>}}*/({})
 	#instance = /**@type {{[K in S]:createjs.AbstractSoundInstance}}*/({})
-
 	/**
 	 @param {Sound.Setup} setup
 	 @param {Sound.Manifest<S>} m
