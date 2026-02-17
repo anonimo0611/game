@@ -44,7 +44,7 @@ export const View = function()
 	{
 		for (const i of range(8))
 		{
-			Fruit.draw(ctx, i, ofst(i)+S/2, S/2, S/16)
+			Fruit.draw(ctx, i, ofst(7-i)+S/2, S/2, S/16)
 		}
 	}
 
