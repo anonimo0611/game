@@ -23,9 +23,7 @@ export class Attract {
 
 	/** @private */
 	constructor() {
-		!document.hasFocus()
-			? this.quit()
-			: $onNS('.Attract',{click_keydown_blur:this.quit})
+		$onNS('.Attract',{click_keydown_blur:this.quit})
 	}
 	update() {this.subAct.update()}
 	GhsEntries = /**@type {const}*/([

@@ -20,13 +20,13 @@ const RunTimer = new class {
 	update() {
 		(!document.hasFocus() || Confirm.opened || Ctrl.activeElem)
 			? this.reset()
-		 	:(this.#cnt+=Ticker.Interval) > 1e3*30 // 30secs
+		 	:(this.#cnt+=Ticker.Interval) > 1e3*3 // 30secs
 				&& State.toAttract()
 	}
 }
 
 /** @type {{[K in import('../state').StateType]?:Scene}} */
-const Scenes ={Title:RunTimer,Attract,CoffBreak}
+const Scenes = {Title:RunTimer,Attract,CoffBreak}
 export const Demo = {
 	get CoffBreakNum() {return CoffBreak.num},
 	draw()   {Scenes[State.current]?.draw?.()},
