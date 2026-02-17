@@ -166,7 +166,8 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 
 //---- jQuery utilities ------
 
-const $win = $(window)
+const $win  = $(window)
+const $root = $(document.documentElement)
 
 /**
  @param {JQWindowHandler} handler
