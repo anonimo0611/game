@@ -6,7 +6,6 @@ html, body {
 	overflow: hidden;
 }
 html {
-	--tile-size: 31px;
 	--grid-cols: 28;
 	--grid-rows: 34;
 	font-size: var(--tile-size);
@@ -208,7 +207,7 @@ body:is([data-state=Attract],[data-state=CoffBreak]) {
 			width: 100%;
 			display: block;
 		}
-		#resetBtn {border-width: 4px}
+		#resetBtn {border-width: .2em}
 	}
 	output + label {
 		display: flex;
@@ -224,7 +223,7 @@ body:is([data-state=Attract],[data-state=CoffBreak]) {
 	}
 	[type=range] {
 		width:  4rem;
-		height: 4px;
+		height: .2em;
 		scale: .9;
 	}
 }
@@ -303,7 +302,7 @@ body:is([data-state=Attract],[data-state=CoffBreak]) {
 		left: calc(var(--thumb-size)/2);
 		top:  var(--size);
 		width:var(--size);
-		height: 3px;
+		height: .17em;
 		rotate: -90deg;
 		transform-origin: 0 50%;
 		opacity: 0;

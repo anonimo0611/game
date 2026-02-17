@@ -18,7 +18,7 @@ dialog {
 	font: 2vmin sans-serif;
 	margin: 0;
 	padding: .2rem;
-	border: solid 2px #444;
+	border: solid .2em #444;
 	border-radius: .4em;
 	position: fixed;
 	top:  50%;
@@ -29,7 +29,7 @@ dialog {
 		background-color: #0006;
 	}
 	.content {
-		border-bottom: solid 1px var(--color-border);
+		border-bottom: solid .1em var(--color-border);
 		padding: .5em 1em 1em;
 	}
 	.buttons {
@@ -42,11 +42,11 @@ dialog {
 			padding: .4em 1em .3em;
 		}
 		button.cancel {
-			border-width: 1px;
+			border-width: .15em;
 		}
 		button.ok {
 			font-weight: bold;
-			border-width: 3px;
+			border-width: .25em;
 		}
 	}
 }
@@ -58,7 +58,7 @@ dialog {
 	font-size: 80%;
 	margin: 0;
 	padding: 0 .2em .3em;
-	border: solid 2px #444;
+	border: solid .15em #444;
 	border-radius: .3rem;
 	position: absolute;
 	z-index: 100;
@@ -81,7 +81,7 @@ button, input,
 [type=slidemenu] {
 	color: #EEE;
 	font-size: .9em;
-	border: solid 2px var(--color-border);
+	border: solid .1em var(--color-border);
 	border-radius: .2em;
 	outline: 0;
 }
@@ -110,14 +110,14 @@ button,
 	--active: #C6F;
 	appearance: none;
 	box-sizing: border-box;
-	border: solid 2px transparent;
-	border-radius: 2px;
+	border: solid .1em transparent;
+	border-radius: .1em;
 	width:  .8em;
 	height: .8em;
 	position: relative;
 	&:focus {
-		outline-offset: 2px;
-		outline: solid 3px var(--active);
+		outline-offset: .1em;
+		outline: solid .15em var(--active);
 	}
 	&:not(:checked) {
 		border-color: var(--color-border);
@@ -130,11 +130,11 @@ button,
 			content: '';
 			border: solid #000;
 			border-width: 0 0 .1em .1em;
-			width:  calc(.7em - 3px);
-			height: calc(.5em - 2px);
+			width:  calc(.55em);
+			height: calc(.40em);
 			box-sizing: border-box;
 			position: absolute;
-			translate: 1px 0;
+			translate: .05em 0;
 			rotate: -45deg;
 		}
 	}
@@ -149,7 +149,7 @@ button,
 	background: linear-gradient(90deg, var(--accent) var(--per), #777 var(--per));
 	border:  none;
 	outline: none;
-	height: 5px;
+	height: .2em;
 	accent-color: var(--accent);
 	&:focus {
 		--accent: var(--active);
@@ -197,13 +197,13 @@ custom-menu {
 		--size: calc(var(--caret-size)/3);
 		content: '';
 		border: solid;
-		border-width: 0 0 3px 3px;
+		border-width: 0 0 .15em .15em;
 		position: absolute;
 		width:  var(--size);
 		height: var(--size);
 		right:  var(--size);
 		top:   calc(50% - var(--size)/3);
-		right: calc(3px + .2em);
+		right: calc(.3em);
 		translate: 0 -50%;
 		rotate: -45deg;
 	}
@@ -219,7 +219,7 @@ custom-menu {
 	mn-item {
 		background: var(--bgcolor);
 		border: solid transparent;
-		border-width: 2px 0;
+		border-width: .1em 0;
 		padding: .1em calc(var(--caret-size)) .1em .3em;
 		display: block;
 		&.selected, &:hover {background:#366}
@@ -238,8 +238,8 @@ custom-menu {
 		background: var(--bgcolor-hilight)
 	}
 	&:focus {
-		outline-offset: 2px;
-		outline: solid 2px var(--color-focus-border);
+		outline-offset: .15em;
+		outline: solid .15em var(--color-focus-border);
 	}
 	mn-list,
 	mn-item {
@@ -254,7 +254,7 @@ custom-menu {
 	.button {
 		background: transparent !important;
 		border: solid;
-		border-width: 0 0 4px 4px;
+		border-width: 0 0 .2em .2em;
 		padding: 0;
 		width:  .5em;
 		height: .5em;
@@ -262,8 +262,8 @@ custom-menu {
 		position: absolute;
 		z-index: 2;
 		top: 50%;
-		&.l {left: 1px; translate:0 -50%; rotate:+45deg}
-		&.r {right:1px; translate:0 -50%; rotate:-45deg; scale:-1 1}
+		&.l {left: .05em; translate:0 -50%; rotate:+45deg}
+		&.r {right:.05em; translate:0 -50%; rotate:-45deg; scale:-1 1}
 		&[data-disabled=true] {opacity: 0.4}
 		transform-origin: center;
 	}
