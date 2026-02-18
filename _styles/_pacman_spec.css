@@ -161,6 +161,10 @@ img.button {
 		tbody th {
 			text-align: left;
 		}
+		td {
+			text-align: right;
+			padding-right: .7em;
+		}
 	}
 	@media screen {
 		th:not(:last-child),
