@@ -4,26 +4,23 @@ import {State}     from '../state.js'
 import {Attract}   from './attract.js'
 import {CoffBreak} from './coffee_break.js'
 
-const WaitTime = 1e3*3 // 30secs
-
 const Events = 'blur_focus_pointerdown_mousemove_keydown_scroll_resize_wheel'
+const WaitTime = 1e3*30 // 30secs
 
 /** Attract Mode will begin after a period of inactivity. */
-const RunTimer = new class {
-	reset() {Ticker.resetCount()}
-	constructor() {State.onChange(()=> this.sync())}
-	sync() {
-		this.reset()
-		State.isTitle == false ?
-			$off('.RunTimer'):
-			$onNS('RunTimer', {[Events]:()=> this.reset()})
-	}
-	update() {
+const RunTimer = function() {
+	State.onChange(()=> {
+		State.isTitle == false
+			? $off('.RunTimer')
+			: $onNS('RunTimer', {[Events]:Ticker.resetCount})
+	})
+	function update() {
 		(!document.hasFocus() || Confirm.opened || Ctrl.activeElem)
-			? this.reset()
+			? Ticker.resetCount()
 		 	: Ticker.elapsedTime > WaitTime && State.toAttract()
 	}
-}
+	return {update}
+}()
 
 /** @type {{[K in import('../state').StateType]?:Scene}} */
 const Scenes = {Title:RunTimer,Attract,CoffBreak}
