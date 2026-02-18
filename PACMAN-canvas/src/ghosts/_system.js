@@ -22,7 +22,7 @@ export const Events = toEnumObject(
 */
 const StandbyTimes = /**@type {const}*/
 ([//Pinky->Aosuke->Guzuta
-	[1000,  500,  500], // Restart
+	[1000, 2000, 3000], // Restart
 	[1000, 4000, 4000], // Lv.1
 	[ 800, 2200, 4000], // Lv.2
 	[ 600, 1900, 3500], // Lv.3
@@ -95,7 +95,7 @@ export const GhsMgr = new class {
 		Ctrl.alwaysChase && GhsMgr.#setReleaseTimer()
 	}
 	#setReleaseTimer() {
-		const lv = (Game.hasDied? 0 : Game.clampedLv)
+		const lv = (Game.restarted? 0 : Game.clampedLv)
 		Timer.sequence(...
 			Ghosts.slice(1).map((g,i)=> ({
 				ms: StandbyTimes[lv][i]/Game.speed,
@@ -201,7 +201,7 @@ export const DotCounter = function() {
 		const pLimit  = LimitTable[i-1][lvIdx] // personal
 		;(Player.core.timeSinceLastEating >= timeout)
 			? fn()
-			: (!Game.hasDied || _globalCounter < 0)
+			: (!Game.restarted || _globalCounter < 0)
 				? (personalCounters[i] >= pLimit)
 					&& fn()
 				: (_globalCounter == gLimit)
@@ -209,11 +209,11 @@ export const DotCounter = function() {
 					&& (_globalCounter = -1)
 		}
 	function reset() {
-		!Game.hasDied && personalCounters.fill(0)
-		_globalCounter = Game.hasDied? 0:-1
+		!Game.restarted && personalCounters.fill(0)
+		_globalCounter = Game.restarted? 0:-1
 	}
 	function increaseCounter() {
-		(Game.hasDied && _globalCounter >= 0)
+		(Game.restarted && _globalCounter >= 0)
 			? _globalCounter++
 			: incPreferredGhostCounter()
 	}

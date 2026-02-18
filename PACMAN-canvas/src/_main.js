@@ -33,12 +33,12 @@ export const Game = new class {
 		.toTitle()
 		Menu.Level.onChange(Game.#resetLevel)
 	}
-	#level   = 1
-	#hasDied = false
+	#level     = 1
+	#restarted = false
 
-	get level()    {return Game.#level}
-	get levelStr() {return Game.#level.toString().padStart(2,'0')}
-	get hasDied()  {return Game.#hasDied}
+	get level()     {return Game.#level}
+	get levelStr()  {return Game.#level.toString().padStart(2,'0')}
+	get restarted() {return Game.#restarted}
 
 	/** Level 13+ as the fastest, stepwise faster from level 1 to 13 */
 	get speedByLv() {return 1 - (13-Game.clampedLv) * .01}
@@ -48,7 +48,7 @@ export const Game = new class {
 	get moveSpeed() {return Game.speed * Game.speedByLv}
 
 	#resetLevel() {
-		Game.#hasDied = false
+		Game.#restarted = false
 		Game.#setLevel(Menu.Level.index+1)
 	}
 	#setLevel(i=1) {
@@ -95,11 +95,11 @@ export const Game = new class {
 		State.toTitle()
 	}
 	#levelBegins() {
-		Game.#hasDied = State.isPacDying
+		Game.#restarted = State.isPacDying
 		State.toReady().toInGame({delay:2200})
 	}
 	#levelEnds() {
-		Game.#hasDied = false
+		Game.#restarted = false
 		if (!Ctrl.endlessMode) {
 			State.toTitle()
 			return
