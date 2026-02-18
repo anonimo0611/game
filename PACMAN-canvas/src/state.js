@@ -1,6 +1,6 @@
 import StateBase from '../_lib/state.js'
 
-/** @import  {StateDef as Def} from '../_lib/_state.d' */
+/** @typedef {import('../_lib/_state.d').StateDef.Opts} Opts */
 /** @typedef {typeof States[number]} StateType */
 const States = /**@type {const}*/([
 	'Title','Attract','Intro','Ready','InGame','NewLevel','Cleared',
@@ -29,7 +29,7 @@ class GameState extends StateBase {
 
 	/**
 	 @param {StateType} s
-	 @param {{delay?:number,data?:JQData}} options
+	 @param {Opts} options
 	*/
 	to(s, {data,delay=(s == 'Quit' ? -1 : 0)}={}) {
 		return super.to(s, {data,delay,fn:this.#callback})
