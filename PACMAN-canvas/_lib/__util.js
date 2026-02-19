@@ -5,14 +5,8 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 /**
  @template {object} T
  @param {T} o
- @returns {Readonly<(keyof T)[]>}
-*/const typedKeys = o=> /**@type {(keyof T)[]}*/(keys(o))
-
-/**
- @template {object} T
- @param {T} o
- @returns {[keyof T, T[keyof T]][]}
-*/const typedEntries = o=> /**@type {any}*/(entries(o))
+*/const typedKeys = o=>
+	/**@type {(keyof T)[]}*/(keys(o))
 
 /**
  @template {string} T
@@ -23,8 +17,7 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 
 /**
  @param {KeyboardEvent|JQuery.KeyboardEventBase} e
-*/const keyRepeat = e=>
-	(e instanceof KeyboardEvent? e : e.originalEvent)?.repeat ?? false
+*/const keyRepeat = e=> (e instanceof KeyboardEvent? e : e.originalEvent)?.repeat ?? false
 
 /**
  @param {KeyboardEvent|JQuery.KeyboardEventBase} e
@@ -40,7 +33,7 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
  @param {number} [step]
  @type {{
 	(stop:number): Generator<number,void,unknown>;
-	(start:number, stop:number, step?:number): Generator<number,void,unknown>;
+	(start:number,stop:number,step?:number): Generator<number,void,unknown>;
  }}
 */const range = function*(v1,v2,step=1) {
 	const [start,stop]= (v2 === undefined ? [0,v1]:[v1,v2])
@@ -56,7 +49,7 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
  @param {number} [step]
  @type {{
 	(stop:number): Generator<number,void,unknown>;
-	(start:number, stop:number, step?:number): Generator<number,void,unknown>;
+	(start:number,stop:number,step?:number): Generator<number,void,unknown>;
  }}
 */const cycleRange = function*(v1,v2,step=1) {
 	const [start,stop]= (v2 === undefined ? [0,v1]:[v1,v2])
