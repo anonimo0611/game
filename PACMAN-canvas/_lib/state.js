@@ -1,9 +1,8 @@
 /**
- @import {StateDef as Def} from "./_state.d"
  @template Owner
  @template {string} State
 */
-class StateBase {
+export default class StateBase {
 	#owner
 	#last     = /**@type {?State}*/(null)
 	#curr     = /**@type {State} */('')
@@ -25,7 +24,7 @@ class StateBase {
 		states?.forEach((/**@type {State}*/s,i)=> {
 			const self = /**@type {any}*/(this)
 			i == 0 && (this.#default = s)
-			self[`to${s}`] = (/**@type {Def.Opts}*/opt)=> this.to(s,opt)
+			self[`to${s}`] = (/**@type {StateDef.Opts}*/opt)=> {this.to(s,opt)}
 			defineProperty(this,`is${s}`, {get(){return this.#curr === s}})
 			defineProperty(this,`was${s}`,{get(){return this.#last === s}})
 		})
@@ -70,11 +69,3 @@ class StateBase {
 		return this
 	}
 }
-
-/**
-@typedef {{
-   new <Self,Owner,State extends string>(owner:Owner):
-   StateBase<Owner,State> & Def.Props<Owner,State,Self>
-}} Constructor
-*/
-export default /**@type {Constructor}*/(StateBase)
