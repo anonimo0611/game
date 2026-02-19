@@ -26,7 +26,6 @@ export class Ghost extends Actor {
 	#frightened = false
 
 	/**
-	 @typedef {import('./_system').IGhsState} IState
 	 @param {Direction} dir
 	 @param {{type?:number, tile?:xyTuple, align?:-1|0|1}} options
 	*/
@@ -35,7 +34,7 @@ export class Ghost extends Actor {
 		this.dir   = dir
 		this.type  = type
 		this.init  = freeze({align,x:col*T})
-		this.state = /**@type {IState}*/(new Sys.GhsState(this))
+		this.state = Sys.createState(this)
 		$(this).on({
 		 [Evt.Reverse]:   ()=> this.#revSig  = true,
 		 [Evt.Ready]:     ()=> this.#fader   = Fade.in (500),

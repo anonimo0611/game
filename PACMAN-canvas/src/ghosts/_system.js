@@ -48,7 +48,7 @@ const StateTypes = toEnumObject(States)
  @extends {_State<Ghost,StateType>}
  @typedef {GhsState & StateDef.Props<globalThis,StateType>} IGhsState
 */
-export class GhsState extends _State {
+class GhsState extends _State {
 	/** @this {IGhsState} */
 	constructor(/**@type {Ghost}*/g) {
 		super(g)
@@ -65,15 +65,17 @@ export class GhsState extends _State {
 		return super.to(s)
 	}
 }
+export const createState =
+	/**@type {(g:Ghost)=> IGhsState}*/(g=> new GhsState(g))
 
 export const GhsMgr = new class {
 	static {$(this.setup)}
 	static setup() {
 		State.on({
 			InGame:   GhsMgr.#onInGame,
-			Ready:    ()=> $(Ghosts).trigger(Evt.Ready),
-			Cleared:  ()=> $(Ghosts).trigger(Evt.RoundEnds),
-			PacCaught:()=> $(Ghosts).trigger(Evt.RoundEnds),
+			Ready:    _=> $(Ghosts).trigger(Evt.Ready),
+			Cleared:  _=> $(Ghosts).trigger(Evt.RoundEnds),
+			PacCaught:_=> $(Ghosts).trigger(Evt.RoundEnds),
 		})
 	}
 	#animIdx = 0
