@@ -87,12 +87,12 @@
 		</section>
 		<section id="pacman-game">
 			<h1><a href="#pacman-game" class="fragment">自作パックマンについて<small>（HTML5 + CSS + JavaScript + Canvas API）</small></a></h1>
-			<p><a href="https://anonimo0611.github.io/game/Pac-Man_Dossier/00.html">The Pacman Dossier</a>を参考に、<cite>PAC-MAN</cite>(1980)をアレンジしたクローンゲームです</p>
-			<p>JavaScriptを使用して、キャンバスにゲーム画面を描画しています</p>
-			<p>テキストにはアタリ風のフォントを使用していますが、それ以外のゲームで使用する迷路やスプライトのすべてをCanvas APIによって描いています。あらかじめ用意したスプライトシートの画像は使用していません。クラシカルなドット絵の雰囲気を保ちつつ、高画質なグラフィックで再現することにこだわりました</p>
-			<p><a href="PACMAN-canvas/_sprites/">スプライトの一覧</a>を用意しました。縮小/拡大したり、アクターのアニメーションをみれます</p>
-			<p>ポイント表示やフルーツ類の一部は<a href="https://github.com/masonicGIT/pacman" class="ref" title="GitHub - masonicGIT/pacman: Remake of Pacman by Shaun Williams">Shaun Williams氏</a>のスプライトを少し改変して使用しています</p>
-			<p>ゲームシステムやロシックをおおかた再現していますが、速度に関してはスピーディにアレンジしています。設定でさらに速くしたり、逆に遅くすることもできますので、お好みの速度で遊んでみてください</p>
+			<p>本作は<a href="https://anonimo0611.github.io/game/Pac-Man_Dossier/00.html">The Pacman Dossier</a>を参考に、<cite>PAC-MAN</cite>(1980)をアレンジしたクローンゲームです</p>
+			<p>JavaScriptを使用して、HTML5のキャンバスにゲーム画面を描画しています。</p>
+			<p>テキストにはアタリ風のフォントを使用していますが、それ以外のゲームで使用する迷路やスプライトのすべてをCanvas APIによって描いています。あらかじめ用意したスプライトシートの画像は使用していません。クラシカルなドット絵の雰囲気を保ちつつ、高画質なグラフィックで再現することにこだわりました。</p>
+			<p><a href="PACMAN-canvas/_sprites/">スプライトの一覧</a>を用意しました。縮小/拡大したり、アクターのアニメーションを閲覧できます。</p>
+			<p>獲得ポイントやフルーツの一部は、<a href="https://github.com/masonicGIT/pacman" class="ref" title="GitHub - masonicGIT/pacman: Remake of Pacman by Shaun Williams">Shaun Williams氏</a>のスプライトを改変して使用しています。</p>
+			<p>ゲームシステムやロジックをおおかた再現していますが、速度に関してはスピーディにアレンジしています。設定でさらに速くしたり、逆に遅くすることもできますので、お好みの速度で遊んでみてください。</p>
 			<section id="requirements">
 				<h2><a href="#requirements" class="fragment">推奨環境</a></h2>
 				<p>最新版のPC向けChromium系ブラウザを推奨しています</p>
@@ -100,7 +100,7 @@
 				<p>後方互換性を考慮してないので、旧いブラウザでは動作しません</p>
 				<p>Firefoxでは読込みの完了後、閲覧領域を一度クリックしないと音声が再生されません</p>
 				<p>ユーザースタイルシートは適用されないようにしてください</p>
-				<p>2Kまたは4Kのフルスクリーンで等倍表示になります</p>
+				<p>2Kまたは4Kのフルスクリーン表示で等倍表示になります</p>
 				<p>フルスクリーンでなければ、CSSのscaleによりビューポートに合せて縮小します</p>
 			</section>
 			<section id="config">
@@ -218,14 +218,14 @@
 						</div>
 					</section>
 				</div>
-				<p>Unrestricted ghostsを有効にすると極端に難しくなるので、あまりお奨めはしません。岩谷氏率いるナムコの開発チームがバランス調整に労力を費やした結果、ゴーストの進入禁止エリアがあります。</p>
+				<p>Unrestricted ghostsを有効にすると極端に難しくなるので、あまりお奨めはしません。ゴーストの進入禁止エリアがあるのは、岩谷氏率いるナムコの開発チームが入念にバランス調整した結果です。</p>
 			</section>
 			<section id="practive-mode">
 				<h2><a href="#practive-mode" class="fragment">練習モード（PRACTICE）について</a></h2>
 				<p>練習モードでは、上端にあるハイスコア表示の代わりに<em>PRACTICE</em>と表示されます</p>
 				<p class="as-follows">切り替わる条件は以下のとおりです：</p>
 				<ul>
-					<li><em>連続プレイではない</em>（すなわち Only this level がオンの）とき</li>
+					<li><em>連続プレイではない</em>（すなわち Play only this level がオンの）とき</li>
 					<li>または連続プレイにおいて<em>途中のレベルから始める</em>とき</li>
 					<li>Speedが0.6以下、Invincible または Show targetsがオンのとき</li>
 				</ul>
@@ -233,30 +233,32 @@
 			</section>
 			<section id="play-mode">
 				<h2><a href="#play-mode" class="fragment">２人交互プレイ</a></h2>
-				<p>２人交互プレイは実装してません。スコアは１ＵＰだけの１行表示です</p>
+				<p>２人交互プレイは実装しておらず、スコアは１ＵＰだけの１行表示です</p>
 				<p>ブラウザゲームなのでクレジットの概念はありません</p>
 				<p>ゲームを開始するには矢印キーやスペースを押すか、下部のボタンを押します</p>
-				<p><kbd>↑</kbd>でスタートすると、次の交差点に達すると上に曲がります。<kbd>→</kbd> を押してから <kbd>↑</kbd> を押すと、右へ進んで次の交差点に達すると上に曲がります。<kbd>↓</kbd> のばあいも同様に下に曲がります</p>
+				<p><kbd>↑</kbd>でスタートすると、次の交差点に達すると上に曲がります
+				<p><kbd>→</kbd> を押してから <kbd>↑</kbd> を押すと、右へ進んで次の交差点に達すると上に曲がります</p>
+				<p><kbd>↓</kbd> のばあいも同様に次の交差点で下に曲がります</p>
 			</section>
 			<section id="demo">
 				<h2><a href="#demo" class="fragment">アトラクト デモ</a></h2>
 				<p>タイトル画面でなにも操作せず放置すると、30秒ほどで始まるようにしています</p>
-				<p>すぐにご覧になりたいときは <img src="_imgs/burger.png" class="button" alt="ハンバーガーボタン" title="ハンバーガーボタン">を押してください。コーヒーブレイクも観れます</p>
+				<p>すぐにご覧になりたいときは <img src="_imgs/burger.png" class="button" alt="ハンバーガーボタン" title="ハンバーガーボタン">からパネルを開き、再生ボタンを押してください</p>
 				<p>ブラウザゲームで勝手に動き出すのは気持ち悪いので、プレイデモはありません</p>
 			</section>
 			<section id="level">
 				<h2><a href="#level" class="fragment">ゲームレベル</a></h2>
-				<p>難易度はレベル１～13まで13段階としており、13以後は同じ難易度の繰り返しです</p>
+				<p>難易度はレベル１～13までの13段階であり、それ以後は同じ難易度の繰り返しになります</p>
 				<p>レベル255をクリアすると一周してレベル１に戻るようにしてます</p>
 				<p>原作ではレベル21まで難易度が上昇します（cf. <a href="Pac-Man_Dossier/table_a1.html" title="付録の表A.1 - The Pac-Man Dossier邦訳 ">付録の表A.1</a>）</p>
 				<p>メニュー選択でお好みのレベルから始められますが、途中からだと<a href="#practive-mode">練習モード</a>になります</p>
-				<p>“Only this level”をオンにすると、次のレベルに進まずタイトル画面に戻ります</p>
+				<p>“Play only this level”をオンにすると、次のレベルに進まずタイトル画面に戻ります</p>
 			</section>
 			<section id="scatter-chase">
 				<h2><a href="#scatter-chase" class="fragment">縄張/追跡モード</a></h2>
 				<p>“常に追跡モード”がオフのときは、おおむね原作のとおりです</p>
 				<p>しかし、原作より移動が速いため、縄張/追跡モードの各期間は短めにしています</p>
-				<p class="as-follows">次の表は各期間の長さをまとめたものです（単位は秒）：</p>
+				<p class="as-follows">次の表は、各期間の長さをまとめたものです（単位は秒）：</p>
 				<table>
 					<thead>
 						<tr>
@@ -334,8 +336,8 @@
 			<section id="release-ghosts">
 				<h2><a href="#release-ghosts" class="fragment">巣からの開放</a></h2>
 				<p><a href="Pac-Man_Dossier/02.html#home-sweet-home" title="第２章：ゲームプレイの詳細 ホームスイートホーム - The Pac-Man Dossier邦訳">ドットカウンター/グローバル･ドットカウンター</a>を原作のとおり実装しています</p>
-				<p>したがって原作のとおり、<a href="https://www.youtube.com/watch?v=GI_kHYAUZOU" title="Pac-Man Ghost House Trick - YouTube">ハウストリック</a>を再現できます</p>
-				<p>タイマー制限も原作同様にレベル１～４までは４秒、レベル５以降では３秒です</p>
+				<p>したがって、原作のとおり<a href="https://www.youtube.com/watch?v=GI_kHYAUZOU" title="Pac-Man Ghost House Trick - YouTube">ハウストリック</a>を再現できます</p>
+				<p>タイマー制限も原作同様にレベル４までは４秒、レベル５以降では３秒です</p>
 				<p>このタイマーはドットを食べたり、優先ゴーストを開放するごとにリセットされます</p>
 				<p class="as-follows">ただし“常に追跡モード”では次の表のとおり、時間で開放されます（単位はミリ秒）：</p>
 				<table>
@@ -447,7 +449,7 @@
 			</section>
 			<section id="frightened-mode">
 				<h2><a href="#frightened-mode" class="fragment">イジケモード</a></h2>
-				<p class="as-follows">下記の表は各レベルのイジケタイム（秒）です：</p>
+				<p class="as-follows">下記の表は、各レベルのイジケタイム（秒）です：</p>
 				<table>
 					<thead>
 						<tr>
@@ -487,7 +489,7 @@
 					</tbody>
 				</table>
 				<p>レベル５、９をクリアしたあと、コーヒーブレイクを挟んだ６、10は５秒に延長されます</p>
-				<p>レベル13以降ではイジケなくなり、進行方向を反転するだけです（原作での17、19以降に相当）</p>
+				<p>レベル13以降ではイジケなくなり、進行方向だけ反転します（原作での17、19以降に相当）</p>
 				<p>ただしゼロ秒のときは400ミリ秒のあいだ、パックマンから遠ざかるようにしています</p>
 				<p>原作のレベル仕様は<a href="Pac-Man_Dossier/table_a1.html" title="付録の表A.1 - The Pac-Man Dossier邦訳 ">付録の表A.1</a>を参照してください</p>
 			</section>
@@ -515,11 +517,14 @@
 			<section id="speed">
 				<h2><a href="#speed" class="fragment">移動速度</a></h2>
 				<p>標準設定ではすべてのレベルを通して、原作より移動速度が速くなっています</p>
-			 	<p>レベル１～13までの13段階で徐々に速くなります(原作では４段階)</p>
-				<p>通常時のゴーストはパックマンに対して107％の速度で移動します</p>
-				<p>レベル13以降では、パックマンの速度は98％に落ちます</p>
-				<p>無理ゲーにならいようにバランス調整している積もりです。ゴーストとの当たり判定が小さいのでギリギリかわせたり、プリターンを連続すると引き離せます。<a href="Pac-Man_Dossier/02.html#areas-to-exploit" title="第２章：ゲームプレイの詳細 最大限活用すべきエリア - The Pac-Man Dossier邦訳">緊急回避用通路</a>に逃げ込むのも手です
-				</p>
+				<ul>
+			 	<li>レベル１～13までの13段階で徐々に速くなります(原作では４段階)</li>
+				<li>通常時のゴーストはパックマンに対して107％の速度で移動します</li>
+				<li>レベル13以降ではパックマンの速度は98％まで落ちて遅くなります</li>
+				</ul>
+				<p>無理ゲーにならいようにバランス調整している積もりです</p>
+				<p>ゴーストとの当たり判定が小さいのでギリギリかわせたり、プリターンを連続すると引き離せます</p>
+				<p><a href="Pac-Man_Dossier/02.html#areas-to-exploit" title="第２章：ゲームプレイの詳細 最大限活用すべきエリア - The Pac-Man Dossier邦訳">緊急回避用通路</a>に逃げ込むのも手です</p>
 				<p>慣れてくるとゴーストの行動を先読みしたり、誘導することが出来るようになります</p>
 				<p class="as-follows">状況による相対的な速度変化は下記のとおりです：</p>
 				<div id="relative-speed">
@@ -664,8 +669,8 @@
 			</section>
 			<section id="pattern">
 				<h2><a href="#pattern" class="fragment">攻略パターン</a></h2>
-				<p>原作のパターンは使えませんが、別の攻略パターンがあるかもしれません。しかし、原作の開発者が想定外だったように、私も想定していません。仕様変更でパターンが変わる可能性もあります</p>
-				<p>パターンを実行すると忍耐力を競うだけになり、本来のゲーム性が失われてしまいます。それよりもプレイヤーが思い思いに操作し、その場その場で敵の行動に対処したほうが面白いと思いませんか？</p>
+				<p>原作のパターンは使えませんが、別の攻略パターンがあるかもしれません。しかし、原作の開発者が想定外だったように、私も想定していません。仕様変更でパターンが変わる可能性もあります。</p>
+				<p>パターンを実行すると忍耐力を競うだけになり、本来のゲーム性が失われてしまいます。私はそれよりも、プレイヤーが思い思いに操作し、その場その場で敵の行動に対処したほうが面白いと思っています。</p>
 			</section>
 		</section>
 	</section>
