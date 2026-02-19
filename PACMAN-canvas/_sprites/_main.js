@@ -138,11 +138,11 @@ export const View = function()
 			aka.draw(ctx,{size:S,x,y,...params})
 		}
 		{// Snagged Clothing
-			const pos = Vec2.Zero, rates = [0.3, 0.5 ,1]
+			const pos = Vec2.Zero, ratios = [0.3, 0.5 ,1]
 			for (const i of range(3)) {
 				draw(...pos.vals, {animIdx:+(i==2)})
 				const nPos = Vec2.new(pos).add(S*0.75, S/4)
-				spr.drawSnaggedClothing(+(i==2), rates[i], {...nPos,size:S})
+				spr.drawSnaggedClothing(+(i==2), ratios[i], {...nPos,size:S})
 				pos.x += S*1.2 + ((i+1)*GAP)
 			}
 		}
