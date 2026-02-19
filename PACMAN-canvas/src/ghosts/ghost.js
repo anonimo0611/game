@@ -34,7 +34,7 @@ export class Ghost extends Actor {
 		this.dir   = dir
 		this.type  = type
 		this.init  = freeze({align,x:col*T})
-		this.state = new Sys.GhsState(this)
+		this.state = Sys.createState(this)
 		$(this).on({
 		 [Evt.Reverse]:   ()=> this.#revSig  = true,
 		 [Evt.Ready]:     ()=> this.#fader   = Fade.in (500),
@@ -177,7 +177,7 @@ export class Ghost extends Actor {
 		this.sprite.setResurrect()
 		;(Ctrl.alwaysChase || this.type == GhsType.Akabei)
 			? this.state.toGoingOut()
-			: this.state.toIdle() && this.#idleInHouse(this)
+			: (this.state.toIdle(), this.#idleInHouse(this))
 		!Timer.frozen && Sound.onGhostReturned()
 	}
 	#setNextDir() {
@@ -239,7 +239,8 @@ export class Ghost extends Actor {
 	}
 	#setPacCaughtState() {
 		Sound.stopLoops()
-		State.toPacCaught().toPacDying({delay:800})
+		State.toPacCaught()
+		State.toPacDying({delay:800})
 	}
 	#setFrightMode(on=true) {
 		!this.isEscaping && (this.#frightened=on)

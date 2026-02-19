@@ -1,16 +1,17 @@
-import StateBase from '../_lib/state.js'
+import _State from '../_lib/state.js'
 
-/** @typedef {import('../_lib/_state.d').StateDef.Opts} Opts */
 /** @typedef {typeof States[number]} StateType */
 const States = /**@type {const}*/([
 	'Title','Attract','Intro','Ready','InGame','NewLevel','Cleared',
 	'Flashing','CoffBreak','PacCaught','PacDying','GameOver','Quit'])
-
-/** @extends {StateBase<GameState,globalThis,StateType>} */
-class GameState extends StateBase {
+/**
+ @extends {_State<globalThis,StateType>}
+ @typedef {GameState & StateDef.Props<globalThis,StateType>} IState
+*/
+class GameState extends _State {
 	constructor() {super(globalThis), this.init(States)}
-	get isDemoMode()  {return this.isAttract || this.isCoffBreak}
-	get isStartMode() {return this.isIntro   || this.isReady}
+	get isDemoMode()  {return State.isAttract || State.isCoffBreak}
+	get isStartMode() {return State.isIntro   || State.isReady}
 
 	/**
 	 @param {StateType} s
@@ -29,10 +30,10 @@ class GameState extends StateBase {
 
 	/**
 	 @param {StateType} s
-	 @param {Opts} options
+	 @param {StateDef.Opts} options
 	*/
 	to(s, {data,delay=(s == 'Quit' ? -1 : 0)}={}) {
 		return super.to(s, {data,delay,fn:this.#callback})
 	}
 }
-export const State = new GameState
+export const State = /**@type {IState}*/(new GameState)

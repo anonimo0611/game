@@ -96,7 +96,8 @@ export const Game = new class {
 	}
 	#levelBegins() {
 		Game.#restarted = State.isPacDying
-		State.toReady().toInGame({delay:2200})
+		State.toReady()
+		State.toInGame({delay:2200})
 	}
 	#levelEnds() {
 		Game.#restarted = false

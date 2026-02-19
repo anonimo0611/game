@@ -14,8 +14,8 @@ const PtsLst = Pts.GhostPts
 const Ghosts = /**@type {Ghost[]}*/([])
 
 export const Events = toEnumObject(
-	['Ready','Reverse','FrightMode','FleeTime','RoundEnds'])
-
+	['Ready','Reverse','FrightMode','FleeTime','RoundEnds']
+)
 /**
  When always chase mode,
  standby time(ms) before the ghost leaves from the house
@@ -44,14 +44,19 @@ const States = /**@type {const}*/(
 
 const StateTypes = toEnumObject(States)
 
-/** @extends {_State<GhsState,Ghost,StateType>} */
-export class GhsState extends _State {
+/**
+ @extends {_State<Ghost,StateType>}
+ @typedef {GhsState & StateDef.Props<globalThis,StateType>} IGhsState
+*/
+class GhsState extends _State {
+	/** @this {IGhsState} */
 	constructor(/**@type {Ghost}*/g) {
 		super(g)
 		this.init(States).owner.inHouse
 			? this.toIdle()
 			: this.toRoaming()
 	}
+	/** @this {IGhsState} */
 	get isEscapingEyes() {
 		return this.isEscaping || this.isReturning
 	}
@@ -60,15 +65,18 @@ export class GhsState extends _State {
 		return super.to(s)
 	}
 }
+export const createState =
+	(/**@type {Ghost}*/g)=>
+	 /**@type {IGhsState}*/(new GhsState(g))
 
 export const GhsMgr = new class {
 	static {$(this.setup)}
 	static setup() {
 		State.on({
 			InGame:   GhsMgr.#onInGame,
-			Ready:    GhsMgr.#onReady,
-			Cleared:  GhsMgr.#onRoundEnds,
-			PacCaught:GhsMgr.#onRoundEnds,
+			Ready:    ()=> $(Ghosts).trigger(Events.Ready),
+			Cleared:  ()=> $(Ghosts).trigger(Events.RoundEnds),
+			PacCaught:()=> $(Ghosts).trigger(Events.RoundEnds),
 		})
 	}
 	#animIdx = 0
@@ -87,9 +95,6 @@ export const GhsMgr = new class {
 		GhsMgr.#animIdx = 0
 		ghosts.forEach((g,i)=> Ghosts[i] = g)
 	}
-	#onReady()     {$(Ghosts).trigger(Events.Ready)}
-	#onRoundEnds() {$(Ghosts).trigger(Events.RoundEnds)}
-
 	#onInGame() {
 		Sound.playSiren()
 		Ctrl.alwaysChase && GhsMgr.#setReleaseTimer()
