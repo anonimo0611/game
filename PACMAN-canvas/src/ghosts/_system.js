@@ -13,9 +13,9 @@ import Target   from './show_targets.js'
 const PtsLst = Pts.GhostPts
 const Ghosts = /**@type {Ghost[]}*/([])
 
-export const Events = toEnumObject(
-	['Ready','Reverse','FrightMode','FleeTime','RoundEnds']
-)
+export const Evt = toEnumObject(
+	['Ready','Reverse','FrightMode','FleeTime','RoundEnds'])
+
 /**
  When always chase mode,
  standby time(ms) before the ghost leaves from the house
@@ -48,7 +48,7 @@ const StateTypes = toEnumObject(States)
  @extends {_State<Ghost,StateType>}
  @typedef {GhsState & StateDef.Props<globalThis,StateType>} IGhsState
 */
-class GhsState extends _State {
+export class GhsState extends _State {
 	/** @this {IGhsState} */
 	constructor(/**@type {Ghost}*/g) {
 		super(g)
@@ -65,18 +65,15 @@ class GhsState extends _State {
 		return super.to(s)
 	}
 }
-export const createState =
-	(/**@type {Ghost}*/g)=>
-	 /**@type {IGhsState}*/(new GhsState(g))
 
 export const GhsMgr = new class {
 	static {$(this.setup)}
 	static setup() {
 		State.on({
 			InGame:   GhsMgr.#onInGame,
-			Ready:    ()=> $(Ghosts).trigger(Events.Ready),
-			Cleared:  ()=> $(Ghosts).trigger(Events.RoundEnds),
-			PacCaught:()=> $(Ghosts).trigger(Events.RoundEnds),
+			Ready:    ()=> $(Ghosts).trigger(Evt.Ready),
+			Cleared:  ()=> $(Ghosts).trigger(Evt.RoundEnds),
+			PacCaught:()=> $(Ghosts).trigger(Evt.RoundEnds),
 		})
 	}
 	#animIdx = 0
@@ -145,7 +142,7 @@ export const GhsMgr = new class {
 }
 
 const signalDirectionReversal = ()=> {
-	$(Ghosts).trigger(Events.Reverse)
+	$(Ghosts).trigger(Evt.Reverse)
 }
 const AttackInWaves = function() {
 	const SCATTER = 0
@@ -268,13 +265,13 @@ const FrightMode = function() {
 			signalDirectionReversal()
 			this.Dur = TimeTable[Game.clampedLv-1]
 			this.Dur == 0 && !State.isAttract
-				? $(Ghosts).trigger(Events.FleeTime)
+				? $(Ghosts).trigger(Evt.FleeTime)
 				: this.#set(true)
 		}
 		#set(isOn=false) {
 			_session = (isOn? this : null)
 			$(Ghosts)
-				.trigger(Events.FrightMode, isOn)
+				.trigger(Evt.FrightMode, isOn)
 				.offon(StateTypes.Bitten, ()=> this.#caught++, isOn)
 			Sound.toggleFrightMode(isOn)
 		}

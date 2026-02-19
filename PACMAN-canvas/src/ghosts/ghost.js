@@ -8,7 +8,7 @@ import {Actor}  from '../actor.js'
 import {Player} from '../player/player.js'
 import Sprite   from '../sprites/ghost.js'
 import * as Sys from './_system.js'
-import {GhsMgr,Events as Evt} from './_system.js'
+import {GhsMgr,Evt} from './_system.js'
 
 /** @type {readonly Direction[]} */
 const TurnPriority = [U,L,D,R]
@@ -26,6 +26,7 @@ export class Ghost extends Actor {
 	#frightened = false
 
 	/**
+	 @typedef {import('./_system').IGhsState} IState
 	 @param {Direction} dir
 	 @param {{type?:number, tile?:xyTuple, align?:-1|0|1}} options
 	*/
@@ -34,7 +35,7 @@ export class Ghost extends Actor {
 		this.dir   = dir
 		this.type  = type
 		this.init  = freeze({align,x:col*T})
-		this.state = Sys.createState(this)
+		this.state = /**@type {IState}*/(new Sys.GhsState(this))
 		$(this).on({
 		 [Evt.Reverse]:   ()=> this.#revSig  = true,
 		 [Evt.Ready]:     ()=> this.#fader   = Fade.in (500),
