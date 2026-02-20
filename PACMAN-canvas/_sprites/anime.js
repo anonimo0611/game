@@ -9,14 +9,14 @@ export const {ctx}= canvas2D('preview')
 const Menu = new DorpDown('animMenu')
 const Btns = $('.radioButtons input')
 
-const Type = /**@type {const}*/
+const Schema = /**@type {const}*/
 ({
 	Actor: {None: -1, Pacman:0, Akabei:1, Pinky:2, Aosuke:3, Guzuta:4, Fright:5},
 	Pacman:{Normal:0, Dying:1},
 	Ghost: {Normal:0, Mended:1, Exposed:2, Flashed:3}
 })
 
-class AnimData
+class ActorPreview
 {
 	constructor(type=0,subType=0)
 	{
@@ -31,37 +31,32 @@ class AnimData
 }
 
 {// Preview
-	let data = /**@type {?AnimData}*/(null)
+	let subj = /**@type {?ActorPreview}*/(null)
 
 	function change()
 	{
-		Timer.cancel('Dying')
 		const [type,subType]= Menu.value.split(':').map(Number)
-
-		switch (type) {
-		case Type.Actor.None:
-			data = null
+		switch(type) {
+		case Schema.Actor.None:
+			subj = null
 			btnDisabled(true)
 			break
 
-		case Type.Actor.Pacman:
-			data = new AnimData(type,subType)
-			if (btnDisabled(subType == Type.Pacman.Dying))
-			{
-				data.pacman.setDying(PacScale*T)
-				Timer.set(2200, change, {key:'Dying'})
-			}
+		case Schema.Actor.Pacman:
+			subj = new ActorPreview(type,subType)
+			if (btnDisabled(subType == Schema.Pacman.Dying))
+				subj.pacman.startDying({radius:PacScale*T,fn:change})
 			break
 
-		case Type.Actor.Akabei:
-		case Type.Actor.Pinky:
-		case Type.Actor.Aosuke:
-		case Type.Actor.Guzuta:
-		case Type.Actor.Fright:
-			data = new AnimData(type,subType)
+		case Schema.Actor.Akabei:
+		case Schema.Actor.Pinky:
+		case Schema.Actor.Aosuke:
+		case Schema.Actor.Guzuta:
+		case Schema.Actor.Fright:
+			subj = new ActorPreview(type,subType)
 			btnDisabled(
-				Type.Actor.Fright == type ||
-				Type.Ghost.Normal != subType
+				Schema.Actor.Fright == type ||
+				Schema.Ghost.Normal != subType
 			)
 			break
 		}
@@ -69,8 +64,8 @@ class AnimData
 	function btnDisabled(disabled=false)
 	{
 		Btns.prop({disabled})
-		if (!disabled && data)
-			data.orient = /**@type {Direction}*/
+		if (!disabled && subj)
+			subj.orient = /**@type {Direction}*/
 				($('input[name=orient]:checked').attr('value'))
 		return disabled
 	}
@@ -78,43 +73,43 @@ class AnimData
 	{
 		ctx.save()
 		ctx.translate(S*1.5/2, S/2)
-		data?.pacman.draw({orient:data.orient, radius:PacScale*T})
+		subj?.pacman.draw({orient:subj.orient, radius:PacScale*T})
 		ctx.restore()
 	}
 	function drawGhost()
 	{
 		ctx.save()
-		data?.subType == Type.Ghost.Exposed
+		subj?.subType == Schema.Ghost.Exposed
 			? ctx.translate(S/3.3, T/2)
 			: ctx.translate(S/2.0, T/2)
 
-		data?.ghost.draw(ctx,
+		subj?.ghost.draw(ctx,
 		{
 			size:        S,
-			type:        data.type-1,
-			animIdx:     data.animIdx,
-			orient:      data.orient,
-			isFrightened:data.type    == Type.Actor.Fright,
-			isExposed:   data.subType == Type.Ghost.Exposed,
-			isMended:    data.subType == Type.Ghost.Mended,
-			spriteIdx:   data.subType == Type.Ghost.Flashed ? data.flashIdx:0,
+			type:        subj.type-1,
+			animIdx:     subj.animIdx,
+			orient:      subj.orient,
+			isFrightened:subj.type    == Schema.Actor.Fright,
+			isExposed:   subj.subType == Schema.Ghost.Exposed,
+			isMended:    subj.subType == Schema.Ghost.Mended,
+			spriteIdx:   subj.subType == Schema.Ghost.Flashed ? subj.flashIdx:0,
 		})
 		ctx.restore()
 	}
 	function update()
 	{
 		resize()
-		if (data) {
-			data.animIdx  ^= +(Ticker.count %  6 == 0)
-			data.flashIdx ^= +(Ticker.count % 14 == 1)
-			data.pacman?.update()
+		if (subj) {
+			subj.animIdx  ^= +(Ticker.count %  6 == 0)
+			subj.flashIdx ^= +(Ticker.count % 14 == 1)
+			subj.pacman?.update()
 		}
 	}
 	function draw()
 	{
 		ctx.clear()
-		if (data) {
-			data.type == Type.Actor.Pacman
+		if (subj) {
+			subj.type == Schema.Actor.Pacman
 				? drawPacman()
 				: drawGhost()
 		}
@@ -140,8 +135,8 @@ class AnimData
 	})
 	Btns.on('change', e=>
 	{
-		if (!data) return
-		data.orient = /**@type {Direction}*/(
+		if (!subj) return
+		subj.orient = /**@type {Direction}*/(
 			e.target.getAttribute('value')
 		)
 	})
