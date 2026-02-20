@@ -79,11 +79,11 @@ export const Game = new class {
 			: Timer.set(600, Game.#die)
 	}
 	#die() {
-		Game.#isDied = true
 		Sound.playDyingSE()
 		Player.sprite.startDying({fn:Game.#onDied})
 	}
 	#onDied() {
+		Game.#isDied = true
 		Lives.left > 0
 			? State.toReady()
 			: State.toGameOver()
