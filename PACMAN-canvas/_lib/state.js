@@ -1,12 +1,12 @@
 /**
  @template Owner
- @template {string} State
+ @template {string} S
 */
 export default class StateBase {
 	#owner
-	#last     = /**@type {?State}*/(null)
-	#curr     = /**@type {State} */('')
-	#default  = /**@type {State} */('')
+	#last     = /**@type {?S}*/(null)
+	#curr     = /**@type {S} */('')
+	#default  = /**@type {S} */('')
 
 	/** @readonly */
 	#eventBus = $({})
@@ -19,24 +19,24 @@ export default class StateBase {
 	get last()    {return this.#last}
 	get default() {return this.#default}
 
-	/** @param {readonly State[]} states */
+	/** @param {readonly S[]} states */
 	init(states) {
-		states?.forEach((/**@type {State}*/s,i)=> {
+		states?.forEach((/**@type {S}*/s,i)=> {
 			const self = /**@type {any}*/(this)
 			i == 0 && (this.#default = s)
-			self[`to${s}`] = (/**@type {StateDef.Opts}*/opt)=> {this.to(s,opt)}
+			self[`to${s}`] = (/**@type {StateDef.Opts<S>}*/opt)=> {this.to(s,opt)}
 			defineProperty(this,`is${s}`, {get(){return this.#curr === s}})
 			defineProperty(this,`was${s}`,{get(){return this.#last === s}})
 		})
 		return this
 	}
 
-	/** @param {State} state */
+	/** @param {S} state */
 	is(state) {
 		return this.#curr == state
 	}
 
-	/** @param {State} [state] */
+	/** @param {S} [state] */
 	was(state) {
 		return state === this.#last
 	}
@@ -54,8 +54,8 @@ export default class StateBase {
 	}
 
 	/**
-	 @param {State} state
-	 @param {{data?:JQData, delay?:number, fn?:(state:State,data?:JQData)=> void}} opts
+	 @param {S} state
+	 @param {StateDef.Opts<S>} opts
 	*/
 	to(state, {data,delay=-1,fn}={}) {
 		if (delay >= 0) {

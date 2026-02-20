@@ -123,7 +123,7 @@ export class Slide extends Menu {
 	constructor(/**@type {string}*/id) {
 		super(id,'slidemenu')
 		const{root}= this, wrap=(this.$label.get(0) ?? root)
-		this.#BtnSet = freeze({
+		this.#BtnSet= freeze({
 			[R]:$('<span class="button r">').prependTo(root)[0],
 			[L]:$('<span class="button l">').prependTo(root)[0],
 		})
