@@ -59,7 +59,7 @@ export class CoffBreak {
 		$off('.CB')
 		CoffBreak.#scene = null
 		State.wasTitle
-			? State.toTitle()
+			? State.toQuit()
 			: State.toNewLevel()
 	}
 }

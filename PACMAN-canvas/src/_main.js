@@ -49,7 +49,6 @@ export const Game = new class {
 	get moveSpeed() {return Game.speed * Game.speedByLv}
 
 	#resetLevel() {
-		Game.#isDied = false
 		Game.#setLevel(Menu.Level.index+1)
 	}
 	#setLevel(i=1) {
@@ -101,16 +100,17 @@ export const Game = new class {
 		State.toReady()
 	}
 	#onGameOver() {
-		State.toTitle({delay:2000})
+		State.toQuit({delay:2000})
 	}
 	#onQuit() {
+		Game.#isDied = false
 		Ticker.reset()
 		State.toTitle()
 	}
 	#levelEnds() {
 		Game.#isDied = false
 		if (!Ctrl.endlessMode) {
-			State.toTitle()
+			Game.#onQuit()
 			return
 		}
 		Demo.CoffBreakNum < 0
