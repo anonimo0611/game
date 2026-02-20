@@ -1,17 +1,22 @@
-const SplitDur = 1149/Ticker.Interval
+const SplitDur = 1200/Ticker.Interval
 const BurstDur =  300/Ticker.Interval
+const TotalDur = SplitDur+BurstDur+30
 
 export class Dying {
-	#innerR
-	#outerR
-	#arkAng  = 0
-	#fadeOut = Fade.out(300)
+	#fadeOut = Fade.out(300);
+	#cnt; #fn; #innerR; #outerR; #arkAng;
+
 	/** @readonly */ctx
 	/** @readonly */r
-	/** @param {EnhancedCtx2D} ctx */
-	constructor(ctx, radius=PacRadius) {
-		this.ctx = ctx
-		this.r = radius
+	/**
+	 @param {EnhancedCtx2D} ctx
+	 @param {{radius?:number,fn?():void}} opts
+	*/
+	constructor(ctx, {radius=PacRadius,fn}={}) {
+		this.ctx    = ctx
+		this.r      = radius
+		this.#fn    = fn
+		this.#cnt   = this.#arkAng = 0
 		this.#innerR = radius/4
 		this.#outerR = radius/2
 	}
@@ -19,9 +24,15 @@ export class Dying {
 		return this.#arkAng < PI-PI/SplitDur
 	}
 	update() {
+		if (this.#cnt > TotalDur) {
+			this.#fn?.()
+			this.#fn = undefined
+			return
+		}
 		this.isSplitting
 			? this.#arkAng += PI/SplitDur
 			: this.#updateRadialBurst()
+		this.#cnt++
 	}
 	#updateRadialBurst() {
 		if (this.#outerR <= this.r) {

@@ -94,10 +94,11 @@ class PlayerCore extends PacMan {
 export const Player = new class {
 	static {State.on({_Ready:_=> Player.init()})}
 	#core = new PlayerCore
-	get core() {return this.#core}
+	get core()   {return this.#core}
+	get sprite() {return this.#core.sprite}
 	init() {
 		!State.wasIntro && (this.#core = new PlayerCore)
-		_fader = State.isTitle? null : Fade.in(500)
+		_fader = State.isTitle? null : Fade.in()
 	}
 	onAte(/**@type {JQTriggerHandler}*/handler) {
 		$(this).on('AteDot', handler)

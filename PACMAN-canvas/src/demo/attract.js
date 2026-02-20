@@ -25,7 +25,6 @@ export class Attract {
 	constructor() {
 		$onNS('.Attract',{click_keydown_blur:this.quit})
 	}
-	update() {this.subAct.update()}
 	GhsEntries = /**@type {const}*/([
 		// time, col1, col2, row, txt1, txt2
 		[10, 8, 18,  6, 'OIKAKE----', '"AKABEI"'],
@@ -73,6 +72,7 @@ export class Attract {
 		Attract.#instance = null
 		State.toTitle()
 	}
+	update() {this.subAct.update()}
 }
 
 class EnergizerAct {

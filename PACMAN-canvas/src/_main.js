@@ -23,22 +23,23 @@ export const Game = new class {
 			Quit:     Game.#onQuit,
 			Title:    Game.#onTitle,
 			Intro:    Game.#onIntro,
+			Ready:    Game.#onReady,
 			InGame:   Game.#onInGame,
-			Cleared:  Game.#onCleared,
-			Flashing: Game.#onFlashing,
 			NewLevel: Game.#onNewLevel,
-			PacDying: Game.#onPacDying,
+			Cleared:  Game.#onRoundEnds,
+			PacDying: Game.#onRoundEnds,
+			Flashing: Game.#onFlashing,
 			GameOver: Game.#onGameOver,
 		})
 		.toTitle()
 		Menu.Level.onChange(Game.#resetLevel)
 	}
-	#level     = 1
-	#restarted = false
+	#level  = 1
+	#isDied = false
 
 	get level()     {return Game.#level}
 	get levelStr()  {return Game.#level.toString().padStart(2,'0')}
-	get restarted() {return Game.#restarted}
+	get isDied()    {return Game.#isDied}
 
 	/** Level 13+ as the fastest, stepwise faster from level 1 to 13 */
 	get speedByLv() {return 1 - (13-Game.clampedLv) * .01}
@@ -48,7 +49,7 @@ export const Game = new class {
 	get moveSpeed() {return Game.speed * Game.speedByLv}
 
 	#resetLevel() {
-		Game.#restarted = false
+		Game.#isDied = false
 		Game.#setLevel(Menu.Level.index+1)
 	}
 	#setLevel(i=1) {
@@ -64,17 +65,29 @@ export const Game = new class {
 	#onIntro() {
 		Cursor.hide()
 		Sound.playStartBGM()
-		Timer.set(2200, Game.#levelBegins)
+		State.toReady({delay:2200})
+	}
+	#onReady() {
+		State.toInGame({delay:2200})
 	}
 	#onInGame() {
 		!document.hasFocus() && Ctrl.pause(true)
 	}
-	#onPacDying() {
+	#onRoundEnds() {
+		State.toRoundEnds()
+		State.isCleared
+			? Game.#onCleared()
+			: Timer.set(600, Game.#die)
+	}
+	#die() {
+		Game.#isDied = true
 		Sound.playDyingSE()
-		Player.core.sprite.setDying()
+		Player.sprite.startDying({fn:Game.#onDied})
+	}
+	#onDied() {
 		Lives.left > 0
-			? Timer.set(2200, Game.#levelBegins)
-			: State.toGameOver({delay:2000})
+			? State.toReady()
+			: State.toGameOver()
 	}
 	#onCleared() {
 		Sound.stopLoops()
@@ -85,22 +98,17 @@ export const Game = new class {
 	}
 	#onNewLevel() {
 		Game.#setLevel(Game.level+1)
-		Game.#levelBegins()
+		State.toReady()
 	}
 	#onGameOver() {
-		State.toTitle({delay:2500})
+		State.toTitle({delay:2000})
 	}
 	#onQuit() {
 		Ticker.reset()
 		State.toTitle()
 	}
-	#levelBegins() {
-		Game.#restarted = State.isPacDying
-		State.toReady()
-		State.toInGame({delay:2200})
-	}
 	#levelEnds() {
-		Game.#restarted = false
+		Game.#isDied = false
 		if (!Ctrl.endlessMode) {
 			State.toTitle()
 			return

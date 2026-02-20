@@ -73,9 +73,8 @@ export const GhsMgr = new class {
 	static setup() {
 		State.on({
 			InGame:   GhsMgr.#onInGame,
-			Ready:    _=> $(Ghosts).trigger(Evt.Ready),
-			Cleared:  _=> $(Ghosts).trigger(Evt.RoundEnds),
-			PacCaught:_=> $(Ghosts).trigger(Evt.RoundEnds),
+			Ready:    GhsMgr.#trigger,
+			RoundEnds:GhsMgr.#trigger,
 		})
 	}
 	#animIdx = 0
@@ -94,12 +93,15 @@ export const GhsMgr = new class {
 		GhsMgr.#animIdx = 0
 		ghosts.forEach((g,i)=> Ghosts[i] = g)
 	}
+	#trigger() {
+		$(Ghosts).trigger(State.current)
+	}
 	#onInGame() {
 		Sound.playSiren()
 		Ctrl.alwaysChase && GhsMgr.#setReleaseTimer()
 	}
 	#setReleaseTimer() {
-		const lv = (Game.restarted? 0 : Game.clampedLv)
+		const lv = (Game.isDied? 0 : Game.clampedLv)
 		Timer.sequence(...
 			Ghosts.slice(1).map((g,i)=> ({
 				ms: StandbyTimes[lv][i]/Game.speed,
@@ -205,7 +207,7 @@ export const DotCounter = function() {
 		const pLimit  = LimitTable[i-1][lvIdx] // personal
 		;(Player.core.timeSinceLastEating >= timeout)
 			? fn()
-			: (!Game.restarted || _globalCounter < 0)
+			: (!Game.isDied || _globalCounter < 0)
 				? (personalCounters[i] >= pLimit)
 					&& fn()
 				: (_globalCounter == gLimit)
@@ -213,11 +215,11 @@ export const DotCounter = function() {
 					&& (_globalCounter = -1)
 		}
 	function reset() {
-		!Game.restarted && personalCounters.fill(0)
-		_globalCounter = Game.restarted? 0:-1
+		!Game.isDied && personalCounters.fill(0)
+		_globalCounter = Game.isDied? 0:-1
 	}
 	function increaseCounter() {
-		(Game.restarted && _globalCounter >= 0)
+		(Game.isDied && _globalCounter >= 0)
 			? _globalCounter++
 			: incPreferredGhostCounter()
 	}

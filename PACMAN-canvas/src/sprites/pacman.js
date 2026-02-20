@@ -64,5 +64,8 @@ export default class {
 		ctx.fill()
 		ctx.restore()
 	}
-	setDying(r=PacRadius) {this.#dyingSpr = new Dying(this.ctx,r)}
+	/** @param {{radius?:number,fn?():void}} cfg */
+	startDying({radius=PacRadius,fn}={}) {
+		this.#dyingSpr = new Dying(this.ctx, {radius,fn})
+	}
 }

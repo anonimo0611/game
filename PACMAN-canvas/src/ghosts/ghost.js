@@ -37,8 +37,8 @@ export class Ghost extends Actor {
 		this.state = Sys.createState(this)
 		$(this).on({
 		 [Evt.Reverse]:   ()=> this.#revSig  = true,
-		 [Evt.Ready]:     ()=> this.#fader   = Fade.in (500),
-		 [Evt.RoundEnds]: ()=> this.#fader   = Fade.out(400),
+		 [Evt.Ready]:     ()=> this.#fader   = Fade.in(),
+		 [Evt.RoundEnds]: ()=> this.#fader   = Fade.out(),
 		 [Evt.FleeTime]:  ()=> this.#fleeTmr = 400/Game.interval,
 		 [Evt.FrightMode]:(_,on=true)=> this.#setFrightMode(on),
 		})
@@ -177,7 +177,7 @@ export class Ghost extends Actor {
 		this.sprite.setResurrect()
 		;(Ctrl.alwaysChase || this.type == GhsType.Akabei)
 			? this.state.toGoingOut()
-			: (this.state.toIdle(), this.#idleInHouse(this))
+			: this.state.toIdle()
 		!Timer.frozen && Sound.onGhostReturned()
 	}
 	#setNextDir() {
@@ -227,7 +227,7 @@ export class Ghost extends Actor {
 			return false
 		this.isFrightened
 			? this.#setBittenState(release)
-			: this.#setPacCaughtState()
+			: this.#setPacDyingState()
 		return true
 	}
 	#setBittenState(release=()=>{}) {
@@ -237,10 +237,9 @@ export class Ghost extends Actor {
 		Timer.freeze()
 		PtsMgr.set({key:GhsMgr, pos:this.center}, release)
 	}
-	#setPacCaughtState() {
+	#setPacDyingState() {
 		Sound.stopLoops()
-		State.toPacCaught()
-		State.toPacDying({delay:800})
+		State.toPacDying()
 	}
 	#setFrightMode(on=true) {
 		!this.isEscaping && (this.#frightened=on)

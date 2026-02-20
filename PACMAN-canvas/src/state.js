@@ -2,8 +2,8 @@ import _State from '../_lib/state.js'
 
 /** @typedef {typeof States[number]} StateType */
 const States = /**@type {const}*/([
-	'Title','Attract','Intro','Ready','InGame','NewLevel','Cleared',
-	'Flashing','CoffBreak','PacCaught','PacDying','GameOver','Quit'])
+	'Title','Attract','Intro','Ready','InGame','NewLevel','RoundEnds',
+	'Cleared','PacDying','Flashing','CoffBreak','GameOver','Quit'])
 /**
  @extends {_State<globalThis,StateType>}
  @typedef {GameState & StateDef.Props<globalThis,StateType>} IState
@@ -23,14 +23,14 @@ class GameState extends _State {
 	}
 
 	/**
-	 @typedef {'_Ready'|'_NewLevel'|'_PacDying_Cleared'} MultiState
+	 @typedef {'_Ready'|'_NewLevel'} MultiState
 	 @param {{[key in (StateType|MultiState)]?:JQWindowHandler}} v
 	*/
 	on(v) {return super.on(v)}
 
 	/**
 	 @param {StateType} s
-	 @param {StateDef.Opts} options
+	 @param {StateDef.Opts<StateType>} options
 	*/
 	to(s, {data,delay=(s == 'Quit' ? -1 : 0)}={}) {
 		return super.to(s, {data,delay,fn:this.#callback})
