@@ -5,8 +5,7 @@ import {Ctrl}     from './control.js'
 import {Lives}    from './lives.js'
 
 let _inProgress = false
-let _score  = 0, _hiSco  = 0
-let _savedS = 0, _savedH = 0
+let[_score,_hiSco,_savedS,_savedH]= [0,0,0,0]
 
 export const Score = new class {
 	/** @readonly */
