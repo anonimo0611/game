@@ -6,7 +6,7 @@ import Sprite   from './sprites/pacman.js'
 
 export class Actor {
 	pos = Vec2.Zero
-	#orient = /**@type {Direction}*/(L)
+	orient  = /**@type {Direction}*/(L)
 	#movDir = /**@type {Direction}*/(L)
 
 	/** @protected */
@@ -28,11 +28,9 @@ export class Actor {
 	get tileIdx()   {return this.tilePos.toIdx(Cols)}
 
 	get dir()       {return this.#movDir}
-	get orient()    {return this.#orient}
+	set dir(dir)    {this.#movDir = this.orient = dir}
 	get revDir()    {return Dir.Opposite[this.dir]}
 	get revOrient() {return Dir.Opposite[this.orient]}
-	set dir(dir)    {this.#orient = this.#movDir = dir}
-	set orient(dir) {this.#orient = dir}
 
 	get tilePixel() {
 		const  {x,y} = this.center, v = Vec2[this.dir]
