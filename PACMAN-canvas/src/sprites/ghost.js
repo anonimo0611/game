@@ -3,15 +3,17 @@ export default class {
 	/** @typedef {Direction|'Bracket'} orient */
 	/** @readonly */ctx
 	/** @readonly */spr
-	constructor(w=T*3, h=T*2) {
+	/** @readonly */mainCtx
+	/** @param {EnhancedCtx2D} mainCtx */
+	constructor(mainCtx, w=T*3, h=T*2) {
+		this.mainCtx = mainCtx
 		this.ctx = canvas2D(null, w, h).ctx
 		this.spr = new CBSprite(this.ctx)
 	}
 	#resurrect = /**@type {?Fade}*/(null)
 	setResurrect() {this.#resurrect ||= Fade.in(600)}
 
-	/** @param {EnhancedCtx2D} main */
-	draw(main, {
+	draw({
 		x=0,y=0,
 		type         = 0,
 		animIdx      = 0,
@@ -26,14 +28,14 @@ export default class {
 		isMended     = false,
 		isExposed    = false,
 	}={}) {
-		const {ctx}= this
+		const {ctx,mainCtx}= this
 		const finalize = ()=> {
 			ctx.restore()
-			main.save()
-			main.setAlpha(alpha)
-			main.translate(x+size/4, y+size/4)
-			main.drawImage(ctx.canvas, -size/2, -size/2)
-			main.restore()
+			mainCtx.save()
+			mainCtx.setAlpha(alpha)
+			mainCtx.translate(x+size/4, y+size/4)
+			mainCtx.drawImage(ctx.canvas, -size/2, -size/2)
+			mainCtx.restore()
 		}
 		ctx.clear()
 		ctx.save()
@@ -52,7 +54,7 @@ export default class {
 		if (!isEscaping) {
 			ctx.save()
 			this.#resurrect?.apply(ctx)
-			this.#drawAngerGlow(main, {x,y,isAngry,size})
+			this.#drawAngerGlow(mainCtx, {x,y,isAngry,size})
 			this.#drawBody({animIdx,isRipped,isMended})
 			if (isFrightened) {
 				ctx.fillStyle   =

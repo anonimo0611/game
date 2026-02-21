@@ -50,7 +50,7 @@ export class CoffBreak {
 	}
 	drawAka(data={}) {
 		const {akabei:{pos,animIdx}}= this
-		this.akabei.sprite.draw(Fg,{animIdx, ...data, ...pos})
+		this.akabei.sprite.draw({animIdx, ...data, ...pos})
 	}
 	draw() {
 		State.wasFlashing && Fruit.drawLevelCounter()

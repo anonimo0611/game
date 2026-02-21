@@ -17,7 +17,7 @@ export class Ghost extends Actor {
 	/** @readonly */type
 	/** @readonly */init
 	/** @readonly */state
-	/** @readonly */sprite = new Sprite
+	/** @readonly */sprite = new Sprite(Fg)
 
 	#fader = /**@type {?Fade}*/(null)
 	#fleeTmr    = -1
@@ -89,7 +89,7 @@ export class Ghost extends Actor {
 	}
 	draw() {
 		if (State.isIntro) return
-		this.sprite.draw(Fg,this)
+		this.sprite.draw(this)
 	}
 	update() {
 		this.sprite.update()
