@@ -59,8 +59,8 @@ export class CoffBreak {
 		$off('.CB')
 		CoffBreak.#scene = null
 		State.wasTitle
-			? State.toTitle()
-			: State.toNewLevel()
+			? State.setTitle()
+			: State.setNewLevel()
 	}
 }
 

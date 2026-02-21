@@ -131,7 +131,7 @@ export class Ghost extends Actor {
 		Player.core.resetTimer()
 		this.#started ||= true
 		this.state.isIdle &&
-		this.state.toGoingOut()
+		this.state.setGoingOut()
 		return deactivateGlobalDotCnt
 	}
 	#goingOut({init,speed,y,center:{x:cx}}=this) {
@@ -146,7 +146,7 @@ export class Ghost extends Actor {
 			return this.move(U)
 
 		this.dir = L
-		this.state.toRoaming()
+		this.state.setRoaming()
 	}
 	#houseEntranceArrived(spd=this.speed) {
 		return this.state.isEscaping
@@ -156,7 +156,7 @@ export class Ghost extends Actor {
 	#enterHouse() {
 		this.dir = D
 		this.centering()
-		this.state.toReturning()
+		this.state.setReturning()
 	}
 	#returnToHome({init,speed,x,y}=this) {
 		if (y+speed < Maze.House.MiddleY)
@@ -176,8 +176,8 @@ export class Ghost extends Actor {
 	#arrivedAtHome() {
 		this.sprite.setResurrect()
 		;(Ctrl.alwaysChase || this.type == GhsType.Akabei)
-			? this.state.toGoingOut()
-			: this.state.toIdle()
+			? this.state.setGoingOut()
+			: this.state.setIdle()
 		!Timer.frozen && Sound.onGhostReturned()
 	}
 	#setNextDir() {
@@ -233,19 +233,19 @@ export class Ghost extends Actor {
 	#setBittenState(release=()=>{}) {
 		Sound.playBittenSE()
 		this.#frightened = false
-		this.state.toBitten()
+		this.state.setBitten()
 		Timer.freeze()
 		PtsMgr.set({key:GhsMgr, pos:this.center}, release)
 	}
 	#setPacDyingState() {
 		Sound.stopLoops()
-		State.toPacDying()
+		State.setPacDying()
 	}
 	#setFrightMode(on=true) {
 		!this.isEscaping && (this.#frightened=on)
 	}
 	#setEscapeState() {
 		Sound.playEscapaingEyes()
-		this.state.toEscaping()
+		this.state.setEscaping()
 	}
 }

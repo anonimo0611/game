@@ -53,16 +53,16 @@ class GhsState extends _State {
 	constructor(/**@type {Ghost}*/g) {
 		super(g)
 		this.init(States).owner.inHouse
-			? this.toIdle()
-			: this.toRoaming()
+			? this.setIdle()
+			: this.setRoaming()
 	}
 	/** @this {IGhsState} */
 	get isEscapingEyes() {
 		return this.isEscaping || this.isReturning
 	}
-	to(/**@type {StateType}*/s) {
+	set(/**@type {StateType}*/s) {
 		$(this.owner).trigger(s)
-		return super.to(s)
+		return super.set(s)
 	}
 }
 export const createState =

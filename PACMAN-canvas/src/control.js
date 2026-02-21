@@ -96,7 +96,7 @@ export const Ctrl = new class {
 		if (State.isTitle)
 			return
 		noConfirm
-			? State.toQuit()
+			? State.setQuit()
 			: State.isInGame && Ctrl.#quitConfirm()
 	}
 	#clearHiScore() {
@@ -110,7 +110,7 @@ export const Ctrl = new class {
 	#quitConfirm() {
 		!Ticker.paused && Ctrl.pause()
 		Confirm.open('Are you sure you want to quit the game?',
-			Ctrl.pause, ()=> State.toQuit(), 'Resume','Quit')
+			Ctrl.pause, ()=> State.setQuit(), 'Resume','Quit')
 	}
 	/** @param {KeyboardEvent} e */
 	#onKeydown(e) {
@@ -142,11 +142,11 @@ export const Ctrl = new class {
 		$('input')   .on({input:Ctrl.#output})
 		$(btns.clear).on({click:Ctrl.#clearHiConfirm})
 		$(btns.reset).on({click:Ctrl.#reset})
-		$(btns.start).on({click:()=> State.toIntro()})
-		$(btns.demo) .on({click:()=> State.toAttract()})
-		$(btns.coff1).on({click:()=> State.toCoffBreak({data:1})})
-		$(btns.coff2).on({click:()=> State.toCoffBreak({data:2})})
-		$(btns.coff3).on({click:()=> State.toCoffBreak({data:3})})
+		$(btns.start).on({click:()=> State.setIntro()})
+		$(btns.demo) .on({click:()=> State.setAttract()})
+		$(btns.coff1).on({click:()=> State.setCoffBreak({data:1})})
+		$(btns.coff2).on({click:()=> State.setCoffBreak({data:2})})
+		$(btns.coff3).on({click:()=> State.setCoffBreak({data:3})})
 		$(Form).attr('data-ready-state','loaded')
 	}
 }, powChk = inputs.powChk

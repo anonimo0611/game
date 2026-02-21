@@ -31,7 +31,7 @@ export const Game = new class {
 			Flashing: Game.#onFlashing,
 			GameOver: Game.#onGameOver,
 		})
-		.toTitle()
+		.setTitle()
 		Menu.Level.onChange(Game.#resetLevel)
 	}
 	#level  = 1
@@ -64,16 +64,16 @@ export const Game = new class {
 	#onIntro() {
 		Cursor.hide()
 		Sound.playStartBGM()
-		State.toReady({delay:2200})
+		State.setReady({delay:2200})
 	}
 	#onReady() {
-		State.toInGame({delay:2200})
+		State.setInGame({delay:2200})
 	}
 	#onInGame() {
 		!document.hasFocus() && Ctrl.pause(true)
 	}
 	#onRoundEnds() {
-		State.toRoundEnds()
+		State.setRoundEnds()
 		State.isCleared
 			? Game.#onCleared()
 			: Timer.set(600, Game.#die)
@@ -85,19 +85,19 @@ export const Game = new class {
 	#onDied() {
 		Game.#isDied = true
 		Lives.left > 0
-			? State.toReady()
-			: State.toGameOver()
+			? State.setReady()
+			: State.setGameOver()
 	}
 	#onCleared() {
 		Sound.stopLoops()
-		State.toFlashing({delay:1000})
+		State.setFlashing({delay:1000})
 	}
 	#onFlashing() {
 		Wall.setFlashing(Game.#levelEnds)
 	}
 	#onNewLevel() {
 		Game.#setLevel(Game.level+1)
-		State.toReady()
+		State.setReady()
 	}
 	#onGameOver() {
 		Timer.set(2000, Game.#onQuit)
@@ -105,7 +105,7 @@ export const Game = new class {
 	#onQuit() {
 		Game.#isDied = false
 		Ticker.reset()
-		State.toTitle()
+		State.setTitle()
 	}
 	#levelEnds() {
 		Game.#isDied = false
@@ -114,8 +114,8 @@ export const Game = new class {
 			return
 		}
 		Demo.CoffBreakNum < 0
-			? State.toNewLevel()
-			: State.toCoffBreak()
+			? State.setNewLevel()
+			: State.setCoffBreak()
 	}
 	#update() {
 		PtsMgr.update()

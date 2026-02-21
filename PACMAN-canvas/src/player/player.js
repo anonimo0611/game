@@ -73,7 +73,7 @@ class PlayerCore extends PacMan {
 			? this.#eatPowerDot()
 			: this.#eatSmallDot()
 		Maze.clearDot(this) == 0
-			? State.toCleared()
+			? State.setCleared()
 			: $(Player).trigger('AteDot')
 	}
 	#eatPowerDot() {

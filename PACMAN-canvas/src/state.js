@@ -32,8 +32,8 @@ class GameState extends _State {
 	 @param {StateType} s
 	 @param {StateDef.Opts<StateType>} options
 	*/
-	to(s, {data,delay=(s == 'Quit' ? -1 : 0)}={}) {
-		return super.to(s, {data,delay,fn:this.#callback})
+	set(s, {data,delay=(s == 'Quit' ? -1 : 0)}={}) {
+		return super.set(s, {data,delay,fn:this.#callback})
 	}
 }
 export const State = /**@type {IState}*/(new GameState)

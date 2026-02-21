@@ -70,7 +70,7 @@ export class Attract {
 	quit() {
 		$off('.Attract')
 		Attract.#instance = null
-		State.toTitle()
+		State.setTitle()
 	}
 	update() {this.subAct.update()}
 }
@@ -117,5 +117,5 @@ class EnergizerAct {
 		GhsMgr.setFrightMode()
 	}
 	draw() {this.started && Actors.draw(this.#pacman)}
-	#end() {GhsMgr.caughtAll && State.toAttract()}
+	#end() {GhsMgr.caughtAll && State.setAttract()}
 }

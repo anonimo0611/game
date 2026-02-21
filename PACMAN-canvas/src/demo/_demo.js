@@ -17,7 +17,7 @@ const RunTimer = function() {
 	function update() {
 		(!document.hasFocus() || Confirm.opened || Ctrl.activeElem)
 			? Ticker.resetCount()
-		 	: Ticker.elapsedTime > WaitTime && State.toAttract()
+		 	: Ticker.elapsedTime > WaitTime && State.setAttract()
 	}
 	return {update}
 }()
