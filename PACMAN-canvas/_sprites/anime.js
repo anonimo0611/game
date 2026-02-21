@@ -1,10 +1,10 @@
 import PacSprite    from '../src/sprites/pacman.js'
 import {Dir}        from '../_lib/direction.js'
 import {DorpDown}   from '../_lib/menu.js'
-import {ghsSprite}  from './_constants.js'
+import {ghsSprPv}   from './_constants.js'
 import {T,S,resize} from './_constants.js'
 
-export const {ctx}= canvas2D('preview')
+export const {ctx:Pv}= canvas2D('preview')
 
 const Menu = new DorpDown('animMenu')
 const Btns = $('.radioButtons input')
@@ -24,8 +24,8 @@ class ActorPreview
 		this.flashIdx = 0
 		this.type     = type
 		this.subType  = subType
-		this.ghost    = ghsSprite
-		this.pacman   = new PacSprite(ctx)
+		this.ghost    = ghsSprPv
+		this.pacman   = new PacSprite(Pv)
 		this.orient   = /**@type {Direction}*/(L)
 	}
 }
@@ -71,19 +71,19 @@ class ActorPreview
 	}
 	function drawPacman()
 	{
-		ctx.save()
-		ctx.translate(S*1.5/2, S/2)
+		Pv.save()
+		Pv.translate(Pv.canvas.width/2, S/2)
 		subj?.pacman.draw({orient:subj.orient, radius:PacScale*T})
-		ctx.restore()
+		Pv.restore()
 	}
 	function drawGhost()
 	{
-		ctx.save()
+		Pv.save()
 		subj?.subType == Schema.Ghost.Exposed
-			? ctx.translate(S/3.3, T/2)
-			: ctx.translate(S/2.0, T/2)
+			? Pv.translate(T*3/4, T/2)
+			: Pv.translate(Pv.canvas.width/2-T/2, T/2)
 
-		subj?.ghost.draw(ctx,
+		subj?.ghost.draw(
 		{
 			size:        S,
 			type:        subj.type-1,
@@ -94,7 +94,7 @@ class ActorPreview
 			isMended:    subj.subType == Schema.Ghost.Mended,
 			spriteIdx:   subj.subType == Schema.Ghost.Flashed ? subj.flashIdx:0,
 		})
-		ctx.restore()
+		Pv.restore()
 	}
 	function update()
 	{
@@ -107,7 +107,7 @@ class ActorPreview
 	}
 	function draw()
 	{
-		ctx.clear()
+		Pv.clear()
 		if (subj) {
 			subj.type == Schema.Actor.Pacman
 				? drawPacman()

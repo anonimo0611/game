@@ -3,7 +3,7 @@ import * as Pts   from '../src/sprites/points.js'
 import * as Fruit from '../src/sprites/fruits.js'
 import PacSprite  from '../src/sprites/pacman.js'
 import {snagSpr}  from '../src/sprites/ghost_cb.js'
-import {GridSize,T,S,GAP,ghsSprite} from './_constants.js'
+import {GridSize,T,S,GAP,ghsSprGr} from './_constants.js'
 
 export const View = function()
 {
@@ -71,7 +71,7 @@ export const View = function()
 		const [x,y]= [ofst(col), row*S]
 		if (row < 5)
 		{
-			ghsSprite.draw(ctx,
+			ghsSprGr.draw(
 			{
 				x,y,size:S,
 				type:  row-1,
@@ -80,7 +80,7 @@ export const View = function()
 			})
 			return
 		}
-		ghsSprite.draw(ctx,
+		ghsSprGr.draw(
 		{
 			x,y,size:S,
 			orient:/**@type {const}*/([R,R,R,R,U,L,D,R])[col],
@@ -125,7 +125,7 @@ export const View = function()
 	}
 
 	function drawAkabei() {
-		const aka = ghsSprite
+		const aka = ghsSprGr
 		const spr = snagSpr(ctx)
 
 		ctx.translate(S/4, S*9+S/4-GAP/4)
@@ -135,7 +135,7 @@ export const View = function()
 		*/
 		const draw = (x,y, params)=>
 		{
-			aka.draw(ctx,{size:S,x,y,...params})
+			aka.draw({size:S,x,y,...params})
 		}
 		{// Snagged Clothing
 			const pos = Vec2.Zero, ratios = [0.3, 0.5 ,1]
