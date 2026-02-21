@@ -24,7 +24,7 @@ export default class StateBase {
 		states?.forEach((/**@type {S}*/s,i)=> {
 			const self = /**@type {any}*/(this)
 			i == 0 && (this.#default = s)
-			self[`to${s}`] = (/**@type {StateDef.Opts<S>}*/opt)=> {this.to(s,opt)}
+			self[`to${s}`] = (/**@type {StateDef.Opts<S>}*/opt)=> {this.set(s,opt)}
 			defineProperty(this,`is${s}`, {get(){return this.#curr === s}})
 			defineProperty(this,`was${s}`,{get(){return this.#last === s}})
 		})
@@ -57,9 +57,9 @@ export default class StateBase {
 	 @param {S} state
 	 @param {StateDef.Opts<S>} opts
 	*/
-	to(state, {data,delay=-1,fn}={}) {
+	set(state, {data,delay=-1,fn}={}) {
 		if (delay >= 0) {
-			Timer.set(delay, ()=> this.to(state,{delay:-1,data}))
+			Timer.set(delay, ()=> this.set(state,{delay:-1,data}))
 			return this
 		}
 		this.#last = this.current
