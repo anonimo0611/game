@@ -4,6 +4,7 @@ import {drawText} from './message.js'
 import {Ctrl}     from './control.js'
 import {Lives}    from './lives.js'
 
+let _inProgress = false
 let _score  = 0, _hiSco  = 0
 let _savedS = 0, _savedH = 0
 
@@ -28,14 +29,19 @@ export const Score = new class {
 		_savedH = _hiSco
 	}
 	#restore() {
-		_score = _savedS
-		_hiSco = _savedH
+		if (_inProgress) {
+			_inProgress = false
+			_score = _savedS
+			_hiSco = _savedH
+		}
 	}
 	#onIntro() {
 		Score.#save()
 		_score = 0
+		_inProgress = true
 	}
 	#onGameOver() {
+		_inProgress = false
 		const hiSco = localStorage[Score.HiScoreKey]|0
 		if (!Ctrl.isPractice && _hiSco > hiSco)
 			localStorage[Score.HiScoreKey] = _hiSco

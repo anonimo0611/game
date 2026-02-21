@@ -70,7 +70,7 @@ export class Attract {
 	quit() {
 		$off('.Attract')
 		Attract.#instance = null
-		State.toQuit()
+		State.toTitle()
 	}
 	update() {this.subAct.update()}
 }
