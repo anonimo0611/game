@@ -100,7 +100,7 @@ export const Game = new class {
 		State.toReady()
 	}
 	#onGameOver() {
-		State.toQuit({delay:2000})
+		Timer.set(2000, Game.#onQuit)
 	}
 	#onQuit() {
 		Game.#isDied = false
