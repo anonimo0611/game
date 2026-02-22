@@ -73,10 +73,10 @@ export const Game = new class {
 		!document.hasFocus() && Ctrl.pause(true)
 	}
 	#onRoundEnds() {
+		State.setRoundEnds()
 		State.isCleared
 			? Game.#onCleared()
 			: Timer.set(600, Game.#die)
-		State.setRoundEnds()
 	}
 	#die() {
 		Sound.playDyingSE()
