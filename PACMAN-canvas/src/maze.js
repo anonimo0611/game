@@ -88,23 +88,18 @@ export const Maze = freeze(new class {
 		State.on({_NewLevel: e=> this.reset(e)})
 		$(powChk).on({change:e=> this.reset(e)})
 	}
-	static reset(
-	 /**@type {JQuery.TriggeredEvent}*/e
-	) {
+	static reset(/**@type {JQuery.TriggeredEvent}*/e) {
 		e.target != powChk && Wall.draw()
 		for (const [i,c] of MapArr.entries())
 			DotChips.has(c) && this.setDot(i,c)
 	}
-	static setDot(
-	 /**@type {number}*/i,
-	 /**@type {string}*/chip
-	) {
+	static setDot(/**@type {number}*/i, chip='.') {
 		const t = Vec2.new(i%Cols, i/Cols|0)
 		const m = t.clone.add(.5)
 		clearDot({tileIdx:i,tileMid:m})
 		DotSet.add(i)
 		powChk.checked == false || chip == '.'
-			? drawDot(Bg,...t.vals)
+			? drawDot(Bg, ...t.vals)
 			: PowMap.set(i,t)
 	}
 	Top     = 1
