@@ -48,7 +48,8 @@ export default class {
 			return
 		if (this.#dyingSpr) {
 			this.isBoard && (x = clamp(x, radius, BW-radius))
-			return this.#dyingSpr.draw({x,y})
+			this.#dyingSpr.draw({x,y,radius})
+			return
 		}
 		const {ctx}  = this
 		const PacR   = radius*scale

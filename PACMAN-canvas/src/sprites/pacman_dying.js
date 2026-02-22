@@ -42,10 +42,11 @@ export class Dying {
 		}
 		this.#fadeOut.update()
 	}
-	draw({x=0,y=0}={}) {
+	draw({x=0,y=0,radius:r=this.r}={}) {
 		const {ctx}= this
 		ctx.save()
 		ctx.translate(x,y)
+		ctx.scale(r/this.r, r/this.r)
 		ctx.lineWidth = this.r*0.21
 		ctx.fillStyle = ctx.strokeStyle = Colors.Pacman
 		this.isSplitting
