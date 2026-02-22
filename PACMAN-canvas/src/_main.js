@@ -138,4 +138,4 @@ export const Game = new class {
 		Message.draw()
 	}
 },
-$Level = $byId('level')
+$Level = $('#level')
