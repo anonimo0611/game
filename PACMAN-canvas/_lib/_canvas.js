@@ -180,9 +180,6 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 class Fade {
 	/** @readonly */ static IN  = 0
 	/** @readonly */ static OUT = 1
-	static set(dur=500, {delay=0,isFadeOut=false}={}) {
-		return new Fade(dur, delay, isFadeOut? 1:0)
-	}
 	static in (dur=500, delay=0) {return new Fade(dur, delay, 0)}
 	static out(dur=500, delay=0) {return new Fade(dur, delay, 1)}
 

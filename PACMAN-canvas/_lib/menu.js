@@ -14,7 +14,7 @@ class Menu {
 	 /**@type {string}*/type
 	) {
 		const
-		root  = /**@type {CustomMenu} */($byId(id).attr({type}) .get(0)),
+		root  = /**@type {CustomMenu} */($('#'+id).attr({type}) .get(0)),
 		menu  = /**@type {HTMLElement}*/($(root).find('mn-list').get(0)),
 		items = /**@type {MenuItem[]} */($(menu).find('mn-item').get())
 		if (!root || !menu || !items.length) {
@@ -97,8 +97,8 @@ export class DorpDown extends Menu {
 		case 'Enter':
 		case '\x20':
 			this.closed
-			? this.open()
-			: this.select(i)
+				? this.open()
+				: this.select(i)
 			break
 		case 'ArrowUp':
 		case 'ArrowDown':{
@@ -122,7 +122,7 @@ export class Slide extends Menu {
 	#width=0
 	constructor(/**@type {string}*/id) {
 		super(id,'slidemenu')
-		const{root}= this, wrap=(this.$label.get(0) ?? root)
+		const {root}= this, wrap=(this.$label.get(0) ?? root)
 		this.#BtnSet= freeze({
 			[R]:$('<span class="button r">').prependTo(root)[0],
 			[L]:$('<span class="button l">').prependTo(root)[0],

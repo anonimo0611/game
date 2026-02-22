@@ -5,14 +5,12 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 /**
  @template {object} T
  @param {T} o
-*/const typedKeys = o=>
-	/**@type {(keyof T)[]}*/(keys(o))
+*/const typedKeys = o=> /**@type {(keyof T)[]}*/(keys(o))
 
 /**
  @template {string} T
  @param {readonly T[]} array
-*/const toEnumObject = array=>
-	/**@type {{readonly [K in T]:K}}*/
+*/const toEnumObject = array=> /**@type {{readonly [K in T]:K}}*/
 	(fromEntries(array.map(k=> [k,k])))
 
 /**
@@ -165,10 +163,6 @@ const $root = $(document.documentElement)
 /**
  @param {JQWindowHandler} handler
 */const $load = handler=> $win.on({load:handler})
-
-/**
- @param {string} elementId
-*/const $byId = elementId=> $('#'+elementId)
 
 /**
  @param {string} events

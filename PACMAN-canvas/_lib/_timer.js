@@ -17,7 +17,8 @@ const {Ticker,Timer}= function() {
 	let _fCount = 0 // frame  count
 	let _pCount = 0 // paused count
 
-	const Ticker = freeze(new class {
+	const Ticker = new class {
+		/** @readonly */
 		Interval = Interval
 		get count()       {return _fCount}
 		get pausedCount() {return _pCount}
@@ -49,7 +50,7 @@ const {Ticker,Timer}= function() {
 			TimerMap.clear()
 			Timer.unfreeze()
 		}
-	})
+	}
 
 	class TickerCore {
 		/**
@@ -110,9 +111,7 @@ const {Ticker,Timer}= function() {
 
 	const Timer = new class {
 		#frozen = false
-		get frozen() {
-			return this.#frozen
-		}
+		get frozen() {return this.#frozen}
 		freeze()   {this.#frozen = true; return this}
 		unfreeze() {this.#frozen = false;return this}
 		/**
