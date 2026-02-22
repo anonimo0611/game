@@ -65,7 +65,7 @@ const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 	#drawPoints() {
 		/**
 		 @import {PtsType} from '../src/sprites/points'
-			@type {(pts:PtsType, x:number, y:number)=> void}
+		 @type {(pts:PtsType, x:number, y:number)=> void}
 		*/
 		function draw(pts, x, y) {
 			const {ctx:cache,w,h}= Pts.cache(pts, S)
@@ -96,9 +96,7 @@ const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 
 		ctx.translate(S/4, S*9+S/4-GAP/4)
 
-		/**
-		 @type {(x:number, y:number, params:object)=> void}
-		*/
+		/** @type {(x:number, y:number, params:object)=> void} */
 		const draw = (x,y, params)=> {aka.draw({size:S,x,y,...params})}
 
 		{// Snagged Clothing
