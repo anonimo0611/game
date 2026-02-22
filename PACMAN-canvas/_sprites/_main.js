@@ -1,32 +1,20 @@
 import '../_lib/mouse.js'
+import './anime.js'
 import * as Pts   from '../src/sprites/points.js'
 import * as Fruit from '../src/sprites/fruits.js'
 import PacSprite  from '../src/sprites/pacman.js'
 import {snagSpr}  from '../src/sprites/ghost_cb.js'
-import {GridSize,T,S,GAP,ghsSprGr} from './_constants.js'
+import {SizeRng,BrightRng,ResetBtn,GridSize,T,S,GAP,ghsSprGr} from './_constants.js'
 
-export const View = function()
-{
-	/** @param {number} colIdx */
-	const ofst = colIdx=> (S*colIdx)+(GAP*colIdx)
-	const ctx  = Fg
+const ctx  = Fg
+const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 
-	function draw()
-	{
-		ctx.save()
-		ctx.translate(GAP, GAP/2)
-		ctx.clear()
-		drawGridLines()
-		drawFruits()
-		drawGhosts()
-		drawPoints()
-		drawPacman()
-		drawAkabei()
-		ctx.restore()
+// Atlas
+;(new class {
+	constructor() {
+		$(SizeRng).on('resize', this.draw)
 	}
-
-	function drawGridLines()
-	{
+	#drawGridLines() {
 		ctx.save()
 		ctx.translate(-GAP/2, 0)
 		ctx.setLineDash([2,2])
@@ -39,38 +27,23 @@ export const View = function()
 		ctx.stroke()
 		ctx.restore()
 	}
-
-	function drawFruits()
-	{
+	#drawFruits() {
 		for (const i of range(8))
-		{
 			Fruit.draw(ctx, i, ofst(7-i)+S/2, S/2, S/16)
-		}
 	}
-
-	function drawGhosts()
-	{
-		for (const row of range(1,6))
-		{
-			for (const col of range(0,8))
-			{
+	#drawGhosts() {
+		for (const row of range(1,6)) {
+			for (const col of range(0,8)) {
 				ctx.save()
 				ctx.translate(T/2, T/2)
-				drawGhost(col, row)
+				this.#drawGhost(col, row)
 				ctx.restore()
 			}
 		}
 	}
-
-	/**
-	 @param {number} col
-	 @param {number} row
-	*/
-	function drawGhost(col, row)
-	{
+	#drawGhost(col=0, row=0) {
 		const [x,y]= [ofst(col), row*S]
-		if (row < 5)
-		{
+		if (row < 5) {
 			ghsSprGr.draw(
 			{
 				x,y,size:S,
@@ -80,8 +53,7 @@ export const View = function()
 			})
 			return
 		}
-		ghsSprGr.draw(
-		{
+		ghsSprGr.draw({
 			x,y,size:S,
 			orient:/**@type {const}*/([R,R,R,R,U,L,D,R])[col],
 			animIdx:    +(col % 2 != 0),
@@ -90,22 +62,19 @@ export const View = function()
 			isEscaping:  (col >= 4),
 		})
 	}
-
-	function drawPoints()
-	{
+	#drawPoints() {
 		/**
 		 @import {PtsType} from '../src/sprites/points'
-		 @type {(pts:PtsType, x:number, y:number)=> void}
+			@type {(pts:PtsType, x:number, y:number)=> void}
 		*/
-		function draw(pts, x, y)
-		{
+		function draw(pts, x, y) {
 			const {ctx:cache,w,h}= Pts.cache(pts, S)
 			ctx.save()
 			ctx.translate(x,y)
 			ctx.drawImage(cache.canvas, -w/2, -h/2)
 			ctx.restore()
 		}
-		const ptsTable = /** @type {const} */
+		const ptsTable = /**@type {const}*/
 		([
 			[200,400,800,1600,100,300,500,700],
 			[1000,2000,3000,5000]
@@ -113,18 +82,15 @@ export const View = function()
 		ptsTable[0].forEach((pts,i)=> draw(pts, ofst(i)+T, S*6+T))
 		ptsTable[1].forEach((pts,i)=> draw(pts, (S+GAP/2)+S*(2+GAP/T)*i, S*7+S/2))
 	}
-
-	function drawPacman() {
+	#drawPacman() {
 		const dirs = /**@type {const}*/([U,U,L,L,D,D,R,R])
-		for (const i of range(-1,9))
-		{
+		for (const i of range(-1,9)) {
 			const center = Vec2.new(T+ofst(i), S*8.5)
 			const params = {center, orient:dirs[i-1], radius:T*PacScale}
 			new PacSprite(ctx, i>0 ? (i%2 ? 1:2) : 0).draw(params)
 		}
 	}
-
-	function drawAkabei() {
+	#drawAkabei() {
 		const aka = ghsSprGr
 		const spr = snagSpr(ctx)
 
@@ -133,10 +99,8 @@ export const View = function()
 		/**
 		 @type {(x:number, y:number, params:object)=> void}
 		*/
-		const draw = (x,y, params)=>
-		{
-			aka.draw({size:S,x,y,...params})
-		}
+		const draw = (x,y, params)=> {aka.draw({size:S,x,y,...params})}
+
 		{// Snagged Clothing
 			const pos = Vec2.Zero, ratios = [0.3, 0.5 ,1]
 			for (const i of range(3)) {
@@ -169,20 +133,26 @@ export const View = function()
 		draw(ofst(2.25), S, {isExposed:true})
 		draw(ofst(4.25), S, {isExposed:true,animIdx:1})
 	}
-
-	return {draw}
-}()
-
-$('#brightRng').on('input', function()
-{
-	const v = /**@type {HTMLInputElement}*/(this).value
-	Fg.canvas.style.backgroundColor = `rgb(${v}% ${v}% ${v}%)`
+	draw = ()=> {
+		ctx.save()
+		ctx.translate(GAP, GAP/2)
+		ctx.clear()
+		this.#drawGridLines()
+		this.#drawFruits()
+		this.#drawGhosts()
+		this.#drawPoints()
+		this.#drawPacman()
+		this.#drawAkabei()
+		ctx.restore()
+	}
 })
 
-$('#resetBtn').on('click', function()
-{
-	Array.from(document.forms).forEach(f=> f.reset())
+$(BrightRng).on('input', function() {
+	const {value:v}= this
+	ctx.canvas.style.backgroundColor = `rgb(${v}% ${v}% ${v}%)`
+})
+$(ResetBtn).on('click', function() {
+	[...document.forms].forEach(f=> f.reset())
 	$('[type=range]').trigger('input')
 })
-
 $load(()=> document.body.style.opacity = '1')

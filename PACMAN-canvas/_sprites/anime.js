@@ -1,13 +1,7 @@
-import PacSprite    from '../src/sprites/pacman.js'
-import {Dir}        from '../_lib/direction.js'
-import {DorpDown}   from '../_lib/menu.js'
-import {ghsSprPv}   from './_constants.js'
-import {T,S,resize} from './_constants.js'
-
-export const {ctx:Pv}= canvas2D('preview')
-
-const Menu = new DorpDown('animMenu')
-const Btns = $('.radioButtons input')
+import PacSprite  from '../src/sprites/pacman.js'
+import {Dir}      from '../_lib/direction.js'
+import {ghsSprPv} from './_constants.js'
+import {T,S,Pv,Menu,Btns,resize} from './_constants.js'
 
 const Schema = /**@type {const}*/
 ({
@@ -16,10 +10,8 @@ const Schema = /**@type {const}*/
 	Ghost: {Normal:0, Mended:1, Exposed:2, Flashed:3}
 })
 
-class ActorPreview
-{
-	constructor(type=0,subType=0)
-	{
+class ActorPreview {
+	constructor(type=0,subType=0) {
 		this.animIdx  = 0
 		this.flashIdx = 0
 		this.type     = type
@@ -30,22 +22,28 @@ class ActorPreview
 	}
 }
 
-{// Preview
-	let subj = /**@type {?ActorPreview}*/(null)
-
-	function change()
-	{
+// Preview
+;(new class {
+	subj = /**@type {?ActorPreview}*/(null)
+	constructor() {
+		Ticker.set(this.update, this.draw)
+		Btns.on('change', this.onChangeBtn)
+		$(Menu.root)
+			.on('change', this.onChangeMenu)
+			.on('keydown',this.onKeydown)
+	}
+	onChangeMenu = ()=> {
 		const [type,subType]= Menu.value.split(':').map(Number)
 		switch(type) {
 		case Schema.Actor.None:
-			subj = null
-			btnDisabled(true)
+			this.subj = null
+			this.btnDisabled(true)
 			break
 
 		case Schema.Actor.Pacman:
-			subj = new ActorPreview(type,subType)
-			if (btnDisabled(subType == Schema.Pacman.Dying))
-				subj.pacman.startDying({radius:PacScale*T,fn:change})
+			this.subj = new ActorPreview(type,subType)
+			if (this.btnDisabled(subType == Schema.Pacman.Dying))
+				this.subj.pacman.startDying({radius:PacScale*T,fn:this.onChangeMenu})
 			break
 
 		case Schema.Actor.Akabei:
@@ -53,31 +51,54 @@ class ActorPreview
 		case Schema.Actor.Aosuke:
 		case Schema.Actor.Guzuta:
 		case Schema.Actor.Fright:
-			subj = new ActorPreview(type,subType)
-			btnDisabled(
+			this.subj = new ActorPreview(type,subType)
+			this.btnDisabled(
 				Schema.Actor.Fright == type ||
 				Schema.Ghost.Normal != subType
 			)
 			break
 		}
 	}
-	function btnDisabled(disabled=false)
-	{
+	onChangeBtn = (/**@type {JQuery.TriggeredEvent}*/e)=> {
+		const {subj}= this
+		if (subj) {
+			subj.orient = /**@type {Direction}*/(
+				e.target.getAttribute('value')
+			)
+		}
+	}
+	onKeydown = (/**@type {JQuery.KeyboardEventBase}*/e)=> {
+		const dir = Dir.from(e)
+		if (dir) {
+			const vx  = Vec2[dir].x
+			const len = +Btns.length
+			const idx = +Btns.filter(':enabled:checked').data('idx')
+			Menu.closed
+				&& vx
+				&& isFinite(idx)
+				&& Btns
+					.eq((vx+idx+len) % len)
+					.prop({checked:true})
+					.trigger('change')
+		}
+	}
+	btnDisabled = (disabled=false)=> {
+		const {subj}= this
 		Btns.prop({disabled})
 		if (!disabled && subj)
 			subj.orient = /**@type {Direction}*/
 				($('input[name=orient]:checked').attr('value'))
 		return disabled
 	}
-	function drawPacman()
-	{
+	drawPacman = ()=> {
+		const {subj}= this
 		Pv.save()
 		Pv.translate(Pv.canvas.width/2, S/2)
 		subj?.pacman.draw({orient:subj.orient, radius:PacScale*T})
 		Pv.restore()
 	}
-	function drawGhost()
-	{
+	drawGhost = ()=> {
+		const {subj}= this
 		Pv.save()
 		subj?.subType == Schema.Ghost.Exposed
 			? Pv.translate(T*3/4, T/2)
@@ -96,50 +117,22 @@ class ActorPreview
 		})
 		Pv.restore()
 	}
-	function update()
-	{
+	update = ()=> {
 		resize()
+		const {subj}= this
 		if (subj) {
 			subj.animIdx  ^= +(Ticker.count %  6 == 0)
 			subj.flashIdx ^= +(Ticker.count % 14 == 1)
 			subj.pacman?.update()
 		}
 	}
-	function draw()
-	{
+	draw = ()=> {
+		const {subj}= this
 		Pv.clear()
 		if (subj) {
 			subj.type == Schema.Actor.Pacman
-				? drawPacman()
-				: drawGhost()
+				? this.drawPacman()
+				: this.drawGhost()
 		}
 	}
-
-	$(Menu.root)
-	.on({change})
-	.on('keydown', e=>
-	{
-		const dir = Dir.from(e)
-		if (!dir) return
-
-		const vx  = Vec2[dir].x
-		const len = +Btns.length
-		const idx = +Btns.filter(':enabled:checked').data('idx')
-		Menu.closed
-		&& vx
-		&& isFinite(idx)
-		&& Btns
-			.eq((vx+idx+len) % len)
-			.prop({checked:true})
-			.trigger('change')
-	})
-	Btns.on('change', e=>
-	{
-		if (!subj) return
-		subj.orient = /**@type {Direction}*/(
-			e.target.getAttribute('value')
-		)
-	})
-
-	Ticker.set(update, draw)
-}
+})
