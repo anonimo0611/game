@@ -11,9 +11,9 @@ const WaitTime = 1e3*30 // 30secs
 /** Attract Mode will begin after a period of inactivity. */
 const RunTimer = function() {
 	State.onChange(()=> {
-		State.isTitle == false
-			? $off('.RunTimer')
-			: $onNS('RunTimer', {[Evt]:Ticker.resetCount})
+		State.isTitle
+			? $onNS('RunTimer', {[Evt]:Ticker.resetCount})
+			: $off('.RunTimer')
 	})
 	function update() {
 		(!document.hasFocus() || Confirm.opened || Ctrl.activeElem)
