@@ -13,9 +13,10 @@ export const Ctrl = new class {
 	static {$(this.setup)}
 	static setup() {
 		$win.on({
-			blur:_=> Ctrl.pause(true),
-			load:    Ctrl.#setup,
-			keydown: Ctrl.#onKeydown,
+			load:     Ctrl.#setup,
+			keydown:  Ctrl.#onKeydown,
+			blur: _=> Ctrl.pause(true),
+			focus:_=> Ctrl.pause(false),
 		})
 		Ctrl.#restore()
 		Ctrl.#output()
@@ -38,7 +39,9 @@ export const Ctrl = new class {
 
 	/** @param {boolean} [force] */
 	pause(force) {
-		State.isInGame && Sound.pause( Ticker.pause(force) )
+		if (!(State.isInGame && force == false))
+			Ticker.pause(force)
+		Sound.pause(Ticker.paused)
 	}
 	#fitToViewport() {
 		const scale = min(

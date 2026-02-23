@@ -31,10 +31,7 @@ export class CoffBreak {
 	constructor(num) {
 		this.pacman.y = this.akabei.y = (BH/2 - T/2)
 		Sound.playCoffBGM({loop:(num == 2) ? 0:1})
-		$onNS('.CB',{Quit:this.end, blur_focus:this.pause})
-	}
-	pause() {
-		Sound.pause( Ticker.pause() )
+		$onNS('.CoffBreak', {Quit:this.end})
 	}
 	movePac() {
 		this.pacman.x += this.pacvx
@@ -56,7 +53,7 @@ export class CoffBreak {
 		State.wasFlashing && Fruit.drawLevelCounter()
 	}
 	end() {
-		$off('.CB')
+		$off('.CoffBreak')
 		CoffBreak.#scene = null
 		State.wasTitle
 			? State.setTitle()
