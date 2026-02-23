@@ -5,9 +5,9 @@ import {$Level} from './_main.js'
 import {State}  from './state.js'
 import {Maze}   from './maze.js'
 import {PtsMgr} from './points.js'
-import {Player} from './player/player.js'
 import * as Pts from './sprites/points.js'
 import * as Spr from './sprites/fruits.js'
+import {player,onAteDot} from './player/player.js'
 
 /** The fruit appear after 70 or 170 dots are cleared
 @type {ReadonlySet<number>} */
@@ -26,7 +26,7 @@ let  _fadeOut = /**@type {?Fade}*/(null)
 export const Fruit = new class {
 	static {$(this.setup)}
 	static setup() {
-		Player.onAte(Fruit.#onDotEaten)
+		onAteDot(Fruit.#onDotEaten)
 		State .on({_Ready: Fruit.#resetTarget})
 		$Level.on({change: Fruit.#setImages})
 	}
@@ -37,7 +37,7 @@ export const Fruit = new class {
 		return (State.isTitle || State.isInGame) && _showTgt
 	}
 	get #intersectsWithPlayer() {
-		return circleCollision(Player.core.center, TargetPos, T/2)
+		return circleCollision(player.center, TargetPos, T/2)
 	}
 	/** Pass the game-level to reference the fruit table */
 	getType(lv=Game.level) {

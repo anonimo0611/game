@@ -19,12 +19,9 @@ export const btns =
 	/**@type {{[K in ButtonIds]:HTMLButtonElement}}*/
 	(fromEntries(buttonIds.map(id=>[id,requireElem(id+'Btn')])))
 
-const panelBtns =
-	/**@type {NodeListOf<HTMLButtonElement>}*/(qSAll('.panelBtn'))
-
 //---- Menus ----
 
-import * as _Menu  from '../_lib/menu.js'
+import * as _Menu from '../_lib/menu.js'
 export const Menu = freeze({
 	Level: new _Menu.DorpDown('LevelMenu'),
 	Extend:new _Menu.Slide('ExtendMenu'),
@@ -32,7 +29,8 @@ export const Menu = freeze({
 
 //---- Panels ----
 
-panelBtns.forEach(btn=> {
+;/**@type {HTMLButtonElement[]}*/
+($('.panelBtn').get()).forEach(btn=> {
 	$(btn).on('keydown pointerdown', e=> {
 		if (e.key && !isEnterKey(e))
 			return

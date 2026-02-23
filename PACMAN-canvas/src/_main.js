@@ -10,7 +10,7 @@ import {Score}   from './score.js'
 import {Lives}   from './lives.js'
 import {Fruit}   from './fruit.js'
 import {Actors}  from './actor.js'
-import {Player}  from './player/player.js'
+import {player}  from './player/player.js'
 import {PtsMgr}  from './points.js'
 import {Demo}    from './demo/_demo.js'
 import {Sound}   from '../_snd/sound.js'
@@ -80,7 +80,7 @@ export const Game = new class {
 	}
 	#die() {
 		Sound.playDyingSE()
-		Player.sprite.startDying({fn:Game.#onDied})
+		player.sprite.startDying({fn:Game.#onDied})
 	}
 	#onDied() {
 		Game.#isDied = true
@@ -134,7 +134,7 @@ export const Game = new class {
 		Score.draw()
 		Maze.PowDots.draw()
 		Fruit.drawTarget()
-		Actors.draw(Player.core)
+		Actors.draw(player)
 		Message.draw()
 	}
 },

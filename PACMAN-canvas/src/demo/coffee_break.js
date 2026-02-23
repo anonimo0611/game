@@ -15,7 +15,7 @@ export class CoffBreak {
 	static #scene = /**@type {?Scene1|Scene2|Scene3}*/(null)
 	static #begin(_={}, n=CoffBreak.num) {
 		if (!between(n,1,3))
-			throw RangeError('The scene number must be 1-3')
+			throw RangeError(`${n}: The scene number must be 1-3`)
 		CoffBreak.#scene = new [Scene1,Scene2,Scene3][n-1]
 	}
 	static get num() {return sceneNum(Game.level)}
@@ -44,9 +44,9 @@ export class CoffBreak {
 	moveAka(rate=1) {
 		this.akabei.x += this.akavx * rate
 	}
-	drawPac(scale=1) {
+	drawPac(radius=PacRadius) {
 		const {pacman:{center,orient}}= this
-		this.pacman.sprite.draw({center,orient,scale})
+		this.pacman.sprite.draw({center,orient,radius})
 	}
 	drawAka(data={}) {
 		const {akabei:{pos,animIdx}}= this
@@ -96,7 +96,7 @@ class Scene1 extends CoffBreak {
 	draw() {
 		const {pacman:{dir},isFrightened}= this
 		this.drawAka({isFrightened})
-		this.drawPac(dir == R ? 4:1)
+		this.drawPac((dir == L ? 1:4)*PacRadius)
 		super.draw()
 	}
 }
@@ -141,9 +141,9 @@ class Scene2 extends CoffBreak {
 		spr.drawStake()
 		this.drawPac()
 		this.drawAka({isRipped,animIdx:aIdx,orient:akaEyes})
-		isRipped?
-			spr.drawShard():
-			function() { // Snagged Clothing
+		isRipped
+			?spr.drawShard()
+			:function() { // Snagged clothing
 				if (isRipped || a.x >= spr.CaughtX) return
 				const pos   = a.center.addX(T)
 				const ratio = norm(spr.CaughtX, spr.AkaMinX, a.x)

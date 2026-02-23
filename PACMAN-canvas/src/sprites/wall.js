@@ -1,8 +1,7 @@
 const HT = T/2
-const SF = screen.height/1080 // Scale Factor
-const LW = int(3*SF) // Line  Width
-const LO = int(4*SF) // Line  Offset
-const OO = int(2*SF) // Outer Offset
+const LW = int(3*ScaleFactor) // Line  Width
+const LO = int(4*ScaleFactor) // Line  Offset
+const OO = int(2*ScaleFactor) // Outer Offset
 const CornerToIndex = trMap('12345678abcdABCD',cycleRange(4))
 
 import {Maze}  from '../maze.js'

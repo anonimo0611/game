@@ -3,10 +3,10 @@ export default class {
 	/** @typedef {Direction|'Bracket'} orient */
 	/** @readonly */ctx
 	/** @readonly */spr
-	/** @readonly */mainCtx
-	/** @param {EnhancedCtx2D} mainCtx */
-	constructor(mainCtx, w=T*3, h=T*2) {
-		this.mainCtx = mainCtx
+	/** @readonly */tgt
+	/** @param {EnhancedCtx2D} target */
+	constructor(target, w=T*3, h=T*2) {
+		this.tgt = target
 		this.ctx = canvas2D(null, w, h).ctx
 		this.spr = new CBSprite(this.ctx)
 	}
@@ -28,14 +28,14 @@ export default class {
 		isMended     = false,
 		isExposed    = false,
 	}={}) {
-		const {ctx,mainCtx}= this
+		const {tgt,ctx}= this
 		const finalize = ()=> {
 			ctx.restore()
-			mainCtx.save()
-			mainCtx.setAlpha(alpha)
-			mainCtx.translate(x+size/4, y+size/4)
-			mainCtx.drawImage(ctx.canvas, -size/2, -size/2)
-			mainCtx.restore()
+			tgt.save()
+			tgt.setAlpha(alpha)
+			tgt.translate(x+size/4, y+size/4)
+			tgt.drawImage(ctx.canvas, -size/2, -size/2)
+			tgt.restore()
 		}
 		ctx.clear()
 		ctx.save()
@@ -54,7 +54,7 @@ export default class {
 		if (!isEscaping) {
 			ctx.save()
 			this.#resurrect?.apply(ctx)
-			this.#drawAngerGlow(mainCtx, {x,y,isAngry,size})
+			isAngry && this.#drawAngerGlow({x,y,size})
 			this.#drawBody({animIdx,isRipped,isMended})
 			if (isFrightened) {
 				ctx.fillStyle   =
@@ -147,15 +147,13 @@ export default class {
 		ctx.addLinePath([ +3, 9],[+11,17],[+15,17],[+25, 9],[+30, 9],[36,17])
 		ctx.stroke()
 	}
-	/** @param {EnhancedCtx2D} ctx */
-	#drawAngerGlow(ctx, {x=0,y=0, isAngry=false, size=T*2}) {
-		if (!isAngry) return
-		const {width:W}=Glow, S=W*1.2
-		ctx.save()
-		ctx.globalAlpha = this.#resurrect?.alpha ?? 1
-		ctx.translate(x+size/4, y+size/4)
-		ctx.drawImage(Glow, 0,0, W,W, -S/2,-S/2, S,S)
-		ctx.restore()
+	#drawAngerGlow({x=0,y=0,size=T*2}) {
+		const {tgt}=this, {width:W}=Glow, S=W*1.2
+		tgt.save()
+		tgt.globalAlpha = this.#resurrect?.alpha ?? 1
+		tgt.translate(x+size/4, y+size/4)
+		tgt.drawImage(Glow, 0,0, W,W, -S/2,-S/2, S,S)
+		tgt.restore()
 	}
 }
 const Glow = function() {

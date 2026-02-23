@@ -56,7 +56,6 @@ function cache(pts, size=T*2) {
 			: DigitPath0to8[+pts.toString()[i]]
 		ctx.save()
 		ctx.translate(x,-3)
-		ctx.beginPath()
 		ctx.stroke(path)
 		ctx.restore()
 	})

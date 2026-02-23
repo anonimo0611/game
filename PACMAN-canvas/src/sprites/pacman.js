@@ -39,7 +39,6 @@ export default class {
 		center:{x,y}={x:0,y:0},
 		orient = /**@type {Direction}*/(L),
 		alpha  = 1,
-		scale  = 1,
 		hidden = false,
 		closed = false,
 		radius = PacRadius}={}
@@ -51,16 +50,15 @@ export default class {
 			this.#dyingSpr.draw({x,y,radius})
 			return
 		}
-		const {ctx}  = this
-		const PacR   = radius*scale
-		const mAngle =(closed? 0:this.#mouthAngle)
+		const {ctx} = this
+		const angle = (closed? 0:this.#mouthAngle)
 		ctx.save()
 		ctx.setAlpha(alpha)
 		ctx.translate(x,y)
 		ctx.rotate(Rotation.get(orient) ?? 0)
 		ctx.beginPath()
-		ctx.moveTo(-PacR*0.3, 0)
-		ctx.arc(0, 0, PacR, mAngle, PI*2-mAngle)
+		ctx.moveTo(-radius*0.3, 0)
+		ctx.arc(0, 0, radius, angle, PI*2-angle)
 		ctx.fillStyle = Colors.Pacman
 		ctx.fill()
 		ctx.restore()

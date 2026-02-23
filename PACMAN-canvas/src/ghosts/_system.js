@@ -6,9 +6,9 @@ import {Ctrl}   from '../control.js'
 import {Maze}   from '../maze.js'
 import {PtsMgr} from '../points.js'
 import * as Pts from '../sprites/points.js'
-import {Player} from '../player/player.js'
 import {Ghost}  from './ghost.js'
 import Target   from './show_targets.js'
+import {player,onAteDot} from '../player/player.js'
 
 const PtsLst = Pts.GhostPts
 const Ghosts = /**@type {Ghost[]}*/([])
@@ -66,7 +66,8 @@ class GhsState extends _State {
 	}
 }
 export const createState =
-	/**@type {(g:Ghost)=> IGhsState}*/(g=> new GhsState(g))
+	/**@type {(g:Ghost)=> IGhsState}*/
+	(g=> new GhsState(g))
 
 export const GhsMgr = new class {
 	static {$(this.setup)}
@@ -205,7 +206,7 @@ export const DotCounter = function() {
 		const timeout = (Game.level<=4 ? 4e3:3e3)
 		const gLimit  = LimitTable[i-1][0] // global
 		const pLimit  = LimitTable[i-1][lvIdx] // personal
-		;(Player.core.timeSinceLastEating >= timeout)
+		;(player.timeSinceLastEating >= timeout)
 			? fn()
 			: (!Game.isDied || _globalCounter < 0)
 				? (personalCounters[i] >= pLimit)
@@ -228,8 +229,8 @@ export const DotCounter = function() {
 		idx = Ghosts.findIndex(g=> g.state.isIdle)
 		idx != -1 && personalCounters[idx]++
 	}
+	onAteDot(increaseCounter)
 	State.on({_Ready:reset})
-	Player.onAte(increaseCounter)
 	return {releaseIfReady}
 }()
 
@@ -248,8 +249,8 @@ const CruiseElroy = function() {
 		if (Maze.dotsLeft <= DotsLeftTable[Game.clampedLv-1]*rate)
 			++_part && Sound.playSiren()
 	}
+	onAteDot(onDotEaten)
 	State.on({_NewLevel:()=> _part=0})
-	Player.onAte(onDotEaten)
 	return {
 		get part()  {return _part},
 		get angry() {return angry()},

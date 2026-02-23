@@ -1,16 +1,16 @@
 const Scaling  = 1.05
 const CacheCtx = canvas2D(null,T*2).ctx
 const FruitFns = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
-const FruitLen = FruitFns.length
+const FruitMax = FruitFns.length
 
 /**
  @param {EnhancedCtx2D} ctx
  @param {number} idx
 */
 export function draw(ctx, idx, x=T,y=T-2, scale=T/8) {
-	if (!FruitFns[idx])
-		throw RangeError(`Invalid fruit index: ${idx}`
-			+` (Valid range: 0-${FruitLen-1})`);
+	if (!FruitFns[idx]) {
+		throw RangeError(`${idx}: Valid fruit range 0-${FruitMax-1}`)
+	}
 	ctx.save()
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
@@ -41,8 +41,8 @@ export const Cache = new class {
 {// Create a sprite sheet for menu icons
 	const Menu = $('#LevelMenu')
 	const size = +Menu.css('--scale') * T
-	const {ctx}= canvas2D(null, size*FruitLen, size)
-	for (const i of range(FruitLen))
+	const {ctx}= canvas2D(null, size*FruitMax, size)
+	for (const i of range(FruitMax))
 		draw(ctx, i, size*i+size/2, size/2, size/16)
 	Menu.css('--url',`url(${ctx.canvas.toDataURL()})`)
 }

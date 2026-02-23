@@ -5,7 +5,7 @@ import {Ctrl}   from '../control.js'
 import {PtsMgr} from '../points.js'
 import {Maze}   from '../maze.js'
 import {Actor}  from '../actor.js'
-import {Player} from '../player/player.js'
+import {player} from '../player/player.js'
 import Sprite   from '../sprites/ghost.js'
 import * as Sys from './_system.js'
 import {GhsMgr,Evt} from './_system.js'
@@ -60,7 +60,7 @@ export class Ghost extends Actor {
 
 	get chaseOffset()  {return 0}
 	get chaseSpeed()   {return GhsSpeed.Base}
-	get chasePos()     {return Player.core.center}
+	get chasePos()     {return player.center}
 	get chaseTile()    {return this.chasePos.divInt(T)}
 	get scatterTile()  {return Vec2.new(24, 0)}
 
@@ -128,7 +128,7 @@ export class Ghost extends Actor {
 		)
 	}
 	leaveHouse(deactivateGlobalDotCnt=false) {
-		Player.core.resetTimer()
+		player.resetTimer()
 		this.#started ||= true
 		this.state.isIdle &&
 		this.state.setGoingOut()
@@ -190,16 +190,16 @@ export class Ghost extends Actor {
 	}
 	#getNextDir(tgt=this.targetTile) {
 		const tile = this.getAdjTile(this.dir)
-		const dirs = TurnPriority.flatMap((dir,idx)=>
+		const dirs = TurnPriority.flatMap((dir,i)=>
 		{
 			const testTile = this.getAdjTile(dir,tile)
 			return this.revOrient != dir
 				&& !Maze.hasWall(testTile)
 				&& !this.#isRestrictedTile({dir,testTile})
-				? [{idx,dir,dist:Vec2.sqrMag(testTile,tgt)}]:[]
+				? [{dir,i,m:Vec2.sqrMag(testTile,tgt)}]:[]
 		})
 		return this.isFrightened? randChoice(dirs).dir:
-			(idx=> dirs.sort(compareDist)[idx].dir)
+			(i=> dirs.sort((a,b)=> a.m-b.m || a.i-b.i)[i].dir)
 				(this.#fleeTmr >= 0 ? dirs.length-1:0)
 	}
 	/** @param {{dir:Direction,testTile:Vec2}} testTile */
@@ -217,7 +217,7 @@ export class Ghost extends Actor {
 		return false
 	}
 	collidesWith(
-		pos     = Player.core.pos,
+		pos     = player.pos,
 		radius  = T*(this.isFrightened? .5 : .4),
 		release = ()=> this.#setEscapeState(),
 	) {

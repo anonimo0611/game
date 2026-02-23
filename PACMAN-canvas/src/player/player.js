@@ -9,13 +9,14 @@ import {GhsMgr}   from '../ghosts/_system.js'
 import {Mover}    from './controller.js'
 import {TunEntry} from './tunnel.js'
 
-let _fader = /**@type {?Fade}*/(null)
+const EventBus = $({})
+let _fade = /**@type {?Fade}*/(null)
 
 class PlayerCore extends PacMan {
 	#eatIdx = 0
 	#sinceLastEating = 0
 
-	/**@type {Mover}*/
+	/** @type {Mover} */
 	#mov      = new Mover(this)
 	#tunEntry = new TunEntry
 	constructor() {super(13.5, 24)}
@@ -23,7 +24,7 @@ class PlayerCore extends PacMan {
 	get speed()    {return this.#mov.speed}
 	get onWall()   {return this.#mov.onWall}
 	get tunEntry() {return this.#tunEntry}
-	get alpha()    {return _fader?.alpha ?? this.maxAlpha}
+	get alpha()    {return _fade?.alpha ?? this.maxAlpha}
 	get maxAlpha() {return Ctrl.semiTransPac? .75:1}
 	get closed()   {return State.isInGame == false}
 	get timeSinceLastEating() {return this.#sinceLastEating}
@@ -31,12 +32,12 @@ class PlayerCore extends PacMan {
 	resetTimer() {
 		this.#sinceLastEating = 0
 	}
-	forwardPos(num=0) {
-		return Vec2[this.dir].mul(num*T).add(this.center)
+	forwardPos(n=0) {
+		return Vec2[this.dir].mul(n*T).add(this.center)
 	}
-	offsetTarget(num=0) {
-		const  ofstX = (this.dir == U ? -num : 0)
-		return this.forwardPos(num).addX(ofstX*T)
+	offsetTarget(n=0) {
+		const  ofstX = (this.dir == U ? -n : 0)
+		return this.forwardPos(n).addX(ofstX*T)
 	}
 	drawCenterDot() {
 		if (!this.hidden && Ctrl.showGridLines)
@@ -50,7 +51,7 @@ class PlayerCore extends PacMan {
 	}
 	update() {
 		this.sprite.update(this)
-		_fader?.update(this.maxAlpha)
+		_fade?.update(this.maxAlpha)
 		if (this.closed || this.hidden)
 			return
 		this.#sinceLastEating += Game.interval
@@ -74,7 +75,7 @@ class PlayerCore extends PacMan {
 			: this.#eatSmallDot()
 		Maze.clearDot(this) == 0
 			? State.setCleared()
-			: $(Player).trigger('AteDot')
+			: EventBus.trigger('AteDot')
 	}
 	#eatPowerDot() {
 		Score.add(PowPts)
@@ -91,18 +92,12 @@ class PlayerCore extends PacMan {
 	}
 }
 
-export const Player = new class {
-	static {State.on({_Ready:_=> Player.init()})}
-	#core = new PlayerCore
-	get core()   {return this.#core}
-	get sprite() {return this.#core.sprite}
-	init() {
-		!State.wasIntro && (this.#core = new PlayerCore)
-		_fader = State.isTitle? null : Fade.in()
-	}
-	onAte(/**@type {JQTriggerHandler}*/handler) {
-		$(this).on('AteDot', handler)
-	}
-	forwardPos   = (num=0)=> this.#core.forwardPos(num)
-	offsetTarget = (num=0)=> this.#core.offsetTarget(num)
+export let player = new PlayerCore
+export function onAteDot(
+	/**@type {JQTriggerHandler}*/fn) {
+	EventBus.on('AteDot',fn)
 }
+State.on({_Ready:()=> {
+	_fade = State.isTitle? null : Fade.in()
+	!State.wasIntro && (player = new PlayerCore)
+}})

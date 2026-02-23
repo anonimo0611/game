@@ -1,6 +1,9 @@
 import _State from '../_lib/state.js'
 
-/** @typedef {typeof States[number]} StateType */
+/**
+ * @typedef {typeof States[number]} StateType
+ * @typedef {`_${Exclude<StateType,'Title'>}`} Underscored
+*/
 const States = /**@type {const}*/([
 	'Title','Attract','Intro','Ready','InGame','NewLevel','RoundEnds',
 	'Cleared','PacDying','Flashing','CoffBreak','GameOver','Quit'])
@@ -10,8 +13,8 @@ const States = /**@type {const}*/([
 */
 class GameState extends _State {
 	constructor() {super(globalThis), this.init(States)}
-	get isDemoMode()  {return State.isAttract || State.isCoffBreak}
 	get isStartMode() {return State.isIntro   || State.isReady}
+	get isDemoMode()  {return State.isAttract || State.isCoffBreak}
 
 	/**
 	 @param {StateType} s
@@ -23,8 +26,7 @@ class GameState extends _State {
 	}
 
 	/**
-	 @typedef {'_Ready'|'_NewLevel'} MultiState
-	 @param {{[key in (StateType|MultiState)]?:JQWindowHandler}} v
+	 @param {{[key in (StateType|Underscored)]?:JQWindowHandler}} v
 	*/
 	on(v) {return super.on(v)}
 

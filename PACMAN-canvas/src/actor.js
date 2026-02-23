@@ -1,13 +1,13 @@
 import {Dir}    from '../_lib/direction.js'
 import {Maze}   from './maze.js'
-import {Player} from './player/player.js'
+import {player} from './player/player.js'
 import {GhsMgr} from './ghosts/_system.js'
 import Sprite   from './sprites/pacman.js'
 
 export class Actor {
 	pos = Vec2.Zero
 	orient  = /**@type {Direction}*/(L)
-	#movDir = /**@type {Direction}*/(L)
+	#movDir = this.orient
 
 	/** @protected */
 	constructor(col=0,row=0) {this.pos.set(col*T,row*T)}
@@ -90,7 +90,7 @@ export class Actor {
 
 export const Actors = new class {
 	update() {
-		Player.core.update()
+		player.update()
 		GhsMgr.update()
 	}
 	/** @param {PacMan} pacman */

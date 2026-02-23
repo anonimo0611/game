@@ -6,7 +6,7 @@ import {Fruit}  from './fruit.js'
 import * as Pts from './sprites/points.js'
 
 const PtsMap = /**@type {Map<any,Points>}*/(new Map)
-State.on({RoundEnds:()=> PtsMap.clear()})
+State.on({_RoundEnds:()=> PtsMap.clear()})
 
 /**
  @typedef {{
