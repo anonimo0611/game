@@ -26,14 +26,6 @@ class SoundCore extends SoundMgr {
 		if (this.disabled) return
 		super.vol = clamp(+vol, 0, 10)
 	}
-	/**
-	 @param {boolean} enable
-	 @param {T[]} ids
-	*/
-	pause(enable, ...ids) {
-		if (State.isInGame || State.isCoffBreak)
-			super.pause(enable, ...ids)
-	}
 	playSiren() {
 		if (GhsMgr.isFrightMode
 		 || GhsMgr.areAnyEscaping) return
