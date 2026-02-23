@@ -24,7 +24,6 @@ export const Game = new class {
 			Title:    Game.#onTitle,
 			Intro:    Game.#onIntro,
 			Ready:    Game.#onReady,
-			InGame:   Game.#onInGame,
 			NewLevel: Game.#onNewLevel,
 			Cleared:  Game.#onRoundEnds,
 			PacDying: Game.#onRoundEnds,
@@ -68,9 +67,6 @@ export const Game = new class {
 	}
 	#onReady() {
 		State.setInGame({delay:2200})
-	}
-	#onInGame() {
-		!document.hasFocus() && Ctrl.pause(true)
 	}
 	#onRoundEnds() {
 		State.setRoundEnds()
