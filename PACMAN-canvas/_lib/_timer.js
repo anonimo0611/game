@@ -16,6 +16,7 @@ const {Ticker,Timer}= function() {
 	let _paused = false
 	let _fCount = 0 // frame  count
 	let _pCount = 0 // paused count
+	let _hidden = false
 
 	const Ticker = new class {
 		/** @readonly */
@@ -68,6 +69,7 @@ const {Ticker,Timer}= function() {
 		}
 		/** @param {number} ts */
 		loop = ts=> {
+			if (_hidden) return
 			this.rAFId = requestAnimationFrame(this.loop)
 			if (this.lstTS === 0)
 				this.lstTS = this.acc = ts
@@ -108,6 +110,16 @@ const {Ticker,Timer}= function() {
 			cancelAnimationFrame(this.rAFId)
 		}
 	}
+	$(document).on('visibilitychange', ()=> {
+		if (!_ticker) return
+		_hidden = document.visibilityState == 'hidden'
+		_hidden
+			? cancelAnimationFrame(_ticker.rAFId)
+			: function() {
+				_ticker.lstTS = 0
+				_ticker.rAFId = requestAnimationFrame(_ticker.loop)
+			}()
+	})
 
 	const Timer = new class {
 		#frozen = false
