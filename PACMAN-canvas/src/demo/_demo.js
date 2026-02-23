@@ -5,21 +5,24 @@ import {Attract}   from './attract.js'
 import {CoffBreak} from './coffee_break.js'
 export {Demo}
 
-const Evt = 'focus blur pointerdown_mousemove_keydown_scroll_resize_wheel'
+const Evt = 'blur_focus_pointerdown_mousemove_keydown_scroll_resize_wheel'
 const WaitTime = 1e3*30 // 30secs
 
 /** Attract Mode will begin after a period of inactivity. */
 const RunTimer = function() {
+	let active = true
 	State.onChange(()=> {
 		State.isTitle
 			? $onNS('RunTimer', {[Evt]:Ticker.resetCount})
 			: $off('.RunTimer')
 	})
 	function update() {
-		(Confirm.opened || Ctrl.activeElem)
+		(!active || Confirm.opened || Ctrl.activeElem)
 			? Ticker.resetCount()
 		 	: Ticker.elapsedTime > WaitTime && State.setAttract()
 	}
+	$win.on({blur: ()=> active = false})
+	$win.on({focus:()=> active = true })
 	return {update}
 }()
 

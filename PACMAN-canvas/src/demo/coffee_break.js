@@ -29,7 +29,7 @@ export class CoffBreak {
 
 	/** @protected @param {number} num */
 	constructor(num) {
-		this.pacman.y = this.akabei.y = (BH/2 - T/2)
+		this.pacman.y = this.akabei.y = 16.5*T
 		Sound.playCoffBGM({loop:(num == 2) ? 0:1})
 		$onNS('.CoffBreak', {Quit:this.end})
 	}
@@ -54,7 +54,6 @@ export class CoffBreak {
 	}
 	end() {
 		$off('.CoffBreak')
-		CoffBreak.#scene = null
 		State.wasTitle
 			? State.setTitle()
 			: State.setNewLevel()

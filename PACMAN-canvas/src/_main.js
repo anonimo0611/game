@@ -10,9 +10,9 @@ import {Score}   from './score.js'
 import {Lives}   from './lives.js'
 import {Fruit}   from './fruit.js'
 import {Actors}  from './actor.js'
+import {Demo}    from './demo/_demo.js'
 import {player}  from './player/player.js'
 import {PtsMgr}  from './points.js'
-import {Demo}    from './demo/_demo.js'
 import {Sound}   from '../_snd/sound.js'
 
 export const Game = new class {
@@ -125,13 +125,13 @@ export const Game = new class {
 		State.isDemoMode
 			? Demo.draw()
 			: Game.#drawMain()
+		Message.draw()
 	}
 	#drawMain() {
 		Score.draw()
 		Maze.PowDots.draw()
 		Fruit.drawTarget()
 		Actors.draw(player)
-		Message.draw()
 	}
 },
 $Level = $('#level')

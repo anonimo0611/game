@@ -23,7 +23,7 @@ export class Attract {
 
 	/** @private */
 	constructor() {
-		$onNS('.Attract',{click_keydown_blur:this.quit})
+		$onNS('Attract',{click_keydown_blur:this.quit})
 	}
 	update() {this.subAct.update()}
 
@@ -36,16 +36,16 @@ export class Attract {
 	])
 	draw() {
 		Score.draw()
-		drawText(7, 5, null, 'CHARACTOR　/　NICKNAME')
+		drawText(7, 4, null, 'CHARACTOR　/　NICKNAME')
 		const et = (Ticker.elapsedTime/100), Small ={size:T*.68}
 		this.GhsEntries.forEach(([t,col1,col2,row,txt1,txt2],i)=> {
 			et > t    && this.drawGhostOnTable(i,row)
-			et > t+ 5 && drawText(col1, row+1, GhsColors[i], txt1)
-			et > t+10 && drawText(col2, row+1, GhsColors[i], txt2)
+			et > t+ 5 && drawText(col1, row, GhsColors[i], txt1)
+			et > t+10 && drawText(col2, row, GhsColors[i], txt2)
 		})
 		if (et > 85) {
-			[[25, DotPts, +true],
-			 [27, PowPts, +this.subAct.pow.show],
+			[[24, DotPts, +true],
+			 [26, PowPts, +this.subAct.pow.show],
 			].forEach(([row,pts,showDot],i)=> {
 				drawDot(Fg, 10, row-1, i==1, !!showDot)
 				drawText(12.0, row, null, pts)
@@ -59,8 +59,8 @@ export class Attract {
 			}
 			if (extendScore > 0) {
 				const text = `BONUS　PACMAN　FOR　${extendScore}`
-				drawText( 2.0, 30, Colors.Orange, text)
-				drawText(24.3, 30, Colors.Orange,'PTS', Small)
+				drawText( 2.0, 29, Colors.Orange, text)
+				drawText(24.3, 29, Colors.Orange,'PTS', Small)
 			}
 		}
 		this.subAct.draw()
@@ -72,7 +72,7 @@ export class Attract {
 	quit() {
 		$off('.Attract')
 		Attract.#instance = null
-		State.setTitle()
+		State.setQuit()
 	}
 }
 

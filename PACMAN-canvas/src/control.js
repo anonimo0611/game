@@ -39,9 +39,9 @@ export const Ctrl = new class {
 
 	/** @param {boolean} [force] */
 	pause(force) {
-		if (!(State.isInGame && force == false))
-			Ticker.pause(force)
-		Sound.pause(Ticker.paused)
+		if (State.isTitle || State.isAttract) return
+		if (State.isInGame && force == false) return
+		Sound.pause( Ticker.pause(force) )
 	}
 	#fitToViewport() {
 		const scale = min(
@@ -77,8 +77,8 @@ export const Ctrl = new class {
 		Ctrl.#save()
 		Ctrl.#toggleGrid()
 		HUD.save()
-		HUD.translate(T*0.1, T*18)
-		HUD.clearRect(0, -T, BW, T*3)
+		HUD.translate(T*0.1, T*17.25)
+		HUD.clearRect(0, 0, BW, T*3)
 		if (Ctrl.usingCheats || spd != 'x1.0') {
 			drawText(0, lh*0, Palette.Info[+(spd != 'x1.0') ], 'Speed'+spd, opt)
 			drawText(0, lh*1, Palette.Info[+Ctrl.invincible ], 'Invincible',opt)
@@ -146,7 +146,7 @@ export const Ctrl = new class {
 		$(btns.clear).on({click:Ctrl.#clearHiConfirm})
 		$(btns.reset).on({click:Ctrl.#reset})
 		$(btns.start).on({click:()=> State.setIntro()})
-		$(btns.demo) .on({click:()=> State.setAttract()})
+		$(btns.demo) .on({click:()=> {State.setAttract();console.log(Ticker.paused)}})
 		$(btns.coff1).on({click:()=> State.setCoffBreak({data:1})})
 		$(btns.coff2).on({click:()=> State.setCoffBreak({data:2})})
 		$(btns.coff3).on({click:()=> State.setCoffBreak({data:3})})

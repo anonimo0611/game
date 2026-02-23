@@ -13,31 +13,35 @@ export const Message = new class {
 	) {
 		ctx.save()
 		ctx.scale(scaleX, 1)
-		ctx.textAlign = 'left'
-		ctx.textBaseline = 'ideographic'
+		ctx.textBaseline = 'top'
 		ctx.font = `${style} ${size}px "${face}"`
 		ctx.fillStyle = color ?? 'white'
 		String(text).split('\n').forEach((txt,i)=>
 			ctx.fillText(txt, col*T+2, row*T+2 + size*i))
 		ctx.restore()
 	}
-	#drawPausedText() {
-		(!Confirm.opened && Ticker.paused)
-			&& (Ticker.pausedCount & 32) == 0
-			&& drawText(11, 19, '#F00','PAUSED')
-	}
 	draw() {
-		if (State.isInGame)
-			this.#drawPausedText()
-
+		this.#drawTextOnTopHouse()
+		this.#drawTextUnderHouse()
+		this.#drawTextForPaused()
+	}
+	#drawTextOnTopHouse() {
 		if (State.isIntro)
-			drawText( 9, 13, '#0FF','PLAYER　ONE')
-
+			drawText( 9, 12, '#0FF','PLAYER　ONE')
+	}
+	#drawTextUnderHouse() {
+		if (Ticker.paused) return
 		if (State.isStartMode)
-			drawText(11, 19, '#FF0','READY!')
+			drawText(11, 18, '#FF0','READY!')
 
 		if (State.isTitle
 		 || State.isGameOver)
-		 	drawText( 9, 19, '#F00','GAME　　OVER')
+			drawText( 9, 18, '#F00','GAME　　OVER')
+	}
+	#drawTextForPaused() {
+		if (!Ticker.paused) return
+		if (!State.isTitle && !Confirm.opened) {
+			drawText(11, 18, '#F00','PAUSED')
+		}
 	}
 }, {drawText}=Message

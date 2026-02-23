@@ -53,11 +53,11 @@ export const Score = new class {
 		return (Sound.ringing? Colors.Extend : null)
 	}
 	draw() {
-		drawText(2,1, this.#fgColorUP, this.#showUP? '1UP':'')
-		drawText(6,1, null, _score || '00')
+		drawText(2,0, this.#fgColorUP, this.#showUP? '1UP':'')
+		drawText(6,0, null, _score || '00')
 		Ctrl.isPractice
-			? drawText(14,1, null, 'PRACTICE')
-			: drawText(14,1, null, `HIGH　${_hiSco || '00'}`)
+			? drawText(14,0, null, 'PRACTICE')
+			: drawText(14,0, null, `HIGH　${_hiSco || '00'}`)
 	}
 	add(points=0) {
 		const score = _score + points
