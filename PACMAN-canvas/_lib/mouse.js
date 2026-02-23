@@ -25,7 +25,7 @@ export const Cursor = function() {
  Enables mouse wheel interactions for range input elements.
  @param {HTMLInputElement} ctrl
 */
-function setupRngCtrl(ctrl) {
+function setupCtrl(ctrl) {
 	const output = $(`output[for~="${ctrl.id}"]`).text(ctrl.value).get(0)
 	const ids    = ctrl.dataset.links?.trim().split(/\s+/) ?? []
 	const label  = ctrl.closest('label') || qS(`label[for="${ctrl.id}"]`)
@@ -48,6 +48,6 @@ function setupRngCtrl(ctrl) {
 	.trigger('input')
 }
 $load(()=> {
-	/**@type {NodeListOf<HTMLInputElement>}*/
-	(qSAll('input[type=range]')).forEach(setupRngCtrl)
+	/**@type {HTMLInputElement[]}*/
+	($('[type=range]').get()).forEach(setupCtrl)
 })

@@ -60,7 +60,6 @@ class Vec2 {
 		if (cols <= 0) throw RangeError('Column count must be greater than zero')
 		return Number(pos.y * cols + pos.x)
 	}
-
 	static add(
 	 /**@type {Position}*/pos1,
 	 /**@type {Position}*/pos2){return Vec2.new(pos1).add(pos2)}

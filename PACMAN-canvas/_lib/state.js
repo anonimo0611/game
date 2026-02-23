@@ -50,7 +50,7 @@ export default class StateBase {
 
 	/** @param {JQTriggerHandler} handler */
 	onChange(handler) {
-		$(this.#eventBus).on('change', handler)
+		this.#eventBus.on('change', handler)
 	}
 
 	/**
@@ -64,8 +64,8 @@ export default class StateBase {
 		}
 		this.#last = this.current
 		this.#curr = state
+		this.#eventBus.trigger('change')
 		fn?.(state,data)
-		$(this.#eventBus).trigger('change')
 		return this
 	}
 }

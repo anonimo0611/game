@@ -1,6 +1,6 @@
 'use strict'
 const {fromEntries,defineProperty,entries,freeze,hasOwn,keys,values}= Object
-const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
+const {abs,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 
 /**
  @template {object} T
@@ -74,16 +74,6 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 */const qS = selector=> document.querySelector(selector)
 
 /**
- @param {string} selector
-*/const qSAll = selector=> /**@type {NodeListOf<HTMLElement>}*/
-	(document.querySelectorAll(selector))
-
-/**
- @typedef {{dist:number, idx:number}} DistEntry
- @type {(a:Readonly<DistEntry>, b:Readonly<DistEntry>)=> number}
-*/const compareDist = (a,b)=> a.dist-b.dist || a.idx-b.idx
-
-/**
  @param {string} str
 */const underscoreToSp = (str,prefix='')=> str.indexOf('_') != -1
 	? prefix.trim()+str.trim().replace(/_/g,'\x20')
@@ -152,8 +142,8 @@ const {abs,ceil,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
  @param {number} r
  @returns {[x:number, y:number]}
 */const circumPosition = (deg, r, cx=0, cy=0)=>
-	[Math.cos(PI/180*deg)*r+cx,
-	 Math.sin(PI/180*deg)*r+cy]
+	[cos(PI/180*deg)*r+cx,
+	 sin(PI/180*deg)*r+cy]
 
 //---- jQuery utilities ------
 
