@@ -161,7 +161,7 @@ const AttackInWaves = function() {
 		}
 	}
 	function create(lv=1) {
-		let idx  = 0, et = 0
+		let tCnt = -1, idx = 0
 		let mode = Ctrl.alwaysChase? CHASE:SCATTER
 		const list = /**@type {const}*/([
 			{mode:SCATTER, dur:lv <= 4 ? 4500 : 4000},
@@ -175,9 +175,9 @@ const AttackInWaves = function() {
 		])
 		function update() {
 			if ((Timer.frozen || GhsMgr.isFrightMode)
-			 || (et+=Game.interval) < list[idx].dur)
+			 || ++tCnt * Game.interval < list[idx].dur)
 				return
-			[et,mode]= [0,list[++idx].mode]
+			[tCnt,mode]= [0,list[++idx].mode]
 			signalDirectionReversal()
 		}
 		return {
