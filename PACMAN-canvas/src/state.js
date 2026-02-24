@@ -1,8 +1,8 @@
 import _State from '../_lib/state.js'
 
 /**
- * @typedef {typeof States[number]} StateType
- * @typedef {`_${Exclude<StateType,'Title'>}`} Underscored
+ @typedef {typeof States[number]} StateType
+ @typedef {`_${Exclude<StateType,'Title'>}`} Underscored
 */
 const States = /**@type {const}*/([
 	'Title','Attract','Intro','Ready','InGame','NewLevel','RoundEnds',

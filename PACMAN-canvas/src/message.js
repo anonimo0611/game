@@ -30,7 +30,8 @@ export const Message = new class {
 			drawText( 9, 12, '#0FF','PLAYER　ONE')
 	}
 	#bottomHouse() {
-		if (Ticker.paused) return
+		if (Ticker.paused)
+			return
 		if (State.isStartMode)
 			drawText(11, 18, '#FF0','READY!')
 
@@ -39,7 +40,8 @@ export const Message = new class {
 			drawText( 9, 18, '#F00','GAME　　OVER')
 	}
 	#pausedText() {
-		if (!Ticker.paused) return
+		if (!Ticker.paused)
+			return
 		!State.isTitle
 			&& !Confirm.opened
 			&& !(Ticker.pausedCount & 32)
