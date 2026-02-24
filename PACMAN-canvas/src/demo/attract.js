@@ -44,10 +44,10 @@ export class Attract {
 			et > t+10 && drawText(col2, row, GhsColors[i], txt2)
 		})
 		if (et > 85) {
-			[[24, DotPts, +true],
-			 [26, PowPts, +this.subAct.pow.show],
+			[[23, DotPts, +true],
+			 [25, PowPts, +this.subAct.pow.show],
 			].forEach(([row,pts,showDot],i)=> {
-				drawDot(Fg, 10, row-1, i==1, !!showDot)
+				drawDot(Fg, 10, row, i==1, !!showDot)
 				drawText(12.0, row, null, pts)
 				drawText(14.3, row, null,'PTS', Small)
 			})

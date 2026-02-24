@@ -15,7 +15,8 @@ export class CoffBreak {
 	static #scene = /**@type {?Scene1|Scene2|Scene3}*/(null)
 	static #begin(_={}, n=CoffBreak.num) {
 		if (!between(n,1,3))
-			throw RangeError(`${n}: The scene number must be 1-3`)
+			throw RangeError(`The 2nd argument is ${n},`
+				+` but the scene number must be 1-3`)
 		CoffBreak.#scene = new [Scene1,Scene2,Scene3][n-1]
 	}
 	static get num() {return sceneNum(Game.level)}
