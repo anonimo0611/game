@@ -62,31 +62,39 @@ class Vec2 {
 	}
 	static add(
 	 /**@type {Position}*/pos1,
-	 /**@type {Position}*/pos2){return Vec2.new(pos1).add(pos2)}
-
+	 /**@type {Position}*/pos2) {
+		return Vec2.new(pos1).add(pos2)
+	}
 	static sub(
 	 /**@type {Position}*/pos1,
-	 /**@type {Position}*/pos2){return Vec2.new(pos1).sub(pos2)}
-
+	 /**@type {Position}*/pos2) {
+		return Vec2.new(pos1).sub(pos2)
+	}
 	static mul(
 	 /**@type {Position}*/pos,
-	 /**@type {number}*/scalar){return Vec2.new(pos).mul(scalar)}
-
+	 /**@type {number}*/scalar) {
+		return Vec2.new(pos).mul(scalar)
+	}
 	static div(
 	 /**@type {Position}*/pos,
-	 /**@type {number}*/scalar){return Vec2.new(pos).div(scalar)}
-
+	 /**@type {number}*/scalar) {
+		return Vec2.new(pos).div(scalar)
+	}
 	static divInt(
 	 /**@type {Position}*/pos,
-	 /**@type {number}*/scalar){return Vec2.new(pos).divInt(scalar)}
-
+	 /**@type {number}*/scalar) {
+		return Vec2.new(pos).divInt(scalar)
+	}
 	static sqrMag(
 	 /**@type {Position}*/pos1,
-	 /**@type {Position}*/pos2){return Vec2.sub(pos1,pos2).sqrMag}
-
+	 /**@type {Position}*/pos2) {
+		return Vec2.sub(pos1,pos2).sqrMag
+	}
 	static distance(
 	 /**@type {Position}*/pos1,
-	 /**@type {Position}*/pos2){return Vec2.sub(pos1,pos2).magnitude}
+	 /**@type {Position}*/pos2) {
+		return Vec2.sub(pos1,pos2).magnitude
+	}
 
 	/**
 	 @private
