@@ -141,7 +141,7 @@ export const Ctrl = new class {
 		$(btns.clear).on({click:Ctrl.#clearHiConfirm})
 		$(btns.reset).on({click:Ctrl.#reset})
 		$(btns.start).on({click:()=> State.setIntro()})
-		$(btns.demo) .on({click:()=> {State.setAttract();console.log(Ticker.paused)}})
+		$(btns.demo) .on({click:()=> State.setAttract()})
 		$(btns.coff1).on({click:()=> State.setCoffBreak({data:1})})
 		$(btns.coff2).on({click:()=> State.setCoffBreak({data:2})})
 		$(btns.coff3).on({click:()=> State.setCoffBreak({data:3})})
