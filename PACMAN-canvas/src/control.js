@@ -12,18 +12,13 @@ export const Form = document.forms[0]
 export const Ctrl = new class {
 	static {$(this.setup)}
 	static setup() {
-		$win.on({
-			load:     Ctrl.#setup,
-			keydown:  Ctrl.#onKeydown,
-			blur: _=> Ctrl.pause(true),
-			focus:_=> Ctrl.pause(false),
-		})
 		Ctrl.#restore()
 		Ctrl.#output()
 		Ctrl.#fitToViewport()
+		$win.on({load:Ctrl.#setup,keydown:Ctrl.#onKeydown})
 	}
-	get extendScore()   {return +Menu.Extend.value}
 	get activeElem()    {return qS(`:not(#${btns.start.id}):focus`)}
+	get extendScore()   {return Number(Menu.Extend.value)}
 	get livesMax()      {return inputs.lvsRng.valueAsNumber}
 	get speed()         {return inputs.spdRng.valueAsNumber}
 	get endlessMode()   {return inputs.onlChk.checked == false}

@@ -1,5 +1,6 @@
 import {Confirm}   from '../../_lib/confirm.js'
 import {Ctrl}      from '../control.js'
+import {WinState}  from '../ui.js'
 import {State}     from '../state.js'
 import {Attract}   from './attract.js'
 import {CoffBreak} from './coffee_break.js'
@@ -10,19 +11,16 @@ const WaitTime = 1e3*30 // 30secs
 
 /** Attract Mode will begin after a period of inactivity. */
 const RunTimer = function() {
-	let active = true
 	State.onChange(()=> {
 		State.isTitle
 			? $onNS('RunTimer', {[Evt]:Ticker.resetCount})
 			: $off('.RunTimer')
 	})
 	function update() {
-		(!active || Confirm.opened || Ctrl.activeElem)
+		/*(!WinState.active || Ctrl.activeElem || Confirm.opened)
 			? Ticker.resetCount()
-		 	: Ticker.elapsedTime > WaitTime && State.setAttract()
+		 	: Ticker.elapsedTime > WaitTime && State.setAttract()*/
 	}
-	$win.on({blur: ()=> active = false})
-	$win.on({focus:()=> active = true })
 	return {update}
 }()
 

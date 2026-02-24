@@ -27,6 +27,16 @@ export const Menu = freeze({
 	Extend:new _Menu.Slide('ExtendMenu'),
 })
 
+//---- Focus ----
+
+import {Ctrl} from './control.js'
+export const WinState = function() {
+	let f = 1
+	$win.on('blur', ()=> {f=0,Ctrl.pause(!f)})
+	$win.on('focus',()=> {f=1,Ctrl.pause(!f)})
+	return {get active() {return !!f}}
+}()
+
 //---- Panels ----
 
 ;/**@type {HTMLButtonElement[]}*/

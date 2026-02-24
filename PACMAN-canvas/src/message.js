@@ -21,15 +21,15 @@ export const Message = new class {
 		ctx.restore()
 	}
 	draw() {
-		this.#drawTextOnTopHouse()
-		this.#drawTextUnderHouse()
-		this.#drawTextForPaused()
+		this.#topHouse()
+		this.#bottomHouse()
+		this.#pausedText()
 	}
-	#drawTextOnTopHouse() {
+	#topHouse() {
 		if (State.isIntro)
 			drawText( 9, 12, '#0FF','PLAYER　ONE')
 	}
-	#drawTextUnderHouse() {
+	#bottomHouse() {
 		if (Ticker.paused) return
 		if (State.isStartMode)
 			drawText(11, 18, '#FF0','READY!')
@@ -38,10 +38,11 @@ export const Message = new class {
 		 || State.isGameOver)
 			drawText( 9, 18, '#F00','GAME　　OVER')
 	}
-	#drawTextForPaused() {
+	#pausedText() {
 		if (!Ticker.paused) return
-		if (!State.isTitle && !Confirm.opened) {
-			drawText(11, 18, '#F00','PAUSED')
-		}
+		!State.isTitle
+			&& !Confirm.opened
+			&& !(Ticker.pausedCount & 32)
+			&& drawText(11, 18, '#F00','PAUSED')
 	}
 }, {drawText}=Message
