@@ -16,7 +16,6 @@ const {Ticker,Timer}= function() {
 	let _paused = false
 	let _fCount = 0 // frame  count
 	let _pCount = 0 // paused count
-	let _hidden = false
 
 	const Ticker = new class {
 		get Interval()    {return Interval}
@@ -68,7 +67,6 @@ const {Ticker,Timer}= function() {
 		}
 		/** @param {number} ts */
 		loop = ts=> {
-			if (_hidden) return
 			this.rAFId = requestAnimationFrame(this.loop)
 			if (this.lstTS === 0)
 				this.lstTS = this.acc = ts
@@ -124,7 +122,7 @@ const {Ticker,Timer}= function() {
 			if (!Ticker.running) Ticker.set()
 			TimerMap.set(key ?? Symbol(),{amount:0,timeout,handler,ignoreFrozen})
 		}
-		/** @param {...{ms:number,fn():void}} seq */
+		/** @param {{ms:number,fn():void}[]} seq */
 		sequence(...seq) {
 			let idx=0, s=seq[idx]
 			function fire() {

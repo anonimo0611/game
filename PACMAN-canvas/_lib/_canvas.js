@@ -169,8 +169,8 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	fillPolygon(style, ...path) {
 		this.save()
 		this.newLinePath(...path)
-		this.fillStyle = style
 		this.closePath()
+		this.fillStyle = style
 		this.fill()
 		this.restore()
 		return this
