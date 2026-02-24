@@ -143,7 +143,7 @@ export const Maze = freeze(new class {
 	 @returns {number} Number of remaining dots
 	*/
 	clearDot({tileIdx:i,tileMid:{x,y}}) {
-		const r = DotR+1
+		const r = DotRadius+1
 		DotSet.delete(i)
 		PowMap.delete(i)
 		Bg.fillRect(x*T-r, y*T-r, r*2, r*2)
@@ -158,6 +158,7 @@ export const Maze = freeze(new class {
 	drawDot(ctx, col,row, isPow=false, visible=true) {
 		if (!visible) return
 		const [x,y] = [col,row].map(v=> (v+0.5)*T)
-		ctx.fillCircle(x,y, (isPow? PowR:DotR), Colors.Dot)
+		const r = (isPow? PowRadius : DotRadius)
+		ctx.fillCircle(x,y, r, Colors.Dot)
 	}
 }), {drawDot,clearDot}= Maze

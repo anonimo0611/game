@@ -13,8 +13,10 @@ ScaleFactor = screen.height/1080,
 T = TileSize,
 
 /** Cookie radius */
-PowR = T/2,
-DotR = T/9,
+DotRadius = T/9,
+
+/** Power cookie radius */
+PowRadius = T/2,
 
 /** Board width */
 BW = Cols * T,
@@ -48,7 +50,7 @@ Colors = freeze(new class {
 	Orange    = '#F90'
 }),
 Palette = /**@type {const}*/({
-	Info      : ['#888','#F9E'],
+	Info:       ['#888','#F9E'],
 	FrightFace: ['#F9F','#F00'],
 	FrightBody: ['#36A','#FFF'],
 }),
