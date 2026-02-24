@@ -8,9 +8,9 @@ const FruitMax = FruitFns.length
  @param {number} idx
 */
 export function draw(ctx, idx, x=T,y=T-2, scale=T/8) {
-	if (!FruitFns[idx]) {
-		throw RangeError(`${idx}: Valid fruit range 0-${FruitMax-1}`)
-	}
+	if (!FruitFns[idx])
+		throw RangeError(`The argument is ${idx},`
+			+` but the fruit range must be 0-${FruitMax-1}`)
 	ctx.save()
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
