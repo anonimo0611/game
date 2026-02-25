@@ -13,10 +13,10 @@ export class Dying {
 	 @param {{radius?:number,fn?():void}} opts
 	*/
 	constructor(ctx, {radius=PacRadius,fn}={}) {
-		this.ctx    = ctx
-		this.r      = radius
-		this.#fn    = fn
-		this.#cnt   = this.#arkAng = 0
+		this.ctx     = ctx
+		this.r       = radius
+		this.#fn     = fn
+		this.#cnt    = this.#arkAng = 0
 		this.#innerR = radius/4
 		this.#outerR = radius/2
 	}
@@ -24,7 +24,7 @@ export class Dying {
 		return this.#arkAng < PI-PI/SplitDur
 	}
 	update() {
-		if (this.#cnt > TotalDur) {
+		if (this.#cnt++ > TotalDur) {
 			this.#fn?.()
 			this.#fn = undefined
 			return
@@ -32,7 +32,6 @@ export class Dying {
 		this.isSplitting
 			? this.#arkAng += PI/SplitDur
 			: this.#updateRadialBurst()
-		this.#cnt++
 	}
 	#updateRadialBurst() {
 		if (this.#outerR <= this.r) {
