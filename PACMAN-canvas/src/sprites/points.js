@@ -21,15 +21,15 @@ const DigitPath0to8 = freeze([
 	 L1,6 L3,6 L4,5 L4,4 L3,3 L1,3 L0,2 L0,1 Z`].map(newPath2D))
 
 const KerningMap = /**@type {const}*/({
-	 100: [ -6.1, -2.3, 2.7],
+	 100: [ -5.9, -2.0, 3.0],
 	 200: [ -7.0, -1.0, 4.0],
-	 300: [ -7.2, -1.2, 3.8],
-	 400: [ -7.1, -1.2, 3.8],
+	 300: [ -7.0, -1.0, 4.0],
+	 400: [ -7.0, -1.0, 4.0],
 	 500: [ -7.0, -1.0, 4.0],
 	 700: [ -7.0, -1.0, 4.0],
 	 800: [ -7.0, -1.0, 4.0],
 	1000: [ -8.0, -4.0, 1.0, 6.0],
-	1600: [ -7.5, -5.3,-.25, 4.7],
+	1600: [ -7.4, -5.3, -.3, 4.7],
 	2000: [-10.0, -4.0, 1.0, 6.0],
 	3000: [-10.0, -4.0, 1.0, 6.0],
 	5000: [-10.0, -4.0, 1.0, 6.0]})
@@ -48,7 +48,7 @@ function cache(pts, size=T*2) {
 	ctx.translate(w/2, h/2)
 	ctx.scale(size/16, size/16)
 	ctx.strokeStyle = color
-	ctx.lineWidth = 1.2
+	ctx.lineWidth = 1.1
 	ctx.lineJoin  = ctx.lineCap = 'round'
 	KerningMap[pts].forEach((x,i)=> {
 		const path = (pts == 1600 && i == 0)

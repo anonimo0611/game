@@ -95,7 +95,7 @@ export const Fruit = new class {
 		HUD.clearRect(x,y,w,h)
 		HUD.translate(x,y)
 		for (const i of range(startLevel, Game.level))
-			Spr.draw(HUD, Fruit.getType(i+1), w-T-Size*(i-startLevel),T)
+			Spr.draw(HUD, Fruit.getType(i+1), w-T-Size*(i-startLevel))
 		HUD.restore()
 	}
 	#setImages() {
