@@ -1,4 +1,5 @@
 const Scaling  = 1.05
+const OffsetY  = -int(T*0.1)
 const CacheCtx = canvas2D(null,T*2).ctx
 const FruitFns = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
 const FruitMax = FruitFns.length
@@ -7,7 +8,7 @@ const FruitMax = FruitFns.length
  @param {EnhancedCtx2D} ctx
  @param {number} idx
 */
-export function draw(ctx, idx, x=T,y=T-2, scale=T/8) {
+export function draw(ctx, idx, x=T,y=T+OffsetY, scale=T/8) {
 	if (!FruitFns[idx])
 		throw RangeError(`The argument is ${idx},`
 			+` but the fruit range must be 0-${FruitMax-1}`)
@@ -32,7 +33,7 @@ export const Cache = new class {
 	draw(ctx, {x,y}, alpha) {
 		ctx.save()
 		ctx.setAlpha(alpha)
-		ctx.translate(x,y)
+		ctx.translate(x, y)
 		ctx.drawImage(CacheCtx.canvas, -T,-T)
 		ctx.restore()
 	}
@@ -175,7 +176,7 @@ function apple(ctx=Fg) {
 
 function melon(ctx=Fg) {
 	// draw body
-	ctx.fillCircle(0, 1.5, 5.2, '#7BF331')
+	ctx.fillCircle(0, 1.7, 5.2, '#7BF331')
 
 	// draw stem
 	ctx.newLinePath([0,-3],[0,-5])
@@ -186,11 +187,11 @@ function melon(ctx=Fg) {
 
 	// dark lines
 	ctx.translate(0, -0.5)
-	ctx.newLinePath([.5,-2],[-4, 2],[0, 6])
-	ctx.setLinePath([-3,-1],[-1, 1])
-	ctx.setLinePath([-2, 6],[ 2, 2])
-	ctx.setLinePath([ 1, 7],[ 3, 5],[0, 2],[3,-1])
-	ctx.setLinePath([ 1,-1],[ 4, 2])
+	ctx.newLinePath([ 0.5,-2.0],[-4.0, 2.2],[0.5, 6.5])
+	ctx.setLinePath([-3.0,-1.0],[-1.0, 1.0])
+	ctx.setLinePath([-1.7, 6.4],[ 2.9, 2.1])
+	ctx.setLinePath([ 1.0, 7.0],[ 3.0, 5.0],[0,2.0],[3.0,-1.0])
+	ctx.setLinePath([ 1.0,-1.0],[ 4.0, 2.0])
 	ctx.lineWidth = 0.3
 	ctx.strokeStyle = '#5B8F8C'
 	ctx.stroke()
