@@ -29,7 +29,7 @@ const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 	}
 	#drawFruits() {
 		for (const i of range(8))
-			Fruit.draw(ctx, i, ofst(7-i)+S/2, S/2, S/16)
+			Fruit.draw(ctx, i, ofst(7-i)+S/2, S/2-T*0.05, S/16)
 	}
 	#drawGhosts() {
 		for (const row of range(1,6)) {
