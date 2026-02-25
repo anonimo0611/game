@@ -197,22 +197,19 @@ export const DotCounter = function() {
 			[17, 30,  0, 0], // Aosuke
 			[32, 60, 50, 0], // Guzuta
 		])
-	/**
-	 @param {number} i Index of Pinky, Aosuke or Guzuta
-	 @param {(deactivateGlobal?:boolean)=> boolean} fn
-	*/
-	function releaseIfReady(i, fn) {
-		const lvIdx   = min(Game.level,3)
+	/** @param {Ghost} ghost */
+	function releaseIfReady({type,leaveHouse}) {
+		const index   = min(Game.level,3)
 		const timeout = (Game.level<=4 ? 4e3:3e3)
-		const gLimit  = LimitTable[i-1][0] // global
-		const pLimit  = LimitTable[i-1][lvIdx] // personal
+		const gLimit  = LimitTable[type-1][0] // global
+		const pLimit  = LimitTable[type-1][index] // personal
 		;(player.timeSinceLastEating >= timeout)
-			? fn()
+			? leaveHouse()
 			: (!Game.isDied || _globalCounter < 0)
-				? (personalCounters[i] >= pLimit)
-					&& fn()
+				? (personalCounters[type] >= pLimit)
+					&& leaveHouse()
 				: (_globalCounter == gLimit)
-					&& fn(i == GhsType.Guzuta)
+					&& leaveHouse(type == GhsType.Guzuta)
 					&& (_globalCounter = -1)
 		}
 	function reset() {

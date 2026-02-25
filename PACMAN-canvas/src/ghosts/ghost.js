@@ -119,15 +119,15 @@ export class Ghost extends Actor {
 			? this.setNextPos(spd)
 			: this.#enterHouse()
 	}
-	#idleInHouse({type,orient,center:{y:cy}}=this) {
-		if (!Ctrl.alwaysChase)
-			Sys.DotCounter.releaseIfReady(type, g=> this.leaveHouse(g))
+	#idleInHouse({orient,center:{y:cy}}=this) {
+		!Ctrl.alwaysChase &&
+			Sys.DotCounter.releaseIfReady(this)
 		!this.state.isGoingOut && this.move(
-			(cy > Maze.House.MiddleY-T*0.6 && orient != D)? U:
-			(cy < Maze.House.MiddleY+T*0.5 ? D:U)
+			(cy > Maze.MidY - (T*0.6) && orient != D)? U:
+			(cy < Maze.MidY + (T*0.5) ? D:U)
 		)
 	}
-	leaveHouse(deactivateGlobalDotCnt=false) {
+	leaveHouse = (deactivateGlobalDotCnt=false)=> {
 		player.resetTimer()
 		this.#started ||= true
 		this.state.isIdle &&
@@ -158,14 +158,14 @@ export class Ghost extends Actor {
 		this.centering()
 		this.state.setReturning()
 	}
-	#returnToHome({init,speed,x,y}=this) {
-		if (y+speed < Maze.House.MiddleY)
+	#returnToHome({init,speed:spd,x,y}=this) {
+		if (y+spd < Maze.MidY)
 			return this.move()
 
-		if (y != Maze.House.MiddleY)
-			return this.pos.setY(Maze.House.MiddleY).void()
+		if (y != Maze.MidY)
+			return this.pos.setY(Maze.MidY).void()
 
-		if (!init.align || abs(x-init.x) <= speed) {
+		if (!init.align || abs(x-init.x) <= spd) {
 			this.x   = init.x
 			this.dir = init.align? (init.align<0 ? R:L) : U
 			this.#arrivedAtHome()
