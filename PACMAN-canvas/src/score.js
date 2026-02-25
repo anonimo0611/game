@@ -21,7 +21,7 @@ export const Score = new class {
 	}
 	reset() {
 		_score = 0
-		_hiSco = localStorage.anopac_hiscore|0
+		_hiSco = localStorage[Score.HiScoreKey]|0
 	}
 	#save() {
 		_savedS = _score

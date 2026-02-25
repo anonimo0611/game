@@ -15,7 +15,7 @@ export const Ctrl = new class {
 		Ctrl.#restore()
 		Ctrl.#output()
 		Ctrl.#fitToViewport()
-		$win.on({load:Ctrl.#setup,keydown:Ctrl.#onKeydown})
+		$win.on({load:Ctrl.#setup, keydown:Ctrl.#onKeydown})
 	}
 	get activeElem()    {return qS(`:not(#${btns.start.id}):focus`)}
 	get extendScore()   {return Number(Menu.Extend.value)}

@@ -59,7 +59,6 @@ class Tunnel {
 	Row = 15
 	EntryColL =  5.5
 	EntryColR = 22.5
-	/** Position in pixels */
 	findSide({x=0,y=0}) {
 		if (int(y/T) == this.Row) {
 			if (x/T <= this.EntryColL) return L
@@ -76,7 +75,7 @@ class PowDotsRenderer extends PowBlinker {
 	draw() {
 		for (const {x,y} of PowMap.values()) {
 			if (!State.isInGame || Ticker.paused || this.show)
-				Maze.drawDot(Fg, x,y, true)
+				drawDot(Fg, x,y, true)
 		}
 	}
 }
@@ -158,7 +157,7 @@ export const Maze = freeze(new class {
 	drawDot(ctx, col,row, isPow=false, visible=true) {
 		if (!visible) return
 		const [x,y] = [col,row].map(v=> (v+0.5)*T)
-		const r = (isPow? PowRadius : DotRadius)
+		const r = [DotRadius,PowRadius][+isPow]
 		ctx.fillCircle(x,y, r, Colors.Dot)
 	}
 }), {drawDot,clearDot}= Maze
