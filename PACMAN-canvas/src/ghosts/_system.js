@@ -40,7 +40,7 @@ const StandbyTimes = /**@type {const}*/
 
 /** @typedef {typeof States[number]} StateType */
 const States = /**@type {const}*/(
-	['Idle','GoingOut','Roaming','Bitten','Escaping','Returning'])
+	['Idle','GoingOut','Walking','Bitten','Escaping','Returning'])
 
 const StateTypes = toEnumObject(States)
 
@@ -54,7 +54,7 @@ class GhsState extends _State {
 		super(g)
 		this.init(States).owner.inHouse
 			? this.setIdle()
-			: this.setRoaming()
+			: this.setWalking()
 	}
 	/** @this {IGhsState} */
 	get isEscapingEyes() {

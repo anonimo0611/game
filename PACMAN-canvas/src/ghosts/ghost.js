@@ -19,11 +19,11 @@ export class Ghost extends Actor {
 	/** @readonly */state
 	/** @readonly */sprite = new Sprite(Fg)
 
-	#fader = /**@type {?Fade}*/(null)
+	#fader   = /**@type {?Fade}*/(null)
 	#fleeTmr = -1
-	#started = false
 	#revSig  = false
-	#fright  = false
+	#started = false
+	#frightd = false
 
 	/**
 	 @param {Direction} dir
@@ -50,9 +50,10 @@ export class Ghost extends Actor {
 
 	get isAngry()      {return false}
 	get isStarted()    {return this.#started}
-	get isFrightened() {return this.#fright}
-	get ignoreOneway() {return this.isFrightened || this.isEscaping}
-	get isNormal()     {return this.state.isRoaming && !this.#fright}
+	get isFrightened() {return this.#frightd}
+	get ignoreOneway() {return this.#frightd || this.isEscaping}
+	get isNormal()     {return this.isWalking && !this.#frightd}
+	get isWalking()    {return this.state.isWalking}
 	get isEscaping()   {return this.state.isEscapingEyes}
 
 	get alpha()        {return this.#fader?.alpha ?? this.maxAlpha}
@@ -146,7 +147,7 @@ export class Ghost extends Actor {
 			return this.move(U)
 
 		this.dir = L
-		this.state.setRoaming()
+		this.state.setWalking()
 	}
 	#houseEntranceArrived(spd=this.speed) {
 		return this.state.isEscaping
@@ -221,7 +222,7 @@ export class Ghost extends Actor {
 		radius  = T*(this.isFrightened? .5 : .4),
 		release = ()=> this.#setEscapeState(),
 	) {
-		if (!this.state.isRoaming
+		if (!this.isWalking
 		 || !this.isFrightened && Ctrl.invincible
 		 || !circleCollision(this, pos, radius))
 			return false
@@ -232,7 +233,7 @@ export class Ghost extends Actor {
 	}
 	#setBittenState(release=()=>{}) {
 		Sound.playBittenSE()
-		this.#fright = false
+		this.#frightd = false
 		this.state.setBitten()
 		Timer.freeze()
 		PtsMgr.set({key:GhsMgr, pos:this.center}, release)
@@ -242,7 +243,7 @@ export class Ghost extends Actor {
 		State.setPacDying()
 	}
 	#frighten(on=true) {
-		!this.isEscaping && (this.#fright=on)
+		!this.isEscaping && (this.#frightd=on)
 	}
 	#setEscapeState() {
 		Sound.playEscapaingEyes()
