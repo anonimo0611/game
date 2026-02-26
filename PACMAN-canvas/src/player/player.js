@@ -81,7 +81,7 @@ class PlayerCore extends PacMan {
 	}
 	#eatPowerDot() {
 		Score.add(PowPts)
-		GhsMgr.setFrightMode()
+		GhsMgr.frighten()
 	}
 	#eatSmallDot() {
 		Score.add(DotPts)

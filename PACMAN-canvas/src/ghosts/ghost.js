@@ -20,10 +20,10 @@ export class Ghost extends Actor {
 	/** @readonly */sprite = new Sprite(Fg)
 
 	#fader = /**@type {?Fade}*/(null)
-	#fleeTmr    = -1
-	#started    = false
-	#revSig     = false
-	#frightened = false
+	#fleeTmr = -1
+	#started = false
+	#revSig  = false
+	#fright  = false
 
 	/**
 	 @param {Direction} dir
@@ -36,11 +36,11 @@ export class Ghost extends Actor {
 		this.init  = freeze({align,x:col*T})
 		this.state = Sys.createState(this)
 		$(this).on({
-		 [Evt.Reverse]:   ()=> this.#revSig  = true,
-		 [Evt.Ready]:     ()=> this.#fader   = Fade.in(),
-		 [Evt.RoundEnds]: ()=> this.#fader   = Fade.out(),
-		 [Evt.FleeTime]:  ()=> this.#fleeTmr = 400/Game.interval,
-		 [Evt.FrightMode]:(_,on=true)=> this.#setFrightMode(on),
+		 [Evt.Reverse]:  ()=> this.#revSig  = true,
+		 [Evt.Ready]:    ()=> this.#fader   = Fade.in(),
+		 [Evt.RoundEnds]:()=> this.#fader   = Fade.out(),
+		 [Evt.FleeStart]:()=> this.#fleeTmr = 400/Game.interval,
+		 [Evt.Frighten]: (_,on=true)=> this.#frighten(on),
 		})
 	}
 	get animIdx()      {return GhsMgr.animIndex}
@@ -50,9 +50,9 @@ export class Ghost extends Actor {
 
 	get isAngry()      {return false}
 	get isStarted()    {return this.#started}
-	get isFrightened() {return this.#frightened}
+	get isFrightened() {return this.#fright}
 	get ignoreOneway() {return this.isFrightened || this.isEscaping}
-	get isNormal()     {return this.state.isRoaming && !this.isFrightened}
+	get isNormal()     {return this.state.isRoaming && !this.#fright}
 	get isEscaping()   {return this.state.isEscapingEyes}
 
 	get alpha()        {return this.#fader?.alpha ?? this.maxAlpha}
@@ -232,7 +232,7 @@ export class Ghost extends Actor {
 	}
 	#setBittenState(release=()=>{}) {
 		Sound.playBittenSE()
-		this.#frightened = false
+		this.#fright = false
 		this.state.setBitten()
 		Timer.freeze()
 		PtsMgr.set({key:GhsMgr, pos:this.center}, release)
@@ -241,8 +241,8 @@ export class Ghost extends Actor {
 		Sound.stopLoops()
 		State.setPacDying()
 	}
-	#setFrightMode(on=true) {
-		!this.isEscaping && (this.#frightened=on)
+	#frighten(on=true) {
+		!this.isEscaping && (this.#fright=on)
 	}
 	#setEscapeState() {
 		Sound.playEscapaingEyes()

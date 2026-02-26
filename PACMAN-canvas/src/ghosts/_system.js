@@ -14,7 +14,7 @@ const PtsLst = Pts.GhostPts
 const Ghosts = /**@type {Ghost[]}*/([])
 
 export const Evt = toEnumObject(
-	['Ready','Reverse','FrightMode','FleeTime','RoundEnds'])
+	['Ready','Reverse','Frighten','FleeStart','RoundEnds'])
 
 /**
  When always chase mode,
@@ -110,7 +110,7 @@ export const GhsMgr = new class {
 			}))
 		)
 	}
-	setFrightMode() {
+	frighten() {
 		FrightMode.new()
 	}
 	update() {
@@ -267,13 +267,13 @@ const FrightMode = function() {
 			signalDirectionReversal()
 			this.Dur = TimeTable[Game.clampedLv-1]
 			this.Dur == 0 && !State.isAttract
-				? $(Ghosts).trigger(Evt.FleeTime)
+				? $(Ghosts).trigger(Evt.FleeStart)
 				: this.#set(true)
 		}
 		#set(isOn=false) {
 			_session = (isOn? this : null)
 			$(Ghosts)
-				.trigger(Evt.FrightMode, isOn)
+				.trigger(Evt.Frighten, isOn)
 				.offon(StateTypes.Bitten, ()=> this.#caught++, isOn)
 			Sound.toggleFrightMode(isOn)
 		}

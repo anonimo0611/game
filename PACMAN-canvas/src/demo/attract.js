@@ -115,7 +115,7 @@ class EnergizerAct {
 		this.#pacvx *= -1
 		this.#ghsvx /= -2
 		this.#pacman.dir = R
-		GhsMgr.setFrightMode()
+		GhsMgr.frighten()
 	}
 	draw() {this.started && Actors.draw(this.#pacman)}
 	#end() {GhsMgr.caughtAll && State.setAttract()}
