@@ -6,7 +6,7 @@ PowPts    = 50,
 TileSize  = int(screen.height/Rows),
 BaseSpeed = TileSize/4.5,
 
-/** screen.height/1080 */
+/** Scale factor based on 1080p resolution */
 ScaleFactor = screen.height/1080,
 
 /** Shorthand of TileSize */
