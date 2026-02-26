@@ -103,8 +103,6 @@ export const Maze = freeze(new class {
 			? drawDot(Bg, ...t.vals)
 			: PowMap.set(i,t)
 	}
-	TopTile = 1
-	BotTile = Rows-3
 	Map     = MapArr
 	MaxDot  = MapArr.filter(c=> DotChips.has(c)).length
 	House   = freeze(new House)
@@ -128,7 +126,7 @@ export const Maze = freeze(new class {
 	 Whether tile `row` coord is the top/bottom of the maze excluding dead space
 	 @param {number} row
 	*/
-	isTopOrBottom = row=> (row == Maze.TopTile) || (row == Maze.BotTile)
+	isTopOrBottom = row=> (row == 1) || (row == Rows-3)
 
 	/**
 	 If the target tile is on the upper side of the maze \
