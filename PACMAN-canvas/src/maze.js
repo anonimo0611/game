@@ -42,7 +42,9 @@ D__________________________C\
 
 /** `.` and `O` represent normal and power cookies
 @type {ReadonlySet<string>} */
-const DotChips = new Set([...'.O'])
+const DotChips  = new Set([...'.O'])
+const DotRadius = T/9
+const PowRadius = T/2
 
 const WallSet  = /**@type {Set<number>}*/(new Set)
 const DotSet   = /**@type {Set<number>}*/(new Set)

@@ -6,29 +6,23 @@ PowPts    = 50,
 TileSize  = int(screen.height/Rows),
 BaseSpeed = TileSize/4.5,
 
-/** screen.height / 1080 */
+/** screen.height/1080 */
 ScaleFactor = screen.height/1080,
 
 /** Shorthand of TileSize */
 T = TileSize,
 
-/** Cookie radius */
-DotRadius = T/9,
-
-/** Power cookie radius */
-PowRadius = T/2,
-
 /** Board width */
-BW = Cols * T,
+BW = Cols*TileSize,
 
 /** Board height */
-BH = Rows * T,
+BH = Rows*TileSize,
 
 U='Up', R='Right', D='Down', L='Left',
 
-Bg   = canvas2D('board_bg' ,  BW,BH).ctx,
+Bg   = canvas2D('board_bg'  , BW,BH).ctx,
 Fg   = canvas2D('board_main', BW,BH).ctx,
-HUD  = canvas2D('board_hud',  BW,BH).ctx,
+HUD  = canvas2D('board_hud' , BW,BH).ctx,
 Grid = canvas2D('board_grid', BW,BH).ctx,
 
 Colors = freeze(new class {
