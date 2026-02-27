@@ -1,30 +1,28 @@
-const Scaling  = 1.05
-const OffsetY  = -int(T*0.1)
-const CacheCtx = canvas2D(null,T*2).ctx
-const FruitFns = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
-const FruitMax = FruitFns.length
-
+const fns = freeze([
+	cherry,strawberry,orange,apple,melon,gala,bell,key
+])
 /**
  @param {EnhancedCtx2D} ctx
  @param {number} idx
 */
-export function draw(ctx, idx, x=T,y=T+OffsetY, scale=T/8) {
-	if (!FruitFns[idx])
+export function draw(ctx, idx, x=T,y=T-int(T*0.1), scale=T/8) {
+	if (!fns[idx])
 		throw RangeError(`The argument is ${idx},`
-			+` but the fruit range must be 0-${FruitMax-1}`)
+			+` but the fruit range must be 0-${fns.length-1}`)
 	ctx.save()
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
 	ctx.translate(x, y)
-	ctx.scale(scale*Scaling, scale*Scaling)
-	FruitFns[idx](ctx)
+	ctx.scale(scale*1.05, scale*1.05)
+	fns[idx](ctx)
 	ctx.restore()
 }
 export const Cache = new class {
+	#ctx = canvas2D(null,T*2).ctx
+
 	/** @param {()=> number} idx */
-	update(idx) {
-		draw(CacheCtx.clear(), idx())
-	}
+	update(idx) {draw(this.#ctx.clear(),idx())}
+
 	/**
 	 @param {EnhancedCtx2D} ctx
 	 @param {Vec2} v
@@ -34,7 +32,7 @@ export const Cache = new class {
 		ctx.save()
 		ctx.setAlpha(alpha)
 		ctx.translate(x, y)
-		ctx.drawImage(CacheCtx.canvas, -T,-T)
+		ctx.drawImage(this.#ctx.canvas, -T,-T)
 		ctx.restore()
 	}
 }
@@ -42,8 +40,8 @@ export const Cache = new class {
 {// Create a sprite sheet for menu icons
 	const Menu = $('#LevelMenu')
 	const size = +Menu.css('--scale') * T
-	const {ctx}= canvas2D(null, size*FruitMax, size)
-	for (const i of range(FruitMax))
+	const {ctx}= canvas2D(null, size*fns.length, size)
+	for (const i of range(fns.length))
 		draw(ctx, i, size*i+size/2, size/2, size/16)
 	Menu.css('--url',`url(${ctx.canvas.toDataURL()})`)
 }
