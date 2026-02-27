@@ -20,7 +20,7 @@ class GameState extends _State {
 	 @param {StateType} s
 	 @param {JQData} [data]
 	*/
-	#callback(s, data) {
+	#callback = (s, data)=> {
 		Ticker.resetCount()
 		$win.trigger(document.body.dataset.state=s, data)
 	}
@@ -35,6 +35,7 @@ class GameState extends _State {
 	 @param {StateDef.Opts<StateType>} options
 	*/
 	set(s, {data,delay=(s == 'Quit' ? -1 : 0)}={}) {
+		if (s == 'Quit') Ticker.reset()
 		return super.set(s, {data,delay,fn:this.#callback})
 	}
 }

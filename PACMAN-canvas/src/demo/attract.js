@@ -72,7 +72,7 @@ export class Attract {
 	quit() {
 		$off('.Attract')
 		Attract.#instance = null
-		State.setTitle()
+		State.setQuit()
 	}
 }
 

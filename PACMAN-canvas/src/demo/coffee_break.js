@@ -55,6 +55,7 @@ export class CoffBreak {
 	}
 	end() {
 		$off('.CoffBreak')
+		State.isQuit ||
 		State.wasTitle
 			? State.setTitle()
 			: State.setNewLevel()

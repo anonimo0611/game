@@ -96,17 +96,16 @@ export const Game = new class {
 		State.setReady()
 	}
 	#onGameOver() {
-		Timer.set(2000, Game.#onQuit)
+		State.setQuit({delay:2000})
 	}
 	#onQuit() {
 		Game.#isDied = false
-		Ticker.reset()
 		State.setTitle()
 	}
 	#levelEnds() {
 		Game.#isDied = false
 		if (!Ctrl.endlessMode) {
-			Game.#onQuit()
+			State.setQuit()
 			return
 		}
 		Demo.CoffBreakNum < 0
