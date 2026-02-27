@@ -55,7 +55,6 @@ export const Game = new class {
 		$Level.text('Level'+this.levelStr).trigger('change')
 	}
 	#onTitle() {
-		Ticker.reset()
 		Sound.stop()
 		Cursor.show()
 		Game.#resetLevel()
