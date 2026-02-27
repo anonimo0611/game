@@ -70,7 +70,7 @@ export const Game = new class {
 	}
 	#onRoundEnds() {
 		State.setRoundEnds()
-		State.isCleared
+		Maze.dotsLeft == 0
 			? Game.#onCleared()
 			: Timer.set(600, Game.#die)
 	}
