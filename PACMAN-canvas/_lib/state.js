@@ -59,7 +59,7 @@ export default class StateBase {
 	*/
 	set(state, {data,delay=-1,fn}={}) {
 		if (delay >= 0) {
-			Timer.set(delay, ()=> this.set(state,{delay:-1,data}))
+			Timer.set(delay, ()=> this.set(state,{delay:-1,data,fn}))
 			return this
 		}
 		this.#last = this.current
