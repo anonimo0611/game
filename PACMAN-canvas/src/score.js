@@ -1,9 +1,9 @@
 import {Sound}    from '../_snd/sound.js'
+import {Game}     from './_main.js'
 import {State}    from './state.js'
 import {drawText} from './message.js'
 import {Ctrl}     from './control.js'
 import {Lives}    from './lives.js'
-import { Game } from './_main.js'
 
 let [_score,_hiSco,_savedS,_savedH]= [0,0,0,0]
 
