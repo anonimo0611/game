@@ -3,9 +3,9 @@ import {State}    from './state.js'
 import {drawText} from './message.js'
 import {Ctrl}     from './control.js'
 import {Lives}    from './lives.js'
+import { Game } from './_main.js'
 
-let _inProgress = false
-let[_score,_hiSco,_savedS,_savedH]= [0,0,0,0]
+let [_score,_hiSco,_savedS,_savedH]= [0,0,0,0]
 
 export const Score = new class {
 	/** @readonly */
@@ -28,8 +28,7 @@ export const Score = new class {
 		_savedH = _hiSco
 	}
 	#restore() {
-		if (_inProgress) {
-			_inProgress = false
+		if (Game.started) {
 			_score = _savedS
 			_hiSco = _savedH
 		}
@@ -37,10 +36,8 @@ export const Score = new class {
 	#onIntro() {
 		Score.#save()
 		_score = 0
-		_inProgress = true
 	}
 	#onGameOver() {
-		_inProgress = false
 		const hiSco = localStorage[Score.HiScoreKey]|0
 		if (!Ctrl.isPractice && _hiSco > hiSco)
 			localStorage[Score.HiScoreKey] = _hiSco

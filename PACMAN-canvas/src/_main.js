@@ -33,12 +33,14 @@ export const Game = new class {
 		.setTitle()
 		Menu.Level.onChange(Game.#resetLevel)
 	}
-	#level  = 1
-	#isDied = false
+	#level   = 1
+	#started = false
+	#pacDied = false
 
 	get level()     {return Game.#level}
 	get levelStr()  {return Game.#level.toString().padStart(2,'0')}
-	get isDied()    {return Game.#isDied}
+	get started()   {return Game.#started}
+	get pacDied()   {return Game.#pacDied}
 
 	/** Level 13+ as the fastest, stepwise faster from level 1 to 13 */
 	get speedByLv() {return 1 - (13-Game.clampedLv) * .01}
@@ -58,11 +60,13 @@ export const Game = new class {
 		Sound.stop()
 		Cursor.show()
 		Game.#resetLevel()
+		Game.#started = false
 	}
 	#onIntro() {
 		Cursor.hide()
 		Sound.playStartBGM()
 		State.setReady({delay:2200})
+		Game.#started = true
 	}
 	#onReady() {
 		State.setInGame({delay:2200})
@@ -71,14 +75,14 @@ export const Game = new class {
 		State.setRoundEnds()
 		Maze.dotsLeft == 0
 			? Game.#onCleared()
-			: Timer.set(600, Game.#die)
+			: Timer.set(600, Game.#startDying)
 	}
-	#die() {
+	#startDying() {
 		Sound.playDyingSE()
 		player.sprite.startDying({fn:Game.#onDied})
 	}
 	#onDied() {
-		Game.#isDied = true
+		Game.#pacDied = true
 		Lives.left > 0
 			? State.setReady()
 			: State.setGameOver()
@@ -98,11 +102,11 @@ export const Game = new class {
 		State.setQuit({delay:2000})
 	}
 	#onQuit() {
-		Game.#isDied = false
+		Game.#pacDied = false
 		State.setTitle()
 	}
 	#levelEnds() {
-		Game.#isDied = false
+		Game.#pacDied = false
 		if (!Ctrl.endlessMode) {
 			State.setQuit()
 			return

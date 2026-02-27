@@ -102,7 +102,7 @@ export const GhsMgr = new class {
 		Ctrl.alwaysChase && GhsMgr.#setReleaseTimer()
 	}
 	#setReleaseTimer() {
-		const lv = (Game.isDied? 0 : Game.clampedLv)
+		const lv = (Game.pacDied? 0 : Game.clampedLv)
 		Timer.sequence(...
 			Ghosts.slice(1).map((g,i)=> ({
 				ms: StandbyTimes[lv][i]/Game.speed,
@@ -205,7 +205,7 @@ export const DotCounter = function() {
 		const pLimit  = LimitTable[type-1][index] // personal
 		;(player.timeSinceLastEating >= timeout)
 			? leaveHouse()
-			: (!Game.isDied || _globalCounter < 0)
+			: (!Game.pacDied || _globalCounter < 0)
 				? (personalCounters[type] >= pLimit)
 					&& leaveHouse()
 				: (_globalCounter == gLimit)
@@ -213,11 +213,11 @@ export const DotCounter = function() {
 					&& (_globalCounter = -1)
 		}
 	function reset() {
-		!Game.isDied && personalCounters.fill(0)
-		_globalCounter = Game.isDied? 0:-1
+		!Game.pacDied && personalCounters.fill(0)
+		_globalCounter = Game.pacDied? 0:-1
 	}
 	function increaseCounter() {
-		(Game.isDied && _globalCounter >= 0)
+		(Game.pacDied && _globalCounter >= 0)
 			? _globalCounter++
 			: incPreferredGhostCounter()
 	}
