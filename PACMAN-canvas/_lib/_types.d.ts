@@ -35,7 +35,7 @@ interface JQuery {
 		force?:  boolean,
 	):this
 	onNS<TType extends string>(
-		events: TType,
+		events:   TType,
 		handlers: JQTriggerHandlers,
 	):this
 	onWheel(handler: (event:WheelEvent)=> void):this

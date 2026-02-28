@@ -175,7 +175,7 @@ const $root = $(document.documentElement)
 	return this
 }
 /**
- @param {string}   events
+ @param {string} events
  @param {JQTriggerHandler} handler
  @param {boolean} [force]
 */jQuery.fn.offon = function(events, handler, force) {

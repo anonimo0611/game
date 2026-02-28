@@ -112,8 +112,8 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 			this.fill()
 		}
 		if (strokeStyle) {
-			this.strokeStyle = strokeStyle
 			this.lineWidth = lineWidth
+			this.strokeStyle = strokeStyle
 			this.stroke()
 		}
 		this.restore()
