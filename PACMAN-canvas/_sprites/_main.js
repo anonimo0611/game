@@ -44,8 +44,7 @@ const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 	#drawGhost(col=0, row=0) {
 		const [x,y]= [ofst(col), row*S]
 		if (row < 5) {
-			ghsSprGr.draw(
-			{
+			ghsSprGr.draw({
 				x,y,size:S,
 				type:  row-1,
 				animIdx: +(col % 2 != 0),
@@ -64,23 +63,22 @@ const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 	}
 	#drawPoints() {
 		/**
-		 @import {PtsType} from '../src/sprites/points'
-		 @type {(pts:PtsType, x:number, y:number)=> void}
+		 @param {import('../src/sprites/points').PtsType} pts
+		 @param {number} x
+		 @param {number} y
 		*/
-		function draw(pts, x, y) {
+		function draw(pts, x,y) {
 			const {ctx:cache,w,h}= Pts.cache(pts, S)
 			ctx.save()
 			ctx.translate(x,y)
 			ctx.drawImage(cache.canvas, -w/2, -h/2)
 			ctx.restore()
 		}
-		const ptsTable = /**@type {const}*/
-		([
-			[200,400,800,1600,100,300,500,700],
-			[1000,2000,3000,5000]
+		const table = /**@type {const}*/([
+			[200,400,800,1600,100,300,500,700], [1000,2000,3000,5000]
 		])
-		ptsTable[0].forEach((pts,i)=> draw(pts, ofst(i)+T, S*6+T))
-		ptsTable[1].forEach((pts,i)=> draw(pts, (S+GAP/2)+S*(2+GAP/T)*i, S*7+S/2))
+		table[0].forEach((pts,i)=> draw(pts, ofst(i)+T, S*6+T))
+		table[1].forEach((pts,i)=> draw(pts, (S+GAP/2)+S*(2+GAP/T)*i, S*7+S/2))
 	}
 	#drawPacman() {
 		const dirs = /**@type {const}*/([U,U,L,L,D,D,R,R])
@@ -97,14 +95,14 @@ const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 		ctx.translate(S/4, S*9+S/4-GAP/4)
 
 		/** @type {(x:number, y:number, params:object)=> void} */
-		const draw = (x,y, params)=> {aka.draw({size:S,x,y,...params})}
+		const draw = (x,y, params)=> {aka.draw({size:S,x,y, ...params})}
 
 		{// Snagged Clothing
 			const pos = Vec2.Zero, ratios = [0.3, 0.5 ,1]
 			for (const i of range(3)) {
-				draw(...pos.vals, {animIdx:+(i==2)})
+				draw(...pos.vals, {animIdx:+(i == 2)})
 				const nPos = Vec2.new(pos).add(S*0.75, S/4)
-				spr.drawSnaggedClothing(+(i==2), ratios[i], {...nPos,size:S})
+				spr.drawSnaggedClothing(+(i == 2), ratios[i], {...nPos,size:S})
 				pos.x += S*1.2 + ((i+1)*GAP)
 			}
 		}
