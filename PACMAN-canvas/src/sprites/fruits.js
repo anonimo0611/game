@@ -1,6 +1,5 @@
-const fns = freeze([
-	cherry,strawberry,orange,apple,melon,gala,bell,key
-])
+const fns = freeze
+	([cherry,strawberry,orange,apple,melon,gala,bell,key])
 /**
  @param {EnhancedCtx2D} ctx
  @param {number} idx
@@ -41,7 +40,7 @@ export const Cache = new class {
 	const Menu = $('#LevelMenu')
 	const size = +Menu.css('--scale') * T
 	const {ctx}= canvas2D(null, size*fns.length, size)
-	for (const i of range(fns.length))
+	for (const i of fns.keys())
 		draw(ctx, i, size*i+size/2, size/2, size/16)
 	Menu.css('--url',`url(${ctx.canvas.toDataURL()})`)
 }
