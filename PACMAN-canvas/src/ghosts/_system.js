@@ -13,8 +13,8 @@ import {player,onAteDot} from '../player/player.js'
 const PtsLst = Pts.GhostPts
 const Ghosts = /**@type {Ghost[]}*/([])
 
-export const Evt = toEnumObject(
-	['Ready','Reverse','Frighten','FleeStart','RoundEnds'])
+export const Evt = toEnumObject
+	(['Ready','Reverse','Frighten','FleeStart','RoundEnds'])
 
 /**
  When always chase mode,
@@ -39,8 +39,8 @@ const StandbyTimes = /**@type {const}*/
 ])
 
 /** @typedef {typeof States[number]} StateType */
-const States = /**@type {const}*/(
-	['Idle','GoingOut','Walking','Bitten','Escaping','Returning'])
+const States = /**@type {const}*/
+	(['Idle','GoingOut','Walking','Bitten','Escaping','Returning'])
 
 const StateTypes = toEnumObject(States)
 

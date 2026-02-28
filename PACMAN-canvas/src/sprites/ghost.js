@@ -115,24 +115,25 @@ export default class {
 		ctx.bezierCurveTo(+29, 45, +41, 45, +42, 26)
 	}
 	#drawEyesUp(isRipped=false) {
-		const eyesColor = (isRipped? 'black':Colors.GhostEyes)
+		const {ctx}= this, color=[Colors.GhostEyes,'#000'][+isRipped]
 		for (const v of [-1,+1]) {
-			this.ctx.setEllipse(19.5*v, -17, 13, 17, -8*v*PI/180, -PI/4, -3*PI/4)
-			this.ctx.fillCircle(18.5*v, -26,  8, eyesColor)
+			ctx.setEllipse(19.5*v, -17, 13, 17, -8*v*PI/180, -PI/4, -3*PI/4)
+			ctx.fillCircle(18.5*v, -26,  8, color)
 		}
 	}
 	#drawEyesDown() {
+		const {ctx}= this
 		for (const v of [-1,+1]) {
-			this.ctx.setEllipse(19*v, -3, 13, 17, 0, 140*PI/180, 40*PI/180)
-			this.ctx.fillCircle(19*v, +4,  8, Colors.GhostEyes)
+			ctx.setEllipse(19*v, -3, 13, 17, 0, 140*PI/180, 40*PI/180)
+			ctx.fillCircle(19*v, +4,  8, Colors.GhostEyes)
 		}
 	}
-	/** @param {Horizontal} orient */
-	#drawEyesHoriz(orient) {
-		const v = (Vec2[orient].x < 0 ? -1:1)
+	/** @param {Horizontal} LR */
+	#drawEyesHoriz(LR) {
+		const {ctx}= this, v = (Vec2[LR].x < 0 ? -1:1)
 		for (const i of [0,1]) {
-			this.ctx.setEllipse([-16.5*v, 23*v][i], -11, 13, 17, 0, 0, PI*2)
-			this.ctx.fillCircle([ -9.5*v, 29*v][i],  -8,  8, Colors.GhostEyes)
+			ctx.setEllipse([-16.5*v, 23*v][i], -11, 13, 17, 0, 0, PI*2)
+			ctx.fillCircle([ -9.5*v, 29*v][i],  -8,  8, Colors.GhostEyes)
 		}
 	}
 	#drawFrightFace() {
@@ -159,6 +160,6 @@ export default class {
 const Glow = function() {
 	const {ctx,w,h}= canvas2D(null, T*5)
 	ctx.filter = `blur(${T*0.6}px)`
-	ctx.fillCircle(w/2, h/2, T, 'red')
+	ctx.fillCircle(w/2, h/2, T, '#F00')
 	return ctx.canvas
 }()
