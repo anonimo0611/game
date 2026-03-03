@@ -82,8 +82,7 @@ export const Game = new class {
 		player.sprite.startDying({fn:Game.#onDied})
 	}
 	#onDied() {
-		Game.#pacDied = true
-		Lives.left > 0
+		(Game.#pacDied = Lives.left > 0)
 			? State.setReady()
 			: State.setGameOver()
 	}
@@ -99,7 +98,7 @@ export const Game = new class {
 		State.setReady()
 	}
 	#onGameOver() {
-		Timer.set(2000, this.#onQuit)
+		State.setTitle({delay:2000})
 	}
 	#onQuit() {
 		Game.#pacDied = false
@@ -108,7 +107,7 @@ export const Game = new class {
 	#levelEnds() {
 		Game.#pacDied = false
 		if (!Ctrl.endlessMode) {
-			this.#onQuit()
+			State.setTitle()
 			return
 		}
 		Demo.CoffBreakNum < 0
