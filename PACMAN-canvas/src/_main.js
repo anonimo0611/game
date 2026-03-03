@@ -4,13 +4,13 @@ import {Menu}    from './ui.js'
 import {State}   from './state.js'
 import {Message} from './message.js'
 import {Ctrl}    from './control.js'
+import {Demo}    from './demo/_demo.js'
 import {Maze}    from './maze.js'
 import {Wall}    from './sprites/wall.js'
 import {Score}   from './score.js'
 import {Lives}   from './lives.js'
 import {Fruit}   from './fruit.js'
 import {Actors}  from './actor.js'
-import {Demo}    from './demo/_demo.js'
 import {player}  from './player/player.js'
 import {PtsMgr}  from './points.js'
 import {Sound}   from '../_snd/sound.js'
@@ -99,7 +99,7 @@ export const Game = new class {
 		State.setReady()
 	}
 	#onGameOver() {
-		State.setQuit({delay:2000})
+		Timer.set(2000, this.#onQuit)
 	}
 	#onQuit() {
 		Game.#pacDied = false
@@ -108,7 +108,7 @@ export const Game = new class {
 	#levelEnds() {
 		Game.#pacDied = false
 		if (!Ctrl.endlessMode) {
-			State.setQuit()
+			this.#onQuit()
 			return
 		}
 		Demo.CoffBreakNum < 0
