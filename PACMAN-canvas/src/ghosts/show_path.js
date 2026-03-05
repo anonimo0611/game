@@ -33,9 +33,8 @@ export class PathMgr {
 		if (!this.enabled || !this.#path.length) return
 		const {type,dir,center}= this.g, lw = T/4
 		const st   = this.begin.tile.clone.add(.5).mul(T)
-		const diff = Vec2.sub(center,st)
 		const ofst = Vec2.new(...Ofsts[type]).mul(lw)
-		const dist = this.end.stopped? 0 : Vec2.dot(diff,Vec2[dir])
+		const dist = Vec2.dot(Vec2.sub(center,st),Vec2[dir])
 		Fg.save()
 		Fg.setAlpha(0.6)
 		Fg.translate(...ofst.vals)
@@ -57,7 +56,7 @@ export class PathMgr {
 			this.#setEndTarget(node, next, dist)
 			if (abs(next.x - pos.x) > T*2) {
 				const isR = next.x < pos.x
-				Fg.lineTo(isR? BW+T/2 : -T/2,  pos.y)
+				Fg.lineTo(isR? BW+T/2 : -T/2, next.y)
 				Fg.moveTo(isR? -T/2 : BW+T/2, next.y)
 			}
 			Fg.lineTo(...next.vals)
