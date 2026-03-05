@@ -17,7 +17,7 @@ const RunTimer = function() {
 			: $off('.RunTimer')
 	})
 	function update() {
-		(!WinState.active || Ctrl.activeElem || Confirm.opened)
+		(!WinState.active || Ctrl.activeElem  || Confirm.opened)
 			? Ticker.resetCount()
 		 	: Ticker.elapsedTime > WaitTime && State.setAttract()
 	}

@@ -1,5 +1,4 @@
 import _State from '../_lib/state.js'
-
 /**
  @typedef {typeof States[number]} StateType
  @typedef {`_${Exclude<StateType,'Title'>}`} Underscored
@@ -35,7 +34,7 @@ class GameState extends _State {
 	 @param {StateDef.Opts<StateType>} options
 	*/
 	set(s, {data,delay=(s == 'Quit' ? -1 : 0)}={}) {
-		/Title|Quit/.test(s) && Ticker.reset()
+		if (/Title|Quit/.test(s)) Ticker.reset()
 		return super.set(s, {data,delay,fn:this.#callback})
 	}
 }

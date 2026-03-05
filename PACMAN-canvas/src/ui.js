@@ -2,8 +2,8 @@
 
 /** @typedef {typeof inputIds[number]} InputIds */
 const inputIds = /**@type {const}*/
-	(['lvsRng','spdRng','onlChk','chsChk','unrChk',
-	  'invChk','tgtChk','grdChk','powChk','volRng','volRg2'])
+	(['lvsRng','spdRng','onlChk','chsChk','unrChk','invChk',
+	  'tgtChk','pthChk','grdChk','powChk','volRng','volRg2'])
 
 export const inputs =
 	/**@type {{[K in InputIds]:HTMLInputElement}}*/

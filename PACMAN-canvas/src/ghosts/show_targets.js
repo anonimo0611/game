@@ -9,13 +9,13 @@ import {GuzutaThreshold} from './ghost_sub.js'
 export default new class {
 	/** @param {readonly Ghost[]} ghosts */
 	draw(ghosts) {
-		if (!Ctrl.showTargets || !State.isInGame)
-			return
+		if (!Ctrl.showTargets) return
+		if (!State.isInGame) return
 		for (const g of ghosts) this.#strokeLines(g)
 		for (const g of ghosts) this.#drawMarker(g)
 	}
 	/** @param {Ghost} g */
-	#markerDisabled = g=> (
+	markerDisabled = g=> (
 		   g.isFrightened
 		|| g.state.isIdle
 		|| g.state.isBitten
@@ -26,7 +26,7 @@ export default new class {
 		(g.state.isGoingOut || g.isEscaping)
 			? Maze.House.EntryTile.add(.5).mul(T)
 			: g.isScattering
-				? g.originalTargetTile.add(.5).mul(T)
+				? g.baseTargetTile.add(.5).mul(T)
 				: g.chasePos
 
 	/** @param {Ghost} g */
@@ -41,7 +41,7 @@ export default new class {
 	}
 	/** @param {Ghost} g */
 	#drawMarker(g) {
-		if (this.#markerDisabled(g))
+		if (this.markerDisabled(g))
 			return
 		const {x,y}= this.#getTargetPos(g)
 		Fg.save()
@@ -59,9 +59,9 @@ export default new class {
 		const fwdXY = player.forwardPos(ofst).vals
 		const ofsXY = player.offsetTarget(ofst).vals
 		Fg.save()
-		Fg.setAlpha(0.8)
+		Fg.setAlpha(0.6)
 		Fg.lineWidth   = 6
-		Fg.strokeStyle = GhsColors[g.type]
+		Fg.fillStyle = Fg.strokeStyle = '#FFF'
 		if (g.type == GhsType.Pinky && !inTunSide
 		 || g.type == GhsType.Aosuke) {
 			dir != U
@@ -73,7 +73,7 @@ export default new class {
 			const tgtXY = g.chasePos.vals
 			const akaXY = GhsMgr.akaCenterPos.vals
 			Fg.newLinePath(akaXY, ofsXY, tgtXY).stroke()
-			Fg.fillCircle(...ofsXY, 8, GhsColors[g.type])
+			Fg.fillCircle(...ofsXY, 8)
 		}
 		Fg.restore()
 	}

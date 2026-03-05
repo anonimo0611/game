@@ -1,13 +1,15 @@
-import {Sound}  from '../../_snd/sound.js'
-import {Game}   from '../_main.js'
-import {State}  from '../state.js'
-import {Ctrl}   from '../control.js'
-import {PtsMgr} from '../points.js'
-import {Maze}   from '../maze.js'
-import {Actor}  from '../actor.js'
-import {player} from '../player/player.js'
-import Sprite   from '../sprites/ghost.js'
-import * as Sys from './_system.js'
+import {Sound}   from '../../_snd/sound.js'
+import {Dir}     from '../../_lib/direction.js'
+import {Game}    from '../_main.js'
+import {State}   from '../state.js'
+import {Ctrl}    from '../control.js'
+import {PtsMgr}  from '../points.js'
+import {Maze}    from '../maze.js'
+import {Actor}   from '../actor.js'
+import {player}  from '../player/player.js'
+import {PathMgr} from './show_path.js'
+import Sprite    from '../sprites/ghost.js'
+import * as Sys  from './_system.js'
 import {GhsMgr,Evt} from './_system.js'
 
 /** @type {readonly Direction[]} */
@@ -17,6 +19,7 @@ export class Ghost extends Actor {
 	/** @readonly */type
 	/** @readonly */init
 	/** @readonly */state
+	/** @readonly */#path  = new PathMgr(this)
 	/** @readonly */sprite = new Sprite(Fg)
 
 	#fader = /**@type {?Fade}*/(null)
@@ -64,7 +67,7 @@ export class Ghost extends Actor {
 	get chaseTile()    {return this.chasePos.divInt(T)}
 	get scatterTile()  {return Vec2.new(24, 0)}
 
-	get originalTargetTile() {
+	get baseTargetTile() {
 		return this.state.isEscaping
 			? Maze.House.EntryTile
 			: this.isScattering
@@ -73,7 +76,7 @@ export class Ghost extends Actor {
 	}
 	get targetTile() {
 		return Ctrl.unrestricted
-			? this.originalTargetTile
+			? this.baseTargetTile
 			: Maze.getGhostExitTile(this)
 	}
 	get speed() {
@@ -89,6 +92,7 @@ export class Ghost extends Actor {
 	}
 	draw() {
 		if (State.isIntro) return
+		this.#path.draw()
 		this.sprite.draw(this)
 	}
 	update() {
@@ -108,6 +112,7 @@ export class Ghost extends Actor {
 	}
 	#moveStepped(steps=1) {
 		for (const _ of range(steps)) {
+			this.#path.setPredictedPath()
 			this.#tickMove(this.speed/steps)
 			this.passedTileCenter && this.#setNextDir()
 			if (this.#makeTurn(this)) break
@@ -115,7 +120,7 @@ export class Ghost extends Actor {
 		}
 	}
 	#tickMove(spd=this.speed) {
-		!this.#houseEntranceArrived(spd)
+		!Maze.House.arrived(this, spd)
 			? this.setNextPos(spd)
 			: this.#enterHouse()
 	}
@@ -147,11 +152,6 @@ export class Ghost extends Actor {
 
 		this.dir = L
 		this.state.setWalking()
-	}
-	#houseEntranceArrived(spd=this.speed) {
-		return this.state.isEscaping
-			&& this.tilePos.y == Maze.House.EntryTile.y
-			&& abs(BW/2 - this.center.x) <= spd
 	}
 	#enterHouse() {
 		this.dir = D
@@ -186,24 +186,25 @@ export class Ghost extends Actor {
 			this.orient = this.revDir
 		}
 		if (this.dir == this.orient)
-			this.orient = this.#getNextDir()
+			this.orient = this.getNextDir()
 	}
-	#getNextDir(tgt=this.targetTile) {
-		const tile = this.getAdjTile(this.dir)
-		const dirs = TurnPriority.flatMap((dir,i)=>
-		{
-			const testTile = this.getAdjTile(dir,tile)
-			return this.revOrient != dir
-				&& !Maze.hasWall(testTile)
-				&& !this.#isRestrictedTile({dir,testTile})
-				? [{dir,i,m:Vec2.sqrMag(testTile,tgt)}]:[]
+	getNextDir(
+		cDir = this.dir,
+		tile = this.getAdjTile(this.dir)
+	) {
+		const dirs = TurnPriority.flatMap((dir,i)=> {
+			const test = this.getAdjTile(dir,tile)
+			return Dir.Opposite[cDir] != dir
+				&& !Maze.hasWall(test)
+				&& !this.#isRestrictedTile({dir,test})
+				? [{dir,i,m:Vec2.sqrMag(test,this.targetTile)}]:[]
 		})
 		return this.isFrightened? randChoice(dirs).dir:
-			(i=> dirs.sort((a,b)=> a.m-b.m || a.i-b.i)[i].dir)
-				(this.#fleeTmr >= 0 ? dirs.length-1:0)
+			(i=> dirs.sort((a,b)=> a.m-b.m || a.i-b.i)[i]?.dir)
+				(this.#fleeTmr >= 0 ? dirs.length-1:0) ?? cDir
 	}
-	/** @param {{dir:Direction,testTile:Vec2}} testTile */
-	#isRestrictedTile({dir,testTile:{hyphenated:xy}}) {
+	/** @param {{dir:Direction,test:Vec2}} testTile */
+	#isRestrictedTile({dir,test:{hyphenated:xy}}) {
 		return (Ctrl.unrestricted || this.ignoreOneway)
 			? false : Maze.GhostNoEntryTiles.has(xy+dir)
 	}

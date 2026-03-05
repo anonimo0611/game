@@ -55,7 +55,14 @@ const PenOuter = new Rect( 9, 12, 10, 7).freeze()
 class House {
 	MiddleY = (this.EntryTile.y+3.5)*T
 	get EntryTile() {return Vec2.new(13, 12)}
-	isIn = (/**@type {Vec2}*/tile)=> PenRect.contains(tile)
+	isIn(/**@type {Position}*/pos) {
+		return PenRect.contains(pos)
+	}
+	arrived(/**@type {Ghost}*/g, spd=1) {
+		return g.state.isEscaping
+			&& g.tilePos.y == this.EntryTile.y
+			&& abs(BW/2 - g.center.x) <= spd
+	}
 }
 class Tunnel {
 	Row = 15
@@ -133,8 +140,8 @@ export const Maze = freeze(new class {
 	 and the ghost is around the house, guide them outside of the area
 	 @param {Ghost} Ghost
 	*/
-	getGhostExitTile = ({originalTargetTile:o, tilePos:t})=>
-		o.y < 10 && PenOuter.contains(t)
+	getGhostExitTile = ({baseTargetTile:o, tilePos:t, isScattering})=>
+		o.y < 10 && PenOuter.contains(t) && !isScattering
 			? o.set(t.x>Cols/2 && o.x>Cols/2 ? 21:6, 15) : o
 
 	/**

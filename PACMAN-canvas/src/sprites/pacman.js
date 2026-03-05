@@ -1,8 +1,8 @@
 const Duration = 300/Ticker.Interval
 const OpenMid  = 30 * PI/180
 const OpenMax  = 60 * PI/180
-const Rotation = new Map([[R,0],[D,PI/2],[L,PI],[U,-PI/2]])
 
+import {Dir}   from '../../_lib/direction.js';
 import {Dying} from './pacman_dying.js'
 export default class {
 	#dyingSpr   = /**@type {?Dying}*/(null)
@@ -55,7 +55,7 @@ export default class {
 		ctx.save()
 		ctx.setAlpha(alpha)
 		ctx.translate(x,y)
-		ctx.rotate(Rotation.get(orient) ?? 0)
+		ctx.rotate(Dir.Rotation[orient])
 		ctx.beginPath()
 		ctx.moveTo(-radius*0.3, 0)
 		ctx.arc(0, 0, radius, angle, PI*2-angle)

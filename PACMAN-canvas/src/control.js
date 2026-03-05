@@ -26,9 +26,11 @@ export const Ctrl = new class {
 	get unrestricted()  {return inputs.unrChk.checked}
 	get invincible()    {return inputs.invChk.checked}
 	get showTargets()   {return inputs.tgtChk.checked}
+	get showPaths()     {return inputs.pthChk.checked}
 	get showGridLines() {return inputs.grdChk.checked}
+	get showTracing()   {return this.showTargets || this.showPaths}
 	get semiTransPac()  {return this.invincible  || this.showGridLines}
-	get usingCheats()   {return this.invincible  || this.speed<.7 || this.showTargets}
+	get usingCheats()   {return this.invincible  || this.speed<.7 || this.showTracing}
 	get isPractice()    {return this.usingCheats || !this.isArcadeMode}
 	get isArcadeMode()  {return this.endlessMode && !Menu.Level.index}
 
@@ -77,11 +79,12 @@ export const Ctrl = new class {
 		if (Ctrl.usingCheats || spd != 'x1.0') {
 			drawText(0, lh*0, Palette.Info[+(spd != 'x1.0') ], 'Speed'+spd, opt)
 			drawText(0, lh*1, Palette.Info[+Ctrl.invincible ], 'Invincible',opt)
-			drawText(0, lh*2, Palette.Info[+Ctrl.showTargets], 'Targets',   opt)
+			drawText(0, lh*2, Palette.Info[+Ctrl.showTargets], 'Show Tgts', opt)
 		}
-		if (Ctrl.unrestricted) {
-			HUD.translate(T*(Cols-5), T/2)
-			drawText(0,0, Palette.Info[1], 'Un-\nrestricted', opt)
+		if (Ctrl.showPaths || Ctrl.unrestricted) {
+			HUD.translate(T*(Cols-5), 0)
+			drawText(0, lh*0, Palette.Info[+Ctrl.showPaths],   'Show Paths', opt)
+			drawText(0, lh*1, Palette.Info[+Ctrl.unrestricted],'Ghosts Un-\nrestricted', opt)
 		}
 		HUD.restore()
 	}
@@ -110,8 +113,7 @@ export const Ctrl = new class {
 		Confirm.open('Are you sure you want to quit the game?',
 			Ctrl.pause, ()=> State.setQuit(), 'Resume','Quit')
 	}
-	/** @param {KeyboardEvent} e */
-	#onKeydown(e) {
+	#onKeydown(/**@type {KeyboardEvent}*/e) {
 		if (Confirm.opened || keyRepeat(e))
 			return
 		switch(e.key) {
