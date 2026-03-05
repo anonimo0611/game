@@ -1,6 +1,6 @@
 'use strict'
 const {fromEntries,defineProperty,entries,freeze,hasOwn,keys,values}= Object
-const {abs,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
+const {abs,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 
 /**
  @template {object} T
@@ -138,12 +138,13 @@ const {abs,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 	(pos1.x-pos2.x)**2 + (pos1.y-pos2.y)**2 <= (r1+r2)**2
 
 /**
- @param {number} deg
+ @param {number} rad
  @param {number} r
- @returns {[x:number, y:number]}
-*/const circumPosition = (deg, r, cx=0, cy=0)=>
-	[cos(PI/180*deg)*r+cx,
-	 sin(PI/180*deg)*r+cy]
+ @returns {{pos:Vec2,vals:[x:number, y:number]}}
+*/const getCircum = (rad, r, cx=0, cy=0)=> {
+	const  [x,y] = [cos(rad)*r+cx, sin(rad)*r+cy]
+	return {pos:Vec2.new(x,y),vals:[x,y]}
+}
 
 //---- jQuery utilities ------
 
