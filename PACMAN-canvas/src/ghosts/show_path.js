@@ -10,6 +10,11 @@ const Ofsts = /**@type {Readonly<xyTuple[]>}*/
 	([[-2,-2], [-1,-1], [1,1], [2,2]])
 
 export class PathMgr {
+	/** @param {readonly Ghost[]} ghosts */
+	static draw(ghosts) {
+		if (State.isInGame && Ctrl.showPaths)
+			ghosts.toReversed().forEach(g=> g.pathMgr.draw())
+	}
 	#path = /**@type {PathNode[]}*/([])
 	/** @private @readonly */g
 	/** @param {Ghost} ghost */
@@ -21,7 +26,6 @@ export class PathMgr {
 	get end()   {return this.#path.at(-1) ?? this.begin}
 	get enabled() {
 		const {g}= this
-		if (!State.isInGame || !Ctrl.showPaths) return false
 		if (Maze.House.arrived(g, T*1.5))  return false
 		if (!between(g.center.x, T, BW-T)) return false
 		return g.isChasing || g.isScattering || this.isEsc
@@ -41,6 +45,7 @@ export class PathMgr {
 		Fg.strokeStyle = GhsColors[type]
 		this.#strokePath(dist)
 		this.#strokeArrow(dist)
+		Fg.stroke()
 		Fg.restore()
 	}
 	#strokePath(dist=0) {
@@ -53,7 +58,7 @@ export class PathMgr {
 			this.#setEndTarget(node, next, dist)
 			if (abs(next.x - pos.x) > T*2) {
 				const isRightExit = next.x < pos.x
-				const margin = T*0.5
+				const margin = T/2
 				const exitX  = isRightExit? BW + margin : -margin
 				const enterX = isRightExit? -margin : BW + margin
 				Fg.lineTo(exitX,  pos.y)
@@ -62,7 +67,6 @@ export class PathMgr {
 			Fg.lineTo(...next.vals)
 			pos = next
 		})
-		Fg.stroke()
 	}
 	#strokeArrow(dist=0) {
 		const{end}= this, {tile,dir}= end
@@ -71,7 +75,7 @@ export class PathMgr {
 		Fg.save()
 		Fg.translate(...pos.vals)
 		Fg.rotate(Dir.Rotation[dir])
-		Fg.newLinePath([-T/2,-T/2],[0,0],[-T/2,T/2]).stroke()
+		Fg.setLinePath([-T/2,-T/2],[0,0],[-T/2,T/2])
 		Fg.restore()
 	}
 	/** @param {PathNode} node */

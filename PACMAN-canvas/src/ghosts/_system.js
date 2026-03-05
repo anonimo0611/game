@@ -1,13 +1,14 @@
-import _State   from '../../_lib/state.js'
-import {Sound}  from '../../_snd/sound.js'
-import {Game}   from '../_main.js'
-import {State}  from '../state.js'
-import {Ctrl}   from '../control.js'
-import {Maze}   from '../maze.js'
-import {Ghost}  from './ghost.js'
-import {PtsMgr} from '../points.js'
-import * as Pts from '../sprites/points.js'
-import Target   from './show_targets.js'
+import _State    from '../../_lib/state.js'
+import {Sound}   from '../../_snd/sound.js'
+import {Game}    from '../_main.js'
+import {State}   from '../state.js'
+import {Ctrl}    from '../control.js'
+import {Maze}    from '../maze.js'
+import {Ghost}   from './ghost.js'
+import {PtsMgr}  from '../points.js'
+import {PathMgr} from './show_path.js'
+import * as Pts  from '../sprites/points.js'
+import TgtMgr    from './show_targets.js'
 import {player,onAteDot} from '../player/player.js'
 
 const PtsLst = Pts.GhostPts
@@ -133,7 +134,8 @@ export const GhsMgr = new class {
 		GhsMgr.#draw(false)
 	}
 	drawFront()  {
-		Target.draw(Ghosts)
+		PathMgr.draw(Ghosts)
+		TgtMgr.draw(Ghosts)
 		GhsMgr.#draw(true)
 		PtsMgr.drawGhostPts()
 	}

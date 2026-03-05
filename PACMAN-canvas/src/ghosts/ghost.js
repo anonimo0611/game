@@ -19,8 +19,8 @@ export class Ghost extends Actor {
 	/** @readonly */type
 	/** @readonly */init
 	/** @readonly */state
-	/** @readonly */#path  = new PathMgr(this)
-	/** @readonly */sprite = new Sprite(Fg)
+	/** @readonly */pathMgr = new PathMgr(this)
+	/** @readonly */sprite  = new Sprite(Fg)
 
 	#fader = /**@type {?Fade}*/(null)
 	#fleeTmr    = -1
@@ -92,7 +92,6 @@ export class Ghost extends Actor {
 	}
 	draw() {
 		if (State.isIntro) return
-		this.#path.draw()
 		this.sprite.draw(this)
 	}
 	update() {
@@ -112,7 +111,7 @@ export class Ghost extends Actor {
 	}
 	#moveStepped(steps=1) {
 		for (const _ of range(steps)) {
-			this.#path.setPredictedPath()
+			this.pathMgr.setPredictedPath()
 			this.#tickMove(this.speed/steps)
 			this.passedTileCenter && this.#setNextDir()
 			if (this.#makeTurn(this)) break
