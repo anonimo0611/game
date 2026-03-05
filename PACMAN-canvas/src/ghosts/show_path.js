@@ -20,9 +20,10 @@ export class PathMgr {
 	get begin() {return this.#path[0]}
 	get end()   {return this.#path.at(-1) ?? this.begin}
 	get enabled() {
-		if (!State.isInGame || !Ctrl.showPaths) return false
-		if (Maze.House.arrived(this.g, T*1.5))  return false
 		const {g}= this
+		if (!State.isInGame || !Ctrl.showPaths) return false
+		if (Maze.House.arrived(g, T*1.5))  return false
+		if (!between(g.center.x, T, BW-T)) return false
 		return g.isChasing || g.isScattering || this.isEsc
 	}
 	draw() {
@@ -43,18 +44,22 @@ export class PathMgr {
 		Fg.restore()
 	}
 	#strokePath(dist=0) {
-		const gPos = this.g.center
-		const tMid = this.g.tilePos.add(.5).mul(T)
+		let pos = this.g.tilePos.add(.5).mul(T)
 		Fg.beginPath()
-		Fg.moveTo(...gPos.vals)
-		Fg.lineTo(...tMid.vals)
-		let pos = tMid
-		this.#path.forEach(node=> {
+		Fg.moveTo(...this.g.center.vals)
+		Fg.lineTo(...pos.vals)
+		this.#path.forEach((node, i) => {
 			let next = node.tile.clone.add(.5).mul(T)
-			this.#setEndTarget(node,next,dist)
-			abs(next.x-pos.x) > T*2
-				? Fg.moveTo(...next.vals)
-				: Fg.lineTo(...next.vals)
+			this.#setEndTarget(node, next, dist)
+			if (abs(next.x - pos.x) > T*2) {
+				const isRightExit = next.x < pos.x
+				const margin = T*0.5
+				const exitX  = isRightExit? BW + margin : -margin
+				const enterX = isRightExit? -margin : BW + margin
+				Fg.lineTo(exitX,  pos.y)
+				Fg.moveTo(enterX, next.y)
+			}
+			Fg.lineTo(...next.vals)
 			pos = next
 		})
 		Fg.stroke()
@@ -72,9 +77,11 @@ export class PathMgr {
 	/** @param {PathNode} node */
 	#setEndTarget({stopped,tile,dir}, curr=Vec2.Zero, dist=0) {
 		if (tile != this.end.tile) return
-		stopped && tile.eq(p.tilePos)
-			? curr.set(p.center)
-			: curr.add(Vec2[dir].mul(dist))
+		stopped
+			&& tile.eq(p.tilePos)
+			&& between(p.center.x, T, BW-T)
+				? curr.set(p.center)
+				: curr.add(Vec2[dir].mul(dist))
 	}
 	setPredictedPath() {
 		const {g,isAka,isEsc}=this, path=[]
