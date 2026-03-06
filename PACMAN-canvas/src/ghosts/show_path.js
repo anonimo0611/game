@@ -15,8 +15,8 @@ export class PathMgr {
 		if (State.isInGame && Ctrl.showPaths)
 			ghosts.toReversed().forEach(g=> g.pathMgr.#draw())
 	}
-	/** @private @readonly   */g
-	/** @type  {PathNode[]}  */#path=[]
+	#path = /**@type {PathNode[]}*/([])
+	/** @private @readonly */g
 	/** @param {Ghost} ghost */
 	constructor(ghost) {this.g = ghost}
 	get isAka() {return this.g.type == GhsType.Akabei}
@@ -31,17 +31,17 @@ export class PathMgr {
 	}
 	#draw() {
 		if (!this.enabled || !this.#path.length) return
-		const {type,dir,center}= this.g, lw = T/4
+		const {type,dir,center:gX}= this.g, lw = T/4
 		const st   = this.begin.tile.clone.add(.5).mul(T)
 		const ofst = Vec2.new(...Ofsts[type]).mul(lw)
-		const dist = Vec2.dot(Vec2.sub(center,st),Vec2[dir])
+		const dist = Vec2.dot(Vec2.sub(gX,st),Vec2[dir])
 		Fg.save()
 		Fg.setAlpha(0.6)
 		Fg.translate(...ofst.vals)
 		Fg.lineWidth   = lw
-		Fg.lineCap     = Fg.lineJoin = 'round'
+		Fg.lineJoin    = Fg.lineCap = 'round'
 		Fg.strokeStyle = GhsColors[type]
-		this.#strokePath(this.end.stopped? 0 : dist)
+		this.#strokePath(this.end.stopped? 0:dist)
 		Fg.stroke()
 		Fg.restore()
 	}
@@ -75,9 +75,9 @@ export class PathMgr {
 		})
 	}
 	setPredictedPath() {
-		const {g,g:{tilePos:t}}=this, path=[]
+		const {g,g:{tilePos:t}}= this, path=[]
 		let dir  = g.dir
-		let tile = g.passedTileCenter? g.getAdjTile(dir,t) : t
+		let tile = g.passedTileCenter? g.getAdjTile(dir,t):t
 		path.push({tile,dir,stopped:false})
 		for (let _ of range(Steps-1)) {
 			dir  = g.getNextDir(dir,tile)
