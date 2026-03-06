@@ -7,7 +7,6 @@ const volRng  = inputs.volRng
 const volRg2  = inputs.volRg2
 const initVol = +(localStorage.anopac_volume ?? 5)
 
-/** Register sound instances and set up controls */
 export const Setup = new class {
 	onLoaded() {
 		Sound.vol = initVol
