@@ -76,7 +76,7 @@ export const Ctrl = new class {
 		HUD.save()
 		HUD.translate(T*0.1, T*17.25)
 		HUD.clearRect(0, 0, BW, T*3)
-		if (Ctrl.usingCheats || spd != 'x1.0') {
+		if (spd != 'x1.0' || Ctrl.invincible || Ctrl.showTargets) {
 			drawText(0, lh*0, Palette.Info[+(spd != 'x1.0') ], 'Speed'+spd, opt)
 			drawText(0, lh*1, Palette.Info[+Ctrl.invincible ], 'Invincible',opt)
 			drawText(0, lh*2, Palette.Info[+Ctrl.showTargets], 'Show Tgts', opt)
