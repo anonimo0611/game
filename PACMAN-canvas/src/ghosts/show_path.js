@@ -15,8 +15,8 @@ export class PathMgr {
 		if (State.isInGame && Ctrl.showPaths)
 			ghosts.toReversed().forEach(g=> g.pathMgr.#draw())
 	}
-	#path = /**@type {PathNode[]}*/([])
-	/** @private @readonly */g
+	/** @private @readonly   */g
+	/** @type  {PathNode[]}  */#path=[]
 	/** @param {Ghost} ghost */
 	constructor(ghost) {this.g = ghost}
 	get isAka() {return this.g.type == GhsType.Akabei}
@@ -33,54 +33,46 @@ export class PathMgr {
 		if (!this.enabled || !this.#path.length) return
 		const {type,dir,center}= this.g, lw = T/4
 		const st   = this.begin.tile.clone.add(.5).mul(T)
-		const diff = Vec2.sub(center,st)
 		const ofst = Vec2.new(...Ofsts[type]).mul(lw)
-		const dist = this.end.stopped? 0 : Vec2.dot(diff,Vec2[dir])
+		const dist = Vec2.dot(Vec2.sub(center,st),Vec2[dir])
 		Fg.save()
 		Fg.setAlpha(0.6)
 		Fg.translate(...ofst.vals)
 		Fg.lineWidth   = lw
 		Fg.lineCap     = Fg.lineJoin = 'round'
 		Fg.strokeStyle = GhsColors[type]
-		this.#strokePath(dist)
-		this.#strokeArrow(dist)
+		this.#strokePath(this.end.stopped? 0 : dist)
 		Fg.stroke()
 		Fg.restore()
 	}
 	#strokePath(dist=0) {
+		const {center:{x:pX},tilePos:pTile}= p
 		let pos = this.g.tilePos.add(.5).mul(T)
 		Fg.beginPath()
 		Fg.moveTo(...this.g.center.vals)
 		Fg.lineTo(...pos.vals)
-		this.#path.forEach(node=> {
-			let next = node.tile.clone.add(.5).mul(T)
-			this.#setEndTarget(node, next, dist)
+		this.#path.forEach(({tile,dir,stopped},i,arr)=> {
+			let next = tile.clone.add(.5).mul(T)
+			if (i == arr.length-1) {
+				stopped && tile.eq(pTile) && between(pX,T,BW-T)
+					? next.set(p.center)
+					: next.add(Vec2[dir].mul(dist))
+			}
 			if (abs(next.x - pos.x) > T*2) {
 				const isR = next.x < pos.x
 				Fg.lineTo(isR? BW+T/2 : -T/2, next.y)
 				Fg.moveTo(isR? -T/2 : BW+T/2, next.y)
 			}
 			Fg.lineTo(...next.vals)
+			if (i == arr.length-1) { // Arrow
+				Fg.save()
+				Fg.translate(...next.clone.vals)
+				Fg.rotate(Dir.Rotation[dir])
+				Fg.setLinePath([-T/2,-T/2],[0,0],[-T/2,T/2])
+				Fg.restore()
+			}
 			pos = next
 		})
-	}
-	#strokeArrow(dist=0) {
-		const{end}= this, {tile,dir}= end
-		const pos = tile.clone.add(.5).mul(T)
-		this.#setEndTarget(end,pos,dist)
-		Fg.save()
-		Fg.translate(...pos.vals)
-		Fg.rotate(Dir.Rotation[dir])
-		Fg.setLinePath([-T/2,-T/2],[0,0],[-T/2,T/2])
-		Fg.restore()
-	}
-	/** @param {PathNode} node */
-	#setEndTarget({stopped,tile,dir}, curr=Vec2.Zero, dist=0) {
-		if (tile != this.end.tile) return
-		const {tilePos:t,center:{x}}= p
-		stopped && tile.eq(t) && between(x,T,BW-T)
-			? curr.set(p.center)
-			: curr.add(Vec2[dir].mul(dist))
 	}
 	setPredictedPath() {
 		const {g,g:{tilePos:t}}=this, path=[]
