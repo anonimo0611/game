@@ -86,13 +86,13 @@ class Vec2 {
 		return Vec2.new(pos).divInt(scalar)
 	}
 	static dot(
-		/**@type {Position}*/pos1,
-		/**@type {Position}*/pos2) {
+	 /**@type {Position}*/pos1,
+	 /**@type {Position}*/pos2) {
 		return (pos1.x * pos2.x) + (pos1.y * pos2.y)
 	}
 	static cross(
-		/**@type {Position}*/pos1,
-		/**@type {Position}*/pos2) {
+	 /**@type {Position}*/pos1,
+	 /**@type {Position}*/pos2) {
 		return (pos1.x * pos2.y) - (pos1.y * pos2.x)
 	}
 	static sqrMag(
