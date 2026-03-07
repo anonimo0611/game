@@ -20,8 +20,8 @@ export class PathMgr {
 	get end()   {return this.#path.at(-1) ?? this.begin}
 	/** @param {Ghost} g */
 	enabled(g) {
-		if (Maze.House.arrived(g, T*1.5))   return false
-		if (!between(g.center.x, -T, BW+T)) return false
+		if (Maze.House.arrived(g, T*1.5)) return false
+		if (!between(g.center.x, -T/2, BW+T/2)) return false
 		return g.isChasing || g.isScattering || g.isEscaping
 	}
 	/** @param {Ghost} g */
@@ -56,9 +56,9 @@ export class PathMgr {
 					: next.add(Vec2[dir].mul(dist))
 			}
 			if (abs(next.x - pos.x) > T*2) {
-				const isR = next.x < pos.x
-				Fg.lineTo(isR? BW+T/2 : -T/2, next.y)
-				Fg.moveTo(isR? -T/2 : BW+T/2, next.y)
+				const isL = next.x < pos.x
+				Fg.lineTo(isL? BW+T/2 : -T/2, next.y)
+				Fg.moveTo(isL? -T/2 : BW+T/2, next.y)
 			}
 			Fg.lineTo(...next.vals)
 			if (i == this.#path.length-1) { // Arrow
