@@ -43,8 +43,7 @@ export class PathMgr {
 				next[Vec2[dir].x? 'x':'y'] -= ofst.x
 			}
 			if (abs(next.x - pos.x) > T*2) {
-				const x = (next.x < pos.x ? BW+T : -T)
-				Fg.lineTo(x, next.y);break
+				Fg.lineTo((next.x < pos.x ? BW+T : -T), next.y);break
 			}
 			Fg.lineTo(...next.vals)
 			if (i == this.#path.length-1) { // Arrow
@@ -61,20 +60,20 @@ export class PathMgr {
 	}
 	update(/** @type {Ghost}*/g) {
 		if (Maze.House.arrived(g, T*1.5)) return
-		const path=[], {tilePos:t}= g
+		const {tilePos:t}= g; this.#path = []
 		const stoppable = (g.isScattering || g.state.isEscaping)
 		let dir  = g.dir
 		let tile = g.passedTileCenter? g.getAdjTile(dir,t):t
 		if (g.inTunSide && (t.x < 1 || t.x > Cols-2)) tile=t
-		path.push({tile,dir,stopped:false})
+		this.#path.push({tile,dir,stopped:false})
 		for (let _ of range(Steps-1)) {
 			dir  = g.getNextDir(dir,tile)
 			tile = g.getAdjTile(dir,tile)
 			let stopped =
 				g.type == AkaIdx && tile.eq(p.tilePos)
 				    || stoppable && tile.eq(g.targetTile)
-			path.push({tile,dir,stopped})
+			this.#path.push({tile,dir,stopped})
 			if (stopped) break
-		} this.#path = path
+		}
 	}
 }

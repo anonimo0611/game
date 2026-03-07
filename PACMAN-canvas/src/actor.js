@@ -76,10 +76,6 @@ export class Actor {
 		const  v = Vec2[dir].add(tile)
 		return v.setX((v.x+Cols) % Cols) // x-axis wrap
 	}
-	/** @param {Direction} dir */
-	getAdjTile2(dir, tile = this.tilePos) {
-		return Vec2[dir].add(tile); // 余計なことはせず、ただ隣を返す
-	}
 	collidesWithWall(dir=this.dir) {
 		const {x,y}= Vec2[dir].mul(T/2+1).add(this.center).divInt(T)
 		return Maze.hasWall({x:(x+Cols) % Cols, y}) // x-axis wrap
