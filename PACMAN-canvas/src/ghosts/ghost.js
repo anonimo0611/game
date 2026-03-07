@@ -19,7 +19,7 @@ export class Ghost extends Actor {
 	/** @readonly */type
 	/** @readonly */init
 	/** @readonly */state
-	/** @readonly */pathMgr = new PathMgr(this)
+	/** @readonly */pathMgr = new PathMgr()
 	/** @readonly */sprite  = new Sprite(Fg)
 
 	#fader = /**@type {?Fade}*/(null)
@@ -111,7 +111,7 @@ export class Ghost extends Actor {
 	}
 	#moveStepped(steps=1) {
 		for (const _ of range(steps)) {
-			this.pathMgr.setPredictedPath()
+			this.pathMgr.update(this)
 			this.#tickMove(this.speed/steps)
 			this.passedTileCenter && this.#setNextDir()
 			if (this.#makeTurn(this)) break
