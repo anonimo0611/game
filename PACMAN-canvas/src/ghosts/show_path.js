@@ -16,8 +16,8 @@ export class PathMgr {
 			ghosts.toReversed().forEach(g=> g.pathMgr.#draw(g))
 	}
 	#draw(/**@type {Ghost}*/g) {
-		if (!this.#path.length
-		 && !g.isChasing
+		if (!this.#path.length) return
+		if (!g.isChasing
 		 && !g.isScattering
 		 && !g.state.isEscaping) return
 		const {dir,center}= g, lw = T/4
@@ -60,20 +60,20 @@ export class PathMgr {
 	}
 	update(/** @type {Ghost}*/g) {
 		if (Maze.House.arrived(g, T*1.5)) return
-		const {tilePos:t}= g; this.#path = []
+		const path=[], {tilePos:t}= g
 		const stoppable = (g.isScattering || g.state.isEscaping)
 		let dir  = g.dir
 		let tile = g.passedTileCenter? g.getAdjTile(dir,t):t
 		if (g.inTunSide && (t.x < 1 || t.x > Cols-2)) tile=t
-		this.#path.push({tile,dir,stopped:false})
+		path.push({tile,dir,stopped:false})
 		for (let _ of range(Steps-1)) {
 			dir  = g.getNextDir(dir,tile)
 			tile = g.getAdjTile(dir,tile)
 			let stopped =
 				g.type == AkaIdx && tile.eq(p.tilePos)
 				    || stoppable && tile.eq(g.targetTile)
-			this.#path.push({tile,dir,stopped})
+			path.push({tile,dir,stopped})
 			if (stopped) break
-		}
+		} this.#path = path
 	}
 }
