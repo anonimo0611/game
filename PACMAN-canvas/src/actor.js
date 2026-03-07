@@ -45,8 +45,8 @@ export class Actor {
 	}
 	#wrapXAxis() {
 		this.x = function({x,size}) {
-			if (x < -size)   return BW+size
-			if (x > BW+size) return -size
+			if (x < -size/2)   return BW+size/2
+			if (x > BW+size/2) return -size/2
 			return x
 		}(this)
 	}
@@ -75,6 +75,10 @@ export class Actor {
 	getAdjTile(dir, tile=this.tilePos) {
 		const  v = Vec2[dir].add(tile)
 		return v.setX((v.x+Cols) % Cols) // x-axis wrap
+	}
+	/** @param {Direction} dir */
+	getAdjTile2(dir, tile = this.tilePos) {
+		return Vec2[dir].add(tile); // 余計なことはせず、ただ隣を返す
 	}
 	collidesWithWall(dir=this.dir) {
 		const {x,y}= Vec2[dir].mul(T/2+1).add(this.center).divInt(T)

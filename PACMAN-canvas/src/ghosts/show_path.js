@@ -5,8 +5,7 @@ import {Maze}  from '../maze.js'
 import {Ghost} from './ghost.js';
 import {player as p} from '../player/player.js';
 
-const AKA   =  0
-const Steps = 16
+const AKA = GhsType.Akabei, Steps = 16
 const Ofsts = /**@type {Readonly<xyTuple[]>}*/
 	([[-2,-2], [-1,-1], [1,1], [2,2]])
 
@@ -21,8 +20,8 @@ export class PathMgr {
 	get end()   {return this.#path.at(-1) ?? this.begin}
 	/** @param {Ghost} g */
 	enabled(g) {
-		if (Maze.House.arrived(g, T*1.5))  return false
-		if (!between(g.center.x, T, BW-T)) return false
+		if (Maze.House.arrived(g, T*1.5))   return false
+		if (!between(g.center.x, -T, BW+T)) return false
 		return g.isChasing || g.isScattering || g.isEscaping
 	}
 	/** @param {Ghost} g */
@@ -45,13 +44,13 @@ export class PathMgr {
 	/** @param {Ghost} g */
 	#strokePath(g, dist=0) {
 		const {center:{x:pX},tilePos:pTile}= p
-		let pos = g.tilePos.add(.5).mul(T)
+		let pos = g.tileMid.mul(T)
 		Fg.beginPath()
 		Fg.moveTo(...g.center.vals)
 		Fg.lineTo(...pos.vals)
-		this.#path.forEach(({tile,dir,stopped},i,arr)=> {
+		for (const [i,{tile,dir,stopped}] of this.#path.entries()) {
 			let next = tile.clone.add(.5).mul(T)
-			if (i == arr.length-1) {
+			if (i == this.#path.length-1) {
 				stopped && tile.eq(pTile) && between(pX,T,BW-T)
 					? next.set(p.center)
 					: next.add(Vec2[dir].mul(dist))
@@ -62,7 +61,7 @@ export class PathMgr {
 				Fg.moveTo(isR? -T/2 : BW+T/2, next.y)
 			}
 			Fg.lineTo(...next.vals)
-			if (i == arr.length-1) { // Arrow
+			if (i == this.#path.length-1) { // Arrow
 				Fg.save()
 				Fg.translate(...next.vals)
 				Fg.rotate(Dir.Rotation[dir])
@@ -70,13 +69,14 @@ export class PathMgr {
 				Fg.restore()
 			}
 			pos = next
-		})
+		}
 	}
 	/** @param {Ghost} g */
 	update(g) {
 		const {tilePos:t}= g, path=[]
 		let dir  = g.dir
 		let tile = g.passedTileCenter? g.getAdjTile(dir,t):t
+		if (g.inTunSide && (t.x < 1 || t.x > Cols-2)) tile=t
 		path.push({tile,dir,stopped:false})
 		for (let _ of range(Steps-1)) {
 			dir  = g.getNextDir(dir,tile)
