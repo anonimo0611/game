@@ -140,8 +140,8 @@ export const Maze = freeze(new class {
 	 and the ghost is around the house, guide them outside of the area
 	 @param {Ghost} Ghost
 	*/
-	getGhostExitTile = ({baseTargetTile:o, tilePos:t, isScattering})=>
-		o.y < 10 && PenOuter.contains(t) && !isScattering
+	getGhostExitTile = ({baseTargetTile:o, tilePos:t})=>
+		o.y < 10 && PenOuter.contains(t)
 			? o.set(t.x>Cols/2 && o.x>Cols/2 ? 21:6, 15) : o
 
 	/**
