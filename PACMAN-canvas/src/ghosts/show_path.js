@@ -5,8 +5,9 @@ import {Maze}  from '../maze.js'
 import {Ghost} from './ghost.js';
 import {player as p} from '../player/player.js';
 
-const AKA = GhsType.Akabei, Steps = 16
-const Ofsts = /**@type {Readonly<xyTuple[]>}*/
+const Steps   = 16
+const AkaType = GhsType.Akabei
+const Ofsts   = /**@type {Readonly<xyTuple[]>}*/
 	([[-2,-2], [-1,-1], [1,1], [2,2]])
 
 export class PathMgr {
@@ -22,7 +23,7 @@ export class PathMgr {
 	enabled(g) {
 		if (Maze.House.arrived(g, T*1.5)) return false
 		if (!between(g.center.x, -T/2, BW+T/2)) return false
-		return g.isChasing || g.isScattering || g.isEscaping
+		return g.isChasing || g.isScattering || g.state.isEscaping
 	}
 	/** @param {Ghost} g */
 	#draw(g) {
@@ -82,8 +83,8 @@ export class PathMgr {
 			dir  = g.getNextDir(dir,tile)
 			tile = g.getAdjTile(dir,tile)
 			const stopped =
-				g.type == AKA && tile.eq(p.tilePos) ||
-				g.isEscaping  && tile.eq(g.targetTile)
+				g.type == AkaType  && tile.eq(p.tilePos) ||
+				g.state.isEscaping && tile.eq(g.targetTile)
 			path.push({tile,dir,stopped})
 			if (stopped) break
 		} this.#path = path
