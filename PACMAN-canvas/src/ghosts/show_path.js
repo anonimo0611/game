@@ -5,7 +5,7 @@ import {Maze}  from '../maze.js'
 import {Ghost} from './ghost.js';
 import {player as p} from '../player/player.js';
 
-const Steps = 16
+const AkaIndex = GhsType.Akabei, Steps = 16
 const Ofsts = /**@type {Readonly<xyTuple[]>}*/
 	([[-2,-2], [-1,-1], [1,1], [2,2]])
 
@@ -73,7 +73,7 @@ export class PathMgr {
 	}
 	/** @param {Ghost} g */
 	update(g) {
-		const {tilePos:t}= g, path=[]
+		const {type,tilePos:t}= g, path=[]
 		let dir  = g.dir
 		let tile = g.passedTileCenter? g.getAdjTile(dir,t):t
 		const stoppable = (g.isScattering || g.state.isEscaping)
@@ -82,8 +82,9 @@ export class PathMgr {
 		for (let _ of range(Steps-1)) {
 			dir  = g.getNextDir(dir,tile)
 			tile = g.getAdjTile(dir,tile)
-			let stopped =    tile.eq(p.tilePos) ||
-				stoppable && tile.eq(g.targetTile)
+			let stopped =
+				type == AkaIndex && tile.eq(p.tilePos)
+				    || stoppable && tile.eq(g.targetTile)
 			path.push({tile,dir,stopped})
 			if (stopped) break
 		} this.#path = path
