@@ -7,7 +7,7 @@ import {player as p} from '../player/player.js';
 
 const Steps  = 16
 const AkaIdx = GhsType.Akabei
-const Ofsts  = freeze([-2, -1, 1, 2])
+const Ofsts  = freeze([-2,-1,1,2])
 
 export class PathMgr {
 	#path = /**@type {PathNode[]}*/([])
@@ -16,21 +16,23 @@ export class PathMgr {
 			ghosts.toReversed().forEach(g=> g.pathMgr.#draw(g))
 	}
 	#draw(/**@type {Ghost}*/g) {
-		if (!this.#path.length) return
-		if (!g.isChasing && !g.isScattering && !g.state.isEscaping) return
-		let   pos = g.tileMid.mul(T)
-		const {type,dir,center}= g, lw = T/4
+		if (!this.#path.length
+		 && !g.isChasing
+		 && !g.isScattering
+		 && !g.state.isEscaping) return
+		const {dir,center}= g, lw = T/4
+		let   pos  = g.tileMid.mul(T)
 		const st   = this.#path[0].tile.clone.add(.5).mul(T)
-		const ofst = Vec2.new(Ofsts[type]*lw)
+		const ofst = Vec2.new(Ofsts[g.type]*lw)
 		const dist = Vec2.dot(Vec2.sub(center,st),Vec2[dir])
 		Fg.save()
 		Fg.setAlpha(0.6)
 		Fg.translate(...ofst.vals)
 		Fg.lineWidth   = lw
 		Fg.lineJoin    = Fg.lineCap = 'round'
-		Fg.strokeStyle = GhsColors[type]
+		Fg.strokeStyle = GhsColors[g.type]
 		Fg.beginPath()
-		Fg.moveTo(...g.center.vals)
+		Fg.moveTo(...center.vals)
 		Fg.lineTo(...pos.vals)
 		for (const [i,{tile,dir,stopped}] of this.#path.entries()) {
 			let next = tile.clone.add(.5).mul(T)
@@ -42,8 +44,7 @@ export class PathMgr {
 			}
 			if (abs(next.x - pos.x) > T*2) {
 				const x = (next.x < pos.x ? BW+T : -T)
-				Fg.lineTo(x, next.y)
-				break
+				Fg.lineTo(x, next.y);break
 			}
 			Fg.lineTo(...next.vals)
 			if (i == this.#path.length-1) { // Arrow

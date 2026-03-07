@@ -45,8 +45,8 @@ export class Actor {
 	}
 	#wrapXAxis() {
 		this.x = function({x,radius:r}) {
-			if (x < -r-T/2)   return BW+r
-			if (x > BW+r) return -r-T/2
+			if (x < -r-T/2) return BW+r
+			if (x > BW+r)   return -r-T/2
 			return x
 		}(this)
 	}
