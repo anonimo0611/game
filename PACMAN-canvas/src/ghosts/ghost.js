@@ -151,6 +151,7 @@ export class Ghost extends Actor {
 
 		this.dir = L
 		this.state.setWalking()
+		this.pathMgr.update(this)
 	}
 	#enterHouse() {
 		this.dir = D

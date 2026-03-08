@@ -43,11 +43,13 @@ export default new class {
 	#drawMarker(g) {
 		if (this.markerDisabled(g))
 			return
-		const {x,y}= this.#getTargetPos(g)
+		const size = T*0.6
+		const {x,y}= this.#getTargetPos(g).sub(size/2)
 		Fg.save()
 		Fg.setAlpha(0.8)
-		Fg.fillCircle  (x,y, T*0.4, GhsColors[g.type])
-		Fg.strokeCircle(x,y, T*0.4, 'white', 4)
+		Fg.lineWidth = T*0.1
+		Fg.fillRect  (x,y, size,size, GhsColors[g.type])
+		Fg.strokeRect(x,y, size,size,'white')
 		Fg.restore()
 	}
 	/**
@@ -59,8 +61,8 @@ export default new class {
 		const fwdXY = player.forwardPos(ofst).vals
 		const ofsXY = player.offsetTarget(ofst).vals
 		Fg.save()
-		Fg.setAlpha(0.6)
-		Fg.lineWidth   = 6
+		Fg.setAlpha(0.5)
+		Fg.lineWidth = T*0.2
 		Fg.fillStyle = Fg.strokeStyle = '#FFF'
 		if (g.type == GhsType.Pinky && !inTunSide
 		 || g.type == GhsType.Aosuke) {
@@ -82,7 +84,7 @@ export default new class {
 		Fg.save()
 		Fg.translate(...player.center.vals)
 		Fg.setAlpha(g.chasePos.eq(player.center) ? 0.8 : 0.4)
-		Fg.strokeCircle(0,0, T*GuzutaThreshold, GhsColors[g.type], 6)
+		Fg.strokeCircle(0,0, T*GuzutaThreshold, '#FFF', T*0.1)
 		Fg.restore()
 	}
 }

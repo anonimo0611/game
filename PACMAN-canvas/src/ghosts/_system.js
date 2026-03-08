@@ -134,8 +134,8 @@ export const GhsMgr = new class {
 		GhsMgr.#draw(false)
 	}
 	drawFront()  {
-		PathMgr.draw(Ghosts)
 		TgtMgr.draw(Ghosts)
+		PathMgr.draw(Ghosts)
 		GhsMgr.#draw(true)
 		PtsMgr.drawGhostPts()
 	}
