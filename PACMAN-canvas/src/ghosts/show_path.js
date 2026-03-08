@@ -22,12 +22,12 @@ export class PathMgr {
 		 && !g.state.isEscaping) return
 		const {dir,center}= g, lw = T/4
 		let   pos  = g.tileMid.mul(T)
-		const st   = this.#path[0].tile.clone.add(.5).mul(T)
-		const ofst = Vec2.new(Ofsts[g.type]*lw)
-		const dist = Vec2.dot(Vec2.sub(center,st),Vec2[dir])
+		const ofst = Ofsts[g.type]*lw
+		const stPt = this.#path[0].tile.clone.add(0.5).mul(T)
+		const dist = Vec2.dot(Vec2[dir],Vec2.sub(center,stPt))
 		Fg.save()
 		Fg.setAlpha(0.6)
-		Fg.translate(...ofst.vals)
+		Fg.translate(ofst, ofst)
 		Fg.lineWidth   = lw
 		Fg.lineJoin    = Fg.lineCap = 'round'
 		Fg.strokeStyle = GhsColors[g.type]
@@ -37,10 +37,10 @@ export class PathMgr {
 		for (const [i,{tile,dir,stopped}] of this.#path.entries()) {
 			let next = tile.clone.add(.5).mul(T)
 			if (i == this.#path.length-1) {
-				stopped && tile.eq(p.tilePos)
+				(g.type == AkaIdx) && tile.eq(p.tilePos)
 					? next.set(p.center)
 					: next.add(Vec2[dir].mul(stopped? 0 : dist))
-				next[Vec2[dir].x? 'x':'y'] -= ofst.x
+				stopped && (next[Vec2[dir].x ? 'x':'y'] -= ofst)
 			}
 			if (abs(next.x - pos.x) > T*2) {
 				Fg.lineTo((next.x < pos.x ? BW+T : -T), next.y);break
@@ -61,7 +61,7 @@ export class PathMgr {
 	update(/** @type {Ghost}*/g) {
 		if (Maze.House.arrived(g, T*1.5)) return
 		const path=[], {tilePos:t}= g
-		const stoppable = (g.isScattering || g.state.isEscaping)
+		const isHaltable = (g.isScattering || g.state.isEscaping)
 		let dir  = g.dir
 		let tile = g.passedTileCenter? g.getAdjTile(dir,t):t
 		if (g.inTunSide && (t.x < 1 || t.x > Cols-2)) tile=t
@@ -69,11 +69,10 @@ export class PathMgr {
 		for (let _ of range(Steps-1)) {
 			dir  = g.getNextDir(dir,tile)
 			tile = g.getAdjTile(dir,tile)
-			let stopped =
-				g.type == AkaIdx && tile.eq(p.tilePos)
-				    || stoppable && tile.eq(g.targetTile)
-			path.push({tile,dir,stopped})
-			if (stopped) break
+			const stopped =
+				(g.type == AkaIdx) && tile.eq(p.tilePos)
+				     || isHaltable && tile.eq(g.targetTile)
+			path.push({tile,dir,stopped});if(stopped)break
 		} this.#path = path
 	}
 }
