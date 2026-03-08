@@ -23,6 +23,7 @@ export class PathMgr {
 		const {dir,center}= g, lw = T/4
 		let   pos  = g.tileMid.mul(T)
 		const ofst = Ofsts[g.type]*lw
+		const lstT = this.#path.at(-1)?.tile
 		const stPt = this.#path[0].tile.clone.add(0.5).mul(T)
 		const dist = Vec2.dot(Vec2[dir],Vec2.sub(center,stPt))
 		Fg.save()
@@ -34,9 +35,9 @@ export class PathMgr {
 		Fg.beginPath()
 		Fg.moveTo(...center.vals)
 		Fg.lineTo(...pos.vals)
-		for (const [i,{tile,dir,stopped}] of this.#path.entries()) {
+		for (const {tile,dir,stopped} of this.#path) {
 			let next = tile.clone.add(.5).mul(T)
-			if (i == this.#path.length-1) {
+			if (tile == lstT) {
 				(g.type == AkaIdx) && tile.eq(p.tilePos)
 					? next.set(p.center)
 					: next.add(Vec2[dir].mul(stopped? 0 : dist))
@@ -46,7 +47,7 @@ export class PathMgr {
 				Fg.lineTo((next.x < pos.x ? BW+T : -T), next.y);break
 			}
 			Fg.lineTo(...next.vals)
-			if (i == this.#path.length-1) { // Arrow
+			if (tile == lstT) { // Arrow
 				Fg.save()
 				Fg.translate(...next.vals)
 				Fg.rotate(Dir.Rotation[dir])
@@ -61,7 +62,7 @@ export class PathMgr {
 	update(/** @type {Ghost}*/g) {
 		if (Maze.House.arrived(g, T*1.5)) return
 		const path=[], {tilePos:t}= g
-		const isHaltable = (g.isScattering || g.state.isEscaping)
+		const isHaltableState = (g.isScattering || g.state.isEscaping)
 		let dir  = g.dir
 		let tile = g.passedTileCenter? g.getAdjTile(dir,t):t
 		if (g.inTunSide && (t.x < 1 || t.x > Cols-2)) tile=t
@@ -71,7 +72,7 @@ export class PathMgr {
 			tile = g.getAdjTile(dir,tile)
 			const stopped =
 				(g.type == AkaIdx) && tile.eq(p.tilePos)
-				     || isHaltable && tile.eq(g.targetTile)
+				|| isHaltableState && tile.eq(g.targetTile)
 			path.push({tile,dir,stopped});if(stopped)break
 		} this.#path = path
 	}
