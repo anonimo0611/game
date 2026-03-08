@@ -49,7 +49,7 @@ export default new class {
 		Fg.setAlpha(0.8)
 		Fg.lineWidth = T*0.1
 		Fg.fillRect  (x,y, size,size, GhsColors[g.type])
-		Fg.strokeRect(x,y, size,size,'white')
+		Fg.strokeRect(x,y, size,size,'#FFF')
 		Fg.restore()
 	}
 	/**
