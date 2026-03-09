@@ -14,7 +14,6 @@ export class PathMgr {
 	}
 	#draw(/**@type {Ghost}*/g) {
 		if (!this.path.length) return
-		g.type == 0 && console.log(g.isChasing)
 		if (!g.isChasing
 		 && !g.isScattering
 		 && !g.state.isEscaping) return
