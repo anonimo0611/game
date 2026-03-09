@@ -14,6 +14,7 @@ export class PathMgr {
 	}
 	#draw(/**@type {Ghost}*/g) {
 		if (!this.path.length) return
+		g.type == 0 && console.log(g.isChasing)
 		if (!g.isChasing
 		 && !g.isScattering
 		 && !g.state.isEscaping) return
@@ -24,6 +25,7 @@ export class PathMgr {
 		const stPt = this.path[0].tile.clone.add(0.5).mul(T)
 		const dist = Vec2.dot(Vec2[dir],Vec2.sub(center,stPt))
 		Fg.save()
+		Fg.globalCompositeOperation = 'screen'
 		Fg.setAlpha(0.7)
 		Fg.translate(ofst, ofst)
 		Fg.lineWidth   = LineWidth
@@ -55,7 +57,7 @@ export class PathMgr {
 		Fg.stroke()
 		Fg.restore()
 	}
-	update(/** @type {Ghost}*/g) {
+	update(/**@type {Ghost}*/g) {
 		this.path = []
 		if (Maze.House.arrived(g, T*1.5)) return
 		const {state:s,tilePos:t}= g, StepMax = 16
