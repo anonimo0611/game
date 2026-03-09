@@ -5,70 +5,74 @@ import {Maze}  from '../maze.js'
 import {Ghost} from './ghost.js';
 import {player as p} from '../player/player.js';
 
-const Steps  = 16, LineWeight = T/5
-const Ofsts  = freeze([-2,-1,1,2])
-
 export class PathMgr {
-	#path = /**@type {PathNode[]}*/([])
+	/** @private */
+	path = /**@type {PathNode[]}*/([])
 	static draw(/**@type {readonly Ghost[]}*/ghosts) {
 		if (State.isInGame && Ctrl.showPaths)
 			ghosts.toReversed().forEach(g=> g.pathMgr.#draw(g))
 	}
 	#draw(/**@type {Ghost}*/g) {
-		if (!this.#path.length) return
+		if (!this.path.length) return
 		if (!g.isChasing
 		 && !g.isScattering
 		 && !g.state.isEscaping) return
-		let {dir,center}= g
-		let   pos  = g.tileMid.mul(T)
-		const ofst = Ofsts[g.type]*LineWeight
-		const lstT = this.#path.at(-1)?.tile
-		const stPt = this.#path[0].tile.clone.add(0.5).mul(T)
+		const {dir,center}= g, LineWidth = T/5
+		let   last = g.tileMid.mul(T)
+		const ofst = [-2,-1,1,2][g.type]*LineWidth
+		const lstT = this.path.at(-1)?.tile
+		const stPt = this.path[0].tile.clone.add(0.5).mul(T)
 		const dist = Vec2.dot(Vec2[dir],Vec2.sub(center,stPt))
 		Fg.save()
 		Fg.setAlpha(0.7)
 		Fg.translate(ofst, ofst)
-		Fg.lineWidth   = LineWeight
+		Fg.lineWidth   = LineWidth
 		Fg.lineJoin    = Fg.lineCap = 'round'
 		Fg.strokeStyle = GhsColors[g.type]
 		Fg.beginPath()
 		Fg.moveTo(...center.vals)
-		Fg.lineTo(...pos.vals)
-		for (const {tile,dir,stopped} of this.#path) {
-			let next = tile.clone.add(0.5).mul(T)
+		for (const {tile,dir,stopped} of this.path) {
+			const curr = tile.clone.add(0.5).mul(T)
 			if (tile == lstT) {
-				tile.eq(p.tilePos)
-					? next.set(p.center)
-					: next.add(Vec2[dir].mul(stopped? 0 : dist))
+				tile.eq(p.tilePos) && !g.isEscaping
+					? curr.set(p.center)
+					: curr.add(Vec2[dir].mul(stopped? 0 : dist))
+				stopped && curr.shiftByAxis(dir, -ofst)
 			}
-			if (abs(next.x - pos.x) > T*2) {
-				Fg.lineTo((next.x < pos.x ? BW+T : -T), next.y);break
+			if (abs(curr.x - last.x) > T*2) {
+				Fg.lineTo((curr.x < last.x ? BW+T : -T), curr.y);break
 			}
-			Fg.lineTo(...next.vals)
+			Fg.lineTo(...curr.vals)
 			if (tile == lstT) { // Arrow
 				Fg.save()
-				Fg.translate(...next.vals)
+				Fg.translate(...curr.vals)
 				Fg.rotate(Dir.Rotation[dir])
 				Fg.setLinePath([-T/2,-T/2],[0,0],[-T/2,T/2])
 				Fg.restore()
 			}
-			pos = next
+			last = curr
 		}
 		Fg.stroke()
 		Fg.restore()
 	}
 	update(/** @type {Ghost}*/g) {
+		this.path = []
 		if (Maze.House.arrived(g, T*1.5)) return
-		const path=[], {tilePos:t}= g
+		const {state:s,tilePos:t}= g, StepMax = 16
+		const isAkaGuzu  = (g.isAkabei || g.isGuzuta)
+		const isHaltable = (g.isScattering || s.isEscaping)
 		let dir  = g.dir
 		let tile = g.passedTileCenter? g.getAdjTile(dir,t):t
 		if (g.inTunSide && (t.x < 1 || t.x > Cols-2)) tile=t
-		path.push({tile,dir,stopped:false})
-		for (let _ of range(Steps-1)) {
+		this.path.push({tile,dir,stopped:false})
+		for (let _ of range(StepMax-1)) {
 			dir  = g.getNextDir(dir,tile)
 			tile = g.getAdjTile(dir,tile)
-			const stopped = tile.eq(g.targetTile)
-			path.push({tile,dir,stopped});if(stopped)break
-		} this.#path = path
+			const stopped =
+				isAkaGuzu  && tile.eq(p.tilePos) ||
+				isHaltable && tile.eq(g.targetTile)
+			this.path.push({tile,dir,stopped})
+			if (stopped) break
+		}
 	}
 }

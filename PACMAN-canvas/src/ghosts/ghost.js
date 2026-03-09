@@ -12,7 +12,7 @@ import Sprite    from '../sprites/ghost.js'
 import * as Sys  from './_system.js'
 import {GhsMgr,Evt} from './_system.js'
 
-/** @type {readonly Direction[]} */
+/**@type {readonly Direction[]}*/
 const TurnPriority = [U,L,D,R]
 
 export class Ghost extends Actor {
@@ -27,6 +27,17 @@ export class Ghost extends Actor {
 	#revSig     = false
 	#started    = false
 	#frightened = false
+
+	get isAkabei() {return this.type == GhsType.Akabei}
+	get isPinky()  {return this.type == GhsType.Pinky}
+	get isGuzuta() {return this.type == GhsType.Guzuta}
+	get isAosuke() {return this.type == GhsType.Aosuke}
+
+	get chaseOffset() {return 0}
+	get chaseSpeed()  {return GhsSpeed.Base}
+	get chasePos()    {return player.center}
+	get chaseTile()   {return this.chasePos.divInt(T)}
+	get scatterTile() {return Vec2.new(24, 0)}
 
 	/**
 	 @param {Direction} dir
@@ -51,21 +62,15 @@ export class Ghost extends Actor {
 	get isChasing()    {return GhsMgr.isChaseMode   && this.isNormal}
 	get isScattering() {return GhsMgr.isScatterMode && this.isNormal}
 
+	get alpha()        {return this.#fader?.alpha ?? this.maxAlpha}
+	get maxAlpha()     {return Ctrl.showTargets? .75:1}
+
 	get isAngry()      {return false}
 	get isEscaping()   {return this.state.isEscapingEyes}
 	get isStarted()    {return this.#started}
 	get isFrightened() {return this.#frightened}
 	get isNormal()     {return!this.#frightened && this.state.isWalking}
 	get ignoreOneway() {return this.#frightened || this.isEscaping}
-
-	get alpha()        {return this.#fader?.alpha ?? this.maxAlpha}
-	get maxAlpha()     {return Ctrl.showTargets? .75:1}
-
-	get chaseOffset()  {return 0}
-	get chaseSpeed()   {return GhsSpeed.Base}
-	get chasePos()     {return player.center}
-	get chaseTile()    {return this.chasePos.divInt(T)}
-	get scatterTile()  {return Vec2.new(24, 0)}
 
 	get baseTargetTile() {
 		return this.state.isEscaping
@@ -111,14 +116,14 @@ export class Ghost extends Actor {
 	}
 	#moveStepped(steps=1) {
 		for (const _ of range(steps)) {
-			this.pathMgr.update(this)
-			this.#tickMove(this.speed/steps)
-			this.passedTileCenter && this.#setNextDir()
 			if (this.#makeTurn(this)) break
 			if (this.collidesWith())  break
+			this.#tickMove(this.speed/steps)
+			this.passedTileCenter && this.#setNextDir()
 		}
 	}
 	#tickMove(spd=this.speed) {
+		this.pathMgr.update(this)
 		!Maze.House.arrived(this, spd)
 			? this.setNextPos(spd)
 			: this.#enterHouse()
@@ -175,7 +180,7 @@ export class Ghost extends Actor {
 	}
 	#arrivedAtHome() {
 		this.sprite.setResurrect()
-		;(Ctrl.alwaysChase || this.type == GhsType.Akabei)
+		;(Ctrl.alwaysChase || this.isAkabei)
 			? this.state.setGoingOut()
 			: this.state.setIdle()
 		!Timer.frozen && Sound.onGhostReturned()

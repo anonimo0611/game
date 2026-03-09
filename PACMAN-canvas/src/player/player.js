@@ -50,6 +50,7 @@ class PlayerCore extends PacMan {
 			return
 		this.sprite.draw(this)
 		this.drawCenterDot()
+		Fg.strokeStyle = 'red'
 	}
 	update() {
 		this.sprite.update(this)

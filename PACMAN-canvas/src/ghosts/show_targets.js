@@ -11,8 +11,12 @@ export default new class {
 	draw(ghosts) {
 		if (!Ctrl.showTargets) return
 		if (!State.isInGame) return
+		Fg.save()
+		Fg.setAlpha(0.7)
+		Fg.fillStyle = Fg.strokeStyle = '#FFF'
 		for (const g of ghosts) this.#strokeLines(g)
 		for (const g of ghosts) this.#drawMarker(g)
+		Fg.restore()
 	}
 	/** @param {Ghost} g */
 	markerDisabled = g=> (
@@ -32,10 +36,10 @@ export default new class {
 	/** @param {Ghost} g */
 	#strokeLines(g) {
 		if (Timer.frozen
-		 || g.type == GhsType.Akabei
+		 || g.isAkabei
 		 || g.isChasing == false)
 			return
-		g.type == GhsType.Guzuta
+		g.isGuzuta
 			? this.#guzutaCircle(g)
 			: this.#auxLines(g, g.chaseOffset)
 	}
@@ -45,12 +49,10 @@ export default new class {
 			return
 		const size = T*0.6
 		const {x,y}= this.#getTargetPos(g).sub(size/2)
-		Fg.save()
-		Fg.setAlpha(0.8)
 		Fg.lineWidth = T*0.1
-		Fg.fillRect  (x,y, size,size, GhsColors[g.type])
-		Fg.strokeRect(x,y, size,size,'#FFF')
-		Fg.restore()
+		Fg.fillStyle = GhsColors[g.type]
+		Fg.fillRect  (x,y, size,size)
+		Fg.strokeRect(x,y, size,size)
 	}
 	/**
 	 @param {Ghost}  g
@@ -60,31 +62,26 @@ export default new class {
 		const {center:{x,y},dir,inTunSide}= player
 		const fwdXY = player.forwardPos(ofst).vals
 		const ofsXY = player.offsetTarget(ofst).vals
-		Fg.save()
-		Fg.setAlpha(0.5)
 		Fg.lineWidth = T*0.2
-		Fg.fillStyle = Fg.strokeStyle = '#FFF'
-		if (g.type == GhsType.Pinky && !inTunSide
-		 || g.type == GhsType.Aosuke) {
+		if (g.isPinky && !inTunSide || g.isAosuke) {
 			dir != U
 				? Fg.newLinePath([x,y], fwdXY)
 				: Fg.newLinePath([x,y], fwdXY).lineTo(...ofsXY)
 			Fg.stroke()
 		}
-		if (g.type == GhsType.Aosuke) {
+		if (g.isAosuke) {
 			const tgtXY = g.chasePos.vals
 			const akaXY = GhsMgr.akaCenterPos.vals
 			Fg.newLinePath(akaXY, ofsXY, tgtXY).stroke()
 			Fg.fillCircle(...ofsXY, 8)
 		}
-		Fg.restore()
 	}
 	/** @param {Ghost} g */
 	#guzutaCircle(g) {
 		Fg.save()
 		Fg.translate(...player.center.vals)
 		Fg.setAlpha(g.chasePos.eq(player.center) ? 0.8 : 0.4)
-		Fg.strokeCircle(0,0, T*GuzutaThreshold, '#FFF', T*0.1)
+		Fg.strokeCircle(0,0, T*GuzutaThreshold, '#FFF', T*0.15)
 		Fg.restore()
 	}
 }
