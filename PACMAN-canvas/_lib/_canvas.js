@@ -49,22 +49,6 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 		this.restore()
 		return this
 	}
-	/**
-	 @param {number} x
-	 @param {number} y
-	 @param {number} w
-	 @param {number} h
-	 @param {?Cvs2DStyle} style
-	 @param {number} lineWidth
-	*/
-	strokeRect(x,y, w,h, style=this.strokeStyle, lineWidth=this.lineWidth) {
-		this.save()
-		this.lineWidth = lineWidth
-		style && (this.strokeStyle = style)
-		super.strokeRect(x, y, w, h)
-		this.restore()
-		return this
-	}
 
 	/**
 	 @param {number} x

@@ -218,7 +218,14 @@ class Vec2 {
 		this.y -= y
 		return this
 	}
-
+	shiftByAxis(
+	 /**@type {Direction}*/dir,
+	 /**@type {number}*/scalar
+	) {
+		Vec2[dir].x && (this.x += scalar)
+		Vec2[dir].y && (this.y += scalar)
+		return this
+	}
 	mul(/**@type {number}*/scalar) {
 		this.x *= scalar
 		this.y *= scalar
