@@ -28,9 +28,9 @@ export const Ctrl = new class {
 	get showTargets()   {return inputs.tgtChk.checked}
 	get showPaths()     {return inputs.pthChk.checked}
 	get showGridLines() {return inputs.grdChk.checked}
-	get showTracing()   {return this.showTargets || this.showPaths}
+	get showTracking()  {return this.showTargets || this.showPaths}
 	get semiTransPac()  {return this.invincible  || this.showGridLines}
-	get usingCheats()   {return this.invincible  || this.speed<.7 || this.showTracing}
+	get usingCheats()   {return this.invincible  || this.speed<.7 || this.showTracking}
 	get isPractice()    {return this.usingCheats || !this.isArcadeMode}
 	get isArcadeMode()  {return this.endlessMode && !Menu.Level.index}
 
