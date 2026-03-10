@@ -12,7 +12,7 @@ class Akabei extends Ghost {
 	}
 	get chaseSpeed()   {return GhsMgr.CruiseElroy.speed}
 	get isAngry()      {return GhsMgr.CruiseElroy.angry}
-	get isChasing()    {return this.targetTile.eq(player.tilePos)}
+	get isChasing()    {return this.isNormal && !this.isScattering}
 	get isScattering() {return super.isScattering && !this.isAngry}
 }
 

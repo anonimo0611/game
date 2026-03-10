@@ -13,10 +13,12 @@ export class PathMgr {
 			ghosts.toReversed().forEach(g=> g.pathMgr.#draw(g))
 	}
 	#draw(/**@type {Ghost}*/g) {
-		if (!this.path.length) return
+		if (!this.path.length)
+			return
 		if (!g.isChasing
 		 && !g.isScattering
-		 && !g.state.isEscaping) return
+		 && !g.state.isEscaping)
+			return
 		const {dir,center}= g, LineWidth = T/5
 		let   last = g.tileMid.mul(T)
 		const ofst = [-2,-1,1,2][g.type]*LineWidth
@@ -57,23 +59,20 @@ export class PathMgr {
 		Fg.restore()
 	}
 	update(/**@type {Ghost}*/g) {
-		this.path = []
-		if (Maze.House.arrived(g, T*1.5)) return
-		const {state:s,tilePos:t}= g, StepMax = 16
-		const isAkaGuzu  = (g.isAkabei || g.isGuzuta)
-		const isHaltable = (g.isScattering || s.isEscaping)
-		let dir  = g.dir
+		if (Maze.House.arrived(g, T*1.5))
+			return
+		const {tilePos:t}= g, path=[], Steps=16
+		let dir  = g.dir, stopped = false
 		let tile = g.passedTileCenter? g.getAdjTile(dir,t):t
 		if (g.inTunSide && (t.x < 1 || t.x > Cols-2)) tile=t
-		this.path.push({tile,dir,stopped:false})
-		for (let _ of range(StepMax-1)) {
+		path.push({tile,dir,stopped})
+		for (let _ of range(Steps-1)) {
 			dir  = g.getNextDir(dir,tile)
 			tile = g.getAdjTile(dir,tile)
-			const stopped =
-				isAkaGuzu  && tile.eq(p.tilePos) ||
-				isHaltable && tile.eq(g.targetTile)
-			this.path.push({tile,dir,stopped})
-			if (stopped) break
+			stopped = g.isTargetPac && tile.eq(p.tilePos)
+			       || g.hasFixedTgt && tile.eq(g.targetTile)
+			path.push({tile,dir,stopped});if (stopped) break
 		}
+		this.path = path
 	}
 }

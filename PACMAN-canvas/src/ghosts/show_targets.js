@@ -36,10 +36,10 @@ export default new class {
 	/** @param {Ghost} g */
 	#strokeLines(g) {
 		if (Timer.frozen
-		 || g.isAkabei
+		 || g.type == GhsType.Akabei
 		 || g.isChasing == false)
 			return
-		g.isGuzuta
+		g.type == GhsType.Guzuta
 			? this.#guzutaCircle(g)
 			: this.#auxLines(g, g.chaseOffset)
 	}
@@ -63,13 +63,14 @@ export default new class {
 		const fwdXY = player.forwardPos(ofst).vals
 		const ofsXY = player.offsetTarget(ofst).vals
 		Fg.lineWidth = T*0.2
-		if (g.isPinky && !inTunSide || g.isAosuke) {
+		if (g.type == GhsType.Pinky && !inTunSide
+		 || g.type == GhsType.Aosuke) {
 			dir != U
 				? Fg.newLinePath([x,y], fwdXY)
 				: Fg.newLinePath([x,y], fwdXY).lineTo(...ofsXY)
 			Fg.stroke()
 		}
-		if (g.isAosuke) {
+		if (g.type == GhsType.Aosuke) {
 			const tgtXY = g.chasePos.vals
 			const akaXY = GhsMgr.akaCenterPos.vals
 			Fg.newLinePath(akaXY, ofsXY, tgtXY).stroke()

@@ -28,16 +28,11 @@ export class Ghost extends Actor {
 	#started    = false
 	#frightened = false
 
-	get isAkabei() {return this.type == GhsType.Akabei}
-	get isPinky()  {return this.type == GhsType.Pinky}
-	get isGuzuta() {return this.type == GhsType.Guzuta}
-	get isAosuke() {return this.type == GhsType.Aosuke}
-
 	get chaseOffset() {return 0}
 	get chaseSpeed()  {return GhsSpeed.Base}
 	get chasePos()    {return player.center}
-	get chaseTile()   {return this.chasePos.divInt(T)}
 	get scatterTile() {return Vec2.new(24, 0)}
+	get chaseTile()   {return this.chasePos.divInt(T)}
 
 	/**
 	 @param {Direction} dir
@@ -67,10 +62,11 @@ export class Ghost extends Actor {
 
 	get isAngry()      {return false}
 	get isEscaping()   {return this.state.isEscapingEyes}
+	get isTargetPac()  {return this.targetTile.eq(player.tilePos)}
 	get isStarted()    {return this.#started}
 	get isFrightened() {return this.#frightened}
-	get isNormal()     {return!this.#frightened && this.state.isWalking}
-	get ignoreOneway() {return this.#frightened || this.isEscaping}
+	get isNormal()     {return!this.#frightened  && this.state.isWalking}
+	get hasFixedTgt()  {return this.isScattering || this.state.isEscaping}
 
 	get baseTargetTile() {
 		return this.state.isEscaping
@@ -180,7 +176,7 @@ export class Ghost extends Actor {
 	}
 	#arrivedAtHome() {
 		this.sprite.setResurrect()
-		;(Ctrl.alwaysChase || this.isAkabei)
+		;(Ctrl.alwaysChase || this.type == GhsType.Akabei)
 			? this.state.setGoingOut()
 			: this.state.setIdle()
 		!Timer.frozen && Sound.onGhostReturned()
@@ -210,7 +206,8 @@ export class Ghost extends Actor {
 	}
 	/** @param {{dir:Direction,test:Vec2}} testTile */
 	#isRestrictedTile({dir,test:{hyphenated:xy}}) {
-		return (Ctrl.unrestricted || this.ignoreOneway)
+		const ignore = (this.isFrightened || this.isEscaping)
+		return (Ctrl.unrestricted || ignore)
 			? false : Maze.GhostNoEntryTiles.has(xy+dir)
 	}
 	#makeTurn({orient}=this) {
