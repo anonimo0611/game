@@ -26,7 +26,6 @@ export class PathMgr {
 		const stPt = this.path[0].tile.clone.add(0.5).mul(T)
 		const dist = Vec2.dot(Vec2[dir],Vec2.sub(center,stPt))
 		Fg.save()
-		Fg.globalCompositeOperation = 'screen'
 		Fg.setAlpha(0.7)
 		Fg.translate(ofst, ofst)
 		Fg.lineWidth   = LineWidth
