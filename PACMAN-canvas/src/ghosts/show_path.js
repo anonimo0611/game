@@ -6,14 +6,13 @@ import {Ghost} from './ghost.js';
 import {player as p} from '../player/player.js';
 
 export class PathMgr {
-	/** @private */
-	path = /**@type {PathNode[]}*/([])
+	#path = /**@type {PathNode[]}*/([])
 	static draw(/**@type {readonly Ghost[]}*/ghosts) {
 		if (State.isInGame && Ctrl.showPaths)
 			ghosts.toReversed().forEach(g=> g.pathMgr.#draw(g))
 	}
 	#draw(/**@type {Ghost}*/g) {
-		if (!this.path.length)
+		if (!this.#path.length)
 			return
 		if (!g.isChasing
 		 && !g.isScattering
@@ -22,8 +21,8 @@ export class PathMgr {
 		const {dir,center}= g, LineWidth = T/5
 		let   last = g.tileMid.mul(T)
 		const ofst = [-2,-1,1,2][g.type]*LineWidth
-		const lstT = this.path.at(-1)?.tile
-		const stPt = this.path[0].tile.clone.add(0.5).mul(T)
+		const lstT = this.#path.at(-1)?.tile
+		const stPt = this.#path[0].tile.clone.add(0.5).mul(T)
 		const dist = Vec2.dot(Vec2[dir],Vec2.sub(center,stPt))
 		Fg.save()
 		Fg.setAlpha(0.7)
@@ -33,7 +32,7 @@ export class PathMgr {
 		Fg.strokeStyle = GhsColors[g.type]
 		Fg.beginPath()
 		Fg.moveTo(...center.vals)
-		for (const {tile,dir,stopped} of this.path) {
+		for (const {tile,dir,stopped} of this.#path) {
 			const curr = tile.clone.add(0.5).mul(T)
 			if (tile == lstT) {
 				tile.eq(p.tilePos) && !g.isEscaping
@@ -72,6 +71,6 @@ export class PathMgr {
 			       || g.hasFixedTgt && tile.eq(g.targetTile)
 			path.push({tile,dir,stopped});if (stopped) break
 		}
-		this.path = path
+		this.#path = path
 	}
 }
