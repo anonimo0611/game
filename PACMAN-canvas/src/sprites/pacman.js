@@ -13,13 +13,13 @@ export default class {
 	/** @readonly */isBoard
 	/**
 	 @param {EnhancedCtx2D} ctx
-	 @param {0|1|2} mouthOpenings
-	 0=closed, 1=middle opened, 2=max opened
+	 @param {0|1|2} initialMouthOpening
+	 0=closed, 1=half-open, 2=fully open
 	*/
-	constructor(ctx, mouthOpenings=0) {
+	constructor(ctx, initialMouthOpening=0) {
 		this.ctx     = ctx
 		this.isBoard = ctx.canvas.id == 'board_main'
-		this.#mouthAngle = [0,OpenMid,OpenMax][mouthOpenings]
+		this.#mouthAngle = [0,OpenMid,OpenMax][initialMouthOpening]
 	}
 	update({closed=false,hidden=false,onWall=false}={}) {
 		this.#dyingSpr
