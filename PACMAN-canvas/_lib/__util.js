@@ -14,15 +14,15 @@ const {abs,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Mat
 	(fromEntries(array.map(k=> [k,k])))
 
 /**
- @param {KeyboardEvent|JQuery.KeyboardEventBase} e
+ @param {KeyboardEvent|JQKeyboardEvent} e
 */const keyRepeat = e=> (e instanceof KeyboardEvent? e : e.originalEvent)?.repeat ?? false
 
 /**
- @param {KeyboardEvent|JQuery.KeyboardEventBase} e
+ @param {KeyboardEvent|JQKeyboardEvent} e
 */const isCombiKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
 /**
- @param {KeyboardEvent|JQuery.KeyboardEventBase|JQuery.TriggeredEvent} e
+ @param {KeyboardEvent|JQKeyboardEvent|JQTriggeredEvent} e
 */const isEnterKey = e=> (e.key === '\x20' || e.key === 'Enter')
 
 /**

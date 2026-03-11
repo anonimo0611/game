@@ -14,7 +14,7 @@ export const Dir = new class {
 	/** @readonly */
 	Opposite = freeze({Up:D, Right:L, Down:U, Left:R})
 
-	/** @param {KeyboardEvent|JQuery.KeyboardEventBase} e */
+	/** @param {KeyboardEvent|JQKeyboardEvent} e */
 	from(e, {wasd=false}={}) {
 		if (isCombiKey(e)) return null
 		const k = e.code.replace(/^(Arrow|Key)/,'')
