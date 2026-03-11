@@ -19,7 +19,7 @@ export default new class {
 		Fg.restore()
 	}
 	/** @param {Ghost} g */
-	markerDisabled = g=> (
+	#markerDisabled = g=> (
 		   g.isFrightened
 		|| g.state.isIdle
 		|| g.state.isBitten
@@ -45,7 +45,7 @@ export default new class {
 	}
 	/** @param {Ghost} g */
 	#drawMarker(g) {
-		if (this.markerDisabled(g))
+		if (this.#markerDisabled(g))
 			return
 		const size = T*0.6
 		const {x,y}= this.#getTargetPos(g).sub(size/2)

@@ -30,7 +30,7 @@ export const Ctrl = new class {
 	get showGridLines() {return inputs.grdChk.checked}
 	get showTracking()  {return this.showTargets || this.showPaths}
 	get semiTransPac()  {return this.invincible  || this.showGridLines}
-	get usingCheats()   {return this.invincible  || this.speed<.7 || this.showTracking}
+	get usingCheats()   {return this.invincible  || this.speed<.7  || this.showTracking}
 	get isPractice()    {return this.usingCheats || !this.isArcadeMode}
 	get isArcadeMode()  {return this.endlessMode && !Menu.Level.index}
 
@@ -113,8 +113,8 @@ export const Ctrl = new class {
 		Confirm.open('Are you sure you want to quit the game?',
 			Ctrl.pause, ()=> State.setQuit(), 'Resume','Quit')
 	}
-	#onKeydown(/**@type {KeyboardEvent}*/e) {
-		if (Confirm.opened || keyRepeat(e))
+	#onKeydown(/**@type {JQKeyboardEvent}*/e) {
+		if (keyRepeat(e) || Confirm.opened)
 			return
 		switch(e.key) {
 		case 'Escape': return Ctrl.pause()

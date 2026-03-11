@@ -96,7 +96,7 @@ export const Maze = freeze(new class {
 		State.on({_NewLevel: e=> this.reset(e)})
 		$(powChk).on({change:e=> this.reset(e)})
 	}
-	static reset(/**@type {JQuery.TriggeredEvent}*/e) {
+	static reset(/**@type {JQTriggeredEvent}*/e) {
 		e.target != powChk && Wall.draw()
 		for (const [i,c] of MapArr.entries())
 			DotChips.has(c) && this.setDot(i,c)
