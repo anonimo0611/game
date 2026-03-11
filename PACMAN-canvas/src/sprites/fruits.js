@@ -6,7 +6,7 @@ const fns = freeze
 */
 export function draw(ctx, idx, x=T,y=T-int(T*0.1), scale=T/8) {
 	if (!fns[idx])
-		throw RangeError(`The argument is ${idx},`
+		throw RangeError(`The 2nd argument is ${idx},`
 			+` but the fruit range must be 0-${fns.length-1}`)
 	ctx.save()
 	ctx.lineWidth = 1
