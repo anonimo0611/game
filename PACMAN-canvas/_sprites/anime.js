@@ -59,7 +59,7 @@ class ActorPreview {
 			break
 		}
 	}
-	onChangeBtn = (/**@type {JQuery.TriggeredEvent}*/e)=> {
+	onChangeBtn = (/**@type {JQTriggeredEvent}*/e)=> {
 		const {subj}= this
 		if (subj) {
 			subj.orient = /**@type {Direction}*/(
@@ -67,7 +67,7 @@ class ActorPreview {
 			)
 		}
 	}
-	onKeydown = (/**@type {JQuery.KeyboardEventBase}*/e)=> {
+	onKeydown = (/**@type {JQKeyboardEvent}*/e)=> {
 		const dir = Dir.from(e)
 		if (dir) {
 			const vx  = Vec2[dir].x
@@ -104,8 +104,7 @@ class ActorPreview {
 			? Pv.translate(T*3/4, T/2)
 			: Pv.translate(Pv.canvas.width/2-T/2, T/2)
 
-		subj?.ghost.draw(
-		{
+		subj?.ghost.draw({
 			size:        S,
 			type:        subj.type-1,
 			animIdx:     subj.animIdx,
