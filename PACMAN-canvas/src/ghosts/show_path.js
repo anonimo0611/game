@@ -18,25 +18,25 @@ export class PathMgr {
 		 && !g.isScattering
 		 && !g.state.isEscaping)
 			return
-		const {dir,center}= g, LineWidth = T/5
-		let   last = g.tileMid.mul(T)
+		const {dir,pos}= g, LineWidth = T/5
+		let   last = g.tilePos.mul(T)
 		const ofst = [-2,-1,1,2][g.type]*LineWidth
-		const lstT = this.#path.at(-1)?.tile
-		const stPt = this.#path[0].tile.clone.add(0.5).mul(T)
-		const dist = Vec2.dot(Vec2[dir],Vec2.sub(center,stPt))
+		const endT = this.#path.at(-1)?.tile
+		const stPt = this.#path[0].tile.clone.mul(T)
+		const dist = Vec2.dot(Vec2[dir],Vec2.sub(pos,stPt))
 		Fg.save()
 		Fg.setAlpha(0.7)
-		Fg.translate(ofst, ofst)
+		Fg.translate(T/2+ofst, T/2+ofst)
 		Fg.lineWidth   = LineWidth
 		Fg.lineJoin    = Fg.lineCap = 'round'
 		Fg.strokeStyle = GhsColors[g.type]
 		Fg.beginPath()
-		Fg.moveTo(...center.vals)
+		Fg.moveTo(...pos.vals)
 		for (const {tile,dir,stopped} of this.#path) {
-			const curr = tile.clone.add(0.5).mul(T)
-			if (tile == lstT) {
+			const curr = tile.clone.mul(T)
+			if (tile == endT) {
 				tile.eq(p.tilePos) && !g.isEscaping
-					? curr.set(p.center)
+					? curr.set(p.pos)
 					: curr.add(Vec2[dir].mul(stopped? 0 : dist))
 				stopped && curr.shiftByAxis(dir, -ofst)
 			}
@@ -44,7 +44,7 @@ export class PathMgr {
 				Fg.lineTo((curr.x < last.x ? BW+T : -T), curr.y);break
 			}
 			Fg.lineTo(...curr.vals)
-			if (tile == lstT) { // Arrow
+			if (tile == endT) { // Arrow
 				Fg.save()
 				Fg.translate(...curr.vals)
 				Fg.rotate(Dir.Rotation[dir])
@@ -62,7 +62,7 @@ export class PathMgr {
 		const {tilePos:t}= g, path=[], Steps=16
 		let dir  = g.dir, stopped = false
 		let tile = g.passedTileCenter? g.getAdjTile(dir,t):t
-		if (g.inTunSide && (t.x < 1 || t.x > Cols-2)) tile=t
+		if (g.inTunSide && t.x < 1 || t.x > Cols-2) tile = t
 		path.push({tile,dir,stopped})
 		for (let _ of range(Steps-1)) {
 			dir  = g.getNextDir(dir,tile)
