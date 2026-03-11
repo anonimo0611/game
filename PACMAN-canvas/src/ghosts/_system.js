@@ -272,7 +272,7 @@ const FrightMode = function() {
 				? $(Ghosts).trigger(Evt.FleeStart)
 				: this.#set(true)
 		}
-		#set(isOn=false) {
+		#set(isOn=true) {
 			_session = (isOn? this : null)
 			$(Ghosts)
 				.trigger(Evt.Frighten, isOn)
@@ -287,7 +287,7 @@ const FrightMode = function() {
 			if (State.isInGame && !Timer.frozen) {
 				const et = (this.#et += Game.interval)/1e3
 				if (et >= this.Dur-2) this.#flashing()
-				if (et >= this.Dur || this.caughtAll) this.#set()
+				if (et >= this.Dur || this.caughtAll) this.#set(false)
 			}
  		}
 	}
