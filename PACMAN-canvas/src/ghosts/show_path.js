@@ -38,7 +38,7 @@ export class PathMgr {
 				tile.eq(p.tilePos) && !g.isEscaping
 					? curr.set(p.pos)
 					: curr.add(Vec2[dir].mul(stopped? 0 : dist))
-				stopped && curr.shiftByAxis(dir, -ofst)
+				stopped && curr.shiftByAxis(dir,-ofst)
 			}
 			if (abs(curr.x - last.x) > T*3) {
 				Fg.lineTo((curr.x < last.x ? BW+T : -T), curr.y);break
@@ -61,9 +61,8 @@ export class PathMgr {
 			return
 		const {tilePos:t}= g, path=[], Steps=16
 		let dir  = g.dir, stopped = false
-		let tile = g.passedTileCenter? g.getAdjTile(dir,t):t
-		if (t.x < 0)      tile.x = 0
-		if (t.x > Cols-1) tile.x = Cols-1
+		let tile = (g.passedTileCenter? g.getAdjTile(dir,t):t)
+		if (tile.x < 0 || tile.x > Cols-1) tile = t
 		path.push({tile,dir,stopped})
 		for (let _ of range(Steps-1)) {
 			dir  = g.getNextDir(dir,tile)
