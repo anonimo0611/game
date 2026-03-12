@@ -40,7 +40,7 @@ export class PathMgr {
 					: curr.add(Vec2[dir].mul(stopped? 0 : dist))
 				stopped && curr.shiftByAxis(dir, -ofst)
 			}
-			if (abs(curr.x - last.x) > T*2) {
+			if (abs(curr.x - last.x) > T*3) {
 				Fg.lineTo((curr.x < last.x ? BW+T : -T), curr.y);break
 			}
 			Fg.lineTo(...curr.vals)
@@ -62,7 +62,8 @@ export class PathMgr {
 		const {tilePos:t}= g, path=[], Steps=16
 		let dir  = g.dir, stopped = false
 		let tile = g.passedTileCenter? g.getAdjTile(dir,t):t
-		if (g.inTunSide && t.x < 1 || t.x > Cols-2) tile = t
+		if (t.x < 0)      tile.x = 0
+		if (t.x > Cols-1) tile.x = Cols-1
 		path.push({tile,dir,stopped})
 		for (let _ of range(Steps-1)) {
 			dir  = g.getNextDir(dir,tile)

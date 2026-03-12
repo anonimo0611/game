@@ -44,11 +44,11 @@ export class Actor {
 		this.x = (BW-T)/2
 	}
 	#wrapXAxis() {
-		this.x = function({x,radius:r}) {
-			if (x < -r-T/2) return BW+r
-			if (x > BW+r)   return -r-T/2
+		this.x = function({center:{x}}) {
+			if (x <   -T) return BW+T
+			if (x > BW+T) return -T
 			return x
-		}(this)
+		}(this) - T/2
 	}
 	#fixPosition() {
 		Vec2[this.dir].y
