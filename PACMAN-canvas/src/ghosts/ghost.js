@@ -111,6 +111,7 @@ export class Ghost extends Actor {
 		}
 	}
 	#moveStepped(steps=1) {
+		this.pathMgr.update(this)
 		for (const _ of range(steps)) {
 			if (this.#makeTurn(this)) break
 			if (this.collidesWith())  break
@@ -119,7 +120,6 @@ export class Ghost extends Actor {
 		}
 	}
 	#tickMove(spd=this.speed) {
-		this.pathMgr.update(this)
 		!Maze.House.arrived(this, spd)
 			? this.setNextPos(spd)
 			: this.#enterHouse()

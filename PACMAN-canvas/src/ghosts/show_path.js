@@ -19,7 +19,7 @@ export class PathMgr {
 		 && !g.state.isEscaping)
 			return
 		const {dir,pos}= g, LineWidth = T/5
-		let   last = g.tilePos.mul(T)
+		let   last = g.pos
 		const ofst = [-2,-1,1,2][g.type]*LineWidth
 		const endT = this.#path.at(-1)?.tile
 		const stPt = this.#path[0].tile.clone.mul(T)
@@ -35,10 +35,9 @@ export class PathMgr {
 		for (const {tile,dir,stopped} of this.#path) {
 			const curr = tile.clone.mul(T)
 			if (tile == endT) {
-				tile.eq(p.tilePos) && !g.isEscaping
+				stopped && g.isTargetPac
 					? curr.set(p.pos)
 					: curr.add(Vec2[dir].mul(stopped? 0 : dist))
-				stopped && curr.shiftByAxis(dir,-ofst)
 			}
 			if (abs(curr.x - last.x) > T*3) {
 				Fg.lineTo((curr.x < last.x ? BW+T : -T), curr.y);break
@@ -57,12 +56,11 @@ export class PathMgr {
 		Fg.restore()
 	}
 	update(/**@type {Ghost}*/g) {
-		if (Maze.House.arrived(g, T*1.5))
+		if (g.dir != g.orient || Maze.House.arrived(g, T*2))
 			return
 		const {tilePos:t}= g, path=[], Steps=16
 		let dir  = g.dir, stopped = false
-		let tile = (g.passedTileCenter? g.getAdjTile(dir,t):t)
-		if (tile.x < 0 || tile.x > Cols-1) tile = t
+		let tile = g.getAdjTile(dir,t)
 		path.push({tile,dir,stopped})
 		for (let _ of range(Steps-1)) {
 			dir  = g.getNextDir(dir,tile)
