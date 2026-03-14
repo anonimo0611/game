@@ -42,7 +42,6 @@ class Vec2 {
 	static new(v1,v2) {
 		return new Vec2(...this.#parseXY(v1,v2))
 	}
-
 	static eq(
 	 /**@type {Position}*/pos1,
 	 /**@type {Position}*/pos2
@@ -52,7 +51,6 @@ class Vec2 {
 			abs(pos1.y-pos2.y) < 1e-6
 		)
 	}
-
 	static idx(
 	 /**@type {Position}*/pos,
 	 /**@type {number}*/cols
@@ -85,16 +83,6 @@ class Vec2 {
 	 /**@type {number}*/scalar) {
 		return Vec2.new(pos).divInt(scalar)
 	}
-	static dot(
-	 /**@type {Position}*/pos1,
-	 /**@type {Position}*/pos2) {
-		return (pos1.x * pos2.x) + (pos1.y * pos2.y)
-	}
-	static cross(
-	 /**@type {Position}*/pos1,
-	 /**@type {Position}*/pos2) {
-		return (pos1.x * pos2.y) - (pos1.y * pos2.x)
-	}
 	static sqrMag(
 	 /**@type {Position}*/pos1,
 	 /**@type {Position}*/pos2) {
@@ -105,7 +93,6 @@ class Vec2 {
 	 /**@type {Position}*/pos2) {
 		return Vec2.sub(pos1,pos2).magnitude
 	}
-
 	/**
 	 @private
 	 @param {number} x
