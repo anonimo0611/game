@@ -129,6 +129,7 @@ export const GhsMgr = new class {
 	}
 	#updateGhosts() {
 		Ghosts.forEach(g=> g.update())
+		PathMgr.update(Ghosts)
 	}
 	drawBehind() {
 		GhsMgr.#draw(false)

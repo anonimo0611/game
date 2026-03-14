@@ -7,6 +7,10 @@ import {player as p} from '../player/player.js';
 
 export class PathMgr {
 	#path = /**@type {PathNode[]}*/([])
+	static update(/**@type {readonly Ghost[]}*/ghosts) {
+		if (State.isInGame && Ctrl.showPaths)
+			ghosts.forEach(g=> g.pathMgr.#update(g))
+	}
 	static draw(/**@type {readonly Ghost[]}*/ghosts) {
 		if (State.isInGame && Ctrl.showPaths)
 			ghosts.toReversed().forEach(g=> g.pathMgr.#draw(g))
@@ -53,7 +57,7 @@ export class PathMgr {
 		Fg.stroke()
 		Fg.restore()
 	}
-	update(/**@type {Ghost}*/g) {
+	#update(/**@type {Ghost}*/g) {
 		const path=[], Steps=16
 		if (g.dir != g.orient) return
 		if (Maze.House.arrived(g, T*2)) return
