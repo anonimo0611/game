@@ -16,26 +16,26 @@ export class PathMgr {
 		if (!g.isChasing
 		 && !g.isScattering
 		 && !g.state.isEscaping) return
-		const {dir,pos}= g, LineWidth = T/5
+		const lw   = T/5
 		let   last = g.pos
-		const ofst = [-2,-1,1,2][g.type]*LineWidth
+		const ofst = [-2,-1,1,2][g.type]*lw
 		const endT = this.#path.at(-1)?.tile
 		const stPt = this.#path[0].tile.clone.mul(T)
-		const dist = Vec2.dot(Vec2[dir],Vec2.sub(pos,stPt))
+		const dist = Vec2.distance(g.pos,stPt)
 		Fg.save()
 		Fg.setAlpha(0.7)
 		Fg.translate(T/2+ofst, T/2+ofst)
-		Fg.lineWidth   = LineWidth
+		Fg.lineWidth   = lw
 		Fg.lineJoin    = Fg.lineCap = 'round'
 		Fg.strokeStyle = GhsColors[g.type]
 		Fg.beginPath()
-		Fg.moveTo(...pos.vals)
+		Fg.moveTo(...g.pos.vals)
 		for (const {tile,dir,stopped} of this.#path) {
 			const curr = tile.clone.mul(T)
 			if (tile == endT) {
 				stopped && g.isTargetPac
 					? curr.set(p.pos)
-					: curr.add(Vec2[dir].mul(stopped? 0 : dist))
+					: curr.add(Vec2[dir].mul(stopped? 0 : T/2-dist))
 			}
 			if (abs(curr.x - last.x) > T*3) {
 				Fg.lineTo((curr.x < last.x ? BW+T : -T), curr.y);break
@@ -60,7 +60,7 @@ export class PathMgr {
 		let dir  = g.dir, stopped = false
 		let tile = g.getAdjTile(dir,g.tile)
 		path.push({tile,dir,stopped})
-		for (let _ of range(Steps-1)) {
+		for (let _ of range(Steps)) {
 			const tgt = g.getTargetTile(tile)
 			dir  = g.getNextDir(dir,tile,tgt)
 			tile = g.getAdjTile(dir,tile)
