@@ -1,8 +1,8 @@
-import {Rect}   from '../_lib/rect.js'
-import {State}  from './state.js'
-import {Ghost}  from './ghosts/ghost.js'
-import {Wall}   from './sprites/wall.js'
-import {powChk} from './control.js'
+import {Rect}  from '../_lib/rect.js'
+import {State} from './state.js'
+import {Ghost} from './ghosts/ghost.js'
+import {Wall}  from './sprites/wall.js'
+import {Ctrl,powChk} from './control.js'
 
 const MapArr = freeze([... `\
 ////////////////////////////\
@@ -60,7 +60,7 @@ class House {
 	}
 	arrived(/**@type {Ghost}*/g, spd=1) {
 		return g.state.isEscaping
-			&& g.tilePos.y == this.EntryTile.y
+			&& g.tile.y == this.EntryTile.y
 			&& abs(BW/2 - g.center.x) <= spd
 	}
 }
@@ -138,11 +138,11 @@ export const Maze = freeze(new class {
 	/**
 	 If the target tile is on the upper side of the maze \
 	 and the ghost is around the house, guide them outside of the area
-	 @param {Ghost} Ghost
+	 @param {{baseTargetTile:Vec2,tile:Vec2}} ghost
 	*/
-	getGhostExitTile = ({baseTargetTile:o, tilePos:t})=>
-		o.y < 10 && PenOuter.contains(t)
-			? o.set(t.x>Cols/2 && o.x>Cols/2 ? 21:6, 15) : o
+	getGhostExitTile = ({baseTargetTile:b,tile:t})=>
+		!Ctrl.unrestricted && b.y < 10 && PenOuter.contains(t)
+			? b.set(t.x>Cols/2 && b.x>Cols/2 ? 21:6, 15) : b
 
 	/**
 	 @param {{tileIdx:number,tileMid:Vec2}} tile

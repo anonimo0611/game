@@ -14,7 +14,7 @@ export class Actor {
 	get speed()     {return 0}
 	get radius()    {return T}
 	get size()      {return this.radius*2}
-	get inHouse()   {return Maze.House.isIn(this.tilePos)}
+	get inHouse()   {return Maze.House.isIn(this.tile)}
 	get inTunSide() {return Maze.Tunnel.findSide(this.center)}
 
 	get x()         {return this.pos.x}
@@ -23,9 +23,9 @@ export class Actor {
 	set y(num)      {this.pos.y = num}
 
 	get center()    {return this.pos.clone.add(T/2)}
-	get tilePos()   {return this.center.divInt(T)}
-	get tileMid()   {return this.tilePos.add(.5)}
-	get tileIdx()   {return this.tilePos.toIdx(Cols)}
+	get tile()      {return this.center.divInt(T)}
+	get tileMid()   {return this.tile.add(.5)}
+	get tileIdx()   {return this.tile.toIdx(Cols)}
 
 	get dir()       {return this.#movDir}
 	set dir(dir)    {this.#movDir = this.orient = dir}
@@ -52,8 +52,8 @@ export class Actor {
 	}
 	#fixPosition() {
 		Vec2[this.dir].y
-			? (this.x = this.tilePos.x * T)
-			: (this.y = this.tilePos.y * T)
+			? (this.x = this.tile.x * T)
+			: (this.y = this.tile.y * T)
 	}
 	move(dir=this.dir) {
 		this.setNextPos(this.speed, this.dir=dir)
@@ -72,7 +72,7 @@ export class Actor {
 		return Maze.hasWall( this.getAdjTile(dir) )
 	}
 	/** @param {Direction} dir */
-	getAdjTile(dir, tile=this.tilePos) {
+	getAdjTile(dir, tile=this.tile) {
 		const  v = Vec2[dir].add(tile)
 		return v.setX((v.x+Cols) % Cols) // x-axis wrap
 	}

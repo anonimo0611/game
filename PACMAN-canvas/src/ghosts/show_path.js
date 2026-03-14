@@ -12,12 +12,10 @@ export class PathMgr {
 			ghosts.toReversed().forEach(g=> g.pathMgr.#draw(g))
 	}
 	#draw(/**@type {Ghost}*/g) {
-		if (!this.#path.length)
-			return
+		if (!this.#path.length) return
 		if (!g.isChasing
 		 && !g.isScattering
-		 && !g.state.isEscaping)
-			return
+		 && !g.state.isEscaping) return
 		const {dir,pos}= g, LineWidth = T/5
 		let   last = g.pos
 		const ofst = [-2,-1,1,2][g.type]*LineWidth
@@ -56,18 +54,20 @@ export class PathMgr {
 		Fg.restore()
 	}
 	update(/**@type {Ghost}*/g) {
-		if (g.dir != g.orient || Maze.House.arrived(g, T*2))
-			return
-		const {tilePos:t}= g, path=[], Steps=16
+		const path=[], Steps=16
+		if (g.dir != g.orient) return
+		if (Maze.House.arrived(g, T*2)) return
 		let dir  = g.dir, stopped = false
-		let tile = g.getAdjTile(dir,t)
+		let tile = g.getAdjTile(dir,g.tile)
 		path.push({tile,dir,stopped})
 		for (let _ of range(Steps-1)) {
-			dir  = g.getNextDir(dir,tile)
+			const tgt = g.getTargetTile(tile)
+			dir  = g.getNextDir(dir,tile,tgt)
 			tile = g.getAdjTile(dir,tile)
-			stopped = g.isTargetPac && tile.eq(p.tilePos)
-			       || g.hasFixedTgt && tile.eq(g.targetTile)
-			path.push({tile,dir,stopped});if (stopped) break
+			stopped = g.isTargetPac && tile.eq(p.tile)
+			       || g.hasFixedTgt && tile.eq(tgt)
+			path.push({tile,dir,stopped})
+			if (stopped) break
 		}
 		this.#path = path
 	}

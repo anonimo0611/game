@@ -62,7 +62,7 @@ export class Ghost extends Actor {
 
 	get isAngry()      {return false}
 	get isEscaping()   {return this.state.isEscapingEyes}
-	get isTargetPac()  {return this.targetTile.eq(player.tilePos)}
+	get isTargetPac()  {return this.getTargetTile().eq(player.tile)}
 	get isStarted()    {return this.#started}
 	get isFrightened() {return this.#frightened}
 	get isNormal()     {return!this.#frightened  && this.state.isWalking}
@@ -75,10 +75,9 @@ export class Ghost extends Actor {
 				? this.scatterTile
 				: this.chaseTile
 	}
-	get targetTile() {
-		return Ctrl.unrestricted
-			? this.baseTargetTile
-			: Maze.getGhostExitTile(this)
+	getTargetTile(tile=this.tile) {
+		const {baseTargetTile}= this
+		return Maze.getGhostExitTile({baseTargetTile,tile})
 	}
 	get speed() {
 		return function(g,{state:s}=g) {
@@ -191,18 +190,19 @@ export class Ghost extends Actor {
 	}
 	getNextDir(
 		cDir = this.dir,
-		tile = this.getAdjTile(this.dir)
+		tile = this.getAdjTile(this.dir),
+		tgt  = this.getTargetTile()
 	) {
 		const dirs = TurnPriority.flatMap((dir,i)=> {
 			const test = this.getAdjTile(dir,tile)
 			return Dir.Opposite[cDir] != dir
 				&& !Maze.hasWall(test)
 				&& !this.#isRestrictedTile({dir,test})
-				? [{dir,i,m:Vec2.sqrMag(test,this.targetTile)}]:[]
+				? [{dir,i,m:Vec2.sqrMag(test,tgt)}]:[]
 		})
 		return this.isFrightened? randChoice(dirs).dir:
-			(i=> dirs.sort((a,b)=> a.m-b.m || a.i-b.i)[i]?.dir)
-				(this.#fleeTmr >= 0 ? dirs.length-1:0) ?? cDir
+			(i=> dirs.sort((a,b)=> a.m-b.m || a.i-b.i)[i].dir)
+				(this.#fleeTmr >= 0 ? dirs.length-1:0)
 	}
 	/** @param {{dir:Direction,test:Vec2}} testTile */
 	#isRestrictedTile({dir,test:{hyphenated:xy}}) {
