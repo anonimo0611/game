@@ -68,6 +68,10 @@ export const Game = new class {
 		State.setReady({delay:2200})
 		Game.#started = true
 	}
+	#onNewLevel() {
+		Game.#setLevel(Game.level+1)
+		State.setReady()
+	}
 	#onReady() {
 		State.setInGame({delay:2200})
 	}
@@ -77,6 +81,13 @@ export const Game = new class {
 			? Game.#onCleared()
 			: Timer.set(600, Game.#startDying)
 	}
+	#onCleared() {
+		Sound.stopLoops()
+		State.setFlashing({delay:1000})
+	}
+	#onFlashing() {
+		Wall.setFlashing(Game.#levelEnds)
+	}
 	#startDying() {
 		Sound.playDyingSE()
 		player.sprite.startDying({fn:Game.#onDied})
@@ -85,17 +96,6 @@ export const Game = new class {
 		(Game.#pacDied = Lives.left > 0)
 			? State.setReady()
 			: State.setGameOver()
-	}
-	#onCleared() {
-		Sound.stopLoops()
-		State.setFlashing({delay:1000})
-	}
-	#onFlashing() {
-		Wall.setFlashing(Game.#levelEnds)
-	}
-	#onNewLevel() {
-		Game.#setLevel(Game.level+1)
-		State.setReady()
 	}
 	#onGameOver() {
 		State.setTitle({delay:2000})
