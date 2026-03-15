@@ -7,19 +7,21 @@ import {player as p} from '../player/player.js';
 
 export class PathMgr {
 	#path = /**@type {PathNode[]}*/([])
-	static update(/**@type {readonly Ghost[]}*/ghosts) {
-		if (State.isInGame && Ctrl.showPaths)
-			ghosts.forEach(g=> g.pathMgr.#update(g))
-	}
 	static draw(/**@type {readonly Ghost[]}*/ghosts) {
 		if (State.isInGame && Ctrl.showPaths)
 			ghosts.toReversed().forEach(g=> g.pathMgr.#draw(g))
 	}
+	static update(/**@type {readonly Ghost[]}*/ghosts) {
+		if (State.isInGame && Ctrl.showPaths)
+			ghosts.forEach(g=> g.pathMgr.#update(g))
+	}
 	#draw(/**@type {Ghost}*/g) {
-		if (!this.#path.length) return
+		if (!this.#path.length)
+			return
 		if (!g.isChasing
 		 && !g.isScattering
-		 && !g.state.isEscaping) return
+		 && !g.state.isEscaping)
+			return
 		const lw   = T/5
 		let   last = g.pos
 		const ofst = [-2,-1,1,2][g.type]*lw
@@ -58,18 +60,17 @@ export class PathMgr {
 		Fg.restore()
 	}
 	#update(/**@type {Ghost}*/g) {
-		const path=[], Steps=16
-		if (g.dir != g.orient) return
-		if (Maze.House.arrived(g, T*2)) return
+		if (g.dir != g.orient || Maze.House.arrived(g, T*2))
+			return
 		let dir  = g.dir, stopped = false
 		let tile = g.getAdjTile(dir,g.tile)
-		path.push({tile,dir,stopped})
-		for (let _ of range(Steps)) {
-			const tgt = g.getTargetTile(tile)
-			dir  = g.getNextDir(dir,tile,tgt)
-			tile = g.getAdjTile(dir,tile)
+		const path = [{tile,dir,stopped}], Steps = 16
+		for(const _ of range(Steps)) {
+			const t = g.getTargetTile(tile)
+			dir     = g.getNextDir(dir,tile,t)
+			tile    = g.getAdjTile(dir,tile)
 			stopped = g.isTargetPac && tile.eq(p.tile)
-			       || g.hasFixedTgt && tile.eq(tgt)
+			       || g.hasFixedTgt && tile.eq(t)
 			path.push({tile,dir,stopped})
 			if (stopped) break
 		}
