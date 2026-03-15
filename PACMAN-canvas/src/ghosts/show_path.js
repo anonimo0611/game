@@ -62,8 +62,8 @@ export class PathMgr {
 	#update(/**@type {Ghost}*/g) {
 		if (g.dir != g.orient || Maze.House.arrived(g, T*2))
 			return
-		let dir  = g.dir, stopped = false
-		let tile = g.getAdjTile(dir,g.tile)
+		let   dir  = g.dir, stopped = false
+		let   tile = g.getAdjTile(dir,g.tile)
 		const path = [{tile,dir,stopped}], Steps = 16
 		for(const _ of range(Steps)) {
 			const t = g.getTargetTile(tile)
