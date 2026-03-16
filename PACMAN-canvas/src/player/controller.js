@@ -88,7 +88,7 @@ export class Mover {
 	#stopAtWall() {
 		const {state:s,actor:a}= this
 		if (this.onWall) {
-			a.pos = a.tilePos.mul(T)
+			a.pos = a.tile.mul(T)
 			s.nextDir = null
 		}
 	}

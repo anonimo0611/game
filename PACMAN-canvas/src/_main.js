@@ -1,6 +1,6 @@
 import './ghosts/ghost_sub.js'
 import {Cursor}  from '../_lib/mouse.js'
-import {Menu}    from './ui.js'
+import {Menu, WinState}    from './ui.js'
 import {State}   from './state.js'
 import {Message} from './message.js'
 import {Ctrl}    from './control.js'
@@ -20,15 +20,16 @@ export const Game = new class {
 	static setup() {
 		Ticker.set(Game.#update, Game.#draw)
 		State.on({
-			Quit:     Game.#onQuit,
-			Title:    Game.#onTitle,
-			Intro:    Game.#onIntro,
-			Ready:    Game.#onReady,
-			NewLevel: Game.#onNewLevel,
-			Cleared:  Game.#onRoundEnds,
-			PacDying: Game.#onRoundEnds,
-			Flashing: Game.#onFlashing,
-			GameOver: Game.#onGameOver,
+			Quit:      Game.#onQuit,
+			Title:     Game.#onTitle,
+			Intro:     Game.#onIntro,
+			Ready:     Game.#onReady,
+			NewLevel:  Game.#onNewLevel,
+			RoundEnds: Game.#onRoundEnds,
+			Cleared:   Game.#onCleared,
+			PacDying:  Game.#onPacDying,
+			Flashing:  Game.#onFlashing,
+			GameOver:  Game.#onGameOver,
 		})
 		.setTitle()
 		Menu.Level.onChange(Game.#resetLevel)
@@ -57,6 +58,7 @@ export const Game = new class {
 		$Level.text('Level'+this.levelStr).trigger('change')
 	}
 	#onTitle() {
+		Sound
 		Sound.stop()
 		Cursor.show()
 		Game.#resetLevel()
@@ -76,10 +78,18 @@ export const Game = new class {
 		State.setInGame({delay:2200})
 	}
 	#onRoundEnds() {
-		State.setRoundEnds()
 		Maze.dotsLeft == 0
-			? Game.#onCleared()
-			: Timer.set(600, Game.#startDying)
+			? State.setCleared()
+			: State.setPacDying({delay:600})
+	}
+	#onPacDying() {
+		Sound.playDyingSE()
+		player.sprite.startDying(Game.#onPacDied)
+	}
+	#onPacDied() {
+		(Game.#pacDied = Lives.left > 0)
+			? State.setReady()
+			: State.setGameOver()
 	}
 	#onCleared() {
 		Sound.stopLoops()
@@ -87,22 +97,6 @@ export const Game = new class {
 	}
 	#onFlashing() {
 		Wall.setFlashing(Game.#levelEnds)
-	}
-	#startDying() {
-		Sound.playDyingSE()
-		player.sprite.startDying({fn:Game.#onDied})
-	}
-	#onDied() {
-		(Game.#pacDied = Lives.left > 0)
-			? State.setReady()
-			: State.setGameOver()
-	}
-	#onGameOver() {
-		State.setTitle({delay:2000})
-	}
-	#onQuit() {
-		Game.#pacDied = false
-		State.setTitle()
 	}
 	#levelEnds() {
 		Game.#pacDied = false
@@ -114,12 +108,20 @@ export const Game = new class {
 			? State.setNewLevel()
 			: State.setCoffBreak()
 	}
+	#onQuit() {
+		Game.#pacDied = false
+		State.setTitle()
+	}
+	#onGameOver() {
+		State.setTitle({delay:2000})
+	}
 	#update() {
 		PtsMgr.update()
 		Fruit.update()
 		Maze.PowDots.update()
 		Demo.update()
 		Actors.update()
+		//$('#debug').text(WinState.active)
 	}
 	#draw() {
 		Fg.clear()

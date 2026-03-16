@@ -11,13 +11,15 @@ export default class {
 
 	/** @readonly */ctx
 	/** @readonly */isBoard
+	/** @readonly */radius
 	/**
 	 @param {EnhancedCtx2D} ctx
 	 @param {0|1|2} initialMouthOpening
 	 0=closed, 1=half-open, 2=fully open
 	*/
-	constructor(ctx, initialMouthOpening=0) {
+	constructor(ctx, initialMouthOpening=0, radius=PacRadius) {
 		this.ctx     = ctx
+		this.radius  = radius
 		this.isBoard = ctx.canvas.id == 'board_main'
 		this.#mouthAngle = [0,OpenMid,OpenMax][initialMouthOpening]
 	}
@@ -41,7 +43,7 @@ export default class {
 		alpha  = 1,
 		hidden = false,
 		closed = false,
-		radius = PacRadius}={}
+		radius = this.radius}={}
 	) {
 		if (hidden)
 			return
@@ -63,8 +65,8 @@ export default class {
 		ctx.fill()
 		ctx.restore()
 	}
-	/** @param {{radius?:number,fn?():void}} cfg */
-	startDying({radius=PacRadius,fn}={}) {
-		this.#dyingSpr = new Dying(this.ctx, {radius,fn})
+	/** @param {()=> void} fn */
+	startDying(fn) {
+		this.#dyingSpr = new Dying(this, fn)
 	}
 }

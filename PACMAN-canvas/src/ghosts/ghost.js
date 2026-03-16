@@ -110,7 +110,6 @@ export class Ghost extends Actor {
 		}
 	}
 	#moveStepped(steps=1) {
-		this.pathMgr.update(this)
 		for (const _ of range(steps)) {
 			if (this.#makeTurn(this)) break
 			if (this.collidesWith())  break
@@ -151,7 +150,6 @@ export class Ghost extends Actor {
 
 		this.dir = L
 		this.state.setWalking()
-		this.pathMgr.update(this)
 	}
 	#enterHouse() {
 		this.dir = D
@@ -229,20 +227,20 @@ export class Ghost extends Actor {
 		 || !circleCollision(this, pos, radius))
 			return false
 		this.isFrightened
-			? this.#setBittenState(release)
-			: this.#setPacDyingState()
+			? this.#onBitten(release)
+			: Maze.dotsLeft && this.#onPacCaught()
 		return true
 	}
-	#setBittenState(release=()=>{}) {
+	#onBitten(release=()=>{}) {
 		Sound.playBittenSE()
 		this.#frightened = false
 		this.state.setBitten()
 		Timer.freeze()
 		PtsMgr.set({key:GhsMgr, pos:this.center}, release)
 	}
-	#setPacDyingState() {
+	#onPacCaught() {
 		Sound.stopLoops()
-		State.setPacDying()
+		State.setRoundEnds()
 	}
 	#frighten(on=true) {
 		!this.isEscaping && (this.#frightened=on)
