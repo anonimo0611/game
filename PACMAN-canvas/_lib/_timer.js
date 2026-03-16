@@ -38,6 +38,7 @@ const {Ticker,Timer}= function() {
 		}
 		resetCount() {
 			_fCount = 0
+			_ticker && (_ticker.skipLag = true)
 		}
 		stop()  {
 			_ticker?.stop()
@@ -58,12 +59,13 @@ const {Ticker,Timer}= function() {
 		*/
 		constructor(updateFn, drawFn) {
 			_ticker?.stop()
-			_ticker     = this
-			this.acc    = 0
-			this.lstTS  = 0
-			this.update = updateFn
-			this.draw   = drawFn
-			this.rAFId  = requestAnimationFrame(this.loop)
+			_ticker      = this
+			this.acc     = 0
+			this.lstTS   = 0
+			this.skipLag = false
+			this.update  = updateFn
+			this.draw    = drawFn
+			this.rAFId   = requestAnimationFrame(this.loop)
 		}
 		/** @param {number} ts */
 		loop = ts=> {
@@ -72,6 +74,10 @@ const {Ticker,Timer}= function() {
 				this.lstTS = this.acc = ts
 			this.acc += (ts - this.lstTS)
 			this.lstTS = ts
+			if (this.skipLag) {
+				this.skipLag = false
+				this.acc = 0
+			}
 			while(this.acc >= Interval) {
 				this.acc -= Interval
 				this.tick()
