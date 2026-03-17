@@ -4,23 +4,18 @@ import {Confirm}  from '../_lib/confirm.js'
 import {State}    from './state.js'
 import {drawText} from './message.js'
 import {Score}    from './score.js'
-import {Menu,inputs,btns} from './ui.js'
+import {Form,Menu,inputs,btns} from './ui.js'
 
 const UserSettingsKey = 'anopacman'
 
-export const Form = document.forms[0]
 export const Ctrl = new class {
-	constructor() {
-		$win.on({
-			load:   this.#onLoad,
-			keydown:this.#onKeydown,
-		})
-	}
-	#onLoad = ()=> {
-		this.#restore()
-		this.#output()
-		this.#fitToViewport()
-		this.#setup()
+	static {$(this.setup)}
+	static setup() {
+		Ctrl.#restore()
+		Ctrl.#output()
+		Ctrl.#setupGrid()
+		Ctrl.#setupCtrls()
+		$win.on({keydown:Ctrl.#onKeydown})
 	}
 	get activeElem()    {return qS(`:not(#${btns.start.id}):focus`)}
 	get extendScore()   {return Number(Menu.Extend.value)}
@@ -33,23 +28,17 @@ export const Ctrl = new class {
 	get showTargets()   {return inputs.tgtChk.checked}
 	get showPaths()     {return inputs.pthChk.checked}
 	get showGridLines() {return inputs.grdChk.checked}
-	get showTracking()  {return this.showTargets || this.showPaths}
-	get semiTransPac()  {return this.invincible  || this.showGridLines}
-	get usingCheats()   {return this.invincible  || this.speed<.7  || this.showTracking}
-	get isPractice()    {return this.usingCheats || !this.isArcadeMode}
-	get isArcadeMode()  {return this.endlessMode && !Menu.Level.index}
+	get showTracking()  {return Ctrl.showTargets || Ctrl.showPaths}
+	get semiTransPac()  {return Ctrl.invincible  || Ctrl.showGridLines}
+	get usingCheats()   {return Ctrl.invincible  || Ctrl.speed<.7  || Ctrl.showTracking}
+	get isPractice()    {return Ctrl.usingCheats ||!Ctrl.isArcadeMode}
+	get isArcadeMode()  {return Ctrl.endlessMode && !Menu.Level.index}
 
 	/** @param {boolean} [force] */
 	pause(force) {
 		if (State.isTitle || State.isAttract) return
 		if (State.isInGame && force == false) return
 		Sound.pause( Ticker.pause(force) )
-	}
-	#fitToViewport() {
-		const scale = min(
-			innerWidth /Form.offsetWidth*.98,
-			innerHeight/Form.offsetHeight)
-		Form.style.scale = min(1, scale).toFixed(2)
 	}
 	#save() {
 		const data = Object.create(null)
@@ -73,37 +62,37 @@ export const Ctrl = new class {
 			} $(input).trigger('input')
 		})
 	}
-	#output = ()=> {
-		const spd = 'x'+this.speed.toFixed(1), lh = 0.9
+	#output() {
+		const spd = 'x'+Ctrl.speed.toFixed(1), lh = 0.9
 		const opt = {ctx:HUD, size:T*0.68, scaleX:0.7, style:'bold'}
-		this.#save()
-		this.#toggleGrid()
+		Ctrl.#save()
+		Ctrl.#toggleGrid()
 		HUD.save()
 		HUD.translate(T*0.1, T*17.25)
 		HUD.clearRect(0, 0, BW, T*3)
-		if (spd != 'x1.0' || this.invincible || this.showTargets) {
+		if (spd != 'x1.0' || Ctrl.invincible || Ctrl.showTargets) {
 			drawText(0, lh*0, Palette.Info[+(spd != 'x1.0') ], 'Speed'+spd, opt)
-			drawText(0, lh*1, Palette.Info[+this.invincible ], 'Invincible',opt)
-			drawText(0, lh*2, Palette.Info[+this.showTargets], 'Show Tgts', opt)
+			drawText(0, lh*1, Palette.Info[+Ctrl.invincible ], 'Invincible',opt)
+			drawText(0, lh*2, Palette.Info[+Ctrl.showTargets], 'Show Tgts', opt)
 		}
-		if (this.showPaths || this.unrestricted) {
+		if (Ctrl.showPaths || Ctrl.unrestricted) {
 			HUD.translate(T*(Cols-5), 0)
-			drawText(0, lh*0, Palette.Info[+this.showPaths],   'Show Paths', opt)
-			drawText(0, lh*1, Palette.Info[+this.unrestricted],'Ghosts Un-\nrestricted', opt)
+			drawText(0, lh*0, Palette.Info[+Ctrl.showPaths],   'Show Paths', opt)
+			drawText(0, lh*1, Palette.Info[+Ctrl.unrestricted],'Ghosts Un-\nrestricted', opt)
 		}
 		HUD.restore()
 	}
 	#reset() {
 		Form.reset()
-		this.#output()
-		this.#restore()
+		Ctrl.#output()
+		Ctrl.#restore()
 	}
 	#quit(noConfirm=false) {
 		if (State.isTitle)
 			return
 		noConfirm
 			? State.setQuit()
-			: State.isInGame && this.#quitConfirm()
+			: State.isInGame && Ctrl.#quitConfirm()
 	}
 	#clearHiScore() {
 		localStorage.removeItem(Score.HiScoreKey)
@@ -111,47 +100,45 @@ export const Ctrl = new class {
 	}
 	#clearHiConfirm() {
 		Confirm.open('Are you sure you want to clear high-score?',
-			null, this.#clearHiScore, 'Cancel','Clear')
+			null, Ctrl.#clearHiScore, 'Cancel','Clear')
 	}
 	#quitConfirm() {
-		!Ticker.paused && this.pause()
+		!Ticker.paused && Ctrl.pause()
 		Confirm.open('Are you sure you want to quit the game?',
-			this.pause, ()=> State.setQuit(), 'Resume','Quit')
+			Ctrl.pause, ()=> State.setQuit(), 'Resume','Quit')
 	}
-	#onKeydown = (/**@type {JQKeyboardEvent}*/e)=> {
-		if (keyRepeat(e) || Confirm.opened)
+	#onKeydown(/**@type {JQKeyboardEvent}*/e) {
+		if (keyRepeat(e) || Confirm.opened || !Sound.settled)
 			return
 		switch(e.key) {
-		case 'Escape': return this.pause()
-		case 'Delete': return this.#quit(e.ctrlKey)
+		case 'Escape': return Ctrl.pause()
+		case 'Delete': return Ctrl.#quit(e.ctrlKey)
 		default:
-			if (this.activeElem) return
+			if (Ctrl.activeElem) return
 			if (Dir.from(e,{wasd:true}) || e.key == '\x20') {
 				State.isTitle && btns.start.click()
-				Ticker.paused && this.pause()
+				Ticker.paused && Ctrl.pause()
 			}
 		}
 	}
 	#toggleGrid() {
-		Grid.canvas.style.opacity = String(+this.showGridLines)
+		Grid.canvas.style.opacity = String(+Ctrl.showGridLines)
 	}
 	#setupGrid() {
 		Grid.strokeStyle = Colors.Grid
 		for (const y of range(1,Cols)) Grid.strokeLine(T*y, 0, T*y, Rows*T)
 		for (const x of range(0,Rows)) Grid.strokeLine(0, T*x, Cols*T, T*x)
 	}
-	#setup() {
-		this.#setupGrid()
-		values(Menu).forEach(m=> m.onChange(this.#save))
-		$win.on({resize:this.#fitToViewport})
-		$('input')   .on({input:this.#output})
-		$(btns.clear).on({click:this.#clearHiConfirm})
-		$(btns.reset).on({click:this.#reset})
+	#setupCtrls() {
+		values(Menu).forEach(m=> m.onChange(Ctrl.#save))
+		$('input')   .on({input:Ctrl.#output})
+		$(btns.clear).on({click:Ctrl.#clearHiConfirm})
+		$(btns.reset).on({click:Ctrl.#reset})
 		$(btns.start).on({click:()=> State.setIntro()})
 		$(btns.demo) .on({click:()=> State.setAttract()})
 		$(btns.coff1).on({click:()=> State.setCoffBreak({data:1})})
 		$(btns.coff2).on({click:()=> State.setCoffBreak({data:2})})
 		$(btns.coff3).on({click:()=> State.setCoffBreak({data:3})})
-		$(Form).attr('data-ready-state','loaded')
+		$root.addClass('ui-initialized')
 	}
 }, powChk = inputs.powChk

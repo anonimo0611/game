@@ -1,3 +1,5 @@
+export const Form = document.forms[0]
+
 //---- Inputs ----
 
 /** @typedef {typeof inputIds[number]} InputIds */
@@ -36,6 +38,17 @@ export const WinState = function() {
 	$win.on('focus',()=> {f=1,Ctrl.pause(!f)})
 	return {get active() {return !!f}}
 }()
+
+//---- Viewport ----
+
+$win.on('resize', ()=> {
+	const scale = min(
+		innerWidth /Form.offsetWidth*.98,
+		innerHeight/Form.offsetHeight
+	)
+	Form.style.scale = min(1, scale).toFixed(2)
+})
+.trigger('resize')
 
 //---- Panels ----
 
