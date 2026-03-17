@@ -4,7 +4,7 @@ const {Sound:SoundJS}= createjs
  @template {string} S
 */
 export class SoundMgr {
-	#loaded   = false
+	#settled  = false
 	#disabled = true
 	#playOpts = /**@type {{[K in S]:Readonly<Sound.Data<S>>}}*/({})
 	#instance = /**@type {{[K in S]:createjs.AbstractSoundInstance}}*/({})
@@ -32,15 +32,15 @@ export class SoundMgr {
 			})
 		})
 		.then(()=> {
-			this.#loaded = true
+			this.#settled = true
 			setup.onLoaded?.()
 		})
 		.catch(()=> {
-			this.#loaded = false
+			this.#settled = false
 			setup.onFailed?.()
 		})
 	}
-	get loaded()   {return this.#loaded}
+	get settled()  {return this.#settled}
 	get disabled() {return this.#disabled}
 	get vol()      {return SoundJS.volume * 10}
 	set vol(vol)   {SoundJS.volume = Number.isFinite(vol)? vol/10 : this.vol}
@@ -64,7 +64,8 @@ export class SoundMgr {
 	 @param {S[]} ids
 	*/
 	pause(enable, ...ids) {
-		if (this.disabled) return
+		if (this.disabled)
+			return
 		ids.length
 			? ids.forEach(id=> {this.#instance[id].paused=enable})
 			: values(this.#instance).forEach(i=> i.paused=enable)

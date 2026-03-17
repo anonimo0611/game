@@ -10,7 +10,6 @@ const initVol = +(localStorage.anopac_volume ?? 5)
 export const Setup = new class {
 	onLoaded() {
 		Sound.vol = initVol
-		$win.on({keydown:Setup.#onKeydown})
 		$('#speaker')
 			.on({click:Setup.#mute})
 			.onWheel(Setup.#onInput)
@@ -18,9 +17,12 @@ export const Setup = new class {
 			.attr({value:initVol,defaultValue:initVol})
 			.on({input:Setup.#onInput})
 			.trigger('input')
+		$win.on({keydown:Setup.#onKeydown})
+		$root.addClass('sound-settled')
 	}
 	onFailed() {
 		$('.volCtrl').hide()
+		$root.addClass('sound-settled')
 	}
 	#onInput(/**@type {Event}*/e) {
 		const isInput = e.target instanceof HTMLInputElement
