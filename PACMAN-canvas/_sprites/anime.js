@@ -17,7 +17,7 @@ class ActorPreview {
 		this.type     = type
 		this.subType  = subType
 		this.ghost    = ghsSprPv
-		this.pacman   = new PacSprite(Pv)
+		this.pacman   = new PacSprite(Pv, 0, PacScale*T)
 		this.orient   = /**@type {Direction}*/(L)
 	}
 }
@@ -43,7 +43,7 @@ class ActorPreview {
 		case Schema.Actor.Pacman:
 			this.subj = new ActorPreview(type,subType)
 			if (this.btnDisabled(subType == Schema.Pacman.Dying))
-				this.subj.pacman.startDying({radius:PacScale*T,fn:this.onChangeMenu})
+				this.subj.pacman.startDying(this.onChangeMenu)
 			break
 
 		case Schema.Actor.Akabei:
