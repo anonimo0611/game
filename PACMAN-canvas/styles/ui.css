@@ -63,9 +63,6 @@ dialog {
 	position: absolute;
 	z-index: 100;
 }
-[data-ready-state=loaded] .panel {
-	display: none;
-}
 
 form, dialog {
 	--color-label:        #6FD;
@@ -206,6 +203,7 @@ custom-menu {
 		right: calc(.3em);
 		translate: 0 -50%;
 		rotate: -45deg;
+		transition: rotate .1s;
 	}
 	mn-list {
 		line-height: 1;

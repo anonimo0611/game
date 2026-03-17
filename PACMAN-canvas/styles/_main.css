@@ -71,9 +71,12 @@ h1 {
 		canvas#board_hud  {z-index: 4}
 	}
 }
-#container[data-ready-state=loaded] {
+html.sound-settled.ui-initialized #container {
 	visibility: visible;
 	opacity: 1;
+}
+html.ui-initialized .panel {
+	display: none;
 }
 
 #titleScr {
