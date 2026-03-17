@@ -10,17 +10,17 @@ const UserSettingsKey = 'anopacman'
 
 export const Form = document.forms[0]
 export const Ctrl = new class {
-	static {
-		$(this.setup)
+	constructor() {
 		$win.on({
-			load:    _=> Ctrl.#setup(),
-			keydown: e=> Ctrl.#onKeydown(e)
+			load:   this.#onLoad,
+			keydown:this.#onKeydown,
 		})
 	}
-	static setup() {
-		Ctrl.#restore()
-		Ctrl.#output()
-		Ctrl.#fitToViewport()
+	#onLoad = ()=> {
+		this.#restore()
+		this.#output()
+		this.#fitToViewport()
+		this.#setup()
 	}
 	get activeElem()    {return qS(`:not(#${btns.start.id}):focus`)}
 	get extendScore()   {return Number(Menu.Extend.value)}
@@ -73,37 +73,37 @@ export const Ctrl = new class {
 			} $(input).trigger('input')
 		})
 	}
-	#output() {
-		const spd = 'x'+Ctrl.speed.toFixed(1), lh = 0.9
+	#output = ()=> {
+		const spd = 'x'+this.speed.toFixed(1), lh = 0.9
 		const opt = {ctx:HUD, size:T*0.68, scaleX:0.7, style:'bold'}
-		Ctrl.#save()
-		Ctrl.#toggleGrid()
+		this.#save()
+		this.#toggleGrid()
 		HUD.save()
 		HUD.translate(T*0.1, T*17.25)
 		HUD.clearRect(0, 0, BW, T*3)
-		if (spd != 'x1.0' || Ctrl.invincible || Ctrl.showTargets) {
+		if (spd != 'x1.0' || this.invincible || this.showTargets) {
 			drawText(0, lh*0, Palette.Info[+(spd != 'x1.0') ], 'Speed'+spd, opt)
-			drawText(0, lh*1, Palette.Info[+Ctrl.invincible ], 'Invincible',opt)
-			drawText(0, lh*2, Palette.Info[+Ctrl.showTargets], 'Show Tgts', opt)
+			drawText(0, lh*1, Palette.Info[+this.invincible ], 'Invincible',opt)
+			drawText(0, lh*2, Palette.Info[+this.showTargets], 'Show Tgts', opt)
 		}
-		if (Ctrl.showPaths || Ctrl.unrestricted) {
+		if (this.showPaths || this.unrestricted) {
 			HUD.translate(T*(Cols-5), 0)
-			drawText(0, lh*0, Palette.Info[+Ctrl.showPaths],   'Show Paths', opt)
-			drawText(0, lh*1, Palette.Info[+Ctrl.unrestricted],'Ghosts Un-\nrestricted', opt)
+			drawText(0, lh*0, Palette.Info[+this.showPaths],   'Show Paths', opt)
+			drawText(0, lh*1, Palette.Info[+this.unrestricted],'Ghosts Un-\nrestricted', opt)
 		}
 		HUD.restore()
 	}
 	#reset() {
 		Form.reset()
-		Ctrl.#output()
-		Ctrl.#restore()
+		this.#output()
+		this.#restore()
 	}
 	#quit(noConfirm=false) {
 		if (State.isTitle)
 			return
 		noConfirm
 			? State.setQuit()
-			: State.isInGame && Ctrl.#quitConfirm()
+			: State.isInGame && this.#quitConfirm()
 	}
 	#clearHiScore() {
 		localStorage.removeItem(Score.HiScoreKey)
@@ -111,29 +111,29 @@ export const Ctrl = new class {
 	}
 	#clearHiConfirm() {
 		Confirm.open('Are you sure you want to clear high-score?',
-			null, Ctrl.#clearHiScore, 'Cancel','Clear')
+			null, this.#clearHiScore, 'Cancel','Clear')
 	}
 	#quitConfirm() {
-		!Ticker.paused && Ctrl.pause()
+		!Ticker.paused && this.pause()
 		Confirm.open('Are you sure you want to quit the game?',
-			Ctrl.pause, ()=> State.setQuit(), 'Resume','Quit')
+			this.pause, ()=> State.setQuit(), 'Resume','Quit')
 	}
-	#onKeydown(/**@type {JQKeyboardEvent}*/e) {
+	#onKeydown = (/**@type {JQKeyboardEvent}*/e)=> {
 		if (keyRepeat(e) || Confirm.opened)
 			return
 		switch(e.key) {
-		case 'Escape': return Ctrl.pause()
-		case 'Delete': return Ctrl.#quit(e.ctrlKey)
+		case 'Escape': return this.pause()
+		case 'Delete': return this.#quit(e.ctrlKey)
 		default:
-			if (Ctrl.activeElem) return
+			if (this.activeElem) return
 			if (Dir.from(e,{wasd:true}) || e.key == '\x20') {
 				State.isTitle && btns.start.click()
-				Ticker.paused && Ctrl.pause()
+				Ticker.paused && this.pause()
 			}
 		}
 	}
 	#toggleGrid() {
-		Grid.canvas.style.opacity = String(+Ctrl.showGridLines)
+		Grid.canvas.style.opacity = String(+this.showGridLines)
 	}
 	#setupGrid() {
 		Grid.strokeStyle = Colors.Grid
@@ -141,12 +141,12 @@ export const Ctrl = new class {
 		for (const x of range(0,Rows)) Grid.strokeLine(0, T*x, Cols*T, T*x)
 	}
 	#setup() {
-		Ctrl.#setupGrid()
-		values(Menu).forEach(m=> m.onChange(Ctrl.#save))
-		$win.on({resize:Ctrl.#fitToViewport})
-		$('input')   .on({input:Ctrl.#output})
-		$(btns.clear).on({click:Ctrl.#clearHiConfirm})
-		$(btns.reset).on({click:Ctrl.#reset})
+		this.#setupGrid()
+		values(Menu).forEach(m=> m.onChange(this.#save))
+		$win.on({resize:this.#fitToViewport})
+		$('input')   .on({input:this.#output})
+		$(btns.clear).on({click:this.#clearHiConfirm})
+		$(btns.reset).on({click:this.#reset})
 		$(btns.start).on({click:()=> State.setIntro()})
 		$(btns.demo) .on({click:()=> State.setAttract()})
 		$(btns.coff1).on({click:()=> State.setCoffBreak({data:1})})
