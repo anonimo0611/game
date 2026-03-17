@@ -10,12 +10,17 @@ const UserSettingsKey = 'anopacman'
 
 export const Form = document.forms[0]
 export const Ctrl = new class {
-	static {$(this.setup)}
+	static {
+		$(this.setup)
+		$win.on({
+			load:    _=> Ctrl.#setup(),
+			keydown: e=> Ctrl.#onKeydown(e)
+		})
+	}
 	static setup() {
 		Ctrl.#restore()
 		Ctrl.#output()
 		Ctrl.#fitToViewport()
-		$win.on({load:Ctrl.#setup, keydown:Ctrl.#onKeydown})
 	}
 	get activeElem()    {return qS(`:not(#${btns.start.id}):focus`)}
 	get extendScore()   {return Number(Menu.Extend.value)}
