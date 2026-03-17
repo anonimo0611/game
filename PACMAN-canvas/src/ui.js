@@ -1,6 +1,6 @@
 export const Form = document.forms[0]
 
-//---- Inputs ----
+// Inputs
 
 /** @typedef {typeof inputIds[number]} InputIds */
 const inputIds = /**@type {const}*/
@@ -11,7 +11,7 @@ export const inputs =
 	/**@type {{[K in InputIds]:HTMLInputElement}}*/
 	(fromEntries(inputIds.map(id=>[id,requireElem(id)])))
 
-//---- Buttons ----
+// Buttons
 
 /** @typedef {typeof buttonIds[number]} ButtonIds */
 const buttonIds = /**@type {const}*/
@@ -21,7 +21,7 @@ export const btns =
 	/**@type {{[K in ButtonIds]:HTMLButtonElement}}*/
 	(fromEntries(buttonIds.map(id=>[id,requireElem(id+'Btn')])))
 
-//---- Menus ----
+// Custom menus
 
 import * as _Menu from '../_lib/menu.js'
 export const Menu = freeze({
@@ -29,28 +29,27 @@ export const Menu = freeze({
 	Extend:new _Menu.Slide('ExtendMenu'),
 })
 
-//---- Focus ----
+// Window focused
 
 import {Ctrl} from './control.js'
 export const WinState = function() {
 	let f = 1
 	$win.on('blur', ()=> {f=0,Ctrl.pause(!f)})
 	$win.on('focus',()=> {f=1,Ctrl.pause(!f)})
-	return {get active() {return !!f}}
+	return {get isActive() {return !!f}}
 }()
 
-//---- Viewport ----
+// Fit to viewport
 
 $win.on('resize', ()=> {
 	const scale = min(
 		innerWidth /Form.offsetWidth*.98,
-		innerHeight/Form.offsetHeight
-	)
+		innerHeight/Form.offsetHeight)
 	Form.style.scale = min(1, scale).toFixed(2)
 })
 .trigger('resize')
 
-//---- Panels ----
+// Panels
 
 ;/**@type {HTMLButtonElement[]}*/
 ($('.panelBtn').get()).forEach(btn=> {
