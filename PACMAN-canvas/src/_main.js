@@ -1,6 +1,6 @@
 import './ghosts/ghost_sub.js'
 import {Cursor}  from '../_lib/mouse.js'
-import {Menu, WinState}    from './ui.js'
+import {Menu}    from './ui.js'
 import {State}   from './state.js'
 import {Message} from './message.js'
 import {Ctrl}    from './control.js'
@@ -121,7 +121,6 @@ export const Game = new class {
 		Maze.PowDots.update()
 		Demo.update()
 		Actors.update()
-		//$('#debug').text(WinState.active)
 	}
 	#draw() {
 		Fg.clear()
