@@ -8,7 +8,7 @@ const {Ticker,Timer}= function() {
 		ignoreFrozen: boolean;
 	}} TimerData
 	*/
-	const Interval = 16.7
+	const Interval = 16.6
 	const TimerMap = /**@type {Map<any,TimerData>}*/(new Map)
 
 	let _ticker = /**@type {?TickerCore}*/(null)
