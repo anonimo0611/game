@@ -8,8 +8,7 @@ const {Ticker,Timer}= function() {
 		ignoreFrozen: boolean;
 	}} TimerData
 	*/
-	const FPS      = 60
-	const Interval = 1000/FPS
+	const Interval = 16.7
 	const TimerMap = /**@type {Map<any,TimerData>}*/(new Map)
 
 	let _ticker = /**@type {?TickerCore}*/(null)
@@ -72,12 +71,12 @@ const {Ticker,Timer}= function() {
 			this.rAFId = requestAnimationFrame(this.loop)
 			if (this.lstTS === 0)
 				this.lstTS = this.acc = ts
-			this.acc += (ts - this.lstTS)
-			this.lstTS = ts
 			if (this.skipLag) {
 				this.skipLag = false
-				this.acc = 0
+				this.acc = Interval
 			}
+			this.acc += (ts - this.lstTS)
+			this.lstTS = ts
 			while(this.acc >= Interval) {
 				this.acc -= Interval
 				this.tick()
