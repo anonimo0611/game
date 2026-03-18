@@ -1,7 +1,13 @@
 export {GhostPts,FruitPts,cache}
 
-const FruitCvs = canvas2D(null)
-const GhostCvs = canvas2D(null)
+const ctxList = [
+	canvas2D(null).ctx, // Fruit
+	canvas2D(null).ctx, // Ghost
+]
+const palette = [
+	Colors.FruitPts,
+	Colors.GhostPts,
+]
 
 /** @typedef {(typeof FruitPts | typeof GhostPts)[number]} PtsType */
 const GhostPts = /**@type {const}*/([200,400,800,1600])
@@ -39,15 +45,13 @@ const GtsPtsSet = new Set(GhostPts)
 
 /** @param {PtsType} pts */
 function cache(pts, size=T*2) {
-	const idx   = +GtsPtsSet.has(pts)
-	const ctx   = [FruitCvs, GhostCvs][idx].ctx
-	const color = [Colors.FruitPts, Colors.GhostPts][idx]
-	const {w,h} = ctx.resize(size*1.5, size).size
-	ctx.clear()
+	const idx = +GtsPtsSet.has(pts)
+	const ctx = ctxList[idx]
+	const{w,h}= ctx.resize(size*1.5, size).size
 	ctx.save()
 	ctx.translate(w/2, h/2)
 	ctx.scale(size/16, size/16)
-	ctx.strokeStyle = color
+	ctx.strokeStyle = palette[idx]
 	ctx.lineWidth = 1.1
 	ctx.lineJoin  = ctx.lineCap = 'round'
 	KerningMap[pts].forEach((x,i)=> {
