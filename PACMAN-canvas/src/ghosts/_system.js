@@ -47,7 +47,7 @@ const StateTypes = toEnumObject(States)
 
 /**
  @extends {_State<Ghost,StateType>}
- @typedef {GhsState & StateDef.Props<Ghost,StateType>} IGhsState
+ @typedef {GhsState & StateDef.Props<StateType>} IGhsState
 */
 class GhsState extends _State {
 	/** @this {IGhsState} */
@@ -181,15 +181,15 @@ const AttackInWaves = function() {
 			[tCnt,mode]= [0,list[++idx].mode]
 		}
 		function update() {
+			const {dur}= list[idx]
 			if ((Timer.frozen || GhsMgr.isFrightMode)
-			 || ++tCnt * Game.interval < list[idx].dur)
-				return
+			 || ++tCnt * Game.interval < dur) return
 			signalDirectionReversal()
-			list[idx].dur < 17 ? Timer.set(16.6,next) : next()
+			dur < 17 ? Timer.set(16.6, next) : next()
 		}
 		return {
 			get mode() {return mode},
-			...{update:mode == CHASE ? null:update},
+			...{update:(mode == CHASE)? null : update},
 		}
 	}
 }()
@@ -271,12 +271,12 @@ const FrightMode = function() {
 		get spriteIdx() {return this.#flash && this.#fIdx^1}
 		constructor() {
 			signalDirectionReversal()
-			this.Dur = TimeTable[Game.clampedLv-1]
-			this.Dur == 0 && !State.isAttract
+			this.dur = TimeTable[Game.clampedLv-1]
+			this.dur == 0 && !State.isAttract
 				? $(Ghosts).trigger(Evt.FleeStart)
 				: this.#set(true)
 		}
-		#set(isOn=true) {
+		#set(/**@type {boolean}*/isOn) {
 			_session = (isOn? this : null)
 			$(Ghosts)
 				.trigger(Evt.Frighten, isOn)
@@ -284,14 +284,15 @@ const FrightMode = function() {
 			Sound.toggleFrightMode(isOn)
 		}
 		#flashing() {
-			const iv = (this.Dur == 1 ? 12:14)/Game.speed|0
+			const iv = (this.dur == 1 ? 12:14)/Game.speed|0
 			this.#flash++ % iv == 0 && (this.#fIdx ^= 1)
 		}
 		update() {
 			if (State.isInGame && !Timer.frozen) {
+				const {dur,caughtAll}= this
 				const et = (this.#et += Game.interval)/1e3
-				if (et >= this.Dur-2) this.#flashing()
-				if (et >= this.Dur || this.caughtAll) this.#set(false)
+				if (et >= dur-2) this.#flashing()
+				if (et >= dur || caughtAll) this.#set(false)
 			}
  		}
 	}
