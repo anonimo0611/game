@@ -47,7 +47,7 @@ const StateTypes = toEnumObject(States)
 
 /**
  @extends {_State<Ghost,StateType>}
- @typedef {GhsState & StateDef.Props<globalThis,StateType>} IGhsState
+ @typedef {GhsState & StateDef.Props<Ghost,StateType>} IGhsState
 */
 class GhsState extends _State {
 	/** @this {IGhsState} */
@@ -174,15 +174,18 @@ const AttackInWaves = function() {
 			{mode:CHASE,   dur:15e3},
 			{mode:SCATTER, dur:3500},
 			{mode:CHASE,   dur:lv == 1 ? 15e3 : 78e4},
-			{mode:SCATTER, dur:lv == 1 ? 3500 : 16.7},
+			{mode:SCATTER, dur:lv == 1 ? 3500 : 16.6},
 			{mode:CHASE,   dur:Infinity},
 		])
+		function next() {
+			[tCnt,mode]= [0,list[++idx].mode]
+		}
 		function update() {
 			if ((Timer.frozen || GhsMgr.isFrightMode)
 			 || ++tCnt * Game.interval < list[idx].dur)
 				return
-			[tCnt,mode]= [0,list[++idx].mode]
 			signalDirectionReversal()
+			list[idx].dur < 17 ? Timer.set(16.6,next) : next()
 		}
 		return {
 			get mode() {return mode},
