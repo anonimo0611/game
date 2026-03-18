@@ -57,4 +57,4 @@ class Guzuta extends Ghost {
 }
 
 const Classes = freeze([Akabei,Pinky,Aosuke,Guzuta])
-State.on({_Ready:()=> GhsMgr.initialize(Classes.map(cls=> new cls))})
+State.on({_Ready:_=> GhsMgr.initialize(Classes.map(c=> new c))})

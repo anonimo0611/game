@@ -187,16 +187,16 @@ export class Ghost extends Actor {
 			this.orient = this.getNextDir()
 	}
 	getNextDir(
-		cDir = this.dir,
-		tile = this.getAdjTile(this.dir),
-		tgt  = this.getTargetTile()
+		currDir = this.dir,
+		stTile  = this.getAdjTile(currDir),
+		tgtTile = this.getTargetTile()
 	) {
 		const dirs = TurnPriority.flatMap((dir,i)=> {
-			const test = this.getAdjTile(dir,tile)
-			return Dir.Opposite[cDir] != dir
+			const test = this.getAdjTile(dir,stTile)
+			return Dir.Opposite[currDir] != dir
 				&& !Maze.hasWall(test)
 				&& !this.#isRestrictedTile({dir,test})
-				? [{dir,i,m:Vec2.sqrMag(test,tgt)}]:[]
+				? [{dir,i,m:Vec2.sqrMag(test,tgtTile)}]:[]
 		})
 		return this.isFrightened? randChoice(dirs).dir:
 			(i=> dirs.sort((a,b)=> a.m-b.m || a.i-b.i)[i].dir)
@@ -220,7 +220,7 @@ export class Ghost extends Actor {
 	collidesWith(
 		pos     = player.pos,
 		radius  = T*(this.isFrightened? .5 : .4),
-		release = ()=> this.#setEscapeState(),
+		release = ()=> this.#startEscaping(),
 	) {
 		if (!this.state.isWalking
 		 || !this.isFrightened && Ctrl.invincible
@@ -245,7 +245,7 @@ export class Ghost extends Actor {
 	#frighten(on=true) {
 		!this.isEscaping && (this.#frightened=on)
 	}
-	#setEscapeState() {
+	#startEscaping() {
 		Sound.playEscapaingEyes()
 		this.state.setEscaping()
 	}
