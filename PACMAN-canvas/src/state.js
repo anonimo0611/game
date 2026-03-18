@@ -8,7 +8,7 @@ const States = /**@type {const}*/([
 	'Cleared','PacDying','Flashing','CoffBreak','GameOver','Quit'])
 /**
  @extends {_State<globalThis,StateType>}
- @typedef {GameState & StateDef.Props<globalThis,StateType>} IState
+ @typedef {GameState & StateDef.Props<StateType>} IState
 */
 class GameState extends _State {
 	constructor() {super(globalThis), this.init(States)}
@@ -19,7 +19,7 @@ class GameState extends _State {
 	 @param {StateType} s
 	 @param {JQData} [data]
 	*/
-	#callback = (s, data)=> {
+	#callback(s, data) {
 		Ticker.resetCount()
 		$win.trigger(document.body.dataset.state=s, data)
 	}
