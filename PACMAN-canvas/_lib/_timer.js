@@ -8,8 +8,12 @@ const {Ticker,Timer}= function() {
 		ignoreFrozen: boolean;
 	}} TimerData
 	*/
-	const Interval = 16.6
-	const TimerMap = /**@type {Map<any,TimerData>}*/(new Map)
+	const TICK_STEP = 16.6
+	const THRESHOLD = 250
+	const INTERVAL  = 1000/60
+
+	/** @type {Map<any,TimerData>} */
+	const TimerMap = new Map
 
 	let _ticker = /**@type {?TickerCore}*/(null)
 	let _paused = false
@@ -17,12 +21,12 @@ const {Ticker,Timer}= function() {
 	let _pCount = 0 // paused count
 
 	const Ticker = new class {
-		get Interval()    {return Interval}
+		get Interval()    {return INTERVAL}
 		get count()       {return _fCount}
 		get pausedCount() {return _pCount}
 		get paused()      {return _paused}
 		get running()     {return _ticker instanceof TickerCore}
-		get elapsedTime() {return _fCount*Interval}
+		get elapsedTime() {return _fCount*INTERVAL}
 
 		/**
 		 @param {()=> void} [updateFn]
@@ -37,7 +41,6 @@ const {Ticker,Timer}= function() {
 		}
 		resetCount() {
 			_fCount = 0
-			_ticker && (_ticker.skipLag = true)
 		}
 		stop()  {
 			_ticker?.stop()
@@ -61,7 +64,6 @@ const {Ticker,Timer}= function() {
 			_ticker      = this
 			this.acc     = 0
 			this.lstTS   = 0
-			this.skipLag = false
 			this.update  = updateFn
 			this.draw    = drawFn
 			this.rAFId   = requestAnimationFrame(this.loop)
@@ -71,14 +73,13 @@ const {Ticker,Timer}= function() {
 			this.rAFId = requestAnimationFrame(this.loop)
 			if (this.lstTS === 0)
 				this.lstTS = this.acc = ts
-			if (this.skipLag) {
-				this.skipLag = false
-				this.acc = Interval
+			if (this.acc > THRESHOLD) {
+				this.acc = TICK_STEP
 			}
 			this.acc += (ts - this.lstTS)
 			this.lstTS = ts
-			while(this.acc >= Interval) {
-				this.acc -= Interval
+			while(this.acc >= TICK_STEP) {
+				this.acc -= TICK_STEP
 				this.tick()
 			}
 			this.draw?.()
@@ -103,7 +104,7 @@ const {Ticker,Timer}= function() {
 		*/
 		timer(t, key) {
 			if (Timer.frozen && !t.ignoreFrozen) return
-			if (Interval*t.amount++ < t.timeout) return
+			if (INTERVAL*t.amount++ < t.timeout) return
 			TimerMap.delete(key);t.handler()
 		}
 		stop()  {
