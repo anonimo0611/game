@@ -1,27 +1,25 @@
 export const Form = document.forms[0]
 
-// Inputs
+//---- Inputs ----
 
-/** @typedef {typeof inputIds[number]} InputIds */
 const inputIds = /**@type {const}*/
 	(['lvsRng','spdRng','onlChk','chsChk','unrChk','invChk',
 	  'tgtChk','pthChk','grdChk','powChk','volRng','volRg2'])
 
 export const inputs =
-	/**@type {{[K in InputIds]:HTMLInputElement}}*/
+	/**@type {{[K in inputIds[number]]:HTMLInputElement}}*/
 	(fromEntries(inputIds.map(id=>[id,requireElem(id)])))
 
-// Buttons
+//---- Buttons ----
 
-/** @typedef {typeof buttonIds[number]} ButtonIds */
 const buttonIds = /**@type {const}*/
 	(['clear','reset','start','demo','coff1','coff2','coff3'])
 
 export const btns =
-	/**@type {{[K in ButtonIds]:HTMLButtonElement}}*/
+	/**@type {{[K in typeof buttonIds[number]]:HTMLButtonElement}}*/
 	(fromEntries(buttonIds.map(id=>[id,requireElem(id+'Btn')])))
 
-// Custom menus
+//---- Custom menus ----
 
 import * as _Menu from '../_lib/menu.js'
 export const Menu = freeze({
@@ -29,7 +27,7 @@ export const Menu = freeze({
 	Extend:new _Menu.Slide('ExtendMenu'),
 })
 
-// Window focused
+//---- Window focused ----
 
 import {Ctrl} from './control.js'
 export const WinState = function() {
@@ -39,7 +37,7 @@ export const WinState = function() {
 	return {get isActive() {return !!f}}
 }()
 
-// Fit to viewport
+//---- Fit to viewport ----
 
 $win.on('resize', ()=> {
 	const scale = min(
@@ -49,22 +47,18 @@ $win.on('resize', ()=> {
 })
 .trigger('resize')
 
-// Panels
+//---- Panels ----
 
 ;/**@type {HTMLButtonElement[]}*/
 ($('.panelBtn').get()).forEach(btn=> {
 	$(btn).on('keydown pointerdown', e=> {
-		if (e.key && !isEnterKey(e))
-			return
+		if (e.key && !isEnterKey(e)) return
 		$('.panel').toggle()
 		$(btn).toggleClass('opened')
 	})
 	$('body').on('keydown pointerdown', e=> {
-		if (!btn.offsetParent
-		 || e.target == btn
-		 || qS(btn.value)?.contains(e.target))
-			return
-		$(btn.value).hide()
-		$(btn).removeClass('opened')
+		const t = e.target, id = btn.value
+		if (t == btn || qS(id)?.contains(t)) return
+		$(id).hide() && $(btn).removeClass('opened')
 	})
 })
