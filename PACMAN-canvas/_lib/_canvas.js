@@ -5,8 +5,7 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 		try {super()} catch(e){}
 		return Object.setPrototypeOf(cvs.getContext('2d',opts), new.target.prototype)
 	}
-	get size()   {return ({w:this.width, h:this.height})}
-	get ctx()    {return this}
+	get size()   {return {w:this.width, h:this.height}}
 	get width()  {return this.canvas.width}
 	get height() {return this.canvas.height}
 
@@ -236,9 +235,9 @@ class Fade {
  @param {number} [height] The desired height. Defaults to `width` if provided; otherwise, defaults to the element's attribute.
 */
 const canvas2D = (id, width, height=width)=> {
-	const elm = id? document.getElementById(id) : null
-	const cvs = elm instanceof HTMLCanvasElement ? elm : document.createElement('canvas')
-	const {ctx,size:{w,h}}= new EnhancedCtx2D(cvs).resize(width,height)
+	const elm  = id? document.getElementById(id) : null
+	const cvs  = (elm instanceof HTMLCanvasElement)? elm : document.createElement('canvas')
+	const ctx  = new EnhancedCtx2D(cvs), {w,h}= ctx.resize(width,height).size
 	const vals = /**@type {readonly [cvs,ctx,w:number,h:number]}*/([cvs,ctx,w,h])
 	return /**@type {const}*/({cvs,ctx,w,h,vals})
 }
