@@ -22,8 +22,8 @@ export class PathMgr {
 		 && !g.isScattering
 		 && !g.state.isEscaping)
 			return
-		const lw   = T/5
 		let   last = g.pos
+		const lw   = T/5
 		const ofst = [-2,-1,1,2][g.type]*lw
 		const endT = this.#path.at(-1)?.tile
 		const stPt = this.#path[0].tile.clone.mul(T)
