@@ -82,7 +82,7 @@ export default new class {
 		Fg.save()
 		Fg.translate(...player.center.vals)
 		Fg.setAlpha(g.chasePos.eq(player.center) ? 0.8 : 0.4)
-		Fg.strokeCircle(0,0, T*GuzutaThreshold, '#FFF', T*0.15)
+		Fg.strokeCircle(0,0, T*GuzutaThreshold, undefined, T*0.15)
 		Fg.restore()
 	}
 }

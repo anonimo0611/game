@@ -28,11 +28,14 @@ export class Ghost extends Actor {
 	#started    = false
 	#frightened = false
 
-	get chaseOffset() {return 0}
-	get chaseSpeed()  {return GhsSpeed.Base}
-	get chasePos()    {return player.center}
-	get scatterTile() {return Vec2.new(24, 0)}
-	get chaseTile()   {return this.chasePos.divInt(T)}
+	// The getters in this section subject to overridden
+	get chaseOffset()  {return 0}
+	get chaseSpeed()   {return GhsSpeed.Base}
+	get chasePos()     {return player.center}
+	get scatterTile()  {return Vec2.new(24, 0)}
+	get isAngry()      {return false}
+	get isChasing()    {return GhsMgr.isChaseMode   && this.isNormal}
+	get isScattering() {return GhsMgr.isScatterMode && this.isNormal}
 
 	/**
 	 @param {Direction} dir
@@ -54,13 +57,10 @@ export class Ghost extends Actor {
 	}
 	get animIdx()      {return GhsMgr.animIndex}
 	get spriteIdx()    {return GhsMgr.spriteIdx}
-	get isChasing()    {return GhsMgr.isChaseMode   && this.isNormal}
-	get isScattering() {return GhsMgr.isScatterMode && this.isNormal}
-
-	get alpha()        {return this.#fader?.alpha ?? this.maxAlpha}
 	get maxAlpha()     {return Ctrl.showTargets? .75:1}
+	get alpha()        {return this.#fader?.alpha ?? this.maxAlpha}
+	get chaseTile()    {return this.chasePos.divInt(T)}
 
-	get isAngry()      {return false}
 	get isEscaping()   {return this.state.isEscapingEyes}
 	get isTargetPac()  {return this.getTargetTile().eq(player.tile)}
 	get isStarted()    {return this.#started}
