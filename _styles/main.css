@@ -208,7 +208,8 @@ table {
 }
 
 /* Notes */
-div.note {
+aside.note {
+	display: block;
 	border-style: solid;
 	border-color: var(--border-color,#000);
 	border-width: 0 0 0 .22em;
@@ -228,8 +229,8 @@ span.note {
 section > p + p.note {
 	margin: -.5em .5em;
 }
-div.note p  {margin: 0}
-dd div.note {margin: .9em 0}
+aside.note p  {margin: 0}
+dd aside.note {margin: .5em 0}
 
 /* Note section */
 section.note {
