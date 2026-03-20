@@ -169,7 +169,7 @@ const AttackInWaves = function() {
 		let mode = Ctrl.alwaysChase? CHASE:SCATTER
 		const list = /**@type {const}*/([
 			{mode:SCATTER, dur:lv <= 4 ? 4500 : 4000},
-			{mode:CHASE,   dur:3000},
+			{mode:CHASE,   dur:15e3},
 			{mode:SCATTER, dur:lv <= 4 ? 4500 : 4000},
 			{mode:CHASE,   dur:15e3},
 			{mode:SCATTER, dur:3500},
