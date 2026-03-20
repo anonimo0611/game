@@ -157,7 +157,7 @@ const AttackInWaves = function() {
 	const CHASE   = 1
 	{
 		let phase = create()
-		State.on({_Ready:()=> phase = create(Game.level)})
+		State.on({Ready:()=> phase = create(Game.level)})
 		return {
 			get isChaseMode()   {return phase.mode == CHASE},
 			get isScatterMode() {return phase.mode == SCATTER},
@@ -169,7 +169,7 @@ const AttackInWaves = function() {
 		let mode = Ctrl.alwaysChase? CHASE:SCATTER
 		const list = /**@type {const}*/([
 			{mode:SCATTER, dur:lv <= 4 ? 4500 : 4000},
-			{mode:CHASE,   dur:15e3},
+			{mode:CHASE,   dur:3000},
 			{mode:SCATTER, dur:lv <= 4 ? 4500 : 4000},
 			{mode:CHASE,   dur:15e3},
 			{mode:SCATTER, dur:3500},
@@ -177,15 +177,14 @@ const AttackInWaves = function() {
 			{mode:SCATTER, dur:lv == 1 ? 3500 : 16.6},
 			{mode:CHASE,   dur:Infinity},
 		])
-		function next() {
-			[tCnt,mode]= [0,list[++idx].mode]
-		}
 		function update() {
-			const {dur}= list[idx]
 			if ((Timer.frozen || GhsMgr.isFrightMode)
-			 || ++tCnt * Game.interval < dur) return
-			signalDirectionReversal()
-			dur < 17 ? Timer.set(16.6, next) : next()
+			 || ++tCnt*Game.interval < list[idx].dur) return
+			signalDirectionReversal(), next()
+		}
+		function next() {
+			list[++idx].dur < 17 && ++idx
+			;[tCnt,mode]= [0,list[idx].mode]
 		}
 		return {
 			get mode() {return mode},
