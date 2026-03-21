@@ -1,6 +1,6 @@
 import './ghosts/ghost_sub.js'
 import {Cursor}  from '../_lib/mouse.js'
-import {Menu}    from './ui.js'
+import * as UI   from './ui.js'
 import {State}   from './state.js'
 import {Message} from './message.js'
 import {Ctrl}    from './control.js'
@@ -32,7 +32,7 @@ export const Game = new class {
 			GameOver:  Game.#onGameOver,
 		})
 		.setTitle()
-		Menu.Level.onChange(Game.#resetLevel)
+		UI.Menu.Level.onChange(Game.#resetLevel)
 	}
 	#level   = 1
 	#started = false
@@ -51,14 +51,13 @@ export const Game = new class {
 	get moveSpeed() {return Game.speed * Game.speedByLv}
 
 	#resetLevel() {
-		Game.#setLevel(Menu.Level.index+1)
+		Game.#setLevel(UI.Menu.Level.index+1)
 	}
 	#setLevel(i=1) {
 		Game.#level = between(i, 1, 0xFF) && +i || 1
-		$Level.text('Level'+this.levelStr).trigger('change')
+		UI.$Level.text(this.levelStr).trigger('change')
 	}
 	#onTitle() {
-		Sound
 		Sound.stop()
 		Cursor.show()
 		Game.#resetLevel()
@@ -135,5 +134,4 @@ export const Game = new class {
 		Fruit.drawTarget()
 		Actors.draw(player)
 	}
-},
-$Level = $('#level')
+}

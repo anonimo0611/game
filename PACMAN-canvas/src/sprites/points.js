@@ -1,17 +1,20 @@
 export {GhostPts,FruitPts,cache}
 
-const ctxList = [
+const ctxList = freeze([
 	canvas2D(null).ctx, // Fruit
 	canvas2D(null).ctx, // Ghost
-]
-const palette = [
+])
+const palette = freeze([
 	Colors.FruitPts,
 	Colors.GhostPts,
-]
+])
 
 /** @typedef {(typeof FruitPts | typeof GhostPts)[number]} PtsType */
 const GhostPts = /**@type {const}*/([200,400,800,1600])
 const FruitPts = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
+
+/** @type {ReadonlySet<number>} */
+const GhostPtsSet = new Set(GhostPts)
 
 const NarrowOnePath = newPath2D('M0,0 L0,6')
 const DigitPath0to8 = freeze([
@@ -40,12 +43,9 @@ const KerningMap = /**@type {const}*/({
 	3000: [-10.0, -4.0, 1.0, 6.0],
 	5000: [-10.0, -4.0, 1.0, 6.0]})
 
-/** @type {ReadonlySet<number>} */
-const GtsPtsSet = new Set(GhostPts)
-
 /** @param {PtsType} pts */
 function cache(pts, size=T*2) {
-	const idx = +GtsPtsSet.has(pts)
+	const idx = GhostPtsSet.has(pts)? 1:0
 	const ctx = ctxList[idx]
 	const{w,h}= ctx.resize(size*1.5, size).size
 	ctx.save()

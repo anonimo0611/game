@@ -1,4 +1,10 @@
-export const Form = document.forms[0]
+export const Form   = document.forms[0]
+export const $Level = $('#level-num')
+
+/** @param {()=> void} fn */
+export function onChangeLevel(fn) {
+	$Level.on({change:fn})
+}
 
 //---- Inputs ----
 
@@ -49,7 +55,7 @@ $win.on('resize', ()=> {
 
 //---- Panels ----
 
-;/**@type {HTMLButtonElement[]}*/
+;/** @type {HTMLButtonElement[]} */
 ($('.panelBtn').get()).forEach(btn=> {
 	$(btn).on('keydown pointerdown', e=> {
 		if (e.key && !isEnterKey(e)) return

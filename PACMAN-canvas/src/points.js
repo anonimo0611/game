@@ -1,68 +1,51 @@
-export {GhostPts,FruitPts,cache}
+import {Game}   from './_main.js'
+import {State}  from './state.js'
+import {Score}  from './score.js'
+import {GhsMgr} from './ghosts/_system.js'
+import {Fruit}  from './fruit.js'
+import * as Pts from './sprites/points.js'
 
-const ctxList = freeze([
-	canvas2D(null).ctx, // Fruit
-	canvas2D(null).ctx, // Ghost
-])
-const palette = freeze([
-	Colors.FruitPts,
-	Colors.GhostPts,
-])
+const PtsMap = /**@type {Map<any,Points>}*/(new Map)
+State.on({_RoundEnds:()=> PtsMap.clear()})
 
-/** @typedef {(typeof FruitPts | typeof GhostPts)[number]} PtsType */
-const GhostPts = /**@type {const}*/([200,400,800,1600])
-const FruitPts = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
-
-/** @type {ReadonlySet<number>} */
-const GhostPtsSet = new Set(GhostPts)
-
-const NarrowOnePath = newPath2D('M0,0 L0,6')
-const DigitPath0to8 = freeze([
-	'M1,0 L2,0 L3,1 L3,5 L2,6 L1,6 L0,5 L0,1 Z',
-	'M0,1 L1,0 L1,6 L0,6 L2,6',
-	'M0,2 L0,1 L1,0 L3,0 L4,1 L4,2 L0,6 L4,6',
-	'M0,0 L4,0 L2,2 L4,4 L4,5 L3,6 L1,6 L0,5',
-	'M3,6 L3,0 L0,3 L0,4 L4,4',
-	'M4,0 L0,0 L0,2 L3,2 L4,3 L4,5 L3,6 L1,6 L0,5',
-	'M3,0 L1,0 L0,1 L0,5 L1,6 L2,6 L3,5 L3,3 L0,3',
-	'M0,1 L0,0 L4,0 L4,1 L2,4 L2,6',
-	`M1,0 L3,0 L4,1 L4,2 L3,3 L1,3 L0,4 L0,5
-	 L1,6 L3,6 L4,5 L4,4 L3,3 L1,3 L0,2 L0,1 Z`].map(newPath2D))
-
-const KerningMap = /**@type {const}*/({
-	 100: [ -5.9, -2.0, 3.0],
-	 200: [ -7.0, -1.0, 4.0],
-	 300: [ -7.0, -1.0, 4.0],
-	 400: [ -7.0, -1.0, 4.0],
-	 500: [ -7.0, -1.0, 4.0],
-	 700: [ -7.0, -1.0, 4.0],
-	 800: [ -7.0, -1.0, 4.0],
-	1000: [ -8.0, -4.0, 1.0, 6.0],
-	1600: [ -7.4, -5.3, -.3, 4.7],
-	2000: [-10.0, -4.0, 1.0, 6.0],
-	3000: [-10.0, -4.0, 1.0, 6.0],
-	5000: [-10.0, -4.0, 1.0, 6.0]})
-
-/** @param {PtsType} pts */
-function cache(pts, size=T*2) {
-	const idx = GhostPtsSet.has(pts)? 1:0
-	const ctx = ctxList[idx]
-	const{w,h}= ctx.resize(size*1.5, size).size
-	ctx.save()
-	ctx.translate(w/2, h/2)
-	ctx.scale(size/16, size/16)
-	ctx.strokeStyle = palette[idx]
-	ctx.lineWidth = 1.1
-	ctx.lineJoin  = ctx.lineCap = 'round'
-	KerningMap[pts].forEach((x,i)=> {
-		const path = (pts == 1600 && i == 0)
-			? NarrowOnePath
-			: DigitPath0to8[+pts.toString()[i]]
-		ctx.save()
-		ctx.translate(x,-3)
-		ctx.stroke(path)
-		ctx.restore()
-	})
-	ctx.restore()
-	return /**@type {const}*/({ctx,w,h})
+/**
+ @typedef {{
+	key:{points:import('./sprites/points').PtsType},
+	pos:Position, dur?:number, fn?:()=> void
+}} PtsData
+*/
+export const PtsMgr = new class {
+	/** @type {(data:PtsData, fn?:()=> void)=> void} */
+	set(data,fn)   {new Points({...data,fn})}
+	update()       {PtsMap.forEach(v=> v.update())}
+	drawFruitPts() {PtsMap.get(Fruit) ?.draw()}
+	drawGhostPts() {PtsMap.get(GhsMgr)?.draw()}
+}
+class Points {
+	/** @param {PtsData} data */
+	constructor({key,pos,dur=1e3,fn}) {
+		const spd  = Game.speed, fadeDur = 300
+		this.pos   = pos
+		this.cache = Pts.cache(key.points)
+		this.fade  = Fade.out(fadeDur/spd, (dur-fadeDur)/spd)
+		Timer.set(dur/spd, ()=> {
+			Timer.unfreeze()
+			PtsMap.delete(key)
+			fn?.()
+		})
+		State.isInGame && Score.add(key.points)
+		PtsMap.set(key, this)
+	}
+	update() {
+		this.fade.update()
+	}
+	draw() {
+		const sideOfst = T*1.25
+		const {pos:{x,y},cache:{ctx,w,h}}= this
+		Fg.save()
+		Fg.setAlpha(this.fade?.alpha)
+		Fg.translate(clamp(x, sideOfst, BW-sideOfst), y)
+		Fg.drawImage(ctx.canvas, -w/2,-h/2)
+		Fg.restore()
+	}
 }

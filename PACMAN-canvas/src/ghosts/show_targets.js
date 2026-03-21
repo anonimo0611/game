@@ -6,7 +6,7 @@ import {GhsMgr} from '../ghosts/_system.js'
 import {Ghost}  from './ghost.js'
 import {GuzutaThreshold} from './ghost_sub.js'
 
-export default new class {
+export const TgtMgr = new class {
 	/** @param {readonly Ghost[]} ghosts */
 	draw(ghosts) {
 		if (!Ctrl.showTargets) return

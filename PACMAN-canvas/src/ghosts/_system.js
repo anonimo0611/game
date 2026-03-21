@@ -4,11 +4,12 @@ import {Game}    from '../_main.js'
 import {State}   from '../state.js'
 import {Ctrl}    from '../control.js'
 import {Maze}    from '../maze.js'
-import {Ghost}   from './ghost.js'
 import {PtsMgr}  from '../points.js'
-import {PathMgr} from './show_path.js'
+import * as UI   from '../ui.js'
 import * as Pts  from '../sprites/points.js'
-import TgtMgr    from './show_targets.js'
+import {Ghost}   from './ghost.js'
+import {PathMgr} from './show_path.js'
+import {TgtMgr}  from './show_targets.js'
 import {player,onAteDot} from '../player/player.js'
 
 const PtsLst = Pts.GhostPts
@@ -153,17 +154,7 @@ const signalDirectionReversal = ()=> {
 	$(Ghosts).trigger(Evt.Reverse)
 }
 const AttackInWaves = function() {
-	const SCATTER = 0
-	const CHASE   = 1
-	{
-		let phase = create()
-		State.on({Ready:()=> phase = create(Game.level)})
-		return {
-			get isChaseMode()   {return phase.mode == CHASE},
-			get isScatterMode() {return phase.mode == SCATTER},
-			update() {State.isInGame && phase.update?.()},
-		}
-	}
+	const SCATTER = 0, CHASE = 1
 	function create(lv=1) {
 		let tCnt = -1, idx = 0
 		let mode = Ctrl.alwaysChase? CHASE:SCATTER
@@ -191,6 +182,13 @@ const AttackInWaves = function() {
 			...{update:(mode == CHASE)? null : update},
 		}
 	}
+	let phase = create()
+	UI.onChangeLevel(()=> phase = create(Game.level))
+	return {
+		get isChaseMode()   {return phase.mode == CHASE},
+		get isScatterMode() {return phase.mode == SCATTER},
+		update() {State.isInGame && phase.update?.()},
+	}
 }()
 
 export const DotCounter = function() {
@@ -202,6 +200,10 @@ export const DotCounter = function() {
 			[17, 30,  0, 0], // Aosuke
 			[32, 60, 50, 0], // Guzuta
 		])
+	function reset() {
+		!Game.pacDied && personalCounters.fill(0)
+		_globalCounter = Game.pacDied? 0:-1
+	}
 	/** @param {Ghost} ghost */
 	function releaseIfReady({type,leaveHouse}) {
 		const index   = min(Game.level,3)
@@ -216,43 +218,37 @@ export const DotCounter = function() {
 				: (_globalCounter == gLimit)
 					&& leaveHouse(type == GhsType.Guzuta)
 					&& (_globalCounter = -1)
-		}
-	function reset() {
-		!Game.pacDied && personalCounters.fill(0)
-		_globalCounter = Game.pacDied? 0:-1
-	}
-	function increaseCounter() {
-		(Game.pacDied && _globalCounter >= 0)
-			? _globalCounter++
-			: incPreferredGhostCounter()
 	}
 	function incPreferredGhostCounter() {
 		const
 		idx = Ghosts.findIndex(g=> g.state.isIdle)
 		idx != -1 && personalCounters[idx]++
 	}
-	onAteDot(increaseCounter)
+	onAteDot(()=> {
+		(Game.pacDied && _globalCounter >= 0)
+			? _globalCounter++
+			: incPreferredGhostCounter()
+	})
 	State.on({_Ready:reset})
 	return {releaseIfReady}
 }()
 
 const CruiseElroy = function() {
-	let  _part = 0
 	const Accelerations = freeze([1.00, 1.02, 1.05, 1.1])
 	const DotsLeftTable = freeze([20,20,30,40,50,60,70,70,80,90,100,110,120])
+	let _part = 0
 	function angry() {
 		return State.isInGame
 			&& _part > 1
 			&& Ghosts[GhsType.Akabei]?.isFrightened == false
 			&& Ghosts[GhsType.Guzuta]?.isStarted == true
 	}
-	function onDotEaten() {
+	onAteDot(()=> {
 		const rate = [1.5, 1.0, 0.5][_part]
 		if (Maze.dotsLeft <= DotsLeftTable[Game.clampedLv-1]*rate)
 			++_part && Sound.playSiren()
-	}
-	onAteDot(onDotEaten)
-	State.on({_NewLevel:()=> _part=0})
+	})
+	State.on({_NewLevel:()=> _part = 0})
 	return {
 		get part()  {return _part},
 		get angry() {return angry()},

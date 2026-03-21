@@ -42,7 +42,6 @@ export const Cache = new class {
 	const {ctx}= canvas2D(null, size*fns.length, size)
 	for (const i of fns.keys())
 		draw(ctx, i, size*i+size/2, size/2, size/16)
-	ctx.getImageData(0,0,1,1)
 	Menu.css('--url',`url("${ctx.canvas.toDataURL()}")`)
 }
 

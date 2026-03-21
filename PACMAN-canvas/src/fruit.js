@@ -1,10 +1,10 @@
 import {Sound}  from '../_snd/sound.js'
 import {Rect}   from '../_lib/rect.js'
 import {Game}   from './_main.js'
-import {$Level} from './_main.js'
 import {State}  from './state.js'
 import {Maze}   from './maze.js'
 import {PtsMgr} from './points.js'
+import * as UI  from './ui.js'
 import * as Pts from './sprites/points.js'
 import * as Spr from './sprites/fruits.js'
 import {player,onAteDot} from './player/player.js'
@@ -27,8 +27,8 @@ export const Fruit = new class {
 	static {$(this.setup)}
 	static setup() {
 		onAteDot(Fruit.#onDotEaten)
-		State .on({_Ready: Fruit.#resetTarget})
-		$Level.on({change: Fruit.#setImages})
+		UI.onChangeLevel(Fruit.#setImages)
+		State.on({_Ready:Fruit.#resetTarget})
 	}
 	get points() {
 		return Pts.FruitPts[Fruit.getType()]
