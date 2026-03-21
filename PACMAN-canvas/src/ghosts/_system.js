@@ -174,8 +174,8 @@ const AttackInWaves = function() {
 			signalDirectionReversal(), next()
 		}
 		function next() {
-			list[++idx].dur < 17 && ++idx
-			;[tCnt,mode]= [0,list[idx].mode]
+			list[++idx].dur < 17 && ++idx;
+			[tCnt,mode]= [0,list[idx].mode]
 		}
 		return {
 			get mode() {return mode},
@@ -192,14 +192,14 @@ const AttackInWaves = function() {
 }()
 
 export const DotCounter = function() {
-	let  _globalCounter = -1
+	let   _globalCounter   = -1
 	const personalCounters = new Uint8Array(GhsType.Max)
 	const LimitTable = /**@type {const}*/
-		([//global,lv1,lv2,lv3+
-			[ 7,  0,  0, 0], // Pinky
-			[17, 30,  0, 0], // Aosuke
-			[32, 60, 50, 0], // Guzuta
-		])
+		(// global,lv1,lv2,lv3+
+			[[ 7,  0,  0, 0], // Pinky
+			 [17, 30,  0, 0], // Aosuke
+			 [32, 60, 50, 0]] // Guzuta
+		)
 	function reset() {
 		!Game.pacDied && personalCounters.fill(0)
 		_globalCounter = Game.pacDied? 0:-1
