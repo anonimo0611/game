@@ -39,7 +39,6 @@ export const Game = new class {
 	#pacDied = false
 
 	get level()     {return Game.#level}
-	get levelStr()  {return Game.#level.toString().padStart(2,'0')}
 	get started()   {return Game.#started}
 	get pacDied()   {return Game.#pacDied}
 
@@ -53,9 +52,9 @@ export const Game = new class {
 	#resetLevel() {
 		Game.#setLevel(UI.Menu.Level.index+1)
 	}
-	#setLevel(i=1) {
-		Game.#level = between(i, 1, 0xFF) && +i || 1
-		UI.$Level.text(this.levelStr).trigger('change')
+	#setLevel(n=1) {
+		n = Game.#level = between(n, 1, 0xFF) && n || 1
+		UI.$Level.val( zeroPad(n,2) ).trigger('change')
 	}
 	#onTitle() {
 		Sound.stop()
