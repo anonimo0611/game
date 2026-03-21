@@ -10,7 +10,7 @@ import * as Pts  from '../sprites/points.js'
 import {Ghost}   from './ghost.js'
 import {PathMgr} from './show_path.js'
 import {TgtMgr}  from './show_targets.js'
-import {player,onAteDot} from '../player/player.js'
+import {player,onPlayerDotEaten} from '../player/player.js'
 
 const PtsLst = Pts.GhostPts
 const Ghosts = /**@type {Ghost[]}*/([])
@@ -192,8 +192,8 @@ const AttackInWaves = function() {
 }()
 
 export const DotCounter = function() {
-	let   _globalCounter   = -1
-	const personalCounters = new Uint8Array(GhsType.Max)
+	let   gCounter   = -1
+	const pCounters  = new Uint8Array(GhsType.Max)
 	const LimitTable = /**@type {const}*/
 		(// global,lv1,lv2,lv3+
 			[[ 7,  0,  0, 0], // Pinky
@@ -201,32 +201,32 @@ export const DotCounter = function() {
 			 [32, 60, 50, 0]] // Guzuta
 		)
 	function reset() {
-		!Game.pacDied && personalCounters.fill(0)
-		_globalCounter = Game.pacDied? 0:-1
+		!Game.pacDied && pCounters.fill(0)
+		gCounter = Game.pacDied? 0:-1
 	}
 	/** @param {Ghost} ghost */
 	function releaseIfReady({type,leaveHouse}) {
 		const index   = min(Game.level,3)
 		const timeout = (Game.level<=4 ? 4e3:3e3)
-		const gLimit  = LimitTable[type-1][0] // global
-		const pLimit  = LimitTable[type-1][index] // personal
+		const gLimit  = LimitTable[type-1][0]
+		const pLimit  = LimitTable[type-1][index]
 		;(player.timeSinceLastEating >= timeout)
 			? leaveHouse()
-			: (!Game.pacDied || _globalCounter < 0)
-				? (personalCounters[type] >= pLimit)
+			: (!Game.pacDied || gCounter < 0)
+				? (pCounters[type] >= pLimit)
 					&& leaveHouse()
-				: (_globalCounter == gLimit)
+				: (gCounter == gLimit)
 					&& leaveHouse(type == GhsType.Guzuta)
-					&& (_globalCounter = -1)
+					&& (gCounter = -1)
 	}
 	function incPreferredGhostCounter() {
 		const
 		idx = Ghosts.findIndex(g=> g.state.isIdle)
-		idx != -1 && personalCounters[idx]++
+		idx != -1 && pCounters[idx]++
 	}
-	onAteDot(()=> {
-		(Game.pacDied && _globalCounter >= 0)
-			? _globalCounter++
+	onPlayerDotEaten(()=> {
+		(Game.pacDied && gCounter >= 0)
+			? gCounter++
 			: incPreferredGhostCounter()
 	})
 	State.on({_Ready:reset})
@@ -243,7 +243,7 @@ const CruiseElroy = function() {
 			&& Ghosts[GhsType.Akabei]?.isFrightened == false
 			&& Ghosts[GhsType.Guzuta]?.isStarted == true
 	}
-	onAteDot(()=> {
+	onPlayerDotEaten(()=> {
 		const rate = [1.5, 1.0, 0.5][_part]
 		if (Maze.dotsLeft <= DotsLeftTable[Game.clampedLv-1]*rate)
 			++_part && Sound.playSiren()

@@ -96,7 +96,7 @@ class PlayerCore extends PacMan {
 }
 
 export let player = new PlayerCore
-export function onAteDot(
+export function onPlayerDotEaten(
 	/**@type {JQTriggerHandler}*/fn) {
 	EventBus.on(AteDotEv,fn)
 }

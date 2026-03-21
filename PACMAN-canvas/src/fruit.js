@@ -7,7 +7,7 @@ import {PtsMgr} from './points.js'
 import * as UI  from './ui.js'
 import * as Pts from './sprites/points.js'
 import * as Spr from './sprites/fruits.js'
-import {player,onAteDot} from './player/player.js'
+import {player,onPlayerDotEaten} from './player/player.js'
 
 /** The fruit appear after 70 or 170 dots are cleared
 @type {ReadonlySet<number>} */
@@ -26,9 +26,9 @@ let  _fadeOut = /**@type {?Fade}*/(null)
 export const Fruit = new class {
 	static {$(this.setup)}
 	static setup() {
-		onAteDot(Fruit.#onDotEaten)
 		UI.onChangeLevel(Fruit.#setImages)
 		State.on({_Ready:Fruit.#resetTarget})
+		onPlayerDotEaten(Fruit.#onDotEaten)
 	}
 	get points() {
 		return Pts.FruitPts[Fruit.getType()]
