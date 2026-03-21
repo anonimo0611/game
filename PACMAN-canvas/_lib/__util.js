@@ -111,6 +111,11 @@ const {abs,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Mat
 
 /**
  @param {number} n
+ @param {number} digit
+*/const zeroPad = (n,digit)=> String(n).padStart(digit,'0')
+
+/**
+ @param {number} n
  @param {number} min
  @param {number} max
 */const between = (n,min,max)=> (n >= min && n <= max)
