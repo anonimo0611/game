@@ -94,7 +94,6 @@ class Vec2 {
 		return Vec2.sub(pos1,pos2).magnitude
 	}
 	/**
-	 @private
 	 @param {number} x
 	 @param {number} y
 	*/
@@ -203,14 +202,6 @@ class Vec2 {
 		const [x,y]= Vec2.#parseXY(v1, v2)
 		this.x -= x
 		this.y -= y
-		return this
-	}
-	shiftByAxis(
-	 /**@type {Direction}*/dir,
-	 /**@type {number}*/scalar
-	) {
-		Vec2[dir].x && (this.x += scalar)
-		Vec2[dir].y && (this.y += scalar)
 		return this
 	}
 	mul(/**@type {number}*/scalar) {
