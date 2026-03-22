@@ -9,7 +9,7 @@ import * as UI   from '../ui.js'
 import * as Pts  from '../sprites/points.js'
 import {Ghost}   from './ghost.js'
 import {PathMgr} from './show_path.js'
-import {TgtMgr}  from './show_targets.js'
+import {Targets} from './show_targets.js'
 import {player,onPlayerDotEaten} from '../player/player.js'
 
 const PtsLst = Pts.GhostPts
@@ -136,7 +136,7 @@ export const GhsMgr = new class {
 		GhsMgr.#draw(false)
 	}
 	drawFront()  {
-		TgtMgr.draw(Ghosts)
+		Targets.draw(Ghosts)
 		PathMgr.draw(Ghosts)
 		GhsMgr.#draw(true)
 		PtsMgr.drawGhostPts()
@@ -154,38 +154,37 @@ const signalDirectionReversal = ()=> {
 	$(Ghosts).trigger(Evt.Reverse)
 }
 const AttackInWaves = function() {
-	const SCATTER = 0, CHASE = 1
+	const SCATTER = 0
+	const CHASING = 1
 	function create(lv=1) {
 		let tCnt = -1, idx = 0
-		let mode = Ctrl.alwaysChase? CHASE:SCATTER
+		let mode = Ctrl.alwaysChase? CHASING : SCATTER
 		const list = /**@type {const}*/([
 			{mode:SCATTER, dur:lv <= 4 ? 4500 : 4000},
-			{mode:CHASE,   dur:15e3},
+			{mode:CHASING, dur:15e3},
 			{mode:SCATTER, dur:lv <= 4 ? 4500 : 4000},
-			{mode:CHASE,   dur:15e3},
+			{mode:CHASING, dur:15e3},
 			{mode:SCATTER, dur:3500},
-			{mode:CHASE,   dur:lv == 1 ? 15e3 : 78e4},
-			{mode:SCATTER, dur:lv == 1 ? 3500 : 16.6},
-			{mode:CHASE,   dur:Infinity},
-		])
-		function update() {
-			if ((Timer.frozen || GhsMgr.isFrightMode)
-			 || ++tCnt*Game.interval < list[idx].dur) return
-			signalDirectionReversal(), next()
-		}
-		function next() {
-			list[++idx].dur < 17 && ++idx;
-			[tCnt,mode]= [0,list[idx].mode]
-		}
-		return {
-			get mode() {return mode},
-			...{update:(mode == CHASE)? null : update},
-		}
+			{mode:CHASING, dur:lv == 1 ? 15e3 : 78e4},
+			{mode:SCATTER, dur:lv == 1 ? 3500 : 0},
+			{mode:CHASING, dur:Infinity},
+		]),
+		update = (mode == CHASING)
+			? null
+			: ()=> {
+				if ((Timer.frozen || GhsMgr.isFrightMode)
+				|| ++tCnt*Game.interval < list[idx].dur)
+					return
+				signalDirectionReversal()
+				list[++idx].dur == 0 && ++idx
+				tCnt = 0, mode = list[idx].mode
+			}
+		return {get mode(){return mode},update}
 	}
 	let phase = create()
 	UI.onChangeLevel(()=> phase = create(Game.level))
 	return {
-		get isChaseMode()   {return phase.mode == CHASE},
+		get isChaseMode()   {return phase.mode == CHASING},
 		get isScatterMode() {return phase.mode == SCATTER},
 		update() {State.isInGame && phase.update?.()},
 	}
@@ -271,7 +270,7 @@ const FrightMode = function() {
 				? $(Ghosts).trigger(Evt.FleeStart)
 				: this.#set(true)
 		}
-		#set(/**@type {boolean}*/isOn) {
+		#set(isOn=true) {
 			_session = (isOn? this : null)
 			$(Ghosts)
 				.trigger(Evt.Frighten, isOn)
