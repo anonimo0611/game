@@ -8,9 +8,8 @@ const {Ticker,Timer}= function() {
 		ignoreFrozen: boolean;
 	}} TimerData
 	*/
-	const TICK_STEP = 16.6
-	const THRESHOLD = 250
-	const INTERVAL  = 1000/60
+	const TICK_STEP = 1000/60
+	const THRESHOLD = 100
 
 	/** @type {Map<any,TimerData>} */
 	const TimerMap = new Map
@@ -21,12 +20,12 @@ const {Ticker,Timer}= function() {
 	let _pCount = 0 // paused count
 
 	const Ticker = new class {
-		get Interval()    {return INTERVAL}
+		get Interval()    {return TICK_STEP}
 		get count()       {return _fCount}
 		get pausedCount() {return _pCount}
 		get paused()      {return _paused}
 		get running()     {return _ticker instanceof TickerCore}
-		get elapsedTime() {return _fCount*INTERVAL}
+		get elapsedTime() {return _fCount*TICK_STEP}
 
 		/**
 		 @param {()=> void} [updateFn]
@@ -41,6 +40,8 @@ const {Ticker,Timer}= function() {
 		}
 		resetCount() {
 			_fCount = 0
+			if (_ticker)
+				_ticker.isReset = true
 		}
 		stop()  {
 			_ticker?.stop()
@@ -64,21 +65,29 @@ const {Ticker,Timer}= function() {
 			_ticker      = this
 			this.acc     = 0
 			this.lstTS   = 0
+			this.isReset = false
 			this.update  = updateFn
 			this.draw    = drawFn
 			this.rAFId   = requestAnimationFrame(this.loop)
 		}
 		/** @param {number} ts */
-		loop = ts=> {
+		loop = (ts) => {
 			this.rAFId = requestAnimationFrame(this.loop)
+
 			if (this.lstTS === 0)
-				this.lstTS = this.acc = ts
-			if (this.acc > THRESHOLD) {
+				this.lstTS = ts
+			let dt = ts - this.lstTS
+			if (dt > THRESHOLD)
+				dt = TICK_STEP
+
+			this.acc += dt
+			this.lstTS = ts
+
+			if (this.isReset) {
+				this.isReset = false
 				this.acc = TICK_STEP
 			}
-			this.acc += (ts - this.lstTS)
-			this.lstTS = ts
-			while(this.acc >= TICK_STEP) {
+			while(ceil(this.acc) >= TICK_STEP) {
 				this.acc -= TICK_STEP
 				this.tick()
 			}
@@ -104,7 +113,7 @@ const {Ticker,Timer}= function() {
 		*/
 		timer(t, key) {
 			if (Timer.frozen && !t.ignoreFrozen) return
-			if (INTERVAL*t.amount++ < t.timeout) return
+			if (TICK_STEP*t.amount++ < t.timeout) return
 			TimerMap.delete(key);t.handler()
 		}
 		stop()  {
@@ -150,3 +159,4 @@ const {Ticker,Timer}= function() {
 
 	return {Ticker,Timer}
 }()
+
