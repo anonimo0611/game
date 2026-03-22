@@ -134,18 +134,18 @@ class Scene2 extends CoffBreak {
 		return (a.x != spr.AkaMinX)
 	}
 	draw() {
-		const {akabei:a, sprite:spr, akaEyes,isRipped}= this
-		const aIdx = isRipped? 0 : (this.counter? 1 : a.animIdx)
+		const {akabei:a,sprite:spr,akaEyes,isRipped}= this
+		const animIdx = isRipped? 0 : (this.counter? 1 : a.animIdx)
 		spr.drawStake()
 		this.drawPac()
-		this.drawAka({isRipped, animIdx:aIdx, orient:akaEyes})
+		this.drawAka({isRipped,animIdx,orient:akaEyes})
 		isRipped
-			?spr.drawShard()
-			:function() { // Snagged clothing
+			? spr.drawShard()
+			: function() { // Snagged clothing
 				if (isRipped || a.x >= spr.CaughtX) return
 				const pos   = a.center.addX(T)
 				const ratio = norm(spr.CaughtX, spr.AkaMinX, a.x)
-				spr.drawSnaggedClothing(aIdx, ratio, pos)
+				spr.drawSnaggedClothing(animIdx, ratio, pos)
 			}()
 		super.draw()
 	}
