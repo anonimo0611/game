@@ -49,8 +49,8 @@ export const Game = new class {
 	get moveSpeed() {return Game.speed * Game.speedByLv}
 
 	#setLevel(n=1) {
-		n = Game.#level = between(n,1,0xFF) && n || 1
-		$Level.val( zeroPad(n,2) ).trigger('change')
+		Game.#level = between(n, 1, 0xFF) && n || 1
+		Level.val( zeroPad(Game.level,2) ).trigger('change')
 	}
 	#reset() {
 		Ticker.reset()
@@ -128,4 +128,4 @@ export const Game = new class {
 		Fruit.drawTarget()
 		Actors.draw(player)
 	}
-}, $Level = $('#level-num')
+}, Level = $('#level-num')

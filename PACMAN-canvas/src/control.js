@@ -32,7 +32,7 @@ export const Ctrl = new class {
 	get semiTransPac()  {return Ctrl.invincible  || Ctrl.showGridLines}
 	get usingCheats()   {return Ctrl.invincible  || Ctrl.speed<.7  || Ctrl.showTracking}
 	get isPractice()    {return Ctrl.usingCheats ||!Ctrl.isArcadeMode}
-	get isArcadeMode()  {return Ctrl.endlessMode && !Menu.Level.index}
+	get isArcadeMode()  {return Ctrl.endlessMode && Menu.Level.index == 0}
 
 	/** @param {boolean} [force] */
 	pause(force) {

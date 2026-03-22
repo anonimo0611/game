@@ -1,7 +1,7 @@
 import {Sound}  from '../_snd/sound.js'
 import {Rect}   from '../_lib/rect.js'
 import {Game}   from './_main.js'
-import {$Level} from './_main.js'
+import {Level}  from './_main.js'
 import {State}  from './state.js'
 import {Maze}   from './maze.js'
 import {PtsMgr} from './points.js'
@@ -22,9 +22,9 @@ let  _fadeOut = /**@type {?Fade}*/(null)
 export const Fruit = new class {
 	static {$(this.setup)}
 	static setup() {
+		Level.on({change:Fruit.#setImages})
+		State.on({_Ready:Fruit.#resetTarget})
 		onPlayerDotEaten(Fruit.#onDotEaten)
-		State .on({_Ready:Fruit.#resetTarget})
-		$Level.on({change:Fruit.#setImages})
 	}
 	get points() {
 		return Pts.FruitPts[Fruit.getType()]
