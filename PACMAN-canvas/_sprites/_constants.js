@@ -13,7 +13,7 @@ export const BrightRng = /**@type {HTMLInputElement} */(byId('brightRng'))
 export const ResetBtn  = /**@type {HTMLButtonElement}*/(byId('resetBtn'))
 
 export let  [T,S,GAP] = [0,0,0]
-export const GridSize = Vec2.new(10,11).freeze()
+export const GridSize = new Vec2(10,11).freeze()
 export const ghsSprPv = new GhsSprite(Pv)
 export const ghsSprGr = new GhsSprite(Fg)
 
