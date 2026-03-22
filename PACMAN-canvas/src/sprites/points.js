@@ -8,7 +8,6 @@ const palette = freeze([
 	Colors.FruitPts,
 	Colors.GhostPts,
 ])
-
 const GhostPts = /**@type {const}*/([200,400,800,1600])
 const FruitPts = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
 
