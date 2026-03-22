@@ -63,7 +63,7 @@ const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 	}
 	#drawPoints() {
 		/**
-		 @param {import('../src/sprites/points').PtsType} pts
+		 @param {PointType} pts
 		 @param {number} x
 		 @param {number} y
 		*/
