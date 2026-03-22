@@ -5,7 +5,6 @@ import {State}   from '../state.js'
 import {Ctrl}    from '../control.js'
 import {Maze}    from '../maze.js'
 import {PtsMgr}  from '../points.js'
-import * as UI   from '../ui.js'
 import * as Pts  from '../sprites/points.js'
 import {Ghost}   from './ghost.js'
 import {PathMgr} from './show_path.js'
@@ -182,7 +181,7 @@ const AttackInWaves = function() {
 		return {get mode(){return mode},update}
 	}
 	let phase = create()
-	UI.onChangeLevel(()=> phase = create(Game.level))
+	State.on({Ready:()=> phase = create(Game.level)})
 	return {
 		get isChaseMode()   {return phase.mode == CHASING},
 		get isScatterMode() {return phase.mode == SCATTER},
