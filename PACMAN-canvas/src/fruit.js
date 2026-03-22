@@ -4,7 +4,7 @@ import {Game}   from './_main.js'
 import {State}  from './state.js'
 import {Maze}   from './maze.js'
 import {PtsMgr} from './points.js'
-import * as UI  from './ui.js'
+import {$Level} from './ui.js'
 import * as Pts from './sprites/points.js'
 import * as Spr from './sprites/fruits.js'
 import {player,onPlayerDotEaten} from './player/player.js'
@@ -13,7 +13,7 @@ import {player,onPlayerDotEaten} from './player/player.js'
 @type {ReadonlySet<number>} */
 const AppearDots = new Set([70,170])
 
-const Size       = T*2
+const Size = T*2
 const LevelsCols = 7
 const FruitTable = freeze([0,1,2,2,3,3,4,4,5,5,6,6,7])
 const TargetPos  = Vec2.new(BW/2, T*18.5).freeze()
@@ -26,9 +26,9 @@ let  _fadeOut = /**@type {?Fade}*/(null)
 export const Fruit = new class {
 	static {$(this.setup)}
 	static setup() {
-		State.on({_Ready:Fruit.#resetTarget})
-		UI.onChangeLevel(Fruit.#setImages)
 		onPlayerDotEaten(Fruit.#onDotEaten)
+		State .on({_Ready:Fruit.#resetTarget})
+		$Level.on({change:Fruit.#setImages})
 	}
 	get points() {
 		return Pts.FruitPts[Fruit.getType()]

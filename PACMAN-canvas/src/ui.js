@@ -1,11 +1,6 @@
 export const Form   = document.forms[0]
 export const $Level = $('#level-num')
 
-/** @param {()=> void} fn */
-export function onChangeLevel(fn) {
-	$Level.on({change:fn})
-}
-
 //---- Inputs ----
 
 const inputIds = /**@type {const}*/
