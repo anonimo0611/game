@@ -1,5 +1,4 @@
 export const Form   = document.forms[0]
-export const $Level = $('#level-num')
 
 //---- Inputs ----
 
