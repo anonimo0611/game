@@ -8,21 +8,15 @@ import * as Pts from './sprites/points.js'
 const PtsMap = /**@type {Map<any,Points>}*/(new Map)
 State.on({_RoundEnds:()=> PtsMap.clear()})
 
-/**
- @typedef {{
-	key:{points:import('./sprites/points').PtsType},
-	pos:Position, dur?:number, fn?:()=> void
-}} PtsData
-*/
 export const PtsMgr = new class {
-	/** @type {(data:PtsData, fn?:()=> void)=> void} */
-	set(data,fn)   {new Points({...data,fn})}
-	update()       {PtsMap.forEach(v=> v.update())}
-	drawFruitPts() {PtsMap.get(Fruit) ?.draw()}
-	drawGhostPts() {PtsMap.get(GhsMgr)?.draw()}
+	/** @param {PointPopUpData} data */
+	set(data) {new Points(data)}
+	update()      {PtsMap.forEach(v=> v.update())}
+	drawFruitPts(){PtsMap.get(Fruit) ?.draw()}
+	drawGhostPts(){PtsMap.get(GhsMgr)?.draw()}
 }
 class Points {
-	/** @param {PtsData} data */
+	/** @param {PointPopUpData} data */
 	constructor({key,pos,dur=1e3,fn}) {
 		const spd  = Game.speed, fadeDur = 300
 		this.pos   = pos

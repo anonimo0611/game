@@ -9,7 +9,6 @@ const palette = freeze([
 	Colors.GhostPts,
 ])
 
-/** @typedef {(typeof FruitPts | typeof GhostPts)[number]} PtsType */
 const GhostPts = /**@type {const}*/([200,400,800,1600])
 const FruitPts = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
 
@@ -43,7 +42,7 @@ const KerningMap = /**@type {const}*/({
 	3000: [-10.0, -4.0, 1.0, 6.0],
 	5000: [-10.0, -4.0, 1.0, 6.0]})
 
-/** @param {PtsType} pts */
+/** @param {PointType} pts */
 function cache(pts, size=T*2) {
 	const idx = GhostPtsSet.has(pts)? 1:0
 	const ctx = ctxList[idx]
