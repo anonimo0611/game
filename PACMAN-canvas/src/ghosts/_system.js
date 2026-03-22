@@ -175,7 +175,7 @@ const AttackInWaves = function() {
 				|| ++tCnt*Game.interval < list[idx].dur)
 					return
 				signalDirectionReversal()
-				list[++idx].dur == 0 && ++idx
+				++idx,(!list[idx].dur && ++idx)
 				tCnt = 0, mode = list[idx].mode
 			}
 		return {get mode(){return mode},update}

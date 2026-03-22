@@ -34,7 +34,6 @@ class GameState extends _State {
 	 @param {StateDef.Opts<StateType>} options
 	*/
 	set(s, {data,delay=(s == 'Quit' ? -1 : 0)}={}) {
-		if (/Title|Quit/.test(s)) Ticker.reset()
 		return super.set(s, {data,delay,fn:this.#callback})
 	}
 }
