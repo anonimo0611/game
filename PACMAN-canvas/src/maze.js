@@ -40,15 +40,13 @@ D__________________________C\
 ////////////////////////////\
 ////////////////////////////`])
 
-/** `.` and `O` represent normal and power cookies
-@type {ReadonlySet<string>} */
-const DotChips  = new Set([...'.O'])
 const DotRadius = T/9
 const PowRadius = T/2
 
 const WallSet  = /**@type {Set<number>}*/(new Set)
 const DotSet   = /**@type {Set<number>}*/(new Set)
 const PowMap   = /**@type {Map<number,Position>}*/(new Map)
+const DotChips = new Set([...'.O'])
 const PenRect  = new Rect(10, 13,  8, 5).freeze()
 const PenOuter = new Rect( 9, 12, 10, 7).freeze()
 

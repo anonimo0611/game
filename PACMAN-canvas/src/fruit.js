@@ -9,15 +9,11 @@ import * as Pts from './sprites/points.js'
 import * as Spr from './sprites/fruits.js'
 import {player,onPlayerDotEaten} from './player/player.js'
 
-/** The fruit appear after 70 or 170 dots are cleared
-@type {ReadonlySet<number>} */
-const AppearDots = new Set([70,170])
-
-const Size = T*2
 const LevelsCols = 7
 const FruitTable = freeze([0,1,2,2,3,3,4,4,5,5,6,6,7])
-const TargetPos  = Vec2.new(BW/2, T*18.5).freeze()
-const LevelsRect = new Rect(Size*6, BH-Size, Size*LevelsCols, Size).freeze()
+const TargetPos  = new Vec2(BW/2, T*18.5).freeze()
+const AppearDots = new Set([70,170])
+const LevelsRect = new Rect(T*2*6, BH-T*2, T*2*LevelsCols, T*2).freeze()
 
 const FadeDur = 300
 let  _showTgt = true
@@ -95,7 +91,7 @@ export const Fruit = new class {
 		HUD.clearRect(x,y,w,h)
 		HUD.translate(x,y)
 		for (const i of range(startLevel, Game.level))
-			Spr.draw(HUD, Fruit.getType(i+1), w-T-Size*(i-startLevel))
+			Spr.draw(HUD, Fruit.getType(i+1), w-T-T*2*(i-startLevel))
 		HUD.restore()
 	}
 	#setImages() {
