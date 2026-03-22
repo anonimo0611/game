@@ -6,8 +6,17 @@ interface Scene {update():void, draw?():void}
 
 type xyTuple  = Readonly<[x:number, y:number]>
 type Position = Readonly<{x:number, y:number}>
-type PathNode = Readonly<{tile:Vec2, dir:Direction, stopped:boolean}>
+type PathNode = {tile:Vec2, dir:Direction,stopped:boolean}
 
+//---- Point ----
+
+type PointType = 100|200|300|400|800|1600|500|700|1000|2000|3000|5000
+type PointPopUpData = {
+    key: {points:PointType};
+    pos: Readonly<Position>;
+    dur?:number;
+    fn?: ()=> void;
+}
 //---- Direction ----
 
 type Direction  = 'Up'|'Right'|'Down'|'Left'
