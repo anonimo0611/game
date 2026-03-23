@@ -1,13 +1,9 @@
 export {GhostPts,FruitPts,cache}
 
-const ctxList = freeze([
-	canvas2D(null).ctx, // Fruit
-	canvas2D(null).ctx, // Ghost
-])
-const palette = freeze([
-	Colors.FruitPts,
-	Colors.GhostPts,
-])
+const fruitCtx = canvas2D(null).ctx
+const ghostCtx = canvas2D(null).ctx
+const ctxList  = freeze([fruitCtx,ghostCtx])
+const palette  = freeze(['#FAF','#3CF'])
 const GhostPts = /**@type {const}*/([200,400,800,1600])
 const FruitPts = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
 
