@@ -5,14 +5,13 @@ import {State}   from '../state.js'
 import {Ctrl}    from '../control.js'
 import {Maze}    from '../maze.js'
 import {PtsMgr}  from '../points.js'
-import * as Pts  from '../sprites/points.js'
 import {Ghost}   from './ghost.js'
 import {PathMgr} from './show_path.js'
 import {Targets} from './show_targets.js'
 import {player,onPlayerDotEaten} from '../player/player.js'
 
-const PtsLst = Pts.GhostPts
 const Ghosts = /**@type {Ghost[]}*/([])
+const PtsLst = /**@type {const}*/([200,400,800,1600])
 
 export const Evt = toEnumObject
 	(['Ready','Reverse','Frighten','FleeStart','RoundEnds'])

@@ -1,14 +1,7 @@
-export {GhostPts,FruitPts,cache}
-
 const fruitCtx = canvas2D(null).ctx
 const ghostCtx = canvas2D(null).ctx
 const ctxList  = freeze([fruitCtx,ghostCtx])
 const palette  = freeze(['#FAF','#3CF'])
-const GhostPts = /**@type {const}*/([200,400,800,1600])
-const FruitPts = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
-
-/** @type {ReadonlySet<number>} */
-const GhostPtsSet = new Set(GhostPts)
 
 const NarrowOnePath = newPath2D('M0,0 L0,6')
 const DigitPath0to8 = freeze([
@@ -37,15 +30,17 @@ const KerningMap = /**@type {const}*/({
 	3000: [-10.0, -4.0, 1.0, 6.0],
 	5000: [-10.0, -4.0, 1.0, 6.0]})
 
-/** @param {PointType} pts */
-function cache(pts, size=T*2) {
-	const idx = GhostPtsSet.has(pts)? 1:0
-	const ctx = ctxList[idx]
+/**
+ @param {0|1} type 0=Fruits, 1=Ghosts
+ @param {PtsValue} pts
+*/
+export function cache(type, pts, size=T*2) {
+	const ctx = ctxList[type]
 	const{w,h}= ctx.resize(size*1.5, size).size
 	ctx.save()
 	ctx.translate(w/2, h/2)
 	ctx.scale(size/16, size/16)
-	ctx.strokeStyle = palette[idx]
+	ctx.strokeStyle = palette[type]
 	ctx.lineWidth = 1.1
 	ctx.lineJoin  = ctx.lineCap = 'round'
 	KerningMap[pts].forEach((x,i)=> {
