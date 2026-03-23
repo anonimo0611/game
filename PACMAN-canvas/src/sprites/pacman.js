@@ -5,12 +5,11 @@ const OpenMax  = 60 * PI/180
 import {Dir}   from '../../_lib/direction.js';
 import {Dying} from './pacman_dying.js'
 export default class {
-	#dyingSpr   = /**@type {?Dying}*/(null)
-	#mouthPhase = 0
-	#mouthAngle = 0
+	#mouthPhase  = 0
+	#mouthAngle  = 0
+	#dyingSprite = /**@type {?Dying}*/(null)
 
 	/** @readonly */ctx
-	/** @readonly */isBoard
 	/** @readonly */radius
 	/**
 	 @param {EnhancedCtx2D} ctx
@@ -18,14 +17,13 @@ export default class {
 	 0=closed, 1=half-open, 2=fully open
 	*/
 	constructor(ctx, initialMouthOpening=0, radius=PacRadius) {
-		this.ctx     = ctx
-		this.radius  = radius
-		this.isBoard = ctx.canvas.id == 'board_main'
+		this.ctx    = ctx
+		this.radius = radius
 		this.#mouthAngle = [0,OpenMid,OpenMax][initialMouthOpening]
 	}
 	update({closed=false,hidden=false,onWall=false}={}) {
-		this.#dyingSpr
-			? this.#dyingSpr.update()
+		this.#dyingSprite
+			? this.#dyingSprite.update()
 			: !closed && !hidden && this.#chew(onWall)
 	}
 	#chew(onWall=false) {
@@ -47,9 +45,8 @@ export default class {
 	) {
 		if (hidden)
 			return
-		if (this.#dyingSpr) {
-			this.isBoard && (x = clamp(x, radius, BW-radius))
-			this.#dyingSpr.draw({x,y,radius})
+		if (this.#dyingSprite) {
+			this.#dyingSprite.draw({x,y})
 			return
 		}
 		const {ctx} = this
@@ -67,6 +64,6 @@ export default class {
 	}
 	/** @param {()=> void} fn */
 	startDying(fn) {
-		this.#dyingSpr = new Dying(this, fn)
+		this.#dyingSprite = new Dying(this, fn)
 	}
 }

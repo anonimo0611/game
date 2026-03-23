@@ -43,6 +43,10 @@ export class Actor {
 	centering() {
 		this.x = (BW-T)/2
 	}
+	keepInsideBoard() {
+		const {center:{x},radius:r}= this
+		this.x = clamp(x, r, BW-r) - T/2
+	}
 	#wrapXAxis() {
 		this.x = function({center:{x}}) {
 			if (x <   -T) return BW+T

@@ -10,11 +10,11 @@ import {Mover}    from './controller.js'
 import {TunEntry} from './tunnel.js'
 
 const EventBus = $({})
-const AteDotEv = 'AteDot'
+const DotEatenEvent = 'DotEaten'
 
 let _fade = /**@type {?Fade}*/(null)
 
-class PlayerCore extends PacMan {
+class Player extends PacMan {
 	#eatIdx = 0
 	#sinceLastEating = 0
 
@@ -46,20 +46,20 @@ class PlayerCore extends PacMan {
 			super.drawCenterDot()
 	}
 	draw() {
-		if (State.isIntro)
-			return
+		if (State.isIntro) return
+		if (State.isInGame == false)
+			this.keepInsideBoard()
 		this.sprite.draw(this)
 		this.drawCenterDot()
-		Fg.strokeStyle = 'red'
 	}
 	update() {
 		this.sprite.update(this)
 		_fade?.update(this.maxAlpha)
-		if (this.closed || this.hidden)
-			return
-		this.#sinceLastEating += Game.interval
-		this.#tunEntry.update()
-		this.#update(this.#mov.speed+.5|0)
+		if (!this.closed && !this.hidden) {
+			this.#sinceLastEating += Game.interval
+			this.#tunEntry.update()
+			this.#update(this.#mov.speed+.5|0)
+		}
 	}
 	#update(steps=1) {
 		for (const _ of range(steps)) {
@@ -69,8 +69,7 @@ class PlayerCore extends PacMan {
 		}
 	}
 	#eatDot(tileIdx=-1) {
-		if (!Maze.hasDot(tileIdx))
-			return
+		if (!Maze.hasDot(tileIdx)) return
 		this.#playEatSE()
 		this.resetTimer()
 		Maze.hasPow(tileIdx)
@@ -78,7 +77,7 @@ class PlayerCore extends PacMan {
 			: this.#eatSmallDot()
 		Maze.clearDot(this) == 0
 			? State.setRoundEnds()
-			: EventBus.trigger(AteDotEv)
+			: EventBus.trigger(DotEatenEvent)
 	}
 	#eatPowerDot() {
 		Score.add(PowPts)
@@ -95,12 +94,12 @@ class PlayerCore extends PacMan {
 	}
 }
 
-export let player = new PlayerCore
+export let player = new Player
 export function onPlayerDotEaten(
 	/**@type {JQTriggerHandler}*/fn) {
-	EventBus.on(AteDotEv,fn)
+	EventBus.on(DotEatenEvent,fn)
 }
 State.on({_Ready:()=> {
 	_fade = State.isTitle? null : Fade.in()
-	!State.wasIntro && (player = new PlayerCore)
+	!State.wasIntro && (player = new Player)
 }})
