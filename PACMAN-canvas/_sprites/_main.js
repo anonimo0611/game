@@ -76,11 +76,13 @@ const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 			ctx.restore()
 		}
 		const table = /**@type {const}*/([
-			[1000,2000,3000,5000], // Fruits
-			[200,400,800,1600,100,300,500,700] // Ghosts
+			[200,400,800,1600],   // Ghost pts
+			[100,300,500,700],    // Fruit pts
+			[1000,2000,3000,5000],// Fruit pts
 		])
-		table[0].forEach((pts,i)=> draw(0, pts, (S+GAP/2)+S*(2+GAP/T)*i, S*7+S/2))
-		table[1].forEach((pts,i)=> draw(1, pts, ofst(i)+T, S*6+T))
+		table[0].forEach((pts,i)=> draw(1, pts, ofst(i+0)+T, S*6+T))
+		table[1].forEach((pts,i)=> draw(0, pts, ofst(i+4)+T, S*6+T))
+		table[2].forEach((pts,i)=> draw(0, pts, (S+GAP/2)+S*(2+GAP/T)*i, S*7+S/2))
 	}
 	#drawPacman() {
 		const dirs = /**@type {const}*/([U,U,L,L,D,D,R,R])
