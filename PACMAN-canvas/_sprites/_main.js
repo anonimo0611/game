@@ -63,22 +63,24 @@ const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 	}
 	#drawPoints() {
 		/**
-		 @param {PointType} pts
+		 @param {0|1} type 0=Fruits, 1=Ghosts
+		 @param {PtsValue} pts
 		 @param {number} x
 		 @param {number} y
 		*/
-		function draw(pts, x,y) {
-			const {ctx:cache,w,h}= Pts.cache(pts, S)
+		function draw(type, pts, x,y) {
+			const {ctx:cache,w,h}= Pts.cache(type,pts,S)
 			ctx.save()
 			ctx.translate(x,y)
 			ctx.drawImage(cache.canvas, -w/2, -h/2)
 			ctx.restore()
 		}
 		const table = /**@type {const}*/([
-			[200,400,800,1600,100,300,500,700], [1000,2000,3000,5000]
+			[1000,2000,3000,5000], // Fruits
+			[200,400,800,1600,100,300,500,700] // Ghosts
 		])
-		table[0].forEach((pts,i)=> draw(pts, ofst(i)+T, S*6+T))
-		table[1].forEach((pts,i)=> draw(pts, (S+GAP/2)+S*(2+GAP/T)*i, S*7+S/2))
+		table[0].forEach((pts,i)=> draw(0, pts, (S+GAP/2)+S*(2+GAP/T)*i, S*7+S/2))
+		table[1].forEach((pts,i)=> draw(1, pts, ofst(i)+T, S*6+T))
 	}
 	#drawPacman() {
 		const dirs = /**@type {const}*/([U,U,L,L,D,D,R,R])
