@@ -38,8 +38,6 @@ Colors = freeze(new class {
 	Guzuta    = '#FB0'
 	GhostEyes = '#33F'
 	GhostSkin = '#F4BEB0'
-	GhostPts  = '#3CF'
-	FruitPts  = '#FFB8FF'
 	Extend    = '#F55'
 	Orange    = '#F90'
 }),
