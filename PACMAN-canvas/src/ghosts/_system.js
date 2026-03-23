@@ -112,6 +112,7 @@ export const GhsMgr = new class {
 		)
 	}
 	frighten() {
+		signalDirectionReversal()
 		FrightMode.new()
 	}
 	update() {
@@ -263,11 +264,9 @@ const FrightMode = function() {
 		get caughtAll() {return this.#caught == GhsType.Max}
 		get spriteIdx() {return this.#flash && this.#fIdx^1}
 		constructor() {
-			signalDirectionReversal()
 			this.dur = TimeTable[Game.clampedLv-1]
 			this.dur == 0 && !State.isAttract
-				? $(Ghosts).trigger(Evt.FleeStart)
-				: this.#set(true)
+				? $(Ghosts).trigger(Evt.FleeStart) : this.#set(true)
 		}
 		#set(isOn=true) {
 			_session = (isOn? this : null)
@@ -281,12 +280,10 @@ const FrightMode = function() {
 			this.#flash++ % iv == 0 && (this.#fIdx ^= 1)
 		}
 		update() {
-			if (State.isInGame && !Timer.frozen) {
-				const {dur,caughtAll}= this
-				const et = (this.#et += Game.interval)/1e3
-				if (et >= dur-2) this.#flashing()
-				if (et >= dur || caughtAll) this.#set(false)
-			}
+			if (!State.isInGame || Timer.frozen) return
+			const et = (this.#et += Game.interval)/1e3
+			et >= this.dur-2 && this.#flashing()
+			et >= this.dur+0 || this.caughtAll && this.#set(false)
  		}
 	}
 	State.on({_Ready:()=> _session = null})
