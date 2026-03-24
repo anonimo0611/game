@@ -10,7 +10,7 @@ import {Mover}    from './controller.js'
 import {TunEntry} from './tunnel.js'
 
 const EventBus = $({})
-const DotEatenEvent = 'DotEaten'
+const EatenEv  = 'DotEaten'
 
 let _fade = /**@type {?Fade}*/(null)
 
@@ -76,7 +76,7 @@ class Player extends PacMan {
 			: this.#eatSmallDot()
 		Maze.clearDot(this) == 0
 			? State.setRoundEnds()
-			: EventBus.trigger(DotEatenEvent)
+			: EventBus.trigger(EatenEv)
 	}
 	#eatPowerDot() {
 		Score.add(PowPts)
@@ -96,7 +96,7 @@ class Player extends PacMan {
 export let player = new Player
 export function onPlayerDotEaten(
 	/**@type {JQTriggerHandler}*/fn) {
-	EventBus.on(DotEatenEvent,fn)
+	EventBus.on(EatenEv,fn)
 }
 State.on({_Ready:()=> {
 	_fade = State.isTitle? null : Fade.in()
