@@ -11,8 +11,8 @@ import {player,onPlayerDotEaten} from './player/player.js'
 const LevelsCols = 7
 const FruitTable = /**@type {const}*/([0,1,2,2,3,3,4,4,5,5,6,6,7])
 const PointTable = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
-const TargetPos  = new Vec2(BW/2, T*18.5).freeze()
 const AppearDots = new Set([70,170])
+const TargetPos  = new Vec2(BW/2, T*18.5).freeze()
 const LevelsRect = new Rect(T*2*6, BH-T*2, T*2*LevelsCols, T*2).freeze()
 
 const FadeDur = 300
