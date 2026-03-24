@@ -234,13 +234,13 @@ export const DotCounter = function() {
 const CruiseElroy = function() {
 	const Accelerations = freeze([1.00, 1.02, 1.05, 1.1])
 	const DotsLeftTable = freeze([20,20,30,40,50,60,70,70,80,90,100,110,120])
-	let _part = 0
 	function angry() {
 		return State.isInGame
 			&& _part > 1
 			&& Ghosts[GhsType.Akabei]?.isFrightened == false
 			&& Ghosts[GhsType.Guzuta]?.isStarted == true
 	}
+	let _part = 0
 	onPlayerDotEaten(()=> {
 		const rate = [1.5, 1.0, 0.5][_part]
 		if (Maze.dotsLeft <= DotsLeftTable[Game.clampedLv-1]*rate)
@@ -279,10 +279,11 @@ const FrightMode = function() {
 			this.#flash++ % iv == 0 && (this.#fIdx ^= 1)
 		}
 		update() {
-			if (!State.isInGame || Timer.frozen) return
-			const et = (this.#et += Game.interval)/1e3
-			et >= this.dur-2 && this.#flashing()
-			et >= this.dur+0 || this.caughtAll && this.#set(false)
+			if (State.isInGame && !Timer.frozen) {
+				const et = (this.#et += Game.interval)/1e3
+				if (et >= this.dur-2) this.#flashing()
+				if (et >= this.dur || this.caughtAll) this.#set(false)
+			}
  		}
 	}
 	State.on({_Ready:()=> _session = null})
