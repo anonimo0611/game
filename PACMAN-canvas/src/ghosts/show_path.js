@@ -5,6 +5,8 @@ import {Maze}  from '../maze.js'
 import {Ghost} from './ghost.js';
 import {player as p} from '../player/player.js';
 
+const PathSteps = 16
+
 export class PathMgr {
 	#path = /**@type {PathNode[]}*/([])
 	static draw(/**@type {readonly Ghost[]}*/ghosts) {
@@ -60,21 +62,19 @@ export class PathMgr {
 		Fg.restore()
 	}
 	#update(/**@type {Ghost}*/g) {
-		if (g.dir != g.orient
-		 || Maze.House.arrived(g, T*2))
+		if (g.dir != g.orient || Maze.House.arrived(g, T*2))
 			return
-		let   dir  = g.dir, stopped = false
+		let   dir  = g.dir, stp = false
 		let   tile = g.getAdjTile(dir,g.tile)
-		const path = [{tile,dir,stopped}]
-		for(const _ of range(16)) {
-			const t = g.getTargetTile(tile)
-			dir     = g.getNextDir(dir,tile,t)
-			tile    = g.getAdjTile(dir,tile)
-			stopped = g.isTargetPac && tile.eq(p.tile)
-			       || g.hasFixedTgt && tile.eq(t)
-			path.push({tile,dir,stopped})
-			if (stopped) break
-		}
-		this.#path = path
+		const path = [{tile,dir,stopped: stp}]
+		for(const _ of range(PathSteps)) {
+			const tgt = g.getTargetTile(tile)
+			dir  = g.getNextDir(dir,tile,tgt)
+			tile = g.getAdjTile(dir,tile)
+			stp  = g.isTargetPac && tile.eq(p.tile)
+			    || g.hasFixedTgt && tile.eq(tgt)
+			path.push({tile,dir,stopped:stp})
+			if (stp) break
+		} this.#path = path
 	}
 }
