@@ -41,16 +41,14 @@ class Player extends PacMan {
 		const  ofstX = (this.dir == U ? -n : 0)
 		return this.forwardPos(n).addX(ofstX*T)
 	}
+	draw() {
+		if (State.isIntro) return
+		this.sprite.draw(this)
+		this.drawCenterDot()
+	}
 	drawCenterDot() {
 		if (!this.hidden && Ctrl.showGridLines)
 			super.drawCenterDot()
-	}
-	draw() {
-		if (State.isIntro) return
-		if (State.isInGame == false)
-			this.keepInsideBoard()
-		this.sprite.draw(this)
-		this.drawCenterDot()
 	}
 	update() {
 		this.sprite.update(this)
@@ -60,6 +58,7 @@ class Player extends PacMan {
 			this.#tunEntry.update()
 			this.#update(this.#mov.speed+.5|0)
 		}
+		!State.isInGame && this.keepInsideBoard()
 	}
 	#update(steps=1) {
 		for (const _ of range(steps)) {
