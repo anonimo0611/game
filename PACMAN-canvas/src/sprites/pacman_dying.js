@@ -13,10 +13,10 @@ export class Dying {
 	 @param {()=> void} [fn]
 	*/
 	constructor({ctx,radius=PacRadius}, fn) {
-		this.#fn     = fn
-		this.#cnt    = this.#arkAng = 0
 		this.ctx     = ctx
 		this.radius  = radius
+		this.#fn     = fn
+		this.#cnt    = this.#arkAng = 0
 		this.#innerR = radius/4
 		this.#outerR = radius/2
 	}
