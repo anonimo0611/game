@@ -6,7 +6,7 @@ interface Scene {update():void, draw?():void}
 
 type xyTuple  = Readonly<[x:number, y:number]>
 type Position = Readonly<{x:number, y:number}>
-type PathNode = {tile:Vec2, dir:Direction,stopped:boolean}
+type PathNode = {tile:Vec2,dir:Direction,stopped:boolean}
 
 //---- Points ----
 

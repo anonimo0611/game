@@ -5,25 +5,32 @@ const {abs,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Mat
 /**
  @template {object} T
  @param {T} o
-*/const typedKeys = o=> /**@type {(keyof T)[]}*/(keys(o))
+*/const typedKeys = o=>
+	/** @type {(keyof T)[]} */(keys(o))
 
 /**
  @template {string} T
  @param {readonly T[]} array
-*/const toEnumObject = array=> /**@type {{readonly [K in T]:K}}*/
+*/const toEnumObject = array=>
+	/** @type {{readonly [K in T]:K}} */
 	(fromEntries(array.map(k=> [k,k])))
 
 /**
  @param {KeyboardEvent|JQKeyboardEvent} e
-*/const keyRepeat = e=> (e instanceof KeyboardEvent? e : e.originalEvent)?.repeat ?? false
+*/const keyRepeat = e=>
+	(e instanceof KeyboardEvent
+		? e : e.originalEvent
+	)?.repeat ?? false
 
 /**
  @param {KeyboardEvent|JQKeyboardEvent} e
-*/const isCombiKey = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
+*/const isCombiKey = e=>
+	(e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
 /**
  @param {KeyboardEvent|JQKeyboardEvent|JQTriggeredEvent} e
-*/const isEnterKey = e=> (e.key === '\x20' || e.key === 'Enter')
+*/const isEnterKey = e=>
+	(e.key == '\x20' || e.key == 'Enter')
 
 /**
  @param {number}  v1
@@ -36,7 +43,7 @@ const {abs,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Mat
 */const range = function*(v1,v2,step=1) {
 	const [start,stop]= (v2 === undefined ? [0,v1]:[v1,v2])
 	if (!arguments.length) throw TypeError('Range expected at least 1 argument, got 0')
-	if (step === 0) throw RangeError('The 3rd argument must not be zero')
+	if (step == 0) throw RangeError('The 3rd argument must not be zero')
 	if (step > 0) for (let i=start; i<stop; i+=step) yield i
 	if (step < 0) for (let i=start; i>stop; i+=step) yield i
 }

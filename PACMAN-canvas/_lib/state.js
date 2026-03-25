@@ -4,14 +4,16 @@
 */
 export default class StateBase {
 	#owner
-	#last     = /**@type {?S}*/(null)
-	#curr     = /**@type {S} */('')
-	#default  = /**@type {S} */('')
+	#last    = /**@type {?S}*/(null)
+	#curr    = /**@type {S} */('')
+	#default = /**@type {S} */('')
 
 	/** @readonly */
 	#eventBus = $({})
 
-	/** @protected @param {Owner} owner */
+	/**
+	 @protected @param {Owner} owner
+	*/
 	constructor(owner) {this.#owner = owner}
 
 	get owner()   {return this.#owner}
@@ -19,7 +21,9 @@ export default class StateBase {
 	get last()    {return this.#last}
 	get default() {return this.#default}
 
-	/** @param {readonly S[]} states */
+	/**
+	 @param {readonly S[]} states
+	*/
 	init(states) {
 		states?.forEach((/**@type {S}*/s,i)=> {
 			const self = /**@type {any}*/(this)
@@ -31,24 +35,32 @@ export default class StateBase {
 		return this
 	}
 
-	/** @param {S} state */
+	/**
+	 @param {S} state
+	*/
 	is(state) {
 		return this.#curr == state
 	}
 
-	/** @param {S} [state] */
+	/**
+	 @param {S} [state]
+	*/
 	was(state) {
 		return state === this.#last
 	}
 
-	/** @param {JQWindowHandlers} v */
+	/**
+	 @param {JQWindowHandlers} v
+	*/
 	on(v) {
 		for (const [ev,fn] of entries(v))
 			$win.on(underscoreToSp(ev,String(this.default)), fn)
 		return this
 	}
 
-	/** @param {JQTriggerHandler} handler */
+	/**
+	 @param {JQTriggerHandler} handler
+	*/
 	onChange(handler) {
 		this.#eventBus.on('change', handler)
 	}

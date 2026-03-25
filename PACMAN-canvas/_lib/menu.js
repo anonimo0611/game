@@ -8,11 +8,12 @@ class Menu {
 	/** @protected */items
 	/** @protected */$label
 
-	/** @protected */
-	constructor(
-	 /**@type {string}*/id,
-	 /**@type {string}*/type
-	) {
+	/**
+	 @protected
+	 @param {string} id
+	 @param {string} type
+	*/
+	constructor(id, type) {
 		const
 		root  = /**@type {CustomMenu} */($('#'+id).attr({type}) .get(0)),
 		menu  = /**@type {HTMLElement}*/($(root).find('mn-list').get(0)),
@@ -39,8 +40,11 @@ class Menu {
 	get selectedItem() {
 		return this.menu.querySelector('.selected') || this.items[0]
 	}
+
 	/** @protected @param {number} idx */
-	isInRange(idx) {return between(idx, 0, this.size-1)}
+	isInRange(idx) {
+		return between(idx, 0, this.size-1)
+	}
 
 	select(idx=0) {
 		if (!this.isInRange(idx)) return
@@ -54,7 +58,8 @@ class Menu {
 }
 
 export class DorpDown extends Menu {
-	/** @private @readonly */current
+	/** @private @readonly */
+	current
 	constructor(/**@type {string}*/id) {
 		super(id,'dropdown')
 		this.current = $('<output>').prependTo(this.root)[0]
@@ -120,7 +125,8 @@ export class DorpDown extends Menu {
 export class Slide extends Menu {
 	#BtnSet
 	#width=0
-	constructor(/**@type {string}*/id) {
+	/** @param {string} id */
+	constructor(id) {
 		super(id,'slidemenu')
 		const {root}= this, wrap=(this.$label.get(0) ?? root)
 		this.#BtnSet= freeze({
@@ -136,16 +142,21 @@ export class Slide extends Menu {
 		this.#setWidth(this.#BtnSet[L].offsetWidth*2)
 		this.select(this.index)
 	}
-	#select(/**@type {?Direction}*/dir) {
+
+	/** @param {?Direction} dir */
+	#select(dir) {
 		if (!dir) return
 		const v = Vec2[dir], idx = this.index+(v.x || -v.y)
 		this.isInRange(idx) && this.select(idx)
 	}
-	#setWidth(/**@type {number}*/btnW) {
+
+	/** @param {number} btnW */
+	#setWidth(btnW) {
 		const width = max(...[...this.items].map(li=> li.offsetWidth))+btnW
 		$([this.root,...this.items]).css('width',`${width}px`)
 		this.#width = width
 	}
+
 	select(idx=this.index) {
 		super.select(idx)
 		this.menu.style.transform = `translateX(${-this.#width*idx}px)`

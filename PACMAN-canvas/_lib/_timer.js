@@ -40,8 +40,7 @@ const {Ticker,Timer}= function() {
 		}
 		resetCount() {
 			_fCount = 0
-			if (_ticker)
-				_ticker.isReset = true
+			if (_ticker) _ticker.needsReset = true
 		}
 		stop()  {
 			_ticker?.stop()
@@ -62,13 +61,13 @@ const {Ticker,Timer}= function() {
 		*/
 		constructor(updateFn, drawFn) {
 			_ticker?.stop()
-			_ticker      = this
-			this.acc     = 0
-			this.lstTS   = 0
-			this.isReset = false
-			this.update  = updateFn
-			this.draw    = drawFn
-			this.rAFId   = requestAnimationFrame(this.loop)
+			_ticker     = this
+			this.acc    = 0
+			this.lstTS  = 0
+			this.update = updateFn
+			this.draw   = drawFn
+			this.rAFId  = requestAnimationFrame(this.loop)
+			this.needsReset = false
 		}
 		/** @param {number} ts */
 		loop = (ts) => {
@@ -83,8 +82,8 @@ const {Ticker,Timer}= function() {
 			this.acc += dt
 			this.lstTS = ts
 
-			if (this.isReset) {
-				this.isReset = false
+			if (this.needsReset) {
+				this.needsReset = false
 				this.acc = TICK_STEP
 			}
 			while(ceil(this.acc) >= TICK_STEP) {
@@ -112,7 +111,7 @@ const {Ticker,Timer}= function() {
 		 @param {unknown} key
 		*/
 		timer(t, key) {
-			if (Timer.frozen && !t.ignoreFrozen) return
+			if (Timer.frozen && !t.ignoreFrozen)  return
 			if (TICK_STEP*t.amount++ < t.timeout) return
 			TimerMap.delete(key);t.handler()
 		}

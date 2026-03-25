@@ -8,18 +8,6 @@ class Vec2 {
 	static get Left()  {return Vec2.new(-1, 0)}
 
 	/**
-	 @param {void|number|Position} [v1]
-	 @param {number} [v2]
-	 @returns {[x:number, y:number]}
-	*/
-	static #parseXY(v1=0, v2) {
-		if (typeof v1 == 'number'
-		 && typeof v2 == 'number') return [v1, v2]
-		if (typeof v1 == 'object') return [v1.x, v1.y]
-		return [v1, v2 ?? v1]
-	}
-
-	/**
 	 @overload
 	 @returns {Vec2}
 
@@ -38,61 +26,88 @@ class Vec2 {
 
 	 @param {void|number|Position} [v1]
 	 @param {number} [v2]
-	*/
-	static new(v1,v2) {
+	*/static new(v1,v2) {
 		return new Vec2(...this.#parseXY(v1,v2))
 	}
-	static eq(
-	 /**@type {Position}*/pos1,
-	 /**@type {Position}*/pos2
-	) {
+
+	/**
+	 @param {void|number|Position} [v1]
+	 @param {number} [v2]
+	 @returns {[x:number, y:number]}
+	*/static #parseXY(v1=0, v2) {
+		if (typeof v1 == 'number'
+		 && typeof v2 == 'number') return [v1, v2]
+		if (typeof v1 == 'object') return [v1.x, v1.y]
+		return [v1, v2 ?? v1]
+	}
+
+	/**
+	 @param {Position} pos1
+	 @param {Position} pos2
+	*/static eq(pos1, pos2) {
 		return(
 			abs(pos1.x-pos2.x) < 1e-6 &&
 			abs(pos1.y-pos2.y) < 1e-6
 		)
 	}
-	static idx(
-	 /**@type {Position}*/pos,
-	 /**@type {number}*/cols
-	) {
+
+	/**
+	 @param {Position} pos
+	 @param {number} cols
+	*/static idx(pos,cols) {
 		if (cols <= 0) throw RangeError('Column count must be greater than zero')
 		return Number(pos.y * cols + pos.x)
 	}
-	static add(
-	 /**@type {Position}*/pos1,
-	 /**@type {Position}*/pos2) {
+
+	/**
+	 @param {Position} pos1
+	 @param {Position} pos2
+	*/static add(pos1,pos2) {
 		return Vec2.new(pos1).add(pos2)
 	}
-	static sub(
-	 /**@type {Position}*/pos1,
-	 /**@type {Position}*/pos2) {
+
+	/**
+	 @param {Position} pos1
+	 @param {Position} pos2
+	*/static sub(pos1,pos2) {
 		return Vec2.new(pos1).sub(pos2)
 	}
-	static mul(
-	 /**@type {Position}*/pos,
-	 /**@type {number}*/scalar) {
+
+	/**
+	 @param {Position} pos
+	 @param {number} scalar
+	*/static mul(pos,scalar) {
 		return Vec2.new(pos).mul(scalar)
 	}
-	static div(
-	 /**@type {Position}*/pos,
-	 /**@type {number}*/scalar) {
+
+	/**
+	 @param {Position} pos
+	 @param {number} scalar
+	*/static div(pos,scalar) {
 		return Vec2.new(pos).div(scalar)
 	}
-	static divInt(
-	 /**@type {Position}*/pos,
-	 /**@type {number}*/scalar) {
+
+	/**
+	 @param {Position} pos
+	 @param {number} scalar
+	*/static divInt(pos,scalar) {
 		return Vec2.new(pos).divInt(scalar)
 	}
-	static sqrMag(
-	 /**@type {Position}*/pos1,
-	 /**@type {Position}*/pos2) {
+
+	/**
+	 @param {Position} pos1
+	 @param {Position} pos2
+	*/static sqrMag(pos1,pos2) {
 		return Vec2.sub(pos1,pos2).sqrMag
 	}
-	static distance(
-	 /**@type {Position}*/pos1,
-	 /**@type {Position}*/pos2) {
+
+	/**
+	 @param {Position} pos1
+	 @param {Position} pos2
+	*/static distance(pos1,pos2) {
 		return Vec2.sub(pos1,pos2).magnitude
 	}
+
 	/**
 	 @param {number} x
 	 @param {number} y
@@ -204,27 +219,48 @@ class Vec2 {
 		this.y -= y
 		return this
 	}
-	mul(/**@type {number}*/scalar) {
+
+	/**
+	 @param {number} scalar
+	*/
+	mul(scalar) {
 		this.x *= scalar
 		this.y *= scalar
 		return this
 	}
-	div(/**@type {number}*/scalar) {
+
+	/**
+	 @param {number} scalar
+	*/
+	div(scalar) {
 		this.x /= scalar
 		this.y /= scalar
 		return this
 	}
-	divInt(/**@type {number}*/scalar) {
+
+	/**
+	 @param {number} scalar
+	*/
+	divInt(scalar) {
 		this.x = (this.x/scalar)|0
 		this.y = (this.y/scalar)|0
 		return this
 	}
-	distance(/**@type {Readonly<Position>}*/pos) {
+
+	/**
+	 @param {Readonly<Position>} pos
+	*/
+	distance(pos) {
 		return Vec2.sub(this,pos).magnitude
 	}
-	toIdx(/**@type {number}*/cols) {
+
+	/**
+	 @param {number} cols
+	*/
+	toIdx(cols) {
 		return Vec2.idx(this,cols)
 	}
+
 	toString() {
 		return /**@type {const}*/(`{x:${this.x}, y:${this.y}}`)
 	}
