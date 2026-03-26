@@ -26,18 +26,21 @@ export const Fruit = new class {
 		State.on({_Ready:Fruit.#resetTarget})
 		onPlayerDotEaten(Fruit.#onDotEaten)
 	}
+	get currentType() {
+		return Fruit.#getType(Game.level-1)
+	}
 	get points() {
-		return PointTable[Fruit.getType()]
+		return PointTable[Fruit.currentType]
 	}
 	get showTarget() {
 		return (State.isTitle || State.isInGame) && _showTgt
 	}
-	get #intersectsWithPlayer() {
+	get intersectsWithPlayer() {
 		return circleCollision(player.center, TargetPos, T/2)
 	}
-	getType(lv=Game.level-1) {
-		if (lv < 0) throw RangeError('Must be zero or greater.')
-		return FruitTable.at( min(lv, FruitTable.length-1) ) ?? 0
+	#getType(/**@type {number}*/i) {
+		if (i < 0) throw RangeError('Must be zero or greater.')
+		return FruitTable.at( min(i, FruitTable.length-1) ) ?? 0
 	}
 	#setHideTimer() {
 		// Disappearing is between 9 and 10 seconds
@@ -58,7 +61,7 @@ export const Fruit = new class {
 		}
 	}
 	#checkIntersects() {
-		if (Fruit.showTarget && Fruit.#intersectsWithPlayer) {
+		if (Fruit.showTarget && Fruit.intersectsWithPlayer) {
 			Fruit.#resetTarget()
 			Timer.cancel(Fruit) && Sound.playEatenSE()
 			PtsMgr.set({key:Fruit, dur:2e3, pos:TargetPos})
@@ -70,10 +73,7 @@ export const Fruit = new class {
 			: Fruit.#checkIntersects()
 	}
 	drawTarget() {
-		if (State.isInGame && Ticker.paused) {
-			return
-		}
-		if (Fruit.showTarget) {
+		if (Fruit.showTarget && !Ticker.paused) {
 			Spr.Cache.draw(Fg, TargetPos, _fadeOut?.alpha)
 		}
 		PtsMgr.drawFruitPts()
@@ -89,11 +89,11 @@ export const Fruit = new class {
 		HUD.clearRect(x,y,w,h)
 		HUD.translate(x,y)
 		for (const i of range(startLevel, Game.level))
-			Spr.draw(HUD, Fruit.getType(i), w-T-T*2*(i-startLevel))
+			Spr.draw(HUD, Fruit.#getType(i), w-T-T*2*(i-startLevel))
 		HUD.restore()
 	}
 	#setImages() {
-		Spr.Cache.update(Fruit.getType)
+		Spr.Cache.update(Fruit.currentType)
 		Fruit.#setLevelCounter()
 	}
 }
