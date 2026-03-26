@@ -6,7 +6,7 @@ import {drawText} from './message.js'
 import {Score}    from './score.js'
 import {Form,Menu,inputs,btns} from './ui.js'
 
-const PL = Palette
+const {Info:palette}= Palette
 const SettingsKey = 'anopacman'
 
 export const Ctrl = new class {
@@ -72,14 +72,14 @@ export const Ctrl = new class {
 		HUD.translate(T*0.1, T*17.25)
 		HUD.clearRect(0, 0, BW, T*3)
 		if (spd != 'x1.0' || Ctrl.invincible || Ctrl.showTargets) {
-			drawText(0, lh*0, PL.Info[+(spd != 'x1.0') ], 'Speed'+spd, opt)
-			drawText(0, lh*1, PL.Info[+Ctrl.invincible ], 'Invincible',opt)
-			drawText(0, lh*2, PL.Info[+Ctrl.showTargets], 'Show Tgts', opt)
+			drawText(0, lh*0, palette[+(spd != 'x1.0') ], 'Speed'+spd, opt)
+			drawText(0, lh*1, palette[+Ctrl.invincible ], 'Invincible',opt)
+			drawText(0, lh*2, palette[+Ctrl.showTargets], 'Show Tgts', opt)
 		}
 		if (Ctrl.showPaths || Ctrl.unrestricted) {
 			HUD.translate(T*(Cols-5), 0)
-			drawText(0, 0, PL.Info[+Ctrl.showPaths],   'Show Paths', opt)
-			drawText(0,lh, PL.Info[+Ctrl.unrestricted],'Ghosts Un-\nrestricted', opt)
+			drawText(0, 0, palette[+Ctrl.showPaths],   'Show Paths', opt)
+			drawText(0,lh, palette[+Ctrl.unrestricted],'Ghosts Un-\nrestricted', opt)
 		}
 		HUD.restore()
 	}
