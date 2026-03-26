@@ -6,7 +6,8 @@ import {drawText} from './message.js'
 import {Score}    from './score.js'
 import {Form,Menu,inputs,btns} from './ui.js'
 
-const UserSettingsKey = 'anopacman'
+const PL = Palette
+const SettingsKey = 'anopacman'
 
 export const Ctrl = new class {
 	static {$(this.setup)}
@@ -49,11 +50,11 @@ export const Ctrl = new class {
 			case 'checkbox':data[input.id] = input.checked;break
 			}
 		})
-		localStorage[UserSettingsKey] = JSON.stringify(data)
+		localStorage[SettingsKey] = JSON.stringify(data)
 	}
 	#restore() {
-		if (!localStorage[UserSettingsKey]) return
-		const data = JSON.parse(localStorage[UserSettingsKey])
+		if (!localStorage[SettingsKey]) return
+		const data = JSON.parse(localStorage[SettingsKey])
 		typedKeys(Menu).forEach(id=> Menu[id].index = data[id])
 		document.querySelectorAll('input').forEach(input=> {
 			switch(input.type) {
@@ -71,14 +72,14 @@ export const Ctrl = new class {
 		HUD.translate(T*0.1, T*17.25)
 		HUD.clearRect(0, 0, BW, T*3)
 		if (spd != 'x1.0' || Ctrl.invincible || Ctrl.showTargets) {
-			drawText(0, lh*0, Palette.Info[+(spd != 'x1.0') ], 'Speed'+spd, opt)
-			drawText(0, lh*1, Palette.Info[+Ctrl.invincible ], 'Invincible',opt)
-			drawText(0, lh*2, Palette.Info[+Ctrl.showTargets], 'Show Tgts', opt)
+			drawText(0, lh*0, PL.Info[+(spd != 'x1.0') ], 'Speed'+spd, opt)
+			drawText(0, lh*1, PL.Info[+Ctrl.invincible ], 'Invincible',opt)
+			drawText(0, lh*2, PL.Info[+Ctrl.showTargets], 'Show Tgts', opt)
 		}
 		if (Ctrl.showPaths || Ctrl.unrestricted) {
 			HUD.translate(T*(Cols-5), 0)
-			drawText(0, lh*0, Palette.Info[+Ctrl.showPaths],   'Show Paths', opt)
-			drawText(0, lh*1, Palette.Info[+Ctrl.unrestricted],'Ghosts Un-\nrestricted', opt)
+			drawText(0, 0, PL.Info[+Ctrl.showPaths],   'Show Paths', opt)
+			drawText(0,lh, PL.Info[+Ctrl.unrestricted],'Ghosts Un-\nrestricted', opt)
 		}
 		HUD.restore()
 	}
@@ -121,7 +122,7 @@ export const Ctrl = new class {
 		}
 	}
 	#toggleGrid() {
-		Grid.canvas.style.opacity = String(+Ctrl.showGridLines)
+		Grid.canvas.style.opacity = String(Ctrl.showGridLines)
 	}
 	#setupGrid() {
 		Grid.strokeStyle = Colors.Grid
