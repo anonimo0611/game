@@ -98,8 +98,7 @@ export const Game = new class {
 	#levelEnds() {
 		Game.#pacDied = false
 		if (!Ctrl.endlessMode) {
-			State.setTitle()
-			return
+			return Game.#reset()
 		}
 		Demo.CoffBreakNum < 0
 			? State.setNewLevel()
