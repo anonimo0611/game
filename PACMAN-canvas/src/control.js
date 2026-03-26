@@ -108,13 +108,12 @@ export const Ctrl = new class {
 			Ctrl.pause, ()=> State.setQuit(), 'Resume','Quit')
 	}
 	#onKeydown(/**@type {JQKeyboardEvent}*/e) {
-		if (keyRepeat(e) || Confirm.opened || !Sound.settled)
-			return
+		if (keyRepeat(e) || Confirm.opened) return
 		switch(e.key) {
 		case 'Escape': return Ctrl.pause()
 		case 'Delete': return Ctrl.#quit(e.ctrlKey)
 		default:
-			if (Ctrl.activeElem) return
+			if (Ctrl.activeElem || !Sound.settled) return
 			if (Dir.from(e,{wasd:true}) || e.key == '\x20') {
 				State.isTitle && btns.start.click()
 				Ticker.paused && Ctrl.pause()
