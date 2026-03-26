@@ -97,12 +97,11 @@ export const Game = new class {
 	}
 	#levelEnds() {
 		Game.#pacDied = false
-		if (!Ctrl.endlessMode) {
-			return Game.#reset()
-		}
-		Demo.CoffBreakNum < 0
-			? State.setNewLevel()
-			: State.setCoffBreak()
+		!Ctrl.endlessMode
+			? Game.#reset()
+			: Demo.CoffBreakNum < 0
+				? State.setNewLevel()
+				: State.setCoffBreak()
 	}
 	#onGameOver() {
 		Timer.set(2000, Game.#reset)
