@@ -9,11 +9,11 @@ import * as Spr from './sprites/fruits.js'
 import {player,onPlayerDotEaten} from './player/player.js'
 
 const LevelsCols = 7
-const FruitTable = /**@type {const}*/([0,1,2,2,3,3,4,4,5,5,6,6,7])
-const PointTable = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
 const AppearDots = new Set([70,170])
 const TargetPos  = new Vec2(BW/2, T*18.5).freeze()
-const LevelsRect = new Rect(T*2*6, BH-T*2, T*2*LevelsCols, T*2).freeze()
+const LevelsRect = new Rect(T*12, BH-T*2, T*2*LevelsCols, T*2).freeze()
+const FruitTable = /**@type {const}*/([0,1,2,2,3,3,4,4,5,5,6,6,7])
+const PointTable = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
 
 const FadeDur = 300
 let  _showTgt = true
@@ -35,14 +35,12 @@ export const Fruit = new class {
 	get #intersectsWithPlayer() {
 		return circleCollision(player.center, TargetPos, T/2)
 	}
-	/** Pass the game-level to reference the fruit table */
-	getType(lv=Game.level) {
-		if (lv < 1) throw RangeError('Must be one or greater.')
-		/* Levels 13+ will always default to the key symbol */
-		return FruitTable.at( min(lv-1, FruitTable.length-1) ) ?? 0
+	getType(lv=Game.level-1) {
+		if (lv < 0) throw RangeError('Must be zero or greater.')
+		return FruitTable.at( min(lv, FruitTable.length-1) ) ?? 0
 	}
-	/** Disappearing is between 9 and 10 seconds */
 	#setHideTimer() {
+		// Disappearing is between 9 and 10 seconds
 		const delay = randInt(9e3, 1e4-FadeDur)/Game.speed
 		Timer.set(delay, Fruit.#setFadeOut, {key:Fruit})
 	}
@@ -91,7 +89,7 @@ export const Fruit = new class {
 		HUD.clearRect(x,y,w,h)
 		HUD.translate(x,y)
 		for (const i of range(startLevel, Game.level))
-			Spr.draw(HUD, Fruit.getType(i+1), w-T-T*2*(i-startLevel))
+			Spr.draw(HUD, Fruit.getType(i), w-T-T*2*(i-startLevel))
 		HUD.restore()
 	}
 	#setImages() {
