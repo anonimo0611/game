@@ -19,8 +19,9 @@ export const Game = new class {
 	static {$(this.setup)}
 	static setup() {
 		Ticker.set(Game.#update, Game.#draw)
+		Menu.Level.onChange(Game.#resetLevel)
 		State.on({
-			Quit:      Game.#reset,
+			Quit: ()=> State.setTitle(),
 			Intro:     Game.#onIntro,
 			Ready:     Game.#onReady,
 			NewLevel:  Game.#onNewLevel,
@@ -30,8 +31,7 @@ export const Game = new class {
 			Flashing:  Game.#onFlashing,
 			GameOver:  Game.#onGameOver,
 		})
-		Game.#reset()
-		Menu.Level.onChange(Game.#reset)
+		.onBefore({Title:Game.#reset}).setTitle()
 	}
 	#level   = 1
 	#started = false
@@ -52,14 +52,16 @@ export const Game = new class {
 		Game.#level = between(n, 1, 0xFF) && n || 1
 		Level.val( zeroPad(Game.level,2) ).trigger('change')
 	}
+	#resetLevel() {
+		Game.#setLevel(Menu.Level.index+1)
+	}
 	#reset() {
 		Ticker.reset()
 		Sound.stop()
 		Cursor.show()
 		Game.#started = false
 		Game.#pacDied = false
-		Game.#setLevel(Menu.Level.index+1)
-		State.setTitle()
+		Game.#resetLevel()
 	}
 	#onIntro() {
 		Cursor.hide()
@@ -98,13 +100,13 @@ export const Game = new class {
 	#levelEnds() {
 		Game.#pacDied = false
 		!Ctrl.endlessMode
-			? Game.#reset()
+			? State.setTitle()
 			: Demo.CoffBreakNum < 0
 				? State.setNewLevel()
 				: State.setCoffBreak()
 	}
 	#onGameOver() {
-		Timer.set(2000, Game.#reset)
+		State.setTitle({delay:2000})
 	}
 	#update() {
 		PtsMgr.update()

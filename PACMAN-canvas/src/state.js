@@ -1,4 +1,5 @@
 import _State from '../_lib/state.js'
+
 /**
  @typedef {typeof States[number]} StateType
  @typedef {`_${Exclude<StateType,'Title'>}`} Underscored
@@ -25,15 +26,15 @@ class GameState extends _State {
 	}
 
 	/**
-	 @param {{[key in (StateType|Underscored)]?:JQWindowHandler}} v
+	 @param {{[key in (StateType|Underscored)]?:JQWindowHandler}} o
 	*/
-	on(v) {return super.on(v)}
+	on(o) {return super.on(o)}
 
 	/**
 	 @param {StateType} s
 	 @param {StateDef.Opts<StateType>} options
 	*/
-	set(s, {data,delay=(s == 'Quit' ? -1 : 0)}={}) {
+	set(s, {data,delay=(/Title|Quit/.test(s) ? -1 : 0)}={}) {
 		return super.set(s, {data,delay,fn:this.#callback})
 	}
 }
