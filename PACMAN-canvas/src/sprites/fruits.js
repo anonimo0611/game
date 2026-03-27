@@ -19,8 +19,8 @@ export function draw(ctx, idx, x=T,y=T-int(T*0.1), scale=T/8) {
 export const Cache = new class {
 	#ctx = canvas2D(null,T*2).ctx
 
-	/** @param {()=> number} idx */
-	update(idx) {draw(this.#ctx.clear(),idx())}
+	/** @param {number} idx */
+	update(idx) {draw(this.#ctx.clear(), idx)}
 
 	/**
 	 @param {EnhancedCtx2D} ctx

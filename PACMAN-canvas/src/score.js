@@ -5,7 +5,7 @@ import {drawText} from './message.js'
 import {Ctrl}     from './control.js'
 import {Lives}    from './lives.js'
 
-let [_score,_hiSco,_savedS,_savedH]= [0,0,0,0]
+let [score,hiSco,savedScore,savedHiSco]= [0,0,0,0]
 
 export const Score = new class {
 	/** @readonly */
@@ -20,27 +20,24 @@ export const Score = new class {
 		})
 	}
 	reset() {
-		_score = 0
-		_hiSco = localStorage[Score.HiScoreKey]|0
-	}
-	#save() {
-		_savedS = _score
-		_savedH = _hiSco
+		score = 0
+		hiSco = localStorage[Score.HiScoreKey]|0
 	}
 	#restore() {
 		if (Game.started) {
-			_score = _savedS
-			_hiSco = _savedH
+			score = savedScore
+			hiSco = savedHiSco
 		}
 	}
 	#onIntro() {
-		Score.#save()
-		_score = 0
+		savedScore = score
+		savedHiSco = hiSco
+		score = 0
 	}
 	#onGameOver() {
 		const hiSco = localStorage[Score.HiScoreKey]|0
-		if (!Ctrl.isPractice && _hiSco > hiSco)
-			localStorage[Score.HiScoreKey] = _hiSco
+		if (!Ctrl.isPractice && hiSco > hiSco)
+			localStorage[Score.HiScoreKey] = hiSco
 	}
 	get #showUP() {
 		return !State.isInGame || Ticker.paused
@@ -51,20 +48,20 @@ export const Score = new class {
 	}
 	draw() {
 		drawText(2,0, this.#fgColorUP, this.#showUP? '1UP':'')
-		drawText(6,0, null, _score || '00')
+		drawText(6,0, null, score || '00')
 		Ctrl.isPractice
 			? drawText(14,0, null, 'PRACTICE')
-			: drawText(14,0, null, `HIGH　${_hiSco || '00'}`)
+			: drawText(14,0, null, `HIGH　${hiSco || '00'}`)
 	}
 	add(points=0) {
-		const score = _score + points
-		if (!Ctrl.isPractice && score > _hiSco) {
-			_hiSco = score
+		const total = score + points
+		if (!Ctrl.isPractice && total > hiSco) {
+			hiSco = total
 		}
-		if (between(Ctrl.extendScore, _score+1, score)) {
+		if (between(Ctrl.extendScore, score+1, total)) {
 			Lives.append()
 			Sound.playBellSE()
 		}
-		_score = score
+		score = total
 	}
 }

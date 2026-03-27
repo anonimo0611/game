@@ -8,16 +8,17 @@ import {PtsMgr} from './points.js'
 import * as Spr from './sprites/fruits.js'
 import {player,onPlayerDotEaten} from './player/player.js'
 
-const LevelsCols = 7
+const FadeOutDur = 300
 const AppearDots = new Set([70,170])
 const TargetPos  = new Vec2(BW/2, T*18.5).freeze()
-const LevelsRect = new Rect(T*12, BH-T*2, T*2*LevelsCols, T*2).freeze()
 const FruitTable = /**@type {const}*/([0,1,2,2,3,3,4,4,5,5,6,6,7])
 const PointTable = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
 
-const FadeDur = 300
-let  _showTgt = true
-let  _fadeOut = /**@type {?Fade}*/(null)
+const LevelsCols = 7
+const LevelsRect = new Rect(T*12, BH-T*2, T*2*LevelsCols, T*2).freeze()
+
+let showTgt = true
+let fadeOut = /**@type {?Fade}*/(null)
 
 export const Fruit = new class {
 	static {$(this.setup)}
@@ -33,7 +34,7 @@ export const Fruit = new class {
 		return PointTable[Fruit.currentType]
 	}
 	get showTarget() {
-		return (State.isTitle || State.isInGame) && _showTgt
+		return (State.isTitle || State.isInGame) && showTgt
 	}
 	get intersectsWithPlayer() {
 		return circleCollision(player.center, TargetPos, T/2)
@@ -44,19 +45,19 @@ export const Fruit = new class {
 	}
 	#setHideTimer() {
 		// Disappearing is between 9 and 10 seconds
-		const delay = randInt(9e3, 1e4-FadeDur)/Game.speed
+		const delay = randInt(9e3, 1e4-FadeOutDur)/Game.speed
 		Timer.set(delay, Fruit.#setFadeOut, {key:Fruit})
 	}
 	#resetTarget() {
-		_fadeOut = null
-		_showTgt = State.isTitle
+		fadeOut = null
+		showTgt = State.isTitle
 	}
 	#setFadeOut() {
-		_fadeOut = Fade.out(FadeDur/Game.speed)
+		fadeOut = Fade.out(FadeOutDur/Game.speed)
 	}
 	#onDotEaten() {
 		if (AppearDots.has(Maze.MaxDot - Maze.dotsLeft)) {
-			_showTgt = true
+			showTgt = true
 			Fruit.#setHideTimer()
 		}
 	}
@@ -68,13 +69,14 @@ export const Fruit = new class {
 		}
 	}
 	update() {
-		_fadeOut?.update() == false
+		fadeOut?.update() == false
 			? Fruit.#resetTarget()
 			: Fruit.#checkIntersects()
 	}
 	drawTarget() {
-		if (Fruit.showTarget && !Ticker.paused) {
-			Spr.Cache.draw(Fg, TargetPos, _fadeOut?.alpha)
+		if (Ticker.paused) return
+		if (Fruit.showTarget) {
+			Spr.Cache.draw(Fg, TargetPos, fadeOut?.alpha)
 		}
 		PtsMgr.drawFruitPts()
 	}

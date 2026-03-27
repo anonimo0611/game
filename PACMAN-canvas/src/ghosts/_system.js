@@ -6,7 +6,7 @@ import {Ctrl}    from '../control.js'
 import {Maze}    from '../maze.js'
 import {PtsMgr}  from '../points.js'
 import {Ghost}   from './ghost.js'
-import {PathMgr} from './show_path.js'
+import {PathMgr} from './show_paths.js'
 import {Targets} from './show_targets.js'
 import {player,onPlayerDotEaten} from '../player/player.js'
 
@@ -149,12 +149,12 @@ export const GhsMgr = new class {
 	}
 }
 
+const SCATTER = 0
+const CHASING = 1
 const signalDirectionReversal = ()=> {
 	$(Ghosts).trigger(Evt.Reverse)
 }
 const AttackInWaves = function() {
-	const SCATTER = 0
-	const CHASING = 1
 	function create(lv=1) {
 		let tCnt = -1, idx = 0
 		let mode = Ctrl.alwaysChase? CHASING : SCATTER
@@ -236,39 +236,39 @@ const CruiseElroy = function() {
 	const DotsLeftTable = freeze([20,20,30,40,50,60,70,70,80,90,100,110,120])
 	function angry() {
 		return State.isInGame
-			&& _part > 1
+			&& currPart > 1
 			&& Ghosts[GhsType.Akabei]?.isFrightened == false
 			&& Ghosts[GhsType.Guzuta]?.isStarted == true
 	}
-	let _part = 0
 	onPlayerDotEaten(()=> {
-		const rate = [1.5, 1.0, 0.5][_part]
+		const rate = [1.5, 1.0, 0.5][currPart]
 		if (Maze.dotsLeft <= DotsLeftTable[Game.clampedLv-1]*rate)
-			++_part && Sound.playSiren()
+			++currPart && Sound.playSiren()
 	})
-	State.on({_NewLevel:()=> _part = 0})
+	let currPart = 0
+	State.on({_NewLevel:()=> currPart = 0})
 	return {
-		get part()  {return _part},
+		get part()  {return currPart},
 		get angry() {return angry()},
-		get speed() {return GhsSpeed.Base * Accelerations[_part]},
+		get speed() {return GhsSpeed.Base * Accelerations[currPart]},
 	}
 }()
 
 const FrightMode = function() {
-	let   _session  = /**@type {?Readonly<Session>}*/(null)
-	const TimeTable = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	class Session {
+		static session = /**@type {?Session}*/(null)
+		static durList = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 		#et=0; #flash=0; #caught=0; #fIdx=1
 		get points()    {return PtsLst[this.#caught-1]}
 		get caughtAll() {return this.#caught == GhsType.Max}
 		get spriteIdx() {return this.#flash && this.#fIdx^1}
 		constructor() {
-			this.dur = TimeTable[Game.clampedLv-1]
+			this.dur = Session.durList[Game.clampedLv-1]
 			this.dur == 0 && !State.isAttract
 				? $(Ghosts).trigger(Evt.FleeStart) : this.#set(true)
 		}
 		#set(isOn=true) {
-			_session = (isOn? this : null)
+			Session.session = (isOn? this : null)
 			$(Ghosts)
 				.trigger(Evt.Frighten, isOn)
 				.offon(StateTypes.Bitten, ()=> this.#caught++, isOn)
@@ -286,9 +286,9 @@ const FrightMode = function() {
 			}
  		}
 	}
-	State.on({_Ready:()=> _session = null})
+	State.on({_Ready:()=> Session.session = null})
 	return {
 		new() {new Session()},
-		get session() {return _session},
+		get session() {return Session.session},
 	}
 }()

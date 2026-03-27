@@ -10,9 +10,9 @@ import {Mover}    from './controller.js'
 import {TunEntry} from './tunnel.js'
 
 const EventBus = $({})
-const EatenEv  = 'DotEaten'
+const EatenEvt = 'DotEaten'
 
-let _fade = /**@type {?Fade}*/(null)
+let fader = /**@type {?Fade}*/(null)
 
 class Player extends PacMan {
 	#eatIdx = 0
@@ -26,7 +26,7 @@ class Player extends PacMan {
 	get speed()    {return this.#mov.speed}
 	get onWall()   {return this.#mov.onWall}
 	get tunEntry() {return this.#tunEntry}
-	get alpha()    {return _fade?.alpha ?? this.maxAlpha}
+	get alpha()    {return fader?.alpha ?? this.maxAlpha}
 	get maxAlpha() {return Ctrl.semiTransPac? .75:1}
 	get closed()   {return State.isInGame == false}
 	get timeSinceLastEating() {return this.#sinceLastEating}
@@ -52,13 +52,14 @@ class Player extends PacMan {
 	}
 	update() {
 		this.sprite.update(this)
-		_fade?.update(this.maxAlpha)
+		fader?.update(this.maxAlpha)
 		if (!this.closed && !this.hidden) {
 			this.#sinceLastEating += Game.interval
 			this.#tunEntry.update()
 			this.#update(this.#mov.speed+.5|0)
 		}
-		!State.isInGame && this.keepInsideBoard()
+		if (!State.isInGame)
+			this.keepInsideBoard()
 	}
 	#update(steps=1) {
 		for (const _ of range(steps)) {
@@ -76,7 +77,7 @@ class Player extends PacMan {
 			: this.#eatSmallDot()
 		Maze.clearDot(this) == 0
 			? State.setRoundEnds()
-			: EventBus.trigger(EatenEv)
+			: EventBus.trigger(EatenEvt)
 	}
 	#eatPowerDot() {
 		Score.add(PowPts)
@@ -96,9 +97,9 @@ class Player extends PacMan {
 export let player = new Player
 export function onPlayerDotEaten(
 	/**@type {JQTriggerHandler}*/fn) {
-	EventBus.on(EatenEv,fn)
+	EventBus.on(EatenEvt,fn)
 }
 State.on({_Ready:()=> {
-	_fade = State.isTitle? null : Fade.in()
+	fader = State.isTitle? null : Fade.in()
 	!State.wasIntro && (player = new Player)
 }})

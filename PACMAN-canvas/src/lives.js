@@ -4,7 +4,7 @@ import {inputs} from './ui.js'
 import Sprite   from './sprites/pacman.js'
 
 export const Lives = function() {
-	let   _left  = 0
+	let   left   = 0
 	const sprite = new Sprite(HUD, 1)
 	const radius = T*.78, size = T*2
 	State.on({
@@ -20,11 +20,11 @@ export const Lives = function() {
 			sprite.draw({radius,center:{x:size*i+T, y:T}})
 		HUD.restore()
 	}
-	function add(n=0) {draw(_left += n)}
-	function reset()  {draw(_left = Ctrl.livesMax-1)}
+	function add(n=0) {draw(left += n)}
+	function reset()  {draw(left = Ctrl.livesMax-1)}
 	$(inputs.lvsRng).on({input:reset})
 	return {
 		append()   {add(1)},
-		get left() {return _left},
+		get left() {return left},
 	}
 }()
