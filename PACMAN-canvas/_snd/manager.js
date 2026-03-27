@@ -31,14 +31,8 @@ export class SoundMgr {
 				this.#disabled = false
 			})
 		})
-		.then(()=> {
-			this.#settled = true
-			setup.onLoaded?.()
-		})
-		.catch(()=> {
-			this.#settled = false
-			setup.onFailed?.()
-		})
+		.then (()=> {setup.onSettled?.(this.#settled = true )})
+		.catch(()=> {setup.onSettled?.(this.#settled = false)})
 	}
 	get settled()  {return this.#settled}
 	get disabled() {return this.#disabled}
