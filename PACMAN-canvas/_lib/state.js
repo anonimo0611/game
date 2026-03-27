@@ -1,5 +1,5 @@
 /**
- @template Owner
+ @template {object} Owner
  @template {string} S
 */
 export default class StateBase {
@@ -11,9 +11,7 @@ export default class StateBase {
 	/** @readonly */
 	#eventBus = $({})
 
-	/**
-	 @protected @param {Owner} owner
-	*/
+	/** @protected @param {Owner} owner */
 	constructor(owner) {this.#owner = owner}
 
 	get owner()   {return this.#owner}
@@ -21,9 +19,7 @@ export default class StateBase {
 	get last()    {return this.#last}
 	get default() {return this.#default}
 
-	/**
-	 @param {readonly S[]} states
-	*/
+	/** @param {readonly S[]} states */
 	init(states) {
 		states?.forEach((/**@type {S}*/s,i)=> {
 			const self = /**@type {any}*/(this)
@@ -35,34 +31,35 @@ export default class StateBase {
 		return this
 	}
 
-	/**
-	 @param {S} state
-	*/
+	/** @param {S} state */
 	is(state) {
 		return this.#curr == state
 	}
 
-	/**
-	 @param {S} [state]
-	*/
+	/** @param {S} [state] */
 	was(state) {
 		return state === this.#last
 	}
 
-	/**
-	 @param {JQWindowHandlers} v
-	*/
-	on(v) {
-		for (const [ev,fn] of entries(v))
-			$win.on(underscoreToSp(ev,String(this.default)), fn)
+	/** @param {JQTriggerHandler} handler */
+	onChange(handler) {
+		this.#eventBus.on('change', handler)
 		return this
 	}
 
-	/**
-	 @param {JQTriggerHandler} handler
-	*/
-	onChange(handler) {
-		this.#eventBus.on('change', handler)
+	/** @param {{[key in S]?:JQTriggerHandler}} o */
+	on(o) {
+		for (const [state,fn] of entries(o))
+			$(this.#owner).on(underscoreToSp(state, String(this.default)), fn)
+		return this
+	}
+
+
+	/** @param {{[key in S]?:JQTriggerHandler}} o */
+	onBefore(o) {
+		for (const [state,fn] of entries(o))
+			$(this.#eventBus).on('before'+state, fn)
+		return this
 	}
 
 	/**
@@ -74,6 +71,7 @@ export default class StateBase {
 			Timer.set(delay, ()=> this.set(state,{delay:-1,data,fn}))
 			return this
 		}
+		this.#eventBus.trigger('before'+state)
 		this.#last = this.current
 		this.#curr = state
 		this.#eventBus.trigger('change')
