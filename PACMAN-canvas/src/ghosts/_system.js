@@ -181,7 +181,7 @@ const AttackInWaves = function() {
 		return {get mode(){return mode},update}
 	}
 	let phase = create()
-	State.on({Ready:()=> phase = create(Game.level)})
+	State.on({_Ready:()=> phase = create(Game.level)})
 	return {
 		get isChaseMode()   {return phase.mode == CHASING},
 		get isScatterMode() {return phase.mode == SCATTER},
