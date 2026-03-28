@@ -66,7 +66,7 @@ export class PathMgr {
 			return
 		let   dir  = g.dir, stpd = false
 		let   tile = g.getAdjTile(dir,g.tile)
-		const path = [{tile,dir,stopped: stpd}]
+		const path = [{tile,dir,stopped:false}]
 		for(const _ of range(PathSteps)) {
 			const
 			tgt  = g.getTargetTile(tile)
