@@ -227,7 +227,7 @@ class Fade {
 
 /**
  @param {string|Path2D} [path]
-*/const newPath2D = path=> new Path2D(path)
+*/const path2D = path=> new Path2D(path)
 
 /**
  @param {?string} id The ID of an existing canvas element. If null or not found, a new canvas is created.
