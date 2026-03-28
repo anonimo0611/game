@@ -45,7 +45,7 @@ const States = /**@type {const}*/
 const StateTypes = toEnumObject(States)
 
 /**
- @extends {_State<Ghost,StateType>}
+ @extends {_State<StateType,Ghost>}
  @typedef {GhsState & StateDef.Props<StateType>} IGhsState
 */
 class GhsState extends _State {
@@ -59,10 +59,6 @@ class GhsState extends _State {
 	/** @this {IGhsState} */
 	get isEscapingEyes() {
 		return this.isEscaping || this.isReturning
-	}
-	set(/**@type {StateType}*/s) {
-		$(this.owner).trigger(s)
-		return super.set(s)
 	}
 }
 export const createState =
