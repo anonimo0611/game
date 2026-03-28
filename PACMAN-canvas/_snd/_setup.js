@@ -3,8 +3,6 @@ import {Sound}   from './sound.js'
 import {Speaker} from './speaker.js'
 
 let  _lstVol  = NaN
-const volRng  = inputs.volRng
-const volRg2  = inputs.volRg2
 const initVol = +(localStorage.anopac_volume ?? 5)
 
 export const Setup = new class {
@@ -15,7 +13,6 @@ export const Setup = new class {
 		$root.addClass('sound-settled')
 	}
 	#onLoaded() {
-		Sound.vol = initVol
 		$('#speaker')
 			.on({click:Setup.#mute})
 			.onWheel(Setup.#onInput)
@@ -30,18 +27,19 @@ export const Setup = new class {
 	}
 	#onInput(/**@type {Event}*/e) {
 		const isInput = e.target instanceof HTMLInputElement
-		Sound.vol = (isInput? e.target:volRng).valueAsNumber
+		Sound.vol = (isInput? e.target:inputs.volRng).valueAsNumber
 		Speaker.draw(localStorage.anopac_volume = Sound.vol)
 	}
 	#onKeydown(/**@type {JQuery.KeyDownEvent}*/e) {
 		if (keyRepeat(e) || isCombiKey(e))
 			return
 		if (e.key.toUpperCase() == 'M'
-		 || e.target == volRg2 && isEnterKey(e))
+		 || e.target == inputs.volRg2 && isEnterKey(e))
 		 	Setup.#mute()
 	}
 	#mute() {
-		_lstVol = Sound.vol || (_lstVol || +volRng.max >> 1)
-		$(volRng).prop({value:Sound.vol? 0 : _lstVol}).trigger('input')
+		_lstVol = Sound.vol || (_lstVol || +inputs.volRng.max >> 1)
+		$('.volRng').prop({value:Sound.vol? 0 : _lstVol})
+		$(inputs.volRng).trigger('input')
 	}
 }
