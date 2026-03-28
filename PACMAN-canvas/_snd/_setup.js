@@ -2,7 +2,9 @@ import {inputs}  from '../src/ui.js'
 import {Sound}   from './sound.js'
 import {Speaker} from './speaker.js'
 
-let  _lstVol  = NaN
+let lstVol = NaN
+
+const {volRng,volRg2}= inputs
 const initVol = +(localStorage.anopac_volume ?? 5)
 
 export const Setup = new class {
@@ -34,12 +36,12 @@ export const Setup = new class {
 		if (keyRepeat(e) || isCombiKey(e))
 			return
 		if (e.key.toUpperCase() == 'M'
-		 || e.target == inputs.volRg2 && isEnterKey(e))
+		 || e.target == volRg2 && isEnterKey(e))
 		 	Setup.#mute()
 	}
 	#mute() {
-		_lstVol = Sound.vol || (_lstVol || +inputs.volRng.max >> 1)
-		$('.volRng').prop({value:Sound.vol? 0 : _lstVol})
-		$(inputs.volRng).trigger('input')
+		lstVol = Sound.vol || (lstVol || +volRng.max >> 1)
+		const value = (Sound.vol ? 0 : lstVol)
+		$('.volRng').prop({value}) && $(volRng).trigger('input')
 	}
 }
