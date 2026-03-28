@@ -48,17 +48,16 @@ export default class StateBase {
 	}
 
 	/** @param {{[key in S]?:JQTriggerHandler}} o */
-	on(o) {
-		for (const [state,fn] of entries(o))
-			$(this.#owner).on(underscoreToSp(state,String(this.default)), fn)
-		return this
-	}
-
-
-	/** @param {{[key in S]?:JQTriggerHandler}} o */
 	onBefore(o) {
 		for (const [state,fn] of entries(o))
 			$(this.#eventBus).on('before'+state, fn)
+		return this
+	}
+
+	/** @param {{[key in S]?:JQTriggerHandler}} o */
+	on(o) {
+		for (const [state,fn] of entries(o))
+			$(this.#owner).on(underscoreToSp(state,String(this.default)), fn)
 		return this
 	}
 
