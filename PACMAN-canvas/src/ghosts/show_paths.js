@@ -24,29 +24,27 @@ export class PathMgr {
 		 && !g.isScattering
 		 && !g.state.isEscaping)
 			return
-		let   last = g.pos
-		const lw   = T/5
+		const path = this.#path, lw = T/5
+		const endT = path.at(-1)?.tile
+		const stPt = path[0].tile.clone.mul(T)
 		const ofst = [-2,-1,1,2][g.type]*lw
-		const endT = this.#path.at(-1)?.tile
-		const stPt = this.#path[0].tile.clone.mul(T)
 		const dist = Vec2.distance(g.pos,stPt)
 		Fg.save()
 		Fg.setAlpha(0.7)
 		Fg.translate(T/2+ofst, T/2+ofst)
-		Fg.lineWidth   = lw
-		Fg.lineJoin    = Fg.lineCap = 'round'
-		Fg.strokeStyle = GhsColors[g.type]
 		Fg.beginPath()
 		Fg.moveTo(...g.pos.vals)
-		for (const {tile,dir,stopped} of this.#path) {
+		for(const [i,{tile,dir,stopped}] of path.entries()) {
 			const curr = tile.clone.mul(T)
+			const last = path[i-1]?.tile.clone.mul(T) ?? g.pos
 			if (tile == endT) {
 				stopped && g.isTargetPac
 					? curr.set(p.pos)
 					: curr.add(Vec2[dir].mul(stopped? 0 : T/2-dist))
 			}
 			if (abs(curr.x - last.x) > T*3) {
-				Fg.lineTo((curr.x < last.x ? BW+T : -T), curr.y);break
+				Fg.lineTo((curr.x < last.x ? BW+T : -T), curr.y);
+				return true
 			}
 			Fg.lineTo(...curr.vals)
 			if (tile == endT) { // Arrow
@@ -56,26 +54,29 @@ export class PathMgr {
 				Fg.setLinePath([-T/2,-T/2],[0,0],[-T/2,T/2])
 				Fg.restore()
 			}
-			last = curr
 		}
+		Fg.lineWidth = lw
+		Fg.lineJoin  = Fg.lineCap = 'round'
+		Fg.strokeStyle = GhsColors[g.type]
 		Fg.stroke()
 		Fg.restore()
 	}
 	#update(/**@type {Ghost}*/g) {
-		if (g.dir != g.orient || Maze.House.arrived(g, T*2))
+		const {dir,orient}= g
+		if (dir != orient || Maze.House.arrived(g, T*2))
 			return
-		let   dir  = g.dir, stpd = false
-		let   tile = g.getAdjTile(dir,g.tile)
-		const path = [{tile,dir,stopped:false}]
-		for(const _ of range(PathSteps)) {
-			const
-			tgt  = g.getTargetTile(tile)
-			dir  = g.getNextDir(dir,tile,tgt)
-			tile = g.getAdjTile(dir,tile)
-			stpd = g.isTargetPac && tile.eq(p.tile)
-			    || g.hasFixedTgt && tile.eq(tgt)
-			path.push({tile,dir,stopped:stpd})
-			if (stpd) break
+		const tile = g.getAdjTile(dir,g.tile)
+		const path = [{dir,tile,stopped:false}]
+		for(const i of range(PathSteps)) {
+			const {dir:d,tile:t}= path[(i+1)-1]
+			const tgt  = g.getTargetTile(t)
+			const dir  = g.getNextDir(d,t,tgt)
+			const tile = g.getAdjTile(dir,t)
+			path.push({tile,dir,stopped:
+				g.isTargetPac && tile.eq(p.tile) ||
+				g.hasFixedTgt && tile.eq(tgt)
+			})
+			if (path[i+1].stopped) break
 		} this.#path = path
 	}
 }
