@@ -60,7 +60,7 @@ export const Ctrl = new class {
 			switch(input.type) {
 			case 'range':   input.value   = data[input.id];break
 			case 'checkbox':input.checked = data[input.id];break
-			} $(input).trigger('input')
+			}
 		})
 	}
 	#output() {
@@ -126,8 +126,8 @@ export const Ctrl = new class {
 	}
 	#setupGrid() {
 		Grid.strokeStyle = Colors.Grid
-		for (const y of range(1,Cols)) Grid.strokeLine(T*y, 0, T*y, Rows*T)
-		for (const x of range(0,Rows)) Grid.strokeLine(0, T*x, Cols*T, T*x)
+		range(1,Cols).forEach(y=> Grid.strokeLine(T*y, 0, T*y, Rows*T))
+		range(0,Rows).forEach(x=> Grid.strokeLine(0, T*x, Cols*T, T*x))
 	}
 	#setupCtrls() {
 		values(Menu).forEach(m=> m.onChange(Ctrl.#save))
