@@ -144,7 +144,7 @@ export const Maze = freeze(new class {
 			? b.set(t.x>Cols/2 && b.x>Cols/2 ? 21:6, 15) : b
 
 	/**
-	 @param {{tileIdx:TileIdx,tileMid:Vec2}} tile
+	 @param {{tileIdx:number,tileMid:Vec2}} tile
 	 @returns {number} Number of remaining dots
 	*/
 	clearDot({tileIdx:i,tileMid:{x,y}}) {
