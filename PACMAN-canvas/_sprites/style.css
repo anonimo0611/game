@@ -79,14 +79,19 @@ main > fieldset:first-child .ctrls {
 #selectAnim {
 	--bgcolor: rgba(51, 51, 51, 0.932);
 	margin: 1em 0;
-	output,	mn-item[val="-1"] {
+	output,	cm-item[val="-1"] {
 		text-align: center;
 		text-indent: calc(-1 * var(--caret-size));
 	}
-	mn-item {
+	cm-item {
 		padding-left: calc(var(--caret-size));
 		font-size: 100%;
+		line-height: 1.2;
 	}
+	cm-item:last-child {
+		padding-bottom: .7em;
+	}
+
 }
 [type=range] {
 	--thumb-size: .8rem;
