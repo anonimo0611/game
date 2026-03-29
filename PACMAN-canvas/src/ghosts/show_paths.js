@@ -43,8 +43,7 @@ export class PathMgr {
 					: curr.add(Vec2[dir].mul(stopped? 0 : T/2-dist))
 			}
 			if (abs(curr.x - last.x) > T*3) {
-				Fg.lineTo((curr.x < last.x ? BW+T : -T), curr.y);
-				return true
+				Fg.lineTo((curr.x < last.x ? BW+T : -T), curr.y);break
 			}
 			Fg.lineTo(...curr.vals)
 			if (tile == endT) { // Arrow
