@@ -78,7 +78,7 @@ export class PowBlinker {
 	get show() {return this.#show == 1}
 	update() {this.#show ^= +(Ticker.count % 15 == 0)}
 }
-class PowDotsRenderer extends PowBlinker {
+class PowDots extends PowBlinker {
 	draw() {
 		for (const {x,y} of PowMap.values()) {
 			if (!State.isInGame || Ticker.paused || this.show)
@@ -112,7 +112,7 @@ export const Maze = freeze(new class {
 	MaxDot  = MapArr.filter(c=> DotChips.has(c)).length
 	House   = freeze(new House)
 	Tunnel  = freeze(new Tunnel)
-	PowDots = freeze(new PowDotsRenderer)
+	PowDots = freeze(new PowDots)
 	MidY    = this.House.MiddleY
 	hasDot  = (/**@type {number}  */i)=> DotSet.has(i)
 	hasPow  = (/**@type {number}  */i)=> PowMap.has(i)
