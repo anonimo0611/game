@@ -43,9 +43,9 @@ D__________________________C\
 const DotRadius = T/9
 const PowRadius = T/2
 
-const WallSet  = /**@type {Set<number>}*/(new Set)
-const DotSet   = /**@type {Set<number>}*/(new Set)
-const PowMap   = /**@type {Map<number,Position>}*/(new Map)
+const DotSet   = /**@type {Set<TileIdx>}*/(new Set)
+const WallSet  = /**@type {ReadonlySet<TileIdx>} */(new Set)
+const PowMap   = /**@type {Map<TileIdx,Position>}*/(new Map)
 const DotChips = new Set([...'.O'])
 const PenRect  = new Rect(10, 13,  8, 5).freeze()
 const PenOuter = new Rect( 9, 12, 10, 7).freeze()
@@ -89,8 +89,9 @@ class PowDots extends PowBlinker {
 
 export const Maze = freeze(new class {
 	static {
+		const wallSet = /**@type {Set<TileIdx>}*/(WallSet)
 		for (const [i,c] of MapArr.entries())
-			!DotChips.has(c) && c.trim() && WallSet.add(i)
+			!DotChips.has(c) && c.trim() && wallSet.add(i)
 		State.on({_NewLevel: e=> this.reset(e)})
 		$(powChk).on({change:e=> this.reset(e)})
 	}
@@ -99,7 +100,7 @@ export const Maze = freeze(new class {
 		for (const [i,c] of MapArr.entries())
 			DotChips.has(c) && this.setDot(i,c)
 	}
-	static setDot(/**@type {number}*/i, chip='.') {
+	static setDot(/**@type {TileIdx}*/i, chip='.') {
 		const t = Vec2.new(i%Cols, i/Cols|0)
 		const m = t.clone.add(.5)
 		clearDot({tileIdx:i,tileMid:m})
@@ -114,8 +115,8 @@ export const Maze = freeze(new class {
 	Tunnel  = freeze(new Tunnel)
 	PowDots = freeze(new PowDots)
 	MidY    = this.House.MiddleY
-	hasDot  = (/**@type {number}  */i)=> DotSet.has(i)
-	hasPow  = (/**@type {number}  */i)=> PowMap.has(i)
+	hasDot  = (/**@type {TileIdx} */i)=> DotSet.has(i)
+	hasPow  = (/**@type {TileIdx} */i)=> PowMap.has(i)
 	hasWall = (/**@type {Position}*/p)=> WallSet.has(p.y*Cols+p.x)
 
 	get dotsLeft() {return DotSet.size}
@@ -143,7 +144,7 @@ export const Maze = freeze(new class {
 			? b.set(t.x>Cols/2 && b.x>Cols/2 ? 21:6, 15) : b
 
 	/**
-	 @param {{tileIdx:number,tileMid:Vec2}} tile
+	 @param {{tileIdx:TileIdx,tileMid:Vec2}} tile
 	 @returns {number} Number of remaining dots
 	*/
 	clearDot({tileIdx:i,tileMid:{x,y}}) {
