@@ -237,7 +237,7 @@ body:is([data-state=Attract],[data-state=CoffBreak]) {
 	--width: calc(var(--t)*8);
 	text-transform: uppercase;
 	margin-left: 0;
-	output, mn-item {
+	output, cm-item {
 		font: 0.8rem/1 sans-serif;
 		display: flex;
 		gap: .2em;
@@ -247,12 +247,12 @@ body:is([data-state=Attract],[data-state=CoffBreak]) {
 		padding-top:    .2rem;
 		padding-bottom: .1rem;
 	}
-	mn-item {
+	cm-item {
 		padding-top:    0;
 		padding-bottom: 0;
 	}
 	output::before,
-	mn-item::before {
+	cm-item::before {
 		--x: calc(-1*var(--t) * var(--val, 0));
 		--size: var(--width) var(--t);
 		content: '';
