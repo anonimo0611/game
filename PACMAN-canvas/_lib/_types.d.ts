@@ -2,8 +2,10 @@
 
 interface Scene {update():void, draw?():void}
 
-//---- Coordinates ----
+//---- Tile & Coords ----
 
+/** A non-negative integer representing the tile index. */
+type TileIdx  = number
 type xyTuple  = Readonly<[x:number, y:number]>
 type Position = Readonly<{x:number, y:number}>
 type PathNode = {tile:Vec2,dir:Direction,stopped:boolean}
