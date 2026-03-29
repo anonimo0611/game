@@ -16,8 +16,8 @@ class Menu {
 	constructor(id, type) {
 		const
 		root  = /**@type {CustomMenu} */($('#'+id).attr({type}) .get(0)),
-		menu  = /**@type {HTMLElement}*/($(root).find('mn-list').get(0)),
-		items = /**@type {MenuItem[]} */($(menu).find('mn-item').get())
+		menu  = /**@type {HTMLElement}*/($(root).find('cm-list').get(0)),
+		items = /**@type {MenuItem[]} */($(menu).find('cm-item').get())
 		if (!root || !menu || !items.length) {
 			throw Error('The menu structure is invalid')
 		}
@@ -173,4 +173,4 @@ class MenuItem extends HTMLElement{
 	get index() {return $(this).index()}
 }
 customElements.define('custom-menu', CustomMenu)
-customElements.define('mn-item', MenuItem)
+customElements.define('cm-item', MenuItem)
