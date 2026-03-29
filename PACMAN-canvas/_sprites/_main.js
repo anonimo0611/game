@@ -9,8 +9,7 @@ import {SizeRng,BrightRng,ResetBtn,GridSize,T,S,GAP,ghsSprGr} from './_constants
 const ctx  = Fg
 const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 
-// Atlas
-;(new class {
+;(new class { // Atlas
 	constructor() {
 		$(SizeRng).on('resize', this.draw)
 	}
@@ -20,8 +19,8 @@ const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 		ctx.setLineDash([2,2])
 		ctx.beginPath()
 		const {x:Cols,y:Rows}= GridSize
-		for (const y of range(Cols+0)) ctx.setLinePath([ofst(y), 0], [ofst(y), Rows*S])
-		for (const x of range(Rows+1)) ctx.setLinePath([0, x*S], [Cols*S+GAP, x*S])
+		range(Cols+0).forEach(y=> ctx.setLinePath([ofst(y), 0], [ofst(y), Rows*S]))
+		range(Rows+1).forEach(x=> ctx.setLinePath([0, x*S], [Cols*S+GAP, x*S]))
 		ctx.lineWidth   = 2
 		ctx.strokeStyle = '#555555'
 		ctx.stroke()
