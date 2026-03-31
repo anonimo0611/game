@@ -11,7 +11,7 @@ class Vec2 {
 	 @param {number} x
 	 @param {number} y
 	*/
-	static xyTuple(x,y) {
+	static of(x,y) {
 		return /**@type {xyTuple}*/([x,y])
 	}
 
@@ -126,9 +126,9 @@ class Vec2 {
 		this.x = x
 		this.y = y
 	}
+	get vals()       {return /**@type {xyTuple}*/([this.x, this.y])}
 	get asObj()      {return {x:this.x, y:this.y}}
 	get hyphenated() {return `${this.x}-${this.y}`}
-	get vals()       {return Vec2.xyTuple(this.x, this.y)}
 	get asInt()      {return Vec2.new(this.x|0,this.y|0)}
 	get clone()      {return Vec2.new(this.x,  this.y)}
 	get normalized() {return Vec2.new(this.x/this.magnitude, this.y/this.magnitude)}
@@ -277,12 +277,13 @@ class Vec2 {
 	void() {}
 }
 
-class ReadonlyPos {
-	constructor(x=0, y=0) {
-		/** @readonly */this.x = x
-		/** @readonly */this.y = y
+class ReadonlyXY {
+	#x; #y;
+	constructor(x=0, y=x) {
+		this.#x = x
+		this.#y = y
 	}
-	get vals() {
-		return Vec2.xyTuple(this.x, this.y)
-	}
+	get x()    {return this.#x}
+	get y()    {return this.#y}
+	get vals() {return /**@type {xyTuple}*/([this.#x,this.#y])}
 }
