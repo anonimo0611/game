@@ -10,7 +10,7 @@ import {player,onPlayerDotEaten} from './player/player.js'
 
 const FadeOutDur = 300
 const AppearDots = new Set([70,170])
-const TargetPos  = new ReadonlyXY(BW/2, T*18.5)
+const TargetPos  = new Vec2(BW/2, T*18.5).fixed
 const FruitTable = /**@type {const}*/([0,1,2,2,3,3,4,4,5,5,6,6,7])
 const PointTable = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
 
