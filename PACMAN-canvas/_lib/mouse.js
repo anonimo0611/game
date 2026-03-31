@@ -15,7 +15,7 @@ export const Cursor = function() {
 		lastPos.set(currPos)
 	}, {passive:true})
 	return {
-		get pos() {return currPos.asObj},
+		get pos() {return {...currPos}},
 		hide() {dRoot.dataset.cursor = 'hidden'},
 		show() {dRoot.dataset.cursor = 'default'},
 	}
