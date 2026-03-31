@@ -125,7 +125,7 @@ class Snag {
 	constructor(ctx) {this.ctx = ctx}
 	CaughtX   = BW/2 + T/2
 	AkaMinX   = this.CaughtX - T
-	stakeSize = Vec2.new(T*.18, T*.70).freeze()
+	stakeSize = new ReadonlyPos(T*.18, T*.70)
 	stakePos  = freeze({
 		x: BW/2 + T*2 - this.stakeSize.x/2,
 		y: BH/2 + T*1 - this.stakeSize.y - T*.1
