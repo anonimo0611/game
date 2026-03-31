@@ -24,7 +24,7 @@ export const Cache = new class {
 
 	/**
 	 @param {EnhancedCtx2D} ctx
-	 @param {Vec2} v
+	 @param {Position} v
 	 @param {number} [alpha]
 	*/
 	draw(ctx, {x,y}, alpha) {
