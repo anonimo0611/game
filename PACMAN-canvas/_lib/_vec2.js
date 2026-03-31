@@ -264,8 +264,11 @@ class Vec2 {
 	toString() {
 		return /**@type {const}*/(`{x:${this.x}, y:${this.y}}`)
 	}
+	/**
+	 @returns {ReadonlyVec2}
+	*/
 	freeze() {
-		return freeze(this)
+		return /**@type {any}*/(freeze(this))
 	}
 	void(){}
 }
