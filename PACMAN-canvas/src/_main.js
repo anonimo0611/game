@@ -95,9 +95,9 @@ export const Game = new class {
 		State.setFlashing({delay:1000})
 	}
 	#onFlashing() {
-		Wall.setFlashing(Game.#levelEnds)
+		Wall.setFlashing(Game.#onLevelEnds)
 	}
-	#levelEnds() {
+	#onLevelEnds() {
 		Game.#pacDied = false
 		!Ctrl.endlessMode
 			? State.setTitle()
