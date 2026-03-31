@@ -18,7 +18,7 @@ const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 		ctx.translate(-GAP/2, 0)
 		ctx.setLineDash([2,2])
 		ctx.beginPath()
-		const {x:Cols,y:Rows}= GridSize
+		const [Cols,Rows]= GridSize.vals
 		range(Cols+0).forEach(y=> ctx.setLinePath([ofst(y), 0], [ofst(y), Rows*S]))
 		range(Rows+1).forEach(x=> ctx.setLinePath([0, x*S], [Cols*S+GAP, x*S]))
 		ctx.lineWidth   = 2

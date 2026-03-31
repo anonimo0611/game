@@ -13,9 +13,9 @@ export const BrightRng = /**@type {HTMLInputElement} */(byId('brightRng'))
 export const ResetBtn  = /**@type {HTMLButtonElement}*/(byId('resetBtn'))
 
 export let  [T,S,GAP] = [0,0,0]
-export const GridSize = new Vec2(10,11).freeze()
 export const ghsSprPv = new GhsSprite(Pv)
 export const ghsSprGr = new GhsSprite(Fg)
+export const GridSize = new ReadonlyXY(10,11)
 
 export function resize() {
 	T = SizeRng.valueAsNumber/2
@@ -24,7 +24,7 @@ export function resize() {
 		ghsSprPv.ctx.resize(S*4, S*3)
 		ghsSprGr.ctx.resize(S*4, S*3)
 		Pv.resize(T*3.2, T*2.1)
-		Fg.resize(...GridSize.clone.mul(S).add(GAP*2).vals)
+		Fg.resize(...Vec2.new(GridSize).mul(S).add(GAP*2).vals)
 		lastTileSize = T
 		$(SizeRng).trigger('resize')
 	}
