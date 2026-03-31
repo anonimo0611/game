@@ -10,23 +10,6 @@ type xyTuple  = Readonly<[x:number, y:number]>
 type Position = Readonly<{x:number, y:number}>
 type PathNode = {tile:Vec2,dir:Direction,stopped:boolean}
 
-interface ReadonlyVec2 {
-	readonly x: number
-	readonly y: number
-	readonly vals: [x:number, y:number]
-	readonly hyphenated: string
-	readonly asInt: Vec2
-	readonly clone: Vec2
-	readonly normalized: Vec2
-	readonly magnitude: number
-	readonly sqrMag: number
-	readonly inverse: Vec2
-	void(): void
-	distance(pos:Position): Vec2
-	toIdx(cols:number): number
-	toString(): string
-}
-
 //---- Points ----
 
 type PtsValue = 100|200|300|400|800|1600|500|700|1000|2000|3000|5000

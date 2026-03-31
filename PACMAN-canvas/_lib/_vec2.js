@@ -8,6 +8,14 @@ class Vec2 {
 	static get Left()  {return Vec2.new(-1, 0)}
 
 	/**
+	 @param {number} x
+	 @param {number} y
+	*/
+	static xyTuple(x,y) {
+		return /**@type {xyTuple}*/([x,y])
+	}
+
+	/**
 	 @overload
 	 @returns {Vec2}
 
@@ -24,10 +32,16 @@ class Vec2 {
 	 @param   {Position} pos
 	 @returns {Vec2}
 
-	 @param {void|number|Position} [v1]
+	 @overload
+	 @param   {xyTuple} pos
+	 @returns {Vec2}
+
+	 @param {void|number|xyTuple|Position} [v1]
 	 @param {number} [v2]
 	*/static new(v1,v2) {
-		return new Vec2(...this.#parseXY(v1,v2))
+		return (v1 instanceof Array)
+			? new Vec2(...v1)
+			: new Vec2(...this.#parseXY(v1,v2))
 	}
 
 	/**
@@ -108,17 +122,13 @@ class Vec2 {
 		return Vec2.sub(pos1,pos2).magnitude
 	}
 
-	/**
-	 @param {number} x
-	 @param {number} y
-	*/
-	constructor(x, y) {
+	constructor(x=0, y=0) {
 		this.x = x
 		this.y = y
 	}
-	get vals()       {return /**@type {[x:number,y:number]}*/([this.x,this.y])}
-	get hyphenated() {return `${this.x}-${this.y}`}
 	get asObj()      {return {x:this.x, y:this.y}}
+	get hyphenated() {return `${this.x}-${this.y}`}
+	get vals()       {return Vec2.xyTuple(this.x, this.y)}
 	get asInt()      {return Vec2.new(this.x|0,this.y|0)}
 	get clone()      {return Vec2.new(this.x,  this.y)}
 	get normalized() {return Vec2.new(this.x/this.magnitude, this.y/this.magnitude)}
@@ -264,11 +274,15 @@ class Vec2 {
 	toString() {
 		return /**@type {const}*/(`{x:${this.x}, y:${this.y}}`)
 	}
-	/**
-	 @returns {ReadonlyVec2}
-	*/
-	freeze() {
-		return /**@type {any}*/(freeze(this))
+	void() {}
+}
+
+class ReadonlyPos {
+	constructor(x=0, y=0) {
+		/** @readonly */this.x = x
+		/** @readonly */this.y = y
 	}
-	void(){}
+	get vals() {
+		return Vec2.xyTuple(this.x, this.y)
+	}
 }
