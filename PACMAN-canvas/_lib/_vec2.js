@@ -8,14 +8,6 @@ class Vec2 {
 	static get Left()  {return Vec2.new(-1, 0)}
 
 	/**
-	 @param {number} x
-	 @param {number} y
-	*/
-	static of(x,y) {
-		return /**@type {xyTuple}*/([x,y])
-	}
-
-	/**
 	 @overload
 	 @returns {Vec2}
 
@@ -278,12 +270,13 @@ class Vec2 {
 }
 
 class ReadonlyXY {
-	#x; #y;
+	/** @readonly */x
+	/** @readonly */y
+	/** @readonly @type {xyTuple} */vals
 	constructor(x=0, y=x) {
-		this.#x = x
-		this.#y = y
+		this.x = x
+		this.y = y
+		this.vals = Object.freeze([x,y])
+		Object.freeze(this)
 	}
-	get x()    {return this.#x}
-	get y()    {return this.#y}
-	get vals() {return /**@type {xyTuple}*/([this.#x,this.#y])}
 }
