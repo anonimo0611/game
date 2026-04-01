@@ -111,7 +111,7 @@ const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 		}
 		{// Stake and Shard
 			const s = T/TileSize
-			const [sx,sy]= Vec2.new(spr.stakeSize).mul(s).vals
+			const [sx,sy]= Vec2.new(spr.StakSize).mul(s).vals
 			// Stake
 			ctx.save()
 			ctx.translate(S*6.9, S-T/2-sy-3*s)
