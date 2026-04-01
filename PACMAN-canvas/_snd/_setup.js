@@ -35,7 +35,7 @@ const SoundCtrl = {
 			return
 		if (e.key.toUpperCase() == 'M'
 		 || e.target == volRg2 && isEnterKey(e))
-			this.mute()
+			SoundCtrl.mute()
 	},
 	mute() {
 		lstVol = Sound.vol || (lstVol || +volRng.max >> 1)
