@@ -1,7 +1,7 @@
 import {State}  from './state.js'
 import {Ctrl}   from './control.js'
 import {inputs} from './ui.js'
-import Sprite   from './sprites/pacman.js'
+import  Sprite  from './sprites/pacman.js'
 
 export const Lives = function() {
 	let   left   = 0

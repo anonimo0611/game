@@ -1,16 +1,16 @@
-import {Sound}   from '../../_snd/sound.js'
-import {Dir}     from '../../_lib/direction.js'
-import {Game}    from '../_main.js'
-import {State}   from '../state.js'
-import {Ctrl}    from '../control.js'
-import {PtsMgr}  from '../points.js'
-import {Maze}    from '../maze.js'
-import {Actor}   from '../actor.js'
-import {player}  from '../player/player.js'
-import {PathMgr} from './show_paths.js'
-import Sprite    from '../sprites/ghost.js'
-import * as Sys  from './_system.js'
-import {GhsMgr,Evt} from './_system.js'
+import {Sound}    from '../../_snd/sound.js'
+import {Dir}      from '../../_lib/direction.js'
+import {Game}     from '../_main.js'
+import {State}    from '../state.js'
+import {Ctrl}     from '../control.js'
+import {Actor}    from '../actor.js'
+import Sprite     from '../sprites/ghost.js'
+import * as Sys   from './_system.js'
+import {player}   from '../player/player.js'
+import {MazeMgr}  from '../maze.js'
+import {GhostMgr} from './_system.js'
+import {PtsMgr}   from '../points.js'
+import {PathMgr}  from './paths.js'
 
 /**@type {readonly Direction[]}*/
 const TurnPriority = [U,L,D,R]
@@ -30,12 +30,12 @@ export class Ghost extends Actor {
 
 	// The getters in this section subject to overridden
 	get chaseOffset()  {return 0}
-	get chaseSpeed()   {return GhsSpeed.Base}
+	get chaseSpeed()   {return Sys.Speed.Base}
 	get chasePos()     {return player.center}
 	get scatterTile()  {return Vec2.new(24, 0)}
 	get isAngry()      {return false}
-	get isChasing()    {return GhsMgr.isChaseMode   && this.isNormal}
-	get isScattering() {return GhsMgr.isScatterMode && this.isNormal}
+	get isChasing()    {return GhostMgr.isChaseMode   && this.isNormal}
+	get isScattering() {return GhostMgr.isScatterMode && this.isNormal}
 
 	/**
 	 @param {Direction} dir
@@ -48,15 +48,15 @@ export class Ghost extends Actor {
 		this.init  = freeze({align,x:col*T})
 		this.state = Sys.createState(this)
 		$(this).on({
-		 [Evt.Reverse]:  ()=> this.#revSig  = true,
-		 [Evt.Ready]:    ()=> this.#fader   = Fade.in(),
-		 [Evt.RoundEnds]:()=> this.#fader   = Fade.out(),
-		 [Evt.FleeStart]:()=> this.#fleeTmr = 400/Game.interval,
-		 [Evt.Frighten]: (_,on=true)=> this.#frighten(on),
+		 [Sys.Evt.Reverse]:  ()=> this.#revSig  = true,
+		 [Sys.Evt.Ready]:    ()=> this.#fader   = Fade.in(),
+		 [Sys.Evt.RoundEnds]:()=> this.#fader   = Fade.out(),
+		 [Sys.Evt.FleeStart]:()=> this.#fleeTmr = 400/Game.interval,
+		 [Sys.Evt.Frighten]: (_,on=true)=> this.#frighten(on),
 		})
 	}
-	get animIdx()      {return GhsMgr.animIndex}
-	get spriteIdx()    {return GhsMgr.spriteIdx}
+	get animIdx()      {return GhostMgr.animIndex}
+	get spriteIdx()    {return GhostMgr.spriteIdx}
 	get maxAlpha()     {return Ctrl.showTargets? .75:1}
 	get alpha()        {return this.#fader?.alpha ?? this.maxAlpha}
 	get chaseTile()    {return this.chasePos.divInt(T)}
@@ -70,23 +70,23 @@ export class Ghost extends Actor {
 
 	get baseTargetTile() {
 		return this.state.isEscaping
-			? Maze.House.EntryTile
+			? MazeMgr.House.EntryTile
 			: this.isScattering
 				? this.scatterTile
 				: this.chaseTile
 	}
 	getTargetTile(tile=this.tile) {
 		const {baseTargetTile}= this
-		return Maze.getGhostExitTile({baseTargetTile,tile})
+		return MazeMgr.getGhostExitTile({baseTargetTile,tile})
 	}
 	get speed() {
 		return function(g,{state:s}=g) {
-			if (s.isIdle)       return GhsSpeed.Idle
-			if (s.isGoingOut)   return GhsSpeed.GoOut
-			if (g.isEscaping)   return GhsSpeed.Escape
-			if (g.inTunSide)    return GhsSpeed.InTunnel
-			if (g.isFrightened) return GhsSpeed.Fright
-			if (g.isScattering) return GhsSpeed.Base
+			if (s.isIdle)       return Sys.Speed.Idle
+			if (s.isGoingOut)   return Sys.Speed.GoOut
+			if (g.isEscaping)   return Sys.Speed.Escape
+			if (g.inTunSide)    return Sys.Speed.InTunnel
+			if (g.isFrightened) return Sys.Speed.Fright
+			if (g.isScattering) return Sys.Speed.Base
 			return g.chaseSpeed
 		}(this) * Game.moveSpeed
 	}
@@ -118,7 +118,7 @@ export class Ghost extends Actor {
 		}
 	}
 	#tickMove(spd=this.speed) {
-		!Maze.House.arrived(this, spd)
+		!MazeMgr.House.arrived(this, spd)
 			? this.setNextPos(spd)
 			: this.#enterHouse()
 	}
@@ -126,8 +126,8 @@ export class Ghost extends Actor {
 		!Ctrl.alwaysChase &&
 			Sys.DotCounter.releaseIfReady(this)
 		!this.state.isGoingOut && this.move(
-			(cy > Maze.MidY - (T*0.6) && orient != D)? U:
-			(cy < Maze.MidY + (T*0.5) ? D:U)
+			(cy > MazeMgr.MidY - (T*0.6) && orient != D)? U:
+			(cy < MazeMgr.MidY + (T*0.5) ? D:U)
 		)
 	}
 	leaveHouse = (deactivateGlobalDotCnt=false)=> {
@@ -145,7 +145,7 @@ export class Ghost extends Actor {
 		if (cx != BW/2)
 			return this.centering()
 
-		if (y > Maze.House.EntryTile.y*T)
+		if (y > MazeMgr.House.EntryTile.y*T)
 			return this.move(U)
 
 		this.dir = L
@@ -157,11 +157,11 @@ export class Ghost extends Actor {
 		this.state.setReturning()
 	}
 	#returnToHome({init,speed:spd,x,y}=this) {
-		if (y+spd < Maze.MidY)
+		if (y+spd < MazeMgr.MidY)
 			return this.move()
 
-		if (y != Maze.MidY)
-			return this.pos.setY(Maze.MidY).void()
+		if (y != MazeMgr.MidY)
+			return this.pos.setY(MazeMgr.MidY).void()
 
 		if (!init.align || abs(x-init.x) <= spd) {
 			this.x   = init.x
@@ -173,7 +173,7 @@ export class Ghost extends Actor {
 	}
 	#arrivedAtHome() {
 		this.sprite.setResurrect()
-		;(Ctrl.alwaysChase || this.type == GhsType.Akabei)
+		this.type == GhostType.Akabei || Ctrl.alwaysChase
 			? this.state.setGoingOut()
 			: this.state.setIdle()
 		!Timer.frozen && Sound.onGhostReturned()
@@ -194,7 +194,7 @@ export class Ghost extends Actor {
 		const dirs = TurnPriority.flatMap((dir,i)=> {
 			const test = this.getAdjTile(dir,stTile)
 			return Dir.Opposite[currDir] != dir
-				&& !Maze.hasWall(test)
+				&& !MazeMgr.hasWall(test)
 				&& !this.#isRestrictedTile({dir,test})
 				? [{dir,i,m:Vec2.sqrMag(test,tgtTile)}]:[]
 		})
@@ -206,7 +206,7 @@ export class Ghost extends Actor {
 	#isRestrictedTile({dir,test:{hyphenated:xy}}) {
 		const ignore = (this.isFrightened || this.isEscaping)
 		return (Ctrl.unrestricted || ignore)
-			? false : Maze.GhostNoEntryTiles.has(xy+dir)
+			? false : MazeMgr.GhostNoEntryTiles.has(xy+dir)
 	}
 	#makeTurn({orient}=this) {
 		if (this.dir != orient
@@ -228,7 +228,7 @@ export class Ghost extends Actor {
 			return false
 		this.isFrightened
 			? this.#onBitten(release)
-			: Maze.dotsLeft && this.#onPacCaught()
+			: MazeMgr.dotsLeft && this.#onPacCaught()
 		return true
 	}
 	#onBitten(release=()=>{}) {
@@ -236,7 +236,7 @@ export class Ghost extends Actor {
 		this.#frightened = false
 		this.state.setBitten()
 		Timer.freeze()
-		PtsMgr.set({key:GhsMgr, pos:this.center, fn:release})
+		PtsMgr.set({key:GhostMgr, pos:this.center, fn:release})
 	}
 	#onPacCaught() {
 		Sound.stopLoops()

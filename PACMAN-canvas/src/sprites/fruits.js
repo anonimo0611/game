@@ -1,27 +1,26 @@
-const fns = freeze
-	([cherry,strawberry,orange,apple,melon,gala,bell,key])
+const cacheCtx  = canvas2D(null,T*2).ctx
+const drawFuncs = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
 /**
  @param {EnhancedCtx2D} ctx
  @param {number} idx
 */
 export function draw(ctx, idx, x=T,y=T-int(T*0.1), scale=T/8) {
-	if (!fns[idx])
+	if (!drawFuncs[idx])
 		throw RangeError(`The 2nd argument is ${idx},`
-			+` but the fruit range must be 0-${fns.length-1}`)
+			+` but the fruit range must be 0-${drawFuncs.length-1}`)
 	ctx.save()
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
 	ctx.translate(x, y)
 	ctx.scale(scale*1.05, scale*1.05)
-	fns[idx](ctx)
+	drawFuncs[idx](ctx)
 	ctx.restore()
 }
-export const Cache = new class {
-	#ctx = canvas2D(null,T*2).ctx
-
-	/** @param {number} idx */
-	update(idx) {draw(this.#ctx.clear(), idx)}
-
+export const Cache = {
+	/**
+	 @param {number} idx
+	*/
+	update(idx) {draw(cacheCtx.clear(), idx)},
 	/**
 	 @param {EnhancedCtx2D} ctx
 	 @param {Position} v
@@ -31,16 +30,16 @@ export const Cache = new class {
 		ctx.save()
 		ctx.setAlpha(alpha)
 		ctx.translate(x, y)
-		ctx.drawImage(this.#ctx.canvas, -T,-T)
+		ctx.drawImage(cacheCtx.canvas, -T,-T)
 		ctx.restore()
-	}
+	},
 }
 
 {// Create a sprite sheet for menu icons
 	const Menu = $('#LevelMenu')
 	const size = +Menu.css('--scale') * T
-	const {ctx}= canvas2D(null, size*fns.length, size)
-	for (const i of fns.keys())
+	const {ctx}= canvas2D(null, size*drawFuncs.length, size)
+	for (const i of drawFuncs.keys())
 		draw(ctx, i, size*i+size/2, size/2, size/16)
 	Menu.css('--url',`url("${ctx.canvas.toDataURL()}")`)
 }

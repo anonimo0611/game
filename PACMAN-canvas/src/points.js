@@ -1,27 +1,27 @@
-import {Game}   from './_main.js'
-import {State}  from './state.js'
-import {Score}  from './score.js'
-import {GhsMgr} from './ghosts/_system.js'
-import {Fruit}  from './fruit.js'
-import {cache}  from './sprites/points.js'
+import {Game}     from './_main.js'
+import {State}    from './state.js'
+import {ScoreMgr} from './score.js'
+import {FruitMgr} from './fruit.js'
+import {GhostMgr} from './ghosts/_system.js'
+import {cache}    from './sprites/points.js'
 
 const FadeDur = 300
 const Popups  = /**@type {Map<any,FloatingPts>}*/(new Map)
 State.on({_RoundEnds:()=> Popups.clear()})
 
-export const PtsMgr = new class {
+export const PtsMgr = new class PointsManager {
 	/** @param {FloatingPtsData} data */
 	set(data) {new FloatingPts(data)}
-	update()      {Popups.forEach(v=> v.update())}
-	drawFruitPts(){Popups.get(Fruit) ?.draw()}
-	drawGhostPts(){Popups.get(GhsMgr)?.draw()}
+	update()       {Popups.forEach(v=> v.update())}
+	drawFruitPts() {Popups.get(FruitMgr)?.draw()}
+	drawGhostPts() {Popups.get(GhostMgr)?.draw()}
 }
 class FloatingPts {
 	/** @param {FloatingPtsData} data */
 	constructor({key,pos,dur=1e3,fn}) {
 		const {speed:spd}= Game
 		this.pos   = pos
-		this.cache = cache((key == Fruit ? 0:1), key.points)
+		this.cache = cache((key == FruitMgr ? 0:1), key.points)
 		this.fade  = Fade.out(FadeDur/spd, (dur-FadeDur)/spd)
 		Timer.set(dur/spd, ()=> {
 			Timer.unfreeze()
@@ -29,7 +29,7 @@ class FloatingPts {
 			fn?.()
 		})
 		Popups.set(key, this)
-		State.isInGame && Score.add(key.points)
+		State.isInGame && ScoreMgr.add(key.points)
 	}
 	update() {
 		this.fade.update()

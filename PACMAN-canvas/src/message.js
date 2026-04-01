@@ -1,7 +1,7 @@
 import {Confirm} from '../_lib/confirm.js'
 import {State}   from './state.js'
 
-export const Message = new class {
+export const Message = {
 	/**
 	 @param {number} col
 	 @param {number} row
@@ -19,25 +19,24 @@ export const Message = new class {
 		String(text).split('\n').forEach((txt,i)=>
 			ctx.fillText(txt, col*T+2, row*T+2 + size*i))
 		ctx.restore()
-	}
+	},
 	draw() {
-		if (State.isIntro)
+		if (State.isIntro) {
 			drawText( 9, 12, '#0FF','PLAYER　ONE')
-
-		if (Ticker.paused)
-			return this.#pausedText()
-
-		if (State.isStartMode)
+		}
+		if (Ticker.paused) {
+			!State.isTitle
+				&& !Confirm.opened
+				&& !(Ticker.pausedCount & 32)
+				&& drawText(11, 18, '#F00','PAUSED')
+			return
+		}
+		if (State.isStartMode) {
 			drawText(11, 18, '#FF0','READY!')
-
+		}
 		if (State.isTitle
-		 || State.isGameOver)
+		 || State.isGameOver) {
 			drawText( 9, 18, '#F00','GAME　　OVER')
-	}
-	#pausedText() {
-		!State.isTitle
-			&& !Confirm.opened
-			&& !(Ticker.pausedCount & 32)
-			&& drawText(11, 18, '#F00','PAUSED')
-	}
+		}
+	},
 }, {drawText}=Message

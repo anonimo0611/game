@@ -1,11 +1,11 @@
-import {Sound}  from '../_snd/sound.js'
-import {Rect}   from '../_lib/rect.js'
-import {Game}   from './_main.js'
-import {Level}  from './_main.js'
-import {State}  from './state.js'
-import {Maze}   from './maze.js'
-import {PtsMgr} from './points.js'
-import * as Spr from './sprites/fruits.js'
+import {Sound}   from '../_snd/sound.js'
+import {Rect}    from '../_lib/rect.js'
+import {Game}    from './_main.js'
+import {Level}   from './_main.js'
+import {State}   from './state.js'
+import {MazeMgr} from './maze.js'
+import {PtsMgr}  from './points.js'
+import * as Spr  from './sprites/fruits.js'
 import {player,onPlayerDotEaten} from './player/player.js'
 
 const FadeOutDur = 300
@@ -20,18 +20,18 @@ const LevelsRect = new Rect(T*12, BH-T*2, T*2*LevelsCols, T*2).freeze()
 let showTgt = true
 let fadeOut = /**@type {?Fade}*/(null)
 
-export const Fruit = new class {
+export const FruitMgr = new class FruitManager {
 	static {$(this.setup)}
 	static setup() {
-		Level.on({change:Fruit.#setImages})
-		State.on({_Ready:Fruit.#resetTarget})
-		onPlayerDotEaten(Fruit.#onDotEaten)
+		Level.on({change:FruitMgr.#setImages})
+		State.on({_Ready:FruitMgr.#resetTarget})
+		onPlayerDotEaten(FruitMgr.#onDotEaten)
 	}
 	get currentType() {
-		return Fruit.#getType(Game.level-1)
+		return this.#getType(Game.level-1)
 	}
 	get points() {
-		return PointTable[Fruit.currentType]
+		return PointTable[this.currentType]
 	}
 	get showTarget() {
 		return (State.isTitle || State.isInGame) && showTgt
@@ -46,7 +46,7 @@ export const Fruit = new class {
 	#setHideTimer() {
 		// Disappearing is between 9 and 10 seconds
 		const delay = randInt(9e3, 1e4-FadeOutDur)/Game.speed
-		Timer.set(delay, Fruit.#setFadeOut, {key:Fruit})
+		Timer.set(delay, this.#setFadeOut, {key:this})
 	}
 	#resetTarget() {
 		fadeOut = null
@@ -55,27 +55,27 @@ export const Fruit = new class {
 	#setFadeOut() {
 		fadeOut = Fade.out(FadeOutDur/Game.speed)
 	}
-	#onDotEaten() {
-		if (AppearDots.has(Maze.MaxDot - Maze.dotsLeft)) {
+	#onDotEaten = ()=> {
+		if (AppearDots.has(MazeMgr.MaxDot - MazeMgr.dotsLeft)) {
 			showTgt = true
-			Fruit.#setHideTimer()
+			this.#setHideTimer()
 		}
 	}
 	#checkIntersects() {
-		if (Fruit.showTarget && Fruit.intersectsWithPlayer) {
-			Fruit.#resetTarget()
-			Timer.cancel(Fruit) && Sound.playEatenSE()
-			PtsMgr.set({key:Fruit, dur:2e3, pos:TargetPos})
+		if (this.showTarget && this.intersectsWithPlayer) {
+			this.#resetTarget()
+			Timer.cancel(this) && Sound.playEatenSE()
+			PtsMgr.set({key:this, dur:2e3, pos:TargetPos})
 		}
 	}
 	update() {
 		fadeOut?.update() == false
-			? Fruit.#resetTarget()
-			: Fruit.#checkIntersects()
+			? this.#resetTarget()
+			: this.#checkIntersects()
 	}
 	drawTarget() {
 		if (Ticker.paused) return
-		if (Fruit.showTarget) {
+		if (this.showTarget) {
 			Spr.Cache.draw(Fg, TargetPos, fadeOut?.alpha)
 		}
 		PtsMgr.drawFruitPts()
@@ -91,11 +91,11 @@ export const Fruit = new class {
 		HUD.clearRect(x,y,w,h)
 		HUD.translate(x,y)
 		for (const i of range(startLevel, Game.level))
-			Spr.draw(HUD, Fruit.#getType(i), w-T-T*2*(i-startLevel))
+			Spr.draw(HUD, this.#getType(i), w-T-T*2*(i-startLevel))
 		HUD.restore()
 	}
-	#setImages() {
-		Spr.Cache.update(Fruit.currentType)
-		Fruit.#setLevelCounter()
+	#setImages = ()=> {
+		Spr.Cache.update(this.currentType)
+		this.#setLevelCounter()
 	}
 }

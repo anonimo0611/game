@@ -1,6 +1,5 @@
 import CBSprite from './ghost_cb.js'
-export default class {
-	/** @typedef {Direction|'Bracket'} orient */
+export default class GhostSprite {
 	/** @readonly */ctx
 	/** @readonly */spr
 	/** @readonly */tgt
@@ -11,8 +10,9 @@ export default class {
 		this.spr = new CBSprite(this.ctx)
 	}
 	#resurrect = /**@type {?Fade}*/(null)
-	setResurrect() {this.#resurrect ||= Fade.in(600)}
-
+	setResurrect() {
+		this.#resurrect ||= Fade.in(600)
+	}
 	draw({
 		x=0,y=0,
 		type         = 0,
@@ -20,7 +20,7 @@ export default class {
 		spriteIdx    = 0,
 		size         = T*2,
 		alpha        = 1,
-		orient       = /**@type {orient}*/(L),
+		orient       = /**@type {Direction|'Bracket'}*/(L),
 		isAngry      = false,
 		isFrightened = false,
 		isEscaping   = false,
@@ -29,7 +29,8 @@ export default class {
 		isExposed    = false,
 	}={}) {
 		const {tgt,ctx}= this
-		const finalize = ()=> {
+		const scale = size/(100/GhostScale)
+		function finalize() {
 			ctx.restore()
 			tgt.save()
 			tgt.setAlpha(alpha)
@@ -40,11 +41,11 @@ export default class {
 		ctx.clear()
 		ctx.save()
 		ctx.translate(size/2, size/2)
-		ctx.scale(size/(100/GhsScale), size/(100/GhsScale))
+		ctx.scale(scale, scale)
 		ctx.lineWidth = 5
 		ctx.lineJoin  = ctx.lineCap = 'round'
 		ctx.fillStyle = !isFrightened
-			? GhsColors[type]
+			? GhostColors[type]
 			: Palette.FrightBody[spriteIdx]
 
 		if (isExposed) {
@@ -128,9 +129,9 @@ export default class {
 			ctx.fillCircle(19*v, +4,  8, Colors.GhostEyes)
 		}
 	}
-	/** @param {Horizontal} LR */
-	#drawEyesHoriz(LR) {
-		const {ctx}= this, v = (Vec2[LR].x < 0 ? -1:1)
+	/** @param {Horizontal} LorR */
+	#drawEyesHoriz(LorR) {
+		const {ctx}= this, v = (Vec2[LorR].x < 0 ? -1:1)
 		for (const i of [0,1]) {
 			ctx.setEllipse([-16.5*v, 23*v][i], -11, 13, 17, 0, 0, PI*2)
 			ctx.fillCircle([ -9.5*v, 29*v][i],  -8,  8, Colors.GhostEyes)

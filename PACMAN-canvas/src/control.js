@@ -3,13 +3,13 @@ import {Sound}    from '../_snd/sound.js'
 import {Confirm}  from '../_lib/confirm.js'
 import {State}    from './state.js'
 import {drawText} from './message.js'
-import {Score}    from './score.js'
+import {ScoreMgr} from './score.js'
 import {Form,Menu,inputs,btns} from './ui.js'
 
-const {Info:palette}= Palette
 const SettingsKey = 'anopacman'
+const {Info:palette}= Palette
 
-export const Ctrl = new class {
+export const Ctrl = new class Controller {
 	static {$(this.setup)}
 	static setup() {
 		Ctrl.#restore()
@@ -31,7 +31,7 @@ export const Ctrl = new class {
 	get showGridLines() {return inputs.grdChk.checked}
 	get showTracking()  {return Ctrl.showTargets || Ctrl.showPaths}
 	get semiTransPac()  {return Ctrl.invincible  || Ctrl.showGridLines}
-	get usingCheats()   {return Ctrl.invincible  || Ctrl.speed<.7  || Ctrl.showTracking}
+	get usingCheats()   {return Ctrl.invincible  || Ctrl.speed<.7 || Ctrl.showTracking}
 	get isPractice()    {return Ctrl.usingCheats ||!Ctrl.isArcadeMode}
 	get isArcadeMode()  {return Ctrl.endlessMode && Menu.Level.index == 0}
 
@@ -95,13 +95,9 @@ export const Ctrl = new class {
 			? State.setQuit()
 			: State.isInGame && Ctrl.#quitConfirm()
 	}
-	#clearHiScore() {
-		localStorage.removeItem(Score.HiScoreKey)
-		Score.reset()
-	}
 	#clearHiConfirm() {
 		Confirm.open('Are you sure you want to clear high-score?',
-			null, Ctrl.#clearHiScore, 'Cancel','Clear')
+			null, ()=> ScoreMgr.clear(), 'Cancel','Clear')
 	}
 	#quitConfirm() {
 		!Ticker.paused && Ctrl.pause()

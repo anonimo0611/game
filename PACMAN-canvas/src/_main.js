@@ -1,21 +1,21 @@
 import './ghosts/ghost_sub.js'
-import {Cursor}  from '../_lib/mouse.js'
-import {Menu}    from './ui.js'
-import {State}   from './state.js'
-import {Message} from './message.js'
-import {Ctrl}    from './control.js'
-import {Demo}    from './demo/_demo.js'
-import {Maze}    from './maze.js'
-import {Wall}    from './sprites/wall.js'
-import {Score}   from './score.js'
-import {Lives}   from './lives.js'
-import {Fruit}   from './fruit.js'
-import {Actors}  from './actor.js'
-import {player}  from './player/player.js'
-import {PtsMgr}  from './points.js'
-import {Sound}   from '../_snd/sound.js'
+import {Cursor}   from '../_lib/mouse.js'
+import {Sound}    from '../_snd/sound.js'
+import {Menu}     from './ui.js'
+import {State}    from './state.js'
+import {Message}  from './message.js'
+import {Ctrl}     from './control.js'
+import {Demo}     from './demo/_demo.js'
+import {Lives}    from './lives.js'
+import {Wall}     from './sprites/wall.js'
+import {MazeMgr}  from './maze.js'
+import {ScoreMgr} from './score.js'
+import {FruitMgr} from './fruit.js'
+import {PtsMgr}   from './points.js'
+import {Actors}   from './actor.js'
+import {player}   from './player/player.js'
 
-export const Game = new class {
+export const Game = new class GameCore {
 	static {$(this.setup)}
 	static setup() {
 		Ticker.set(Game.#update, Game.#draw)
@@ -77,7 +77,7 @@ export const Game = new class {
 		State.setInGame({delay:2200})
 	}
 	#onRoundEnds() {
-		Maze.dotsLeft == 0
+		MazeMgr.dotsLeft == 0
 			? State.setCleared()
 			: State.setPacDying({delay:600})
 	}
@@ -110,8 +110,8 @@ export const Game = new class {
 	}
 	#update() {
 		PtsMgr.update()
-		Fruit.update()
-		Maze.PowDots.update()
+		FruitMgr.update()
+		MazeMgr.PowDots.update()
 		Demo.update()
 		Actors.update()
 	}
@@ -123,9 +123,9 @@ export const Game = new class {
 		Message.draw()
 	}
 	#drawMain() {
-		Score.draw()
-		Maze.PowDots.draw()
-		Fruit.drawTarget()
+		ScoreMgr.draw()
+		MazeMgr.PowDots.draw()
+		FruitMgr.drawTarget()
 		Actors.draw(player)
 	}
 }, Level = $('#level-num')

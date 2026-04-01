@@ -4,7 +4,7 @@ const OpenMax  = 60 * PI/180
 
 import {Dir}   from '../../_lib/direction.js';
 import {Dying} from './pacman_dying.js'
-export default class {
+export default class PacmanSprite {
 	#mouthPhase  = 0
 	#mouthAngle  = 0
 	#dyingSprite = /**@type {?Dying}*/(null)
@@ -13,8 +13,7 @@ export default class {
 	/** @readonly */radius
 	/**
 	 @param {EnhancedCtx2D} ctx
-	 @param {0|1|2} initialMouthOpening
-	 0=closed, 1=half-open, 2=fully open
+	 @param {0|1|2} initialMouthOpening 0=closed, 1=half open, 2=fully open
 	*/
 	constructor(ctx, initialMouthOpening=0, radius=PacRadius) {
 		this.ctx    = ctx

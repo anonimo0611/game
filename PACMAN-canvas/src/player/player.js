@@ -2,10 +2,10 @@ import {Sound}    from '../../_snd/sound.js'
 import {Game}     from '../_main.js'
 import {Ctrl}     from '../control.js'
 import {State}    from '../state.js'
-import {Score}    from '../score.js'
-import {Maze}     from '../maze.js'
+import {ScoreMgr} from '../score.js'
+import {MazeMgr}  from '../maze.js'
 import {PacMan}   from '../actor.js'
-import {GhsMgr}   from '../ghosts/_system.js'
+import {GhostMgr} from '../ghosts/_system.js'
 import {Mover}    from './controller.js'
 import {TunEntry} from './tunnel.js'
 
@@ -69,22 +69,22 @@ class Player extends PacMan {
 		}
 	}
 	#eatDot(tileIdx=-1) {
-		if (!Maze.hasDot(tileIdx)) return
+		if (!MazeMgr.hasDot(tileIdx)) return
 		this.#playEatSE()
 		this.resetTimer()
-		Maze.hasPow(tileIdx)
+		MazeMgr.hasPow(tileIdx)
 			? this.#eatPowerDot()
 			: this.#eatSmallDot()
-		Maze.clearDot(this) == 0
+		MazeMgr.clearDot(this) == 0
 			? State.setRoundEnds()
 			: EventBus.trigger(EatenEvt)
 	}
 	#eatPowerDot() {
-		Score.add(PowPts)
-		GhsMgr.frighten()
+		ScoreMgr.add(PowPts)
+		GhostMgr.frighten()
 	}
 	#eatSmallDot() {
-		Score.add(DotPts)
+		ScoreMgr.add(DotPts)
 	}
 	#playEatSE() {
 		const duration = (T/this.speed)*Ticker.Interval*.5

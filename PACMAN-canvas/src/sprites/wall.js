@@ -4,15 +4,16 @@ const LO = int(4*ScaleFactor) // Line  Offset
 const OO = int(2*ScaleFactor) // Outer Offset
 const CornerToIndex = trMap('12345678abcdABCD',cycleRange(4))
 
-import {Maze}  from '../maze.js'
-import {State} from '../state.js'
-export const Wall = new class {
+import {State}   from '../state.js'
+import {MazeMgr} from '../maze.js'
+export const Wall = new class WallRenderer {
+	/** @param {Cvs2DStyle} color */
 	draw(color=Colors.Wall) {
 		Bg.clear()
 		Bg.save()
 		Bg.lineWidth   = LW
 		Bg.strokeStyle = color
-		Maze.Map.forEach(Wall.#drawTile)
+		MazeMgr.Map.forEach(Wall.#drawTile)
 		Wall.#drawHouse()
 		Wall.#drawDoor()
 		Bg.restore()
@@ -27,13 +28,13 @@ export const Wall = new class {
 	}
 	#drawDoor() {
 		if (State.isFlashing) return
-		const y = (Maze.House.EntryTile.y+1.6)*T
+		const y = (MazeMgr.House.EntryTile.y+1.6)*T
 		Bg.fillRect(BW/2-T, y, T*2, T/4, Colors.Door)
 	}
 	#drawHouse() {
 		const [ix,iy,ox,oy]= [31,16,34,19].map(n=>n/10*T)
 		Bg.save()
-		Bg.translate(BW/2, Maze.House.MiddleY)
+		Bg.translate(BW/2, MazeMgr.House.MiddleY)
 		Bg.strokeRect(-ox, -oy, ox*2, oy*2)
 		Bg.strokeRect(-ix, -iy, ix*2, iy*2)
 		Bg.clearRect (-T, -oy-LW, T*2, HT)
@@ -84,7 +85,7 @@ export const Wall = new class {
 			Bg.translate(x+(t.x<Cols/2 ? OO:T-OO), y)
 			Bg.strokeLine(0,0,0,T)
 		}
-		if (/[_=]/.test(c) || Maze.isTopOrBottom(t.y) && +c) {
+		if (/[_=]/.test(c) || MazeMgr.isTopOrBottom(t.y) && +c) {
 			const oY = /[=56]/.test(c) ? OO:T-OO
 			Bg.translate(x, y)
 			Bg.strokeLine(0, oY, T, oY)

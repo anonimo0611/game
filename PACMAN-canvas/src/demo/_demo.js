@@ -24,7 +24,7 @@ const RunTimer = function() {
 	return {update}
 }()
 
-/** @type {{[K in import('../state').StateType]?:Scene}} */
+/** @type {{[K in import('../state').StateType]?:IScene}} */
 const Scenes = {Title:RunTimer,Attract,CoffBreak}
 const Demo = {
 	get CoffBreakNum() {return CoffBreak.num},

@@ -1,18 +1,20 @@
-import _State    from '../../_lib/state.js'
 import {Sound}   from '../../_snd/sound.js'
+import _State    from '../../_lib/state.js'
+import _Speed    from '../speed.js'
 import {Game}    from '../_main.js'
 import {State}   from '../state.js'
 import {Ctrl}    from '../control.js'
-import {Maze}    from '../maze.js'
-import {PtsMgr}  from '../points.js'
 import {Ghost}   from './ghost.js'
-import {PathMgr} from './show_paths.js'
-import {Targets} from './show_targets.js'
+import {MazeMgr} from '../maze.js'
+import {PtsMgr}  from '../points.js'
+import {PathMgr} from './paths.js'
+import {Targets} from './targets.js'
 import {player,onPlayerDotEaten} from '../player/player.js'
 
 const Ghosts = /**@type {Ghost[]}*/([])
 const PtsLst = /**@type {const}*/([200,400,800,1600])
 
+export const {Ghost:Speed}= _Speed
 export const Evt = toEnumObject
 	(['Ready','Reverse','Frighten','FleeStart','RoundEnds'])
 
@@ -46,32 +48,32 @@ const StateTypes = toEnumObject(States)
 
 /**
  @extends {_State<StateType,Ghost>}
- @typedef {GhsState & StateDef.Props<StateType>} IGhsState
+ @typedef {GhostState & StateDef.Props<StateType>} IGhostState
 */
-class GhsState extends _State {
-	/** @this {IGhsState} */
+class GhostState extends _State {
+	/** @this {IGhostState} */
 	constructor(/**@type {Ghost}*/g) {
 		super(g)
 		this.init(States).owner.inHouse
 			? this.setIdle()
 			: this.setWalking()
 	}
-	/** @this {IGhsState} */
+	/** @this {IGhostState} */
 	get isEscapingEyes() {
 		return this.isEscaping || this.isReturning
 	}
 }
 export const createState =
-	/**@type {(g:Ghost)=> IGhsState}*/
-	(g=> new GhsState(g))
+	/**@type {(g:Ghost)=> IGhostState}*/
+	(g=> new GhostState(g))
 
-export const GhsMgr = new class {
+export const GhostMgr = new class GhostManager {
 	static {$(this.setup)}
 	static setup() {
 		State.on({
-			InGame:   GhsMgr.#onInGame,
-			Ready:    GhsMgr.#trigger,
-			RoundEnds:GhsMgr.#trigger,
+			InGame:   GhostMgr.#onInGame,
+			Ready:    GhostMgr.#trigger,
+			RoundEnds:GhostMgr.#trigger,
 		})
 	}
 	#animIdx = 0
@@ -83,19 +85,19 @@ export const GhsMgr = new class {
 	get points()         {return FrightMode.session?.points ?? PtsLst[0]}
 	get spriteIdx()      {return FrightMode.session?.spriteIdx ?? 0}
 	get caughtAll()      {return FrightMode.session?.caughtAll ?? false}
-	get akaCenterPos()   {return Ghosts[GhsType.Akabei].center}
+	get akaCenterPos()   {return Ghosts[GhostType.Akabei].center}
 	get areAnyEscaping() {return Ghosts.some(g=> g.isEscaping)}
 
 	initialize(/**@type {readonly Ghost[]}*/ghosts) {
-		GhsMgr.#animIdx = 0
+		this.#animIdx = 0
 		ghosts.forEach((g,i)=> Ghosts[i] = g)
 	}
 	#trigger() {
 		$(Ghosts).trigger(State.current)
 	}
-	#onInGame() {
+	#onInGame = ()=> {
 		Sound.playSiren()
-		Ctrl.alwaysChase && GhsMgr.#setReleaseTimer()
+		Ctrl.alwaysChase && this.#setReleaseTimer()
 	}
 	#setReleaseTimer() {
 		const lv = (Game.pacDied? 0 : Game.clampedLv)
@@ -113,27 +115,27 @@ export const GhsMgr = new class {
 	update() {
 		AttackInWaves.update()
 		FrightMode.session?.update()
-		GhsMgr.#updateAnimation()
-		GhsMgr.#updateGhosts()
+		this.#updateAnimation()
+		this.#updateGhosts()
 	}
 	#updateAnimation() {
 		if (Timer.frozen)
 			return
 		if (State.isInGame
 		 || State.isDemoMode)
-			GhsMgr.#animIdx ^= +(Ticker.count % 6 == 0)
+			this.#animIdx ^= +(Ticker.count % 6 == 0)
 	}
 	#updateGhosts() {
 		Ghosts.forEach(g=> g.update())
 		PathMgr.update(Ghosts)
 	}
 	drawBehind() {
-		GhsMgr.#draw(false)
+		this.#draw(false)
 	}
 	drawFront()  {
 		Targets.draw(Ghosts)
 		PathMgr.draw(Ghosts)
-		GhsMgr.#draw(true)
+		this.#draw(true)
 		PtsMgr.drawGhostPts()
 	}
 	#draw(onFront=true) {
@@ -167,7 +169,7 @@ const AttackInWaves = function() {
 		update = (mode == CHASING)
 			? null
 			: ()=> {
-				if ((Timer.frozen || GhsMgr.isFrightMode)
+				if ((Timer.frozen || GhostMgr.isFrightMode)
 				|| ++tCnt*Game.interval < list[idx].dur)
 					return
 				signalDirectionReversal()
@@ -187,7 +189,7 @@ const AttackInWaves = function() {
 
 export const DotCounter = function() {
 	let   gCounter   = -1
-	const pCounters  = new Uint8Array(GhsType.Max)
+	const pCounters  = new Uint8Array(GhostType.Max)
 	const LimitTable = /**@type {const}*/
 		(// global,lv1,lv2,lv3+
 			[[ 7,  0,  0, 0], // Pinky
@@ -210,7 +212,7 @@ export const DotCounter = function() {
 				? (pCounters[type] >= pLimit)
 					&& leaveHouse()
 				: (gCounter == gLimit)
-					&& leaveHouse(type == GhsType.Guzuta)
+					&& leaveHouse(type == GhostType.Guzuta)
 					&& (gCounter = -1)
 	}
 	function incPreferredGhostCounter() {
@@ -233,12 +235,12 @@ const CruiseElroy = function() {
 	function angry() {
 		return State.isInGame
 			&& currPart > 1
-			&& Ghosts[GhsType.Akabei]?.isFrightened == false
-			&& Ghosts[GhsType.Guzuta]?.isStarted == true
+			&& Ghosts[GhostType.Akabei]?.isFrightened == false
+			&& Ghosts[GhostType.Guzuta]?.isStarted == true
 	}
 	onPlayerDotEaten(()=> {
 		const rate = [1.5, 1.0, 0.5][currPart]
-		if (Maze.dotsLeft <= DotsLeftTable[Game.clampedLv-1]*rate)
+		if (MazeMgr.dotsLeft <= DotsLeftTable[Game.clampedLv-1]*rate)
 			++currPart && Sound.playSiren()
 	})
 	let currPart = 0
@@ -246,20 +248,21 @@ const CruiseElroy = function() {
 	return {
 		get part()  {return currPart},
 		get angry() {return angry()},
-		get speed() {return GhsSpeed.Base * Accelerations[currPart]},
+		get speed() {return Speed.Base * Accelerations[currPart]},
 	}
 }()
 
 const FrightMode = function() {
 	class Session {
+		/** @readonly */
+		static DurList = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 		static session = /**@type {?Session}*/(null)
-		static durList = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 		#et=0; #flash=0; #caught=0; #fIdx=1
 		get points()    {return PtsLst[this.#caught-1]}
-		get caughtAll() {return this.#caught == GhsType.Max}
+		get caughtAll() {return this.#caught == GhostType.Max}
 		get spriteIdx() {return this.#flash && this.#fIdx^1}
 		constructor() {
-			this.dur = Session.durList[Game.clampedLv-1]
+			this.dur = Session.DurList[Game.clampedLv-1]
 			this.dur == 0 && !State.isAttract
 				? $(Ghosts).trigger(Evt.FleeStart) : this.#set(true)
 		}

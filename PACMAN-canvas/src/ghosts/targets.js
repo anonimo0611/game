@@ -1,12 +1,12 @@
-import {State}  from '../state.js'
-import {Ctrl}   from '../control.js'
-import {Maze}   from '../maze.js'
-import {player} from '../player/player.js'
-import {GhsMgr} from '../ghosts/_system.js'
-import {Ghost}  from './ghost.js'
+import {State}    from '../state.js'
+import {Ctrl}     from '../control.js'
+import {player}   from '../player/player.js'
+import {MazeMgr}  from '../maze.js'
+import {Ghost}    from './ghost.js'
+import {GhostMgr} from './_system.js'
 import {GuzutaThreshold} from './ghost_sub.js'
 
-export const Targets = new class {
+export const Targets = new class TargetVisualizer {
 	/** @param {readonly Ghost[]} ghosts */
 	draw(ghosts) {
 		if (!Ctrl.showTargets) return
@@ -28,7 +28,7 @@ export const Targets = new class {
 	/** @param {Ghost} g */
 	#getTargetPos = g=>
 		(g.state.isGoingOut || g.isEscaping)
-			? Maze.House.EntryTile.add(.5).mul(T)
+			? MazeMgr.House.EntryTile.add(.5).mul(T)
 			: g.isScattering
 				? g.baseTargetTile.add(.5).mul(T)
 				: g.chasePos
@@ -36,10 +36,10 @@ export const Targets = new class {
 	/** @param {Ghost} g */
 	#strokeLines(g) {
 		if (Timer.frozen
-		 || g.type == GhsType.Akabei
+		 || g.type == GhostType.Akabei
 		 || g.isChasing == false)
 			return
-		g.type == GhsType.Guzuta
+		g.type == GhostType.Guzuta
 			? this.#guzutaCircle(g)
 			: this.#auxLines(g, g.chaseOffset)
 	}
@@ -50,7 +50,7 @@ export const Targets = new class {
 		const size = T*0.6
 		const {x,y}= this.#getTargetPos(g).sub(size/2)
 		Fg.lineWidth = T*0.1
-		Fg.fillStyle = GhsColors[g.type]
+		Fg.fillStyle = GhostColors[g.type]
 		Fg.fillRect  (x,y, size,size)
 		Fg.strokeRect(x,y, size,size)
 	}
@@ -63,16 +63,16 @@ export const Targets = new class {
 		const fwdXY = player.forwardPos(ofst).vals
 		const ofsXY = player.offsetTarget(ofst).vals
 		Fg.lineWidth = T*0.2
-		if (g.type == GhsType.Pinky && !inTunSide
-		 || g.type == GhsType.Aosuke) {
+		if (g.type == GhostType.Pinky && !inTunSide
+		 || g.type == GhostType.Aosuke) {
 			dir != U
 				? Fg.newLinePath([x,y], fwdXY)
 				: Fg.newLinePath([x,y], fwdXY).lineTo(...ofsXY)
 			Fg.stroke()
 		}
-		if (g.type == GhsType.Aosuke) {
+		if (g.type == GhostType.Aosuke) {
 			const tgtXY = g.chasePos.vals
-			const akaXY = GhsMgr.akaCenterPos.vals
+			const akaXY = GhostMgr.akaCenterPos.vals
 			Fg.newLinePath(akaXY, ofsXY, tgtXY).stroke()
 			Fg.fillCircle(...ofsXY, 8)
 		}

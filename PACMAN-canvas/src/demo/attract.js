@@ -1,14 +1,14 @@
 ﻿import {State}      from '../state.js'
 import {drawText}   from '../message.js'
 import {Ctrl}       from '../control.js'
-import {Score}      from '../score.js'
-import {Fruit}      from '../fruit.js'
 import {drawDot}    from '../maze.js'
 import {PowBlinker} from '../maze.js'
+import {ScoreMgr}   from '../score.js'
+import {FruitMgr}   from '../fruit.js'
+import {GhostMgr}   from '../ghosts/_system.js'
 import {Actors}     from '../actor.js'
-import {GhsMgr}     from '../ghosts/_system.js'
-import {Ghost}      from '../ghosts/ghost.js'
 import {PacMan}     from '../actor.js'
+import {Ghost}      from '../ghosts/ghost.js'
 import GhostSprite  from '../sprites/ghost.js'
 
 export class Attract {
@@ -27,7 +27,7 @@ export class Attract {
 	}
 	update() {this.subAct.update()}
 
-	GhsEntries = /**@type {const}*/([
+	GhostEntries = /**@type {const}*/([
 		// time, col1, col2, row, txt1, txt2
 		[10, 8, 18,  6, 'OIKAKE----', '"AKABEI"'],
 		[30, 8, 19,  9, 'MACHIBUSE--','"PINKY"' ],
@@ -35,13 +35,13 @@ export class Attract {
 		[70, 8, 18, 15, 'OTOBOKE---', '"GUZUTA"']
 	])
 	draw() {
-		Score.draw()
+		ScoreMgr.draw()
 		drawText(7, 4, null, 'CHARACTOR　/　NICKNAME')
 		const et = (Ticker.elapsedTime/100), Small ={size:T*.68}
-		this.GhsEntries.forEach(([t,col1,col2,row,txt1,txt2],i)=> {
+		this.GhostEntries.forEach(([t,col1,col2,row,txt1,txt2],i)=> {
 			et > t    && this.drawGhostOnTable(i,row)
-			et > t+ 5 && drawText(col1, row, GhsColors[i], txt1)
-			et > t+10 && drawText(col2, row, GhsColors[i], txt2)
+			et > t+ 5 && drawText(col1, row, GhostColors[i], txt1)
+			et > t+10 && drawText(col2, row, GhostColors[i], txt2)
 		})
 		if (et > 85) {
 			[[23, DotPts, +true],
@@ -64,7 +64,7 @@ export class Attract {
 			}
 		}
 		this.subAct.draw()
-		Fruit.drawLevelCounter()
+		FruitMgr.drawLevelCounter()
 	}
 	drawGhostOnTable(type=0, row=0) {
 		this.ghsSpr.draw({type,orient:R,x:(T*5),y:(T*row)})
@@ -85,8 +85,8 @@ class EnergizerAct {
 	get started() {return Ticker.elapsedTime > 1e4+500}
 	get outward() {return this.#pacman.dir == L}
 	constructor() {
-		range(GhsType.Max).forEach(i=> this.#setActor(i))
-		GhsMgr.initialize(this.#ghosts)
+		range(GhostType.Max).forEach(i=> this.#setActor(i))
+		GhostMgr.initialize(this.#ghosts)
 	}
 	#setActor(type=0) {
 		const
@@ -115,8 +115,8 @@ class EnergizerAct {
 		this.#pacvx *= -1
 		this.#ghsvx /= -2
 		this.#pacman.dir = R
-		GhsMgr.frighten()
+		GhostMgr.frighten()
 	}
 	draw() {this.started && Actors.draw(this.#pacman)}
-	#end() {GhsMgr.caughtAll && State.setAttract()}
+	#end() {GhostMgr.caughtAll && State.setAttract()}
 }

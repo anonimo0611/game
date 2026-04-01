@@ -1,7 +1,7 @@
-export default class {
+export default class GhostSpriteForCoffBreak {
 	/** @readonly */ctx
 	/** @param {EnhancedCtx2D} ctx */
-	constructor(ctx) {this.ctx = ctx}
+	constructor(ctx) {this.ctx=ctx}
 	drawHalfNakedBody() {
 		const {ctx}= this
 		ctx.clearRect(38,-1, 6,25)
@@ -150,14 +150,15 @@ class Snag {
 	 @param {{x?:number, y?:number, size?:number}} options
 	*/
 	drawSnaggedClothing(animIdx, ratio, {x=0, y=0, size=T*2}={}) {
-		const {ctx}= this
+		const {ctx} = this
+		const scale = size/(100/GhostScale)
 		const v1 = lerp(-2,  5, ratio)
 		const v2 = lerp( 4, 22, ratio)
 		const v3 = lerp( 4, 50, ratio)
 		const ls = (animIdx? -25:-36) // Left side
 		ctx.save()
 		ctx.translate(x, y)
-		ctx.scale(size/(100/GhsScale), size/(100/GhsScale))
+		ctx.scale(scale, scale)
 		ctx.beginPath()
 		ctx.moveTo(-8, -10)
 		ctx.quadraticCurveTo(-8,-4, v1, 3)

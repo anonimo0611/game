@@ -62,6 +62,7 @@ class House {
 			&& abs(BW/2 - g.center.x) <= spd
 	}
 }
+
 class Tunnel {
 	Row = 15
 	EntryColL =  5.5
@@ -73,6 +74,7 @@ class Tunnel {
 		} return null
 	}
 }
+
 export class PowBlinker {
 	#show = 1
 	get show() {return this.#show == 1}
@@ -87,7 +89,7 @@ class PowDots extends PowBlinker {
 	}
 }
 
-export const Maze = freeze(new class {
+class MazeManager {
 	static {
 		const wallSet = /**@type {Set<TileIdx>}*/(WallSet)
 		for (const [i,c] of MapArr.entries())
@@ -166,4 +168,6 @@ export const Maze = freeze(new class {
 		const r = [DotRadius,PowRadius][+isPow]
 		ctx.fillCircle(x,y, r, Colors.Dot)
 	}
-}), {drawDot,clearDot}= Maze
+}
+export const MazeMgr = freeze(new MazeManager)
+export const {drawDot,clearDot}= MazeMgr

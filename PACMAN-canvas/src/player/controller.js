@@ -1,13 +1,15 @@
-import {Dir}     from '../../_lib/direction.js';
-import {Confirm} from '../../_lib/confirm.js';
-import {Game}    from '../_main.js'
-import {State}   from '../state.js'
-import {Ctrl}    from '../control.js';
-import {Maze}    from '../maze.js'
-import {Actor}   from '../actor.js';
-import {GhsMgr}  from '../ghosts/_system.js'
+import {Dir}      from '../../_lib/direction.js';
+import {Confirm}  from '../../_lib/confirm.js';
+import {Game}     from '../_main.js'
+import  Speed     from '../speed.js';
+import {State}    from '../state.js'
+import {Ctrl}     from '../control.js';
+import {Actor}    from '../actor.js';
+import {MazeMgr}  from '../maze.js'
+import {GhostMgr} from '../ghosts/_system.js'
 
-const Spd = PacSpeed, {SlowLevel,SlowRate}= Spd
+const {Pacman:Spd}= Speed
+const {SlowLevel,SlowRate}= Spd
 
 class TurnState {
 	turning  = false
@@ -40,9 +42,9 @@ export class Mover {
 		const slowRate = (Game.level < SlowLevel)? 1 : SlowRate
 		return (
 			Game.moveSpeed * slowRate * (
-				Maze.hasDot(this.actor.tileIdx)
-			    ? (GhsMgr.isFrightMode? Spd.EneEating : Spd.Eating)
-			    : (GhsMgr.isFrightMode? Spd.Energized : Spd.Base)
+				MazeMgr.hasDot(this.actor.tileIdx)
+			    ? (GhostMgr.isFrightMode? Spd.EneEating : Spd.Eating)
+			    : (GhostMgr.isFrightMode? Spd.Energized : Spd.Base)
 			)
 		)
 	}

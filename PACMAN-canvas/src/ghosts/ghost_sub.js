@@ -1,8 +1,8 @@
-import {Maze}   from '../maze.js'
-import {State}  from '../state.js'
-import {player} from '../player/player.js'
-import {GhsMgr} from './_system.js'
-import {Ghost}  from './ghost.js'
+import {MazeMgr}  from '../maze.js'
+import {State}    from '../state.js'
+import {player}   from '../player/player.js'
+import {Ghost}    from './ghost.js'
+import {GhostMgr} from './_system.js'
 
 export const GuzutaThreshold = 8
 
@@ -10,8 +10,8 @@ class Akabei extends Ghost {
 	constructor() {
 		super(L, {type:0, tile:[13.5, 12]})
 	}
-	get chaseSpeed()   {return GhsMgr.CruiseElroy.speed}
-	get isAngry()      {return GhsMgr.CruiseElroy.angry}
+	get chaseSpeed()   {return GhostMgr.CruiseElroy.speed}
+	get isAngry()      {return GhostMgr.CruiseElroy.angry}
 	get isChasing()    {return this.isNormal && !this.isScattering}
 	get isScattering() {return super.isScattering && !this.isAngry}
 }
@@ -25,8 +25,8 @@ class Pinky extends Ghost {
 	get chasePos() {
 		const pos = player.offsetTarget(this.chaseOffset)
 		switch(player.tunEntry.side) {
-		case L: return pos.setX(Maze.Tunnel.EntryColR*T)
-		case R: return pos.setX(Maze.Tunnel.EntryColL*T)
+		case L: return pos.setX(MazeMgr.Tunnel.EntryColR*T)
+		case R: return pos.setX(MazeMgr.Tunnel.EntryColL*T)
 		default:return pos
 		}
 	}
@@ -40,7 +40,7 @@ class Aosuke extends Ghost {
 	get scatterTile() {return Vec2.new(27, 33)}
 	get chasePos() {
 		const  pos = player.offsetTarget(this.chaseOffset)
-		return pos.clone.sub(GhsMgr.akaCenterPos).add(pos)
+		return pos.clone.sub(GhostMgr.akaCenterPos).add(pos)
 	}
 }
 
@@ -57,4 +57,4 @@ class Guzuta extends Ghost {
 }
 
 const Classes = freeze([Akabei,Pinky,Aosuke,Guzuta])
-State.on({_Ready:_=> GhsMgr.initialize(Classes.map(c=> new c))})
+State.on({_Ready:_=> GhostMgr.initialize(Classes.map(c=> new c))})

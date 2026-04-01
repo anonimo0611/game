@@ -1,11 +1,11 @@
-import {Sound}   from '../../_snd/sound.js'
-import {Game}    from '../_main.js'
-import {State}   from '../state.js'
-import {Ctrl}    from '../control.js'
-import {Fruit}   from '../fruit.js'
-import {Ghost}   from '../ghosts/ghost.js'
-import {PacMan}  from '../actor.js'
-import {snagSpr} from '../sprites/ghost_cb.js'
+import {Sound}    from '../../_snd/sound.js'
+import {Game}     from '../_main.js'
+import {State}    from '../state.js'
+import {Ctrl}     from '../control.js'
+import {FruitMgr} from '../fruit.js'
+import {Ghost}    from '../ghosts/ghost.js'
+import {PacMan}   from '../actor.js'
+import {snagSpr}  from '../sprites/ghost_cb.js'
 
 const sceneNum = (lv=0)=>
 	!Ctrl.isPractice && ({2:1, 5:2, 9:3}[lv]) || -1
@@ -50,7 +50,7 @@ export class CoffBreak {
 		this.akabei.sprite.draw({animIdx, ...data, ...pos})
 	}
 	draw() {
-		State.wasFlashing && Fruit.drawLevelCounter()
+		State.wasFlashing && FruitMgr.drawLevelCounter()
 	}
 	end() {
 		State.wasTitle
@@ -60,9 +60,9 @@ export class CoffBreak {
 }
 
 class Scene1 extends CoffBreak {
+	isFrightened = false
 	constructor() {
 		super(1)
-		this.isFrightened = false
 		this.akavx    = -BW / 156.4
 		this.pacman.x =  BW + T*1
 		this.akabei.x =  BW + T*3
@@ -97,12 +97,12 @@ class Scene1 extends CoffBreak {
 }
 
 class Scene2 extends CoffBreak {
+	counter  = 0
+	akaEyes  = L
+	sprite   = snagSpr(Fg)
+	isRipped = false
 	constructor() {
 		super(2)
-		this.counter  = 0
-		this.akaEyes  = L
-		this.isRipped = false
-		this.sprite   = snagSpr(Fg)
 		this.pacman.x = BW + T*3
 		this.akabei.x = BW + T*16
 	}
