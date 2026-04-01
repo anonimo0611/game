@@ -9,7 +9,7 @@ const States = /**@type {const}*/([
 	'Cleared','PacDying','Flashing','CoffBreak','GameOver','Quit'])
 /**
  @extends {_State<StateType,globalThis>}
- @typedef {GameState & StateDef.Props<StateType>} IState
+ @typedef {GameState & StateDef.Props<StateType>} IGameState
 */
 class GameState extends _State {
 	constructor() {super(globalThis), this.init(States)}
@@ -38,4 +38,4 @@ class GameState extends _State {
 		return super.set(s, {data,delay})
 	}
 }
-export const State = /**@type {IState}*/(new GameState)
+export const State = /**@type {IGameState}*/(new GameState)
