@@ -21,14 +21,14 @@ export const Confirm = new class ConfirmCore {
 
 	/**
 	 @param {string} content   Dialog description
-	 @param {?Function} fn1    Functions to assign to the left button
-	 @param {?Function} fn2    Functions to assign to the right button
+	 @param {?()=> void} cb1   Functions to assign to the left button
+	 @param {?()=> void} cb2   Functions to assign to the right button
 	 @param {string} [btn1Txt] Text of the left  button
 	 @param {string} [btn2Txt] Text of the right button
 	 @param {0|1} [cancelIdx]  Button to assign when canceling; 0=left(default), 1=right
 	 @param {0|1} [autoFocus]  0=left, 1=right; The default is the same as `cancelIdx`
 	*/
-	open(content, fn1,fn2, btn1Txt='Cancel',btn2Txt='Ok', cancelIdx=0, autoFocus=cancelIdx) {
+	open(content, cb1,cb2, btn1Txt='Cancel',btn2Txt='Ok', cancelIdx=0, autoFocus=cancelIdx) {
 		if (this.opened) return
 		this.#opened = true
 		this.#cancel = cancelIdx
@@ -38,16 +38,16 @@ export const Confirm = new class ConfirmCore {
 			i == autoFocus && (btn.autofocus=true)
 			btn.classList.add(i == cancelIdx ? 'cancel':'ok')
 			btn.textContent = [btn1Txt,btn2Txt][i]
-			btn.onclick = ()=> {$off(NS);this.#remove([fn1,fn2][i])}
+			btn.onclick = ()=> {$off(NS);this.#remove([cb1,cb2][i])}
 		})
 		$(this.#confirm).fadeIn(300).get(0)?.showModal()
 		$onNS(NS,{keydown:this.#onKeydown})
 		$onNS(NS,{pointerdown:e=> e.preventDefault()})
 	}
-	/** @param {?Function} fn */
-	#remove(fn) {
+	/** @param {?()=> void} cb */
+	#remove(cb) {
 		$('#confirm').fadeOut(300, function() {
-			this.remove(), fn?.()
+			this.remove(), cb?.()
 			Confirm.#opened = false
 		})
 	}

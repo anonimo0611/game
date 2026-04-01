@@ -181,9 +181,9 @@ const $root = $(document.documentElement)
  @param {JQTriggerHandlers} events}
 */jQuery.fn.onNS = function(ns, events) {
 	ns = ns[0] != '.' ? `.${ns}` : ns
-	entries(events).forEach(([ev,fn])=> {
+	entries(events).forEach(([ev,handler])=> {
 		const evNS = ev.trim().replace(/[_\s]+/g,`${ns}\x20`) + ns
-		this.off(evNS).on(evNS,fn)
+		this.off(evNS).on(evNS,handler)
 	})
 	return this
 }

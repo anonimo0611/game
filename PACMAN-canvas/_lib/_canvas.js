@@ -25,6 +25,38 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	}
 
 	/**
+	 @overload
+	 @param   {number} scalar
+	 @returns {this}
+
+	 @overload
+	 @param   {number} x
+	 @param   {number} y
+	 @returns {this}
+
+	 @overload
+	 @param   {Position} pos
+	 @returns {this}
+
+	 @param {number|Position} v1
+	 @param {number} [v2]
+	*/
+	translate(v1, v2) {
+		if (typeof v1 == 'object') super.translate(v1.x, v1.y)
+		if (typeof v1 == 'number') super.translate(v1, v2 ?? v1)
+		return this
+	}
+
+	/**
+	 @param {number}  x
+	 @param {number} [y]
+	*/
+	scale(x, y=x) {
+		super.scale(x, y)
+		return this
+	}
+
+	/**
 	 @param {Cvs2DStyle} [style]
 	*/
 	clear(style) {

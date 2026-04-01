@@ -2,6 +2,16 @@
 
 interface IScene {update():void, draw?():void}
 
+//---- Timer ----
+
+type TimerData = {
+	amount:  number;
+	timeout: number;
+	callback:()=> void;
+	ignoreFrozen: boolean;
+}
+type TimerSeq = [durationMS:number, callback:()=> void]
+
 //---- Tile & Coords ----
 
 /** A non-negative integer representing the tile index. */
@@ -14,10 +24,10 @@ type PathNode = {tile:Vec2,dir:Direction,stopped:boolean}
 
 type PtsValue = 100|200|300|400|800|1600|500|700|1000|2000|3000|5000
 type FloatingPtsData = {
-    key: {points:PtsValue};
+    key:{points:PtsValue};
     pos: Readonly<Position>;
     dur?:number;
-    fn?: ()=> void;
+    cb?: ()=> void;
 }
 
 //---- Direction ----

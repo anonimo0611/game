@@ -1,13 +1,7 @@
 'use strict'
 const {Ticker,Timer}= function() {
-	/**
-	@typedef {{
-		amount:  number;
-		timeout: number;
-		handler: Function;
-		ignoreFrozen: boolean;
-	}} TimerData
-	*/
+	const MS = 0 // millisecs
+	const CB = 1 // callback
 	const TICK_STEP = 1000/60
 	const THRESHOLD = 100
 
@@ -114,7 +108,7 @@ const {Ticker,Timer}= function() {
 		timer(t, key) {
 			if (Timer.frozen && !t.ignoreFrozen)  return
 			if (TICK_STEP*t.amount++ < t.timeout) return
-			TimerMap.delete(key);t.handler()
+			TimerMap.delete(key);t.callback()
 		}
 		stop()  {
 			Ticker.reset()
@@ -129,21 +123,21 @@ const {Ticker,Timer}= function() {
 		unfreeze() {_tFrozen = false;return this},
 		/**
 		 @param {number}    timeout
-		 @param {()=> void} handler
+		 @param {()=> void} callback
 		 @param {{key?:unknown,ignoreFrozen?:boolean}} otps
 		*/
-		set(timeout, handler, {key,ignoreFrozen=this.frozen}={}) {
+		set(timeout, callback, {key,ignoreFrozen=this.frozen}={}) {
 			if (!Ticker.running) Ticker.set()
-			TimerMap.set(key ?? Symbol(),{amount:0,timeout,handler,ignoreFrozen})
+			TimerMap.set(key ?? Symbol(), {amount:0,timeout,callback,ignoreFrozen})
 		},
-		/** @param {{ms:number,fn():void}[]} seq */
+		/** @param {TimerSeq[]} seq */
 		sequence(...seq) {
 			let idx=0, s=seq[idx]
 			const fire = ()=> {
-				seq[idx].fn()
-				;(s=seq[++idx]) && this.set(s.ms, fire)
+				seq[idx][CB]()
+				;(s=seq[++idx]) && this.set(s[MS], fire)
 			}
-			this.set(s.ms, fire)
+			this.set(s[MS], fire)
 		},
 		/** @param {unknown} key */
 		cancel(key) {
