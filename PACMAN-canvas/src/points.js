@@ -18,7 +18,7 @@ export const PtsMgr = new class PointsManager {
 }
 class FloatingPts {
 	/** @param {FloatingPtsData} data */
-	constructor({key,pos,dur=1e3,fn}) {
+	constructor({key,pos,dur=1e3,cb}) {
 		const {speed:spd}= Game
 		this.pos   = pos
 		this.cache = cache((key == FruitMgr ? 0:1), key.points)
@@ -26,7 +26,7 @@ class FloatingPts {
 		Timer.set(dur/spd, ()=> {
 			Timer.unfreeze()
 			Popups.delete(key)
-			fn?.()
+			cb?.()
 		})
 		Popups.set(key, this)
 		State.isInGame && ScoreMgr.add(key.points)

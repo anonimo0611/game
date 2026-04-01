@@ -101,11 +101,11 @@ export const GhostMgr = new class GhostManager {
 	}
 	#setReleaseTimer() {
 		const lv = (Game.pacDied? 0 : Game.clampedLv)
-		Timer.sequence(...
-			Ghosts.slice(1).map((g,i)=> ({
-				ms: StandbyTimes[lv][i]/Game.speed,
-				fn: ()=> g.leaveHouse()
-			}))
+		Timer.sequence(.../**@type {TimerSeq[]}*/(
+			Ghosts.slice(1).map((g,i)=> ([
+				StandbyTimes[lv][i]/Game.speed,
+				()=> g.leaveHouse()
+			])))
 		)
 	}
 	frighten() {

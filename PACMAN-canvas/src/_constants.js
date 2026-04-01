@@ -24,7 +24,7 @@ Fg   = canvas2D('board_main', BW,BH).ctx,
 HUD  = canvas2D('board_hud' , BW,BH).ctx,
 Grid = canvas2D('board_grid', BW,BH).ctx,
 
-Colors = /**@type {const}*/({
+Color = /**@type {const}*/({
 	Grid:      '#F00',
 	Dot:       '#FFB8AE',
 	Wall:      '#58E',
@@ -41,7 +41,8 @@ Colors = /**@type {const}*/({
 	Orange:    '#F90',
 }),
 Palette = /**@type {const}*/({
-	Info:       ['#888','#F9E'],
+	Info:       ['#888','#F9E'], // disabled, enabled
+	Points:     ['#FAF','#3CF'], // fruit, ghost
 	FrightFace: ['#F9F','#F00'],
 	FrightBody: ['#36A','#FFF'],
 }),
@@ -52,6 +53,6 @@ PacRadius = PacScale*T,
 GhostScale  = 1.1,
 GhostType   = /**@type {const}*/({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4}),
 GhostNames  = /**@type {const}*/(['Akabei','Pinky','Aosuke','Guzuta']),
-GhostColors = freeze( GhostNames.map(name=> Colors[name]+'') )
+GhostColors = /**@type {readonly string[]}*/(GhostNames.map(n=> Color[n]))
 
 $root.css('--tile-size',`${TileSize}px`)

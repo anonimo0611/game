@@ -166,7 +166,7 @@ class MazeManager {
 		if (!visible) return
 		const [x,y] = [col,row].map(v=> (v+0.5)*T)
 		const r = [DotRadius,PowRadius][+isPow]
-		ctx.fillCircle(x,y, r, Colors.Dot)
+		ctx.fillCircle(x,y, r, Color.Dot)
 	}
 }
 export const MazeMgr = freeze(new MazeManager)

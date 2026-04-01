@@ -3,19 +3,20 @@ const BurstDur =  300/Ticker.Interval
 const TotalDur = SplitDur+BurstDur+30
 
 export class Dying {
-	#fadeOut = Fade.out(300);
-	#cnt; #fn; #innerR; #outerR; #arkAng;
-
 	/** @readonly */ctx
 	/** @readonly */radius
+	#cnt;    #cb;
+	#innerR; #outerR;
+	#arkAng; #fadeOut = Fade.out(300);
+
 	/**
 	 @param {{ctx:EnhancedCtx2D,radius:number}} _
-	 @param {()=> void} [fn]
+	 @param {()=> void} [cb]
 	*/
-	constructor({ctx,radius=PacRadius}, fn) {
+	constructor({ctx,radius=PacRadius}, cb) {
 		this.ctx     = ctx
 		this.radius  = radius
-		this.#fn     = fn
+		this.#cb     = cb
 		this.#cnt    = this.#arkAng = 0
 		this.#innerR = radius/4
 		this.#outerR = radius/2
@@ -25,8 +26,8 @@ export class Dying {
 	}
 	update() {
 		if (this.#cnt++ > TotalDur) {
-			this.#fn?.()
-			this.#fn = undefined
+			this.#cb?.()
+			this.#cb = undefined
 			return
 		}
 		this.isSplitting
@@ -45,9 +46,9 @@ export class Dying {
 		const {ctx,radius}= this
 		ctx.save()
 		ctx.translate(x,y)
-		ctx.scale(r/radius, r/radius)
+		ctx.scale(r/radius)
 		ctx.lineWidth = radius*0.21
-		ctx.fillStyle = ctx.strokeStyle = Colors.Pacman
+		ctx.fillStyle = ctx.strokeStyle = Color.Pacman
 		this.isSplitting
  			? this.#drawSplittingBody()
 	 		: this.#drawRadialBurst()

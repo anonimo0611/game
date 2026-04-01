@@ -48,7 +48,7 @@ export class PathMgr {
 			Fg.lineTo(...curr.vals)
 			if (tile == endT) { // Arrow
 				Fg.save()
-				Fg.translate(...curr.vals)
+				Fg.translate(curr)
 				Fg.rotate(Dir.Rotation[dir])
 				Fg.setLinePath([-T/2,-T/2],[0,0],[-T/2,T/2])
 				Fg.restore()

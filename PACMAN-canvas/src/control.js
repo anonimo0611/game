@@ -118,10 +118,10 @@ export const Ctrl = new class Controller {
 		}
 	}
 	#toggleGrid() {
-		Grid.canvas.style.opacity = String(Ctrl.showGridLines)
+		Grid.canvas.style.opacity = String(+Ctrl.showGridLines)
 	}
 	#setupGrid() {
-		Grid.strokeStyle = Colors.Grid
+		Grid.strokeStyle = Color.Grid
 		range(1,Cols).forEach(y=> Grid.strokeLine(T*y, 0, T*y, Rows*T))
 		range(0,Rows).forEach(x=> Grid.strokeLine(0, T*x, Cols*T, T*x))
 	}

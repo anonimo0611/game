@@ -1,13 +1,13 @@
 import CBSprite from './ghost_cb.js'
 export default class GhostSprite {
 	/** @readonly */ctx
-	/** @readonly */spr
+	/** @readonly */sub
 	/** @readonly */tgt
 	/** @param {EnhancedCtx2D} target */
 	constructor(target, w=T*3, h=T*2) {
 		this.tgt = target
 		this.ctx = canvas2D(null, w, h).ctx
-		this.spr = new CBSprite(this.ctx)
+		this.sub = new CBSprite(this.ctx)
 	}
 	#resurrect = /**@type {?Fade}*/(null)
 	setResurrect() {
@@ -29,7 +29,6 @@ export default class GhostSprite {
 		isExposed    = false,
 	}={}) {
 		const {tgt,ctx}= this
-		const scale = size/(100/GhostScale)
 		function finalize() {
 			ctx.restore()
 			tgt.save()
@@ -40,8 +39,9 @@ export default class GhostSprite {
 		}
 		ctx.clear()
 		ctx.save()
-		ctx.translate(size/2, size/2)
-		ctx.scale(scale, scale)
+		ctx.translate(size/2)
+		ctx.scale(size/100)
+		ctx.scale(GhostScale)
 		ctx.lineWidth = 5
 		ctx.lineJoin  = ctx.lineCap = 'round'
 		ctx.fillStyle = !isFrightened
@@ -49,7 +49,7 @@ export default class GhostSprite {
 			: Palette.FrightBody[spriteIdx]
 
 		if (isExposed) {
-			this.spr.drawHadake(animIdx)
+			this.sub.drawHadake(animIdx)
 			return finalize()
 		}
 		if (!isEscaping) {
@@ -72,7 +72,7 @@ export default class GhostSprite {
 			case 'Right':  return this.#drawEyesHoriz(R)
 			case 'Up':     return this.#drawEyesUp(isRipped)
 			case 'Down':   return this.#drawEyesDown()
-			case 'Bracket':return this.spr.drawBracketEyes()
+			case 'Bracket':return this.sub.drawBracketEyes()
 			}
 		})()
 		finalize()
@@ -92,8 +92,8 @@ export default class GhostSprite {
 			? this.#drawFoot0()
 			: this.#drawFoot1()
 		ctx.fill()
-		isRipped && this.spr.drawHalfNakedBody()
-		isMended && this.spr.drawMendedSeam(animIdx)
+		isRipped && this.sub.drawHalfNakedBody()
+		isMended && this.sub.drawMendedSeam(animIdx)
 	}
 	#drawFoot0() {
 		const {ctx}= this
@@ -116,7 +116,7 @@ export default class GhostSprite {
 		ctx.bezierCurveTo(+29, 45, +41, 45, +42, 26)
 	}
 	#drawEyesUp(isRipped=false) {
-		const {ctx}= this, color=[Colors.GhostEyes,'#000'][+isRipped]
+		const {ctx}= this, color=[Color.GhostEyes,'#000'][+isRipped]
 		for (const v of [-1,+1]) {
 			ctx.setEllipse(19.5*v, -17, 13, 17, -8*v*PI/180, -PI/4, -3*PI/4)
 			ctx.fillCircle(18.5*v, -26,  8, color)
@@ -126,7 +126,7 @@ export default class GhostSprite {
 		const {ctx}= this
 		for (const v of [-1,+1]) {
 			ctx.setEllipse(19*v, -3, 13, 17, 0, 140*PI/180, 40*PI/180)
-			ctx.fillCircle(19*v, +4,  8, Colors.GhostEyes)
+			ctx.fillCircle(19*v, +4,  8, Color.GhostEyes)
 		}
 	}
 	/** @param {Horizontal} LorR */
@@ -134,7 +134,7 @@ export default class GhostSprite {
 		const {ctx}= this, v = (Vec2[LorR].x < 0 ? -1:1)
 		for (const i of [0,1]) {
 			ctx.setEllipse([-16.5*v, 23*v][i], -11, 13, 17, 0, 0, PI*2)
-			ctx.fillCircle([ -9.5*v, 29*v][i],  -8,  8, Colors.GhostEyes)
+			ctx.fillCircle([ -9.5*v, 29*v][i],  -8,  8, Color.GhostEyes)
 		}
 	}
 	#drawFrightFace() {

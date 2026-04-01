@@ -47,7 +47,7 @@ export const ScoreMgr = new class ScoreManager {
 			? true : !!(Ticker.count & (Sound.ringing? 8:16))
 	}
 	get #fgColorUP() {
-		return (Sound.ringing? Colors.Extend : null)
+		return (Sound.ringing? Color.Extend : null)
 	}
 	draw() {
 		drawText(2,0, this.#fgColorUP, this.#showUP? '1UP':'')

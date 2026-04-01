@@ -231,12 +231,12 @@ export class Ghost extends Actor {
 			: MazeMgr.dotsLeft && this.#onPacCaught()
 		return true
 	}
-	#onBitten(release=()=>{}) {
+	#onBitten(cb=()=>{}) {
 		Sound.playBittenSE()
 		this.#frightened = false
 		this.state.setBitten()
 		Timer.freeze()
-		PtsMgr.set({key:GhostMgr, pos:this.center, fn:release})
+		PtsMgr.set({key:GhostMgr, pos:this.center, cb})
 	}
 	#onPacCaught() {
 		Sound.stopLoops()

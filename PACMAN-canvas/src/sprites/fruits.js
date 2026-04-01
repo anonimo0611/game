@@ -12,7 +12,7 @@ export function draw(ctx, idx, x=T,y=T-int(T*0.1), scale=T/8) {
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
 	ctx.translate(x, y)
-	ctx.scale(scale*1.05, scale*1.05)
+	ctx.scale(scale*1.05)
 	drawFuncs[idx](ctx)
 	ctx.restore()
 }

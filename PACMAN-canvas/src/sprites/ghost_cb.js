@@ -10,7 +10,7 @@ export default class GhostSpriteForCoffBreak {
 		ctx.newLinePath([40, 1],[40,23],[35,23])
 		ctx.quadraticCurveTo(28, 32, 35, 32)
 		ctx.addLinePath([43,32],[43,42],[9,42],[9,38],[18,32],[26,25],[21,20],[19,19])
-		ctx.fillStyle = Colors.GhostSkin
+		ctx.fillStyle = Color.GhostSkin
 		ctx.fill()
 	}
 	drawMendedSeam(animIdx=0) {
@@ -41,7 +41,7 @@ export default class GhostSpriteForCoffBreak {
 	drawHadake(animIdx=0) {
 		const {ctx}= this
 		ctx.save()
-		ctx.translate(T/2, T/2)
+		ctx.translate(T/2)
 		animIdx == 0
 			? this.#drawHadake0()
 			: this.#drawHadake1()
@@ -57,7 +57,7 @@ export default class GhostSpriteForCoffBreak {
 		ctx.addLinePath([61, -30],[54, -16])
 		ctx.quadraticCurveTo(49, -4, 40, 4)
 		ctx.addLinePath([56,5],[56,22],[37,22],[37,16])
-		ctx.fillStyle = Colors.GhostSkin
+		ctx.fillStyle = Color.GhostSkin
 		ctx.fill()
 		ctx.restore()
 
@@ -83,7 +83,7 @@ export default class GhostSpriteForCoffBreak {
 		ctx.addLinePath([51,-28],[51,-11])
 		ctx.quadraticCurveTo(50, -1, 45, 4)
 		ctx.addLinePath([63,4],[63,22],[44,22],[44,16],[12,16])
-		ctx.fillStyle = Colors.GhostSkin
+		ctx.fillStyle = Color.GhostSkin
 		ctx.fill()
 		ctx.restore()
 
@@ -109,7 +109,7 @@ export default class GhostSpriteForCoffBreak {
 			// Eyes
 			ctx.beginPath()
 			ctx.ellipse(eyesLR[i], -33, 5, 9, 0,0, PI*2)
-			ctx.fillStyle = Colors.GhostEyes
+			ctx.fillStyle = Color.GhostEyes
 			ctx.fill()
 		}
 	}
@@ -147,7 +147,7 @@ class Snag {
 		const {ctx,StakSize:{y:h}}= this
 		ctx.save()
 		ctx.translate(x, y)
-		ctx.fillPolygon(Colors.Akabei, [0,-4],[0,-h],[-T,0],[-4,0],[-4,-4])
+		ctx.fillPolygon(Color.Akabei, [0,-4],[0,-h],[-T,0],[-4,0],[-4,-4])
 		ctx.restore()
 	}
 	/**
@@ -156,21 +156,21 @@ class Snag {
 	 @param {{x?:number, y?:number, size?:number}} options
 	*/
 	drawSnaggedClothing(animIdx, ratio, {x=0, y=0, size=T*2}={}) {
-		const {ctx} = this
-		const scale = size/(100/GhostScale)
+		const {ctx}= this
 		const v1 = lerp(-2,  5, ratio)
 		const v2 = lerp( 4, 22, ratio)
 		const v3 = lerp( 4, 50, ratio)
 		const ls = (animIdx? -25:-36) // Left side
 		ctx.save()
 		ctx.translate(x, y)
-		ctx.scale(scale, scale)
+		ctx.scale(size/100)
+		ctx.scale(GhostScale)
 		ctx.beginPath()
 		ctx.moveTo(-8, -10)
 		ctx.quadraticCurveTo(-8,-4, v1, 3)
 		ctx.quadraticCurveTo(v2, 9, v3, 9)
 		ctx.addLinePath([v3,43],[ls,43],[ls,20],[-8,20])
-		ctx.fillStyle = Colors.Akabei
+		ctx.fillStyle = Color.Akabei
 		ctx.fill()
 		ctx.restore()
 	}

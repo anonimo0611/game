@@ -8,7 +8,7 @@ import {State}   from '../state.js'
 import {MazeMgr} from '../maze.js'
 export const Wall = new class WallRenderer {
 	/** @param {Cvs2DStyle} color */
-	draw(color=Colors.Wall) {
+	draw(color=Color.Wall) {
 		Bg.clear()
 		Bg.save()
 		Bg.lineWidth   = LW
@@ -18,18 +18,18 @@ export const Wall = new class WallRenderer {
 		Wall.#drawDoor()
 		Bg.restore()
 	}
-	setFlashing(/**@type {()=> void}*/fn) {
+	setFlashing(/**@type {()=> void}*/cb) {
 		let count = 0
 		;(function redraw() {
-			if (++count > 8) return Timer.set(500, fn)
-			Wall.draw([, Colors.FlashWall][count % 2])
+			if (++count > 8) return Timer.set(500, cb)
+			Wall.draw([, Color.FlashWall][count % 2])
 			Timer.set(250, redraw)
 		})()
 	}
 	#drawDoor() {
 		if (State.isFlashing) return
 		const y = (MazeMgr.House.EntryTile.y+1.6)*T
-		Bg.fillRect(BW/2-T, y, T*2, T/4, Colors.Door)
+		Bg.fillRect(BW/2-T, y, T*2, T/4, Color.Door)
 	}
 	#drawHouse() {
 		const [ix,iy,ox,oy]= [31,16,34,19].map(n=>n/10*T)
