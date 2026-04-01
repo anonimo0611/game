@@ -1,5 +1,4 @@
 'use strict'
-
 class EnhancedCtx2D extends CanvasRenderingContext2D {
 	constructor(/**@type {HTMLCanvasElement}*/cvs, opts={}) {
 		try {super()} catch(e){}
@@ -163,14 +162,14 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	}
 
 	/**
-	 @param {Cvs2DStyle} style
+	 @param {?Cvs2DStyle} style
 	 @param {(readonly [x:number, y:number])[]} path
 	*/
 	fillPolygon(style, ...path) {
 		this.save()
 		this.newLinePath(...path)
 		this.closePath()
-		this.fillStyle = style
+		style && (this.fillStyle = style)
 		this.fill()
 		this.restore()
 		return this

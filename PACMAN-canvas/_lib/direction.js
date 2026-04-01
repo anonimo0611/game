@@ -2,17 +2,10 @@ const U='Up', R='Right', D='Down', L='Left'
 const DirSet   = new Set([U,R,D,L])
 const WasdMap  = new Map([['W',U],['A',L],['S',D],['D',R]])
 
-export const Dir = new class {
-	/** @readonly */U = U
-	/** @readonly */R = R
-	/** @readonly */D = D
-	/** @readonly */L = L
-
-	/** @readonly */
-	Rotation = freeze({Right:0|0, Down:PI/2, Left:PI, Up:-PI/2})
-
-	/** @readonly */
-	Opposite = freeze({Up:D, Right:L, Down:U, Left:R})
+export const Dir = freeze({
+	U,R,D,L,
+	Rotation: freeze({Right:0|0, Down:PI/2, Left:PI, Up:-PI/2}),
+	Opposite: freeze({Up:D, Right:L, Down:U, Left:R}),
 
 	/** @param {KeyboardEvent|JQKeyboardEvent} e */
 	from(e, {wasd=false}={}) {
@@ -21,5 +14,5 @@ export const Dir = new class {
 		return /**@type {?Direction}*/(
 			DirSet.has(k)? k : (wasd && WasdMap.get(k)) || null
 		)
-	}
-}
+	},
+})

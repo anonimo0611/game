@@ -1,5 +1,5 @@
 import {Dir} from './direction.js'
-export const Confirm = new class {
+export const Confirm = new class ConfirmCore {
 	#opened = false
 	#cancel = /**@type {0|1}*/(0)
 	get opened()   {return this.#opened}

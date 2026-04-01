@@ -1,6 +1,6 @@
 //---- Scene ----
 
-interface Scene {update():void, draw?():void}
+interface IScene {update():void, draw?():void}
 
 //---- Tile & Coords ----
 

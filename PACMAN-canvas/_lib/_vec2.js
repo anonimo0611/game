@@ -1,5 +1,4 @@
 'use strict'
-
 class Vec2 {
 	static get Zero()  {return Vec2.new( 0, 0)}
 	static get Up()    {return Vec2.new( 0,-1)}
@@ -25,7 +24,7 @@ class Vec2 {
 	 @returns {Vec2}
 
 	 @overload
-	 @param   {xyTuple} pos
+	 @param   {xyTuple} xyTuple
 	 @returns {Vec2}
 
 	 @param {void|number|xyTuple|Position} [v1]
@@ -267,16 +266,4 @@ class Vec2 {
 		return /**@type {const}*/(`{x:${this.x}, y:${this.y}}`)
 	}
 	void() {}
-}
-
-class ReadonlyXY {
-	/** @readonly */x
-	/** @readonly */y
-	/** @readonly @type {xyTuple} */vals
-	constructor(x=0, y=x) {
-		this.x = x
-		this.y = y
-		this.vals = Object.freeze([x,y])
-		Object.freeze(this)
-	}
 }

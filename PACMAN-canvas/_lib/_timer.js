@@ -14,18 +14,19 @@ const {Ticker,Timer}= function() {
 	/** @type {Map<any,TimerData>} */
 	const TimerMap = new Map
 
-	let _ticker = /**@type {?TickerCore}*/(null)
-	let _paused = false
-	let _fCount = 0 // frame  count
-	let _pCount = 0 // paused count
+	let _ticker  = /**@type {?TickerCore}*/(null)
+	let _fCount  = 0 // frame  count
+	let _pCount  = 0 // paused count
+	let _paused  = false
+	let _tFrozen = false
 
-	const Ticker = new class {
-		get Interval()    {return TICK_STEP}
-		get count()       {return _fCount}
-		get pausedCount() {return _pCount}
-		get paused()      {return _paused}
-		get running()     {return _ticker instanceof TickerCore}
-		get elapsedTime() {return _fCount*TICK_STEP}
+	const Ticker = {
+		get Interval()    {return TICK_STEP},
+		get count()       {return _fCount},
+		get pausedCount() {return _pCount},
+		get paused()      {return _paused},
+		get running()     {return _ticker instanceof TickerCore},
+		get elapsedTime() {return _fCount*TICK_STEP},
 
 		/**
 		 @param {()=> void} [updateFn]
@@ -33,24 +34,24 @@ const {Ticker,Timer}= function() {
 		*/
 		set(updateFn,drawFn) {
 			new TickerCore(updateFn,drawFn)
-		}
+		},
 		/** @param {boolean} [force] */
 		pause(force) {
 			return _paused = !!(force? force : !_paused)
-		}
+		},
 		resetCount() {
 			_fCount = 0
 			if (_ticker) _ticker.needsReset = true
-		}
+		},
 		stop()  {
 			_ticker?.stop()
-		}
+		},
 		reset() {
-			_fCount =
-			_pCount = 0
-			_paused = false
+			_fCount  = 0
+			_pCount  = 0
+			_paused  = false
+			_tFrozen = false
 			TimerMap.clear()
-			Timer.unfreeze()
 		}
 	}
 
@@ -122,40 +123,38 @@ const {Ticker,Timer}= function() {
 		}
 	}
 
-	const Timer = new class {
-		#frozen = false
-		get frozen() {return this.#frozen}
-		freeze()   {this.#frozen = true; return this}
-		unfreeze() {this.#frozen = false;return this}
+	const Timer = {
+		get frozen() {return _tFrozen},
+		freeze()   {_tFrozen = true; return this},
+		unfreeze() {_tFrozen = false;return this},
 		/**
 		 @param {number}    timeout
 		 @param {()=> void} handler
 		 @param {{key?:unknown,ignoreFrozen?:boolean}} otps
 		*/
-		set(timeout, handler, {key,ignoreFrozen=Timer.frozen}={}) {
+		set(timeout, handler, {key,ignoreFrozen=this.frozen}={}) {
 			if (!Ticker.running) Ticker.set()
 			TimerMap.set(key ?? Symbol(),{amount:0,timeout,handler,ignoreFrozen})
-		}
+		},
 		/** @param {{ms:number,fn():void}[]} seq */
 		sequence(...seq) {
 			let idx=0, s=seq[idx]
-			function fire() {
+			const fire = ()=> {
 				seq[idx].fn()
-				;(s=seq[++idx]) && Timer.set(s.ms, fire)
+				;(s=seq[++idx]) && this.set(s.ms, fire)
 			}
-			Timer.set(s.ms, fire)
-		}
+			this.set(s.ms, fire)
+		},
 		/** @param {unknown} key */
 		cancel(key) {
 			TimerMap.delete(key)
 			return this
-		}
+		},
 		cancelAll() {
 			TimerMap.clear()
 			return this
-		}
+		},
 	}
 
 	return {Ticker,Timer}
 }()
-
