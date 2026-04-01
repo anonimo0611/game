@@ -9,10 +9,10 @@ export class SoundMgr {
 	#playOpts = /**@type {{[K in S]:Readonly<Sound.Data<S>>}}*/({})
 	#instance = /**@type {{[K in S]:createjs.AbstractSoundInstance}}*/({})
 	/**
-	 @param {Sound.Setup} setup
 	 @param {Sound.Manifest<S>} m
+	 @param {Sound.onSettled} [onSettled]
 	*/
-	constructor(setup={}, m) {
+	constructor(m, onSettled) {
 		new Promise((resolve,reject)=> {
 			let amount = 0
 			m.flat().forEach(s=> s.data.audioSprite.forEach(d=> this.#playOpts[d.id]=d))
@@ -31,8 +31,8 @@ export class SoundMgr {
 				this.#disabled = false
 			})
 		})
-		.then (()=> {setup.onSettled?.(this.#settled = true )})
-		.catch(()=> {setup.onSettled?.(this.#settled = false)})
+		.then (()=> {onSettled?.(this.#settled = true )})
+		.catch(()=> {onSettled?.(this.#settled = false)})
 	}
 	get settled()  {return this.#settled}
 	get disabled() {return this.#disabled}

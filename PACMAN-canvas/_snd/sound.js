@@ -1,9 +1,9 @@
-import {State}    from '../src/state.js'
-import {GhsMgr}   from '../src/ghosts/_system.js'
-import {Setup}    from './_setup.js'
-import {SirenIds} from './_manifest.js'
-import {Manifest} from './_manifest.js'
-import {SoundMgr} from './manager.js'
+import {State}     from '../src/state.js'
+import {onSettled} from './_setup.js'
+import {SirenIds}  from './_manifest.js'
+import {Manifest}  from './_manifest.js'
+import {GhostMgr}  from '../src/ghosts/_system.js'
+import {SoundMgr}  from './manager.js'
 
 /**
  @extends {SoundMgr<T>}
@@ -14,8 +14,8 @@ import {SoundMgr} from './manager.js'
  @typedef {SoundCore & Play & Stop} ISound
 */
 class SoundCore extends SoundMgr {
-	constructor()  {super(Setup, Manifest)}
-	get sirenId()  {return SirenIds[GhsMgr.CruiseElroy.part]}
+	constructor()  {super(Manifest, onSettled)}
+	get sirenId()  {return SirenIds[GhostMgr.CruiseElroy.part]}
 	get ringing()  {return this.isPlaying('BellSE')}
 	get disabled() {return super.disabled || State.isAttract}
 
@@ -27,8 +27,8 @@ class SoundCore extends SoundMgr {
 		super.vol = clamp(+vol, 0, 10)
 	}
 	playSiren() {
-		if (GhsMgr.isFrightMode
-		 || GhsMgr.areAnyEscaping) return
+		if (GhostMgr.isFrightMode
+		 || GhostMgr.areAnyEscaping) return
 		Sound.stopLoops().play(Sound.sirenId)
 	}
 	toggleFrightMode(/**@type {boolean}*/on) {
@@ -36,16 +36,16 @@ class SoundCore extends SoundMgr {
 		  : Sound.playSiren()
 	}
 	#playFrightened() {
-		if (GhsMgr.areAnyEscaping) return
+		if (GhostMgr.areAnyEscaping) return
 		Sound.stopSiren().playFrightSE()
 	}
 	playEscapaingEyes() {
 		Sound.stopSiren().stopFrightSE().playEyesSE()
 	}
 	onGhostReturned() {
-		if (GhsMgr.areAnyEscaping) return
+		if (GhostMgr.areAnyEscaping) return
 		Sound.stopEyesSE()
-		GhsMgr.isFrightMode
+		GhostMgr.isFrightMode
 			? Sound.playFrightSE()
 			: Sound.play(Sound.sirenId)
 	}

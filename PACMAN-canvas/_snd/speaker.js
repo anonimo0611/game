@@ -1,38 +1,38 @@
-﻿const Size  = $('#volume').height()
-const{cvs,ctx}= canvas2D('speaker', Size)
-
-export const Speaker = new class {
+﻿export class SpeakerRenderer {
+	/** @readonly*/ctx
 	/** @readonly*/color
-	/** @param {Cvs2DStyle} color */
-	constructor(color='#FFF') {this.color=color}
-
+	/**
+	 @param {EnhancedCtx2D} ctx
+	 @param {Cvs2DStyle} color
+	*/
+	constructor(ctx, color='#FFF') {
+		this.ctx   = ctx
+		this.color = color
+	}
 	draw(/**@type {number}*/vol) {
-		const {width,height}= cvs
-		const step = this.#step(vol)
+		const {ctx,ctx:{size:{w,h}}}= this
+		const step = this.#getSteps(vol)
 		ctx.clear()
 		ctx.save()
 		ctx.fillStyle = ctx.strokeStyle = this.color
-		ctx.translate(width/2, height/2)
-		ctx.scale(width/100, height/100)
-		this.#drawBody()
+		ctx.translate(w/2, h/2)
+		ctx.scale(w/100, h/100)
+		ctx.fillPolygon(null,
+			[ -7, -35],[-31, -12],[-45, -12],
+			[-45, +12],[-31, +12],[ -7, +35])
 		step <= 0
-			? this.#drawMute()
+			? this.#drawMuteCross()
 			: this.#drawWaves(vol, step)
 		ctx.restore()
 	}
-	#step(/**@type {number}*/vol) {
-		if (between(vol,8,9)) return 3
-		if (between(vol,3,7)) return 2
-		if (between(vol,1,2)) return 1
+	#getSteps(/**@type {number}*/vol) {
+		if (between(vol,8,10)) return 3
+		if (between(vol,3, 7)) return 2
+		if (between(vol,1, 2)) return 1
 		return 0
 	}
-	#drawBody() {
-		ctx.newLinePath(
-			[ -7, -35],[-31, -12],[-45, -12],
-			[-45, +12],[-31, +12],[ -7, +35])
-		ctx.fill()
-	}
-	#drawMute() {
+	#drawMuteCross() {
+		const {ctx}= this
 		ctx.save()
 		ctx.translate(24, 0)
 		ctx.lineWidth = 10
@@ -44,6 +44,7 @@ export const Speaker = new class {
 	 /**@type {number}*/vol,
 	 /**@type {number}*/step
 	) {
+		const {ctx}= this
 		ctx.save()
 		ctx.lineCap = 'round'
 		ctx.lineWidth = 8

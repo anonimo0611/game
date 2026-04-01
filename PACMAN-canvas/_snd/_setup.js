@@ -1,47 +1,53 @@
-import {inputs}  from '../src/ui.js'
-import {Sound}   from './sound.js'
-import {Speaker} from './speaker.js'
+import {inputs} from '../src/ui.js'
+import {Sound}  from './sound.js'
+import {SpeakerRenderer} from './speaker.js'
 
 let lstVol = NaN
 
 const {volRng,volRg2}= inputs
-const initVol = +(localStorage.anopac_volume ?? 5)
+const $speaker  = $('#speaker')
+const $volRngs  = $('.volRng')
+const $volCtrls = $('.volCtrl')
 
-export const Setup = new class {
-	onSettled(succeeded=true) {
-		succeeded
-			? Setup.#onLoaded()
-			: Setup.#onFailed()
-		$root.addClass('sound-settled')
-	}
-	#onLoaded() {
-		$('#speaker')
-			.on({click:Setup.#mute})
-			.onWheel(Setup.#onInput)
-		$('.volRng')
-			.attr({value:initVol,defaultValue:initVol})
-			.on({input:Setup.#onInput})
-			.trigger('input')
-		$win.on({keydown:Setup.#onKeydown})
-	}
-	#onFailed() {
-		$('.volCtrl').hide()
-	}
-	#onInput(/**@type {Event}*/e) {
+const speaker = function() {
+	const size = $('#volume').height()
+	const ctx  = canvas2D('speaker',size).ctx
+	return new SpeakerRenderer(ctx,'#FFF')
+}()
+
+const SoundCtrl = {
+	loaded() {
+		const {mute,input,keydown}= this
+		$win.on({keydown})
+		$volRngs.on({input}).trigger('input')
+		$speaker.on({click:mute}).onWheel(input)
+	},
+	failed() {
+		$volCtrls.hide()
+	},
+	input(/**@type {Event}*/e) {
 		const isInput = e.target instanceof HTMLInputElement
-		Sound.vol = (isInput? e.target:inputs.volRng).valueAsNumber
-		Speaker.draw(localStorage.anopac_volume = Sound.vol)
-	}
-	#onKeydown(/**@type {JQuery.KeyDownEvent}*/e) {
+		const rngCtrl = (isInput? e.target : inputs.volRng)
+		speaker.draw(Sound.vol = rngCtrl.valueAsNumber)
+	},
+	keydown(/**@type {JQuery.KeyDownEvent}*/e) {
 		if (keyRepeat(e) || isCombiKey(e))
 			return
 		if (e.key.toUpperCase() == 'M'
 		 || e.target == volRg2 && isEnterKey(e))
-		 	Setup.#mute()
-	}
-	#mute() {
+			this.mute()
+	},
+	mute() {
 		lstVol = Sound.vol || (lstVol || +volRng.max >> 1)
-		const value = (Sound.vol ? 0 : lstVol)
-		$('.volRng').prop({value}) && $(volRng).trigger('input')
+		$volRngs.prop({value:(Sound.vol ? 0 : lstVol)})
+		$(volRng).trigger('input')
 	}
+}
+
+/** @param {boolean} succeeded */
+export function onSettled(succeeded) {
+	succeeded
+		? SoundCtrl.loaded()
+		: SoundCtrl.failed()
+	$root.addClass('sound-settled')
 }
