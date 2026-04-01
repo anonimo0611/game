@@ -1,9 +1,9 @@
 import {State}     from '../src/state.js'
+import {GhostMgr}  from '../src/ghosts/_system.js'
+import {SoundMgr}  from './manager.js'
 import {onSettled} from './_setup.js'
 import {SirenIds}  from './_manifest.js'
 import {Manifest}  from './_manifest.js'
-import {GhostMgr}  from '../src/ghosts/_system.js'
-import {SoundMgr}  from './manager.js'
 
 /**
  @extends {SoundMgr<T>}
