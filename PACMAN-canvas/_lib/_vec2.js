@@ -36,6 +36,13 @@ class Vec2 {
 	}
 
 	/**
+	 @param {number}  x
+	 @param {number} [y]
+	*/static fixed(x,y=x) {
+		return Vec2.new(x,y).fixed
+	}
+
+	/**
 	 @param {void|number|Position} [v1]
 	 @param {number} [v2]
 	 @returns {[x:number, y:number]}
