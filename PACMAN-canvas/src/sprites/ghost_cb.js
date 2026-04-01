@@ -116,29 +116,35 @@ export default class GhostSpriteForCoffBreak {
 }
 
 /** @param {EnhancedCtx2D} ctx */
-export function snagSpr(ctx) {
-	return freeze( new Snag(ctx) )
-}
+export const snagSpr =
+	ctx=> freeze( new Snag(ctx) )
+
 class Snag {
+	StakSize = Vec2.fixed(
+		T*.18,
+		T*.70
+	)
+	StakePos = Vec2.fixed(
+		BW/2 + T*2 - this.StakSize.x/2,
+		BH/2 + T*1 - this.StakSize.y - T*.1
+	)
+	ShardPos = Vec2.fixed(
+		BW/2 + T*2 + this.StakSize.x/2,
+		BH/2 + T*1 - T*.1
+	)
+	CaughtX = BW/2 + T/2
+	AkaMinX = this.CaughtX - T
+
 	/** @readonly */ctx
 	/** @param {EnhancedCtx2D} ctx */
 	constructor(ctx) {this.ctx = ctx}
-	CaughtX   = BW/2 + T/2
-	AkaMinX   = this.CaughtX - T
-	stakeSize = Vec2.new(T*.18, T*.70).fixed
-	stakePos  = freeze({
-		x: BW/2 + T*2 - this.stakeSize.x/2,
-		y: BH/2 + T*1 - this.stakeSize.y - T*.1
-	})
-	shardPos = freeze({
-		x: BW/2 + T*2 + this.stakeSize.x/2,
-		y: BH/2 + T*1 - T*.1
-	})
-	drawStake({x,y}= this.stakePos) {
-		this.ctx.fillRect(x,y, ...this.stakeSize.vals, 'white')
+
+	drawStake({x,y}=this.StakePos) {
+		const {ctx,StakSize:{x:w,y:h}}= this
+		ctx.fillRect(x, y, w, h, 'white')
 	}
-	drawShard({x,y}= this.shardPos) {
-		const {ctx}= this, h=this.stakeSize.y
+	drawShard({x,y}=this.ShardPos) {
+		const {ctx,StakSize:{y:h}}= this
 		ctx.save()
 		ctx.translate(x, y)
 		ctx.fillPolygon(Colors.Akabei, [0,-4],[0,-h],[-T,0],[-4,0],[-4,-4])
