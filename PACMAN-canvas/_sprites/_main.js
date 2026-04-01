@@ -4,12 +4,12 @@ import * as Pts   from '../src/sprites/points.js'
 import * as Fruit from '../src/sprites/fruits.js'
 import PacSprite  from '../src/sprites/pacman.js'
 import {snagSpr}  from '../src/sprites/ghost_cb.js'
-import {SizeRng,BrightRng,ResetBtn,GridSize,T,S,GAP,ghsSprGr} from './_constants.js'
+import {SizeRng,BrightRng,ResetBtn,GridSize,T,S,GAP,ghostGr} from './_constants.js'
 
 const ctx  = Fg
 const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 
-;(new class { // Atlas
+;(new class Atlas {
 	constructor() {
 		$(SizeRng).on('resize', this.draw)
 	}
@@ -43,7 +43,7 @@ const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 	#drawGhost(col=0, row=0) {
 		const [x,y]= [ofst(col), row*S]
 		if (row < 5) {
-			ghsSprGr.draw({
+			ghostGr.draw({
 				x,y,size:S,
 				type:  row-1,
 				animIdx: +(col % 2 != 0),
@@ -51,7 +51,7 @@ const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 			})
 			return
 		}
-		ghsSprGr.draw({
+		ghostGr.draw({
 			x,y,size:S,
 			orient:/**@type {const}*/([R,R,R,R,U,L,D,R])[col],
 			animIdx:    +(col % 2 != 0),
@@ -92,7 +92,7 @@ const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 		}
 	}
 	#drawAkabei() {
-		const aka = ghsSprGr
+		const aka = ghostGr
 		const spr = snagSpr(ctx)
 
 		ctx.translate(S/4, S*9+S/4-GAP/4)

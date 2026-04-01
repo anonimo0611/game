@@ -1,5 +1,5 @@
-import {DorpDown} from '../_lib/menu.js'
-import GhsSprite  from '../src/sprites/ghost.js'
+import {DorpDown}  from '../_lib/menu.js'
+import GhostSprite from '../src/sprites/ghost.js'
 
 let lastTileSize = -1
 
@@ -14,15 +14,15 @@ export const ResetBtn  = /**@type {HTMLButtonElement}*/(byId('resetBtn'))
 
 export let  [T,S,GAP] = [0,0,0]
 export const GridSize = new Vec2(10,11).vals
-export const ghsSprPv = new GhsSprite(Pv)
-export const ghsSprGr = new GhsSprite(Fg)
+export const ghostPv  = new GhostSprite(Pv)
+export const ghostGr  = new GhostSprite(Fg)
 
 export function resize() {
 	T = SizeRng.valueAsNumber/2
 	if (lastTileSize != T) {
 		[S,GAP] = [T*2,T*.25]
-		ghsSprPv.ctx.resize(S*4, S*3)
-		ghsSprGr.ctx.resize(S*4, S*3)
+		ghostPv.ctx.resize(S*4, S*3)
+		ghostGr.ctx.resize(S*4, S*3)
 		Pv.resize(T*3.2, T*2.1)
 		Fg.resize(...Vec2.new(GridSize).mul(S).add(GAP*2).vals)
 		lastTileSize = T

@@ -1,6 +1,6 @@
-import PacSprite  from '../src/sprites/pacman.js'
-import {Dir}      from '../_lib/direction.js'
-import {ghsSprPv} from './_constants.js'
+import PacSprite from '../src/sprites/pacman.js'
+import {Dir}     from '../_lib/direction.js'
+import {ghostPv} from './_constants.js'
 import {T,S,Pv,Menu,Btns,resize} from './_constants.js'
 
 const Schema = /**@type {const}*/
@@ -16,14 +16,13 @@ class ActorPreview {
 		this.flashIdx = 0
 		this.type     = type
 		this.subType  = subType
-		this.ghost    = ghsSprPv
+		this.ghost    = ghostPv
 		this.pacman   = new PacSprite(Pv, 0, PacScale*T)
 		this.orient   = /**@type {Direction}*/(L)
 	}
 }
 
-// Preview
-;(new class {
+;(new class Preview {
 	subj = /**@type {?ActorPreview}*/(null)
 	constructor() {
 		Ticker.set(this.update, this.draw)
