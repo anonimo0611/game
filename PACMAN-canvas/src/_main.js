@@ -49,8 +49,8 @@ export const Game = new class GameCore {
 	get moveSpeed() {return Game.speed * Game.speedByLv}
 
 	#setLevel(n=1) {
-		Game.#level = between(n, 1, 0xFF) && n || 1
-		Level.val( ('0'+Game.level).slice(-2) ).trigger('change')
+		const lv = (Game.#level = between(n, 1, 0xFF) && n || 1)
+		Level.val( String(lv).padStart(2,'0') ).trigger('change')
 	}
 	#resetLevel() {
 		Game.#setLevel(Menu.Level.index+1)
