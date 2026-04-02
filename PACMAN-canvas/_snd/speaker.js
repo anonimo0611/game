@@ -55,7 +55,9 @@
 		].forEach(([x,rX,rY,st,ed], idx)=> {
 			ctx.save()
 			ctx.setAlpha(step <= idx && vol/10 || 1)
-			ctx.setEllipse(x,0, rX,rY, 0, st,ed, null, this.color)
+			ctx.beginPath()
+			ctx.ellipse(x,0, rX,rY, 0, st,ed)
+			ctx.stroke()
 			ctx.restore()
 		})
 		ctx.restore()
