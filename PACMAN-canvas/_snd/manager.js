@@ -58,8 +58,7 @@ export class SoundMgr {
 	 @param {S[]} ids
 	*/
 	pause(enable, ...ids) {
-		if (this.disabled)
-			return
+		if (this.disabled) return
 		ids.length
 			? ids.forEach(id=> {this.#instance[id].paused=enable})
 			: values(this.#instance).forEach(i=> i.paused=enable)

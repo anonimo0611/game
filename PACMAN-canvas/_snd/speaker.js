@@ -11,7 +11,7 @@
 	}
 	draw(/**@type {number}*/vol) {
 		const {ctx,ctx:{size:{w,h}}}= this
-		const step = this.#getSteps(vol)
+		const steps = this.#getSteps(vol)
 		ctx.clear()
 		ctx.save()
 		ctx.fillStyle = ctx.strokeStyle = this.color
@@ -20,9 +20,9 @@
 		ctx.fillPolygon(null,
 			[ -7, -35],[-31, -12],[-45, -12],
 			[-45, +12],[-31, +12],[ -7, +35])
-		step <= 0
+		steps == 0
 			? this.#drawMuteCross()
-			: this.#drawWaves(vol, step)
+			: this.#drawWaves(vol, steps)
 		ctx.restore()
 	}
 	#getSteps(/**@type {number}*/vol) {
