@@ -107,9 +107,8 @@ export const Actors = {
 
 export class PacMan extends Actor {
 	/** @readonly */
-	sprite = new Sprite(Fg)
+	sprite = new Sprite(Fg, T)
 	constructor(col=0,row=0) {super(col,row)}
-	get radius() {return PacRadius}
 	get hidden() {return Timer.frozen}
 	draw() {this.sprite.draw(this)}
 }

@@ -5,8 +5,8 @@ import  Sprite  from './sprites/pacman.js'
 
 export const Lives = function() {
 	let   left   = 0
-	const sprite = new Sprite(HUD, 1)
-	const radius = T*.78, size = T*2
+	const sprite = new Sprite(HUD, T, 1)
+	const radius = T*.87, size = T*2
 	State.on({
 		Title:()=> reset(),
 		Intro:()=> add(+1),

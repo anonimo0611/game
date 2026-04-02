@@ -41,7 +41,7 @@ export class CoffBreak {
 	moveAka(rate=1) {
 		this.akabei.x += this.akavx * rate
 	}
-	drawPac(radius=PacRadius) {
+	drawPac(radius=this.pacman.radius) {
 		const {pacman:{center,orient}}= this
 		this.pacman.sprite.draw({center,orient,radius})
 	}
@@ -89,9 +89,10 @@ class Scene1 extends CoffBreak {
 		this.akabei.x > T*9+BW && this.end()
 	}
 	draw() {
-		const {pacman:{dir},isFrightened}= this
+		const {isFrightened}= this
+		const {pacman:{dir,radius:r}}= this
 		this.drawAka({isFrightened})
-		this.drawPac((dir == L ? 1:4)*PacRadius)
+		this.drawPac((dir == L ? 1:4)*r)
 		super.draw()
 	}
 }

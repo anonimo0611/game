@@ -6,18 +6,20 @@ import {Dir}   from '../../_lib/direction.js';
 import {Dying} from './pacman_dying.js'
 export default class PacmanSprite {
 	/** @readonly */ctx
-	/** @readonly */radius
+	/** @readonly */Radius
+	/** @readonly */Scale = 0.9
 	#mPhase = 0
 	#mAngle = 0
 	#dyingSpr = /**@type {?Dying}*/(null)
 
 	/**
 	 @param {EnhancedCtx2D} ctx
+	 @param {number} radius
 	 @param {0|1|2} initialOpening 0=closed, 1=half open, 2=fully open
 	*/
-	constructor(ctx, initialOpening=0, radius=PacRadius) {
+	constructor(ctx, radius, initialOpening=0) {
 		this.ctx     = ctx
-		this.radius  = radius
+		this.Radius  = radius
 		this.#mAngle = [0,OpenMid,OpenMax][initialOpening]
 	}
 	update({closed=false,hidden=false,onWall=false}={}) {
@@ -40,13 +42,13 @@ export default class PacmanSprite {
 		alpha  = 1,
 		hidden = false,
 		closed = false,
-		radius = this.radius}={}
+		radius = this.Radius}={}
 	) {
 		if (hidden) {
 			return
 		}
 		if (this.#dyingSpr) {
-			this.#dyingSpr.draw({x,y})
+			this.#dyingSpr.draw({x,y,radius})
 			return
 		}
 		const {ctx} = this
@@ -54,6 +56,7 @@ export default class PacmanSprite {
 		ctx.save()
 		ctx.setAlpha(alpha)
 		ctx.translate(x,y)
+		ctx.scale(this.Scale)
 		ctx.rotate(Dir.Rotation[orient])
 		ctx.beginPath()
 		ctx.moveTo(-radius*0.3, 0)

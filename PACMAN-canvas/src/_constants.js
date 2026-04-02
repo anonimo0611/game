@@ -47,9 +47,6 @@ Palette = /**@type {const}*/({
 	FrightBody: ['#36A','#FFF'],
 }),
 
-PacScale  = 0.9,
-PacRadius = PacScale*T,
-
 GhostScale  = 1.1,
 GhostType   = /**@type {const}*/({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4}),
 GhostNames  = /**@type {const}*/(['Akabei','Pinky','Aosuke','Guzuta']),
