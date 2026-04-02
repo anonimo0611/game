@@ -24,9 +24,8 @@ export class Attract {
 	/** @private */
 	constructor() {
 		$onNS('Attract',{click_keydown_blur:this.quit})
+		this.update = ()=> this.subAct.update()
 	}
-	update() {this.subAct.update()}
-
 	GhostEntries = /**@type {const}*/([
 		// time, col1, col2, row, txt1, txt2
 		[10, 8, 18,  6, 'OIKAKE----', '"AKABEI"'],
@@ -62,8 +61,8 @@ export class Attract {
 				drawText( 2.0, 29, Color.Orange, text)
 				drawText(24.3, 29, Color.Orange,'PTS', Small)
 			}
+			this.subAct.draw()
 		}
-		this.subAct.draw()
 		FruitMgr.drawLevelCounter()
 	}
 	drawGhostOnTable(type=0, row=0) {
