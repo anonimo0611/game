@@ -50,7 +50,7 @@ export const Game = new class GameCore {
 
 	#setLevel(n=1) {
 		Game.#level = between(n, 1, 0xFF) && n || 1
-		Level.val( zeroPad(Game.level,2) ).trigger('change')
+		Level.val( ('0'+Game.level).slice(-2) ).trigger('change')
 	}
 	#resetLevel() {
 		Game.#setLevel(Menu.Level.index+1)
