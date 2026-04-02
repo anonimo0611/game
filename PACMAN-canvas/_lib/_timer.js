@@ -1,7 +1,5 @@
 'use strict'
 const {Ticker,Timer}= function() {
-	const MS = 0 // millisecs
-	const CB = 1 // callback
 	const TICK_STEP = 1000/60
 	const THRESHOLD = 100
 
@@ -126,18 +124,22 @@ const {Ticker,Timer}= function() {
 		 @param {()=> void} callback
 		 @param {{key?:unknown,ignoreFrozen?:boolean}} otps
 		*/
-		set(timeout, callback, {key,ignoreFrozen=this.frozen}={}) {
+		set(timeout, callback, {key,ignoreFrozen=false}={}) {
 			if (!Ticker.running) Ticker.set()
-			TimerMap.set(key ?? Symbol(), {amount:0,timeout,callback,ignoreFrozen})
+			TimerMap.set(key ?? Symbol(), {amount:0,timeout,ignoreFrozen,callback})
 		},
 		/** @param {TimerSeq[]} seq */
 		sequence(...seq) {
-			let idx=0, s=seq[idx]
-			const fire = ()=> {
-				seq[idx][CB]()
-				;(s=seq[++idx]) && this.set(s[MS], fire)
-			}
-			this.set(s[MS], fire)
+			if (seq.length == 0) return
+			let idx = 0
+			;(function processNext() {
+				const [dur,cb]= seq[idx]
+				Timer.set(dur, ()=> {
+					cb(), idx++
+					if (idx < seq.length)
+						processNext()
+				})
+			})()
 		},
 		/** @param {unknown} key */
 		cancel(key) {
