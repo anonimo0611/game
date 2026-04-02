@@ -15,9 +15,7 @@ export class Rect {
 		return freeze(this)
 	}
 
-	/**
-	 @param {Position} pos
-	*/
+	/** @param {Position} pos */
 	contains(pos) {
 		const {x,y,w,h}= this
 		return (
@@ -26,8 +24,6 @@ export class Rect {
 		)
 	}
 
-	/**
-	 @returns {readonly [x:number, y:number, w:number, h:number]}
-	*/
+	/** @returns {readonly [x:number, y:number, w:number, h:number]} */
 	get vals() {return ([this.x, this.y, this.w, this.h])}
 }

@@ -228,43 +228,33 @@ class Vec2 {
 		return this
 	}
 
-	/**
-	 @param {number} scalar
-	*/
+	/** @param {number} scalar */
 	mul(scalar) {
 		this.x *= scalar
 		this.y *= scalar
 		return this
 	}
 
-	/**
-	 @param {number} scalar
-	*/
+	/** @param {number} scalar */
 	div(scalar) {
 		this.x /= scalar
 		this.y /= scalar
 		return this
 	}
 
-	/**
-	 @param {number} scalar
-	*/
+	/** @param {number} scalar */
 	divInt(scalar) {
 		this.x = (this.x/scalar)|0
 		this.y = (this.y/scalar)|0
 		return this
 	}
 
-	/**
-	 @param {Readonly<Position>} pos
-	*/
+	/** @param {Readonly<Position>} pos */
 	distance(pos) {
 		return Vec2.sub(this,pos).magnitude
 	}
 
-	/**
-	 @param {number} cols
-	*/
+	/** @param {number} cols */
 	toIdx(cols) {
 		return Vec2.idx(this,cols)
 	}

@@ -56,9 +56,7 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 		return this
 	}
 
-	/**
-	 @param {Cvs2DStyle} [style]
-	*/
+	/** @param {Cvs2DStyle} [style] */
 	clear(style) {
 		this.fillRect(0,0, this.width, this.height, style ?? null)
 		return this
@@ -118,40 +116,6 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	}
 
 	/**
-	 @param {number} x
-	 @param {number} y
-	 @param {number} radiusX
-	 @param {number} radiusY
-	 @param {number} rotation
-	 @param {number} stAngle
-	 @param {number} edAngle
-	 @param {?Cvs2DStyle}[fillStyle]
-	 @param {Cvs2DStyle} [strokeStyle]
-	 @param {number}     [lineWidth]
-	 @param {boolean}    [closePath]
-	*/
-	setEllipse(x,y,radiusX,radiusY,rotation,stAngle,edAngle,
-		fillStyle = this.fillStyle, strokeStyle,
-		lineWidth = this.lineWidth, closePath=false
-	) {
-		this.save()
-		this.beginPath()
-		this.ellipse(x,y,radiusX,radiusY,rotation,stAngle,edAngle)
-		closePath && this.closePath()
-		if (fillStyle) {
-			this.fillStyle = fillStyle
-			this.fill()
-		}
-		if (strokeStyle) {
-			this.lineWidth = lineWidth
-			this.strokeStyle = strokeStyle
-			this.stroke()
-		}
-		this.restore()
-		return this
-	}
-
-	/**
 	 @param {number} x1
 	 @param {number} y1
 	 @param {number} x2
@@ -165,18 +129,14 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 		return this
 	}
 
-	/**
-	 @param {(readonly [x:number, y:number])[]} path
-	*/
+	/** @param {(readonly [x:number, y:number])[]} path */
 	newLinePath(...path) {
 		this.beginPath()
 		this.setLinePath(...path)
 		return this
 	}
 
-	/**
-	 @param {(readonly [x:number, y:number])[]} path
-	*/
+	/** @param {(readonly [x:number, y:number])[]} path */
 	setLinePath(...path) {
 		path.forEach(([x,y], i)=> {
 			!i ? this.moveTo(x,y)
@@ -185,9 +145,7 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 		return this
 	}
 
-	/**
-	 @param {(readonly [x:number, y:number])[]} path
-	*/
+	/** @param {(readonly [x:number, y:number])[]} path */
 	addLinePath(...path) {
 		path.forEach(([x,y])=> this.lineTo(x,y))
 		return this
@@ -250,15 +208,12 @@ class Fade {
 		return this.running
 	}
 
-	/**
-	 @param {CanvasRenderingContext2D} ctx
-	*/
+	/** @param {CanvasRenderingContext2D} ctx */
 	apply(ctx) {ctx.globalAlpha = this.#alpha}
 }
 
-/**
- @param {string|Path2D} [path]
-*/const path2D = path=> new Path2D(path)
+/** @param {string|Path2D} [path] */
+const path2D = path=> new Path2D(path)
 
 /**
  @param {?string} id The ID of an existing canvas element. If null or not found, a new canvas is created.
