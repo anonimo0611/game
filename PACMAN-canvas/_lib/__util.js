@@ -6,21 +6,19 @@ const {abs,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Mat
  @template {object} T
  @param {T} o
 */const typedKeys = o=>
-	/** @type {(keyof T)[]} */(keys(o))
+	/**@type {(keyof T)[]}*/(keys(o))
 
 /**
  @template {string} T
  @param {readonly T[]} array
 */const toEnumObject = array=>
-	/** @type {{readonly [K in T]:K}} */
+	/**@type {{readonly [K in T]:K}}*/
 	(fromEntries(array.map(k=> [k,k])))
 
 /**
  @param {KeyboardEvent|JQKeyboardEvent} e
 */const keyRepeat = e=>
-	(e instanceof KeyboardEvent
-		? e : e.originalEvent
-	)?.repeat ?? false
+	((e instanceof KeyboardEvent)? e : e.originalEvent)?.repeat ?? false
 
 /**
  @param {KeyboardEvent|JQKeyboardEvent} e
@@ -115,11 +113,6 @@ const {abs,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Mat
  @param {number} min
  @param {number} max
 */const clamp = (n,min=0,max=1)=> Math.min(Math.max(n,min), max)
-
-/**
- @param {number} n
- @param {number} digit
-*/const zeroPad = (n,digit)=> String(n).padStart(digit,'0')
 
 /**
  @param {number} n
