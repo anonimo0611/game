@@ -23,13 +23,15 @@ class FloatingPts {
 		this.pos   = pos
 		this.cache = cache((key == FruitMgr ? 0:1), key.points)
 		this.fade  = Fade.out(FadeDur/spd, (dur-FadeDur)/spd)
+
+		Popups.set(key, this)
+		State.isInGame && ScoreMgr.add(key.points)
+
 		Timer.set(dur/spd, ()=> {
 			Timer.unfreeze()
 			Popups.delete(key)
 			cb?.()
 		}, {ignoreFrozen:true})
-		Popups.set(key, this)
-		State.isInGame && ScoreMgr.add(key.points)
 	}
 	update() {
 		this.fade.update()
