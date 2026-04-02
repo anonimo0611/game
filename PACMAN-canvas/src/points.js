@@ -27,7 +27,7 @@ class FloatingPts {
 			Timer.unfreeze()
 			Popups.delete(key)
 			cb?.()
-		})
+		}, {ignoreFrozen:true})
 		Popups.set(key, this)
 		State.isInGame && ScoreMgr.add(key.points)
 	}
