@@ -42,9 +42,7 @@ export const Wall = new class WallRenderer {
 		Bg.strokeLine(+T+LW/2, -oy, +T+LW/2, -iy)
 		Bg.restore()
 	}
-	/**
-	 @param {{type:number, ci:number, x:number, y:number}} cornerData
-	*/
+	/** @param {{type:number, ci:number, x:number, y:number}} cornerData */
 	#drawCorner({type,ci,x,y}) {
 		Bg.save()
 		Bg.translate(x+HT, y+HT)

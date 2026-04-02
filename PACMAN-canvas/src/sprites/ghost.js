@@ -1,8 +1,8 @@
 import CBSprite from './ghost_cb.js'
 export default class GhostSprite {
+	/** @readonly */tgt
 	/** @readonly */ctx
 	/** @readonly */sub
-	/** @readonly */tgt
 	/** @param {EnhancedCtx2D} target */
 	constructor(target, w=T*3, h=T*2) {
 		this.tgt = target
