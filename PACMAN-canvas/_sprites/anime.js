@@ -17,7 +17,7 @@ class ActorPreview {
 		this.type     = type
 		this.subType  = subType
 		this.ghost    = ghostPv
-		this.pacman   = new PacSprite(Pv, 0, PacScale*T)
+		this.pacman   = new PacSprite(Pv, T)
 		this.orient   = /**@type {Direction}*/(L)
 	}
 }
@@ -93,7 +93,7 @@ class ActorPreview {
 		const {subj}= this
 		Pv.save()
 		Pv.translate(Pv.canvas.width/2, S/2)
-		subj?.pacman.draw({orient:subj.orient, radius:PacScale*T})
+		subj?.pacman.draw({orient:subj.orient, radius:T})
 		Pv.restore()
 	}
 	drawGhost = ()=> {

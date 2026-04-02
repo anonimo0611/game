@@ -34,7 +34,7 @@ const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 		for (const row of range(1,6)) {
 			for (const col of range(0,8)) {
 				ctx.save()
-				ctx.translate(T/2, T/2)
+				ctx.translate(T/2)
 				this.#drawGhost(col, row)
 				ctx.restore()
 			}
@@ -87,8 +87,8 @@ const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 		const dirs = /**@type {const}*/([U,U,L,L,D,D,R,R])
 		for (const i of range(-1,9)) {
 			const center = Vec2.new(T+ofst(i), S*8.5)
-			const params = {center, orient:dirs[i-1], radius:T*PacScale}
-			new PacSprite(ctx, i>0 ? (i%2 ? 1:2) : 0).draw(params)
+			const params = {center, orient:dirs[i-1], radius:T}
+			new PacSprite(ctx, T, i>0 ? (i%2 ? 1:2) : 0).draw(params)
 		}
 	}
 	#drawAkabei() {
@@ -115,13 +115,13 @@ const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 			// Stake
 			ctx.save()
 			ctx.translate(S*6.9, S-T/2-sy-3*s)
-			ctx.scale(s, s)
+			ctx.scale(s)
 			spr.drawStake(Vec2.Zero)
 			ctx.restore()
 			// Shard
 			ctx.save()
 			ctx.translate(S*6.9+sx, S-T/2-3*s)
-			ctx.scale(s, s)
+			ctx.scale(s)
 			spr.drawShard(Vec2.Zero)
 			ctx.restore()
 		}
