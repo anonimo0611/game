@@ -25,7 +25,9 @@ export default class GhostSpriteForCoffBreak {
 	drawBracketEyes() {
 		const {ctx}= this
 		for (const v of [-1,+1]) { // Eyeball
-			ctx.setEllipse(19*v, -14, 13,16, 0, PI/2, PI*2.05)
+			ctx.beginPath()
+			ctx.ellipse(19*v, -14, 13,16, 0, PI/2, PI*2.05)
+			ctx.fill()
 		}
 		ctx.lineWidth   = 8
 		ctx.lineCap     = 'square'

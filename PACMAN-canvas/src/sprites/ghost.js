@@ -118,14 +118,18 @@ export default class GhostSprite {
 	#drawEyesUp(isRipped=false) {
 		const {ctx}= this, color=[Color.GhostEyes,'#000'][+isRipped]
 		for (const v of [-1,+1]) {
-			ctx.setEllipse(19.5*v, -17, 13, 17, -8*v*PI/180, -PI/4, -3*PI/4)
+			ctx.beginPath()
+			ctx.ellipse(19.5*v, -17, 13, 17, -8*v*PI/180, -PI/4, -3*PI/4)
+			ctx.fill()
 			ctx.fillCircle(18.5*v, -26,  8, color)
 		}
 	}
 	#drawEyesDown() {
 		const {ctx}= this
 		for (const v of [-1,+1]) {
-			ctx.setEllipse(19*v, -3, 13, 17, 0, 140*PI/180, 40*PI/180)
+			ctx.beginPath()
+			ctx.ellipse(19*v, -3, 13, 17, 0, 140*PI/180, 40*PI/180)
+			ctx.fill()
 			ctx.fillCircle(19*v, +4,  8, Color.GhostEyes)
 		}
 	}
@@ -133,7 +137,9 @@ export default class GhostSprite {
 	#drawEyesHoriz(LorR) {
 		const {ctx}= this, v = (Vec2[LorR].x < 0 ? -1:1)
 		for (const i of [0,1]) {
-			ctx.setEllipse([-16.5*v, 23*v][i], -11, 13, 17, 0, 0, PI*2)
+			ctx.beginPath()
+			ctx.ellipse([-16.5*v, 23*v][i], -11, 13, 17, 0, 0, PI*2)
+			ctx.fill()
 			ctx.fillCircle([ -9.5*v, 29*v][i],  -8,  8, Color.GhostEyes)
 		}
 	}
