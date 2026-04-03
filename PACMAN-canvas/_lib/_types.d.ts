@@ -1,13 +1,15 @@
+//---- Dictionary ----
+
 type NumericDict<T> = {readonly [K:number]:T}
-type IScene<S> = {[K in S]?: {update():void, draw?():void}}
+type SceneDict<T> = {[K in T]?: {update():void, draw?():void}}
 
 //---- Timer ----
 
 type TimerData = {
 	amount:  number;
 	timeout: number;
-	callback:()=> void;
 	ignoreFrozen: boolean;
+	callback:()=> void;
 }
 type TimerSeq = [durationMS:number, callback:()=> void]
 
