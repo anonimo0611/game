@@ -8,8 +8,8 @@ export function draw(
 	ctx, idx, x=T, y=T*0.9, scale=T*2/FruitSpriteSize
 ) {
 	if (!FruitFuncs[idx])
-		throw RangeError(`The 2nd argument is ${idx}, `
-			+`but the fruit range must be 0-${FruitFuncs.length-1}`)
+		throw new RangeError(`Invalid fruit index: ${idx}.`
+			+` Must be between 0 and ${FruitFuncs.length-1}.`)
 	ctx.save()
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
