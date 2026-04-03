@@ -5,6 +5,9 @@ DotPts   = 10,
 PowPts   = 50,
 TileSize = int(screen.height/Rows),
 
+SmallSpriteSize =  8,
+LargeSpriteSize = 16,
+
 /** Scale factor based on 1080p resolution */
 ScaleFactor = screen.height/1080,
 
