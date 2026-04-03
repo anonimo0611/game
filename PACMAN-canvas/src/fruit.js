@@ -76,7 +76,7 @@ export const FruitMgr = new class FruitManager {
 	drawTarget() {
 		if (Ticker.paused) return
 		if (this.showTarget) {
-			Spr.Cache.draw(Fg, TargetPos, fadeOut?.alpha)
+			Spr.cache.draw(Fg, TargetPos, fadeOut?.alpha)
 		}
 		PtsMgr.drawFruitPts()
 	}
@@ -95,7 +95,7 @@ export const FruitMgr = new class FruitManager {
 		HUD.restore()
 	}
 	#setImages = ()=> {
-		Spr.Cache.update(this.currentType)
+		Spr.cache.update(this.currentType)
 		this.#setLevelCounter()
 	}
 }
