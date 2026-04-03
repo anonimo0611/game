@@ -2,6 +2,7 @@ import {Confirm}   from '../../_lib/confirm.js'
 import {Ctrl}      from '../control.js'
 import {WinState}  from '../ui.js'
 import {State}     from '../state.js'
+import {States}    from '../state.js'
 import {Attract}   from './attract.js'
 import {CoffBreak} from './coffee_break.js'
 export {Demo}
@@ -24,7 +25,7 @@ const RunTimer = function() {
 	return {update}
 }()
 
-/** @type {{[K in import('../state').StateType]?:IScene}} */
+/** @type {IScene<States[number]>} */
 const Scenes = {Title:RunTimer,Attract,CoffBreak}
 const Demo = {
 	get CoffBreakNum() {return CoffBreak.num},
