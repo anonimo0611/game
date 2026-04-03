@@ -4,10 +4,10 @@ const OpenMax  = 60 * PI/180
 
 import {Dir}   from '../../_lib/direction.js';
 import {Dying} from './pacman_dying.js'
+export const PacScale = 0.9
 export default class PacmanSprite {
 	/** @readonly */ctx
 	/** @readonly */Radius
-	/** @readonly */Scale = 0.9
 	#mPhase = 0
 	#mAngle = 0
 	#dyingSpr = /**@type {?Dying}*/(null)
@@ -56,7 +56,7 @@ export default class PacmanSprite {
 		ctx.save()
 		ctx.setAlpha(alpha)
 		ctx.translate(x,y)
-		ctx.scale(this.Scale)
+		ctx.scale(PacScale)
 		ctx.rotate(Dir.Rotation[orient])
 		ctx.beginPath()
 		ctx.moveTo(-radius*0.3, 0)

@@ -1,3 +1,4 @@
+import {GhostScale} from './ghost.js'
 export default class GhostSpriteForCoffBreak {
 	/** @readonly */ctx
 	/** @param {EnhancedCtx2D} ctx */

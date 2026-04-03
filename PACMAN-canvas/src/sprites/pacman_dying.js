@@ -2,22 +2,21 @@ const SplitDur = 1200/Ticker.Interval
 const BurstDur =  300/Ticker.Interval
 const TotalDur = SplitDur+BurstDur+30
 
+import {PacScale} from './pacman.js'
 export class Dying {
 	/** @readonly */ctx
 	/** @readonly */Radius
-	/** @readonly */Scale
 	#cnt;    #cb;
 	#innerR; #outerR;
 	#arkAng; #fadeOut = Fade.out(300);
 
 	/**
-	 @param {{ctx:EnhancedCtx2D,Radius:number,Scale:number}} _
+	 @param {{ctx:EnhancedCtx2D,Radius:number}} _
 	 @param {()=> void} [cb]
 	*/
-	constructor({ctx,Radius,Scale}, cb) {
+	constructor({ctx,Radius}, cb) {
 		this.ctx     = ctx
 		this.Radius  = Radius
-		this.Scale   = Scale
 		this.#cb     = cb
 		this.#cnt    = this.#arkAng = 0
 		this.#innerR = Radius/4
@@ -48,7 +47,7 @@ export class Dying {
 		const {ctx,Radius}= this
 		ctx.save()
 		ctx.translate(x,y)
-		ctx.scale(r/Radius*this.Scale)
+		ctx.scale(r/Radius*PacScale)
 		ctx.lineWidth = Radius*0.21
 		ctx.fillStyle = ctx.strokeStyle = Color.Pacman
 		this.isSplitting

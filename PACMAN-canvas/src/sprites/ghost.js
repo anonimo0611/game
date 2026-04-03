@@ -1,4 +1,5 @@
 import CBSprite from './ghost_cb.js'
+export const GhostScale = 1.1
 export default class GhostSprite {
 	/** @readonly */tgt
 	/** @readonly */ctx
