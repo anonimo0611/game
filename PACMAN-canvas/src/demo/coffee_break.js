@@ -100,7 +100,7 @@ class Scene1 extends CoffBreak {
 class Scene2 extends CoffBreak {
 	counter  = 0
 	akaEyes  = L
-	sprite   = snagSpr(Fg)
+	snag     = snagSpr(Fg)
 	isRipped = false
 	constructor() {
 		super(2)
@@ -126,24 +126,24 @@ class Scene2 extends CoffBreak {
 		}
 	}
 	moveAka() {
-		const {akabei:a, sprite:spr}= this
-		a.x > spr.CaughtX ? super.moveAka(1.0):
-		a.x > spr.AkaMinX ? super.moveAka(0.1):(a.x=spr.AkaMinX)
-		return (a.x != spr.AkaMinX)
+		const {akabei:a,snag}= this
+		a.x > snag.CaughtX ? super.moveAka(1.0):
+		a.x > snag.AkaMinX ? super.moveAka(0.1):(a.x=snag.AkaMinX)
+		return (a.x != snag.AkaMinX)
 	}
 	draw() {
-		const {akabei:a,sprite:spr,akaEyes,isRipped}= this
+		const {akabei:a,snag,akaEyes,isRipped}= this
 		const animIdx = isRipped? 0 : (this.counter? 1 : a.animIdx)
-		spr.drawStake()
+		snag.drawStake()
 		this.drawPac()
 		this.drawAka({isRipped,animIdx,orient:akaEyes})
 		isRipped
-			? spr.drawShard()
+			? snag.drawShard()
 			: function() { // Snagged clothing
-				if (isRipped || a.x >= spr.CaughtX) return
+				if (isRipped || a.x >= snag.CaughtX) return
 				const pos   = a.center.addX(T)
-				const ratio = norm(spr.CaughtX, spr.AkaMinX, a.x)
-				spr.drawSnaggedClothing(animIdx, ratio, pos)
+				const ratio = norm(snag.CaughtX, snag.AkaMinX, a.x)
+				snag.drawSnaggedClothing(animIdx, ratio, pos)
 			}()
 		super.draw()
 	}
