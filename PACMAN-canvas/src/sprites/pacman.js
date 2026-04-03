@@ -65,7 +65,7 @@ export default class PacmanSprite {
 		ctx.fill()
 		ctx.restore()
 	}
-	/** @param {()=> void} cb */
+	/** @param {()=> void} [cb] */
 	startDying(cb) {
 		this.#dyingSpr = new Dying(this, cb)
 	}
