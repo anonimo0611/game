@@ -58,8 +58,7 @@ class Menu {
 }
 
 export class DorpDown extends Menu {
-	/** @private @readonly */
-	current
+	/** @private @readonly */current
 	constructor(/**@type {string}*/id) {
 		super(id,'dropdown')
 		this.current = $('<output>').prependTo(this.root)[0]
@@ -125,8 +124,7 @@ export class DorpDown extends Menu {
 export class Slide extends Menu {
 	#BtnSet
 	#width=0
-	/** @param {string} id */
-	constructor(id) {
+	constructor(/**@type {string}*/id) {
 		super(id,'slidemenu')
 		const {root}= this, wrap=(this.$label.get(0) ?? root)
 		this.#BtnSet= freeze({
@@ -142,21 +140,16 @@ export class Slide extends Menu {
 		this.#setWidth(this.#BtnSet[L].offsetWidth*2)
 		this.select(this.index)
 	}
-
-	/** @param {?Direction} dir */
-	#select(dir) {
+	#select(/**@type {?Direction}*/dir) {
 		if (!dir) return
 		const v = Vec2[dir], idx = this.index+(v.x || -v.y)
 		this.isInRange(idx) && this.select(idx)
 	}
-
-	/** @param {number} btnW */
-	#setWidth(btnW) {
+	#setWidth(btnW=0) {
 		const width = max(...[...this.items].map(li=> li.offsetWidth))+btnW
 		$([this.root,...this.items]).css('width',`${width}px`)
 		this.#width = width
 	}
-
 	select(idx=this.index) {
 		super.select(idx)
 		this.menu.style.transform = `translateX(${-this.#width*idx}px)`
