@@ -1,5 +1,4 @@
-//---- Scene ----
-
+type NumericDict<T> = {readonly [K:number]:T}
 type IScene<S> = {[K in S]?: {update():void, draw?():void}}
 
 //---- Timer ----
