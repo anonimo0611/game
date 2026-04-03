@@ -1,6 +1,6 @@
 //---- Scene ----
 
-interface IScene {update():void, draw?():void}
+type IScene<S> = {[K in S]?: {update():void, draw?():void}}
 
 //---- Timer ----
 
