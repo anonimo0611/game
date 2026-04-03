@@ -1,10 +1,14 @@
+const SpriteSize = 16
+const ScaleModif = 1.05
+
 const cacheCtx  = canvas2D(null,T*2).ctx
 const drawFuncs = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
+
 /**
  @param {EnhancedCtx2D} ctx
  @param {number} idx
 */
-export function draw(ctx, idx, x=T,y=T-int(T*0.1), scale=T/8) {
+export function draw(ctx, idx, x=T, y=T*0.9, scale=T*2/SpriteSize) {
 	if (!drawFuncs[idx])
 		throw RangeError(`The 2nd argument is ${idx},`
 			+` but the fruit range must be 0-${drawFuncs.length-1}`)
@@ -12,7 +16,7 @@ export function draw(ctx, idx, x=T,y=T-int(T*0.1), scale=T/8) {
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
 	ctx.translate(x, y)
-	ctx.scale(scale*1.05)
+	ctx.scale(scale*ScaleModif)
 	drawFuncs[idx](ctx)
 	ctx.restore()
 }
@@ -40,7 +44,7 @@ export const Cache = {
 	const size = +Menu.css('--scale') * T
 	const {ctx}= canvas2D(null, size*drawFuncs.length, size)
 	for (const i of drawFuncs.keys())
-		draw(ctx, i, size*i+size/2, size/2, size/16)
+		draw(ctx, i, size*i+size/2, size/2, size/SpriteSize)
 	Menu.css('--url',`url("${ctx.canvas.toDataURL()}")`)
 }
 

@@ -2,7 +2,7 @@ const SplitDur = 1200/Ticker.Interval
 const BurstDur =  300/Ticker.Interval
 const TotalDur = SplitDur+BurstDur+30
 
-import {PacScale} from './pacman.js'
+import {ScaleModif} from './pacman.js'
 export class Dying {
 	/** @readonly */ctx
 	/** @readonly */Radius
@@ -47,7 +47,7 @@ export class Dying {
 		const {ctx,Radius}= this
 		ctx.save()
 		ctx.translate(x,y)
-		ctx.scale(r/Radius*PacScale)
+		ctx.scale(r/Radius*ScaleModif)
 		ctx.lineWidth = Radius*0.21
 		ctx.fillStyle = ctx.strokeStyle = Color.Pacman
 		this.isSplitting

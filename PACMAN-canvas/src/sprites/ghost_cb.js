@@ -1,4 +1,4 @@
-import {GhostScale} from './ghost.js'
+import {ScaleModif} from './ghost.js'
 export default class GhostSpriteForCoffBreak {
 	/** @readonly */ctx
 	/** @param {EnhancedCtx2D} ctx */
@@ -167,7 +167,7 @@ class Snag {
 		ctx.save()
 		ctx.translate(x, y)
 		ctx.scale(size/100)
-		ctx.scale(GhostScale)
+		ctx.scale(ScaleModif)
 		ctx.beginPath()
 		ctx.moveTo(-8, -10)
 		ctx.quadraticCurveTo(-8,-4, v1, 3)

@@ -1,5 +1,6 @@
 const
-ctxFruit_Ghost = freeze([
+SpriteSize = 8,
+FruitGhostCtxs = freeze([
 	canvas2D(null).ctx,
 	canvas2D(null).ctx
 ]),
@@ -35,11 +36,11 @@ KerningMap = /**@type {const}*/({
  @param {PtsValue} pts
 */
 export function cache(type, pts, size=T*2) {
-	const ctx = ctxFruit_Ghost[type]
+	const ctx = FruitGhostCtxs[type]
 	const{w,h}= ctx.resize(size*1.5, size).size
 	ctx.save()
 	ctx.translate(w/2, h/2)
-	ctx.scale(size/16)
+	ctx.scale(size/2/SpriteSize)
 	ctx.strokeStyle = Palette.Points[type]
 	ctx.lineWidth = 1.1
 	ctx.lineJoin  = ctx.lineCap = 'round'

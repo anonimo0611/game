@@ -1,5 +1,5 @@
 import CBSprite from './ghost_cb.js'
-export const GhostScale = 1.1
+export const ScaleModif = 1.1
 export default class GhostSprite {
 	/** @readonly */tgt
 	/** @readonly */ctx
@@ -42,7 +42,7 @@ export default class GhostSprite {
 		ctx.save()
 		ctx.translate(size/2)
 		ctx.scale(size/100)
-		ctx.scale(GhostScale)
+		ctx.scale(ScaleModif)
 		ctx.lineWidth = 5
 		ctx.lineJoin  = ctx.lineCap = 'round'
 		ctx.fillStyle = !isFrightened
