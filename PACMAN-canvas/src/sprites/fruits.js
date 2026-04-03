@@ -5,7 +5,7 @@ const FruitFuncs = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
  @param {number} idx
 */
 export function draw(
-	ctx, idx, x=T, y=T*0.9, scale=T*2/LargeSpriteSize
+	ctx, idx, x=T, y=T*0.9, scale=T*2/FruitSpriteSize
 ) {
 	if (!FruitFuncs[idx])
 		throw RangeError(`The 2nd argument is ${idx}, `
@@ -43,7 +43,7 @@ export const cache = new class FruitCache {
 	const size = +Menu.css('--scale') * T
 	const {ctx}= canvas2D(null, size*FruitFuncs.length, size)
 	for (const i of FruitFuncs.keys())
-		draw(ctx, i, size*i+size/2, size/2, size/LargeSpriteSize)
+		draw(ctx, i, size*i+size/2, size/2, size/FruitSpriteSize)
 	Menu.css('--url',`url("${ctx.canvas.toDataURL()}")`)
 }
 
