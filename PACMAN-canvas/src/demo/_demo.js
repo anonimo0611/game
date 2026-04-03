@@ -25,7 +25,7 @@ const RunTimer = function() {
 	return {update}
 }()
 
-/** @type {IScene<States[number]>} */
+/** @type {SceneDict<States[number]>} */
 const Scenes = {Title:RunTimer,Attract,CoffBreak}
 const Demo = {
 	get CoffBreakNum() {return CoffBreak.num},
