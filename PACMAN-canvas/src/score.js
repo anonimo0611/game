@@ -63,7 +63,7 @@ export const ScoreMgr = new class ScoreManager {
 		}
 		if (between(Ctrl.extendScore, _score+1, total)) {
 			Lives.append()
-			Sound.playBellSE()
+			Sound.playGetsHiScore()
 		}
 		_score = total
 	}

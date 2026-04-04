@@ -65,7 +65,7 @@ export const Game = new class GameCore {
 	}
 	#onIntro() {
 		Cursor.hide()
-		Sound.playStartBGM()
+		Sound.playStartup()
 		Game.#started = true
 		State.setReady({delay:2200})
 	}
@@ -82,7 +82,7 @@ export const Game = new class GameCore {
 			: State.setPacDying({delay:600})
 	}
 	#onPacDying() {
-		Sound.playDyingSE()
+		Sound.playPacDying()
 		player.sprite.startDying(Game.#onPacDied)
 	}
 	#onPacDied() {

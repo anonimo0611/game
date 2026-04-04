@@ -31,7 +31,7 @@ export class CoffBreak {
 	/** @protected @param {number} num */
 	constructor(num) {
 		this.pacman.y = this.akabei.y = 16.5*T
-		Sound.playCoffBGM({loop:(num == 2) ? 0:1})
+		Sound.playCoffBreak({loop:(num == 2) ? 0:1})
 	}
 	movePac() {
 		this.pacman.x += this.pacvx

@@ -64,7 +64,7 @@ export const FruitMgr = new class FruitManager {
 	#checkIntersects() {
 		if (this.showTarget && this.intersectsWithPlayer) {
 			this.#resetTarget()
-			Timer.cancel(this) && Sound.playEatenSE()
+			Timer.cancel(this) && Sound.playEatenFruit()
 			PtsMgr.set({key:this, dur:2e3, pos:TargetPos})
 		}
 	}

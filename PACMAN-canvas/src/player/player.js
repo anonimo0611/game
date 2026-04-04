@@ -89,8 +89,8 @@ class Player extends PacMan {
 	#playEatSE() {
 		const duration = (T/this.speed)*Ticker.Interval*.5
 		;(this.#eatIdx ^= 1)
-			? Sound.playEatSE0({duration})
-			: Sound.playEatSE1({duration})
+			? Sound.playWakaWaka0({duration})
+			: Sound.playWakaWaka1({duration})
 	}
 }
 
