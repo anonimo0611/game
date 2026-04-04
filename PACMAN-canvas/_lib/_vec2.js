@@ -30,9 +30,7 @@ class Vec2 {
 	 @param {void|number|xyTuple|Position} [v1]
 	 @param {number} [v2]
 	*/static new(v1,v2) {
-		return (v1 instanceof Array)
-			? new Vec2(...v1)
-			: new Vec2(...this.#parseXY(v1,v2))
+		return new Vec2(...this.#parseXY(v1,v2))
 	}
 
 	/**
@@ -43,10 +41,11 @@ class Vec2 {
 	}
 
 	/**
-	 @param {void|number|Position} [v1]
+	 @param {void|number|xyTuple|Position} [v1]
 	 @param {number} [v2]
 	 @returns {[x:number, y:number]}
 	*/static #parseXY(v1=0, v2) {
+		if (v1 instanceof Array) return [v1[0], v1[1]]
 		if (typeof v1 == 'number'
 		 && typeof v2 == 'number') return [v1, v2]
 		if (typeof v1 == 'object') return [v1.x, v1.y]
@@ -144,7 +143,11 @@ class Vec2 {
 	 @param   {Position} pos
 	 @returns {boolean}
 
-	 @param {number|Position} v1
+	 @overload
+	 @param   {xyTuple} xyTuple
+	 @returns {boolean}
+
+	 @param {number|xyTuple|Position} v1
 	 @param {number} [v2]
 	*/
 	eq(v1, v2) {
@@ -166,7 +169,11 @@ class Vec2 {
 	 @param   {Position} pos
 	 @returns {Vec2}
 
-	 @param {number|Position} v1
+	 @overload
+	 @param   {xyTuple} xyTuple
+	 @returns {Vec2}
+
+	 @param {number|xyTuple|Position} v1
 	 @param {number} [v2]
 	*/
 	set(v1, v2) {
@@ -194,7 +201,11 @@ class Vec2 {
 	 @param   {Position} pos
 	 @returns {Vec2}
 
-	 @param {number|Position} v1
+	 @overload
+	 @param   {xyTuple} xyTuple
+	 @returns {Vec2}
+
+	 @param {number|xyTuple|Position} v1
 	 @param {number} [v2]
 	*/
 	add(v1, v2) {
@@ -218,7 +229,11 @@ class Vec2 {
 	 @param   {Position} pos
 	 @returns {Vec2}
 
-	 @param {number|Position} v1
+	 @overload
+	 @param   {xyTuple} xyTuple
+	 @returns {Vec2}
+
+	 @param {number|xyTuple|Position} v1
 	 @param {number} [v2]
 	*/
 	sub(v1, v2) {
