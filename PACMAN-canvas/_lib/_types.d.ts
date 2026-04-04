@@ -9,7 +9,7 @@ type TimerData = {
 	amount:  number;
 	timeout: number;
 	ignoreFrozen: boolean;
-	callback:()=> void;
+	callback: ()=> void;
 }
 type TimerSeq = [durationMS:number, callback:()=> void]
 
@@ -19,16 +19,16 @@ type TimerSeq = [durationMS:number, callback:()=> void]
 type TileIdx  = number
 type xyTuple  = Readonly<[x:number, y:number]>
 type Position = Readonly<{x:number, y:number}>
-type PathNode = {tile:Vec2,dir:Direction,stopped:boolean}
+type PathNode = {tile:Vec2, dir:Direction, stopped:boolean}
 
 //---- Points ----
 
-type PtsValue = 100|200|300|400|800|1600|500|700|1000|2000|3000|5000
+type PtsValue = 100|200|300|400|500|700|800|1000|1600|2000|3000|5000
 type FloatingPtsData = {
-	key:{points:PtsValue};
-	pos: Readonly<Position>;
-	dur?:number;
-	cb?: ()=> void;
+	key: {points: PtsValue};
+	pos:  Readonly<Position>;
+	dur?: number;
+	cb?:  ()=> void;
 }
 
 //---- Direction ----
@@ -58,12 +58,12 @@ type JQTriggerHandlers ={[events:string]:JQTriggerHandler}
 interface JQuery {
 	offon<TType extends string>(
 		events:  TType,
-		handler: JQuery.TypeEventHandler<TElement,undefined,TElement,TElement,TType>,
+		handler: JQuery.TypeEventHandler<TElement, undefined, TElement, TElement, TType>,
 		force?:  boolean,
-	):this
+	): this
 	onNS<TType extends string>(
 		events:   TType,
 		handlers: JQTriggerHandlers,
-	):this
-	onWheel(handler: (event:WheelEvent)=> void):this
+	): this
+	onWheel(handler: (event: WheelEvent)=> void): this
 }
