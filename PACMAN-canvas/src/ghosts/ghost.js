@@ -111,10 +111,10 @@ export class Ghost extends Actor {
 	}
 	#moveStepped(steps=1) {
 		for (const _ of range(steps)) {
-			if (this.#makeTurn(this)) break
-			if (this.collidesWith())  break
 			this.#tickMove(this.speed/steps)
 			this.passedTileCenter && this.#setNextDir()
+			if (this.#makeTurn(this)) break
+			if (this.collidesWith())  break
 		}
 	}
 	#tickMove(spd=this.speed) {
