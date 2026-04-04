@@ -9,13 +9,13 @@ import {Manifest}  from './_manifest.js'
  @extends {SoundMgr<T>}
  @typedef {import('./_manifest').SoundType} T
  @typedef {{[K in T as `play${K}`]:Sound.playFn}} Play
- @typedef {{[K in T as `stop${K}`]:()=> ISound}} Stop
+ @typedef {{[K in T as `stop${K}`]:()=> ISound}}  Stop
  @typedef {SoundCore & Play & Stop} ISound
 */
 class SoundCore extends SoundMgr {
 	constructor()  {super(Manifest, onSettled)}
 	get sirenId()  {return SirenIds[GhostMgr.CruiseElroy.part]}
-	get ringing()  {return this.isPlaying('BellSE')}
+	get ringing()  {return this.isPlaying('GetsHiScore')}
 	get disabled() {return super.disabled || State.isAttract}
 
 	get vol() {
@@ -36,19 +36,19 @@ class SoundCore extends SoundMgr {
 	}
 	#playFrightened() {
 		if (GhostMgr.areAnyEscaping) return
-		Sound.stopSiren().playFrightSE()
+		Sound.stopSiren().playFrightMode()
 	}
 	playEscapaingEyes() {
-		Sound.stopSiren().stopFrightSE().playEyesSE()
+		Sound.stopSiren().stopFrightMode().playBackToHome()
 	}
 	onGhostReturned() {
 		if (GhostMgr.areAnyEscaping) return
-		Sound.stopEyesSE()
+		Sound.playBackToHome()
 		GhostMgr.isFrightMode
-			? Sound.playFrightSE()
+			? Sound.playFrightMode()
 			: Sound.play(Sound.sirenId)
 	}
 	stopSiren = ()=> Sound.stop(...SirenIds)
-	stopLoops = ()=> Sound.stopSiren().stopFrightSE().stopEyesSE()
+	stopLoops = ()=> Sound.stopSiren().stopFrightMode().stopBackToHome()
 }
 export const Sound = /**@type {ISound}*/(new SoundCore)
