@@ -1,8 +1,6 @@
 const {Sound:SoundJS}= createjs
-/**
- @import {Sound} from './_sound.d'
- @template {string} S
-*/
+
+/** @template {string} S */
 export class SoundMgr {
 	#settled  = false
 	#disabled = true

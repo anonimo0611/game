@@ -8,9 +8,8 @@ import {Manifest}  from './_manifest.js'
 /**
  @extends {SoundMgr<T>}
  @typedef {import('./_manifest').SoundType} T
- @typedef {import('./_sound.d').Sound.Opts} opts
- @typedef {{[K in T as`play${K}`]:(opts?:opts)=> void}}   Play
- @typedef {{[K in T as`stop${K}`]:(...ids:T[])=> ISound}} Stop
+ @typedef {{[K in T as `play${K}`]:Sound.playFn}} Play
+ @typedef {{[K in T as `stop${K}`]:()=> ISound}} Stop
  @typedef {SoundCore & Play & Stop} ISound
 */
 class SoundCore extends SoundMgr {
