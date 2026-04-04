@@ -31,24 +31,24 @@ class SoundCore extends SoundMgr {
 		Sound.stopLoops().play(Sound.sirenId)
 	}
 	toggleFrightMode(/**@type {boolean}*/on) {
-		on? Sound.#playFrightened()
+		on? Sound.#switchToFright()
 		  : Sound.playSiren()
 	}
-	#playFrightened() {
+	#switchToFright() {
 		if (GhostMgr.areAnyEscaping) return
 		Sound.stopSiren().playFrightMode()
 	}
-	playEscapaingEyes() {
-		Sound.stopSiren().stopFrightMode().playBackToHome()
+	switchToEyesEscaping() {
+		Sound.stopSiren().stopFrightMode().playEyesEscaping()
 	}
 	onGhostReturned() {
 		if (GhostMgr.areAnyEscaping) return
-		Sound.playBackToHome()
+		Sound.stopEyesEscaping()
 		GhostMgr.isFrightMode
 			? Sound.playFrightMode()
 			: Sound.play(Sound.sirenId)
 	}
 	stopSiren = ()=> Sound.stop(...SirenIds)
-	stopLoops = ()=> Sound.stopSiren().stopFrightMode().stopBackToHome()
+	stopLoops = ()=> Sound.stopSiren().stopFrightMode().stopEyesEscaping()
 }
 export const Sound = /**@type {ISound}*/(new SoundCore)
