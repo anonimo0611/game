@@ -11,9 +11,9 @@ import {PathMgr} from './paths.js'
 import {Targets} from './targets.js'
 import {player,onPlayerDotEaten} from '../player/player.js'
 
-const Ghosts = /**@type {Ghost[]}*/([])
-const PtsLst = /**@type {const}*/([200,400,800,1600])
-const FrightTimeLst = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
+const Ghosts  = /**@type {Ghost[]}*/([])
+const PtsList = /**@type {const}*/([200,400,800,1600])
+const FrightTimeList = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 
 export const {Ghost:Speed}= _Speed
 export const Evt = toEnumObject
@@ -43,9 +43,9 @@ const StandbyTimes = /**@type {const}*/
 
 /** @typedef {typeof States[number]} StateType */
 const States = /**@type {const}*/
-	(['Idle','GoingOut','Walking','Bitten','Escaping','Returning'])
+	(['Idle','GoingOut','Walking','Bitten','Escaping','Entering'])
 
-const StateTypes = toEnumObject(States)
+const StateType = toEnumObject(States)
 
 /**
  @extends {_State<StateType,Ghost>}
@@ -61,7 +61,7 @@ class GhostState extends _State {
 	}
 	/** @this {IGhostState} */
 	get isEscapingEyes() {
-		return this.isEscaping || this.isReturning
+		return this.isEscaping || this.isEntering
 	}
 }
 export const createState =
@@ -83,7 +83,7 @@ export const GhostMgr = new class GhostManager {
 	get isChaseMode()    {return AttackInWaves.isChaseMode}
 	get isScatterMode()  {return AttackInWaves.isScatterMode}
 	get isFrightMode()   {return FrightMode.session != null}
-	get points()         {return FrightMode.session?.points ?? PtsLst[0]}
+	get points()         {return FrightMode.session?.points ?? PtsList[0]}
 	get spriteIdx()      {return FrightMode.session?.spriteIdx ?? 0}
 	get caughtAll()      {return FrightMode.session?.caughtAll ?? false}
 	get akaCenterPos()   {return Ghosts[GhostType.Akabei].center}
@@ -111,7 +111,7 @@ export const GhostMgr = new class GhostManager {
 	}
 	frighten() {
 		const
-		duration = FrightTimeLst[Game.clampedLv-1]
+		duration = FrightTimeList[Game.clampedLv-1]
 		duration == 0 && !State.isAttract
 			? $(Ghosts).trigger(Evt.FleeStart)
 			: FrightMode.new(duration)
@@ -260,7 +260,7 @@ const CruiseElroy = function() {
 const FrightMode = function() {
 	class Session {
 		#et=0; #flash=0; #caught=0; #fIdx=1
-		get points()    {return PtsLst[this.#caught-1]}
+		get points()    {return PtsList[this.#caught-1]}
 		get caughtAll() {return this.#caught == GhostType.Max}
 		get spriteIdx() {return this.#flash && this.#fIdx^1}
 		constructor(dur=1) {
@@ -271,7 +271,7 @@ const FrightMode = function() {
 			session = (isOn? this : null)
 			$(Ghosts)
 				.trigger(Evt.Frighten, isOn)
-				.offon(StateTypes.Bitten, ()=> this.#caught++, isOn)
+				.offon(StateType.Bitten, ()=> this.#caught++, isOn)
 			Sound.toggleFrightMode(isOn)
 		}
 		#flashing() {

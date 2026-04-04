@@ -103,9 +103,9 @@ export class Ghost extends Actor {
 		this.#fleeTmr >= 0 && this.#fleeTmr--
 		if (Timer.frozen && !this.isEscaping) return
 		switch(this.state.current) {
-		case 'Idle':     return this.#idleInHouse(this)
-		case 'GoingOut': return this.#goingOut(this)
-		case 'Returning':return this.#returnToHome(this)
+		case 'Idle':    return this.#idleInHouse(this)
+		case 'GoingOut':return this.#goingOut(this)
+		case 'Entering':return this.#enteringToHome(this)
 		default: this.#moveStepped(this.speed+.5|0)
 		}
 	}
@@ -154,9 +154,9 @@ export class Ghost extends Actor {
 	#enterHouse() {
 		this.dir = D
 		this.centering()
-		this.state.setReturning()
+		this.state.setEntering()
 	}
-	#returnToHome({init,speed:spd,x,y}=this) {
+	#enteringToHome({init,speed:spd,x,y}=this) {
 		if (y+spd < MazeMgr.MidY)
 			return this.move()
 
@@ -246,7 +246,7 @@ export class Ghost extends Actor {
 		!this.isEscaping && (this.#frightened=on)
 	}
 	#startEscaping() {
-		Sound.playEscapaingEyes()
+		Sound.switchToEyesEscaping()
 		this.state.setEscaping()
 	}
 }
