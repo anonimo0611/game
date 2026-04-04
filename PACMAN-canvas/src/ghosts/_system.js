@@ -13,6 +13,7 @@ import {player,onPlayerDotEaten} from '../player/player.js'
 
 const Ghosts = /**@type {Ghost[]}*/([])
 const PtsLst = /**@type {const}*/([200,400,800,1600])
+const FrightTimeLst = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 
 export const {Ghost:Speed}= _Speed
 export const Evt = toEnumObject
@@ -109,8 +110,12 @@ export const GhostMgr = new class GhostManager {
 		)
 	}
 	frighten() {
+		const
+		duration = FrightTimeLst[Game.clampedLv-1]
+		duration == 0 && !State.isAttract
+			? $(Ghosts).trigger(Evt.FleeStart)
+			: FrightMode.new(duration)
 		signalDirectionReversal()
-		FrightMode.new()
 	}
 	update() {
 		AttackInWaves.update()
@@ -254,20 +259,16 @@ const CruiseElroy = function() {
 
 const FrightMode = function() {
 	class Session {
-		/** @readonly */
-		static DurList = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
-		static session = /**@type {?Session}*/(null)
 		#et=0; #flash=0; #caught=0; #fIdx=1
 		get points()    {return PtsLst[this.#caught-1]}
 		get caughtAll() {return this.#caught == GhostType.Max}
 		get spriteIdx() {return this.#flash && this.#fIdx^1}
-		constructor() {
-			this.dur = Session.DurList[Game.clampedLv-1]
-			this.dur == 0 && !State.isAttract
-				? $(Ghosts).trigger(Evt.FleeStart) : this.#set(true)
+		constructor(dur=1) {
+			this.dur = dur
+			this.#set(true)
 		}
 		#set(isOn=true) {
-			Session.session = (isOn? this : null)
+			session = (isOn? this : null)
 			$(Ghosts)
 				.trigger(Evt.Frighten, isOn)
 				.offon(StateTypes.Bitten, ()=> this.#caught++, isOn)
@@ -285,9 +286,10 @@ const FrightMode = function() {
 			}
  		}
 	}
-	State.on({_Ready:()=> Session.session = null})
+	let session = /**@type {?Session}*/(null)
+	State.on({_Ready:()=> session = null})
 	return {
-		new() {new Session()},
-		get session() {return Session.session},
+		new(dur=1) {new Session(dur)},
+		get session() {return session},
 	}
 }()
