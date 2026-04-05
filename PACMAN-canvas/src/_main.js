@@ -15,6 +15,8 @@ import {PtsMgr}   from './points.js'
 import {Actors}   from './actor.js'
 import {player}   from './player/player.js'
 
+const SPEED_STEP_PER_LV = 0.1
+
 export const Game = new class GameCore {
 	static {$(this.setup)}
 	static setup() {
@@ -41,8 +43,8 @@ export const Game = new class GameCore {
 	get started()   {return Game.#started}
 	get pacDied()   {return Game.#pacDied}
 
-	/** Level 13+ as the fastest, stepwise faster from level 1 to 13 */
-	get speedByLv() {return 1 - (13-Game.clampedLv) * .01}
+	/** Level 13 is the fastest and hardest; speed increases stepwise from levels 1-13 */
+	get speedByLv() {return 1 - (13 - Game.clampedLv) * SPEED_STEP_PER_LV}
 	get clampedLv() {return clamp(Game.level, 1, 13)}
 	get speed()     {return State.isInGame? Ctrl.speed : 1}
 	get interval()  {return Game.speed * Ticker.Interval}
