@@ -43,7 +43,7 @@ export const Game = new class GameCore {
 	get started()   {return Game.#started}
 	get pacDied()   {return Game.#pacDied}
 
-	/** Level 13 is the fastest and hardest; speed increases stepwise from levels 1-13 */
+	/** Levels 1-13 scale in difficulty. Level 13 is the maximum difficulty cap */
 	get speedByLv() {return 1 - (13 - Game.clampedLv) * SPEED_STEP_PER_LV}
 	get clampedLv() {return clamp(Game.level, 1, 13)}
 	get speed()     {return State.isInGame? Ctrl.speed : 1}
