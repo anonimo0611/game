@@ -8,6 +8,7 @@ import {SizeRng,BrightRng,ResetBtn,GridSize,T,S,GAP,ghostGr} from './_constants.
 
 const ctx  = Fg
 const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
+const [Cols,Rows]= GridSize
 
 ;(new class Atlas {
 	constructor() {
@@ -15,10 +16,9 @@ const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 	}
 	#drawGridLines() {
 		ctx.save()
-		ctx.translate(-GAP/2, 0)
+		ctx.translate(-GAP/2, +1)
 		ctx.setLineDash([2,2])
 		ctx.beginPath()
-		const [Cols,Rows]= GridSize
 		range(Cols+0).forEach(y=> ctx.setLinePath([ofst(y), 0], [ofst(y), Rows*S]))
 		range(Rows+1).forEach(x=> ctx.setLinePath([0, x*S], [Cols*S+GAP, x*S]))
 		ctx.lineWidth   = 2
@@ -28,7 +28,7 @@ const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 	}
 	#drawFruits() {
 		for (const i of range(8))
-			Fruit.draw(ctx, i, ofst(7-i)+S/2, S/2-T*0.05, S/16)
+			Fruit.draw(ctx, i, ofst(7-i)+S/2, S/2, S/16)
 	}
 	#drawGhosts() {
 		for (const row of range(1,6)) {
@@ -95,7 +95,7 @@ const ofst = (colIdx=0)=> (S*colIdx)+(GAP*colIdx)
 		const aka = ghostGr
 		const spr = snagSpr(ctx)
 
-		ctx.translate(S/4, S*9+S/4-GAP/4)
+		ctx.translate(T/2, (Rows-2)*S+T/2)
 
 		/** @type {(x:number, y:number, params:object)=> void} */
 		const draw = (x,y, params)=> {aka.draw({size:S,x,y, ...params})}
