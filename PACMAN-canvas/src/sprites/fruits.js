@@ -12,7 +12,7 @@ export function draw(
 	ctx.save()
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
-	ctx.translate(x, y*.9)
+	ctx.translate(x, y-(T*.1))
 	ctx.scale(scale)
 	FruitFuncs[idx](ctx)
 	ctx.restore()
