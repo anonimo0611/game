@@ -1,11 +1,10 @@
-const ScaleModif = 1.05
 const FruitFuncs = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
 /**
  @param {EnhancedCtx2D} ctx
  @param {number} idx
 */
 export function draw(
-	ctx, idx, x=T, y=T*0.9, scale=T*2/FruitSpriteSize
+	ctx, idx, x=T, y=T, scale=T*2/FruitSpriteSize
 ) {
 	if (!FruitFuncs[idx])
 		throw new RangeError(`Invalid fruit index: ${idx}.`
@@ -13,8 +12,8 @@ export function draw(
 	ctx.save()
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
-	ctx.translate(x, y)
-	ctx.scale(scale*ScaleModif)
+	ctx.translate(x, y*.9)
+	ctx.scale(scale)
 	FruitFuncs[idx](ctx)
 	ctx.restore()
 }
