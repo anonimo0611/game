@@ -9,10 +9,11 @@ export function draw(
 	if (!FruitFuncs[idx])
 		throw new RangeError(`Invalid fruit index: ${idx}.`
 			+` Must be between 0 and ${FruitFuncs.length-1}.`)
+	const ofstY = -(T*0.1)
 	ctx.save()
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
-	ctx.translate(x, y-(T*.1))
+	ctx.translate(x, y+ofstY)
 	ctx.scale(scale)
 	FruitFuncs[idx](ctx)
 	ctx.restore()
