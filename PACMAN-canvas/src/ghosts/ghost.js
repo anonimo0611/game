@@ -192,18 +192,18 @@ export class Ghost extends Actor {
 		tgtTile = this.getTargetTile()
 	) {
 		const dirs = TurnPriority.flatMap((dir,i)=> {
-			const test = this.getAdjTile(dir,stTile)
+			const testTile = this.getAdjTile(dir,stTile)
 			return Dir.Opposite[currDir] != dir
-				&& !MazeMgr.hasWall(test)
-				&& !this.#isRestrictedTile({dir,test})
-				? [{dir,i,m:Vec2.sqrMag(test,tgtTile)}]:[]
+				&& !MazeMgr.hasWall(testTile)
+				&& !this.#isRestrictedTile({dir,testTile})
+				? [{dir,i,m:Vec2.sqrMag(testTile,tgtTile)}]:[]
 		})
 		return this.isFrightened? randChoice(dirs).dir:
 			(i=> dirs.sort((a,b)=> a.m-b.m || a.i-b.i)[i].dir)
 				(this.#fleeTmr >= 0 ? dirs.length-1:0)
 	}
-	/** @param {{dir:Direction,test:Vec2}} testTile */
-	#isRestrictedTile({dir,test:{hyphenated:xy}}) {
+	/** @param {{dir:Direction,testTile:Vec2}} testTile */
+	#isRestrictedTile({dir,testTile:{hyphenated:xy}}) {
 		const ignore = (this.isFrightened || this.isEscaping)
 		return (Ctrl.unrestricted || ignore)
 			? false : MazeMgr.GhostNoEntryTiles.has(xy+dir)
