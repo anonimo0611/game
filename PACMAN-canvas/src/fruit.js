@@ -14,8 +14,9 @@ const TargetPos  = new Vec2(BW/2, T*18.5).fixed
 const FruitTable = /**@type {const}*/([0,1,2,2,3,3,4,4,5,5,6,6,7])
 const PointTable = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
 
+const Size = T*2
 const LevelsCols = 7
-const LevelsRect = new Rect(T*12, BH-T*2, T*2*LevelsCols, T*2).freeze()
+const LevelsRect = new Rect(Size*6, BH-Size, LevelsCols*Size, Size).freeze()
 
 let showTgt = true
 let fadeOut = /**@type {?Fade}*/(null)
@@ -91,7 +92,7 @@ export const FruitMgr = new class FruitManager {
 		HUD.clearRect(x,y,w,h)
 		HUD.translate(x,y)
 		for (const i of range(startLevel, Game.level))
-			Spr.draw(HUD, this.#getType(i), w-T-T*2*(i-startLevel))
+			Spr.draw(HUD, this.#getType(i), w-T-Size*(i-startLevel))
 		HUD.restore()
 	}
 	#setImages = ()=> {
