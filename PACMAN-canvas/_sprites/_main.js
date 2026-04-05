@@ -55,7 +55,7 @@ const [Cols,Rows]= GridSize
 			x,y,size:S,
 			orient:/**@type {const}*/([R,R,R,R,U,L,D,R])[col],
 			animIdx:    +(col % 2 != 0),
-			spriteIdx:  +(col >= 2),
+			spriteIdx:  +(col >= 2 && col <= 3),
 			isFrightened:(col <= 3),
 			isEscaping:  (col >= 4),
 		})
