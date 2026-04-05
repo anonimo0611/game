@@ -259,7 +259,7 @@ body:is([data-state=Attract],[data-state=CoffBreak]) {
 		background: no-repeat var(--x) 0/var(--size) var(--url);
 		width:  var(--t);
 		height: var(--t);
-		translate: 0 -.1rem;
+		translate: 0;
 	}
 }
 #ExtendMenu {
