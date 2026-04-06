@@ -1,6 +1,7 @@
 import './ghosts/ghost_sub.js'
 import {Cursor}   from '../_lib/mouse.js'
 import {Sound}    from '../_snd/sound.js'
+import  Speed     from './speed.js'
 import {Menu}     from './ui.js'
 import {State}    from './state.js'
 import {Message}  from './message.js'
@@ -14,8 +15,6 @@ import {FruitMgr} from './fruit.js'
 import {PtsMgr}   from './points.js'
 import {Actors}   from './actor.js'
 import {player}   from './player/player.js'
-
-const SPEED_STEP_PER_LV = 0.1
 
 export const Game = new class GameCore {
 	static {$(this.setup)}
@@ -44,7 +43,7 @@ export const Game = new class GameCore {
 	get pacDied()   {return Game.#pacDied}
 
 	/** Levels 1-13 scale in difficulty. Level 13 is the maximum difficulty cap */
-	get speedByLv() {return 1 - (13 - Game.clampedLv) * SPEED_STEP_PER_LV}
+	get speedByLv() {return 1 - (13 - Game.clampedLv) * Speed.StepPerLevel}
 	get clampedLv() {return clamp(Game.level, 1, 13)}
 	get speed()     {return State.isInGame? Ctrl.speed : 1}
 	get interval()  {return Game.speed * Ticker.Interval}
