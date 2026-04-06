@@ -42,7 +42,7 @@ export const Game = new class GameCore {
 	get started()   {return Game.#started}
 	get pacDied()   {return Game.#pacDied}
 
-	/** Levels 1-13 scale in difficulty. Level 13 is the maximum difficulty cap */
+	/** Levels 1-13 scale in difficulty. Level 13 is the max difficulty cap. */
 	get speedByLv() {return 1 - (13 - Game.clampedLv) * Speed.StepPerLevel}
 	get clampedLv() {return clamp(Game.level, 1, 13)}
 	get speed()     {return State.isInGame? Ctrl.speed : 1}
