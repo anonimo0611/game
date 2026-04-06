@@ -21,8 +21,8 @@ export function resize() {
 	T = SizeRng.valueAsNumber/2
 	if (lastTileSize != T) {
 		[S,GAP] = [T*2,T*.25]
-		ghostPv.ctx.resize(S*4, S*3)
-		ghostGr.ctx.resize(S*4, S*3)
+		ghostPv.ctx.resize(S*1.5, S*3)
+		ghostGr.ctx.resize(S*1.5, S*3)
 		Pv.resize(T*3.2, T*2.1)
 		Fg.resize(...Vec2.new(GridSize).mul(S).add(GAP*2).vals)
 		lastTileSize = T

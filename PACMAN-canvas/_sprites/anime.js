@@ -100,7 +100,7 @@ class ActorPreview {
 		const {subj}= this
 		Pv.save()
 		subj?.subType == Schema.Ghost.Exposed
-			? Pv.translate(T*3/4, T/2)
+			? Pv.translate(Pv.canvas.width/2-T,   T/2)
 			: Pv.translate(Pv.canvas.width/2-T/2, T/2)
 
 		subj?.ghost.draw({
