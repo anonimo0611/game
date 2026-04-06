@@ -55,47 +55,47 @@ export default class GhostSpriteForCoffBreak {
 		// Body
 		ctx.save()
 		ctx.beginPath()
-		ctx.moveTo(-12, 13)
-		ctx.quadraticCurveTo(-4, -16, 28, -31)
-		ctx.addLinePath([61, -30],[54, -16])
-		ctx.quadraticCurveTo(49, -4, 40, 4)
-		ctx.addLinePath([56,5],[56,22],[37,22],[37,16])
+		ctx.moveTo(-6, 19)
+		ctx.quadraticCurveTo(2, -10, 34, -25)
+		ctx.addLinePath([67,-24],[60,-10])
+		ctx.quadraticCurveTo(55, 2, 46, 10)
+		ctx.addLinePath([62,11],[62,28],[43,28],[43,22])
 		ctx.fillStyle = Color.GhostSkin
 		ctx.fill()
 		ctx.restore()
 
 		// Clothes
 		ctx.beginPath()
-		ctx.setLinePath([-67,22],[-55,7])
-		ctx.quadraticCurveTo(-43, -5, -35,  8)
-		ctx.quadraticCurveTo(-28, 16, -18,  6)
-		ctx.quadraticCurveTo( -8,  0, -.5, -2)
-		ctx.quadraticCurveTo( 10, -7,  13,  2)
-		ctx.quadraticCurveTo( 20, 12,  25, 15)
-		ctx.addLinePath([17,15],[13,22],[-63,22])
+		ctx.setLinePath([-61,28],[-49,13])
+		ctx.quadraticCurveTo(-37,  1, -29, 14)
+		ctx.quadraticCurveTo(-22, 22, -12, 12)
+		ctx.quadraticCurveTo(-2,   6, 5.5,  4)
+		ctx.quadraticCurveTo(16,  -1,  19,  8)
+		ctx.quadraticCurveTo(26,  18,  31, 21)
+		ctx.addLinePath([23,21],[19,28],[-57,28])
 		ctx.fill()
-		this.#hadakeEyes([33,54],[39,61])
+		this.#hadakeEyes([39,60],[45,67])
 	}
 	#drawHadake1() {
 		const {ctx}= this
 		// Body
 		ctx.save()
 		ctx.beginPath()
-		ctx.moveTo(-15,17)
-		ctx.quadraticCurveTo(3, -3, 22, -28)
-		ctx.addLinePath([51,-28],[51,-11])
-		ctx.quadraticCurveTo(50, -1, 45, 4)
-		ctx.addLinePath([63,4],[63,22],[44,22],[44,16],[12,16])
+		ctx.moveTo(-9, 23)
+		ctx.quadraticCurveTo(9, 3, 28, -22)
+		ctx.addLinePath([57,-22],[57,-5])
+		ctx.quadraticCurveTo(56, 5, 51, 10)
+		ctx.addLinePath([69,10],[69,28],[50,28],[50,22],[18,22])
 		ctx.fillStyle = Color.GhostSkin
 		ctx.fill()
 		ctx.restore()
 
 		// Clothes
-		ctx.newLinePath([-67, 22],[-58, 12])
-		ctx.quadraticCurveTo(-48, 1, -43, 11)
-		ctx.addLinePath([-4,11],[-4,5],[22,4],[28,12],[24,15],[18,22])
+		ctx.newLinePath([-61, 28],[-52, 18])
+		ctx.quadraticCurveTo(-42, 7, -37, 17)
+		ctx.addLinePath([2,17],[2,11],[28,10],[34,18],[30,21],[24,28])
 		ctx.fill()
-		this.#hadakeEyes([28,49],[34,56])
+		this.#hadakeEyes([34,55],[40,62])
 	}
 	/**
 	 @param {[L:number, R:number]} ballsLR
@@ -106,12 +106,12 @@ export default class GhostSpriteForCoffBreak {
 		for (const i of [1,0]) {
 			// Eyeballs
 			ctx.beginPath()
-			ctx.ellipse(ballsLR[i], -33, 11, 16, 0,0, PI*2)
+			ctx.ellipse(ballsLR[i], -27, 11, 16, 0,0, PI*2)
 			ctx.fillStyle = 'white'
 			ctx.fill()
 			// Eyes
 			ctx.beginPath()
-			ctx.ellipse(eyesLR[i], -33, 5, 9, 0,0, PI*2)
+			ctx.ellipse(eyesLR[i], -27, 5, 9, 0,0, PI*2)
 			ctx.fillStyle = Color.GhostEyes
 			ctx.fill()
 		}
