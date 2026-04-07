@@ -7,7 +7,7 @@ import {Actor}    from '../actor.js'
 import Sprite     from '../sprites/ghost.js'
 import * as Sys   from './_system.js'
 import {player}   from '../player/player.js'
-import {MazeMgr}  from '../maze.js'
+import {Maze}     from '../maze.js'
 import {GhostMgr} from './_system.js'
 import {PtsMgr}   from '../points.js'
 import {PathMgr}  from './paths.js'
@@ -70,14 +70,14 @@ export class Ghost extends Actor {
 
 	get baseTargetTile() {
 		return this.state.isEscaping
-			? MazeMgr.House.EntryTile
+			? Maze.House.EntryTile
 			: this.isScattering
 				? this.scatterTile
 				: this.chaseTile
 	}
 	getTargetTile(tile=this.tile) {
 		const {baseTargetTile}= this
-		return MazeMgr.getGhostExitTile({baseTargetTile,tile})
+		return Maze.getGhostExitTile({baseTargetTile,tile})
 	}
 	get speed() {
 		return function(g,{state:s}=g) {
@@ -118,7 +118,7 @@ export class Ghost extends Actor {
 		}
 	}
 	#tickMove(spd=this.speed) {
-		!MazeMgr.House.arrived(this, spd)
+		!Maze.House.arrived(this, spd)
 			? this.setNextPos(spd)
 			: this.#enterHouse()
 	}
@@ -126,8 +126,8 @@ export class Ghost extends Actor {
 		!Ctrl.alwaysChase &&
 			Sys.DotCounter.releaseIfReady(this)
 		!this.state.isGoingOut && this.move(
-			(cy > MazeMgr.MidY - (T*0.6) && orient != D)? U:
-			(cy < MazeMgr.MidY + (T*0.5) ? D:U)
+			(cy > Maze.House.MidY - (T*0.6) && orient != D)? U:
+			(cy < Maze.House.MidY + (T*0.5) ? D:U)
 		)
 	}
 	leaveHouse = (deactivateGlobalDotCnt=false)=> {
@@ -145,7 +145,7 @@ export class Ghost extends Actor {
 		if (cx != BW/2)
 			return this.centering()
 
-		if (y > MazeMgr.House.EntryTile.y*T)
+		if (y > Maze.House.EntryTile.y*T)
 			return this.move(U)
 
 		this.dir = L
@@ -157,11 +157,12 @@ export class Ghost extends Actor {
 		this.state.setEntering()
 	}
 	#enteringToHome({init,speed:spd,x,y}=this) {
-		if (y+spd < MazeMgr.MidY)
+		const {House}= Maze
+		if (y+spd < House.MidY)
 			return this.move()
 
-		if (y != MazeMgr.MidY)
-			return this.pos.setY(MazeMgr.MidY).void()
+		if (y != House.MidY)
+			return this.pos.setY(House.MidY).void()
 
 		if (!init.align || abs(x-init.x) <= spd) {
 			this.x   = init.x
@@ -194,7 +195,7 @@ export class Ghost extends Actor {
 		const dirs = TurnPriority.flatMap((dir,i)=> {
 			const testTile = this.getAdjTile(dir,stTile)
 			return Dir.Opposite[currDir] != dir
-				&& !MazeMgr.hasWall(testTile)
+				&& !Maze.hasWall(testTile)
 				&& !this.#isRestrictedTile({dir,testTile})
 				? [{dir,i,m:Vec2.sqrMag(testTile,tgtTile)}]:[]
 		})
@@ -206,7 +207,7 @@ export class Ghost extends Actor {
 	#isRestrictedTile({dir,testTile:{hyphenated:xy}}) {
 		const ignore = (this.isFrightened || this.isEscaping)
 		return (Ctrl.unrestricted || ignore)
-			? false : MazeMgr.GhostNoEntryTiles.has(xy+dir)
+			? false : Maze.GhostNoEntryTiles.has(xy+dir)
 	}
 	#makeTurn({orient}=this) {
 		if (this.dir != orient
@@ -228,7 +229,7 @@ export class Ghost extends Actor {
 			return false
 		this.isFrightened
 			? this.#onBitten(release)
-			: MazeMgr.dotsLeft && this.#onPacCaught()
+			: Maze.dotsLeft && this.#onPacCaught()
 		return true
 	}
 	#onBitten(cb=()=>{}) {

@@ -1,8 +1,8 @@
-import {Dir}     from '../../_lib/direction.js';
-import {Ctrl}    from '../control.js'
-import {State}   from '../state.js';
-import {MazeMgr} from '../maze.js'
-import {Ghost}   from './ghost.js';
+import {Dir}   from '../../_lib/direction.js';
+import {Ctrl}  from '../control.js'
+import {State} from '../state.js';
+import {Maze}  from '../maze.js'
+import {Ghost} from './ghost.js';
 import {player as p} from '../player/player.js';
 
 const PathSteps = 16
@@ -62,7 +62,7 @@ export class PathMgr {
 	}
 	#update(/**@type {Ghost}*/g) {
 		const {dir,orient}= g
-		if (dir != orient || MazeMgr.House.arrived(g, T*2))
+		if (dir != orient || Maze.House.arrived(g, T*2))
 			return
 		const tile = g.getAdjTile(dir,g.tile)
 		const path = [{dir,tile,stopped:false}]

@@ -1,4 +1,4 @@
-import {MazeMgr}  from '../maze.js'
+import {Maze}     from '../maze.js'
 import {State}    from '../state.js'
 import {player}   from '../player/player.js'
 import {Ghost}    from './ghost.js'
@@ -25,8 +25,8 @@ class Pinky extends Ghost {
 	get chasePos() {
 		const pos = player.offsetTarget(this.chaseOffset)
 		switch(player.tunEntry.side) {
-		case L: return pos.setX(MazeMgr.Tunnel.EntryColR*T)
-		case R: return pos.setX(MazeMgr.Tunnel.EntryColL*T)
+		case L: return pos.setX(Maze.Tunnel.EntryColR*T)
+		case R: return pos.setX(Maze.Tunnel.EntryColL*T)
 		default:return pos
 		}
 	}

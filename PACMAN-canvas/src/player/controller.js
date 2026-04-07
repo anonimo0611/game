@@ -5,7 +5,7 @@ import  Speed     from '../speed.js';
 import {State}    from '../state.js'
 import {Ctrl}     from '../control.js';
 import {Actor}    from '../actor.js';
-import {MazeMgr}  from '../maze.js'
+import {Maze}     from '../maze.js'
 import {GhostMgr} from '../ghosts/_system.js'
 
 const {Pacman:Spd}= Speed
@@ -42,7 +42,7 @@ export class Mover {
 		const slowRate = (Game.level < SlowLevel)? 1 : SlowRate
 		return (
 			Game.moveSpeed * slowRate * (
-				MazeMgr.hasDot(this.actor.tileIdx)
+				Maze.hasDot(this.actor.tileIdx)
 			    ? (GhostMgr.isFrightMode? Spd.EneEating : Spd.Eating)
 			    : (GhostMgr.isFrightMode? Spd.Energized : Spd.Base)
 			)

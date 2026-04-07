@@ -5,7 +5,7 @@ import {Game}    from '../_main.js'
 import {State}   from '../state.js'
 import {Ctrl}    from '../control.js'
 import {Ghost}   from './ghost.js'
-import {MazeMgr} from '../maze.js'
+import {Maze}    from '../maze.js'
 import {PtsMgr}  from '../points.js'
 import {PathMgr} from './paths.js'
 import {Targets} from './targets.js'
@@ -245,7 +245,7 @@ const CruiseElroy = function() {
 	}
 	onPlayerDotEaten(()=> {
 		const rate = [1.5, 1.0, 0.5][currPart]
-		if (MazeMgr.dotsLeft <= DotsLeftTable[Game.clampedLv-1]*rate)
+		if (Maze.dotsLeft <= DotsLeftTable[Game.clampedLv-1]*rate)
 			++currPart && Sound.playSiren()
 	})
 	let currPart = 0

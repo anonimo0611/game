@@ -144,7 +144,7 @@ class Snag {
 
 	drawStake({x,y}=this.StakePos) {
 		const {ctx,StakSize:{x:w,y:h}}= this
-		ctx.fillRect(x, y, w, h, 'white')
+		ctx.fillRect(x,y, w,h, 'white')
 	}
 	drawShard({x,y}=this.ShardPos) {
 		const {ctx,StakSize:{y:h}}= this

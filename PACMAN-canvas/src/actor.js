@@ -1,7 +1,7 @@
 import {Dir}      from '../_lib/direction.js'
 import  Sprite    from './sprites/pacman.js'
 import {player}   from './player/player.js'
-import {MazeMgr}  from './maze.js'
+import {Maze}  from './maze.js'
 import {GhostMgr} from './ghosts/_system.js'
 
 export class Actor {
@@ -14,8 +14,8 @@ export class Actor {
 	get speed()     {return 0}
 	get radius()    {return T}
 	get size()      {return this.radius*2}
-	get inHouse()   {return MazeMgr.House.isIn(this.tile)}
-	get inTunSide() {return MazeMgr.Tunnel.findSide(this.center)}
+	get inHouse()   {return Maze.House.isIn(this.tile)}
+	get inTunSide() {return Maze.Tunnel.findSide(this.center)}
 
 	get x()         {return this.pos.x}
 	get y()         {return this.pos.y}
@@ -73,7 +73,7 @@ export class Actor {
 	}
 	/** @param {Direction} dir */
 	hasAdjWall(dir) {
-		return MazeMgr.hasWall( this.getAdjTile(dir) )
+		return Maze.hasWall( this.getAdjTile(dir) )
 	}
 	/** @param {Direction} dir */
 	getAdjTile(dir, tile=this.tile) {
@@ -82,7 +82,7 @@ export class Actor {
 	}
 	collidesWithWall(dir=this.dir) {
 		const {x,y}= Vec2[dir].mul(T/2+1).add(this.center).divInt(T)
-		return MazeMgr.hasWall({x:(x+Cols) % Cols, y}) // x-axis wrap
+		return Maze.hasWall({x:(x+Cols) % Cols, y}) // x-axis wrap
 	}
 	justArrivedAtTile(spd=this.speed) {
 		return !this.passedTileCenter && this.tilePixel <= spd

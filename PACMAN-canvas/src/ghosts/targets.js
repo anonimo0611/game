@@ -1,7 +1,7 @@
 import {State}    from '../state.js'
 import {Ctrl}     from '../control.js'
 import {player}   from '../player/player.js'
-import {MazeMgr}  from '../maze.js'
+import {Maze}     from '../maze.js'
 import {Ghost}    from './ghost.js'
 import {GhostMgr} from './_system.js'
 import {GuzutaThreshold} from './ghost_sub.js'
@@ -28,7 +28,7 @@ export const Targets = new class TargetVisualizer {
 	/** @param {Ghost} g */
 	#getTargetPos = g=>
 		(g.state.isGoingOut || g.isEscaping)
-			? MazeMgr.House.EntryTile.add(.5).mul(T)
+			? Maze.House.EntryTile.add(.5).mul(T)
 			: g.isScattering
 				? g.baseTargetTile.add(.5).mul(T)
 				: g.chasePos

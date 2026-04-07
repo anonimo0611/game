@@ -9,7 +9,7 @@ import {Ctrl}     from './control.js'
 import {Demo}     from './demo/_demo.js'
 import {Lives}    from './lives.js'
 import {Wall}     from './sprites/wall.js'
-import {MazeMgr}  from './maze.js'
+import {Maze}     from './maze.js'
 import {ScoreMgr} from './score.js'
 import {FruitMgr} from './fruit.js'
 import {PtsMgr}   from './points.js'
@@ -78,7 +78,7 @@ export const Game = new class GameCore {
 		State.setInGame({delay:2200})
 	}
 	#onRoundEnds() {
-		MazeMgr.dotsLeft == 0
+		Maze.dotsLeft == 0
 			? State.setCleared()
 			: State.setPacDying({delay:600})
 	}
@@ -112,7 +112,7 @@ export const Game = new class GameCore {
 	#update() {
 		PtsMgr.update()
 		FruitMgr.update()
-		MazeMgr.PowDots.update()
+		Maze.PowDots.update()
 		Demo.update()
 		Actors.update()
 	}
@@ -125,7 +125,7 @@ export const Game = new class GameCore {
 	}
 	#drawMain() {
 		ScoreMgr.draw()
-		MazeMgr.PowDots.draw()
+		Maze.PowDots.draw()
 		FruitMgr.drawTarget()
 		Actors.draw(player)
 	}

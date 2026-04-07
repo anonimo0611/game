@@ -51,7 +51,7 @@ const PenRect  = new Rect(10, 13,  8, 5).freeze()
 const PenOuter = new Rect( 9, 12, 10, 7).freeze()
 
 class House {
-	MiddleY = (this.EntryTile.y+3.5)*T
+	MidY = (this.EntryTile.y+3.5)*T
 	get EntryTile() {return Vec2.new(13, 12)}
 	isIn(/**@type {Position}*/pos) {
 		return PenRect.contains(pos)
@@ -116,7 +116,7 @@ class MazeManager {
 	House   = freeze(new House)
 	Tunnel  = freeze(new Tunnel)
 	PowDots = freeze(new PowDots)
-	MidY    = this.House.MiddleY
+	MidY    = this.House.MidY
 	hasDot  = (/**@type {TileIdx} */i)=> DotSet.has(i)
 	hasPow  = (/**@type {TileIdx} */i)=> PowMap.has(i)
 	hasWall = (/**@type {Position}*/p)=> WallSet.has(p.y*Cols+p.x)
@@ -169,5 +169,5 @@ class MazeManager {
 		ctx.fillCircle(x,y, r, Color.Dot)
 	}
 }
-export const MazeMgr = freeze(new MazeManager)
-export const {drawDot,clearDot}= MazeMgr
+export const Maze = freeze(new MazeManager)
+export const {drawDot,clearDot}= Maze

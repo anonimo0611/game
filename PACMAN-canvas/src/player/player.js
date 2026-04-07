@@ -3,7 +3,7 @@ import {Game}     from '../_main.js'
 import {Ctrl}     from '../control.js'
 import {State}    from '../state.js'
 import {ScoreMgr} from '../score.js'
-import {MazeMgr}  from '../maze.js'
+import {Maze}     from '../maze.js'
 import {PacMan}   from '../actor.js'
 import {GhostMgr} from '../ghosts/_system.js'
 import {Mover}    from './controller.js'
@@ -69,13 +69,13 @@ class Player extends PacMan {
 		}
 	}
 	#eatDot(tileIdx=-1) {
-		if (!MazeMgr.hasDot(tileIdx)) return
+		if (!Maze.hasDot(tileIdx)) return
 		this.#playEatSE()
 		this.resetTimer()
-		MazeMgr.hasPow(tileIdx)
+		Maze.hasPow(tileIdx)
 			? this.#eatPowerDot()
 			: this.#eatSmallDot()
-		MazeMgr.clearDot(this) == 0
+		Maze.clearDot(this) == 0
 			? State.setRoundEnds()
 			: EventBus.trigger(EatenEvt)
 	}

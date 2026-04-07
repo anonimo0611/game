@@ -1,11 +1,11 @@
-import {Sound}   from '../_snd/sound.js'
-import {Rect}    from '../_lib/rect.js'
-import {Game}    from './_main.js'
-import {Level}   from './_main.js'
-import {State}   from './state.js'
-import {MazeMgr} from './maze.js'
-import {PtsMgr}  from './points.js'
-import * as Spr  from './sprites/fruits.js'
+import {Sound}  from '../_snd/sound.js'
+import {Rect}   from '../_lib/rect.js'
+import {Game}   from './_main.js'
+import {Level}  from './_main.js'
+import {State}  from './state.js'
+import {Maze}   from './maze.js'
+import {PtsMgr} from './points.js'
+import * as Spr from './sprites/fruits.js'
 import {player,onPlayerDotEaten} from './player/player.js'
 
 const FadeOutDur = 300
@@ -57,7 +57,7 @@ export const FruitMgr = new class FruitManager {
 		fadeOut = Fade.out(FadeOutDur/Game.speed)
 	}
 	#onDotEaten = ()=> {
-		if (AppearDots.has(MazeMgr.MaxDot - MazeMgr.dotsLeft)) {
+		if (AppearDots.has(Maze.MaxDot - Maze.dotsLeft)) {
 			showTgt = true
 			this.#setHideTimer()
 		}
