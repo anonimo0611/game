@@ -38,7 +38,8 @@ export const FruitMgr = new class FruitManager {
 		return (State.isTitle || State.isInGame) && showTgt
 	}
 	get intersectsWithPlayer() {
-		return circleCollision(player.center, TargetPos, T/2)
+		return this.showTarget
+			&& circleCollision(player.center, TargetPos, T/2)
 	}
 	#getType(/**@type {number}*/i) {
 		if (i < 0) throw RangeError('Must be zero or greater.')
@@ -62,23 +63,22 @@ export const FruitMgr = new class FruitManager {
 			this.#setHideTimer()
 		}
 	}
-	#checkIntersects() {
-		if (this.showTarget && this.intersectsWithPlayer) {
-			this.#resetTarget()
-			Timer.cancel(this) && Sound.playEatenFruit()
-			PtsMgr.set({key:this, dur:2e3, pos:TargetPos})
-		}
+	#onEaten() {
+		this.#resetTarget()
+		Timer.cancel(this)
+		Sound.playEatenFruit()
+		PtsMgr.set({key:this, dur:2e3, pos:TargetPos})
 	}
 	update() {
 		fadeOut?.update() == false
 			? this.#resetTarget()
-			: this.#checkIntersects()
+			: this.intersectsWithPlayer && this.#onEaten()
 	}
 	drawTarget() {
-		if (Ticker.paused) return
-		if (this.showTarget) {
+		if (Ticker.paused)
+			return
+		if (this.showTarget)
 			Spr.cache.draw(Fg, TargetPos, fadeOut?.alpha)
-		}
 		PtsMgr.drawFruitPts()
 	}
 	drawLevelCounter() {
