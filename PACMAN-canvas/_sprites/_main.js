@@ -2,8 +2,8 @@ import '../_lib/mouse.js'
 import './anime.js'
 import * as Pts   from '../src/sprites/points.js'
 import * as Fruit from '../src/sprites/fruits.js'
+import * as Snag  from '../src/sprites/ghost_snag.js'
 import PacSprite  from '../src/sprites/pacman.js'
-import {snagSpr}  from '../src/sprites/ghost_cb.js'
 import {SizeRng,BrightRng,ResetBtn,GridSize,T,S,GAP,ghostGr} from './_constants.js'
 
 const ctx  = Fg
@@ -92,8 +92,9 @@ const [Cols,Rows]= GridSize
 		}
 	}
 	#drawAkabei() {
-		const aka = ghostGr
-		const spr = snagSpr(ctx)
+		const aka   = ghostGr
+		const spr   = new Snag.SnagSprite(ctx)
+		const scale = T/TileSize
 
 		ctx.translate(T/2, (Rows-2)*S+T/2)
 
@@ -105,25 +106,14 @@ const [Cols,Rows]= GridSize
 			for (const i of range(3)) {
 				draw(...pos.vals, {animIdx:+(i == 2)})
 				const nPos = Vec2.new(pos).add(S*0.75, S/4)
-				spr.drawSnaggedClothing(+(i == 2), ratios[i], {...nPos,size:S})
+				spr.drawSnaggedClothing(+(i == 2), ratios[i], {...nPos,scale})
 				pos.x += S*1.2 + ((i+1)*GAP)
 			}
 		}
-		{// Stake and Shard
-			const s = T/TileSize
-			const [sx,sy]= Vec2.new(spr.StakSize).mul(s).vals
-			// Stake
-			ctx.save()
-			ctx.translate(S*6.9, S-T/2-sy-3*s)
-			ctx.scale(s)
-			spr.drawStake(Vec2.Zero)
-			ctx.restore()
-			// Shard
-			ctx.save()
-			ctx.translate(S*6.9+sx, S-T/2-3*s)
-			ctx.scale(s)
-			spr.drawShard(Vec2.Zero)
-			ctx.restore()
+		{
+			const pos = Vec2.new(S*6.9, S-T/2-3)
+			spr.drawStake(pos, scale)
+			spr.drawShard(pos, scale)
 		}
 		draw(ofst(4.00), 0, {isRipped: true,orient:U})
 		draw(ofst(5.00), 0, {isRipped: true,orient:'Bracket'})
