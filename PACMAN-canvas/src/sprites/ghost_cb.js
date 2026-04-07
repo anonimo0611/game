@@ -123,31 +123,32 @@ export const snagSpr =
 	ctx=> freeze( new Snag(ctx) )
 
 class Snag {
-	StakSize = Vec2.fixed(
+	StakeSize = Vec2.fixed(
 		T*.18,
 		T*.70
 	)
 	StakePos = Vec2.fixed(
-		BW/2 + T*2 - this.StakSize.x/2,
-		BH/2 + T*1 - this.StakSize.y - T*.1
+		BW/2 + T*2 - this.StakeSize.x/2,
+		BH/2 + T*1 - this.StakeSize.y - T*.1
 	)
 	ShardPos = Vec2.fixed(
-		BW/2 + T*2 + this.StakSize.x/2,
+		BW/2 + T*2 + this.StakeSize.x/2,
 		BH/2 + T*1 - T*.1
 	)
 	CaughtX = BW/2 + T/2
 	AkaMinX = this.CaughtX - T
+	StakeH  = this.StakeSize.y
 
 	/** @readonly */ctx
 	/** @param {EnhancedCtx2D} ctx */
 	constructor(ctx) {this.ctx = ctx}
 
 	drawStake({x,y}=this.StakePos) {
-		const {ctx,StakSize:{x:w,y:h}}= this
-		ctx.fillRect(x,y, w,h, 'white')
+		const {ctx,StakeSize}= this
+		ctx.fillRect(x,y, ...StakeSize.vals, 'white')
 	}
 	drawShard({x,y}=this.ShardPos) {
-		const {ctx,StakSize:{y:h}}= this
+		const {ctx,StakeSize:{y:h}}= this
 		ctx.save()
 		ctx.translate(x, y)
 		ctx.fillPolygon(Color.Akabei, [0,-4],[0,-h],[-T,0],[-4,0],[-4,-4])
