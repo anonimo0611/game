@@ -8,7 +8,7 @@ export class Dying {
 	/** @readonly */Radius
 	#cnt;    #cb;
 	#innerR; #outerR;
-	#arkAng; #fadeOut = Fade.out(300);
+	#arcAng; #fadeOut = Fade.out(300);
 
 	/**
 	 @param {{ctx:EnhancedCtx2D,Radius:number}} _
@@ -18,12 +18,12 @@ export class Dying {
 		this.ctx     = ctx
 		this.Radius  = Radius
 		this.#cb     = cb
-		this.#cnt    = this.#arkAng = 0
+		this.#cnt    = this.#arcAng = 0
 		this.#innerR = Radius/4
 		this.#outerR = Radius/2
 	}
 	get isSplitting() {
-		return this.#arkAng < PI-PI/SplitDur
+		return this.#arcAng < PI-PI/SplitDur
 	}
 	update() {
 		if (this.#cnt++ > TotalDur) {
@@ -32,7 +32,7 @@ export class Dying {
 			return
 		}
 		this.isSplitting
-			? this.#arkAng += PI/SplitDur
+			? this.#arcAng += PI/SplitDur
 			: this.#updateRadialBurst()
 	}
 	#updateRadialBurst() {
@@ -57,7 +57,7 @@ export class Dying {
 	}
 	#drawSplittingBody() {
 		const {ctx,Radius}= this
-		const angle = this.#arkAng
+		const angle = this.#arcAng
 		ctx.beginPath()
 		ctx.moveTo(0, Radius*0.3)
 		ctx.arc(0, 0, Radius, -PI/2+angle, -PI/2-angle)
