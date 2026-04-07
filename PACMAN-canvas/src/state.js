@@ -13,8 +13,8 @@ export const States = /**@type {const}*/([
 */
 class GameState extends _State {
 	constructor() {super(globalThis), this.init(States)}
-	get isStartMode() {return State.isIntro    || State.isReady}
-	get isDemoMode()  {return State.isAttract  || State.isCoffBreak}
+	get isStartMode() {return State.isIntro   || State.isReady}
+	get isDemoMode()  {return State.isAttract || State.isCoffBreak}
 
 	/**
 	 @param {StateType} s
