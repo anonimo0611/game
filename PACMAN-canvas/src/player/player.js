@@ -95,10 +95,10 @@ class Player extends PacMan {
 }
 
 export let player = new Player
-export function onPlayerDotEaten(
-	/**@type {JQTriggerHandler}*/cb) {
-	EventBus.on(EatenEvt,cb)
-}
+export const onPlayerDotEaten =
+	(/**@type {JQTriggerHandler}*/cb)=>
+		{EventBus.on(EatenEvt,cb)}
+
 State.on({_Ready:()=> {
 	fader = State.isTitle? null : Fade.in()
 	!State.wasIntro && (player = new Player)
