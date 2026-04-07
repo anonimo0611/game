@@ -116,7 +116,6 @@ class MazeManager {
 	House   = freeze(new House)
 	Tunnel  = freeze(new Tunnel)
 	PowDots = freeze(new PowDots)
-	MidY    = this.House.MidY
 	hasDot  = (/**@type {TileIdx} */i)=> DotSet.has(i)
 	hasPow  = (/**@type {TileIdx} */i)=> PowMap.has(i)
 	hasWall = (/**@type {Position}*/p)=> WallSet.has(p.y*Cols+p.x)
