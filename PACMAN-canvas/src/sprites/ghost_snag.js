@@ -1,13 +1,15 @@
 import {ScaleModif} from './ghost.js'
 
 export const
-	CaughtX    = BW/2 + T/2,
-	AkaMinX    = CaughtX - T,
-	StakeSize  = Vec2.fixed(T*.18, T*.70),
+	StakeSize = Vec2.fixed(
+		T*.18, T*.70
+	),
 	SnaggedPos = Vec2.fixed(
 		BW/2 + T*2 - StakeSize.x/2,
 		BH/2 + T*1 - T*.1
-	)
+	),
+	CaughtX = BW/2 + T/2,
+	AkaMinX = CaughtX - T
 
 export class SnagSprite {
 	/** @readonly */ctx
