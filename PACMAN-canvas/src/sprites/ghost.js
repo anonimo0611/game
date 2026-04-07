@@ -1,4 +1,4 @@
-import CBSprite from './ghost_cb.js'
+import SubSprite from './ghost_sub.js'
 export const ScaleModif = 1.1
 export default class GhostSprite {
 	/** @readonly */tgt
@@ -8,7 +8,7 @@ export default class GhostSprite {
 	constructor(target, w=T*3, h=T*2) {
 		this.tgt = target
 		this.ctx = canvas2D(null, w, h).ctx
-		this.sub = new CBSprite(this.ctx)
+		this.sub = new SubSprite(this.ctx)
 	}
 	#resurrect = /**@type {?Fade}*/(null)
 	setResurrect() {

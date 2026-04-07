@@ -1,5 +1,4 @@
-import {ScaleModif} from './ghost.js'
-export default class GhostSpriteForCoffBreak {
+export default class GhostSubSprite {
 	/** @readonly */ctx
 	/** @param {EnhancedCtx2D} ctx */
 	constructor(ctx) {this.ctx=ctx}
@@ -115,67 +114,5 @@ export default class GhostSpriteForCoffBreak {
 			ctx.fillStyle = Color.GhostEyes
 			ctx.fill()
 		}
-	}
-}
-
-/** @param {EnhancedCtx2D} ctx */
-export const snagSpr =
-	ctx=> freeze( new Snag(ctx) )
-
-class Snag {
-	StakeSize = Vec2.fixed(
-		T*.18,
-		T*.70
-	)
-	StakePos = Vec2.fixed(
-		BW/2 + T*2 - this.StakeSize.x/2,
-		BH/2 + T*1 - this.StakeSize.y - T*.1
-	)
-	ShardPos = Vec2.fixed(
-		BW/2 + T*2 + this.StakeSize.x/2,
-		BH/2 + T*1 - T*.1
-	)
-	CaughtX = BW/2 + T/2
-	AkaMinX = this.CaughtX - T
-	StakeH  = this.StakeSize.y
-
-	/** @readonly */ctx
-	/** @param {EnhancedCtx2D} ctx */
-	constructor(ctx) {this.ctx = ctx}
-
-	drawStake({x,y}=this.StakePos) {
-		const {ctx,StakeSize}= this
-		ctx.fillRect(x,y, ...StakeSize.vals, 'white')
-	}
-	drawShard({x,y}=this.ShardPos) {
-		const {ctx,StakeSize:{y:h}}= this
-		ctx.save()
-		ctx.translate(x, y)
-		ctx.fillPolygon(Color.Akabei, [0,-4],[0,-h],[-T,0],[-4,0],[-4,-4])
-		ctx.restore()
-	}
-	/**
-	 @param {number} animIdx
-	 @param {number} ratio
-	 @param {{x?:number, y?:number, size?:number}} options
-	*/
-	drawSnaggedClothing(animIdx, ratio, {x=0, y=0, size=T*2}={}) {
-		const {ctx}= this
-		const v1 = lerp(-2,  5, ratio)
-		const v2 = lerp( 4, 22, ratio)
-		const v3 = lerp( 4, 50, ratio)
-		const ls = (animIdx? -25:-36) // Left side
-		ctx.save()
-		ctx.translate(x, y)
-		ctx.scale(size/100)
-		ctx.scale(ScaleModif)
-		ctx.beginPath()
-		ctx.moveTo(-8, -10)
-		ctx.quadraticCurveTo(-8,-4, v1, 3)
-		ctx.quadraticCurveTo(v2, 9, v3, 9)
-		ctx.addLinePath([v3,43],[ls,43],[ls,20],[-8,20])
-		ctx.fillStyle = Color.Akabei
-		ctx.fill()
-		ctx.restore()
 	}
 }
