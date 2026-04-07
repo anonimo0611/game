@@ -5,7 +5,7 @@ import {Ctrl}     from '../control.js'
 import {FruitMgr} from '../fruit.js'
 import {Ghost}    from '../ghosts/ghost.js'
 import {PacMan}   from '../actor.js'
-import {snagSpr}  from '../sprites/ghost_cb.js'
+import * as Snag  from '../sprites/ghost_snag.js'
 
 const sceneNum = (lv=0)=>
 	!Ctrl.isPractice && ({2:1, 5:2, 9:3}[lv]) || -1
@@ -100,7 +100,7 @@ class Scene1 extends CoffBreak {
 class Scene2 extends CoffBreak {
 	counter  = 0
 	akaEyes  = L
-	snag     = snagSpr(Fg)
+	snag     = new Snag.SnagSprite(Fg)
 	isRipped = false
 	constructor() {
 		super(2)
@@ -126,10 +126,10 @@ class Scene2 extends CoffBreak {
 		}
 	}
 	moveAka() {
-		const {akabei:a,snag}= this
-		a.x > snag.CaughtX ? super.moveAka(1.0):
-		a.x > snag.AkaMinX ? super.moveAka(0.1):(a.x=snag.AkaMinX)
-		return (a.x != snag.AkaMinX)
+		const {akabei:a}= this
+		a.x > Snag.CaughtX ? super.moveAka(1.0):
+		a.x > Snag.AkaMinX ? super.moveAka(0.1):(a.x=Snag.AkaMinX)
+		return (a.x != Snag.AkaMinX)
 	}
 	draw() {
 		const {akabei:a,snag,akaEyes,isRipped}= this
@@ -140,9 +140,9 @@ class Scene2 extends CoffBreak {
 		isRipped
 			? snag.drawShard()
 			: function() { // Snagged clothing
-				if (isRipped || a.x >= snag.CaughtX) return
+				if (isRipped || a.x >= Snag.CaughtX) return
 				const pos   = a.center.addX(T)
-				const ratio = norm(snag.CaughtX, snag.AkaMinX, a.x)
+				const ratio = norm(Snag.CaughtX, Snag.AkaMinX, a.x)
 				snag.drawSnaggedClothing(animIdx, ratio, pos)
 			}()
 		super.draw()
