@@ -19,8 +19,8 @@ const [Cols,Rows]= GridSize
 		ctx.translate(-GAP/2, +1)
 		ctx.setLineDash([2,2])
 		ctx.beginPath()
-		range(Cols+0).forEach(y=> ctx.setLinePath([ofst(y), 0], [ofst(y), Rows*S]))
-		range(Rows+1).forEach(x=> ctx.setLinePath([0, x*S], [Cols*S+GAP, x*S]))
+		range(Cols+0).forEach(x=> ctx.setLinePath([ofst(x), 0], [ofst(x), Rows*S]))
+		range(Rows+1).forEach(y=> ctx.setLinePath([0, y*S], [Cols*S+GAP, y*S]))
 		ctx.lineWidth   = 2
 		ctx.strokeStyle = '#555555'
 		ctx.stroke()
