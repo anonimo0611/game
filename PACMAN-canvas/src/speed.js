@@ -2,7 +2,7 @@ const PacSpd = TileSize / 4.5
 const GhsSpd = PacSpd * 1.07
 
 export default /**@type {const}*/({
-	StepPerLevel: 0.1,
+	StepPerLevel: 0.01,
 	Pacman: {
 		SlowLevel: 13,   // After this level, Pacman slows down
 		SlowRate:  0.98, // Deceleration rate at SlowLevel
