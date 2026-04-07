@@ -57,9 +57,10 @@ export class Dying {
 	}
 	#drawSplittingBody() {
 		const {ctx,Radius}= this
+		const angle = this.#arkAng
 		ctx.beginPath()
 		ctx.moveTo(0, Radius*0.3)
-		ctx.arc(0, 0, Radius, -PI/2+this.#arkAng, -PI/2-this.#arkAng)
+		ctx.arc(0, 0, Radius, -PI/2+angle, -PI/2-angle)
 		ctx.fill()
 	}
 	#drawRadialBurst() {
