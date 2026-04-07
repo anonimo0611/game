@@ -122,8 +122,8 @@ export const Ctrl = new class Controller {
 	}
 	#setupGrid() {
 		Grid.strokeStyle = Color.Grid
-		range(1,Cols).forEach(y=> Grid.strokeLine(T*y, 0, T*y, Rows*T))
-		range(0,Rows).forEach(x=> Grid.strokeLine(0, T*x, Cols*T, T*x))
+		range(1,Cols).forEach(x=> Grid.strokeLine(T*x, 0, T*x, Rows*T))
+		range(0,Rows).forEach(y=> Grid.strokeLine(0, T*y, Cols*T, T*y))
 	}
 	#setupCtrls() {
 		values(Menu).forEach(m=> m.onChange(Ctrl.#save))
