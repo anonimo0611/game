@@ -127,9 +127,9 @@ class Scene2 extends CoffBreak {
 	}
 	moveAka() {
 		const {akabei:a}= this
-		a.x > Snag.CaughtX ? super.moveAka(1.0):
-		a.x > Snag.AkaMinX ? super.moveAka(0.1):(a.x=Snag.AkaMinX)
-		return (a.x != Snag.AkaMinX)
+		a.x > Snag.AkaSnagX ? super.moveAka(1.0):
+		a.x > Snag.AkaStopX ? super.moveAka(0.1):(a.x=Snag.AkaStopX)
+		return (a.x != Snag.AkaStopX)
 	}
 	draw() {
 		const {snag,akaEyes,isRipped,akabei:a}= this
@@ -137,9 +137,9 @@ class Scene2 extends CoffBreak {
 		this.drawPac()
 		snag.drawSnaggedStake({isRipped})
 		this.drawAka({isRipped,animIdx,orient:akaEyes})
-		if (!isRipped && a.x < Snag.CaughtX) {
+		if (!isRipped && a.x < Snag.AkaSnagX) {
 			const pos   = a.center.addX(T)
-			const ratio = norm(Snag.CaughtX, Snag.AkaMinX, a.x)
+			const ratio = norm(Snag.AkaSnagX, Snag.AkaStopX, a.x)
 			snag.drawSnaggedClothing(animIdx, ratio, pos)
 		}
 		super.draw()
