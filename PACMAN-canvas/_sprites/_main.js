@@ -111,8 +111,8 @@ const [Cols,Rows]= GridSize
 			}
 		}
 		{
-			const pos = Vec2.new(S*6.9, S-T/2-3)
-			spr.drawSnaggedStake({pos,isRipped:true,scale})
+			const pos = Vec2.new(S*6.9, S-T/2)
+			spr.drawSnaggedStake({scale,pos,isRipped:true})
 		}
 		draw(ofst(4.00), 0, {isRipped: true,orient:U})
 		draw(ofst(5.00), 0, {isRipped: true,orient:'Bracket'})
