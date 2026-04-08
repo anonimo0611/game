@@ -132,7 +132,7 @@ class Scene2 extends CoffBreak {
 		return (a.x != Snag.AkaStopX)
 	}
 	draw() {
-		const {snag,akaEyes,isRipped,akabei:a}= this
+		const {akabei:a,snag,akaEyes,isRipped}= this
 		const animIdx = isRipped? 0 : (this.counter? 1 : a.animIdx)
 		this.drawPac()
 		snag.drawSnaggedStake({isRipped})
