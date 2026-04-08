@@ -2,7 +2,8 @@ import {ScaleModif} from './ghost.js'
 
 export const
 	StakeSize = Vec2.fixed(
-		T*.18, T*.70
+		T*.18,
+		T*.70
 	),
 	SnaggedPos = Vec2.fixed(
 		BW/2 + T*2 - StakeSize.x/2,
@@ -15,8 +16,11 @@ export class SnagSprite {
 	/** @readonly */ctx
 	/** @param {EnhancedCtx2D} ctx */
 	constructor(ctx) {this.ctx = ctx}
-	drawSnaggedStake({pos=SnaggedPos, isRipped=false, scale=1}={}) {
-		const {ctx}= this, {x:sw, y:sh}= StakeSize
+
+	drawSnaggedStake(
+		{pos=SnaggedPos,isRipped=false,scale=1}={}
+	) {
+		const {ctx}= this, [sw,sh]= StakeSize.vals
 		ctx.save()
 		ctx.translate(pos)
 		ctx.scale(scale)
@@ -27,17 +31,20 @@ export class SnagSprite {
 		}
 		ctx.restore()
 	}
+
 	/**
 	 @param {number} animIdx
 	 @param {number} ratio
 	 @param {{x?:number, y?:number, scale?:number}} options
 	*/
-	drawSnaggedClothing(animIdx, ratio, {x=0, y=0, scale=1}={}) {
-		const {ctx} = this
+	drawSnaggedClothing(
+		animIdx, ratio, {x=0,y=0,scale=1}={}
+	) {
+		const {ctx}= this
 		const v1 = lerp(-2,  5, ratio)
 		const v2 = lerp(+4, 22, ratio)
 		const v3 = lerp(+4, 50, ratio)
-		const ls = (animIdx ? -25 : -36) // Left side
+		const ls = (animIdx? -25 : -36) // Left side
 		ctx.save()
 		ctx.translate(x, y)
 		ctx.scale(T*2*scale/100)
