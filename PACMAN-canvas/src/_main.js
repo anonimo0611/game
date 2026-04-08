@@ -1,4 +1,4 @@
-import './ghosts/ghost_sub.js'
+import './ghosts/ghosts.js'
 import {Cursor}   from '../_lib/mouse.js'
 import {Sound}    from '../_snd/sound.js'
 import  Speed     from './speed.js'
