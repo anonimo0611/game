@@ -99,22 +99,22 @@ export default class GhostSprite {
 	#drawFoot0() {
 		const {ctx}= this
 		ctx.lineTo(-42, 41)
-		ctx.lineTo(-29, 27)
+		ctx.lineTo(-29, 28)
 		ctx.quadraticCurveTo(-16, 41, -9, 42)
-		ctx.arcTo( -9, 26, -6, 26, 4)
-		ctx.arcTo( +9, 26, +9, 31, 4)
+		ctx.arcTo( -9, 28, -6, 28, 4)
+		ctx.arcTo( +9, 28, +9, 31, 4)
 		ctx.lineTo(+9, 42)
-		ctx.quadraticCurveTo(+16, 41, 29, 27)
+		ctx.quadraticCurveTo(+16, 41, 29, 28)
 		ctx.lineTo(+42, 41)
 	}
 	#drawFoot1() {
 		const {ctx}= this
 		ctx.lineTo(-42, 26)
-		ctx.bezierCurveTo(-41, 45, -29, 45, -26, 38)
+		ctx.bezierCurveTo(-41, 42, -29, 42, -26, 38)
 		ctx.bezierCurveTo(-22, 28, -13, 28,  -9, 35)
-		ctx.bezierCurveTo( -5, 45,  +5, 45,  +9, 35)
+		ctx.bezierCurveTo( -5, 42,  +5, 42,  +9, 35)
 		ctx.bezierCurveTo(+13, 28, +22, 28, +26, 38)
-		ctx.bezierCurveTo(+29, 45, +41, 45, +42, 26)
+		ctx.bezierCurveTo(+29, 42, +41, 42, +42, 26)
 	}
 	#drawEyesUp(isRipped=false) {
 		const {ctx}= this, color=[Color.GhostEyes,'#000'][+isRipped]
