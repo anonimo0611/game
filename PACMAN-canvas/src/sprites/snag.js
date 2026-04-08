@@ -18,11 +18,11 @@ export class SnagSprite {
 	constructor(ctx) {this.ctx = ctx}
 
 	drawSnaggedStake(
-		{pos=SnaggedPos,isRipped=false,scale=1}={}
+		{x=0,y=0,isRipped=false,scale=1}={}
 	) {
 		const {ctx}= this, [sw,sh]= StakeSize.vals
 		ctx.save()
-		ctx.translate(pos)
+		ctx.translate(x,y)
 		ctx.scale(scale)
 		ctx.fillRect(0,-sh, sw,sh, 'white')
 		if (isRipped) {
