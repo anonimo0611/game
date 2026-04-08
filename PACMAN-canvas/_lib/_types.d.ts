@@ -36,6 +36,12 @@ type FloatingPtsData = {
 type Direction  = 'Up'|'Right'|'Down'|'Left'
 type Vertical   = 'Up'|'Down'
 type Horizontal = 'Left'|'Right'
+/**
+ Represents the "shocked" eye state used in
+ the intermission scene when Akabei faces despair.
+*/
+type ShatteredEyes = 'ShatteredEyes'
+type VisualOrient  = Direction|ShatteredEyes
 
 //---- Canvas API ----
 
