@@ -16,8 +16,7 @@ const PtsList = /**@type {const}*/([200,400,800,1600])
 const FrightTimeList = freeze([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 
 export const {Ghost:Speed}= _Speed
-export const Evt = toEnumObject
-	(['Ready','Reverse','Frighten','FleeStart','RoundEnds'])
+export const Evt = toEnumObject(['Ready','Reverse','Frighten','FleeStart','RoundEnds'])
 
 /**
  When always chase mode,
@@ -41,10 +40,10 @@ const StandbyTimes = /**@type {const}*/
 	[   0,  900,    0], // Lv.13+
 ])
 
-/** @typedef {typeof States[number]} StateType */
 const States = /**@type {const}*/
 	(['Idle','GoingOut','Walking','Bitten','Escaping','Entering'])
 
+/** @typedef {typeof States[number]} StateType */
 const StateType = toEnumObject(States)
 
 /**

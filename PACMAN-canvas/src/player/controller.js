@@ -1,5 +1,4 @@
 import {Dir}      from '../../_lib/direction.js';
-import {Confirm}  from '../../_lib/confirm.js';
 import {Game}     from '../_main.js'
 import  Speed     from '../speed.js';
 import {State}    from '../state.js'
@@ -9,7 +8,6 @@ import {Maze}     from '../maze.js'
 import {GhostMgr} from '../ghosts/_system.js'
 
 const {Pacman:Spd}= Speed
-const {SlowLevel,SlowRate}= Spd
 
 class TurnState {
 	turning  = false
@@ -17,36 +15,33 @@ class TurnState {
 	nextTurn = /**@type {?Direction}*/(null)
 }
 export class Mover {
-	#speed = 0
 	/** @private @readonly */actor
 	/** @private @readonly */state
-	constructor(/**@type {Actor}*/actor) {
+	/** @param {Actor} actor */
+	constructor(actor) {
 		this.actor = actor
 		this.state = new TurnState
-		setSteerEvent({actor,state:this.state})
+		setSteerEvent(actor,this.state)
 	}
-	get speed()  {
-		return this.#speed ||= this.#tileSpeed
+	#spd = /**@type {?number}*/(null)
+	get speed() {
+		return this.#spd ??= this.#setSpeed()
 	}
 	get onWall() {
-		const {state:s,actor:a}= this
-		return !s.turning && a.collidesWithWall()
+		const {state,actor}= this
+		return !state.turning && actor.collidesWithWall()
 	}
-	get #canTurn() {
-		const {actor:a,state:{nextDir}}=this
+	get canTurn() {
+		const {actor,state:{nextDir}}=this
 		return nextDir != null
-		    && !a.passedTileCenter
-		    && !a.collidesWithWall(nextDir)
+		    && !actor.passedTileCenter
+		    && !actor.collidesWithWall(nextDir)
 	}
-	get #tileSpeed() {
-		const slowRate = (Game.level < SlowLevel)? 1 : SlowRate
-		return (
-			Game.moveSpeed * slowRate * (
-				Maze.hasDot(this.actor.tileIdx)
-			    ? (GhostMgr.isFrightMode? Spd.EneEating : Spd.Eating)
-			    : (GhostMgr.isFrightMode? Spd.Energized : Spd.Base)
-			)
-		)
+	#setSpeed() {
+		const spd = Maze.hasDot(this.actor.tileIdx)
+			? (GhostMgr.isFrightMode? Spd.EneEating : Spd.Eating)
+			: (GhostMgr.isFrightMode? Spd.Energized : Spd.Base)
+		return(this.#spd = Game.moveSpeed * Spd.levelFactor * spd)
 	}
 	/** @param {number} spd */
 	update(spd) {
@@ -60,51 +55,51 @@ export class Mover {
 	/** @param {number} spd */
 	#setMoveSpeed(spd) {
 		if (this.actor.justArrivedAtTile(spd))
-			this.#speed = this.#tileSpeed
+			this.#setSpeed()
 	}
 	/** @param {number} spd */
 	#turnCorner(spd) {
-		const {state:s,actor:a}= this
-		if (this.#canTurn && s.nextDir) {
-			s.turning ||= true
-			a.orient = s.nextDir
-			a.setNextPos(spd, s.nextDir)
+		const {state,actor}= this
+		if (this.canTurn && state.nextDir) {
+			state.turning ||= true
+			actor.orient = state.nextDir
+			actor.setNextPos(spd, state.nextDir)
 		}
 	}
 	#finishCornering() {
-		const {state:s,actor:a}= this
-		if (s.turning && a.passedTileCenter) {
-			s.nextDir  = s.nextTurn
-			s.turning  = false
-			s.nextTurn = null
-			a.setMoveDir(a.orient)
+		const {state,actor}= this
+		if (state.turning && actor.passedTileCenter) {
+			state.nextDir  = state.nextTurn
+			state.turning  = false
+			state.nextTurn = null
+			actor.setMoveDir(actor.orient)
 		}
 	}
 	#turnAround() {
-		const {actor:a}= this
-		if (a.dir == a.revOrient) {
-			a.setMoveDir(a.orient)
-			this.#speed = this.#tileSpeed
+		const {actor}= this
+		if (actor.dir == actor.revOrient) {
+			actor.setMoveDir(actor.orient)
+			this.#setSpeed()
 		}
 	}
 	#stopAtWall() {
-		const {state:s,actor:a}= this
+		const {state,actor}= this
 		if (this.onWall) {
-			a.pos = a.tile.mul(T)
-			s.nextDir = null
+			actor.pos = actor.tile.mul(T)
+			state.nextDir = null
 		}
 	}
 }
 
-/** @param {{actor:Actor, state:TurnState}} _ */
-function setSteerEvent({actor,state}) {
+/**
+ @param {Actor} actor
+ @param {TurnState} state
+*/
+function setSteerEvent(actor,state) {
 	$win.offon('keydown.PacSteer', e=> {
 		const dir = Dir.from(e,{wasd:true})
-		if (keyRepeat(e)
-		 || dir == null
-		 || Confirm.opened
-		 || Ctrl.activeElem
-		) return
+		if (keyRepeat(e) || dir == null || Ctrl.isCaptured)
+			return
 
 		if (state.turning)
 			return void(state.nextTurn = dir)

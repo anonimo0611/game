@@ -1,22 +1,24 @@
-const PacSpd = TileSize / 4.5
-const GhsSpd = PacSpd * 1.07
+const PacBase = TileSize / 4.5
+const GhsBase = PacBase * 1.07
 
+import {Game} from './_main.js'
 export default /**@type {const}*/({
 	StepPerLevel: 0.01,
 	Pacman: {
-		SlowLevel: 13,   // After this level, Pacman slows down
-		SlowRate:  0.98, // Deceleration rate at SlowLevel
-		Base:      PacSpd,
-		Eating:    PacSpd * 0.86,
-		Energized: PacSpd * 1.10,
-		EneEating: PacSpd * 0.95, // Energized+Eating
+		Base:      PacBase,
+		Eating:    PacBase * 0.86,
+		Energized: PacBase * 1.10,
+		EneEating: PacBase * 0.95, // Energized+Eating
+		get levelFactor() {
+			return (Game.level < 13 ? 1 : 0.98)
+		},
 	},
 	Ghost: {
-		Base:     GhsSpd,
-		Idle:     GhsSpd * 0.50,
-		GoOut:    GhsSpd * 0.50,
-		Fright:   GhsSpd * 0.60,
-		InTunnel: GhsSpd * 0.60,
-		Escape:   GhsSpd * 1.40,
+		Base:     GhsBase,
+		Idle:     GhsBase * 0.50,
+		GoOut:    GhsBase * 0.50,
+		Fright:   GhsBase * 0.60,
+		InTunnel: GhsBase * 0.60,
+		Escape:   GhsBase * 1.40,
 	},
 })

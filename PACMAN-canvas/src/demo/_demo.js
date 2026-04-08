@@ -1,4 +1,3 @@
-import {Confirm}   from '../../_lib/confirm.js'
 import {Ctrl}      from '../control.js'
 import {WinState}  from '../ui.js'
 import {State}     from '../state.js'
@@ -18,7 +17,7 @@ const RunTimer = function() {
 			: $off('.RunTimer')
 	})
 	function update() {
-		(!WinState.isActive || Ctrl.activeElem || Confirm.opened)
+		(!WinState.isActive || Ctrl.isCaptured)
 			? Ticker.resetCount()
 		 	: Ticker.elapsedTime > WaitTime && State.setAttract()
 	}

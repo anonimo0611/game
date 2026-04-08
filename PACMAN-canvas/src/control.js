@@ -18,8 +18,9 @@ export const Ctrl = new class Controller {
 		Ctrl.#setupCtrls()
 		$win.on({keydown:Ctrl.#onKeydown})
 	}
+	get isCaptured()    {return this.activeElem || Confirm.opened}
 	get activeElem()    {return qS(`:not(#${btns.start.id}):focus`)}
-	get extendScore()   {return Number(Menu.Extend.value)}
+	get extendScore()   {return +(Menu.Extend.value)}
 	get livesMax()      {return inputs.lvsRng.valueAsNumber}
 	get speed()         {return inputs.spdRng.valueAsNumber}
 	get endlessMode()   {return inputs.onlChk.checked == false}
