@@ -21,6 +21,7 @@ BW = Cols*TileSize,
 BH = Rows*TileSize,
 
 U='Up', R='Right', D='Down', L='Left',
+ShatteredEyes = 'ShatteredEyes',
 
 Bg   = canvas2D('board_bg'  , BW,BH).ctx,
 Fg   = canvas2D('board_main', BW,BH).ctx,

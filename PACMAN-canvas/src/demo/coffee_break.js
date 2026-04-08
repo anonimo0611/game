@@ -98,9 +98,9 @@ class Scene1 extends CoffBreak {
 }
 
 class Scene2 extends CoffBreak {
-	counter  = 0
-	akaEyes  = L
 	snag     = new Snag.SnagSprite(Fg)
+	akaEyes  = /**@type {VisualOrient}*/(L)
+	counter  = 0
 	isRipped = false
 	constructor() {
 		super(2)
@@ -118,7 +118,7 @@ class Scene2 extends CoffBreak {
 			this.isRipped = true
 			break
 		case 150:
-			this.akaEyes = 'Bracket'
+			this.akaEyes = ShatteredEyes
 			break
 		case 270:
 			this.end()

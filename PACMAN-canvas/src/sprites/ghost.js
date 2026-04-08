@@ -21,7 +21,7 @@ export default class GhostSprite {
 		spriteIdx    = 0,
 		size         = T*2,
 		alpha        = 1,
-		orient       = /**@type {Direction|'Bracket'}*/(L),
+		orient       = /**@type {VisualOrient}*/(L),
 		isAngry      = false,
 		isFrightened = false,
 		isEscaping   = false,
@@ -69,11 +69,11 @@ export default class GhostSprite {
 			if (isFrightened) return
 			ctx.fillStyle = '#FFF'
 			switch(orient) {
-			case 'Left':   return this.#drawEyesHoriz(L)
-			case 'Right':  return this.#drawEyesHoriz(R)
-			case 'Up':     return this.#drawEyesUp(isRipped)
-			case 'Down':   return this.#drawEyesDown()
-			case 'Bracket':return this.sub.drawBracketEyes()
+			case L: return this.#drawEyesHoriz(L)
+			case R: return this.#drawEyesHoriz(R)
+			case U: return this.#drawEyesUp(isRipped)
+			case D: return this.#drawEyesDown()
+			case ShatteredEyes: this.sub.drawShatteredEyes()
 			}
 		})()
 		finalize()
