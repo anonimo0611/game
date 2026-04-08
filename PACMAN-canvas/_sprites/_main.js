@@ -112,8 +112,7 @@ const [Cols,Rows]= GridSize
 		}
 		{
 			const pos = Vec2.new(S*6.9, S-T/2-3)
-			spr.drawStake(pos, scale)
-			spr.drawShard(pos, scale)
+			spr.drawSnaggedStake({pos,isRipped:true,scale})
 		}
 		draw(ofst(4.00), 0, {isRipped: true,orient:U})
 		draw(ofst(5.00), 0, {isRipped: true,orient:'Bracket'})
