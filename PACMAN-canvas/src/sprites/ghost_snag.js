@@ -15,21 +15,16 @@ export class SnagSprite {
 	/** @readonly */ctx
 	/** @param {EnhancedCtx2D} ctx */
 	constructor(ctx) {this.ctx = ctx}
-	drawStake(pos=SnaggedPos, scale=1) {
+	drawSnaggedStake({pos=SnaggedPos, isRipped=false, scale=1}={}) {
 		const {ctx}= this, {x:sw, y:sh}= StakeSize
 		ctx.save()
 		ctx.translate(pos)
 		ctx.scale(scale)
 		ctx.fillRect(0,-sh, sw,sh, 'white')
-		ctx.restore()
-	}
-	drawShard(pos=SnaggedPos, scale=1) {
-		const {ctx}= this, {x:sw, y:sh}= StakeSize
-		ctx.save()
-		ctx.translate(pos)
-		ctx.scale(scale)
-		ctx.translate(sw, 0)
-		ctx.fillPolygon(Color.Akabei, [0,-4],[0,-sh],[-T,0],[-4,0],[-4,-4])
+		if (isRipped) {
+			ctx.translate(sw, 0)
+			ctx.fillPolygon(Color.Akabei, [0,-4],[0,-sh],[-T,0],[-4,0],[-4,-4])
+		}
 		ctx.restore()
 	}
 	/**
