@@ -2,7 +2,7 @@ import '../_lib/mouse.js'
 import './anime.js'
 import * as Pts   from '../src/sprites/points.js'
 import * as Fruit from '../src/sprites/fruits.js'
-import * as Snag  from '../src/sprites/ghost_snag.js'
+import * as Snag  from '../src/sprites/snag.js'
 import PacSprite  from '../src/sprites/pacman.js'
 import {SizeRng,BrightRng,ResetBtn,GridSize,T,S,GAP,ghostGr} from './_constants.js'
 
