@@ -98,14 +98,14 @@ export default class GhostSprite {
 	}
 	#drawFoot0() {
 		const {ctx}= this
-		ctx.lineTo(-42, 41)
-		ctx.lineTo(-29, 28)
-		ctx.quadraticCurveTo(-16, 41, -9, 42)
+		ctx.lineTo(-42, 42)
+		ctx.lineTo(-28, 28)
+		ctx.quadraticCurveTo(-14, 41, -9, 42)
 		ctx.arcTo( -9, 28, -6, 28, 4)
 		ctx.arcTo( +9, 28, +9, 31, 4)
 		ctx.lineTo(+9, 42)
-		ctx.quadraticCurveTo(+16, 41, 29, 28)
-		ctx.lineTo(+42, 41)
+		ctx.quadraticCurveTo(+14, 41, 28, 28)
+		ctx.lineTo(+42, 42)
 	}
 	#drawFoot1() {
 		const {ctx}= this
