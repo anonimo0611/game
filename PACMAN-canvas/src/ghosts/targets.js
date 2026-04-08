@@ -4,7 +4,7 @@ import {player}   from '../player/player.js'
 import {Maze}     from '../maze.js'
 import {Ghost}    from './ghost.js'
 import {GhostMgr} from './_system.js'
-import {GuzutaThreshold} from './ghost_sub.js'
+import {GuzutaThreshold} from './ghosts.js'
 
 export const Targets = new class TargetVisualizer {
 	/** @param {readonly Ghost[]} ghosts */
