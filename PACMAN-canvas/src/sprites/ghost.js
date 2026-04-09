@@ -65,17 +65,16 @@ export default class GhostSprite {
 			}
 			ctx.restore()
 		}
-		(()=> {
-			if (isFrightened) return
-			ctx.fillStyle = '#FFF'
-			switch(orient) {
-			case L: return this.#drawEyesHoriz(L)
-			case R: return this.#drawEyesHoriz(R)
-			case U: return this.#drawEyesUp(isRipped)
-			case D: return this.#drawEyesDown()
-			case ShatteredEyes: this.sub.drawShatteredEyes()
-			}
-		})()
+		if (!isFrightened) {
+			ctx.fillStyle = '#FFF',
+			/**@type {Record<VisualOrient,()=>void>}*/({
+				Left:  ()=> this.#drawEyesHoriz(L),
+				Right: ()=> this.#drawEyesHoriz(R),
+				Up:    ()=> this.#drawEyesUp(isRipped),
+				Down:  ()=> this.#drawEyesDown(),
+				ShatteredEyes: ()=> this.sub.drawShatteredEyes(),
+			})[orient]()
+		}
 		finalize()
 	}
 	update() {
