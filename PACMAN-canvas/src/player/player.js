@@ -20,7 +20,7 @@ class Player extends PacMan {
 
 	/** @type {Mover} */
 	#mov      = new Mover(this)
-	#tunEntry = new TunEntry
+	#tunEntry = new TunEntry()
 	constructor() {super(13.5, 24)}
 
 	get speed()    {return this.#mov.speed}
@@ -54,9 +54,9 @@ class Player extends PacMan {
 		this.sprite.update(this)
 		fader?.update(this.maxAlpha)
 		if (!this.closed && !this.hidden) {
-			this.#sinceLastEating += Game.interval
-			this.#tunEntry.update()
 			this.#update(this.#mov.speed+.5|0)
+			this.#tunEntry.update()
+			this.#sinceLastEating += Game.interval
 		}
 		if (!State.isInGame)
 			this.keepInsideBoard()

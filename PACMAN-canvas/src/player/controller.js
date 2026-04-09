@@ -28,7 +28,7 @@ export class Mover {
 		return this.#spd ??= this.#setSpeed()
 	}
 	get onWall() {
-		const {state,actor}= this
+		const  {state,actor}= this
 		return !state.turning && actor.collidesWithWall()
 	}
 	get canTurn() {
@@ -98,7 +98,7 @@ export class Mover {
 function setSteerEvent(actor,state) {
 	$win.offon('keydown.PacSteer', e=> {
 		const dir = Dir.from(e,{wasd:true})
-		if (keyRepeat(e) || dir == null || Ctrl.isCaptured)
+		if (!dir || keyRepeat(e) || Ctrl.isCaptured)
 			return
 
 		if (state.turning)
