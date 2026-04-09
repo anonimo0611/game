@@ -11,7 +11,7 @@ const {abs,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Mat
 /**
  @template {string} T
  @param {readonly T[]} array
-*/const toEnumObject = array=>
+*/const enumObj = (...array)=>
 	/**@type {{readonly [K in T]:K}}*/
 	(fromEntries(array.map(k=> [k,k])))
 
