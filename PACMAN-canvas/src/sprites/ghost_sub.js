@@ -5,7 +5,7 @@ export default class GhostSubSprite {
 	drawHalfNakedBody() {
 		const {ctx}= this
 		ctx.clearRect(38,-1, 6,25)
-		ctx.clearRect(30,23,15,15)
+		ctx.clearRect(30,23,15,18)
 		ctx.newLinePath([38,-8],[49,-5],[36, 4]).fill()
 		ctx.newLinePath([40, 1],[40,23],[35,23])
 		ctx.quadraticCurveTo(28, 32, 35, 32)
@@ -22,7 +22,7 @@ export default class GhostSubSprite {
 		ctx.newLinePath(...path).stroke()
 		path.forEach(xy=> ctx.fillCircle(...xy, ctx.lineWidth, '#FFF'))
 	}
-	drawBracketEyes() {
+	drawShatteredEyes() {
 		const {ctx}= this
 		for (const v of [-1,+1]) { // Eyeball
 			ctx.beginPath()
