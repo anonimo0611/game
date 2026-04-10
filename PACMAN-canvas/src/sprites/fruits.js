@@ -1,4 +1,5 @@
 const FruitFuncs = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
+
 /**
  @param {EnhancedCtx2D} ctx
  @param {number} idx
@@ -18,6 +19,7 @@ export function draw(
 	FruitFuncs[idx](ctx)
 	ctx.restore()
 }
+
 export const cache = new class FruitCache {
 	#ctx = canvas2D(null,T*2).ctx
 	/**
