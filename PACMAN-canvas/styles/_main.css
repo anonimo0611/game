@@ -8,7 +8,7 @@ html, body {
 html {
 	--grid-cols: 28;
 	--grid-rows: 34;
-	font-size: var(--tile-size);
+	font-size: 31px;
 }
 body {
 	color: #4c76d1;
@@ -174,7 +174,7 @@ body:is([data-state=Attract],[data-state=CoffBreak]) {
 	}
 	> label:first-of-type  {
 		color: inherit;
-		font-size: 1em;
+		font-size: .9em;
 		font-variant: small-caps;
 		display: flex;
 		gap: .25em;
@@ -244,10 +244,11 @@ body:is([data-state=Attract],[data-state=CoffBreak]) {
 		align-items: center;
 	}
 	output {
-		padding-top:    .2rem;
-		padding-bottom: .1rem;
+		padding-top:    .1rem;
+		padding-bottom: .0rem;
 	}
 	cm-item {
+		line-height: 1;
 		padding-top:    0;
 		padding-bottom: 0;
 	}
