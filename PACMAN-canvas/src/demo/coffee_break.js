@@ -118,7 +118,7 @@ class Scene2 extends CoffBreak {
 			this.isRipped = true
 			break
 		case 150:
-			this.akaEyes = ShatteredEyes
+			this.akaEyes = DazedEyes
 			break
 		case 270:
 			this.end()
