@@ -66,7 +66,7 @@ export const Game = new class GameCore {
 	}
 	#onNewGame() {
 		Cursor.hide()
-		Sound.playStartup()
+		Sound.playStartMusic()
 		Game.#started = true
 		State.setReady({delay:2200})
 	}
