@@ -1,5 +1,5 @@
 import SubSprite from './ghost_sub.js'
-export const ScaleModif = 1.1
+export const LOGICAL_SIZE = 90
 export default class GhostSprite {
 	/** @readonly */tgt
 	/** @readonly */ctx
@@ -41,8 +41,7 @@ export default class GhostSprite {
 		ctx.clear()
 		ctx.save()
 		ctx.translate(size/2)
-		ctx.scale(size/100)
-		ctx.scale(ScaleModif)
+		ctx.scale(size/LOGICAL_SIZE)
 		ctx.lineWidth = 5
 		ctx.lineJoin  = ctx.lineCap = 'round'
 		ctx.fillStyle = !isFrightened

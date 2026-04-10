@@ -1,4 +1,5 @@
 const
+LOGICAL_DEGIT_HEIGHT = 8,
 FruitGhostCtxs = freeze([
 	canvas2D(null).ctx,
 	canvas2D(null).ctx
@@ -39,7 +40,7 @@ export function cache(type, pts, size=T*2) {
 	const{w,h}= ctx.resize(size*1.5, size).size
 	ctx.save()
 	ctx.translate(w/2, h/2)
-	ctx.scale(size/2/PointSpriteSize)
+	ctx.scale(size/2/LOGICAL_DEGIT_HEIGHT)
 	ctx.strokeStyle = Palette.Points[type]
 	ctx.lineWidth = 1.1
 	ctx.lineJoin  = ctx.lineCap = 'round'

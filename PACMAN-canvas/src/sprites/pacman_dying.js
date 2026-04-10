@@ -1,8 +1,8 @@
-const SplitDur = 1200/Ticker.Interval
-const BurstDur =  300/Ticker.Interval
-const TotalDur = SplitDur+BurstDur+30
+const SPLIT_DUR = 1200/Ticker.Interval
+const BURST_DUR =  300/Ticker.Interval
+const TOTAL_DUR = SPLIT_DUR+BURST_DUR+30
 
-import {ScaleModif} from './pacman.js'
+import {SCALE_FACTOR} from './pacman.js'
 export class Dying {
 	/** @readonly */ctx
 	/** @readonly */Radius
@@ -23,22 +23,22 @@ export class Dying {
 		this.#outerR = Radius/2
 	}
 	get isSplitting() {
-		return this.#arcAng < PI-PI/SplitDur
+		return this.#arcAng < PI-PI/SPLIT_DUR
 	}
 	update() {
-		if (this.#cnt++ > TotalDur) {
+		if (this.#cnt++ > TOTAL_DUR) {
 			this.#cb?.()
 			this.#cb = undefined
 			return
 		}
 		this.isSplitting
-			? this.#arcAng += PI/SplitDur
+			? this.#arcAng += PI/SPLIT_DUR
 			: this.#updateRadialBurst()
 	}
 	#updateRadialBurst() {
 		if (this.#outerR <= this.Radius) {
-			this.#innerR += this.Radius*0.4/BurstDur
-			this.#outerR += this.Radius*1.0/BurstDur
+			this.#innerR += this.Radius*0.4/BURST_DUR
+			this.#outerR += this.Radius*1.0/BURST_DUR
 			return
 		}
 		this.#fadeOut.update()
@@ -47,7 +47,7 @@ export class Dying {
 		const {ctx,Radius}= this
 		ctx.save()
 		ctx.translate(x,y)
-		ctx.scale(r/Radius*ScaleModif)
+		ctx.scale(r/Radius*SCALE_FACTOR)
 		ctx.lineWidth = Radius*0.21
 		ctx.fillStyle = ctx.strokeStyle = Color.Pacman
 		this.isSplitting

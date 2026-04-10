@@ -1,24 +1,21 @@
-const FruitFuncs = freeze(
-	[cherry,strawberry,orange,apple,melon,gala,bell,key]
-)
+const LOGICAL_SIZE  = 15.24
+const drawFunctions = [cherry,strawb,orange,apple,melon,gala,bell,key]
 
 /**
  @param {EnhancedCtx2D} ctx
  @param {number} idx
 */
-export function draw(
-	ctx, idx, x=T, y=T, scale=T*2/FruitSpriteSize
-) {
-	if (!FruitFuncs[idx])
+export function draw(ctx, idx, x=T,y=T, scale=T*2/LOGICAL_SIZE) {
+	if (!drawFunctions[idx])
 		throw new RangeError(`Invalid fruit index: ${idx}.`
-			+` Must be between 0 and ${FruitFuncs.length-1}.`)
+			+` Must be between 0 and ${drawFunctions.length-1}.`)
 	const ofstY = -(T*.1)
 	ctx.save()
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
 	ctx.translate(x, y+ofstY)
-	ctx.scale(scale*1.05)
-	FruitFuncs[idx](ctx)
+	ctx.scale(scale)
+	drawFunctions[idx](ctx)
 	ctx.restore()
 }
 
@@ -45,9 +42,9 @@ export const cache = new class FruitCache {
 {// Create a sprite sheet for menu icons
 	const Menu = $('#LevelMenu')
 	const size = +Menu.css('--scale') * T
-	const {ctx}= canvas2D(null, size*FruitFuncs.length, size)
-	for (const i of FruitFuncs.keys())
-		draw(ctx, i, size*i+size/2, size/2, size/FruitSpriteSize)
+	const {ctx}= canvas2D(null, size*drawFunctions.length, size)
+	for (const i of drawFunctions.keys())
+		draw(ctx, i, size*i+size/2, size/2, size/LOGICAL_SIZE)
 	Menu.css('--url',`url("${ctx.canvas.toDataURL()}")`)
 }
 
@@ -82,7 +79,7 @@ function cherry(ctx=Fg) {
 	ctx.stroke()
 }
 
-function strawberry(ctx=Fg) {
+function strawb(ctx=Fg) {
 	// red body
 	ctx.beginPath()
 	ctx.moveTo(-1,-4)

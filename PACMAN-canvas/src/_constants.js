@@ -5,12 +5,6 @@ DotPts   = 10,
 PowPts   = 50,
 TileSize = int(screen.height/Rows),
 
-PointSpriteSize =  8,
-FruitSpriteSize = 16,
-
-/** Scale factor based on 1080p resolution */
-ScaleFactor = screen.height/1080,
-
 /** Shorthand of TileSize */
 T = TileSize,
 
@@ -55,4 +49,5 @@ GhostType   = /**@type {const}*/({Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4}),
 GhostNames  = /**@type {const}*/(['Akabei','Pinky','Aosuke','Guzuta']),
 GhostColors = /**@type {readonly string[]}*/(GhostNames.map(n=> Color[n]))
 
-$root.css('--tile-size',`${TileSize}px`)
+// Use the tile size as the default font size
+$root.css('font-size', `${TileSize}px`)

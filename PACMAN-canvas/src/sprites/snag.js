@@ -1,4 +1,4 @@
-import {ScaleModif} from './ghost.js'
+import {LOGICAL_SIZE} from './ghost.js'
 
 // Assumes actors are vertically centered on the board
 const StakeSize  = Vec2.fixed(T*.18, T*.7)
@@ -40,8 +40,7 @@ export class SnagSprite {
 		const ls = (animIdx? -25 : -36) // Left side
 		ctx.save()
 		ctx.translate(x, y)
-		ctx.scale(T*2*scale/100)
-		ctx.scale(ScaleModif)
+		ctx.scale(T*2*scale/LOGICAL_SIZE)
 		ctx.beginPath()
 		ctx.moveTo(-8, -10)
 		ctx.quadraticCurveTo(-8, -4, v1, 3)

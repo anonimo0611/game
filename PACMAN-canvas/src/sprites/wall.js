@@ -1,3 +1,6 @@
+/** Scale factor based on 1080p resolution */
+const ScaleFactor = screen.height/1080
+
 const HT = T/2
 const LW = int(3*ScaleFactor) // Line  Width
 const LO = int(4*ScaleFactor) // Line  Offset
