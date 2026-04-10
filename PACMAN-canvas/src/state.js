@@ -5,7 +5,7 @@ import _State from '../_lib/state.js'
  @typedef {`_${Exclude<StateType,'Title'>}`} Underscored
 */
 export const States = /**@type {const}*/([
-	'Title','Attract','NewGame','Ready','InGame','NewLevel','RoundEnds',
+	'Title','Attract','NewGame','NewLevel','Ready','InGame','RoundEnds',
 	'Cleared','PacDying','Flashing','CoffBreak','GameOver','Quit'])
 /**
  @extends {_State<StateType,globalThis>}

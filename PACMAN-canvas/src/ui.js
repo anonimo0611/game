@@ -3,10 +3,8 @@ export const Form = document.forms[0]
 //---- Inputs ----
 
 const inputIds = /**@type {const}*/
-	(['lvsRng','spdRng','onlChk',
-	  'chsChk','unrChk','invChk',
-	  'tgtChk','pthChk','grdChk',
-	  'powChk','volRng','volRg2'])
+	(['lvsRng','spdRng','onlChk','chsChk','unrChk','invChk',
+	  'tgtChk','pthChk','grdChk','powChk','volRng','volRg2'])
 
 export const inputs =
 	/**@type {{[K in inputIds[number]]:HTMLInputElement}}*/
