@@ -37,7 +37,7 @@ type Direction  = 'Up'|'Right'|'Down'|'Left'
 type Vertical   = 'Up'|'Down'
 type Horizontal = 'Left'|'Right'
 
-/** Represents Akabei's shocked eyes in intermissions scene. */
+/** Represents Akabei's dazed eyes in intermissions scene part 2. */
 type DazedEyes = 'DazedEyes'
 type VisualOrient = Direction|DazedEyes
 
