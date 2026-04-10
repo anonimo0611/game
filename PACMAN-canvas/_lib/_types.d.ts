@@ -1,7 +1,7 @@
 //---- Dictionary ----
 
+type SceneDict<T>   = {[K in T]?: {update():void, draw?():void}}
 type NumericDict<T> = {readonly [K:number]:T}
-type SceneDict<T> = {[K in T]?: {update():void, draw?():void}}
 
 //---- Timer ----
 
@@ -36,10 +36,8 @@ type FloatingPtsData = {
 type Direction  = 'Up'|'Right'|'Down'|'Left'
 type Vertical   = 'Up'|'Down'
 type Horizontal = 'Left'|'Right'
-/**
- Represents the "shocked" eye state used in
- the intermission scene when Akabei faces despair.
-*/
+
+/** Represents Akabei's shocked eyes in intermissions scene. */
 type ShatteredEyes = 'ShatteredEyes'
 type VisualOrient  = Direction|ShatteredEyes
 
