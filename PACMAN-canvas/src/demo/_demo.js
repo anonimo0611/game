@@ -5,7 +5,6 @@ import {WinState}  from '../ui.js'
 import {demoBtns}  from '../ui.js'
 import {Attract}   from './attract.js'
 import {CoffBreak} from './coffee_break.js'
-export {Demo}
 
 const Evt = 'blur_focus_pointerdown_mousemove_keydown_scroll_resize_wheel'
 const WaitTime = 1e3*30 // 30secs
@@ -27,7 +26,8 @@ const RunTimer = function() {
 
 /** @type {SceneDict<States[number]>} */
 const Scenes = {Title:RunTimer,Attract,CoffBreak}
-const Demo = {
+
+export const Demo = {
 	get CoffBreakNum() {return CoffBreak.num},
 	draw()   {Scenes[State.current]?.draw?.()},
 	update() {Scenes[State.current]?.update()},
