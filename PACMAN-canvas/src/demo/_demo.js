@@ -24,6 +24,13 @@ const RunTimer = function() {
 	return {update}
 }()
 
+range(demoBtns.length).forEach(i=> {
+	const click = (i == 0)
+		? ()=> State.setAttract()
+		: ()=> State.setCoffBreak({data:i})
+	$(demoBtns[i]).on({click})
+})
+
 /** @type {SceneDict<States[number]>} */
 const Scenes = {Title:RunTimer,Attract,CoffBreak}
 
@@ -32,10 +39,3 @@ export const Demo = {
 	draw()   {Scenes[State.current]?.draw?.()},
 	update() {Scenes[State.current]?.update()},
 }
-
-range(demoBtns.length).forEach(i=> {
-	const click = (i == 0)
-		? ()=> State.setAttract()
-		: ()=> State.setCoffBreak({data:i})
-	$(demoBtns[i]).on({click})
-})
