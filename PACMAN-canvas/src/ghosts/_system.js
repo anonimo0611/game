@@ -40,10 +40,10 @@ const StandbyTimes = /**@type {const}*/
 	[   0,  900,    0], // Lv.13+
 ])
 
-/** @typedef {typeof States[number]} StateType */
 const States = /**@type {const}*/
 	(['Idle','GoingOut','Walking','Bitten','Escaping','Entering'])
 
+/** @typedef {typeof States[number]} StateType */
 const StateType = enumObj(...States)
 
 /**
