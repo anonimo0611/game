@@ -22,7 +22,7 @@ export default class GhostSubSprite {
 		ctx.newLinePath(...path).stroke()
 		path.forEach(xy=> ctx.fillCircle(...xy, ctx.lineWidth, '#FFF'))
 	}
-	drawShatteredEyes() {
+	drawDazedEyes() {
 		const {ctx}= this
 		for (const v of [-1,+1]) { // Eyeball
 			ctx.beginPath()
