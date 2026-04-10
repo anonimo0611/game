@@ -37,7 +37,6 @@ export class CoffBreak {
 		this.pacman.x += this.pacvx
 		this.pacman.sprite.update()
 	}
-	/** @param {number} rate */
 	moveAka(rate=1) {
 		this.akabei.x += this.akavx * rate
 	}
