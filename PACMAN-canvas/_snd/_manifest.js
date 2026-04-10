@@ -8,7 +8,7 @@ export const Manifest = /**@type {const}*/([
 		{id:'FrightMode',  startTime: 6561, duration: 538, volume:0.55, loop:-1},
 		{id:'EyesEscaping',startTime: 5292, duration: 268, volume:0.90, loop:-1},
 		{id:'CoffBreak',   startTime: 8059, duration:5686, volume:1.00, loop: 1},
-		{id:'Startup',     startTime:14233, duration:4500},
+		{id:'StartMusic',  startTime:14233, duration:4500},
 	]}},
 	{src:'./res/regular.ogg', data:{channels:4, audioSprite:[
 		{id:'PacDying',   startTime:   0, duration:1749},
