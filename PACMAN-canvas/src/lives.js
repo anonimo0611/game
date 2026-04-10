@@ -6,7 +6,7 @@ import  Sprite  from './sprites/pacman.js'
 export const Lives = function() {
 	let   left   = 0
 	const size   = T*2
-	const sprite = new Sprite(HUD, T*.85, 1)
+	const sprite = new Sprite(HUD, T*.8, 1)
 	State.on({
 		Title:   ()=> reset(),
 		NewGame: ()=> add(+1),
