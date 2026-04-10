@@ -38,8 +38,8 @@ type Vertical   = 'Up'|'Down'
 type Horizontal = 'Left'|'Right'
 
 /** Represents Akabei's shocked eyes in intermissions scene. */
-type ShatteredEyes = 'ShatteredEyes'
-type VisualOrient  = Direction|ShatteredEyes
+type DazedEyes = 'DazedEyes'
+type VisualOrient = Direction|DazedEyes
 
 //---- Canvas API ----
 
