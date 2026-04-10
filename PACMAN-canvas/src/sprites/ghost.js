@@ -72,7 +72,7 @@ export default class GhostSprite {
 				Right: ()=> this.#drawEyesHoriz(R),
 				Up:    ()=> this.#drawEyesUp(isRipped),
 				Down:  ()=> this.#drawEyesDown(),
-				ShatteredEyes: ()=> this.sub.drawShatteredEyes(),
+				DazedEyes: ()=> this.sub.drawShatteredEyes(),
 			})[orient]()
 		}
 		finalize()

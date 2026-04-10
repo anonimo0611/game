@@ -1,4 +1,6 @@
-const FruitFuncs = freeze([cherry,strawberry,orange,apple,melon,gala,bell,key])
+const FruitFuncs = freeze(
+	[cherry,strawberry,orange,apple,melon,gala,bell,key]
+)
 
 /**
  @param {EnhancedCtx2D} ctx
@@ -28,7 +30,7 @@ export const cache = new class FruitCache {
 	update(idx) {draw(this.#ctx.clear(), idx)}
 	/**
 	 @param {EnhancedCtx2D} ctx
-	 @param {Position} v
+	 @param {Position} pos
 	 @param {number} [alpha]
 	*/
 	draw(ctx, {x,y}, alpha) {
