@@ -71,11 +71,11 @@ h1 {
 		canvas#board_hud  {z-index: 4}
 	}
 }
-html.sound-settled.ui-initialized #container {
+html.sound-settled.controller-settled #container {
 	visibility: visible;
 	opacity: 1;
 }
-html.ui-initialized .panel {
+html.controller-settled .panel {
 	display: none;
 }
 
