@@ -14,7 +14,7 @@ export const ScoreMgr = new class ScoreManager {
 		ScoreMgr.#reset()
 		State.on({
 			Quit:    ScoreMgr.#restore,
-			Intro:   ScoreMgr.#onIntro,
+			NewGame: ScoreMgr.#onNewGame,
 			GameOver:ScoreMgr.#onGameOver,
 		})
 	}
@@ -32,7 +32,7 @@ export const ScoreMgr = new class ScoreManager {
 			_hiSco = savedHiSco
 		}
 	}
-	#onIntro() {
+	#onNewGame() {
 		savedScore = _score
 		savedHiSco = _hiSco
 		_score = 0

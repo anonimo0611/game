@@ -23,9 +23,9 @@ export const Game = new class GameCore {
 		Menu.Level.onChange(Game.#resetLevel)
 		State.on({
 			Quit: ()=> State.setTitle(),
-			Intro:     Game.#onIntro,
-			Ready:     Game.#onReady,
+			NewGame:   Game.#onNewGame,
 			NewLevel:  Game.#onNewLevel,
+			Ready:     Game.#onReady,
 			RoundEnds: Game.#onRoundEnds,
 			Cleared:   Game.#onCleared,
 			PacDying:  Game.#onPacDying,
@@ -64,7 +64,7 @@ export const Game = new class GameCore {
 		Game.#pacDied = false
 		Game.#resetLevel()
 	}
-	#onIntro() {
+	#onNewGame() {
 		Cursor.hide()
 		Sound.playStartup()
 		Game.#started = true

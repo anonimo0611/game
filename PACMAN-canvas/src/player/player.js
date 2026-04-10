@@ -15,7 +15,7 @@ const EatenEvt = 'DotEaten'
 let fader = /**@type {?Fade}*/(null)
 
 class Player extends PacMan {
-	#eatIdx = 0
+	#eatIndex =  0
 	#sinceLastEating = 0
 
 	/** @type {Mover} */
@@ -42,7 +42,7 @@ class Player extends PacMan {
 		return this.forwardPos(n).addX(ofstX*T)
 	}
 	draw() {
-		if (State.isIntro) return
+		if (State.isNewGame) return
 		this.sprite.draw(this)
 		this.drawCenterDot()
 	}
@@ -69,7 +69,8 @@ class Player extends PacMan {
 		}
 	}
 	#eatDot(tileIdx=-1) {
-		if (!Maze.hasDot(tileIdx)) return
+		if (!Maze.hasDot(tileIdx))
+			return
 		this.#playEatSE()
 		this.resetTimer()
 		Maze.hasPow(tileIdx)
@@ -88,7 +89,7 @@ class Player extends PacMan {
 	}
 	#playEatSE() {
 		const duration = (T/this.speed)*Ticker.Interval*.5
-		;(this.#eatIdx ^= 1)
+		;(this.#eatIndex ^= 1)
 			? Sound.playWakaWaka0({duration})
 			: Sound.playWakaWaka1({duration})
 	}
@@ -101,5 +102,5 @@ export const onPlayerDotEaten =
 
 State.on({_Ready:()=> {
 	fader = State.isTitle? null : Fade.in()
-	!State.wasIntro && (player = new Player)
+	!State.wasNewGame && (player = new Player)
 }})

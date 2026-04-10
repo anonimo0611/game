@@ -91,7 +91,7 @@ export class Ghost extends Actor {
 		}(this) * Game.moveSpeed
 	}
 	draw() {
-		if (State.isIntro) return
+		if (State.isNewGame) return
 		this.sprite.draw(this)
 	}
 	update() {

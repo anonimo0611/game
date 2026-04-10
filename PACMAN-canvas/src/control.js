@@ -122,20 +122,18 @@ export const Ctrl = new class Controller {
 		Grid.canvas.style.opacity = String(+Ctrl.showGridLines)
 	}
 	#setupGrid() {
+		Grid.beginPath()
+		range(1,Cols).forEach(x=> Grid.setLinePath([T*x, 0],[T*x, Rows*T]))
+		range(0,Rows).forEach(y=> Grid.setLinePath([0, T*y],[Cols*T, T*y]))
 		Grid.strokeStyle = Color.Grid
-		range(1,Cols).forEach(x=> Grid.strokeLine(T*x, 0, T*x, Rows*T))
-		range(0,Rows).forEach(y=> Grid.strokeLine(0, T*y, Cols*T, T*y))
+		Grid.stroke()
 	}
 	#setupCtrls() {
 		values(Menu).forEach(m=> m.onChange(Ctrl.#save))
 		$('input')   .on({input:Ctrl.#output})
 		$(btns.clear).on({click:Ctrl.#clearHiConfirm})
 		$(btns.reset).on({click:Ctrl.#reset})
-		$(btns.start).on({click:()=> State.setIntro()})
-		$(btns.demo) .on({click:()=> State.setAttract()})
-		$(btns.coff1).on({click:()=> State.setCoffBreak({data:1})})
-		$(btns.coff2).on({click:()=> State.setCoffBreak({data:2})})
-		$(btns.coff3).on({click:()=> State.setCoffBreak({data:3})})
-		$root.addClass('ui-initialized')
+		$(btns.start).on({click:State.setNewGame})
+		$root.addClass('controller-settled')
 	}
 }, powChk = inputs.powChk

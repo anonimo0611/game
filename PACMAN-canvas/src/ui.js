@@ -3,21 +3,30 @@ export const Form = document.forms[0]
 //---- Inputs ----
 
 const inputIds = /**@type {const}*/
-	(['lvsRng','spdRng','onlChk','chsChk','unrChk','invChk',
-	  'tgtChk','pthChk','grdChk','powChk','volRng','volRg2'])
+	(['lvsRng','spdRng','onlChk',
+	  'chsChk','unrChk','invChk',
+	  'tgtChk','pthChk','grdChk',
+	  'powChk','volRng','volRg2'])
 
 export const inputs =
 	/**@type {{[K in inputIds[number]]:HTMLInputElement}}*/
-	(fromEntries(inputIds.map(id=>[id,requireElem(id)])))
+	(fromEntries(inputIds.map(id=> [id,requireElem(id)])))
 
 //---- Buttons ----
 
-const buttonIds = /**@type {const}*/
-	(['clear','reset','start','demo','coff1','coff2','coff3'])
+const demoBtnIds = /**@type {const}*/
+	(['demo','coff1','coff2','coff3'])
+
+const buttonIds  = /**@type {const}*/
+	(['clear','reset','start', ...demoBtnIds])
 
 export const btns =
 	/**@type {{[K in buttonIds[number]]:HTMLButtonElement}}*/
-	(fromEntries(buttonIds.map(id=>[id,requireElem(id+'Btn')])))
+	(fromEntries(buttonIds.map(id=> [id,requireElem(id+'Btn')])))
+
+export const demoBtns =
+	/**@type {HTMLButtonElement[]}*/
+	(demoBtnIds.map(id=> requireElem(id+'Btn')))
 
 //---- Custom menus ----
 

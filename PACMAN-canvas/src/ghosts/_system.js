@@ -53,8 +53,8 @@ const StateType = enumObj(...States)
 class GhostState extends _State {
 	/** @this {IGhostState} */
 	constructor(/**@type {Ghost}*/g) {
-		super(g)
-		this.init(States).owner.inHouse
+		super(g, States)
+		this.owner.inHouse
 			? this.setIdle()
 			: this.setWalking()
 	}

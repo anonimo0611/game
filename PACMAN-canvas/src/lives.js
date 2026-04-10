@@ -8,9 +8,9 @@ export const Lives = function() {
 	const size   = T*2
 	const sprite = new Sprite(HUD, T*.85, 1)
 	State.on({
-		Title:()=> reset(),
-		Intro:()=> add(+1),
-		Ready:()=> add(State.wasNewLevel? 0:-1),
+		Title:   ()=> reset(),
+		NewGame: ()=> add(+1),
+		Ready:   ()=> add(State.wasNewLevel? 0:-1),
 	})
 	function draw(left=3) {
 		HUD.save()

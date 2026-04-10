@@ -1,7 +1,8 @@
 import {Ctrl}      from '../control.js'
-import {WinState}  from '../ui.js'
 import {State}     from '../state.js'
 import {States}    from '../state.js'
+import {WinState}  from '../ui.js'
+import {demoBtns}  from '../ui.js'
 import {Attract}   from './attract.js'
 import {CoffBreak} from './coffee_break.js'
 export {Demo}
@@ -31,3 +32,10 @@ const Demo = {
 	draw()   {Scenes[State.current]?.draw?.()},
 	update() {Scenes[State.current]?.update()},
 }
+
+range(demoBtns.length).forEach(i=> {
+	const click = (i == 0)
+		? ()=> State.setAttract()
+		: ()=> State.setCoffBreak({data:i})
+	$(demoBtns[i]).on({click})
+})

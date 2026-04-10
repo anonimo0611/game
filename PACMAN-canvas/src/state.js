@@ -5,15 +5,15 @@ import _State from '../_lib/state.js'
  @typedef {`_${Exclude<StateType,'Title'>}`} Underscored
 */
 export const States = /**@type {const}*/([
-	'Title','Attract','Intro','Ready','InGame','NewLevel','RoundEnds',
+	'Title','Attract','NewGame','Ready','InGame','NewLevel','RoundEnds',
 	'Cleared','PacDying','Flashing','CoffBreak','GameOver','Quit'])
 /**
  @extends {_State<StateType,globalThis>}
  @typedef {GameState & StateDef.Props<StateType>} IGameState
 */
 class GameState extends _State {
-	constructor() {super(globalThis), this.init(States)}
-	get isStartMode() {return State.isIntro   || State.isReady}
+	constructor() {super(globalThis, States)}
+	get isStartMode() {return State.isNewGame || State.isReady}
 	get isDemoMode()  {return State.isAttract || State.isCoffBreak}
 
 	/**

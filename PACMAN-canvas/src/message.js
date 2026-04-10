@@ -21,7 +21,7 @@ export const Message = {
 		ctx.restore()
 	},
 	draw() {
-		if (State.isIntro) {
+		if (State.isNewGame) {
 			drawText( 9, 12, '#0FF','PLAYER　ONE')
 		}
 		if (Ticker.paused) {
