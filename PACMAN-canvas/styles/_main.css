@@ -6,9 +6,11 @@ html, body {
 	overflow: hidden;
 }
 html {
+	--tile-size: 31px;
 	--grid-cols: 28;
 	--grid-rows: 34;
-	font-size: 31px;
+	--t: var(--tile-size);
+	font-size: var(--t);
 }
 body {
 	color: #4c76d1;
@@ -36,17 +38,19 @@ header > * {
 }
 h1 {
 	text-transform: lowercase;
-	font: 1.15rem/.9 PacFont;
-	translate: 23.3rem 11.2rem;
+	font: var(--t)/.9 PacFont;
+	transform-origin: 0;
+	translate: calc(var(--t) * 23.3) calc(var(--t) * 11.5);
+	scale: 115%;
 	display: flex;
 	flex-direction: column;
 	:nth-child(2) {text-indent: 1.5em}
 }
 #level {
-	font: small-caps .8rem/1 Atari;
+	font: small-caps var(--t)/1 Atari;
 	transform-origin: 0 center;
-	translate: .5em 12.7rem;
-	scale: 0.82 1;
+	translate: calc(var(--t) * .5) calc(var(--t) * 12.6);
+	scale: .65 .8;
 }
 
 #container {
@@ -59,8 +63,8 @@ h1 {
 	#board {
 		pointer-events: none;
 		margin-top: 0.5em;
-		width:  calc(1rem * var(--grid-cols));
-		height: calc(1rem * var(--grid-rows));
+		width:  calc(var(--t) * var(--grid-cols));
+		height: calc(var(--t) * var(--grid-rows));
 		canvas {
 			position: absolute;
 			top: var(--padding-top);
@@ -87,14 +91,14 @@ html.controller-settled .panel {
 	width: 100%;
 	position: absolute;
 	z-index: 100;
-	top: 6.9rem;
+	top: calc(var(--t) * 6.9);
 	#startBtn {
 		text-align: center;
 		white-space: nowrap;
-		font: .8rem/1 Atari, sans-serif;
-		padding: .4rem 1.5rem .2rem;
+		font: calc(var(--t) * .8)/1 Atari, sans-serif;
+		padding: .4em 1.5em .2em;
 		position: absolute;
-		top: 21.75rem;
+		top: calc(var(--t) * 21.75);
 		left: 50%;
 		translate: -50% 0;
 	}
