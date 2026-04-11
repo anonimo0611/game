@@ -54,9 +54,9 @@ class Player extends PacMan {
 		this.sprite.update(this)
 		fader?.update(this.maxAlpha)
 		if (!this.closed && !this.hidden) {
-			this.#update(this.#mov.speed+.5|0)
 			this.#tunEntry.update()
 			this.#sinceLastEating += Game.interval
+			this.#update(this.#mov.speed+.5|0)
 		}
 		if (!State.isInGame)
 			this.keepInsideBoard()
