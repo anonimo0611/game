@@ -50,4 +50,4 @@ GhostNames  = /**@type {const}*/(['Akabei','Pinky','Aosuke','Guzuta']),
 GhostColors = /**@type {readonly string[]}*/(GhostNames.map(n=> Color[n]))
 
 // Use the tile size as the default font size
-$root.css('font-size', `${TileSize}px`)
+$root.css('--tile-size', `${TileSize}px`)
