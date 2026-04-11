@@ -13,7 +13,7 @@ export const inputs =
 //---- Buttons ----
 
 const buttonIds  = /**@type {const}*/
-	(['clear','reset','start','demo','coff1','coff2','coff3'])
+	(['clear','reset','start','demo','cs1','cs2','cs3'])
 
 export const btns =
 	/**@type {{[K in buttonIds[number]]:HTMLButtonElement}}*/
@@ -26,8 +26,8 @@ export const demoBtns =
 
 import * as _Menu from '../_lib/menu.js'
 export const Menu = freeze({
-	Level: new _Menu.DorpDown('LevelMenu'),
-	Extend:new _Menu.Slide('ExtendMenu'),
+	Level:  new _Menu.DorpDown('LevelMenu'),
+	Extend: new _Menu.Slide('ExtendMenu'),
 })
 
 //---- Window focused ----
