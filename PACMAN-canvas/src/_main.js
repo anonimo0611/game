@@ -102,9 +102,9 @@ export const Game = new class GameCore {
 		Game.#pacDied = false
 		!Ctrl.endlessMode
 			? State.setTitle()
-			: Demo.CoffBreakNum < 0
+			: Demo.CutsceneNum < 0
 				? State.setNewLevel()
-				: State.setCoffBreak()
+				: State.setCutscene()
 	}
 	#onGameOver() {
 		State.setTitle({delay:2000})

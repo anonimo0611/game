@@ -1,10 +1,10 @@
-import {Ctrl}      from '../control.js'
-import {State}     from '../state.js'
-import {States}    from '../state.js'
-import {WinState}  from '../ui.js'
-import {demoBtns}  from '../ui.js'
-import {Attract}   from './attract.js'
-import {CoffBreak} from './coffee_break.js'
+import {Ctrl}     from '../control.js'
+import {State}    from '../state.js'
+import {States}   from '../state.js'
+import {WinState} from '../ui.js'
+import {demoBtns} from '../ui.js'
+import {Attract}  from './attract.js'
+import {Cutscene} from './cutscene.js'
 
 const Evt = 'blur_focus_pointerdown_mousemove_keydown_scroll_resize_wheel'
 const WaitTime = 1e3*30 // 30secs
@@ -27,15 +27,15 @@ const RunTimer = function() {
 range(demoBtns.length).forEach(i=> {
 	const click = (i == 0)
 		? ()=> State.setAttract()
-		: ()=> State.setCoffBreak({data:i})
+		: ()=> State.setCutscene({data:i})
 	$(demoBtns[i]).on({click})
 })
 
 /** @type {SceneDict<States[number]>} */
-const Scenes = {Title:RunTimer,Attract,CoffBreak}
+const Scenes = {Title:RunTimer,Attract,Cutscene}
 
 export const Demo = {
-	get CoffBreakNum() {return CoffBreak.num},
+	get CutsceneNum() {return Cutscene.num},
 	draw()   {Scenes[State.current]?.draw?.()},
 	update() {Scenes[State.current]?.update()},
 }

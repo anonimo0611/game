@@ -6,7 +6,7 @@ import _State from '../_lib/state.js'
 */
 export const States = /**@type {const}*/([
 	'Title','Attract','NewGame','NewLevel','Ready','InGame','RoundEnds',
-	'Cleared','PacDying','Flashing','CoffBreak','GameOver','Quit'])
+	'Cleared','PacDying','Flashing','Cutscene','GameOver','Quit'])
 /**
  @extends {_State<StateType,globalThis>}
  @typedef {GameState & StateDef.Props<StateType>} IGameState
@@ -14,7 +14,7 @@ export const States = /**@type {const}*/([
 class GameState extends _State {
 	constructor() {super(globalThis, States)}
 	get isStartMode() {return State.isNewGame || State.isReady}
-	get isDemoMode()  {return State.isAttract || State.isCoffBreak}
+	get isDemoMode()  {return State.isAttract || State.isCutscene}
 
 	/**
 	 @param {StateType} s

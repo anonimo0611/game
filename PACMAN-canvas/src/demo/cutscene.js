@@ -10,18 +10,18 @@ import * as Snag  from '../sprites/snag.js'
 const sceneNum = (lv=0)=>
 	!Ctrl.isPractice && ({2:1, 5:2, 9:3}[lv]) || -1
 
-export class CoffBreak {
-	static {State.on({CoffBreak:this.#begin})}
+export class Cutscene {
+	static {State.on({Cutscene:this.#begin})}
 	static #scene = /**@type {?Scene1|Scene2|Scene3}*/(null)
-	static #begin(_={}, n=CoffBreak.num) {
+	static #begin(_={}, n=Cutscene.num) {
 		if (!between(n,1,3))
 			throw new RangeError(`Invalid scene number: ${n}.`
 				+` Must be between 1 and 3.`)
-		CoffBreak.#scene = new [Scene1,Scene2,Scene3][n-1]
+		Cutscene.#scene = new [Scene1,Scene2,Scene3][n-1]
 	}
 	static get num() {return sceneNum(Game.level)}
-	static draw()    {CoffBreak.#scene?.draw()}
-	static update()  {CoffBreak.#scene?.update()}
+	static draw()    {Cutscene.#scene?.draw()}
+	static update()  {Cutscene.#scene?.update()}
 
 	pacvx  = -BW/180
 	akavx  = -BW/180
@@ -31,7 +31,7 @@ export class CoffBreak {
 	/** @protected @param {number} num */
 	constructor(num) {
 		this.pacman.y = this.akabei.y = BH/2 - T/2
-		Sound.playCoffBreak({loop:(num == 2) ? 0:1})
+		Sound.playCutscene({loop:(num == 2) ? 0:1})
 	}
 	movePac() {
 		this.pacman.x += this.pacvx
@@ -58,7 +58,7 @@ export class CoffBreak {
 	}
 }
 
-class Scene1 extends CoffBreak {
+class Scene1 extends Cutscene {
 	isFrightened = false
 	constructor() {
 		super(1)
@@ -96,7 +96,7 @@ class Scene1 extends CoffBreak {
 	}
 }
 
-class Scene2 extends CoffBreak {
+class Scene2 extends Cutscene {
 	snag     = new Snag.SnagSprite(Fg)
 	akaEyes  = /**@type {VisualOrient}*/(L)
 	counter  = 0
@@ -145,7 +145,7 @@ class Scene2 extends CoffBreak {
 	}
 }
 
-class Scene3 extends CoffBreak {
+class Scene3 extends Cutscene {
 	constructor() {
 		super(3)
 		this.pacman.x = BW + T*6
