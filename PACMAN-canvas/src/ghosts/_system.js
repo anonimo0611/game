@@ -109,12 +109,11 @@ export const GhostMgr = new class GhostManager {
 		)
 	}
 	frighten() {
-		const
-		sec = FrightSecs[Game.clampedLv-1]
-		sec == 0 && !State.isAttract
-			? $(Ghosts).trigger(Evt.FleeStart)
-			: FrightMode.new(sec)
 		signalDirectionReversal()
+		const s = FrightSecs[Game.clampedLv-1]
+		s > 0 || State.isAttract
+			? FrightMode.new(s)
+			: $(Ghosts).trigger(Evt.FleeStart)
 	}
 	update() {
 		AttackInWaves.update()
