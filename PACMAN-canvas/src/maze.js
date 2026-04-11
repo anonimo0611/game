@@ -170,5 +170,3 @@ class MazeManager {
 }
 export const Maze = freeze(new MazeManager)
 export const {drawDot,clearDot}= Maze
-
-console.log(Maze.House.MidY)
