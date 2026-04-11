@@ -47,14 +47,14 @@ const DotSet   = /**@type {Set<TileIdx>}*/(new Set)
 const WallSet  = /**@type {ReadonlySet<TileIdx>} */(new Set)
 const PowMap   = /**@type {Map<TileIdx,Position>}*/(new Map)
 const DotChips = new Set([...'.O'])
-const PenRect  = new Rect(10, 13,  8, 5).freeze()
-const PenOuter = new Rect( 9, 12, 10, 7).freeze()
+const PenRect  = new Rect(14-4, 15-2,  8, 5).freeze()
+const PenOuter = new Rect(14-5, 15-3, 10, 7).freeze()
 
 class House {
 	MidY = (this.EntryTile.y+3.5)*T
 	get EntryTile() {return Vec2.new(13, 12)}
-	isIn(/**@type {Position}*/pos) {
-		return PenRect.contains(pos)
+	isIn(/**@type {Position}*/tilePos) {
+		return PenRect.contains(tilePos)
 	}
 	arrived(/**@type {Ghost}*/g, spd=1) {
 		return g.state.isEscaping
@@ -142,7 +142,7 @@ class MazeManager {
 	*/
 	getGhostExitTile = ({baseTargetTile:b,tile:t})=>
 		!Ctrl.unrestricted && b.y < 10 && PenOuter.contains(t)
-			? b.set(t.x>Cols/2 && b.x>Cols/2 ? 21:6, 15) : b
+			? Vec2.new(t.x>Cols/2 && b.x>Cols/2 ? 21:6, 15) : b
 
 	/**
 	 @param {{tileIdx:number,tileMid:Vec2}} tile
@@ -170,3 +170,5 @@ class MazeManager {
 }
 export const Maze = freeze(new MazeManager)
 export const {drawDot,clearDot}= Maze
+
+console.log(Maze.House.MidY)
