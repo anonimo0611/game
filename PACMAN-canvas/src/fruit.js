@@ -45,17 +45,15 @@ export const FruitMgr = new class FruitManager {
 		if (i < 0) throw RangeError('Must be zero or greater.')
 		return FruitTable.at( min(i, FruitTable.length-1) ) ?? 0
 	}
-	#setHideTimer() {
-		// Disappearing is between 9 and 10 seconds
-		const delay = randInt(9e3, 1e4-FadeOutDur)/Game.speed
-		Timer.set(delay, this.#setFadeOut, {key:this})
-	}
 	#resetTarget() {
 		fadeOut = null
 		showTgt = State.isTitle
 	}
-	#setFadeOut() {
-		fadeOut = Fade.out(FadeOutDur/Game.speed)
+	#onEaten() {
+		this.#resetTarget()
+		Timer.cancel(this)
+		Sound.playEatenFruit()
+		PtsMgr.set({key:this, dur:2e3, pos:TargetPos})
 	}
 	#onDotEaten = ()=> {
 		if (AppearDots.has(Maze.MaxDot - Maze.dotsLeft)) {
@@ -63,11 +61,13 @@ export const FruitMgr = new class FruitManager {
 			this.#setHideTimer()
 		}
 	}
-	#onEaten() {
-		this.#resetTarget()
-		Timer.cancel(this)
-		Sound.playEatenFruit()
-		PtsMgr.set({key:this, dur:2e3, pos:TargetPos})
+	#setHideTimer() {
+		// Disappearing is between 9 and 10 seconds
+		const delay = randInt(9e3, 1e4-FadeOutDur)/Game.speed
+		Timer.set(delay, this.#setFadeOut, {key:this})
+	}
+	#setFadeOut() {
+		fadeOut = Fade.out(FadeOutDur/Game.speed)
 	}
 	update() {
 		fadeOut?.update() == false
