@@ -103,7 +103,7 @@ html.controller-settled .panel {
 body:not([data-state=Title]) #titleScr {
 	visibility: hidden;
 }
-body:is([data-state=Attract],[data-state=CoffBreak]) {
+body:is([data-state=Attract],[data-state=Cutscene]) {
 	:is(header,canvas:not(#board_main,#board_grid)) {visibility: hidden}
 }
 
