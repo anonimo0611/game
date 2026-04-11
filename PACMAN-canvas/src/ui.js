@@ -12,19 +12,15 @@ export const inputs =
 
 //---- Buttons ----
 
-const demoBtnIds = /**@type {const}*/
-	(['demo','coff1','coff2','coff3'])
-
 const buttonIds  = /**@type {const}*/
-	(['clear','reset','start', ...demoBtnIds])
+	(['clear','reset','start','demo','coff1','coff2','coff3'])
 
 export const btns =
 	/**@type {{[K in buttonIds[number]]:HTMLButtonElement}}*/
 	(fromEntries(buttonIds.map(id=> [id,requireElem(id+'Btn')])))
 
 export const demoBtns =
-	/**@type {HTMLButtonElement[]}*/
-	(demoBtnIds.map(id=> requireElem(id+'Btn')))
+	/**@type {HTMLButtonElement[]}*/($('button.demo').get())
 
 //---- Custom menus ----
 
