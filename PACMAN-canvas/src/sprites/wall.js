@@ -19,15 +19,11 @@ export const Wall = new class WallRenderer {
 		Cache.forEach((ctx,i)=> {
 			ctx.lineWidth   = LW
 			ctx.strokeStyle = Palette.Wall[i];
-			for (const i of Maze.Map.keys()) {
-				if (i%Cols >= Cols/2) continue
+			Maze.Map.forEach((_,i)=> {
+				if (i%Cols >= Cols/2) return
 				Wall.#drawTile(ctx, Maze.Map[i], i)
-			}
-			ctx.save()
-			ctx.translate(BW, 0)
-			ctx.scale(-1, 1)
-			ctx.drawImage(ctx.canvas, 0,0, BW/2,BH, 0,0, BW/2,BH)
-			ctx.restore()
+			})
+			ctx.flip(ctx.canvas, 0,0, true)
 			Wall.#drawHouse(ctx)
 		})
 	}
