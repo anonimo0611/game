@@ -40,13 +40,13 @@ export class Cutscene {
 	moveAka(rate=1) {
 		this.akabei.x += this.akavx * rate
 	}
-	drawPac(radius=this.pacman.radius) {
+	drawPac(radius=this.pacman.sprite.r) {
 		const {pacman:{center,orient}}= this
 		this.pacman.sprite.draw({center,orient,radius})
 	}
 	drawAka(data={}) {
-		const {akabei:{pos,animIdx}}= this
-		this.akabei.sprite.draw({animIdx, ...data, ...pos})
+		const {akabei:{center,animIdx}}= this
+		this.akabei.sprite.draw({animIdx,center, ...data})
 	}
 	draw() {
 		State.wasFlashing && FruitMgr.drawLevelCounter()
@@ -89,7 +89,7 @@ class Scene1 extends Cutscene {
 	}
 	draw() {
 		const {isFrightened}= this
-		const {pacman:{dir,radius:r}}= this
+		const {pacman:{dir,sprite:{r}}}= this
 		this.drawAka({isFrightened})
 		this.drawPac((dir == L ? 1:4)*r)
 		super.draw()

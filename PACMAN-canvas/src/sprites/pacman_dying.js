@@ -5,22 +5,22 @@ const TOTAL_DUR = SPLIT_DUR+BURST_DUR+30
 import {SCALE_FACTOR} from './pacman.js'
 export class Dying {
 	/** @readonly */ctx
-	/** @readonly */Radius
+	/** @readonly */r
 	#cnt;    #cb;
 	#innerR; #outerR;
 	#arcAng; #fadeOut = Fade.out(300);
 
 	/**
-	 @param {{ctx:EnhancedCtx2D,Radius:number}} _
+	 @param {{ctx:EnhancedCtx2D,r:number}} _
 	 @param {()=> void} [cb]
 	*/
-	constructor({ctx,Radius}, cb) {
+	constructor({ctx,r}, cb) {
 		this.ctx     = ctx
-		this.Radius  = Radius
 		this.#cb     = cb
 		this.#cnt    = this.#arcAng = 0
-		this.#innerR = Radius/4
-		this.#outerR = Radius/2
+		this.r       = r
+		this.#innerR = r/4
+		this.#outerR = r/2
 	}
 	get isSplitting() {
 		return this.#arcAng < PI-PI/SPLIT_DUR
@@ -36,19 +36,19 @@ export class Dying {
 			: this.#updateRadialBurst()
 	}
 	#updateRadialBurst() {
-		if (this.#outerR <= this.Radius) {
-			this.#innerR += this.Radius*0.4/BURST_DUR
-			this.#outerR += this.Radius*1.0/BURST_DUR
+		if (this.#outerR <= this.r) {
+			this.#innerR += this.r*0.4/BURST_DUR
+			this.#outerR += this.r*1.0/BURST_DUR
 			return
 		}
 		this.#fadeOut.update()
 	}
-	draw({x=0,y=0,radius:r=this.Radius}={}) {
-		const {ctx,Radius}= this
+	draw({x=0,y=0,radius:r=this.r}={}) {
+		const {ctx,r:defaultR}= this
 		ctx.save()
 		ctx.translate(x,y)
-		ctx.scale(r/Radius*SCALE_FACTOR)
-		ctx.lineWidth = Radius*0.21
+		ctx.scale(r/defaultR*SCALE_FACTOR)
+		ctx.lineWidth = defaultR*0.21
 		ctx.fillStyle = ctx.strokeStyle = Color.Pacman
 		this.isSplitting
  			? this.#drawSplittingBody()
@@ -56,11 +56,11 @@ export class Dying {
 		ctx.restore()
 	}
 	#drawSplittingBody() {
-		const {ctx,Radius}= this
+		const {ctx,r}= this
 		const angle = this.#arcAng
 		ctx.beginPath()
-		ctx.moveTo(0, Radius*0.3)
-		ctx.arc(0, 0, Radius, -PI/2+angle, -PI/2-angle)
+		ctx.moveTo(0, r*0.3)
+		ctx.arc(0, 0, r, -PI/2+angle, -PI/2-angle)
 		ctx.fill()
 	}
 	#drawRadialBurst() {

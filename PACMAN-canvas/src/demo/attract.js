@@ -18,7 +18,7 @@ export class Attract {
 	static draw()   {Attract.#instance?.draw()}
 	static update() {Attract.#instance?.update()}
 
-	ghsSpr = new GhostSprite(Fg, T*2, T*2)
+	ghsSpr = new GhostSprite(Fg, T)
 	subAct = new EnergizerAct
 
 	/** @private */
@@ -66,7 +66,8 @@ export class Attract {
 		FruitMgr.drawLevelCounter()
 	}
 	drawGhostOnTable(type=0, row=0) {
-		this.ghsSpr.draw({type,orient:R,x:(T*5),y:(T*row)})
+		const center = Vec2.new(T*5, T*row).add(T/2)
+		this.ghsSpr.draw({type,orient:R,center})
 	}
 	quit() {
 		$off('.Attract')

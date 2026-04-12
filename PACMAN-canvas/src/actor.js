@@ -11,9 +11,9 @@ export class Actor {
 
 	/** @protected */
 	constructor(col=0,row=0) {this.pos.set(col*T,row*T)}
+
+	// Override this in subclasses to return the actual speed.
 	get speed()     {return 0}
-	get radius()    {return T}
-	get size()      {return this.radius*2}
 	get inHouse()   {return Maze.House.isIn(this.tile)}
 	get inTunSide() {return Maze.Tunnel.findSide(this.center)}
 
@@ -44,8 +44,8 @@ export class Actor {
 		this.x = (BW-T)/2
 	}
 	keepInsideBoard() {
-		const {center:{x},radius:r}= this
-		this.x = clamp(x, r, BW-r) - T/2
+		const {center:{x}}= this
+		this.x = clamp(x, T, BW-T) - T/2
 	}
 	#wrapXAxis() {
 		this.x = function({center:{x}}) {

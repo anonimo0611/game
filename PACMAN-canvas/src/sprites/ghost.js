@@ -1,25 +1,37 @@
 import SubSprite from './ghost_sub.js'
 export const LOGICAL_SIZE = 90
 export default class GhostSprite {
+	#size
 	/** @readonly */tgt
 	/** @readonly */ctx
 	/** @readonly */sub
-	/** @param {EnhancedCtx2D} target */
-	constructor(target, w=T*3, h=T*2) {
+	/**
+	 @param {EnhancedCtx2D} target
+	 @param {number} radius
+	*/
+	constructor(target, radius) {
 		this.tgt = target
-		this.ctx = canvas2D(null, w, h).ctx
+		this.ctx = canvas2D(null).ctx
 		this.sub = new SubSprite(this.ctx)
+		this.resize(this.#size = radius*2)
 	}
 	#resurrect = /**@type {?Fade}*/(null)
 	setResurrect() {
 		this.#resurrect ||= Fade.in(600)
 	}
+	get size() {
+		return this.#size
+	}
+	/** @param {number} size */
+	resize(size) {
+		this.#size = size
+		this.ctx.resize(size*1.5, size)
+	}
 	draw({
-		x=0,y=0,
+		center ={x:0,y:0},
 		type         = 0,
 		animIdx      = 0,
 		spriteIdx    = 0,
-		size         = T*2,
 		alpha        = 1,
 		orient       = /**@type {VisualOrient}*/(L),
 		isAngry      = false,
@@ -29,12 +41,12 @@ export default class GhostSprite {
 		isMended     = false,
 		isExposed    = false,
 	}={}) {
-		const {tgt,ctx}= this
+		const {tgt,ctx,size}= this
 		function finalize() {
 			ctx.restore()
 			tgt.save()
 			tgt.setAlpha(alpha)
-			tgt.translate(x+size/4, y+size/4)
+			tgt.translate(center)
 			tgt.drawImage(ctx.canvas, -size/2, -size/2)
 			tgt.restore()
 		}
@@ -55,7 +67,7 @@ export default class GhostSprite {
 		if (!isEscaping) {
 			ctx.save()
 			this.#resurrect?.apply(ctx)
-			isAngry && this.#drawAngerGlow({x,y,size})
+			this.#drawAngerGlow({center,isAngry})
 			this.#drawBody({animIdx,isRipped,isMended})
 			if (isFrightened) {
 				ctx.fillStyle   =
@@ -154,11 +166,12 @@ export default class GhostSprite {
 		ctx.addLinePath([ +3, 9],[+11,17],[+15,17],[+25, 9],[+30, 9],[36,17])
 		ctx.stroke()
 	}
-	#drawAngerGlow({x=0,y=0,size=T*2}) {
+	#drawAngerGlow({center:{x=0,y=0},isAngry=false}) {
+		if (!isAngry) return
 		const {tgt}=this, {width:W}=Glow, S=W*1.2
 		tgt.save()
 		tgt.globalAlpha = this.#resurrect?.alpha ?? 1
-		tgt.translate(x+size/4, y+size/4)
+		tgt.translate(x, y)
 		tgt.drawImage(Glow, 0,0, W,W, -S/2,-S/2, S,S)
 		tgt.restore()
 	}

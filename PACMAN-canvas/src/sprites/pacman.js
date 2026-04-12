@@ -7,7 +7,7 @@ import {Dying} from './pacman_dying.js'
 export const SCALE_FACTOR = 0.9
 export default class PacmanSprite {
 	/** @readonly */ctx
-	/** @readonly */Radius
+	/** @readonly */r
 	#mPhase = 0
 	#mAngle = 0
 	#dyingSpr = /**@type {?Dying}*/(null)
@@ -18,8 +18,8 @@ export default class PacmanSprite {
 	 @param {0|1|2} initialOpening 0=closed, 1=half open, 2=fully open
 	*/
 	constructor(ctx, radius, initialOpening=0) {
-		this.ctx     = ctx
-		this.Radius  = radius
+		this.ctx = ctx
+		this.r = radius
 		this.#mAngle = [0,OpenMid,OpenMax][initialOpening]
 	}
 	update({closed=false,hidden=false,onWall=false}={}) {
@@ -42,7 +42,7 @@ export default class PacmanSprite {
 		alpha  = 1,
 		hidden = false,
 		closed = false,
-		radius = this.Radius}={}
+		radius = this.r}={}
 	) {
 		if (hidden) {
 			return

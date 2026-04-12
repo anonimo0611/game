@@ -1,11 +1,11 @@
 import {LOGICAL_SIZE} from './ghost.js'
 
-// Assumes actors are vertically centered on the board
-const StakeSize  = Vec2.fixed(T*.18, T*.7)
-const SnaggedPos = Vec2.fixed(BW/2+T*2-StakeSize.x/2, BH/2+T)
-
 export const AkaSnagX = BW/2 + T/2
 export const AkaStopX = AkaSnagX - T
+
+// Assumes actors are vertically centered on the board
+export const StakeSize  = Vec2.fixed(T*.18, T*.7)
+export const SnaggedPos = Vec2.fixed(BW/2+T*2-StakeSize.x/2, BH/2+T)
 
 export class SnagSprite {
 	/** @readonly */ctx
