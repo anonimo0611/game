@@ -25,8 +25,6 @@ Grid = canvas2D('board_grid', BW,BH).ctx,
 Color = /**@type {const}*/({
 	Grid:      '#F00',
 	Dot:       '#FFB8AE',
-	Wall:      '#58E',
-	FlashWall: '#FFF',
 	Door:      '#FFB8DE',
 	Pacman:    '#FF0',
 	Akabei:    '#E00',
@@ -41,6 +39,7 @@ Color = /**@type {const}*/({
 Palette = /**@type {const}*/({
 	Info:       ['#888','#F9E'], // disabled, enabled
 	Points:     ['#FAF','#3CF'], // fruit, ghost
+	Wall:       ['#58E','#FFF'],
 	FrightFace: ['#F9F','#F00'],
 	FrightBody: ['#36A','#FFF'],
 }),
