@@ -19,9 +19,9 @@ export const Wall = new class WallRenderer {
 		Cache.forEach((ctx,i)=> {
 			ctx.lineWidth   = LW
 			ctx.strokeStyle = Palette.Wall[i];
-			Maze.Map.forEach((_,i)=> {
-				if (i%Cols >= Cols/2) return
-				Wall.#drawTile(ctx, Maze.Map[i], i)
+			Maze.Map.forEach((_,j)=> {
+				if (j%Cols >= Cols/2) return
+				Wall.#drawTile(ctx, Maze.Map[j], j)
 			})
 			ctx.flip(ctx.canvas, 0,0, true)
 			Wall.#drawHouse(ctx)
@@ -32,11 +32,11 @@ export const Wall = new class WallRenderer {
 		Bg.drawImage(Cache[idx].canvas, 0,0)
 		Wall.#drawDoor()
 	}
-	setFlashing(/**@type {()=> void}*/cb) {
-		let count = 0
+	setFlashing(cb=()=>{}) {
+		let cnt = 0
 		;(function redraw() {
-			if (++count > 8) return Timer.set(500, cb)
-			Wall.draw(count % 2 ? 1:0)
+			if (++cnt > 8) return Timer.set(500, cb)
+			Wall.draw(cnt % 2 ? 1:0)
 			Timer.set(250, redraw)
 		})()
 	}
