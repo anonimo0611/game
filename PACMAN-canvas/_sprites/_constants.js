@@ -14,15 +14,15 @@ export const ResetBtn  = /**@type {HTMLButtonElement}*/(byId('resetBtn'))
 
 export let  [T,S,GAP] = [0,0,0]
 export const GridSize = new Vec2(10,11).vals
-export const ghostPv  = new GhostSprite(Pv)
-export const ghostGr  = new GhostSprite(Fg)
+export const ghostPv  = new GhostSprite(Pv, T)
+export const ghostGr  = new GhostSprite(Fg, T)
 
 export function resize() {
 	T = SizeRng.valueAsNumber/2
 	if (lastTileSize != T) {
 		[S,GAP] = [T*2,T*.25]
-		ghostPv.ctx.resize(S*1.5, S*3)
-		ghostGr.ctx.resize(S*1.5, S*3)
+		ghostPv.resize(S)
+		ghostGr.resize(S)
 		Pv.resize(T*3.2, T*2.1)
 		Fg.resize(...Vec2.new(GridSize).mul(S).add(GAP*2).vals)
 		lastTileSize = T

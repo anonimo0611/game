@@ -98,13 +98,13 @@ class ActorPreview {
 	}
 	drawGhost = ()=> {
 		const {subj}= this
+		const {width:PvW,height:PvH}= Pv.canvas
 		Pv.save()
 		subj?.subType == Schema.Ghost.Exposed
-			? Pv.translate(Pv.canvas.width/2-T,   T/2)
-			: Pv.translate(Pv.canvas.width/2-T/2, T/2)
+			? Pv.translate(PvW/2-T/2, PvH/2)
+			: Pv.translate(PvW/2, PvH/2)
 
 		subj?.ghost.draw({
-			size:        S,
 			type:        subj.type-1,
 			animIdx:     subj.animIdx,
 			orient:      subj.orient,

@@ -34,17 +34,17 @@ const [Cols,Rows]= GridSize
 		for (const row of range(1,6)) {
 			for (const col of range(0,8)) {
 				ctx.save()
-				ctx.translate(T/2)
+				ctx.translate(T)
 				this.#drawGhost(col, row)
 				ctx.restore()
 			}
 		}
 	}
 	#drawGhost(col=0, row=0) {
-		const [x,y]= [ofst(col), row*S]
+		const center = Vec2.new(ofst(col), row*S)
 		if (row < 5) {
 			ghostGr.draw({
-				x,y,size:S,
+				center,
 				type:  row-1,
 				animIdx: +(col % 2 != 0),
 				orient:/**@type {const}*/([U,U,L,L,D,D,R,R])[col],
@@ -52,7 +52,7 @@ const [Cols,Rows]= GridSize
 			return
 		}
 		ghostGr.draw({
-			x,y,size:S,
+			center,
 			orient:/**@type {const}*/([R,R,R,R,U,L,D,R])[col],
 			animIdx:    +(col % 2 != 0),
 			spriteIdx:  +(col >= 2 && col <= 3),
@@ -99,7 +99,10 @@ const [Cols,Rows]= GridSize
 		ctx.translate(T/2, (Rows-2)*S+T/2)
 
 		/** @type {(x:number, y:number, params:object)=> void} */
-		const draw = (x,y, params)=> {aka.draw({size:S,x,y, ...params})}
+		const draw = (x,y, params)=> {
+			const center = Vec2.new(x+T/2, y+T/2)
+			aka.draw({center, ...params})
+		}
 
 		{// Snagged Clothing
 			const pos = Vec2.Zero, ratios = [0.3, 0.5 ,1]
@@ -111,11 +114,11 @@ const [Cols,Rows]= GridSize
 			}
 		}
 		{
-			const pos = Vec2.new(S*6.9, S-T/2)
+			const pos = Vec2.new(S*6.9, S-Snag.StakeSize.y)
 			spr.drawSnaggedStake({scale,pos,isRipped:true})
 		}
 		draw(ofst(4.00), 0, {isRipped: true,orient:U})
-		draw(ofst(5.00), 0, {isRipped: true,orient:ShatteredEyes})
+		draw(ofst(5.00), 0, {isRipped: true,orient:DazedEyes})
 		draw(ofst(0.00), S, {isMended: true})
 		draw(ofst(1.00), S, {isMended: true,animIdx:1})
 		draw(ofst(2.25), S, {isExposed:true})
