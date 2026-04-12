@@ -58,6 +58,19 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 		return this
 	}
 
+	/**
+	 @param {HTMLImageElement|HTMLCanvasElement} img
+	 @param {number} x
+	 @param {number} y
+	*/
+	flip(img, x, y, flipX=false, flipY=false, w=img.width, h=img.height) {
+		this.save()
+		this.translate(x+(flipX? w:0), y+(flipY? h:0))
+		this.scale(flipX? -1:1, flipY? -1:1)
+		this.drawImage(img, 0,0, w,h)
+		this.restore()
+	}
+
 	/** @param {Cvs2DStyle} [style] */
 	clear(style) {
 		this.fillRect(0,0, this.width, this.height, style ?? null)
