@@ -8,6 +8,8 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	get width()  {return this.canvas.width}
 	get height() {return this.canvas.height}
 
+	void() {}
+
 	/**
 	 @param {number} [w]
 	 @param {number} [h]
