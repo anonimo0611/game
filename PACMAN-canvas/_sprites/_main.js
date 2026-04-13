@@ -19,23 +19,23 @@ const [Cols,Rows]= GridSize
 		ctx.translate(-GAP/2, +1)
 		ctx.setLineDash([2,2])
 		ctx.beginPath()
-		range(Cols+0).forEach(x=> ctx.setLinePath([ofst(x), 0], [ofst(x), Rows*S]))
-		range(Rows+1).forEach(y=> ctx.setLinePath([0, y*S], [Cols*S+GAP, y*S]))
+		for(let x=0; x<Cols+0; x++) ctx.setLinePath([ofst(x), 0], [ofst(x), Rows*S])
+		for(let y=0; y<Rows+1; y++) ctx.setLinePath([0, y*S], [Cols*S+GAP, y*S])
 		ctx.lineWidth   = 2
 		ctx.strokeStyle = '#555555'
 		ctx.stroke()
 		ctx.restore()
 	}
 	#drawFruits() {
-		for (const i of range(8))
+		for (let i=0; i<8; i++)
 			Fruit.draw(ctx, i, ofst(7-i)+S/2, S/2, S/16)
 	}
 	#drawGhosts() {
-		for (const row of range(1,6)) {
-			for (const col of range(0,8)) {
+		for (let y=1; y<6; y++) {
+			for (let x=0; x<8; x++) {
 				ctx.save()
 				ctx.translate(T)
-				this.#drawGhost(col, row)
+				this.#drawGhost(x, y)
 				ctx.restore()
 			}
 		}
@@ -85,7 +85,7 @@ const [Cols,Rows]= GridSize
 	}
 	#drawPacman() {
 		const dirs = /**@type {const}*/([U,U,L,L,D,D,R,R])
-		for (const i of range(-1,9)) {
+		for (let i=-1; i<9; i++) {
 			const center = Vec2.new(T+ofst(i), S*8.5)
 			const params = {center, orient:dirs[i-1], radius:T}
 			new PacSprite(ctx, T, i>0 ? (i%2 ? 1:2) : 0).draw(params)
@@ -106,7 +106,7 @@ const [Cols,Rows]= GridSize
 
 		{// Snagged Clothing
 			const pos = Vec2.Zero, ratios = [0.3, 0.5 ,1]
-			for (const i of range(3)) {
+			for (let i=0; i<3; i++) {
 				draw(...pos.vals, {animIdx:+(i == 2)})
 				const nPos = Vec2.new(pos).add(S*0.75, S/4)
 				spr.drawSnaggedClothing(+(i == 2), ratios[i], {...nPos,scale})
