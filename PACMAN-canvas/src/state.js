@@ -26,6 +26,7 @@ class GameState extends _State {
 	}
 
 	/**
+	 State names starting with an _ represent a combination with the 'Title'.
 	 @param {{[key in (StateType|Underscored)]?:JQWindowHandler}} o
 	*/
 	on(o) {return super.on(o)}
