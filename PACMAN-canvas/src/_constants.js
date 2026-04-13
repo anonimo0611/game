@@ -34,7 +34,7 @@ Color = /**@type {const}*/({
 	GhostEyes: '#33F',
 	GhostSkin: '#F4BEB0',
 	Extend:    '#F55',
-	Orange:    '#F90',
+	Notice:    '#F90',
 }),
 Palette = /**@type {const}*/({
 	Info:       ['#888','#F9E'], // disabled, enabled

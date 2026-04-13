@@ -58,8 +58,8 @@ export class Attract {
 			}
 			if (extendScore > 0) {
 				const text = `BONUS　PACMAN　FOR　${extendScore}`
-				drawText( 2.0, 29, Color.Orange, text)
-				drawText(24.3, 29, Color.Orange,'PTS', Small)
+				drawText( 2.0, 29, Color.Notice, text)
+				drawText(24.3, 29, Color.Notice,'PTS', Small)
 			}
 			this.subAct.draw()
 		}
