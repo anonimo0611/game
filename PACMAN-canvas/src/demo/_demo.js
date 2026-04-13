@@ -24,7 +24,7 @@ const RunTimer = function() {
 	return {update}
 }()
 
-range(demoBtns.length).forEach(i=> {
+demoBtns.keys().forEach(i=> {
 	const click = (i == 0)
 		? ()=> State.setAttract()
 		: ()=> State.setCutscene({data:i})

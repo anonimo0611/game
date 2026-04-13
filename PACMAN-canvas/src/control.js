@@ -123,8 +123,8 @@ export const Ctrl = new class Controller {
 	}
 	#setupGrid() {
 		Grid.beginPath()
-		range(1,Cols).forEach(x=> Grid.setLinePath([T*x, 0],[T*x, Rows*T]))
-		range(0,Rows).forEach(y=> Grid.setLinePath([0, T*y],[Cols*T, T*y]))
+		for(let x=1; x<Cols+0; x++) Grid.setLinePath([T*x, 0],[T*x, Rows*T])
+		for(let y=0; y<Cols+0; y++) Grid.setLinePath([0, T*y],[Cols*T, T*y])
 		Grid.strokeStyle = Color.Grid
 		Grid.stroke()
 	}

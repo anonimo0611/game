@@ -91,7 +91,7 @@ export const FruitMgr = new class FruitManager {
 		HUD.save()
 		HUD.clearRect(x,y,w,h)
 		HUD.translate(x,y)
-		for (const i of range(startLevel, Game.level))
+		for (let i=startLevel; i<Game.level; i++)
 			Spr.draw(HUD, this.#getType(i), w-T-Size*(i-startLevel))
 		HUD.restore()
 	}

@@ -94,13 +94,13 @@ class MazeManager {
 		const wallSet = /**@type {Set<TileIdx>}*/(WallSet)
 		for (const [i,c] of MapArr.entries())
 			!DotChips.has(c) && c.trim() && wallSet.add(i)
-		State.on({_NewLevel: e=> this.reset(e)})
-		$(powChk).on({change:e=> this.reset(e)})
+		State.on({_NewLevel: this.reset})
+		$(powChk).on({change:this.reset})
 	}
 	static reset(/**@type {JQTriggeredEvent}*/e) {
 		e.target != powChk && Wall.draw()
 		for (const [i,c] of MapArr.entries())
-			DotChips.has(c) && this.setDot(i,c)
+			DotChips.has(c) && MazeManager.setDot(i,c)
 	}
 	static setDot(/**@type {TileIdx}*/i, chip='.') {
 		const t = Vec2.new(i%Cols, i/Cols|0)

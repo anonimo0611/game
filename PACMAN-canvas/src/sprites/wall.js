@@ -1,10 +1,9 @@
-const ScaleFactor = screen.height/1080
-const CornerToIdx = trMap('12345678abcdABCD',cycleRange(4))
-
 const HT = T/2
-const LW = max(1, 3*ScaleFactor|0) // Line  Width
-const LO = max(2, 4*ScaleFactor|0) // Line  Offset
-const OO = max(1, 2*ScaleFactor|0) // Outer Offset
+const SF = screen.height/1080
+const LW = max(1, 3*SF|0) // Line  Width
+const LO = max(2, 4*SF|0) // Line  Offset
+const OO = max(1, 2*SF|0) // Outer Offset
+const CornerToIdx = new Map(Array.from('12345678abcdABCD',(v,i)=> [v,i%4]))
 
 const Cache = freeze([
 	canvas2D(null, BW,BH).ctx, // Blue

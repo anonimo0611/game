@@ -85,7 +85,8 @@ class EnergizerAct {
 	get started() {return Ticker.elapsedTime > 1e4+500}
 	get outward() {return this.#pacman.dir == L}
 	constructor() {
-		range(GhostType.Max).forEach(i=> this.#setActor(i))
+		for (let i=0; i<GhostType.Max; i++)
+			this.#setActor(i)
 		GhostMgr.initialize(this.#ghosts)
 	}
 	#setActor(type=0) {

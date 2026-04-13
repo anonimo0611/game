@@ -34,7 +34,8 @@ export class PathMgr {
 		Fg.translate(T/2+ofst, T/2+ofst)
 		Fg.beginPath()
 		Fg.moveTo(...g.pos.vals)
-		for(const [i,{tile,dir,stopped}] of path.entries()) {
+		for (let i=0; i<path.length; i++) {
+			const {tile,dir,stopped}= path[i]
 			const curr = tile.clone.mul(T)
 			const last = path[i-1]?.tile.clone.mul(T) ?? g.pos
 			if (tile == endT) {
@@ -66,7 +67,7 @@ export class PathMgr {
 			return
 		const tile = g.getAdjTile(dir,g.tile)
 		const path = [{dir,tile,stopped:false}]
-		for(const i of range(PathSteps)) {
+		for (let i=0; i<PathSteps; i++) {
 			const {dir:d,tile:t}= path[(i+1)-1]
 			const tgt  = g.getTargetTile(t)
 			const dir  = g.getNextDir(d,t,tgt)

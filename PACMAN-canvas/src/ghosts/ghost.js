@@ -103,14 +103,14 @@ export class Ghost extends Actor {
 		this.#fleeTmr >= 0 && this.#fleeTmr--
 		if (Timer.frozen && !this.isEscaping) return
 		switch(this.state.current) {
-		case 'Idle':    return this.#idleInHouse(this)
-		case 'GoingOut':return this.#goingOut(this)
-		case 'Entering':return this.#enteringToHome(this)
+		case 'Idle':     return this.#idleInHouse(this)
+		case 'GoingOut': return this.#goingOut(this)
+		case 'Entering': return this.#enteringToHome(this)
 		default: this.#moveStepped(this.speed+.5|0)
 		}
 	}
 	#moveStepped(steps=1) {
-		for (const _ of range(steps)) {
+		for (let i=0; i<steps; i++) {
 			this.#tickMove(this.speed/steps)
 			this.passedTileCenter && this.#setNextDir()
 			if (this.#makeTurn(this)) break

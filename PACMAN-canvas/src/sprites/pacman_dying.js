@@ -66,10 +66,10 @@ export class Dying {
 	#drawRadialBurst() {
 		const {ctx}= this
 		ctx.setAlpha(this.#fadeOut?.alpha)
-		for (const deg of range(0, 360, 360/10)) {
+		for (let d=0; d<360; d+=360/10) {
 			ctx.beginPath()
-			ctx.moveTo(...getCircum(deg*PI/180, this.#innerR).vals)
-			ctx.lineTo(...getCircum(deg*PI/180, this.#outerR).vals)
+			ctx.moveTo(...getCircum(d*PI/180, this.#innerR).vals)
+			ctx.lineTo(...getCircum(d*PI/180, this.#outerR).vals)
 			ctx.stroke()
 		}
 	}
