@@ -1,7 +1,7 @@
 import {Dir}      from '../_lib/direction.js'
-import  Sprite    from './sprites/pacman.js'
+import  PacSprite from './sprites/pacman.js'
 import {player}   from './player/player.js'
-import {Maze}  from './maze.js'
+import {Maze}     from './maze.js'
 import {GhostMgr} from './ghosts/_system.js'
 
 export class Actor {
@@ -107,7 +107,7 @@ export const Actors = {
 
 export class PacMan extends Actor {
 	/** @readonly */
-	sprite = new Sprite(Fg, T)
+	sprite = new PacSprite(Fg,T)
 	constructor(col=0,row=0) {super(col,row)}
 	get hidden() {return Timer.frozen}
 	draw() {this.sprite.draw(this)}
