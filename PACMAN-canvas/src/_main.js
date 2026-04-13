@@ -26,7 +26,7 @@ export const Game = new class GameCore {
 			NewGame:   Game.#onNewGame,
 			NewLevel:  Game.#onNewLevel,
 			Ready:     Game.#onReady,
-			RoundEnds: Game.#onRoundEnds,
+			RoundEnds: Game.#onRoundEnd,
 			Cleared:   Game.#onCleared,
 			PacDying:  Game.#onPacDying,
 			Flashing:  Game.#onFlashing,
@@ -77,7 +77,7 @@ export const Game = new class GameCore {
 	#onReady() {
 		State.setInGame({delay:2200})
 	}
-	#onRoundEnds() {
+	#onRoundEnd() {
 		Maze.dotsLeft == 0
 			? State.setCleared()
 			: State.setPacDying({delay:600})
@@ -96,9 +96,9 @@ export const Game = new class GameCore {
 		State.setFlashing({delay:1000})
 	}
 	#onFlashing() {
-		Wall.setFlashing(Game.#onLevelEnds)
+		Wall.setFlashing(Game.#onLevelEnd)
 	}
-	#onLevelEnds() {
+	#onLevelEnd() {
 		Game.#pacDied = false
 		!Ctrl.endlessMode
 			? State.setTitle()
