@@ -11,16 +11,13 @@ export default class StateBase {
 	/** @readonly */
 	#eventBus = $({})
 
-	/** @protected @param {Owner} owner */
-	constructor(owner) {this.#owner = owner}
-
-	get owner()   {return this.#owner}
-	get current() {return this.#curr}
-	get last()    {return this.#last}
-	get default() {return this.#default}
-
-	/** @param {readonly S[]} states */
-	init(states) {
+	/**
+	 @protected
+	 @param {Owner} owner
+	 @param {readonly S[]} states
+	*/
+	constructor(owner, states) {
+		this.#owner = owner
 		states?.forEach((/**@type {S}*/s,i)=> {
 			const self = /**@type {any}*/(this)
 			i == 0 && (this.#default = s)
@@ -28,8 +25,11 @@ export default class StateBase {
 			defineProperty(this,`is${s}`, {get(){return this.#curr === s}})
 			defineProperty(this,`was${s}`,{get(){return this.#last === s}})
 		})
-		return this
 	}
+	get owner()   {return this.#owner}
+	get current() {return this.#curr}
+	get last()    {return this.#last}
+	get default() {return this.#default}
 
 	/** @param {S} state */
 	is(state) {

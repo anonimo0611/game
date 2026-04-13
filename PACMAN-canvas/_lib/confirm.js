@@ -3,8 +3,8 @@ export const Confirm = new class ConfirmCore {
 	#opened = false
 	#cancel = /**@type {0|1}*/(0)
 	get opened()   {return this.#opened}
-	get #tempElm() {return /**@type {HTMLTemplateElement}*/(byId('confirm_t'))}
-	get #confirm() {return /**@type {HTMLDialogElement}  */(byId('confirm'))}
+	get #tempElm() {return /**@type {HTMLTemplateElement}*/(qS('#confirm_t'))}
+	get #confirm() {return /**@type {HTMLDialogElement}  */(qS('#confirm'))}
 
 	/** @param {JQKeyboardEvent} e */
 	#onKeydown(e) {

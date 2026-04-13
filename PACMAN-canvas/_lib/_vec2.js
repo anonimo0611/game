@@ -6,6 +6,8 @@ class Vec2 {
 	static get Down()  {return Vec2.new( 0, 1)}
 	static get Left()  {return Vec2.new(-1, 0)}
 
+	void() {}
+
 	/**
 	 @overload
 	 @returns {Vec2}
@@ -277,5 +279,4 @@ class Vec2 {
 	toString() {
 		return /**@type {const}*/(`{x:${this.x}, y:${this.y}}`)
 	}
-	void() {}
 }

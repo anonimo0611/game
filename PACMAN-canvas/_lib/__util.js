@@ -31,45 +31,10 @@ const {abs,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Mat
 	(e.key == '\x20' || e.key == 'Enter')
 
 /**
- @param {number}  v1
- @param {number} [v2]
- @param {number} [step]
- @type {{
-	(stop:number): Generator<number,void,unknown>;
-	(start:number,stop:number,step?:number): Generator<number,void,unknown>;
- }}
-*/const range = function*(v1,v2,step=1) {
-	const [start,stop]= (v2 === undefined ? [0,v1]:[v1,v2])
-	if (!arguments.length) throw TypeError('Range expected at least 1 argument, got 0')
-	if (step == 0) throw RangeError('The 3rd argument must not be zero')
-	if (step > 0) for (let i=start; i<stop; i+=step) yield i
-	if (step < 0) for (let i=start; i>stop; i+=step) yield i
-}
-
-/**
- @param {number}  v1
- @param {number} [v2]
- @param {number} [step]
- @type {{
-	(stop:number): Generator<number,void,unknown>;
-	(start:number,stop:number,step?:number): Generator<number,void,unknown>;
- }}
-*/const cycleRange = function*(v1,v2,step=1) {
-	const [start,stop]= (v2 === undefined ? [0,v1]:[v1,v2])
-	if (step > 0 && start >= stop) return
-	if (step < 0 && start <= stop) return
-	while(1) yield* v2 === undefined ? range(v1) : range(v1,v2,step)
-}
-
-/**
- @param {string} elementId
-*/const byId = elementId=> document.getElementById(elementId)
-
-/**
  @param {string} id
  @throws {ReferenceError} If no element exists with the given ID.
 */const requireElem = id=> {
-	const elem = byId(id); if (elem) return elem
+	const elem = document.getElementById(id); if (elem) return elem
 	throw ReferenceError(`There is no element with the ID “${id}”.`)
 }
 
@@ -80,9 +45,10 @@ const {abs,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Mat
 
 /**
  @param {string} str
-*/const underscoreToSp = (str,prefix='')=> str.indexOf('_') != -1
-	? prefix.trim()+str.trim().replace(/_/g,'\x20')
-	: str.trim()
+*/const underscoreToSp = (str,prefix='')=>
+	str.indexOf('_') != -1
+		? prefix.trim()+str.trim().replace(/_/g,'\x20')
+		: str.trim()
 
 /**
  @param {number} a start
@@ -119,20 +85,6 @@ const {abs,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Mat
  @param {number} min
  @param {number} max
 */const between = (n,min,max)=> (n >= min && n <= max)
-
-/**
- @template T
- @param {string} str
- @param {Iterable<T>} iterable
-*/const trMap = (str,iterable)=> {
-	const map = /**@type {Map<String,T>}*/(new Map)
-	const itr = iterable[Symbol.iterator]()
-	for(const char of str) {
-		const {value,done}= itr.next()
-		if (done) break
-		map.set(char,value)
-	} return map
-}
 
 /**
  @param {Position} pos1
