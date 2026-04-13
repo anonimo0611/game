@@ -6,6 +6,7 @@ import {FruitMgr} from '../fruit.js'
 import {Ghost}    from '../ghosts/ghost.js'
 import {PacMan}   from '../actor.js'
 import * as Snag  from '../sprites/snag.js'
+import { GhostMgr } from '../ghosts/_system.js'
 
 const sceneNum = (lv=0)=>
 	!Ctrl.isPractice && ({2:1, 5:2, 9:3}[lv]) || -1
@@ -59,7 +60,6 @@ export class Cutscene {
 }
 
 class Scene1 extends Cutscene {
-	isFrightened = false
 	constructor() {
 		super(1)
 		this.akavx    = -BW / 156.4
@@ -78,7 +78,6 @@ class Scene1 extends Cutscene {
 		this.pacman.x < -T*9 && this.turnBack()
 	}
 	turnBack() {
-		this.isFrightened = true
 		this.pacvx *= -1.1
 		this.akavx *= -0.6
 		this.pacman.dir = this.akabei.dir = R
@@ -88,7 +87,7 @@ class Scene1 extends Cutscene {
 		this.akabei.x > T*9+BW && this.end()
 	}
 	draw() {
-		const {isFrightened}= this
+		const isFrightened = (this.akavx > 0)
 		const {pacman:{dir,sprite:{r}}}= this
 		this.drawAka({isFrightened})
 		this.drawPac((dir == L ? 1:4)*r)
@@ -97,10 +96,10 @@ class Scene1 extends Cutscene {
 }
 
 class Scene2 extends Cutscene {
-	snag     = new Snag.SnagSprite(Fg)
-	akaEyes  = /**@type {VisualOrient}*/(L)
 	counter  = 0
 	isRipped = false
+	snag     = new Snag.SnagSprite(Fg)
+	akaEyes  = /**@type {VisualOrient}*/(L)
 	constructor() {
 		super(2)
 		this.pacman.x = BW + T*3
