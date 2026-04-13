@@ -9,15 +9,20 @@ const PathSteps = 16
 
 export class PathMgr {
 	#path = /**@type {PathNode[]}*/([])
-	static draw(/**@type {readonly Ghost[]}*/ghosts) {
+
+	/** @param {readonly Ghost[]} ghosts */
+	static draw(ghosts) {
 		if (State.isInGame && Ctrl.showPaths)
 			ghosts.toReversed().forEach(g=> g.pathMgr.#draw(g))
 	}
-	static update(/**@type {readonly Ghost[]}*/ghosts) {
+	/** @param {readonly Ghost[]} ghosts */
+	static update(ghosts) {
 		if (State.isInGame && Ctrl.showPaths)
 			ghosts.forEach(g=> g.pathMgr.#update(g))
 	}
-	#draw(/**@type {Ghost}*/g) {
+
+	/** @param {Ghost} g */
+	#draw(g) {
 		if (!this.#path.length)
 			return
 		if (!g.isChasing
@@ -27,11 +32,10 @@ export class PathMgr {
 		const path = this.#path, lw = T/5
 		const endT = path.at(-1)?.tile
 		const stPt = path[0].tile.clone.mul(T)
-		const ofst = [-2,-1,1,2][g.type]*lw
 		const dist = Vec2.distance(g.pos,stPt)
 		Fg.save()
 		Fg.setAlpha(0.7)
-		Fg.translate(T/2+ofst, T/2+ofst)
+		Fg.translate(T/2+[-2,-1,+1,+2][g.type]*lw)
 		Fg.beginPath()
 		Fg.moveTo(...g.pos.vals)
 		for (let i=0; i<path.length; i++) {
@@ -61,7 +65,9 @@ export class PathMgr {
 		Fg.stroke()
 		Fg.restore()
 	}
-	#update(/**@type {Ghost}*/g) {
+
+	/** @param {Ghost} g */
+	#update(g) {
 		const {dir,orient}= g
 		if (dir != orient || Maze.House.arrived(g, T*2))
 			return
