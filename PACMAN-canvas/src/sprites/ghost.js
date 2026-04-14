@@ -7,13 +7,13 @@ export default class GhostSprite {
 	/** @readonly */sub
 	/**
 	 @param {EnhancedCtx2D} target
-	 @param {number} radius
+	 @param {number} size
 	*/
-	constructor(target, radius) {
+	constructor(target, size) {
 		this.tgt = target
 		this.ctx = canvas2D(null).ctx
 		this.sub = new SubSprite(this.ctx)
-		this.resize(this.#size = radius*2)
+		this.resize(this.#size = size)
 	}
 	#resurrect = /**@type {?Fade}*/(null)
 	setResurrect() {
@@ -57,7 +57,7 @@ export default class GhostSprite {
 		ctx.lineWidth = 5
 		ctx.lineJoin  = ctx.lineCap = 'round'
 		ctx.fillStyle = !isFrightened
-			? GhostColors[type]
+			? Palette.Ghosts[type]
 			: Palette.FrightBody[spriteIdx]
 
 		if (isExposed) {

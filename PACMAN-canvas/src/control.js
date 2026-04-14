@@ -7,7 +7,7 @@ import {ScoreMgr} from './score.js'
 import {Form,Menu,inputs,btns} from './ui.js'
 
 const SettingsKey = 'anopacman'
-const {Info:palette}= Palette
+const {InfoText:palette}= Palette
 
 export const Ctrl = new class Controller {
 	static {$(this.setup)}

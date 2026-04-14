@@ -46,7 +46,7 @@ const PowRadius = T/2
 const DotSet   = /**@type {Set<TileIdx>}*/(new Set)
 const WallSet  = /**@type {ReadonlySet<TileIdx>} */(new Set)
 const PowMap   = /**@type {Map<TileIdx,Position>}*/(new Map)
-const DotChips = new Set([...'.O'])
+const DotChars = new Set([...'.O'])
 const PenRect  = new Rect(14-4, 15-2,  8, 5).freeze()
 const PenOuter = new Rect(14-5, 15-3, 10, 7).freeze()
 
@@ -92,27 +92,27 @@ class PowDots extends PowBlinker {
 class MazeManager {
 	static {
 		const wallSet = /**@type {Set<TileIdx>}*/(WallSet)
-		for (const [i,c] of MapArr.entries())
-			!DotChips.has(c) && c.trim() && wallSet.add(i)
+		for (const [i,s] of MapArr.entries())
+			!DotChars.has(s) && s.trim() && wallSet.add(i)
 		State.on({_NewLevel: this.reset})
 		$(powChk).on({change:this.reset})
 	}
 	static reset(/**@type {JQTriggeredEvent}*/e) {
 		e.target != powChk && Wall.draw()
-		for (const [i,c] of MapArr.entries())
-			DotChips.has(c) && MazeManager.setDot(i,c)
+		for (const [i,s] of MapArr.entries())
+			DotChars.has(s) && MazeManager.setDot(i,s)
 	}
-	static setDot(/**@type {TileIdx}*/i, chip='.') {
+	static setDot(/**@type {TileIdx}*/i, symbol='.') {
 		const t = Vec2.new(i%Cols, i/Cols|0)
 		const m = t.clone.add(.5)
 		clearDot({tileIdx:i,tileMid:m})
 		DotSet.add(i)
-		powChk.checked == false || chip == '.'
+		powChk.checked == false || symbol == '.'
 			? drawDot(Bg, ...t.vals)
 			: PowMap.set(i,t)
 	}
 	Map     = MapArr
-	MaxDot  = MapArr.filter(c=> DotChips.has(c)).length
+	MaxDot  = MapArr.filter(c=> DotChars.has(c)).length
 	House   = freeze(new House)
 	Tunnel  = freeze(new Tunnel)
 	PowDots = freeze(new PowDots)

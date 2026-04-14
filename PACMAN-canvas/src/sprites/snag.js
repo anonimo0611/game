@@ -11,7 +11,6 @@ export class SnagSprite {
 	/** @readonly */ctx
 	/** @param {EnhancedCtx2D} ctx */
 	constructor(ctx) {this.ctx = ctx}
-
 	drawSnaggedStake({pos=SnaggedPos,isRipped=false,scale=1}={}) {
 		const {ctx}= this, [sw,sh]= StakeSize.vals
 		ctx.save()
@@ -22,11 +21,10 @@ export class SnagSprite {
 		ctx.fillRect(0,-sh, sw,sh, 'white')
 		if (isRipped) {
 			ctx.translate(sw, 0)
-			ctx.fillPolygon(Color.Akabei, [0,-4],[0,-sh],[-T,0],[-4,0],[-4,-4])
+			ctx.fillPolygon(AkabeiColor, [0,-4],[0,-sh],[-T,0],[-4,0],[-4,-4])
 		}
 		ctx.restore()
 	}
-
 	/**
 	 @param {number} animIdx
 	 @param {number} ratio
@@ -46,7 +44,7 @@ export class SnagSprite {
 		ctx.quadraticCurveTo(-8, -4, v1, 3)
 		ctx.quadraticCurveTo(v2, 9, v3, 9)
 		ctx.addLinePath([v3,42],[ls,42],[ls,20],[-8,20])
-		ctx.fillStyle = Color.Akabei
+		ctx.fillStyle = AkabeiColor
 		ctx.fill()
 		ctx.restore()
 	}

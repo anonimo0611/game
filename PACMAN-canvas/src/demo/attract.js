@@ -18,7 +18,7 @@ export class Attract {
 	static draw()   {Attract.#instance?.draw()}
 	static update() {Attract.#instance?.update()}
 
-	ghsSpr = new GhostSprite(Fg, T)
+	ghsSpr = new GhostSprite(Fg,T*2)
 	subAct = new EnergizerAct
 
 	/** @private */
@@ -39,8 +39,8 @@ export class Attract {
 		const et = (Ticker.elapsedTime/100), Small ={size:T*.68}
 		this.GhostEntries.forEach(([t,col1,col2,row,txt1,txt2],i)=> {
 			et > t    && this.drawGhostOnTable(i,row)
-			et > t+ 5 && drawText(col1, row, GhostColors[i], txt1)
-			et > t+10 && drawText(col2, row, GhostColors[i], txt2)
+			et > t+ 5 && drawText(col1, row, Palette.Ghosts[i], txt1)
+			et > t+10 && drawText(col2, row, Palette.Ghosts[i], txt2)
 		})
 		if (et > 85) {
 			[[23, DotPts, +true],

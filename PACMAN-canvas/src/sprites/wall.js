@@ -3,8 +3,9 @@ const SF = screen.height/1080
 const LW = max(1, 3*SF|0) // Line  Width
 const LO = max(2, 4*SF|0) // Line  Offset
 const OO = max(1, 2*SF|0) // Outer Offset
-const CornerToIdx = new Map(Array.from('12345678abcdABCD',(v,i)=> [v,i%4]))
-
+const CornerSymbolToRot = new Map(
+	Array.from('12345678abcdABCD', (v,i)=> [v,i%4])
+)
 const Cache = freeze([
 	canvas2D(null, BW,BH).ctx, // Blue
 	canvas2D(null, BW,BH).ctx  // White
@@ -17,7 +18,7 @@ export const Wall = new class WallRenderer {
 	static cache() {
 		Cache.forEach((ctx,i)=> {
 			ctx.lineWidth   = LW
-			ctx.strokeStyle = Palette.Wall[i];
+			ctx.strokeStyle = Palette.MazeWall[i];
 			Maze.Map.forEach((_,j)=> {
 				if (j%Cols >= Cols/2) return
 				Wall.#drawTile(ctx, Maze.Map[j], j)
@@ -81,28 +82,28 @@ export const Wall = new class WallRenderer {
 	}
 	/**
 	 @param {EnhancedCtx2D} ctx
-	 @param {string} c Tile chip
+	 @param {string} s Tile symbol
 	 @param {number} i Tile index
 	*/
-	#drawTile(ctx, c, i) {
+	#drawTile(ctx, s, i) {
 		const t  = {x:i%Cols, y:i/Cols|0}, {x,y}= Vec2.mul(t,T)
-		const lo = c == '#' || /[VH=]/.test(c) ? -LO:LO
+		const lo = s == '#' || /[VH=]/.test(s) ? -LO:LO
 
 		;[/[A-D]/,/[A-D]/,/[a-d1-4]/,/[a-d]/,/[5-8]/].forEach((r,i)=> {
-			const ci = CornerToIdx.get(c) ?? -1
-			ci>=0 && r.test(c) && Wall.#drawCorner(ctx,{type:i,ci,pos:{x,y}})
+			const ci = CornerSymbolToRot.get(s) ?? -1
+			ci>=0 && r.test(s) && Wall.#drawCorner(ctx,{type:i,ci,pos:{x,y}})
 		})
-		switch(c.replace('#','V').toUpperCase()) {
+		switch(s.replace('#','V').toUpperCase()) {
 		case 'V':ctx.strokeLine(x+HT+lo, y, x+HT+lo, y+T);break
 		case 'H':ctx.strokeLine(x, y+HT+lo, x+T, y+HT+lo);break
 		}
-		if (c == '#' || t.x == 0 && +c) {
+		if (s == '#' || t.x == 0 && +s) {
 			return ctx.strokeLine(x+OO, y, x+OO, y+T).void()
 		}
-		if (/[_=]/.test(c) || Maze.isTopOrBottom(t.y) && +c) {
-			const oY = /[=56]/.test(c) ? OO : T-OO
+		if (/[_=]/.test(s) || Maze.isTopOrBottom(t.y) && +s) {
+			const oY = /[=56]/.test(s) ? OO : T-OO
 			ctx.strokeLine(x, y+oY, x+T, y+oY)
-			isNaN(+c) && ctx.strokeLine(x, y+HT+lo, x+T, y+HT+lo)
+			isNaN(+s) && ctx.strokeLine(x, y+HT+lo, x+T, y+HT+lo)
 		}
 	}
 }

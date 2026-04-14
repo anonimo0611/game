@@ -1,10 +1,8 @@
-import {Maze}     from '../maze.js'
-import {State}    from '../state.js'
-import {player}   from '../player/player.js'
-import {Ghost}    from './ghost.js'
-import {GhostMgr} from './_system.js'
-
-export const GuzutaThreshold = 8
+import {Maze}   from '../maze.js'
+import {State}  from '../state.js'
+import {player} from '../player/player.js'
+import {Ghost}  from './ghost.js'
+import {GhostMgr,GuzutaThreshold} from './_system.js'
 
 class Akabei extends Ghost {
 	constructor() {

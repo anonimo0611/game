@@ -6,7 +6,6 @@ import {FruitMgr} from '../fruit.js'
 import {Ghost}    from '../ghosts/ghost.js'
 import {PacMan}   from '../actor.js'
 import * as Snag  from '../sprites/snag.js'
-import { GhostMgr } from '../ghosts/_system.js'
 
 const sceneNum = (lv=0)=>
 	!Ctrl.isPractice && ({2:1, 5:2, 9:3}[lv]) || -1

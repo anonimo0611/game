@@ -20,7 +20,7 @@ export class Ghost extends Actor {
 	/** @readonly */init
 	/** @readonly */state
 	/** @readonly */path   = new PathMgr()
-	/** @readonly */sprite = new Sprite(Fg,T)
+	/** @readonly */sprite = new Sprite(Fg,T*2)
 
 	#fader = /**@type {?Fade}*/(null)
 	#fleeTmr    = -1

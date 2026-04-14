@@ -1,16 +1,14 @@
-import {State}    from '../state.js'
-import {Ctrl}     from '../control.js'
-import {player}   from '../player/player.js'
-import {Maze}     from '../maze.js'
-import {Ghost}    from './ghost.js'
-import {GhostMgr} from './_system.js'
-import {GuzutaThreshold} from './ghosts.js'
+import {State}  from '../state.js'
+import {Ctrl}   from '../control.js'
+import {player} from '../player/player.js'
+import {Maze}   from '../maze.js'
+import {Ghost}  from './ghost.js'
+import {GhostMgr,GuzutaThreshold} from './_system.js'
 
 export const Targets = new class TargetVisualizer {
-	/** @param {readonly Ghost[]} ghosts */
-	draw(ghosts) {
+	draw(/**@type {readonly Ghost[]}*/ghosts) {
+		if (!State.isInGame)   return
 		if (!Ctrl.showTargets) return
-		if (!State.isInGame) return
 		Fg.save()
 		Fg.setAlpha(0.7)
 		Fg.fillStyle = Fg.strokeStyle = '#FFF'
@@ -18,6 +16,7 @@ export const Targets = new class TargetVisualizer {
 		for (const g of ghosts) this.#drawMarker(g)
 		Fg.restore()
 	}
+
 	/** @param {Ghost} g */
 	#markerDisabled = g=> (
 		   g.isFrightened
@@ -25,6 +24,7 @@ export const Targets = new class TargetVisualizer {
 		|| g.state.isBitten
 		|| (Timer.frozen && !g.isEscaping)
 	)
+
 	/** @param {Ghost} g */
 	#getTargetPos = g=>
 		(g.state.isGoingOut || g.isEscaping)
@@ -43,6 +43,7 @@ export const Targets = new class TargetVisualizer {
 			? this.#guzutaCircle(g)
 			: this.#auxLines(g, g.chaseOffset)
 	}
+
 	/** @param {Ghost} g */
 	#drawMarker(g) {
 		if (this.#markerDisabled(g))
@@ -50,15 +51,13 @@ export const Targets = new class TargetVisualizer {
 		const size = T*0.6
 		const {x,y}= this.#getTargetPos(g).sub(size/2)
 		Fg.lineWidth = T*0.1
-		Fg.fillStyle = GhostColors[g.type]
+		Fg.fillStyle = Palette.Ghosts[g.type]
 		Fg.fillRect  (x,y, size,size)
 		Fg.strokeRect(x,y, size,size)
 	}
-	/**
-	 @param {Ghost}  g
-	 @param {number} ofst
-	*/
-	#auxLines(g, ofst) {
+
+	/** @param {Ghost}  g */
+	#auxLines(g, ofst=2) {
 		const {center:{x,y},dir,inTunSide}= player
 		const fwdXY = player.forwardPos(ofst).vals
 		const ofsXY = player.offsetTarget(ofst).vals
@@ -77,6 +76,7 @@ export const Targets = new class TargetVisualizer {
 			Fg.fillCircle(...ofsXY, 8)
 		}
 	}
+
 	/** @param {Ghost} g */
 	#guzutaCircle(g) {
 		Fg.save()
