@@ -22,9 +22,9 @@ Fg   = canvas2D('board_main', BW,BH).ctx,
 HUD  = canvas2D('board_hud' , BW,BH).ctx,
 Grid = canvas2D('board_grid', BW,BH).ctx,
 
-GhostType = /**@type {const}*/(
-	{Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4}
-),
+GhostType = /**@type {const}*/({
+	Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4
+}),
 Color = /**@type {const}*/({
 	Grid:      '#F00',
 	Dot:       '#FFB8AE',
