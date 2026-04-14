@@ -6,6 +6,7 @@ import {Ghost} from './ghost.js';
 import {player as p} from '../player/player.js';
 
 const
+	LineWidth = T/5,
 	PathSteps = 17,
 	PathOfsts = freeze([
 		-2, // Akabei
@@ -54,19 +55,19 @@ export class PathMgr {
 		 && !g.isScattering
 		 && !g.state.isEscaping)
 			return
-		const nodeList = this.#nodeList, lw = T/5
-		const startPos = nodeList[0].tile.clone.mul(T)
-		const endTile  = nodeList.at(-1)?.tile
+		const nodes    = this.#nodeList
+		const startPos = nodes[0].tile.clone.mul(T)
+		const endTile  = nodes.at(-1)?.tile
 		const distance = Vec2.distance(g.pos,startPos)
 		Fg.save()
 		Fg.setAlpha(0.7)
-		Fg.translate(T/2 + PathOfsts[g.type]*lw)
+		Fg.translate(T/2 + PathOfsts[g.type]*LineWidth)
 		Fg.beginPath()
 		Fg.moveTo(...g.pos.vals)
-		for (let i=0; i<nodeList.length; i++) {
-			const {tile,dir,stopped}= nodeList[i]
+		for (let i=0; i<nodes.length; i++) {
+			const {tile,dir,stopped}= nodes[i]
 			const curr = tile.clone.mul(T)
-			const last = nodeList[i-1]?.tile.clone.mul(T) ?? g.pos
+			const last = nodes[i-1]?.tile.clone.mul(T) ?? g.pos
 			if (tile == endTile) {
 				stopped && g.isTargetPac
 					? curr.set(p.pos)
@@ -84,7 +85,7 @@ export class PathMgr {
 				Fg.restore()
 			}
 		}
-		Fg.lineWidth = lw
+		Fg.lineWidth = LineWidth
 		Fg.lineJoin  = Fg.lineCap = 'round'
 		Fg.strokeStyle = GhostColors[g.type]
 		Fg.stroke()
