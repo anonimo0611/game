@@ -1,7 +1,6 @@
-export const AkaSnagX = BW/2 + T/2
-export const AkaStopX = AkaSnagX - T
-
 // Assumes actors are vertically centered on the board
+export const AkaSnagX   = BW/2 + T/2
+export const AkaStopX   = AkaSnagX - T
 export const StakeSize  = Vec2.fixed(T*.18, T*.7)
 export const SnaggedPos = Vec2.fixed(BW/2+T*2-StakeSize.x/2, BH/2+T)
 
@@ -27,6 +26,7 @@ export class SnagSprite {
 		}
 		ctx.restore()
 	}
+
 	/**
 	 @param {number} animIdx
 	 @param {number} ratio
