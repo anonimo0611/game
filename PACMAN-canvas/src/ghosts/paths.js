@@ -6,7 +6,7 @@ import {Ghost} from './ghost.js';
 import {player as p} from '../player/player.js';
 
 const
-	PathSteps = 16,
+	PathSteps = 17,
 	PathOfsts = freeze([
 		-2, // Akabei
 		-1, // Pinky
@@ -33,7 +33,7 @@ export class PathMgr {
 			return
 		const tile = g.getAdjTile(dir,g.tile)
 		const path = [{dir,tile,stopped:false}]
-		for (let i=0; i<PathSteps; i++) {
+		for (let i=0; i<PathSteps-1; i++) {
 			const {dir:d,tile:t}= path[(i+1)-1]
 			const tgt  = g.getTargetTile(t)
 			const dir  = g.getNextDir(d,t,tgt)
@@ -54,29 +54,29 @@ export class PathMgr {
 		 && !g.isScattering
 		 && !g.state.isEscaping)
 			return
-		const nodes = this.#nodeList, lw = T/5
-		const endT  = nodes.at(-1)?.tile
-		const stPt  = nodes[0].tile.clone.mul(T)
-		const dist  = Vec2.distance(g.pos,stPt)
+		const nodeList = this.#nodeList, lw = T/5
+		const startPos = nodeList[0].tile.clone.mul(T)
+		const endTile  = nodeList.at(-1)?.tile
+		const distance = Vec2.distance(g.pos,startPos)
 		Fg.save()
 		Fg.setAlpha(0.7)
 		Fg.translate(T/2 + PathOfsts[g.type]*lw)
 		Fg.beginPath()
 		Fg.moveTo(...g.pos.vals)
-		for (let i=0; i<nodes.length; i++) {
-			const {tile,dir,stopped}= nodes[i]
+		for (let i=0; i<nodeList.length; i++) {
+			const {tile,dir,stopped}= nodeList[i]
 			const curr = tile.clone.mul(T)
-			const last = nodes[i-1]?.tile.clone.mul(T) ?? g.pos
-			if (tile == endT) {
+			const last = nodeList[i-1]?.tile.clone.mul(T) ?? g.pos
+			if (tile == endTile) {
 				stopped && g.isTargetPac
 					? curr.set(p.pos)
-					: curr.add(Vec2[dir].mul(stopped? 0 : T/2-dist))
+					: curr.add(Vec2[dir].mul(stopped? 0 : T/2-distance))
 			}
 			if (abs(curr.x - last.x) > T*3) {
 				Fg.lineTo((curr.x < last.x ? BW+T : -T), curr.y);break
 			}
 			Fg.lineTo(...curr.vals)
-			if (tile == endT) { // Arrow
+			if (tile == endTile) { // Arrow
 				Fg.save()
 				Fg.translate(curr)
 				Fg.rotate(Dir.Rotation[dir])
