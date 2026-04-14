@@ -5,11 +5,11 @@ import {State}    from '../state.js'
 import {Ctrl}     from '../control.js'
 import {Actor}    from '../actor.js'
 import Sprite     from '../sprites/ghost.js'
-import * as Sys   from './_system.js'
 import {player}   from '../player/player.js'
 import {Maze}     from '../maze.js'
-import {GhostMgr} from './_system.js'
 import {PtsMgr}   from '../points.js'
+import * as Sys   from './_system.js'
+import {GhostMgr} from './_system.js'
 import {PathMgr}  from './paths.js'
 
 /**@type {readonly Direction[]}*/
@@ -19,8 +19,8 @@ export class Ghost extends Actor {
 	/** @readonly */type
 	/** @readonly */init
 	/** @readonly */state
-	/** @readonly */pathMgr = new PathMgr()
-	/** @readonly */sprite  = new Sprite(Fg, T)
+	/** @readonly */path   = new PathMgr()
+	/** @readonly */sprite = new Sprite(Fg,T)
 
 	#fader = /**@type {?Fade}*/(null)
 	#fleeTmr    = -1

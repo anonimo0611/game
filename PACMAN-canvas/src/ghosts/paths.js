@@ -5,43 +5,68 @@ import {Maze}  from '../maze.js'
 import {Ghost} from './ghost.js';
 import {player as p} from '../player/player.js';
 
-const PathSteps = 16
+const
+	PathSteps = 16,
+	PathOfsts = freeze([
+		-2, // Akabei
+		-1, // Pinky
+		+1, // Aosuke
+		+2, // Guzuta
+	])
 
 export class PathMgr {
-	#path = /**@type {PathNode[]}*/([])
+	#nodeList = /**@type {PathNode[]}*/([])
 
-	/** @param {readonly Ghost[]} ghosts */
-	static draw(ghosts) {
+	static update(/**@type {readonly Ghost[]}*/ghosts) {
 		if (State.isInGame && Ctrl.showPaths)
-			ghosts.toReversed().forEach(g=> g.pathMgr.#draw(g))
+			ghosts.forEach(g=> g.path.#update(g))
 	}
-	/** @param {readonly Ghost[]} ghosts */
-	static update(ghosts) {
+	static draw(/**@type {readonly Ghost[]}*/ghosts) {
 		if (State.isInGame && Ctrl.showPaths)
-			ghosts.forEach(g=> g.pathMgr.#update(g))
+			ghosts.toReversed().forEach(g=> g.path.#draw(g))
+	}
+
+	/** @param {Ghost} g */
+	#update(g) {
+		const {dir,orient}= g
+		if (dir != orient || Maze.House.arrived(g, T*2))
+			return
+		const tile = g.getAdjTile(dir,g.tile)
+		const path = [{dir,tile,stopped:false}]
+		for (let i=0; i<PathSteps; i++) {
+			const {dir:d,tile:t}= path[(i+1)-1]
+			const tgt  = g.getTargetTile(t)
+			const dir  = g.getNextDir(d,t,tgt)
+			const tile = g.getAdjTile(dir,t)
+			path.push({tile,dir,stopped:
+				g.isTargetPac && tile.eq(p.tile) ||
+				g.hasFixedTgt && tile.eq(tgt)
+			})
+			if (path[i+1].stopped) break
+		} this.#nodeList = path
 	}
 
 	/** @param {Ghost} g */
 	#draw(g) {
-		if (!this.#path.length)
+		if (!this.#nodeList.length)
 			return
 		if (!g.isChasing
 		 && !g.isScattering
 		 && !g.state.isEscaping)
 			return
-		const path = this.#path, lw = T/5
-		const endT = path.at(-1)?.tile
-		const stPt = path[0].tile.clone.mul(T)
-		const dist = Vec2.distance(g.pos,stPt)
+		const nodes = this.#nodeList, lw = T/5
+		const endT  = nodes.at(-1)?.tile
+		const stPt  = nodes[0].tile.clone.mul(T)
+		const dist  = Vec2.distance(g.pos,stPt)
 		Fg.save()
 		Fg.setAlpha(0.7)
-		Fg.translate(T/2+[-2,-1,+1,+2][g.type]*lw)
+		Fg.translate(T/2 + PathOfsts[g.type]*lw)
 		Fg.beginPath()
 		Fg.moveTo(...g.pos.vals)
-		for (let i=0; i<path.length; i++) {
-			const {tile,dir,stopped}= path[i]
+		for (let i=0; i<nodes.length; i++) {
+			const {tile,dir,stopped}= nodes[i]
 			const curr = tile.clone.mul(T)
-			const last = path[i-1]?.tile.clone.mul(T) ?? g.pos
+			const last = nodes[i-1]?.tile.clone.mul(T) ?? g.pos
 			if (tile == endT) {
 				stopped && g.isTargetPac
 					? curr.set(p.pos)
@@ -64,25 +89,5 @@ export class PathMgr {
 		Fg.strokeStyle = GhostColors[g.type]
 		Fg.stroke()
 		Fg.restore()
-	}
-
-	/** @param {Ghost} g */
-	#update(g) {
-		const {dir,orient}= g
-		if (dir != orient || Maze.House.arrived(g, T*2))
-			return
-		const tile = g.getAdjTile(dir,g.tile)
-		const path = [{dir,tile,stopped:false}]
-		for (let i=0; i<PathSteps; i++) {
-			const {dir:d,tile:t}= path[(i+1)-1]
-			const tgt  = g.getTargetTile(t)
-			const dir  = g.getNextDir(d,t,tgt)
-			const tile = g.getAdjTile(dir,t)
-			path.push({tile,dir,stopped:
-				g.isTargetPac && tile.eq(p.tile) ||
-				g.hasFixedTgt && tile.eq(tgt)
-			})
-			if (path[i+1].stopped) break
-		} this.#path = path
 	}
 }
