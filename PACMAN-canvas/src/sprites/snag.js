@@ -1,5 +1,3 @@
-import {LOGICAL_SIZE} from './ghost.js'
-
 export const AkaSnagX = BW/2 + T/2
 export const AkaStopX = AkaSnagX - T
 
@@ -7,10 +5,14 @@ export const AkaStopX = AkaSnagX - T
 export const StakeSize  = Vec2.fixed(T*.18, T*.7)
 export const SnaggedPos = Vec2.fixed(BW/2+T*2-StakeSize.x/2, BH/2+T)
 
+const AkabeiColor = Palette.Ghosts[GhostType.Akabei]
+
+import {LOGICAL_SIZE} from './ghost.js'
 export class SnagSprite {
 	/** @readonly */ctx
 	/** @param {EnhancedCtx2D} ctx */
 	constructor(ctx) {this.ctx = ctx}
+
 	drawSnaggedStake({pos=SnaggedPos,isRipped=false,scale=1}={}) {
 		const {ctx}= this, [sw,sh]= StakeSize.vals
 		ctx.save()

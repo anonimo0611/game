@@ -22,8 +22,8 @@ Fg   = canvas2D('board_main', BW,BH).ctx,
 HUD  = canvas2D('board_hud' , BW,BH).ctx,
 Grid = canvas2D('board_grid', BW,BH).ctx,
 
-GhostType = /**@type {const}*/({
-	Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4}
+GhostType = /**@type {const}*/(
+	{Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4}
 ),
 Color = /**@type {const}*/({
 	Grid:      '#F00',
@@ -42,8 +42,7 @@ Palette = /**@type {const}*/({
 	Ghosts:     ['#E00','#F9B','#0CF','#FB0'],
 	FrightFace: ['#F9F','#F00'],
 	FrightBody: ['#36A','#FFF'],
-}),
-AkabeiColor = Palette.Ghosts[0] // for cutscene
+})
 
 // Use the tile size as the default font size
 $root.css('--tile-size',`${TileSize}px`)
