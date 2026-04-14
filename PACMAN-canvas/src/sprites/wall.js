@@ -43,7 +43,7 @@ export const Wall = new class WallRenderer {
 	#drawDoor() {
 		if (State.isFlashing) return
 		const y = (Maze.House.EntryTile.y+1.6)*T
-		Bg.fillRect(BW/2-T, y, T*2, T/4, Color.Door)
+		Bg.fillRect(BW/2-T, y, T*2, T/4, Color.HouseDoor)
 	}
 	/** @param {EnhancedCtx2D} ctx */
 	#drawHouse(/**@type {EnhancedCtx2D}*/ctx) {

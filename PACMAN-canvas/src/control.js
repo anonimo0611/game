@@ -125,7 +125,7 @@ export const Ctrl = new class Controller {
 		Grid.beginPath()
 		for(let x=1; x<Cols; x++) Grid.setLinePath([T*x, 0],[T*x, BH])
 		for(let y=0; y<Rows; y++) Grid.setLinePath([0, T*y],[BW, T*y])
-		Grid.strokeStyle = Color.Grid
+		Grid.strokeStyle = Color.GridLine
 		Grid.stroke()
 	}
 	#setupCtrls() {

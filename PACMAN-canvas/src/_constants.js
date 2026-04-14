@@ -26,11 +26,11 @@ GhostType = /**@type {const}*/({
 	Akabei:0, Pinky:1, Aosuke:2, Guzuta:3, Max:4
 }),
 Color = /**@type {const}*/({
-	Grid:      '#F00',
-	Dot:       '#FFB8AE',
-	Door:      '#FFB8DE',
-	Extend:    '#F55',
-	Notice:    '#F90',
+	GridLine:  '#F00',
+	Cookie:    '#FFB8AE',
+	HouseDoor: '#FFB8DE',
+	ExtendTxt: '#F55',
+	NoticeTxt: '#F90',
 	Pacman:    '#FF0',
 	GhostEye:  '#33F',
 	GhostSkin: '#F4BEB0',
