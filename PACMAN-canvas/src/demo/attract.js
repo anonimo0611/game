@@ -39,8 +39,8 @@ export class Attract {
 		const et = (Ticker.elapsedTime/100), Small ={size:T*.68}
 		this.GhostEntries.forEach(([t,col1,col2,row,txt1,txt2],i)=> {
 			et > t    && this.drawGhostOnTable(i,row)
-			et > t+ 5 && drawText(col1, row, Palette.Ghosts[i], txt1)
-			et > t+10 && drawText(col2, row, Palette.Ghosts[i], txt2)
+			et > t+ 5 && drawText(col1, row, Color.GhostBodies[i], txt1)
+			et > t+10 && drawText(col2, row, Color.GhostBodies[i], txt2)
 		})
 		if (et > 85) {
 			[[23, DotPts, +true],

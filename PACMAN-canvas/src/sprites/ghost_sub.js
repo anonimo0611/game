@@ -111,7 +111,7 @@ export default class GhostSubSprite {
 			// Eyes
 			ctx.beginPath()
 			ctx.ellipse(eyesLR[i], -31, 5, 9, 0,0, PI*2)
-			ctx.fillStyle = Color.GhostEyes
+			ctx.fillStyle = Color.GhostEye
 			ctx.fill()
 		}
 	}

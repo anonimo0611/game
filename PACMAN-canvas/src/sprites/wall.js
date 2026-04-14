@@ -18,7 +18,7 @@ export const Wall = new class WallRenderer {
 	static cache() {
 		Cache.forEach((ctx,i)=> {
 			ctx.lineWidth   = LW
-			ctx.strokeStyle = Palette.MazeWall[i];
+			ctx.strokeStyle = Color.MazeWalls[i];
 			Maze.Map.forEach((_,j)=> {
 				if (j%Cols >= Cols/2) return
 				Wall.#drawTile(ctx, Maze.Map[j], j)

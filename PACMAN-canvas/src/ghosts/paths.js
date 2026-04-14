@@ -85,9 +85,9 @@ export class PathMgr {
 				Fg.restore()
 			}
 		}
-		Fg.lineWidth = LineWidth
-		Fg.lineJoin  = Fg.lineCap = 'round'
-		Fg.strokeStyle = Palette.Ghosts[g.type]
+		Fg.lineWidth   = LineWidth
+		Fg.lineJoin    = Fg.lineCap = 'round'
+		Fg.strokeStyle = Color.GhostBodies[g.type]
 		Fg.stroke()
 		Fg.restore()
 	}

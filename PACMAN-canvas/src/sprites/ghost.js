@@ -57,8 +57,8 @@ export default class GhostSprite {
 		ctx.lineWidth = 5
 		ctx.lineJoin  = ctx.lineCap = 'round'
 		ctx.fillStyle = !isFrightened
-			? Palette.Ghosts[type]
-			: Palette.FrightBody[spriteIdx]
+			? Color.GhostBodies[type]
+			: Color.GhostBodies[GhostType.Max+spriteIdx]
 
 		if (isExposed) {
 			this.sub.drawHadake(animIdx)
@@ -71,7 +71,7 @@ export default class GhostSprite {
 			this.#drawBody({animIdx,isRipped,isMended})
 			if (isFrightened) {
 				ctx.fillStyle   =
-				ctx.strokeStyle = Palette.FrightFace[spriteIdx]
+				ctx.strokeStyle = Color.FrightFaces[spriteIdx]
 				this.#drawFrightFace()
 			}
 			ctx.restore()
@@ -127,7 +127,7 @@ export default class GhostSprite {
 		ctx.bezierCurveTo(+29, 42, +41, 42, +42, 26)
 	}
 	#drawEyesUp(isRipped=false) {
-		const {ctx}= this, color=[Color.GhostEyes,'#000'][+isRipped]
+		const {ctx}= this, color=[Color.GhostEye,'#000'][+isRipped]
 		for (const v of [-1,+1]) {
 			ctx.beginPath()
 			ctx.ellipse(19.5*v, -17, 13, 17, -8*v*PI/180, -PI/4, -3*PI/4)
@@ -141,7 +141,7 @@ export default class GhostSprite {
 			ctx.beginPath()
 			ctx.ellipse(19*v, -3, 13, 17, 0, 140*PI/180, 40*PI/180)
 			ctx.fill()
-			ctx.fillCircle(19*v, +4,  8, Color.GhostEyes)
+			ctx.fillCircle(19*v, +4,  8, Color.GhostEye)
 		}
 	}
 	/** @param {Horizontal} LorR */
@@ -151,7 +151,7 @@ export default class GhostSprite {
 			ctx.beginPath()
 			ctx.ellipse([-16.5*v, 23*v][i], -11, 13, 17, 0, 0, PI*2)
 			ctx.fill()
-			ctx.fillCircle([ -9.5*v, 29*v][i],  -8,  8, Color.GhostEyes)
+			ctx.fillCircle([ -9.5*v, 29*v][i],  -8,  8, Color.GhostEye)
 		}
 	}
 	#drawFrightFace() {

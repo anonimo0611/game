@@ -4,7 +4,7 @@ export const AkaStopX   = AkaSnagX - T
 export const StakeSize  = Vec2.fixed(T*.18, T*.7)
 export const SnaggedPos = Vec2.fixed(BW/2+T*2-StakeSize.x/2, BH/2+T)
 
-const AkabeiColor = Palette.Ghosts[GhostType.Akabei]
+const AkabeiColor = Color.GhostBodies[0]
 
 import {LOGICAL_SIZE} from './ghost.js'
 export class SnagSprite {
