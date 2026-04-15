@@ -40,21 +40,21 @@ D__________________________C\
 ////////////////////////////\
 ////////////////////////////`])
 
-const DotRadius = T/9
-const PowRadius = T/2
+const DotSet  = /**@type {Set<TileIdx>}*/(new Set)
+const WallSet = /**@type {ReadonlySet<TileIdx>} */(new Set)
+const PowMap  = /**@type {Map<TileIdx,Position>}*/(new Map)
 
-const DotSet   = /**@type {Set<TileIdx>}*/(new Set)
-const WallSet  = /**@type {ReadonlySet<TileIdx>} */(new Set)
-const PowMap   = /**@type {Map<TileIdx,Position>}*/(new Map)
-const DotChars = new Set([...'.O'])
-const PenRect  = new Rect(14-4, 15-2,  8, 5).freeze()
-const PenOuter = new Rect(14-5, 15-3, 10, 7).freeze()
+const DotRadius  = T/9
+const PowRadius  = T/2
+const DotSymbols = new Set([...'.O'])
+const HouseRect  = new Rect(14-4, 15-2,  8, 5).freeze()
+const HouseOuter = new Rect(14-5, 15-3, 10, 7).freeze()
 
 class House {
 	MidY = (this.EntryTile.y+3.5)*T
 	get EntryTile() {return Vec2.new(13, 12)}
 	isIn(/**@type {Position}*/tilePos) {
-		return PenRect.contains(tilePos)
+		return HouseRect.contains(tilePos)
 	}
 	arrived(/**@type {Ghost}*/g, spd=1) {
 		return g.state.isEscaping
@@ -93,14 +93,14 @@ class MazeManager {
 	static {
 		const wallSet = /**@type {Set<TileIdx>}*/(WallSet)
 		for (const [i,s] of MapArr.entries())
-			!DotChars.has(s) && s.trim() && wallSet.add(i)
+			!DotSymbols.has(s) && s.trim() && wallSet.add(i)
 		State.on({_NewLevel: this.reset})
 		$(powChk).on({change:this.reset})
 	}
 	static reset(/**@type {JQTriggeredEvent}*/e) {
 		e.target != powChk && Wall.draw()
 		for (const [i,s] of MapArr.entries())
-			DotChars.has(s) && MazeManager.setDot(i,s)
+			DotSymbols.has(s) && MazeManager.setDot(i,s)
 	}
 	static setDot(/**@type {TileIdx}*/i, symbol='.') {
 		const t = Vec2.new(i%Cols, i/Cols|0)
@@ -112,7 +112,7 @@ class MazeManager {
 			: PowMap.set(i,t)
 	}
 	Map     = MapArr
-	MaxDot  = MapArr.filter(c=> DotChars.has(c)).length
+	MaxDot  = MapArr.filter(c=> DotSymbols.has(c)).length
 	House   = freeze(new House)
 	Tunnel  = freeze(new Tunnel)
 	PowDots = freeze(new PowDots)
@@ -141,7 +141,7 @@ class MazeManager {
 	 @param {{baseTargetTile:Vec2,tile:Vec2}} ghost
 	*/
 	getGhostExitTile = ({baseTargetTile:b,tile:t})=>
-		!Ctrl.unrestricted && b.y < 10 && PenOuter.contains(t)
+		!Ctrl.unrestricted && b.y < 10 && HouseOuter.contains(t)
 			? Vec2.new(t.x>Cols/2 && b.x>Cols/2 ? 21:6, 15) : b
 
 	/**
