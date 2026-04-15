@@ -12,7 +12,7 @@ import {Targets} from './targets.js'
 import {player,onPlayerDotEaten} from '../player/player.js'
 
 const Ghosts = /**@type {Ghost[]}*/([])
-const PointsList = /**@type {const}*/([200,400,800,1600])
+const PointList  = /**@type {const}*/([200,400,800,1600])
 const FrightSecs = /**@type {const}*/([6,5,4,3,2,5,2,2,1,5,2,1,0])
 
 export const {Ghost:Speed}= _Speed
@@ -88,7 +88,7 @@ export const GhostMgr = new class GhostManager {
 	get isChaseMode()    {return AttackInWaves.isChaseMode}
 	get isScatterMode()  {return AttackInWaves.isScatterMode}
 	get isFrightMode()   {return FrightMode.session != null}
-	get points()         {return FrightMode.session?.points ?? PointsList[0]}
+	get points()         {return FrightMode.session?.points ?? PointList[0]}
 	get spriteIdx()      {return FrightMode.session?.spriteIdx ?? 0}
 	get caughtAll()      {return FrightMode.session?.caughtAll ?? false}
 	get akaCenterPos()   {return Ghosts[GhostType.Akabei].center}
@@ -117,7 +117,7 @@ export const GhostMgr = new class GhostManager {
 	frighten() {
 		signalDirectionReversal()
 		const s = FrightSecs[Game.clampedLv-1]
-		s > 0 || State.isAttract
+		;(s > 0 || State.isAttract)
 			? FrightMode.new(s)
 			: $(Ghosts).trigger(Evt.FleeStart)
 	}
@@ -263,7 +263,7 @@ const CruiseElroy = function() {
 const FrightMode = function() {
 	class Session {
 		#et=0; #flash=0; #caught=0; #fIdx=1
-		get points()    {return PointsList[this.#caught-1]}
+		get points()    {return PointList[this.#caught-1]}
 		get caughtAll() {return this.#caught == GhostType.Max}
 		get spriteIdx() {return this.#flash && this.#fIdx^1}
 		constructor(sec=1) {
