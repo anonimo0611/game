@@ -19,14 +19,14 @@ export const {Ghost:Speed}= _Speed
 export const Evt = enumObj('Ready','Reverse','Frighten','FleeStart','RoundEnds')
 
 /**
- Distance threshold for Guzuta's chase logic \
- The value is a multiple of tile size
+ Distance threshold for Guzuta's chase logic. \
+ The value is a multiple of tile size.
 */
 export const GuzutaThreshold = 8
 
 /**
  When always chase mode,
- standby time(ms) before the ghost leaves from the house
+ standby time(ms) before the ghost leaves from the house.
 */
 const StandbyTimes = /**@type {const}*/
 ([//Pinky->Aosuke->Guzuta

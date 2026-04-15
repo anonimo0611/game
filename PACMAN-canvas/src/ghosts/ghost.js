@@ -12,7 +12,7 @@ import * as Sys   from './_system.js'
 import {GhostMgr} from './_system.js'
 import {PathMgr}  from './paths.js'
 
-/**@type {readonly Direction[]}*/
+/** @type {readonly Direction[]} */
 const TurnPriority = [U,L,D,R]
 
 export class Ghost extends Actor {
@@ -182,7 +182,7 @@ export class Ghost extends Actor {
 	#setNextDir() {
 		if (this.#revSig) {
 			this.#revSig = false
-			this.orient = this.revDir
+			this.orient  = this.revDir
 		}
 		if (this.dir == this.orient)
 			this.orient = this.getNextDir()
