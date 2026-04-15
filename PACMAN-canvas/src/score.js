@@ -62,7 +62,7 @@ export const ScoreMgr = new class ScoreManager {
 			_hiSco = total
 		}
 		if (between(Ctrl.extendScore, _score+1, total)) {
-			Lives.append()
+			Lives.extend()
 			Sound.playGetsHiScore()
 		}
 		_score = total

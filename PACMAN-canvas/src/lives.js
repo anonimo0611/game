@@ -24,7 +24,7 @@ export const Lives = function() {
 	function reset()  {draw(left = Ctrl.livesMax-1)}
 	$(inputs.lvsRng).on({input:reset})
 	return {
-		append()   {add(1)},
+		extend()   {add(1)},
 		get left() {return left},
 	}
 }()
