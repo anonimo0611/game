@@ -3,10 +3,11 @@ const SF = screen.height/1080
 const LW = max(1, 3*SF|0) // Line  Width
 const LO = max(2, 4*SF|0) // Line  Offset
 const OO = max(1, 2*SF|0) // Outer Offset
-const CornerSymbolToRot = new Map(
+
+const CornerToRotateIdx = new Map(
 	Array.from('12345678abcdABCD', (v,i)=> [v,i%4])
 )
-const Cache = freeze([
+const CacheCtxs = freeze([
 	canvas2D(null, BW,BH).ctx, // Blue
 	canvas2D(null, BW,BH).ctx  // White
 ])
@@ -16,7 +17,7 @@ import {Maze}  from '../maze.js'
 export const Wall = new class WallRenderer {
 	static {$(this.cache)}
 	static cache() {
-		Cache.forEach((ctx,i)=> {
+		CacheCtxs.forEach((ctx,i)=> {
 			ctx.lineWidth   = LW
 			ctx.strokeStyle = Color.MazeWalls[i];
 			Maze.Map.forEach((_,j)=> {
@@ -29,7 +30,7 @@ export const Wall = new class WallRenderer {
 	}
 	draw(idx=0) {
 		Bg.clear()
-		Bg.drawImage(Cache[idx].canvas, 0,0)
+		Bg.drawImage(CacheCtxs[idx].canvas, 0,0)
 		Wall.#drawDoor()
 	}
 	setFlashing(cb=()=>{}) {
@@ -90,7 +91,7 @@ export const Wall = new class WallRenderer {
 		const lo = s == '#' || /[VH=]/.test(s) ? -LO:LO
 
 		;[/[A-D]/,/[A-D]/,/[a-d1-4]/,/[a-d]/,/[5-8]/].forEach((r,i)=> {
-			const ci = CornerSymbolToRot.get(s) ?? -1
+			const ci = CornerToRotateIdx.get(s) ?? -1
 			ci>=0 && r.test(s) && Wall.#drawCorner(ctx,{type:i,ci,pos:{x,y}})
 		})
 		switch(s.replace('#','V').toUpperCase()) {
