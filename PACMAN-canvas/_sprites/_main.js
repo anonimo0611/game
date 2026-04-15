@@ -118,7 +118,7 @@ const [Cols,Rows]= GridSize
 			spr.drawSnaggedStake({scale,pos,isRipped:true})
 		}
 		draw(ofst(4.00), 0, {isRipped: true,orient:U})
-		draw(ofst(5.00), 0, {isRipped: true,orient:DazedEyes})
+		draw(ofst(5.00), 0, {isRipped: true,orient:Dazed})
 		draw(ofst(0.00), S, {isMended: true})
 		draw(ofst(1.00), S, {isMended: true,animIdx:1})
 		draw(ofst(2.25), S, {isExposed:true})
