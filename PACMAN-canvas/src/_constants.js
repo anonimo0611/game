@@ -14,7 +14,7 @@ BW = Cols*TileSize,
 /** Board height */
 BH = Rows*TileSize,
 
-DazedEyes = 'DazedEyes',
+Dazed = 'Dazed',
 U='Up', R='Right', D='Down', L='Left',
 
 Bg   = canvas2D('board_bg'  , BW,BH).ctx,

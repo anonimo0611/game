@@ -115,7 +115,7 @@ class Scene2 extends Cutscene {
 			this.isRipped = true
 			break
 		case 150:
-			this.akaEyes = DazedEyes
+			this.akaEyes = Dazed
 			break
 		case 270:
 			this.end()
