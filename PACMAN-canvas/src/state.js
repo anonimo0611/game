@@ -6,7 +6,9 @@ import _State from '../_lib/state.js'
 */
 export const States = /**@type {const}*/([
 	'Title','Attract','NewGame','NewLevel','Ready','InGame','RoundEnds',
-	'Cleared','PacDying','Flashing','Cutscene','GameOver','Quit'])
+	'Cleared','PacDying','Flashing','Cutscene','GameOver','Quit'
+])
+
 /**
  @extends {_State<StateType,globalThis>}
  @typedef {GameState & StateDef.Props<StateType>} IGameState
