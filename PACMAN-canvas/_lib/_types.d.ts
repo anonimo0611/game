@@ -53,10 +53,10 @@ type JQData = any[]|JQuery.PlainObject|string|number|boolean
 type JQKeyboardEvent   = JQuery.KeyboardEventBase
 type JQTriggeredEvent  = JQuery.TriggeredEvent
 
-type JQWindowHandler   = (events:JQTriggeredEvent<Global,undefined,Global,Global>)=> void
+type JQWindowHandler   = (events:JQuery.TriggeredEvent<Global,undefined,Global,Global>, data?:any)=> void
 type JQWindowHandlers  ={[events:string]:JQWindowHandler}
 
-type JQTriggerHandler  = (events:JQTriggeredEvent)=> void
+type JQTriggerHandler  = (events:JQTriggeredEvent, data?:any)=> void
 type JQTriggerHandlers ={[events:string]:JQTriggerHandler}
 
 interface JQuery {
