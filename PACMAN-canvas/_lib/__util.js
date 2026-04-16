@@ -51,10 +51,10 @@ const {abs,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Mat
 		: str.trim()
 
 /**
- @param {number} a start
- @param {number} b end
+ @param {number} start
+ @param {number} end
  @param {number} ratio 0.0-1.0
-*/const lerp = (a,b,ratio)=> a + (b-a) * ratio
+*/const lerp = (start,end,ratio)=> start + (end-start) * ratio
 
 /**
  @param {number} min
