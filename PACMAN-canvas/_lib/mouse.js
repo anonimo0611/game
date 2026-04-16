@@ -22,7 +22,7 @@ export const Cursor = function() {
 }()
 
 /**
- Enables mouse wheel interactions for range input elements.
+ Enables wheel control and synchronizes values across linked inputs and output elements.
  @param {HTMLInputElement} ctrl
 */
 function setupCtrl(ctrl) {
