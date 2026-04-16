@@ -10,8 +10,9 @@ export class Actor {
 	#movDir = this.orient
 
 	/** @protected */
-	constructor(col=0,row=0) {this.pos.set(col*T,row*T)}
-
+	constructor(col=0, row=0) {
+		this.pos.set(col*T, row*T)
+	}
 	// Override this in subclasses to return the actual speed.
 	get speed()     {return 0}
 	get inHouse()   {return Maze.House.isIn(this.tile)}
@@ -108,7 +109,13 @@ export const Actors = {
 export class PacMan extends Actor {
 	/** @readonly */
 	sprite = new PacSprite(Fg,T)
-	constructor(col=0,row=0) {super(col,row)}
-	get hidden() {return Timer.frozen}
-	draw() {this.sprite.draw(this)}
+	constructor(col=0, row=0) {
+		super(col, row)
+	}
+	get hidden() {
+		return Timer.frozen
+	}
+	draw() {
+		this.sprite.draw(this)
+	}
 }
