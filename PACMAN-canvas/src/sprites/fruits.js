@@ -9,18 +9,18 @@ export function draw(ctx, idx, x=T,y=T, scale=T*2/LOGICAL_SIZE) {
 	if (!drawFunctions[idx])
 		throw new RangeError(`Invalid fruit index: ${idx}.`
 			+` Must be between 0 and ${drawFunctions.length-1}.`)
-	const ofstY = -(T*.1)
+	const offsetY = -(T*0.1)
 	ctx.save()
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
-	ctx.translate(x, y+ofstY)
+	ctx.translate(x, y+offsetY)
 	ctx.scale(scale)
 	drawFunctions[idx](ctx)
 	ctx.restore()
 }
 
 export const cache = new class FruitCache {
-	#ctx = canvas2D(null,T*2).ctx
+	#ctx = canvas2D(null, T*2).ctx
 	/**
 	 @param {number} idx
 	*/
@@ -42,9 +42,9 @@ export const cache = new class FruitCache {
 {// Create a sprite sheet for menu icons
 	const Menu = $('#LevelMenu')
 	const size = +Menu.css('--scale') * T
-	const {ctx}= canvas2D(null, size*drawFunctions.length, size)
+	const {ctx}= canvas2D(null, drawFunctions.length*size, size)
 	for (const i of drawFunctions.keys())
-		draw(ctx, i, size*i+size/2, size/2, size/LOGICAL_SIZE)
+		draw(ctx, i, i*size + size/2, size/2, size/LOGICAL_SIZE)
 	Menu.css('--url',`url("${ctx.canvas.toDataURL()}")`)
 }
 

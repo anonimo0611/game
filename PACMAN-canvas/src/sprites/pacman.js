@@ -1,6 +1,6 @@
-const Duration = 300/Ticker.Interval
-const OpenMid  = 30 * PI/180
-const OpenMax  = 60 * PI/180
+const DURATION = 300/Ticker.Interval
+const OPEN_MID = 30 * PI/180
+const OPEN_MAX = 60 * PI/180
 
 import {Dir}   from '../../_lib/direction.js';
 import {Dying} from './pacman_dying.js'
@@ -11,7 +11,6 @@ export default class PacmanSprite {
 	#mPhase = 0
 	#mAngle = 0
 	#dyingSpr = /**@type {?Dying}*/(null)
-
 	/**
 	 @param {EnhancedCtx2D} ctx
 	 @param {number} radius
@@ -20,7 +19,7 @@ export default class PacmanSprite {
 	constructor(ctx, radius, initialOpening=0) {
 		this.ctx = ctx
 		this.r = radius
-		this.#mAngle = [0,OpenMid,OpenMax][initialOpening]
+		this.#mAngle = [0,OPEN_MID,OPEN_MAX][initialOpening]
 	}
 	update({closed=false,hidden=false,onWall=false}={}) {
 		this.#dyingSpr
@@ -29,12 +28,12 @@ export default class PacmanSprite {
 	}
 	#chew(onWall=false) {
 		if (onWall) {
-			if (this.#mAngle <= OpenMid)
-				this.#mAngle = OpenMid
+			if (this.#mAngle <= OPEN_MID)
+				this.#mAngle = OPEN_MID
 			return
 		}
-		const phase = this.#mPhase += PI/Duration
-		this.#mAngle = OpenMax * abs(sin(phase))
+		const phase = this.#mPhase += PI/DURATION
+		this.#mAngle = OPEN_MAX * abs(sin(phase))
 	}
 	draw({
 		center:{x,y}={x:0,y:0},

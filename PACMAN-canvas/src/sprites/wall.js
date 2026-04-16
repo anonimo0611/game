@@ -4,40 +4,40 @@ const LW = max(1, 3*SF|0) // Line  Width
 const LO = max(2, 4*SF|0) // Line  Offset
 const OO = max(1, 2*SF|0) // Outer Offset
 
-const CornerToRotateIdx = new Map(
+const CornerToRotationIdx = new Map(
 	Array.from('12345678abcdABCD', (v,i)=> [v,i%4])
 )
-const CacheCtxs = freeze([
-	canvas2D(null, BW,BH).ctx, // Blue
-	canvas2D(null, BW,BH).ctx  // White
-])
+const Ctxs = freeze({
+	Blue:  canvas2D(null, BW,BH).ctx,
+	White: canvas2D(null, BW,BH).ctx,
+})
 
 import {State} from '../state.js'
 import {Maze}  from '../maze.js'
 export const Wall = new class WallRenderer {
 	static {$(this.cache)}
 	static cache() {
-		CacheCtxs.forEach((ctx,i)=> {
+		values(Ctxs).forEach((ctx,i)=> {
 			ctx.lineWidth   = LW
 			ctx.strokeStyle = Color.MazeWalls[i];
-			Maze.Map.forEach((_,j)=> {
-				if (j%Cols >= Cols/2) return
-				Wall.#drawTile(ctx, Maze.Map[j], j)
+			Maze.Map.forEach((s,i)=> {
+				if (i%Cols >= Cols/2) return
+				Wall.#drawTile(ctx,s,i)
 			})
 			ctx.flip(ctx.canvas, 0,0, true)
 			Wall.#drawHouse(ctx)
 		})
 	}
-	draw(idx=0) {
+	draw(ctx=Ctxs.Blue) {
 		Bg.clear()
-		Bg.drawImage(CacheCtxs[idx].canvas, 0,0)
+		Bg.drawImage(ctx.canvas, 0,0)
 		Wall.#drawDoor()
 	}
 	setFlashing(cb=()=>{}) {
 		let cnt = 0
 		;(function redraw() {
 			if (++cnt > 8) return Timer.set(500, cb)
-			Wall.draw(cnt % 2 ? 1:0)
+			Wall.draw(cnt % 2 ? Ctxs.White : Ctxs.Blue)
 			Timer.set(250, redraw)
 		})()
 	}
@@ -46,8 +46,10 @@ export const Wall = new class WallRenderer {
 		const y = (Maze.House.EntryTile.y+1.6)*T
 		Bg.fillRect(BW/2-T, y, T*2, T/4, Color.HouseDoor)
 	}
-	/** @param {EnhancedCtx2D} ctx */
-	#drawHouse(/**@type {EnhancedCtx2D}*/ctx) {
+	/**
+	 @param {EnhancedCtx2D} ctx
+	*/
+	#drawHouse(ctx) {
 		const [ix,iy,ox,oy]= [31,16,34,19].map(n=>n/10*T)
 		ctx.save()
 		ctx.translate(BW/2, Maze.House.MidY)
@@ -91,7 +93,7 @@ export const Wall = new class WallRenderer {
 		const lo = s == '#' || /[VH=]/.test(s) ? -LO:LO
 
 		;[/[A-D]/,/[A-D]/,/[a-d1-4]/,/[a-d]/,/[5-8]/].forEach((r,i)=> {
-			const ci = CornerToRotateIdx.get(s) ?? -1
+			const ci = CornerToRotationIdx.get(s) ?? -1
 			ci>=0 && r.test(s) && Wall.#drawCorner(ctx,{type:i,ci,pos:{x,y}})
 		})
 		switch(s.replace('#','V').toUpperCase()) {

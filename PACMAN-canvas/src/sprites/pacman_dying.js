@@ -9,7 +9,6 @@ export class Dying {
 	#cnt;    #cb;
 	#innerR; #outerR;
 	#arcAng; #fadeOut = Fade.out(300);
-
 	/**
 	 @param {{ctx:EnhancedCtx2D,r:number}} _
 	 @param {()=> void} [cb]

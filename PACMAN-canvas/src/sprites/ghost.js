@@ -78,7 +78,7 @@ export default class GhostSprite {
 		}
 		if (!isFrightened) {
 			ctx.fillStyle = '#FFF',
-			/**@type {Record<VisualOrient,()=>void>}*/({
+			/**@type {Record<VisualOrient,()=> void>}*/({
 				Left:  ()=> this.#drawEyesHoriz(L),
 				Right: ()=> this.#drawEyesHoriz(R),
 				Up:    ()=> this.#drawEyesUp(isRipped),
