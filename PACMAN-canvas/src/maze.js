@@ -52,11 +52,15 @@ const HouseOuter = new Rect(14-5, 15-3, 10, 7).freeze()
 
 class House {
 	MidY = (this.EntryTile.y+3.5)*T
-	get EntryTile() {return Vec2.new(13, 12)}
-	isIn(/**@type {Position}*/tilePos) {
+	get EntryTile() {
+		return Vec2.new(13, 12)
+	}
+	/** @param {Position} tilePos */
+	isIn(tilePos) {
 		return HouseRect.contains(tilePos)
 	}
-	arrived(/**@type {Ghost}*/g, spd=1) {
+	/** @param {Ghost} g */
+	arrived(g, spd=1) {
 		return g.state.isEscaping
 			&& g.tile.y == this.EntryTile.y
 			&& abs(BW/2 - g.center.x) <= spd
@@ -77,8 +81,12 @@ class Tunnel {
 
 export class PowBlinker {
 	#show = 1
-	get show() {return this.#show == 1}
-	update() {this.#show ^= +(Ticker.count % 15 == 0)}
+	get show() {
+		return this.#show == 1
+	}
+	update() {
+		this.#show ^= +(Ticker.count % 15 == 0)
+	}
 }
 class PowDots extends PowBlinker {
 	draw() {
@@ -104,8 +112,7 @@ class MazeManager {
 	}
 	static setDot(/**@type {TileIdx}*/i, symbol='.') {
 		const t = Vec2.new(i%Cols, i/Cols|0)
-		const m = t.clone.add(.5)
-		clearDot({tileIdx:i,tileMid:m})
+		clearDot({tileIdx:i, tileMid:t.clone.add(.5)})
 		DotSet.add(i)
 		powChk.checked == false || symbol == '.'
 			? drawDot(Bg, ...t.vals)
