@@ -67,23 +67,27 @@ class Vec2 {
 	/**
 	 @param {Position} pos
 	 @param {number} cols
-	*/static idx(pos,cols) {
+	*/static idx(pos, cols) {
 		if (cols <= 0) throw RangeError('Column count must be greater than zero')
 		return Number(pos.y * cols + pos.x)
 	}
 
 	/**
-	 @param {Position} pos1
-	 @param {Position} pos2
-	*/static add(pos1,pos2) {
-		return Vec2.new(pos1).add(pos2)
+	 @param {Position} pos
+	 @param {Position|number} val
+	*/static add(pos, val) {
+		return typeof val == 'number'
+			? Vec2.new(pos).add(val)
+			: Vec2.new(pos).add(val)
 	}
 
 	/**
-	 @param {Position} pos1
-	 @param {Position} pos2
-	*/static sub(pos1,pos2) {
-		return Vec2.new(pos1).sub(pos2)
+	 @param {Position} pos
+	 @param {Position|number} val
+	*/static sub(pos, val) {
+		return typeof val == 'number'
+			? Vec2.new(pos).sub(val)
+			: Vec2.new(pos).sub(val)
 	}
 
 	/**
