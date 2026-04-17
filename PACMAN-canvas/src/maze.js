@@ -112,7 +112,8 @@ class MazeManager {
 	}
 	static setDot(/**@type {TileIdx}*/i, symbol='.') {
 		const t = Vec2.new(i%Cols, i/Cols|0)
-		clearDot({tileIdx:i, tileMid:t.clone.add(.5)})
+		const m = Vec2.add(t, 0.5)
+		clearDot({tileIdx:i, tileMid:m})
 		DotSet.add(i)
 		powChk.checked == false || symbol == '.'
 			? drawDot(Bg, ...t.vals)
