@@ -32,7 +32,7 @@ class Vec2 {
 	 @param {void|number|xyTuple|Position} [v1]
 	 @param {number} [v2]
 	*/static new(v1,v2) {
-		return new Vec2(...this.#parseXY(v1,v2))
+		return new Vec2(...this.parseXY(v1,v2))
 	}
 
 	/**
@@ -46,7 +46,7 @@ class Vec2 {
 	 @param {void|number|xyTuple|Position} [v1]
 	 @param {number} [v2]
 	 @returns {[x:number, y:number]}
-	*/static #parseXY(v1=0, v2) {
+	*/static parseXY(v1=0, v2) {
 		if (v1 instanceof Array) return [v1[0], v1[1]]
 		if (typeof v1 == 'number'
 		 && typeof v2 == 'number') return [v1, v2]
@@ -153,7 +153,7 @@ class Vec2 {
 	 @param {number} [v2]
 	*/
 	eq(v1, v2) {
-		const [x,y]= Vec2.#parseXY(v1, v2)
+		const [x,y]= Vec2.parseXY(v1, v2)
 		return Vec2.eq(this, {x,y})
 	}
 
@@ -179,7 +179,7 @@ class Vec2 {
 	 @param {number} [v2]
 	*/
 	set(v1, v2) {
-		const [x,y]= Vec2.#parseXY(v1, v2)
+		const [x,y]= Vec2.parseXY(v1, v2)
 		this.x = x
 		this.y = y
 		return this
@@ -211,7 +211,7 @@ class Vec2 {
 	 @param {number} [v2]
 	*/
 	add(v1, v2) {
-		const [x,y]= Vec2.#parseXY(v1, v2)
+		const [x,y]= Vec2.parseXY(v1, v2)
 		this.x += x
 		this.y += y
 		return this
@@ -239,7 +239,7 @@ class Vec2 {
 	 @param {number} [v2]
 	*/
 	sub(v1, v2) {
-		const [x,y]= Vec2.#parseXY(v1, v2)
+		const [x,y]= Vec2.parseXY(v1, v2)
 		this.x -= x
 		this.y -= y
 		return this

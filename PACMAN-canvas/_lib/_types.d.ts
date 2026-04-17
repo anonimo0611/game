@@ -25,7 +25,7 @@ type PathNode = {tile:Vec2, dir:Direction, stopped:boolean}
 
 type PtsValue = 100|200|300|400|500|700|800|1000|1600|2000|3000|5000
 type FloatingPtsData = {
-	key: {points: PtsValue};
+	key: {pointType:number, pointValue:PtsValue};
 	pos:  Readonly<Position>;
 	dur?: number;
 	cb?:  ()=> void;
