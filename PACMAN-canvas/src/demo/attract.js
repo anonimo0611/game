@@ -23,7 +23,7 @@ export class Attract {
 
 	/** @private */
 	constructor() {
-		$onNS('Attract',{click_keydown_blur:this.quit})
+		$onNS('Attract', {click_keydown_blur:this.quit})
 		this.update = ()=> this.subAct.update()
 	}
 	GhostEntries = /**@type {const}*/([

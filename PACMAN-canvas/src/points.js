@@ -21,11 +21,11 @@ class FloatingPts {
 	constructor({key,pos,dur=1e3,cb}) {
 		const {speed:spd}= Game
 		this.pos   = pos
+		this.cache = cache(key, T*2)
 		this.fade  = Fade.out(FadeDur/spd, (dur-FadeDur)/spd)
-		this.cache = cache((key == FruitMgr ? 0:1), key.points)
 
 		Popups.set(key, this)
-		State.isInGame && ScoreMgr.add(key.points)
+		State.isInGame && ScoreMgr.add(key.pointValue)
 
 		Timer.set(dur/spd, ()=> {
 			Timer.unfreeze()

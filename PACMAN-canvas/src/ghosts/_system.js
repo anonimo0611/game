@@ -4,16 +4,16 @@ import _Speed    from '../speed.js'
 import {Game}    from '../_main.js'
 import {State}   from '../state.js'
 import {Ctrl}    from '../control.js'
-import {Ghost}   from './ghost.js'
 import {Maze}    from '../maze.js'
 import {PtsMgr}  from '../points.js'
 import {PathMgr} from './paths.js'
 import {Targets} from './targets.js'
+import {Ghost}   from './ghost.js'
 import {player,onPlayerDotEaten} from '../player/player.js'
 
 const Ghosts = /**@type {Ghost[]}*/([])
-const PointList  = /**@type {const}*/([200,400,800,1600])
-const FrightSecs = /**@type {const}*/([6,5,4,3,2,5,2,2,1,5,2,1,0])
+const FrightPtsTable = /**@type {const}*/([200,400,800,1600])
+const FrightDurTable = /**@type {const}*/([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 
 export const {Ghost:Speed}= _Speed
 export const Evt = enumObj('Ready','Reverse','Frighten','FleeStart','RoundEnds')
@@ -46,51 +46,53 @@ const StandbyTimes = /**@type {const}*/
 	[   0,  900,    0], // Lv.13+
 ])
 
-const States = /**@type {const}*/
-	(['Idle','GoingOut','Walking','Bitten','Escaping','Entering'])
-
-/** @typedef {typeof States[number]} StateType */
-const StateType = enumObj(...States)
-
-/**
- @extends {_State<StateType,Ghost>}
- @typedef {GhostState & StateDef.Props<StateType>} IGhostState
-*/
-class GhostState extends _State {
-	/** @this {IGhostState} */
-	constructor(/**@type {Ghost}*/g) {
-		super(g, States)
-		this.owner.inHouse
-			? this.setIdle()
-			: this.setWalking()
+export const [StateType,createState] = function() {
+	/**
+	 @typedef {typeof States[number]} StateType
+	 @typedef {State & StateDef.Props<StateType>} IGhostState
+	 @extends {_State<StateType,Ghost>}
+	*/
+	class State extends _State {
+		/** @this {IGhostState} */
+		constructor(/**@type {Ghost}*/g) {
+			super(g, States)
+			this.owner.inHouse
+				? this.setIdle()
+				: this.setWalking()
+		}
+		/** @this {IGhostState} */
+		get isEscapingEyes() {
+			return this.isEscaping || this.isEntering
+		}
 	}
-	/** @this {IGhostState} */
-	get isEscapingEyes() {
-		return this.isEscaping || this.isEntering
-	}
-}
-export const createState =
-	/**@type {(g:Ghost)=> IGhostState}*/
-	(g=> new GhostState(g))
+	const States = /**@type {const}*/(
+		['Idle','GoingOut','Walking','Bitten','Escaping','Entering']
+	)
+	return [
+		enumObj(...States),
+		/**@type {(g:Ghost)=> IGhostState}*/(g=> new State(g))
+	]
+}()
 
 export const GhostMgr = new class GhostManager {
 	static {$(this.setup)}
 	static setup() {
 		State.on({
-			InGame:   GhostMgr.#onInGame,
-			Ready:    GhostMgr.#trigger,
-			RoundEnds:GhostMgr.#trigger,
+			InGame:    GhostMgr.#onInGame,
+			Ready:     GhostMgr.#trigger,
+			RoundEnds: GhostMgr.#trigger,
 		})
 	}
 	#animIdx = 0
 	get animIndex()      {return this.#animIdx}
 	get CruiseElroy()    {return CruiseElroy}
-	get isChaseMode()    {return AttackInWaves.isChaseMode}
-	get isScatterMode()  {return AttackInWaves.isScatterMode}
-	get isFrightMode()   {return FrightMode.session != null}
-	get points()         {return FrightMode.session?.points ?? PointList[0]}
+	get pointType()      {return PointType.Ghost}
+	get pointValue()     {return FrightMode.session?.points ?? FrightPtsTable[0]}
 	get spriteIdx()      {return FrightMode.session?.spriteIdx ?? 0}
 	get caughtAll()      {return FrightMode.session?.caughtAll ?? false}
+	get isFrightMode()   {return FrightMode.session != null}
+	get isChaseMode()    {return AttackInWaves.isChaseMode}
+	get isScatterMode()  {return AttackInWaves.isScatterMode}
 	get akaCenterPos()   {return Ghosts[GhostType.Akabei].center}
 	get areAnyEscaping() {return Ghosts.some(g=> g.isEscaping)}
 
@@ -116,7 +118,7 @@ export const GhostMgr = new class GhostManager {
 	}
 	frighten() {
 		signalDirectionReversal()
-		const s = FrightSecs[Game.clampedLv-1]
+		const s = FrightDurTable[Game.clampedLv-1]
 		;(s > 0 || State.isAttract)
 			? FrightMode.new(s)
 			: $(Ghosts).trigger(Evt.FleeStart)
@@ -263,11 +265,11 @@ const CruiseElroy = function() {
 const FrightMode = function() {
 	class Session {
 		#et=0; #flash=0; #caught=0; #fIdx=1
-		get points()    {return PointList[this.#caught-1]}
+		get points()    {return FrightPtsTable[this.#caught-1]}
 		get caughtAll() {return this.#caught == GhostType.Max}
 		get spriteIdx() {return this.#flash && this.#fIdx^1}
-		constructor(sec=1) {
-			this.sec = sec
+		constructor(secs=1) {
+			this.secs = secs
 			this.#set(true)
 		}
 		#set(isOn=true) {
@@ -278,21 +280,21 @@ const FrightMode = function() {
 			Sound.toggleFrightMode(isOn)
 		}
 		#flashing() {
-			const iv = (this.sec == 1 ? 12:14)/Game.speed|0
+			const iv = (this.secs == 1 ? 12:14)/Game.speed|0
 			this.#flash++ % iv == 0 && (this.#fIdx ^= 1)
 		}
 		update() {
 			if (State.isInGame && !Timer.frozen) {
 				const et = (this.#et += Game.interval)/1e3
-				if (et >= this.sec-2) this.#flashing()
-				if (et >= this.sec || this.caughtAll) this.#set(false)
+				if (et >= this.secs-2) this.#flashing()
+				if (et >= this.secs || this.caughtAll) this.#set(false)
 			}
  		}
 	}
-	let session = /**@type {?Session}*/(null)
+	let session = /**@type {?Readonly<Session>}*/(null)
 	State.on({_Ready:()=> session = null})
 	return {
-		new(sec=1) {new Session(sec)},
+		new(secs=1)   {new Session(secs)},
 		get session() {return session},
 	}
 }()

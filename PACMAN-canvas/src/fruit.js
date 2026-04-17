@@ -28,19 +28,11 @@ export const FruitMgr = new class FruitManager {
 		State.on({_Ready:FruitMgr.#resetTarget})
 		onPlayerDotEaten(FruitMgr.#onDotEaten)
 	}
-	get currentType() {
-		return this.#getType(Game.level-1)
-	}
-	get points() {
-		return PointTable[this.currentType]
-	}
-	get showTarget() {
-		return (State.isTitle || State.isInGame) && showTgt
-	}
-	get intersectsWithPlayer() {
-		return this.showTarget
-			&& circleCollision(player.center, TargetPos, T/2)
-	}
+	get currType()   {return this.#getType(Game.level-1)}
+	get pointType()  {return PointType.Fruit}
+	get pointValue() {return PointTable[this.currType]}
+	get showTarget() {return (State.isTitle || State.isInGame) && showTgt}
+
 	#getType(/**@type {number}*/i) {
 		if (i < 0) throw RangeError('Must be zero or greater.')
 		return FruitTable.at( min(i, FruitTable.length-1) ) ?? 0
@@ -69,10 +61,14 @@ export const FruitMgr = new class FruitManager {
 	#setFadeOut() {
 		fadeOut = Fade.out(FadeOutDur/Game.speed)
 	}
+	#intersectsWithPlayer() {
+		return this.showTarget
+			&& circleCollision(player.center, TargetPos, T/2)
+	}
 	update() {
 		fadeOut?.update() == false
 			? this.#resetTarget()
-			: this.intersectsWithPlayer && this.#onEaten()
+			: this.#intersectsWithPlayer() && this.#onEaten()
 	}
 	drawTarget() {
 		if (Ticker.paused)
@@ -96,7 +92,7 @@ export const FruitMgr = new class FruitManager {
 		HUD.restore()
 	}
 	#setImages = ()=> {
-		Spr.cache.update(this.currentType)
+		Spr.cache.update(this.currType)
 		this.#setLevelCounter()
 	}
 }

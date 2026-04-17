@@ -13,7 +13,7 @@ export class Actor {
 	constructor(col=0, row=0) {
 		this.pos.set(col*T, row*T)
 	}
-	// Override this in subclasses to return the actual speed.
+	// Override the actual speed in the subclasses.
 	get speed()     {return 0}
 	get inHouse()   {return Maze.House.isIn(this.tile)}
 	get inTunSide() {return Maze.Tunnel.findSide(this.center)}

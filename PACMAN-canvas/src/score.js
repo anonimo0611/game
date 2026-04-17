@@ -13,9 +13,9 @@ export const ScoreMgr = new class ScoreManager {
 	static setup() {
 		ScoreMgr.#reset()
 		State.on({
-			Quit:    ScoreMgr.#restore,
-			NewGame: ScoreMgr.#onNewGame,
-			GameOver:ScoreMgr.#onGameOver,
+			Quit:     ScoreMgr.#restore,
+			NewGame:  ScoreMgr.#onNewGame,
+			GameOver: ScoreMgr.#onGameOver,
 		})
 	}
 	clear() {

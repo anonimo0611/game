@@ -5,7 +5,7 @@ const LO = max(2, 4*SF|0) // Line  Offset
 const OO = max(1, 2*SF|0) // Outer Offset
 
 const CornerToRotationIdx = new Map(
-	Array.from('12345678abcdABCD', (v,i)=> [v,i%4])
+	Array.from('12345678abcdABCD', (v,i)=> [v,(i%4)])
 )
 const Ctxs = freeze({
 	Blue:  canvas2D(null, BW,BH).ctx,
@@ -92,10 +92,12 @@ export const Wall = new class WallRenderer {
 		const t  = {x:i%Cols, y:i/Cols|0}, {x,y}= Vec2.mul(t,T)
 		const lo = s == '#' || /[VH=]/.test(s) ? -LO:LO
 
-		;[/[A-D]/,/[A-D]/,/[a-d1-4]/,/[a-d]/,/[5-8]/].forEach((r,i)=> {
-			const ci = CornerToRotationIdx.get(s) ?? -1
-			ci>=0 && r.test(s) && Wall.#drawCorner(ctx,{type:i,ci,pos:{x,y}})
-		})
+		;[/[A-D]/,/[A-D]/,/[a-d1-4]/,/[a-d]/,/[5-8]/]
+			.forEach((r,type)=> {
+				const ci = CornerToRotationIdx.get(s) ?? -1
+				if (ci >= 0 && r.test(s))
+					Wall.#drawCorner(ctx,{type,ci,pos:{x,y}})
+			})
 		switch(s.replace('#','V').toUpperCase()) {
 		case 'V':ctx.strokeLine(x+HT+lo, y, x+HT+lo, y+T);break
 		case 'H':ctx.strokeLine(x, y+HT+lo, x+T, y+HT+lo);break

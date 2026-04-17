@@ -7,6 +7,7 @@ import {Ghost}    from '../ghosts/ghost.js'
 import {PacMan}   from '../actor.js'
 import * as Snag  from '../sprites/snag.js'
 
+const MIDDLE_Y = BH/2
 const sceneNum = (lv=0)=>
 	!Ctrl.isPractice && ({2:1, 5:2, 9:3}[lv]) || -1
 
@@ -30,7 +31,7 @@ export class Cutscene {
 
 	/** @protected @param {number} num */
 	constructor(num) {
-		this.pacman.y = this.akabei.y = BH/2 - T/2
+		this.pacman.y = this.akabei.y = MIDDLE_Y - T/2
 		Sound.playCutscene({loop:(num == 2) ? 0:1})
 	}
 	movePac() {
@@ -132,7 +133,7 @@ class Scene2 extends Cutscene {
 		const {akabei:a,snag,akaEyes,isRipped}= this
 		const animIdx = isRipped? 0 : (this.counter? 1 : a.animIdx)
 		this.drawPac()
-		snag.drawSnaggedStake({isRipped})
+		snag.drawSnaggedStake({isRipped,y:MIDDLE_Y+T})
 		this.drawAka({isRipped,animIdx,orient:akaEyes})
 		if (!isRipped && a.x < Snag.AkaSnagX) {
 			const pos   = a.center.addX(T)
