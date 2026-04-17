@@ -62,13 +62,13 @@ const [Cols,Rows]= GridSize
 	}
 	#drawPoints() {
 		/**
-		 @param {0|1} type 0=Fruits, 1=Ghosts
-		 @param {PtsValue} pts
+		 @param {number}   pointType
+		 @param {PtsValue} pointValue
 		 @param {number} x
 		 @param {number} y
 		*/
-		function draw(type, pts, x,y) {
-			const {ctx:cache,w,h}= Pts.cache(type,pts,S)
+		function draw(pointType, pointValue, x,y) {
+			const {ctx:cache,w,h}= Pts.cache({pointType,pointValue},S)
 			ctx.save()
 			ctx.translate(x,y)
 			ctx.drawImage(cache.canvas, -w/2, -h/2)
@@ -79,9 +79,9 @@ const [Cols,Rows]= GridSize
 			[100,300,500,700],    // Fruit pts
 			[1000,2000,3000,5000],// Fruit pts
 		])
-		table[0].forEach((pts,i)=> draw(1, pts, ofst(i+0)+T, S*6+T))
-		table[1].forEach((pts,i)=> draw(0, pts, ofst(i+4)+T, S*6+T))
-		table[2].forEach((pts,i)=> draw(0, pts, (S+GAP/2)+S*(2+GAP/T)*i, S*7+S/2))
+		table[0].forEach((pts,i)=> draw(PointType.Ghost, pts, ofst(i+0)+T, S*6+T))
+		table[1].forEach((pts,i)=> draw(PointType.Fruit, pts, ofst(i+4)+T, S*6+T))
+		table[2].forEach((pts,i)=> draw(PointType.Fruit, pts, (S+GAP/2)+S*(2+GAP/T)*i, S*7+S/2))
 	}
 	#drawPacman() {
 		const dirs = /**@type {const}*/([U,U,L,L,D,D,R,R])
@@ -104,7 +104,7 @@ const [Cols,Rows]= GridSize
 			aka.draw({center, ...params})
 		}
 
-		{// Snagged Clothing
+		{// Snagged clothing
 			const pos = Vec2.Zero, ratios = [0.3, 0.5 ,1]
 			for (let i=0; i<3; i++) {
 				draw(...pos.vals, {animIdx:+(i == 2)})
@@ -113,9 +113,9 @@ const [Cols,Rows]= GridSize
 				pos.x += S*1.2 + ((i+1)*GAP)
 			}
 		}
-		{
-			const pos = Vec2.new(S*6.9, S-Snag.StakeSize.y)
-			spr.drawSnaggedStake({scale,pos,isRipped:true})
+		{// Stake and Scrap
+			const pos = Vec2.new(S*6.9, S-T/2)
+			spr.drawSnaggedStake({scale,...pos,isRipped:true})
 		}
 		draw(ofst(4.00), 0, {isRipped: true,orient:U})
 		draw(ofst(5.00), 0, {isRipped: true,orient:Dazed})
