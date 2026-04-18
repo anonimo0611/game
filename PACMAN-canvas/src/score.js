@@ -43,7 +43,7 @@ export const ScoreMgr = new class ScoreManager {
 			localStorage[HiScoreKey] = _hiSco
 	}
 	get #showUP() {
-		return !State.isInGame || Ticker.paused
+		return (!State.isInGame || Ticker.paused)
 			? true : !!(Ticker.count & (Sound.ringing? 8:16))
 	}
 	get #fgColorUP() {
