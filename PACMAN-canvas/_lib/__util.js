@@ -1,6 +1,6 @@
 'use strict'
 const {fromEntries,defineProperty,entries,freeze,hasOwn,keys,values}= Object
-const {abs,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
+const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 
 /**
  @template {object} T
