@@ -66,7 +66,7 @@ export const Targets = new class TargetVisualizer {
 		 || g.type == GhostType.Aosuke) {
 			dir != U
 				? Fg.newLinePath([x,y], fwdXY)
-				: Fg.newLinePath([x,y], fwdXY).lineTo(...ofsXY)
+				: Fg.newLinePath([x,y], fwdXY, ofsXY)
 			Fg.stroke()
 		}
 		if (g.type == GhostType.Aosuke) {
