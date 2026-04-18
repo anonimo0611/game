@@ -5,15 +5,11 @@ import {Maze}  from '../maze.js'
 import {Ghost} from './ghost.js';
 import {player as p} from '../player/player.js';
 
-const
-	LineWidth = T/5,
-	PathSteps = 17,
-	PathOfsts = freeze([
-		-2, // Akabei
-		-1, // Pinky
-		+1, // Aosuke
-		+2, // Guzuta
-	])
+const PathSteps = 17
+const LineWidth = T/5
+
+// Akabei, Pinky, Aosuke, Guzuta
+const PathOfsts = freeze([-2,-1,+1,+2])
 
 export class PathMgr {
 	#nodeList = /**@type {PathNode[]}*/([])
