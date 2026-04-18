@@ -88,7 +88,7 @@ const [Cols,Rows]= GridSize
 		for (let i=-1; i<9; i++) {
 			const center = Vec2.new(T+ofst(i), S*8.5)
 			const params = {center, orient:dirs[i-1], radius:T}
-			new PacSprite(ctx, T, i>0 ? (i%2 ? 1:2) : 0).draw(params)
+			new PacSprite(ctx, T, i>0 ? (i%2 ? 0.5:1) : 0).draw(params)
 		}
 	}
 	#drawAkabei() {
