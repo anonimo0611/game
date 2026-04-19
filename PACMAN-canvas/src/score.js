@@ -5,7 +5,7 @@ import {drawText} from './message.js'
 import {Ctrl}     from './control.js'
 import {Lives}    from './lives.js'
 
-const HiScoreKey = 'anopac_hiscore'
+const HISCORE_KEY = 'anopac_hiscore'
 let [_score,_hiSco,savedScore,savedHiSco]= [0,0,0,0]
 
 export const ScoreMgr = new class ScoreManager {
@@ -19,12 +19,12 @@ export const ScoreMgr = new class ScoreManager {
 		})
 	}
 	clear() {
-		localStorage.removeItem(HiScoreKey)
+		localStorage.removeItem(HISCORE_KEY)
 		this.#reset()
 	}
 	#reset() {
 		_score = 0
-		_hiSco = localStorage[HiScoreKey]|0
+		_hiSco = localStorage[HISCORE_KEY]|0
 	}
 	#restore() {
 		if (Game.started) {
@@ -38,9 +38,9 @@ export const ScoreMgr = new class ScoreManager {
 		_score = 0
 	}
 	#onGameOver() {
-		const hi = localStorage[HiScoreKey]|0
+		const hi = localStorage[HISCORE_KEY]|0
 		if (!Ctrl.isPractice && _hiSco > hi)
-			localStorage[HiScoreKey] = _hiSco
+			localStorage[HISCORE_KEY] = _hiSco
 	}
 	get #showUP() {
 		return (!State.isInGame || Ticker.paused)

@@ -5,16 +5,16 @@ import {FruitMgr} from './fruit.js'
 import {GhostMgr} from './ghosts/_system.js'
 import {cache}    from './sprites/points.js'
 
-const FadeDur = 300
-const Popups  = /**@type {Map<any,FloatingPts>}*/(new Map)
-State.on({_RoundEnds:()=> Popups.clear()})
+const FadeDur  = 300
+const PopupMap = /**@type {Map<any,FloatingPts>}*/(new Map)
+State.on({_RoundEnds:()=> PopupMap.clear()})
 
 export const PtsMgr = new class PointsManager {
 	/** @param {FloatingPtsData} data */
 	set(data) {new FloatingPts(data)}
-	update()       {Popups.forEach(v=> v.update())}
-	drawFruitPts() {Popups.get(FruitMgr)?.draw()}
-	drawGhostPts() {Popups.get(GhostMgr)?.draw()}
+	update()       {PopupMap.forEach(v=> v.update())}
+	drawFruitPts() {PopupMap.get(FruitMgr)?.draw()}
+	drawGhostPts() {PopupMap.get(GhostMgr)?.draw()}
 }
 class FloatingPts {
 	/** @param {FloatingPtsData} data */
@@ -23,11 +23,11 @@ class FloatingPts {
 		this.pos   = pos
 		this.cache = cache(key, T*2)
 		this.fade  = Fade.out(FadeDur/spd, (dur-FadeDur)/spd)
-		Popups.set(key,this)
+		PopupMap.set(key,this)
 		State.isInGame && ScoreMgr.add(key.pointValue)
 		Timer.set(dur/spd, ()=> {
 			Timer.unfreeze()
-			Popups.delete(key)
+			PopupMap.delete(key)
 			cb?.()
 		}, {ignoreFrozen:true})
 	}

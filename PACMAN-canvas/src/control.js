@@ -6,7 +6,7 @@ import {drawText} from './message.js'
 import {ScoreMgr} from './score.js'
 import {Form,Menu,inputs,btns} from './ui.js'
 
-const SettingsKey = 'anopacman'
+const SETTINGS_KEY = 'anopacman'
 const {InfoTexts:palette}= Color
 
 export const Ctrl = new class Controller {
@@ -51,11 +51,11 @@ export const Ctrl = new class Controller {
 			case 'checkbox':data[input.id] = input.checked;break
 			}
 		})
-		localStorage[SettingsKey] = JSON.stringify(data)
+		localStorage[SETTINGS_KEY] = JSON.stringify(data)
 	}
 	#restore() {
-		if (!localStorage[SettingsKey]) return
-		const data = JSON.parse(localStorage[SettingsKey])
+		if (!localStorage[SETTINGS_KEY]) return
+		const data = JSON.parse(localStorage[SETTINGS_KEY])
 		typedKeys(Menu).forEach(id=> Menu[id].index = data[id])
 		document.querySelectorAll('input').forEach(input=> {
 			switch(input.type) {
