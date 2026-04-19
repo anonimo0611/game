@@ -12,8 +12,8 @@ import {Ghost}   from './ghost.js'
 import {player,onPlayerDotEaten} from '../player/player.js'
 
 const Ghosts = /**@type {Ghost[]}*/([])
-const FrightPtsTable = /**@type {const}*/([200,400,800,1600])
-const FrightDurTable = /**@type {const}*/([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
+const PointTable = /**@type {const}*/([200,400,800,1600])
+const FrightDurs = /**@type {const}*/([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 
 export const {Ghost:Speed}= _Speed
 export const Evt = enumObj('Ready','Reverse','Frighten','FleeStart','RoundEnds')
@@ -87,7 +87,7 @@ export const GhostMgr = new class GhostManager {
 	get animIndex()      {return this.#animIdx}
 	get CruiseElroy()    {return CruiseElroy}
 	get pointType()      {return PointType.Ghost}
-	get pointValue()     {return FrightMode.session?.points ?? FrightPtsTable[0]}
+	get pointValue()     {return FrightMode.session?.points ?? PointTable[0]}
 	get spriteIdx()      {return FrightMode.session?.spriteIdx ?? 0}
 	get caughtAll()      {return FrightMode.session?.caughtAll ?? false}
 	get isFrightMode()   {return FrightMode.session != null}
@@ -118,7 +118,7 @@ export const GhostMgr = new class GhostManager {
 	}
 	frighten() {
 		signalDirectionReversal()
-		const s = FrightDurTable[Game.clampedLv-1]
+		const s = FrightDurs[Game.clampedLv-1]
 		;(s > 0 || State.isAttract)
 			? FrightMode.new(s)
 			: $(Ghosts).trigger(Evt.FleeStart)
@@ -265,7 +265,7 @@ const CruiseElroy = function() {
 const FrightMode = function() {
 	class Session {
 		#et=0; #flash=0; #caught=0; #fIdx=1
-		get points()    {return FrightPtsTable[this.#caught-1]}
+		get points()    {return PointTable[this.#caught-1]}
 		get caughtAll() {return this.#caught == GhostType.Max}
 		get spriteIdx() {return this.#flash && this.#fIdx^1}
 		constructor(secs=1) {
