@@ -6,9 +6,10 @@ const drawFunctions = [cherry,strawb,orange,apple,melon,gala,bell,key]
  @param {number} idx
 */
 export function draw(ctx, idx, x=T,y=T, scale=T*2/LOGICAL_SIZE) {
-	if (!drawFunctions[idx])
+	if (!drawFunctions[idx]) {
 		throw new RangeError(`Invalid fruit index: ${idx}.`
 			+` Must be between 0 and ${drawFunctions.length-1}.`)
+	}
 	const offsetY = -(T*0.1)
 	ctx.save()
 	ctx.lineWidth = 1
@@ -21,10 +22,10 @@ export function draw(ctx, idx, x=T,y=T, scale=T*2/LOGICAL_SIZE) {
 
 export const cache = new class FruitCache {
 	#ctx = canvas2D(null, T*2).ctx
-	/**
-	 @param {number} idx
-	*/
+
+	/** @param {number} idx*/
 	update(idx) {draw(this.#ctx.clear(), idx)}
+
 	/**
 	 @param {EnhancedCtx2D} ctx
 	 @param {Position} pos
