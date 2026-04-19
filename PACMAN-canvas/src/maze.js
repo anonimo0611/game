@@ -40,8 +40,8 @@ D__________________________C\
 ////////////////////////////\
 ////////////////////////////`])
 
+const WallSet = /**@type {Set<TileIdx>}*/(new Set)
 const DotSet  = /**@type {Set<TileIdx>}*/(new Set)
-const WallSet = /**@type {ReadonlySet<TileIdx>} */(new Set)
 const PowMap  = /**@type {Map<TileIdx,Position>}*/(new Map)
 
 const DOT_RADIUS = T/9
@@ -99,9 +99,8 @@ class PowDots extends PowBlinker {
 
 class MazeManager {
 	static {
-		const wallSet = /**@type {Set<TileIdx>}*/(WallSet)
 		for (const [i,s] of MapArr.entries())
-			!DotSymbols.has(s) && s.trim() && wallSet.add(i)
+			!DotSymbols.has(s) && s.trim() && WallSet.add(i)
 		State.on({_NewLevel: this.reset})
 		$(powChk).on({change:this.reset})
 	}
