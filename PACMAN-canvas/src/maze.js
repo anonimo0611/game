@@ -44,8 +44,8 @@ const DotSet  = /**@type {Set<TileIdx>}*/(new Set)
 const WallSet = /**@type {ReadonlySet<TileIdx>} */(new Set)
 const PowMap  = /**@type {Map<TileIdx,Position>}*/(new Map)
 
-const DotRadius  = T/9
-const PowRadius  = T/2
+const DOT_RADIUS = T/9
+const POW_RADIUS = T/2
 const DotSymbols = new Set([...'.O'])
 const HouseRect  = new Rect(14-4, 15-2,  8, 5).freeze()
 const HouseOuter = new Rect(14-5, 15-3, 10, 7).freeze()
@@ -157,7 +157,7 @@ class MazeManager {
 	 @returns {number} Number of remaining dots
 	*/
 	clearDot({tileIdx:i,tileMid:{x,y}}) {
-		const r = DotRadius+1
+		const r = DOT_RADIUS+1
 		DotSet.delete(i)
 		PowMap.delete(i)
 		Bg.clearRect(x*T-r, y*T-r, r*2, r*2)
@@ -172,7 +172,7 @@ class MazeManager {
 	drawDot(ctx, col,row, isPow=false, isVisible=true) {
 		if (!isVisible) return
 		const [x,y] = [col,row].map(v=> (v+0.5)*T)
-		const r = [DotRadius,PowRadius][+isPow]
+		const r = [DOT_RADIUS,POW_RADIUS][+isPow]
 		ctx.fillCircle(x,y, r, Color.Cookie)
 	}
 }
