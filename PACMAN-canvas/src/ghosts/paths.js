@@ -5,8 +5,8 @@ import {Maze}  from '../maze.js'
 import {Ghost} from './ghost.js';
 import {player as p} from '../player/player.js';
 
-const PathSteps = 17
-const LineWidth = T/5
+const PATH_STEPS = 17
+const LINE_WIDTH = T/5
 
 // Akabei, Pinky, Aosuke, Guzuta
 const PathOfsts = freeze([-2,-1,+1,+2])
@@ -30,7 +30,7 @@ export class PathMgr {
 			return
 		const tile = g.getAdjTile(dir,g.tile)
 		const path = [{dir,tile,stopped:false}]
-		for (let i=0; i<PathSteps-1; i++) {
+		for (let i=0; i<PATH_STEPS-1; i++) {
 			const {dir:d,tile:t}= path[(i+1)-1]
 			const tgt  = g.getTargetTile(t)
 			const dir  = g.getNextDir(d,t,tgt)
@@ -57,7 +57,7 @@ export class PathMgr {
 		const distance = Vec2.distance(g.pos,startPos)
 		Fg.save()
 		Fg.setAlpha(0.7)
-		Fg.translate(T/2 + PathOfsts[g.type]*LineWidth)
+		Fg.translate(T/2 + PathOfsts[g.type]*LINE_WIDTH)
 		Fg.beginPath()
 		Fg.moveTo(...g.pos.vals)
 		for (let i=0; i<nodes.length; i++) {
@@ -81,7 +81,7 @@ export class PathMgr {
 				Fg.restore()
 			}
 		}
-		Fg.lineWidth   = LineWidth
+		Fg.lineWidth   = LINE_WIDTH
 		Fg.lineJoin    = Fg.lineCap = 'round'
 		Fg.strokeStyle = Color.GhostBodies[g.type]
 		Fg.stroke()

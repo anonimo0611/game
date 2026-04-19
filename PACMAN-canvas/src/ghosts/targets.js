@@ -3,7 +3,7 @@ import {Ctrl}   from '../control.js'
 import {player} from '../player/player.js'
 import {Maze}   from '../maze.js'
 import {Ghost}  from './ghost.js'
-import {GhostMgr,GuzutaThreshold} from './_system.js'
+import {GhostMgr,GUZUTA_THRESHOLD} from './_system.js'
 
 export const Targets = new class TargetVisualizer {
 	draw(/**@type {readonly Ghost[]}*/ghosts) {
@@ -82,7 +82,7 @@ export const Targets = new class TargetVisualizer {
 		Fg.save()
 		Fg.translate(player.center)
 		Fg.setAlpha(g.isTargetPac ? 0.8 : 0.4)
-		Fg.strokeCircle(0,0, T*GuzutaThreshold, undefined, T*0.15)
+		Fg.strokeCircle(0,0, T*GUZUTA_THRESHOLD, undefined, T*0.15)
 		Fg.restore()
 	}
 }

@@ -22,7 +22,7 @@ export const Evt = enumObj('Ready','Reverse','Frighten','FleeStart','RoundEnds')
  Distance threshold for Guzuta's chase logic. \
  The value is a multiple of tile size.
 */
-export const GuzutaThreshold = 8
+export const GUZUTA_THRESHOLD = 8
 
 /**
  When always chase mode,

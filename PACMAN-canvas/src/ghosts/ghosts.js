@@ -2,7 +2,7 @@ import {Maze}   from '../maze.js'
 import {State}  from '../state.js'
 import {player} from '../player/player.js'
 import {Ghost}  from './ghost.js'
-import {GhostMgr,GuzutaThreshold} from './_system.js'
+import {GhostMgr,GUZUTA_THRESHOLD} from './_system.js'
 
 class Akabei extends Ghost {
 	constructor() {
@@ -49,7 +49,7 @@ class Guzuta extends Ghost {
 	get scatterTile() {return Vec2.new(0, 33)}
 	get chasePos() {
 		const {center,pos}= player
-		return Vec2.sqrMag(this, pos) < (T*GuzutaThreshold)**2
+		return Vec2.sqrMag(this, pos) < (T*GUZUTA_THRESHOLD)**2
 			? this.scatterTile.add(.5).mul(T) : center
 	}
 }
