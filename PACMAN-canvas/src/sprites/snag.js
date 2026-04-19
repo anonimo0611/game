@@ -14,13 +14,13 @@ export class SnagSprite {
 	/** Renders the stake bottom-aligned to the given y-coord. */
 	drawSnaggedStake({x=StakeX,y=0,isRipped=false,scale=1}={}) {
 		const {ctx}= this, [sw,sh]= StakeSize.vals
+		/** Adjust for the gap between the sprite bottom and the ground */
+		const offsetY = -T*0.1
 		ctx.save()
-		ctx.translate(x, y)
-		// Adjust for the gap between the sprite bottom and the ground
-		ctx.translate(0, -T*0.1)
+		ctx.translate(x, y+offsetY)
 		ctx.scale(scale)
-		ctx.fillRect(0,-sh, sw,sh, 'white')
-		if (isRipped) {
+		ctx.fillRect(0,-sh, sw,sh, 'white') // Stake
+		if (isRipped) { // Scraps of cloth
 			ctx.translate(sw, 0)
 			ctx.fillPolygon(AkaColor, [0,-4],[0,-sh],[-T,0],[-4,0],[-4,-4])
 		}
