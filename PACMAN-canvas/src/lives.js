@@ -5,7 +5,7 @@ import  Sprite  from './sprites/pacman.js'
 
 export const Lives = function() {
 	let   left   = 0
-	const size   = T*2
+	const SIZE   = T*2
 	const sprite = new Sprite(HUD, T*.8, 0.5)
 	State.on({
 		Title:   ()=> reset(),
@@ -14,10 +14,10 @@ export const Lives = function() {
 	})
 	function draw(left=3) {
 		HUD.save()
-		HUD.translate(size, BH-size)
-		HUD.clearRect(0,0, size*(+inputs.lvsRng.max), size)
+		HUD.translate(SIZE, BH-SIZE)
+		HUD.clearRect(0,0, SIZE*(+inputs.lvsRng.max), SIZE)
 		for (let i=0; i<left; i++)
-			sprite.draw({center:{x:size*i+T, y:T}})
+			sprite.draw({center:{x:SIZE*i+T, y:T}})
 		HUD.restore()
 	}
 	function add(n=0) {draw(left += n)}

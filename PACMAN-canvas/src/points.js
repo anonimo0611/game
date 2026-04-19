@@ -5,7 +5,7 @@ import {FruitMgr} from './fruit.js'
 import {GhostMgr} from './ghosts/_system.js'
 import {cache}    from './sprites/points.js'
 
-const FadeDur  = 300
+const FADE_DUR = 300
 const PopupMap = /**@type {Map<any,FloatingPts>}*/(new Map)
 State.on({_RoundEnds:()=> PopupMap.clear()})
 
@@ -22,7 +22,7 @@ class FloatingPts {
 		const {speed:spd}= Game
 		this.pos   = pos
 		this.cache = cache(key, T*2)
-		this.fade  = Fade.out(FadeDur/spd, (dur-FadeDur)/spd)
+		this.fade  = Fade.out(FADE_DUR/spd, (dur-FADE_DUR)/spd)
 		PopupMap.set(key,this)
 		State.isInGame && ScoreMgr.add(key.pointValue)
 		Timer.set(dur/spd, ()=> {

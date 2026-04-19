@@ -8,15 +8,13 @@ import {PtsMgr} from './points.js'
 import * as Spr from './sprites/fruits.js'
 import {player,onPlayerDotEaten} from './player/player.js'
 
-const FadeOutDur = 300
+const FADE_DUR   = 300
+const LEVEL_COLS = 7
 const AppearDots = new Set([70,170])
 const TargetPos  = new Vec2(BW/2, T*18.5).fixed
+const LevelsRect = new Rect(T*2*6, BH-T*2, LEVEL_COLS*T*2, T*2).freeze()
 const FruitTable = /**@type {const}*/([0,1,2,2,3,3,4,4,5,5,6,6,7])
 const PointTable = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
-
-const Size = T*2
-const LevelsCols = 7
-const LevelsRect = new Rect(Size*6, BH-Size, LevelsCols*Size, Size).freeze()
 
 let showTgt = true
 let fadeOut = /**@type {?Fade}*/(null)
@@ -55,11 +53,11 @@ export const FruitMgr = new class FruitManager {
 	}
 	#setHideTimer() {
 		// Disappearing is between 9 and 10 seconds
-		const delay = randInt(9e3, 1e4-FadeOutDur)/Game.speed
+		const delay = randInt(9e3, 1e4-FADE_DUR)/Game.speed
 		Timer.set(delay, this.#setFadeOut, {key:this})
 	}
 	#setFadeOut() {
-		fadeOut = Fade.out(FadeOutDur/Game.speed)
+		fadeOut = Fade.out(FADE_DUR/Game.speed)
 	}
 	#intersectsWithPlayer() {
 		return this.showTarget
@@ -83,12 +81,12 @@ export const FruitMgr = new class FruitManager {
 	}
 	#setLevelCounter() {
 		const [x,y,w,h]  = LevelsRect.vals
-		const startLevel = max(Game.level-LevelsCols, 0)
+		const startLevel = max(Game.level-LEVEL_COLS, 0)
 		HUD.save()
 		HUD.clearRect(x,y,w,h)
 		HUD.translate(x,y)
 		for (let i=startLevel; i<Game.level; i++)
-			Spr.draw(HUD, this.#getType(i), w-T-Size*(i-startLevel))
+			Spr.draw(HUD, this.#getType(i), w-T-T*2*(i-startLevel))
 		HUD.restore()
 	}
 	#setImages = ()=> {
