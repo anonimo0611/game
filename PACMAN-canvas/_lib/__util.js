@@ -54,7 +54,7 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
  @param {number} start
  @param {number} end
  @param {number} ratio 0.0-1.0
-*/const lerp = (start,end,ratio)=> start + (end-start) * ratio
+*/const lerp = (start,end,ratio)=> start + (end-start) * clamp(ratio,0,1)
 
 /**
  @param {number} min
