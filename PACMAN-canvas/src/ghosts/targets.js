@@ -6,7 +6,8 @@ import {Ghost}  from './ghost.js'
 import {GhostMgr,GUZUTA_THRESHOLD} from './_system.js'
 
 export const Targets = new class TargetVisualizer {
-	draw(/**@type {readonly Ghost[]}*/ghosts) {
+	/** @param {readonly Ghost[]} ghosts */
+	draw(ghosts) {
 		if (!State.isInGame)   return
 		if (!Ctrl.showTargets) return
 		Fg.save()

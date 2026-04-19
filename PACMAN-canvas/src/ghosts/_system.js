@@ -145,7 +145,7 @@ export const GhostMgr = new class GhostManager {
 	}
 	drawFront()  {
 		Targets.draw(Ghosts)
-		PathMgr.draw(Ghosts)
+		PathMgr.draw(Ghosts.toReversed())
 		this.#draw(true)
 		PtsMgr.drawGhostPts()
 	}

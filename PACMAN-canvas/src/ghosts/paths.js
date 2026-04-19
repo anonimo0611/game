@@ -14,13 +14,18 @@ const PathOfsts = freeze([-2,-1,+1,+2])
 export class PathMgr {
 	#nodeList = /**@type {PathNode[]}*/([])
 
-	static update(/**@type {readonly Ghost[]}*/ghosts) {
-		if (State.isInGame && Ctrl.showPaths)
-			ghosts.forEach(g=> g.path.#update(g))
+	static get isActive() {
+		return State.isInGame && Ctrl.showPaths
 	}
-	static draw(/**@type {readonly Ghost[]}*/ghosts) {
-		if (State.isInGame && Ctrl.showPaths)
-			ghosts.toReversed().forEach(g=> g.path.#draw(g))
+
+	/** @param {readonly Ghost[]} ghosts */
+	static update(ghosts) {
+		this.isActive && ghosts.forEach(g=> g.path.#update(g))
+	}
+
+	/** @param {readonly Ghost[]} ghosts */
+	static draw(ghosts) {
+		this.isActive && ghosts.forEach(g=> g.path.#draw(g))
 	}
 
 	/** @param {Ghost} g */
