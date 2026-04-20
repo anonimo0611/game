@@ -17,7 +17,6 @@ export const Targets = new class TargetVisualizer {
 		for (const g of ghosts) this.#drawMarker(g)
 		Fg.restore()
 	}
-
 	/** @param {Ghost} g */
 	#markerDisabled = g=> (
 		   g.isFrightened
@@ -25,7 +24,6 @@ export const Targets = new class TargetVisualizer {
 		|| g.state.isBitten
 		|| (Timer.frozen && !g.isEscaping)
 	)
-
 	/** @param {Ghost} g */
 	#getTargetPos = g=>
 		(g.state.isGoingOut || g.isEscaping)
@@ -44,7 +42,6 @@ export const Targets = new class TargetVisualizer {
 			? this.#guzutaCircle(g)
 			: this.#auxLines(g, g.chaseOffset)
 	}
-
 	/** @param {Ghost} g */
 	#drawMarker(g) {
 		if (this.#markerDisabled(g))
@@ -56,7 +53,6 @@ export const Targets = new class TargetVisualizer {
 		Fg.fillRect  (x,y, size,size)
 		Fg.strokeRect(x,y, size,size)
 	}
-
 	/** @param {Ghost}  g */
 	#auxLines(g, ofst=2) {
 		const {center:{x,y},dir,inTunSide}= player
@@ -77,7 +73,6 @@ export const Targets = new class TargetVisualizer {
 			Fg.fillCircle(...ofsXY, 8)
 		}
 	}
-
 	/** @param {Ghost} g */
 	#guzutaCircle(g) {
 		Fg.save()

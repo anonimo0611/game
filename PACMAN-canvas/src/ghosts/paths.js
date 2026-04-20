@@ -5,11 +5,9 @@ import {Maze}  from '../maze.js'
 import {Ghost} from './ghost.js';
 import {player as p} from '../player/player.js';
 
-const PATH_STEPS = 17
-const LINE_WIDTH = T/5
-
-// Akabei, Pinky, Aosuke, Guzuta
-const PathOfsts = freeze([-2,-1,+1,+2])
+const PATH_STEPS  = 17
+const LINE_WIDTH  = T/5
+const PathOffsets = freeze([-2,-1,+1,+2])
 
 export class PathMgr {
 	#nodeList = /**@type {PathNode[]}*/([])
@@ -17,12 +15,10 @@ export class PathMgr {
 	static get isActive() {
 		return State.isInGame && Ctrl.showPaths
 	}
-
 	/** @param {readonly Ghost[]} ghosts */
 	static update(ghosts) {
 		this.isActive && ghosts.forEach(g=> g.path.#update(g))
 	}
-
 	/** @param {readonly Ghost[]} ghosts */
 	static draw(ghosts) {
 		this.isActive && ghosts.forEach(g=> g.path.#draw(g))
@@ -47,7 +43,6 @@ export class PathMgr {
 			if (path[i+1].stopped) break
 		} this.#nodeList = path
 	}
-
 	/** @param {Ghost} g */
 	#draw(g) {
 		if (!this.#nodeList.length)
@@ -62,7 +57,7 @@ export class PathMgr {
 		const distance = Vec2.distance(g.pos,startPos)
 		Fg.save()
 		Fg.setAlpha(0.7)
-		Fg.translate(T/2 + PathOfsts[g.type]*LINE_WIDTH)
+		Fg.translate(T/2 + PathOffsets[g.type]*LINE_WIDTH)
 		Fg.beginPath()
 		Fg.moveTo(...g.pos.vals)
 		for (let i=0; i<nodes.length; i++) {
