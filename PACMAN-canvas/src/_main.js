@@ -53,21 +53,21 @@ export const Game = new class GameCore {
 		const lv = (Game.#level = between(n, 1, 0xFF) && n || 1)
 		Level.val( String(lv).padStart(2,'0') ).trigger('change')
 	}
-	#resetLevel() {
-		Game.#setLevel(Menu.Level.index+1)
-	}
 	#reset() {
 		Ticker.reset()
 		Sound.stop()
 		Cursor.show()
-		Game.#started = false
-		Game.#pacDied = false
 		Game.#resetLevel()
 	}
+	#resetLevel() {
+		Game.#started = false
+		Game.#pacDied = false
+		Game.#setLevel(Menu.Level.index+1)
+	}
 	#onNewGame() {
+		Game.#started = true
 		Cursor.hide()
 		Sound.playStartMusic()
-		Game.#started = true
 		State.setReady({delay:2200})
 	}
 	#onNewLevel() {
