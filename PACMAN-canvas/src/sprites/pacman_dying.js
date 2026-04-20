@@ -63,13 +63,14 @@ export class Dying {
 		ctx.fill()
 	}
 	#drawRadialBurst() {
-		const {ctx}= this
+		const {ctx}= this, steps = 10
 		ctx.setAlpha(this.#fadeOut?.alpha)
-		for (let d=0; d<360; d+=360/10) {
-			ctx.beginPath()
-			ctx.moveTo(...getPointOnCircle(d*PI/180, this.#innerR).vals)
-			ctx.lineTo(...getPointOnCircle(d*PI/180, this.#outerR).vals)
-			ctx.stroke()
+		for (let i=0; i<steps; i++) {
+			const r = (i*PI*2)/steps
+			ctx.newLinePath(
+				getPointOnCircle(r, this.#innerR).vals,
+				getPointOnCircle(r, this.#outerR).vals
+			).stroke()
 		}
 	}
 }
