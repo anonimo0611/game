@@ -17,11 +17,13 @@ export class PathMgr {
 	}
 	/** @param {readonly Ghost[]} ghosts */
 	static update(ghosts) {
-		this.isActive && ghosts.forEach(g=> g.path.#update(g))
+		if (!this.isActive) return
+		ghosts.forEach(g=> g.path.#update(g))
 	}
 	/** @param {readonly Ghost[]} ghosts */
 	static draw(ghosts) {
-		this.isActive && ghosts.forEach(g=> g.path.#draw(g))
+		if (!this.isActive) return
+		ghosts.toReversed().forEach(g=> g.path.#draw(g))
 	}
 
 	/** @param {Ghost} g */
