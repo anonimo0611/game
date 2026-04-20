@@ -67,8 +67,8 @@ export class Dying {
 		ctx.setAlpha(this.#fadeOut?.alpha)
 		for (let d=0; d<360; d+=360/10) {
 			ctx.beginPath()
-			ctx.moveTo(...getCircum(d*PI/180, this.#innerR).vals)
-			ctx.lineTo(...getCircum(d*PI/180, this.#outerR).vals)
+			ctx.moveTo(...getPointOnCircle(d*PI/180, this.#innerR).vals)
+			ctx.lineTo(...getPointOnCircle(d*PI/180, this.#outerR).vals)
 			ctx.stroke()
 		}
 	}
