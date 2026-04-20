@@ -31,7 +31,7 @@ const SoundCtrl = {
 		speaker.draw(Sound.vol = rngCtrl.valueAsNumber)
 	},
 	keydown(/**@type {JQuery.KeyDownEvent}*/e) {
-		if (keyRepeat(e) || isCombiKey(e))
+		if (keyRepeat(e) || hasModifierKeys(e))
 			return
 		if (e.key.toUpperCase() == 'M'
 		 || e.target == volRg2 && isEnterKey(e))
