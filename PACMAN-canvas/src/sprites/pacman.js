@@ -20,7 +20,7 @@ export default class PacmanSprite {
 	constructor(ctx, radius, initOpening=0) {
 		this.ctx = ctx
 		this.r = radius
-		this.#mAngle = lerp(0, OPEN_MAX, clamp(initOpening,0,1))
+		this.#mAngle = lerp(0, OPEN_MAX, initOpening)
 	}
 	update({closed=false,hidden=false,onWall=false}={}) {
 		this.#dyingSpr
