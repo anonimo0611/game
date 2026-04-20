@@ -101,7 +101,7 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
  @param {number} rad
  @param {number} r
  @returns {{pos:Vec2,vals:[x:number, y:number]}}
-*/const getCircum = (rad, r, cx=0, cy=0)=> {
+*/const getPointOnCircle = (rad, r, cx=0, cy=0)=> {
 	const  [x,y] = [cos(rad)*r+cx, sin(rad)*r+cy]
 	return {pos:Vec2.new(x,y),vals:[x,y]}
 }
