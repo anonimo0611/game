@@ -25,7 +25,7 @@ const {Ticker,Timer}= function() {
 		 @param {()=> void} [drawFn]
 		*/
 		set(updateFn,drawFn) {
-			new TickerCore(updateFn,drawFn)
+			new TickerCore(updateFn, drawFn)
 		},
 		/** @param {boolean} [force] */
 		pause(force) {
@@ -106,7 +106,7 @@ const {Ticker,Timer}= function() {
 		timer(t, key) {
 			if (Timer.frozen && !t.ignoreFrozen)  return
 			if (TICK_STEP*t.amount++ < t.timeout) return
-			TimerMap.delete(key);t.callback()
+			TimerMap.delete(key), t.callback()
 		}
 		stop()  {
 			Ticker.reset()

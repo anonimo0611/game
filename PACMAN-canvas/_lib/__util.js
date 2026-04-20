@@ -16,19 +16,22 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 	(fromEntries(array.map(k=> [k,k])))
 
 /**
- @param {KeyboardEvent|JQKeyboardEvent} e
-*/const keyRepeat = e=>
-	((e instanceof KeyboardEvent)? e : e.originalEvent)?.repeat ?? false
+ @param {KeyboardEvent|JQKeyboardEvent|JQTriggeredEvent} e
+*/const getNativeKeyEvent = e=>
+	(e instanceof KeyboardEvent)? e :
+		(e.originalEvent instanceof KeyboardEvent)? e.originalEvent : null
 
 /**
  @param {KeyboardEvent|JQKeyboardEvent} e
-*/const isCombiKey = e=>
-	(e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
+*/const keyRepeat = e=> getNativeKeyEvent(e)?.repeat || false
+
+/**
+ @param {KeyboardEvent|JQKeyboardEvent} e
+*/const hasModifierKeys = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
 /**
  @param {KeyboardEvent|JQKeyboardEvent|JQTriggeredEvent} e
-*/const isEnterKey = e=>
-	(e.key == '\x20' || e.key == 'Enter')
+*/const isEnterKey = e=> (e.key == '\x20' || e.key == 'Enter')
 
 /**
  @param {string} id
@@ -118,7 +121,7 @@ const $root = $(document.documentElement)
 
 /**
  @param {string} ns
- @param {JQWindowHandlers} events
+ @param {JQTriggerHandlers} events
 */const $onNS = (ns,events)=> $win.onNS(ns, events)
 
 /**

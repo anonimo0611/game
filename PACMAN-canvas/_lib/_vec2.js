@@ -32,7 +32,7 @@ class Vec2 {
 	 @param {void|number|xyTuple|Position} [v1]
 	 @param {number} [v2]
 	*/static new(v1,v2) {
-		return new Vec2(...this.parseXY(v1,v2))
+		return new Vec2(...this.#parseXY(v1,v2))
 	}
 
 	/**
@@ -46,7 +46,7 @@ class Vec2 {
 	 @param {void|number|xyTuple|Position} [v1]
 	 @param {number} [v2]
 	 @returns {[x:number, y:number]}
-	*/static parseXY(v1=0, v2) {
+	*/static #parseXY(v1=0, v2) {
 		if (v1 instanceof Array) return [v1[0], v1[1]]
 		if (typeof v1 == 'number'
 		 && typeof v2 == 'number') return [v1, v2]
@@ -93,36 +93,36 @@ class Vec2 {
 	/**
 	 @param {Position} pos
 	 @param {number} scalar
-	*/static mul(pos,scalar) {
+	*/static mul(pos, scalar) {
 		return Vec2.new(pos).mul(scalar)
 	}
 
 	/**
 	 @param {Position} pos
 	 @param {number} scalar
-	*/static div(pos,scalar) {
+	*/static div(pos, scalar) {
 		return Vec2.new(pos).div(scalar)
 	}
 
 	/**
 	 @param {Position} pos
 	 @param {number} scalar
-	*/static divInt(pos,scalar) {
+	*/static divInt(pos, scalar) {
 		return Vec2.new(pos).divInt(scalar)
 	}
 
 	/**
 	 @param {Position} pos1
 	 @param {Position} pos2
-	*/static sqrMag(pos1,pos2) {
-		return Vec2.sub(pos1,pos2).sqrMag
+	*/static sqrMag(pos1, pos2) {
+		return Vec2.sub(pos1, pos2).sqrMag
 	}
 
 	/**
 	 @param {Position} pos1
 	 @param {Position} pos2
-	*/static distance(pos1,pos2) {
-		return Vec2.sub(pos1,pos2).magnitude
+	*/static distance(pos1, pos2) {
+		return Vec2.sub(pos1, pos2).magnitude
 	}
 
 	constructor(x=0, y=0) {
@@ -157,7 +157,7 @@ class Vec2 {
 	 @param {number} [v2]
 	*/
 	eq(v1, v2) {
-		const [x,y]= Vec2.parseXY(v1, v2)
+		const [x,y]= Vec2.#parseXY(v1, v2)
 		return Vec2.eq(this, {x,y})
 	}
 
@@ -183,7 +183,7 @@ class Vec2 {
 	 @param {number} [v2]
 	*/
 	set(v1, v2) {
-		const [x,y]= Vec2.parseXY(v1, v2)
+		const [x,y]= Vec2.#parseXY(v1, v2)
 		this.x = x
 		this.y = y
 		return this
@@ -215,7 +215,7 @@ class Vec2 {
 	 @param {number} [v2]
 	*/
 	add(v1, v2) {
-		const [x,y]= Vec2.parseXY(v1, v2)
+		const [x,y]= Vec2.#parseXY(v1, v2)
 		this.x += x
 		this.y += y
 		return this
@@ -243,7 +243,7 @@ class Vec2 {
 	 @param {number} [v2]
 	*/
 	sub(v1, v2) {
-		const [x,y]= Vec2.parseXY(v1, v2)
+		const [x,y]= Vec2.#parseXY(v1, v2)
 		this.x -= x
 		this.y -= y
 		return this
