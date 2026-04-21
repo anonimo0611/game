@@ -236,8 +236,7 @@ export class Ghost extends Actor {
 		Sound.playBitesGhost()
 		this.#frightened = false
 		this.state.setBitten()
-		Timer.freeze()
-		PtsMgr.set({key:GhostMgr, pos:this.center, cb})
+		PtsMgr.set({key:GhostMgr, pos:this.center, frozen:true, cb})
 	}
 	#onPacCaught() {
 		Sound.stopLoops()
