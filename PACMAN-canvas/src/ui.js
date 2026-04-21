@@ -55,11 +55,11 @@ $win.on('resize', ()=> {
 $('.panelBtn').on('keydown pointerdown', e=> {
 	if (e.key && !isEnterKey(e)) return
 	const button = e.currentTarget
-	const tgtId  = button.dataset.target ?? ''
+	const tgtSel = button.dataset.target ?? ''
 	const opened = button.classList.contains('opened')
 	e.stopPropagation()
 	$('.panel-ui').removeClass('opened')
-	!opened && $([button,tgtId]).addClass('opened')
+	!opened && $(button).add(tgtSel).addClass('opened')
 })
 $('body').on('keydown pointerdown', e=> {
 	if (e.key == 'Escape' || !e.target.closest('.panel-ui'))
