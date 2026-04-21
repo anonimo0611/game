@@ -18,16 +18,19 @@ export const PtsMgr = new class PointsManager {
 }
 class FloatingPts {
 	/** @param {FloatingPtsData} data */
-	constructor({key,pos,dur=1e3,cb}) {
+	constructor({key,pos,dur=1e3,frozen=false,cb}) {
 		const {speed:spd}= Game
 		this.pos   = pos
 		this.cache = cache(key, T*2)
 		this.fade  = Fade.out(FADE_DUR/spd, (dur-FADE_DUR)/spd)
+
 		PopupMap.set(key,this)
+		frozen && Timer.freeze()
 		State.isInGame && ScoreMgr.add(key.pointValue)
+
 		Timer.set(dur/spd, ()=> {
-			Timer.unfreeze()
 			PopupMap.delete(key)
+			frozen && Timer.unfreeze()
 			cb?.()
 		}, {ignoreFrozen:true})
 	}
