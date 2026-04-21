@@ -62,6 +62,7 @@ dialog {
 	border-radius: .3rem;
 	position: absolute;
 	z-index: 100;
+	&.opened {display: block}
 }
 
 form, dialog {

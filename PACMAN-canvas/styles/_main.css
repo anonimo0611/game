@@ -79,7 +79,7 @@ html.sound-settled.controller-settled #container {
 	visibility: visible;
 	opacity: 1;
 }
-html.controller-settled .panel {
+html.controller-settled .panel:not(.opened) {
 	display: none;
 }
 
