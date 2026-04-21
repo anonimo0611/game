@@ -28,6 +28,7 @@ type FloatingPtsData = {
 	key: {pointType:number, pointValue:PtsValue};
 	pos:  Readonly<Position>;
 	dur?: number;
+	frozen?: boolean;
 	cb?:  ()=> void;
 }
 
