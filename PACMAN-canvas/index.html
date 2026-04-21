@@ -84,15 +84,15 @@
 			</div>
 			<div class="buttons">
 				<button id="clearBtn">Clear Score</button>
-				<button class="panelBtn" value="#keysPanel">Key Controls</button>
+				<button class="panelBtn panel-ui" data-target="#keysPanel">Key Controls</button>
 			</div>
-			<button id="cfgBtn" class="panelBtn" value="#cfgPanel" title="More configuration">
+			<button id="cfgBtn" class="panelBtn panel-ui" data-target="#cfgPanel" title="More configuration">
 				<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round">
 					<path d="M6 8h20M6 16h20M6 24h20"/>
 				</svg>
 			</button>
 		</div>
-		<ul id="cfgPanel" class="panel" data-caption="Configuration">
+		<ul id="cfgPanel" class="panel panel-ui" data-caption="Configuration">
 			<li class="volCtrl">
 				<output for="volRng volRg2">10</output>
 				<label>Volume:<input type="range" id="volRng" class="volRng"
@@ -148,7 +148,7 @@
 				<button id="resetBtn">Return to Default</button>
 			</li>
 		</ul>
-		<div id="keysPanel" class="panel">
+		<div id="keysPanel" class="panel panel-ui">
 			<table>
 			<caption>Controls</caption>
 			<tr class="volCtrl">
