@@ -19,8 +19,8 @@ export const btns =
 	/**@type {{[K in buttonIds[number]]:HTMLButtonElement}}*/
 	(fromEntries(buttonIds.map(id=> [id,requireElem(id+'Btn')])))
 
-export const demoBtns =
-	/**@type {HTMLButtonElement[]}*/($('button.demo').get())
+/** @type {NodeListOf<HTMLButtonElement>} */
+export const demoBtns = document.querySelectorAll('button.demo')
 
 //---- Custom menus ----
 
@@ -52,16 +52,23 @@ $win.on('resize', ()=> {
 
 //---- Panels ----
 
-;/** @type {HTMLButtonElement[]} */
-($('.panelBtn').get()).forEach(btn=> {
-	$(btn).on('keydown pointerdown', e=> {
-		if (e.key && !isEnterKey(e)) return
-		$('.panel').toggle()
-		$(btn).toggleClass('opened')
-	})
-	$('body').on('keydown pointerdown', e=> {
-		const t = e.target, id = btn.value
-		if (t == btn || qS(id)?.contains(t)) return
-		$(id).hide() && $(btn).removeClass('opened')
-	})
+function closeAllPanel() {
+	$('.panel').hide()
+	$('.panelBtn').removeClass('opened')
+}
+$('.panelBtn').on('keydown pointerdown', e=> {
+	if (e.key && !isEnterKey(e)) return
+	const button = e.currentTarget
+	const opened = $(button).hasClass('opened')
+	e.stopPropagation()
+	closeAllPanel()
+	if (!opened) {
+		$(button.dataset.target ?? '').show()
+		$(button).addClass('opened')
+	}
+})
+$('body').on('keydown pointerdown', e=> {
+	if (e.key == 'Escape'
+	|| !e.target.closest('.panel-ui'))
+		closeAllPanel()
 })
