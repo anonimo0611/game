@@ -57,6 +57,8 @@ export const ScoreMgr = new class ScoreManager {
 			: drawText(14,0, null, `HIGH　${_hiSco || '00'}`)
 	}
 	add(points=0) {
+		if (!State.isInGame)
+			return
 		const total = _score + points
 		if (!Ctrl.isPractice && total > _hiSco) {
 			_hiSco = total

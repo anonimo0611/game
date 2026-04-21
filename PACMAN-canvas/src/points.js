@@ -25,8 +25,8 @@ class FloatingPts {
 		this.fade  = Fade.out(FADE_DUR/spd, (dur-FADE_DUR)/spd)
 
 		PopupMap.set(key,this)
+		ScoreMgr.add(key.pointValue)
 		frozen && Timer.freeze()
-		State.isInGame && ScoreMgr.add(key.pointValue)
 
 		Timer.set(dur/spd, ()=> {
 			PopupMap.delete(key)
