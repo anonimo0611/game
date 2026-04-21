@@ -52,23 +52,16 @@ $win.on('resize', ()=> {
 
 //---- Panels ----
 
-function closeAllPanel() {
-	$('.panel').hide()
-	$('.panelBtn').removeClass('opened')
-}
 $('.panelBtn').on('keydown pointerdown', e=> {
 	if (e.key && !isEnterKey(e)) return
 	const button = e.currentTarget
-	const opened = $(button).hasClass('opened')
+	const tgtId  = button.dataset.target ?? ''
+	const opened = button.classList.contains('opened')
 	e.stopPropagation()
-	closeAllPanel()
-	if (!opened) {
-		$(button.dataset.target ?? '').show()
-		$(button).addClass('opened')
-	}
+	$('.panel-ui').removeClass('opened')
+	!opened && $([button,tgtId]).addClass('opened')
 })
 $('body').on('keydown pointerdown', e=> {
-	if (e.key == 'Escape'
-	|| !e.target.closest('.panel-ui'))
-		closeAllPanel()
+	if (e.key == 'Escape' || !e.target.closest('.panel-ui'))
+		$('.panel-ui').removeClass('opened')
 })
