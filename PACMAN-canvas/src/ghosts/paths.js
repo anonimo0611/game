@@ -5,7 +5,7 @@ import {Maze}  from '../maze.js'
 import {Ghost} from './ghost.js';
 import {player as p} from '../player/player.js';
 
-const PATH_STEPS  = 17
+const PATH_STEPS  = 18
 const LINE_WIDTH  = T/5
 const PathOffsets = freeze([-2,-1,+1,+2])
 
@@ -33,8 +33,8 @@ export class PathMgr {
 			return
 		const tile = g.getAdjTile(dir,g.tile)
 		const path = [{dir,tile,stopped:false}]
-		for (let i=0; i<PATH_STEPS-1; i++) {
-			const {dir:lstDir,tile:t}= path[(i+1)-1]
+		for (let i=1; i<PATH_STEPS-1; i++) {
+			const {dir:lstDir,tile:t}= path[i-1]
 			const tgt  = g.getTargetTile(t)
 			const dir  = g.getNextDir(lstDir,t,tgt)
 			const tile = g.getAdjTile(dir,t)
@@ -42,7 +42,7 @@ export class PathMgr {
 				g.isTargetPac && tile.eq(p.tile) ||
 				g.hasFixedTgt && tile.eq(tgt)
 			})
-			if (path[i+1].stopped) break
+			if (path[i].stopped) break
 		} this.#nodeList = path
 	}
 	/** @param {Ghost} g */
@@ -69,7 +69,7 @@ export class PathMgr {
 			if (tile == endTile) {
 				stopped && g.isTargetPac
 					? curr.set(p.pos)
-					: curr.add( Vec2[dir].mul(T/2-distance) )
+					: curr.add( Vec2[dir].mul(stopped? 0 : T/2-distance) )
 			}
 			if (abs(curr.x - last.x) > T*3) {
 				Fg.lineTo((curr.x < last.x ? BW+T : -T), curr.y)
