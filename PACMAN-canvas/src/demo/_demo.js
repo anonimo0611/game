@@ -24,11 +24,11 @@ const RunTimer = function() {
 	return {update}
 }()
 
-demoBtns.keys().forEach(i=> {
-	const click = (i == 0)
+demoBtns.forEach((btn,i)=> {
+	const startDemo = (i == 0)
 		? ()=> State.setAttract()
 		: ()=> State.setCutscene({data:i})
-	$(demoBtns[i]).on({click})
+	$(btn).on({click:startDemo})
 })
 
 /** @type {SceneDict<States[number]>} */
