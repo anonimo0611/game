@@ -34,9 +34,9 @@ export class PathMgr {
 		const tile = g.getAdjTile(dir,g.tile)
 		const path = [{dir,tile,stopped:false}]
 		for (let i=0; i<PATH_STEPS-1; i++) {
-			const {dir:d,tile:t}= path[(i+1)-1]
+			const {dir:lstDir,tile:t}= path[(i+1)-1]
 			const tgt  = g.getTargetTile(t)
-			const dir  = g.getNextDir(d,t,tgt)
+			const dir  = g.getNextDir(lstDir,t,tgt)
 			const tile = g.getAdjTile(dir,t)
 			path.push({tile,dir,stopped:
 				g.isTargetPac && tile.eq(p.tile) ||
