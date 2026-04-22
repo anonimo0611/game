@@ -21,8 +21,8 @@ export const Ctrl = new class Controller {
 	get isCaptured()    {return this.activeElem || Confirm.opened}
 	get activeElem()    {return qS(`:not(#${btns.start.id}):focus`)}
 	get extendScore()   {return +(Menu.Extend.value)}
-	get livesMax()      {return inputs.lvsRng.valueAsNumber}
 	get speed()         {return inputs.spdRng.valueAsNumber}
+	get initialLives()  {return inputs.lvsRng.valueAsNumber}
 	get endlessMode()   {return inputs.onlChk.checked == false}
 	get alwaysChase()   {return inputs.chsChk.checked}
 	get unrestricted()  {return inputs.unrChk.checked}

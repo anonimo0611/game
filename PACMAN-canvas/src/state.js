@@ -19,6 +19,7 @@ class GameState extends _State {
 	get isDemoMode()  {return State.isAttract || State.isCutscene}
 
 	/**
+	 @protected
 	 @param {StateType} s
 	 @param {JQData} [data]
 	*/

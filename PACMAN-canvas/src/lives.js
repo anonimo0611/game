@@ -21,7 +21,7 @@ export const Lives = function() {
 		HUD.restore()
 	}
 	function add(n=0) {draw(left += n)}
-	function reset()  {draw(left = Ctrl.livesMax-1)}
+	function reset()  {draw(left = Ctrl.initialLives-1)}
 	$(inputs.lvsRng).on({input:reset})
 	return {
 		extend()   {add(1)},

@@ -171,7 +171,7 @@ class MazeManager {
 	drawDot(ctx, col,row, isPow=false, isVisible=true) {
 		if (!isVisible) return
 		const [x,y] = [col,row].map(v=> (v+0.5)*T)
-		const r = [DOT_RADIUS,POW_RADIUS][+isPow]
+		const r = (isPow? POW_RADIUS : DOT_RADIUS)
 		ctx.fillCircle(x,y, r, Color.Cookie)
 	}
 }
