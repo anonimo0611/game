@@ -12,7 +12,7 @@ export const inputs =
 
 //---- Buttons ----
 
-const buttonIds  = /**@type {const}*/
+const buttonIds = /**@type {const}*/
 	(['clear','reset','start','demo','cs1','cs2','cs3'])
 
 export const btns =
@@ -59,7 +59,7 @@ $('.panelBtn').on('keydown pointerdown', e=> {
 	const opened = button.classList.contains('opened')
 	e.stopPropagation()
 	$('.panel-ui').removeClass('opened')
-	!opened && $(button).add(tgtSel).addClass('opened')
+	$(button).add(tgtSel).toggleClass('opened',!opened)
 })
 $('body').on('keydown pointerdown', e=> {
 	if (e.key == 'Escape' || !e.target.closest('.panel-ui'))

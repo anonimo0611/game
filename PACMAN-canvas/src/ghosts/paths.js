@@ -69,10 +69,11 @@ export class PathMgr {
 			if (tile == endTile) {
 				stopped && g.isTargetPac
 					? curr.set(p.pos)
-					: curr.add(Vec2[dir].mul(stopped? 0 : T/2-distance))
+					: curr.add( Vec2[dir].mul(T/2-distance) )
 			}
 			if (abs(curr.x - last.x) > T*3) {
-				Fg.lineTo((curr.x < last.x ? BW+T : -T), curr.y);break
+				Fg.lineTo((curr.x < last.x ? BW+T : -T), curr.y)
+				break
 			}
 			Fg.lineTo(...curr.vals)
 			if (tile == endTile) { // Arrow
