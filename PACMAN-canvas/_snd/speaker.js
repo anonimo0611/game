@@ -15,7 +15,7 @@
 		ctx.clear()
 		ctx.save()
 		ctx.fillStyle = ctx.strokeStyle = this.color
-		ctx.translate(w/2, h/2)
+		ctx.translate(w/2)
 		ctx.scale(w/100, h/100)
 		ctx.fillPolygon(null,
 			[ -7, -35],[-31, -12],[-45, -12],
