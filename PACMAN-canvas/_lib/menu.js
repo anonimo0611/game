@@ -52,9 +52,10 @@ class Menu {
 		this.items[idx].classList.add('selected')
 		$(this.menu).trigger('change')
 	}
-	onChange (/**@type {()=>void}*/handler) {$(this.menu).on ({change:handler})}
-	offChange(/**@type {()=>void}*/handler) {$(this.menu).off({change:handler})}
 	reset() {this.select(this.defaultIndex)}
+	onChange (/**@type {()=>void}*/handler) {
+		$(this.menu).on ({change:handler})
+	}
 }
 
 export class DorpDown extends Menu {

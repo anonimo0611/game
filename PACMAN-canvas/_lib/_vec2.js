@@ -10,15 +10,8 @@ class Vec2 {
 
 	/**
 	 @overload
-	 @returns {Vec2}
-
-	 @overload
-	 @param   {number} scalar
-	 @returns {Vec2}
-
-	 @overload
-	 @param   {number} x
-	 @param   {number} y
+	 @param   {number}  x
+	 @param   {number} [y]
 	 @returns {Vec2}
 
 	 @overload
@@ -38,7 +31,7 @@ class Vec2 {
 	/**
 	 @param {number}  x
 	 @param {number} [y]
-	*/static fixed(x,y=x) {
+	*/static fixed(x, y=x) {
 		return Vec2.new(x,y).fixed
 	}
 
@@ -99,9 +92,9 @@ class Vec2 {
 
 	/**
 	 @param {Position} pos
-	 @param {number} scalar
-	*/static div(pos, scalar) {
-		return Vec2.new(pos).div(scalar)
+	 @param {number} divisor
+	*/static div(pos, divisor) {
+		return Vec2.new(pos).div(divisor)
 	}
 
 	/**
@@ -163,12 +156,8 @@ class Vec2 {
 
 	/**
 	 @overload
-	 @param   {number} scalar
-	 @returns {Vec2}
-
-	 @overload
-	 @param   {number} x
-	 @param   {number} y
+	 @param   {number}  x
+	 @param   {number} [y]
 	 @returns {Vec2}
 
 	 @overload
@@ -195,12 +184,8 @@ class Vec2 {
 
 	/**
 	 @overload
-	 @param   {number} scalar
-	 @returns {Vec2}
-
-	 @overload
-	 @param   {number} x
-	 @param   {number} y
+	 @param   {number}  x
+	 @param   {number} [y]
 	 @returns {Vec2}
 
 	 @overload
@@ -223,12 +208,8 @@ class Vec2 {
 
 	/**
 	 @overload
-	 @param   {number} scalar
-	 @returns {Vec2}
-
-	 @overload
-	 @param   {number} x
-	 @param   {number} y
+	 @param   {number}  x
+	 @param   {number} [y]
 	 @returns {Vec2}
 
 	 @overload
@@ -256,17 +237,17 @@ class Vec2 {
 		return this
 	}
 
-	/** @param {number} scalar */
-	div(scalar) {
-		this.x /= scalar
-		this.y /= scalar
+	/** @param {number} divisor */
+	div(divisor) {
+		this.x /= divisor
+		this.y /= divisor
 		return this
 	}
 
-	/** @param {number} scalar */
-	divInt(scalar) {
-		this.x = (this.x/scalar)|0
-		this.y = (this.y/scalar)|0
+	/** @param {number} divisor */
+	divInt(divisor) {
+		this.x = (this.x/divisor)|0
+		this.y = (this.y/divisor)|0
 		return this
 	}
 

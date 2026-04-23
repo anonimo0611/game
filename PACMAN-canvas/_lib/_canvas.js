@@ -28,12 +28,8 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 
 	/**
 	 @overload
-	 @param   {number} scalar
-	 @returns {this}
-
-	 @overload
 	 @param   {number} x
-	 @param   {number} y
+	 @param   {number} [y]
 	 @returns {this}
 
 	 @overload
@@ -98,14 +94,12 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	 @param {number} x
 	 @param {number} y
 	 @param {number} radius
-	 @param {?Cvs2DStyle} style
+	 @param {Cvs2DStyle} [style]
 	*/
 	fillCircle(x,y, radius, style=this.fillStyle) {
 		this.save()
 		this.beginPath()
-		style === null
-			? (this.globalCompositeOperation = 'destination-out')
-			: (this.fillStyle = style)
+		style && (this.fillStyle = style)
 		this.arc(x,y, radius, 0, PI*2)
 		this.fill()
 		this.restore()
@@ -192,7 +186,7 @@ class Fade {
 	 @private
 	 @param {number} duration
 	 @param {number} delay
-	 @param {0|1} type Fade.IN / Fade.OUT
+	 @param {0|1} type
 	*/
 	constructor(duration, delay, type=Fade.IN) {
 		this.#type	= type

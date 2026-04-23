@@ -5,38 +5,30 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 /**
  @template {object} T
  @param {T} o
-*/const typedKeys = o=>
-	/**@type {(keyof T)[]}*/(keys(o))
+*/const typedKeys = o=> /**@type {(keyof T)[]}*/(keys(o))
 
 /**
  @template {string} T
  @param {readonly T[]} array
 */const enumObj = (...array)=>
-	/**@type {{readonly [K in T]:K}}*/
-	(fromEntries(array.map(k=> [k,k])))
+	/**@type {{readonly [K in T]:K}}*/(fromEntries(array.map(k=> [k,k])))
 
-/**
- @param {KeyboardEvent|JQKeyboardEvent|JQTriggeredEvent} e
-*/const getNativeKeyEvent = e=>
+/** @param {KeyboardEvent|JQKeyboardEvent} e */
+const getNativeKeyEvent = e=>
 	(e instanceof KeyboardEvent)? e :
 		(e.originalEvent instanceof KeyboardEvent)? e.originalEvent : null
 
-/**
- @param {KeyboardEvent|JQKeyboardEvent} e
-*/const keyRepeat = e=> getNativeKeyEvent(e)?.repeat || false
+/** @param {KeyboardEvent|JQKeyboardEvent} e */
+const hasModifierKeys = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
-/**
- @param {KeyboardEvent|JQKeyboardEvent} e
-*/const hasModifierKeys = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
+/** @param {KeyboardEvent|JQKeyboardEvent} e */
+const keyRepeat = e=> getNativeKeyEvent(e)?.repeat || false
 
-/**
- @param {KeyboardEvent|JQKeyboardEvent|JQTriggeredEvent} e
-*/const isEnterKey = e=> (e.key == '\x20' || e.key == 'Enter')
+/** @param {KeyboardEvent|JQKeyboardEvent|JQTriggeredEvent} e */
+const isEnterKey = e=> (e.key == '\x20' || e.key == 'Enter')
 
-/**
- @param {string} id
- @throws {ReferenceError} If no element exists with the given ID.
-*/const requireElem = id=> {
+/** @param {string} id */
+const requireElem = id=> {
 	const elem = document.getElementById(id); if (elem) return elem
 	throw ReferenceError(`There is no element with the ID “${id}”.`)
 }
@@ -81,7 +73,7 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
  @param {number} n
  @param {number} min
  @param {number} max
-*/const clamp = (n,min=0,max=1)=> Math.min(Math.max(n,min), max)
+*/const clamp = (n,min,max)=> Math.min(Math.max(n,min), max)
 
 /**
  @param {number} n
@@ -94,7 +86,7 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
  @param {Position} pos2
  @param {number}  r1  radius1
  @param {number} [r2] radius2
-*/const circleCollision = (pos1,pos2,r1,r2=r1)=>
+*/const circleCollision = (pos1, pos2, r1, r2=r1)=>
 	(pos1.x-pos2.x)**2 + (pos1.y-pos2.y)**2 <= (r1+r2)**2
 
 /**
@@ -112,26 +104,22 @@ const $win  = $(window)
 const $root = $(document.documentElement)
 
 /**
- @param {JQWindowHandler} handler
-*/const $load = handler=> $win.on({load:handler})
-
-/**
  @param {string} events
-*/const $off = events=> $win.off(underscoreToSp(events))
+*/const $off = events=> $win.off(events)
 
 /**
  @param {string} ns
  @param {JQTriggerHandlers} events
-*/const $onNS = (ns,events)=> $win.onNS(ns, events)
+*/const $onNS = (ns,events)=> $win.onNS(ns,events)
 
 /**
  @param {string} ns
  @param {JQTriggerHandlers} events}
 */jQuery.fn.onNS = function(ns, events) {
 	ns = ns[0] != '.' ? `.${ns}` : ns
-	entries(events).forEach(([ev,handler])=> {
+	entries(events).forEach(([ev,cb])=> {
 		const evNS = ev.trim().replace(/[_\s]+/g,`${ns}\x20`) + ns
-		this.off(evNS).on(evNS,handler)
+		this.off(evNS).on(evNS,/**@type {JQTriggerHandler}*/(cb))
 	})
 	return this
 }

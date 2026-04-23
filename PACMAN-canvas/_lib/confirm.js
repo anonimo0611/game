@@ -6,7 +6,7 @@ export const Confirm = new class ConfirmCore {
 	get #tempElm() {return /**@type {HTMLTemplateElement}*/(qS('#confirm_t'))}
 	get #confirm() {return /**@type {HTMLDialogElement}  */(qS('#confirm'))}
 
-	/** @param {JQTriggeredEvent} e */
+	/** @param {JQKeyboardEvent} e */
 	#onKeydown(e) {
 		const btns = $('#confirm button').get()
 		if (e.key == 'Escape') {

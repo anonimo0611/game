@@ -47,7 +47,7 @@ function setupCtrl(ctrl) {
 	})
 	.trigger('input')
 }
-$load(()=> {
+$win.on('load', ()=> {
 	/**@type {HTMLInputElement[]}*/
 	($('[type=range]').get()).forEach(setupCtrl)
 })

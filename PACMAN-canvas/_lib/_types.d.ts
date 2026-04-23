@@ -51,24 +51,23 @@ type Cvs2DStyle = string|CanvasGradient|CanvasPattern
 type Global = Window & typeof globalThis
 type JQData = any[]|JQuery.PlainObject|string|number|boolean
 
-type JQKeyboardEvent   = JQuery.KeyboardEventBase
-type JQTriggeredEvent  = JQuery.TriggeredEvent
-
-type JQWindowHandler   = (events:JQuery.TriggeredEvent<Global,undefined,Global,Global>, data?:any)=> void
-type JQWindowHandlers  ={[events:string]:JQWindowHandler}
-
-type JQTriggerHandler  = (events:JQTriggeredEvent, data?:any)=> void
-type JQTriggerHandlers ={[events:string]:JQTriggerHandler}
+type JQKeyboardEvent    = JQuery.KeyboardEventBase
+type JQTriggeredEvent   = JQuery.TriggeredEvent
+type JQWindowHandler    = (events:JQuery.TriggeredEvent<Global,undefined,Global,Global>, data?:any)=> void
+type JQTriggerHandler   = (events:JQTriggeredEvent, data?:any)=> void
+type JQKeyboardHandler  = (events:JQKeyboardEvent,  data?:any)=> void
+type JQKeyboardHandlers = {keyup?:JQKeyboardHandler, keydown?:JQKeyboardHandler}
+type JQTriggerHandlers  = {[events:string]:JQTriggerHandler}|JQKeyboardHandlers
 
 interface JQuery {
 	offon<TType extends string>(
 		events:  TType,
-		handler: JQuery.TypeEventHandler<TElement, undefined, TElement, TElement, TType>,
+		handler: JQuery.TypeEventHandler<TElement,undefined,TElement,TElement,TType>,
 		force?:  boolean,
 	): this
 	onNS<TType extends string>(
 		events:   TType,
 		handlers: JQTriggerHandlers,
 	): this
-	onWheel(handler: (event: WheelEvent)=> void): this
+	onWheel(handler: (event:WheelEvent)=> void): this
 }
