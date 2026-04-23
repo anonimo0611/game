@@ -127,7 +127,7 @@ const $root = $(document.documentElement)
 	ns = ns[0] != '.' ? `.${ns}` : ns
 	entries(events).forEach(([ev,cb])=> {
 		const evNS = ev.trim().replace(/[_\s]+/g,`${ns}\x20`) + ns
-		this.off(evNS).on(evNS,/**@type {JQTriggerHandler}*/(cb))
+		this.off(evNS).on(evNS,/**@type {()=> void}*/(cb))
 	})
 	return this
 }
