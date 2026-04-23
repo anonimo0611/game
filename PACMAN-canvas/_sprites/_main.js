@@ -146,4 +146,4 @@ $(ResetBtn).on('click', function() {
 	[...document.forms].forEach(f=> f.reset())
 	$('[type=range]').trigger('input')
 })
-$load(()=> document.body.style.opacity = '1')
+$win.on('load', ()=> document.body.style.opacity = '1')
