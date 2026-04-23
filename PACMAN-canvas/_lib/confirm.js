@@ -38,11 +38,11 @@ export const Confirm = new class ConfirmCore {
 			i == autoFocus && (btn.autofocus=true)
 			btn.classList.add(i == cancelIdx ? 'cancel':'ok')
 			btn.textContent = [btn1Txt,btn2Txt][i]
-			btn.onclick = ()=> {$off(NS);this.#remove([cb1,cb2][i])}
+			btn.onclick = ()=> {$win.off(NS);this.#remove([cb1,cb2][i])}
 		})
 		$(this.#confirm).fadeIn(300).get(0)?.showModal()
-		$onNS(NS,{keydown:this.#onKeydown})
-		$onNS(NS,{pointerdown:e=> e.preventDefault()})
+		$win.onNS(NS,{keydown:this.#onKeydown})
+		$win.onNS(NS,{pointerdown:e=> e.preventDefault()})
 	}
 	/** @param {?()=> void} cb */
 	#remove(cb) {

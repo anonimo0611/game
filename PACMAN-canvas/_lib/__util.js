@@ -109,25 +109,17 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 //---- jQuery utilities ------
 
 const $win  = $(window)
+const $doc  = $(document)
 const $root = $(document.documentElement)
 
 /**
- @param {string} events
-*/const $off = events=> $win.off(events)
-
-/**
  @param {string} ns
- @param {JQTriggerHandlers} events
-*/const $onNS = (ns,events)=> $win.onNS(ns,events)
-
-/**
- @param {string} ns
- @param {JQTriggerHandlers} events}
-*/jQuery.fn.onNS = function(ns, events) {
-	ns = ns[0] != '.' ? `.${ns}` : ns
-	entries(events).forEach(([ev,cb])=> {
-		const evNS = ev.trim().replace(/[_\s]+/g,`${ns}\x20`) + ns
-		this.off(evNS).on(evNS,/**@type {()=> void}*/(cb))
+ @param {Record<string,()=> void>} handlers
+*/jQuery.fn.onNS = function(ns, handlers) {
+	const NS = ns[0] != '.' ? `.${ns}` : ns
+	entries(handlers).forEach(([ev,cb])=> {
+		const ns = ev.trim().replace(/[_\s]+/g,`${NS}\x20`) + NS
+		this.off(ns).on(ns,cb)
 	})
 	return this
 }
