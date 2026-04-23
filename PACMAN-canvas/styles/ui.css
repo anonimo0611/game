@@ -70,7 +70,8 @@ custom-menu{white-space:nowrap;color:#FFF;position:relative;display:inline-block
 		}
 	}
 }
-[type=slidemenu]{border:none;display:inline-block;vertical-align:middle;overflow:hidden;
+[type=slidemenu]{
+	border:none;display:inline-block;vertical-align:middle;overflow:hidden;
 	&:hover,&:focus{background:var(--bgcolor-hilight)}
 	&:focus{outline-offset:.15em;outline:solid .15em var(--color-focus-border)}
 	cm-list,cm-item{text-align:center;transition:transform .3s;will-change:transform;z-index:1}
