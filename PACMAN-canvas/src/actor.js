@@ -78,12 +78,11 @@ export class Actor {
 	}
 	/** @param {Direction} dir */
 	getAdjTile(dir, tile=this.tile) {
-		const  v = Vec2[dir].add(tile)
-		return v.setX((v.x+Cols) % Cols) // x-axis wrap
+		return Vec2[dir].add(tile).wrapX(Cols)
 	}
 	collidesWithWall(dir=this.dir) {
-		const {x,y}= Vec2[dir].mul(T/2+1).add(this.center).divInt(T)
-		return Maze.hasWall({x:(x+Cols) % Cols, y}) // x-axis wrap
+		const  fwd = Vec2[dir].mul(T/2+1).add(this.center)
+		return Maze.hasWall( fwd.divInt(T).wrapX(Cols) )
 	}
 	justArrivedAtTile(spd=this.speed) {
 		return !this.passedTileCenter && this.tilePixel <= spd
