@@ -13,8 +13,8 @@ const WaitTime = 1e3*30 // 30secs
 const RunTimer = function() {
 	State.onChange(()=> {
 		State.isTitle
-			? $onNS('RunTimer', {[Evt]:Ticker.resetCount})
-			: $off('.RunTimer')
+			? $win.onNS('RunTimer', {[Evt]:Ticker.resetCount})
+			: $win.off('.RunTimer')
 	})
 	function update() {
 		(!WinState.isActive || Ctrl.isCaptured)

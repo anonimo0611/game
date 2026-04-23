@@ -23,7 +23,7 @@ export class Attract {
 
 	/** @private */
 	constructor() {
-		$onNS('Attract', {click_keydown_blur:this.quit})
+		$win.onNS('Attract', {click_keydown_blur:this.quit})
 		this.update = ()=> this.subAct.update()
 	}
 	GhostEntries = /**@type {const}*/([
@@ -70,7 +70,7 @@ export class Attract {
 		this.ghsSpr.draw({type,orient:R,center})
 	}
 	quit() {
-		$off('.Attract')
+		$win.off('.Attract')
 		Attract.#instance = null
 		State.setQuit()
 	}
