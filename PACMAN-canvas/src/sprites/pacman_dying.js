@@ -66,10 +66,10 @@ export class Dying {
 		const {ctx}= this, steps = 10
 		ctx.setAlpha(this.#fadeOut?.alpha)
 		for (let i=0; i<steps; i++) {
-			const r = (i*PI*2)/steps
+			const theta = (i*PI*2)/steps
 			ctx.newLinePath(
-				getPointOnCircle(r, this.#innerR).vals,
-				getPointOnCircle(r, this.#outerR).vals
+				getPointOnCircle(theta, this.#innerR).vals,
+				getPointOnCircle(theta, this.#outerR).vals
 			).stroke()
 		}
 	}

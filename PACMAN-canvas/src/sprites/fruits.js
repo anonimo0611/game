@@ -6,17 +6,14 @@ const drawFunctions = [cherry,strawb,orange,apple,melon,gala,bell,key]
  @param {number} idx
 */
 export function draw(ctx, idx, x=T,y=T, scale=T*2/LOGICAL_SIZE) {
-	if (!drawFunctions[idx]) {
-		throw new RangeError(`Invalid fruit index: ${idx}.`
-			+` Must be between 0 and ${drawFunctions.length-1}.`)
-	}
 	const offsetY = -(T*0.1)
+	const fnIndex = clamp(idx, 0, drawFunctions.length-1)
 	ctx.save()
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
 	ctx.translate(x, y+offsetY)
 	ctx.scale(scale)
-	drawFunctions[idx](ctx)
+	drawFunctions[fnIndex](ctx)
 	ctx.restore()
 }
 
@@ -234,10 +231,10 @@ function gala(ctx=Fg) {
 function bell(ctx=Fg) {
 	// bell body
 	ctx.beginPath()
-	for (const s of [1,-1]) {
-		ctx.addLinePath([0,-5.8],[1.3*s,-5.8],[1.5*s,-5.3])
-		ctx.quadraticCurveTo(4.5*s, -4.2, 4.9*s, 1.2)
-		ctx.addLinePath([5.5*s,2.1],[5.5*s,4.3],[4.9*s,4.9],[0,4.9])
+	for (const vx of [1,-1]) {
+		ctx.addLinePath([0,-5.8],[1.3*vx,-5.8],[1.5*vx,-5.3])
+		ctx.quadraticCurveTo(4.5*vx, -4.2, 4.9*vx, 1.2)
+		ctx.addLinePath([5.5*vx,2.1],[5.5*vx,4.3],[4.9*vx,4.9],[0,4.9])
 	}
 	ctx.fillStyle = '#F8FF00'
 	ctx.fill()

@@ -24,9 +24,9 @@ export default class GhostSubSprite {
 	}
 	drawDazedEyes() {
 		const {ctx}= this
-		for (const v of [-1,+1]) { // Eyeball
+		for (const vx of [-1,+1]) { // Eyeball
 			ctx.beginPath()
-			ctx.ellipse(19*v, -14, 13,16, 0, PI/2, PI*2.05)
+			ctx.ellipse(19*vx, -14, 13,16, 0, PI/2, PI*2.05)
 			ctx.fill()
 		}
 		ctx.lineWidth   = 8

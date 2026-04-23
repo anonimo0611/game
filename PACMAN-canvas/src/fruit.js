@@ -32,8 +32,7 @@ export const FruitMgr = new class FruitManager {
 	get showTarget() {return (State.isTitle || State.isInGame) && showTgt}
 
 	#getType(/**@type {number}*/i) {
-		if (i < 0) throw RangeError('Must be zero or greater.')
-		return FruitTable.at( min(i, FruitTable.length-1) ) ?? 0
+		return FruitTable[clamp(i, 0, FruitTable.length-1)]
 	}
 	#resetTarget() {
 		fadeOut = null

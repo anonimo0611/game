@@ -33,7 +33,6 @@ demoBtns.forEach((btn,i)=> {
 
 /** @type {SceneDict<States[number]>} */
 const Scenes = {Title:RunTimer,Attract,Cutscene}
-
 export const Demo = {
 	get CutsceneNum() {return Cutscene.num},
 	draw()   {Scenes[State.current]?.draw?.()},

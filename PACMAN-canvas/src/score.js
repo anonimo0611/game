@@ -59,6 +59,7 @@ export const ScoreMgr = new class ScoreManager {
 	add(points=0) {
 		if (!State.isInGame)
 			return
+
 		const total = _score + points
 		if (!Ctrl.isPractice && total > _hiSco) {
 			_hiSco = total

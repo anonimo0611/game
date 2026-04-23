@@ -128,30 +128,30 @@ export default class GhostSprite {
 	}
 	#drawEyesUp(isRipped=false) {
 		const {ctx}= this, color=[Color.GhostEye,'#000'][+isRipped]
-		for (const v of [-1,+1]) {
+		for (const vx of [-1,+1]) {
 			ctx.beginPath()
-			ctx.ellipse(19.5*v, -17, 13, 17, -8*v*PI/180, -PI/4, -3*PI/4)
+			ctx.ellipse(19.5*vx, -17, 13, 17, -8*vx*PI/180, -PI/4, -3*PI/4)
 			ctx.fill()
-			ctx.fillCircle(18.5*v, -26,  8, color)
+			ctx.fillCircle(18.5*vx, -26,  8, color)
 		}
 	}
 	#drawEyesDown() {
 		const {ctx}= this
-		for (const v of [-1,+1]) {
+		for (const vx of [-1,+1]) {
 			ctx.beginPath()
-			ctx.ellipse(19*v, -3, 13, 17, 0, 140*PI/180, 40*PI/180)
+			ctx.ellipse(19*vx, -3, 13, 17, 0, 140*PI/180, 40*PI/180)
 			ctx.fill()
-			ctx.fillCircle(19*v, +4,  8, Color.GhostEye)
+			ctx.fillCircle(19*vx, +4,  8, Color.GhostEye)
 		}
 	}
 	/** @param {Horizontal} LorR */
 	#drawEyesHoriz(LorR) {
-		const {ctx}= this, v = (Vec2[LorR].x < 0 ? -1:1)
+		const {ctx}= this, vx = (Vec2[LorR].x < 0 ? -1:1)
 		for (const i of [0,1]) {
 			ctx.beginPath()
-			ctx.ellipse([-16.5*v, 23*v][i], -11, 13, 17, 0, 0, PI*2)
+			ctx.ellipse([-16.5*vx, 23*vx][i], -11, 13, 17, 0, 0, PI*2)
 			ctx.fill()
-			ctx.fillCircle([ -9.5*v, 29*v][i],  -8,  8, Color.GhostEye)
+			ctx.fillCircle([ -9.5*vx, 29*vx][i],  -8,  8, Color.GhostEye)
 		}
 	}
 	#drawFrightFace() {

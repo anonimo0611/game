@@ -15,11 +15,8 @@ export class Cutscene {
 	static {State.on({Cutscene:this.#begin})}
 	static #scene = /**@type {?Scene1|Scene2|Scene3}*/(null)
 	static #begin(_={}, n=Cutscene.num) {
-		if (!between(n,1,3)) {
-			throw new RangeError(`Invalid scene number: ${n}.`
-				+` Must be between 1 and 3.`)
-		}
-		Cutscene.#scene = new [Scene1,Scene2,Scene3][n-1]
+		const idx = clamp(n,1,3) - 1
+		Cutscene.#scene = new [Scene1,Scene2,Scene3][idx]
 	}
 	static get num() {return sceneNum(Game.level)}
 	static draw()    {Cutscene.#scene?.draw()}
