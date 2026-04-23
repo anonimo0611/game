@@ -10,7 +10,7 @@ export const Cursor = function() {
 	addEventListener('mousemove', e=> {
 		currPos.set(e.pageX, e.pageY)
 		clearTimeout(timerId)
-		timerId = setTimeout(Cursor.hide,hideDelay)
+		timerId = setTimeout(Cursor.hide, hideDelay)
 		Vec2.sqrMag(currPos,lastPos) > threshold**2 && Cursor.show()
 		lastPos.set(currPos)
 	}, {passive:true})

@@ -257,6 +257,11 @@ class Vec2 {
 	}
 
 	/** @param {number} cols */
+	wrapX(cols) {
+		return this.setX((this.x+cols) % cols)
+	}
+
+	/** @param {number} cols */
 	toIdx(cols) {
 		return Vec2.idx(this,cols)
 	}
