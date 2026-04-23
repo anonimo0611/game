@@ -4,32 +4,40 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 
 /**
  @template {object} T
- @param {T} o
-*/const typedKeys = o=> /**@type {(keyof T)[]}*/(keys(o))
+ @param {T} object
+*/const typedKeys = object=>
+	/**@type {(keyof T)[]}*/(keys(object))
 
 /**
  @template {string} T
- @param {readonly T[]} array
+ @param {T[]} array
 */const enumObj = (...array)=>
 	/**@type {{readonly [K in T]:K}}*/(fromEntries(array.map(k=> [k,k])))
 
-/** @param {KeyboardEvent|JQKeyboardEvent} e */
-const getNativeKeyEvent = e=>
-	(e instanceof KeyboardEvent)? e :
-		(e.originalEvent instanceof KeyboardEvent)? e.originalEvent : null
+/**
+ @param {KeyboardEvent|JQKeyboardEvent} e
+*/const getNativeKeyEvent = e=>
+	(e instanceof KeyboardEvent)
+		? e :(e.originalEvent instanceof KeyboardEvent)
+			? e.originalEvent : null
 
-/** @param {KeyboardEvent|JQKeyboardEvent} e */
-const hasModifierKeys = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
+/**
+ @param {KeyboardEvent|JQKeyboardEvent} e
+*/const hasModifierKeys = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
-/** @param {KeyboardEvent|JQKeyboardEvent} e */
-const keyRepeat = e=> getNativeKeyEvent(e)?.repeat || false
+/**
+ @param {KeyboardEvent|JQKeyboardEvent} e
+*/const keyRepeat = e=> getNativeKeyEvent(e)?.repeat || false
 
-/** @param {KeyboardEvent|JQKeyboardEvent|JQTriggeredEvent} e */
-const isEnterKey = e=> (e.key == '\x20' || e.key == 'Enter')
+/**
+ @param {KeyboardEvent|JQKeyboardEvent|JQTriggeredEvent} e
+*/const isEnterKey = e=> (e.key == '\x20' || e.key == 'Enter')
 
-/** @param {string} id */
-const requireElem = id=> {
-	const elem = document.getElementById(id); if (elem) return elem
+/**
+ @param {string} id
+*/const requireElem = id=> {
+	let elem = document.getElementById(id)
+	if (elem) return elem
 	throw ReferenceError(`There is no element with the ID “${id}”.`)
 }
 
