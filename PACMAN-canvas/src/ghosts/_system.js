@@ -12,23 +12,18 @@ import {Ghost}   from './ghost.js'
 import {player,onPlayerDotEaten} from '../player/player.js'
 
 const Ghosts = /**@type {Ghost[]}*/([])
-const PointTable = /**@type {const}*/([200,400,800,1600])
-const FrightDurs = /**@type {const}*/([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 
-export const {Ghost:Speed}= _Speed
+export const {GhostSpeed:Speed}= _Speed
 export const Evt = enumObj('Ready','Reverse','Frighten','FleeStart','RoundEnds')
 
-/**
- Distance threshold for Guzuta's chase logic. \
- The value is a multiple of tile size.
-*/
+/** Distance threshold for Guzuta's chase logic. */
 export const GUZUTA_THRESHOLD = 8
 
 /**
  When always chase mode,
  standby time(ms) before the ghost leaves from the house.
 */
-const StandbyTimes = /**@type {const}*/
+const StandbyDelays = /**@type {const}*/
 ([//Pinky->Aosuke->Guzuta
 	[1000, 2000, 3000], // Restart
 	[1000, 4000, 4000], // Lv.1
@@ -85,14 +80,14 @@ export const GhostMgr = new class GhostManager {
 	}
 	#animIdx = 0
 	get animIndex()      {return this.#animIdx}
-	get CruiseElroy()    {return CruiseElroy}
 	get pointType()      {return PointType.Ghost}
-	get pointValue()     {return FrightMode.session?.points ?? PointTable[0]}
-	get spriteIdx()      {return FrightMode.session?.spriteIdx ?? 0}
-	get caughtAll()      {return FrightMode.session?.caughtAll ?? false}
-	get isFrightMode()   {return FrightMode.session != null}
+	get CruiseElroy()    {return CruiseElroy}
 	get isChaseMode()    {return AttackInWaves.isChaseMode}
 	get isScatterMode()  {return AttackInWaves.isScatterMode}
+	get isFrightMode()   {return FrightMode.isActive}
+	get pointValue()     {return FrightMode.pointVal}
+	get spriteIdx()      {return FrightMode.spriteIdx}
+	get caughtAll()      {return FrightMode.caughtAll}
 	get akaCenterPos()   {return Ghosts[GhostType.Akabei].center}
 	get areAnyEscaping() {return Ghosts.some(g=> g.isEscaping)}
 
@@ -111,21 +106,17 @@ export const GhostMgr = new class GhostManager {
 		const lv = (Game.pacDied? 0 : Game.clampedLv)
 		Timer.sequence(.../**@type {TimerSeq[]}*/(
 			Ghosts.slice(1).map((g,i)=> ([
-				StandbyTimes[lv][i]/Game.speed,
+				StandbyDelays[lv][i]/Game.speed,
 				()=> g.leaveHouse()
 			])))
 		)
 	}
 	frighten() {
-		signalDirectionReversal()
-		const s = FrightDurs[Game.clampedLv-1]
-		;(s > 0 || State.isAttract)
-			? FrightMode.new(s)
-			: $(Ghosts).trigger(Evt.FleeStart)
+		FrightMode.frighten()
 	}
 	update() {
 		AttackInWaves.update()
-		FrightMode.session?.update()
+		FrightMode.update()
 		this.#updateAnimation()
 		this.#updateGhosts()
 	}
@@ -264,13 +255,15 @@ const CruiseElroy = function() {
 
 const FrightMode = function() {
 	class Session {
-		#et=0; #flash=0; #caught=0; #fIdx=1
-		get points()    {return PointTable[this.#caught-1]}
-		get caughtAll() {return this.#caught == GhostType.Max}
+		#et=0; #flash=0; #caught=0; #fIdx=1;
+		get points()    {return PtsList[this.#caught-1]}
 		get spriteIdx() {return this.#flash && this.#fIdx^1}
-		constructor(secs=1) {
-			this.secs = secs
-			this.#set(true)
+		get caughtAll() {return this.#caught == GhostType.Max}
+		constructor() {
+			signalDirectionReversal()
+			;(this.secs = DurList[Game.clampedLv-1]) > 0
+				? this.#set(true)
+				: $(Ghosts).trigger(Evt.FleeStart)
 		}
 		#set(isOn=true) {
 			session = (isOn? this : null)
@@ -291,10 +284,16 @@ const FrightMode = function() {
 			}
  		}
 	}
-	let session = /**@type {?Readonly<Session>}*/(null)
+	let   session = /**@type {?Readonly<Session>}*/(null)
+	const PtsList = /**@type {const}*/([200,400,800,1600])
+	const DurList = /**@type {const}*/([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	State.on({_Ready:()=> session = null})
 	return {
-		new(secs=1)   {new Session(secs)},
-		get session() {return session},
+		frighten() {new Session()},
+		update()   {session?.update()},
+		get isActive()  {return session != null},
+		get spriteIdx() {return session?.spriteIdx ?? 0},
+		get caughtAll() {return session?.caughtAll ?? false},
+		get pointVal()  {return session?.points ?? PtsList[0]},
 	}
 }()
