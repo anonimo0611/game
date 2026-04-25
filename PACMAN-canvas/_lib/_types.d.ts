@@ -1,6 +1,6 @@
 //---- Ghosts ----
 
-type GhostEnum = (typeof GhostType)['Akabei'|'Pinky'|'Aosuke'|'Guzuta']
+type GhostIdx = (typeof GhostType)['Akabei'|'Pinky'|'Aosuke'|'Guzuta']
 
 //---- Dictionary ----
 
@@ -27,9 +27,10 @@ type PathNode = {tile:Vec2, dir:Direction, stopped:boolean}
 
 //---- Points ----
 
+type PtsIdx   = typeof PointType[keyof typeof PointType]
 type PtsValue = 100|200|300|400|500|700|800|1000|1600|2000|3000|5000
 type FloatingPtsData = {
-	key: {ptsType:number, ptsValue:PtsValue};
+	key: {ptsType:PtsIdx, ptsValue:PtsValue};
 	pos:  Readonly<Position>;
 	dur?: number;
 	frozen?: boolean;
