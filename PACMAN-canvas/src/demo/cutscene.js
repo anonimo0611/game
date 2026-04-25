@@ -1,11 +1,11 @@
-import {Sound}    from '../../_snd/sound.js'
-import {Game}     from '../_main.js'
-import {State}    from '../state.js'
-import {Ctrl}     from '../control.js'
-import {FruitMgr} from '../fruit.js'
-import {Ghost}    from '../ghosts/ghost.js'
-import {PacMan}   from '../actor.js'
-import * as Snag  from '../sprites/snag.js'
+import {Sound}   from '../../_snd/sound.js'
+import {Game}    from '../_main.js'
+import {State}   from '../state.js'
+import {Ctrl}    from '../control.js'
+import {Fruit}   from '../fruit.js'
+import {PacMan}  from '../actor.js'
+import {Ghost}   from '../ghosts/ghost.js'
+import * as Snag from '../sprites/snag.js'
 
 const ACTORS_Y = BH/2
 const sceneNum = (lv=0)=>
@@ -48,7 +48,7 @@ export class Cutscene {
 		this.akabei.sprite.draw({animIdx,center, ...data})
 	}
 	draw() {
-		State.wasFlashing && FruitMgr.drawLevelCounter()
+		State.wasFlashing && Fruit.drawLevelCounter()
 	}
 	end() {
 		State.wasTitle

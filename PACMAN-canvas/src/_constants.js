@@ -33,6 +33,7 @@ GhostType = freeze({
 	Guzuta: 3,
 	Max:    4,
 }),
+GhostMax = 4,
 Color = /**@type {const}*/({
 	GridLine:   '#F00',
 	Cookie:     '#FFB8AE',

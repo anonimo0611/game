@@ -35,13 +35,13 @@ KerningMap = /**@type {const}*/({
  @param {FloatingPtsData['key']} _
  @param {number} size
 */
-export function cache({pointType, pointValue:pts}, size) {
-	const ctx = FruitGhostCtxs[pointType]
+export function cache({ptsType,ptsValue:pts}, size) {
+	const ctx = FruitGhostCtxs[ptsType]
 	const{w,h}= ctx.resize(size*1.5, size).size
 	ctx.save()
 	ctx.translate(w/2, h/2)
 	ctx.scale(size/2/LOGICAL_DEGIT_HEIGHT)
-	ctx.strokeStyle = Color.PointTexts[pointType]
+	ctx.strokeStyle = Color.PointTexts[ptsType]
 	ctx.lineWidth = 1.1
 	ctx.lineJoin  = ctx.lineCap = 'round'
 	KerningMap[pts].forEach((x,i)=> {

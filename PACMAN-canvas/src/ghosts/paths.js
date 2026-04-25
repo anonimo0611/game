@@ -1,9 +1,9 @@
-import {Dir}   from '../../_lib/direction.js';
-import {Ctrl}  from '../control.js'
-import {State} from '../state.js';
-import {Maze}  from '../maze.js'
-import {Ghost} from './ghost.js';
-import {player as p} from '../player/player.js';
+import {Dir}    from '../../_lib/direction.js';
+import {Ctrl}   from '../control.js'
+import {State}  from '../state.js';
+import {Maze}   from '../maze.js'
+import {Ghost}  from './ghost.js';
+import {player} from '../player/player.js';
 
 const PATH_STEPS  = 18
 const LINE_WIDTH  = T/5
@@ -39,8 +39,8 @@ export class PathMgr {
 			const dir  = g.getNextDir(lstDir,t,tgt)
 			const tile = g.getAdjTile(dir,t)
 			path.push({tile,dir,stopped:
-				g.isTargetPac && tile.eq(p.tile) ||
-				g.hasFixedTgt && tile.eq(tgt)
+				g.hasFixedTgt && tile.eq(tgt) ||
+				g.isTargetPac && tile.eq(player.tile)
 			})
 			if (path[i].stopped) break
 		} this.#nodeList = path
@@ -68,7 +68,7 @@ export class PathMgr {
 			const last = nodes[i-1]?.tile.clone.mul(T) ?? g.pos
 			if (tile == endTile) {
 				stopped && g.isTargetPac
-					? curr.set(p.pos)
+					? curr.set(player.pos)
 					: curr.add( Vec2[dir].mul(stopped? 0 : T/2-distance) )
 			}
 			if (abs(curr.x - last.x) > T*3) {

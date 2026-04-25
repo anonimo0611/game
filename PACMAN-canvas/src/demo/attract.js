@@ -1,15 +1,14 @@
-﻿import {State}      from '../state.js'
-import {drawText}   from '../message.js'
-import {Ctrl}       from '../control.js'
-import {drawDot}    from '../maze.js'
-import {PowBlinker} from '../maze.js'
-import {ScoreMgr}   from '../score.js'
-import {FruitMgr}   from '../fruit.js'
-import {GhostMgr}   from '../ghosts/_system.js'
-import {Actors}     from '../actor.js'
-import {PacMan}     from '../actor.js'
-import {Ghost}      from '../ghosts/ghost.js'
-import GhostSprite  from '../sprites/ghost.js'
+﻿import {State}    from '../state.js'
+import {Ctrl}     from '../control.js'
+import {Actors}   from '../actor.js'
+import {PacMan}   from '../actor.js'
+import {Ghosts}   from '../ghosts/_system.js'
+import {Ghost}    from '../ghosts/ghost.js'
+import {Fruit}    from '../fruit.js'
+import {Score}    from '../score.js'
+import  Sprite    from '../sprites/ghost.js'
+import {drawText} from '../message.js'
+import {drawDot,PowBlinker} from '../maze.js'
 
 export class Attract {
 	static {State.on({Attract:this.#begin})}
@@ -18,7 +17,7 @@ export class Attract {
 	static draw()   {Attract.#instance?.draw()}
 	static update() {Attract.#instance?.update()}
 
-	ghsSpr = new GhostSprite(Fg,T*2)
+	ghsSpr = new Sprite(Fg,T*2)
 	subAct = new EnergizerAct
 
 	/** @private */
@@ -34,7 +33,7 @@ export class Attract {
 		[70, 8, 18, 15, 'OTOBOKE---', '"GUZUTA"']
 	])
 	draw() {
-		ScoreMgr.draw()
+		Score.draw()
 		drawText(7, 4, null, 'CHARACTOR　/　NICKNAME')
 		const et = (Ticker.elapsedTime/100), Small ={size:T*.68}
 		this.GhostEntries.forEach(([t,col1,col2,row,txt1,txt2],i)=> {
@@ -63,7 +62,7 @@ export class Attract {
 			}
 			this.subAct.draw()
 		}
-		FruitMgr.drawLevelCounter()
+		Fruit.drawLevelCounter()
 	}
 	drawGhostOnTable(type=0, row=0) {
 		const center = Vec2.new(T*5, T*row).add(T/2)
@@ -87,7 +86,7 @@ class EnergizerAct {
 	constructor() {
 		for (let i=0; i<GhostType.Max; i++)
 			this.#setActor(i)
-		GhostMgr.initialize(this.#ghosts)
+		Ghosts.initialize(this.#ghosts)
 	}
 	#setActor(type=0) {
 		const
@@ -116,8 +115,8 @@ class EnergizerAct {
 		this.#pacvx *= -1
 		this.#ghsvx /= -2
 		this.#pacman.dir = R
-		GhostMgr.frighten()
+		Ghosts.frighten()
 	}
 	draw() {this.started && Actors.draw(this.#pacman)}
-	#end() {GhostMgr.caughtAll && State.setAttract()}
+	#end() {Ghosts.caughtAll && State.setAttract()}
 }

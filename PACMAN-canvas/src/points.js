@@ -1,9 +1,9 @@
-import {Game}     from './_main.js'
-import {State}    from './state.js'
-import {ScoreMgr} from './score.js'
-import {FruitMgr} from './fruit.js'
-import {GhostMgr} from './ghosts/_system.js'
-import {cache}    from './sprites/points.js'
+import {Game}   from './_main.js'
+import {State}  from './state.js'
+import {Score}  from './score.js'
+import {Ghosts} from './ghosts/_system.js'
+import {Fruit}  from './fruit.js'
+import {cache}  from './sprites/points.js'
 
 const FADE_DUR = 300
 const PopupMap = /**@type {Map<any,FloatingPts>}*/(new Map)
@@ -13,8 +13,8 @@ export const PtsMgr = new class PointsManager {
 	/** @param {FloatingPtsData} data */
 	set(data) {new FloatingPts(data)}
 	update()       {PopupMap.forEach(v=> v.update())}
-	drawFruitPts() {PopupMap.get(FruitMgr)?.draw()}
-	drawGhostPts() {PopupMap.get(GhostMgr)?.draw()}
+	drawFruitPts() {PopupMap.get(Fruit) ?.draw()}
+	drawGhostPts() {PopupMap.get(Ghosts)?.draw()}
 }
 class FloatingPts {
 	/** @param {FloatingPtsData} data */
@@ -25,7 +25,7 @@ class FloatingPts {
 		this.fade  = Fade.out(FADE_DUR/spd, (dur-FADE_DUR)/spd)
 
 		PopupMap.set(key,this)
-		ScoreMgr.add(key.pointValue)
+		Score.add(key.ptsValue)
 		frozen && Timer.freeze()
 
 		Timer.set(dur/spd, ()=> {

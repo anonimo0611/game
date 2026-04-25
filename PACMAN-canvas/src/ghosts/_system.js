@@ -11,20 +11,17 @@ import {Targets} from './targets.js'
 import {Ghost}   from './ghost.js'
 import {player,onPlayerDotEaten} from '../player/player.js'
 
-const Ghosts = /**@type {Ghost[]}*/([])
+const GhostList = /**@type {Ghost[]}*/([])
 
-export const {GhostSpeed:Speed}= _Speed
+export const {Ghost:Speed}= _Speed
 export const Evt = enumObj('Ready','Reverse','Frighten','FleeStart','RoundEnds')
-
-/** Distance threshold for Guzuta's chase logic. */
-export const GUZUTA_THRESHOLD = 8
 
 /**
  When always chase mode,
- standby time(ms) before the ghost leaves from the house.
+ standby delay(ms) before the ghost leaves from the house.
 */
 const StandbyDelays = /**@type {const}*/
-([//Pinky->Aosuke->Guzuta
+([// Pinky->Aosuke->Guzuta
 	[1000, 2000, 3000], // Restart
 	[1000, 4000, 4000], // Lv.1
 	[ 800, 2200, 4000], // Lv.2
@@ -60,43 +57,41 @@ export const [StateType,createState] = function() {
 			return this.isEscaping || this.isEntering
 		}
 	}
-	const States = /**@type {const}*/(
-		['Idle','GoingOut','Walking','Bitten','Escaping','Entering']
-	)
+	const States = /**@type {const}*/
+		(['Idle','GoingOut','Walking','Bitten','Escaping','Entering'])
 	return [
 		enumObj(...States),
 		/**@type {(g:Ghost)=> IGhostState}*/(g=> new State(g))
 	]
 }()
 
-export const GhostMgr = new class GhostManager {
+export const Ghosts = new class GhostManager {
 	static {$(this.setup)}
 	static setup() {
 		State.on({
-			InGame:    GhostMgr.#onInGame,
-			Ready:     GhostMgr.#trigger,
-			RoundEnds: GhostMgr.#trigger,
+			InGame:    Ghosts.#onInGame,
+			Ready:     Ghosts.#trigger,
+			RoundEnds: Ghosts.#trigger,
 		})
 	}
 	#animIdx = 0
-	get animIndex()      {return this.#animIdx}
-	get pointType()      {return PointType.Ghost}
-	get CruiseElroy()    {return CruiseElroy}
-	get isChaseMode()    {return AttackInWaves.isChaseMode}
-	get isScatterMode()  {return AttackInWaves.isScatterMode}
-	get isFrightMode()   {return FrightMode.isActive}
-	get pointValue()     {return FrightMode.pointVal}
-	get spriteIdx()      {return FrightMode.spriteIdx}
-	get caughtAll()      {return FrightMode.caughtAll}
-	get akaCenterPos()   {return Ghosts[GhostType.Akabei].center}
-	get areAnyEscaping() {return Ghosts.some(g=> g.isEscaping)}
+	get animIndex()     {return this.#animIdx}
+	get CruiseElroy()   {return CruiseElroy}
+	get ptsType()       {return PointType.Ghost}
+	get ptsValue()      {return Fright.ptsValue}
+	get frightened()    {return Fright.session != null}
+	get spriteIdx()     {return Fright.session?.spriteIdx ?? 0}
+	get caughtAll()     {return Fright.session?.caughtAll ?? false}
+	get isAnyEscaping() {return GhostList.some(g=> g.isEscaping)}
+	get isChasing()     {return PhaseManager.isChaseMode}
+	get isScattering()  {return PhaseManager.isScatterMode}
 
 	initialize(/**@type {readonly Ghost[]}*/ghosts) {
 		this.#animIdx = 0
-		ghosts.forEach((g,i)=> Ghosts[i] = g)
+		ghosts.forEach((g,i)=> GhostList[i] = g)
 	}
 	#trigger() {
-		$(Ghosts).trigger(State.current)
+		$(GhostList).trigger(State.current)
 	}
 	#onInGame = ()=> {
 		Sound.playSiren()
@@ -105,18 +100,19 @@ export const GhostMgr = new class GhostManager {
 	#setReleaseTimer() {
 		const lv = (Game.pacDied? 0 : Game.clampedLv)
 		Timer.sequence(.../**@type {TimerSeq[]}*/(
-			Ghosts.slice(1).map((g,i)=> ([
+			GhostList.slice(1).map((g,i)=> ([
 				StandbyDelays[lv][i]/Game.speed,
 				()=> g.leaveHouse()
 			])))
 		)
 	}
 	frighten() {
-		FrightMode.frighten()
+		signalDirectionReversal()
+		Fright.frighten()
 	}
 	update() {
-		AttackInWaves.update()
-		FrightMode.update()
+		PhaseManager.update()
+		Fright.session?.update()
 		this.#updateAnimation()
 		this.#updateGhosts()
 	}
@@ -128,33 +124,35 @@ export const GhostMgr = new class GhostManager {
 			this.#animIdx ^= +(Ticker.count % 6 == 0)
 	}
 	#updateGhosts() {
-		Ghosts.forEach(g=> g.update())
-		PathMgr.update(Ghosts)
+		GhostList.forEach(g=> g.update())
+		PathMgr.update(GhostList)
 	}
 	drawBehind() {
 		this.#draw(false)
 	}
 	drawFront()  {
-		Targets.draw(Ghosts)
-		PathMgr.draw(Ghosts)
+		Targets.draw(GhostList)
+		PathMgr.draw(GhostList)
 		this.#draw(true)
 		PtsMgr.drawGhostPts()
 	}
 	#draw(onFront=true) {
-		Ghosts
+		GhostList
 			.toReversed()
 			.filter (g=> g.isFrightened != onFront)
 			.filter (g=> g.state.isBitten == false)
 			.forEach(g=> g.draw())
 	}
+	/** @param {GhostEnum} type */
+	of = type=> GhostList[type]
 }
 
 const SCATTER = 0
 const CHASING = 1
 const signalDirectionReversal = ()=> {
-	$(Ghosts).trigger(Evt.Reverse)
+	$(GhostList).trigger(Evt.Reverse)
 }
-const AttackInWaves = function() {
+const PhaseManager = function() {
 	function create(lv=1) {
 		let tCnt = -1, idx = 0
 		let mode = Ctrl.alwaysChase? CHASING : SCATTER
@@ -171,8 +169,8 @@ const AttackInWaves = function() {
 		update = (mode == CHASING)
 			? null
 			: ()=> {
-				if (Timer.frozen || GhostMgr.isFrightMode) return
-				if (++tCnt*Game.interval < list[idx].dur)  return
+				if (Timer.frozen || Ghosts.frightened) return
+				if (++tCnt*Game.interval < list[idx].dur) return
 				signalDirectionReversal()
 				++idx,(!list[idx].dur && ++idx)
 				tCnt = 0, mode = list[idx].mode
@@ -218,7 +216,7 @@ export const DotCounter = function() {
 	}
 	function incPreferredGhostCounter() {
 		const
-		idx = Ghosts.findIndex(g=> g.state.isIdle)
+		idx = GhostList.findIndex(g=> g.state.isIdle)
 		idx != -1 && pCounters[idx]++
 	}
 	onPlayerDotEaten(()=> {
@@ -236,8 +234,8 @@ const CruiseElroy = function() {
 	function angry() {
 		return State.isInGame
 			&& currPart > 1
-			&& Ghosts[GhostType.Akabei]?.isFrightened == false
-			&& Ghosts[GhostType.Guzuta]?.isStarted == true
+			&& GhostList[GhostType.Akabei]?.isFrightened == false
+			&& GhostList[GhostType.Guzuta]?.isStarted == true
 	}
 	onPlayerDotEaten(()=> {
 		const rate = [1.5, 1.0, 0.5][currPart]
@@ -253,47 +251,43 @@ const CruiseElroy = function() {
 	}
 }()
 
-const FrightMode = function() {
+const Fright = function() {
+	let   session = /**@type {?Readonly<Session>}*/(null)
+	const PtsList = /**@type {const}*/([200,400,800,1600])
+	const DurList = /**@type {const}*/([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	class Session {
-		et=0; flashCnt=0; caughtCnt=0; flashIdx=1;
-		get points()    {return PtsList[this.caughtCnt-1]}
-		get spriteIdx() {return this.flashCnt && this.flashIdx^1}
-		get caughtAll() {return this.caughtCnt == GhostType.Max}
+		#et=0; #flash=0; caught=0; #fIdx=1;
+		get points()    {return PtsList[this.caught-1]}
+		get spriteIdx() {return this.#flash && this.#fIdx^1}
+		get caughtAll() {return this.caught == GhostType.Max}
 		constructor() {
-			signalDirectionReversal()
-			;(this.secs = DurList[Game.clampedLv-1]) > 0
+			(this.secs = DurList[Game.clampedLv-1]) > 0
 				? this.#set(true)
-				: $(Ghosts).trigger(Evt.FleeStart)
+				: $(GhostList).trigger(Evt.FleeStart)
 		}
 		#set(isOn=true) {
 			session = (isOn? this : null)
-			$(Ghosts)
+			$(GhostList)
 				.trigger(Evt.Frighten, isOn)
-				.offon(StateType.Bitten, ()=> this.caughtCnt++, isOn)
+				.offon(StateType.Bitten, ()=> this.caught++, isOn)
 			Sound.toggleFrightMode(isOn)
 		}
 		#flashing() {
 			const iv = (this.secs == 1 ? 12:14)/Game.speed|0
-			this.flashCnt++ % iv == 0 && (this.flashIdx ^= 1)
+			this.#flash++ % iv == 0 && (this.#fIdx ^= 1)
 		}
 		update() {
 			if (State.isInGame && !Timer.frozen) {
-				const et = (this.et += Game.interval)/1e3
+				const et = (this.#et += Game.interval)/1e3
 				if (et >= this.secs-2) this.#flashing()
 				if (et >= this.secs || this.caughtAll) this.#set(false)
 			}
  		}
 	}
-	let   session = /**@type {?Readonly<Session>}*/(null)
-	const PtsList = /**@type {const}*/([200,400,800,1600])
-	const DurList = /**@type {const}*/([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	State.on({_Ready:()=> session = null})
 	return {
 		frighten() {new Session()},
-		update()   {session?.update()},
-		get isActive()  {return session != null},
-		get spriteIdx() {return session?.spriteIdx ?? 0},
-		get caughtAll() {return session?.caughtAll ?? false},
-		get pointVal()  {return session?.points ?? PtsList[0]},
+		get session()  {return session},
+		get ptsValue() {return session?.points ?? PtsList[0]},
 	}
 }()

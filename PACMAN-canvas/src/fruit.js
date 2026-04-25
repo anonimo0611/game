@@ -19,16 +19,16 @@ const PointTable = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
 let showTgt = true
 let fadeOut = /**@type {?Fade}*/(null)
 
-export const FruitMgr = new class FruitManager {
+export const Fruit = new class FruitManager {
 	static {$(this.setup)}
 	static setup() {
-		Level.on({change:FruitMgr.#setImages})
-		State.on({_Ready:FruitMgr.#resetTarget})
-		onPlayerDotEaten(FruitMgr.#onDotEaten)
+		Level.on({change:Fruit.#setImages})
+		State.on({_Ready:Fruit.#resetTarget})
+		onPlayerDotEaten(Fruit.#onDotEaten)
 	}
 	get currType()   {return this.#getType(Game.level-1)}
-	get pointType()  {return PointType.Fruit}
-	get pointValue() {return PointTable[this.currType]}
+	get ptsType()    {return PointType.Fruit}
+	get ptsValue()   {return PointTable[this.currType]}
 	get showTarget() {return (State.isTitle || State.isInGame) && showTgt}
 
 	#getType(/**@type {number}*/i) {

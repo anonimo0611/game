@@ -1,8 +1,8 @@
-import {Dir}      from '../_lib/direction.js'
-import  PacSprite from './sprites/pacman.js'
-import {player}   from './player/player.js'
-import {Maze}     from './maze.js'
-import {GhostMgr} from './ghosts/_system.js'
+import {Dir}    from '../_lib/direction.js'
+import {Maze}   from './maze.js'
+import  PacSpr  from './sprites/pacman.js'
+import {player} from './player/player.js'
+import {Ghosts} from './ghosts/_system.js'
 
 export class Actor {
 	pos = Vec2.Zero
@@ -95,19 +95,19 @@ export class Actor {
 export const Actors = {
 	update() {
 		player.update()
-		GhostMgr.update()
+		Ghosts.update()
 	},
 	/** @param {PacMan} pacman */
 	draw(pacman) {
-		GhostMgr.drawBehind()
+		Ghosts.drawBehind()
 		pacman.draw()
-		GhostMgr.drawFront()
+		Ghosts.drawFront()
 	},
 }
 
 export class PacMan extends Actor {
 	/** @readonly */
-	sprite = new PacSprite(Fg,T)
+	sprite = new PacSpr(Fg,T)
 	constructor(col=0, row=0) {
 		super(col, row)
 	}

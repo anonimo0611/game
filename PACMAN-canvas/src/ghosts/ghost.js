@@ -1,16 +1,16 @@
-import {Sound}    from '../../_snd/sound.js'
-import {Dir}      from '../../_lib/direction.js'
-import {Game}     from '../_main.js'
-import {State}    from '../state.js'
-import {Ctrl}     from '../control.js'
-import {Actor}    from '../actor.js'
-import Sprite     from '../sprites/ghost.js'
-import {player}   from '../player/player.js'
-import {Maze}     from '../maze.js'
-import {PtsMgr}   from '../points.js'
-import * as Sys   from './_system.js'
-import {GhostMgr} from './_system.js'
-import {PathMgr}  from './paths.js'
+import {Sound}   from '../../_snd/sound.js'
+import {Dir}     from '../../_lib/direction.js'
+import {Game}    from '../_main.js'
+import {State}   from '../state.js'
+import {Ctrl}    from '../control.js'
+import {Maze}    from '../maze.js'
+import {PtsMgr}  from '../points.js'
+import {Actor}   from '../actor.js'
+import {player}  from '../player/player.js'
+import  Sprite   from '../sprites/ghost.js'
+import * as Sys  from './_system.js'
+import {Ghosts}  from './_system.js'
+import {PathMgr} from './paths.js'
 
 /** @type {readonly Direction[]} */
 const TurnPriority = [U,L,D,R]
@@ -34,8 +34,8 @@ export class Ghost extends Actor {
 	get chasePos()     {return player.center}
 	get scatterTile()  {return Vec2.new(24, 0)}
 	get isAngry()      {return false}
-	get isChasing()    {return GhostMgr.isChaseMode   && this.isNormal}
-	get isScattering() {return GhostMgr.isScatterMode && this.isNormal}
+	get isChasing()    {return Ghosts.isChasing    && this.isNormal}
+	get isScattering() {return Ghosts.isScattering && this.isNormal}
 
 	/**
 	 @param {Direction} dir
@@ -55,15 +55,15 @@ export class Ghost extends Actor {
 		 [Sys.Evt.Frighten]: (_,on=true)=> this.#frighten(on),
 		})
 	}
-	get animIdx()      {return GhostMgr.animIndex}
-	get spriteIdx()    {return GhostMgr.spriteIdx}
+	get animIdx()      {return Ghosts.animIndex}
+	get spriteIdx()    {return Ghosts.spriteIdx}
 	get maxAlpha()     {return Ctrl.showTargets? .75:1}
 	get alpha()        {return this.#fader?.alpha ?? this.maxAlpha}
 	get chaseTile()    {return this.chasePos.divInt(T)}
 
+	get isStarted()    {return this.#started}
 	get isEscaping()   {return this.state.isEscapingEyes}
 	get isTargetPac()  {return this.getTargetTile().eq(player.tile)}
-	get isStarted()    {return this.#started}
 	get isFrightened() {return this.#frightened}
 	get isNormal()     {return!this.#frightened  && this.state.isWalking}
 	get hasFixedTgt()  {return this.isScattering || this.state.isEscaping}
@@ -236,7 +236,7 @@ export class Ghost extends Actor {
 		Sound.playBitesGhost()
 		this.#frightened = false
 		this.state.setBitten()
-		PtsMgr.set({key:GhostMgr, pos:this.center, frozen:true, cb})
+		PtsMgr.set({key:Ghosts, pos:this.center, frozen:true, cb})
 	}
 	#onPacCaught() {
 		Sound.stopLoops()

@@ -1,20 +1,20 @@
 import './ghosts/ghosts.js'
-import {Cursor}   from '../_lib/mouse.js'
-import {Sound}    from '../_snd/sound.js'
-import  Speed     from './speed.js'
-import {Menu}     from './ui.js'
-import {State}    from './state.js'
-import {Message}  from './message.js'
-import {Demo}     from './demo/_demo.js'
-import {Ctrl}     from './control.js'
-import {Lives}    from './lives.js'
-import {Wall}     from './sprites/wall.js'
-import {Maze}     from './maze.js'
-import {ScoreMgr} from './score.js'
-import {FruitMgr} from './fruit.js'
-import {PtsMgr}   from './points.js'
-import {Actors}   from './actor.js'
-import {player}   from './player/player.js'
+import {Cursor}  from '../_lib/mouse.js'
+import {Sound}   from '../_snd/sound.js'
+import  Speed    from './speed.js'
+import {Menu}    from './ui.js'
+import {State}   from './state.js'
+import {Message} from './message.js'
+import {Demo}    from './demo/_demo.js'
+import {Ctrl}    from './control.js'
+import {Lives}   from './lives.js'
+import {Wall}    from './sprites/wall.js'
+import {Maze}    from './maze.js'
+import {Score}   from './score.js'
+import {Fruit}   from './fruit.js'
+import {PtsMgr}  from './points.js'
+import {Actors}  from './actor.js'
+import {player}  from './player/player.js'
 
 export const Game = new class GameCore {
 	static {$(this.setup)}
@@ -111,7 +111,7 @@ export const Game = new class GameCore {
 	}
 	#update() {
 		PtsMgr.update()
-		FruitMgr.update()
+		Fruit.update()
 		Maze.PowDots.update()
 		Demo.update()
 		Actors.update()
@@ -124,9 +124,9 @@ export const Game = new class GameCore {
 		Message.draw()
 	}
 	#drawMain() {
-		ScoreMgr.draw()
+		Score.draw()
 		Maze.PowDots.draw()
-		FruitMgr.drawTarget()
+		Fruit.drawTarget()
 		Actors.draw(player)
 	}
 }, Level = $('#level-num')

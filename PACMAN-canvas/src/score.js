@@ -1,21 +1,21 @@
 import {Sound}    from '../_snd/sound.js'
 import {Game}     from './_main.js'
 import {State}    from './state.js'
-import {drawText} from './message.js'
 import {Ctrl}     from './control.js'
 import {Lives}    from './lives.js'
+import {drawText} from './message.js'
 
 const HISCORE_KEY = 'anopac_hiscore'
 let [_score,_hiSco,savedScore,savedHiSco]= [0,0,0,0]
 
-export const ScoreMgr = new class ScoreManager {
+export const Score = new class ScoreManager {
 	static {$(this.setup)}
 	static setup() {
-		ScoreMgr.#reset()
+		Score.#reset()
 		State.on({
-			Quit:     ScoreMgr.#restore,
-			NewGame:  ScoreMgr.#onNewGame,
-			GameOver: ScoreMgr.#onGameOver,
+			Quit:     Score.#restore,
+			NewGame:  Score.#onNewGame,
+			GameOver: Score.#onGameOver,
 		})
 	}
 	clear() {
@@ -59,7 +59,6 @@ export const ScoreMgr = new class ScoreManager {
 	add(points=0) {
 		if (!State.isInGame)
 			return
-
 		const total = _score + points
 		if (!Ctrl.isPractice && total > _hiSco) {
 			_hiSco = total

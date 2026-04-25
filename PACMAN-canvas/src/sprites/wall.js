@@ -5,7 +5,7 @@ const LO = max(2, 4*SF|0) // Line  Offset
 const OO = max(1, 2*SF|0) // Outer Offset
 
 const CornerToRotationIdx = new Map(
-	Array.from('12345678abcdABCD', (v,i)=> [v,(i%4)])
+	Array.from('12345678abcdABCD', (v,i)=> [v,i%4])
 )
 const Ctxs = freeze({
 	Blue:  canvas2D(null, BW,BH).ctx,
@@ -99,8 +99,8 @@ export const Wall = new class WallRenderer {
 					Wall.#drawCorner(ctx,{type,ci,pos:{x,y}})
 			})
 		switch(s.replace('#','V').toUpperCase()) {
-		case 'V':ctx.strokeLine(x+HT+lo, y, x+HT+lo, y+T);break
-		case 'H':ctx.strokeLine(x, y+HT+lo, x+T, y+HT+lo);break
+		case 'V': ctx.strokeLine(x+HT+lo, y, x+HT+lo, y+T);break
+		case 'H': ctx.strokeLine(x, y+HT+lo, x+T, y+HT+lo);break
 		}
 		if (s == '#' || t.x == 0 && +s) {
 			return ctx.strokeLine(x+OO, y, x+OO, y+T).void()

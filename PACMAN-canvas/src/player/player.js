@@ -2,10 +2,10 @@ import {Sound}    from '../../_snd/sound.js'
 import {Game}     from '../_main.js'
 import {Ctrl}     from '../control.js'
 import {State}    from '../state.js'
-import {ScoreMgr} from '../score.js'
+import {Score}    from '../score.js'
 import {Maze}     from '../maze.js'
 import {PacMan}   from '../actor.js'
-import {GhostMgr} from '../ghosts/_system.js'
+import {Ghosts}   from '../ghosts/_system.js'
 import {Mover}    from './controller.js'
 import {TunEntry} from './tunnel.js'
 
@@ -82,11 +82,11 @@ class Player extends PacMan {
 			: EventBus.trigger(EATEN_EV)
 	}
 	#eatPowerDot() {
-		ScoreMgr.add(PowPts)
-		GhostMgr.frighten()
+		Score.add(PowPts)
+		Ghosts.frighten()
 	}
 	#eatSmallDot() {
-		ScoreMgr.add(DotPts)
+		Score.add(DotPts)
 	}
 	#playEatSE() {
 		const duration = (T/this.speed)*Ticker.Interval*.5

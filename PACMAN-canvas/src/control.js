@@ -2,8 +2,8 @@ import {Dir}      from '../_lib/direction.js'
 import {Sound}    from '../_snd/sound.js'
 import {Confirm}  from '../_lib/confirm.js'
 import {State}    from './state.js'
+import {Score}    from './score.js'
 import {drawText} from './message.js'
-import {ScoreMgr} from './score.js'
 import {Form,Menu,inputs,btns} from './ui.js'
 
 const SETTINGS_KEY = 'anopacman'
@@ -98,7 +98,7 @@ export const Ctrl = new class Controller {
 	}
 	#clearHiConfirm() {
 		Confirm.open('Are you sure you want to clear high-score?',
-			null, ()=> ScoreMgr.clear(), 'Cancel','Clear')
+			null, ()=> Score.clear(), 'Cancel','Clear')
 	}
 	#quitConfirm() {
 		!Ticker.paused && Ctrl.pause()
