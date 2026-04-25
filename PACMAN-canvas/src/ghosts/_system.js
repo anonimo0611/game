@@ -143,7 +143,7 @@ export const Ghosts = new class GhostManager {
 			.filter (g=> g.state.isBitten == false)
 			.forEach(g=> g.draw())
 	}
-	/** @param {GhostEnum} type */
+	/** @param {GhostIdx} type */
 	of = type=> GhostList[type]
 }
 
