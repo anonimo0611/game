@@ -54,7 +54,7 @@ class Menu {
 	}
 	reset() {this.select(this.defaultIndex)}
 	onChange (/**@type {()=>void}*/handler) {
-		$(this.menu).on ({change:handler})
+		$(this.menu).on({change:handler})
 	}
 }
 
