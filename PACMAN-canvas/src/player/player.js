@@ -62,7 +62,6 @@ class Player extends PacMan {
 			this.keepInsideBoard()
 	}
 	#update(steps=1) {
-		const {tileIdx}= this
 		for (let i=0; i<steps; i++) {
 			this.#eatDot(this.tileIdx)
 			this.#mov.update(this.speed/steps)
