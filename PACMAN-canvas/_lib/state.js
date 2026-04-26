@@ -56,8 +56,10 @@ export default class StateBase {
 
 	/** @param {{[key in S]?:JQTriggerHandler}} o */
 	on(o) {
-		for (const [state,cb] of entries(o))
-			$(this.#owner).on(underscoreToSp(state,String(this.default)), cb)
+		for(const [state,cb] of entries(o)) {
+			const prefix = (state.trim()[0] == '_')? this.default : ''
+			$(this.#owner).on(underscoreToSp(state,prefix), cb)
+		}
 		return this
 	}
 

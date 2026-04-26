@@ -50,7 +50,7 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
  @param {string} str
 */const underscoreToSp = (str,prefix='')=>
 	str.indexOf('_') != -1
-		? prefix.trim()+str.trim().replace(/_/g,'\x20')
+		? `${prefix} ${str}`.replace(/[_\s]+/g,'\x20').trim()
 		: str.trim()
 
 /**
