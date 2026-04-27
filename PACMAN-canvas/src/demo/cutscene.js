@@ -33,11 +33,11 @@ export class Cutscene {
 		this.pacman.y = this.akabei.y = ACTORS_Y - T/2
 		Sound.playCutscene({loop:(num == 2) ? 0:1})
 	}
-	movePac() {
+	updatePac() {
 		this.pacman.x += this.pacvx
 		this.pacman.update()
 	}
-	moveAka(rate=1) {
+	updateAka(rate=1) {
 		this.akabei.x += this.akavx * rate
 		Ghosts.updateAnimation()
 	}
@@ -68,13 +68,13 @@ class Scene1 extends Cutscene {
 	}
 	update() {
 		if (Ticker.elapsedTime > 400)
-			this.moveAka()
+			this.updateAka()
 		this.pacman.dir == L
 			? this.moveLeft()
 			: this.moveRight()
 	}
 	moveLeft() {
-		this.movePac()
+		this.updatePac()
 		this.pacman.x < -T*9 && this.turnBack()
 	}
 	turnBack() {
@@ -83,7 +83,7 @@ class Scene1 extends Cutscene {
 		this.pacman.dir = this.akabei.dir = R
 	}
 	moveRight() {
-		this.akabei.x > T*7.5  && this.movePac()
+		this.akabei.x > T*7.5  && this.updatePac()
 		this.akabei.x > T*9+BW && this.end()
 	}
 	draw() {
@@ -106,8 +106,8 @@ class Scene2 extends Cutscene {
 		this.akabei.x = BW + T*16
 	}
 	update() {
-		this.movePac()
-		if (!this.counter && this.moveAka())
+		this.updatePac()
+		if (!this.counter && this.updateAka())
 			return
 		switch(this.counter++) {
 		case 90:
@@ -123,10 +123,10 @@ class Scene2 extends Cutscene {
 			break
 		}
 	}
-	moveAka() {
+	updateAka() {
 		const {akabei:a}= this
-		a.x > Snag.AkaSnagX ? super.moveAka(1.0):
-		a.x > Snag.AkaStopX ? super.moveAka(0.1):(a.x=Snag.AkaStopX)
+		a.x > Snag.AkaSnagX ? super.updateAka(1.0):
+		a.x > Snag.AkaStopX ? super.updateAka(0.1):(a.x=Snag.AkaStopX)
 		return (a.x != Snag.AkaStopX)
 	}
 	draw() {
@@ -151,12 +151,12 @@ class Scene3 extends Cutscene {
 		this.akabei.x = BW + T*13
 	}
 	update() {
-		this.movePac()
-		this.moveAka()
+		this.updatePac()
+		this.updateAka()
 	}
-	moveAka() {
+	updateAka() {
 		const {akabei:aka}= this
-		super.moveAka()
+		super.updateAka()
 		aka.dir == L
 			? aka.x < -T*10 && (aka.dir = R) && (this.akavx *= -1)
 			: aka.x > (T*13+BW) && this.end()

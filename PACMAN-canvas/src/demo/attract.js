@@ -97,12 +97,12 @@ class EnergizerAct {
 	update() {
 		if (!this.started) return
 		this.pow.update()
-		this.#move()
+		this.#updateActors()
 		if (this.#pacman.dir == L
 		 && this.#pacman.x <= T*4)
 			this.#turnBack()
 	}
-	#move() {
+	#updateActors() {
 		if (Timer.frozen) return
 		Actors.update(this.#pacman)
 		this.#pacman.x += this.#pacvx
