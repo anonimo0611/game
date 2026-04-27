@@ -4,6 +4,7 @@ import {State}   from '../state.js'
 import {Ctrl}    from '../control.js'
 import {Fruit}   from '../fruit.js'
 import {PacMan}  from '../actor.js'
+import {Ghosts}  from '../ghosts/_system.js'
 import {Ghost}   from '../ghosts/ghost.js'
 import * as Snag from '../sprites/snag.js'
 
@@ -34,10 +35,11 @@ export class Cutscene {
 	}
 	movePac() {
 		this.pacman.x += this.pacvx
-		this.pacman.sprite.update()
+		this.pacman.update()
 	}
 	moveAka(rate=1) {
 		this.akabei.x += this.akavx * rate
+		Ghosts.updateAnimation()
 	}
 	drawPac(radius=this.pacman.sprite.r) {
 		const {pacman:{center,orient}}= this

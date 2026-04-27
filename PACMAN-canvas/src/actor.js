@@ -1,7 +1,6 @@
 import {Dir}    from '../_lib/direction.js'
 import {Maze}   from './maze.js'
 import  PacSpr  from './sprites/pacman.js'
-import {player} from './player/player.js'
 import {Ghosts} from './ghosts/_system.js'
 
 export class Actor {
@@ -93,8 +92,9 @@ export class Actor {
 }
 
 export const Actors = {
-	update() {
-		player.update()
+	/** @param {PacMan} pacman */
+	update(pacman) {
+		pacman.update()
 		Ghosts.update()
 	},
 	/** @param {PacMan} pacman */
@@ -113,6 +113,9 @@ export class PacMan extends Actor {
 	}
 	get hidden() {
 		return Timer.frozen
+	}
+	update() {
+		this.sprite.update(this)
 	}
 	draw() {
 		this.sprite.draw(this)

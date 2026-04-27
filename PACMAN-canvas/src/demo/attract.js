@@ -104,7 +104,7 @@ class EnergizerAct {
 	}
 	#move() {
 		if (Timer.frozen) return
-		this.#pacman.sprite.update()
+		Actors.update(this.#pacman)
 		this.#pacman.x += this.#pacvx
 		this.#ghosts.forEach(g=> {
 			g.x += this.#ghsvx

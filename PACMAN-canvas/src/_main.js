@@ -16,7 +16,7 @@ import {PtsMgr}  from './points.js'
 import {Actors}  from './actor.js'
 import {player}  from './player/player.js'
 
-export const Game = new class GameCore {
+export const Game  = new class GameCore {
 	static {$(this.setup)}
 	static setup() {
 		Ticker.set(Game.#update, Game.#draw)
@@ -111,10 +111,9 @@ export const Game = new class GameCore {
 	}
 	#update() {
 		PtsMgr.update()
-		Fruit.update()
-		Maze.PowDots.update()
-		Demo.update()
-		Actors.update()
+		State.isDemoMode
+			? Demo.update()
+			: Game.#updateMain()
 	}
 	#draw() {
 		Fg.clear()
@@ -122,6 +121,11 @@ export const Game = new class GameCore {
 			? Demo.draw()
 			: Game.#drawMain()
 		Message.draw()
+	}
+	#updateMain() {
+		Fruit.update()
+		Maze.PowDots.update()
+		Actors.update(player)
 	}
 	#drawMain() {
 		Score.draw()
