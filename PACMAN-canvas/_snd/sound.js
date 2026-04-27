@@ -26,7 +26,7 @@ class SoundCore extends SoundMgr {
 		super.vol = clamp(+vol, 0, 10)
 	}
 	playSiren() {
-		if (Ghosts.frightened
+		if (Ghosts.isFrightened
 		 || Ghosts.isAnyEscaping) return
 		Sound.stopLoops().play(Sound.sirenId)
 	}
@@ -44,7 +44,7 @@ class SoundCore extends SoundMgr {
 	onGhostReturned() {
 		if (Ghosts.isAnyEscaping) return
 		Sound.stopEyesEscaping()
-		Ghosts.frightened
+		Ghosts.isFrightened
 			? Sound.playFrightMode()
 			: Sound.play(Sound.sirenId)
 	}
