@@ -39,8 +39,8 @@ export class Mover {
 	}
 	#setSpeed() {
 		const spd = Maze.hasDot(this.actor.tileIdx)
-			? (Ghosts.frightened? Spd.EneEating : Spd.Eating)
-			: (Ghosts.frightened? Spd.Energized : Spd.Base)
+			? (Ghosts.isFrightened? Spd.EneEating : Spd.Eating)
+			: (Ghosts.isFrightened? Spd.Energized : Spd.Base)
 		return(this.#spd = Game.moveSpeed * Spd.levelFactor * spd)
 	}
 	/** @param {number} spd */
