@@ -79,9 +79,9 @@ export const Ghosts = new class GhostManager {
 	get CruiseElroy()   {return CruiseElroy}
 	get ptsType()       {return PointType.Ghost}
 	get ptsValue()      {return Fright.ptsValue}
-	get frightened()    {return Fright.session != null}
 	get spriteIdx()     {return Fright.session?.spriteIdx ?? 0}
 	get caughtAll()     {return Fright.session?.caughtAll ?? false}
+	get isFrightened()  {return Fright.session != null}
 	get isAnyEscaping() {return GhostList.some(g=> g.isEscaping)}
 	get isChasing()     {return PhaseManager.isChaseMode}
 	get isScattering()  {return PhaseManager.isScatterMode}
@@ -169,7 +169,7 @@ const PhaseManager = function() {
 		update = (mode == CHASING)
 			? null
 			: ()=> {
-				if (Timer.frozen || Ghosts.frightened) return
+				if (Timer.frozen || Ghosts.isFrightened)  return
 				if (++tCnt*Game.interval < list[idx].dur) return
 				signalDirectionReversal()
 				++idx,(!list[idx].dur && ++idx)
