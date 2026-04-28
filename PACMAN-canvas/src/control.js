@@ -26,14 +26,14 @@ export const Ctrl = new class Controller {
 	get endlessMode()   {return inputs.onlChk.checked == false}
 	get alwaysChase()   {return inputs.chsChk.checked}
 	get unrestricted()  {return inputs.unrChk.checked}
-	get invincible()    {return inputs.invChk.checked}
+	get invulnerable()  {return inputs.invChk.checked}
 	get showTargets()   {return inputs.tgtChk.checked}
 	get showPaths()     {return inputs.pthChk.checked}
 	get showGridLines() {return inputs.grdChk.checked}
-	get showTracking()  {return Ctrl.showTargets || Ctrl.showPaths}
-	get semiTransPac()  {return Ctrl.invincible  || Ctrl.showGridLines}
-	get usingCheats()   {return Ctrl.invincible  || Ctrl.speed<.7 || Ctrl.showTracking}
-	get isPractice()    {return Ctrl.usingCheats ||!Ctrl.isArcadeMode}
+	get showTracking()  {return Ctrl.showTargets  || Ctrl.showPaths}
+	get semiTransPac()  {return Ctrl.invulnerable || Ctrl.showGridLines}
+	get usingCheats()   {return Ctrl.invulnerable || Ctrl.speed<.7 || Ctrl.showTracking}
+	get isPractice()    {return Ctrl.usingCheats  ||!Ctrl.isArcadeMode}
 	get isArcadeMode()  {return Ctrl.endlessMode && Menu.Level.index == 0}
 
 	/** @param {boolean} [force] */
@@ -72,9 +72,9 @@ export const Ctrl = new class Controller {
 		HUD.save()
 		HUD.translate(T*0.1, T*17.25)
 		HUD.clearRect(0, 0, BW, T*3)
-		if (spd != 'x1.0' || Ctrl.invincible || Ctrl.showTargets) {
+		if (spd != 'x1.0' || Ctrl.invulnerable || Ctrl.showTargets) {
 			drawText(0, lh*0, palette[+(spd != 'x1.0') ], 'Speed'+spd, opt)
-			drawText(0, lh*1, palette[+Ctrl.invincible ], 'Invincible',opt)
+			drawText(0, lh*1, palette[+Ctrl.invulnerable],'Invincible',opt)
 			drawText(0, lh*2, palette[+Ctrl.showTargets], 'Show Tgts', opt)
 		}
 		if (Ctrl.showPaths || Ctrl.unrestricted) {
