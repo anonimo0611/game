@@ -251,7 +251,17 @@ class Vec2 {
 		return this
 	}
 
-	/** @param {Readonly<Position>} pos */
+	/** @param {Position} pos */
+	dot(pos) {
+		return this.x * pos.x + this.y * pos.y
+	}
+
+	/** @param {Position} pos */
+	cross(pos) {
+		return this.x * pos.y - this.y * pos.x
+	}
+
+	/** @param {Position} pos */
 	distance(pos) {
 		return Vec2.sub(this,pos).magnitude
 	}
