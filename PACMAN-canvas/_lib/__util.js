@@ -1,12 +1,18 @@
 'use strict'
-const {fromEntries,defineProperty,entries,freeze,hasOwn,keys,values}= Object
+const {fromEntries,defineProperty,entries,freeze,hasOwn}= Object
 const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 
 /**
  @template {object} T
  @param {T} object
-*/const typedKeys = object=>
-	/**@type {(keyof T)[]}*/(keys(object))
+*/const keys = object=>
+	/**@type {(keyof T)[]}*/(Object.keys(object))
+/**
+ @template {string} K
+ @template V
+ @param {Record<K,V>} object
+ @returns {V[]}
+*/const values = object=> Object.values(object)
 
 /**
  @template {string} T
