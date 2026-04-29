@@ -39,7 +39,7 @@ const SoundCtrl = {
 	},
 	mute() {
 		lstVol = Sound.vol || (lstVol || +volRng.max >> 1)
-		$volRngs.prop({value:(Sound.vol ? 0 : lstVol)})
+		$volRngs.val(Sound.vol ? 0 : lstVol)
 		$(volRng).trigger('input')
 	}
 }
