@@ -5,6 +5,9 @@ DotPts   = 10,
 PowPts   = 50,
 TileSize = int(screen.height/Rows),
 
+/** Scale Factor */
+SF = TileSize/(1080/Rows),
+
 /** Shorthand of TileSize */
 T = TileSize,
 

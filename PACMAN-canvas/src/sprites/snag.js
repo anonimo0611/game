@@ -15,7 +15,7 @@ export class SnagSprite {
 	drawSnaggedStake({x=StakeX,y=0,isRipped=false,scale=1}={}) {
 		const {ctx}= this, [sw,sh]= StakeSize.vals
 		/** Adjust for the gap between the sprite bottom and the ground */
-		const offsetY = -T*0.1
+		const offsetY = -T*0.1/SF
 		ctx.save()
 		ctx.translate(x, y+offsetY)
 		ctx.scale(scale)

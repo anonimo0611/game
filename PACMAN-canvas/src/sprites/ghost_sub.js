@@ -43,7 +43,7 @@ export default class GhostSubSprite {
 	drawHadake(animIdx=0) {
 		const {ctx}= this
 		ctx.save()
-		ctx.translate(T/2)
+		ctx.translate(T/(2*SF))
 		animIdx == 0
 			? this.#drawHadake0()
 			: this.#drawHadake1()

@@ -1,5 +1,4 @@
 const HT = T/2
-const SF = screen.height/1080
 const LW = max(1, 3*SF|0) // Line  Width
 const LO = max(2, 4*SF|0) // Line  Offset
 const OO = max(1, 2*SF|0) // Outer Offset
