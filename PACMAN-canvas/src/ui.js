@@ -43,10 +43,10 @@ export const WinState = function() {
 //---- Fit to viewport ----
 
 $win.on('resize', ()=> {
-	const scale = min(
+	Form.style.scale = min(
 		innerWidth /Form.offsetWidth*.98,
-		innerHeight/Form.offsetHeight)
-	Form.style.scale = min(1, scale).toFixed(2)
+		innerHeight/Form.offsetHeight
+	).toFixed(2)
 })
 .trigger('resize')
 
@@ -58,7 +58,7 @@ $('.panelBtn').on('keydown pointerdown', e=> {
 	const tgtSel = button.dataset.target ?? ''
 	const opened = button.classList.contains('opened')
 	e.stopPropagation()
-	$('.panel-ui').removeClass('opened')
+	$('.panel-ui.opened').toggleClass('opened')
 	$(button).add(tgtSel).toggleClass('opened',!opened)
 })
 $('body').on('keydown pointerdown', e=> {
