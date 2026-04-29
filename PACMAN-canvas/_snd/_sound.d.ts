@@ -10,4 +10,6 @@ namespace Sound {
 			readonly audioSprite: ReadonlyArray<Data<S>>
 		}
 	}>
+	type PlayOpts<S> = {[K in S]:Readonly<Sound.Data<S>>}
+	type Instance<S> = {[K in S]:createjs.AbstractSoundInstance}
 }
