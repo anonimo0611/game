@@ -1,12 +1,14 @@
+
 const
-Cols     = 28,
-Rows     = 34,
-DotPts   = 10,
-PowPts   = 50,
-TileSize = int(screen.height/Rows),
+Cols      = 28,
+Rows      = 34,
+DotPts    = 10,
+PowPts    = 50,
+ScrHeight = screen.height,
+TileSize  = int(ScrHeight/Rows),
 
 /** Scale Factor */
-SF = TileSize/(1080/Rows),
+SF = ScrHeight/1080,
 
 /** Shorthand of TileSize */
 T = TileSize,

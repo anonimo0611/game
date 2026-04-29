@@ -15,14 +15,16 @@ export class SnagSprite {
 	drawSnaggedStake({x=StakeX,y=0,isRipped=false,scale=1}={}) {
 		const {ctx}= this, [sw,sh]= StakeSize.vals
 		/** Adjust for the gap between the sprite bottom and the ground */
-		const offsetY = -T*0.1/SF
+		const offsetY = -T*0.1
 		ctx.save()
-		ctx.translate(x, y+offsetY)
+		ctx.translate(x, y)
 		ctx.scale(scale)
+		ctx.translate(0, offsetY)
 		ctx.fillRect(0,-sh, sw,sh, 'white') // Stake
 		if (isRipped) { // Scraps of cloth
+			const s = sw*0.8
 			ctx.translate(sw, 0)
-			ctx.fillPolygon(AkaColor, [0,-4],[0,-sh],[-T,0],[-4,0],[-4,-4])
+			ctx.fillPolygon(AkaColor, [0,-s],[0,-sh],[-T,0],[-s,0],[-s,-s])
 		}
 		ctx.restore()
 	}
