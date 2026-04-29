@@ -4,8 +4,8 @@ const {Sound:SoundJS}= createjs
 export class SoundMgr {
 	#settled  = false
 	#disabled = true
-	#playOpts = /**@type {{[K in S]:Readonly<Sound.Data<S>>}}*/({})
-	#instance = /**@type {{[K in S]:createjs.AbstractSoundInstance}}*/({})
+	#playOpts = /**@type {Sound.PlayOpts<S>}*/({})
+	#instance = /**@type {Sound.Instance<S>}*/({})
 	/**
 	 @param {Sound.Manifest<S>} m
 	 @param {Sound.onSettled} [onSettled]
@@ -18,7 +18,7 @@ export class SoundMgr {
 			SoundJS.on('fileerror', reject)
 			SoundJS.on('fileload', ()=> {
 				if (++amount < m.length) return
-				typedKeys(this.#playOpts).forEach(id=> {
+				keys(this.#playOpts).forEach(id=> {
 					const
 					self = /**@type {any}*/(this)
 					self[`play${id}`]  = (opts={})=> this.play(id,opts)
