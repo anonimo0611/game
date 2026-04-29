@@ -22,7 +22,7 @@ dialog{
 }
 form,dialog{--color-label:#6FD;--color-label-hover:#FBE;--color-border:#888;--color-focus-border:#09C;--color-active-border:#3CF;--bgcolor:#333B;--bgcolor-hilight:#369B}
 button,input,[type=dropdown]>output,[type=slidemenu]{color:#EEE;font-size:.9em;border:solid .1em var(--color-border);border-radius:.2em;outline:0}
-button,[type=dropdown]>output,.button[data-disabled=false]{
+button,[type=dropdown]>output,cm-btn[data-disabled=false]{
 	background:var(--bgcolor);display:inline-block;padding:.4em .4em .3em;
 	&:hover,&:focus,
 	&.opened{border-color:var(--color-focus-border)}
@@ -36,12 +36,15 @@ button,[type=dropdown]>output,.button[data-disabled=false]{
 }
 [type=checkbox]{
 	--active:#C6F;appearance:none;box-sizing:border-box;border:solid .1em transparent;border-radius:.1em;width:.8em;height:.8em;position:relative;
-	&:focus {outline-offset:.1em;outline:solid .15em var(--active)}
-	&:not(:checked){border-color:var(--color-border);&:hover {border-color:#BBB}}
+	&:focus{outline-offset:.1em;outline:solid .15em var(--active)}
+	&:not(:checked){
+		border-color:var(--color-border);
+		&:hover{border-color:#BBB}
+	}
 	&:checked{
-		background:#9CF;
+	   display:grid;place-items:center;background:#9CF;
 		&:hover,&:focus{background:var(--active)}
-		&::before{content:'';border:solid #000;border-width:0 0 .1em .1em;width:calc(.55em);height:calc(.40em);box-sizing:border-box;position:absolute;translate:.05em 0;rotate:-45deg}
+		&::before{content:'';border:solid #000;border-width:0 0 .1em .1em;width:calc(.55em);height:calc(.40em);box-sizing:border-box;translate:0 -0.1em;rotate:-45deg}
 	}
 }
 [type=range]{
@@ -57,9 +60,10 @@ button,[type=dropdown]>output,.button[data-disabled=false]{
 custom-menu{white-space:nowrap;color:#FFF;position:relative;display:inline-block;cursor:default}
 [type=dropdown]{
 	--caret-size:1.1em;
+	position:relative;
 	output{padding:.1em .2em;box-sizing:border-box}
 	output,cm-list{font-size:1rem}
-	output::after{--size:calc(var(--caret-size)/3);content:'';border:solid;border-width:0 0 .15em .15em;position:absolute;width:var(--size);height:var(--size);right:var(--size);top:calc(50% - var(--size)/3);right:calc(.3em);translate:0 -50%;rotate:-45deg;transition:rotate .1s}
+	output::after{--size:calc(var(--caret-size)/3);content:'';border:solid;border-width:0 0 .15em .15em;position:absolute;width:var(--size);height:var(--size);right:var(--size);top:calc(50% - var(--size)/3);translate:0 -50%;rotate:-45deg;transition:rotate .1s}
 	cm-list{line-height:1;padding-top:.05rem;padding-bottom:.05rem;box-sizing:border-box;display:block;position:absolute;z-index:100}
 	cm-item{
 		background:var(--bgcolor);border:solid transparent;border-width:.1em 0;padding:.1em calc(var(--caret-size)) .1em .3em;display:block;
@@ -76,9 +80,9 @@ custom-menu{white-space:nowrap;color:#FFF;position:relative;display:inline-block
 	&:focus{outline-offset:.15em;outline:solid .15em var(--color-focus-border)}
 	cm-list,cm-item{text-align:center;transition:transform .3s;will-change:transform;z-index:1}
 	cm-list{display:inline-flex}
-	.button{
+	cm-btn{
 		background:transparent!important;border:solid;border-width:0 0 .2em .2em;padding:0;width:.5em;height:.5em;display:inline-block;position:absolute;z-index:2;top:50%;&.l{left:.05em;translate:0 -50%;rotate:+45deg}
-		&.r {right:.05em;translate:0 -50%;rotate:-45deg;scale:-1 1}
+		&.r{right:.05em;translate:0 -50%;rotate:-45deg;scale:-1 1}
 		&[data-disabled=true]{opacity:.4}
 		transform-origin:center;
 	}

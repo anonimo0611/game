@@ -1,6 +1,6 @@
 html,body{margin:0;padding:0;width:100%;height:100vh;overflow:hidden}
 html{--tile-size:31px;--grid-cols:28;--grid-rows:34;--t:var(--tile-size);font-size:var(--t)}
-body{color:#4c76d1;color:#FFF;background:#1B1B1C;font:1rem/1 Verdana, sans-serif;display:grid;place-content:center;color-scheme:dark}
+body{color:#4c76d1;color:#FFF;background:#1B1B1C;font:1rem/1 Verdana,sans-serif;display:grid;place-content:center;color-scheme:dark}
 div,ul,menu,li,th,td,form,input,output{margin:0;padding:0;list-style-type:none}
 svg{fill:#FFF;pointer-events:none}
 header>*{color:#FF0;position:absolute;z-index:100}
@@ -24,7 +24,7 @@ html.controller-settled .panel:not(.opened){display:none}
 	#startBtn {text-align:center;white-space:nowrap;font:calc(var(--t)*.8)/1 Atari, sans-serif;padding:.4em 1.5em .2em;position:absolute;top:calc(var(--t)*21.75);left:50%;translate:-50% 0}
 }
 body:not([data-state=Title]) #titleScr{visibility:hidden}
-body:is([data-state=Attract],[data-state=Cutscene]){:is(header,canvas:not(#board_main,#board_grid)) {visibility:hidden}}
+body:is([data-state=Attract],[data-state=Cutscene]){:is(header,canvas:not(#board_main,#board_grid)){visibility:hidden}}
 #debug{white-space:pre;position:fixed;top:.5em;left:.5em}
 .panel{
 	top:var(--height);right:0;table{border-collapse:collapse}
@@ -35,10 +35,13 @@ body:is([data-state=Attract],[data-state=Cutscene]){:is(header,canvas:not(#board
 	th,td{text-align:center;vertical-align:middle;font-weight:normal;padding:.2em}
 }
 #cfg{
-	height:var(--height);display:flex;gap:.4em;justify-content:center;align-items:center;.checkboxes,
-	.buttons {
+	height:var(--height);display:flex;gap:.4em;justify-content:center;align-items:center;
+	.checkboxes,.buttons {
 		height:100%;display:flex;gap:.15em;flex-direction:column;justify-content:center;
-		label {font-size:.75rem;display:flex;gap:.3em;align-content:center;input {font-size:inherit}}
+		label {
+			font-size:.75rem;display:flex;gap:.3em;align-content:center;
+			input{font-size:inherit}
+		}
 		[data-for=keys]{cursor:help}
 		label:has(#chsChk) chk-label{display:inline-block;font-size:94%}
 	}
@@ -50,7 +53,7 @@ body:is([data-state=Attract],[data-state=Cutscene]){:is(header,canvas:not(#board
 	> li {padding:.15em 0!important;position:relative;display:flex;align-items:center}
 	> li.noLeft::before,
 	> li:not(.noLeft)>:first-child{
-		content:'';text-align:center;width:1.5rem;
+		content:'';width:1.5rem;display:grid;place-content:center;
 		+ * {flex:1}
 	}
 	> li.buttons{
@@ -65,9 +68,9 @@ body:is([data-state=Attract],[data-state=Cutscene]){:is(header,canvas:not(#board
 }
 #LevelMenu{
 	--scale:1.2;--t:calc(1rem * var(--scale));--width:calc(var(--t)*8);text-transform:uppercase;margin-left:0;
-	output,cm-item {font:.8rem/1 sans-serif;display:flex;gap:.2em;align-items:center}
-	output {padding-top:.1rem;padding-bottom:.0rem}
-	cm-item {line-height:1;padding-top:0;padding-bottom:0}
+	output,cm-item{font:.8rem/1 sans-serif;display:flex;gap:.2em;align-items:center}
+	output{padding-top:.1rem;padding-bottom:.0rem}
+	cm-item{line-height:1;padding-top:0;padding-bottom:0}
 	output::before,cm-item::before{--x:calc(-1*var(--t)*var(--val,0));--size:var(--width) var(--t);content:'';background:no-repeat var(--x) 0/var(--size) var(--url);width:var(--t);height:var(--t);translate:0}
 }
 #ExtendMenu{text-align:right;font-size:.9em;scale:.9}
