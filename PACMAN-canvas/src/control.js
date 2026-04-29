@@ -44,7 +44,7 @@ export const Ctrl = new class Controller {
 	}
 	#save() {
 		const data = Object.create(null)
-		typedKeys(Menu).forEach(id=> data[id] = Menu[id].index)
+		keys(Menu).forEach(id=> data[id] = Menu[id].index)
 		document.querySelectorAll('input').forEach(input=> {
 			switch(input.type) {
 			case 'range':   data[input.id] = input.value;  break
@@ -56,7 +56,7 @@ export const Ctrl = new class Controller {
 	#restore() {
 		if (!localStorage[SETTINGS_KEY]) return
 		const data = JSON.parse(localStorage[SETTINGS_KEY])
-		typedKeys(Menu).forEach(id=> Menu[id].index = data[id])
+		keys(Menu).forEach(id=> Menu[id].index = data[id])
 		document.querySelectorAll('input').forEach(input=> {
 			switch(input.type) {
 			case 'range':   input.value   = data[input.id];break
