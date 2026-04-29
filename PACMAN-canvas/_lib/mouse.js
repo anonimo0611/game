@@ -34,6 +34,7 @@ function setupCtrl(ctrl) {
 
 	$(label || ctrl).onWheel(e=> {
 		e.preventDefault()
+		if (e.ctrlKey) return
 		0 < e.deltaY
 			? ctrl.stepDown()
 			: ctrl.stepUp()
@@ -42,7 +43,7 @@ function setupCtrl(ctrl) {
 	$(ctrl).on('input', ()=> {
 		const {value,min,max}= ctrl
 		$(target)
-			.prop({value})
+			.val(value)
 			.css('--ratio',`${norm(+min,+max,+value)*100}%`)
 	})
 	.trigger('input')
