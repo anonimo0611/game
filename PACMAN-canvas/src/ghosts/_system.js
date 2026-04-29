@@ -41,7 +41,7 @@ const StandbyDelays = /**@type {const}*/
 export const [StateType,createState] = function() {
 	/**
 	 @typedef {typeof States[number]} StateType
-	 @typedef {State & StateDef.Props<StateType>} IGhostState
+	 @typedef {StateDef.Fluent<State,StateType>} IGhostState
 	 @extends {_State<StateType,Ghost>}
 	*/
 	class State extends _State {

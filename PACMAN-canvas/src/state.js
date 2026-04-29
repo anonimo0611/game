@@ -11,7 +11,7 @@ export const States = /**@type {const}*/([
 
 /**
  @extends {_State<StateType,globalThis>}
- @typedef {GameState & StateDef.Props<StateType>} IGameState
+ @typedef {StateDef.Fluent<GameState,StateType>} IGameState
 */
 class GameState extends _State {
 	constructor() {super(globalThis, States)}
