@@ -129,8 +129,8 @@ export class Slide extends Menu {
 		super(id,'slidemenu')
 		const {root}= this, wrap=(this.$label.get(0) ?? root)
 		this.#BtnSet= freeze({
-			[R]:$('<cm-btn class="button r">').prependTo(root)[0],
-			[L]:$('<cm-btn class="button l">').prependTo(root)[0],
+			[R]:$('<cm-btn class=r>').prependTo(root)[0],
+			[L]:$('<cm-btn class=l>').prependTo(root)[0],
 		})
 		$(this.#BtnSet[L]).on('click',()=> {this.#select(L)})
 		$(this.#BtnSet[R]).on('click',()=> {this.#select(R)})
