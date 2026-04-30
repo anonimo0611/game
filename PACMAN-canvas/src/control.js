@@ -31,8 +31,8 @@ export const Ctrl = new class Controller {
 	get showPaths()     {return inputs.pthChk.checked}
 	get showGridLines() {return inputs.grdChk.checked}
 	get showTracking()  {return Ctrl.showTargets  || Ctrl.showPaths}
-	get semiTransPac()  {return Ctrl.invincible || Ctrl.showGridLines}
-	get usingCheats()   {return Ctrl.invincible || Ctrl.speed<.7 || Ctrl.showTracking}
+	get semiTransPac()  {return Ctrl.invincible   || Ctrl.showGridLines}
+	get usingCheats()   {return Ctrl.invincible   || Ctrl.speed<.7 || Ctrl.showTracking}
 	get isPractice()    {return Ctrl.usingCheats  ||!Ctrl.isArcadeMode}
 	get isArcadeMode()  {return Ctrl.endlessMode && Menu.Level.index == 0}
 
