@@ -86,9 +86,11 @@ export const Ghosts = new class GhostManager {
 	get isChasing()     {return PhaseManager.isChaseMode}
 	get isScattering()  {return PhaseManager.isScatterMode}
 
-	initialize(/**@type {readonly Ghost[]}*/ghosts) {
+	/** @param {Ghost[]} [ghosts] */
+	initialize(ghosts) {
 		this.#animIdx = 0
-		ghosts.forEach((g,i)=> GhostList[i] = g)
+		GhostList.length = 0
+		ghosts?.forEach((g,i)=> GhostList[i] = g)
 	}
 	#trigger() {
 		$(GhostList).trigger(State.current)
@@ -114,9 +116,9 @@ export const Ghosts = new class GhostManager {
 		PhaseManager.update()
 		Fright.session?.update()
 		this.#updateGhosts()
-		this.updateAnimation()
+		this.#updateAnimation()
 	}
-	updateAnimation() {
+	#updateAnimation() {
 		if (Timer.frozen)
 			return
 		if (State.isInGame

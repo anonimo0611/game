@@ -112,7 +112,8 @@ export const Game  = new class GameCore {
 	#update() {
 		PtsMgr.update()
 		Demo.update()
-		Game.#updateMain()
+		!State.isDemoMode
+			&& Game.#updateMain()
 	}
 	#draw() {
 		Fg.clear()

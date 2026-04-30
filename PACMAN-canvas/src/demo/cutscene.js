@@ -31,6 +31,7 @@ export class Cutscene {
 	/** @protected @param {number} num */
 	constructor(num) {
 		this.pacman.y = this.akabei.y = ACTORS_Y - T/2
+		Ghosts.initialize()
 		Sound.playCutscene({loop:(num == 2) ? 0:1})
 	}
 	updatePac() {
@@ -39,7 +40,7 @@ export class Cutscene {
 	}
 	updateAka(rate=1) {
 		this.akabei.x += this.akavx * rate
-		Ghosts.updateAnimation()
+		Ghosts.update()
 	}
 	drawPac(radius=this.pacman.sprite.r) {
 		const {pacman:{center,orient}}= this
