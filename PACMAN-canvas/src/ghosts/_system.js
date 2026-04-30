@@ -115,8 +115,8 @@ export const Ghosts = new class GhostManager {
 	update() {
 		PhaseManager.update()
 		Fright.session?.update()
-		this.#updateGhosts()
 		this.#updateAnimation()
+		this.#updateGhosts()
 	}
 	#updateAnimation() {
 		if (Timer.frozen)
