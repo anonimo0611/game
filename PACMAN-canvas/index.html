@@ -1,37 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>PAC-MAN</title>
-	<link rel="icon" href="data:,">
-	<link rel="preload" as="style" type="text/css"   href="styles/ui.css">
-	<link rel="preload" as="style" type="text/css"   href="styles/_main.css">
-	<link rel="preload" as="font"  type="font/woff2" href="res/Atari.woff2" crossorigin>
-	<link rel="preload" as="font"  type="font/woff2" href="res/PacfontGood.woff2" crossorigin>
-	<link rel="stylesheet" href="styles/ui.css">
-	<link rel="stylesheet" href="styles/_main.css">
-	<style>
-	@font-face {src:url(res/Atari.woff2)       format('woff2');font-family:Atari;  font-display:swap}
-	@font-face {src:url(res/PacfontGood.woff2) format('woff2');font-family:PacFont;font-display:swap}
-	</style>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/SoundJS/1.0.2/soundjs.min.js"></script>
-	<script src="_lib/__util.js"></script>
-	<script src="_lib/_timer.js"></script>
-	<script src="_lib/_canvas.js"></script>
-	<script src="_lib/_vec2.js"></script>
-	<script src="src/_constants.js" defer></script>
-	<script src="src/_main.js" type="module"></script>
+<meta charset="UTF-8">
+<title>PAC-MAN</title>
+<link rel="icon" href="data:,">
+<link rel="preload" as="style" type="text/css"   href="styles/ui.css">
+<link rel="preload" as="style" type="text/css"   href="styles/_main.css">
+<link rel="preload" as="font"  type="font/woff2" href="res/Atari.woff2" crossorigin>
+<link rel="preload" as="font"  type="font/woff2" href="res/PacfontGood.woff2" crossorigin>
+<link rel="stylesheet" href="styles/ui.css">
+<link rel="stylesheet" href="styles/_main.css">
+<style>
+@font-face {src:url(res/Atari.woff2)       format('woff2');font-family:Atari;  font-display:swap}
+@font-face {src:url(res/PacfontGood.woff2) format('woff2');font-family:PacFont;font-display:swap}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/SoundJS/1.0.2/soundjs.min.js"></script>
+<script src="_lib/__util.js"></script>
+<script src="_lib/_timer.js"></script>
+<script src="_lib/_canvas.js"></script>
+<script src="_lib/_vec2.js"></script>
+<script src="src/_constants.js" defer></script>
+<script src="src/_main.js" type="module"></script>
 </head>
 
 <body>
 
 <form id="container" onsubmit="return false">
 	<header>
-		<h1 aria-label="PAC-MAN">
-			<h-line>PAC</h-line>
-			<h-line>MAN</h-line>
-		</h1>
+		<h1 aria-label="PAC-MAN"><h-line>PAC</h-line><h-line>MAN</h-line></h1>
 		<div id="level">Level<output id="level-num">01</output></div>
 	</header>
 	<div id="board">
@@ -43,140 +40,80 @@
 	<div id="volume" class="volCtrl">
 		<label for="volRg2" title="Mute/Unmute (M)">
 			<canvas id="speaker"></canvas>
-			<input type="range" id="volRg2" class="volRng"
-				value="5" step="1" min="0" max="10" data-links="volRng">
+			<input type="range" id="volRg2" class="volRng" value="5" step="1" min="0" max="10" data-links="volRng">
 		</label>
 	</div>
 	<div id="titleScr">
 		<div id="cfg">
 			<label>Level
 				<custom-menu id="LevelMenu">
-					<cm-list>
-					<cm-item val="0">01 Beginner</cm-item>
-					<cm-item val="1">02</cm-item>
-					<cm-item val="2">03 Very Easy</cm-item>
-					<cm-item val="2">04</cm-item>
-					<cm-item val="3">05 Easy</cm-item>
-					<cm-item val="3">06</cm-item>
-					<cm-item val="4">07 Normal</cm-item>
-					<cm-item val="4">08</cm-item>
-					<cm-item val="5">09 Hard</cm-item>
-					<cm-item val="5">10</cm-item>
-					<cm-item val="6">11 Very Hard</cm-item>
-					<cm-item val="6">12</cm-item>
-					<cm-item val="7">13 Expert</cm-item>
-					</cm-list>
+				<cm-list>
+				<cm-item val="0">01 Beginner</cm-item>
+				<cm-item val="1">02</cm-item>
+				<cm-item val="2">03 Very Easy</cm-item>
+				<cm-item val="2">04</cm-item>
+				<cm-item val="3">05 Easy</cm-item>
+				<cm-item val="3">06</cm-item>
+				<cm-item val="4">07 Normal</cm-item>
+				<cm-item val="4">08</cm-item>
+				<cm-item val="5">09 Hard</cm-item>
+				<cm-item val="5">10</cm-item>
+				<cm-item val="6">11 Very Hard</cm-item>
+				<cm-item val="6">12</cm-item>
+				<cm-item val="7">13 Expert</cm-item>
+				</cm-list>
 				</custom-menu>
 			</label>
 			<div class="checkboxes">
-				<label>
-					<chk-wrapper><input type="checkbox" id="powChk" checked></chk-wrapper>
-					<chk-label>Power Cookies</chk-label>
-				</label>
-				<label>
-					<chk-wrapper><input type="checkbox" id="onlChk"></chk-wrapper>
-					<chk-label>Current level Only</chk-label>
-				</label>
-				<label>
-					<chk-wrapper><input type="checkbox" id="chsChk"></chk-wrapper>
-					<chk-label>Always Chase mode</chk-label>
-				</label>
+				<label><chk-wrapper><input type="checkbox" id="powChk" checked></chk-wrapper><chk-label>Power Cookies</chk-label></label>
+				<label><chk-wrapper><input type="checkbox" id="onlChk"></chk-wrapper><chk-label>Current level Only</chk-label></label>
+				<label><chk-wrapper><input type="checkbox" id="chsChk"></chk-wrapper><chk-label>Always Chase mode</chk-label></label>
 			</div>
 			<div class="buttons">
 				<button id="clearBtn">Clear Score</button>
 				<button class="panelBtn panel-ui" data-target="#helpPanel">How to Play</button>
 			</div>
 			<button id="cfgBtn" class="panelBtn panel-ui" data-target="#cfgPanel" title="More configuration">
-				<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round">
-					<path d="M6 8h20M6 16h20M6 24h20"/>
-				</svg>
+				<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><path d="M6 8h20M6 16h20M6 24h20"/></svg>
 			</button>
 		</div>
 		<ul id="cfgPanel" class="panel panel-ui" data-caption="Configuration">
-			<li class="volCtrl">
-				<output for="volRng volRg2">10</output>
-				<label>Volume:<input type="range" id="volRng" class="volRng"
-					value="5" step="1" min="0" max="10" data-links="volRg2"></label>
-			</li>
-			<li>
-				<output for="spdRng">1</output>
-				<label>Speed:<input type="range" id="spdRng"
-					value="1" step="0.1" min="0.5" max="1.2"></label>
-			</li>
-			<li>
-				<output for="lvsRng">3</output>
-				<label>PacLives:<input type="range" id="lvsRng"
-					value="3" step="1" min="1" max="5"></label>
-			</li>
+			<li class="volCtrl"><output for="volRng volRg2">10</output><label>Volume:<input type="range" id="volRng" class="volRng" value="5" step="1" min="0" max="10" data-links="volRg2"></label></li>
+			<li><output for="spdRng">1</output><label>Speed:<input type="range" id="spdRng" value="1" step="0.1" min="0.5" max="1.2"></label></li>
+			<li><output for="lvsRng">3</output><label>PacLives:<input type="range" id="lvsRng" value="3" step="1" min="1" max="5"></label></li>
 			<li class="noLeft">
-				<label>Extend:
-					<custom-menu id="ExtendMenu">
-						<cm-list>
-						<cm-item val="-1">Never</cm-item>
-						<cm-item val="10000" class="selected">10,000<small>PTS</small></cm-item>
-						<cm-item val="15000">15,000<small>PTS</small></cm-item>
-						<cm-item val="20000">20,000<small>PTS</small></cm-item>
-						</cm-list>
-					</custom-menu>
-				</label>
+			<label>Extend:
+				<custom-menu id="ExtendMenu">
+				<cm-list>
+				<cm-item val="-1">Never</cm-item>
+				<cm-item val="10000" class="selected">10,000<small>PTS</small></cm-item>
+				<cm-item val="15000">15,000<small>PTS</small></cm-item>
+				<cm-item val="20000">20,000<small>PTS</small></cm-item>
+				</cm-list>
+				</custom-menu>
+			</label>
 			</li>
-			<li>
-				<chk-wrapper><input type="checkbox" id="invChk"></chk-wrapper>
-				<label for="invChk">invincible</label>
-			</li>
-			<li>
-				<chk-wrapper><input type="checkbox" id="unrChk"></chk-wrapper>
-				<label for="unrChk">Ghosts Unrestricted</label>
-			</li>
-			<li>
-				<chk-wrapper><input type="checkbox" id="tgtChk"></chk-wrapper>
-				<label for="tgtChk">Show targets</label>
-			</li>
-			<li>
-				<chk-wrapper><input type="checkbox" id="pthChk"></chk-wrapper>
-				<label for="pthChk">Show paths</label>
-			</li>
-			<li>
-				<chk-wrapper><input type="checkbox" id="grdChk"></chk-wrapper>
-				<label for="grdChk">Show tile grid</label>
-			</li>
+			<li><chk-wrapper><input type="checkbox" id="invChk"></chk-wrapper><label for="invChk">invincible</label></li>
+			<li><chk-wrapper><input type="checkbox" id="unrChk"></chk-wrapper><label for="unrChk">Ghosts Unrestricted</label></li>
+			<li><chk-wrapper><input type="checkbox" id="tgtChk"></chk-wrapper><label for="tgtChk">Show targets</label></li>
+			<li><chk-wrapper><input type="checkbox" id="pthChk"></chk-wrapper><label for="pthChk">Show paths</label></li>
+			<li><chk-wrapper><input type="checkbox" id="grdChk"></chk-wrapper><label for="grdChk">Show tile grid</label></li>
 			<li class="buttons noLeft">
-				<button class="demo" id="demoBtn">Attract Demo</button>
-				<button class="demo" id="cs1Btn">Cutscene 1</button>
-				<button class="demo" id="cs2Btn">Cutscene 2</button>
-				<button class="demo" id="cs3Btn">Cutscene 3</button>
-				<button id="resetBtn">Return to Default</button>
+			<button class="demo" id="demoBtn">Attract Demo</button>
+			<button class="demo" id="cs1Btn">Cutscene 1</button>
+			<button class="demo" id="cs2Btn">Cutscene 2</button>
+			<button class="demo" id="cs3Btn">Cutscene 3</button>
+			<button id="resetBtn">Return to Default</button>
 			</li>
 		</ul>
 		<div id="helpPanel" class="panel panel-ui">
 			<table>
 			<caption>Key Controls</caption>
-			<tr class="volCtrl">
-				<th>Mute</th>
-				<td><kbd>M</kbd></td>
-			</tr>
-			<tr>
-				<th>Pause</th>
-				<td><kbd>ESC</kbd></td>
-			</tr>
-			<tr>
-				<th>Quit</th>
-				<td><kbd>DEL</kbd></td>
-			</tr>
-			<tr>
-				<th>Reset</th>
-				<td><kbd>CTRL</kbd>+<kbd>DEL</kbd></td>
-			</tr>
-			<tr>
-				<th>Steer</th>
-				<td>
-				<kbd-arrows>
-					<kbd class="←">←</kbd>
-					<kbd class="↑">↑</kbd>
-					<kbd class="↓">↓</kbd>
-					<kbd class="→">→</kbd>
-				</kbd-arrows> or <kbd>WASD</kbd>
-				</td>
+			<tr class="volCtrl"><th>Mute</th><td><kbd>M</kbd></td></tr>
+			<tr><th>Pause</th><td><kbd>ESC</kbd></td></tr>
+			<tr><th>Quit</th><td><kbd>DEL</kbd></td></tr>
+			<tr><th>Reset</th><td><kbd>CTRL</kbd>+<kbd>DEL</kbd></td></tr>
+			<tr><th>Steer</th><td><kbd-arrows><kbd class="←">←</kbd><kbd class="↑">↑</kbd><kbd class="↓">↓</kbd><kbd class="→">→</kbd></kbd-arrows> or <kbd>WASD</kbd></td>
 			</tr>
 			</table>
 			<dl>
@@ -196,11 +133,8 @@
 <div id="debug"></div>
 <template id="confirm_t">
 	<dialog id="confirm" style="display:none">
-		<div class="content"></div>
-		<div class="buttons">
-			<button></button>
-			<button></button>
-		</div>
+	<div class="content"></div>
+	<div class="buttons"><button></button><button></button></div>
 	</dialog>
 </template>
 
