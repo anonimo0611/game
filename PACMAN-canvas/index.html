@@ -75,7 +75,7 @@
 				</label>
 				<label>
 					<chk-wrapper><input type="checkbox" id="onlChk"></chk-wrapper>
-					<chk-label>Play only this level</chk-label>
+					<chk-label>Current level Only</chk-label>
 				</label>
 				<label>
 					<chk-wrapper><input type="checkbox" id="chsChk"></chk-wrapper>
@@ -84,7 +84,7 @@
 			</div>
 			<div class="buttons">
 				<button id="clearBtn">Clear Score</button>
-				<button class="panelBtn panel-ui" data-target="#keysPanel">Key Controls</button>
+				<button class="panelBtn panel-ui" data-target="#helpPanel">How to Play</button>
 			</div>
 			<button id="cfgBtn" class="panelBtn panel-ui" data-target="#cfgPanel" title="More configuration">
 				<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round">
@@ -148,9 +148,9 @@
 				<button id="resetBtn">Return to Default</button>
 			</li>
 		</ul>
-		<div id="keysPanel" class="panel panel-ui">
+		<div id="helpPanel" class="panel panel-ui">
 			<table>
-			<caption>Controls</caption>
+			<caption>Key Controls</caption>
 			<tr class="volCtrl">
 				<th>Mute</th>
 				<td><kbd>M</kbd></td>
@@ -168,7 +168,7 @@
 				<td><kbd>CTRL</kbd>+<kbd>DEL</kbd></td>
 			</tr>
 			<tr>
-				<th>Stear</th>
+				<th>Steer</th>
 				<td>
 				<kbd-arrows>
 					<kbd class="←">←</kbd>
@@ -179,6 +179,15 @@
 				</td>
 			</tr>
 			</table>
+			<dl>
+			<dt>Practice Mode</dt>
+			<dd>Starting above Lv.1</dd>
+			<dd>Speed is 0.6 or lower</dd>
+			<dd>ON: Current Lv. only</dd>
+			<dd>ON: Invincible</dd>
+			<dd>ON: Show paths</dd>
+			<dd>ON: Show targets</dd>
+			</dl>
 		</div>
 		<button id="startBtn">PRESS　ARROWS　to　START</button>
 	</div>

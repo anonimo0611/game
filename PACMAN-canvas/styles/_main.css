@@ -1,7 +1,7 @@
 html,body{margin:0;padding:0;width:100%;height:100vh;overflow:hidden}
 html{--tile-size:31px;--grid-cols:28;--grid-rows:34;--t:var(--tile-size);font-size:var(--t)}
 body{color:#4c76d1;color:#FFF;background:#1B1B1C;font:1rem/1 Verdana,sans-serif;display:grid;place-content:center;color-scheme:dark}
-div,ul,menu,li,th,td,form,input,output{margin:0;padding:0;list-style-type:none}
+div,dl,dt,dd,ul,menu,li,th,td,form,input,output{margin:0;padding:0;list-style-type:none}
 svg{fill:#FFF;pointer-events:none}
 header>*{color:#FF0;position:absolute;z-index:100}
 h1{text-transform:lowercase;font:var(--t)/.9 PacFont;transform-origin:0;translate:calc(var(--t)*23.3) calc(var(--t)*11.5);scale:115%;display:flex;flex-direction:column;:nth-child(2){text-indent:1.5em}}
@@ -28,11 +28,11 @@ body:is([data-state=Attract],[data-state=Cutscene]){:is(header,canvas:not(#board
 #debug{white-space:pre;position:fixed;top:.5em;left:.5em}
 .panel{
 	top:var(--height);right:0;table{border-collapse:collapse}
-	caption,
-	&[data-caption]::before{text-align:center;color:#FF3;font:700 .9rem/1 sans-serif;margin:.2em 0 .2em .4rem;padding:0}
+	caption,dt,
+	&[data-caption]::before{text-align:center;color:#FF3;font:700 .8rem/1 sans-serif;margin:.2em 0 .2em .4rem;padding:0}
 	&[data-caption]::before{content:attr(data-caption);display:block}
-	> li,th,td{font:.8rem/1 sans-serif;padding:.1rem 0}
-	th,td{text-align:center;vertical-align:middle;font-weight:normal;padding:.2em}
+	> li,th,td,dd{font:.75rem/1 sans-serif;padding:.1rem 0}
+	th,td{text-align:center;vertical-align:middle;font-weight:normal;padding:.15em .2em}
 }
 #cfg{
 	height:var(--height);display:flex;gap:.4em;justify-content:center;align-items:center;
@@ -74,15 +74,18 @@ body:is([data-state=Attract],[data-state=Cutscene]){:is(header,canvas:not(#board
 	output::before,cm-item::before{--x:calc(-1*var(--t)*var(--val,0));--size:var(--width) var(--t);content:'';background:no-repeat var(--x) 0/var(--size) var(--url);width:var(--t);height:var(--t);translate:0}
 }
 #ExtendMenu{text-align:right;font-size:.9em;scale:.9}
-#keysPanel{
+#helpPanel{
+	table{width:100%}
 	kbd-arrows {display:inline-flex}
 	kbd{
-		text-align:center;font:100%/1 Consolas, monospace;position:relative;display:inline-block;
+		text-align:center;font:110%/1 Consolas,monospace;position:relative;display:inline-block;
 		&.↑,&.↓{width:1em;height:1em}
 		&.↑{margin-left:-0.2em;top:-0.25em}
 		&.↓{margin-left:-1.0em;top:+0.25em}
 		&.→{margin-left:-0.2em}
 	}
+	dl{margin-top:.4em}
+	dd{line-height:1.3;padding:0 .5em}
 }
 #volume{
 	--size:1.4rem;--thumb-size:0.4rem;width:calc(var(--size) + var(--thumb-size)*1.1);height:var(--size);position:absolute;top:.25em;right:.15em;
