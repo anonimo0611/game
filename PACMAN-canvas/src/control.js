@@ -74,7 +74,7 @@ export const Ctrl = new class Controller {
 		HUD.clearRect(0, 0, BW, T*3)
 		if (spd != 'x1.0' || Ctrl.invincible || Ctrl.showTargets) {
 			drawText(0, lh*0, palette[+(spd != 'x1.0') ], 'Speed'+spd, opt)
-			drawText(0, lh*1, palette[+Ctrl.invincible],  'Invincible',opt)
+			drawText(0, lh*1, palette[+Ctrl.invincible ], 'Invincible',opt)
 			drawText(0, lh*2, palette[+Ctrl.showTargets], 'Show Tgts', opt)
 		}
 		if (Ctrl.showPaths || Ctrl.unrestricted) {
