@@ -224,7 +224,7 @@ export class Ghost extends Actor {
 		release = ()=> this.#startEscaping(),
 	) {
 		if (!this.state.isWalking
-		 || !this.isFrightened && Ctrl.invulnerable
+		 || !this.isFrightened && Ctrl.invincible
 		 || !circleCollision(this, pos, radius))
 			return false
 		this.isFrightened
