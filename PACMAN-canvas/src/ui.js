@@ -43,10 +43,10 @@ export const WinState = function() {
 //---- Fit to viewport ----
 
 $win.on('resize', ()=> {
-	Form.style.scale = min(
+	const scale = min(
 		innerWidth /Form.offsetWidth*.98,
-		innerHeight/Form.offsetHeight
-	).toFixed(2)
+		innerHeight/Form.offsetHeight)
+	Form.style.scale = min(1, scale).toFixed(2)
 })
 .trigger('resize')
 
