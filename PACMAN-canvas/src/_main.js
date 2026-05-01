@@ -72,7 +72,7 @@ export const Game = new class GameCore {
 		State.setInGame({delay:2200})
 	}
 	#onRoundEnd() {
-		Maze.dotsLeft == 0
+		Maze.dotsLeft <= Maze.CLEAR_DOTS
 			? State.setCleared()
 			: State.setPacDying({delay:600})
 	}

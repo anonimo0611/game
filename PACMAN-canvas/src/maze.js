@@ -127,6 +127,8 @@ class MazeManager {
 	hasPow  = (/**@type {TileIdx} */i)=> PowMap.has(i)
 	hasWall = (/**@type {Position}*/p)=> WallSet.has(p.y*Cols+p.x)
 
+	/** @readonly */
+	CLEAR_DOTS = 0 // for debug
 	get dotsLeft() {return DotSet.size}
 
 	/**
