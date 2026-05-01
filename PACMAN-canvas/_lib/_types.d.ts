@@ -72,7 +72,8 @@ interface JQuery {
 	): this
 	onNS<TType extends string>(
 		namespace: TType,
-		handlers: JQTriggerHandlers,
+		handlers:  JQTriggerHandlers,
+		force?:    boolean,
 	): this
 	onWheel(handler: (event:WheelEvent)=> void): this
 }

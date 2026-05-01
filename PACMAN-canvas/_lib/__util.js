@@ -129,8 +129,10 @@ const $root = $(document.documentElement)
 /**
  @param {string} ns
  @param {Record<string,()=> void>} handlers
-*/jQuery.fn.onNS = function(ns, handlers) {
+ @param {boolean} [force]
+*/jQuery.fn.onNS = function(ns, handlers, force) {
 	const NS = ns[0] != '.' ? `.${ns}` : ns
+	if (force === false) return this.off(ns)
 	entries(handlers).forEach(([ev,cb])=> {
 		const ns = ev.trim().replace(/[_\s]+/g,`${NS}\x20`) + NS
 		this.off(ns).on(ns,cb)
