@@ -1,25 +1,19 @@
-import './ghosts/ghosts.js'
-import {Cursor}  from '../_lib/mouse.js'
-import {Sound}   from '../_snd/sound.js'
-import  Speed    from './speed.js'
-import {Menu}    from './ui.js'
-import {State}   from './state.js'
-import {Message} from './message.js'
-import {Demo}    from './demo/_demo.js'
-import {Ctrl}    from './control.js'
-import {Lives}   from './lives.js'
-import {Wall}    from './sprites/wall.js'
-import {Maze}    from './maze.js'
-import {Score}   from './score.js'
-import {Fruit}   from './fruit.js'
-import {PtsMgr}  from './points.js'
-import {Actors}  from './actor.js'
-import {player}  from './player/player.js'
+import {Cursor} from '../_lib/mouse.js'
+import {Sound}  from '../_snd/sound.js'
+import  Speed   from './speed.js'
+import {Menu}   from './ui.js'
+import {State}  from './state.js'
+import {Ctrl}   from './control.js'
+import {Lives}  from './lives.js'
+import {Wall}   from './sprites/wall.js'
+import {Maze}   from './maze.js'
+import {player} from './player/player.js'
+import {Scene}  from './scene.js'
 
-export const Game  = new class GameCore {
+export const Game = new class GameCore {
 	static {$(this.setup)}
 	static setup() {
-		Ticker.set(Game.#update, Game.#draw)
+		Ticker.set(Scene.update, Scene.draw)
 		Menu.Level.onChange(Game.#resetLevel)
 		State.on({
 			Quit: ()=> State.setTitle(),
@@ -102,35 +96,11 @@ export const Game  = new class GameCore {
 		Game.#pacDied = false
 		!Ctrl.endlessMode
 			? State.setTitle()
-			: Demo.CutsceneNum < 0
-				? State.setNewLevel()
-				: State.setCutscene()
+			: Scene.shouldPlayCutscene
+				? State.setCutscene()
+				: State.setNewLevel()
 	}
 	#onGameOver() {
 		State.setTitle({delay:2000})
-	}
-	#update() {
-		PtsMgr.update()
-		Demo.update()
-		!State.isDemoMode
-			&& Game.#updateMain()
-	}
-	#draw() {
-		Fg.clear()
-		State.isDemoMode
-			? Demo.draw()
-			: Game.#drawMain()
-		Message.draw()
-	}
-	#updateMain() {
-		Fruit.update()
-		Maze.PowDots.update()
-		Actors.update(player)
-	}
-	#drawMain() {
-		Score.draw()
-		Maze.PowDots.draw()
-		Fruit.drawTarget()
-		Actors.draw(player)
 	}
 }, Level = $('#level-num')

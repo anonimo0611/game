@@ -1,3 +1,4 @@
+import {State} from './state.js'
 export const Form = document.forms[0]
 
 //---- Inputs ----
@@ -13,14 +14,12 @@ export const inputs =
 //---- Buttons ----
 
 const buttonIds = /**@type {const}*/
-	(['clear','reset','start','demo','cs1','cs2','cs3'])
+	(['clear','reset','start'])
 
 export const btns =
 	/**@type {{[K in buttonIds[number]]:HTMLButtonElement}}*/
 	(fromEntries(buttonIds.map(id=> [id,requireElem(id+'Btn')])))
 
-/** @type {NodeListOf<HTMLButtonElement>} */
-export const demoBtns = document.querySelectorAll('button.demo')
 
 //---- Custom menus ----
 
