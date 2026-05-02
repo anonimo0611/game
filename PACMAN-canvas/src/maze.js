@@ -51,7 +51,7 @@ const HouseRect  = new Rect(14-4, 15-2,  8, 5).freeze()
 const HouseOuter = new Rect(14-5, 15-3, 10, 7).freeze()
 
 class House {
-	MidY = (this.EntryTile.y+3.5)*T
+	MID_Y = (this.EntryTile.y+3.5)*T
 	get EntryTile() {
 		return Vec2.new(13, 12)
 	}
@@ -68,13 +68,12 @@ class House {
 }
 
 class Tunnel {
-	Row = 15
-	EntryColL =  5.5
-	EntryColR = 22.5
+	ROW = 15
+	EntryCol = freeze({L:5.5, R:22.5})
 	findSide({x=0,y=0}) {
-		if (int(y/T) == this.Row) {
-			if (x/T <= this.EntryColL) return L
-			if (x/T >= this.EntryColR) return R
+		if (int(y/T) == this.ROW) {
+			if (x/T <= this.EntryCol.L) return L
+			if (x/T >= this.EntryCol.R) return R
 		} return null
 	}
 }
@@ -110,7 +109,7 @@ class MazeManager {
 			DotSymbols.has(s) && MazeManager.setDot(i,s)
 	}
 	static setDot(/**@type {TileIdx}*/i, symbol='.') {
-		const t = Vec2.new(i%Cols, i/Cols|0)
+		const t = Vec2.new(i%COLS, i/COLS|0)
 		const m = Vec2.add(t, 0.5)
 		clearDot({tileIdx:i, tileMid:m})
 		DotSet.add(i)
@@ -125,7 +124,7 @@ class MazeManager {
 	PowDots = freeze(new PowDots)
 	hasDot  = (/**@type {TileIdx} */i)=> DotSet.has(i)
 	hasPow  = (/**@type {TileIdx} */i)=> PowMap.has(i)
-	hasWall = (/**@type {Position}*/p)=> WallSet.has(p.y*Cols+p.x)
+	hasWall = (/**@type {Position}*/p)=> WallSet.has(p.y*COLS+p.x)
 
 	/** @readonly */
 	CLEAR_DOTS = 0 // for debug
@@ -142,7 +141,7 @@ class MazeManager {
 	 Whether tile `row` coord is the top/bottom of the maze excluding dead space
 	 @param {number} row
 	*/
-	isTopOrBottom = row=> (row == 1) || (row == Rows-3)
+	isTopOrBottom = row=> (row == 1) || (row == ROWS-3)
 
 	/**
 	 If the target tile is on the upper side of the maze \
@@ -151,7 +150,7 @@ class MazeManager {
 	*/
 	getGhostExitTile = ({baseTargetTile:b,tile:t})=>
 		!Ctrl.unrestricted && b.y < 10 && HouseOuter.contains(t)
-			? Vec2.new(t.x>Cols/2 && b.x>Cols/2 ? 21:6, 15) : b
+			? Vec2.new(t.x>COLS/2 && b.x>COLS/2 ? 21:6, 15) : b
 
 	/**
 	 @param {{tileIdx:number,tileMid:Vec2}} tile

@@ -42,8 +42,8 @@ export class Attract {
 			et > t+10 && drawText(col2, row, Color.GhostBodies[i], txt2)
 		})
 		if (et > 85) {
-			[[23, DotPts, +true],
-			 [25, PowPts, +this.subAct.pow.show],
+			[[23, DOT_PTS, +true],
+			 [25, POW_PTS, +this.subAct.pow.show],
 			].forEach(([row,pts,showDot],i)=> {
 				drawDot(Fg, 10, row, i == 1, !!showDot)
 				drawText(12.0, row, null, pts)
@@ -76,21 +76,23 @@ export class Attract {
 }
 
 class EnergizerAct {
+	/** @readonly */
 	pow = new PowBlinker
 	#pacman = new PacMan
 	#ghosts = /**@type {Ghost[]}*/([])
 	#pacvx  = -BW/180
 	#ghsvx  = -BW/169
-	get started() {return Ticker.elapsedTime > 1e4+500}
-	get outward() {return this.#pacman.dir == L}
 	constructor() {
 		for (let i=0; i<GhostType.Max; i++)
 			this.#setActor(i)
 		Ghosts.initialize(this.#ghosts)
 	}
+	get started() {return Ticker.elapsedTime > 1e4+500}
+	get outward() {return this.#pacman.dir == L}
+
 	#setActor(type=0) {
 		const
-		g = new Ghost(L, {type,tile:[Cols+6+(type*2),19]})
+		g = new Ghost(L, {type,tile:[COLS+6+(type*2),19]})
 		g.type == 0 && this.#pacman.pos.set(g.x-(T*3.5), g.y)
 		this.#ghosts.push(g)
 	}

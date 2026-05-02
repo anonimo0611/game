@@ -25,7 +25,7 @@ export class Actor {
 	get center()    {return this.pos.clone.add(T/2)}
 	get tile()      {return this.center.divInt(T)}
 	get tileMid()   {return this.tile.add(.5)}
-	get tileIdx()   {return this.tile.toIdx(Cols)}
+	get tileIdx()   {return this.tile.toIdx(COLS)}
 
 	get dir()       {return this.#movDir}
 	set dir(dir)    {this.#movDir = this.orient = dir}
@@ -76,11 +76,11 @@ export class Actor {
 	}
 	/** @param {Direction} dir */
 	getAdjTile(dir, tile=this.tile) {
-		return Vec2[dir].add(tile).wrapX(Cols)
+		return Vec2[dir].add(tile).wrapX(COLS)
 	}
 	collidesWithWall(dir=this.dir) {
 		const  fwd = Vec2[dir].mul(T/2+1).add(this.center)
-		return Maze.hasWall( fwd.divInt(T).wrapX(Cols) )
+		return Maze.hasWall( fwd.divInt(T).wrapX(COLS) )
 	}
 	justArrivedAtTile(spd=this.speed) {
 		return !this.passedTileCenter && this.tilePixel <= spd
@@ -88,20 +88,6 @@ export class Actor {
 	drawCenterDot({r=3,color='red'}={}) {
 		Fg.fillCircle(...this.center.vals, r, color)
 	}
-}
-
-export const Actors = {
-	/** @param {PacMan} pacman */
-	update(pacman) {
-		pacman.update()
-		Ghosts.update()
-	},
-	/** @param {PacMan} pacman */
-	draw(pacman) {
-		Ghosts.drawBehind()
-		pacman.draw()
-		Ghosts.drawFront()
-	},
 }
 
 export class PacMan extends Actor {
@@ -119,4 +105,18 @@ export class PacMan extends Actor {
 	draw() {
 		this.sprite.draw(this)
 	}
+}
+
+export const Actors = {
+	/** @param {PacMan} pacman */
+	update(pacman) {
+		pacman.update()
+		Ghosts.update()
+	},
+	/** @param {PacMan} pacman */
+	draw(pacman) {
+		Ghosts.drawBehind()
+		pacman.draw()
+		Ghosts.drawFront()
+	},
 }

@@ -126,9 +126,9 @@ class Scene2 extends Cutscene {
 	}
 	updateAka() {
 		const {akabei:a}= this
-		a.x > Snag.AkaSnagX ? super.updateAka(1.0):
-		a.x > Snag.AkaStopX ? super.updateAka(0.1):(a.x=Snag.AkaStopX)
-		return (a.x != Snag.AkaStopX)
+		a.x > Snag.SNAG_X ? super.updateAka(1.0):
+		a.x > Snag.STOP_X ? super.updateAka(0.1):(a.x=Snag.STOP_X)
+		return (a.x != Snag.STOP_X)
 	}
 	draw() {
 		const {akabei:a,snag,akaEyes,isRipped}= this
@@ -136,9 +136,9 @@ class Scene2 extends Cutscene {
 		this.drawPac()
 		snag.drawSnaggedStake({isRipped,y:ACTORS_Y+T})
 		this.drawAka({isRipped,animIdx,orient:akaEyes})
-		if (!isRipped && a.x < Snag.AkaSnagX) {
+		if (!isRipped && a.x < Snag.SNAG_X) {
 			const pos   = a.center.addX(T)
-			const ratio = norm(Snag.AkaSnagX, Snag.AkaStopX, a.x)
+			const ratio = norm(Snag.SNAG_X, Snag.STOP_X, a.x)
 			snag.drawSnaggedClothing(animIdx, ratio, pos)
 		}
 		super.draw()

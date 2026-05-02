@@ -1,4 +1,3 @@
-export {Scene}
 import {WinState} from './ui.js'
 import {Ctrl}     from './control.js'
 import {States}   from './state.js'
@@ -50,7 +49,7 @@ const MainScene = {
 	},
 }
 
-const Scene = new class SceneManager {
+export const Scene = new class SceneManager {
 	get shouldPlayCutscene() {
 		return Cutscene.num > 0
 	}

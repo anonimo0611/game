@@ -24,7 +24,7 @@ class FloatingPts {
 		this.cache = cache(key, T*2)
 		this.fade  = Fade.out(FADE_DUR/spd, (dur-FADE_DUR)/spd)
 
-		PopupMap.set(key,this)
+		PopupMap.set(key, this)
 		Score.add(key.ptsValue)
 		frozen && Timer.freeze()
 

@@ -20,7 +20,7 @@ export const Wall = new class WallRenderer {
 			ctx.lineWidth   = LW
 			ctx.strokeStyle = Color.MazeWalls[i]
 			Maze.Map.forEach((s,i)=> {
-				if (i%Cols >= Cols/2) return
+				if (i%COLS >= COLS/2) return
 				Wall.#drawTile(ctx,s,i)
 			})
 			ctx.flip(ctx.canvas, 0,0, true)
@@ -51,7 +51,7 @@ export const Wall = new class WallRenderer {
 	#drawHouse(ctx) {
 		const [ix,iy,ox,oy]= [31,16,34,19].map(n=>n/10*T)
 		ctx.save()
-		ctx.translate(BW/2, Maze.House.MidY)
+		ctx.translate(BW/2, Maze.House.MID_Y)
 		ctx.strokeRect(-ox, -oy, ox*2, oy*2)
 		ctx.strokeRect(-ix, -iy, ix*2, iy*2)
 		ctx.clearRect (-T, -oy-LW, T*2, HT)
@@ -88,7 +88,7 @@ export const Wall = new class WallRenderer {
 	 @param {number} i Tile index
 	*/
 	#drawTile(ctx, s, i) {
-		const t  = {x:i%Cols, y:i/Cols|0}, {x,y}= Vec2.mul(t,T)
+		const t  = {x:i%COLS, y:i/COLS|0}, {x,y}= Vec2.mul(t,T)
 		const lo = s == '#' || /[VH=]/.test(s) ? -LO:LO
 
 		;[/[A-D]/,/[A-D]/,/[a-d1-4]/,/[a-d]/,/[5-8]/]

@@ -1,23 +1,21 @@
-
 const
-Cols      = 28,
-Rows      = 34,
-DotPts    = 10,
-PowPts    = 50,
-ScrHeight = screen.height,
-TileSize  = int(ScrHeight/Rows),
+COLS      = 28,
+ROWS      = 34,
+DOT_PTS   = 10,
+POW_PTS   = 50,
+TILE_SIZE = int(screen.height/ROWS),
 
 /** Scale Factor */
-SF = ScrHeight/1080,
+SF = screen.height/1080,
 
-/** Shorthand of TileSize */
-T = TileSize,
+/** Shorthand of TILE_SIZE */
+T = TILE_SIZE,
 
 /** Board width */
-BW = Cols*TileSize,
+BW = COLS*TILE_SIZE,
 
 /** Board height */
-BH = Rows*TileSize,
+BH = ROWS*TILE_SIZE,
 
 Dazed = 'Dazed',
 U='Up', R='Right', D='Down', L='Left',
@@ -61,4 +59,4 @@ Color = /**@type {const}*/({
 })
 
 // Use the tile size as the default font size
-$root.css('--tile-size',`${TileSize}px`)
+$root.css('--tile-size',`${TILE_SIZE}px`)

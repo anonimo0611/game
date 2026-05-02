@@ -32,8 +32,7 @@ export default class PacmanSprite {
 			if (this.#mAngle <= OPEN_MID) {
 				this.#mAngle = OPEN_MID
 				this.#mPhase = PHASE_MID
-			}
-			return
+			} return
 		}
 		const phase = this.#mPhase += PI/DURATION
 		this.#mAngle = OPEN_MAX * abs(sin(phase))

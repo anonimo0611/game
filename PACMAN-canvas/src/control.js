@@ -78,7 +78,7 @@ export const Ctrl = new class Controller {
 			drawText(0, lh*2, palette[+Ctrl.showTargets], 'Show Tgts', opt)
 		}
 		if (Ctrl.showPaths || Ctrl.unrestricted) {
-			HUD.translate(T*(Cols-5), 0)
+			HUD.translate(T*(COLS-5), 0)
 			drawText(0, 0, palette[+Ctrl.showPaths],   'Show Paths', opt)
 			drawText(0,lh, palette[+Ctrl.unrestricted],'Ghosts Un-\nrestricted', opt)
 		}
@@ -123,8 +123,8 @@ export const Ctrl = new class Controller {
 	}
 	#setupGrid() {
 		Grid.beginPath()
-		for(let x=1; x<Cols; x++) Grid.setLinePath([T*x, 0],[T*x, BH])
-		for(let y=0; y<Rows; y++) Grid.setLinePath([0, T*y],[BW, T*y])
+		for(let x=1; x<COLS; x++) Grid.setLinePath([T*x, 0],[T*x, BH])
+		for(let y=0; y<ROWS; y++) Grid.setLinePath([0, T*y],[BW, T*y])
 		Grid.strokeStyle = Color.GridLine
 		Grid.stroke()
 	}

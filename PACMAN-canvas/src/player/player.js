@@ -81,11 +81,11 @@ class Player extends PacMan {
 			: EventBus.trigger(EATEN_EV)
 	}
 	#eatPowerDot() {
-		Score.add(PowPts)
+		Score.add(POW_PTS)
 		Ghosts.frighten()
 	}
 	#eatSmallDot() {
-		Score.add(DotPts)
+		Score.add(DOT_PTS)
 	}
 	#playEatSE() {
 		const duration = (T/this.speed)*Ticker.Interval*.5

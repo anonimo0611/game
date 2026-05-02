@@ -126,8 +126,8 @@ export class Ghost extends Actor {
 		!Ctrl.alwaysChase &&
 			Sys.DotCounter.releaseIfReady(this)
 		!this.state.isGoingOut && this.move(
-			(cy > Maze.House.MidY - (T*0.6) && orient != D)? U:
-			(cy < Maze.House.MidY + (T*0.5) ? D:U)
+			(cy > Maze.House.MID_Y - (T*0.6) && orient != D)? U:
+			(cy < Maze.House.MID_Y + (T*0.5) ? D:U)
 		)
 	}
 	leaveHouse = (deactivateGlobalDotCnt=false)=> {
@@ -158,11 +158,11 @@ export class Ghost extends Actor {
 	}
 	#enteringToHome({init,speed:spd,x,y}=this) {
 		const {House}= Maze
-		if (y+spd < House.MidY)
+		if (y+spd < House.MID_Y)
 			return this.move()
 
-		if (y != House.MidY)
-			return this.pos.setY(House.MidY).void()
+		if (y != House.MID_Y)
+			return this.pos.setY(House.MID_Y).void()
 
 		if (!init.align || abs(x-init.x) <= spd) {
 			this.x   = init.x

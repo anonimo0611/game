@@ -1,4 +1,4 @@
-const BASE_P = TileSize / 4.5
+const BASE_P = TILE_SIZE / 4.5
 const BASE_G = BASE_P * 1.07
 
 import {Game} from './_main.js'

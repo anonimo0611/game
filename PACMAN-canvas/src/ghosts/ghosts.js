@@ -23,8 +23,8 @@ export class Pinky extends Ghost {
 	get chasePos() {
 		const pos = player.offsetTarget(this.chaseOffset)
 		switch(player.tunEntry.side) {
-		case L: return pos.setX(Maze.Tunnel.EntryColR*T)
-		case R: return pos.setX(Maze.Tunnel.EntryColL*T)
+		case L: return pos.setX(Maze.Tunnel.EntryCol.R*T)
+		case R: return pos.setX(Maze.Tunnel.EntryCol.L*T)
 		default:return pos
 		}
 	}
