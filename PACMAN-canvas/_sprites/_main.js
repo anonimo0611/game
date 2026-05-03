@@ -63,7 +63,7 @@ const [Cols,Rows]= GridSize
 	#drawPoints() {
 		/**
 		 @param {number}   pointType
-		 @param {PtsValue} pointValue
+		 @param {PtsVal} pointValue
 		 @param {number} x
 		 @param {number} y
 		*/
@@ -94,7 +94,7 @@ const [Cols,Rows]= GridSize
 	#drawAkabei() {
 		const aka   = ghostGr
 		const spr   = new Snag.SnagSprite(ctx)
-		const scale = T/TileSize
+		const scale = T/TILE_SIZE
 
 		ctx.translate(T/2, (Rows-2)*S+T/2)
 
