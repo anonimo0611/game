@@ -1,10 +1,11 @@
-import {inputs} from '../src/ui.js'
-import {Sound}  from './sound.js'
+import {Sound} from './sound.js'
 import {SpeakerRenderer} from './speaker.js'
 
 let lstVol = NaN
 
-const {volRng,volRg2}= inputs
+const MAX_VOL   = 10
+const volRange  = qS('#volRng')
+const volRange2 = qS('#volRg2')
 const $speaker  = $('#speaker')
 const $volRngs  = $('.volRng')
 const $volCtrls = $('.volCtrl')
@@ -26,21 +27,25 @@ const SoundCtrl = {
 		$volCtrls.hide()
 	},
 	input(/**@type {Event}*/e) {
-		const isInput = e.target instanceof HTMLInputElement
-		const rngCtrl = (isInput? e.target : inputs.volRng)
-		speaker.draw(Sound.vol = rngCtrl.valueAsNumber)
+		if (volRange instanceof HTMLInputElement) {
+			const isInput = e.target instanceof HTMLInputElement
+			const rngCtrl = (isInput? e.target : volRange)
+			speaker.draw(Sound.vol = rngCtrl.valueAsNumber)
+		}
 	},
 	keydown(/**@type {JQuery.KeyDownEvent}*/e) {
 		if (keyRepeat(e) || hasModifierKeys(e))
 			return
 		if (e.key.toUpperCase() == 'M'
-		 || e.target == volRg2 && isEnterKey(e))
+		 || e.target == volRange2 && isEnterKey(e))
 			SoundCtrl.mute()
 	},
 	mute() {
-		lstVol = Sound.vol || (lstVol || +volRng.max >> 1)
-		$volRngs.val(Sound.vol ? 0 : lstVol)
-		$(volRng).trigger('input')
+		if (volRange) {
+			lstVol = Sound.vol || (lstVol || MAX_VOL/2)
+			$volRngs.val(Sound.vol ? 0 : lstVol)
+			$(volRange).trigger('input')
+		}
 	}
 }
 
