@@ -61,7 +61,9 @@ export default class GhostSprite {
 			: Color.GhostBodies[GhostType.Max+spriteIdx]
 
 		if (isExposed) {
-			this.sub.drawHadake(animIdx)
+			animIdx == 0
+				? this.sub.drawHadake0()
+				: this.sub.drawHadake1()
 			return finalize()
 		}
 		if (!isEscaping) {
@@ -103,7 +105,7 @@ export default class GhostSprite {
 			? this.#drawFoot0()
 			: this.#drawFoot1()
 		ctx.fill()
-		isRipped && this.sub.drawHalfNakedBody()
+		isRipped && this.sub.drawRippedBody()
 		isMended && this.sub.drawMendedSeam(animIdx)
 	}
 	#drawFoot0() {

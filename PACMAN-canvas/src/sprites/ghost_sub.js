@@ -2,7 +2,7 @@ export default class GhostSubSprite {
 	/** @readonly */ctx
 	/** @param {EnhancedCtx2D} ctx */
 	constructor(ctx) {this.ctx=ctx}
-	drawHalfNakedBody() {
+	drawRippedBody() {
 		const {ctx}= this
 		ctx.clearRect(38,-1, 6,25)
 		ctx.clearRect(30,23,15,18)
@@ -40,12 +40,7 @@ export default class GhostSubSprite {
 			).stroke()
 		}
 	}
-	drawHadake(animIdx=0) {
-		animIdx == 0
-			? this.#drawHadake0()
-			: this.#drawHadake1()
-	}
-	#drawHadake0() {
+	drawHadake0() {
 		const {ctx}= this
 		// Body
 		ctx.save()
@@ -71,7 +66,7 @@ export default class GhostSubSprite {
 		ctx.fill()
 		this.#hadakeEyes([55,76],[61,83])
 	}
-	#drawHadake1() {
+	drawHadake1() {
 		const {ctx}= this
 		// Body
 		ctx.save()
