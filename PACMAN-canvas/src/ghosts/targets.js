@@ -1,5 +1,5 @@
 import {State}  from '../state.js'
-import {Ctrl}   from '../control.js'
+import {Cfg}    from '../control.js'
 import {player} from '../player/player.js'
 import {Maze}   from '../maze.js'
 import {Ghosts} from './_system.js'
@@ -9,8 +9,8 @@ import {Akabei,Pinky,Aosuke,Guzuta} from './ghost_sub.js'
 export const Targets = new class TargetVisualizer {
 	/** @param {readonly Ghost[]} ghosts */
 	draw(ghosts) {
-		if (!State.isInGame)   return
-		if (!Ctrl.showTargets) return
+		if (!State.isInGame)  return
+		if (!Cfg.showTargets) return
 		Fg.save()
 		Fg.setAlpha(0.7)
 		Fg.fillStyle = Fg.strokeStyle = '#FFF'

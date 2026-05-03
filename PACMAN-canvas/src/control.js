@@ -4,10 +4,23 @@ import {Confirm}  from '../_lib/confirm.js'
 import {State}    from './state.js'
 import {Score}    from './score.js'
 import {drawText} from './message.js'
-import {Form,Menu,inputs,btns} from './ui.js'
+import {Form,Menu,getInput,btns} from './ui.js'
 
 const SETTINGS_KEY = 'anopacman'
 const {InfoTexts:palette}= Color
+
+const CfgD = new class ConfigData {
+	speed         = 1
+	initialLives  = 3
+	powEnabled    = true
+	endlessMode   = false
+	alwaysChase   = false
+	unrestricted  = false
+	invincible    = false
+	showTargets   = false
+	showPaths     = false
+	showGridLines = false
+}
 
 export const Ctrl = new class Controller {
 	static {$(this.setup)}
@@ -18,23 +31,14 @@ export const Ctrl = new class Controller {
 		Ctrl.#setupCtrls()
 		$win.on({keydown:Ctrl.#onKeydown})
 	}
-	get isCaptured()    {return this.activeElem || Confirm.opened}
-	get activeElem()    {return qS(`:not(#${btns.start.id}):focus`)}
-	get extendScore()   {return +Menu.Extend.value}
-	get speed()         {return inputs.spdRng.valueAsNumber}
-	get initialLives()  {return inputs.lvsRng.valueAsNumber}
-	get endlessMode()   {return inputs.onlChk.checked == false}
-	get alwaysChase()   {return inputs.chsChk.checked}
-	get unrestricted()  {return inputs.unrChk.checked}
-	get invincible()    {return inputs.invChk.checked}
-	get showTargets()   {return inputs.tgtChk.checked}
-	get showPaths()     {return inputs.pthChk.checked}
-	get showGridLines() {return inputs.grdChk.checked}
-	get showTracking()  {return Ctrl.showTargets || Ctrl.showPaths}
-	get semiTransPac()  {return Ctrl.invincible  || Ctrl.showGridLines}
-	get usingCheats()   {return Ctrl.invincible  || Ctrl.speed<.7 || Ctrl.showTracking}
-	get isPractice()    {return Ctrl.usingCheats ||!Ctrl.isArcadeMode}
-	get isArcadeMode()  {return Ctrl.endlessMode && Menu.Level.index == 0}
+	#anyFocused = false
+	get extendScore()  {return +Menu.Extend.value}
+	get isCaptured()   {return Ctrl.#anyFocused || Confirm.opened}
+	get isPractice()   {return Ctrl.usingCheats ||!Ctrl.isArcadeMode}
+	get isArcadeMode() {return CfgD.endlessMode && Menu.Level.index == 0}
+	get showTracking() {return CfgD.showTargets || CfgD.showPaths}
+	get semiTransPac() {return CfgD.invincible  || CfgD.showGridLines}
+	get usingCheats()  {return CfgD.invincible  || CfgD.speed<.7 || Ctrl.showTracking}
 
 	/** @param {boolean} [force] */
 	pause(force) {
@@ -43,11 +47,11 @@ export const Ctrl = new class Controller {
 		Sound.pause( Ticker.pause(force) )
 	}
 	#save() {
-		const data = Object.create(null)
+		const data = /**@type {any}*/({...CfgD})
 		keys(Menu).forEach(id=> data[id] = Menu[id].index)
 		document.querySelectorAll('input').forEach(input=> {
 			switch(input.type) {
-			case 'range':   data[input.id] = input.value;  break
+			case 'range':   data[input.id] = input.valueAsNumber;break
 			case 'checkbox':data[input.id] = input.checked;break
 			}
 		})
@@ -65,22 +69,22 @@ export const Ctrl = new class Controller {
 		})
 	}
 	#output() {
-		const spd = 'x'+Ctrl.speed.toFixed(1), lh = 0.9
+		const spd = 'x'+CfgD.speed.toFixed(1), lh = 0.9
 		const opt = {ctx:HUD, size:T*0.68, scaleX:0.7, style:'bold'}
 		Ctrl.#save()
 		Ctrl.#toggleGrid()
 		HUD.save()
 		HUD.translate(T*0.1, T*17.25)
 		HUD.clearRect(0, 0, BW, T*3)
-		if (spd != 'x1.0' || Ctrl.invincible || Ctrl.showTargets) {
+		if (spd != 'x1.0' || CfgD.invincible || CfgD.showTargets) {
 			drawText(0, lh*0, palette[+(spd != 'x1.0') ], 'Speed'+spd, opt)
-			drawText(0, lh*1, palette[+Ctrl.invincible ], 'Invincible',opt)
-			drawText(0, lh*2, palette[+Ctrl.showTargets], 'Show Tgts', opt)
+			drawText(0, lh*1, palette[+CfgD.invincible ], 'Invincible',opt)
+			drawText(0, lh*2, palette[+CfgD.showTargets], 'Show Tgts', opt)
 		}
-		if (Ctrl.showPaths || Ctrl.unrestricted) {
+		if (CfgD.showPaths || CfgD.unrestricted) {
 			HUD.translate(T*(COLS-5), 0)
-			drawText(0, 0, palette[+Ctrl.showPaths],   'Show Paths', opt)
-			drawText(0,lh, palette[+Ctrl.unrestricted],'Ghosts Un-\nrestricted', opt)
+			drawText(0, 0, palette[+CfgD.showPaths],   'Show Paths', opt)
+			drawText(0,lh, palette[+CfgD.unrestricted],'Ghosts Un-\nrestricted', opt)
 		}
 		HUD.restore()
 	}
@@ -111,7 +115,7 @@ export const Ctrl = new class Controller {
 		case 'Escape': return Ctrl.pause()
 		case 'Delete': return Ctrl.#quit(e.ctrlKey)
 		default:
-			if (Ctrl.activeElem || !Sound.settled) return
+			if (Ctrl.#anyFocused || !Sound.settled) return
 			if (Dir.from(e,{wasd:true}) || e.key == '\x20') {
 				State.isTitle && btns.start.click()
 				Ticker.paused && Ctrl.pause()
@@ -119,7 +123,7 @@ export const Ctrl = new class Controller {
 		}
 	}
 	#toggleGrid() {
-		Grid.canvas.style.opacity = String(+Ctrl.showGridLines)
+		Grid.canvas.style.opacity = String(+CfgD.showGridLines)
 	}
 	#setupGrid() {
 		Grid.beginPath()
@@ -128,7 +132,14 @@ export const Ctrl = new class Controller {
 		Grid.strokeStyle = Color.GridLine
 		Grid.stroke()
 	}
+	#trackInputFocus() {
+		$(document.body).on('focusin focusout', e=> {
+			const isStartBtn = (e.target == btns.start)
+			Ctrl.#anyFocused = (e.type == 'focusin') && !isStartBtn
+		})
+	}
 	#setupCtrls() {
+		Ctrl.#trackInputFocus()
 		values(Menu).forEach(m=> m.onChange(Ctrl.#save))
 		$('input')   .on({input:Ctrl.#output})
 		$(btns.clear).on({click:Ctrl.#clearHiConfirm})
@@ -136,4 +147,6 @@ export const Ctrl = new class Controller {
 		$(btns.start).on({click:State.setNewGame})
 		$root.addClass('controller-settled')
 	}
-}, powChk = inputs.powChk
+}
+,powChk = getInput('powEnabled')
+,Cfg = /**@type {Readonly<CfgD>}*/(CfgD)

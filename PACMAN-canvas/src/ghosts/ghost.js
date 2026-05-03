@@ -2,7 +2,7 @@ import {Sound}   from '../../_snd/sound.js'
 import {Dir}     from '../../_lib/direction.js'
 import {Game}    from '../_main.js'
 import {State}   from '../state.js'
-import {Ctrl}    from '../control.js'
+import {Cfg}     from '../control.js'
 import {Maze}    from '../maze.js'
 import {PtsMgr}  from '../points.js'
 import {Actor}   from '../actor.js'
@@ -57,7 +57,7 @@ export class Ghost extends Actor {
 	}
 	get animIdx()      {return Ghosts.animIndex}
 	get spriteIdx()    {return Ghosts.spriteIdx}
-	get maxAlpha()     {return Ctrl.showTargets? .75:1}
+	get maxAlpha()     {return Cfg.showTargets? .75:1}
 	get alpha()        {return this.#fader?.alpha ?? this.maxAlpha}
 	get chaseTile()    {return this.chasePos.divInt(T)}
 
@@ -123,7 +123,7 @@ export class Ghost extends Actor {
 			: this.#enterHouse()
 	}
 	#idleInHouse({orient,center:{y:cy}}=this) {
-		!Ctrl.alwaysChase &&
+		!Cfg.alwaysChase &&
 			Sys.DotCounter.releaseIfReady(this)
 		!this.state.isGoingOut && this.move(
 			(cy > Maze.House.MID_Y - (T*0.6) && orient != D)? U:
@@ -174,7 +174,7 @@ export class Ghost extends Actor {
 	}
 	#arrivedAtHome() {
 		this.sprite.setResurrect()
-		this.type == GhostType.Akabei || Ctrl.alwaysChase
+		this.type == GhostType.Akabei || Cfg.alwaysChase
 			? this.state.setGoingOut()
 			: this.state.setIdle()
 		!Timer.frozen && Sound.onGhostReturned()
@@ -206,7 +206,7 @@ export class Ghost extends Actor {
 	/** @param {{dir:Direction,testTile:Vec2}} testTile */
 	#isRestrictedTile({dir,testTile:{hyphenated:xy}}) {
 		const ignore = (this.isFrightened || this.isEscaping)
-		return (Ctrl.unrestricted || ignore)
+		return (Cfg.unrestricted || ignore)
 			? false : Maze.GhostNoEntryTiles.has(xy+dir)
 	}
 	#makeTurn({orient}=this) {
@@ -224,7 +224,7 @@ export class Ghost extends Actor {
 		release = ()=> this.#startEscaping(),
 	) {
 		if (!this.state.isWalking
-		 || !this.isFrightened && Ctrl.invincible
+		 || !this.isFrightened && Cfg.invincible
 		 || !circleCollision(this, pos, radius))
 			return false
 		this.isFrightened

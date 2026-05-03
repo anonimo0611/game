@@ -1,6 +1,6 @@
 import {Sound}    from '../../_snd/sound.js'
 import {Game}     from '../_main.js'
-import {Ctrl}     from '../control.js'
+import {Ctrl,Cfg} from '../control.js'
 import {State}    from '../state.js'
 import {Score}    from '../score.js'
 import {Maze}     from '../maze.js'
@@ -47,7 +47,7 @@ class Player extends PacMan {
 		this.drawCenterDot()
 	}
 	drawCenterDot() {
-		if (!this.hidden && Ctrl.showGridLines)
+		if (!this.hidden && Cfg.showGridLines)
 			super.drawCenterDot()
 	}
 	update() {

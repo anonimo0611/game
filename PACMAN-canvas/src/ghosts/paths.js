@@ -1,5 +1,5 @@
 import {Dir}   from '../../_lib/direction.js';
-import {Ctrl}  from '../control.js'
+import {Cfg}   from '../control.js'
 import {State} from '../state.js';
 import {Maze}  from '../maze.js'
 import {Ghost} from './ghost.js';
@@ -13,7 +13,7 @@ export class PathMgr {
 	#nodeList = /**@type {PathNode[]}*/([])
 
 	static get isActive() {
-		return State.isInGame && Ctrl.showPaths
+		return State.isInGame && Cfg.showPaths
 	}
 	/** @param {readonly Ghost[]} ghosts */
 	static update(ghosts) {

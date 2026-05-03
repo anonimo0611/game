@@ -2,13 +2,9 @@ export const Form = document.forms[0]
 
 //---- Inputs ----
 
-const inputIds = /**@type {const}*/
-	(['lvsRng','spdRng','onlChk','chsChk','unrChk','invChk',
-	  'tgtChk','pthChk','grdChk','powChk','volRng','volRg2'])
-
-export const inputs =
-	/**@type {{[K in inputIds[number]]:HTMLInputElement}}*/
-	(fromEntries(inputIds.map(id=> [id,requireElem(id)])))
+/** @param {string} id */
+export const getInput = id=>
+	/**@type {HTMLInputElement}*/(requireElem(id))
 
 //---- Buttons ----
 
@@ -18,7 +14,6 @@ const buttonIds = /**@type {const}*/
 export const btns =
 	/**@type {{[K in buttonIds[number]]:HTMLButtonElement}}*/
 	(fromEntries(buttonIds.map(id=> [id,requireElem(id+'Btn')])))
-
 
 //---- Custom menus ----
 

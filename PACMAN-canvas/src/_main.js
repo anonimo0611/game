@@ -3,7 +3,7 @@ import {Sound}  from '../_snd/sound.js'
 import  Speed   from './speed.js'
 import {Menu}   from './ui.js'
 import {State}  from './state.js'
-import {Ctrl}   from './control.js'
+import {Cfg}    from './control.js'
 import {Lives}  from './lives.js'
 import {Wall}   from './sprites/wall.js'
 import {Maze}   from './maze.js'
@@ -39,7 +39,7 @@ export const Game = new class GameCore {
 	/** Levels 1-13 scale in difficulty. Level 13 is the max difficulty cap. */
 	get speedByLv() {return 1 - (13 - Game.clampedLv) * Speed.StepPerLevel}
 	get clampedLv() {return clamp(Game.level, 1, 13)}
-	get speed()     {return State.isInGame? Ctrl.speed : 1}
+	get speed()     {return State.isInGame? Cfg.speed : 1}
 	get interval()  {return Game.speed * Ticker.Interval}
 	get moveSpeed() {return Game.speed * Game.speedByLv}
 
@@ -94,7 +94,7 @@ export const Game = new class GameCore {
 	}
 	#onLevelEnd() {
 		Game.#pacDied = false
-		!Ctrl.endlessMode
+		!Cfg.endlessMode
 			? State.setTitle()
 			: Scene.shouldPlayCutscene
 				? State.setCutscene()

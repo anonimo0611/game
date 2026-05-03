@@ -3,7 +3,7 @@ import _State    from '../../_lib/state.js'
 import _Speed    from '../speed.js'
 import {Game}    from '../_main.js'
 import {State}   from '../state.js'
-import {Ctrl}    from '../control.js'
+import {Cfg}     from '../control.js'
 import {Maze}    from '../maze.js'
 import {PtsMgr}  from '../points.js'
 import {PathMgr} from './paths.js'
@@ -97,7 +97,7 @@ export const Ghosts = new class GhostManager {
 	}
 	#onInGame = ()=> {
 		Sound.playSiren()
-		Ctrl.alwaysChase && this.#setReleaseTimer()
+		Cfg.alwaysChase && this.#setReleaseTimer()
 	}
 	#setReleaseTimer() {
 		const lv = (Game.pacDied? 0 : Game.clampedLv)
@@ -157,7 +157,7 @@ const signalDirectionReversal = ()=> {
 const PhaseManager = function() {
 	function create(lv=1) {
 		let tCnt = -1, idx = 0
-		let mode = Ctrl.alwaysChase? CHASING : SCATTER
+		let mode = Cfg.alwaysChase? CHASING : SCATTER
 		const list = /**@type {const}*/([
 			{mode:SCATTER, dur:lv <= 4 ? 4500 : 4000},
 			{mode:CHASING, dur:15e3},

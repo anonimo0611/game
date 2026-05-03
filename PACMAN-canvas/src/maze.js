@@ -2,7 +2,7 @@ import {Rect}  from '../_lib/rect.js'
 import {State} from './state.js'
 import {Ghost} from './ghosts/ghost.js'
 import {Wall}  from './sprites/wall.js'
-import {Ctrl,powChk} from './control.js'
+import {Cfg,powChk} from './control.js'
 
 const MapArr = freeze([... `\
 ////////////////////////////\
@@ -149,7 +149,7 @@ class MazeManager {
 	 @param {{baseTargetTile:Vec2,tile:Vec2}} ghost
 	*/
 	getGhostExitTile = ({baseTargetTile:b,tile:t})=>
-		!Ctrl.unrestricted && b.y < 10 && HouseOuter.contains(t)
+		!Cfg.unrestricted && b.y < 10 && HouseOuter.contains(t)
 			? Vec2.new(t.x>COLS/2 && b.x>COLS/2 ? 21:6, 15) : b
 
 	/**
