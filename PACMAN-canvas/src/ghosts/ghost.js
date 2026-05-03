@@ -189,11 +189,11 @@ export class Ghost extends Actor {
 	}
 	getNextDir(
 		currDir = this.dir,
-		stTile  = this.getAdjTile(currDir),
+		srcTile = this.getAdjTile(currDir),
 		tgtTile = this.getTargetTile()
 	) {
 		const dirs = TurnPriority.flatMap((dir,i)=> {
-			const testTile = this.getAdjTile(dir,stTile)
+			const testTile = this.getAdjTile(dir,srcTile)
 			return Dir.Opposite[currDir] != dir
 				&& !Maze.hasWall(testTile)
 				&& !this.#isRestrictedTile({dir,testTile})
