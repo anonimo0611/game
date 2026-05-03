@@ -41,60 +41,56 @@ export default class GhostSubSprite {
 		}
 	}
 	drawHadake(animIdx=0) {
-		const {ctx}= this
-		ctx.save()
-		ctx.translate(T/(2*SF))
 		animIdx == 0
 			? this.#drawHadake0()
 			: this.#drawHadake1()
-		ctx.restore()
 	}
 	#drawHadake0() {
 		const {ctx}= this
 		// Body
 		ctx.save()
 		ctx.beginPath()
-		ctx.moveTo(-6, 15)
-		ctx.quadraticCurveTo(2, -14, 34, -29)
-		ctx.addLinePath([67,-28],[60,-14])
-		ctx.quadraticCurveTo(55, -2, 46, 6)
-		ctx.addLinePath([62,7],[62,24],[43,24],[43,18])
+		ctx.moveTo(10, 31)
+		ctx.quadraticCurveTo(18, 2, 50, -13)
+		ctx.addLinePath([83,-12],[76,2])
+		ctx.quadraticCurveTo(71, 14, 62, 22)
+		ctx.addLinePath([78,23],[78,40],[59,40],[59,34])
 		ctx.fillStyle = Color.GhostSkin
 		ctx.fill()
 		ctx.restore()
 
 		// Clothes
 		ctx.beginPath()
-		ctx.setLinePath([-61,24],[-49,9])
-		ctx.quadraticCurveTo(-37, -3, -29, 10)
-		ctx.quadraticCurveTo(-22, 18, -12, 8)
-		ctx.quadraticCurveTo(-2, 2, 5.5, 0)
-		ctx.quadraticCurveTo(16, -5, 19, 4)
-		ctx.quadraticCurveTo(26, 14, 31, 17)
-		ctx.addLinePath([23,17],[19,24],[-57,24])
+		ctx.setLinePath([-45,40],[-33,25])
+		ctx.quadraticCurveTo(-21, 13, -13, 26)
+		ctx.quadraticCurveTo(-6, 34, 4, 24)
+		ctx.quadraticCurveTo(14, 18, 21.5, 16)
+		ctx.quadraticCurveTo(32, 11, 35, 20)
+		ctx.quadraticCurveTo(42, 30, 47, 33)
+		ctx.addLinePath([39,33],[35,40],[-41,40])
 		ctx.fill()
-		this.#hadakeEyes([39,60],[45,67])
+		this.#hadakeEyes([55,76],[61,83])
 	}
 	#drawHadake1() {
 		const {ctx}= this
 		// Body
 		ctx.save()
 		ctx.beginPath()
-		ctx.moveTo(-9, 19)
-		ctx.quadraticCurveTo(9, -1, 28, -26)
-		ctx.addLinePath([57,-26],[57,-9])
-		ctx.quadraticCurveTo(56, 1, 51, 6)
-		ctx.addLinePath([69,6],[69,24],[50,24],[50,18],[18,18])
+		ctx.moveTo(7, 35)
+		ctx.quadraticCurveTo(25, 15, 44, -10)
+		ctx.addLinePath([73,-10],[73,7])
+		ctx.quadraticCurveTo(72, 17, 67, 22)
+		ctx.addLinePath([85,22],[85,40],[66,40],[66,34],[34,34])
 		ctx.fillStyle = Color.GhostSkin
 		ctx.fill()
 		ctx.restore()
 
 		// Clothes
-		ctx.newLinePath([-61,24],[-52,14])
-		ctx.quadraticCurveTo(-42, 3, -37, 13)
-		ctx.addLinePath([2,13],[2,7],[28,6],[34,14],[30,17],[24,24])
+		ctx.newLinePath([-45,40],[-36,30])
+		ctx.quadraticCurveTo(-26, 19, -21, 29)
+		ctx.addLinePath([18,29],[18,23],[44,22],[50,30],[46,33],[40,40])
 		ctx.fill()
-		this.#hadakeEyes([34,55],[40,62])
+		this.#hadakeEyes([50,71],[56,78])
 	}
 	/**
 	 @param {[L:number, R:number]} ballsLR
@@ -105,12 +101,12 @@ export default class GhostSubSprite {
 		for (const i of [1,0]) {
 			// Eyeballs
 			ctx.beginPath()
-			ctx.ellipse(ballsLR[i], -31, 11, 16, 0,0, PI*2)
+			ctx.ellipse(ballsLR[i], -15, 11, 16, 0,0, PI*2)
 			ctx.fillStyle = 'white'
 			ctx.fill()
 			// Eyes
 			ctx.beginPath()
-			ctx.ellipse(eyesLR[i], -31, 5, 9, 0,0, PI*2)
+			ctx.ellipse(eyesLR[i], -15, 5, 9, 0,0, PI*2)
 			ctx.fillStyle = Color.GhostEye
 			ctx.fill()
 		}
