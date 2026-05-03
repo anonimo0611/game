@@ -65,9 +65,9 @@
 				</custom-menu>
 			</label>
 			<div class="checkboxes">
-				<label><chk-in><input type="checkbox" id="powChk" checked></chk-in><chk-label>Power Cookies</chk-label></label>
-				<label><chk-in><input type="checkbox" id="onlChk"></chk-in><chk-label>Current level Only</chk-label></label>
-				<label><chk-in><input type="checkbox" id="chsChk"></chk-in><chk-label>Always Chase mode</chk-label></label>
+				<label><chk-in><input type="checkbox" id="powEnabled" checked></chk-in><chk-label>Power Cookies</chk-label></label>
+				<label><chk-in><input type="checkbox" id="endlessMode"></chk-in><chk-label>Current level Only</chk-label></label>
+				<label><chk-in><input type="checkbox" id="alwaysChase"></chk-in><chk-label>Always Chase mode</chk-label></label>
 			</div>
 			<div class="buttons">
 				<button id="clearBtn">Clear Score</button>
@@ -79,8 +79,8 @@
 		</div>
 		<ul id="cfgPanel" class="panel panel-ui" data-caption="Configuration">
 			<li class="volCtrl"><output for="volRng volRg2">5</output><label>Volume:<input type="range" id="volRng" class="volRng" value="5" step="1" min="0" max="10" data-links="volRg2"></label></li>
-			<li><output for="spdRng">1</output><label>Speed:<input type="range" id="spdRng" value="1" step="0.1" min="0.5" max="1.2"></label></li>
-			<li><output for="lvsRng">3</output><label>PacLives:<input type="range" id="lvsRng" value="3" step="1" min="1" max="5"></label></li>
+			<li><output for="speed">1</output><label>Speed:<input type="range" id="speed" value="1" step="0.1" min="0.5" max="1.2"></label></li>
+			<li><output for="initialLives">3</output><label>PacLives:<input type="range" id="initialLives" value="3" step="1" min="1" max="5"></label></li>
 			<li class="noLeft">
 			<label>Extend:
 				<custom-menu id="ExtendMenu">
@@ -93,11 +93,11 @@
 				</custom-menu>
 			</label>
 			</li>
-			<li><chk-in><input type="checkbox" id="invChk"></chk-in><label for="invChk">invincible</label></li>
-			<li><chk-in><input type="checkbox" id="unrChk"></chk-in><label for="unrChk">Ghosts Unrestricted</label></li>
-			<li><chk-in><input type="checkbox" id="tgtChk"></chk-in><label for="tgtChk">Show targets</label></li>
-			<li><chk-in><input type="checkbox" id="pthChk"></chk-in><label for="pthChk">Show paths</label></li>
-			<li><chk-in><input type="checkbox" id="grdChk"></chk-in><label for="grdChk">Show tile grid</label></li>
+			<li><chk-in><input type="checkbox" id="invincible"></chk-in><label for="invincible">invincible</label></li>
+			<li><chk-in><input type="checkbox" id="unrestricted"></chk-in><label for="unrestricted">Ghosts Unrestricted</label></li>
+			<li><chk-in><input type="checkbox" id="showTargets"></chk-in><label for="showTargets">Show targets</label></li>
+			<li><chk-in><input type="checkbox" id="showPaths"></chk-in><label for="showPaths">Show paths</label></li>
+			<li><chk-in><input type="checkbox" id="showGridLines"></chk-in><label for="showGridLines">Show tile grid</label></li>
 			<li class="buttons noLeft">
 			<button class="demo at">Attract Demo</button>
 			<button class="demo cs">Cutscene 1</button>
