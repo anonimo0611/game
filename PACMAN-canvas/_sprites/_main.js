@@ -62,13 +62,13 @@ const [Cols,Rows]= GridSize
 	}
 	#drawPoints() {
 		/**
-		 @param {number}   pointType
-		 @param {PtsVal} pointValue
+		 @param {PtsIdx} ptsType
+		 @param {PtsVal} ptsValue
 		 @param {number} x
 		 @param {number} y
 		*/
-		function draw(pointType, pointValue, x,y) {
-			const {ctx:cache,w,h}= Pts.cache({ptsType: pointType,ptsValue: pointValue},S)
+		function draw(ptsType, ptsValue, x,y) {
+			const {ctx:cache,w,h}= Pts.cache({ptsType,ptsValue},S)
 			ctx.save()
 			ctx.translate(x,y)
 			ctx.drawImage(cache.canvas, -w/2, -h/2)
