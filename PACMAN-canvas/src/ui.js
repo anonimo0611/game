@@ -1,4 +1,3 @@
-import {State} from './state.js'
 export const Form = document.forms[0]
 
 //---- Inputs ----
