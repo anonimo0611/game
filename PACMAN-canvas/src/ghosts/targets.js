@@ -4,7 +4,7 @@ import {player} from '../player/player.js'
 import {Maze}   from '../maze.js'
 import {Ghosts} from './_system.js'
 import {Ghost}  from './ghost.js'
-import {Akabei,Pinky,Aosuke,Guzuta} from './ghosts.js'
+import {Akabei,Pinky,Aosuke,Guzuta} from './ghost_sub.js'
 
 export const Targets = new class TargetVisualizer {
 	/** @param {readonly Ghost[]} ghosts */
