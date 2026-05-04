@@ -31,14 +31,14 @@ export const Ctrl = new class Controller {
 		Ctrl.#setupCtrls()
 		$win.on({keydown:Ctrl.#onKeydown})
 	}
-	#anyFocused = false
+	#anyFocued = false
 	get extendScore()  {return +Menu.Extend.value}
-	get isCaptured()   {return Ctrl.#anyFocused || Confirm.opened}
-	get isPractice()   {return Ctrl.usingCheats ||!Ctrl.isArcadeMode}
-	get isArcadeMode() {return CfgD.endlessMode && Menu.Level.index == 0}
 	get showTracking() {return CfgD.showTargets || CfgD.showPaths}
 	get semiTransPac() {return CfgD.invincible  || CfgD.showGridLines}
 	get usingCheats()  {return CfgD.invincible  || CfgD.speed<.7 || Ctrl.showTracking}
+	get isCaptured()   {return Ctrl.#anyFocued  || Confirm.opened}
+	get isPractice()   {return Ctrl.usingCheats ||!Ctrl.isArcadeMode}
+	get isArcadeMode() {return CfgD.endlessMode && Menu.Level.index == 0}
 
 	/** @param {boolean} [force] */
 	pause(force) {
@@ -115,7 +115,7 @@ export const Ctrl = new class Controller {
 		case 'Escape': return Ctrl.pause()
 		case 'Delete': return Ctrl.#quit(e.ctrlKey)
 		default:
-			if (Ctrl.#anyFocused || !Sound.settled) return
+			if (Ctrl.#anyFocued || !Sound.settled) return
 			if (Dir.from(e,{wasd:true}) || e.key == '\x20') {
 				State.isTitle && btns.start.click()
 				Ticker.paused && Ctrl.pause()
@@ -135,7 +135,7 @@ export const Ctrl = new class Controller {
 	#trackInputFocus() {
 		$(document.body).on('focusin focusout', e=> {
 			const isStartBtn = (e.target == btns.start)
-			Ctrl.#anyFocused = (e.type == 'focusin') && !isStartBtn
+			Ctrl.#anyFocued  = (e.type == 'focusin') && !isStartBtn
 		})
 	}
 	#setupCtrls() {
