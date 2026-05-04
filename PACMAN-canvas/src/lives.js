@@ -14,10 +14,10 @@ export const Lives = function() {
 	})
 	function draw(left=3) {
 		HUD.save()
-		HUD.translate(SIZE, BH-SIZE)
-		HUD.clearRect(0,0, SIZE*MAX, SIZE)
+		HUD.translate(SIZE+T, BH-T)
+		HUD.clearRect(-T,-T, SIZE*MAX, SIZE)
 		for (let i=0; i<left; i++)
-			sprite.draw({center:{x:SIZE*i+T, y:T}})
+			sprite.draw({center:{x:SIZE*i}})
 		HUD.restore()
 	}
 	function add(n=0) {draw(left += n)}

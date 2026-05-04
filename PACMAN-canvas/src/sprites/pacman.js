@@ -38,7 +38,7 @@ export default class PacmanSprite {
 		this.#mAngle = OPEN_MAX * abs(sin(phase))
 	}
 	draw({
-		center:{x,y}={x:0,y:0},
+		center:{x=0,y=0}={x:0,y:0},
 		orient = /**@type {Direction}*/(L),
 		alpha  = 1,
 		hidden = false,
