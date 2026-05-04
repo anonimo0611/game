@@ -4,8 +4,6 @@ import {SpeakerRenderer} from './speaker.js'
 let lstVol = NaN
 
 const MAX_VOL   = 10
-const volRange  = qS('#volRng')
-const volRange2 = qS('#volRg2')
 const $speaker  = $('#speaker')
 const $volRngs  = $('.volRng')
 const $volCtrls = $('.volCtrl')
@@ -16,43 +14,44 @@ const speaker = function() {
 	return new SpeakerRenderer(ctx,'#FFF')
 }()
 
-const SoundCtrl = {
-	loaded() {
-		const {mute,input,keydown}= this
-		$win.on({keydown})
-		$volRngs.on({input}).trigger('input')
-		$speaker.on({click:mute}).onWheel(input)
-	},
+const Ctrl = {
+    loaded() {
+  		const {input,keydown,mute}= this
+    	$win.on({keydown})
+        $volRngs.on({input})
+        $speaker.on({click:mute})
+    },
 	failed() {
 		$volCtrls.hide()
 	},
-	input(/**@type {Event}*/e) {
-		if (volRange instanceof HTMLInputElement) {
-			const isInput = e.target instanceof HTMLInputElement
-			const rngCtrl = (isInput? e.target : volRange)
-			speaker.draw(Sound.vol = rngCtrl.valueAsNumber)
-		}
+	input(/**@type {JQTriggeredEvent}*/e) {
+		if (e.target instanceof HTMLInputElement)
+			Ctrl.setVolume(e.target.valueAsNumber)
 	},
-	keydown(/**@type {JQuery.KeyDownEvent}*/e) {
-		if (keyRepeat(e) || hasModifierKeys(e))
-			return
-		if (e.key.toUpperCase() == 'M'
-		 || e.target == volRange2 && isEnterKey(e))
-			SoundCtrl.mute()
+    setVolume(/**@type {number}*/val) {
+        Sound.vol = val
+        $volRngs.val(val)
+        speaker.draw(val)
 	},
 	mute() {
-		if (volRange) {
-			lstVol = Sound.vol || (lstVol || MAX_VOL/2)
-			$volRngs.val(Sound.vol ? 0 : lstVol)
-			$(volRange).trigger('input')
-		}
-	}
+ 		lstVol = Sound.vol || (lstVol || MAX_VOL/2)
+  		$volRngs.val(Sound.vol? 0 : lstVol).trigger('input')
+	},
+	keydown(/**@type {JQKeyboardEvent}*/e) {
+        if (keyRepeat(e) || hasModifierKeys(e)) return
+        const isMKey = e.key.toUpperCase() == 'M'
+        const isEnterOnRng = $(e.target).hasClass('volRng') && isEnterKey(e)
+        if (isMKey || isEnterOnRng) {
+            e.preventDefault()
+            Ctrl.mute()
+        }
+    }
 }
 
 /** @param {boolean} succeeded */
 export function onSettled(succeeded) {
 	succeeded
-		? SoundCtrl.loaded()
-		: SoundCtrl.failed()
+		? Ctrl.loaded()
+		: Ctrl.failed()
 	$root.addClass('sound-settled')
 }
