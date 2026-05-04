@@ -1,11 +1,12 @@
 import {State}    from './state.js'
-import {Cfg}      from './control.js'
 import  Sprite    from './sprites/pacman.js'
+import {getInput} from './ui.js'
 
 export const Lives = function() {
 	let   left   = 0
 	const MAX    = 5
 	const SIZE   = T*2
+	const input  = getInput('initialLives')
 	const sprite = new Sprite(HUD, T*.8, 0.5)
 	State.on({
 		Title:   ()=> reset(),
@@ -21,8 +22,8 @@ export const Lives = function() {
 		HUD.restore()
 	}
 	function add(n=0) {draw(left += n)}
-	function reset()  {draw(left = Cfg.initialLives-1)}
-	$('#initialLives').on({input:reset})
+	function reset()  {draw(left = input.valueAsNumber-1)}
+	$(input).on({input:reset})
 	return {
 		extend()   {add(1)},
 		get left() {return left},
