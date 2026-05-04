@@ -4,14 +4,13 @@ import {Confirm}  from '../_lib/confirm.js'
 import {State}    from './state.js'
 import {Score}    from './score.js'
 import {drawText} from './message.js'
-import {Form,Menu,getInput,btns} from './ui.js'
+import {Form,Menu,btns,getInput} from './ui.js'
 
 const SETTINGS_KEY = 'anopacman'
 const {InfoTexts:palette}= Color
 
 const CfgD = new class ConfigData {
 	speed         = 1
-	initialLives  = 3
 	powEnabled    = true
 	endlessMode   = false
 	alwaysChase   = false
