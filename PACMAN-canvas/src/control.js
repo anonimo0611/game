@@ -47,7 +47,7 @@ export const Ctrl = new class Controller {
 		Sound.pause( Ticker.pause(force) )
 	}
 	#save() {
-		const data = /**@type {any}*/({...CfgD})
+		const data = /**@type {any}*/(CfgD)
 		keys(Menu).forEach(id=> data[id] = Menu[id].index)
 		document.querySelectorAll('input').forEach(input=> {
 			switch(input.type) {

@@ -47,7 +47,7 @@ const PowMap  = /**@type {Map<TileIdx,Position>}*/(new Map)
 const DOT_RADIUS = T/9
 const POW_RADIUS = T/2
 const DotSymbols = new Set([...'.O'])
-const HouseRect  = new Rect(14-4, 15-2,  8, 5).freeze()
+const HouseInner = new Rect(14-4, 15-2,  8, 5).freeze()
 const HouseOuter = new Rect(14-5, 15-3, 10, 7).freeze()
 
 class House {
@@ -57,7 +57,7 @@ class House {
 	}
 	/** @param {Position} tilePos */
 	isIn(tilePos) {
-		return HouseRect.contains(tilePos)
+		return HouseInner.contains(tilePos)
 	}
 	/** @param {Ghost} g */
 	arrived(g, spd=1) {
