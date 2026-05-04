@@ -133,9 +133,9 @@ const $root = $(document.documentElement)
 */jQuery.fn.onNS = function(ns, handlers, force) {
 	const NS = ns[0] != '.' ? `.${ns}` : ns
 	if (force === false) return this.off(NS)
-	entries(handlers).forEach(([ev,cb])=> {
-		const ns = ev.trim().replace(/[_\s]+/g,`${NS}\x20`) + NS
-		this.off(ns).on(ns,cb)
+	entries(handlers).forEach(([e,cb])=> {
+		const ev = e.trim().replace(/[_\s]+/g,`${NS}\x20`) + NS
+		this.off(ev).on(ev,cb)
 	})
 	return this
 }
