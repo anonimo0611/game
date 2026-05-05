@@ -2,7 +2,7 @@ const SPLIT_DUR = 1200/Ticker.Interval
 const BURST_DUR =  300/Ticker.Interval
 const TOTAL_DUR = SPLIT_DUR+BURST_DUR+30
 
-import {SCALE_FACTOR} from './pacman.js'
+import {SCALE_FACTOR,MOUTH_DEPTH_FACTOR} from './pacman.js'
 export class Dying {
 	/** @readonly */ctx
 	/** @readonly */r
@@ -58,7 +58,7 @@ export class Dying {
 		const {ctx,r}= this
 		const angle = this.#arcAng
 		ctx.beginPath()
-		ctx.moveTo(0, r*0.3)
+		ctx.moveTo(0, r*MOUTH_DEPTH_FACTOR)
 		ctx.arc(0, 0, r, -PI/2+angle, -PI/2-angle)
 		ctx.fill()
 	}

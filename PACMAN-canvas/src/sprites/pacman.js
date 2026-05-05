@@ -6,6 +6,7 @@ const PHASE_MID = asin(OPEN_MID/OPEN_MAX)
 import {Dir}   from '../../_lib/direction.js';
 import {Dying} from './pacman_dying.js'
 export const SCALE_FACTOR = 0.9
+export const MOUTH_DEPTH_FACTOR = 0.3
 export default class PacmanSprite {
 	/** @readonly */ctx
 	/** @readonly */r
@@ -60,7 +61,7 @@ export default class PacmanSprite {
 		ctx.scale(SCALE_FACTOR)
 		ctx.rotate(Dir.Rotation[orient])
 		ctx.beginPath()
-		ctx.moveTo(-radius*0.3, 0)
+		ctx.moveTo(-radius*MOUTH_DEPTH_FACTOR, 0)
 		ctx.arc(0, 0, radius, angle, PI*2-angle)
 		ctx.fillStyle = Color.Pacman
 		ctx.fill()
