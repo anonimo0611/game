@@ -12,7 +12,7 @@ const {InfoTexts:palette}= Color
 const CfgD = new class ConfigData {
 	speed         = 1
 	powEnabled    = true
-	endlessMode   = false
+	currentOnly   = false
 	alwaysChase   = false
 	unrestricted  = false
 	invincible    = false
@@ -37,7 +37,7 @@ export const Ctrl = new class Controller {
 	get usingCheats()  {return CfgD.invincible  || CfgD.speed<.7 || Ctrl.showTracking}
 	get isCaptured()   {return Ctrl.#anyFocused || Confirm.opened}
 	get isPractice()   {return Ctrl.usingCheats ||!Ctrl.isArcadeMode}
-	get isArcadeMode() {return CfgD.endlessMode && Menu.Level.index == 0}
+	get isArcadeMode() {return CfgD.currentOnly == false && !Menu.Level.index}
 
 	/** @param {boolean} [force] */
 	pause(force) {

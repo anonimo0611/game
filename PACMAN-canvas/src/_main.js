@@ -3,8 +3,8 @@ import {Sound}  from '../_snd/sound.js'
 import  Speed   from './speed.js'
 import {Menu}   from './ui.js'
 import {State}  from './state.js'
-import {Cfg}    from './control.js'
 import {Lives}  from './lives.js'
+import {Cfg}    from './control.js'
 import {Wall}   from './sprites/wall.js'
 import {Maze}   from './maze.js'
 import {player} from './player/player.js'
@@ -94,7 +94,7 @@ export const Game = new class GameCore {
 	}
 	#onLevelEnd() {
 		Game.#pacDied = false
-		!Cfg.endlessMode
+		Cfg.currentOnly
 			? State.setTitle()
 			: Scene.shouldPlayCutscene
 				? State.setCutscene()
