@@ -68,10 +68,10 @@ export const Ctrl = new class Controller {
 		})
 	}
 	#output() {
-		const spd = 'x'+CfgD.speed.toFixed(1), lh = 0.9
-		const opt = {ctx:HUD, size:T*0.68, scaleX:0.7, style:'bold'}
 		Ctrl.#save()
 		Ctrl.#toggleGrid()
+		const spd = 'x'+CfgD.speed.toFixed(1), lh = 0.9
+		const opt = {ctx:HUD, size:T*0.68, scaleX:0.7, style:'bold'}
 		HUD.save()
 		HUD.translate(T*0.1, T*17.25)
 		HUD.clearRect(0, 0, BW, T*3)
@@ -93,8 +93,7 @@ export const Ctrl = new class Controller {
 		Ctrl.#restore()
 	}
 	#quit(noConfirm=false) {
-		if (State.isTitle)
-			return
+		if (!State.isTitle) return
 		noConfirm
 			? State.setQuit()
 			: State.isInGame && Ctrl.#quitConfirm()
