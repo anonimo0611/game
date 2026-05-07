@@ -82,8 +82,8 @@ export const Ctrl = new class Controller {
 		}
 		if (CfgD.showPaths || CfgD.unrestricted) {
 			HUD.translate(T*(COLS-5), 0)
-			drawText(0, 0, palette[+CfgD.showPaths],   'Show Paths', opt)
-			drawText(0,lh, palette[+CfgD.unrestricted],'Ghosts Un-\nrestricted', opt)
+			drawText(0,  0, palette[+CfgD.showPaths],   'Show Paths', opt)
+			drawText(0, lh, palette[+CfgD.unrestricted],'Ghosts Un-\nrestricted', opt)
 		}
 		HUD.restore()
 	}

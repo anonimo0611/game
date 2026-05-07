@@ -11,6 +11,7 @@ import {PtsMgr}   from './points.js'
 import {Message}  from './message.js'
 import {Attract}  from './demo/attract.js'
 import {Cutscene} from './demo/cutscene.js'
+export {Scene}
 
 {// Reset counter on any title screen interaction
 	const EV = `blur focus resize scroll keydown pointerdown mousemove wheel`
@@ -21,7 +22,7 @@ import {Cutscene} from './demo/cutscene.js'
 }
 
 /** @type {SceneDict<States[number]>} */
-const SceneList = {Attract,Cutscene}
+const DemoDict  = {Attract,Cutscene}
 const DemoScene = {
 	/** Attract mode will begin after a period of inactivity. */
 	updateTimer() {
@@ -32,8 +33,12 @@ const DemoScene = {
 			: Ticker.elapsedTime > waitIime && State.setAttract()
 		}
 	},
-	update() {SceneList[State.current]?.update()},
-	draw()   {SceneList[State.current]?.draw?.()},
+	update() {
+		DemoDict[State.current]?.update()
+	},
+	draw() {
+		DemoDict[State.current]?.draw?.()
+	},
 }
 
 const MainScene = {
@@ -50,21 +55,19 @@ const MainScene = {
 	},
 }
 
-export const Scene = new class SceneManager {
+const Scenes = [MainScene,DemoScene]
+const Scene  = new class SceneManager {
 	get shouldPlayCutscene() {
 		return Cutscene.num > 0
-	}
-	get #current() {
-		return State.isDemoMode? DemoScene:MainScene
 	}
 	update() {
 		PtsMgr.update()
 		DemoScene.updateTimer()
-		Scene.#current.update()
+		Scenes[+State.isDemoMode].update()
 	}
 	draw() {
 		Fg.clear()
-		Scene.#current.draw()
+		Scenes[+State.isDemoMode].draw()
 		Message.draw()
 	}
 }
