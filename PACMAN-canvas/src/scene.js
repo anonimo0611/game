@@ -24,6 +24,12 @@ export {Scene}
 /** @type {SceneDict<States[number]>} */
 const DemoDict  = {Attract,Cutscene}
 const DemoScene = {
+	update() {
+		DemoDict[State.current]?.update()
+	},
+	draw() {
+		DemoDict[State.current]?.draw?.()
+	},
 	/** Attract mode will begin after a period of inactivity. */
 	updateTimer() {
 		const waitIime = 1e3*30 // 30secs
@@ -32,12 +38,6 @@ const DemoScene = {
 			? Ticker.resetCount()
 			: Ticker.elapsedTime > waitIime && State.setAttract()
 		}
-	},
-	update() {
-		DemoDict[State.current]?.update()
-	},
-	draw() {
-		DemoDict[State.current]?.draw?.()
 	},
 }
 
