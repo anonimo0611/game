@@ -31,7 +31,6 @@ export class Pinky extends Ghost {
 }
 
 export class Aosuke extends Ghost {
-	/** @readonly */
 	constructor() {
 		super(U, {type:2, tile:[11.5, 15], align:-1})
 	}
