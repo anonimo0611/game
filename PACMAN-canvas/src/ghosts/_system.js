@@ -155,7 +155,6 @@ const signalDirectionReversal = ()=> {
 	$(GhostList).trigger(Evt.Reverse)
 }
 const PhaseManager = function() {
-	let phase = create()
 	function create(lv=1) {
 		let tCnt = -1, idx = 0
 		let mode = Cfg.alwaysChase? CHASING : SCATTER
@@ -180,6 +179,7 @@ const PhaseManager = function() {
 			}
 		return {get mode(){return mode},update}
 	}
+	let phase = create()
 	State.on({_Ready:()=> phase = create(Game.level)})
 	return {
 		get mode() {return phase.mode},
@@ -230,25 +230,25 @@ export const DotCounter = function() {
 }()
 
 const CruiseElroy = function() {
+	let   currentPart   = 0
 	const Accelerations = freeze([1.00, 1.02, 1.05, 1.1])
 	const DotsLeftTable = freeze([20,20,30,40,50,60,70,70,80,90,100,110,120])
 	function angry() {
 		return State.isInGame
-			&& currPart > 1
+			&& currentPart > 1
 			&& GhostList[GhostType.Akabei]?.isFrightened == false
 			&& GhostList[GhostType.Guzuta]?.isStarted == true
 	}
 	onPlayerDotEaten(()=> {
-		const rate = [1.5, 1.0, 0.5][currPart]
+		const rate = [1.5, 1.0, 0.5][currentPart]
 		if (Maze.dotsLeft <= DotsLeftTable[Game.clampedLv-1]*rate)
-			++currPart && Sound.playSiren()
+			++currentPart && Sound.playSiren()
 	})
-	let currPart = 0
-	State.on({_NewLevel:()=> currPart = 0})
+	State.on({_NewLevel:()=> currentPart = 0})
 	return {
-		get part()  {return currPart},
+		get part()  {return currentPart},
 		get angry() {return angry()},
-		get speed() {return Speed.Base * Accelerations[currPart]},
+		get speed() {return Speed.Base * Accelerations[currentPart]},
 	}
 }()
 
