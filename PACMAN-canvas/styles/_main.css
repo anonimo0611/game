@@ -73,7 +73,7 @@ body:is([data-state=Attract],[data-state=Cutscene]){:is(header,canvas:not(#board
 	cm-item{line-height:1;padding-top:0;padding-bottom:0}
 	output::before,cm-item::before{--x:calc(-1*var(--t)*var(--val,0));--size:var(--width) var(--t);content:'';background:no-repeat var(--x) 0/var(--size) var(--url);width:var(--t);height:var(--t);translate:0}
 }
-#ExtendMenu{text-align:right;font-size:.9em;scale:.9}
+#ExtendMenu{font-size:1em;scale:.9;translate:0 -.1em}
 #helpPanel{
 	table{width:100%}
 	kbd-arrows {display:inline-flex}

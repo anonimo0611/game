@@ -81,7 +81,8 @@ custom-menu{white-space:nowrap;color:#FFF;position:relative;display:inline-block
 	cm-list,cm-item{text-align:center;transition:transform .3s;will-change:transform;z-index:1}
 	cm-list{display:inline-flex}
 	cm-btn{
-		background:transparent!important;border:solid;border-width:0 0 .2em .2em;padding:0;width:.5em;height:.5em;display:inline-block;position:absolute;z-index:2;top:50%;&.l{left:.05em;translate:0 -50%;rotate:+45deg}
+		background:transparent!important;border:solid;border-width:0 0 .18em .18em;padding:0;width:.5em;height:.5em;display:inline-block;position:absolute;z-index:2;top:50%;
+		&.l{left: .05em;translate:0 -50%;rotate:+45deg}
 		&.r{right:.05em;translate:0 -50%;rotate:-45deg;scale:-1 1}
 		&[data-disabled=true]{opacity:.4}
 		transform-origin:center;
