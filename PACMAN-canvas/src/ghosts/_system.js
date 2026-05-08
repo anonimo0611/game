@@ -82,9 +82,9 @@ export const Ghosts = new class GhostManager {
 	get spriteIdx()     {return Fright.session?.spriteIdx ?? 0}
 	get caughtAll()     {return Fright.session?.caughtAll ?? false}
 	get isFrightened()  {return Fright.session != null}
+	get isChasing()     {return PhaseManager.mode == CHASING}
+	get isScattering()  {return PhaseManager.mode == SCATTER}
 	get isAnyEscaping() {return GhostList.some(g=> g.isEscaping)}
-	get isChasing()     {return PhaseManager.isChaseMode}
-	get isScattering()  {return PhaseManager.isScatterMode}
 
 	/** @param {Ghost[]} [ghosts] */
 	initialize(ghosts) {
@@ -155,6 +155,7 @@ const signalDirectionReversal = ()=> {
 	$(GhostList).trigger(Evt.Reverse)
 }
 const PhaseManager = function() {
+	let phase = create()
 	function create(lv=1) {
 		let tCnt = -1, idx = 0
 		let mode = Cfg.alwaysChase? CHASING : SCATTER
@@ -179,11 +180,9 @@ const PhaseManager = function() {
 			}
 		return {get mode(){return mode},update}
 	}
-	let phase = create()
 	State.on({_Ready:()=> phase = create(Game.level)})
 	return {
-		get isChaseMode()   {return phase.mode == CHASING},
-		get isScatterMode() {return phase.mode == SCATTER},
+		get mode() {return phase.mode},
 		update() {State.isInGame && phase.update?.()},
 	}
 }()
@@ -258,10 +257,10 @@ const Fright = function() {
 	const PtsList = /**@type {const}*/([200,400,800,1600])
 	const DurList = /**@type {const}*/([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	class Session {
-		#et=0; #flash=0; caught=0; #fIdx=1;
-		get points()    {return PtsList[this.caught-1]}
+		#et=0; #flash=0; #caught=0; #fIdx=1;
+		get points()    {return PtsList[this.#caught-1]}
 		get spriteIdx() {return this.#flash && this.#fIdx^1}
-		get caughtAll() {return this.caught == GhostType.Max}
+		get caughtAll() {return this.#caught == GhostType.Max}
 		constructor() {
 			(this.secs = DurList[Game.clampedLv-1]) > 0
 				? this.#set(true)
@@ -271,7 +270,7 @@ const Fright = function() {
 			session = (isOn? this : null)
 			$(GhostList)
 				.trigger(Evt.Frighten, isOn)
-				.offon(StateType.Bitten, ()=> this.caught++, isOn)
+				.offon(StateType.Bitten, ()=> this.#caught++, isOn)
 			Sound.toggleFrightMode(isOn)
 		}
 		#flashing() {
