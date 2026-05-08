@@ -29,9 +29,9 @@ body:is([data-state=Attract],[data-state=Cutscene]){:is(header,canvas:not(#board
 .panel{
 	top:var(--height);right:0;table{border-collapse:collapse}
 	caption,dt,
-	&[data-caption]::before{text-align:center;color:#FF3;font:700 .8rem/1 sans-serif;margin:.2em 0 .2em .4rem;padding:0}
+	&[data-caption]::before{text-align:center;color:#FF3;font:small-caps bold .8rem/1 sans-serif;margin:.2em 0 .2em .4rem;padding:0}
 	&[data-caption]::before{content:attr(data-caption);display:block}
-	> li,th,td,dd{font:.75rem/1 sans-serif;padding:.1rem 0}
+	> li,th,td,dd{font:.7rem/1 sans-serif;padding:.1rem 0}
 	th,td{text-align:center;vertical-align:middle;font-weight:normal;padding:.15em .2em}
 }
 #cfg{
