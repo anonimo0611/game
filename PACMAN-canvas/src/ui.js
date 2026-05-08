@@ -8,12 +8,12 @@ export const getInput = id=>
 
 //---- Buttons ----
 
-const buttonIds = /**@type {const}*/
+const btnIds = /**@type {const}*/
 	(['clear','reset','start'])
 
 export const btns =
-	/**@type {{[K in buttonIds[number]]:HTMLButtonElement}}*/
-	(fromEntries(buttonIds.map(id=> [id,requireElem(id+'Btn')])))
+	/**@type {{[K in btnIds[number]]:HTMLButtonElement}}*/
+	(toObj(btnIds.map(id=> [id,requireElem(id+'Btn')])))
 
 //---- Custom menus ----
 
@@ -45,16 +45,15 @@ $win.on('resize', ()=> {
 
 //---- Panels ----
 
+$('body').on('keydown pointerdown', e=> {
+	if (e.key == 'Escape' || !e.target.closest('.panel-ui'))
+		$('.panel-ui').removeClass('opened')
+})
 $('.panelBtn').on('keydown pointerdown', e=> {
 	if (e.key && !isEnterKey(e)) return
 	const button = e.currentTarget
 	const tgtSel = button.dataset.target ?? ''
 	const opened = button.classList.contains('opened')
-	e.stopPropagation()
 	$('.panel-ui.opened').toggleClass('opened')
 	$(button).add(tgtSel).toggleClass('opened',!opened)
-})
-$('body').on('keydown pointerdown', e=> {
-	if (e.key == 'Escape' || !e.target.closest('.panel-ui'))
-		$('.panel-ui').removeClass('opened')
 })
