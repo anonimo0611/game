@@ -48,12 +48,19 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 */const isEnterKey = e=> (e.key == '\x20' || e.key == 'Enter')
 
 /**
+ @template {new ()=> HTMLElement} T
  @param {string} id
-*/const requireElem = id=> {
-	let elem = document.getElementById(id)
-	if (elem) return elem
-	throw ReferenceError(`There is no element with the ID “${id}”.`)
+ @param {T} [type]
+ @returns {InstanceType<T>}
+*/const requireElem = (id, type=/**@type {any}*/(HTMLElement))=> {
+    const e = document.getElementById(id)
+    if (e instanceof type) return /**@type {any}*/(e)
+    throw ReferenceError(`Element with ID "${id}" is not an instance of ${type.name}.`);
 }
+
+/**
+ @param {string} id
+*/const getInput = id=> requireElem(id,HTMLInputElement)
 
 /**
  @param  {string} selector
