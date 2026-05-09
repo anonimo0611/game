@@ -24,7 +24,7 @@ const {Ticker,Timer}= function() {
 		 @param {()=> void} [updateFn]
 		 @param {()=> void} [drawFn]
 		*/
-		set(updateFn,drawFn) {
+		set(updateFn, drawFn) {
 			new TickerCore(updateFn, drawFn)
 		},
 		/** @param {boolean} [force] */

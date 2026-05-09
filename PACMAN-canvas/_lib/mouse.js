@@ -7,6 +7,7 @@ export const Cursor = function() {
 	const hideDelay = 2000
 	const currPos   = Vec2.Zero
 	const lastPos   = Vec2.Zero
+
 	addEventListener('mousemove', e=> {
 		currPos.set(e.pageX, e.pageY)
 		clearTimeout(timerId)

@@ -93,14 +93,14 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	/**
 	 @param {number} x
 	 @param {number} y
-	 @param {number} radius
+	 @param {number} r
 	 @param {Cvs2DStyle} [style]
 	*/
-	fillCircle(x,y, radius, style=this.fillStyle) {
+	fillCircle(x,y, r, style=this.fillStyle) {
 		this.save()
 		this.beginPath()
 		style && (this.fillStyle = style)
-		this.arc(x,y, radius, 0, PI*2)
+		this.arc(x,y, r, 0, PI*2)
 		this.fill()
 		this.restore()
 		return this

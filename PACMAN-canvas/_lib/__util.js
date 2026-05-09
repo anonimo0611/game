@@ -51,11 +51,10 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
  @template {new ()=> HTMLElement} T
  @param {string} id
  @param {T} [type]
- @returns {InstanceType<T>}
 */const requireElem = (id, type=/**@type {any}*/(HTMLElement))=> {
-    const e = document.getElementById(id)
-    if (e instanceof type) return /**@type {any}*/(e)
-    throw ReferenceError(`Element with ID "${id}" is not an instance of ${type.name}.`);
+	const e = document.getElementById(id)
+	if (e instanceof type) return /**@type {InstanceType<T>}*/(e)
+	throw ReferenceError(`Element with ID "${id}" is not an instance of ${type.name}.`);
 }
 
 /**
