@@ -69,7 +69,6 @@ export const Ctrl = new class Controller {
 	#output() {
 		Ctrl.#save()
 		Ctrl.#toggleGrid()
-		$(Ctrl).trigger('update')
 		const spd = 'x'+Data.speed.toFixed(1), lh = 0.9
 		const opt = {ctx:HUD, size:T*0.68, scaleX:0.7, style:'bold'}
 		HUD.save()
