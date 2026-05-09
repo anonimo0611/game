@@ -15,12 +15,12 @@ const speaker = function() {
 }()
 
 const Ctrl = {
-    loaded() {
+	loaded() {
   		const {input,keydown,mute}= this
-    	$win.on({keydown})
-        $volRngs.on({input})
-        $speaker.on({click:mute})
-    },
+		$win.on({keydown})
+		$volRngs.on({input})
+		$speaker.on({click:mute})
+	},
 	failed() {
 		$volCtrls.hide()
 	},
@@ -28,24 +28,24 @@ const Ctrl = {
 		if (e.target instanceof HTMLInputElement)
 			Ctrl.setVolume(e.target.valueAsNumber)
 	},
-    setVolume(/**@type {number}*/val) {
-        Sound.vol = val
-        $volRngs.val(val)
-        speaker.draw(val)
+	setVolume(/**@type {number}*/val) {
+		Sound.vol = val
+		$volRngs.val(val)
+		speaker.draw(val)
 	},
 	mute() {
  		lstVol = Sound.vol || (lstVol || MAX_VOL/2)
   		$volRngs.val(Sound.vol? 0 : lstVol).trigger('input')
 	},
 	keydown(/**@type {JQKeyboardEvent}*/e) {
-        if (keyRepeat(e) || hasModifierKeys(e)) return
-        const isMKey = e.key.toUpperCase() == 'M'
-        const isEnterOnRng = $(e.target).hasClass('volRng') && isEnterKey(e)
-        if (isMKey || isEnterOnRng) {
-            e.preventDefault()
-            Ctrl.mute()
-        }
-    }
+		if (keyRepeat(e) || hasModifierKeys(e)) return
+		const isMKey = e.key.toUpperCase() == 'M'
+		const isEnterOnRng = $(e.target).hasClass('volRng') && isEnterKey(e)
+		if (isMKey || isEnterOnRng) {
+			e.preventDefault()
+			Ctrl.mute()
+		}
+	}
 }
 
 /** @param {boolean} succeeded */
