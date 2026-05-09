@@ -1,11 +1,5 @@
 export const Form = document.forms[0]
 
-//---- Inputs ----
-
-/** @param {string} id */
-export const getInput = id=>
-	/**@type {HTMLInputElement}*/(requireElem(id))
-
 //---- Buttons ----
 
 const btnIds = /**@type {const}*/

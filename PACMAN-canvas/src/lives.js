@@ -1,6 +1,5 @@
-import {State}    from './state.js'
-import  Sprite    from './sprites/pacman.js'
-import {getInput} from './ui.js'
+import {State} from './state.js'
+import  Sprite from './sprites/pacman.js'
 
 export const Lives = function() {
 	let   left   = 0
@@ -25,7 +24,7 @@ export const Lives = function() {
 	function reset()  {draw(left = input.valueAsNumber-1)}
 	$(input).on({input:reset})
 	return {
-		extend()   {add(1)},
+		extend()   {add(+1)},
 		get left() {return left},
 	}
 }()

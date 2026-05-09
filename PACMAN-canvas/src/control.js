@@ -4,14 +4,13 @@ import {Confirm}  from '../_lib/confirm.js'
 import {State}    from './state.js'
 import {Score}    from './score.js'
 import {drawText} from './message.js'
-import {Form,Menu,btns,getInput} from './ui.js'
+import {Form,Menu,btns} from './ui.js'
 
 const SETTINGS_KEY = 'anopacman'
 const {InfoTexts:palette}= Color
 
-const CfgD = new class ConfigData {
+const Data = new class ConfigData {
 	speed         = 1
-	powEnabled    = true
 	currentOnly   = false
 	alwaysChase   = false
 	unrestricted  = false
@@ -32,12 +31,12 @@ export const Ctrl = new class Controller {
 	}
 	#anyFocused = false
 	get extendScore()  {return +Menu.Extend.value}
-	get showTracking() {return CfgD.showTargets || CfgD.showPaths}
-	get semiTransPac() {return CfgD.invincible  || CfgD.showGridLines}
-	get usingCheats()  {return CfgD.invincible  || CfgD.speed<.7 || Ctrl.showTracking}
+	get showTracking() {return Data.showTargets || Data.showPaths}
+	get semiTransPac() {return Data.invincible  || Data.showGridLines}
+	get usingCheats()  {return Data.invincible  || Data.speed<.7 || Ctrl.showTracking}
 	get isCaptured()   {return Ctrl.#anyFocused || Confirm.opened}
 	get isPractice()   {return Ctrl.usingCheats ||!Ctrl.isArcadeMode}
-	get isArcadeMode() {return CfgD.currentOnly == false && !Menu.Level.index}
+	get isArcadeMode() {return Data.currentOnly == false && !Menu.Level.index}
 
 	/** @param {boolean} [force] */
 	pause(force) {
@@ -46,7 +45,7 @@ export const Ctrl = new class Controller {
 		Sound.pause( Ticker.pause(force) )
 	}
 	#save() {
-		const data = /**@type {any}*/(CfgD)
+		const data = /**@type {any}*/(Data)
 		keys(Menu).forEach(id=> data[id] = Menu[id].index)
 		document.querySelectorAll('input').forEach(input=> {
 			switch(input.type) {
@@ -70,20 +69,21 @@ export const Ctrl = new class Controller {
 	#output() {
 		Ctrl.#save()
 		Ctrl.#toggleGrid()
-		const spd = 'x'+CfgD.speed.toFixed(1), lh = 0.9
+		$(Ctrl).trigger('update')
+		const spd = 'x'+Data.speed.toFixed(1), lh = 0.9
 		const opt = {ctx:HUD, size:T*0.68, scaleX:0.7, style:'bold'}
 		HUD.save()
 		HUD.translate(T*0.1, T*17.25)
 		HUD.clearRect(0, 0, BW, T*3)
-		if (spd != 'x1.0' || CfgD.invincible || CfgD.showTargets) {
+		if (spd != 'x1.0' || Data.invincible || Data.showTargets) {
 			drawText(0, lh*0, palette[+(spd != 'x1.0') ], 'Speed'+spd, opt)
-			drawText(0, lh*1, palette[+CfgD.invincible ], 'Invincible',opt)
-			drawText(0, lh*2, palette[+CfgD.showTargets], 'Show Tgts', opt)
+			drawText(0, lh*1, palette[+Data.invincible ], 'Invincible',opt)
+			drawText(0, lh*2, palette[+Data.showTargets], 'Show Tgts', opt)
 		}
-		if (CfgD.showPaths || CfgD.unrestricted) {
+		if (Data.showPaths || Data.unrestricted) {
 			HUD.translate(T*(COLS-5), 0)
-			drawText(0,  0, palette[+CfgD.showPaths],   'Show Paths', opt)
-			drawText(0, lh, palette[+CfgD.unrestricted],'Ghosts Un-\nrestricted', opt)
+			drawText(0,  0, palette[+Data.showPaths],   'Show Paths', opt)
+			drawText(0, lh, palette[+Data.unrestricted],'Ghosts Un-\nrestricted', opt)
 		}
 		HUD.restore()
 	}
@@ -121,7 +121,7 @@ export const Ctrl = new class Controller {
 		}
 	}
 	#toggleGrid() {
-		Grid.canvas.style.opacity = String(+CfgD.showGridLines)
+		Grid.canvas.style.opacity = String(+Data.showGridLines)
 	}
 	#setupGrid() {
 		Grid.beginPath()
@@ -147,4 +147,4 @@ export const Ctrl = new class Controller {
 	}
 }
 ,powChk = getInput('powEnabled')
-,Cfg = /**@type {Readonly<CfgD>}*/(CfgD)
+,Cfg = /**@type {Readonly<Data>}*/(Data)
