@@ -33,8 +33,8 @@ export class Actor {
 	get revOrient() {return Dir.Opposite[this.orient]}
 
 	get tilePixel() {
-    	const dot = this.center.dot(Vec2[this.dir])
-    	return (dot % T + T) % T
+		const dot = this.center.dot(Vec2[this.dir])
+		return (dot % T + T) % T
 	}
 	get passedTileCenter() {
 		return this.tilePixel > T/2

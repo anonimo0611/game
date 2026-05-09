@@ -3,12 +3,14 @@ const LW = max(1, 3*SF|0) // Line  Width
 const LO = max(2, 4*SF|0) // Line  Offset
 const OO = max(1, 2*SF|0) // Outer Offset
 
-const CornerToRotationIdx = new Map(
-	Array.from('12345678abcdABCD', (v,i)=> [v,i%4])
-)
 const Ctxs = freeze({
 	Blue:  canvas2D(null, BW,BH).ctx,
 	White: canvas2D(null, BW,BH).ctx,
+})
+const Corner = /**@type {const}*/({
+	Type:    {Standard:0, LTShape:1, Outer:2, Pocket:3},
+	RegExps: [/[1-4]/,/[5-8]/,/[A-D]/,/[a-d]/],
+	toIndex: new Map(Array.from('12345678abcdABCD', (v,i)=> [v,i%4]))
 })
 
 import {State} from '../state.js'
@@ -21,7 +23,7 @@ export const Wall = new class WallRenderer {
 			ctx.strokeStyle = Color.MazeWalls[i]
 			Maze.Map.forEach((s,i)=> {
 				if (i%COLS >= COLS/2) return
-				Wall.#drawTile(ctx,s,i)
+				Wall.#drawTile(ctx, s, i%COLS, i/COLS|0)
 			})
 			ctx.flip(ctx.canvas, 0,0, true)
 			Wall.#drawHouse(ctx)
@@ -45,9 +47,7 @@ export const Wall = new class WallRenderer {
 		const y = (Maze.House.EntryTile.y+1.6)*T
 		Bg.fillRect(BW/2-T, y, T*2, T/4, Color.HouseDoor)
 	}
-	/**
-	 @param {EnhancedCtx2D} ctx
-	*/
+	/** @param {EnhancedCtx2D} ctx */
 	#drawHouse(ctx) {
 		const [ix,iy,ox,oy]= [31,16,34,19].map(n=>n/10*T)
 		ctx.save()
@@ -60,51 +60,56 @@ export const Wall = new class WallRenderer {
 		ctx.restore()
 	}
 	/**
-	  @param {EnhancedCtx2D} ctx
-	  @param {{type:number, ci:number, pos:Position}} _
+	 @param {EnhancedCtx2D} ctx
+	 @param {{type:number, ci:number, pos:Position}} _
 	*/
 	#drawCorner(ctx, {type,ci,pos:{x,y}}) {
+		const {Type:CT}= Corner
+		const radii = /**@type {number[]}*/([])
 		ctx.save()
 		ctx.translate(x+HT, y+HT)
 		ctx.rotate(ci*PI/2)
-		ctx.beginPath()
 		switch(type) {
-		case 0: ctx.arc(HT,HT, T-OO,  PI,-PI/2);break
-		case 1: ctx.arc(HT,HT, HT+LO, PI,-PI/2);break
-		case 2: ctx.arc(HT,HT, HT-LO, PI,-PI/2);break
-		case 3: ctx.arc(HT,HT, OO,    PI,-PI/2);break
-		case 4:
+		case CT.Outer:    radii.push(T-OO, HT+LO);break
+		case CT.Standard: radii.push(HT-LO);      break
+		case CT.Pocket:   radii.push(HT-LO, OO);  break
+		case CT.LTShape:
+			ctx.beginPath()
 			ctx.moveTo(-LO,  HT)
 			ctx.arcTo (-LO, -LO, T/3-LO, -LO, T/3)
 			ctx.lineTo( HT, -LO)
-			break
+			ctx.stroke()
 		}
-		ctx.stroke()
+		for (const r of radii) {
+			ctx.beginPath()
+			ctx.arc(HT,HT, r, PI,-PI/2)
+			ctx.stroke()
+		}
 		ctx.restore()
 	}
 	/**
 	 @param {EnhancedCtx2D} ctx
-	 @param {string} s Tile symbol
-	 @param {number} i Tile index
+	 @param {string} s  Tile symbol
+	 @param {number} tx Tile col
+	 @param {number} ty Tile row
 	*/
-	#drawTile(ctx, s, i) {
-		const t  = {x:i%COLS, y:i/COLS|0}, {x,y}= Vec2.mul(t,T)
+	#drawTile(ctx, s, tx, ty) {
 		const lo = s == '#' || /[VH=]/.test(s) ? -LO:LO
+		const ci = Corner.toIndex.get(s) ?? -1, [x,y]=[tx*T,ty*T]
 
-		;[/[A-D]/,/[A-D]/,/[a-d1-4]/,/[a-d]/,/[5-8]/]
-			.forEach((r,type)=> {
-				const ci = CornerToRotationIdx.get(s) ?? -1
-				if (ci >= 0 && r.test(s))
-					Wall.#drawCorner(ctx,{type,ci,pos:{x,y}})
-			})
 		switch(s.replace('#','V').toUpperCase()) {
 		case 'V': ctx.strokeLine(x+HT+lo, y, x+HT+lo, y+T);break
 		case 'H': ctx.strokeLine(x, y+HT+lo, x+T, y+HT+lo);break
 		}
-		if (s == '#' || t.x == 0 && +s) {
-			return ctx.strokeLine(x+OO, y, x+OO, y+T).void()
+		if (ci >= 0) {
+			const type = Corner.RegExps.findIndex(c=> c.test(s))
+			Wall.#drawCorner(ctx,{type,ci,pos:{x,y}})
 		}
-		if (/[_=]/.test(s) || Maze.isTopOrBottom(t.y) && +s) {
+		if (s == '#' || tx == 0 && +s) {
+			ctx.strokeLine(x+OO, y, x+OO, y+T)
+			return
+		}
+		if (/[_=]/.test(s) || Maze.isTopOrBottom(ty) && +s) {
 			const oY = /[=56]/.test(s) ? OO : T-OO
 			ctx.strokeLine(x, y+oY, x+T, y+oY)
 			isNaN(+s) && ctx.strokeLine(x, y+HT+lo, x+T, y+HT+lo)

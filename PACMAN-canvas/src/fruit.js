@@ -68,8 +68,7 @@ export const Fruit = new class FruitManager {
 			: this.#intersectsWithPlayer() && this.#onEaten()
 	}
 	drawTarget() {
-		if (Ticker.paused)
-			return
+		if (Ticker.paused) return
 		if (this.showTarget)
 			Spr.cache.draw(Fg, TargetPos, fadeOut?.alpha)
 		PtsMgr.drawFruitPts()
