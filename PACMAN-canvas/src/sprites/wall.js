@@ -64,16 +64,15 @@ export const Wall = new class WallRenderer {
 	 @param {{type:number, ci:number, pos:Position}} _
 	*/
 	#drawCorner(ctx, {type,ci,pos:{x,y}}) {
-		const {Type:CT}= Corner
-		const radii = /**@type {number[]}*/([])
+		const {Type}= Corner, radii = []
 		ctx.save()
 		ctx.translate(x+HT, y+HT)
 		ctx.rotate(ci*PI/2)
 		switch(type) {
-		case CT.Outer:    radii.push(T-OO, HT+LO);break
-		case CT.Standard: radii.push(HT-LO);      break
-		case CT.Pocket:   radii.push(HT-LO, OO);  break
-		case CT.LTShape:
+		case Type.Outer:    radii.push(T-OO, HT+LO);break
+		case Type.Standard: radii.push(HT-LO);      break
+		case Type.Pocket:   radii.push(HT-LO, OO);  break
+		case Type.LTShape:
 			ctx.beginPath()
 			ctx.moveTo(-LO,  HT)
 			ctx.arcTo (-LO, -LO, T/3-LO, -LO, T/3)
@@ -94,7 +93,7 @@ export const Wall = new class WallRenderer {
 	 @param {number} ty Tile row
 	*/
 	#drawTile(ctx, s, tx, ty) {
-		const lo = s == '#' || /[VH=]/.test(s) ? -LO:LO
+		const lo = s == '#' || /[VH=]/.test(s) ? -LO : +LO
 		const ci = Corner.toIndex.get(s) ?? -1, [x,y]=[tx*T,ty*T]
 
 		switch(s.replace('#','V').toUpperCase()) {
