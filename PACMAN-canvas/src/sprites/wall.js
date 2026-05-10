@@ -8,9 +8,9 @@ const Ctxs = freeze({
 	White: canvas2D(null, BW,BH).ctx,
 })
 const Corner = /**@type {const}*/({
+	toIndex: cyclicIndexMap('12345678abcdABCD', 4),
 	Type:    {Standard:0, LTShape:1, Outer:2, Pocket:3},
 	RegExps: [/[1-4]/,/[5-8]/,/[A-D]/,/[a-d]/],
-	toIndex: new Map(Array.from('12345678abcdABCD', (v,i)=> [v,i%4]))
 })
 
 import {State} from '../state.js'
