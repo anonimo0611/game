@@ -6,7 +6,7 @@ const TICK_STEP = 1000/60
 const THRESHOLD = 100
 
 /** @type {Map<any,TimerData>} */
-const TimerMap = new Map
+const TimerMap = new Map()
 
 let _ticker  = /**@type {?TickerCore}*/(null)
 let _fCount  = 0 // frame  count
@@ -29,7 +29,9 @@ const Ticker = {
 	set(updateFn, drawFn) {
 		new TickerCore(updateFn, drawFn)
 	},
-	/** @param {boolean} [force] */
+	/**
+	 @param {boolean} [force]
+	*/
 	pause(force) {
 		return _paused = !!(force? force : !_paused)
 	},
@@ -64,8 +66,7 @@ class TickerCore {
 		this.rAFId  = requestAnimationFrame(this.loop)
 		this.needsReset = false
 	}
-	/** @param {number} ts */
-	loop = (ts) => {
+	loop = (/**@type {number}*/ts)=> {
 		this.rAFId = requestAnimationFrame(this.loop)
 
 		if (this.lstTS === 0)
@@ -101,11 +102,10 @@ class TickerCore {
 		_pCount = 0
 		_fCount++
 	}
-	/**
-	 @param {TimerData} t
-	 @param {unknown} key
-	*/
-	timer(t, key) {
+	timer(
+	 /**@type {TimerData}*/t,
+	 /**@type {unknown}*/key
+	) {
 		if (Timer.frozen && !t.ignoreFrozen)  return
 		if (TICK_STEP*t.amount++ < t.timeout) return
 		TimerMap.delete(key), t.callback()
@@ -130,8 +130,19 @@ const Timer = {
 		if (!Ticker.running) Ticker.set()
 		TimerMap.set(key ?? Symbol(), {amount:0,timeout,ignoreFrozen,callback})
 	},
-	/** @param {TimerSeq[]} seq */
-	sequence(...seq) {
+	cancelAll() {
+		TimerMap.clear()
+		return this
+	},
+	cancel(
+	 /**@type {unknown}*/key
+	) {
+		TimerMap.delete(key)
+		return this
+	},
+	sequence(
+	 /**@type {TimerSeq[]}*/...seq
+	) {
 		if (seq.length == 0) return
 		let idx = 0
 		;(function processNext() {
@@ -142,15 +153,6 @@ const Timer = {
 					processNext()
 			})
 		})()
-	},
-	/** @param {unknown} key */
-	cancel(key) {
-		TimerMap.delete(key)
-		return this
-	},
-	cancelAll() {
-		TimerMap.clear()
-		return this
 	},
 }
 return {Ticker,Timer}
