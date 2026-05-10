@@ -1,156 +1,159 @@
 'use strict'
 const {Ticker,Timer}= function() {
-	const TICK_STEP = 1000/60
-	const THRESHOLD = 100
+//-- begin --
 
-	/** @type {Map<any,TimerData>} */
-	const TimerMap = new Map
+const TICK_STEP = 1000/60
+const THRESHOLD = 100
 
-	let _ticker  = /**@type {?TickerCore}*/(null)
-	let _fCount  = 0 // frame  count
-	let _pCount  = 0 // paused count
-	let _paused  = false
-	let _tFrozen = false
+/** @type {Map<any,TimerData>} */
+const TimerMap = new Map
 
-	const Ticker = {
-		get Interval()    {return TICK_STEP},
-		get count()       {return _fCount},
-		get pausedCount() {return _pCount},
-		get paused()      {return _paused},
-		get running()     {return _ticker instanceof TickerCore},
-		get elapsedTime() {return _fCount*TICK_STEP},
+let _ticker  = /**@type {?TickerCore}*/(null)
+let _fCount  = 0 // frame  count
+let _pCount  = 0 // paused count
+let _paused  = false
+let _tFrozen = false
 
-		/**
-		 @param {()=> void} [updateFn]
-		 @param {()=> void} [drawFn]
-		*/
-		set(updateFn, drawFn) {
-			new TickerCore(updateFn, drawFn)
-		},
-		/** @param {boolean} [force] */
-		pause(force) {
-			return _paused = !!(force? force : !_paused)
-		},
-		resetCount() {
-			_fCount = 0
-			if (_ticker) _ticker.needsReset = true
-		},
-		stop()  {
-			_ticker?.stop()
-		},
-		reset() {
-			_fCount  = 0
-			_pCount  = 0
-			_paused  = false
-			_tFrozen = false
-			TimerMap.clear()
-		}
+const Ticker = {
+	get Interval()    {return TICK_STEP},
+	get count()       {return _fCount},
+	get pausedCount() {return _pCount},
+	get paused()      {return _paused},
+	get running()     {return _ticker instanceof TickerCore},
+	get elapsedTime() {return _fCount*TICK_STEP},
+
+	/**
+	 @param {()=> void} [updateFn]
+	 @param {()=> void} [drawFn]
+	*/
+	set(updateFn, drawFn) {
+		new TickerCore(updateFn, drawFn)
+	},
+	/** @param {boolean} [force] */
+	pause(force) {
+		return _paused = !!(force? force : !_paused)
+	},
+	resetCount() {
+		_fCount = 0
+		if (_ticker) _ticker.needsReset = true
+	},
+	stop()  {
+		_ticker?.stop()
+	},
+	reset() {
+		_fCount  = 0
+		_pCount  = 0
+		_paused  = false
+		_tFrozen = false
+		TimerMap.clear()
 	}
+}
 
-	class TickerCore {
-		/**
-		 @param {()=> void} [updateFn]
-		 @param {()=> void} [drawFn]
-		*/
-		constructor(updateFn, drawFn) {
-			_ticker?.stop()
-			_ticker     = this
-			this.acc    = 0
-			this.lstTS  = 0
-			this.update = updateFn
-			this.draw   = drawFn
-			this.rAFId  = requestAnimationFrame(this.loop)
-			this.needsReset = false
-		}
-		/** @param {number} ts */
-		loop = (ts) => {
-			this.rAFId = requestAnimationFrame(this.loop)
+class TickerCore {
+	/**
+	 @param {()=> void} [updateFn]
+	 @param {()=> void} [drawFn]
+	*/
+	constructor(updateFn, drawFn) {
+		_ticker?.stop()
+		_ticker     = this
+		this.acc    = 0
+		this.lstTS  = 0
+		this.update = updateFn
+		this.draw   = drawFn
+		this.rAFId  = requestAnimationFrame(this.loop)
+		this.needsReset = false
+	}
+	/** @param {number} ts */
+	loop = (ts) => {
+		this.rAFId = requestAnimationFrame(this.loop)
 
-			if (this.lstTS === 0)
-				this.lstTS = ts
-			let dt = ts - this.lstTS
-			if (dt > THRESHOLD)
-				dt = TICK_STEP
-
-			this.acc += dt
+		if (this.lstTS === 0)
 			this.lstTS = ts
+		let dt = ts - this.lstTS
+		if (dt > THRESHOLD)
+			dt = TICK_STEP
 
-			if (this.needsReset) {
-				this.needsReset = false
-				this.acc = TICK_STEP
-			}
-			while(ceil(this.acc) >= TICK_STEP) {
-				this.acc -= TICK_STEP
-				this.tick()
-			}
-			this.draw?.()
+		this.acc += dt
+		this.lstTS = ts
+
+		if (this.needsReset) {
+			this.needsReset = false
+			this.acc = TICK_STEP
 		}
-		tick() {
-			_paused
-				? this.updatePausing()
-				: this.updateGame()
+		while(ceil(this.acc) >= TICK_STEP) {
+			this.acc -= TICK_STEP
+			this.tick()
 		}
-		updatePausing() {
-			_pCount++
-		}
-		updateGame() {
-			TimerMap.forEach(this.timer)
-			this.update?.()
-			_pCount = 0
-			_fCount++
-		}
-		/**
-		 @param {TimerData} t
-		 @param {unknown} key
-		*/
-		timer(t, key) {
-			if (Timer.frozen && !t.ignoreFrozen)  return
-			if (TICK_STEP*t.amount++ < t.timeout) return
-			TimerMap.delete(key), t.callback()
-		}
-		stop()  {
-			Ticker.reset()
-			_ticker = null
-			cancelAnimationFrame(this.rAFId)
-		}
+		this.draw?.()
 	}
-
-	const Timer = {
-		get frozen() {return _tFrozen},
-		freeze()   {_tFrozen = true; return this},
-		unfreeze() {_tFrozen = false;return this},
-		/**
-		 @param {number}    timeout
-		 @param {()=> void} callback
-		 @param {{key?:unknown,ignoreFrozen?:boolean}} otps
-		*/
-		set(timeout, callback, {key,ignoreFrozen=false}={}) {
-			if (!Ticker.running) Ticker.set()
-			TimerMap.set(key ?? Symbol(), {amount:0,timeout,ignoreFrozen,callback})
-		},
-		/** @param {TimerSeq[]} seq */
-		sequence(...seq) {
-			if (seq.length == 0) return
-			let idx = 0
-			;(function processNext() {
-				const [dur,cb]= seq[idx]
-				Timer.set(dur, ()=> {
-					cb(), idx++
-					if (idx < seq.length)
-						processNext()
-				})
-			})()
-		},
-		/** @param {unknown} key */
-		cancel(key) {
-			TimerMap.delete(key)
-			return this
-		},
-		cancelAll() {
-			TimerMap.clear()
-			return this
-		},
+	tick() {
+		_paused
+			? this.updatePausing()
+			: this.updateGame()
 	}
+	updatePausing() {
+		_pCount++
+	}
+	updateGame() {
+		TimerMap.forEach(this.timer)
+		this.update?.()
+		_pCount = 0
+		_fCount++
+	}
+	/**
+	 @param {TimerData} t
+	 @param {unknown} key
+	*/
+	timer(t, key) {
+		if (Timer.frozen && !t.ignoreFrozen)  return
+		if (TICK_STEP*t.amount++ < t.timeout) return
+		TimerMap.delete(key), t.callback()
+	}
+	stop()  {
+		Ticker.reset()
+		_ticker = null
+		cancelAnimationFrame(this.rAFId)
+	}
+}
 
-	return {Ticker,Timer}
+const Timer = {
+	get frozen() {return _tFrozen},
+	freeze()   {_tFrozen = true; return this},
+	unfreeze() {_tFrozen = false;return this},
+	/**
+	 @param {number}    timeout
+	 @param {()=> void} callback
+	 @param {{key?:unknown,ignoreFrozen?:boolean}} otps
+	*/
+	set(timeout, callback, {key,ignoreFrozen=false}={}) {
+		if (!Ticker.running) Ticker.set()
+		TimerMap.set(key ?? Symbol(), {amount:0,timeout,ignoreFrozen,callback})
+	},
+	/** @param {TimerSeq[]} seq */
+	sequence(...seq) {
+		if (seq.length == 0) return
+		let idx = 0
+		;(function processNext() {
+			const [dur,cb]= seq[idx]
+			Timer.set(dur, ()=> {
+				cb(), idx++
+				if (idx < seq.length)
+					processNext()
+			})
+		})()
+	},
+	/** @param {unknown} key */
+	cancel(key) {
+		TimerMap.delete(key)
+		return this
+	},
+	cancelAll() {
+		TimerMap.clear()
+		return this
+	},
+}
+return {Ticker,Timer}
+
+//-- end --
 }()

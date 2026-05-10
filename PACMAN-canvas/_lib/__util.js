@@ -110,6 +110,11 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 */const between = (n,min,max)=> (n >= min && n <= max)
 
 /**
+ @param {string} str
+ @param {number} size
+*/const cyclicIndexMap = (str,size)=> new Map(Array.from(str, (v,i)=> [v,i%size]))
+
+/**
  @param {Position} pos1
  @param {Position} pos2
  @param {number}  r1  radius1

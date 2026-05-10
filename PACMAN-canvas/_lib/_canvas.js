@@ -28,7 +28,7 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 
 	/**
 	 @overload
-	 @param   {number} x
+	 @param   {number}  x
 	 @param   {number} [y]
 	 @returns {this}
 
