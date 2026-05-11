@@ -12,8 +12,8 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
  @template {string} K
  @template V
  @param {{[key in K]?:V}} o
- @returns {V[]}
-*/const values = o=> Object.values(o)
+*/const values = o=>
+	/**@type {V[]}*/(Object.values(o))
 
 /**
  @template {string} K
@@ -26,7 +26,8 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
  @template {string} T
  @param {T[]} array
 */const enumObj = (...array)=>
-	/**@type {{readonly [K in T]:K}}*/(toObj(array.map(k=> [k,k])))
+	/**@type {{readonly [K in T]:K}}*/
+	(toObj(array.map(k=> [k,k])))
 
 /**
  @param {KeyboardEvent|JQKeyboardEvent} e
@@ -37,24 +38,27 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 
 /**
  @param {KeyboardEvent|JQKeyboardEvent} e
-*/const hasModifierKeys = e=> (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
-
-/**
- @param {KeyboardEvent|JQKeyboardEvent} e
-*/const keyRepeat = e=> getNativeKeyEvent(e)?.repeat || false
+*/const hasModifierKeys = e=>
+	(e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
 /**
  @param {KeyboardEvent|JQKeyboardEvent|JQTriggeredEvent} e
-*/const isEnterKey = e=> (e.key == '\x20' || e.key == 'Enter')
+*/const isEnterKey = e=>
+	(e.key == '\x20' || e.key == 'Enter')
+
+/**
+ @param {KeyboardEvent|JQKeyboardEvent} e
+*/const keyRepeat = e=>
+	getNativeKeyEvent(e)?.repeat || false
 
 /**
  @template {new ()=> HTMLElement} T
  @param {string} id
  @param {T} [type]
 */const requireElem = (id, type=/**@type {any}*/(HTMLElement))=> {
-	const e = document.getElementById(id)
+	const e = document.getElementById(id), {name}= type
 	if (e instanceof type) return /**@type {InstanceType<T>}*/(e)
-	throw ReferenceError(`Element with ID "${id}" is not an instance of ${type.name}.`);
+	throw ReferenceError(`No ${name} with that id #${id} exists.`)
 }
 
 /**
@@ -113,7 +117,7 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
  @param {string} str
  @param {number} size
 */const cyclicIndexMap = (str,size)=>
-	new Map(Array.from(str, (v,i)=> [v,i%size]))
+	new Map(Array.from(str, (v,i)=> [v,i % size]))
 
 /**
  @param {Position} pos1
