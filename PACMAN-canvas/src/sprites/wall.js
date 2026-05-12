@@ -13,8 +13,6 @@ const Corner = /**@type {const}*/({
 	RegExps: [/[1-4]/,/[5-8]/,/[A-D]/,/[a-d]/],
 })
 
-const list = new Uint8Array(4)
-
 import {State} from '../state.js'
 import {Maze}  from '../maze.js'
 export const Wall = new class WallRenderer {
@@ -106,7 +104,6 @@ export const Wall = new class WallRenderer {
 		}
 		if (cIdx >= 0) {
 			const type = Corner.RegExps.findIndex(c=> c.test(s))
-			ctx == Ctxs.Blue && list[type]++
 			Wall.#drawCorner(ctx,{type,cIdx,pos:{x,y}})
 		}
 		if (s == '#' || tx == 0 && +s) {
