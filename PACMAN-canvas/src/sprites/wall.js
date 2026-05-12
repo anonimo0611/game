@@ -13,6 +13,8 @@ const Corner = /**@type {const}*/({
 	RegExps: [/[1-4]/,/[5-8]/,/[A-D]/,/[a-d]/],
 })
 
+const list = new Uint8Array(4)
+
 import {State} from '../state.js'
 import {Maze}  from '../maze.js'
 export const Wall = new class WallRenderer {
@@ -61,13 +63,13 @@ export const Wall = new class WallRenderer {
 	}
 	/**
 	 @param {EnhancedCtx2D} ctx
-	 @param {{type:number, ci:number, pos:Position}} _
+	 @param {{type:number, cIdx:number, pos:Position}} _
 	*/
-	#drawCorner(ctx, {type,ci,pos:{x,y}}) {
+	#drawCorner(ctx, {type,cIdx,pos:{x,y}}) {
 		const {Type}= Corner, radii = []
 		ctx.save()
 		ctx.translate(x+HT, y+HT)
-		ctx.rotate(ci*PI/2)
+		ctx.rotate(cIdx*PI/2)
 		switch(type) {
 		case Type.Outer:    radii.push(T-OO, HT+LO);break
 		case Type.Standard: radii.push(HT-LO);      break
@@ -93,16 +95,19 @@ export const Wall = new class WallRenderer {
 	 @param {number} ty Tile row
 	*/
 	#drawTile(ctx, s, tx, ty) {
-		const lo = s == '#' || /[VH=]/.test(s) ? -LO : +LO
-		const ci = Corner.toIndex.get(s) ?? -1, [x,y]=[tx*T,ty*T]
+		const ofst = /[#VH=]/.test(s) ? -LO : +LO
+		const cIdx = Corner.toIndex.get(s) ?? -1
+		const [x,y]= [tx*T, ty*T]
 
-		switch(s.replace('#','V').toUpperCase()) {
-		case 'V': ctx.strokeLine(x+HT+lo, y, x+HT+lo, y+T);break
-		case 'H': ctx.strokeLine(x, y+HT+lo, x+T, y+HT+lo);break
+		switch(s.toUpperCase()) {
+		case '#':
+		case 'V': ctx.strokeLine(x+HT+ofst, y, x+HT+ofst, y+T);break
+		case 'H': ctx.strokeLine(x, y+HT+ofst, x+T, y+HT+ofst);break
 		}
-		if (ci >= 0) {
+		if (cIdx >= 0) {
 			const type = Corner.RegExps.findIndex(c=> c.test(s))
-			Wall.#drawCorner(ctx,{type,ci,pos:{x,y}})
+			ctx == Ctxs.Blue && list[type]++
+			Wall.#drawCorner(ctx,{type,cIdx,pos:{x,y}})
 		}
 		if (s == '#' || tx == 0 && +s) {
 			ctx.strokeLine(x+OO, y, x+OO, y+T)
@@ -111,7 +116,7 @@ export const Wall = new class WallRenderer {
 		if (/[_=]/.test(s) || Maze.isTopOrBottom(ty) && +s) {
 			const oY = /[=56]/.test(s) ? OO : T-OO
 			ctx.strokeLine(x, y+oY, x+T, y+oY)
-			isNaN(+s) && ctx.strokeLine(x, y+HT+lo, x+T, y+HT+lo)
+			!+s && ctx.strokeLine(x, y+HT+ofst, x+T, y+HT+ofst)
 		}
 	}
 }
