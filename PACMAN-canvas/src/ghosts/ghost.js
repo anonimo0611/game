@@ -28,15 +28,6 @@ export class Ghost extends Actor {
 	#started    = false
 	#frightened = false
 
-	// The getters in this section subject to overridden
-	get chaseOffset()  {return 0}
-	get chaseSpeed()   {return Sys.Speed.Base}
-	get chasePos()     {return player.center}
-	get scatterTile()  {return Vec2.new(24, 0)}
-	get isAngry()      {return false}
-	get isChasing()    {return Ghosts.isChasing    && this.isNormal}
-	get isScattering() {return Ghosts.isScattering && this.isNormal}
-
 	/**
 	 @param {Direction} dir
 	 @param {{type?:number, tile?:xyTuple, align?:-1|0|1}} options
@@ -67,6 +58,15 @@ export class Ghost extends Actor {
 	get isFrightened() {return this.#frightened}
 	get isNormal()     {return!this.#frightened  && this.state.isWalking}
 	get hasFixedTgt()  {return this.isScattering || this.state.isEscaping}
+
+	// The getters in this section subject to overridden
+	get chaseOffset()  {return 0}
+	get chaseSpeed()   {return Sys.Speed.Base}
+	get chasePos()     {return player.center}
+	get scatterTile()  {return Vec2.new(24, 0)}
+	get isAngry()      {return false}
+	get isChasing()    {return Ghosts.isChasing    && this.isNormal}
+	get isScattering() {return Ghosts.isScattering && this.isNormal}
 
 	get baseTargetTile() {
 		return this.state.isEscaping
