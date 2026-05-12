@@ -1,10 +1,12 @@
 import SubSprite from './ghost_sub.js'
 export const LOGICAL_SIZE = 90
 export default class GhostSprite {
+	/**@readonly*/tgt
+	/**@readonly*/ctx
+	/**@readonly*/sub
 	#size
-	/** @readonly */tgt
-	/** @readonly */ctx
-	/** @readonly */sub
+	#resurrect = /**@type {?Fade}*/(null)
+
 	/**
 	 @param {EnhancedCtx2D} target
 	 @param {number} size
@@ -15,15 +17,13 @@ export default class GhostSprite {
 		this.sub = new SubSprite(this.ctx)
 		this.resize(this.#size = size)
 	}
-	#resurrect = /**@type {?Fade}*/(null)
 	setResurrect() {
 		this.#resurrect ||= Fade.in(600)
 	}
 	get size() {
 		return this.#size
 	}
-	/** @param {number} size */
-	resize(size) {
+	resize(/**@type {number}*/size) {
 		this.#size = size
 		this.ctx.resize(size*1.5, size)
 	}
