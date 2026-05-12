@@ -4,11 +4,11 @@ const TOTAL_DUR = SPLIT_DUR+BURST_DUR+30
 
 import {SCALE_FACTOR,MOUTH_DEPTH_FACTOR} from './pacman.js'
 export class Dying {
+	#cnt; #cb; #innerR; #outerR; #arcAng;
+	#fadeOut = Fade.out(300)
+
 	/** @readonly */ctx
 	/** @readonly */r
-	#cnt;    #cb;
-	#innerR; #outerR;
-	#arcAng; #fadeOut = Fade.out(300);
 	/**
 	 @param {{ctx:EnhancedCtx2D,r:number}} _
 	 @param {()=> void} [cb]

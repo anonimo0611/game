@@ -8,11 +8,12 @@ import {Dying} from './pacman_dying.js'
 export const SCALE_FACTOR = 0.9
 export const MOUTH_DEPTH_FACTOR = 0.3
 export default class PacmanSprite {
+	#mPhase   = 0
+	#mAngle   = 0
+	#dyingSpr = /**@type {?Dying}*/(null)
+
 	/** @readonly */ctx
 	/** @readonly */r
-	#mPhase = 0
-	#mAngle = 0
-	#dyingSpr = /**@type {?Dying}*/(null)
 	/**
 	 @param {EnhancedCtx2D} ctx
 	 @param {number} radius
