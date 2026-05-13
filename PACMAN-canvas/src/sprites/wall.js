@@ -47,7 +47,9 @@ export const Wall = new class WallRenderer {
 		const y = (Maze.House.EntryTile.y+1.6)*T
 		Bg.fillRect(BW/2-T, y, T*2, T/4, Color.HouseDoor)
 	}
-	/** @param {EnhancedCtx2D} ctx */
+	/**
+	 @param {EnhancedCtx2D} ctx
+	*/
 	#drawHouse(ctx) {
 		const [ix,iy,ox,oy]= [31,16,34,19].map(n=>n/10*T)
 		ctx.save()
@@ -69,13 +71,13 @@ export const Wall = new class WallRenderer {
 		ctx.translate(x+HT, y+HT)
 		ctx.rotate(cIdx*PI/2)
 		switch(type) {
-		case Type.Outer:    radii.push(T-OO, HT+LO);break
-		case Type.Standard: radii.push(HT-LO);      break
-		case Type.Pocket:   radii.push(HT-LO, OO);  break
+		case Type.Outer:    radii.push(HT+LO,T-OO);break
+		case Type.Standard: radii.push(HT-LO);     break
+		case Type.Pocket:   radii.push(HT-LO,OO);  break
 		case Type.LTShape:
 			ctx.beginPath()
 			ctx.moveTo(-LO,  HT)
-			ctx.arcTo (-LO, -LO, T/3-LO, -LO, T/3)
+			ctx.arcTo (-LO, -LO, T/3, -LO, T/3)
 			ctx.lineTo( HT, -LO)
 			ctx.stroke()
 		}
@@ -95,7 +97,7 @@ export const Wall = new class WallRenderer {
 	#drawTile(ctx, s, tx, ty) {
 		const ofst = /[#VH=]/.test(s) ? -LO : +LO
 		const cIdx = Corner.toIndex.get(s) ?? -1
-		const [x,y]= [tx*T, ty*T]
+		const [x,y]= [tx*T,ty*T]
 
 		switch(s.toUpperCase()) {
 		case '#':
