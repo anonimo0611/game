@@ -15,7 +15,7 @@ const EATEN_EV = 'DotEaten'
 let fader = /**@type {?Fade}*/(null)
 
 class Player extends PacMan {
-	#eatIndex =  0
+	#wakaWakaSEIndex = 0
 	#sinceLastEating = 0
 
 	/** @type {Mover} */
@@ -89,7 +89,7 @@ class Player extends PacMan {
 	}
 	#playEatSE() {
 		const duration = (T/this.speed)*Ticker.Interval*.5
-		;(this.#eatIndex ^= 1)
+		;(this.#wakaWakaSEIndex ^= 1)
 			? Sound.playWakaWaka0({duration})
 			: Sound.playWakaWaka1({duration})
 	}
