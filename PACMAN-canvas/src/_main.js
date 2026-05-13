@@ -76,15 +76,6 @@ export const Game = new class GameCore {
 			? State.setCleared()
 			: State.setPacDying({delay:600})
 	}
-	#onPacDying() {
-		Sound.playPacDying()
-		player.sprite.startDying(Game.#onPacDied)
-	}
-	#onPacDied() {
-		(Game.#pacDied = Lives.left > 0)
-			? State.setReady()
-			: State.setGameOver()
-	}
 	#onCleared() {
 		Sound.stopLoops()
 		State.setFlashing({delay:1000})
@@ -99,6 +90,15 @@ export const Game = new class GameCore {
 			: Scene.shouldPlayCutscene
 				? State.setCutscene()
 				: State.setNewLevel()
+	}
+	#onPacDying() {
+		Sound.playPacDying()
+		player.sprite.startDying(Game.#onPacDied)
+	}
+	#onPacDied() {
+		(Game.#pacDied = Lives.left > 0)
+			? State.setReady()
+			: State.setGameOver()
 	}
 	#onGameOver() {
 		State.setTitle({delay:2000})
