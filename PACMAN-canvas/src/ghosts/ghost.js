@@ -113,13 +113,13 @@ export class Ghost extends Actor {
 		for (let i=0; i<steps; i++) {
 			this.#tickMove(this.speed/steps)
 			this.passedTileCenter && this.#setNextDir()
-			if (this.#makeTurn(this)) break
-			if (this.collidesWith())  break
+			if (this.#makeTurn()) break
+			if (this.collidesWith()) break
 		}
 	}
 	#tickMove(spd=this.speed) {
 		!Maze.House.arrived(this, spd)
-			? this.setNextPos(spd)
+			? this.setNextPosition(spd)
 			: this.#enterHouse()
 	}
 	#idleInHouse({orient,center:{y:cy}}=this) {
@@ -189,11 +189,11 @@ export class Ghost extends Actor {
 	}
 	getNextDir(
 		currDir = this.dir,
-		srcTile = this.getAdjTile(currDir),
+		srcTile = this.getAdjacentTile(),
 		tgtTile = this.getTargetTile()
 	) {
 		const dirs = TurnPriority.flatMap((dir,i)=> {
-			const testTile = this.getAdjTile(dir,srcTile)
+			const testTile = this.getAdjacentTile(dir,srcTile)
 			return Dir.Opposite[currDir] != dir
 				&& !Maze.hasWall(testTile)
 				&& !this.#isRestrictedTile({dir,testTile})
@@ -209,11 +209,11 @@ export class Ghost extends Actor {
 		return (Cfg.unrestricted || ignore)
 			? false : Maze.GhostNoEntryTiles.has(xy+dir)
 	}
-	#makeTurn({orient}=this) {
-		if (this.dir != orient
+	#makeTurn() {
+		if (this.dir != this.orient
 		 && this.passedTileCenter
-		 && this.hasAdjWall(orient) == false) {
-			this.setMoveDir(orient)
+		 && this.hasAdjacentWall() == false) {
+			this.updateDirection()
 			return true
 		}
 		return false

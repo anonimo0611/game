@@ -59,23 +59,20 @@ export class Actor {
 			: (this.y = this.tile.y * T)
 	}
 	move(dir=this.dir) {
-		this.setNextPos(this.speed, this.dir=dir)
+		this.setNextPosition(this.speed, this.dir=dir)
 	}
-	setNextPos(spd=this.speed, dir=this.dir) {
+	setNextPosition(spd=this.speed, dir=this.dir) {
 		this.pos = Vec2[dir].mul(spd).add(this)
 		this.#wrapXAxis()
 	}
-	/** @param {Direction} dir */
-	setMoveDir(dir) {
+	updateDirection(dir=this.orient) {
 		this.#movDir = dir
 		this.#fixPosition()
 	}
-	/** @param {Direction} dir */
-	hasAdjWall(dir) {
-		return Maze.hasWall( this.getAdjTile(dir) )
+	hasAdjacentWall(dir=this.orient) {
+		return Maze.hasWall( this.getAdjacentTile(dir) )
 	}
-	/** @param {Direction} dir */
-	getAdjTile(dir, tile=this.tile) {
+	getAdjacentTile(dir=this.dir, tile=this.tile) {
 		return Vec2[dir].add(tile).wrapX(COLS)
 	}
 	collidesWithWall(dir=this.dir) {

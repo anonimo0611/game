@@ -46,7 +46,7 @@ export class Mover {
 	/** @param {number} spd */
 	update(spd) {
 		this.#turnCorner(spd)
-		this.actor.setNextPos(spd)
+		this.actor.setNextPosition(spd)
 		this.#setMoveSpeed(spd)
 		this.#finishCornering()
 		this.#turnAround()
@@ -63,7 +63,7 @@ export class Mover {
 		if (this.canTurn && state.nextDir) {
 			state.turning ||= true
 			actor.orient = state.nextDir
-			actor.setNextPos(spd, state.nextDir)
+			actor.setNextPosition(spd, state.nextDir)
 		}
 	}
 	#finishCornering() {
@@ -72,13 +72,13 @@ export class Mover {
 			state.nextDir  = state.nextTurn
 			state.turning  = false
 			state.nextTurn = null
-			actor.setMoveDir(actor.orient)
+			actor.updateDirection()
 		}
 	}
 	#turnAround() {
 		const {actor}= this
 		if (actor.dir == actor.revOrient) {
-			actor.setMoveDir(actor.orient)
+			actor.updateDirection()
 			this.#setSpeed()
 		}
 	}
@@ -104,7 +104,7 @@ function setSteerEvent(actor,state) {
 		if (state.turning)
 			return void(state.nextTurn = dir)
 
-		if (actor.hasAdjWall(dir))
+		if (actor.hasAdjacentWall(dir))
 			return void(state.nextDir = dir)
 
 		if (State.isStartMode && Vec2[dir].x)
@@ -113,7 +113,7 @@ function setSteerEvent(actor,state) {
 		state.nextDir = dir
 		if (actor.passedTileCenter) {
 			actor.orient = dir
-			actor.setMoveDir(actor.revDir)
+			actor.updateDirection(actor.revDir)
 		}
 	})
 }
