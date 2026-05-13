@@ -18,7 +18,7 @@ const Ctrl = {
 	loaded() {
   		const {input,keydown,mute}= this
 		$win.on({keydown})
-		$volRngs.on({input})
+		$volRngs.on({input}).trigger('input')
 		$speaker.on({click:mute})
 	},
 	failed() {
