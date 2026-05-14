@@ -27,6 +27,10 @@ export class PathMgr {
 	}
 
 	/** @param {Ghost} g */
+	hasFixedTarget(g) {
+		return g.isScattering || g.state.isEscaping
+	}
+	/** @param {Ghost} g */
 	#update(g) {
 		const {dir,orient}= g
 		if (dir != orient || Maze.House.arrived(g, T*2))
@@ -40,7 +44,7 @@ export class PathMgr {
 			const tile = g.getAdjacentTile(dir,t)
 			path.push({tile,dir,stopped:
 				g.isChasingPac && tile.eq(p.tile) ||
-				g.hasFixedTgt && tile.eq(tgt)
+				this.hasFixedTarget(g) && tile.eq(tgt)
 			})
 			if (path[i].stopped) break
 		} this.#nodeList = path

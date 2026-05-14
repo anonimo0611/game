@@ -23,7 +23,7 @@ export class Ghost extends Actor {
 	/** @readonly */sprite = new Sprite(Fg,T*2)
 
 	#fader = /**@type {?Fade}*/(null)
-	#fleeTmr    = -1
+	#fleeTimer  = -1
 	#revSig     = false
 	#started    = false
 	#frightened = false
@@ -42,7 +42,7 @@ export class Ghost extends Actor {
 		 [Sys.Evt.Reverse]:  ()=> this.#revSig  = true,
 		 [Sys.Evt.Ready]:    ()=> this.#fader   = Fade.in(),
 		 [Sys.Evt.RoundEnds]:()=> this.#fader   = Fade.out(),
-		 [Sys.Evt.FleeStart]:()=> this.#fleeTmr = 400/Game.interval,
+		 [Sys.Evt.FleeStart]:()=> this.#fleeTimer = 400/Game.interval,
 		 [Sys.Evt.Frighten]: (_,on=true)=> this.#frighten(on),
 		})
 	}
@@ -50,30 +50,28 @@ export class Ghost extends Actor {
 	get spriteIdx()    {return Ghosts.spriteIdx}
 	get maxAlpha()     {return Cfg.showTargets? .75:1}
 	get alpha()        {return this.#fader?.alpha ?? this.maxAlpha}
-	get chaseTile()    {return this.chasePos.divInt(T)}
+	get isStarted()    {return this.#started}
+	get isFrightened() {return this.#frightened}
+	get isEscaping()   {return this.state.isEyes}
 	get isChasingPac() {return this.getTargetTile().eq(player.tile)}
 
-	get isStarted()    {return this.#started}
-	get isEscaping()   {return this.state.isEscapingEyes}
-	get isFrightened() {return this.#frightened}
-	get isNormal()     {return!this.#frightened  && this.state.isWalking}
-	get hasFixedTgt()  {return this.isScattering || this.state.isEscaping}
-
-	// The getters in this section subject to overridden
+	// Getters in this section can be overridden.
+	get isAngry()      {return false}
+	get isNormal()     {return !this.isFrightened  && this.state.isWalking}
+	get isChasing()    {return Ghosts.isChasing    && this.isNormal}
+	get isScattering() {return Ghosts.isScattering && this.isNormal}
 	get chaseOffset()  {return 0}
 	get chaseSpeed()   {return Sys.Speed.Base}
 	get chasePos()     {return player.center}
 	get scatterTile()  {return Vec2.new(24, 0)}
-	get isAngry()      {return false}
-	get isChasing()    {return Ghosts.isChasing    && this.isNormal}
-	get isScattering() {return Ghosts.isScattering && this.isNormal}
+	get chasingTile()  {return this.chasePos.divInt(T)}
 
 	get baseTargetTile() {
 		return this.state.isEscaping
 			? Maze.House.EntryTile
 			: this.isScattering
 				? this.scatterTile
-				: this.chaseTile
+				: this.chasingTile
 	}
 	getTargetTile(tile=this.tile) {
 		const {baseTargetTile}= this
@@ -83,7 +81,7 @@ export class Ghost extends Actor {
 		return function(g,{state:s}=g) {
 			if (s.isIdle)       return Sys.Speed.Idle
 			if (s.isGoingOut)   return Sys.Speed.GoOut
-			if (g.isEscaping)   return Sys.Speed.Escape
+			if (s.isEscaping)   return Sys.Speed.Escape
 			if (g.inTunSide)    return Sys.Speed.InTunnel
 			if (g.isFrightened) return Sys.Speed.Fright
 			if (g.isScattering) return Sys.Speed.Base
@@ -100,7 +98,7 @@ export class Ghost extends Actor {
 		State.isInGame && this.#update()
 	}
 	#update() {
-		this.#fleeTmr >= 0 && this.#fleeTmr--
+		this.#fleeTimer >= 0 && this.#fleeTimer--
 		if (Timer.frozen && !this.isEscaping) return
 		switch(this.state.current) {
 		case 'Idle':     return this.#idleInHouse(this)
@@ -201,7 +199,7 @@ export class Ghost extends Actor {
 		})
 		return this.isFrightened? randChoice(dirs).dir:
 			(i=> dirs.sort((a,b)=> a.m-b.m || a.i-b.i)[i].dir)
-				(this.#fleeTmr >= 0 ? dirs.length-1:0)
+				(this.#fleeTimer >= 0 ? dirs.length-1:0)
 	}
 	/** @param {{dir:Direction,testTile:Vec2}} testTile */
 	#isRestrictedTile({dir,testTile:{hyphenated:xy}}) {

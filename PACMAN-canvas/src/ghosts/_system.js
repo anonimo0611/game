@@ -39,26 +39,20 @@ const StandbyDelays = /**@type {const}*/
 ])
 
 export const [StateType,createState] = function() {
+	const States = /**@type {const}*/
+		(['Idle','GoingOut','Walking','Bitten','Escaping','Entering'])
 	/**
 	 @typedef {typeof States[number]} StateType
 	 @typedef {StateDef.Fluent<State,StateType>} IGhostState
 	 @extends {_State<StateType,Ghost>}
 	*/
 	class State extends _State {
-		/** @this {IGhostState} */
 		constructor(/**@type {Ghost}*/g) {
 			super(g, States)
-			this.owner.inHouse
-				? this.setIdle()
-				: this.setWalking()
+			this.set(g.inHouse? 'Idle':'Walking')
 		}
-		/** @this {IGhostState} */
-		get isEscapingEyes() {
-			return this.isEscaping || this.isEntering
-		}
+		get isEyes() {return this.is('Escaping','Entering')}
 	}
-	const States = /**@type {const}*/
-		(['Idle','GoingOut','Walking','Bitten','Escaping','Entering'])
 	return [
 		enumObj(...States),
 		/**@type {(g:Ghost)=> IGhostState}*/(g=> new State(g))

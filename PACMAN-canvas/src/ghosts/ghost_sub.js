@@ -11,7 +11,7 @@ export class Akabei extends Ghost {
 	get chaseSpeed()   {return Ghosts.CruiseElroy.speed}
 	get isAngry()      {return Ghosts.CruiseElroy.angry}
 	get isChasing()    {return this.isNormal && !this.isScattering}
-	get isScattering() {return super.isScattering && !this.isAngry}
+	get isScattering() {return super.isScattering  && !this.isAngry}
 }
 
 export class Pinky extends Ghost {
