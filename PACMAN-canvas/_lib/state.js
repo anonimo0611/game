@@ -4,9 +4,9 @@
 */
 export default class StateBase {
 	#owner
-	#last    = /**@type {?S}*/(null)
-	#curr    = /**@type {S} */('')
-	#default = /**@type {S} */('')
+	#last     = /**@type {S}*/('')
+	#curr     = /**@type {S}*/('')
+	#default  = /**@type {S}*/('')
 
 	/** @readonly */
 	#eventBus = $({})
@@ -31,14 +31,14 @@ export default class StateBase {
 	get last()    {return this.#last}
 	get default() {return this.#default}
 
-	/** @param {S} state */
-	is(state) {
-		return this.#curr == state
+	/** @param {S[]} states */
+	is(...states) {
+		return states.includes(this.current)
 	}
 
-	/** @param {S} [state] */
+	/** @param {S} state */
 	was(state) {
-		return state === this.#last
+		return state == this.last
 	}
 
 	/** @param {JQTriggerHandler} handler */
