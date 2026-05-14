@@ -39,7 +39,7 @@ export class PathMgr {
 			const dir  = g.getNextDir(lstDir,t,tgt)
 			const tile = g.getAdjacentTile(dir,t)
 			path.push({tile,dir,stopped:
-				g.isTargetPac && tile.eq(p.tile) ||
+				g.isChasingPac && tile.eq(p.tile) ||
 				g.hasFixedTgt && tile.eq(tgt)
 			})
 			if (path[i].stopped) break
@@ -67,7 +67,7 @@ export class PathMgr {
 			const curr = tile.clone.mul(T)
 			const last = nodes[i-1]?.tile.clone.mul(T) ?? g.pos
 			if (tile == endTile) {
-				stopped && g.isTargetPac
+				stopped && g.isChasingPac
 					? curr.set(p.pos)
 					: curr.add( Vec2[dir].mul(stopped? 0 : T/2-distance) )
 			}

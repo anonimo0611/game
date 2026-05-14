@@ -51,10 +51,10 @@ export class Ghost extends Actor {
 	get maxAlpha()     {return Cfg.showTargets? .75:1}
 	get alpha()        {return this.#fader?.alpha ?? this.maxAlpha}
 	get chaseTile()    {return this.chasePos.divInt(T)}
+	get isChasingPac() {return this.getTargetTile().eq(player.tile)}
 
 	get isStarted()    {return this.#started}
 	get isEscaping()   {return this.state.isEscapingEyes}
-	get isTargetPac()  {return this.getTargetTile().eq(player.tile)}
 	get isFrightened() {return this.#frightened}
 	get isNormal()     {return!this.#frightened  && this.state.isWalking}
 	get hasFixedTgt()  {return this.isScattering || this.state.isEscaping}

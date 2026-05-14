@@ -77,7 +77,7 @@ export const Targets = new class TargetVisualizer {
 	#guzutaCircle(g) {
 		Fg.save()
 		Fg.translate(player.center)
-		Fg.setAlpha(g.isTargetPac ? 0.8 : 0.4)
+		Fg.setAlpha(g.isChasingPac ? 0.8 : 0.4)
 		Fg.strokeCircle(0,0, T*Guzuta.THRESHOLD, undefined, T*0.15)
 		Fg.restore()
 	}
