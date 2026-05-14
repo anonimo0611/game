@@ -43,7 +43,7 @@ body:is([data-state=Attract],[data-state=Cutscene]){:is(header,canvas:not(#board
 			input{font-size:inherit}
 		}
 		[data-for=keys]{cursor:help}
-		label:has(#chsChk) chk-label{display:inline-block;font-size:94%}
+		label:has(#alwaysChase) chk-label{display:inline-block;font-size:92%}
 	}
 	.buttons button{font-size:.65rem}
 	> label:first-of-type{color:inherit;font-size:.9em;font-variant:small-caps;display:flex;gap:.25em;align-items:center}
