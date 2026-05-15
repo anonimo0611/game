@@ -7,7 +7,7 @@ header>*{color:#FF0;position:absolute;z-index:100}
 h1{text-transform:lowercase;font:var(--t)/.9 PacFont;transform-origin:0;translate:calc(var(--t)*23.3) calc(var(--t)*11.5);scale:115%;display:flex;flex-direction:column;:nth-child(2){text-indent:1.5em}}
 #level{font:small-caps var(--t)/1 Atari;transform-origin:0 center;translate:calc(var(--t)*.5) calc(var(--t)*12.6);scale:.65 .8}
 #container{
-	background:#000;position:relative;transform-origin:center;visibility:hidden;opacity:0;transition:visibility .3s, opacity .3s;
+	background:#000;position:relative;transform-origin:center;visibility:hidden;opacity:0;
 	#board{
 		pointer-events:none;margin-top:0.5em;width:calc(var(--t)*var(--grid-cols));height:calc(var(--t)*var(--grid-rows));
 		canvas{position:absolute;top:var(--padding-top)}
@@ -20,8 +20,8 @@ h1{text-transform:lowercase;font:var(--t)/.9 PacFont;transform-origin:0;translat
 html.sound-settled.controller-settled #container{visibility:visible;opacity:1}
 html.controller-settled .panel:not(.opened){display:none}
 #titleScr{
-	--height:3.2rem;background:#000B;border:red .1em;border-style:solid none;width:100%;position:absolute;z-index:100;top:calc(var(--t) * 6.9);
-	#startBtn {text-align:center;white-space:nowrap;font:calc(var(--t)*.8)/1 Atari, sans-serif;padding:.4em 1.5em .2em;position:absolute;top:calc(var(--t)*21.75);left:50%;translate:-50% 0}
+	--height:3.2rem;background:#000B;border:red .1em;border-style:solid none;width:100%;position:absolute;z-index:100;top:calc(var(--t)*6.9);
+	#startBtn {text-align:center;white-space:nowrap;font:calc(var(--t)*.8)/1 Atari,sans-serif;padding:.4em 1.5em .2em;position:absolute;top:calc(var(--t)*21.75);left:50%;translate:-50% 0}
 }
 body:not([data-state=Title]) #titleScr{visibility:hidden}
 body:is([data-state=Attract],[data-state=Cutscene]){:is(header,canvas:not(#board_main,#board_grid)){visibility:hidden}}
