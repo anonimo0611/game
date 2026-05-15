@@ -19,7 +19,7 @@ $('button.demo').each((i,button)=> {
 	$(button).on({click:startScene})
 })
 
-/**@type {SceneDict<string>}*/
+/** @type {SceneDict<string>} */
 const DemoDict = {Attract,Cutscene}
 
 export const DemoScene = {
