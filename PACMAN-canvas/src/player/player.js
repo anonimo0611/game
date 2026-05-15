@@ -4,10 +4,9 @@ import {Ctrl,Cfg} from '../control.js'
 import {State}    from '../state.js'
 import {Score}    from '../score.js'
 import {Maze}     from '../maze.js'
-import {PacMan}   from '../actor.js'
-import {Ghosts}   from '../ghosts/_system.js'
 import {Mover}    from './controller.js'
 import {TunEntry} from './tunnel.js'
+import {PacMan,Ghosts} from '../actors.js'
 
 const EventBus = $({})
 const EATEN_EV = 'DotEaten'

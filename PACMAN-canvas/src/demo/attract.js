@@ -1,14 +1,11 @@
 ﻿import {State}    from '../state.js'
 import {Ctrl}     from '../control.js'
-import {Actors}   from '../actor.js'
-import {PacMan}   from '../actor.js'
-import {Ghosts}   from '../ghosts/_system.js'
-import {Ghost}    from '../ghosts/ghost.js'
 import {Fruit}    from '../fruit.js'
 import {Score}    from '../score.js'
-import  Sprite    from '../sprites/ghost.js'
+import  GhostSpr  from '../sprites/ghost.js'
 import {drawText} from '../message.js'
 import {drawDot,PowBlinker} from '../maze.js'
+import {Actors,PacMan,Ghosts,Ghost} from '../actors.js'
 
 export class Attract {
 	static {State.on({Attract:this.#begin})}
@@ -17,7 +14,7 @@ export class Attract {
 	static draw()   {Attract.#instance?.draw()}
 	static update() {Attract.#instance?.update()}
 
-	ghsSpr = new Sprite(Fg,T*2)
+	ghsSpr = new GhostSpr(Fg,T*2)
 	subAct = new EnergizerAct
 
 	/** @private */

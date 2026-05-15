@@ -3,10 +3,8 @@ import {Game}    from '../_main.js'
 import {State}   from '../state.js'
 import {Ctrl}    from '../control.js'
 import {Fruit}   from '../fruit.js'
-import {PacMan}  from '../actor.js'
-import {Ghosts}  from '../ghosts/_system.js'
-import {Ghost}   from '../ghosts/ghost.js'
 import * as Snag from '../sprites/snag.js'
+import {PacMan,Ghosts,Ghost} from '../actors.js'
 
 const ACTORS_Y = BH/2
 const sceneNum = (lv=0)=>

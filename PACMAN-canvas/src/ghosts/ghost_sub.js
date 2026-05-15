@@ -1,8 +1,6 @@
-import {Maze}   from '../maze.js'
-import {State}  from '../state.js'
-import {player} from '../player/player.js'
-import {Ghosts} from './_system.js'
-import {Ghost}  from './ghost.js'
+import {Maze}  from '../maze.js'
+import {State} from '../state.js'
+import {player,Ghosts,Ghost} from '../actors.js'
 
 export class Akabei extends Ghost {
 	constructor() {

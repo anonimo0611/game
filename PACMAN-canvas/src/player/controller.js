@@ -1,11 +1,10 @@
-import {Dir}    from '../../_lib/direction.js';
-import {Game}   from '../_main.js'
-import  Speed   from '../speed.js';
-import {State}  from '../state.js'
-import {Ctrl}   from '../control.js';
-import {Maze}   from '../maze.js'
-import {Actor}  from '../actor.js';
-import {Ghosts} from '../ghosts/_system.js'
+import {Dir}   from '../../_lib/direction.js';
+import {Game}  from '../_main.js'
+import  Speed  from '../speed.js';
+import {State} from '../state.js'
+import {Ctrl}  from '../control.js';
+import {Maze}  from '../maze.js'
+import {Actor,Ghosts} from '../actors.js';
 
 const {Pacman:Spd}= Speed
 

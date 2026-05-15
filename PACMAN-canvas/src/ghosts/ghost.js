@@ -5,12 +5,10 @@ import {State}   from '../state.js'
 import {Cfg}     from '../control.js'
 import {Maze}    from '../maze.js'
 import {PtsMgr}  from '../points.js'
-import {Actor}   from '../actor.js'
-import {player}  from '../player/player.js'
 import  Sprite   from '../sprites/ghost.js'
-import * as Sys  from './_system.js'
-import {Ghosts}  from './_system.js'
 import {PathMgr} from './paths.js'
+import * as Sys  from './_system.js'
+import {Actor,player,Ghosts} from '../actors.js'
 
 /** @type {readonly Direction[]} */
 const TurnPriority = [U,L,D,R]
@@ -81,7 +79,7 @@ export class Ghost extends Actor {
 		return function(g,{state:s}=g) {
 			if (s.isIdle)       return Sys.Speed.Idle
 			if (s.isGoingOut)   return Sys.Speed.GoOut
-			if (s.isEscaping)   return Sys.Speed.Escape
+			if (g.isEscaping)   return Sys.Speed.Escape
 			if (g.inTunSide)    return Sys.Speed.InTunnel
 			if (g.isFrightened) return Sys.Speed.Fright
 			if (g.isScattering) return Sys.Speed.Base

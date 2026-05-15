@@ -1,9 +1,7 @@
-import {State}  from '../state.js'
-import {Cfg}    from '../control.js'
-import {player} from '../player/player.js'
-import {Maze}   from '../maze.js'
-import {Ghosts} from './_system.js'
-import {Ghost}  from './ghost.js'
+import {State} from '../state.js'
+import {Cfg}   from '../control.js'
+import {Maze}  from '../maze.js'
+import {Ghosts,Ghost,player} from '../actors.js'
 import {Akabei,Pinky,Aosuke,Guzuta} from './ghost_sub.js'
 
 export const Targets = new class TargetVisualizer {

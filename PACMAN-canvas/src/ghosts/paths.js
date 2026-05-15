@@ -2,8 +2,7 @@ import {Dir}   from '../../_lib/direction.js';
 import {Cfg}   from '../control.js'
 import {State} from '../state.js';
 import {Maze}  from '../maze.js'
-import {Ghost} from './ghost.js';
-import {player as p} from '../player/player.js';
+import {Ghost,player as p} from '../actors.js';
 
 const PATH_STEPS  = 18
 const LINE_WIDTH  = T/5

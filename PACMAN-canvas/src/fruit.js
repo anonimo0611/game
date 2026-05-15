@@ -6,7 +6,7 @@ import {State}  from './state.js'
 import {Maze}   from './maze.js'
 import {PtsMgr} from './points.js'
 import * as Spr from './sprites/fruits.js'
-import {player,onPlayerDotEaten} from './player/player.js'
+import {player,onPlayerDotEaten} from './actors.js'
 
 const FADE_DUR   = 300
 const LEVEL_COLS = 7
