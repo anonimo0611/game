@@ -22,7 +22,7 @@ const DemoScene = {
 		DemoDict[State.current]?.update()
 	},
 	draw() {
-		DemoDict[State.current]?.draw?.()
+		DemoDict[State.current]?.draw()
 	},
 	/** Attract mode will begin after a period of inactivity. */
 	updateTimer() {
