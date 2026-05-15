@@ -146,4 +146,4 @@ export const Ctrl = new class Controller {
 	}
 }
 ,powChk = getInput('powEnabled')
-,Cfg = /**@type {Readonly<Data>}*/(Data)
+,Cfg = /**@type {Readonly<typeof Data>}*/(Data)
