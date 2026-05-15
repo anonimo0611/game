@@ -4,8 +4,10 @@ type GhostIdx = (typeof GhostType)['Akabei'|'Pinky'|'Aosuke'|'Guzuta']
 
 //---- Dictionary ----
 
-type SceneDict<T>   = {[K in T]?: {update():void, draw():void}}
-type NumericDict<T> = {readonly [K:number]:T}
+type FuncDict     <T extends string> = {[K in T]: ()=> void}
+type PartialFnDict<T extends string> = {[K in T]?:()=> void}
+type SceneDict    <T extends string> = {[K in T]?:{update():void, draw():void}}
+type NumericDict  <T> = {readonly [K:number]:T}
 
 //---- Timer ----
 
