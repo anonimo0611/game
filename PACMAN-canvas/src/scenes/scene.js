@@ -1,12 +1,13 @@
+import {MainScene} from './main.js'
+import {DemoScene} from './demo.js'
 import {State}     from '../state.js'
 import {PtsMgr}    from '../points.js'
 import {Message}   from '../message.js'
 import {Cutscene}  from '../demo/cutscene.js'
-import {MainScene} from './main.js'
-import {DemoScene} from './demo.js'
 
 const Scenes = [MainScene,DemoScene]
-const Scene  = new class SceneManager {
+
+export const Scene = new class SceneManager {
 	get shouldPlayCutscene() {
 		return Cutscene.num > 0
 	}
@@ -21,4 +22,3 @@ const Scene  = new class SceneManager {
 		Message.draw()
 	}
 }
-export {Scene}

@@ -1,8 +1,8 @@
 import {WinState} from '../ui.js'
 import {Ctrl}     from '../control.js'
+import {State}    from '../state.js'
 import {Attract}  from '../demo/attract.js'
 import {Cutscene} from '../demo/cutscene.js'
-import {States,State} from '../state.js'
 
 {// Reset counter on any title screen interaction
 	const EV = `blur focus resize scroll keydown pointerdown mousemove wheel`
@@ -12,9 +12,17 @@ import {States,State} from '../state.js'
 	})
 }
 
-/** @type {SceneDict<States[number]>} */
-const DemoDict  = {Attract,Cutscene}
-const DemoScene = {
+$('button.demo').each((i,button)=> {
+	const startScene = (i == 0)
+		? ()=> State.setAttract()
+		: ()=> State.setCutscene({data:i})
+	$(button).on({click:startScene})
+})
+
+/**@type {SceneDict}*/
+const DemoDict = {Attract,Cutscene}
+
+export const DemoScene = {
 	get shouldPlayCutscene() {
 		return Cutscene.num > 0
 	},
@@ -34,11 +42,3 @@ const DemoScene = {
 		}
 	},
 }
-export {DemoScene}
-
-$('button.demo').each((i,button)=> {
-	const startScene = (i == 0)
-		? ()=> State.setAttract()
-		: ()=> State.setCutscene({data:i})
-	$(button).on({click:startScene})
-})
