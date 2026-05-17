@@ -1,10 +1,10 @@
+import {lives} from './ui.js'
 import {State} from './state.js'
 import  Sprite from './sprites/pacman.js'
 
 export const Lives = function() {
 	let   left   = 0
 	const SIZE   = T*2
-	const input  = getInput('initialLives')
 	const sprite = new Sprite(HUD, T*.8, 0.5)
 	State.on({
 		Title:   ()=> reset(),
@@ -14,14 +14,14 @@ export const Lives = function() {
 	function draw(left=3) {
 		HUD.save()
 		HUD.translate(SIZE+T, BH-T)
-		HUD.clearRect(-T,-T, SIZE*(+input.max), SIZE)
+		HUD.clearRect(-T,-T, SIZE*(+lives.max), SIZE)
 		for (let i=0; i<left; i++)
 			sprite.draw({center:{x:SIZE*i}})
 		HUD.restore()
 	}
 	function add(n=0) {draw(left += n)}
-	function reset()  {draw(left = input.valueAsNumber-1)}
-	$(input).on({input:reset})
+	function reset()  {draw(left = lives.valueAsNumber-1)}
+	$(lives).on({input:reset})
 	return {
 		extend()   {add(+1)},
 		get left() {return left},

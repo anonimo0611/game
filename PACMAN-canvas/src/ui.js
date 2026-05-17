@@ -1,4 +1,6 @@
-export const Form = document.forms[0]
+export const Form   = document.forms[0]
+export const powChk = getInput('powEnabled')
+export const lives  = getInput('initialLives')
 
 //---- Buttons ----
 

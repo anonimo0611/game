@@ -1,8 +1,9 @@
-import {Rect}  from '../_lib/rect.js'
-import {State} from './state.js'
-import {Ghost} from './ghosts/ghost.js'
-import {Wall}  from './sprites/wall.js'
-import {Cfg,powChk} from './control.js'
+import {Rect}   from '../_lib/rect.js'
+import {State}  from './state.js'
+import {Cfg}    from './control.js'
+import {powChk} from './ui.js'
+import {Ghost}  from './ghosts/ghost.js'
+import {Wall}   from './sprites/wall.js'
 
 const MapArr = freeze([... `\
 ////////////////////////////\

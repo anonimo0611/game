@@ -144,6 +144,4 @@ export const Ctrl = new class Controller {
 		$(btns.start).on({click:State.setNewGame})
 		$root.addClass('controller-settled')
 	}
-}
-,powChk = getInput('powEnabled')
-,Cfg = /**@type {Readonly<typeof Data>}*/(Data)
+}, Cfg = /**@type {Readonly<typeof Data>}*/(Data)
