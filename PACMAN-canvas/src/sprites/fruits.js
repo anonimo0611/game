@@ -40,7 +40,7 @@ export const cache = new class FruitCache {
 {// Create a sprite sheet for menu icons
 	const Menu = $('#LevelMenu')
 	const size = Menu.height() ?? 0
-	const {ctx}= canvas2D(null, drawFunctions.length*size, size)
+	const {ctx}= canvas2D(null, size*drawFunctions.length, size)
 	for (const i of drawFunctions.keys())
 		draw(ctx, i, i*size + size/2, size/2, size/LOGICAL_SIZE)
 	$(Menu).css('--url',`url("${ctx.canvas.toDataURL()}")`)

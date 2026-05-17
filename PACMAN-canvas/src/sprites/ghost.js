@@ -1,248 +1,186 @@
-import {Sound}   from '../../_snd/sound.js'
-import {Dir}     from '../../_lib/direction.js'
-import {Game}    from '../_main.js'
-import {State}   from '../state.js'
-import {Cfg}     from '../control.js'
-import {Maze}    from '../maze.js'
-import {PtsMgr}  from '../points.js'
-import  Sprite   from '../sprites/ghost.js'
-import {PathMgr} from './paths.js'
-import * as Sys  from './_system.js'
-import {Actor,player,Ghosts} from '../actors.js'
-
-/** @type {readonly Direction[]} */
-const TurnPriority = [U,L,D,R]
-
-export class Ghost extends Actor {
-	/** @readonly */type
-	/** @readonly */init
-	/** @readonly */state
-	/** @readonly */path   = new PathMgr()
-	/** @readonly */sprite = new Sprite(Fg,T*2)
-
-	#fader = /**@type {?Fade}*/(null)
-	#fleeTimer  = -1
-	#revSig     = false
-	#started    = false
-	#frightened = false
+import SubSprite from './ghost_sub.js'
+export const LOGICAL_SIZE = 90
+export default class GhostSprite {
+	/**@readonly*/tgt
+	/**@readonly*/ctx
+	/**@readonly*/sub
+	#size
+	#resurrect = /**@type {?Fade}*/(null)
 
 	/**
-	 @param {Direction} dir
-	 @param {{type?:number, tile?:xyTuple, align?:-1|0|1}} options
+	 @param {EnhancedCtx2D} target
+	 @param {number} size
 	*/
-	constructor(dir=L, {type=0,tile:[col,row]=[0,0],align=0}={}) {
-		super(col,row)
-		this.dir   = dir
-		this.type  = type
-		this.init  = freeze({align,x:col*T})
-		this.state = Sys.createState(this)
-		$(this).on({
-		 [Sys.Evt.Reverse]:  ()=> this.#revSig  = true,
-		 [Sys.Evt.Ready]:    ()=> this.#fader   = Fade.in(),
-		 [Sys.Evt.RoundEnds]:()=> this.#fader   = Fade.out(),
-		 [Sys.Evt.FleeStart]:()=> this.#fleeTimer = 400/Game.interval,
-		 [Sys.Evt.Frighten]: (_,on=true)=> this.#frighten(on),
-		})
+	constructor(target, size) {
+		this.tgt = target
+		this.ctx = canvas2D(null).ctx
+		this.sub = new SubSprite(this.ctx)
+		this.resize(this.#size = size)
 	}
-	get animIdx()      {return Ghosts.animIndex}
-	get spriteIdx()    {return Ghosts.spriteIdx}
-	get maxAlpha()     {return Cfg.showTargets? .75:1}
-	get alpha()        {return this.#fader?.alpha ?? this.maxAlpha}
-	get isStarted()    {return this.#started}
-	get isFrightened() {return this.#frightened}
-	get isEscaping()   {return this.state.isEyes}
-	get isChasingPac() {return this.getTargetTile().eq(player.tile)}
+	setResurrect() {
+		this.#resurrect ||= Fade.in(600)
+	}
+	get size() {
+		return this.#size
+	}
+	resize(/**@type {number}*/size) {
+		this.#size = size
+		this.ctx.resize(size*1.5, size)
+	}
+	draw({
+		center ={x:0,y:0},
+		type         = 0,
+		animIdx      = 0,
+		spriteIdx    = 0,
+		alpha        = 1,
+		orient       = /**@type {VisualOrient}*/(L),
+		isAngry      = false,
+		isFrightened = false,
+		isEscaping   = false,
+		isRipped     = false,
+		isMended     = false,
+		isExposed    = false,
+	}={}) {
+		const {tgt,ctx,size}= this
+		function finalize() {
+			ctx.restore()
+			tgt.save()
+			tgt.setAlpha(alpha)
+			tgt.translate(center)
+			tgt.drawImage(ctx.canvas, -size/2, -size/2)
+			tgt.restore()
+		}
+		ctx.clear()
+		ctx.save()
+		ctx.translate(size/2)
+		ctx.scale(size/LOGICAL_SIZE)
+		ctx.lineWidth = 5
+		ctx.lineJoin  = ctx.lineCap = 'round'
+		ctx.fillStyle = !isFrightened
+			? Color.GhostBodies[type]
+			: Color.GhostBodies[GhostType.Max+spriteIdx]
 
-	// Getters in this section can be overridden.
-	get isAngry()      {return false}
-	get isNormal()     {return !this.isFrightened  && this.state.isWalking}
-	get isChasing()    {return Ghosts.isChasing    && this.isNormal}
-	get isScattering() {return Ghosts.isScattering && this.isNormal}
-	get chaseOffset()  {return 0}
-	get chaseSpeed()   {return Sys.Speed.Base}
-	get chasePos()     {return player.center}
-	get scatterTile()  {return Vec2.new(24, 0)}
-	get chasingTile()  {return this.chasePos.divInt(T)}
-
-	get baseTargetTile() {
-		return this.state.isEscaping
-			? Maze.House.EntryTile
-			: this.isScattering
-				? this.scatterTile
-				: this.chasingTile
-	}
-	getTargetTile(tile=this.tile) {
-		const {baseTargetTile}= this
-		return Maze.getGhostExitTile({baseTargetTile,tile})
-	}
-	get speed() {
-		return function(g,{state:s}=g) {
-			if (s.isIdle)       return Sys.Speed.Idle
-			if (s.isGoingOut)   return Sys.Speed.GoOut
-			if (g.isEscaping)   return Sys.Speed.Escape
-			if (g.inTunSide)    return Sys.Speed.InTunnel
-			if (g.isFrightened) return Sys.Speed.Fright
-			if (g.isScattering) return Sys.Speed.Base
-			return g.chaseSpeed
-		}(this) * Game.moveSpeed
-	}
-	draw() {
-		if (State.isNewGame) return
-		this.sprite.draw(this)
+		if (isExposed) {
+			animIdx == 0
+				? this.sub.drawHadake0()
+				: this.sub.drawHadake1()
+			return finalize()
+		}
+		if (!isEscaping) {
+			ctx.save()
+			this.#resurrect?.apply(ctx)
+			this.#drawAngerGlow({center,isAngry})
+			this.#drawBody({animIdx,isRipped,isMended})
+			if (isFrightened) {
+				ctx.fillStyle   =
+				ctx.strokeStyle = Color.FrightFaces[spriteIdx]
+				this.#drawFrightFace()
+			}
+			ctx.restore()
+		}
+		if (!isFrightened) {
+			ctx.fillStyle = '#FFF',
+			{
+				Left:  ()=> this.#drawEyesHoriz(L),
+				Right: ()=> this.#drawEyesHoriz(R),
+				Up:    ()=> this.#drawEyesUp(isRipped),
+				Down:  ()=> this.#drawEyesDown(),
+				Dazed: ()=> this.sub.drawDazedEyes(),
+			}[orient]()
+		}
+		finalize()
 	}
 	update() {
-		this.sprite.update()
-		this.#fader?.update(this.maxAlpha)
-		State.isInGame && this.#update()
+		if (this.#resurrect?.update() == false)
+			this.#resurrect = null
 	}
-	#update() {
-		this.#fleeTimer >= 0 && this.#fleeTimer--
-		if (Timer.frozen && !this.isEscaping) return
-		switch(this.state.current) {
-		case 'Idle':     return this.#idleInHouse(this)
-		case 'GoingOut': return this.#goingOut(this)
-		case 'Entering': return this.#enteringToHome(this)
-		default: this.#moveStepped(this.speed+.5|0)
+	#drawBody({animIdx=0, isRipped=false, isMended=false}) {
+		const {ctx}= this
+		ctx.beginPath()
+		ctx.moveTo(+42, +26)
+		ctx.lineTo(+42, +11)
+		ctx.bezierCurveTo(+42,-60, -42,-60, -42,11)
+		ctx.lineTo(-42, +26)
+		animIdx == 0
+			? this.#drawFoot0()
+			: this.#drawFoot1()
+		ctx.fill()
+		isRipped && this.sub.drawRippedBody()
+		isMended && this.sub.drawMendedSeam(animIdx)
+	}
+	#drawFoot0() {
+		const {ctx}= this
+		ctx.lineTo(-42, 42)
+		ctx.lineTo(-28, 28)
+		ctx.quadraticCurveTo(-14, 41, -9, 42)
+		ctx.arcTo( -9, 28, -6, 28, 4)
+		ctx.arcTo( +9, 28, +9, 31, 4)
+		ctx.lineTo(+9, 42)
+		ctx.quadraticCurveTo(+14, 41, 28, 28)
+		ctx.lineTo(+42, 42)
+	}
+	#drawFoot1() {
+		const {ctx}= this
+		ctx.lineTo(-42, 26)
+		ctx.bezierCurveTo(-41, 42, -29, 42, -26, 38)
+		ctx.bezierCurveTo(-22, 28, -13, 28,  -9, 35)
+		ctx.bezierCurveTo( -5, 42,  +5, 42,  +9, 35)
+		ctx.bezierCurveTo(+13, 28, +22, 28, +26, 38)
+		ctx.bezierCurveTo(+29, 42, +41, 42, +42, 26)
+	}
+	#drawEyesUp(isRipped=false) {
+		const {ctx}= this, color=[Color.GhostEye,'#000'][+isRipped]
+		for (const vx of [-1,+1]) {
+			ctx.beginPath()
+			ctx.ellipse(19.5*vx, -17, 13, 17, -8*vx*PI/180, -PI/4, -3*PI/4)
+			ctx.fill()
+			ctx.fillCircle(18.5*vx, -26,  8, color)
 		}
 	}
-	#moveStepped(steps=1) {
-		for (let i=0; i<steps; i++) {
-			this.#tickMove(this.speed/steps)
-			this.passedTileCenter && this.#setNextDir()
-			if (this.#makeTurn())    break
-			if (this.collidesWith()) break
+	#drawEyesDown() {
+		const {ctx}= this
+		for (const vx of [-1,+1]) {
+			ctx.beginPath()
+			ctx.ellipse(19*vx, -3, 13, 17, 0, 140*PI/180, 40*PI/180)
+			ctx.fill()
+			ctx.fillCircle(19*vx, +4,  8, Color.GhostEye)
 		}
 	}
-	#tickMove(spd=this.speed) {
-		!Maze.House.arrived(this, spd)
-			? this.setNextPosition(spd)
-			: this.#enterHouse()
-	}
-	#idleInHouse({orient,center:{y:cy}}=this) {
-		!Cfg.alwaysChase &&
-			Sys.DotCounter.releaseIfReady(this)
-		!this.state.isGoingOut && this.move(
-			(cy > Maze.House.MID_Y - (T*0.6) && orient != D)? U:
-			(cy < Maze.House.MID_Y + (T*0.5) ? D:U)
-		)
-	}
-	leaveHouse = (deactivateGlobalDotCnt=false)=> {
-		player.resetTimer()
-		this.#started ||= true
-		this.state.isIdle &&
-		this.state.setGoingOut()
-		return deactivateGlobalDotCnt
-	}
-	#goingOut({init,speed,y,center:{x:cx}}=this) {
-		if (cx > BW/2+speed
-		 || cx < BW/2-speed)
-			return this.move(init.align<0 ? R:L)
-
-		if (cx != BW/2)
-			return this.centering()
-
-		if (y > Maze.House.EntryTile.y*T)
-			return this.move(U)
-
-		this.dir = L
-		this.state.setWalking()
-	}
-	#enterHouse() {
-		this.dir = D
-		this.centering()
-		this.state.setEntering()
-	}
-	#enteringToHome({init,speed:spd,x,y}=this) {
-		const {House}= Maze
-		if (y+spd < House.MID_Y)
-			return this.move()
-
-		if (y != House.MID_Y)
-			return this.pos.setY(House.MID_Y).void()
-
-		if (!init.align || abs(x-init.x) <= spd) {
-			this.x   = init.x
-			this.dir = init.align? (init.align<0 ? R:L) : U
-			this.#arrivedAtHome()
-			return
+	/** @param {Horizontal} LorR */
+	#drawEyesHoriz(LorR) {
+		const {ctx}= this, vx = (Vec2[LorR].x < 0 ? -1:1)
+		for (const i of [0,1]) {
+			ctx.beginPath()
+			ctx.ellipse([-16.5*vx, 23*vx][i], -11, 13, 17, 0, 0, PI*2)
+			ctx.fill()
+			ctx.fillCircle([ -9.5*vx, 29*vx][i],  -8,  8, Color.GhostEye)
 		}
-		this.move(init.align<0 ? L:R)
 	}
-	#arrivedAtHome() {
-		this.sprite.setResurrect()
-		this.type == GhostType.Akabei || Cfg.alwaysChase
-			? this.state.setGoingOut()
-			: this.state.setIdle()
-		!Timer.frozen && Sound.onGhostReturned()
-	}
-	#setNextDir() {
-		if (this.#revSig) {
-			this.#revSig = false
-			this.orient  = this.revDir
+	#drawFrightFace() {
+		const {ctx}= this
+		{// Eyes
+			const size = 11
+			ctx.fillRect(-15-size/2, -size*1.5, size, size)
+			ctx.fillRect(+15-size/2, -size*1.5, size, size)
 		}
-		if (this.dir == this.orient)
-			this.orient = this.getNextDir()
+		// Mouth
+		ctx.newLinePath([-36,17],[-30, 9],[-25, 9],[-15,17],[-11,17],[-3, 9])
+		ctx.addLinePath([ +3, 9],[+11,17],[+15,17],[+25, 9],[+30, 9],[36,17])
+		ctx.stroke()
 	}
-	getNextDir(
-		currDir = this.dir,
-		srcTile = this.getAdjacentTile(),
-		tgtTile = this.getTargetTile()
-	) {
-		const dirs = TurnPriority.flatMap((dir,i)=> {
-			const testTile = this.getAdjacentTile(dir,srcTile)
-			return Dir.Opposite[currDir] != dir
-				&& !Maze.hasWall(testTile)
-				&& !this.#isRestrictedTile({dir,testTile})
-				? [{dir,i,m:Vec2.sqrMag(testTile,tgtTile)}]:[]
-		})
-		return this.isFrightened? randChoice(dirs).dir:
-			(i=> dirs.sort((a,b)=> a.m-b.m || a.i-b.i)[i].dir)
-				(this.#fleeTimer >= 0 ? dirs.length-1:0)
-	}
-	/** @param {{dir:Direction,testTile:Vec2}} testTile */
-	#isRestrictedTile({dir,testTile:{hyphenated:xy}}) {
-		const ignore = (this.isFrightened || this.isEscaping)
-		return (Cfg.unrestricted || ignore)
-			? false : Maze.GhostNoEntryTiles.has(xy+dir)
-	}
-	#makeTurn() {
-		if (this.dir != this.orient
-		 && this.passedTileCenter
-		 && this.hasAdjacentWall() == false) {
-			this.updateDirection()
-			return true
-		}
-		return false
-	}
-	collidesWith(
-		pos     = player.pos,
-		radius  = T*(this.isFrightened? .5 : .4),
-		release = ()=> this.#startEscaping(),
-	) {
-		if (!this.state.isWalking
-		 || !this.isFrightened && Cfg.invincible
-		 || !circleCollision(this, pos, radius))
-			return false
-		this.isFrightened
-			? this.#onBitten(release)
-			: Maze.dotsLeft && this.#onPacCaught()
-		return true
-	}
-	#onBitten(cb=()=>{}) {
-		Sound.playBitesGhost()
-		this.#frightened = false
-		this.state.setBitten()
-		PtsMgr.set({key:Ghosts, pos:this.center, frozen:true, cb})
-	}
-	#onPacCaught() {
-		Sound.stopLoops()
-		State.setRoundEnds()
-	}
-	#frighten(on=true) {
-		!this.isEscaping && (this.#frightened=on)
-	}
-	#startEscaping() {
-		Sound.switchToEyesEscaping()
-		this.state.setEscaping()
+	#drawAngerGlow({center:{x=0,y=0},isAngry=false}) {
+		if (!isAngry) return
+		const {tgt}=this, {width:W}=Glow, S=W*1.2
+		tgt.save()
+		tgt.globalAlpha = this.#resurrect?.alpha ?? 1
+		tgt.translate(x, y)
+		tgt.drawImage(Glow, 0,0, W,W, -S/2,-S/2, S,S)
+		tgt.restore()
 	}
 }
+const Glow = function() {
+	const {ctx,w,h}= canvas2D(null, T*5)
+	ctx.filter = `blur(${T*0.6}px)`
+	ctx.fillCircle(w/2, h/2, T, '#F00')
+	return ctx.canvas
+}()
