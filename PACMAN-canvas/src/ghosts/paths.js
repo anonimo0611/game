@@ -11,22 +11,22 @@ const PathOffsets = freeze([-2,-1,+1,+2])
 export class PathMgr {
 	#nodeList = /**@type {PathNode[]}*/([])
 
-	static get isActive() {
+	static get #isActive() {
 		return State.isInGame && Cfg.showPaths
 	}
 	/** @param {readonly Ghost[]} ghosts */
 	static update(ghosts) {
-		if (!this.isActive) return
+		if (!this.#isActive) return
 		ghosts.forEach(g=> g.path.#update(g))
 	}
 	/** @param {readonly Ghost[]} ghosts */
 	static draw(ghosts) {
-		if (!this.isActive) return
+		if (!this.#isActive) return
 		ghosts.toReversed().forEach(g=> g.path.#draw(g))
 	}
 
 	/** @param {Ghost} g */
-	hasFixedTarget(g) {
+	#hasFixedTarget(g) {
 		return g.isScattering || g.state.isEscaping
 	}
 	/** @param {Ghost} g */
@@ -43,7 +43,7 @@ export class PathMgr {
 			const tile = g.getAdjacentTile(dir,t)
 			path.push({tile,dir,stopped:
 				g.isChasingPac && tile.eq(p.tile) ||
-				this.hasFixedTarget(g) && tile.eq(tgt)
+				this.#hasFixedTarget(g) && tile.eq(tgt)
 			})
 			if (path[i].stopped) break
 		} this.#nodeList = path
