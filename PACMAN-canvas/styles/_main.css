@@ -39,11 +39,12 @@ body:is([data-state=Attract],[data-state=Cutscene]){:is(header,canvas:not(#board
 	.checkboxes,.buttons {
 		height:100%;display:flex;gap:.15em;flex-direction:column;justify-content:center;
 		label {
-			font-size:.75rem;display:flex;gap:.3em;align-content:center;
+			font-size:.73rem;display:flex;gap:.3em;align-content:center;
 			input{font-size:inherit}
 		}
 		[data-for=keys]{cursor:help}
-		label:has(#alwaysChase) chk-label{display:inline-block;font-size:92%}
+		chk-label{display:inline-block;white-space:nowrap}
+		label:has(#alwaysChase) chk-label{width:.92em;scale:.92 1;transform-origin:0 0}
 	}
 	.buttons button{font-size:.65rem}
 	> label:first-of-type{color:inherit;font-size:.9em;font-variant:small-caps;display:flex;gap:.25em;align-items:center}
