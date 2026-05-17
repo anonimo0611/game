@@ -49,7 +49,8 @@ export class Cutscene {
 		this.akabei.sprite.draw({animIdx,center, ...data})
 	}
 	draw() {
-		State.wasFlashing && Fruit.drawLevelCounter()
+		State.wasFlashing
+			&& Fruit.drawLevelCounter()
 	}
 	end() {
 		State.wasTitle
