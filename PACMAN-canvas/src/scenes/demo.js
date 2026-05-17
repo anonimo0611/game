@@ -12,13 +12,6 @@ import {Cutscene} from '../demo/cutscene.js'
 	})
 }
 
-$('button.demo').each((i,button)=> {
-	const startScene = (i == 0)
-		? ()=> State.setAttract()
-		: ()=> State.setCutscene({data:i})
-	$(button).on({click:startScene})
-})
-
 /** @type {SceneDict<string>} */
 const DemoDict = {Attract,Cutscene}
 
@@ -42,3 +35,10 @@ export const DemoScene = {
 		}
 	},
 }
+
+$('button.demo').each((i,button)=> {
+	const startScene = (i == 0)
+		? ()=> State.setAttract()
+		: ()=> State.setCutscene({data:i})
+	$(button).on({click:startScene})
+})
