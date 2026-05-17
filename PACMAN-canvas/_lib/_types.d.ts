@@ -4,10 +4,9 @@ type GhostIdx = (typeof GhostType)['Akabei'|'Pinky'|'Aosuke'|'Guzuta']
 
 //---- Dictionary ----
 
-type FuncDict     <T extends string> = {[K in T]: ()=> void}
-type PartialFnDict<T extends string> = {[K in T]?:()=> void}
-type SceneDict    <T extends string> = {[K in T]?:{update():void, draw():void}}
-type NumericDict  <T> = {readonly [K:number]:T}
+type FuncDict <T extends string> = {[K in T]:()=> void}
+type SceneDict<T extends string> = {[K in T]?:{update():void, draw():void}}
+type NumericDict<T> = {readonly [K:number]:T}
 
 //---- Timer ----
 
@@ -21,7 +20,6 @@ type TimerSeq = [durationMS:number, callback:()=> void]
 
 //---- Tile & Coords ----
 
-/** A non-negative integer representing the tile index. */
 type TileIdx  = number
 type xyTuple  = Readonly<[x:number, y:number]>
 type Position = Readonly<{x:number, y:number}>
@@ -36,7 +34,7 @@ type FloatingPtsData = {
 	pos:  Readonly<Position>;
 	dur?: number;
 	frozen?: boolean;
-	cb?:  ()=> void;
+	cb?: ()=> void;
 }
 
 //---- Direction ----
@@ -60,22 +58,22 @@ type JQData = any[]|JQuery.PlainObject|string|number|boolean
 
 type JQKeyboardEvent    = JQuery.KeyboardEventBase
 type JQTriggeredEvent   = JQuery.TriggeredEvent
-type JQWindowHandler    = (events:JQuery.TriggeredEvent<Global,undefined,Global,Global>, data?:any)=> void
-type JQTriggerHandler   = (events:JQTriggeredEvent, data?:any)=> void
-type JQKeyboardHandler  = (events:JQKeyboardEvent,  data?:any)=> void
+type JQWindowHandler    = (ev:JQuery.TriggeredEvent<Global,undefined,Global,Global>, data?:any)=> void
+type JQTriggerHandler   = (ev:JQTriggeredEvent, data?:any)=> void
+type JQKeyboardHandler  = (ev:JQKeyboardEvent,  data?:any)=> void
 type JQKeyboardHandlers = {keyup?:JQKeyboardHandler, keydown?:JQKeyboardHandler}
-type JQTriggerHandlers  = {[events:string]:JQTriggerHandler}|JQKeyboardHandlers
+type JQTriggerHandlers  = {[ev:string]:JQTriggerHandler}|JQKeyboardHandlers
 
 interface JQuery {
 	offon<TType extends string>(
-		events:  TType,
+		events: TType,
 		handler: JQuery.TypeEventHandler<TElement,undefined,TElement,TElement,TType>,
-		force?:  boolean,
+		force?: boolean,
 	): this
 	onNS<TType extends string>(
 		namespace: TType,
-		handlers:  JQTriggerHandlers,
-		force?:    boolean,
+		handlers: JQTriggerHandlers,
+		force?: boolean,
 	): this
-	onWheel(handler: (event:WheelEvent)=> void): this
+	onWheel(handler: (ev:WheelEvent)=> void): this
 }
