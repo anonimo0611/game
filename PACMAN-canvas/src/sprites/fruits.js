@@ -26,11 +26,11 @@ export const cache = new class FruitCache {
 	/**
 	 @param {EnhancedCtx2D} ctx
 	 @param {Position} pos
-	 @param {number} [alpha]
+	 @param {?Fade} [fade]
 	*/
-	draw(ctx, {x,y}, alpha) {
+	draw(ctx, {x,y}, fade) {
 		ctx.save()
-		ctx.setAlpha(alpha)
+		fade?.apply(ctx)
 		ctx.translate(x, y)
 		ctx.drawImage(this.#ctx.canvas, -T,-T)
 		ctx.restore()

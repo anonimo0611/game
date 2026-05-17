@@ -69,8 +69,7 @@ export const Fruit = new class FruitManager {
 	}
 	drawTarget() {
 		if (Ticker.paused) return
-		if (this.showTarget)
-			Spr.cache.draw(Fg, TargetPos, fadeOut?.alpha)
+		this.showTarget && Spr.cache.draw(Fg, TargetPos, fadeOut)
 		PtsMgr.drawFruitPts()
 	}
 	drawLevelCounter() {
