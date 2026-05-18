@@ -8,35 +8,28 @@ const PATH_STEPS  = 18
 const LINE_WIDTH  = T/5
 const PathOffsets = freeze([-2,-1,+1,+2])
 
-export const PathMgr = new class PathManager {
-	#paths = /**@type {Path[]}*/([])
-	static {State.on({_Ready:this.#reset})}
-	static #reset() {
-		for (let i=0; i<GhostType.Max; i++)
-			PathMgr.#paths[i] = new Path()
-	}
-	get isActive() {
+export class PathMgr {
+	static get isActive() {
 		return Cfg.showPaths && State.isInGame
 	}
-	update(/**@type {readonly Ghost[]}*/ghosts) {
+	/** @param {readonly Ghost[]} ghosts */
+	static update(ghosts) {
 		if (!this.isActive) return
-		this.#paths.forEach((p,i)=> p.update(ghosts[i]))
+		ghosts.forEach(g=> g.path.#update(g))
 	}
-	draw(/**@type {readonly Ghost[]}*/ghosts) {
+	/** @param {readonly Ghost[]} ghosts */
+	static draw(ghosts) {
 		if (!this.isActive) return
-		this.#paths.forEach((p,i)=> p.draw(ghosts[i]))
+		ghosts.toReversed().forEach(g=> g.path.#draw(g))
 	}
-}
-
-class Path {
 	#nodeList = /**@type {PathNode[]}*/([])
 
 	/** @param {Ghost} g */
-	hasFixedTarget(g) {
+	#hasFixedTarget(g) {
 		return g.isScattering || g.state.isEscaping
 	}
 	/** @param {Ghost} g */
-	update(g) {
+	#update(g) {
 		const {dir,orient}= g
 		if (dir != orient || Maze.House.arrived(g, T*2))
 			return
@@ -49,13 +42,13 @@ class Path {
 			const tile = g.getAdjacentTile(dir,t)
 			path.push({tile,dir,stopped:
 				g.isChasingPac && tile.eq(p.tile) ||
-				this.hasFixedTarget(g) && tile.eq(tgt)
+				this.#hasFixedTarget(g) && tile.eq(tgt)
 			})
 			if (path[i].stopped) break
 		} this.#nodeList = path
 	}
 	/** @param {Ghost} g */
-	draw(g) {
+	#draw(g) {
 		if (!this.#nodeList.length)
 			return
 		if (!g.isChasing
