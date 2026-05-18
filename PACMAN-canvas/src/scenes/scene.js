@@ -7,7 +7,7 @@ import {Cutscene}  from '../demo/cutscene.js'
 export {Scene}
 
 const Scenes = [MainScene,DemoScene]
-const Scene = new class SceneManager {
+const Scene  = new class SceneManager {
 	get shouldPlayCutscene() {
 		return Cutscene.num > 0
 	}

@@ -14,7 +14,7 @@ export {DemoScene}
 }
 
 /** @type {SceneDict<string>} */
-const DemoDict = {Attract,Cutscene}
+const DemoDict  = {Attract,Cutscene}
 const DemoScene = {
 	/** Attract mode will begin after a period of inactivity. */
 	updateTimer() {
