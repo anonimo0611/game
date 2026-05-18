@@ -6,7 +6,6 @@ import {Cfg}     from '../control.js'
 import {Maze}    from '../maze.js'
 import {PtsMgr}  from '../points.js'
 import  Sprite   from '../sprites/ghost.js'
-import {PathMgr} from './paths.js'
 import * as Sys  from './_system.js'
 import {Actor,player,Ghosts} from '../actors.js'
 
@@ -17,7 +16,6 @@ export class Ghost extends Actor {
 	/** @readonly */type
 	/** @readonly */init
 	/** @readonly */state
-	/** @readonly */path   = new PathMgr()
 	/** @readonly */sprite = new Sprite(Fg,T*2)
 
 	#fader = /**@type {?Fade}*/(null)
