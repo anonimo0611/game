@@ -26,6 +26,7 @@
 
 <body>
 
+
 <form id="container" onsubmit="return false">
 	<header>
 		<h1 aria-label="PAC-MAN"><h-line>PAC</h-line><h-line>MAN</h-line></h1>
@@ -94,10 +95,10 @@
 			</label>
 			</li>
 			<li><chk-in><input type="checkbox" id="invincible"></chk-in><label for="invincible">Invincible mode</label></li>
-			<li><chk-in><input type="checkbox" id="showTargets"></chk-in><label for="showTargets">Show targets</label></li>
-			<li><chk-in><input type="checkbox" id="showPaths"></chk-in><label for="showPaths">Show paths</label></li>
 			<li><chk-in><input type="checkbox" id="showGridLines"></chk-in><label for="showGridLines">Show tile grid</label></li>
-			<li><chk-in><input type="checkbox" id="unrestricted"></chk-in><label for="unrestricted">Ghosts Unrestricted</label></li>
+			<li><chk-in><input type="checkbox" id="showTargets"></chk-in><label for="showTargets">Show ghost targets</label></li>
+			<li><chk-in><input type="checkbox" id="showPaths"></chk-in><label for="showPaths">Show ghost paths</label></li>
+			<li><chk-in><input type="checkbox" id="unrestricted"></chk-in><label for="unrestricted">Unrestricted ghosts</label></li>
 			<li class="buttons noLeft">
 			<button class="demo at">Attract Demo</button>
 			<button class="demo cs">Cutscene 1</button>
@@ -118,12 +119,12 @@
 			</table>
 			<dl>
 			<dt>Practice mode</dt>
-			<dd>Starting above Lv.1</dd>
+			<dd>Starting above Level.1</dd>
 			<dd>Speed is 0.6 or lower</dd>
-			<dd>ON: Current Lv. only</dd>
+			<dd>ON: Current level only</dd>
 			<dd>ON: Invincible mode</dd>
-			<dd>ON: Show paths</dd>
-			<dd>ON: Show targets</dd>
+			<dd>ON: Show ghost paths</dd>
+			<dd>ON: Show ghost targets</dd>
 			</dl>
 		</div>
 		<button id="startBtn">PRESS　ARROWS　to　START</button>
