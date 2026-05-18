@@ -7,8 +7,8 @@ import {player,onPlayerDotEaten} from './player/player.js'
 export {Actor,PacMan,Ghost,Ghosts}
 export {player,onPlayerDotEaten}
 export const Actors = {
- 	/** @param {PacMan} pacman */
-   update(pacman=player) {
+    /** @param {PacMan} pacman */
+    update(pacman=player) {
         pacman.update()
         Ghosts.update()
     },

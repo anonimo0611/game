@@ -4,10 +4,10 @@ import {State}     from '../state.js'
 import {PtsMgr}    from '../points.js'
 import {Message}   from '../message.js'
 import {Cutscene}  from '../demo/cutscene.js'
+export {Scene}
 
 const Scenes = [MainScene,DemoScene]
-
-export const Scene = new class SceneManager {
+const Scene = new class SceneManager {
 	get shouldPlayCutscene() {
 		return Cutscene.num > 0
 	}

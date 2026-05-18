@@ -3,6 +3,7 @@ import {Ctrl}     from '../control.js'
 import {State}    from '../state.js'
 import {Attract}  from '../demo/attract.js'
 import {Cutscene} from '../demo/cutscene.js'
+export {DemoScene}
 
 {// Reset counter on any title screen interaction
 	const EV = `blur focus resize scroll keydown pointerdown mousemove wheel`
@@ -14,17 +15,7 @@ import {Cutscene} from '../demo/cutscene.js'
 
 /** @type {SceneDict<string>} */
 const DemoDict = {Attract,Cutscene}
-
-export const DemoScene = {
-	get shouldPlayCutscene() {
-		return Cutscene.num > 0
-	},
-	update() {
-		DemoDict[State.current]?.update()
-	},
-	draw() {
-		DemoDict[State.current]?.draw()
-	},
+const DemoScene = {
 	/** Attract mode will begin after a period of inactivity. */
 	updateTimer() {
 		const waitIime = 1e3*30 // 30secs
@@ -34,6 +25,9 @@ export const DemoScene = {
 			: Ticker.elapsedTime > waitIime && State.setAttract()
 		}
 	},
+	get shouldPlayCutscene() {return Cutscene.num > 0},
+	draw()   {DemoDict[State.current]?.draw()},
+	update() {DemoDict[State.current]?.update()},
 }
 
 $('button.demo').each((i,button)=> {
