@@ -9,15 +9,15 @@ import {Form,Menu,btns} from './ui.js'
 const SETTINGS_KEY = 'anopacman'
 const {InfoTexts:palette}= Color
 
-const Data = new class ConfigData {
-	speed         = 1
-	currentOnly   = false
-	alwaysChase   = false
-	unrestricted  = false
-	invincible    = false
-	showTargets   = false
-	showPaths     = false
-	showGridLines = false
+const Data = {
+	speed:         1,
+	currentOnly:   false,
+	alwaysChase:   false,
+	unrestricted:  false,
+	invincible:    false,
+	showTargets:   false,
+	showPaths:     false,
+	showGridLines: false,
 }
 
 export const Ctrl = new class Controller {
