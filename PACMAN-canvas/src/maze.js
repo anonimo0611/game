@@ -53,19 +53,16 @@ const HouseOuter = new Rect(14-5, 15-3, 10, 7).freeze()
 
 class House {
 	MID_Y = (this.EntryTile.y+3.5)*T
-	get EntryTile() {
-		return Vec2.new(13, 12)
-	}
+	get EntryTile() {return Vec2.new(13, 12)}
+
 	/** @param {Position} tilePos */
-	isIn(tilePos) {
-		return HouseInner.contains(tilePos)
-	}
+	isIn = tilePos=> HouseInner.contains(tilePos)
+
 	/** @param {Ghost} g */
-	arrived(g, spd=1) {
-		return g.state.isEscaping
-			&& g.tile.y == this.EntryTile.y
-			&& abs(BW/2 - g.center.x) <= spd
-	}
+	arrived = (g, spd=1)=>
+		   g.state.isEscaping
+		&& g.tile.y == this.EntryTile.y
+		&& abs(BW/2 - g.center.x) <= spd
 }
 
 class Tunnel {
@@ -81,19 +78,14 @@ class Tunnel {
 
 export class PowBlinker {
 	#show = 1
-	get show() {
-		return this.#show == 1
-	}
-	update() {
-		this.#show ^= +(Ticker.count % 15 == 0)
-	}
+	get show() {return this.#show == 1}
+	update() {this.#show ^= +(Ticker.count % 15 == 0)}
 }
 class PowDots extends PowBlinker {
 	draw() {
-		for (const {x,y} of PowMap.values()) {
+		for (const {x,y} of PowMap.values())
 			if (!State.isInGame || Ticker.paused || this.show)
 				drawDot(Fg, x,y, true)
-		}
 	}
 }
 
