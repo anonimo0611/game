@@ -39,7 +39,7 @@ export const Wall = new class WallRenderer {
 		;(function redraw() {
 			if (++cnt > 8) return Timer.set(500, cb)
 			Wall.draw(cnt % 2 ? Ctxs.White : Ctxs.Blue)
-			Timer.set(250, redraw)
+			Timer.set(235, redraw)
 		})()
 	}
 	#drawDoor() {
