@@ -5,15 +5,15 @@ import {Ghosts,Ghost,player} from '../actors.js'
 import {Akabei,Pinky,Aosuke,Guzuta} from './ghost_sub.js'
 
 export const Targets = new class TargetVisualizer {
-	/** @param {readonly Ghost[]} ghosts */
-	draw(ghosts) {
+	/** @param {readonly Ghost[]} ghostList */
+	draw(ghostList) {
 		if (!State.isInGame)  return
 		if (!Cfg.showTargets) return
 		Fg.save()
 		Fg.setAlpha(0.7)
 		Fg.fillStyle = Fg.strokeStyle = '#FFF'
-		for (const g of ghosts) this.#strokeLines(g)
-		for (const g of ghosts) this.#drawMarker(g)
+		for (const g of ghostList) this.#strokeLines(g)
+		for (const g of ghostList) this.#drawMarker(g)
 		Fg.restore()
 	}
 	/** @param {Ghost} g */

@@ -79,11 +79,11 @@ export const Ghosts = new class GhostManager {
 	get isScattering()  {return PhaseManager.mode == SCATTER}
 	get isAnyEscaping() {return GhostList.some(g=> g.isEscaping)}
 
-	/** @param {Ghost[]} [ghosts] */
-	initialize(ghosts) {
+	/** @param {Ghost[]} [ghostList] */
+	initialize(ghostList) {
 		this.#animIdx = 0
 		GhostList.length = 0
-		ghosts?.forEach((g,i)=> GhostList[i] = g)
+		ghostList?.forEach((g,i)=> GhostList[i] = g)
 	}
 	#trigger() {
 		$(GhostList).trigger(State.current)

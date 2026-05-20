@@ -12,15 +12,15 @@ export class PathMgr {
 	static get isActive() {
 		return Cfg.showPaths && State.isInGame
 	}
-	/** @param {readonly Ghost[]} ghosts */
-	static update(ghosts) {
+	/** @param {readonly Ghost[]} ghostList */
+	static update(ghostList) {
 		if (!this.isActive) return
-		ghosts.forEach(g=> g.path.#update(g))
+		ghostList.forEach(g=> g.path.#update(g))
 	}
-	/** @param {readonly Ghost[]} ghosts */
-	static draw(ghosts) {
+	/** @param {readonly Ghost[]} ghostList */
+	static draw(ghostList) {
 		if (!this.isActive) return
-		ghosts.toReversed().forEach(g=> g.path.#draw(g))
+		ghostList.toReversed().forEach(g=> g.path.#draw(g))
 	}
 	#nodeList = /**@type {PathNode[]}*/([])
 
