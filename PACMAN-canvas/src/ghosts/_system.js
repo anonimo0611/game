@@ -250,14 +250,13 @@ const Fright = function() {
 	const PtsList = /**@type {const}*/([200,400,800,1600])
 	const DurList = /**@type {const}*/([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	class Session {
-		#et=0; #flash=0; #caught=0; #fIdx=1;
+		#et=0; #caught=0; #fCnt=0; #idx=1;
 		get points()    {return PtsList[this.#caught-1]}
-		get spriteIdx() {return this.#flash && this.#fIdx^1}
+		get spriteIdx() {return this.#idx? 0:1}
 		get caughtAll() {return this.#caught == GhostType.Max}
-		constructor() {
-			(this.secs = DurList[Game.clampedLv-1]) > 0
-				? this.#set(true)
-				: $(GhostList).trigger(Evt.FleeStart)
+		constructor(s=0) {
+			this.secs = s, this.iv = (s == 1 ? 12:14)/Game.speed|0
+			s > 0 ? this.#set() : $(GhostList).trigger(Evt.FleeStart)
 		}
 		#set(isOn=true) {
 			session = (isOn? this : null)
@@ -266,21 +265,18 @@ const Fright = function() {
 				.offon(StateType.Bitten, ()=> this.#caught++, isOn)
 			Sound.toggleFrightMode(isOn)
 		}
-		#flashing() {
-			const iv = (this.secs == 1 ? 12:14)/Game.speed|0
-			this.#flash++ % iv == 0 && (this.#fIdx ^= 1)
-		}
 		update() {
 			if (State.isInGame && !Timer.frozen) {
+				const {secs,iv}= this
 				const et = (this.#et += Game.interval)/1e3
-				if (et >= this.secs-2) this.#flashing()
-				if (et >= this.secs || this.caughtAll) this.#set(false)
+				if (et >= secs-2) this.#idx ^= +!(this.#fCnt++%iv)
+				if (et >= secs || this.caughtAll) this.#set(false)
 			}
  		}
 	}
 	State.on({_Ready:()=> session = null})
 	return {
-		frighten() {new Session()},
+		frighten() {new Session(DurList[Game.clampedLv-1])},
 		get session()  {return session},
 		get ptsValue() {return session?.points ?? PtsList[0]},
 	}
