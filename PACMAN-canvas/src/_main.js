@@ -2,18 +2,18 @@ import {Cursor} from '../_lib/mouse.js'
 import {Sound}  from '../_snd/sound.js'
 import  Speed   from './speed.js'
 import {Menu}   from './ui.js'
+import {Scene}  from './scenes/scene.js'
 import {State}  from './state.js'
 import {Lives}  from './lives.js'
 import {Cfg}    from './control.js'
 import {Wall}   from './sprites/wall.js'
 import {Maze}   from './maze.js'
 import {player} from './player/player.js'
-import {Scene}  from './scenes/scene.js'
 
 export const Game = new class GameCore {
 	static {$(this.setup)}
 	static setup() {
-		Ticker.set(Scene.update, Scene.draw)
+		Ticker.set(Scene)
 		Menu.Level.onChange(Game.#resetLevel)
 		State.on({
 			Quit: ()=> State.setTitle(),
