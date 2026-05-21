@@ -22,16 +22,10 @@ const Ticker = {
 	get running()     {return _ticker instanceof TickerCore},
 	get elapsedTime() {return _fCount*TICK_STEP},
 
-	/**
-	 @param {()=> void} [updateFn]
-	 @param {()=> void} [drawFn]
-	*/
-	set(updateFn, drawFn) {
-		new TickerCore(updateFn, drawFn)
-	},
-	/**
-	 @param {boolean} [force]
-	*/
+	/** @param {Scene} [s] */
+	set(s) {new TickerCore(s?.update, s?.draw)},
+
+	/** @param {boolean} [force] */
 	pause(force) {
 		return _paused = !!(force? force : !_paused)
 	},
@@ -53,16 +47,16 @@ const Ticker = {
 
 class TickerCore {
 	/**
-	 @param {()=> void} [updateFn]
-	 @param {()=> void} [drawFn]
+	 @param {()=> void} [update]
+	 @param {()=> void} [draw]
 	*/
-	constructor(updateFn, drawFn) {
+	constructor(update,draw) {
 		_ticker?.stop()
 		_ticker     = this
 		this.acc    = 0
 		this.lstTS  = 0
-		this.update = updateFn
-		this.draw   = drawFn
+		this.update = update
+		this.draw   = draw
 		this.rAFId  = requestAnimationFrame(this.loop)
 		this.needsReset = false
 	}
