@@ -4,14 +4,32 @@ import {Ctrl,Cfg} from '../control.js'
 import {State}    from '../state.js'
 import {Score}    from '../score.js'
 import {Maze}     from '../maze.js'
+import  PacSpr    from '../sprites/pacman.js'
 import {Mover}    from './controller.js'
 import {TunEntry} from './tunnel.js'
-import {PacMan,Ghosts} from '../actors.js'
+import {Actor,Ghosts} from '../actors.js'
 
 const EventBus = $({})
 const EATEN_EV = 'DotEaten'
 
 let fader = /**@type {?Fade}*/(null)
+
+export class PacMan extends Actor {
+	/** @readonly */
+	sprite = new PacSpr(Fg,T)
+	constructor(col=0, row=0) {
+		super(col, row)
+	}
+	get hidden() {
+		return Timer.frozen
+	}
+	update() {
+		this.sprite.update(this)
+	}
+	draw() {
+		this.sprite.draw(this)
+	}
+}
 
 class Player extends PacMan {
 	#wakaWakaSEIndex = 0

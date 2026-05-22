@@ -1,6 +1,5 @@
 import {Dir}  from '../_lib/direction.js'
 import {Maze} from './maze.js'
-import PacSpr from './sprites/pacman.js'
 
 export class Actor {
 	pos = Vec2.Zero
@@ -83,22 +82,5 @@ export class Actor {
 	}
 	drawCenterDot({r=3,color='red'}={}) {
 		Fg.fillCircle(...this.center.vals, r, color)
-	}
-}
-
-export class PacMan extends Actor {
-	/** @readonly */
-	sprite = new PacSpr(Fg,T)
-	constructor(col=0, row=0) {
-		super(col, row)
-	}
-	get hidden() {
-		return Timer.frozen
-	}
-	update() {
-		this.sprite.update(this)
-	}
-	draw() {
-		this.sprite.draw(this)
 	}
 }

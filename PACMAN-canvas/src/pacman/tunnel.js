@@ -1,4 +1,4 @@
-import {player} from './player.js';
+import {player} from './pacman.js'
 
 /** Save which side of the tunnel the player entered from */
 export class TunEntry {

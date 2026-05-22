@@ -8,7 +8,7 @@ import {Lives}  from './lives.js'
 import {Cfg}    from './control.js'
 import {Wall}   from './sprites/wall.js'
 import {Maze}   from './maze.js'
-import {player} from './player/player.js'
+import {player} from './pacman/pacman.js'
 
 export const Game = new class GameCore {
 	static {$(this.setup)}
