@@ -25,7 +25,6 @@ const DemoScene = {
 			: Ticker.elapsedTime > waitIime && State.setAttract()
 		}
 	},
-	get shouldPlayCutscene() {return Cutscene.num > 0},
 	draw()   {DemoDict[State.current]?.draw()},
 	update() {DemoDict[State.current]?.update()},
 }
