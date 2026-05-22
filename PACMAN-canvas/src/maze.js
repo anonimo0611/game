@@ -59,10 +59,11 @@ class House {
 	isIn = tilePos=> HouseInner.contains(tilePos)
 
 	/** @param {Ghost} g */
-	arrived = (g, spd=1)=>
-		   g.state.isEscaping
-		&& g.tile.y == this.EntryTile.y
-		&& abs(BW/2 - g.center.x) <= spd
+	arrived(g, spd=1) {
+		return g.state.isEscaping
+			&& g.tile.y == this.EntryTile.y
+			&& abs(BW/2 - g.center.x) <= spd
+	}
 }
 
 class Tunnel {
