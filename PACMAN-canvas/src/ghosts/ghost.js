@@ -10,8 +10,8 @@ import {PathMgr} from './paths.js'
 import * as Sys  from './_system.js'
 import {Actor,player,Ghosts} from '../actors.js'
 
-/** @type {readonly Direction[]} */
-const TurnPriority = [U,L,D,R]
+/**@type {readonly Direction[]}*/
+const TurnPriority  = [U,L,D,R]
 
 export class Ghost extends Actor {
 	/** @readonly */type
@@ -216,7 +216,7 @@ export class Ghost extends Actor {
 	}
 	collidesWith(
 		pos     = player.pos,
-		radius  = T*(this.isFrightened? .5 : .4),
+		radius  = Sys.StateHitRadii[+this.isFrightened],
 		release = ()=> this.#startEscaping(),
 	) {
 		if (!this.state.isWalking

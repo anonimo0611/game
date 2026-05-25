@@ -11,8 +11,8 @@ import {Targets} from './targets.js'
 import {Ghost,player,onPlayerDotEaten} from '../actors.js'
 
 const GhostList = /**@type {Ghost[]}*/([])
-
-export const {Ghost:Speed}= _Speed
+export const {Ghost:Speed} = _Speed
+export const StateHitRadii = freeze([T*0.5, T*0.4]) // 0:normal, 1:frightened
 export const Evt = enumObj('Ready','Reverse','Frighten','FleeStart','RoundEnds')
 
 /**
