@@ -69,7 +69,7 @@ export default class GhostSprite {
 		if (!isEscaping) {
 			ctx.save()
 			this.#resurrect?.apply(ctx)
-			this.#drawAngerGlow({center,isAngry})
+			isAngry && tgt.draw(Glow, center, this.#resurrect?.alpha)
 			this.#drawBody({animIdx,isRipped,isMended})
 			if (isFrightened) {
 				ctx.fillStyle   =
@@ -167,10 +167,6 @@ export default class GhostSprite {
 		ctx.newLinePath([-36,17],[-30, 9],[-25, 9],[-15,17],[-11,17],[-3, 9])
 		ctx.addLinePath([ +3, 9],[+11,17],[+15,17],[+25, 9],[+30, 9],[36,17])
 		ctx.stroke()
-	}
-	#drawAngerGlow({center:{x=0,y=0},isAngry=false}) {
-		if (!isAngry) return
-		this.tgt.draw(Glow, {x,y}, this.#resurrect?.alpha ?? 1)
 	}
 }
 const Glow = function() {
