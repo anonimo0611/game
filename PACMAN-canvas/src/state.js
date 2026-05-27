@@ -25,6 +25,7 @@ class GameState extends _State {
 	*/
 	callback(s, data) {
 		Ticker.resetCount()
+		Timer.cancelAll()
 		$win.trigger(document.body.dataset.state = s, data)
 	}
 

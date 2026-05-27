@@ -170,16 +170,11 @@ export default class GhostSprite {
 	}
 	#drawAngerGlow({center:{x=0,y=0},isAngry=false}) {
 		if (!isAngry) return
-		const {tgt}=this, {width:W}=Glow, S=W*1.2
-		tgt.save()
-		tgt.globalAlpha = this.#resurrect?.alpha ?? 1
-		tgt.translate(x, y)
-		tgt.drawImage(Glow, 0,0, W,W, -S/2,-S/2, S,S)
-		tgt.restore()
+		this.tgt.draw(Glow, {x,y}, this.#resurrect?.alpha ?? 1)
 	}
 }
 const Glow = function() {
-	const {ctx,w,h}= canvas2D(null, T*5)
+	const {ctx,w,h}= canvas2D(null, T*6)
 	ctx.filter = `blur(${T*0.6}px)`
 	ctx.fillCircle(w/2, h/2, T, '#F00')
 	return ctx.canvas

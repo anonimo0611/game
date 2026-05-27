@@ -17,8 +17,10 @@ export const PtsMgr = new class PointsManager {
 	drawGhostPts() {PopupMap.get(Ghosts)?.draw()}
 }
 class FloatingPts {
-	/** @param {FloatingPtsData} data */
-	constructor({key,pos,dur=1e3,frozen=false,cb}) {
+	pos; cache; fade;
+	constructor(/**@type {FloatingPtsData}*/
+		{key,pos,dur=1e3,frozen=false,cb}
+	) {
 		const {speed:spd}= Game
 		this.pos   = pos
 		this.cache = cache(key, T*2)
@@ -29,6 +31,7 @@ class FloatingPts {
 		frozen && Timer.freeze()
 
 		Timer.set(dur/spd, ()=> {
+			if (!PopupMap.has(key)) return
 			PopupMap.delete(key)
 			frozen && Timer.unfreeze()
 			cb?.()
@@ -39,11 +42,8 @@ class FloatingPts {
 	}
 	draw() {
 		const sideOfst = T*1.25
-		const {pos:{x,y},cache:{ctx,w,h}}= this
-		Fg.save()
-		Fg.setAlpha(this.fade?.alpha)
-		Fg.translate(clamp(x, sideOfst, BW-sideOfst), y)
-		Fg.drawImage(ctx.canvas, -w/2,-h/2)
-		Fg.restore()
+		const {pos:{x:sx,y},cache:{ctx}}= this
+		const x = clamp(sx, sideOfst, BW-sideOfst)
+		Fg.draw(ctx.canvas, {x,y}, this.fade.alpha)
 	}
 }
