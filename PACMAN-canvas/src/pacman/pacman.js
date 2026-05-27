@@ -12,7 +12,7 @@ import {Actor,Ghosts} from '../actors.js'
 const EventBus = $({})
 const EATEN_EV = 'DotEaten'
 
-let fader = /**@type {?Fade}*/(null)
+let fadeSpr = /**@type {?Fade}*/(null)
 
 export class PacMan extends Actor {
 	/** @readonly */
@@ -43,7 +43,7 @@ class Player extends PacMan {
 	get speed()    {return this.#mov.speed}
 	get onWall()   {return this.#mov.onWall}
 	get tunEntry() {return this.#tunEntry}
-	get alpha()    {return fader?.alpha ?? this.maxAlpha}
+	get alpha()    {return fadeSpr?.alpha ?? this.maxAlpha}
 	get maxAlpha() {return Ctrl.semiTransPac? .75:1}
 	get closed()   {return State.isInGame == false}
 	get timeSinceLastEating() {return this.#sinceLastEating}
@@ -69,7 +69,7 @@ class Player extends PacMan {
 	}
 	update() {
 		this.sprite.update(this)
-		fader?.update(this.maxAlpha)
+		fadeSpr?.update(this.maxAlpha)
 		if (!this.closed && !this.hidden) {
 			this.#tunEntry.update()
 			this.#sinceLastEating += Game.interval
@@ -118,6 +118,6 @@ export const onPlayerDotEaten =
 		{EventBus.on(EATEN_EV,cb)}
 
 State.on({_Ready:()=> {
-	fader = State.isTitle? null : Fade.in()
+	fadeSpr = State.isTitle? null : Fade.in()
 	!State.wasNewGame && (player = new Player)
 }})

@@ -19,7 +19,7 @@ const TargetPos  = new Vec2(BW/2, T*18.5).fixed
 const LevelsRect = new Rect(T*2*6, BH-T*2, LEVEL_COLS*T*2, T*2).freeze()
 
 let showTgt = true
-let fadeOut = /**@type {?Fade}*/(null)
+let fadeTgt = /**@type {?Fade}*/(null)
 
 export const Fruit = new class FruitManager {
 	static {$(this.setup)}
@@ -37,7 +37,7 @@ export const Fruit = new class FruitManager {
 		return FruitTable[clamp(i, 0, FruitTable.length-1)]
 	}
 	#resetTarget() {
-		fadeOut = null
+		fadeTgt = null
 		showTgt = State.isTitle
 	}
 	#onEaten() {
@@ -58,20 +58,22 @@ export const Fruit = new class FruitManager {
 		Timer.set(delay, this.#setFadeOut, {key:this})
 	}
 	#setFadeOut() {
-		fadeOut = Fade.out(FADE_DUR/Game.speed)
+		fadeTgt = Fade.out(FADE_DUR/Game.speed)
 	}
 	#intersectsWithPlayer() {
 		return this.showTarget
 			&& circleCollision(player.center, TargetPos, T/2)
 	}
 	update() {
-		fadeOut?.update() == false
+		fadeTgt?.update() == false
 			? this.#resetTarget()
 			: this.#intersectsWithPlayer() && this.#onEaten()
 	}
 	drawTarget() {
-		if (Ticker.paused) return
-		this.showTarget && Spr.cache.draw(Fg, TargetPos, fadeOut)
+		if (Ticker.paused)
+			return
+		if (this.showTarget)
+			Fg.draw(Spr.cache.cvs, TargetPos, fadeTgt?.alpha)
 		PtsMgr.drawFruitPts()
 	}
 	drawLevelCounter() {
