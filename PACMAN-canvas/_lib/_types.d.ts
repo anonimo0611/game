@@ -4,7 +4,8 @@ type GhostIdx = (typeof GhostType)['Akabei'|'Pinky'|'Aosuke'|'Guzuta']
 
 //---- Dictionary ----
 
-type SceneDict<T extends string> = {[K in T]?:{update():void, draw():void}}
+type Scene = {update():void, draw():void}
+type SceneDict<T extends string> = {[K in T]?:Scene}
 type NumericDict<T> = {readonly [K:number]:T}
 
 //---- Timer ----
@@ -30,7 +31,7 @@ type PtsIdx = typeof PointType[keyof typeof PointType]
 type PtsVal = 100|200|300|400|500|700|800|1000|1600|2000|3000|5000
 type FloatingPtsData = {
 	key: {ptsType:PtsIdx, ptsValue:PtsVal};
-	pos:  Readonly<Position>;
+	pos:  Position;
 	dur?: number;
 	frozen?: boolean;
 	cb?: ()=> void;
