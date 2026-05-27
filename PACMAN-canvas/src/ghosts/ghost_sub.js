@@ -55,5 +55,8 @@ export class Guzuta extends Ghost {
 	}
 }
 
-const Classes = /**@type {const}*/([Akabei,Pinky,Aosuke,Guzuta])
-State.on({_Ready:_=> Ghosts.initialize(Classes.map(c=> new c))})
+{// Event-driven instantiation
+	const ghosts = [Akabei,Pinky,Aosuke,Guzuta]
+	const instantiate = ()=> Ghosts.initialize(ghosts.map(g=> new g))
+	State.on({_Ready:instantiate})
+}
