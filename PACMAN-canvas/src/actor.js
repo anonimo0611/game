@@ -74,7 +74,7 @@ export class Actor {
 		return Vec2[dir].add(tile).wrapX(COLS)
 	}
 	collidesWithWall(dir=this.dir) {
-		const  fwd = Vec2[dir].mul(T/2+1).add(this.center)
+		const  fwd = Vec2[dir].mul(T/2+1e-6).add(this.center)
 		return Maze.hasWall( fwd.divInt(T).wrapX(COLS) )
 	}
 	justArrivedAtTile(spd=this.speed) {

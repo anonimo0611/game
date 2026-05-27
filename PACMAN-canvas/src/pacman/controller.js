@@ -42,14 +42,17 @@ export class Mover {
 			: (Ghosts.isFrightened? Spd.Energized : Spd.Base)
 		return(this.#spd = Game.moveSpeed * Spd.levelFactor * spd)
 	}
-	/** @param {number} spd */
+	/**
+	 @param {number} spd
+	 @returns {boolean} True if the actor stopped at a wall.
+	*/
 	update(spd) {
 		this.#turnCorner(spd)
 		this.actor.setNextPosition(spd)
 		this.#setMoveSpeed(spd)
 		this.#finishCornering()
 		this.#turnAround()
-		this.#stopAtWall()
+		return this.#stopAtWall()
 	}
 	/** @param {number} spd */
 	#setMoveSpeed(spd) {
@@ -86,7 +89,9 @@ export class Mover {
 		if (this.onWall) {
 			actor.pos = actor.tile.mul(T)
 			state.nextDir = null
+			return true
 		}
+		return false
 	}
 }
 
