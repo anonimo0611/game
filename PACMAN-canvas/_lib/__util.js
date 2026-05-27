@@ -139,7 +139,6 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 //---- jQuery utilities ------
 
 const $win  = $(window)
-const $doc  = $(document)
 const $root = $(document.documentElement)
 
 /**
@@ -159,6 +158,7 @@ const $root = $(document.documentElement)
  @param {string} events
  @param {JQTriggerHandler} handler
  @param {boolean} [force]
+ @memberof jQuery.fn
 */jQuery.fn.offon = function(events, handler, force) {
 	return (force === false)
 		? this.off(events)
@@ -166,6 +166,7 @@ const $root = $(document.documentElement)
 }
 /**
  @param {(ev:WheelEvent)=> void} handler
+ @memberof jQuery.fn
 */jQuery.fn.onWheel = function(handler) {
 	return this.each(function() {
 		this.addEventListener('wheel', handler, {passive:false})
