@@ -29,12 +29,13 @@ const Ticker = {
 	pause(force) {
 		return _paused = !!(force? force : !_paused)
 	},
-	resetCount() {
-		_fCount = 0
-		if (_ticker) _ticker.needsReset = true
-	},
 	stop()  {
 		_ticker?.stop()
+	},
+	resetCount() {
+		_fCount = 0
+		if (_ticker)
+			_ticker.needsReset = true
 	},
 	reset() {
 		_fCount  = 0
