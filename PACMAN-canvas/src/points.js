@@ -31,11 +31,10 @@ class FloatingPts {
 		frozen && Timer.freeze()
 
 		Timer.set(dur/spd, ()=> {
-			if (!PopupMap.has(key)) return
 			PopupMap.delete(key)
 			frozen && Timer.unfreeze()
 			cb?.()
-		}, {ignoreFrozen:true})
+		}, {key:PtsMgr,ignoreFrozen:true})
 	}
 	update() {
 		this.fade.update()

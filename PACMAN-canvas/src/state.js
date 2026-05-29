@@ -24,8 +24,8 @@ class GameState extends _State {
 	 @param {JQData} [data]
 	*/
 	callback(s, data) {
-		Ticker.resetCount()
 		Timer.cancelAll()
+		Ticker.resetCount()
 		$win.trigger(document.body.dataset.state = s, data)
 	}
 
