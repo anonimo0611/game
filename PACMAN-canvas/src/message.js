@@ -33,7 +33,7 @@ export const Message = new class MessageManager {
 		if (Ticker.paused)
 			return this.#drawPausedText()
 
-		if (State.isStartMode)
+		if (State.isStarting)
 			drawText(11, 18, '#FF0','READY!')
 
 		if (State.isTitle

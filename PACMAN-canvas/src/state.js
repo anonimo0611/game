@@ -15,8 +15,8 @@ export const States = /**@type {const}*/([
 */
 class GameState extends _State {
 	constructor() {super(globalThis, States)}
-	get isStartMode() {return State.isNewGame || State.isReady}
-	get isDemoMode()  {return State.isAttract || State.isCutscene}
+	get isStarting() {return State.isNewGame || State.isReady}
+	get isDemoMode() {return State.isAttract || State.isCutscene}
 
 	/**
 	 @protected
@@ -24,8 +24,8 @@ class GameState extends _State {
 	 @param {JQData} [data]
 	*/
 	callback(s, data) {
-		Timer.cancelAll()
 		Ticker.resetCount()
+		Timer.cancelAll()
 		$win.trigger(document.body.dataset.state = s, data)
 	}
 
