@@ -40,7 +40,12 @@ export default class GhostSubSprite {
 			).stroke()
 		}
 	}
-	drawHadake0() {
+	drawHadake(animIdx=0) {
+		!animIdx
+			? this.#drawHadake0()
+			: this.#drawHadake1()
+	}
+	#drawHadake0() {
 		const {ctx}= this
 		// Body
 		ctx.save()
@@ -66,7 +71,7 @@ export default class GhostSubSprite {
 		ctx.fill()
 		this.#hadakeEyes([55,76],[61,83])
 	}
-	drawHadake1() {
+	#drawHadake1() {
 		const {ctx}= this
 		// Body
 		ctx.save()

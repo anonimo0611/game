@@ -5,7 +5,7 @@ export default class GhostSprite {
 	/**@readonly*/ctx
 	/**@readonly*/sub
 	#size
-	#resurrect = /**@type {?Fade}*/(null)
+	#fadeBody = /**@type {?Fade}*/(null)
 
 	/**
 	 @param {EnhancedCtx2D} target
@@ -17,12 +17,9 @@ export default class GhostSprite {
 		this.sub = new SubSprite(this.ctx)
 		this.resize(this.#size = size)
 	}
-	setResurrect() {
-		this.#resurrect ||= Fade.in(600)
-	}
-	get size() {
-		return this.#size
-	}
+	get size()  {return this.#size}
+	get alpha() {return this.#fadeBody?.alpha}
+	setResurrect() {this.#fadeBody ||= Fade.in(600)}
 	resize(/**@type {number}*/size) {
 		this.#size = size
 		this.ctx.resize(size*1.5, size)
@@ -42,14 +39,6 @@ export default class GhostSprite {
 		isExposed    = false,
 	}={}) {
 		const {tgt,ctx,size}= this
-		function finalize() {
-			ctx.restore()
-			tgt.save()
-			tgt.setAlpha(alpha)
-			tgt.translate(center)
-			tgt.drawImage(ctx.canvas, -size/2, -size/2)
-			tgt.restore()
-		}
 		ctx.clear()
 		ctx.save()
 		ctx.translate(size/2)
@@ -60,39 +49,25 @@ export default class GhostSprite {
 			? Color.GhostBodies[type]
 			: Color.GhostBodies[GhostType.Max+spriteIdx]
 
-		if (isExposed) {
-			animIdx == 0
-				? this.sub.drawHadake0()
-				: this.sub.drawHadake1()
-			return finalize()
-		}
-		if (!isEscaping) {
-			ctx.save()
-			this.#resurrect?.apply(ctx)
-			isAngry && tgt.draw(Glow, center, this.#resurrect?.alpha)
-			this.#drawBody({animIdx,isRipped,isMended})
-			if (isFrightened) {
-				ctx.fillStyle   =
-				ctx.strokeStyle = Color.FrightFaces[spriteIdx]
-				this.#drawFrightFace()
+		const drawBody = ()=> {
+			if (!isEscaping) {
+				ctx.save()
+				ctx.setAlpha(this.alpha)
+				isAngry && tgt.draw(Glow,center,this.alpha)
+				this.#drawBody({animIdx,isRipped,isMended})
+				ctx.restore()
 			}
-			ctx.restore()
+			!isFrightened
+				? this.#drawEyes(orient,isRipped)
+				: this.#drawFrightFace(spriteIdx)
 		}
-		if (!isFrightened) {
-			ctx.fillStyle = '#FFF',
-			{
-				Left:  ()=> this.#drawEyesHoriz(L),
-				Right: ()=> this.#drawEyesHoriz(R),
-				Up:    ()=> this.#drawEyesUp(isRipped),
-				Down:  ()=> this.#drawEyesDown(),
-				Dazed: ()=> this.sub.drawDazedEyes(),
-			}[orient]()
-		}
-		finalize()
+		isExposed? this.sub.drawHadake(animIdx) : drawBody()
+		ctx.restore()
+		tgt.draw(ctx.canvas, center, alpha, T/2)
 	}
 	update() {
-		if (this.#resurrect?.update() == false)
-			this.#resurrect = null
+		if (this.#fadeBody?.update() == false)
+			this.#fadeBody = null
 	}
 	#drawBody({animIdx=0, isRipped=false, isMended=false}) {
 		const {ctx}= this
@@ -128,6 +103,27 @@ export default class GhostSprite {
 		ctx.bezierCurveTo(+13, 28, +22, 28, +26, 38)
 		ctx.bezierCurveTo(+29, 42, +41, 42, +42, 26)
 	}
+	/** @param {VisualOrient} orient */
+	#drawEyes(orient, isRipped=false) {
+		this.ctx.fillStyle = '#FFF',
+		{
+			Left:  ()=> this.#drawEyesHoriz(L),
+			Right: ()=> this.#drawEyesHoriz(R),
+			Up:    ()=> this.#drawEyesUp(isRipped),
+			Down:  ()=> this.#drawEyesDown(),
+			Dazed: ()=> this.sub.drawDazedEyes(),
+		}[orient]()
+	}
+	/** @param {Horizontal} LorR */
+	#drawEyesHoriz(LorR) {
+		const {ctx}= this, vx = (Vec2[LorR].x < 0 ? -1:1)
+		for (const i of [0,1]) {
+			ctx.beginPath()
+			ctx.ellipse([-16.5*vx, 23*vx][i], -11, 13, 17, 0, 0, PI*2)
+			ctx.fill()
+			ctx.fillCircle([ -9.5*vx, 29*vx][i],  -8,  8, Color.GhostEye)
+		}
+	}
 	#drawEyesUp(isRipped=false) {
 		const {ctx}= this, color=[Color.GhostEye,'#000'][+isRipped]
 		for (const vx of [-1,+1]) {
@@ -146,18 +142,10 @@ export default class GhostSprite {
 			ctx.fillCircle(19*vx, +4,  8, Color.GhostEye)
 		}
 	}
-	/** @param {Horizontal} LorR */
-	#drawEyesHoriz(LorR) {
-		const {ctx}= this, vx = (Vec2[LorR].x < 0 ? -1:1)
-		for (const i of [0,1]) {
-			ctx.beginPath()
-			ctx.ellipse([-16.5*vx, 23*vx][i], -11, 13, 17, 0, 0, PI*2)
-			ctx.fill()
-			ctx.fillCircle([ -9.5*vx, 29*vx][i],  -8,  8, Color.GhostEye)
-		}
-	}
-	#drawFrightFace() {
+	#drawFrightFace(spriteIdx=0) {
 		const {ctx}= this
+		ctx.fillStyle   =
+		ctx.strokeStyle = Color.FrightFaces[spriteIdx]
 		{// Eyes
 			const size = 11
 			ctx.fillRect(-15-size/2, -size*1.5, size, size)
