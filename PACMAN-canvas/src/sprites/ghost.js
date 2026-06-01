@@ -121,7 +121,7 @@ export default class GhostSprite {
 			ctx.beginPath()
 			ctx.ellipse([-16.5*vx, 23*vx][i], -11, 13, 17, 0, 0, PI*2)
 			ctx.fill()
-			ctx.fillCircle([ -9.5*vx, 29*vx][i],  -8,  8, Color.GhostEye)
+			ctx.fillCircle([-9.5*vx, 29*vx][i], -8, 8, Color.GhostEye)
 		}
 	}
 	#drawEyesUp(isRipped=false) {
@@ -130,7 +130,7 @@ export default class GhostSprite {
 			ctx.beginPath()
 			ctx.ellipse(19.5*vx, -17, 13, 17, -8*vx*PI/180, -PI/4, -3*PI/4)
 			ctx.fill()
-			ctx.fillCircle(18.5*vx, -26,  8, color)
+			ctx.fillCircle(18.5*vx, -26, 8, color)
 		}
 	}
 	#drawEyesDown() {
@@ -139,7 +139,7 @@ export default class GhostSprite {
 			ctx.beginPath()
 			ctx.ellipse(19*vx, -3, 13, 17, 0, 140*PI/180, 40*PI/180)
 			ctx.fill()
-			ctx.fillCircle(19*vx, +4,  8, Color.GhostEye)
+			ctx.fillCircle(19*vx, +4, 8, Color.GhostEye)
 		}
 	}
 	#drawFrightFace(spriteIdx=0) {
