@@ -11,7 +11,8 @@ import {Actor,Ghosts} from '../actors.js'
 
 const EventBus = $({})
 const EATEN_EV = 'DotEaten'
-let   fadeSpr  = /**@type {?Fade}*/(null)
+
+let fadeSpr = /**@type {?Fade}*/(null)
 
 export class PacMan extends Actor {
 	/** @readonly */
@@ -113,7 +114,7 @@ class Player extends PacMan {
 
 export const onPlayerDotEaten =
 (/**@type {JQTriggerHandler}*/cb)=>
-	EventBus.on(EATEN_EV,cb)
+	{EventBus.on(EATEN_EV,cb)}
 
 export let player = new Player
 State.on({_Ready:()=> {
