@@ -63,7 +63,7 @@ export default class GhostSprite {
 		}
 		isExposed? this.sub.drawHadake(animIdx) : drawBody()
 		ctx.restore()
-		tgt.draw(ctx.canvas, center, alpha, T/2)
+		tgt.draw(ctx.canvas, center, -size/2, -size/2)
 	}
 	update() {
 		if (this.#fadeBody?.update() == false)
