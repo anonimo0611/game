@@ -8,34 +8,20 @@ const drawFunctions = [cherry,strawb,orange,apple,melon,gala,bell,key]
 export function draw(ctx, idx, x=T,y=T, scale=T*2/LOGICAL_SIZE) {
 	const offsetY = -(T*0.1)
 	const fnIndex = clamp(idx, 0, drawFunctions.length-1)
-	ctx.save()
-	ctx.lineWidth = 1
-	ctx.lineCap = ctx.lineJoin = 'round'
-	ctx.translate(x, y+offsetY)
-	ctx.scale(scale)
-	drawFunctions[fnIndex](ctx)
-	ctx.restore()
+	ctx.draw(()=> {
+		ctx.lineWidth = 1
+		ctx.lineCap = ctx.lineJoin = 'round'
+		ctx.scale(scale)
+		drawFunctions[fnIndex](ctx)
+	}, {x, y:(y+offsetY)})
 }
-
-export const cache = new class FruitCache {
-	#ctx = canvas2D(null, T*2).ctx
-
-	/** @param {number} idx*/
-	update(idx) {draw(this.#ctx.clear(), idx)}
-
-	/**
-	 @param {EnhancedCtx2D} ctx
-	 @param {Position} pos
-	 @param {?Fade} [fade]
-	*/
-	draw(ctx, {x,y}, fade) {
-		ctx.save()
-		fade?.apply(ctx)
-		ctx.translate(x, y)
-		ctx.drawImage(this.#ctx.canvas, -T,-T)
-		ctx.restore()
+export const cache = function() {
+	const ctx = canvas2D(null, T*2).ctx
+	return {
+		get canvas()  {return ctx.canvas},
+		update(idx=0) {draw(ctx.clear(), idx)}
 	}
-}
+}()
 
 {// Create a sprite sheet for menu icons
 	const Menu = $('#LevelMenu')
