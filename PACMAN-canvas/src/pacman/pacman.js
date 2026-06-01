@@ -11,8 +11,7 @@ import {Actor,Ghosts} from '../actors.js'
 
 const EventBus = $({})
 const EATEN_EV = 'DotEaten'
-
-let fadePlayer = /**@type {?Fade}*/(null)
+let   fadeSpr  = /**@type {?Fade}*/(null)
 
 export class PacMan extends Actor {
 	/** @readonly */
@@ -36,14 +35,14 @@ class Player extends PacMan {
 	#sinceLastEating = 0
 
 	/** @type {Mover} */
-	#mov      = new Mover()
+	#mov      = new Mover(this)
 	#tunEntry = new TunEntry()
 	constructor() {super(13.5, 24)}
 
 	get speed()    {return this.#mov.speed}
 	get onWall()   {return this.#mov.onWall}
 	get tunEntry() {return this.#tunEntry}
-	get alpha()    {return fadePlayer?.alpha ?? this.maxAlpha}
+	get alpha()    {return fadeSpr?.alpha ?? this.maxAlpha}
 	get maxAlpha() {return Ctrl.semiTransPac? .75:1}
 	get closed()   {return State.isInGame == false}
 	get timeSinceLastEating() {return this.#sinceLastEating}
@@ -69,7 +68,7 @@ class Player extends PacMan {
 	}
 	update() {
 		this.sprite.update(this)
-		fadePlayer?.update(this.maxAlpha)
+		fadeSpr?.update(this.maxAlpha)
 		if (!this.closed && !this.hidden) {
 			this.#tunEntry.update()
 			this.#sinceLastEating += Game.interval
@@ -112,13 +111,12 @@ class Player extends PacMan {
 	}
 }
 
-export function onPlayerDotEaten(
-  /**@type {JQTriggerHandler}*/cb
-) {return EventBus.on(EATEN_EV,cb)}
+export const onPlayerDotEaten =
+(/**@type {JQTriggerHandler}*/cb)=>
+	EventBus.on(EATEN_EV,cb)
 
 export let player = new Player
-export let pActor = /**@type {Actor}*/(player)
 State.on({_Ready:()=> {
-	fadePlayer = State.isTitle? null : Fade.in()
-	!State.wasNewGame && (player = pActor = new Player)
+	fadeSpr = State.isTitle ? null : Fade.in()
+	!State.wasNewGame && (player = new Player)
 }})
