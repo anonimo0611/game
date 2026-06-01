@@ -11,17 +11,15 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	void() {}
 
 	/**
-	 @param {HTMLImageElement|HTMLCanvasElement|(()=> void)} src
+	 @param {HTMLImageElement|HTMLCanvasElement} img
 	 @param {Position} centerPos
 	 @param {number} [alpha]
 	*/
-	draw(src, {x,y}, alpha, ox=0, oy=0) {
+	draw(img, centerPos, alpha, ox = -img.width/2, oy = -img.height/2) {
 		this.save()
 		this.setAlpha(alpha)
-		this.translate(x+ox, y+oy)
-		typeof src == 'function'
-			? src()
-			: this.drawImage(src, -src.width/2, -src.height/2)
+		this.translate(centerPos)
+		this.drawImage(img, ox, oy)
 		this.restore()
 	}
 
