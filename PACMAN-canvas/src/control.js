@@ -1,6 +1,6 @@
 import {Dir}      from '../_lib/direction.js'
-import {Sound}    from '../_snd/sound.js'
 import {Confirm}  from '../_lib/confirm.js'
+import {Sound}    from '../_snd/sound.js'
 import {State}    from './state.js'
 import {Score}    from './score.js'
 import {drawText} from './message.js'
