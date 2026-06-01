@@ -15,13 +15,11 @@ export function draw(ctx, idx, x=T,y=T, scale=T*2/LOGICAL_SIZE) {
 		drawFunctions[fnIndex](ctx)
 	}, {x, y:(y+offsetY)})
 }
-export const cache = function() {
-	const ctx = canvas2D(null, T*2).ctx
-	return {
-		get canvas()  {return ctx.canvas},
-		update(idx=0) {draw(ctx.clear(), idx)}
-	}
-}()
+export const cache = new class Cache {
+    #ctx = canvas2D(null, T*2).ctx
+    get canvas()  {return this.#ctx.canvas}
+    update(idx=0) {draw(this.#ctx.clear(), idx)}
+}
 
 {// Create a sprite sheet for menu icons
 	const Menu = $('#LevelMenu')
