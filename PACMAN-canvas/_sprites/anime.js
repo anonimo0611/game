@@ -25,7 +25,7 @@ class ActorPreview {
 ;(new class Preview {
 	subj = /**@type {?ActorPreview}*/(null)
 	constructor() {
-		Ticker.set(this.update, this.draw)
+		Ticker.set(this)
 		Btns.on('change', this.onChangeBtn)
 		$(Menu.root)
 			.on('change', this.onChangeMenu)
