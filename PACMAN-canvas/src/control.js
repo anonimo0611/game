@@ -46,7 +46,7 @@ export const Ctrl = new class Controller {
 	}
 	#save() {
 		const data = /**@type {any}*/(Data)
-		keys(Menu).forEach(id=> data[id] = Menu[id].index)
+		getKeys(Menu).forEach(id=> data[id] = Menu[id].index)
 		document.querySelectorAll('input').forEach(input=> {
 			switch(input.type) {
 			case 'range':   data[input.id] = input.valueAsNumber;break
@@ -58,7 +58,7 @@ export const Ctrl = new class Controller {
 	#restore() {
 		if (!localStorage[SETTINGS_KEY]) return
 		const data = JSON.parse(localStorage[SETTINGS_KEY])
-		keys(Menu).forEach(id=> Menu[id].index = data[id])
+		getKeys(Menu).forEach(id=> Menu[id].index = data[id])
 		document.querySelectorAll('input').forEach(input=> {
 			switch(input.type) {
 			case 'range':   input.value   = data[input.id];break
@@ -107,7 +107,7 @@ export const Ctrl = new class Controller {
 			Ctrl.pause, ()=> State.setQuit(), 'Resume','Quit')
 	}
 	#onKeydown(/**@type {JQKeyboardEvent}*/e) {
-		if (keyRepeat(e) || Confirm.opened) return
+		if (keyRepeated(e) || Confirm.opened) return
 		switch(e.key) {
 		case 'Escape': return Ctrl.pause()
 		case 'Delete': return Ctrl.#quit(e.ctrlKey)
@@ -137,7 +137,7 @@ export const Ctrl = new class Controller {
 	}
 	#setupCtrls() {
 		Ctrl.#trackInputFocus()
-		values(Menu).forEach(m=> m.onChange(Ctrl.#save))
+		getVals(Menu).forEach(m=> m.onChange(Ctrl.#save))
 		$('input')   .on({input:Ctrl.#output})
 		$(btns.clear).on({click:Ctrl.#clearHiConfirm})
 		$(btns.reset).on({click:Ctrl.#reset})

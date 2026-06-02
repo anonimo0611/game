@@ -18,7 +18,7 @@ import {Maze}  from '../maze.js'
 export const Wall = new class WallRenderer {
 	static {$(this.cache)}
 	static cache() {
-		values(Ctxs).forEach((ctx,i)=> {
+		getVals(Ctxs).forEach((ctx,i)=> {
 			ctx.lineWidth   = LW
 			ctx.strokeStyle = Color.MazeWalls[i]
 			Maze.Map.forEach((s,i)=> {

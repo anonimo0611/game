@@ -42,7 +42,7 @@ export class Actor {
 	}
 	keepInsideBoard() {
 		const {center:{x}}= this
-		this.x = clamp(x, T, BW-T) - T/2
+		this.x = mathClamp(x, T, BW-T) - T/2
 	}
 	#wrapXAxis() {
 		this.x = function({center:{x}}) {

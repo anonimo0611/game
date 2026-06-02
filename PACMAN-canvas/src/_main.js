@@ -38,13 +38,13 @@ export const Game = new class GameCore {
 
 	/** Levels 1-13 scale in difficulty. Level 13 is the max difficulty cap. */
 	get speedByLv() {return 1 - (13 - Game.clampedLv) * Speed.StepPerLevel}
-	get clampedLv() {return clamp(Game.level, 1, 13)}
+	get clampedLv() {return mathClamp(Game.level, 1, 13)}
 	get speed()     {return State.isInGame? Cfg.speed : 1}
 	get interval()  {return Game.speed * Ticker.Interval}
 	get moveSpeed() {return Game.speed * Game.speedByLv}
 
 	#setLevel(n=1) {
-		const lv = (Game.#level = between(n, 1, 0xFF) && n || 1)
+		const lv = (Game.#level = isBetween(n, 1, 0xFF) && n || 1)
 		Level.val( String(lv).padStart(2,'0') ).trigger('change')
 	}
 	#reset() {

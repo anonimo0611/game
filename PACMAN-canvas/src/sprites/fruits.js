@@ -7,7 +7,7 @@ const drawFunctions = [cherry,strawb,orange,apple,melon,gala,bell,key]
 */
 export function draw(ctx, idx, x=T,y=T, scale=T*2/LOGICAL_SIZE) {
 	const offsetY = -(T*0.1)
-	const fnIndex = clamp(idx, 0, drawFunctions.length-1)
+	const fnIndex = mathClamp(idx, 0, drawFunctions.length-1)
 	ctx.save()
 	ctx.translate(x, y+offsetY)
 	ctx.lineWidth = 1

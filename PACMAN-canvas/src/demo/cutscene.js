@@ -14,7 +14,7 @@ export class Cutscene {
 	static {State.on({Cutscene:this.#begin})}
 	static #scene = /**@type {?Scene1|Scene2|Scene3}*/(null)
 	static #begin(_={}, n=Cutscene.num) {
-		const idx = clamp(n,1,3) - 1
+		const idx = mathClamp(n,1,3) - 1
 		Cutscene.#scene = new [Scene1,Scene2,Scene3][idx]
 	}
 	static get num() {return sceneNum(Game.level)}
@@ -137,7 +137,7 @@ class Scene2 extends Cutscene {
 		this.drawAka({isRipped,animIdx,orient:akaEyes})
 		if (!isRipped && a.x < Snag.SNAG_X) {
 			const pos   = a.center.addX(T)
-			const ratio = norm(Snag.SNAG_X, Snag.STOP_X, a.x)
+			const ratio = mathNorm(Snag.SNAG_X, Snag.STOP_X, a.x)
 			snag.drawSnaggedClothing(animIdx, ratio, pos)
 		}
 		super.draw()

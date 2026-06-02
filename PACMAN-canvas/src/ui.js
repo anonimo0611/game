@@ -46,7 +46,7 @@ $('body').on('keydown pointerdown', e=> {
 		$('.panel-ui').removeClass('opened')
 })
 $('.panelBtn').on('keydown pointerdown', e=> {
-	if (e.key && !isEnterKey(e)) return
+	if (e.key && !isActionKey(e)) return
 	const button = e.currentTarget
 	const tgtSel = button.dataset.target ?? ''
 	const opened = button.classList.contains('opened')

@@ -65,7 +65,7 @@ export const Score = new class ScoreManager {
 		if (!Ctrl.isPractice && _score > _hiSco) {
 			_hiSco = _score
 		}
-		if (between(Ctrl.extendScore, oldScore+1, _score)) {
+		if (isBetween(Ctrl.extendScore, oldScore+1, _score)) {
 			Lives.extend()
 			Sound.playGetsHiScore()
 		}

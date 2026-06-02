@@ -13,7 +13,7 @@ import {Ghost,player,onPlayerDotEaten} from '../actors.js'
 const GhostList = /**@type {Ghost[]}*/([])
 export const {Ghost:Speed} = _Speed
 export const StateHitRadii = freeze([T*0.5, T*0.4]) // 0:normal, 1:frightened
-export const Evt = enumObj('Ready','Reverse','Frighten','FleeStart','RoundEnds')
+export const Evt = asEnum('Ready','Reverse','Frighten','FleeStart','RoundEnds')
 
 /**
  When always chase mode,
@@ -53,7 +53,7 @@ export const [StateType,createState] = function() {
 		get isEyes() {return this.is('Escaping','Entering')}
 	}
 	return [
-		enumObj(...States),
+		asEnum(...States),
 		/**@type {(g:Ghost)=> IGhostState}*/(g=> new State(g))
 	]
 }()

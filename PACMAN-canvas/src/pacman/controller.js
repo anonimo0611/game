@@ -102,7 +102,7 @@ export class Mover {
 function setSteerEvent(actor,state) {
 	$win.offon('keydown.PacSteer', e=> {
 		const dir = Dir.from(e,{wasd:true})
-		if (!dir || keyRepeat(e) || Ctrl.isCaptured)
+		if (!dir || keyRepeated(e) || Ctrl.isCaptured)
 			return
 
 		if (!State.isInGame && Vec2[dir].x)

@@ -35,9 +35,9 @@ export class SnagSprite {
 	*/
 	drawSnaggedClothing(animIdx, ratio, {x=0,y=0,scale=1}={}) {
 		const {ctx}= this
-		const v1 = lerp(-2,  5, ratio)
-		const v2 = lerp(+4, 22, ratio)
-		const v3 = lerp(+4, 50, ratio)
+		const v1 = mathLerp(-2,  5, ratio)
+		const v2 = mathLerp(+4, 22, ratio)
+		const v3 = mathLerp(+4, 50, ratio)
 		const ls = (animIdx? -25 : -36) // Left side
 		ctx.save()
 		ctx.translate(x, y)

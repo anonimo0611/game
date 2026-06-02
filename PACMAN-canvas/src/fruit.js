@@ -34,7 +34,7 @@ export const Fruit = new class FruitManager {
 	get showTarget() {return (State.isTitle || State.isInGame) && showTgt}
 
 	#getType(/**@type {number}*/i) {
-		return FruitTable[clamp(i, 0, FruitTable.length-1)]
+		return FruitTable[mathClamp(i, 0, FruitTable.length-1)]
 	}
 	#resetTarget() {
 		fadeTgt = null
