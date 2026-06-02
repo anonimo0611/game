@@ -15,7 +15,7 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	 @param {Position} centerPos
 	 @param {number} [alpha]
 	*/
-	draw(img, centerPos, alpha, ox = -img.width/2, oy = -img.height/2) {
+	put(img, centerPos, alpha, ox = -img.width/2, oy = -img.height/2) {
 		this.save()
 		this.setAlpha(alpha)
 		this.translate(centerPos)
