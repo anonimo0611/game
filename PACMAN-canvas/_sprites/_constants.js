@@ -8,9 +8,9 @@ export const Pv = canvas2D('preview').ctx
 export const Menu = new DorpDown('animMenu')
 export const Btns = $('.radioButtons input')
 
-export const SizeRng   = /**@type {HTMLInputElement} */(qS('#sizeRng'))
-export const BrightRng = /**@type {HTMLInputElement} */(qS('#brightRng'))
-export const ResetBtn  = /**@type {HTMLButtonElement}*/(qS('#resetBtn'))
+export const SizeRng   = /**@type {HTMLInputElement} */(qSel('#sizeRng'))
+export const BrightRng = /**@type {HTMLInputElement} */(qSel('#brightRng'))
+export const ResetBtn  = /**@type {HTMLButtonElement}*/(qSel('#resetBtn'))
 
 export let  [T,S,GAP] = [0,0,0]
 export const GridSize = new Vec2(10,11).vals
