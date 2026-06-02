@@ -25,5 +25,5 @@ export class Rect {
 	}
 
 	/** @returns {readonly [x:number, y:number, w:number, h:number]} */
-	get vals() {return ([this.x, this.y, this.w, this.h])}
+	get vals() {return [this.x, this.y, this.w, this.h]}
 }

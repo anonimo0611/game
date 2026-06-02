@@ -5,27 +5,27 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 /**
  @template {object} T
  @param {T} o
-*/const keys = o=>
+*/const getKeys = o=>
 	/**@type {(keyof T)[]}*/(Object.keys(o))
 
 /**
  @template {string} K
  @template V
  @param {{[key in K]?:V}} o
-*/const values = o=>
+*/const getVals = o=>
 	/**@type {V[]}*/(Object.values(o))
 
 /**
  @template {string} K
  @template V
  @param {{[key in K]?:V}} o
-*/const entries = o=>
+*/const getEntries = o=>
 	/**@type {[K,V][]}*/(Object.entries(o))
 
 /**
  @template {string} T
  @param {T[]} array
-*/const enumObj = (...array)=>
+*/const asEnum = (...array)=>
 	/**@type {{readonly [K in T]:K}}*/
 	(toObj(array.map(k=> [k,k])))
 
@@ -43,12 +43,12 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 
 /**
  @param {KeyboardEvent|JQKeyboardEvent|JQTriggeredEvent} e
-*/const isEnterKey = e=>
+*/const isActionKey = e=>
 	(e.key == '\x20' || e.key == 'Enter')
 
 /**
  @param {KeyboardEvent|JQKeyboardEvent} e
-*/const keyRepeat = e=>
+*/const keyRepeated = e=>
 	getNativeKeyEvent(e)?.repeat || false
 
 /**
@@ -68,7 +68,7 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 /**
  @param  {string} selector
  @return {?HTMLElement}
-*/const qS = selector=> document.querySelector(selector)
+*/const qSel = selector=> document.querySelector(selector)
 
 /**
  @param {string} str
@@ -81,14 +81,20 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
  @param {number} start
  @param {number} end
  @param {number} ratio 0.0-1.0
-*/const lerp = (start,end,ratio)=> start + (end-start) * clamp(ratio,0,1)
+*/const mathLerp = (start,end,ratio)=> start + (end-start) * mathClamp(ratio,0,1)
 
 /**
  @param {number} min
  @param {number} max
  @param {number} val
  @returns {number} 0.0-1.0
-*/const norm = (min,max,val)=> (max === min)? 0 : (val-min)/(max-min)
+*/const mathNorm = (min,max,val)=> (max === min)? 0 : (val-min)/(max-min)
+
+/**
+ @param {number} n
+ @param {number} min
+ @param {number} max
+*/const mathClamp = (n,min,max)=> Math.min(Math.max(n,min), max)
 
 /**
  @param {number} min
@@ -105,13 +111,7 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
  @param {number} n
  @param {number} min
  @param {number} max
-*/const clamp = (n,min,max)=> Math.min(Math.max(n,min), max)
-
-/**
- @param {number} n
- @param {number} min
- @param {number} max
-*/const between = (n,min,max)=> (n >= min && n <= max)
+*/const isBetween = (n,min,max)=> (n >= min && n <= max)
 
 /**
  @param {string} str
@@ -148,7 +148,7 @@ const $root = $(document.documentElement)
 */jQuery.fn.onNS = function(ns, handlers, force) {
 	const NS = ns[0] != '.' ? `.${ns}` : ns
 	if (force === false) return this.off(NS)
-	entries(handlers).forEach(([e,cb])=> {
+	getEntries(handlers).forEach(([e,cb])=> {
 		const ev = e.trim().replace(/[_\s]+/g,`${NS}\x20`) + NS
 		this.off(ev).on(ev,cb)
 	})

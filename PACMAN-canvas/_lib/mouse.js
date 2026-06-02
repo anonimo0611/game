@@ -29,8 +29,8 @@ export const Cursor = function() {
 function setupCtrl(ctrl) {
 	const output = $(`output[for~="${ctrl.id}"]`).text(ctrl.value).get(0)
 	const ids    = ctrl.dataset.links?.trim().split(/\s+/) ?? []
-	const label  = ctrl.closest('label') || qS(`label[for="${ctrl.id}"]`)
-	const links  = ids.map(id=> qS(`input#${id}`)).filter(e=> e != null)
+	const label  = ctrl.closest('label') || qSel(`label[for="${ctrl.id}"]`)
+	const links  = ids.map(id=> qSel(`input#${id}`)).filter(e=> e != null)
 	const target = [...new Set([ctrl,output,...links])].filter(e=> e != null)
 
 	$(label || ctrl).onWheel(e=> {
@@ -45,7 +45,7 @@ function setupCtrl(ctrl) {
 		const {value,min,max}= ctrl
 		$(target)
 			.val(value)
-			.css('--ratio',`${norm(+min,+max,+value)*100}%`)
+			.css('--ratio',`${mathNorm(+min,+max,+value)*100}%`)
 	})
 	.trigger('input')
 }

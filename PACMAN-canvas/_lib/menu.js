@@ -43,7 +43,7 @@ class Menu {
 
 	/** @protected @param {number} idx */
 	isInRange(idx) {
-		return between(idx, 0, this.size-1)
+		return isBetween(idx, 0, this.size-1)
 	}
 
 	select(idx=0) {
