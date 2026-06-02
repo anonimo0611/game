@@ -21,7 +21,7 @@ class SoundCore extends SoundMgr {
 	}
 	set vol(vol) {
 		if (this.disabled) return
-		super.vol = clamp(+vol, 0, 10)
+		super.vol = mathClamp(+vol, 0, 10)
 	}
 	playSiren() {
 		if (Ghosts.isFrightened

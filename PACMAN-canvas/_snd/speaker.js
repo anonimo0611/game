@@ -26,9 +26,9 @@
 		ctx.restore()
 	}
 	#getSteps(/**@type {number}*/vol) {
-		if (between(vol,8,10)) return 3
-		if (between(vol,3, 7)) return 2
-		if (between(vol,1, 2)) return 1
+		if (isBetween(vol,8,10)) return 3
+		if (isBetween(vol,3, 7)) return 2
+		if (isBetween(vol,1, 2)) return 1
 		return 0
 	}
 	#drawMuteCross() {

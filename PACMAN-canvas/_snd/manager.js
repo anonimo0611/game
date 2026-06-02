@@ -18,7 +18,7 @@ export class SoundMgr {
 			SoundJS.on('fileerror', reject)
 			SoundJS.on('fileload', ()=> {
 				if (++amount < m.length) return
-				keys(this.#playOpts).forEach(id=> {
+				getKeys(this.#playOpts).forEach(id=> {
 					const
 					self = /**@type {any}*/(this)
 					self[`play${id}`]  = (opts={})=> this.play(id,opts)
@@ -59,7 +59,7 @@ export class SoundMgr {
 		if (this.disabled) return
 		ids.length
 			? ids.forEach(id=> {this.#instance[id].paused=enable})
-			: values(this.#instance).forEach(i=> i.paused=enable)
+			: getVals(this.#instance).forEach(i=> i.paused=enable)
 	}
 
 	/**

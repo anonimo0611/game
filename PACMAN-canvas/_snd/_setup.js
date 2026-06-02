@@ -38,9 +38,9 @@ const Ctrl = {
   		$volRngs.val(Sound.vol? 0 : lstVol).trigger('input')
 	},
 	keydown(/**@type {JQKeyboardEvent}*/e) {
-		if (keyRepeat(e) || hasModifierKeys(e)) return
+		if (keyRepeated(e) || hasModifierKeys(e)) return
 		const isMKey = e.key.toUpperCase() == 'M'
-		const isEnterOnRng = $(e.target).hasClass('volRng') && isEnterKey(e)
+		const isEnterOnRng = $(e.target).hasClass('volRng') && isActionKey(e)
 		if (isMKey || isEnterOnRng) {
 			e.preventDefault()
 			Ctrl.mute()
