@@ -53,7 +53,7 @@ export default class GhostSprite {
 			if (!isEscaping) {
 				ctx.save()
 				ctx.setAlpha(this.alpha)
-				isAngry && tgt.draw(Glow,center,this.alpha)
+				isAngry && tgt.put(Glow,center,this.alpha)
 				this.#drawBody({animIdx,isRipped,isMended})
 				ctx.restore()
 			}
@@ -63,7 +63,7 @@ export default class GhostSprite {
 		}
 		isExposed? this.sub.drawHadake(animIdx) : drawBody()
 		ctx.restore()
-		tgt.draw(ctx.canvas, center, alpha, -size/2)
+		tgt.put(ctx.canvas, center, alpha, -size/2)
 	}
 	update() {
 		if (this.#fadeBody?.update() == false)

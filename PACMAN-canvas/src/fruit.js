@@ -73,7 +73,7 @@ export const Fruit = new class FruitManager {
 		if (Ticker.paused)
 			return
 		if (this.showTarget)
-			Fg.draw(Spr.cache.canvas, TargetPos, fadeTgt?.alpha)
+			Fg.put(Spr.cache.canvas, TargetPos, fadeTgt?.alpha)
 		PtsMgr.drawFruitPts()
 	}
 	drawLevelCounter() {

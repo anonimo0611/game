@@ -43,6 +43,6 @@ class FloatingPts {
 		const sideOfst = T*1.25
 		const {pos:{x:sx,y},cache:{ctx}}= this
 		const x = mathClamp(sx, sideOfst, BW-sideOfst)
-		Fg.draw(ctx.canvas, {x,y}, this.fade.alpha)
+		Fg.put(ctx.canvas, {x,y}, this.fade.alpha)
 	}
 }
