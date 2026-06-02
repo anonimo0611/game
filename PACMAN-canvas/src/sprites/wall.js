@@ -9,7 +9,7 @@ const Ctxs = freeze({
 })
 const Corner = /**@type {const}*/({
 	toIndex: cyclicIndexMap('12345678abcdABCD', 4),
-	Type:    {Standard:0, LTShape:1, Outer:2, Pocket:3},
+	Type:    {Convex:0, Concave:1, Outer:2, Pocket:3},
 	RegExps: [/[1-4]/,/[5-8]/,/[A-D]/,/[a-d]/],
 })
 
@@ -71,10 +71,10 @@ export const Wall = new class WallRenderer {
 		ctx.translate(x+HT, y+HT)
 		ctx.rotate(cIdx*PI/2)
 		switch(type) {
-		case Type.Outer:    radii.push(HT+LO,T-OO);break
-		case Type.Standard: radii.push(HT-LO);     break
-		case Type.Pocket:   radii.push(HT-LO,OO);  break
-		case Type.LTShape:
+		case Type.Outer:  radii.push(HT+LO,T-OO);break
+		case Type.Convex: radii.push(HT-LO);     break
+		case Type.Pocket: radii.push(HT-LO,OO);  break
+		case Type.Concave:
 			ctx.beginPath()
 			ctx.moveTo(-LO,  HT)
 			ctx.arcTo (-LO, -LO, T/3, -LO, T/3)
