@@ -36,7 +36,7 @@ import * as Fruits from './sprites/fruits.js'
 	const menu = Menu.Level.root
 	const size = menu.offsetHeight
 	const {ctx}= canvas2D(null, size*Fruits.MAX, size)
-	for (let i=0; i<8; i++)
+	for (let i=0; i<Fruits.MAX; i++)
 		Fruits.draw(ctx, i, size, i*size + size/2)
 	$(menu).css('--url',`url("${ctx.canvas.toDataURL()}")`)
 }
