@@ -15,7 +15,7 @@ export default class PacmanSprite {
 	#dyingSpr = /**@type {?Dying}*/(null)
 
 	/**
-	 @param {EnhancedCtx2D} ctx
+	 @param {Ctx2D}  ctx
 	 @param {number} radius
 	 @param {number} initOpening 0 to 1
 	*/

@@ -1,4 +1,4 @@
-const Fns = /**@type {((ctx:EnhancedCtx2D)=> void)[]}*/([
+const Fns = /**@type {((ctx:Ctx2D)=> void)[]}*/([
 function cherry(ctx) {
 	// both fruits
 	[[-6,-1],[-1,1]].forEach(([x,y])=> {
@@ -231,7 +231,7 @@ export const LOGIC_SIZE = 15.24
 export const MAX = Fns.length
 
 /**
- @param {EnhancedCtx2D} ctx
+ @param {Ctx2D}  ctx
  @param {number} idx
  @param {number} size
 */

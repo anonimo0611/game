@@ -10,7 +10,7 @@ export class Dying {
 	#cnt; #cb; #innerR; #outerR; #arcAng;
 
 	/**
-	 @param {{ctx:EnhancedCtx2D,r:number}} _
+	 @param {{ctx:Ctx2D,r:number}} _
 	 @param {()=> void} [cb]
 	*/
 	constructor({ctx,r}, cb) {

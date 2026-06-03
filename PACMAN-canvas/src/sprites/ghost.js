@@ -9,7 +9,7 @@ export default class GhostSprite {
 	#fadeBody = /**@type {?Fade}*/(null)
 
 	/**
-	 @param {EnhancedCtx2D} target
+	 @param {Ctx2D}  target
 	 @param {number} size
 	*/
 	constructor(target, size) {

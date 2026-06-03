@@ -1,7 +1,6 @@
 export default class GhostSubSprite {
 	/** @readonly */ctx
-	/** @param {EnhancedCtx2D} ctx */
-	constructor(ctx) {this.ctx=ctx}
+	constructor(/**@type {Ctx2D}*/ctx) {this.ctx=ctx}
 	drawRippedBody() {
 		const {ctx}= this
 		ctx.clearRect(38,-1, 6,25)

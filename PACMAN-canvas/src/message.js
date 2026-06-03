@@ -5,7 +5,7 @@ export const Message = new class MessageManager {
 	/**
 	 @param {number} col
 	 @param {number} row
-	 @param {?Cvs2DStyle}   color
+	 @param {?CvsStyle} color
 	 @param {string|number} text
 	*/
 	drawText(col, row, color, text,
