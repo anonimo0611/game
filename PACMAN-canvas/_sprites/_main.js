@@ -28,7 +28,7 @@ const [Cols,Rows]= GridSize
 	}
 	#drawFruits() {
 		for (let i=0; i<8; i++)
-			Fruit.draw(ctx, i, ofst(7-i)+S/2, S/2, S/16)
+			Fruit.draw(ctx, i, S, ofst(7-i)+S/2, S/2)
 	}
 	#drawGhosts() {
 		for (let y=1; y<6; y++) {
