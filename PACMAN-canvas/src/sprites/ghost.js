@@ -4,6 +4,7 @@ export default class GhostSprite {
 	/**@readonly*/tgt
 	/**@readonly*/ctx
 	/**@readonly*/sub
+	/**@readonly*/glow
 	#size
 	#fadeBody = /**@type {?Fade}*/(null)
 
@@ -12,9 +13,10 @@ export default class GhostSprite {
 	 @param {number} size
 	*/
 	constructor(target, size) {
-		this.tgt = target
-		this.ctx = canvas2D(null).ctx
-		this.sub = new SubSprite(this.ctx)
+		this.tgt  = target
+		this.glow = glowImg(size)
+		this.ctx  = canvas2D(null).ctx
+		this.sub  = new SubSprite(this.ctx)
 		this.resize(this.#size = size)
 	}
 	get size()  {return this.#size}
@@ -38,7 +40,7 @@ export default class GhostSprite {
 		isMended     = false,
 		isExposed    = false,
 	}={}) {
-		const {tgt,ctx,size}= this
+		const {tgt,ctx,size,glow}= this
 		ctx.clear()
 		ctx.save()
 		ctx.translate(size/2)
@@ -53,7 +55,7 @@ export default class GhostSprite {
 			if (!isEscaping) {
 				ctx.save()
 				ctx.setAlpha(this.alpha)
-				isAngry && tgt.put(Glow,center,this.alpha)
+				isAngry && tgt.put(glow,center,this.alpha)
 				this.#drawBody({animIdx,isRipped,isMended})
 				ctx.restore()
 			}
@@ -105,14 +107,14 @@ export default class GhostSprite {
 	}
 	/** @param {VisualOrient} orient */
 	#drawEyes(orient, isRipped=false) {
-		this.ctx.fillStyle = '#FFF',
-		{
-			Left:  ()=> this.#drawEyesHoriz(L),
-			Right: ()=> this.#drawEyesHoriz(R),
+		this.ctx.fillStyle = '#FFF'
+		;({
+			Left:  ()=> this.#drawEyesHoriz('Left'),
+			Right: ()=> this.#drawEyesHoriz('Right'),
 			Up:    ()=> this.#drawEyesUp(isRipped),
 			Down:  ()=> this.#drawEyesDown(),
 			Dazed: ()=> this.sub.drawDazedEyes(),
-		}[orient]()
+		})[orient]()
 	}
 	/** @param {Horizontal} LorR */
 	#drawEyesHoriz(LorR) {
@@ -157,9 +159,9 @@ export default class GhostSprite {
 		ctx.stroke()
 	}
 }
-const Glow = function() {
-	const {ctx,w,h}= canvas2D(null, T*6)
+function glowImg(/**@type {number}*/size) {
+	const {ctx,w,h}= canvas2D(null, size*3)
 	ctx.filter = `blur(${T*0.6}px)`
-	ctx.fillCircle(w/2, h/2, T, '#F00')
+	ctx.fillCircle(w/2, h/2, size/2, '#F00')
 	return ctx.canvas
-}()
+}
