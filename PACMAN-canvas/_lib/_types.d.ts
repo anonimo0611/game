@@ -49,7 +49,8 @@ type VisualOrient = Direction|Dazed
 
 //---- Canvas API ----
 
-type Cvs2DStyle = string|CanvasGradient|CanvasPattern
+type Ctx2D = EnhancedCtx2D
+type CvsStyle = string|CanvasGradient|CanvasPattern
 
 //---- jQuery ----
 

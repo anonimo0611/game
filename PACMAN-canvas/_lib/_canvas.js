@@ -80,7 +80,7 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 		this.restore()
 	}
 
-	/** @param {Cvs2DStyle} [style] */
+	/** @param {CvsStyle} [style] */
 	clear(style) {
 		this.fillRect(0,0, this.width, this.height, style ?? null)
 		return this
@@ -91,7 +91,7 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	 @param {number} y
 	 @param {number} w
 	 @param {number} h
-	 @param {?Cvs2DStyle} style
+	 @param {?CvsStyle} style
 	*/
 	fillRect(x,y, w,h, style=this.fillStyle) {
 		this.save()
@@ -107,7 +107,7 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	 @param {number} x
 	 @param {number} y
 	 @param {number} r
-	 @param {Cvs2DStyle} [style]
+	 @param {CvsStyle} [style]
 	*/
 	fillCircle(x,y, r, style=this.fillStyle) {
 		this.save()
@@ -123,7 +123,7 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	 @param {number} x
 	 @param {number} y
 	 @param {number} r
-	 @param {Cvs2DStyle} style
+	 @param {CvsStyle} style
 	 @param {number} lineWidth
 	*/
 	strokeCircle(x,y, r, style=this.strokeStyle, lineWidth=this.lineWidth) {
@@ -174,7 +174,7 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	}
 
 	/**
-	 @param {?Cvs2DStyle} style
+	 @param {?CvsStyle} style
 	 @param {(readonly [x:number, y:number])[]} path
 	*/
 	fillPolygon(style, ...path) {
