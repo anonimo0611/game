@@ -14,6 +14,7 @@ const LEVEL_COLS = 7
 /** 0:Cherry, 1:Strwb, 2:Orange, 3:Apple, 4:Melon ,5:Gala, 6:Bell, 7:Key */
 const FruitTable = /**@type {const}*/([0,1,2,2,3,3,4,4,5,5,6,6,7])
 const PointTable = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
+const Cache      = Spr.cache(T*2)
 const AppearDots = new Set([70,170])
 const TargetPos  = new Vec2(BW/2, T*18.5).fixed
 const LevelsRect = new Rect(T*2*6, BH-T*2, LEVEL_COLS*T*2, T*2).freeze()
@@ -73,7 +74,7 @@ export const Fruit = new class FruitManager {
 		if (Ticker.paused)
 			return
 		if (this.showTarget)
-			Fg.put(Spr.cache.canvas, TargetPos, fadeTgt?.alpha)
+			Fg.put(Cache.canvas, TargetPos, fadeTgt?.alpha)
 		PtsMgr.drawFruitPts()
 	}
 	drawLevelCounter() {
@@ -87,11 +88,11 @@ export const Fruit = new class FruitManager {
 		HUD.clearRect(x,y,w,h)
 		HUD.translate(x,y)
 		for (let i=startLevel; i<Game.level; i++)
-			Spr.draw(HUD, this.#getType(i), w-T-T*2*(i-startLevel))
+			Spr.draw(HUD, this.#getType(i), T*2, w-T-T*2*(i-startLevel))
 		HUD.restore()
 	}
 	#setImages = ()=> {
-		Spr.cache.update(this.currType)
+		Cache.update(this.currType)
 		this.#setLevelCounter()
 	}
 }

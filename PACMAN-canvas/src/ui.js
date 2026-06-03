@@ -2,6 +2,16 @@ export const Form   = document.forms[0]
 export const powChk = getInput('powEnabled')
 export const lives  = getInput('initialLives')
 
+//---- Fit to viewport ----
+
+$win.on('resize', ()=> {
+	const scale = min(
+		innerWidth /Form.offsetWidth*.98,
+		innerHeight/Form.offsetHeight)
+	Form.style.scale = min(1, scale).toFixed(2)
+})
+.trigger('resize')
+
 //---- Buttons ----
 
 const btnIds = /**@type {const}*/
@@ -19,6 +29,18 @@ export const Menu = freeze({
 	Extend: new _Menu.Slide('ExtendMenu'),
 })
 
+//---- LevelMenu ----
+
+import * as Fruits from './sprites/fruits.js'
+{// Create a sprite sheet for menu icons
+	const menu = Menu.Level.root
+	const size = menu.offsetHeight
+	const {ctx}= canvas2D(null, size*Fruits.MAX, size)
+	for (let i=0; i<8; i++)
+		Fruits.draw(ctx, i, size, i*size + size/2)
+	$(menu).css('--url',`url("${ctx.canvas.toDataURL()}")`)
+}
+
 //---- Window focused ----
 
 import {Ctrl} from './control.js'
@@ -28,16 +50,6 @@ export const WinState = function() {
 	$win.on('focus',()=> {f=1,Ctrl.pause(!f)})
 	return {get isActive() {return !!f}}
 }()
-
-//---- Fit to viewport ----
-
-$win.on('resize', ()=> {
-	const scale = min(
-		innerWidth /Form.offsetWidth*.98,
-		innerHeight/Form.offsetHeight)
-	Form.style.scale = min(1, scale).toFixed(2)
-})
-.trigger('resize')
 
 //---- Panels ----
 

@@ -2,7 +2,7 @@ const StakeSize = Vec2.fixed(T*.18, T*.7)
 const STAKE_X   = BW/2 + T*2 - StakeSize.x/2
 const AKA_COLOR = Color.GhostBodies[GhostType.Akabei]
 
-import {LOGICAL_SIZE} from './ghost.js'
+import {LOGIC_SIZE} from './ghost.js'
 export const SNAG_X = BW/2 + T/2
 export const STOP_X = SNAG_X - T
 export class SnagSprite {
@@ -41,7 +41,7 @@ export class SnagSprite {
 		const ls = (animIdx? -25 : -36) // Left side
 		ctx.save()
 		ctx.translate(x, y)
-		ctx.scale(T*2*scale/LOGICAL_SIZE)
+		ctx.scale(T*2*scale/LOGIC_SIZE)
 		ctx.beginPath()
 		ctx.moveTo(-8, -10)
 		ctx.quadraticCurveTo(-8, -4, v1, 3)

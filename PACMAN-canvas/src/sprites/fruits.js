@@ -1,37 +1,5 @@
-const LOGICAL_SIZE  = 15.24
-const drawFunctions = [cherry,strawb,orange,apple,melon,gala,bell,key]
-
-/**
- @param {EnhancedCtx2D} ctx
- @param {number} idx
-*/
-export function draw(ctx, idx, x=T,y=T, scale=T*2/LOGICAL_SIZE) {
-	const offsetY = -(T*0.1)
-	const fnIndex = mathClamp(idx, 0, drawFunctions.length-1)
-	ctx.save()
-	ctx.translate(x, y+offsetY)
-	ctx.lineWidth = 1
-	ctx.lineCap = ctx.lineJoin = 'round'
-	ctx.scale(scale)
-	drawFunctions[fnIndex](ctx)
-	ctx.restore()
-}
-export const cache = new class Cache {
-    #ctx = canvas2D(null, T*2).ctx
-    get canvas()  {return this.#ctx.canvas}
-    update(idx=0) {draw(this.#ctx.clear(), idx)}
-}
-
-{// Create a sprite sheet for menu icons
-	const Menu = $('#LevelMenu')
-	const size = Menu.height() ?? 0
-	const {ctx}= canvas2D(null, size*drawFunctions.length, size)
-	for (const i of drawFunctions.keys())
-		draw(ctx, i, i*size + size/2, size/2, size/LOGICAL_SIZE)
-	$(Menu).css('--url',`url("${ctx.canvas.toDataURL()}")`)
-}
-
-function cherry(ctx=Fg) {
+const Fns = /**@type {((ctx:EnhancedCtx2D)=> void)[]}*/([
+function cherry(ctx) {
 	// both fruits
 	[[-6,-1],[-1,1]].forEach(([x,y])=> {
 		ctx.save()
@@ -60,9 +28,8 @@ function cherry(ctx=Fg) {
 	ctx.bezierCurveTo(3,-4, 1, 0, 1, 2)
 	ctx.strokeStyle = '#F90'
 	ctx.stroke()
-}
-
-function strawb(ctx=Fg) {
+},
+function strawb(ctx) {
 	// red body
 	ctx.beginPath()
 	ctx.moveTo(-1,-4)
@@ -89,9 +56,8 @@ function strawb(ctx=Fg) {
 	// stem
 	ctx.strokeStyle = '#FFF'
 	ctx.strokeLine(0,-4, 0,-5)
-}
-
-function orange(ctx=Fg) {
+},
+function orange(ctx) {
 	// orange body
 	ctx.beginPath()
 	ctx.moveTo(-2,-2)
@@ -124,9 +90,8 @@ function orange(ctx=Fg) {
 	ctx.strokeStyle = ctx.fillStyle = '#0F0'
 	ctx.stroke()
 	ctx.fill()
-}
-
-function apple(ctx=Fg) {
+},
+function apple(ctx) {
 	// red fruit
 	ctx.beginPath()
 	ctx.moveTo(-2, -3)
@@ -155,9 +120,8 @@ function apple(ctx=Fg) {
 	ctx.quadraticCurveTo(3, 3, 3, 1)
 	ctx.strokeStyle = '#FFF'
 	ctx.stroke()
-}
-
-function melon(ctx=Fg) {
+},
+function melon(ctx) {
 	// draw body
 	ctx.fillCircle(0, 1.7, 5.2, '#7BF331')
 
@@ -183,9 +147,8 @@ function melon(ctx=Fg) {
 		[ 0.0,-2.3],[-2,-1.2],[-4, 0.8],[-3.6, 3.2],[1, 0],
 	  	[-1.3, 2.0],[-1, 4.5],[ 3, 2.5],[ 1.0, 4.5]
 	].forEach(([x,y])=> ctx.fillCircle(x,y, 0.5, '#FFF'))
-}
-
-function gala(ctx=Fg) {
+},
+function gala(ctx) {
 	const yellow = '#F8FF00'
 	for (const scaleX of [1,-1]) {
 		// yellow body
@@ -211,9 +174,8 @@ function gala(ctx=Fg) {
 	}
 	ctx.fillStyle = '#FF3401'
 	ctx.fill()
-}
-
-function bell(ctx=Fg) {
+},
+function bell(ctx) {
 	// bell body
 	ctx.beginPath()
 	for (const vx of [1,-1]) {
@@ -227,7 +189,7 @@ function bell(ctx=Fg) {
 	// marks
 	ctx.beginPath()
 	ctx.lineWidth	= 0.8
-	ctx.strokeStyle = '#0'
+	ctx.strokeStyle = '#000'
 	ctx.strokeLine(-3.5, 2.3, -3.4,1.1)
 	ctx.moveTo(-3, -0.7)
 	ctx.quadraticCurveTo(-2.7,-3.0,-1.8,-3.1)
@@ -240,9 +202,8 @@ function bell(ctx=Fg) {
 	ctx.ellipse(0, 4.9, 4.6, 1, 0, 0, PI*2)
 	ctx.fill()
 	ctx.fillCircle(1.2, 5.3, 1.4, '#FFF')
-}
-
-function key(ctx=Fg) {
+},
+function key(ctx) {
 	// key metal
 	ctx.newLinePath([-1,-1.5],[-1.0, 5.4],[0,6.4],[1,5.4],[1,2.8])
 	ctx.setLinePath([ 1, 1.8],[ 1.0,-1.5])
@@ -264,4 +225,31 @@ function key(ctx=Fg) {
 	ctx.roundRect(-1.7, -5, 1.7*2, 1, .5)
 	ctx.fillStyle = '#68B9FC'
 	ctx.fill('evenodd')
+}])
+
+export const LOGIC_SIZE = 15.24
+export const MAX = Fns.length
+
+/**
+ @param {EnhancedCtx2D} ctx
+ @param {number} idx
+ @param {number} size
+*/
+export function draw(ctx, idx, size, x=size/2,y=size/2) {
+	ctx.save()
+	ctx.translate(x, y-(size*0.05))
+	ctx.lineWidth = 1
+	ctx.lineCap = ctx.lineJoin = 'round'
+	ctx.scale(size/LOGIC_SIZE)
+	Fns[mathClamp(0, idx, MAX-1)](ctx)
+	ctx.restore()
+}
+
+/** @param {number} size */
+export function cache(size) {
+	const ctx = canvas2D(null, size).ctx
+	return {
+		get canvas()  {return ctx.canvas},
+		update(idx=0) {draw(ctx.clear(), idx, size)},
+	}
 }
