@@ -260,8 +260,8 @@ const Fright = function() {
 		get spriteIdx() {return this.#sIdx ^ 1}
 		get caughtAll() {return this.#caught == GhostType.Max}
 		constructor(s=0) {
-			this.iv = ((this.secs = s) == 1 ? 12 : 14) / Game.speed
-			s>0 ? this.#set() : $(GhostList).trigger(Evt.FleeStart)
+			this.iv = ((this.secs = s) == 1 ? 12:14) / Game.speed
+			!s ? $(GhostList).trigger(Evt.FleeStart) : this.#set()
 		}
 		#set(isOn=true) {
 			session = (isOn? this : null)
