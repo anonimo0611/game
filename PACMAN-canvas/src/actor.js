@@ -5,12 +5,12 @@ export class Actor {
 	/** @readonly */
 	static CHEAT_ALPHA = 0.75
 
-	/** @protected */
-	fadeSpr = /**@type {?Fade}*/(null)
-
 	pos = Vec2.Zero
 	orient  = /**@type {Direction}*/(L)
 	#movDir = this.orient
+
+	/** @protected */
+	fadeSpr = /**@type {?Fade}*/(null)
 
 	/** @protected */
 	constructor(col=0, row=0) {
