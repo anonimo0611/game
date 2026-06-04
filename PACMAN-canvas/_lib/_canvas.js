@@ -15,10 +15,11 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	 @param {Position} centerPos
 	 @param {number} [alpha]
 	*/
-	put(img, centerPos, alpha, ox = -img.width/2, oy = -img.height/2) {
+	put(img, centerPos, alpha, ox = -img.width/2, oy = -img.height/2, scaleX=1, scaleY=scaleX) {
 		this.save()
 		this.setAlpha(alpha)
 		this.translate(centerPos)
+		this.scale(scaleX, scaleY)
 		this.drawImage(img, ox, oy)
 		this.restore()
 	}
@@ -73,11 +74,8 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	 @param {number} y
 	*/
 	flip(img, x, y, flipX=false, flipY=false, w=img.width, h=img.height) {
-		this.save()
-		this.translate(x+(flipX? w:0), y+(flipY? h:0))
-		this.scale(flipX? -1:1, flipY? -1:1)
-		this.drawImage(img, 0,0, w,h)
-		this.restore()
+		const center = {x:(flipX? w:0)+x, y:(flipY? h:0)+y}
+		this.put(img, center, 1, 0,0, flipX? -1:1, flipY? -1:1)
 	}
 
 	/** @param {CvsStyle} [style] */
@@ -214,11 +212,12 @@ class Fade {
 	get running() {return this.#et < (this.#delay+this.#dur)}
 
 	/**
-	 @param   {number}  maxAlpha
+	 @param   {number} maxAlpha  maximum opacity
+	 @param   {number} deltaTime elapsed time since last update(in ms)
 	 @returns {boolean} Whether the fade animation is currently active
 	*/
-	update(maxAlpha=1) {
-		this.#et += Ticker.Interval
+	update(maxAlpha=1, deltaTime=1000/60) {
+		this.#et += deltaTime
 		if (this.#et < this.#delay) {
 			this.#alpha = (this.#type == Fade.IN)? 0:maxAlpha
 			return true
