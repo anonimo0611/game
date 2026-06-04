@@ -60,9 +60,9 @@ export class Cutscene {
 }
 
 class Scene1 extends Cutscene {
+	akavx = -BW/156.4
 	constructor() {
 		super(1)
-		this.akavx    = -BW / 156.4
 		this.pacman.x =  BW + T*1
 		this.akabei.x =  BW + T*3
 	}
