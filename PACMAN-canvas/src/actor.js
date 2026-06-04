@@ -2,6 +2,12 @@ import {Dir}  from '../_lib/direction.js'
 import {Maze} from './maze.js'
 
 export class Actor {
+	/** @readonly */
+	static CHEAT_ALPHA = 0.75
+
+	/** @protected */
+	fadeSpr = /**@type {?Fade}*/(null)
+
 	pos = Vec2.Zero
 	orient  = /**@type {Direction}*/(L)
 	#movDir = this.orient
@@ -12,6 +18,8 @@ export class Actor {
 	}
 	// Override the actual speed in the subclasses.
 	get speed()     {return 0}
+	get maxAlpha()  {return 1}
+	get alpha()     {return this.fadeSpr?.alpha ?? this.maxAlpha}
 	get inHouse()   {return Maze.House.isIn(this.tile)}
 	get inTunSide() {return Maze.Tunnel.findSide(this.center)}
 

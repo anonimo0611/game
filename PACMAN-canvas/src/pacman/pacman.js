@@ -12,26 +12,21 @@ import {Actor,Ghosts} from '../actors.js'
 const EventBus = $({})
 const EATEN_EV = 'DotEaten'
 
-let fadeSpr = /**@type {?Fade}*/(null)
-
 export class PacMan extends Actor {
 	/** @readonly */
 	sprite = new PacSpr(Fg,T)
-	constructor(col=0, row=0) {
-		super(col, row)
-	}
-	get hidden() {
-		return Timer.frozen
-	}
-	update() {
-		this.sprite.update(this)
-	}
-	draw() {
-		this.sprite.draw(this)
-	}
+	constructor(col=0,row=0) {super(col,row)}
+	get hidden() {return Timer.frozen}
+	draw()   {this.sprite.draw(this)}
+	update() {this.sprite.update(this)}
 }
 
 class Player extends PacMan {
+	static {State.on({_Ready:this.instantiate})}
+	static instantiate() {
+		!State.wasNewGame && (player = new Player)
+		!State.isTitle && (player.fadeSpr = Fade.in())
+	}
 	#wakaWakaSEIndex = 0
 	#sinceLastEating = 0
 
@@ -43,8 +38,7 @@ class Player extends PacMan {
 	get speed()    {return this.#mov.speed}
 	get onWall()   {return this.#mov.onWall}
 	get tunEntry() {return this.#tunEntry}
-	get alpha()    {return fadeSpr?.alpha ?? this.maxAlpha}
-	get maxAlpha() {return Ctrl.semiTransPac? .75:1}
+	get maxAlpha() {return Ctrl.semiTransPac? Actor.CHEAT_ALPHA:1}
 	get closed()   {return State.isInGame == false}
 	get timeSinceLastEating() {return this.#sinceLastEating}
 
@@ -69,7 +63,7 @@ class Player extends PacMan {
 	}
 	update() {
 		this.sprite.update(this)
-		fadeSpr?.update(this.maxAlpha)
+		this.fadeSpr?.update(this.maxAlpha)
 		if (!this.closed && !this.hidden) {
 			this.#tunEntry.update()
 			this.#sinceLastEating += Game.interval
@@ -91,18 +85,11 @@ class Player extends PacMan {
 		this.#playEatSE()
 		this.resetTimer()
 		Maze.hasPow(tileIdx)
-			? this.#eatPowerDot()
-			: this.#eatSmallDot()
+			? (Score.add(POW_PTS), Ghosts.frighten())
+			: (Score.add(DOT_PTS))
 		Maze.clearDot(this) <= Maze.CLEAR_DOTS
 			? State.setRoundEnds()
 			: EventBus.trigger(EATEN_EV)
-	}
-	#eatPowerDot() {
-		Score.add(POW_PTS)
-		Ghosts.frighten()
-	}
-	#eatSmallDot() {
-		Score.add(DOT_PTS)
 	}
 	#playEatSE() {
 		const duration = (T/this.speed)*Ticker.Interval*.5
@@ -111,13 +98,8 @@ class Player extends PacMan {
 			: Sound.playWakaWaka1({duration})
 	}
 }
-
-export const onPlayerDotEaten =
-(/**@type {JQTriggerHandler}*/cb)=>
-	{EventBus.on(EATEN_EV,cb)}
-
 export let player = new Player
-State.on({_Ready:()=> {
-	fadeSpr = State.isTitle ? null : Fade.in()
-	!State.wasNewGame && (player = new Player)
-}})
+export const onPlayerDotEaten =
+(/**@type {JQTriggerHandler}*/cb)=> {
+	EventBus.on(EATEN_EV,cb)
+}

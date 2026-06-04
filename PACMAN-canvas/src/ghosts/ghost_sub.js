@@ -6,6 +6,7 @@ export class Akabei extends Ghost {
 	constructor() {
 		super(L, {type:0, tile:[13.5, 12]})
 	}
+	get scatterTile()  {return Vec2.new(24, 0)}
 	get chaseSpeed()   {return Ghosts.CruiseElroy.speed}
 	get isAngry()      {return Ghosts.CruiseElroy.angry}
 	get isChasing()    {return this.isNormal && !this.isScattering}
