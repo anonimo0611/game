@@ -55,7 +55,8 @@ export default class GhostSprite {
 			if (!isEscaping) {
 				ctx.save()
 				ctx.setAlpha(this.alpha)
-				isAngry && tgt.put(glow,center,this.alpha)
+				if (!isFrightened && isAngry)
+					tgt.put(glow, center, this.alpha ?? alpha)
 				this.#drawBody({animIdx,isRipped,isMended})
 				ctx.restore()
 			}
@@ -160,8 +161,8 @@ export default class GhostSprite {
 	}
 }
 function glowImg(/**@type {number}*/size) {
-	const {ctx,w,h}= canvas2D(null, size*3)
-	ctx.filter = `blur(${T*0.6}px)`
-	ctx.fillCircle(w/2, h/2, size/2, '#F00')
+	const {ctx,w,h}= canvas2D(null, size*6)
+	ctx.filter = `blur(${T*.8}px)`
+	ctx.fillCircle(w/2, h/2, size*.55, '#F00')
 	return ctx.canvas
 }
