@@ -161,7 +161,7 @@ export const Maze = freeze({
 	},
 
 	/**
-	 @param {} ctx
+	 @param {Ctx2D}  ctx
 	 @param {number} col
 	 @param {number} row
 	*/

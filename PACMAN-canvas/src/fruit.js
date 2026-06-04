@@ -8,7 +8,7 @@ import {PtsMgr} from './points.js'
 import * as Spr from './sprites/fruits.js'
 import {player,onPlayerDotEaten} from './actors.js'
 
-const FADE_DUR   = 300
+const FADE_DUR = 300
 const LEVEL_COLS = 7
 
 /** 0:Cherry, 1:Strwb, 2:Orange, 3:Apple, 4:Melon ,5:Gala, 6:Bell, 7:Key */
