@@ -109,13 +109,13 @@ export default class GhostSprite {
 	/** @param {VisualOrient} orient */
 	#drawEyes(orient, isRipped=false) {
 		this.ctx.fillStyle = '#FFF'
-		;({
-			Left:  ()=> this.#drawEyesHoriz('Left'),
-			Right: ()=> this.#drawEyesHoriz('Right'),
-			Up:    ()=> this.#drawEyesUp(isRipped),
-			Down:  ()=> this.#drawEyesDown(),
-			Dazed: ()=> this.sub.drawDazedEyes(),
-		})[orient]()
+		switch(orient) {
+		case 'Left':  return this.#drawEyesHoriz(orient)
+		case 'Right': return this.#drawEyesHoriz(orient)
+		case 'Up':    return this.#drawEyesUp(isRipped)
+		case 'Down':  return this.#drawEyesDown()
+		case 'Dazed': return this.sub.drawDazedEyes()
+		}
 	}
 	/** @param {Horizontal} LorR */
 	#drawEyesHoriz(LorR) {
@@ -161,7 +161,7 @@ export default class GhostSprite {
 	}
 }
 function glowImg(/**@type {number}*/size) {
-	const {ctx,w,h}= canvas2D(null, size*6)
+	const {ctx,w,h}= canvas2D(null, size*3)
 	ctx.filter = `blur(${T*.8}px)`
 	ctx.fillCircle(w/2, h/2, size*.55, '#F00')
 	return ctx.canvas
