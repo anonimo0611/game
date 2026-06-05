@@ -15,7 +15,7 @@ export const {Ghost:Speed} = _Speed
 export const Evt = asEnum('Ready','Reverse','Frighten','FleeStart','RoundEnds')
 
 /** Time spent fleeing from the player when Frightened Time is 0. */
-export const FREE_TIME = 400 // ms
+export const FLEE_TIME = 400 // ms
 
 /** Ghost collision radii by state (0: Normal, 1: Frightened). */
 export const StateHitRadii = freeze([T*.50, T*.55])

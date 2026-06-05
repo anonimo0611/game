@@ -39,7 +39,7 @@ export class Ghost extends Actor {
 		 [Sys.Evt.Ready]:    ()=> this.fadeSpr  = Fade.in(),
 		 [Sys.Evt.RoundEnds]:()=> this.fadeSpr  = Fade.out(),
 		 [Sys.Evt.Reverse]:  ()=> this.#revSig  = true,
-		 [Sys.Evt.FleeStart]:()=> this.#fleeTmr = Sys.FREE_TIME,
+		 [Sys.Evt.FleeStart]:()=> this.#fleeTmr = Sys.FLEE_TIME,
 		 [Sys.Evt.Frighten]: (_, on=true)=> this.#frighten(on),
 		})
 	}
