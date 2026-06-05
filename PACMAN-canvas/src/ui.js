@@ -2,6 +2,16 @@ export const Form   = document.forms[0]
 export const powChk = getInput('powEnabled')
 export const lives  = getInput('initialLives')
 
+//---- Window focused ----
+
+import {Ctrl} from './control.js'
+export const WinState = function() {
+	let f = 1
+	$win.on('blur', ()=> {f=0,Ctrl.pause(!f)})
+	$win.on('focus',()=> {f=1,Ctrl.pause(!f)})
+	return {get isActive() {return !!f}}
+}()
+
 //---- Fit to viewport ----
 
 $win.on('resize', ()=> {
@@ -29,7 +39,7 @@ export const Menu = freeze({
 	Extend: new _Menu.Slide('ExtendMenu'),
 })
 
-//---- LevelMenu ----
+//---- Level menu ----
 
 import * as Fruits from './sprites/fruits.js'
 {// Create a sprite sheet for menu icons
@@ -40,16 +50,6 @@ import * as Fruits from './sprites/fruits.js'
 		Fruits.draw(ctx, i, size, i*size + size/2)
 	$(menu).css('--url',`url("${ctx.canvas.toDataURL()}")`)
 }
-
-//---- Window focused ----
-
-import {Ctrl} from './control.js'
-export const WinState = function() {
-	let f = 1
-	$win.on('blur', ()=> {f=0,Ctrl.pause(!f)})
-	$win.on('focus',()=> {f=1,Ctrl.pause(!f)})
-	return {get isActive() {return !!f}}
-}()
 
 //---- Panels ----
 
