@@ -68,7 +68,7 @@ export const Targets = new class TargetVisualizer {
 		if (g instanceof Aosuke) {
 			const akaXY = Ghosts.of(GhostType.Akabei).center.vals
 			Fg.newLinePath(akaXY, ofsXY, g.chasePos.vals).stroke()
-			Fg.fillCircle(...ofsXY, 8)
+			Fg.fillCircle(...ofsXY, T*0.26|0)
 		}
 	}
 	/** @param {Guzuta} g */

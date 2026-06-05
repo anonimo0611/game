@@ -6,7 +6,7 @@ export class Akabei extends Ghost {
 	constructor() {
 		super(L, {type:0, tile:[13.5, 12]})
 	}
-	get scatterTile()  {return Vec2.new(24, 0)}
+	get scatterTile()  {return Vec2.new(COLS-4, 0)}
 	get chaseSpeed()   {return Ghosts.CruiseElroy.speed}
 	get isAngry()      {return Ghosts.CruiseElroy.angry}
 	get isChasing()    {return this.isNormal && !this.isScattering}
@@ -34,7 +34,7 @@ export class Aosuke extends Ghost {
 		super(U, {type:2, tile:[11.5, 15], align:-1})
 	}
 	get chaseOffset() {return 2}
-	get scatterTile() {return Vec2.new(27, 33)}
+	get scatterTile() {return Vec2.new(COLS-1, ROWS-1)}
 	get chasePos() {
 		const  Aka = Ghosts.of(GhostType.Akabei)
 		const  pos = player.offsetTarget(this.chaseOffset)
@@ -48,7 +48,7 @@ export class Guzuta extends Ghost {
 	constructor() {
 		super(U, {type:3, tile:[15.5, 15], align:+1})
 	}
-	get scatterTile() {return Vec2.new(0, 33)}
+	get scatterTile() {return Vec2.new(0, ROWS-1)}
 	get chasePos() {
 		const {center,pos}= player
 		return Vec2.sqrMag(this, pos) < (T*Guzuta.THRESHOLD)**2
