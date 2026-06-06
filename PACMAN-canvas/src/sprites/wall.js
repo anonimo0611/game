@@ -25,7 +25,7 @@ export const Wall = new class WallRenderer {
 				if (i%COLS >= COLS/2) return
 				Wall.#drawTile(ctx, s, i%COLS, i/COLS|0)
 			})
-			ctx.flip(ctx.canvas, 0,0, true)
+			ctx.put(ctx.canvas, Vec2.Zero, 1, -BW,0, -1,1)
 			Wall.#drawHouse(ctx)
 		})
 	}
