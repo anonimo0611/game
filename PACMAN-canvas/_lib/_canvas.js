@@ -14,13 +14,20 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	 @param {HTMLImageElement|HTMLCanvasElement} img
 	 @param {Position} centerPos
 	 @param {number} [alpha]
+	 @param {?number} [ox] Default: -img.width / 2
+	 @param {?number} [oy] Default: -img.height / 2
 	*/
-	put(img, centerPos, alpha, ox = -img.width/2, oy = -img.height/2, scaleX=1, scaleY=scaleX) {
+	put(img, centerPos, alpha, ox,oy,
+		scaleX=1,
+		scaleY=1,
+		rotate=0
+	) {
 		this.save()
 		this.setAlpha(alpha)
 		this.translate(centerPos)
+		this.rotate(rotate)
 		this.scale(scaleX, scaleY)
-		this.drawImage(img, ox, oy)
+		this.drawImage(img, (ox??-img.width/2), (oy??-img.height/2))
 		this.restore()
 	}
 
@@ -66,16 +73,6 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	scale(x, y=x) {
 		super.scale(x, y)
 		return this
-	}
-
-	/**
-	 @param {HTMLImageElement|HTMLCanvasElement} img
-	 @param {number} x
-	 @param {number} y
-	*/
-	flip(img, x, y, flipX=false, flipY=false, w=img.width, h=img.height) {
-		const center = {x:(flipX? w:0)+x, y:(flipY? h:0)+y}
-		this.put(img, center, 1, 0,0, flipX? -1:1, flipY? -1:1)
 	}
 
 	/** @param {CvsStyle} [style] */
