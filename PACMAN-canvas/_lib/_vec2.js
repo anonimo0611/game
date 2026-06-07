@@ -64,7 +64,7 @@ class Vec2 {
 	 @param {Position} pos
 	 @param {number} cols
 	*/static idx(pos, cols) {
-		if (cols < 0) throw RangeError('Column count must be greater than zero')
+		if (cols <= 0) throw RangeError('Column count must be greater than zero')
 		return pos.y * cols + pos.x
 	}
 
