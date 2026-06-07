@@ -13,9 +13,9 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	/**
 	 @param {HTMLImageElement|HTMLCanvasElement} img
 	 @param {Position} centerPos
-	 @param {number} [alpha]
-	 @param {?number} [ox] Default: -img.width / 2
-	 @param {?number} [oy] Default: -img.height / 2
+	 @param {number}   [alpha]
+	 @param {?number}  [ox] Default: -img.width  / 2
+	 @param {?number}  [oy] Default: -img.height / 2
 	*/
 	put(img, centerPos, alpha, ox,oy,
 		scaleX=1,
@@ -234,7 +234,7 @@ class Fade {
 const path2D = path=> new Path2D(path)
 
 /**
- @param {?string} id The ID of an existing canvas element. If null or not found, a new canvas is created.
+ @param {?string} id      The ID of an existing canvas element. If null or not found, a new canvas is created.
  @param {number} [width]  The desired width. Defaults to the element's attribute if omitted.
  @param {number} [height] The desired height. Defaults to `width` if provided; otherwise, defaults to the element's attribute.
 */

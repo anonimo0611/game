@@ -7,6 +7,9 @@ class Vec2 {
 	static get Left()  {return Vec2.new(-1, 0)}
 
 	void() {}
+	toString() {
+		return /**@type {const}*/(`{x:${this.x}, y:${this.y}}`)
+	}
 
 	/**
 	 @overload
@@ -61,8 +64,8 @@ class Vec2 {
 	 @param {Position} pos
 	 @param {number} cols
 	*/static idx(pos, cols) {
-		if (cols <= 0) throw RangeError('Column count must be greater than zero')
-		return Number(pos.y * cols + pos.x)
+		if (cols < 0) throw RangeError('Column count must be greater than zero')
+		return pos.y * cols + pos.x
 	}
 
 	/**
@@ -129,8 +132,8 @@ class Vec2 {
 	get sqrMag()     {return this.x**2 + this.y**2}
 	get magnitude()  {return sqrt(this.sqrMag)}
 	get clone()      {return Vec2.new(this.x,  this.y)}
-	get asInt()      {return Vec2.new(this.x|0,this.y|0)}
-	get normalized() {return Vec2.new(this.x/this.magnitude, this.y/this.magnitude)}
+	get asInt()      {return Vec2.new(floor(this.x),floor(this.y))}
+	get normalized() {return Vec2.new(this.x/this.magnitude||0 , this.y/this.magnitude||0)}
 
 	/**
 	 @overload
@@ -246,37 +249,26 @@ class Vec2 {
 
 	/** @param {number} divisor */
 	divInt(divisor) {
-		this.x = (this.x/divisor)|0
-		this.y = (this.y/divisor)|0
+		this.x = floor(this.x/divisor)
+		this.y = floor(this.y/divisor)
 		return this
 	}
 
 	/** @param {Position} pos */
-	dot(pos) {
-		return this.x * pos.x + this.y * pos.y
-	}
+	dot(pos)   {return this.x * pos.x + this.y * pos.y}
 
 	/** @param {Position} pos */
-	cross(pos) {
-		return this.x * pos.y - this.y * pos.x
-	}
+	cross(pos) {return this.x * pos.y - this.y * pos.x}
 
 	/** @param {Position} pos */
-	distance(pos) {
-		return Vec2.sub(this,pos).magnitude
-	}
+	distance(pos) {return Vec2.sub(this,pos).magnitude}
+
+	/** @param {number} cols */
+	toIdx(cols) {return Vec2.idx(this,cols)}
 
 	/** @param {number} cols */
 	wrapX(cols) {
-		return this.setX((this.x+cols) % cols)
-	}
-
-	/** @param {number} cols */
-	toIdx(cols) {
-		return Vec2.idx(this,cols)
-	}
-
-	toString() {
-		return /**@type {const}*/(`{x:${this.x}, y:${this.y}}`)
+		if (cols <= 0) return this
+		return this.setX(((this.x % cols) + cols) % cols)
 	}
 }
