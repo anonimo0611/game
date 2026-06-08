@@ -63,7 +63,7 @@ export const Ctrl = new class Controller {
 			switch(input.type) {
 			case 'range':   input.value   = data[input.id];break
 			case 'checkbox':input.checked = data[input.id];break
-			}
+			}$(input).trigger('input')
 		})
 	}
 	#output() {
