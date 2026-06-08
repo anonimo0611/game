@@ -34,26 +34,27 @@ export const Confirm = new class ConfirmCore {
 	open(content, cb1,cb2, btn1Txt='Cancel', btn2Txt='Ok', cancelIdx=0, autoFocus=cancelIdx) {
 		if (this.opened) return
 		this.#opened  = true
-		const eDialog = this.#appendDialog()
-		const $Dialog = $(eDialog)
-		$Dialog.find('.content').text(content)
-		$Dialog.find('button').each((i,btn)=> {
+		const
+		$dialog = $(this.#appendDialog())
+		$dialog.find('.content').text(content)
+		$dialog.find('button').each((i,btn)=> {
 			if (i == autoFocus) btn.autofocus = true
 			btn.classList.add(i == cancelIdx? 'cancel':'ok')
 			btn.textContent = [btn1Txt,btn2Txt][i]
 			btn.onclick = ()=> {
 				$win.off(NS)
-				$Dialog.fadeOut(300, ()=> {
-					eDialog.close()
-					eDialog.remove()
-					this.#opened = false
+				$dialog.fadeOut(300, function() {
+					this.close()
+					this.remove()
 					;[cb1,cb2][i]?.()
+					Confirm.#opened = false
 				})
 			}
 		})
-		eDialog.showModal()
-		$Dialog.fadeIn(300)
-		$win.onNS(NS,{keydown:this.#onKeydown})
-		$win.onNS(NS,{pointerdown:e=> e.preventDefault()})
+		$win.onNS(NS, {
+			keydown:this.#onKeydown,
+			pointerdown:e=> e.preventDefault()
+		})
+		$dialog.fadeIn(300)[0].showModal()
 	}
 }, NS = '.CONFIRM'
