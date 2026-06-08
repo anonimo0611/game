@@ -1,7 +1,6 @@
 import {Dir} from './direction.js'
 export const Confirm = new class ConfirmCore {
-	#opened    = false
-	#cancelIdx = /**@type {0|1}*/(0)
+	#opened = false
 	get opened() {return this.#opened}
 
 	/** @param {JQKeyboardEvent} e */
@@ -9,7 +8,7 @@ export const Confirm = new class ConfirmCore {
 		const btns = $('#confirm button').get()
 		if (e.key == 'Escape') {
 			e.preventDefault()
-			return btns[Confirm.#cancelIdx].click()
+			return $(btns).filter('.cancel')[0]?.click()
 		}
 		if (e.target instanceof HTMLButtonElement) {
 			const i = $(e.target).index()
@@ -31,10 +30,7 @@ export const Confirm = new class ConfirmCore {
 	 @param {0|1} [cancelIdx]  Button to assign when canceling; 0=left(default), 1=right
 	 @param {0|1} [autoFocus]  0=left, 1=right; The default is the same as `cancelIdx`
 	*/
-	open(content,
-		cb1,cb2, btn1Txt='Cancel',btn2Txt='Ok',
-		cancelIdx=0, autoFocus=this.#cancelIdx=cancelIdx
-	) {
+	open(content, cb1,cb2, btn1Txt='Cancel',btn2Txt='Ok', cancelIdx=0, autoFocus=cancelIdx) {
 		if (this.opened) return
 		this.#opened = true
 		const
