@@ -1,4 +1,4 @@
-import {Dir} from './direction.js'
+import {Dir,L,R} from './direction.js'
 
 class Menu {
 	/** @readonly  */root
