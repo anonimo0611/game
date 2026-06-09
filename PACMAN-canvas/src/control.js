@@ -97,10 +97,6 @@ export const Ctrl = new class Controller {
 			? State.setQuit()
 			: State.isInGame && Ctrl.#quitConfirm()
 	}
-	#clearHiConfirm() {
-		Confirm.open('Are you sure you want to clear high-score?',
-			null, ()=> Score.clear(), 'Cancel','Clear')
-	}
 	#quitConfirm() {
 		!Ticker.paused && Ctrl.pause()
 		Confirm.open('Are you sure you want to quit the game?',
@@ -139,9 +135,9 @@ export const Ctrl = new class Controller {
 		Ctrl.#trackInputFocus()
 		getVals(Menu).forEach(m=> m.onChange(Ctrl.#save))
 		$('input')   .on({input:Ctrl.#output})
-		$(btns.clear).on({click:Ctrl.#clearHiConfirm})
 		$(btns.reset).on({click:Ctrl.#reset})
 		$(btns.start).on({click:State.setNewGame})
+		$(btns.clear).on({click:Score.clearConfirm})
 		$root.addClass('controller-settled')
 	}
 }, Cfg = /**@type {Readonly<typeof Data>}*/(Data)

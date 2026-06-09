@@ -1,4 +1,5 @@
 import {Sound}    from '../_snd/sound.js'
+import {Confirm}  from '../_lib/confirm.js'
 import {Game}     from './_main.js'
 import {State}    from './state.js'
 import {Ctrl}     from './control.js'
@@ -18,9 +19,13 @@ export const Score = new class ScoreManager {
 			GameOver: Score.#onGameOver,
 		})
 	}
-	clear() {
+	clearConfirm() {
+		Confirm.open('Are you sure you want to clear high-score?',
+			null, Score.#clear, 'Cancel','Clear')
+	}
+	#clear() {
 		localStorage.removeItem(HISCORE_KEY)
-		this.#reset()
+		Score.#reset()
 	}
 	#reset() {
 		_score = 0
