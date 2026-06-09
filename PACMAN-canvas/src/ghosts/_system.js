@@ -100,10 +100,10 @@ export const Ghosts = new class GhostManager {
 	#setReleaseTimer() {
 		const lv = (Game.pacDied? 0 : Game.clampedLv)
 		Timer.sequence(.../**@type {TimerSeq[]}*/(
-			GhostList.slice(1).map((g,i)=> ([
+			GhostList.slice(1).map((g,i)=> [
 				StandbyDelays[lv][i]/Game.speed,
 				()=> g.leaveHouse()
-			])))
+			]))
 		)
 	}
 	frighten() {
@@ -137,11 +137,12 @@ export const Ghosts = new class GhostManager {
 		PtsMgr.drawGhostPts()
 	}
 	#draw(onFront=true) {
-		GhostList
-			.toReversed()
-			.filter (g=> g.isFrightened != onFront)
-			.filter (g=> g.state.isBitten == false)
-			.forEach(g=> g.draw())
+		GhostList.forEach((_,i,arr)=> {
+			const g = arr[arr.length-1-i]
+			if (g.isFrightened == onFront) return
+			if (g.state.isBitten) return
+			g.draw()
+		})
 	}
 	/** @param {GhostIdx} type */
 	of = type=> GhostList[type]
