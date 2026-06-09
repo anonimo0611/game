@@ -11,11 +11,12 @@ import {Targets} from './targets.js'
 import {Ghost,player,onPlayerDotEaten} from '../actors.js'
 
 const GhostList = /**@type {Ghost[]}*/([])
-export const {Ghost:Speed} = _Speed
+
+export const{Ghost:Speed}= _Speed
 export const Evt = asEnum('Ready','Reverse','Frighten','FleeStart','RoundEnds')
 
-/** Time spent fleeing from the player when Frightened Time is 0. */
-export const FLEE_TIME = 400 // ms
+/** The fleeing time(ms) from the player when Frightened Time is 0. */
+export const FLEE_TIME = 400
 
 /** Ghost collision radii by state (0: Normal, 1: Frightened). */
 export const StateHitRadii = freeze([T*.50, T*.55])
@@ -47,7 +48,7 @@ export const [StateType,createState] = function() {
 		(['Idle','GoingOut','Walking','Bitten','Escaping','Entering'])
 	/**
 	 @typedef {typeof States[number]} StateType
-	 @typedef {StateDef.Fluent<State,StateType>} IGhostState
+	 @typedef {StateDef.Fluent<State,StateType>} IState
 	 @extends {_State<StateType,Ghost>}
 	*/
 	class State extends _State {
@@ -59,7 +60,7 @@ export const [StateType,createState] = function() {
 	}
 	return [
 		asEnum(...States),
-		/**@type {(g:Ghost)=> IGhostState}*/(g=> new State(g))
+		/**@type {(g:Ghost)=> IState}*/(g=> new State(g))
 	]
 }()
 
@@ -86,8 +87,7 @@ export const Ghosts = new class GhostManager {
 
 	/** @param {Ghost[]} [ghostList] */
 	initialize(ghostList) {
-		this.#animIdx = 0
-		GhostList.length = 0
+		this.#animIdx = GhostList.length = 0
 		ghostList?.forEach((g,i)=> GhostList[i] = g)
 	}
 	#trigger() {
@@ -139,8 +139,8 @@ export const Ghosts = new class GhostManager {
 	#draw(onFront=true) {
 		GhostList.forEach((_,i,arr)=> {
 			const g = arr[arr.length-1-i]
-			if (g.isFrightened == onFront) return
 			if (g.state.isBitten) return
+			if (g.isFrightened == onFront) return
 			g.draw()
 		})
 	}
