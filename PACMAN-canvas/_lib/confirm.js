@@ -11,7 +11,6 @@ export const Confirm = new class ConfirmCore {
 			return $(btns).filter('.cancel')[0]?.click()
 		}
 		if (e.target instanceof HTMLButtonElement) {
-			e.preventDefault()
 			const i = $(e.target).index()
 			Dir.from(e) == [R,L][i] && btns[1^i]?.focus()
 		}
