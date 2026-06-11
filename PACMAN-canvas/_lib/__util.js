@@ -53,17 +53,22 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 
 /**
  @template {new ()=> HTMLElement} T
- @param {string} id
+ @param {string|HTMLElement} src
  @param {T} [type]
-*/const requireElem = (id, type=/**@type {any}*/(HTMLElement))=> {
-	const e = document.getElementById(id), {name}= type
+*/const reqElem = (src, type=/**@type {any}*/(HTMLElement))=> {
+	const e = (typeof src == 'string')? qSel(src) : src
+	if (!e) throw ReferenceError(`No ${type.name} with that id #${src} exists.`)
 	if (e instanceof type) return /**@type {InstanceType<T>}*/(e)
-	throw ReferenceError(`No ${name} with that id #${id} exists.`)
+	throw TypeError(`Expected ${type.name}, but got ${e}.`)
 }
 
 /**
- @param {string} id
-*/const getInput = id=> requireElem(id,HTMLInputElement)
+ @param {string|HTMLElement} src
+*/const reqInput = src=> reqElem(src,HTMLInputElement)
+
+/**
+ @param {string|HTMLElement} src
+*/const reqButton = src=> reqElem(src,HTMLButtonElement)
 
 /**
  @param  {string} selector

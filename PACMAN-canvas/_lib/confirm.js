@@ -17,9 +17,9 @@ export const Confirm = new class ConfirmCore {
 		}
 	}
 	#appendDialog() {
-		const temp = requireElem('confirm_t',HTMLTemplateElement)
+		const temp = reqElem('#confirm_t',HTMLTemplateElement)
 		document.body.append(temp.content.cloneNode(true))
-		return requireElem('confirm',HTMLDialogElement)
+		return reqElem('#confirm',HTMLDialogElement)
 	}
 
 	/**
