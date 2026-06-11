@@ -1,6 +1,6 @@
 export const Form   = document.forms[0]
-export const powChk = getInput('powEnabled')
-export const lives  = getInput('initialLives')
+export const powChk = reqInput('#powEnabled')
+export const lives  = reqInput('#initialLives')
 
 //---- Window focused ----
 
@@ -29,7 +29,7 @@ const btnIds = /**@type {const}*/
 
 export const btns =
 	/**@type {{[K in btnIds[number]]:HTMLButtonElement}}*/
-	(toObj(btnIds.map(id=> [id,requireElem(id+'Btn')])))
+	(toObj(btnIds.map(id=> [id,reqButton(`#${id}Btn`)])))
 
 //---- Custom menus ----
 
@@ -59,9 +59,8 @@ $('body').on('keydown pointerdown', e=> {
 })
 $('.panelBtn').on('keydown pointerdown', e=> {
 	if (e.key && !isActionKey(e)) return
-	const button = e.currentTarget
-	const tgtSel = button.dataset.target ?? ''
-	const opened = button.classList.contains('opened')
+	const btn = reqButton(e.target)
+	const opn = $(btn).hasClass('opened')
 	$('.panel-ui.opened').toggleClass('opened')
-	$(button).add(tgtSel).toggleClass('opened',!opened)
+	$(btn).add(btn.value).toggleClass('opened',!opn)
 })
