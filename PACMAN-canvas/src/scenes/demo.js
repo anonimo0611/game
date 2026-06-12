@@ -1,4 +1,4 @@
-import {WinState} from '../ui.js'
+import {Window}   from '../ui.js'
 import {Ctrl}     from '../control.js'
 import {State}    from '../state.js'
 import {Attract}  from '../demo/attract.js'
@@ -18,20 +18,17 @@ const DemoDict  = {Attract,Cutscene}
 const DemoScene = {
 	/** Attract mode will begin after a period of inactivity. */
 	updateTimer() {
-		const waitIime = 1e3*30 // 30secs
-		if (State.isTitle) {
-			!WinState.isActive || Ctrl.isCaptured
+		if (!State.isTitle) return
+		!Window.isActive || Ctrl.isCaptured
 			? Ticker.resetCount()
-			: Ticker.elapsedTime > waitIime && State.setAttract()
-		}
+			: Ticker.elapsedTime > 1e3*30 // 30secs
+				&& State.setAttract()
 	},
 	draw()   {DemoDict[State.current]?.draw()},
 	update() {DemoDict[State.current]?.update()},
 }
 
-$('button.demo').each((i,button)=> {
-	const startScene = (i == 0)
-		? ()=> State.setAttract()
-		: ()=> State.setCutscene({data:i})
-	$(button).on({click:startScene})
+$('button.demo.at').on({click:State.setAttract})
+$('button.demo.cs').each((i,btn)=> {
+	$(btn).on({click:()=> State.setCutscene({data:i+1})})
 })

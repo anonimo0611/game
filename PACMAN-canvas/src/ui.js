@@ -5,7 +5,7 @@ export const lives  = reqInput('#initialLives')
 //---- Window focused ----
 
 import {Ctrl} from './control.js'
-export const WinState = function() {
+export const Window = function() {
 	let f = 1
 	$win.on('blur', ()=> {f=0,Ctrl.pause(!f)})
 	$win.on('focus',()=> {f=1,Ctrl.pause(!f)})
