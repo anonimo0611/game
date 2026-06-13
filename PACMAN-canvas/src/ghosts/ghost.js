@@ -216,7 +216,7 @@ export class Ghost extends Actor {
 	}
 	collidesWith(
 		pos     = player.pos,
-		radius  = Sys.StateHitRadii[+this.isFrightened],
+		radius  = Sys.HitRadii[+this.isFrightened],
 		release = ()=> this.#startEscaping(),
 	) {
 		if (!this.state.isWalking
@@ -225,7 +225,7 @@ export class Ghost extends Actor {
 			return false
 		this.isFrightened
 			? this.#onBitten(release)
-			: Maze.dotsLeft && this.#onPacCaught()
+			: Maze.dotsLeft > 0 && this.#onPacCaught()
 		return true
 	}
 	#onBitten(cb=()=>{}) {

@@ -13,13 +13,13 @@ import {Ghost,player,onPlayerDotEaten} from '../actors.js'
 const GhostList = /**@type {Ghost[]}*/([])
 
 export const{Ghost:Speed}= _Speed
-export const Evt = asEnum('Ready','Reverse','Frighten','FleeStart','RoundEnds')
+export const Evt = asEnum('Ready','RoundEnds','Reverse','Frighten','FleeStart')
 
 /** The fleeing time(ms) from the player when Frightened Time is 0. */
 export const FLEE_TIME = 400
 
-/** Ghost collision radii by state (0: Normal, 1: Frightened). */
-export const StateHitRadii = freeze([T*.50, T*.55])
+/** Ghost collision radii by state. */
+export const HitRadii = /**@type {GhostHitRadii}*/([T*.50, T*.55])
 
 /**
  When always chase mode,
@@ -111,8 +111,8 @@ export const Ghosts = new class GhostManager {
 		Fright.frighten()
 	}
 	update() {
-		PhaseManager.update()
 		Fright.session?.update()
+		PhaseManager.update()
 		this.#updateAnimation()
 		this.#updateGhosts()
 	}
