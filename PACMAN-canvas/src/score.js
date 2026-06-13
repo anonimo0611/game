@@ -4,6 +4,7 @@ import {Game}     from './_main.js'
 import {State}    from './state.js'
 import {Ctrl}     from './control.js'
 import {Lives}    from './lives.js'
+import {btns}     from './ui.js'
 import {drawText} from './message.js'
 
 const HISCORE_KEY = 'anopac_hiscore'
@@ -12,14 +13,15 @@ let [_score,_hiSco,savedScore,savedHiSco]= [0,0,0,0]
 export const Score = new class ScoreManager {
 	static {$(this.setup)}
 	static setup() {
-		Score.#reset()
 		State.on({
 			Quit:     Score.#restore,
 			NewGame:  Score.#onNewGame,
 			GameOver: Score.#onGameOver,
 		})
+		Score.#reset()
+		$(btns.clear).on({click:Score.#clearConfirm})
 	}
-	clearConfirm() {
+	#clearConfirm() {
 		Confirm.open('Are you sure you want to clear high-score?',
 			null, Score.#clear, 'Cancel','Clear')
 	}
@@ -62,7 +64,8 @@ export const Score = new class ScoreManager {
 			: drawText(14,0, null, `HIGH　${_hiSco || '00'}`)
 	}
 	add(points = 0) {
-		if (!State.isInGame) return
+		if (!State.isInGame)
+			return
 
 		const oldScore = _score
 		_score += points

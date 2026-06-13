@@ -2,7 +2,6 @@ import {Dir}      from '../_lib/direction.js'
 import {Confirm}  from '../_lib/confirm.js'
 import {Sound}    from '../_snd/sound.js'
 import {State}    from './state.js'
-import {Score}    from './score.js'
 import {drawText} from './message.js'
 import {Form,Menu,btns} from './ui.js'
 
@@ -137,7 +136,6 @@ export const Ctrl = new class Controller {
 		$('input')   .on({input:Ctrl.#output})
 		$(btns.reset).on({click:Ctrl.#reset})
 		$(btns.start).on({click:State.setNewGame})
-		$(btns.clear).on({click:Score.clearConfirm})
 		$root.addClass('controller-settled')
 	}
 }, Cfg = /**@type {Readonly<typeof Data>}*/(Data)
