@@ -1,6 +1,7 @@
 //---- Ghosts ----
 
 type GhostIdx = (typeof GhostType)['Akabei'|'Pinky'|'Aosuke'|'Guzuta']
+type GhostHitRadii = readonly [normal: number, frightened: number]
 
 //---- Dictionary ----
 
