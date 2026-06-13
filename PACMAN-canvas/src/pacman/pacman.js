@@ -27,7 +27,7 @@ class Player extends PacMan {
 		!State.wasNewGame && (player = new Player)
 		!State.isTitle && (player.fadeSpr = Fade.in())
 	}
-	#wakaWakaSEIndex = 0
+	#eatSEIndex = 0
 	#sinceLastEating = 0
 
 	/** @type {Mover} */
@@ -93,9 +93,9 @@ class Player extends PacMan {
 	}
 	#playEatSE() {
 		const duration = (T/this.speed)*Ticker.Interval*.5
-		;(this.#wakaWakaSEIndex ^= 1)
-			? Sound.playWakaWaka0({duration})
-			: Sound.playWakaWaka1({duration})
+		;(this.#eatSEIndex ^= 1)
+			? Sound.playEatDot0({duration})
+			: Sound.playEatDot1({duration})
 	}
 }
 export let player = new Player
