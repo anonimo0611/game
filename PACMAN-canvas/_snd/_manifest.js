@@ -12,8 +12,8 @@ export const Manifest = /**@type {const}*/([
 	]}},
 	{src:'./res/regular.ogg', data:{channels:4, audioSprite:[
 		{id:'PacDying',   startTime:   0, duration:1749},
-		{id:'WakaWaka0',  startTime:1998, duration:  80, volume:0.70},
-		{id:'WakaWaka1',  startTime:2137, duration:  80, volume:0.70},
+		{id:'EatDot0',    startTime:1998, duration:  80, volume:0.70},
+		{id:'EatDot1',    startTime:2137, duration:  80, volume:0.70},
 		{id:'BitesGhost', startTime:2603, duration: 575},
 		{id:'GetsHiScore',startTime:3641, duration:2090},
 		{id:'EatenFruit', startTime:5952, duration: 496},
