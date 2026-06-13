@@ -154,13 +154,13 @@ function gala(ctx) {
 		// yellow body
 		ctx.save()
 		ctx.scale(scaleX, 1)
-		ctx.fillPolygon(yellow,[0,-2.6],[4.9,-2.4],[4.6,-.5],[2,1.6],[1.1,.5],[0,.5])
+		ctx.fillPolygon(yellow,[0,-2.6],[4.9,-2.4],[4.6,-.5],[2,1.6],[1.3,1],[0,1])
 		// blue wings
-		ctx.fillPolygon('#0AF',[4.6,-4.8],[6,-4.5],[6,.6],[1.6,4],[1.6,2],[4.6,-.6])
+		ctx.fillPolygon('#0AF',[4.6,-4.2],[6,-4.2],[6,.6],[1.6,4],[1.6,2],[4.6,-.5])
 		ctx.restore()
 	}
 	// yellow tail
-	ctx.lineWidth   = 1.2
+	ctx.lineWidth   = 1.3
 	ctx.strokeStyle = yellow
 	ctx.strokeLine(0, 0, 0, 6)
 
@@ -168,9 +168,9 @@ function gala(ctx) {
 	ctx.beginPath()
 	for (const scaleX of [1,-1]) {
 		ctx.scale(scaleX, 1)
-		ctx.setLinePath([0,-4.9],[3.8,-2.2],[3.0,-1.2],[1.3,-2.3])
-		ctx.quadraticCurveTo(0.7,-2.7, 0.7,-1.4)
-		ctx.quadraticCurveTo(0.4, 0.0, 0.0, 0.0)
+		ctx.setLinePath([0,-5.1],[4,-1.7],[1.3,-2.1])
+		ctx.quadraticCurveTo(1, -2.1, 1, -1.8)
+		ctx.quadraticCurveTo(0.4, 0.6, 0, 0.6)
 	}
 	ctx.fillStyle = '#FF3401'
 	ctx.fill()

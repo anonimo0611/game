@@ -14,9 +14,9 @@ export default class GhostSubSprite {
 	}
 	drawMendedSeam(animIdx=0) {
 		const {ctx}= this, path = /**@type {xyTuple[]}*/
-			([[39,8],[33,14],[24,8],[14,15],[26,20],[14,27],[25,33],[14,38]])
+			([[41,9],[33,15],[23,9],[12,15],[23,20],[12,27],[23,32],[12,38]])
 		animIdx && path.pop()
-		ctx.lineWidth   = 3.5
+		ctx.lineWidth   = 3
 		ctx.strokeStyle = 'white'
 		ctx.newLinePath(...path).stroke()
 		path.forEach(xy=> ctx.fillCircle(...xy, ctx.lineWidth, '#FFF'))
