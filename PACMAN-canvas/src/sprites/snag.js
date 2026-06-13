@@ -21,7 +21,7 @@ export class SnagSprite {
 		ctx.fillRect(0,-sh, sw,sh, 'white') // Stake
 		if (isRipped) { // Scrap of cloth
 			const s = sw*0.8
-		ctx.translate(sw, 0)
+			ctx.translate(sw, 0)
 			ctx.fillPolygon(AKA_COLOR, [0,-s],[0,-sh],[-T,0],[-s,0],[-s,-s])
 		}
 		ctx.restore()
@@ -41,7 +41,7 @@ export class SnagSprite {
 		ctx.translate(x, y)
 		ctx.scale(T*2*scale/LOGIC_SIZE)
 		ctx.beginPath()
-		ctx.moveTo(-11, -20) //-11 -20
+		ctx.moveTo(-11, -20)
 		ctx.quadraticCurveTo(v1, 9, v2, 9)
 		ctx.addLinePath([v2,42],[ls,42],[ls,20],[-8,20])
 		ctx.fillStyle = AKA_COLOR
