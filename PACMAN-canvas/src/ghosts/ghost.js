@@ -102,10 +102,10 @@ export class Ghost extends Actor {
 		case 'Idle':     return this.#idleInHouse(this)
 		case 'GoingOut': return this.#goingOut(this)
 		case 'Entering': return this.#enteringToHome(this)
-		default: this.#moveStepped(this.speed+.5|0)
+		default: this.#moveSteps(this.speed+.5|0)
 		}
 	}
-	#moveStepped(steps=1) {
+	#moveSteps(steps=1) {
 		for (let i=0; i<steps; i++) {
 			this.#tickMove(this.speed/steps)
 			this.passedTileCenter && this.#setNextDir()

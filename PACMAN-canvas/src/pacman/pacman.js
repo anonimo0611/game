@@ -67,12 +67,12 @@ class Player extends PacMan {
 		if (!this.closed && !this.hidden) {
 			this.#tunEntry.update()
 			this.#sinceLastEating += Game.interval
-			this.#update(this.speed+.5|0)
+			this.#moveSteps(this.speed+.5|0)
 		}
 		if (!State.isInGame)
 			this.keepInsideBoard()
 	}
-	#update(steps=1) {
+	#moveSteps(steps=1) {
 		for (let i=0; i<steps; i++) {
 			this.#eatDot(this.tileIdx)
 			const spd = this.speed/steps
