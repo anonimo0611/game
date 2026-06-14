@@ -8,7 +8,7 @@ function cherry(ctx) {
 		// red fruit
 		ctx.fillCircle(2.5, 2.5, 3, '#F00')
 		ctx.save()
- 		ctx.globalCompositeOperation = 'destination-out'
+		ctx.globalCompositeOperation = 'destination-out'
 		ctx.strokeCircle(2.5, 2.5, 3, undefined, 0.5)
 		ctx.restore()
 
@@ -154,23 +154,23 @@ function gala(ctx) {
 		// yellow body
 		ctx.save()
 		ctx.scale(scaleX, 1)
-		ctx.fillPolygon(yellow,[0,-2.6],[4.9,-2.4],[4.6,-.5],[2,1.6],[1.3,1],[0,1])
+		ctx.fillPolygon(yellow,[0,-3],[4.9,-2],[4.6,-.5],[2,1.6],[1.3,1],[0,1])
 		// blue wings
-		ctx.fillPolygon('#0AF',[4.6,-4.2],[6,-4.2],[6,.6],[1.6,4],[1.6,2],[4.6,-.5])
+		ctx.fillPolygon('#0AF',[4.6,-4.3],[6,-4.3],[6,.6],[1.6,4],[1.6,2],[4.6,-.5])
 		ctx.restore()
 	}
 	// yellow tail
 	ctx.lineWidth   = 1.3
 	ctx.strokeStyle = yellow
-	ctx.strokeLine(0, 0, 0, 6)
+	ctx.strokeLine(0, 0, 0, 6.3)
 
 	// red arrow head
 	ctx.beginPath()
 	for (const scaleX of [1,-1]) {
 		ctx.scale(scaleX, 1)
-		ctx.setLinePath([0,-5.1],[4,-1.7],[1.3,-2.1])
-		ctx.quadraticCurveTo(1, -2.1, 1, -1.8)
-		ctx.quadraticCurveTo(0.4, 0.6, 0, 0.6)
+		ctx.setLinePath([0,-5.4],[4,-2],[1.3,-2.4])
+		ctx.quadraticCurveTo(1, -2.4, 1, -2.1)
+		ctx.quadraticCurveTo(0.4, 0.3, 0, 0.3)
 	}
 	ctx.fillStyle = '#FF3401'
 	ctx.fill()
