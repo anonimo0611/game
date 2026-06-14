@@ -126,8 +126,8 @@ const [Cols,Rows]= GridSize
 	}
 	draw = ()=> {
 		ctx.save()
-		ctx.translate(GAP, GAP/2)
 		ctx.clear()
+		ctx.translate(GAP, GAP/2)
 		this.#drawGridLines()
 		this.#drawFruits()
 		this.#drawGhosts()
