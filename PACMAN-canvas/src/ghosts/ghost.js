@@ -222,15 +222,15 @@ export class Ghost extends Actor {
 		 || !circleCollision(this, pos, radius))
 			return false
 		this.isFrightened
-			? this.#onBitten(this, release)
+			? this.#onBitten(this.center, release)
 			: Maze.dotsLeft > 0 && this.#onPacCaught()
 		return true
 	}
-	#onBitten({center:pos}=this, cb=()=>{}) {
-		this.state.setBitten()
+	#onBitten(pos=Vec2.Zero, cb=()=>{}) {
 		this.#frightened = false
+		this.state.setBitten()
 		Sound.playBitesGhost()
-		Sys.PtsMgr.set({cb,key:Ghosts,pos,frozen:true})
+		Sys.PtsMgr.set({key:Ghosts,frozen:true,pos,cb})
 	}
 	#onPacCaught() {
 		Sound.stopLoops()
