@@ -5,19 +5,18 @@ import {State}   from '../state.js'
 import {Cfg}     from '../control.js'
 import {Maze}    from '../maze.js'
 import  Sprite   from '../sprites/ghost.js'
-import {PtsMgr}  from '../points.js'
-import {PathMgr} from './paths.js'
 import * as Sys  from './_system.js'
+import {Spd,Evt} from './_system.js'
 import {Actor,player,Ghosts} from '../actors.js'
 
 /**@type {readonly Direction[]}*/
-const TurnPriority  = [U,L,D,R]
+const TurnPriority = [U,L,D,R]
 
 export class Ghost extends Actor {
 	/** @readonly */type
 	/** @readonly */init
 	/** @readonly */state
-	/** @readonly */path   = new PathMgr()
+	/** @readonly */path   = new Sys.PathMgr()
 	/** @readonly */sprite = new Sprite(Fg,T*2)
 
 	#fleeTmr    = -1
@@ -36,11 +35,11 @@ export class Ghost extends Actor {
 		this.init  = freeze({align,x:col*T})
 		this.state = Sys.createState(this)
 		$(this).on({
-		 [Sys.Evt.Ready]:    ()=> this.fadeSpr  = Fade.in(),
-		 [Sys.Evt.RoundEnds]:()=> this.fadeSpr  = Fade.out(),
-		 [Sys.Evt.Reverse]:  ()=> this.#revSig  = true,
-		 [Sys.Evt.FleeStart]:()=> this.#fleeTmr = Sys.FLEE_TIME,
-		 [Sys.Evt.Frighten]: (_, on=true)=> this.#frighten(on),
+		 [Evt.Ready]:    ()=> this.fadeSpr  = Fade.in(),
+		 [Evt.RoundEnds]:()=> this.fadeSpr  = Fade.out(),
+		 [Evt.Reverse]:  ()=> this.#revSig  = true,
+		 [Evt.FleeStart]:()=> this.#fleeTmr = Sys.FLEE_TIME,
+		 [Evt.Frighten]: (_, on=true)=> this.#frighten(on),
 		})
 	}
 	get animIdx()      {return Ghosts.animIndex}
@@ -53,7 +52,7 @@ export class Ghost extends Actor {
 
 	// Getters in this section can be overridden.
 	get chaseOffset()  {return 0}
-	get chaseSpeed()   {return Sys.Speed.Base}
+	get chaseSpeed()   {return Spd.Base}
 	get chasePos()     {return player.center}
 	get chasingTile()  {return this.chasePos.divInt(T)}
 	get scatterTile()  {return Vec2.Zero}
@@ -69,20 +68,19 @@ export class Ghost extends Actor {
 				? this.scatterTile
 				: this.chasingTile
 	}
-	getTargetTile(tile=this.tile) {
-		const {baseTargetTile}= this
-		return Maze.getGhostExitTile({baseTargetTile,tile})
-	}
 	get speed() {
 		return function(g,{state:s}=g) {
-			if (s.isIdle)       return Sys.Speed.Idle
-			if (s.isGoingOut)   return Sys.Speed.GoOut
-			if (g.isEscaping)   return Sys.Speed.Escape
-			if (g.inTunSide)    return Sys.Speed.InTunnel
-			if (g.isFrightened) return Sys.Speed.Fright
-			if (g.isScattering) return Sys.Speed.Base
+			if (s.isIdle)       return Spd.Idle
+			if (s.isGoingOut)   return Spd.GoOut
+			if (g.isEscaping)   return Spd.Escape
+			if (g.inTunSide)    return Spd.InTunnel
+			if (g.isFrightened) return Spd.Fright
+			if (g.isScattering) return Spd.Base
 			return g.chaseSpeed
 		}(this) * Game.moveSpeed
+	}
+	getTargetTile(tile=this.tile) {
+		return Maze.getGhostExitTile(this, tile)
 	}
 	draw() {
 		if (State.isNewGame) return
@@ -229,10 +227,10 @@ export class Ghost extends Actor {
 		return true
 	}
 	#onBitten(cb=()=>{}) {
-		Sound.playBitesGhost()
 		this.#frightened = false
 		this.state.setBitten()
-		PtsMgr.set({key:Ghosts, pos:this.center, frozen:true, cb})
+		Sound.playBitesGhost()
+		Sys.PtsMgr.set({key:Ghosts, pos:this.center, frozen:true, cb})
 	}
 	#onPacCaught() {
 		Sound.stopLoops()

@@ -12,12 +12,13 @@ export const Message = new class MessageManager {
 		{ctx=Fg, scaleX=1, face='Atari', size=T, style=''}={}
 	) {
 		ctx.save()
+		ctx.translate(col*T+2, row*T+2)
 		ctx.scale(scaleX, 1)
 		ctx.textBaseline = 'top'
 		ctx.font = `${style} ${size}px "${face}"`
 		ctx.fillStyle = color || 'white'
 		String(text).split('\n').forEach((txt,i)=>
-			ctx.fillText(txt, col*T+2, row*T+2 + size*i))
+			ctx.fillText(txt, 0, size*i))
 		ctx.restore()
 	}
 	#drawPausedText() {

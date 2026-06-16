@@ -1,19 +1,19 @@
-import _State from '../_lib/state.js'
+import {AState} from '../_lib/state.js'
 
 /**
  @typedef {typeof States[number]} StateType
  @typedef {`_${Exclude<StateType,'Title'>}`} Underscored
 */
-export const States = /**@type {const}*/([
+const States = /**@type {const}*/([
 	'Title','Attract','NewGame','NewLevel','Ready','InGame','RoundEnds',
 	'Cleared','PacDying','Flashing','Cutscene','GameOver','Quit'
 ])
 
 /**
- @extends {_State<StateType,globalThis>}
+ @extends {AState<StateType,globalThis>}
  @typedef {StateDef.Fluent<GameState,StateType>} IGameState
 */
-class GameState extends _State {
+class GameState extends AState {
 	constructor() {super(globalThis, States)}
 	get isStarting() {return State.isNewGame || State.isReady}
 	get isDemoMode() {return State.isAttract || State.isCutscene}

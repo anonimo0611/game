@@ -1,6 +1,6 @@
 import {Cursor} from '../_lib/mouse.js'
 import {Sound}  from '../_snd/sound.js'
-import  Speed   from './speed.js'
+import {Speed}  from './speed.js'
 import {Menu}   from './ui.js'
 import {Scene}  from './scenes/scene.js'
 import {State}  from './state.js'

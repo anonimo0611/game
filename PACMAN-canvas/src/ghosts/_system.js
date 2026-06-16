@@ -1,7 +1,7 @@
 import {Sound}   from '../../_snd/sound.js'
-import _State    from '../../_lib/state.js'
-import _Speed    from '../speed.js'
+import {AState}  from '../../_lib/state.js'
 import {Game}    from '../_main.js'
+import {GhsSpd}  from '../speed.js'
 import {State}   from '../state.js'
 import {Cfg}     from '../control.js'
 import {Maze}    from '../maze.js'
@@ -12,7 +12,7 @@ import {Ghost,player,onPlayerDotEaten} from '../actors.js'
 
 const GhostList = /**@type {Ghost[]}*/([])
 
-export const{Ghost:Speed}= _Speed
+export {PathMgr,PtsMgr,GhsSpd as Spd}
 export const Evt = asEnum('Ready','RoundEnds','Reverse','Frighten','FleeStart')
 
 /** The fleeing time(ms) from the player when Frightened Time is 0. */
@@ -49,9 +49,9 @@ export const [StateType,createState] = function() {
 	/**
 	 @typedef {typeof States[number]} StateType
 	 @typedef {StateDef.Fluent<State,StateType>} IState
-	 @extends {_State<StateType,Ghost>}
+	 @extends {AState<StateType,Ghost>}
 	*/
-	class State extends _State {
+	class State extends AState {
 		constructor(/**@type {Ghost}*/g) {
 			super(g, States)
 			this.set(g.inHouse? 'Idle':'Walking')
@@ -247,7 +247,7 @@ const CruiseElroy = function() {
 	return {
 		get part()  {return currentPart},
 		get angry() {return angry()},
-		get speed() {return Speed.Base * Accelerations[currentPart]},
+		get speed() {return GhsSpd.Base * Accelerations[currentPart]},
 	}
 }()
 
@@ -268,8 +268,13 @@ const Fright = function() {
 			session = (isOn? this : null)
 			$(GhostList)
 				.trigger(Evt.Frighten, isOn)
-				.offon(StateType.Bitten, ()=> this.#caught++, isOn)
+				.offon(StateType.Bitten, this.#onBitten, isOn)
 			Sound.toggleFrightMode(isOn)
+		}
+		#onBitten = (_={}, {pos={x:0,y:0},cb=()=>{}})=> {
+			this.#caught++
+			Sound.playBitesGhost()
+			PtsMgr.set({key:Ghosts, pos, frozen:true, cb})
 		}
 		update() {
 			if (State.isInGame && !Timer.frozen) {

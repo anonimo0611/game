@@ -1,12 +1,10 @@
 import {Dir}   from '../../_lib/direction.js';
 import {Game}  from '../_main.js'
-import  Speed  from '../speed.js';
 import {State} from '../state.js'
 import {Ctrl}  from '../control.js';
 import {Maze}  from '../maze.js'
-import {Actor,Ghosts} from '../actors.js';
-
-const {Pacman:Spd}= Speed
+import {Actor,Ghosts}  from '../actors.js';
+import {PacSpd as Spd} from '../speed.js';
 
 class TurnState {
 	turning  = false
@@ -72,8 +70,8 @@ export class Mover {
 		const {state,actor}= this
 		if (state.turning && actor.passedTileCenter) {
 			state.nextDir  = state.nextTurn
-			state.turning  = false
 			state.nextTurn = null
+			state.turning  = false
 			actor.updateDirection()
 		}
 	}

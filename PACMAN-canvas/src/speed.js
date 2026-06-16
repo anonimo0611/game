@@ -2,7 +2,7 @@ const BASE_P = TILE_SIZE / 4.5
 const BASE_G = BASE_P * 1.07
 
 import {Game} from './_main.js'
-export default /**@type {const}*/({
+export const Speed = /**@type {const}*/({
 	StepPerLevel: 0.01,
 	Pacman: {
 		Base:      BASE_P,
@@ -20,3 +20,4 @@ export default /**@type {const}*/({
 		Escape:   BASE_G * 1.40,
 	},
 })
+,{Ghost:GhsSpd,Pacman:PacSpd}= Speed
