@@ -268,13 +268,8 @@ const Fright = function() {
 			session = (isOn? this : null)
 			$(GhostList)
 				.trigger(Evt.Frighten, isOn)
-				.offon(StateType.Bitten, this.#onBitten, isOn)
+				.offon(StateType.Bitten, ()=> this.#caught++, isOn)
 			Sound.toggleFrightMode(isOn)
-		}
-		#onBitten = (_={}, {pos={x:0,y:0},cb=()=>{}})=> {
-			this.#caught++
-			Sound.playBitesGhost()
-			PtsMgr.set({key:Ghosts, pos, frozen:true, cb})
 		}
 		update() {
 			if (State.isInGame && !Timer.frozen) {
