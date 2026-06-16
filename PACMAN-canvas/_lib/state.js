@@ -2,7 +2,7 @@
  @template {string} S
  @template {object} Owner
 */
-export default class StateBase {
+export class AState {
 	#owner
 	#last     = /**@type {S}*/('')
 	#curr     = /**@type {S}*/('')
