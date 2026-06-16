@@ -19,5 +19,4 @@ export const Speed = /**@type {const}*/({
 		InTunnel: BASE_G * 0.60,
 		Escape:   BASE_G * 1.40,
 	},
-})
-,{Ghost:GhsSpd,Pacman:PacSpd}= Speed
+}), {Ghost:GhsSpd, Pacman:PacSpd}= Speed
