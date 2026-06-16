@@ -1,12 +1,12 @@
-import {Sound}   from '../../_snd/sound.js'
-import {Dir}     from '../../_lib/direction.js'
-import {Game}    from '../_main.js'
-import {State}   from '../state.js'
-import {Cfg}     from '../control.js'
-import {Maze}    from '../maze.js'
-import  Sprite   from '../sprites/ghost.js'
-import * as Sys  from './_system.js'
-import {Spd,Evt} from './_system.js'
+import {Sound}  from '../../_snd/sound.js'
+import {Dir}    from '../../_lib/direction.js'
+import {Game}   from '../_main.js'
+import {State}  from '../state.js'
+import {Cfg}    from '../control.js'
+import {Maze}   from '../maze.js'
+import  Sprite  from '../sprites/ghost.js'
+import * as Sys from './_system.js'
+import {Spd,Evt,PtsMgr} from './_system.js'
 import {Actor,player,Ghosts} from '../actors.js'
 
 /**@type {readonly Direction[]}*/
@@ -117,7 +117,7 @@ export class Ghost extends Actor {
 			: this.#enterHouse()
 	}
 	#idleInHouse({orient,center:{y:cy}}=this) {
-		!Cfg.alwaysChase &&
+		if (!Cfg.alwaysChase)
 			Sys.DotCounter.releaseIfReady(this)
 		!this.state.isGoingOut && this.move(
 			(cy > Maze.House.MID_Y - (T*0.6) && orient != D)? U:
@@ -230,7 +230,7 @@ export class Ghost extends Actor {
 		this.#frightened = false
 		this.state.setBitten()
 		Sound.playBitesGhost()
-		Sys.PtsMgr.set({key:Ghosts,frozen:true,pos,cb})
+		PtsMgr.set({key:Ghosts,frozen:true,pos,cb})
 	}
 	#onPacCaught() {
 		Sound.stopLoops()

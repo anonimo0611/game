@@ -8,7 +8,7 @@ import {Maze}    from '../maze.js'
 import {PtsMgr}  from '../points.js'
 import {PathMgr} from './paths.js'
 import {Targets} from './targets.js'
-import {Ghost,player,onPlayerDotEaten} from '../actors.js'
+import {Ghost,player,onPlayerDotEaten,} from '../actors.js'
 
 const GhostList = /**@type {Ghost[]}*/([])
 
