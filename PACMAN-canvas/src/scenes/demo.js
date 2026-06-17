@@ -1,4 +1,3 @@
-import {Window}   from '../ui.js'
 import {Ctrl}     from '../control.js'
 import {State}    from '../state.js'
 import {Attract}  from '../demo/attract.js'
@@ -19,7 +18,7 @@ const DemoScene = {
 	/** Attract mode will begin after a period of inactivity. */
 	updateTimer() {
 		if (!State.isTitle) return
-		!Window.isActive || Ctrl.isCaptured
+		!Ctrl.window.isActive || Ctrl.isCaptured
 			? Ticker.resetCount()
 			: Ticker.elapsedTime > 1e3*30 // 30secs
 				&& State.setAttract()

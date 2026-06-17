@@ -24,7 +24,6 @@ export const Ctrl = new class Controller {
 	static setup() {
 		Ctrl.#restore()
 		Ctrl.#output()
-		Ctrl.#setupGrid()
 		Ctrl.#setupCtrls()
 		$win.on({keydown:Ctrl.#onKeydown})
 	}
@@ -37,8 +36,16 @@ export const Ctrl = new class Controller {
 	get isPractice()   {return Ctrl.usingCheats ||!Ctrl.isArcadeMode}
 	get isArcadeMode() {return Data.currentOnly == false && !Menu.Level.index}
 
+	/** @readonly */
+	window = function() {
+		let f = +document.hasFocus()
+		$win.on('blur', ()=> {f=0;Ctrl.#pause(!f)})
+		$win.on('focus',()=> {f=1;Ctrl.#pause(!f)})
+		return {get isActive() {return Boolean(f)}}
+	}()
+
 	/** @param {boolean} [force] */
-	pause(force) {
+	#pause(force) {
 		if (State.isTitle || State.isAttract) return
 		if (State.isInGame && force == false) return
 		Sound.pause( Ticker.pause(force) )
@@ -67,7 +74,7 @@ export const Ctrl = new class Controller {
 	}
 	#output() {
 		Ctrl.#save()
-		Ctrl.#toggleGrid()
+		Grid.canvas.style.opacity = String(+Data.showGridLines)
 		const spd = 'x'+Data.speed.toFixed(1), lh = 0.9
 		const opt = {ctx:HUD, size:T*0.68, scaleX:0.7, style:'bold'}
 		HUD.save()
@@ -97,41 +104,31 @@ export const Ctrl = new class Controller {
 			: State.isInGame && Ctrl.#quitConfirm()
 	}
 	#quitConfirm() {
-		!Ticker.paused && Ctrl.pause()
+		!Ticker.paused && Ctrl.#pause()
 		Confirm.open('Are you sure you want to quit the game?',
-			Ctrl.pause, ()=> State.setQuit(), 'Resume','Quit')
+			Ctrl.#pause, State.setQuit, 'Resume','Quit')
 	}
 	#onKeydown(/**@type {JQKeyboardEvent}*/e) {
 		if (keyRepeated(e) || Confirm.opened) return
 		switch(e.key) {
-		case 'Escape': return Ctrl.pause()
+		case 'Escape': return Ctrl.#pause()
 		case 'Delete': return Ctrl.#quit(e.ctrlKey)
 		default:
 			if (Ctrl.#anyFocused || !Sound.settled) return
 			if (Dir.from(e,{wasd:true}) || e.key == '\x20') {
 				State.isTitle && btns.start.click()
-				Ticker.paused && Ctrl.pause()
+				Ticker.paused && Ctrl.#pause()
 			}
 		}
 	}
-	#toggleGrid() {
-		Grid.canvas.style.opacity = String(+Data.showGridLines)
-	}
-	#setupGrid() {
-		Grid.beginPath()
-		for(let x=1; x<COLS; x++) Grid.setLinePath([T*x, 0],[T*x, BH])
-		for(let y=0; y<ROWS; y++) Grid.setLinePath([0, T*y],[BW, T*y])
-		Grid.strokeStyle = Color.GridLine
-		Grid.stroke()
-	}
-	#trackInputFocus() {
+	#observeFocusChange() {
 		$(document.body).on('focusin focusout', e=> {
 			const isStartBtn = (e.target == btns.start)
 			Ctrl.#anyFocused = (e.type == 'focusin') && !isStartBtn
 		})
 	}
 	#setupCtrls() {
-		Ctrl.#trackInputFocus()
+		Ctrl.#observeFocusChange()
 		getVals(Menu).forEach(m=> m.onChange(Ctrl.#save))
 		$('input')   .on({input:Ctrl.#output})
 		$(btns.reset).on({click:Ctrl.#reset})

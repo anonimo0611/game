@@ -2,15 +2,13 @@ export const Form   = document.forms[0]
 export const powChk = reqInput('#powEnabled')
 export const lives  = reqInput('#initialLives')
 
-//---- Window focused ----
-
-import {Ctrl} from './control.js'
-export const Window = function() {
-	let f = 1
-	$win.on('blur', ()=> {f=0,Ctrl.pause(!f)})
-	$win.on('focus',()=> {f=1,Ctrl.pause(!f)})
-	return {get isActive() {return !!f}}
-}()
+{//---- Grid lines ----
+	Grid.beginPath()
+	for(let x=1; x<COLS; x++) Grid.setLinePath([T*x, 0],[T*x, BH])
+	for(let y=0; y<ROWS; y++) Grid.setLinePath([0, T*y],[BW, T*y])
+	Grid.strokeStyle = Color.GridLine
+	Grid.stroke()
+}
 
 //---- Fit to viewport ----
 
