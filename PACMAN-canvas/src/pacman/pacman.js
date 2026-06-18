@@ -92,9 +92,9 @@ class Player extends PacMan {
 			: EventBus.trigger(EATEN_EV)
 	}
 	#playEatingSE() { 
-		const SEIndex  = (this.#eatingSEIndex ^= 1)? 1 : 0
+		const seIndex  = (this.#eatingSEIndex ^= 1)? 1 : 0
 		const duration = (T/this.speed)*Ticker.Interval*.5
-		Sound.play(`EatsDot${SEIndex}`, {duration})
+		Sound.play(`EatsDot${seIndex}`, {duration})
 	}
 }
 export let player = new Player
