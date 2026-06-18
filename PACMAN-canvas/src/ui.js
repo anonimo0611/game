@@ -2,7 +2,7 @@ export const Form   = document.forms[0]
 export const powChk = reqInput('#powEnabled')
 export const lives  = reqInput('#initialLives')
 
-{//---- Grid lines ----
+{// Set grid lines
 	Grid.beginPath()
 	for(let x=1; x<COLS; x++) Grid.setLinePath([T*x, 0],[T*x, BH])
 	for(let y=0; y<ROWS; y++) Grid.setLinePath([0, T*y],[BW, T*y])
