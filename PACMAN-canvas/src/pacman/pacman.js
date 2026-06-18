@@ -27,7 +27,7 @@ class Player extends PacMan {
 		!State.wasNewGame && (player = new Player)
 		!State.isTitle && (player.fadeSpr = Fade.in())
 	}
-	#eatSEIndex = 0
+	#eatingSEToggle  = 0
 	#sinceLastEating = 0
 
 	/** @type {Mover} */
@@ -82,7 +82,7 @@ class Player extends PacMan {
 	#eatDot(tileIdx=-1) {
 		if (!Maze.hasDot(tileIdx))
 			return
-		this.#playEatSE()
+		this.#playEatingSE()
 		this.resetTimer()
 		Maze.hasPow(tileIdx)
 			? (Score.add(POW_PTS), Ghosts.frighten())
@@ -91,11 +91,11 @@ class Player extends PacMan {
 			? State.setRoundEnds()
 			: EventBus.trigger(EATEN_EV)
 	}
-	#playEatSE() {
+	#playEatingSE() {
 		const duration = (T/this.speed)*Ticker.Interval*.5
-		;(this.#eatSEIndex ^= 1)
-			? Sound.playEatDot0({duration})
-			: Sound.playEatDot1({duration})
+		;(this.#eatingSEToggle ^= 1)
+			? Sound.playEatsDot0({duration})
+			: Sound.playEatsDot1({duration})
 	}
 }
 export let player = new Player

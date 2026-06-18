@@ -44,7 +44,7 @@ export const Fruit = new class FruitManager {
 	#onEaten() {
 		this.#resetTarget()
 		Timer.cancel(this)
-		Sound.playEatenFruit()
+		Sound.playEatsFruit()
 		PtsMgr.set({key:this, dur:2e3, pos:TargetPos})
 	}
 	#onDotEaten = ()=> {
