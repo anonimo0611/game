@@ -1,8 +1,11 @@
-import {Actor}  from './actor.js'
+export {Actor}  from './actor.js'
+export {Ghost}  from './ghosts/ghost.js'
 import {Ghosts} from './ghosts/_system.js'
-import {Ghost}  from './ghosts/ghost.js'
-import {PacMan,player,onPlayerDotEaten} from './pacman/pacman.js'
-export {Actor,PacMan,Ghost,player,onPlayerDotEaten,Ghosts}
+import {PacMan} from './pacman/pacman.js'
+import {player} from './pacman/pacman.js'
+export {onPlayerDotEaten} from './pacman/pacman.js'
+
+export {Ghosts,PacMan,player}
 export const Actors = {
     /** @param {PacMan} pacman */
     update(pacman=player) {
