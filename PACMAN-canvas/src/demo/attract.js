@@ -39,12 +39,13 @@ export class Attract {
 			et > t+10 && drawText(col2, row, Color.GhostBodies[i], txt2)
 		})
 		if (et > 85) {
-			[[23, DOT_PTS, +true],
-			 [25, POW_PTS, +this.subAct.pow.show],
-			].forEach(([row,pts,showDot],i)=> {
-				drawDot(Fg, 10, row, i == 1, !!showDot)
-				drawText(12.0, row, null, pts)
-				drawText(14.3, row, null,'PTS', Small)
+			/**@type {const}*/([
+			 [23, DOT_PTS, false, true],
+			 [25, POW_PTS, true,  this.subAct.pow.show]]
+			).forEach(([row,pts,isPow,showDot])=> {
+				drawDot(Fg,10, row, isPow, showDot)
+				drawText(12.0, row, null,  pts)
+				drawText(14.3, row, null, 'PTS', Small)
 			})
 		}
 		if (et > 90) {
