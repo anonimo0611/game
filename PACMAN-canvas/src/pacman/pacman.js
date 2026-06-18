@@ -27,7 +27,7 @@ class Player extends PacMan {
 		!State.wasNewGame && (player = new Player)
 		!State.isTitle && (player.fadeSpr = Fade.in())
 	}
-	#eatingSEToggle  = 0
+	#eatingSEIndex   = 1
 	#sinceLastEating = 0
 
 	/** @type {Mover} */
@@ -91,11 +91,10 @@ class Player extends PacMan {
 			? State.setRoundEnds()
 			: EventBus.trigger(EATEN_EV)
 	}
-	#playEatingSE() {
+	#playEatingSE() { 
+		const SEIndex  = (this.#eatingSEIndex ^= 1)? 1 : 0
 		const duration = (T/this.speed)*Ticker.Interval*.5
-		;(this.#eatingSEToggle ^= 1)
-			? Sound.playEatsDot0({duration})
-			: Sound.playEatsDot1({duration})
+		Sound.play(`EatsDot${SEIndex}`, {duration})
 	}
 }
 export let player = new Player
