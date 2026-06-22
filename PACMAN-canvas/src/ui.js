@@ -57,7 +57,7 @@ $('body').on('keydown pointerdown', e=> {
 })
 $('.panelBtn').on('keydown pointerdown', e=> {
 	if (e.key && !isActionKey(e)) return
-	const btn = reqButton(e.target)
+	const btn = reqButton(e.currentTarget)
 	const opn = $(btn).hasClass('opened')
 	$('.panel-ui.opened').toggleClass('opened')
 	$(btn).add(btn.value).toggleClass('opened',!opn)

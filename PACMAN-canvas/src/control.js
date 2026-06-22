@@ -41,7 +41,7 @@ export const Env = new class Environment {
 		let f = +document.hasFocus()
 		$win.on('blur', ()=> {f=0;Env.#pause(!f)})
 		$win.on('focus',()=> {f=1;Env.#pause(!f)})
-		return {get isActive() {return Boolean(f)}}
+		return {get isActive(){return Boolean(f)}}
 	}()
 
 	/** @param {boolean} [force] */
@@ -123,9 +123,8 @@ export const Env = new class Environment {
 	}
 	#observeFocusChange() {
 		$(document.body).on('focusin focusout', e=> {
-			Env.#anyFocused =
-				(e.type   == 'focusin') &&
-				(e.target != btns.start)
+			Env.#anyFocused = (e.type == 'focusin')
+				&& (e.currentTarget != btns.start)
 		})
 	}
 	#setupCtrls() {
