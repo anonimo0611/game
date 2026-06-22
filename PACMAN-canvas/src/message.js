@@ -1,14 +1,14 @@
 import {Confirm} from '../_lib/confirm.js'
 import {State}   from './state.js'
 
-export const Message = new class MessageManager {
+export const Message = new class MessageView {
 	/**
 	 @param {number} col
 	 @param {number} row
 	 @param {?CvsStyle} color
-	 @param {string|number} text
+	 @param {string|number} content
 	*/
-	drawText(col, row, color, text,
+	drawText(col, row, color, content,
 		{ctx=Fg, scaleX=1, face='Atari', size=T, style=''}={}
 	) {
 		ctx.save()
@@ -17,7 +17,7 @@ export const Message = new class MessageManager {
 		ctx.textBaseline = 'top'
 		ctx.font = `${style} ${size}px "${face}"`
 		ctx.fillStyle = color || 'white'
-		String(text).split('\n').forEach((txt,i)=>
+		String(content).split('\n').forEach((txt,i)=>
 			ctx.fillText(txt, 0, size*i))
 		ctx.restore()
 	}

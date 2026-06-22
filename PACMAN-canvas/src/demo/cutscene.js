@@ -1,14 +1,14 @@
 import {Sound}   from '../../_snd/sound.js'
 import {Game}    from '../_main.js'
 import {State}   from '../state.js'
-import {Ctrl}    from '../control.js'
-import {Fruit}   from '../fruit.js'
+import {Env}     from '../control.js'
+import {Fruits}  from '../fruits.js'
 import * as Snag from '../sprites/snag.js'
 import {PacMan,Ghosts,Ghost} from '../actors.js'
 
 const ACTORS_Y = BH/2
 const sceneNum = (lv=0)=>
-	!Ctrl.isPractice && ({2:1, 5:2, 9:3}[lv]) || -1
+	!Env.isPractice && ({2:1, 5:2, 9:3}[lv]) || -1
 
 export class Cutscene {
 	static {State.on({Cutscene:this.#begin})}
@@ -50,7 +50,7 @@ export class Cutscene {
 	}
 	draw() {
 		State.wasFlashing
-			&& Fruit.drawLevelCounter()
+			&& Fruits.drawLevelCounter()
 	}
 	end() {
 		State.wasTitle

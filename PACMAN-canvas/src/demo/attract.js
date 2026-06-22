@@ -1,6 +1,6 @@
 ﻿import {State}    from '../state.js'
-import {Ctrl}     from '../control.js'
-import {Fruit}    from '../fruit.js'
+import {Env}      from '../control.js'
+import {Fruits}   from '../fruits.js'
 import {Score}    from '../score.js'
 import  GhostSpr  from '../sprites/ghost.js'
 import {drawText} from '../message.js'
@@ -49,7 +49,7 @@ export class Attract {
 			})
 		}
 		if (et > 90) {
-			const {extendScore}= Ctrl
+			const {extendScore}= Env
 			if (this.subAct.outward) {
 				drawDot(Fg, 4, 19, true, this.subAct.pow.show)
 			}
@@ -60,7 +60,7 @@ export class Attract {
 			}
 			this.subAct.draw()
 		}
-		Fruit.drawLevelCounter()
+		Fruits.drawLevelCounter()
 	}
 	drawGhostOnTable(type=0, row=0) {
 		const center = Vec2.new(T*5, T*row).add(T/2)

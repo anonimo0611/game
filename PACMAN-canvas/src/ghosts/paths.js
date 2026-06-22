@@ -8,7 +8,7 @@ const PATH_STEPS  = 18
 const LINE_WIDTH  = T/5
 const PathOffsets = freeze([-2,-1,+1,+2])
 
-export class PathMgr {
+export class Paths {
 	static get isActive() {
 		return Cfg.showPaths && State.isInGame
 	}

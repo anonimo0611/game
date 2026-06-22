@@ -2,7 +2,7 @@ import {Game}   from './_main.js'
 import {State}  from './state.js'
 import {Score}  from './score.js'
 import {Ghosts} from './ghosts/_system.js'
-import {Fruit}  from './fruit.js'
+import {Fruits} from './fruits.js'
 import {cache}  from './sprites/points.js'
 
 const FADE_DUR = 300
@@ -13,7 +13,7 @@ export const PtsMgr = new class PointsManager {
 	/** @param {FloatingPtsData} data */
 	set(data) {new FloatingPts(data)}
 	update()       {PopupMap.forEach(v=> v.update())}
-	drawFruitPts() {PopupMap.get(Fruit) ?.draw()}
+	drawFruitPts() {PopupMap.get(Fruits) ?.draw()}
 	drawGhostPts() {PopupMap.get(Ghosts)?.draw()}
 }
 class FloatingPts {

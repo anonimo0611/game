@@ -1,6 +1,6 @@
 import {Sound}    from '../../_snd/sound.js'
 import {Game}     from '../_main.js'
-import {Ctrl,Cfg} from '../control.js'
+import {Env,Cfg}  from '../control.js'
 import {State}    from '../state.js'
 import {Score}    from '../score.js'
 import {Maze}     from '../maze.js'
@@ -38,7 +38,7 @@ class Player extends PacMan {
 	get speed()    {return this.#mov.speed}
 	get onWall()   {return this.#mov.onWall}
 	get tunEntry() {return this.#tunEntry}
-	get maxAlpha() {return Ctrl.semiTransPac? Actor.CHEAT_ALPHA:1}
+	get maxAlpha() {return Env.semiTransPac? Actor.CHEAT_ALPHA:1}
 	get closed()   {return State.isInGame == false}
 	get timeSinceLastEating() {return this.#sinceLastEating}
 
@@ -91,7 +91,7 @@ class Player extends PacMan {
 			? State.setRoundEnds()
 			: EventBus.trigger(EATEN_EV)
 	}
-	#playEatingSE() { 
+	#playEatingSE() {
 		const duration = (T/this.speed)*Ticker.Interval*.5
 		;(this.#eatingSEToggle ^= 1)
 			? Sound.playEatsDot0({duration})

@@ -8,7 +8,7 @@ import {Form,Menu,btns} from './ui.js'
 const SETTINGS_KEY = 'anopacman'
 const {InfoTexts:palette}= Color
 
-const Data = {
+const Ctl = {
 	speed:         1,
 	currentOnly:   false,
 	alwaysChase:   false,
@@ -19,28 +19,28 @@ const Data = {
 	showGridLines: false,
 }
 
-export const Ctrl = new class Controller {
+export const Env = new class Environment {
 	static {$(this.setup)}
 	static setup() {
-		Ctrl.#restore()
-		Ctrl.#output()
-		Ctrl.#setupCtrls()
-		$win.on({keydown:Ctrl.#onKeydown})
+		Env.#restore()
+		Env.#output()
+		Env.#setupCtrls()
+		$win.on({keydown:Env.#onKeydown})
 	}
 	#anyFocused = false
 	get extendScore()  {return +Menu.Extend.value}
-	get showTracking() {return Data.showTargets || Data.showPaths}
-	get semiTransPac() {return Data.invincible  || Data.showGridLines}
-	get usingCheats()  {return Data.invincible  || Data.speed<.7 || Ctrl.showTracking}
-	get isCaptured()   {return Ctrl.#anyFocused || Confirm.opened}
-	get isPractice()   {return Ctrl.usingCheats ||!Ctrl.isArcadeMode}
-	get isArcadeMode() {return Data.currentOnly == false && !Menu.Level.index}
+	get showTracking() {return Ctl.showTargets || Ctl.showPaths}
+	get semiTransPac() {return Ctl.invincible  || Ctl.showGridLines}
+	get usingCheats()  {return Ctl.invincible  || Ctl.speed<.7 || Env.showTracking}
+	get isCaptured()   {return Env.#anyFocused || Confirm.opened}
+	get isPractice()   {return Env.usingCheats ||!Env.isArcadeMode}
+	get isArcadeMode() {return Ctl.currentOnly == false && !Menu.Level.index}
 
 	/** @readonly */
 	window = function() {
 		let f = +document.hasFocus()
-		$win.on('blur', ()=> {f=0;Ctrl.#pause(!f)})
-		$win.on('focus',()=> {f=1;Ctrl.#pause(!f)})
+		$win.on('blur', ()=> {f=0;Env.#pause(!f)})
+		$win.on('focus',()=> {f=1;Env.#pause(!f)})
 		return {get isActive() {return Boolean(f)}}
 	}()
 
@@ -51,7 +51,7 @@ export const Ctrl = new class Controller {
 		Sound.pause( Ticker.pause(force) )
 	}
 	#save() {
-		const data = /**@type {any}*/(Data)
+		const data = /**@type {any}*/(Ctl)
 		getKeys(Menu).forEach(id=> data[id] = Menu[id].index)
 		document.querySelectorAll('input').forEach(input=> {
 			switch(input.type) {
@@ -73,66 +73,67 @@ export const Ctrl = new class Controller {
 		})
 	}
 	#output() {
-		Ctrl.#save()
-		Grid.canvas.style.opacity = String(+Data.showGridLines)
-		const spd = 'x'+Data.speed.toFixed(1), lh = 0.9
+		Env.#save()
+		Grid.canvas.style.opacity = String(+Ctl.showGridLines)
+		const spd = 'x'+Ctl.speed.toFixed(1), lh = 0.9
 		const opt = {ctx:HUD, size:T*0.68, scaleX:0.7, style:'bold'}
 		HUD.save()
 		HUD.translate(T*0.1, T*17.25)
 		HUD.clearRect(0, 0, BW, T*3)
-		if (spd != 'x1.0' || Data.invincible || Data.showTargets) {
+		if (spd != 'x1.0' || Ctl.invincible || Ctl.showTargets) {
 			drawText(0, lh*0, palette[+(spd != 'x1.0') ], 'Speed'+spd, opt)
-			drawText(0, lh*1, palette[+Data.invincible ], 'Invincible',opt)
-			drawText(0, lh*2, palette[+Data.showTargets], 'Show Tgts', opt)
+			drawText(0, lh*1, palette[+Ctl.invincible ], 'Invincible',opt)
+			drawText(0, lh*2, palette[+Ctl.showTargets], 'Show Tgts', opt)
 		}
-		if (Data.showPaths || Data.unrestricted) {
+		if (Ctl.showPaths || Ctl.unrestricted) {
 			HUD.translate(T*(COLS-5), 0)
-			drawText(0,  0, palette[+Data.showPaths],   'Show Paths', opt)
-			drawText(0, lh, palette[+Data.unrestricted],'Ghosts Un-\nrestricted', opt)
+			drawText(0,  0, palette[+Ctl.showPaths],   'Show Paths', opt)
+			drawText(0, lh, palette[+Ctl.unrestricted],'Ghosts Un-\nrestricted', opt)
 		}
 		HUD.restore()
 	}
 	#reset() {
 		Form.reset()
-		Ctrl.#output()
-		Ctrl.#restore()
+		Env.#output()
+		Env.#restore()
 	}
 	#quit(noConfirm=false) {
 		if (State.isTitle) return
 		noConfirm
 			? State.setQuit()
-			: State.isInGame && Ctrl.#quitConfirm()
+			: State.isInGame && Env.#quitConfirm()
 	}
 	#quitConfirm() {
-		!Ticker.paused && Ctrl.#pause()
+		!Ticker.paused && Env.#pause()
 		Confirm.open('Are you sure you want to quit the game?',
-			Ctrl.#pause, State.setQuit, 'Resume','Quit')
+			Env.#pause, State.setQuit, 'Resume','Quit')
 	}
 	#onKeydown(/**@type {JQKeyboardEvent}*/e) {
 		if (keyRepeated(e) || Confirm.opened) return
 		switch(e.key) {
-		case 'Escape': return Ctrl.#pause()
-		case 'Delete': return Ctrl.#quit(e.ctrlKey)
+		case 'Escape': return Env.#pause()
+		case 'Delete': return Env.#quit(e.ctrlKey)
 		default:
-			if (Ctrl.#anyFocused || !Sound.settled) return
+			if (Env.#anyFocused || !Sound.settled) return
 			if (Dir.from(e,{wasd:true}) || e.key == '\x20') {
 				State.isTitle && btns.start.click()
-				Ticker.paused && Ctrl.#pause()
+				Ticker.paused && Env.#pause()
 			}
 		}
 	}
 	#observeFocusChange() {
 		$(document.body).on('focusin focusout', e=> {
-			const isStartBtn = (e.target == btns.start)
-			Ctrl.#anyFocused = (e.type == 'focusin') && !isStartBtn
+			Env.#anyFocused =
+				(e.type   == 'focusin') &&
+				(e.target != btns.start)
 		})
 	}
 	#setupCtrls() {
-		Ctrl.#observeFocusChange()
-		getVals(Menu).forEach(m=> m.onChange(Ctrl.#save))
-		$('input')   .on({input:Ctrl.#output})
-		$(btns.reset).on({click:Ctrl.#reset})
+		Env.#observeFocusChange()
+		getVals(Menu).forEach(m=> m.onChange(Env.#save))
+		$('input')   .on({input:Env.#output})
+		$(btns.reset).on({click:Env.#reset})
 		$(btns.start).on({click:State.setNewGame})
 		$root.addClass('controller-settled')
 	}
-}, Cfg = /**@type {Readonly<typeof Data>}*/(Data)
+}, Cfg = /**@type {Readonly<typeof Ctl>}*/(Ctl)

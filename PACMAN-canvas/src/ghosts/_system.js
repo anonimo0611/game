@@ -6,13 +6,13 @@ import {State}   from '../state.js'
 import {Cfg}     from '../control.js'
 import {Maze}    from '../maze.js'
 import {PtsMgr}  from '../points.js'
-import {PathMgr} from './paths.js'
+import {Paths}   from './paths.js'
 import {Targets} from './targets.js'
 import {Ghost,player,onPlayerDotEaten,} from '../actors.js'
 
 const GhostList = /**@type {Ghost[]}*/([])
 
-export {PathMgr,PtsMgr,GhsSpd as Spd}
+export {Paths,PtsMgr,GhsSpd as Spd}
 export const Evt = asEnum('Ready','RoundEnds','Reverse','Frighten','FleeStart')
 
 /** The fleeing time(ms) from the player when Frightened Time is 0. */
@@ -64,7 +64,7 @@ export const [StateType,createState] = function() {
 	]
 }()
 
-export const Ghosts = new class GhostManager {
+export const Ghosts = new class GhostGroup {
 	static {$(this.setup)}
 	static setup() {
 		State.on({
@@ -125,14 +125,14 @@ export const Ghosts = new class GhostManager {
 	}
 	#updateGhosts() {
 		GhostList.forEach(g=> g.update())
-		PathMgr.update(GhostList)
+		Paths.update(GhostList)
 	}
 	drawBehind() {
 		this.#draw(false)
 	}
 	drawFront()  {
 		Targets.draw(GhostList)
-		PathMgr.draw(GhostList)
+		Paths.draw(GhostList)
 		this.#draw(true)
 		PtsMgr.drawGhostPts()
 	}

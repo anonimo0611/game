@@ -8,7 +8,7 @@ import {Lives}  from './lives.js'
 import {Cfg}    from './control.js'
 import {Wall}   from './sprites/wall.js'
 import {Maze}   from './maze.js'
-import {player} from './pacman/pacman.js'
+import {player} from './actors.js'
 
 export const Game = new class GameCore {
 	static {$(this.setup)}
@@ -72,6 +72,7 @@ export const Game = new class GameCore {
 		State.setInGame({delay:2200})
 	}
 	#onRoundEnd() {
+		Sound.stopLoops()
 		Maze.dotsLeft <= Maze.CLEAR_DOTS
 			? State.setCleared()
 			: State.setPacDying({delay:600})

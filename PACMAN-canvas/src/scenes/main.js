@@ -1,18 +1,18 @@
-import {Fruit}  from '../fruit.js'
+import {Fruits}  from '../fruits.js'
 import {Maze}   from '../maze.js'
 import {Score}  from '../score.js'
 import {Actors} from '../actors.js'
 
 export const MainScene = {
 	update() {
-		Fruit.update()
+		Fruits.update()
 		Maze.PowDots.update()
 		Actors.update()
 	},
 	draw() {
 		Score.draw()
 		Maze.PowDots.draw()
-		Fruit.drawTarget()
+		Fruits.drawTarget()
 		Actors.draw()
 	},
 }

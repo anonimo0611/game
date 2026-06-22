@@ -16,7 +16,7 @@ export class Ghost extends Actor {
 	/** @readonly */type
 	/** @readonly */init
 	/** @readonly */state
-	/** @readonly */path   = new Sys.PathMgr()
+	/** @readonly */path   = new Sys.Paths()
 	/** @readonly */sprite = new Sprite(Fg,T*2)
 
 	#fleeTmr    = -1

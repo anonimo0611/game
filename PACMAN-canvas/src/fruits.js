@@ -22,12 +22,12 @@ const LevelsRect = new Rect(T*2*6, BH-T*2, LEVEL_COLS*T*2, T*2).freeze()
 let showTgt = true
 let fadeTgt = /**@type {?Fade}*/(null)
 
-export const Fruit = new class FruitManager {
+export const Fruits = new class FruitGroup {
 	static {$(this.setup)}
 	static setup() {
-		Level.on({change:Fruit.#setImages})
-		State.on({_Ready:Fruit.#resetTarget})
-		onPlayerDotEaten(Fruit.#onDotEaten)
+		Level.on({change:Fruits.#setImages})
+		State.on({_Ready:Fruits.#resetTarget})
+		onPlayerDotEaten(Fruits.#onDotEaten)
 	}
 	get currType()   {return this.#getType(Game.level-1)}
 	get ptsType()    {return PointType.Fruit}

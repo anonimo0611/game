@@ -1,7 +1,7 @@
 import {Dir}   from '../../_lib/direction.js';
 import {Game}  from '../_main.js'
 import {State} from '../state.js'
-import {Ctrl}  from '../control.js';
+import {Env}   from '../control.js';
 import {Maze}  from '../maze.js'
 import {Actor,Ghosts}  from '../actors.js';
 import {PacSpd as Spd} from '../speed.js';
@@ -100,7 +100,7 @@ export class Mover {
 function setSteerEvent(actor,state) {
 	$win.offon('keydown.PacSteer', e=> {
 		const dir = Dir.from(e,{wasd:true})
-		if (!dir || keyRepeated(e) || Ctrl.isCaptured)
+		if (!dir || keyRepeated(e) || Env.isCaptured)
 			return
 
 		if (!State.isInGame && Vec2[dir].x)
