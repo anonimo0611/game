@@ -75,18 +75,16 @@ class Player extends PacMan {
 		this.#moveSteps(this.speed+.5|0)
 	}
 	#moveSteps(steps=1) {
+		const {tileIdx:tIdx,speed}= this
 		for (let i=0; i<steps; i++) {
-			this.#eatDot(this.tileIdx)
-			const spd = this.speed/steps
-			if (this.#mov.update(spd)) break
+			Maze.hasDot(tIdx) && this.#eatDot(tIdx)
+			if (this.#mov.update(speed/steps)) break
 		}
 	}
-	#eatDot(tileIdx=-1) {
-		if (!Maze.hasDot(tileIdx))
-			return
+	#eatDot(/**@type {TileIdx}*/i) {
 		this.#playEatingSE()
 		this.resetTimer()
-		Maze.hasPow(tileIdx)
+		Maze.hasPow(i)
 			? (Score.add(POW_PTS), Ghosts.frighten())
 			: (Score.add(DOT_PTS))
 		Maze.clearDot(this) <= Maze.CLEAR_DOTS
