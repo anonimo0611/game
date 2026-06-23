@@ -89,9 +89,9 @@ export class Ghost extends Actor {
 	update() {
 		this.sprite.update()
 		this.fadeSpr?.update(this.maxAlpha)
-		State.isInGame && this.#update()
+		State.isInGame && this.#updateMovement()
 	}
-	#update() {
+	#updateMovement() {
 		if (this.#fleeTmr >= 0)
 			this.#fleeTmr -= Game.interval
 		if (Timer.frozen && !this.isEscaping)

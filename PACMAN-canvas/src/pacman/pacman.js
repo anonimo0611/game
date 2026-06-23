@@ -64,13 +64,15 @@ class Player extends PacMan {
 	update() {
 		this.sprite.update(this)
 		this.fadeSpr?.update(this.maxAlpha)
-		if (!this.closed && !this.hidden) {
-			this.#tunEntry.update()
-			this.#sinceLastEating += Game.interval
-			this.#moveSteps(this.speed+.5|0)
-		}
-		if (!State.isInGame)
-			this.keepInsideBoard()
+		this.closed
+			? this.keepInsideBoard()
+			: this.#updateMovement()
+	}
+	#updateMovement() {
+		if (this.hidden) return
+		this.#tunEntry.update()
+		this.#sinceLastEating += Game.interval
+		this.#moveSteps(this.speed+.5|0)
 	}
 	#moveSteps(steps=1) {
 		for (let i=0; i<steps; i++) {
