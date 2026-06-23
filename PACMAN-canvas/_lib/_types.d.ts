@@ -17,10 +17,11 @@ type TimerData = {
 	ignoreFrozen: boolean;
 	callback: ()=> void;
 }
-type TimerSeq = [durationMS:number, callback:()=> void]
+type TimerSeq = [durationMS:number, callback:()=> void, key?:unknown]
 
 //---- Tile & Coords ----
 
+/** Must be a positive value */
 type TileIdx  = number
 type xyTuple  = Readonly<[x:number, y:number]>
 type Position = Readonly<{x:number, y:number}>
