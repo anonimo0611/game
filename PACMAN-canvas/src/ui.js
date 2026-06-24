@@ -48,3 +48,17 @@ import * as Fruits from './sprites/fruits.js'
 		Fruits.draw(ctx, i, size, i*size + size/2)
 	$(menu).css('--url',`url("${ctx.canvas.toDataURL()}")`)
 }
+
+//---- Panels ----
+
+$('body').on('keydown pointerdown', e=> {
+	if (e.key == 'Escape' || !e.target.closest('.panel-ui'))
+		$('.panel-ui').removeClass('opened')
+})
+$('.panelBtn').on('keydown pointerdown', e=> {
+	if (e.key && !isActionKey(e)) return
+	const btn = reqButton(e.target)
+	const opn = $(btn).hasClass('opened')
+	$('.panel-ui.opened').toggleClass('opened')
+	$(btn).add(btn.value).toggleClass('opened',!opn)
+})
