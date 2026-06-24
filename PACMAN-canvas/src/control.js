@@ -106,7 +106,7 @@ export const Env = new class Environment {
 	#quitConfirm() {
 		!Ticker.paused && Env.#pause()
 		Confirm.open('Are you sure you want to quit the game?',
-			Env.#pause, State.setQuit, 'Resume','Quit')
+			[Env.#pause, State.setQuit], ['Resume','Quit'])
 	}
 	#onKeydown(/**@type {JQKeyboardEvent}*/e) {
 		if (keyRepeated(e) || Confirm.opened) return
