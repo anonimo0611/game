@@ -7,7 +7,7 @@ export class TunEntry {
 	update() {
 		const {inTunSide,dir}= player
 		inTunSide == null && (this.#side = null)
-		inTunSide == R && dir == R && (this.#side ||= R)
-		inTunSide == L && dir == L && (this.#side ||= L)
+		inTunSide == R && dir == R && (this.#side ??= R)
+		inTunSide == L && dir == L && (this.#side ??= L)
 	}
 }
