@@ -5,7 +5,7 @@ html{
 	}
 }
 ::selection{color:inherit;background:transparent}
-dialog#confirm {
+dialog{
 	color:#FFF;background:rgba(0 0 38/.6);font:2vmin sans-serif;margin:0;padding:.2rem;border:solid .2em #444;border-radius:.4em;position:fixed;top:50%;left:50%;translate:-50% -50%;will-change:opacity;
 	&::backdrop{background-color:#0006}
 	.content{border-bottom:solid .1em var(--color-border);padding:.5em 1em 1em}
@@ -16,29 +16,21 @@ dialog#confirm {
 		button.ok{font-weight:bold;border-width:.25em}
 	}
 }
-[popover]{
-	white-space:nowrap;color:#FFF;background:rgba(0 0 38/.85);font-size:80%;margin:0;padding:0 .2em .3em;border:solid .15em #444;border-radius:.3rem;position:absolute;z-index:100;display:block;
+.panel{
+	white-space:nowrap;color:#FFF;background:rgba(0 0 38/.85);font-size:80%;margin:0;padding:0 .2em .3em;border:solid .15em #444;border-radius:.3rem;position:absolute;z-index:100;
+	&.opened{display:block}
 }
-form,dialog{
---color-label:#6FD;
---color-label-hover:#FBE;
---color-border:#888;
---color-focus-border:#09C;
---color-active-border:#3CF;
---bgcolor:#333B;
---bgcolor-hilight:#369B;
---bgcolor-hover:#036C;
---bgcolor-focus:#069C;
---bgcolor-active:#396C;
-}
+form,dialog{--color-label:#6FD;--color-label-hover:#FBE;--color-border:#888;--color-focus-border:#09C;--color-active-border:#3CF;--bgcolor:#333B;--bgcolor-hilight:#369B}
 button,input,[type=dropdown]>output,[type=slidemenu]{color:#EEE;font-size:.9em;border:solid .1em var(--color-border);border-radius:.2em;outline:0}
 button,[type=dropdown]>output,cm-btn[data-disabled=false]{
 	background:var(--bgcolor);display:inline-block;padding:.4em .4em .3em;
-	&:hover,&:focus{border-color:var(--color-focus-border)}
+	&:hover,&:focus,
+	&.opened{border-color:var(--color-focus-border)}
 	&:active{border-color:var(--color-active-border)}
-	&:hover {background:var(--bgcolor-hover)}
-	&:focus {background:var(--bgcolor-focus)}
-	&:active{background:var(--bgcolor-active)}
+	&:hover {background:#036C}
+	&:focus {background:#069C}
+	&:active{background:#396C}
+	&.opened{background:#396C}
 	&:disabled{color:#888;background:var(--bgcolor);border-color:#888}
 	&::-moz-focus-inner{border:0;padding:0}
 }
