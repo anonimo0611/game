@@ -16,7 +16,7 @@ dialog{
 		button.ok{font-weight:bold;border-width:.25em}
 	}
 }
-.panel{
+.popover.panel{
 	white-space:nowrap;color:#FFF;background:rgba(0 0 38/.85);font-size:80%;margin:0;padding:0 .2em .3em;border:solid .15em #444;border-radius:.3rem;position:absolute;z-index:100;
 	&.opened{display:block}
 }
