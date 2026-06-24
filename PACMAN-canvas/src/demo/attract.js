@@ -30,9 +30,9 @@ export class Attract {
 		[70, 8, 18, 15, 'OTOBOKE---', '"GUZUTA"']
 	])
 	draw() {
+		const et = (Ticker.elapsedTime/100)
 		Score.draw()
 		drawText(7, 4, null, 'CHARACTOR　/　NICKNAME')
-		const et = (Ticker.elapsedTime/100), Small ={size:T*.68}
 		this.GhostEntries.forEach(([t,col1,col2,row,txt1,txt2],i)=> {
 			et > t    && this.drawGhostOnTable(i,row)
 			et > t+ 5 && drawText(col1, row, Color.GhostBodies[i], txt1)
@@ -43,22 +43,18 @@ export class Attract {
 			 [23, DOT_PTS, false, true],
 			 [25, POW_PTS, true,  this.subAct.pow.show]]
 			).forEach(([row,pts,isPow,showDot])=> {
-				drawDot(Fg,10, row, isPow, showDot)
-				drawText(12.0, row, null,  pts)
-				drawText(14.3, row, null, 'PTS', Small)
+				drawDot(Fg,10, row+.00, isPow, showDot)
+				drawText(12.0, row+.00, null,  pts)
+				drawText(14.3, row+.25, null, 'PTS', {size:T*.7})
 			})
 		}
 		if (et > 90) {
-			const {extendScore}= Env
-			if (this.subAct.outward) {
-				drawDot(Fg, 4, 19, true, this.subAct.pow.show)
-			}
-			if (extendScore > 0) {
-				const text = `BONUS　PACMAN　FOR　${extendScore}`
-				drawText( 2.0, 29, Color.NoticeTxt, text)
-				drawText(24.3, 29, Color.NoticeTxt,'PTS', Small)
-			}
 			this.subAct.draw()
+			if (Env.extendScore > 0) {
+				const text = `BONUS　PACMAN　FOR　${Env.extendScore}`
+				drawText( 2.0, 29.00, Color.NoticeTxt, text)
+				drawText(24.3, 29.25, Color.NoticeTxt,'PTS', {size:T*.7})
+			}
 		}
 		Fruits.drawLevelCounter()
 	}
@@ -117,6 +113,9 @@ class EnergizerAct {
 		this.#pacman.dir = R
 		Ghosts.frighten()
 	}
-	draw() {this.started && Actors.draw(this.#pacman)}
+	draw() {
+		this.outward && drawDot(Fg, 4, 19, true, this.pow.show)
+		this.started && Actors.draw(this.#pacman)
+	}
 	#end() {Ghosts.caughtAll && State.setAttract()}
 }
