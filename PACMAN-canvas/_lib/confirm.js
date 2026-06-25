@@ -22,11 +22,11 @@ export const Confirm = new class ConfirmCore {
 	}
 
 	/**
-	 @param {string} content  Dialog description
-	 @param {[?()=> void,?()=> void]} callbacks Callbacks assigned to the left and right buttons
-	 @param {[string,string]} btnTexts Left and right button text
-	 @param {0|1} [cancelIdx] Button to assign when canceling; 0=left(default), 1=right
-	 @param {0|1} [autoFocus] 0=left, 1=right; The default is the same as `cancelIdx`
+	 @param {string} content - Dialog description
+	 @param {[?()=> void,?()=> void]} callback - Callbacks assigned to the left and right buttons
+	 @param {[string,string]} btnText - Left and right button text
+	 @param {0|1} [cancelIdx] - Button to assign when canceling; 0=left(default), 1=right
+	 @param {0|1} [autoFocus] - 0=left, 1=right; The default is the same as `cancelIdx`
 	*/
 	open(content, [cb0,cb1], [btn0Txt,btn1Txt]=['Cancel','Ok'], cancelIdx=0, autoFocus=cancelIdx) {
 		if (this.opened) return
