@@ -15,7 +15,8 @@ export const lives  = reqInput('#initialLives')
 $win.on('resize', ()=> {
 	const scale = min(
 		innerWidth /Form.offsetWidth*.98,
-		innerHeight/Form.offsetHeight)
+		innerHeight/Form.offsetHeight
+	)
 	Form.style.scale = min(1, scale).toFixed(2)
 })
 .trigger('resize')
@@ -52,7 +53,8 @@ import * as Fruits from './sprites/fruits.js'
 //---- Pop over ----
 
 $('body').on('keydown pointerdown', e=> {
-	if (e.key == 'Escape' || !e.target.closest('.popover'))
+	if (e.key == 'Escape'
+	|| !e.target.closest('.popover'))
 		$('.popover').removeClass('opened')
 })
 $('button.popover').on('keydown pointerdown', e=> {

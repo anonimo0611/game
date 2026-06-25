@@ -13,7 +13,7 @@ export const PtsMgr = new class PointsManager {
 	/** @param {FloatingPtsData} data */
 	set(data) {new FloatingPts(data)}
 	update()       {PopupMap.forEach(v=> v.update())}
-	drawFruitPts() {PopupMap.get(Fruits) ?.draw()}
+	drawFruitPts() {PopupMap.get(Fruits)?.draw()}
 	drawGhostPts() {PopupMap.get(Ghosts)?.draw()}
 }
 class FloatingPts {
