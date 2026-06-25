@@ -57,8 +57,8 @@ $('body').on('keydown pointerdown', e=> {
 })
 $('button.popover').on('keydown pointerdown', e=> {
 	if (e.key && !isActionKey(e)) return
-	const btn = reqButton(e.target)
+	const btn = reqButton(e.currentTarget)
 	const opn = $(btn).hasClass('opened')
-	$('.popover.opened') .toggleClass('opened')
+	$('.popover.opened') .removeClass('opened')
 	$(btn).add(btn.value).toggleClass('opened',!opn)
 })
