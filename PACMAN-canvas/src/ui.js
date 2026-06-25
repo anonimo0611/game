@@ -21,12 +21,11 @@ $win.on('resize', ()=> {
 
 //---- Buttons ----
 
-const btnIds = /**@type {const}*/
-	(['clear','reset','start'])
-
-export const btns =
-	/**@type {{[K in btnIds[number]]:HTMLButtonElement}}*/
-	(toObj(btnIds.map(id=> [id,reqButton(`#${id}Btn`)])))
+export const btns = (()=> {
+	const ids = /**@type {const}*/(['clear','reset','start'])
+	return /**@type {{[K in ids[number]]:HTMLButtonElement}}*/(
+		toObj(ids.map(id=> [id,reqButton(`#${id}Btn`)])))
+})()
 
 //---- Custom menus ----
 
