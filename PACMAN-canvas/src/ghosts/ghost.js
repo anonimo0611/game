@@ -103,19 +103,6 @@ export class Ghost extends Actor {
 		default: this.#moveSteps(this.speed+.5|0)
 		}
 	}
-	#moveSteps(steps=1) {
-		for (let i=0; i<steps; i++) {
-			this.#tickMove(this.speed/steps)
-			this.passedTileCenter && this.#setNextDir()
-			if (this.#makeTurn())    break
-			if (this.collidesWith()) break
-		}
-	}
-	#tickMove(spd=this.speed) {
-		!Maze.House.arrived(this, spd)
-			? this.setNextPosition(spd)
-			: this.#enterHouse()
-	}
 	#idleInHouse({orient,center:{y:cy}}=this) {
 		if (!Cfg.alwaysChase)
 			Sys.DotCounter.releaseIfReady(this)
@@ -172,6 +159,19 @@ export class Ghost extends Actor {
 			? this.state.setGoingOut()
 			: this.state.setIdle()
 		!Timer.frozen && Sound.onGhostReturned()
+	}
+	#moveSteps(steps=1) {
+		for (let i=0; i<steps; i++) {
+			this.#tickMove(this.speed/steps)
+			this.passedTileCenter && this.#setNextDir()
+			if (this.#makeTurn())    break
+			if (this.collidesWith()) break
+		}
+	}
+	#tickMove(spd=this.speed) {
+		!Maze.House.arrived(this, spd)
+			? this.setNextPosition(spd)
+			: this.#enterHouse()
 	}
 	#setNextDir() {
 		if (this.#revSig) {
