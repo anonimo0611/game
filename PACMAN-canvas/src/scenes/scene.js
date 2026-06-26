@@ -20,5 +20,5 @@ const Scene  = {
 		Fg.clear()
 		Scenes[+State.isDemoMode].draw()
 		Message.draw()
-	}
+	},
 }
