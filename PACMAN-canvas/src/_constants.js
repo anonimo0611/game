@@ -5,9 +5,6 @@ DOT_PTS   = 10,
 POW_PTS   = 50,
 TILE_SIZE = int(screen.height/ROWS),
 
-/** Scale Factor */
-SF = (screen.height/1080),
-
 /** Shorthand of TILE_SIZE */
 T = TILE_SIZE,
 

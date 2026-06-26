@@ -1,7 +1,8 @@
 const HT = T/2
-const LW = max(1, 3*SF|0) // Line  Width
-const LO = max(2, 4*SF|0) // Line  Offset
-const OO = max(1, 2*SF|0) // Outer Offset
+const SF = screen.height/1080 // Scale Factor
+const LW = max(1, int(3*SF))  // Line  Width
+const LO = max(2, int(4*SF))  // Line  Offset
+const OO = max(1, int(2*SF))  // Outer Offset
 
 const Ctxs = freeze({
 	Blue:  canvas2D(null, BW,BH).ctx,
