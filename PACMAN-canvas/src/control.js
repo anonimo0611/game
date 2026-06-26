@@ -6,8 +6,8 @@ import {drawText} from './message.js'
 import {Form,Menu,btns} from './ui.js'
 
 const {InfoTexts:palette}= Color
-const SETTINGS_KEY  = 'anopacman'
-const LOW_SPD_LIMIT = 0.7
+const SETTINGS_KEY = 'anopacman'
+const LOW_SPEED_THRESHOLD = 0.7
 const Ctl = {
 	speed:         1,
 	isStAbove1:    false,
@@ -20,10 +20,6 @@ const Ctl = {
 	showPaths:     false,
 	showGridLines: false,
 }
-const PracticeIds = /**@type {const}*/([
-	'isStAbove1','isLowSpeed','currentOnly',
-	'invincible','showPaths','showTargets'
-])
 
 export const Env = new class Environment {
 	static {$(this.setup)}
@@ -80,10 +76,11 @@ export const Env = new class Environment {
 	}
 	#output() {
 		Env.#save()
-		Grid.canvas.style.opacity = String(+Ctl.showGridLines)
-		const spd = 'x'+Ctl.speed.toFixed(1), lh = 0.9
-		const opt = {ctx:HUD, size:T*0.68, scaleX:0.7, style:'bold'}
-		Env.#setHelpPanelColors()
+		Env.#syncHelpPanel()
+		Env.#toggleGridLines()
+		const
+		spd = 'x'+Ctl.speed.toFixed(1), lh = 0.9,
+		opt = {ctx:HUD, size:T*0.68, scaleX:0.7, style:'bold'}
 		HUD.save()
 		HUD.translate(T*0.1, T*17.25)
 		HUD.clearRect(0, 0, BW, T*3)
@@ -99,10 +96,10 @@ export const Env = new class Environment {
 		}
 		HUD.restore()
 	}
-	#setHelpPanelColors() {
+	#syncHelpPanel() {
 		Ctl.isStAbove1 = (Menu.Level.index > 0)
-		Ctl.isLowSpeed = (Ctl.speed < LOW_SPD_LIMIT)
-		for (const id of PracticeIds)
+		Ctl.isLowSpeed = (Ctl.speed < LOW_SPEED_THRESHOLD)
+		for (const id of getKeys(Ctl))
 			$(`#_${id}`).css('color', palette[+Ctl[id]])
 	}
 	#reset() {
@@ -133,6 +130,9 @@ export const Env = new class Environment {
 				Ticker.paused && Env.#pause()
 			}
 		}
+	}
+	#toggleGridLines() {
+		Grid.canvas.style.opacity = String(+Ctl.showGridLines)
 	}
 	#observeFocusChange() {
 		$(document.body).on('focusin focusout', e=> {
