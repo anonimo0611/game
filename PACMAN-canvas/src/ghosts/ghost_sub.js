@@ -58,6 +58,5 @@ export class Guzuta extends Ghost {
 
 {// Event-driven instantiation
 	const ghosts = [Akabei,Pinky,Aosuke,Guzuta]
-	const instantiate = ()=> Ghosts.initialize(ghosts.map(g=> new g))
-	State.on({_Ready:instantiate})
+	State.on({_Ready(){Ghosts.initialize(ghosts.map(g=> new g))}})
 }
