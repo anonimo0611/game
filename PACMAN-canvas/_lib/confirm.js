@@ -22,13 +22,14 @@ export const Confirm = new class ConfirmCore {
 	}
 
 	/**
-	 @param {string} content - Dialog description
-	 @param {[?()=> void,?()=> void]} callback - Callbacks assigned to the left and right buttons
-	 @param {[string,string]} btnText - Left and right button text
+	 @typedef {[label:string, cb?:()=> void]} Button
+	 @param {string} content  - Dialog description
+	 @param {Button} ButtonL  - [label: string, cb?: ()=> void]
+	 @param {Button} ButtonR  - [label: string, cb?: ()=> void]
 	 @param {0|1} [cancelIdx] - Button to assign when canceling; 0=left(default), 1=right
 	 @param {0|1} [autoFocus] - 0=left, 1=right; The default is the same as `cancelIdx`
 	*/
-	open(content, [cb0,cb1], [btn0Txt,btn1Txt]=['Cancel','Ok'], cancelIdx=0, autoFocus=cancelIdx) {
+	open(content, ButtonL, ButtonR, cancelIdx=0, autoFocus=cancelIdx) {
 		if (this.opened) return
 		this.#opened = true
 		const
@@ -37,12 +38,12 @@ export const Confirm = new class ConfirmCore {
 		$dialog.find('button').each((i,btn)=> {
 			if (i == autoFocus) btn.autofocus = true
 			btn.classList.add(i == cancelIdx? 'cancel':'ok')
-			btn.textContent = [btn0Txt,btn1Txt][i]
+			btn.textContent = [ButtonL,ButtonR][i][0]
 			btn.onclick = ()=> {
 				$dialog.fadeOut(300, function() {
 					this.close()
 					this.remove()
-					;[cb0,cb1][i]?.()
+					;[ButtonL,ButtonR][i][1]?.()
 					Confirm.#opened = false
 				})
 			}
