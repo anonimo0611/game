@@ -179,7 +179,7 @@ const PhaseManager = function() {
 		return {get mode(){return mode},update}
 	}
 	let phase = create()
-	State.on({_Ready:()=> phase = create(Game.level)})
+	State.on({_Ready(){phase = create(Game.level)}})
 	return {
 		get mode() {return phase.mode},
 		update() {State.isInGame && phase.update?.()},
@@ -243,7 +243,7 @@ const CruiseElroy = function() {
 		if (Maze.dotsLeft <= DotsLeftTable[Game.clampedLv-1]*rate)
 			++currentPart && Sound.playSiren()
 	})
-	State.on({_NewLevel:()=> currentPart = 0})
+	State.on({_NewLevel(){currentPart = 0}})
 	return {
 		get part()  {return currentPart},
 		get angry() {return angry()},
@@ -280,7 +280,7 @@ const Fright = function() {
 			}
  		}
 	}
-	State.on({_Ready:()=> session = null})
+	State.on({_Ready(){session = null}})
 	return {
 		frighten() {new Session(DurList[Game.clampedLv-1])},
 		get session()  {return session},
