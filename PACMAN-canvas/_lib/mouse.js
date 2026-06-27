@@ -27,11 +27,11 @@ export const Cursor = function() {
  @param {HTMLInputElement} ctrl
 */
 function setupCtrl(ctrl) {
-	const output = $(`output[for~="${ctrl.id}"]`).text(ctrl.value).get(0)
-	const ids    = ctrl.dataset.links?.trim().split(/\s+/) ?? []
-	const label  = ctrl.closest('label') || qSel(`label[for="${ctrl.id}"]`)
-	const links  = ids.map(id=> qSel(`input#${id}`)).filter(e=> e != null)
-	const target = [...new Set([ctrl,output,...links])].filter(e=> e != null)
+	const outputs = $(`output[for~="${ctrl.id}"]`).text(ctrl.value).get() ?? []
+	const linkIds = ctrl.dataset.links?.trim().split(/\s+/)  ?? []
+	const inputs  = linkIds.flatMap(id=> qSel(`input#${id}`) ?? [])
+	const label   = ctrl.closest('label') || qSel(`label[for="${ctrl.id}"]`)
+	const targets = $.uniqueSort([ctrl,...outputs,...inputs])
 
 	$(label || ctrl).onWheel(e=> {
 		e.preventDefault()
@@ -43,7 +43,7 @@ function setupCtrl(ctrl) {
 	})
 	$(ctrl).on('input', ()=> {
 		const {value,min,max}= ctrl
-		$(target)
+		$(targets)
 			.val(value)
 			.css('--ratio',`${mathNorm(+min,+max,+value)*100}%`)
 	})
