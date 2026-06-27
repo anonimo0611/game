@@ -23,7 +23,7 @@ export const Score = new class ScoreManager {
 	}
 	#clearConfirm() {
 		Confirm.open('Are you sure you want to clear high-score?',
-			[null, Score.#clear], ['Cancel','Clear'])
+			['Cancel'], ['Clear',Score.#clear])
 	}
 	#clear() {
 		localStorage.removeItem(HISCORE_KEY)
