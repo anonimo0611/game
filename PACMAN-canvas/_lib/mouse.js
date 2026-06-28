@@ -28,9 +28,9 @@ export const Cursor = function() {
 */
 function setupCtrl(ctrl) {
 	const outputs = $(`output[for~="${ctrl.id}"]`).text(ctrl.value).get() ?? []
+	const label   = ctrl.closest('label') || qSel(`label[for="${ctrl.id}"]`)
 	const linkIds = ctrl.dataset.links?.trim().split(/\s+/)  ?? []
 	const inputs  = linkIds.flatMap(id=> qSel(`input#${id}`) ?? [])
-	const label   = ctrl.closest('label') || qSel(`label[for="${ctrl.id}"]`)
 	const targets = $.uniqueSort([ctrl,...outputs,...inputs])
 
 	$(label || ctrl).onWheel(e=> {
@@ -51,5 +51,5 @@ function setupCtrl(ctrl) {
 }
 $win.on('load', ()=> {
 	/**@type {HTMLInputElement[]}*/
-	($('[type=range]').get()).forEach(setupCtrl)
+	($('input[type=range]').get()).forEach(setupCtrl)
 })
