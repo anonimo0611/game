@@ -29,5 +29,5 @@ const DemoScene = {
 
 $('button.demo.at').on({click:State.setAttract})
 $('button.demo.cs').each((i,btn)=> {
-	$(btn).on({click:()=> State.setCutscene({data:i+1})})
+	$(btn).on({click(){State.setCutscene({data:i+1})}})
 })
