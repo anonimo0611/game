@@ -17,12 +17,12 @@ export const Targets = new class TargetVisualizer {
 		Fg.restore()
 	}
 	/** @param {Ghost} g */
-	#markerDisabled = g=> (
+	#markerDisabled = g=>
 		   g.isFrightened
 		|| g.state.isIdle
 		|| g.state.isBitten
 		|| (Timer.frozen && !g.isEscaping)
-	)
+
 	/** @param {Ghost} g */
 	#getTargetPos = g=>
 		(g.state.isGoingOut || g.isEscaping)

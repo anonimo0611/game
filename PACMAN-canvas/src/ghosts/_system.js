@@ -256,12 +256,12 @@ const Fright = function() {
 	const PtsList = /**@type {const}*/([200,400,800,1600])
 	const DurList = /**@type {const}*/([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	class Session {
-		#et=0; #caught=0; #fCnt=0; #sIdx=1; iv; secs;
+		#et=0; #caught=0; #fCnt=0; #sIdx=1; iv; dur;
 		get points()    {return PtsList[this.#caught-1]}
 		get spriteIdx() {return this.#sIdx ^ 1}
 		get caughtAll() {return this.#caught == GhostType.Max}
 		constructor(s=0) {
-			this.iv = ((this.secs = s) == 1 ? 12:14) / Game.speed
+			this.iv = ((this.dur = s) == 1 ? 12:14) / Game.speed
 			!s ? $(GhostList).trigger(Evt.FleeStart) : this.#set()
 		}
 		#set(isOn=true) {
@@ -273,10 +273,10 @@ const Fright = function() {
 		}
 		update() {
 			if (State.isInGame && !Timer.frozen) {
-				const {secs,iv}= this
+				const {dur,iv}= this
 				const et = (this.#et += Game.interval) / 1000
-				if (et >= secs-2) this.#sIdx ^= +!(this.#fCnt++ % iv)
-				if (et >= secs+0 || this.caughtAll) this.#set(false)
+				if (et >= dur-2) this.#sIdx ^= +!(this.#fCnt++ % iv)
+				if (et >= dur+0 || this.caughtAll) this.#set(false)
 			}
  		}
 	}
