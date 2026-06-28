@@ -71,7 +71,7 @@ export const Env = new class Environment {
 		const data = JSON.parse(localStorage[SETTINGS_KEY])
 		getKeys(Menu).forEach(id=> Menu[id].index = data[id])
 		document.querySelectorAll('input').forEach(input=> {
-			if (!data[input.id]) return
+			if (data[input.id] == undefined) return
 			switch(input.type) {
 			case 'range':   input.value   = data[input.id];break
 			case 'checkbox':input.checked = data[input.id];break
