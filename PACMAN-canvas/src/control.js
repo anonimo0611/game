@@ -54,7 +54,7 @@ export const Env = new class Environment {
 		Sound.pause( Ticker.pause(force) )
 	}
 	#save() {
-		const data = /**@type {any}*/(Cfg)
+		const data = /**@type {Record<string,number|boolean>}*/(Cfg)
 		getKeys(Menu).forEach(id=> data[id] = Menu[id].index)
 		document.querySelectorAll('input').forEach(input=> {
 			switch(input.type) {
@@ -71,6 +71,7 @@ export const Env = new class Environment {
 		const data = JSON.parse(localStorage[SETTINGS_KEY])
 		getKeys(Menu).forEach(id=> Menu[id].index = data[id])
 		document.querySelectorAll('input').forEach(input=> {
+			if (!data[input.id]) return
 			switch(input.type) {
 			case 'range':   input.value   = data[input.id];break
 			case 'checkbox':input.checked = data[input.id];break
