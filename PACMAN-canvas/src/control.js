@@ -25,7 +25,6 @@ export const Env = new class Environment {
 	static {$(this.setup)}
 	static setup() {
 		Env.#restore()
-		Env.#output()
 		Env.#setupCtrls()
 		$win.on({keydown:Env.#onKeydown})
 	}
