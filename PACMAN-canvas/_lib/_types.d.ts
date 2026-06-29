@@ -1,6 +1,6 @@
 //---- Ghosts ----
-
-type GhostIdx = (typeof GhostType)['Akabei'|'Pinky'|'Aosuke'|'Guzuta']
+type GhostType = Readonly<{Akabei:0,Pinky:1,Aosuke:2,Guzuta:3,Max:4}>
+type GhostIdx  = (typeof GhostType)['Akabei'|'Pinky'|'Aosuke'|'Guzuta']
 type GhostHitRadii = readonly [normal: number, frightened: number]
 
 //---- Dictionary ----
@@ -29,6 +29,7 @@ type PathNode = {tile:Vec2, dir:Direction, stopped:boolean}
 
 //---- Points ----
 
+type PointType = Readonly<{Fruit:0, Ghost:1}>
 type PtsIdx = typeof PointType[keyof typeof PointType]
 type PtsVal = 100|200|300|400|500|700|800|1000|1600|2000|3000|5000
 type FloatingPtsData = {
