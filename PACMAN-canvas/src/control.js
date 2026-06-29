@@ -129,8 +129,7 @@ export const Env = new class Environment {
 		Grid.canvas.style.opacity = String(+Cfg.showGridLines)
 	}
 	#syncHelpPanel() {
-		const isLowSpeed = Env.isLowSpeed
-		const isStAbove1 = Menu.Level.index > 0
+		const {isLowSpeed}=Env,isStAbove1=(Menu.Level.index > 0)
 		entries({...Cfg,isStAbove1,isLowSpeed}).forEach(([id,v])=> {
 			$(`#_${id}`).css('color',palette[+v])
 		})
