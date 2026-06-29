@@ -9,8 +9,7 @@ const {InfoTexts:palette}= Color
 const SETTINGS_KEY  = 'anopacman'
 const MAX_LOW_SPEED = 0.7
 
-export const Cfg = /**@type {const}*/
-({
+const Ctl = {
 	speed:         1,
 	currentOnly:   false,
 	alwaysChase:   false,
@@ -19,7 +18,7 @@ export const Cfg = /**@type {const}*/
 	showTargets:   false,
 	showPaths:     false,
 	showGridLines: false,
-})
+}
 
 export const Env = new class Environment {
 	static {$(this.setup)}
@@ -30,13 +29,14 @@ export const Env = new class Environment {
 	}
 	#anyFocused = false
 	get extendScore()  {return +Menu.Extend.value}
-	get isLowSpeed()   {return  Cfg.speed < MAX_LOW_SPEED}
-	get isArcadeMode() {return !Cfg.currentOnly && !Menu.Level.index}
+	get isStAboveLv1() {return  Menu.Level.index > 0}
+	get isLowSpeed()   {return  Ctl.speed < MAX_LOW_SPEED}
+	get isArcadeMode() {return !Ctl.currentOnly && !Menu.Level.index}
 	get isPractice()   {return  Env.usingCheats || !Env.isArcadeMode}
 	get isCaptured()   {return  Env.#anyFocused || Confirm.opened}
-	get showTracking() {return  Cfg.showTargets || Cfg.showPaths}
-	get semiTransPac() {return  Cfg.invincible  || Cfg.showGridLines}
-	get usingCheats()  {return  Cfg.invincible  || Env.isLowSpeed || Env.showTracking}
+	get showTracking() {return  Ctl.showTargets || Ctl.showPaths}
+	get semiTransPac() {return  Ctl.invincible  || Ctl.showGridLines}
+	get usingCheats()  {return  Ctl.invincible  || Env.isLowSpeed || Env.showTracking}
 
 	/** @readonly */
 	window = function() {
@@ -53,7 +53,7 @@ export const Env = new class Environment {
 		Sound.pause( Ticker.pause(force) )
 	}
 	#save() {
-		const data = /**@type {Record<string,number|boolean>}*/(Cfg)
+		const data = /**@type {Record<string,number|boolean>}*/(Ctl)
 		getKeys(Menu).forEach(id=> data[id] = Menu[id].index)
 		document.querySelectorAll('input').forEach(i=> {
 			switch(i.type) {
@@ -80,20 +80,20 @@ export const Env = new class Environment {
 		Env.#syncHelpPanel()
 		Env.#toggleGridLines()
 		const
-		spd = 'x'+Cfg.speed.toFixed(1), lh = 0.9,
+		spd = 'x'+Ctl.speed.toFixed(1), lh = 0.9,
 		opt = {ctx:HUD, size:T*0.68, scaleX:0.7, style:'bold'}
 		HUD.save()
 		HUD.translate(T*0.1, T*17.25)
 		HUD.clearRect(0, 0, BW, T*3)
-		if (spd != 'x1.0' || Cfg.invincible || Cfg.showTargets) {
+		if (spd != 'x1.0' || Ctl.invincible || Ctl.showTargets) {
 			drawText(0, lh*0, palette[+(spd != 'x1.0')], 'Speed'+spd, opt)
-			drawText(0, lh*1, palette[+Cfg.invincible ], 'Invincible',opt)
-			drawText(0, lh*2, palette[+Cfg.showTargets], 'Show Tgts', opt)
+			drawText(0, lh*1, palette[+Ctl.invincible ], 'Invincible',opt)
+			drawText(0, lh*2, palette[+Ctl.showTargets], 'Show Tgts', opt)
 		}
-		if (Cfg.showPaths || Cfg.unrestricted) {
+		if (Ctl.showPaths || Ctl.unrestricted) {
 			HUD.translate(T*(COLS-5), 0)
-			drawText(0,  0, palette[+Cfg.showPaths],   'Show Paths', opt)
-			drawText(0, lh, palette[+Cfg.unrestricted],'Ghosts Un-\nrestricted', opt)
+			drawText(0,  0, palette[+Ctl.showPaths],   'Show Paths', opt)
+			drawText(0, lh, palette[+Ctl.unrestricted],'Ghosts Un-\nrestricted', opt)
 		}
 		HUD.restore()
 	}
@@ -126,12 +126,13 @@ export const Env = new class Environment {
 		}
 	}
 	#toggleGridLines() {
-		Grid.canvas.style.opacity = String(+Cfg.showGridLines)
+		Grid.canvas.style.opacity = String(+Ctl.showGridLines)
 	}
 	#syncHelpPanel() {
-		const {isLowSpeed}=Env,isStAbove1=(Menu.Level.index > 0)
-		entries({...Cfg,isStAbove1,isLowSpeed}).forEach(([id,v])=> {
-			$(`#_${id}`).css('color',palette[+v])
+		const {isLowSpeed,isStAboveLv1}= Env
+		const data = {...Ctl,isStAboveLv1,isLowSpeed}
+		entries(data).forEach(([id,v])=> {
+			$(`#_${id}`).css('color', palette[+v])
 		})
 	}
 	#observeFocusChange() {
@@ -148,4 +149,4 @@ export const Env = new class Environment {
 		$(btns.start).on({click:State.setNewGame})
 		$root.addClass('controller-settled')
 	}
-}
+}, Cfg = /**@type {Readonly<typeof Ctl>}*/(Ctl)
