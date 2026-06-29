@@ -54,31 +54,32 @@ export const Env = new class Environment {
 		Sound.pause( Ticker.pause(force) )
 	}
 	#save() {
-		const data = /**@type {Record<string,number|boolean>}*/(Cfg)
-		getKeys(Menu).forEach(id=> data[id] = Menu[id].index)
-		document.querySelectorAll('input').forEach(input=> {
-			switch(input.type) {
-			case 'range':   data[input.id] = input.valueAsNumber;break
-			case 'checkbox':data[input.id] = input.checked;break
+		const d = /**@type {Record<string,number|boolean>}*/(Cfg)
+		getKeys(Menu).forEach(id=> d[id] = Menu[id].index)
+		document.querySelectorAll('input').forEach(i=> {
+			switch(i.type) {
+			case 'range':   d[i.id] = i.valueAsNumber;break
+			case 'checkbox':d[i.id] = i.checked;break
 			}
 		})
-		data.isStAbove1 = (Menu.Level.index > 0)
-		data.isLowSpeed = (Cfg.speed < LOW_SPEED_THRESHOLD)
-		localStorage[SETTINGS_KEY] = JSON.stringify(data)
+		d.isStAbove1 = (Menu.Level.index > 0)
+		d.isLowSpeed = (Cfg.speed < LOW_SPEED_THRESHOLD)
+		localStorage[SETTINGS_KEY] = JSON.stringify(d)
 	}
 	#restore() {
 		if (!localStorage[SETTINGS_KEY]) return
-		const data = JSON.parse(localStorage[SETTINGS_KEY])
-		getKeys(Menu).forEach(id=> Menu[id].index = data[id])
-		document.querySelectorAll('input').forEach(input=> {
-			if (data[input.id] == undefined) return
-			switch(input.type) {
-			case 'range':   input.value   = data[input.id];break
-			case 'checkbox':input.checked = data[input.id];break
-			}$(input).trigger('input')
+		const d = JSON.parse(localStorage[SETTINGS_KEY])
+		getKeys(Menu).forEach(id=> Menu[id].index = d[id])
+		document.querySelectorAll('input').forEach(i=> {
+			if (d[i.id] == undefined) return
+			switch(i.type) {
+			case 'range':   i.value   = d[i.id];break
+			case 'checkbox':i.checked = d[i.id];break
+			}
 		})
 	}
-	#output() {
+	async #output() {
+		await Promise.resolve()
 		Env.#save()
 		Env.#syncHelpPanel()
 		Env.#toggleGridLines()
@@ -102,8 +103,7 @@ export const Env = new class Environment {
 	}
 	#reset() {
 		Form.reset()
-		Env.#output()
-		Env.#restore()
+		$('input').trigger('input')
 	}
 	#quit(noConfirm=false) {
 		if (State.isTitle) return
