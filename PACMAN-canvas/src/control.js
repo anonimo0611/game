@@ -74,29 +74,6 @@ export const Env = new class Environment {
 			}
 		})
 	}
-	async #output() {
-		await Promise.resolve()
-		Env.#save()
-		Env.#syncHelpPanel()
-		Env.#toggleGridLines()
-		const
-		spd = 'x'+Ctl.speed.toFixed(1), lh = 0.9,
-		opt = {ctx:HUD, size:T*0.68, scaleX:0.7, style:'bold'}
-		HUD.save()
-		HUD.translate(T*0.1, T*17.25)
-		HUD.clearRect(0, 0, BW, T*3)
-		if (spd != 'x1.0' || Ctl.invincible || Ctl.showTargets) {
-			drawText(0, lh*0, palette[+(spd != 'x1.0')], 'Speed'+spd, opt)
-			drawText(0, lh*1, palette[+Ctl.invincible ], 'Invincible',opt)
-			drawText(0, lh*2, palette[+Ctl.showTargets], 'Show Tgts', opt)
-		}
-		if (Ctl.showPaths || Ctl.unrestricted) {
-			HUD.translate(T*(COLS-5), 0)
-			drawText(0,  0, palette[+Ctl.showPaths],   'Show Paths', opt)
-			drawText(0, lh, palette[+Ctl.unrestricted],'Ghosts Un-\nrestricted', opt)
-		}
-		HUD.restore()
-	}
 	#reset() {
 		Form.reset()
 		$('input').trigger('input')
@@ -125,8 +102,28 @@ export const Env = new class Environment {
 			}
 		}
 	}
-	#toggleGridLines() {
-		Grid.canvas.style.opacity = String(+Ctl.showGridLines)
+	async #output() {
+		await Promise.resolve()
+		Env.#save()
+		Env.#syncHelpPanel()
+		Env.#toggleGridLines()
+		const
+		spd = 'x'+Ctl.speed.toFixed(1), lh = 0.9,
+		opt = {ctx:HUD, size:T*0.68, scaleX:0.7, style:'bold'}
+		HUD.save()
+		HUD.translate(T*0.1, T*17.25)
+		HUD.clearRect(0, 0, BW, T*3)
+		if (spd != 'x1.0' || Ctl.invincible || Ctl.showTargets) {
+			drawText(0, lh*0, palette[+(spd != 'x1.0')], 'Speed'+spd, opt)
+			drawText(0, lh*1, palette[+Ctl.invincible ], 'Invincible',opt)
+			drawText(0, lh*2, palette[+Ctl.showTargets], 'Show Tgts', opt)
+		}
+		if (Ctl.showPaths || Ctl.unrestricted) {
+			HUD.translate(T*(COLS-5), 0)
+			drawText(0,  0, palette[+Ctl.showPaths],   'Show Paths', opt)
+			drawText(0, lh, palette[+Ctl.unrestricted],'Ghosts Un-\nrestricted', opt)
+		}
+		HUD.restore()
 	}
 	#syncHelpPanel() {
 		const {isStAboveLv1,isLowSpeed}= Env
@@ -134,6 +131,9 @@ export const Env = new class Environment {
 		entries(data).forEach(([id,v])=> {
 			$(`#_${id}`).css('color', palette[+v])
 		})
+	}
+	#toggleGridLines() {
+		Grid.canvas.style.opacity = String(+Ctl.showGridLines)
 	}
 	#observeFocusChange() {
 		$(document.body).on('focusin focusout', e=> {
