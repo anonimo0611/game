@@ -19,7 +19,7 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
  @template {string} K
  @template V
  @param {{[key in K]?:V}} o
-*/const getEntries = o=>
+*/const entries = o=>
 	/**@type {[K,V][]}*/(Object.entries(o))
 
 /**
@@ -153,7 +153,7 @@ const $root = $(document.documentElement)
 */jQuery.fn.onNS = function(ns, handlers, force) {
 	const NS = ns[0] != '.' ? `.${ns}` : ns
 	if (force === false) return this.off(NS)
-	getEntries(handlers).forEach(([e,cb])=> {
+	entries(handlers).forEach(([e,cb])=> {
 		const ev = e.trim().replace(/[_\s]+/g,`${NS}\x20`) + NS
 		this.off(ev).on(ev,cb)
 	})

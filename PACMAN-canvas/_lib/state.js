@@ -49,14 +49,14 @@ export class AState {
 
 	/** @param {{[key in S]?:JQTriggerHandler}} o */
 	onBefore(o) {
-		for (const [state,cb] of getEntries(o))
+		for (const [state,cb] of entries(o))
 			$(this.#eventBus).on('before'+state, cb)
 		return this
 	}
 
 	/** @param {{[key in S]?:JQTriggerHandler}} o */
 	on(o) {
-		for(const [state,cb] of getEntries(o)) {
+		for(const [state,cb] of entries(o)) {
 			const prefix = (state.trim()[0] == '_')? this.default : ''
 			$(this.#owner).on(underscoreToSp(state,prefix), cb)
 		}
