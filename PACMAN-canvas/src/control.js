@@ -6,14 +6,12 @@ import {drawText} from './message.js'
 import {Form,Menu,btns} from './ui.js'
 
 const {InfoTexts:palette}= Color
-const SETTINGS_KEY = 'anopacman'
-const LOW_SPEED_THRESHOLD = 0.7
+const SETTINGS_KEY  = 'anopacman'
+const MAX_LOW_SPEED = 0.7
 
 export const Cfg = /**@type {const}*/
 ({
 	speed:         1,
-	isStAbove1:    false,
-	isLowSpeed:    false,
 	currentOnly:   false,
 	alwaysChase:   false,
 	unrestricted:  false,
@@ -32,12 +30,13 @@ export const Env = new class Environment {
 	}
 	#anyFocused = false
 	get extendScore()  {return +Menu.Extend.value}
-	get showTracking() {return Cfg.showTargets || Cfg.showPaths}
-	get semiTransPac() {return Cfg.invincible  || Cfg.showGridLines}
-	get usingCheats()  {return Cfg.invincible  || Cfg.isLowSpeed || Env.showTracking}
-	get isCaptured()   {return Env.#anyFocused || Confirm.opened}
-	get isPractice()   {return Env.usingCheats ||!Env.isArcadeMode}
-	get isArcadeMode() {return Cfg.currentOnly == false && !Menu.Level.index}
+	get isLowSpeed()   {return  Cfg.speed < MAX_LOW_SPEED}
+	get isArcadeMode() {return !Cfg.currentOnly && !Menu.Level.index}
+	get isPractice()   {return  Env.usingCheats || !Env.isArcadeMode}
+	get isCaptured()   {return  Env.#anyFocused || Confirm.opened}
+	get showTracking() {return  Cfg.showTargets || Cfg.showPaths}
+	get semiTransPac() {return  Cfg.invincible  || Cfg.showGridLines}
+	get usingCheats()  {return  Cfg.invincible  || Env.isLowSpeed || Env.showTracking}
 
 	/** @readonly */
 	window = function() {
@@ -54,27 +53,24 @@ export const Env = new class Environment {
 		Sound.pause( Ticker.pause(force) )
 	}
 	#save() {
-		const d = /**@type {Record<string,number|boolean>}*/(Cfg)
-		getKeys(Menu).forEach(id=> d[id] = Menu[id].index)
+		const data = /**@type {Record<string,number|boolean>}*/(Cfg)
+		getKeys(Menu).forEach(id=> data[id] = Menu[id].index)
 		document.querySelectorAll('input').forEach(i=> {
 			switch(i.type) {
-			case 'range':   d[i.id] = i.valueAsNumber;break
-			case 'checkbox':d[i.id] = i.checked;break
+			case 'range':   data[i.id] = i.valueAsNumber;break
+			case 'checkbox':data[i.id] = i.checked;break
 			}
-		})
-		d.isStAbove1 = (Menu.Level.index > 0)
-		d.isLowSpeed = (Cfg.speed < LOW_SPEED_THRESHOLD)
-		localStorage[SETTINGS_KEY] = JSON.stringify(d)
+		}),localStorage[SETTINGS_KEY] = JSON.stringify(data)
 	}
 	#restore() {
 		if (!localStorage[SETTINGS_KEY]) return
-		const d = JSON.parse(localStorage[SETTINGS_KEY])
-		getKeys(Menu).forEach(id=> Menu[id].index = d[id])
+		const data = JSON.parse(localStorage[SETTINGS_KEY])
+		getKeys(Menu).forEach(id=> Menu[id].index = data[id])
 		document.querySelectorAll('input').forEach(i=> {
-			if (d[i.id] == undefined) return
+			if (data[i.id] == undefined) return
 			switch(i.type) {
-			case 'range':   i.value   = d[i.id];break
-			case 'checkbox':i.checked = d[i.id];break
+			case 'range':   i.value   = data[i.id];break
+			case 'checkbox':i.checked = data[i.id];break
 			}
 		})
 	}
@@ -133,8 +129,11 @@ export const Env = new class Environment {
 		Grid.canvas.style.opacity = String(+Cfg.showGridLines)
 	}
 	#syncHelpPanel() {
-		for (const id of getKeys(Cfg))
-			$(`#_${id}`).css('color', palette[+Cfg[id]])
+		const isLowSpeed = Env.isLowSpeed
+		const isStAbove1 = Menu.Level.index > 0
+		entries({...Cfg,isStAbove1,isLowSpeed}).forEach(([id,v])=> {
+			$(`#_${id}`).css('color',palette[+v])
+		})
 	}
 	#observeFocusChange() {
 		$(document.body).on('focusin focusout', e=> {
