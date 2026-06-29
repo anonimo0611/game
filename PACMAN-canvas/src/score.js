@@ -14,7 +14,7 @@ export const Score = new class ScoreManager {
 	static {$(this.setup)}
 	static setup() {
 		State.on({
-			Quit:     Score.#restore,
+			Quit:     Score.#onQuit,
 			NewGame:  Score.#onNewGame,
 			GameOver: Score.#onGameOver,
 		})
@@ -33,16 +33,15 @@ export const Score = new class ScoreManager {
 		_score = 0
 		_hiSco = localStorage[HISCORE_KEY]|0
 	}
-	#restore() {
-		if (Game.started) {
-			_score = savedScore
-			_hiSco = savedHiSco
-		}
-	}
 	#onNewGame() {
 		savedScore = _score
 		savedHiSco = _hiSco
 		_score = 0
+	}
+	#onQuit() {
+		if (!Game.started) return
+		_score = savedScore
+		_hiSco = savedHiSco
 	}
 	#onGameOver() {
 		const hi = localStorage[HISCORE_KEY]|0
