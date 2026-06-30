@@ -53,7 +53,7 @@ export const [StateType,createState] = function() {
 	*/
 	class State extends AState {
 		constructor(/**@type {Ghost}*/g) {
-			super(g, States)
+			super(g, States, true)
 			this.set(g.inHouse? 'Idle':'Walking')
 		}
 		get isEyes() {return this.is('Escaping','Entering')}
