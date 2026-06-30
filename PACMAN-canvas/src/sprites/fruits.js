@@ -169,7 +169,7 @@ function gala(ctx) {
 	ctx.beginPath()
 	for (const scaleX of [1,-1]) {
 		ctx.scale(scaleX, 1)
-		ctx.setLinePath([0,-5.6],[4.1,-1.7],[1.3,-2.4])
+		ctx.setLinePath([0,-5.5],[4.3,-1.7],[1.3,-2.4])
 		ctx.quadraticCurveTo(1, -2.4, 1, -2.4)
 		ctx.quadraticCurveTo(0.4, 0.1, 0, 0.1)
 	}
