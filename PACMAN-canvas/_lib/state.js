@@ -78,7 +78,9 @@ export class AState {
 	 @param {StateDef.Opts<S>} opts
 	*/
 	set(state, {data,delay=0,cb=this.callback}={}) {
-		this.immediately && (delay ||= -1)
+		if (this.immediately) {
+			delay ||= -1
+		}
 		if (delay >= 0) {
 			Timer.set(delay, ()=> this.set(state,{delay:-1,data,cb}))
 			return this
