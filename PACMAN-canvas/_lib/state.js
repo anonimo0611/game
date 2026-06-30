@@ -8,16 +8,17 @@ export class AState {
 	#curr     = /**@type {S}*/('')
 	#default  = /**@type {S}*/('')
 
-	/** @readonly */
-	#eventBus = $({})
+	/** @readonly */immediately
+	/** @readonly */#eventBus = $({})
 
 	/**
 	 @protected
 	 @param {Owner} owner
 	 @param {readonly S[]} states
 	*/
-	constructor(owner, states) {
+	constructor(owner, states, immediately=false) {
 		this.#owner = owner
+		this.immediately = immediately
 		states?.forEach((/**@type {S}*/s,i)=> {
 			const self = /**@type {any}*/(this)
 			i == 0 && (this.#default = s)
@@ -76,7 +77,8 @@ export class AState {
 	 @param {S} state
 	 @param {StateDef.Opts<S>} opts
 	*/
-	set(state, {data,delay=-1,cb=this.callback}={}) {
+	set(state, {data,delay=0,cb=this.callback}={}) {
+		this.immediately && (delay ||= -1)
 		if (delay >= 0) {
 			Timer.set(delay, ()=> this.set(state,{delay:-1,data,cb}))
 			return this
