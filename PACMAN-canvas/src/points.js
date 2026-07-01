@@ -19,10 +19,10 @@ export const PtsMgr = new class PointsManager {
 class FloatingPts {
 	pos; cache; fade;
 	constructor(/**@type {FloatingPtsData}*/
-		{key,centerPos,dur=1e3,frozen=false,cb}
+		{key,x,y,dur=1e3,frozen=false,cb}
 	) {
 		const {speed:spd}= Game
-		this.pos   = centerPos
+		this.pos   = {x,y}
 		this.cache = cache(key, T*2)
 		this.fade  = Fade.out(FADE_DUR/spd, (dur-FADE_DUR)/spd)
 

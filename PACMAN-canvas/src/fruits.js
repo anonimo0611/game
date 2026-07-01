@@ -45,7 +45,7 @@ export const Fruits = new class FruitGroup {
 		this.#resetTarget()
 		Timer.cancel(this)
 		Sound.playEatsFruit()
-		PtsMgr.set({key:this, dur:2e3, centerPos:TargetPos})
+		PtsMgr.set({key:this, dur:2e3, ...TargetPos})
 	}
 	#onDotEaten = ()=> {
 		if (AppearDots.has(Maze.MaxDot - Maze.dotsLeft)) {
