@@ -34,7 +34,7 @@ type PtsIdx = typeof PointType[keyof typeof PointType]
 type PtsVal = 100|200|300|400|500|700|800|1000|1600|2000|3000|5000
 type FloatingPtsData = {
 	key: {ptsType:PtsIdx, ptsValue:PtsVal};
-	pos:  Position;
+	centerPos: Position;
 	dur?: number;
 	frozen?: boolean;
 	cb?: ()=> void;
