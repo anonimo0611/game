@@ -4,7 +4,7 @@ import {Score}  from './score.js'
 import {cache}  from './sprites/points.js'
 
 const FADE_DUR = 300
-const PopupMap = /**@type {Map<PtsIdx,FloatingPts>}*/(new Map)
+const PopupMap = /**@type {Map<PointIdx,FloatingPts>}*/(new Map)
 State.on({_RoundEnds:()=> PopupMap.clear()})
 
 export const PtsMgr = new class PointsManager {
@@ -17,19 +17,19 @@ export const PtsMgr = new class PointsManager {
 class FloatingPts {
 	pos; cache; fade;
 	constructor(/**@type {FloatingPtsData}*/
-		{key,x,y,dur=1e3,frozen=false,cb}
+		{pts,x,y,dur=1e3,frozen=false,cb}
 	) {
 		const {speed:spd}= Game
 		this.pos   = {x,y}
-		this.cache = cache(key, T*2)
+		this.cache = cache(pts, T*2)
 		this.fade  = Fade.out(FADE_DUR/spd, (dur-FADE_DUR)/spd)
 
-		PopupMap.set(key.ptsType, this)
-		Score.add(key.ptsValue)
+		PopupMap.set(pts.type, this)
+		Score.add(pts.value)
 		frozen && Timer.freeze()
 
 		Timer.set(dur/spd, ()=> {
-			PopupMap.delete(key.ptsType)
+			PopupMap.delete(pts.type)
 			frozen && Timer.unfreeze()
 			cb?.()
 		}, {ignoreFrozen:true})

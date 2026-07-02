@@ -64,6 +64,11 @@ export const [StateType,createState] = function() {
 	]
 }()
 
+export const Points = {
+	get type()  {return PointType.Ghost},
+	get value() {return Fright.ptsValue},
+}
+
 export const Ghosts = new class GhostGroup {
 	static {$(this.setup)}
 	static setup() {
@@ -76,8 +81,6 @@ export const Ghosts = new class GhostGroup {
 	#animIdx = 0
 	get animIndex()     {return this.#animIdx}
 	get CruiseElroy()   {return CruiseElroy}
-	get ptsType()       {return PointType.Ghost}
-	get ptsValue()      {return Fright.ptsValue}
 	get spriteIdx()     {return Fright.session?.spriteIdx ?? 0}
 	get caughtAll()     {return Fright.session?.caughtAll ?? false}
 	get isFrightened()  {return Fright.session != null}

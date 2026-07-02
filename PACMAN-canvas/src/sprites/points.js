@@ -32,10 +32,10 @@ KerningMap = /**@type {const}*/({
 })
 
 /**
- @param {FloatingPtsData['key']} _
+ @param {FloatingPtsData['pts']} _
  @param {number} size
 */
-export function cache({ptsType,ptsValue:pts}, size) {
+export function cache({type: ptsType,value:pts}, size) {
 	const ctx = FruitGhostCtxs[ptsType]
 	const{w,h}= ctx.resize(size*1.5, size).size
 	ctx.save()
