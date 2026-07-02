@@ -22,6 +22,15 @@ const LevelsRect = new Rect(T*2*6, BH-T*2, LEVEL_COLS*T*2, T*2).freeze()
 let showTgt = true
 let fadeTgt = /**@type {?Fade}*/(null)
 
+const Types = {
+	get current()  {return this.get(Game.level-1)},
+	get ptsType()  {return PointType.Fruit},
+	get ptsValue() {return PointTable[this.current]},
+	get(/**@type {number}*/i) {
+		return FruitTable[mathClamp(i, 0, FruitTable.length-1)]
+	},
+}
+
 export const Fruits = new class FruitGroup {
 	static {$(this.setup)}
 	static setup() {
@@ -29,13 +38,8 @@ export const Fruits = new class FruitGroup {
 		State.on({_Ready:Fruits.#resetTarget})
 		onPlayerDotEaten(Fruits.#onDotEaten)
 	}
-	get currType()   {return this.#getType(Game.level-1)}
-	get ptsType()    {return PointType.Fruit}
-	get ptsValue()   {return PointTable[this.currType]}
-	get showTarget() {return (State.isTitle || State.isInGame) && showTgt}
-
-	#getType(/**@type {number}*/i) {
-		return FruitTable[mathClamp(i, 0, FruitTable.length-1)]
+	get showTarget() {
+		return (State.isTitle || State.isInGame) && showTgt
 	}
 	#resetTarget() {
 		fadeTgt = null
@@ -45,7 +49,7 @@ export const Fruits = new class FruitGroup {
 		this.#resetTarget()
 		Timer.cancel(this)
 		Sound.playEatsFruit()
-		PtsMgr.set({key:this, dur:2e3, ...TargetPos})
+		PtsMgr.set({key:Types, dur:2e3, ...TargetPos})
 	}
 	#onDotEaten = ()=> {
 		if (AppearDots.has(Maze.MaxDot - Maze.dotsLeft)) {
@@ -88,11 +92,11 @@ export const Fruits = new class FruitGroup {
 		HUD.clearRect(x,y,w,h)
 		HUD.translate(x,y)
 		for (let i=startLevel; i<Game.level; i++)
-			Spr.draw(HUD, this.#getType(i), T*2, w-T-T*2*(i-startLevel))
+			Spr.draw(HUD, Types.get(i), T*2, w-T-T*2*(i-startLevel))
 		HUD.restore()
 	}
 	#setImages = ()=> {
-		Cache.update(this.currType)
+		Cache.update(Types.current)
 		this.#setLevelCounter()
 	}
 }
