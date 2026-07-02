@@ -30,10 +30,10 @@ type PathNode = {tile:Vec2, dir:Direction, stopped:boolean}
 //---- Points ----
 
 type PointType = Readonly<{Fruit:0, Ghost:1}>
-type PtsIdx = typeof PointType[keyof typeof PointType]
-type PtsVal = 100|200|300|400|500|700|800|1000|1600|2000|3000|5000
+type PointIdx  = typeof PointType[keyof typeof PointType]
+type PointVal  = 100|200|300|400|500|700|800|1000|1600|2000|3000|5000
 type FloatingPtsData = {
-	key: {ptsType:PtsIdx, ptsValue:PtsVal};
+	pts: {type:PointIdx, value:PointVal};
 	x: number,
 	y: nunber,
 	dur?: number;
