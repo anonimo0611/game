@@ -23,12 +23,12 @@ let showTgt = true
 let fadeTgt = /**@type {?Fade}*/(null)
 
 const Points = {
-	get current() {return this.get(Game.level-1)},
-	get type()    {return PointType.Fruit},
-	get value()   {return PointTable[this.current]},
 	get(/**@type {number}*/i) {
 		return FruitTable[mathClamp(i, 0, FruitTable.length-1)]
 	},
+	get curr()  {return this.get(Game.level-1)},
+	get type()  {return PointType.Fruit},
+	get value() {return PointTable[this.curr]},
 }
 
 export const Fruits = new class FruitGroup {
@@ -96,7 +96,7 @@ export const Fruits = new class FruitGroup {
 		HUD.restore()
 	}
 	#setImages = ()=> {
-		Cache.update(Points.current)
+		Cache.update(Points.curr)
 		this.#setLevelCounter()
 	}
 }
