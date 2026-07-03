@@ -24,7 +24,7 @@ let fadeTgt = /**@type {?Fade}*/(null)
 
 const Types = {
 	get current() {return this.get(Game.level-1)},
-	get: (i=0)=> FruitTable[mathClamp(i, 0, FruitTable.length-1)],
+	get:(i=0)=> FruitTable[mathClamp(i, 0, FruitTable.length-1)],
 }
 const Points = {
 	get type()  {return PointType.Fruit},
