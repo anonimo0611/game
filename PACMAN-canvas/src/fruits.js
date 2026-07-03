@@ -22,13 +22,13 @@ const LevelsRect = new Rect(T*2*6, BH-T*2, LEVEL_COLS*T*2, T*2).freeze()
 let showTgt = true
 let fadeTgt = /**@type {?Fade}*/(null)
 
+const Types = {
+	get current() {return this.get(Game.level-1)},
+	get: (i=0)=> FruitTable[mathClamp(i, 0, FruitTable.length-1)],
+}
 const Points = {
-	get(/**@type {number}*/i) {
-		return FruitTable[mathClamp(i, 0, FruitTable.length-1)]
-	},
-	get curr()  {return this.get(Game.level-1)},
 	get type()  {return PointType.Fruit},
-	get value() {return PointTable[this.curr]},
+	get value() {return PointTable[Types.current]},
 }
 
 export const Fruits = new class FruitGroup {
@@ -92,11 +92,11 @@ export const Fruits = new class FruitGroup {
 		HUD.clearRect(x,y,w,h)
 		HUD.translate(x,y)
 		for (let i=startLevel; i<Game.level; i++)
-			Spr.draw(HUD, Points.get(i), T*2, w-T-T*2*(i-startLevel))
+			Spr.draw(HUD, Types.get(i), T*2, w-T-T*2*(i-startLevel))
 		HUD.restore()
 	}
 	#setImages = ()=> {
-		Cache.update(Points.curr)
+		Cache.update(Types.current)
 		this.#setLevelCounter()
 	}
 }
