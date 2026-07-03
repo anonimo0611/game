@@ -6,8 +6,7 @@ import {drawText} from './message.js'
 import {Form,Menu,btns} from './ui.js'
 
 const {InfoTexts:palette}= Color
-const SETTINGS_KEY  = 'anopacman'
-const MAX_LOW_SPEED = 0.7
+const SETTINGS_KEY = 'anopacman'
 
 const Ctl = {
 	speed:         1,
@@ -30,7 +29,7 @@ export const Env = new class Environment {
 	#anyFocused = false
 	get extendScore()  {return +Menu.Extend.value}
 	get isStAboveLv1() {return  Menu.Level.index > 0}
-	get isLowSpeed()   {return  Ctl.speed < MAX_LOW_SPEED}
+	get isLowSpeed()   {return  Ctl.speed < 0.7}
 	get isArcadeMode() {return !Ctl.currentOnly && !Menu.Level.index}
 	get isPractice()   {return  Env.usingCheats || !Env.isArcadeMode}
 	get isCaptured()   {return  Env.#anyFocused || Confirm.opened}
