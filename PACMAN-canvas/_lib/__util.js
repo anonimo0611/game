@@ -30,6 +30,12 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 	(toObj(array.map(k=> [k,k])))
 
 /**
+ @template {object} O
+ @param {O} obj
+*/const readOnly = obj=>
+	/**@type Readonly<O>*/(obj)
+
+/**
  @param {KeyboardEvent|JQKeyboardEvent} e
 */const getNativeKeyEvent = e=>
 	(e instanceof KeyboardEvent)
