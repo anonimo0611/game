@@ -35,19 +35,19 @@ KerningMap = /**@type {const}*/({
  @param {FloatingPtsData['pts']} _
  @param {number} size
 */
-export function cache({type: ptsType,value:pts}, size) {
-	const ctx = FruitGhostCtxs[ptsType]
+export function cache({type,value}, size) {
+	const ctx = FruitGhostCtxs[type]
 	const{w,h}= ctx.resize(size*1.5, size).size
 	ctx.save()
 	ctx.translate(w/2, h/2)
 	ctx.scale(size/2/LOGIC_DEGIT_HEIGHT)
-	ctx.strokeStyle = Color.PointTexts[ptsType]
+	ctx.strokeStyle = Color.PointTexts[type]
 	ctx.lineWidth = 1.1
 	ctx.lineJoin  = ctx.lineCap = 'round'
-	KerningMap[pts].forEach((x,i)=> {
-		const path = (pts == 1600 && i == 0)
+	KerningMap[value].forEach((x,i)=> {
+		const path = (value == 1600 && i == 0)
 			? NarrowOnePath
-			: DigitPath0to8[+pts.toString()[i]]
+			: DigitPath0to8[+value.toString()[i]]
 		ctx.save()
 		ctx.translate(x,-3)
 		ctx.stroke(path)

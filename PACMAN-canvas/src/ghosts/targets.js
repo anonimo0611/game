@@ -1,5 +1,5 @@
 import {State} from '../state.js'
-import {Cfg}   from '../control.js'
+import {Cfg}   from '../env.js'
 import {Maze}  from '../maze.js'
 import {Ghosts,Ghost,player} from '../actors.js'
 import {Akabei,Pinky,Aosuke,Guzuta} from './ghost_sub.js'

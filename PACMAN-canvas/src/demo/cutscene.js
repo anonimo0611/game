@@ -1,7 +1,7 @@
 import {Sound}   from '../../_snd/sound.js'
 import {Game}    from '../_main.js'
 import {State}   from '../state.js'
-import {Env}     from '../control.js'
+import {Env}     from '../env.js'
 import {Fruits}  from '../fruits.js'
 import * as Snag from '../sprites/snag.js'
 import {PacMan,Ghosts,Ghost} from '../actors.js'

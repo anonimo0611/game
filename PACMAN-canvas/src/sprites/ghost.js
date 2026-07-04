@@ -21,7 +21,7 @@ export default class GhostSprite {
 	}
 	get size()  {return this.#size}
 	get alpha() {return this.#fadeBody?.alpha}
-	setResurrect() {this.#fadeBody ||= Fade.in(600)}
+	setResurrect() {this.#fadeBody ??= Fade.in(600)}
 	resize(/**@type {number}*/size) {
 		this.#size = size
 		this.ctx.resize(size*1.5, size)

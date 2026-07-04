@@ -1,5 +1,5 @@
 ﻿import {State}    from '../state.js'
-import {Env}      from '../control.js'
+import {Env}      from '../env.js'
 import {Fruits}   from '../fruits.js'
 import {Score}    from '../score.js'
 import  GhostSpr  from '../sprites/ghost.js'

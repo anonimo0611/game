@@ -1,5 +1,5 @@
 import {Dir}   from '../../_lib/direction.js';
-import {Cfg}   from '../control.js'
+import {Cfg}   from '../env.js'
 import {State} from '../state.js';
 import {Maze}  from '../maze.js'
 import {Ghost,player as p} from '../actors.js';

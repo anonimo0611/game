@@ -1,4 +1,4 @@
-import {Env}      from '../control.js'
+import {Env}      from '../env.js'
 import {State}    from '../state.js'
 import {Attract}  from '../demo/attract.js'
 import {Cutscene} from '../demo/cutscene.js'

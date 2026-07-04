@@ -1,7 +1,7 @@
 import {Dir}   from '../../_lib/direction.js';
 import {Game}  from '../_main.js'
 import {State} from '../state.js'
-import {Env}   from '../control.js';
+import {Env}   from '../env.js';
 import {Maze}  from '../maze.js'
 import {Actor,Ghosts}  from '../actors.js';
 import {PacSpd as Spd} from '../speed.js';

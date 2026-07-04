@@ -43,7 +43,7 @@ export class SnagSprite {
 		ctx.beginPath()
 		ctx.moveTo(-11, -20)
 		ctx.quadraticCurveTo(v1, 9, v2, 9)
-		ctx.addLinePath([v2,42],[ls,42],[ls,20],[-8,20])
+		ctx.addLinePath([v2,42],[ls,42],[ls,20],[-11,20])
 		ctx.fillStyle = AKA_COLOR
 		ctx.fill()
 		ctx.restore()

@@ -1,6 +1,6 @@
 import {Sound}    from '../../_snd/sound.js'
 import {Game}     from '../_main.js'
-import {Env,Cfg}  from '../control.js'
+import {Env,Cfg}  from '../env.js'
 import {State}    from '../state.js'
 import {Score}    from '../score.js'
 import {Maze}     from '../maze.js'
@@ -98,7 +98,7 @@ class Player extends PacMan {
 			: Sound.playEatsDot1({duration})
 	}
 }
-export let player = new Player
+export let player = new Player()
 export const onPlayerDotEaten =
 (/**@type {JQTriggerHandler}*/cb)=> {
 	EventBus.on(EATEN_EV,cb)

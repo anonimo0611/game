@@ -4,22 +4,25 @@ import {Sound}    from '../_snd/sound.js'
 import {State}    from './state.js'
 import {drawText} from './message.js'
 import {Form,Menu,btns} from './ui.js'
+export {Cfg,Env}
 
 const {InfoTexts:palette}= Color
 const SETTINGS_KEY = 'anopacman'
+const Cfg = function() {
+	const cfg = {
+		speed:         1,
+		currentOnly:   false,
+		alwaysChase:   false,
+		unrestricted:  false,
+		invincible:    false,
+		showTargets:   false,
+		showPaths:     false,
+		showGridLines: false,
+	}
+	return /**@type {Readonly<typeof cfg>}*/(cfg)
+}()
 
-const Ctl = {
-	speed:         1,
-	currentOnly:   false,
-	alwaysChase:   false,
-	unrestricted:  false,
-	invincible:    false,
-	showTargets:   false,
-	showPaths:     false,
-	showGridLines: false,
-}
-
-export const Env = new class Environment {
+const Env = new class Environment {
 	static {$(this.setup)}
 	static setup() {
 		Env.#restore()
@@ -29,13 +32,13 @@ export const Env = new class Environment {
 	#anyFocused = false
 	get extendScore()  {return +Menu.Extend.value}
 	get isStAboveLv1() {return  Menu.Level.index > 0}
-	get isLowSpeed()   {return  Ctl.speed < 0.7}
-	get isArcadeMode() {return !Ctl.currentOnly && !Menu.Level.index}
+	get isLowSpeed()   {return  Cfg.speed < 0.7}
+	get isArcadeMode() {return !Cfg.currentOnly && !Menu.Level.index}
 	get isPractice()   {return  Env.usingCheats || !Env.isArcadeMode}
 	get isCaptured()   {return  Env.#anyFocused || Confirm.opened}
-	get showTracking() {return  Ctl.showTargets || Ctl.showPaths}
-	get semiTransPac() {return  Ctl.invincible  || Ctl.showGridLines}
-	get usingCheats()  {return  Ctl.invincible  || Env.isLowSpeed || Env.showTracking}
+	get showTracking() {return  Cfg.showTargets || Cfg.showPaths}
+	get semiTransPac() {return  Cfg.invincible  || Cfg.showGridLines}
+	get usingCheats()  {return  Cfg.invincible  || Env.isLowSpeed || Env.showTracking}
 
 	/** @readonly */
 	window = function() {
@@ -52,7 +55,7 @@ export const Env = new class Environment {
 		Sound.pause( Ticker.pause(force) )
 	}
 	#save() {
-		const data = /**@type {Record<string,number|boolean>}*/(Ctl)
+		const data = /**@type {Record<string,any>}*/(Cfg)
 		getKeys(Menu).forEach(id=> data[id] = Menu[id].index)
 		document.querySelectorAll('input').forEach(i=> {
 			switch(i.type) {
@@ -107,37 +110,37 @@ export const Env = new class Environment {
 		Env.#syncHelpPanel()
 		Env.#toggleGridLines()
 		const
-		spd = 'x'+Ctl.speed.toFixed(1), lh = 0.9,
+		spd = 'x'+Cfg.speed.toFixed(1), lh = 0.9,
 		opt = {ctx:HUD, size:T*0.68, scaleX:0.7, style:'bold'}
 		HUD.save()
 		HUD.translate(T*0.1, T*17.25)
 		HUD.clearRect(0, 0, BW, T*3)
-		if (spd != 'x1.0' || Ctl.invincible || Ctl.showTargets) {
+		if (spd != 'x1.0' || Cfg.invincible || Cfg.showTargets) {
 			drawText(0, lh*0, palette[+(spd != 'x1.0')], 'Speed'+spd, opt)
-			drawText(0, lh*1, palette[+Ctl.invincible ], 'Invincible',opt)
-			drawText(0, lh*2, palette[+Ctl.showTargets], 'Show Tgts', opt)
+			drawText(0, lh*1, palette[+Cfg.invincible ], 'Invincible',opt)
+			drawText(0, lh*2, palette[+Cfg.showTargets], 'Show Tgts', opt)
 		}
-		if (Ctl.showPaths || Ctl.unrestricted) {
+		if (Cfg.showPaths || Cfg.unrestricted) {
 			HUD.translate(T*(COLS-5), 0)
-			drawText(0,  0, palette[+Ctl.showPaths],   'Show Paths', opt)
-			drawText(0, lh, palette[+Ctl.unrestricted],'Ghosts Un-\nrestricted', opt)
+			drawText(0,  0, palette[+Cfg.showPaths],   'Show Paths', opt)
+			drawText(0, lh, palette[+Cfg.unrestricted],'Ghosts Un-\nrestricted', opt)
 		}
 		HUD.restore()
 	}
 	#syncHelpPanel() {
 		const {isStAboveLv1,isLowSpeed}= Env
-		const data = {...Ctl,isStAboveLv1,isLowSpeed}
+		const data = {...Cfg,isStAboveLv1,isLowSpeed}
 		entries(data).forEach(([id,v])=> {
 			$(`#_${id}`).css('color', palette[+v])
 		})
 	}
 	#toggleGridLines() {
-		Grid.canvas.style.opacity = String(+Ctl.showGridLines)
+		Grid.canvas.style.opacity = String(+Cfg.showGridLines)
 	}
 	#observeFocusChange() {
 		$(document.body).on('focusin focusout', e=> {
 			Env.#anyFocused = (e.type == 'focusin')
-				&& (e.currentTarget != btns.start)
+				&& (e.target != btns.start)
 		})
 	}
 	#setupCtrls() {
@@ -148,4 +151,4 @@ export const Env = new class Environment {
 		$(btns.start).on({click:State.setNewGame})
 		$root.addClass('controller-settled')
 	}
-}, Cfg = /**@type {Readonly<typeof Ctl>}*/(Ctl)
+}
