@@ -8,19 +8,16 @@ export {Cfg,Env}
 
 const {InfoTexts:palette}= Color
 const SETTINGS_KEY = 'anopacman'
-const Cfg = function() {
-	const cfg = {
-		speed:         1,
-		currentOnly:   false,
-		alwaysChase:   false,
-		unrestricted:  false,
-		invincible:    false,
-		showTargets:   false,
-		showPaths:     false,
-		showGridLines: false,
-	}
-	return /**@type {Readonly<typeof cfg>}*/(cfg)
-}()
+const Cfg = readOnly({
+	speed:         1,
+	currentOnly:   false,
+	alwaysChase:   false,
+	unrestricted:  false,
+	invincible:    false,
+	showTargets:   false,
+	showPaths:     false,
+	showGridLines: false,
+})
 
 const Env = new class Environment {
 	static {$(this.setup)}
