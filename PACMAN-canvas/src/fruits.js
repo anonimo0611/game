@@ -8,6 +8,9 @@ import {PtsMgr} from './points.js'
 import * as Spr from './sprites/fruits.js'
 import {player,onPlayerDotEaten} from './actors.js'
 
+let showTgt = true
+let fadeTgt = /**@type {?Fade}*/(null)
+
 const FADE_DUR = 300
 const LEVEL_COLS = 7
 
@@ -18,9 +21,6 @@ const Cache      = Spr.cache(T*2)
 const AppearDots = new Set([70,170])
 const TargetPos  = new Vec2(BW/2, T*18.5).fixed
 const LevelsRect = new Rect(T*2*6, BH-T*2, LEVEL_COLS*T*2, T*2).freeze()
-
-let showTgt = true
-let fadeTgt = /**@type {?Fade}*/(null)
 
 const Types = {
 	get current() {return this.get(Game.level-1)},
