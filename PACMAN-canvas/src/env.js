@@ -4,11 +4,11 @@ import {Sound}    from '../_snd/sound.js'
 import {State}    from './state.js'
 import {drawText} from './message.js'
 import {Form,Menu,btns} from './ui.js'
-export {Cfg,Env}
 
 const {InfoTexts:palette}= Color
 const SETTINGS_KEY = 'anopacman'
-const Cfg = readOnly({
+
+export const Cfg = readOnly({
 	speed:         1,
 	currentOnly:   false,
 	alwaysChase:   false,
@@ -19,7 +19,7 @@ const Cfg = readOnly({
 	showGridLines: false,
 })
 
-const Env = new class Environment {
+export const Env = new class Environment {
 	static {$(this.setup)}
 	static setup() {
 		Env.#restore()
