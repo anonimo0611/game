@@ -168,9 +168,8 @@ export const Maze = freeze({
 	*/
 	drawDot(ctx, col,row, isPow=false, isVisible=true) {
 		if (!isVisible) return
-		const [x,y] = [col,row].map(v=> (v+0.5)*T)
 		const r = (isPow? POW_RADIUS : DOT_RADIUS)
-		ctx.fillCircle(x,y, r, Color.Cookie)
+		ctx.fillCircle(col*T+T/2, row*T+T/2, r, Color.Cookie)
 	},
 })
 export const {drawDot,clearDot}= Maze
