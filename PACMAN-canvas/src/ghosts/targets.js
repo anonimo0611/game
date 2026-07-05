@@ -16,12 +16,13 @@ export const Targets = new class TargetVisualizer {
 		for (const g of ghostList) this.#drawMarker(g)
 		Fg.restore()
 	}
+
 	/** @param {Ghost} g */
 	#markerDisabled = g=>
-		   g.isFrightened
+		  (g.isFrightened
 		|| g.state.isIdle
 		|| g.state.isBitten
-		|| (Timer.frozen && !g.isEscaping)
+		|| (Timer.frozen && !g.isEscaping))
 
 	/** @param {Ghost} g */
 	#getTargetPos = g=>
