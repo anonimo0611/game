@@ -56,7 +56,7 @@ export const Targets = new class TargetVisualizer {
 	/** @param {Pinky|Aosuke}  g */
 	#auxLines(g, ofst=2) {
 		const {center:{x,y},dir,inTunSide}= player
-		const fwdXY  = player.forwardPos(ofst).vals
+		const fwdXY  = player.forward(dir, ofst).vals
 		const ofsXY  = player.offsetTarget(ofst).vals
 		Fg.lineWidth = T*0.2
 		if (g instanceof Pinky && !inTunSide

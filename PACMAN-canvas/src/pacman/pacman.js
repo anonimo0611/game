@@ -45,12 +45,9 @@ class Player extends PacMan {
 	resetTimer() {
 		this.#sinceLastEating = 0
 	}
-	forwardPos(n=0) {
-		return Vec2[this.dir].mul(n*T).add(this.center)
-	}
 	offsetTarget(n=0) {
 		const  ofstX = (this.dir == U ? -n : 0)
-		return this.forwardPos(n).addX(ofstX*T)
+		return this.forward(this.dir, n*T).addX(ofstX*T)
 	}
 	draw() {
 		if (State.isNewGame) return

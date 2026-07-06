@@ -67,6 +67,9 @@ export class Actor {
 	move(dir=this.dir) {
 		this.setNextPosition(this.speed, this.dir=dir)
 	}
+	forward(dir=this.dir, dist=1) {
+    	return Vec2[dir].mul(dist).add(this.center)
+	}
 	setNextPosition(spd=this.speed, dir=this.dir) {
 		this.pos = Vec2[dir].mul(spd).add(this)
 		this.#wrapXAxis()
@@ -82,7 +85,7 @@ export class Actor {
 		return Vec2[dir].add(tile).wrapX(COLS)
 	}
 	collidesWithWall(dir=this.dir) {
-		const  fwd = Vec2[dir].mul(T/2+1e-6).add(this.center)
+		const  fwd = this.forward(dir, T/2+1e-6)
 		return Maze.hasWall( fwd.divInt(T).wrapX(COLS) )
 	}
 	justArrivedAtTile(spd=this.speed) {
