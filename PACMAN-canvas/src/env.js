@@ -132,7 +132,7 @@ export const Env = new class Environment {
 		})
 	}
 	#toggleGridLines() {
-		Grid.canvas.style.opacity = String(+Cfg.showGridLines)
+		Grid.canvas.dataset.show = String(Cfg.showGridLines)
 	}
 	#observeFocusChange() {
 		$(document.body).on('focusin focusout', e=> {
