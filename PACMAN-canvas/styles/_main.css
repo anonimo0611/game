@@ -12,7 +12,7 @@ h1{text-transform:lowercase;font:var(--t)/.9 PacFont;transform-origin:0;translat
 		pointer-events:none;margin-top:0.5em;width:calc(var(--t)*var(--grid-cols));height:calc(var(--t)*var(--grid-rows));
 		canvas{position:absolute;top:var(--padding-top)}
 		canvas#board_bg  {z-index:1}
-		canvas#board_grid{z-index:2;opacity:0}
+		canvas#board_grid{z-index:2;&[data-show=false]{visibility:hidden}}
 		canvas#board_main{z-index:3}
 		canvas#board_hud {z-index:4}
 	}
