@@ -54,7 +54,7 @@ export const Targets = new class TargetVisualizer {
 		Fg.strokeRect(x,y, size,size)
 	}
 	/** @param {Pinky|Aosuke}  g */
-	#auxLines(g, ofst=2) {
+	#auxLines(g, ofst=T*2) {
 		const {center:{x,y},dir,inTunSide}= player
 		const fwdXY  = player.forward(dir, ofst).vals
 		const ofsXY  = player.offsetTarget(ofst).vals

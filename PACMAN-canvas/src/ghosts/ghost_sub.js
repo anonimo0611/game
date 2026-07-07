@@ -17,7 +17,7 @@ export class Pinky extends Ghost {
 	constructor() {
 		super(D, {type:1, tile:[13.5, 15]})
 	}
-	get chaseOffset() {return 4}
+	get chaseOffset() {return 4*T}
 	get scatterTile() {return Vec2.new(3, 0)}
 	get chasePos() {
 		const pos = player.offsetTarget(this.chaseOffset)
@@ -33,7 +33,7 @@ export class Aosuke extends Ghost {
 	constructor() {
 		super(U, {type:2, tile:[11.5, 15], align:-1})
 	}
-	get chaseOffset() {return 2}
+	get chaseOffset() {return 2*T}
 	get scatterTile() {return Vec2.new(COLS-1, ROWS-1)}
 	get chasePos() {
 		const  Aka = Ghosts.of(GhostType.Akabei)
