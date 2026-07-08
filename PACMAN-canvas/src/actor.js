@@ -1,6 +1,5 @@
 import {Dir}  from '../_lib/direction.js'
 import {Maze} from './maze.js'
-const WALL_STOP_OFFSET = T/2+1e-6
 
 export class Actor {
 	/** @readonly */
@@ -79,7 +78,7 @@ export class Actor {
 	move(dir=this.orient) {
 		this.setNextPosition(this.speed, this.dir=dir)
 	}
-	forward(dir=this.orient, dist=WALL_STOP_OFFSET) {
+	forward(dir=this.orient, dist=0) {
     	return Vec2[dir].mul(dist).add(this.center)
 	}
 	getAdjacentTile(dir=this.orient, tile=this.tile) {
@@ -89,7 +88,8 @@ export class Actor {
 		return Maze.hasWall( this.getAdjacentTile(dir) )
 	}
 	collidesWithWall(dir=this.orient) {
-		return Maze.hasWall( this.forward(dir).divInt(T).wrapX(COLS) )
+		const  fwd = this.forward(dir, T/2+1e-6)
+		return Maze.hasWall( fwd.divInt(T).wrapX(COLS) )
 	}
 	justArrivedAtTile(spd=this.speed) {
 		return !this.passedTileCenter && this.tilePixel <= spd
