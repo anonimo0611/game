@@ -84,7 +84,7 @@ export class Actor {
 	hasAdjacentWall(dir=this.orient) {
 		return Maze.hasWall( this.getAdjacentTile(dir) )
 	}
-	collidesWithWall(dir=this.dir) {
+	collidesWithWall(dir=this.orient) {
 		return Maze.hasWall( this.forward(dir).divInt(T).wrapX(COLS) )
 	}
 	justArrivedAtTile(spd=this.speed) {
