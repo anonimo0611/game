@@ -1,5 +1,6 @@
 import {Dir}  from '../_lib/direction.js'
 import {Maze} from './maze.js'
+const WALL_STOP_OFFSET = T/2+1e-6
 
 export class Actor {
 	/** @readonly */
@@ -13,9 +14,8 @@ export class Actor {
 	fadeSpr = /**@type {?Fade}*/(null)
 
 	/** @protected */
-	constructor(col=0, row=0) {
-		this.pos.set(col*T, row*T)
-	}
+	constructor(col=0, row=0) {this.pos.set(col*T, row*T)}
+
 	// Override the actual speed in the subclasses.
 	get speed()     {return 0}
 	get maxAlpha()  {return 1}
@@ -45,6 +45,10 @@ export class Actor {
 	get passedTileCenter() {
 		return this.tilePixel > T/2
 	}
+	/** @protected */
+	drawCenterDot({r=3,color='red'}={}) {
+		Fg.fillCircle(...this.center.vals, r, color)
+	}
 	centering() {
 		this.x = (BW-T)/2
 	}
@@ -72,13 +76,13 @@ export class Actor {
 		this.pos = Vec2[dir].mul(spd).add(this)
 		this.#wrapXAxis()
 	}
-	move(dir=this.dir) {
+	move(dir=this.orient) {
 		this.setNextPosition(this.speed, this.dir=dir)
 	}
-	forward(dir=this.dir, dist=T/2+1e-6) {
+	forward(dir=this.orient, dist=WALL_STOP_OFFSET) {
     	return Vec2[dir].mul(dist).add(this.center)
 	}
-	getAdjacentTile(dir=this.dir, tile=this.tile) {
+	getAdjacentTile(dir=this.orient, tile=this.tile) {
 		return Vec2[dir].add(tile).wrapX(COLS)
 	}
 	hasAdjacentWall(dir=this.orient) {
@@ -89,8 +93,5 @@ export class Actor {
 	}
 	justArrivedAtTile(spd=this.speed) {
 		return !this.passedTileCenter && this.tilePixel <= spd
-	}
-	drawCenterDot({r=3,color='red'}={}) {
-		Fg.fillCircle(...this.center.vals, r, color)
 	}
 }
