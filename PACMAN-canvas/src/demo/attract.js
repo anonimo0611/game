@@ -59,7 +59,7 @@ export class Attract {
 		Fruits.drawLevelCounter()
 	}
 	drawGhostOnTable(type=0, row=0) {
-		const center = Vec2.new(T*5, T*row).add(T/2)
+		const center = {x:T*5+T/2, y:T*row+T/2}
 		this.ghsSpr.draw({type,orient:R,center})
 	}
 	quit() {
