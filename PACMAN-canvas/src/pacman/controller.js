@@ -98,23 +98,21 @@ export class Mover {
 function setSteerEvent(actor,state) {
 	$win.offon('keydown.PacSteer', e=> {
 		const dir = Dir.from(e,{wasd:true})
-		if (!dir || keyRepeated(e) || Env.isCaptured)
+		if (!dir || keyRepeated(e) || Env.isCaptured) {
 			return
-
+		}
 		if (!State.isInGame && Vec2[dir].x) {
 			actor.dir = dir
 			return
 		}
+		state.nextDir = dir
 		if (state.turning) {
-			state.nextDir = dir
 			actor.updateDirection(actor.revOrient)
 			return
 		}
 		if (actor.hasAdjacentWall(dir)) {
-			state.nextDir = dir
 			return
 		}
-		state.nextDir = dir
 		if (actor.passedTileCenter) {
 			actor.orient = dir
 			actor.updateDirection(actor.revDir)
