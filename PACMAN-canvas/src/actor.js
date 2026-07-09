@@ -75,7 +75,7 @@ export class Actor {
 		this.pos = Vec2[dir].mul(spd).add(this)
 		this.#wrapXAxis()
 	}
-	move(dir=this.orient) {
+	move(dir=this.dir) {
 		this.setNextPosition(this.speed, this.dir=dir)
 	}
 	forward(dir=this.orient, dist=0) {
