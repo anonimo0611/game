@@ -21,6 +21,8 @@ export class Pinky extends Ghost {
 	get scatterTile() {return Vec2.new(3, 0)}
 	get chasePos() {
 		const pos = player.offsetTarget(this.chaseOffset)
+		// Modified Pinky's targeting scheme:
+		// guides her toward the opposite exit of the tunnel if the player enters it.
 		switch(player.tunEntry.side) {
 		case L: return pos.setX(Maze.Tunnel.EntryCol.R*T)
 		case R: return pos.setX(Maze.Tunnel.EntryCol.L*T)
