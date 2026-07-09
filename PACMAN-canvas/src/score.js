@@ -64,7 +64,7 @@ export const Score = new class ScoreManager {
 	}
 	add(points = 0) {
 		if (!State.isInGame)
-			return
+			return false
 
 		const oldScore = _score
 		_score += points
@@ -76,5 +76,6 @@ export const Score = new class ScoreManager {
 			Lives.extend()
 			Sound.playGetsHiScore()
 		}
+		return true
 	}
 }
