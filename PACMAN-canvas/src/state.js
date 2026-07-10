@@ -1,16 +1,13 @@
 import {AState} from '../_lib/state.js'
 
-/**
- @typedef {typeof States[number]} StateType
- @typedef {`_${Exclude<StateType,'Title'>}`} Underscored
-*/
+/** @typedef {typeof States[number]} StateType */
 const States = /**@type {const}*/([
 	'Title','Attract','NewGame','NewLevel','Ready','InGame','RoundEnds',
 	'Cleared','PacDying','Flashing','Cutscene','GameOver','Quit'
 ])
 
 /**
- @extends {AState<StateType,globalThis>}
+ @extends {AState<StateType,States,globalThis>}
  @typedef {StateDef.Fluent<GameState,StateType>} IGameState
 */
 class GameState extends AState {
@@ -28,12 +25,6 @@ class GameState extends AState {
 		Timer.cancelAll()
 		$win.trigger(document.body.dataset.state = s, data)
 	}
-
-	/**
-	 State names starting with an _ represent a combination with the `Title`.
-	 @param {{[key in (StateType|Underscored)]?:JQWindowHandler}} o
-	*/
-	on(o) {return super.on(o)}
 
 	/**
 	 @param {StateType} s

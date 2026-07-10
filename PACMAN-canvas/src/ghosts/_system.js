@@ -49,11 +49,11 @@ export const [StateType,createState] = function() {
 	/**
 	 @typedef {typeof States[number]} StateType
 	 @typedef {StateDef.Fluent<State,StateType>} IState
-	 @extends {AState<StateType,Ghost>}
+	 @extends {AState<StateType,States,Ghost>}
 	*/
 	class State extends AState {
 		constructor(/**@type {Ghost}*/g) {
-			super(g, States, true)
+			super(g, States, {immediately:true})
 			this.set(g.inHouse? 'Idle':'Walking')
 		}
 		get isEyes() {return this.is('Escaping','Entering')}
