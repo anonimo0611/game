@@ -1,36 +1,39 @@
 /**
  @template {string} S
+ @template {readonly [S,...S[]]} States
  @template {object} Owner
 */
 export class AState {
-	#owner
-	#last     = /**@type {S}*/('')
-	#curr     = /**@type {S}*/('')
-	#default  = /**@type {S}*/('')
+	#last = /**@type {S}*/('')
+	#curr = /**@type {S}*/('')
 
+	/** @readonly */owner
 	/** @readonly */immediately
+	/** @readonly */default = /**@type {States[0]}*/('')
 	/** @readonly */#eventBus = $({})
 
 	/**
 	 @protected
-	 @param {Owner} owner
-	 @param {readonly S[]} states
+	 @typedef {`_${Exclude<S,States[0]>}`} Underscored
+	 @param {Owner}  owner
+	 @param {States} states
+	 @param {{immediately?:boolean,defaultState?:S}} opts
 	*/
-	constructor(owner, states, immediately=false) {
-		this.#owner = owner
+	constructor(owner, states,
+		{immediately=false, defaultState=states[0]}={}
+	) {
+		this.owner   = owner
+		this.default = defaultState
 		this.immediately = immediately
 		states?.forEach((/**@type {S}*/s,i)=> {
 			const self = /**@type {any}*/(this)
-			i == 0 && (this.#default = s)
 			self[`set${s}`] = (/**@type {StateDef.Opts<S>}*/opt)=> {this.set(s,opt)}
 			defineProperty(this,`is${s}`, {get(){return this.#curr === s}})
 			defineProperty(this,`was${s}`,{get(){return this.#last === s}})
 		})
 	}
-	get owner()   {return this.#owner}
 	get current() {return this.#curr}
 	get last()    {return this.#last}
-	get default() {return this.#default}
 
 	/** @param {S[]} states */
 	is(...states) {
@@ -55,11 +58,11 @@ export class AState {
 		return this
 	}
 
-	/** @param {{[key in S]?:JQTriggerHandler}} o */
+	/** @param {{[key in (S|Underscored)]?:JQTriggerHandler}} o */
 	on(o) {
 		for(const [state,cb] of entries(o)) {
 			const prefix = (state.trim()[0] == '_')? this.default : ''
-			$(this.#owner).on(underscoreToSp(state,prefix), cb)
+			$(this.owner).on(underscoreToSp(state,prefix), cb)
 		}
 		return this
 	}
