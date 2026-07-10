@@ -193,7 +193,7 @@ class Vec2 {
 	 @returns {Vec2}
 
 	 @overload
-	 @param   {Position|number} pos
+	 @param   {Position|number} numOrPos
 	 @returns {Vec2}
 
 	 @overload
@@ -221,7 +221,7 @@ class Vec2 {
 	 @returns {Vec2}
 
 	 @overload
-	 @param   {Position|number} pos
+	 @param   {Position|number} numOrPos
 	 @returns {Vec2}
 
 	 @overload
