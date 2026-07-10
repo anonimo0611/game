@@ -71,20 +71,16 @@ class Vec2 {
 
 	/**
 	 @param {Position} pos
-	 @param {Position|number} v
-	*/static add(pos, v) {
-		return Vec2.new(pos).add(
-			typeof v == 'number' ? {x:v, y:v} : v
-		)
+	 @param {Position|number} val
+	*/static add(pos, val) {
+		return Vec2.new(pos).add(val)
 	}
 
 	/**
 	 @param {Position} pos
-	 @param {Position|number} v
-	*/static sub(pos, v) {
-		return Vec2.new(pos).sub(
-			typeof v == 'number' ? {x:v, y:v} : v
-		)
+	 @param {Position|number} val
+	*/static sub(pos, val) {
+		return Vec2.new(pos).sub(val)
 	}
 
 	/**
@@ -197,6 +193,10 @@ class Vec2 {
 	 @returns {Vec2}
 
 	 @overload
+	 @param   {Position|number} pos
+	 @returns {Vec2}
+
+	 @overload
 	 @param   {xyTuple} xyTuple
 	 @returns {Vec2}
 
@@ -218,6 +218,10 @@ class Vec2 {
 
 	 @overload
 	 @param   {Position} pos
+	 @returns {Vec2}
+
+	 @overload
+	 @param   {Position|number} pos
 	 @returns {Vec2}
 
 	 @overload
