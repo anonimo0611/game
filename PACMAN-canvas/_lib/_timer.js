@@ -3,7 +3,7 @@ const {Ticker,Timer}= function() {
 //-- begin --
 
 const TICK_STEP = 1000/60
-const THRESHOLD = 100
+const THRESHOLD = 250
 
 /** @type {Map<any,TimerData>} */
 const TimerMap = new Map()
@@ -68,7 +68,7 @@ class TickerCore {
 			this.lstTS = ts
 		let dt = ts - this.lstTS
 		if (dt > THRESHOLD)
-			dt = TICK_STEP
+			dt = THRESHOLD
 
 		this.acc += dt
 		this.lstTS = ts
@@ -77,6 +77,7 @@ class TickerCore {
 			this.needsReset = false
 			this.acc = TICK_STEP
 		}
+
 		while(ceil(this.acc) >= TICK_STEP) {
 			this.acc -= TICK_STEP
 			this.tick()
@@ -141,12 +142,12 @@ const Timer = {
 		if (seq.length == 0) return
 		let idx = 0
 		;(function processNext() {
-			const [dur,cb]= seq[idx]
+			const [dur,cb,key]= seq[idx]
 			Timer.set(dur, ()=> {
 				cb(), idx++
 				if (idx < seq.length)
 					processNext()
-			})
+			}, {key})
 		})()
 	},
 }
