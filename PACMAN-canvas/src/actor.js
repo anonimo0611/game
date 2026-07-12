@@ -32,9 +32,9 @@ export class Actor {
 	get tileMid()   {return this.tile.add(.5)}
 	get tileIdx()   {return this.tile.toIdx(COLS)}
 
-	get dir()       {return this.#movDir}
-	get aligned()   {return this.dir == this.orient}
 	set dir(dir)    {this.#movDir = this.orient = dir}
+	get dir()       {return this.#movDir}
+	get aligned()   {return this.#movDir == this.orient}
 	get revDir()    {return Dir.Opposite[this.dir]}
 	get revOrient() {return Dir.Opposite[this.orient]}
 
