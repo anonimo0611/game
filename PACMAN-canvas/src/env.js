@@ -108,19 +108,19 @@ export const Env = new class Environment {
 		Env.#toggleGridLines()
 		const
 		spd = 'x'+Cfg.speed.toFixed(1), lh = 0.9,
-		opt = {ctx:HUD, size:T*0.68, scaleX:0.7, style:'bold'}
+		opt = {size:T*0.68, scaleX:0.7, style:'bold'}
 		HUD.save()
 		HUD.translate(T*0.1, T*17.25)
 		HUD.clearRect(0, 0, BW, T*3)
 		if (spd != 'x1.0' || Cfg.invincible || Cfg.showTargets) {
-			drawText(0, lh*0, palette[+(spd != 'x1.0')], 'Speed'+spd, opt)
-			drawText(0, lh*1, palette[+Cfg.invincible ], 'Invincible',opt)
-			drawText(0, lh*2, palette[+Cfg.showTargets], 'Show Tgts', opt)
+			drawText(HUD, 0, lh*0, palette[+(spd != 'x1.0')], 'Speed'+spd, opt)
+			drawText(HUD, 0, lh*1, palette[+Cfg.invincible ], 'Invincible',opt)
+			drawText(HUD, 0, lh*2, palette[+Cfg.showTargets], 'Show Tgts', opt)
 		}
 		if (Cfg.showPaths || Cfg.unrestricted) {
 			HUD.translate(T*(COLS-5), 0)
-			drawText(0,  0, palette[+Cfg.showPaths],   'Show Paths', opt)
-			drawText(0, lh, palette[+Cfg.unrestricted],'Ghosts Un-\nrestricted', opt)
+			drawText(HUD, 0,  0, palette[+Cfg.showPaths],   'Show Paths', opt)
+			drawText(HUD, 0, lh, palette[+Cfg.unrestricted],'Ghosts Un-\nrestricted', opt)
 		}
 		HUD.restore()
 	}

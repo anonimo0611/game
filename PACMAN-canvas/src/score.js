@@ -56,11 +56,11 @@ export const Score = new class ScoreManager {
 		return (Sound.ringing? Color.ExtendLife : null)
 	}
 	draw() {
-		drawText(2,0, this.#fgColorUP, this.#showUP? '1UP':'')
-		drawText(6,0, null, _score || '00')
+		drawText(Fg, 2,0, this.#fgColorUP, this.#showUP? '1UP':'')
+		drawText(Fg, 6,0, null, _score || '00')
 		Env.isPractice
-			? drawText(14,0, null, 'PRACTICE')
-			: drawText(14,0, null, `HIGH　${_hiSco || '00'}`)
+			? drawText(Fg, 14,0, null, 'PRACTICE')
+			: drawText(Fg, 14,0, null, `HIGH　${_hiSco || '00'}`)
 	}
 	add(points = 0) {
 		if (!State.isInGame)

@@ -3,13 +3,14 @@ import {State}   from './state.js'
 
 export const Message = new class MessageView {
 	/**
+	 @param {Ctx2D}  ctx
 	 @param {number} col
 	 @param {number} row
 	 @param {?CvsStyle} color
 	 @param {string|number} content
 	*/
-	drawText(col, row, color, content,
-		{ctx=Fg, scaleX=1, face='Atari', size=T, style=''}={}
+	drawText(ctx, col, row, color, content,
+		{scaleX=1, face='Atari', size=T, style=''}={}
 	) {
 		ctx.save()
 		ctx.translate(col*T+2, row*T+2)
@@ -25,20 +26,20 @@ export const Message = new class MessageView {
 		!State.isTitle
 			&& !Confirm.opened
 			&& !(Ticker.pausedCount & 32)
-			&& drawText(11, 18, '#F00','PAUSED')
+			&& drawText(Fg, 11, 18, '#F00','PAUSED')
 	}
 	draw() {
 		if (State.isNewGame)
-			drawText( 9, 12, '#0FF','PLAYER　ONE')
+			drawText(Fg,  9, 12, '#0FF','PLAYER　ONE')
 
 		if (Ticker.paused)
 			return this.#drawPausedText()
 
 		if (State.isStarting)
-			drawText(11, 18, '#FF0','READY!')
+			drawText(Fg, 11, 18, '#FF0','READY!')
 
 		if (State.isTitle
 		 || State.isGameOver)
-			drawText( 9, 18, '#F00','GAME　　OVER')
+			drawText(Fg,  9, 18, '#F00','GAME　　OVER')
 	}
 }, {drawText}=Message

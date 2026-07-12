@@ -32,28 +32,28 @@ export class Attract {
 	draw() {
 		const et = (Ticker.elapsedTime/100)
 		Score.draw()
-		drawText(7, 4, null, 'CHARACTOR　/　NICKNAME')
+		drawText(Fg, 7, 4, null, 'CHARACTOR　/　NICKNAME')
 		this.GhostEntries.forEach(([t,col1,col2,row,txt1,txt2],i)=> {
 			et > t    && this.drawGhostOnTable(i,row)
-			et > t+ 5 && drawText(col1, row, Color.GhostBodies[i], txt1)
-			et > t+10 && drawText(col2, row, Color.GhostBodies[i], txt2)
+			et > t+ 5 && drawText(Fg, col1, row, Color.GhostBodies[i], txt1)
+			et > t+10 && drawText(Fg, col2, row, Color.GhostBodies[i], txt2)
 		})
 		if (et > 85) {
 			/**@type {const}*/([
 			 [23, DOT_PTS, false, true],
 			 [25, POW_PTS, true,  this.subAct.pow.show]]
 			).forEach(([row,pts,isPow,showDot])=> {
-				drawDot(Fg,10, row+.00, isPow, showDot)
-				drawText(12.0, row+.00, null,  pts)
-				drawText(14.3, row+.25, null, 'PTS', {size:T*.7})
+				drawDot (Fg, 10.0, row+.00, isPow, showDot)
+				drawText(Fg, 12.0, row+.00, null,  pts)
+				drawText(Fg, 14.3, row+.25, null, 'PTS', {size:T*.7})
 			})
 		}
 		if (et > 90) {
 			this.subAct.draw()
 			if (Env.extendScore > 0) {
 				const text = `BONUS　PACMAN　FOR　${Env.extendScore}`
-				drawText( 2.0, 29.00, Color.NoticeTxt, text)
-				drawText(24.3, 29.25, Color.NoticeTxt,'PTS', {size:T*.7})
+				drawText(Fg,  2.0, 29.00, Color.NoticeTxt, text)
+				drawText(Fg, 24.3, 29.25, Color.NoticeTxt,'PTS', {size:T*.7})
 			}
 		}
 		Fruits.drawLevelCounter()
