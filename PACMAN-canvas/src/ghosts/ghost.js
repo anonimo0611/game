@@ -164,8 +164,8 @@ export class Ghost extends Actor {
 		for (let i=0; i<steps; i++) {
 			this.#tickMove(this.speed/steps)
 			this.passedTileCenter && this.#setNextDir()
-			if (this.#makeTurn())    break
-			if (this.collidesWith()) break
+			if (this.#makeTurn())     break
+			if (this.collidesWith())  break
 		}
 	}
 	#tickMove(spd=this.speed) {
@@ -178,12 +178,12 @@ export class Ghost extends Actor {
 			this.#revSig = false
 			this.orient  = this.revDir
 		}
-		if (this.dir == this.orient)
+		if (this.aligned)
 			this.orient = this.getNextDir()
 	}
 	getNextDir(
 		currDir = this.dir,
-		srcTile = this.getAdjacentTile(),
+		srcTile = this.getAdjacentTile(currDir),
 		tgtTile = this.getTargetTile()
 	) {
 		const dirs = TurnPriority.flatMap((dir,i)=> {
@@ -204,10 +204,10 @@ export class Ghost extends Actor {
 			? false : Maze.GhostNoEntryTiles.has(xy+dir)
 	}
 	#makeTurn() {
-		if (this.dir != this.orient
+		if (this.aligned == false
 		 && this.passedTileCenter
-		 && this.hasAdjacentWall() == false) {
-			this.updateDirection()
+		 && this.hasAdjacentWall(this.orient) == false) {
+			this.alignDirection()
 			return true
 		}
 		return false

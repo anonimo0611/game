@@ -33,6 +33,7 @@ export class Actor {
 	get tileIdx()   {return this.tile.toIdx(COLS)}
 
 	get dir()       {return this.#movDir}
+	get aligned()   {return this.dir == this.orient}
 	set dir(dir)    {this.#movDir = this.orient = dir}
 	get revDir()    {return Dir.Opposite[this.dir]}
 	get revOrient() {return Dir.Opposite[this.orient]}
@@ -55,7 +56,7 @@ export class Actor {
 		const {center:{x}}= this
 		this.x = mathClamp(x, T, BW-T) - T/2
 	}
-	#fixPosition() {
+	#snapToGrid() {
 		Vec2[this.dir].y
 			? (this.x = this.tile.x * T)
 			: (this.y = this.tile.y * T)
@@ -67,9 +68,9 @@ export class Actor {
 			return x
 		}(this) - T/2
 	}
-	updateDirection(dir=this.orient) {
+	alignDirection(dir=this.orient) {
 		this.#movDir = dir
-		this.#fixPosition()
+		this.#snapToGrid()
 	}
 	setNextPosition(spd=this.speed, dir=this.dir) {
 		this.pos = Vec2[dir].mul(spd).add(this)
@@ -78,20 +79,25 @@ export class Actor {
 	move(dir=this.dir) {
 		this.setNextPosition(this.speed, this.dir=dir)
 	}
-	forward(dir=this.orient, dist=0) {
+	justArrivedAtTile(speed=this.speed) {
+		return this.passedTileCenter == false
+			&& this.tilePixel <= speed
+	}
+	/** @param {Direction} dir */
+	forward(dir, dist=0) {
     	return Vec2[dir].mul(dist).add(this.center)
 	}
-	getAdjacentTile(dir=this.orient, tile=this.tile) {
+	/** @param {Direction} dir */
+	getAdjacentTile(dir, tile=this.tile) {
 		return Vec2[dir].add(tile).wrapX(COLS)
 	}
-	hasAdjacentWall(dir=this.orient) {
+	/** @param {Direction} dir */
+	hasAdjacentWall(dir) {
 		return Maze.hasWall( this.getAdjacentTile(dir) )
 	}
-	collidesWithWall(dir=this.orient) {
+	/** @param {Direction} dir */
+	collidesWithWall(dir) {
 		const  fwd = this.forward(dir, T/2+1e-6)
 		return Maze.hasWall( fwd.divInt(T).wrapX(COLS) )
-	}
-	justArrivedAtTile(spd=this.speed) {
-		return !this.passedTileCenter && this.tilePixel <= spd
 	}
 }

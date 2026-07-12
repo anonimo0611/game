@@ -24,8 +24,8 @@ export class Mover {
 		return this.#spd ??= this.#setSpeed()
 	}
 	get onWall() {
-		const  {state,actor}= this
-		return !state.turning && actor.collidesWithWall()
+		const  {state,actor}= this, {dir}= actor
+		return !state.turning && actor.collidesWithWall(dir)
 	}
 	get canTurn() {
 		const {actor,state:{nextDir}}=this
@@ -70,13 +70,13 @@ export class Mover {
 		if (state.turning && actor.passedTileCenter) {
 			state.turning = false
 			state.nextDir = null
-			actor.updateDirection()
+			actor.alignDirection()
 		}
 	}
 	#turnAround() {
 		const {actor}= this
 		if (actor.dir == actor.revOrient) {
-			actor.updateDirection()
+			actor.alignDirection()
 			this.#setSpeed()
 		}
 	}
@@ -107,7 +107,7 @@ function setSteerEvent(actor,state) {
 		}
 		state.nextDir = dir
 		if (state.turning) {
-			actor.updateDirection(actor.revOrient)
+			actor.alignDirection(actor.revOrient)
 			return
 		}
 		if (actor.hasAdjacentWall(dir)) {
@@ -115,7 +115,7 @@ function setSteerEvent(actor,state) {
 		}
 		if (actor.passedTileCenter) {
 			actor.orient = dir
-			actor.updateDirection(actor.revDir)
+			actor.alignDirection(actor.revDir)
 		}
 	})
 }
