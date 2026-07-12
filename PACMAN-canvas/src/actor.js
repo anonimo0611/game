@@ -68,16 +68,16 @@ export class Actor {
 			return x
 		}(this) - T/2
 	}
+	move(dir=this.dir) {
+		this.setNextPosition(this.speed, this.dir=dir)
+	}
 	alignDirection(dir=this.orient) {
 		this.#movDir = dir
 		this.#snapToGrid()
 	}
-	setNextPosition(spd=this.speed, dir=this.dir) {
-		this.pos = Vec2[dir].mul(spd).add(this)
+	setNextPosition(speed=this.speed, dir=this.dir) {
+		this.pos = Vec2[dir].mul(speed).add(this)
 		this.#wrapXAxis()
-	}
-	move(dir=this.dir) {
-		this.setNextPosition(this.speed, this.dir=dir)
 	}
 	justArrivedAtTile(speed=this.speed) {
 		return this.passedTileCenter == false
