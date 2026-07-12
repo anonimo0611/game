@@ -34,7 +34,8 @@ export class Actor {
 
 	get dir()       {return this.#movDir}
 	set dir(dir)    {this.#movDir = this.orient = dir}
-	get aligned()   {return this.#movDir == this.orient}
+
+	get aligned()   {return this.dir == this.orient}
 	get revDir()    {return Dir.Opposite[this.dir]}
 	get revOrient() {return Dir.Opposite[this.orient]}
 
