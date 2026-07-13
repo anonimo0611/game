@@ -85,9 +85,11 @@ class EnergizerAct {
 	get outward() {return this.#pacman.dir == L}
 
 	#setActor(type=0) {
-		const
-		g = new Ghost(L, {type,tile:[COLS+6+(type*2),19]})
-		g.type == 0 && this.#pacman.pos.set(g.x-(T*3.5), g.y)
+		const g = new Ghost(L, {
+			type: /**@type {GhostType}*/(type),
+			tile: [COLS+6+(type*2),19]
+		})
+		!g.type && this.#pacman.pos.set(g.x-(T*3.5), g.y)
 		this.#ghosts.push(g)
 	}
 	update() {
