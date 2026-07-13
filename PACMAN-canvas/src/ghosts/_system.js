@@ -72,10 +72,10 @@ export const Points = {
 export const Ghosts = new class GhostGroup {
 	static {$(this.setup)}
 	static setup() {
-		State.on({
-			InGame:    Ghosts.#onInGame,
-			Ready:     Ghosts.#trigger,
-			RoundEnds: Ghosts.#trigger,
+		State.on({InGame:Ghosts.#onInGame,})
+		State.onChange(()=> {
+			if (hasOwn(Evt,State.current))
+				$(GhostList).trigger(State.current)
 		})
 	}
 	#animIdx = 0
@@ -92,9 +92,6 @@ export const Ghosts = new class GhostGroup {
 	initialize(ghostList) {
 		this.#animIdx = GhostList.length = 0
 		ghostList?.forEach((g,i)=> GhostList[i] = g)
-	}
-	#trigger() {
-		$(GhostList).trigger(State.current)
 	}
 	#onInGame = ()=> {
 		Sound.playSiren()
