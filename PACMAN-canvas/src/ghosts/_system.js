@@ -147,8 +147,8 @@ export const Ghosts = new class GhostGroup {
 			g.draw()
 		})
 	}
-	/** @param {GhostIdx} type */
-	of = type=> GhostList[type]
+	/** @param {GhostType} idx */
+	of = idx=> GhostList[idx]
 }
 
 const SCATTER = 0
