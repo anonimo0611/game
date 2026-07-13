@@ -91,8 +91,8 @@ export class AState {
 		this.#eventBus.trigger('before'+state)
 		this.#last = this.current
 		this.#curr = state
-		this.#eventBus.trigger('change')
 		cb?.call(this,state,data)
+		this.#eventBus.trigger('change', state)
 		return this
 	}
 }
