@@ -72,11 +72,8 @@ export const Points = {
 export const Ghosts = new class GhostGroup {
 	static {$(this.setup)}
 	static setup() {
-		State.on({InGame:Ghosts.#onInGame,})
-		State.onChange(()=> {
-			if (hasOwn(Evt,State.current))
-				$(GhostList).trigger(State.current)
-		})
+		State.on({InGame:Ghosts.#onInGame})
+		State.onChange(Ghosts.#dispatchState)
 	}
 	#animIdx = 0
 	get animIndex()     {return this.#animIdx}
@@ -96,6 +93,10 @@ export const Ghosts = new class GhostGroup {
 	#onInGame = ()=> {
 		Sound.playSiren()
 		Cfg.alwaysChase && this.#setReleaseTimer()
+	}
+	#dispatchState = ()=> {
+		hasOwn(Evt,State.current)
+			&& $(GhostList).trigger(State.current)
 	}
 	#setReleaseTimer() {
 		const lv = (Game.pacDied? 0 : Game.clampedLv)

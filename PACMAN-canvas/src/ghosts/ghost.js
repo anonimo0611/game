@@ -164,8 +164,8 @@ export class Ghost extends Actor {
 		for (let i=0; i<steps; i++) {
 			this.#tickMove(this.speed/steps)
 			this.passedTileCenter && this.#setNextDir()
-			if (this.#makeTurn())     break
-			if (this.collidesWith())  break
+			if (this.#makeTurn())    break
+			if (this.collidesWith()) break
 		}
 	}
 	#tickMove(spd=this.speed) {
