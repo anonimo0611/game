@@ -26,7 +26,7 @@ export class Ghost extends Actor {
 
 	/**
 	 @param {Direction} dir
-	 @param {{type?:number, tile?:xyTuple, align?:-1|0|1}} options
+	 @param {{type?:GhostType, tile?:xyTuple, align?:-1|0|1}} options
 	*/
 	constructor(dir=L, {type=0,tile:[col,row]=[0,0],align=0}={}) {
 		super(col,row)
