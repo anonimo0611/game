@@ -1,5 +1,5 @@
 //---- Ghosts ----
-type GhostType = (typeof GhostType)['Akabei'|'Pinky'|'Aosuke'|'Guzuta']
+type GhostType = (typeof GhostType)[Exclude<keyof typeof GhostType,'Max'>]
 type GhostHitRadii = readonly [normal: number, frightened: number]
 
 //---- Dictionary ----
