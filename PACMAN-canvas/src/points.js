@@ -1,10 +1,10 @@
-import {Game}   from './_main.js'
-import {State}  from './state.js'
-import {Score}  from './score.js'
-import {cache}  from './sprites/points.js'
+import {Game}  from './_main.js'
+import {State} from './state.js'
+import {Score} from './score.js'
+import {cache} from './sprites/points.js'
 
 const FADE_DUR = 300
-const PopupMap = /**@type {Map<PointIdx,FloatingPts>}*/(new Map)
+const PopupMap = /**@type {Map<PointType,FloatingPts>}*/(new Map)
 State.on({_RoundEnds:()=> PopupMap.clear()})
 
 export const PtsMgr = new class PointsManager {
