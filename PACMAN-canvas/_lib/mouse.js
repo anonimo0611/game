@@ -27,7 +27,7 @@ export const Cursor = function() {
  @param {HTMLInputElement} ctrl
 */
 function setupCtrl(ctrl) {
-	const outputs = $(`output[for~="${ctrl.id}"]`).text(ctrl.value).get() ?? []
+	const outputs = $(`output[for~="${ctrl.id}"]`).text(ctrl.value).get()
 	const label   = ctrl.closest('label') || qSel(`label[for="${ctrl.id}"]`)
 	const linkIds = ctrl.dataset.links?.trim().split(/\s+/)  ?? []
 	const inputs  = linkIds.flatMap(id=> qSel(`input#${id}`) ?? [])

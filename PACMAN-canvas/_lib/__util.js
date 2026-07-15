@@ -33,7 +33,7 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
  @template {object} O
  @param {O} obj
 */const readOnly = obj=>
-	/**@type Readonly<O>*/(obj)
+	/**@type {Readonly<O>}*/(obj)
 
 /** @param {KeyboardEventLike} e */
 const keyRepeated = e=>
@@ -47,7 +47,7 @@ const isActionKey = e=>
 const hasModifierKeys = e=>
 	(e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
-/**  @param {KeyboardEventLike} e */
+/** @param {KeyboardEventLike} e */
 const getNativeKeyEvent = e=>
 	(e instanceof KeyboardEvent)
 		? e :(e.originalEvent instanceof KeyboardEvent)
