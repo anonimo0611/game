@@ -35,27 +35,23 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 */const readOnly = obj=>
 	/**@type Readonly<O>*/(obj)
 
-/**
- @param {KeyboardEvent|JQKeyboardEvent} e
-*/const getNativeKeyEvent = e=>
+/** @param {KeyboardEventLike} e */
+const keyRepeated = e=>
+	getNativeKeyEvent(e)?.repeat || false
+
+/** @param {KeyboardEventLike|JQTriggeredEvent} e */
+const isActionKey = e=>
+	(e.key == '\x20' || e.key == 'Enter')
+
+/** @param {KeyboardEventLike} e */
+const hasModifierKeys = e=>
+	(e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
+
+/**  @param {KeyboardEventLike} e */
+const getNativeKeyEvent = e=>
 	(e instanceof KeyboardEvent)
 		? e :(e.originalEvent instanceof KeyboardEvent)
 			? e.originalEvent : null
-
-/**
- @param {KeyboardEvent|JQKeyboardEvent} e
-*/const hasModifierKeys = e=>
-	(e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
-
-/**
- @param {KeyboardEvent|JQKeyboardEvent|JQTriggeredEvent} e
-*/const isActionKey = e=>
-	(e.key == '\x20' || e.key == 'Enter')
-
-/**
- @param {KeyboardEvent|JQKeyboardEvent} e
-*/const keyRepeated = e=>
-	getNativeKeyEvent(e)?.repeat || false
 
 /**
  @template {new ()=> HTMLElement} T

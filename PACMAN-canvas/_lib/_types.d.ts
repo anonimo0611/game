@@ -4,8 +4,7 @@ type GhostHitRadii = readonly [normal: number, frightened: number]
 
 //---- Dictionary ----
 
-type Scene   = {update():void, draw():void}
-type DirDict = {readonly [key:string]: Direction}
+type Scene  = {update():void, draw():void}
 type SceneDict<T extends string> = {[K in T]?:Scene}
 type NumericDict<T> = {readonly [K:number]:T}
 
@@ -42,9 +41,10 @@ type FloatingPtsData = {
 
 //---- Direction ----
 
-type Direction  = 'Up'|'Right'|'Down'|'Left'
-type Vertical   = 'Up'|'Down'
-type Horizontal = 'Left'|'Right'
+type Vertical     = 'Up'|'Down'
+type Horizontal   = 'Left'|'Right'
+type Direction    = 'Up'|'Right'|'Down'|'Left'
+type DirectionMap = {readonly [key:string]: Direction}
 
 /** Represents Akabei's dazed eyes in intermissions scene part 2. */
 type Dazed = 'Dazed'
@@ -54,6 +54,10 @@ type VisualOrient = Direction|Dazed
 
 type Ctx2D = EnhancedCtx2D
 type CvsStyle = string|CanvasGradient|CanvasPattern
+
+//---- Key events ----
+
+type KeyboardEventLike = KeyboardEvent|JQuery.KeyboardEventBase
 
 //---- jQuery ----
 
