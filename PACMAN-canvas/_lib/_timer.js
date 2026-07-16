@@ -64,7 +64,7 @@ class TickerCore {
 		let dt = ts - this.lstTS
 		if (dt > THRESHOLD)
 			dt = THRESHOLD
-		if (dt > RESET_THRESHOLD_MS) {
+		if (dt > THRESHOLD) {
 			this.lstTS = ts
 			this.acc = 0
 			dt = 0
@@ -72,10 +72,12 @@ class TickerCore {
 		this.acc += (dt*1000)+.5|0
 		this.lstTS = ts
 
-		while(this.acc >= TICK_US) {
-			this.acc -= TICK_US
+		while(this.acc >= TICK_US-500) {
 			this.tick()
+			this.acc -= TICK_US
 		}
+		if (this.acc < 0)
+			this.acc = 0
 		this.draw?.()
 		this.rAFId = requestAnimationFrame(this.loop)
 	}
