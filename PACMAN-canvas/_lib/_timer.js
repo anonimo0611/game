@@ -2,8 +2,10 @@
 const {Ticker,Timer}= function() {
 //-- begin --
 
-const TICK_STEP = 1000/60
-const THRESHOLD = 250
+const TICK_MS   = 1000/60
+const TICK_US   = 16667
+const THRESHOLD = 200 // ms
+const RESET_THRESHOLD_MS = 1000
 
 /** @type {Map<any,TimerData>} */
 const TimerMap = new Map()
@@ -15,12 +17,12 @@ let _paused  = false
 let _tFrozen = false
 
 const Ticker = {
-	get Interval()    {return TICK_STEP},
+	get Interval()    {return TICK_MS},
 	get count()       {return _fCount},
 	get pausedCount() {return _pCount},
 	get paused()      {return _paused},
 	get running()     {return _ticker instanceof TickerCore},
-	get elapsedTime() {return _fCount*TICK_STEP},
+	get elapsedTime() {return _fCount*TICK_MS},
 
 	/** @param {Scene} [s] */
 	set(s) {new TickerCore(s?.update, s?.draw)},
@@ -34,8 +36,6 @@ const Ticker = {
 	},
 	resetCount() {
 		_fCount = 0
-		if (_ticker)
-			_ticker.needsReset = true
 	},
 	reset() {
 		_fCount  = 0
@@ -55,34 +55,29 @@ class TickerCore {
 		_ticker?.stop()
 		_ticker     = this
 		this.acc    = 0
-		this.lstTS  = 0
+		this.lstTS  = performance.now()
 		this.update = update
 		this.draw   = draw
 		this.rAFId  = requestAnimationFrame(this.loop)
-		this.needsReset = false
 	}
 	loop = (/**@type {number}*/ts)=> {
-		this.rAFId = requestAnimationFrame(this.loop)
-
-		if (this.lstTS === 0)
-			this.lstTS = ts
 		let dt = ts - this.lstTS
 		if (dt > THRESHOLD)
 			dt = THRESHOLD
-
-		this.acc += dt
+		if (dt > RESET_THRESHOLD_MS) {
+			this.lstTS = ts
+			this.acc = 0
+			dt = 0
+		}
+		this.acc += Math.round(dt * 1000);
 		this.lstTS = ts
 
-		if (this.needsReset) {
-			this.needsReset = false
-			this.acc = TICK_STEP
-		}
-
-		while(ceil(this.acc) >= TICK_STEP) {
-			this.acc -= TICK_STEP
+		while(this.acc >= TICK_US) {
+			this.acc -= TICK_US
 			this.tick()
 		}
 		this.draw?.()
+		this.rAFId = requestAnimationFrame(this.loop)
 	}
 	tick() {
 		_paused
@@ -103,7 +98,7 @@ class TickerCore {
 	 /**@type {unknown}*/key
 	) {
 		if (Timer.frozen && !t.ignoreFrozen)  return
-		if (TICK_STEP*t.amount++ < t.timeout) return
+		if (TICK_MS*t.amount++ < t.timeout) return
 		TimerMap.delete(key), t.callback()
 	}
 	stop()  {
