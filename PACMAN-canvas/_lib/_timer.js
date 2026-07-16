@@ -69,7 +69,7 @@ class TickerCore {
 			this.acc = 0
 			dt = 0
 		}
-		this.acc += Math.round(dt * 1000);
+		this.acc += (dt*1000)+.5|0
 		this.lstTS = ts
 
 		while(this.acc >= TICK_US) {

@@ -38,7 +38,7 @@ export const Confirm = new class ConfirmCore {
 		$dialog.find('button').each((i,btn)=> {
 			if (i == autoFocus) btn.autofocus = true
 			btn.classList.add(i == cancelIdx? 'cancel':'ok')
-			btn.textContent = [lTxt,rTxt][0]
+			btn.textContent = [lTxt,rTxt][i]
 			btn.onclick = ()=> {
 				$dialog.fadeOut(300, function() {
 					this.close()
