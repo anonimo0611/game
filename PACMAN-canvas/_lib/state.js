@@ -45,16 +45,16 @@ export class AState {
 		return state == this.last
 	}
 
-	/** @param {JQTriggerHandler} handler */
-	onChange(handler) {
-		this.#eventBus.on('change', handler)
-		return this
-	}
-
 	/** @param {{[key in S]?:JQTriggerHandler}} o */
 	onBefore(o) {
 		for (const [state,cb] of entries(o))
 			$(this.#eventBus).on('before'+state, cb)
+		return this
+	}
+
+	/** @param {JQTriggerHandler} handler */
+	onChange(handler) {
+		this.#eventBus.on('change', handler)
 		return this
 	}
 
@@ -92,7 +92,7 @@ export class AState {
 		this.#last = this.current
 		this.#curr = state
 		cb?.call(this,state,data)
-		this.#eventBus.trigger('change', state)
+		this.#eventBus.trigger('change')
 		return this
 	}
 }
