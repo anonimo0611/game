@@ -84,7 +84,7 @@ export class Ghost extends Actor {
 	}
 	draw() {
 		if (State.isNewGame) return
-		this.sprite.draw(this)
+		!this.state.isBitten && this.sprite.draw(this)
 	}
 	update() {
 		this.sprite.update()

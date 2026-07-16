@@ -138,12 +138,11 @@ export const Ghosts = new class GhostGroup {
 		PtsMgr.drawGhostPts()
 	}
 	#draw(onFront=true) {
-		GhostList.forEach((_,i,arr)=> {
-			const g = arr[arr.length-1-i]
-			if (g.state.isBitten) return
-			if (g.isFrightened == onFront) return
-			g.draw()
-		})
+		GhostList
+			.toReversed()
+			.forEach(g=> {
+				g.isFrightened != onFront && g.draw()
+			})
 	}
 	/** @param {GhostType} idx */
 	of = idx=> GhostList[idx]
