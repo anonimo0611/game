@@ -5,7 +5,6 @@ const {Ticker,Timer}= function() {
 const TICK_MS   = 1000/60
 const TICK_US   = 16667
 const THRESHOLD = 200 // ms
-const RESET_THRESHOLD_MS = 1000
 
 /** @type {Map<any,TimerData>} */
 const TimerMap = new Map()
@@ -62,8 +61,6 @@ class TickerCore {
 	}
 	loop = (/**@type {number}*/ts)=> {
 		let dt = ts - this.lstTS
-		if (dt > THRESHOLD)
-			dt = THRESHOLD
 		if (dt > THRESHOLD) {
 			this.lstTS = ts
 			this.acc = 0
