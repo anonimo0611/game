@@ -14,7 +14,7 @@ const EATEN_EV = 'DotEaten'
 
 export class PacMan extends Actor {
 	/** @readonly */
-	sprite = new PacSpr(Fg,T)
+	sprite = new PacSpr(Fg,T,0)
 	constructor(col=0,row=0) {super(col,row)}
 	get hidden() {return Timer.frozen}
 	draw()   {this.sprite.draw(this)}
@@ -59,7 +59,7 @@ class Player extends PacMan {
 			super.drawCenterDot()
 	}
 	update() {
-		this.sprite.update(this)
+		this.sprite.update(this, Game.speed)
 		this.fadeSpr?.update(this.maxAlpha)
 		this.closed
 			? this.keepInsideBoard()

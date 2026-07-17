@@ -1,4 +1,4 @@
-const DURATION  = 300/Ticker.Interval
+const DURATION  = 200/Ticker.Interval
 const OPEN_MID  = 30 * PI/180
 const OPEN_MAX  = 60 * PI/180
 const PHASE_MID = asin(OPEN_MID/OPEN_MAX)
@@ -24,19 +24,19 @@ export default class PacmanSprite {
 		this.r = radius
 		this.#mAngle = mathLerp(0, OPEN_MAX, initOpening)
 	}
-	update({closed=false,hidden=false,onWall=false}={}) {
+	update({closed=false,hidden=false,onWall=false}={}, speed=1) {
 		this.#dyingSpr
 			? this.#dyingSpr.update()
-			: !closed && !hidden && this.#chew(onWall)
+			: !closed && !hidden && this.#chew(onWall, speed)
 	}
-	#chew(onWall=false) {
+	#chew(onWall=false, speed=1) {
 		if (onWall) {
 			if (this.#mAngle <= OPEN_MID) {
 				this.#mAngle = OPEN_MID
 				this.#mPhase = PHASE_MID
 			} return
 		}
-		const phase = this.#mPhase += PI/DURATION
+		const phase = this.#mPhase += PI/(DURATION/speed)
 		this.#mAngle = OPEN_MAX * abs(sin(phase))
 	}
 	draw({
