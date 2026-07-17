@@ -157,7 +157,7 @@ export const Maze = freeze({
 		const r = DOT_RADIUS+1
 		DotSet.delete(i)
 		PowMap.delete(i)
-		Bg.clearRect(x*T-r, y*T-r, r*2, r*2)
+		Bg.fillRect(x*T-r, y*T-r, r*2, r*2, '#000')
 		return DotSet.size
 	},
 
