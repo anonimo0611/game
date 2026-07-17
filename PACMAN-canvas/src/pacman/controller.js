@@ -7,8 +7,9 @@ import {Actor,Ghosts}  from '../actors.js';
 import {PacSpd as Spd} from '../speed.js';
 
 class TurnState {
-	turning = false
-	nextDir = /**@type {?Direction}*/(null)
+	turning  = false
+	nextTurn = /**@type {?Direction}*/(null)
+	nextDir  = /**@type {?Direction}*/(null)
 }
 export class Mover {
 	/** @private @readonly */actor
@@ -68,8 +69,9 @@ export class Mover {
 	#finishCornering() {
 		const {state,actor}= this
 		if (state.turning && actor.passedTileCenter) {
-			state.turning = false
-			state.nextDir = null
+			state.nextDir  = state.nextTurn
+			state.turning  = false
+			state.nextTurn = null
 			actor.alignDirection()
 		}
 	}
@@ -105,14 +107,15 @@ function setSteerEvent(actor,state) {
 			actor.dir = dir
 			return
 		}
-		state.nextDir = dir
 		if (state.turning) {
-			actor.alignDirection(actor.revOrient)
+			state.nextTurn = dir
 			return
 		}
 		if (actor.hasAdjacentWall(dir)) {
+			state.nextDir = dir
 			return
 		}
+		state.nextDir = dir
 		if (actor.passedTileCenter) {
 			actor.orient = dir
 			actor.alignDirection(actor.revDir)
