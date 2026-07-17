@@ -60,6 +60,7 @@ class TickerCore {
 		this.rAFId  = requestAnimationFrame(this.loop)
 	}
 	loop = (/**@type {number}*/ts)=> {
+		this.rAFId = requestAnimationFrame(this.loop)
 		let dt = ts - this.lstTS
 		if (dt > THRESHOLD) {
 			this.lstTS = ts
@@ -76,7 +77,6 @@ class TickerCore {
 		if (this.acc < 0)
 			this.acc = 0
 		this.draw?.()
-		this.rAFId = requestAnimationFrame(this.loop)
 	}
 	tick() {
 		_paused
@@ -96,8 +96,8 @@ class TickerCore {
 	 /**@type {TimerData}*/t,
 	 /**@type {unknown}*/key
 	) {
-		if (Timer.frozen && !t.ignoreFrozen)  return
-		if (TICK_MS*t.amount++ < t.timeout) return
+		if (Timer.frozen && !t.ignoreFrozen) return
+		if (TICK_MS*t.amount++ < t.timeout)  return
 		TimerMap.delete(key), t.callback()
 	}
 	stop()  {
