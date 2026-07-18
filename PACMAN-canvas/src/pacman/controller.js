@@ -40,22 +40,30 @@ export class Mover {
 			: (Ghosts.isFrightened? Spd.Energized : Spd.Base)
 		return(this.#spd = Game.moveSpeed * Spd.levelFactor * spd)
 	}
-	/**
-	 @param {number} spd
-	 @returns {boolean} True if the actor stopped at a wall.
-	*/
-	update(spd) {
-		this.#turnCorner(spd)
-		this.actor.setNextPosition(spd)
-		this.#setMoveSpeed(spd)
-		this.#finishCornering()
-		this.#turnAround()
-		return this.#stopAtWall()
-	}
 	/** @param {number} spd */
 	#setMoveSpeed(spd) {
 		if (this.actor.justArrivedAtTile(spd))
 			this.#setSpeed()
+	}
+	/**
+	 @param {number} spd
+	 @returns {boolean} True if the actor stopped at a wall.
+	*/
+	update(/**@type {number}*/spd) {
+		this.#turnAround()
+		this.#turnCorner(spd)
+		this.actor.setNextPosition(spd)
+		this.#setMoveSpeed(spd)
+		this.#finishCornering()
+		return this.#stopAtWall()
+	}
+	#turnAround() {
+		const {state,actor}= this
+		if (actor.revDir == state.nextDir) {
+			actor.dir = state.nextDir
+			state.nextDir = null
+			this.#setSpeed()
+		}
 	}
 	/** @param {number} spd */
 	#turnCorner(spd) {
@@ -73,13 +81,6 @@ export class Mover {
 			state.turning  = false
 			state.nextTurn = null
 			actor.alignDirection()
-		}
-	}
-	#turnAround() {
-		const {actor}= this
-		if (actor.dir == actor.revOrient) {
-			actor.alignDirection()
-			this.#setSpeed()
 		}
 	}
 	#stopAtWall() {
@@ -100,21 +101,21 @@ export class Mover {
 function setSteerEvent(actor,state) {
 	$win.offon('keydown.PacSteer', e=> {
 		const dir = Dir.from(e,{wasd:true})
-		if (!dir || keyRepeated(e) || Env.isCaptured) {
-			return
-		}
-		if (!State.isInGame && Vec2[dir].x) {
-			actor.dir = dir
-			return
-		}
-		if (state.turning) {
-			state.nextTurn = dir
-			return
-		}
-		if (actor.hasAdjacentWall(dir)) {
-			state.nextDir = dir
-			return
-		}
+		if (dir == null
+		 || dir == actor.dir
+		 || keyRepeated(e)
+		 || Env.isCaptured
+		) return
+
+		if (!State.isInGame && Vec2[dir].x)
+			return void (actor.dir = dir)
+
+		if (state.turning)
+			return void(state.nextTurn = dir)
+
+		if (actor.hasAdjacentWall(dir))
+			return void(state.nextDir = dir)
+
 		state.nextDir = dir
 		if (actor.passedTileCenter) {
 			actor.orient = dir
