@@ -57,10 +57,13 @@ export class Actor {
 		const {center:{x}}= this
 		this.x = mathClamp(x, T, BW-T) - T/2
 	}
-	#snapToGrid() {
+	#snapToAxis() {
 		Vec2[this.dir].y
 			? (this.x = this.tile.x * T)
 			: (this.y = this.tile.y * T)
+	}
+	snapToTileCenter() {
+		this.pos = this.tile.mul(T)
 	}
 	#wrapXAxis() {
 		this.x = function({center:{x}}) {
@@ -74,7 +77,7 @@ export class Actor {
 	}
 	alignDirection(dir=this.orient) {
 		this.#movDir = dir
-		this.#snapToGrid()
+		this.#snapToAxis()
 	}
 	setNextPosition(speed=this.speed, dir=this.dir) {
 		this.pos = Vec2[dir].mul(speed).add(this)
