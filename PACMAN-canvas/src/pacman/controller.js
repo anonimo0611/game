@@ -21,13 +21,13 @@ export class Mover {
 		return this.#spd ??= this.#setSpeed()
 	}
 	get onWall() {
-		return !this.#turning
+		return this.#turning == false
 			&& this.#actor.collidesWithWall(this.#actor.dir)
 	}
 	get canTurn() {
 		return this.#nextDir != null
-		    && !this.#actor.passedTileCenter
-		    && !this.#actor.collidesWithWall(this.#nextDir)
+			&& !this.#actor.passedTileCenter
+			&& !this.#actor.collidesWithWall(this.#nextDir)
 	}
 	#setSpeed() {
 		const spd = Maze.hasDot(this.#actor.tileIdx)
