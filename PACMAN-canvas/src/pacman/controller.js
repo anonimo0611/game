@@ -22,11 +22,10 @@ export class Mover {
 	}
 	get onWall() {
 		return this.#turning == false
-			&& this.#actor.collidesWithWall(this.#actor.dir)
+			&& this.#actor.collidesWithWall()
 	}
 	get canTurn() {
-		return this.#nextDir != null
-			&& !this.#actor.passedTileCenter
+		return !this.#actor.passedTileCenter
 			&& !this.#actor.collidesWithWall(this.#nextDir)
 	}
 	#setSpeed() {
@@ -53,7 +52,7 @@ export class Mover {
 	}
 	/** @param {number} step */
 	#turnCorner(step) {
-		if (this.canTurn && this.#nextDir) {
+		if (this.#nextDir && this.canTurn) {
 			this.#turning ||= true
 			this.#actor.orient = this.#nextDir
 			this.#actor.setNextPosition(step, this.#nextDir)
