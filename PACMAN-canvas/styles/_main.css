@@ -7,7 +7,7 @@ header>*{color:#FF0;position:absolute;z-index:100}
 h1{text-transform:lowercase;font:var(--t)/.9 PacFont;transform-origin:0;translate:calc(var(--t)*23.3) calc(var(--t)*11.5);scale:115%;display:flex;flex-direction:column;:nth-child(2){text-indent:1.5em}}
 #level{font:small-caps var(--t)/1 Atari;transform-origin:0 center;translate:calc(var(--t)*.5) calc(var(--t)*12.6);scale:.65 .8}
 #container{
-	background:#000;position:relative;transform-origin:center;visibility:hidden;opacity:0;
+	background:#000;position:relative;transform-origin:center;visibility:hidden;opacity:0;will-change:scale opacity;
 	#board{
 		pointer-events:none;margin-top:0.5em;width:calc(var(--t)*var(--grid-cols));height:calc(var(--t)*var(--grid-rows));
 		canvas{position:absolute;top:var(--padding-top)}
