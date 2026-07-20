@@ -128,7 +128,7 @@ export const Env = new class Environment {
 		const {isStAboveLv1,isLowSpeed}= Env
 		const data = {...Cfg,isStAboveLv1,isLowSpeed}
 		entries(data).forEach(([id,v])=> {
-			$(`#_${id}`).css('color', palette[+v])
+			$(`#pm_${id}`).css('color', palette[+v])
 		})
 	}
 	#toggleGridLines() {
