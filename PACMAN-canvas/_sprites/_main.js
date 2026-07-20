@@ -62,8 +62,8 @@ const [Cols,Rows]= GridSize
 	}
 	#drawPoints() {
 		/**
-		 @param {PointKind} ptsType
-		 @param {PointVal} ptsValue
+		 @param {PointType} ptsType
+		 @param {PointVal}  ptsValue
 		 @param {number} x
 		 @param {number} y
 		*/
@@ -138,6 +138,7 @@ const [Cols,Rows]= GridSize
 	}
 })
 
+
 $(BrightRng).on('input', function() {
 	const {value:v}= this
 	ctx.canvas.style.backgroundColor = `rgb(${v}% ${v}% ${v}%)`
@@ -145,5 +146,24 @@ $(BrightRng).on('input', function() {
 $(ResetBtn).on('click', function() {
 	[...document.forms].forEach(f=> f.reset())
 	$('[type=range]').trigger('input')
+	saveData()
 })
-$win.on('load', ()=> document.body.style.opacity = '1')
+
+const SETTINGS_KEY = 'anopac-atlas'
+const saveData = ()=> {
+	localStorage[SETTINGS_KEY] = JSON.stringify({
+		sizeRng:   SizeRng.valueAsNumber,
+		brightRng: BrightRng.valueAsNumber,
+	})
+}
+$('input[type=range]').on('change', saveData)
+
+$win.on('load', ()=> {
+	document.body.style.opacity = '1'
+	if (localStorage[SETTINGS_KEY]) {
+		const data = JSON.parse(localStorage[SETTINGS_KEY])
+		SizeRng  .value = data['sizeRng']
+		BrightRng.value = data['brightRng']
+		$('[type=range]').trigger('input')
+	}
+})
