@@ -61,10 +61,8 @@ const PowMap  = /**@type {Map<TileIdx,Position>}*/(new Map)
 		MapArr.forEach((s,i)=> {
 			if (!DotSymbols.has(s)) return
 			const t = Vec2.new(i%COLS, i/COLS|0)
-			const m = Vec2.add(t, 0.5)
-			clearDot({tileIdx:i, tileMid:m})
-			DotSet.add(i)
-			powChk.checked == false || s == '.'
+			clearDot(i), DotSet.add(i)
+			!powChk.checked || s == '.'
 				? drawDot(Bg, ...t.vals)
 				: PowMap.set(i, t)
 		})
@@ -150,14 +148,13 @@ export const Maze = freeze({
 			? Vec2.new((curr.x>COLS/2 && b.x>COLS/2 ? 21:6), 15) : b,
 
 	/**
-	 @param {{tileIdx:number,tileMid:Vec2}} tile
+	 @param {TileIdx} i
 	 @returns {number} Number of remaining dots
 	*/
-	clearDot({tileIdx:i, tileMid:{x,y}}) {
-		const r = DOT_RADIUS+1
+	clearDot(i) {
 		DotSet.delete(i)
 		PowMap.delete(i)
-		Bg.fillRect(x*T-r, y*T-r, r*2, r*2, '#000')
+		Bg.clearRect((i%COLS)*T, (i/COLS|0)*T, T,T)
 		return DotSet.size
 	},
 
@@ -168,8 +165,8 @@ export const Maze = freeze({
 	*/
 	drawDot(ctx, col,row, isPow=false, isVisible=true) {
 		if (!isVisible) return
-		const r = (isPow? POW_RADIUS : DOT_RADIUS)
-		ctx.fillCircle(col*T+T/2, row*T+T/2, r, Color.Cookie)
+		const radius = [DOT_RADIUS,POW_RADIUS][+isPow]
+		ctx.fillCircle(col*T+T/2, row*T+T/2, radius, Color.Cookie)
 	},
 })
 export const {drawDot,clearDot}= Maze

@@ -84,7 +84,7 @@ class Player extends PacMan {
 		Maze.hasPow(i)
 			? Score.add(POW_PTS) && Ghosts.frighten()
 			: Score.add(DOT_PTS)
-		Maze.clearDot(this) <= Maze.CLEAR_DOTS
+		Maze.clearDot(i) <= Maze.CLEAR_DOTS
 			? State.setRoundEnds()
 			: EventBus.trigger(EATEN_EV)
 	}
