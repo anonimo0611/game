@@ -59,7 +59,7 @@ const getNativeKeyEvent = e=>
  @param {T} [type]
 */const reqElem = (src, type=/**@type {any}*/(HTMLElement))=> {
 	const e = (typeof src == 'string')? qSel(src) : src
-	if (!e) throw ReferenceError(`No ${type.name} with that id ${src} exists.`)
+	if (!e) throw ReferenceError(`No ${type.name} with that selector ${src} exists.`)
 	if (e instanceof type) return /**@type {InstanceType<T>}*/(e)
 	throw TypeError(`Expected ${type.name}, but got ${e}.`)
 }
