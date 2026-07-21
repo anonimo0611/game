@@ -29,7 +29,6 @@ export class Actor {
 
 	get center()    {return this.pos.clone.add(T/2)}
 	get tile()      {return this.center.divInt(T)}
-	get tileMid()   {return this.tile.add(.5)}
 	get tileIdx()   {return this.tile.toIdx(COLS)}
 
 	get dir()       {return this.#movDir}
