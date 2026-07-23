@@ -90,14 +90,14 @@ export class Mover {
 			if (mover.#turning) {
 				return void(mover.#nextTurn = dir)
 			}
-			if (actor.hasAdjacentWall(dir)) {
-				return void(mover.#nextDir = dir)
-			}
 			if (dir == actor.revDir) {
 				actor.dir = dir
 				mover.#nextDir = null
 				mover.#setSpeed()
 				return
+			}
+			if (actor.hasAdjacentWall(dir)) {
+				return void(mover.#nextDir = dir)
 			}
 			mover.#nextDir = dir
 			if (actor.passedTileCenter) {
