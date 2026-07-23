@@ -100,11 +100,10 @@ export const Ghosts = new class GhostGroup {
 	}
 	#setReleaseTimer() {
 		const lv = (Game.pacDied? 0 : Game.clampedLv)
-		Timer.sequence(.../**@type {TimerSeq[]}*/(
-			GhostList.slice(1).map((g,i)=> [
-				StandbyDelays[lv][i]/Game.speed,
-				()=> g.leaveHouse()
-			]))
+		Timer.sequence(...
+			GhostList.slice(1).map((g,i)=> /**@type {TimerSeq}*/
+				([StandbyDelays[lv][i]/Game.speed, g.leaveHouse])
+			)
 		)
 	}
 	frighten() {
