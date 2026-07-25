@@ -8,8 +8,8 @@ export class AState {
 	#curr = /**@type {S}*/('')
 
 	/** @readonly */owner
+	/** @readonly */default
 	/** @readonly */immediately
-	/** @readonly */default = /**@type {States[0]}*/('')
 	/** @readonly */#eventBus = $({})
 
 	/**
