@@ -16,7 +16,7 @@ export {Paths,PtsMgr,GhsSpd as Spd}
 export const Evt = asEnum('Ready','RoundEnds','Reverse','Frighten','FleeStart')
 
 /** The fleeing time(ms) from the player when Frightened Time is 0. */
-export const FLEE_TIME = 400
+export const FLEE_TIME = 500
 
 /** Ghost collision radii by state. */
 export const HitRadii = /**@type {GhostHitRadii}*/([T*.50, T*.55])
