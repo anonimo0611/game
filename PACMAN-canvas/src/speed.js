@@ -6,7 +6,7 @@ export const Speed = /**@type {const}*/({
 	StepPerLevel: 0.01,
 	Pacman: {
 		Base:      BASE_P,
-		Eating:    BASE_P * 0.86,
+		Eating:    BASE_P * 0.88,
 		Energized: BASE_P * 1.10,
 		EneEating: BASE_P * 0.95, // Energized+Eating
 		get levelFactor() {return (Game.level < 13 ? 1 : 0.98)},

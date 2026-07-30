@@ -7,30 +7,29 @@ import {Actor,Ghosts}  from '../actors.js';
 import {PacSpd as Spd} from '../speed.js';
 
 export class Mover {
-	#actor
 	#turning  = false
 	#nextDir  = /**@type {?Direction}*/(null)
 	#nextTurn = /**@type {?Direction}*/(null)
 
+	/** @private @readonly */a
 	/** @param {Actor} actor */
 	constructor(actor) {
-		Mover.#setSteerEvent(this, this.#actor=actor)
+		Mover.#setSteerEvent(this, this.a=actor)
 	}
 	#spd = /**@type {?number}*/(null)
 	get speed() {
-		return this.#spd ??= this.#setSpeed()
+		return this.#spd ??= this.#adjustSpeedOnTileArrival()
 	}
 	get onWall() {
-		return this.#turning == false
-			&& this.#actor.collidesWithWall()
+		return !this.#turning && this.a.collidesWithWall()
 	}
 	get canTurn() {
 		return this.#nextDir != null
-			&& !this.#actor.passedTileCenter
-			&& !this.#actor.collidesWithWall(this.#nextDir)
+		    && !this.a.passedTileCenter
+		    && !this.a.collidesWithWall(this.#nextDir)
 	}
-	#setSpeed() {
-		const spd = Maze.hasDot(this.#actor.tileIdx)
+	#adjustSpeedOnTileArrival() {
+		const spd = Maze.hasDot(this.a.tileIdx)
 			? (Ghosts.isFrightened? Spd.EneEating : Spd.Eating)
 			: (Ghosts.isFrightened? Spd.Energized : Spd.Base)
 		return(this.#spd = Game.moveSpeed * Spd.levelFactor * spd)
@@ -41,36 +40,43 @@ export class Mover {
 	*/
 	update(step) {
 		this.#turnCorner(step)
-		this.#actor.setNextPosition(step)
-		this.#adjustSpeedOnTileArrival(step)
+		this.a.setNextPosition(step)
+		this.#setMoveSpeed(step)
 		this.#finishCornering()
+		this.#turnAround()
 		return this.#stopAtWall()
 	}
 	/** @param {number} step */
-	#adjustSpeedOnTileArrival(step) {
-		if (this.#actor.justArrivedAtTile(step))
-			this.#setSpeed()
+	#setMoveSpeed(step) {
+		if (this.a.justArrivedAtTile(step))
+			this.#adjustSpeedOnTileArrival()
 	}
 	/** @param {number} step */
 	#turnCorner(step) {
-		if (this.#nextDir && this.canTurn) {
+		if (this.canTurn && this.#nextDir) {
 			this.#turning ||= true
-			this.#actor.orient = this.#nextDir
-			this.#actor.setNextPosition(step, this.#nextDir)
+			this.a.orient = this.#nextDir
+			this.a.setNextPosition(step, this.#nextDir)
 		}
 	}
 	#finishCornering() {
-		if (this.#turning && this.#actor.passedTileCenter) {
+		if (this.#turning && this.a.passedTileCenter) {
 			this.#nextDir  = this.#nextTurn
-			this.#nextTurn = null
 			this.#turning  = false
-			this.#actor.alignDirection()
+			this.#nextTurn = null
+			this.a.alignDirection()
+		}
+	}
+	#turnAround() {
+		if (this.a.dir == this.a.revOrient) {
+			this.a.alignDirection()
+			this.#adjustSpeedOnTileArrival()
 		}
 	}
 	#stopAtWall() {
 		if (this.onWall) {
+			this.a.snapToTileCenter()
 			this.#nextDir = null
-			this.#actor.snapToTileCenter()
 			return true
 		}
 		return false
@@ -79,27 +85,21 @@ export class Mover {
 	 @param {Mover} mover
 	 @param {Actor} actor
 	*/
-	static #setSteerEvent(mover, actor) {
+	static #setSteerEvent(mover,actor) {
 		$win.offon('keydown.PacSteer', e=> {
-			const dir = Dir.from(e, {wasd:true})
-			if (keyRepeated(e) || Env.isCaptured)   return
-			if (dir == null || dir == actor.orient) return
-
-			if (!State.isInGame && Vec2[dir].x) {
-				return void(actor.dir = dir)
-			}
-			if (mover.#turning) {
-				return void(mover.#nextTurn = dir)
-			}
-			if (actor.hasAdjacentWall(dir)) {
-				return void(mover.#nextDir = dir)
-			}
-			if (dir == actor.revDir) {
-				actor.dir = dir
-				mover.#nextDir = null
-				mover.#setSpeed()
+			const dir = Dir.from(e,{wasd:true})
+			if (!dir || keyRepeated(e) || Env.isCaptured)
 				return
-			}
+
+			if (!State.isInGame && Vec2[dir].x)
+				return void(actor.dir = dir)
+
+			if (mover.#turning)
+				return void(mover.#nextTurn = dir)
+
+			if (actor.hasAdjacentWall(dir))
+				return void(mover.#nextDir = dir)
+
 			mover.#nextDir = dir
 			if (actor.passedTileCenter) {
 				actor.orient = dir
