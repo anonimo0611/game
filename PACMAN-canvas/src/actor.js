@@ -100,7 +100,7 @@ export class Actor {
 	}
 	/** @param {?Direction} [dir] */
 	collidesWithWall(dir=this.dir) {
-		if (dir === null) return false
+		if (!dir) return false
 		const  tile = this.forward(dir,T/2+1e-6).divInt(T)
 		return Maze.hasWall( tile.wrapX(COLS) )
 	}
