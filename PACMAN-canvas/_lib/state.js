@@ -7,23 +7,21 @@ export class AState {
 	#last = /**@type {S}*/('')
 	#curr = /**@type {S}*/('')
 
-	/** @readonly */owner
-	/** @readonly */default
-	/** @readonly */immediately
 	/** @readonly */#eventBus = $({})
+	/** @readonly */owner
+	/** @readonly */immediately
+	/** @readonly */default = /**@type {States[0]}*/('')
 
 	/**
 	 @protected
 	 @typedef {`_${Exclude<S,States[0]>}`} Underscored
 	 @param {Owner}  owner
 	 @param {States} states
-	 @param {{immediately?:boolean,defaultState?:S}} opts
+	 @param {{immediately?:boolean}} opts
 	*/
-	constructor(owner, states,
-		{immediately=false, defaultState=states[0]}={}
-	) {
+	constructor(owner, states, {immediately=false}={}) {
 		this.owner   = owner
-		this.default = defaultState
+		this.default = states[0]
 		this.immediately = immediately
 		states?.forEach((/**@type {S}*/s,i)=> {
 			const self = /**@type {any}*/(this)
