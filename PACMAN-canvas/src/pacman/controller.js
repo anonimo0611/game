@@ -25,7 +25,8 @@ export class Mover {
 			&& this.#actor.collidesWithWall()
 	}
 	get canTurn() {
-		return !this.#actor.passedTileCenter
+		return this.#nextDir != null
+			&& !this.#actor.passedTileCenter
 			&& !this.#actor.collidesWithWall(this.#nextDir)
 	}
 	#setSpeed() {
