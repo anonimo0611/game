@@ -1,10 +1,10 @@
-import {Dir}   from '../../_lib/direction.js';
+import {Dir}   from '../../_lib/direction.js'
 import {Game}  from '../_main.js'
 import {State} from '../state.js'
-import {Env}   from '../env.js';
+import {Env}   from '../env.js'
 import {Maze}  from '../maze.js'
-import {Actor,Ghosts}  from '../actors.js';
-import {PacSpd as Spd} from '../speed.js';
+import {Actor,Ghosts}  from '../actors.js'
+import {PacSpd as Spd} from '../speed.js'
 
 export class Mover {
 	#turning  = false
