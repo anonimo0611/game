@@ -18,7 +18,7 @@ export class Mover {
 	}
 	#spd = /**@type {?number}*/(null)
 	get speed() {
-		return this.#spd ??= this.#adjustSpeedOnTileArrival()
+		return this.#spd ??= this.#setSpeed()
 	}
 	get onWall() {
 		return !this.#turning && this.a.collidesWithWall()
@@ -28,7 +28,7 @@ export class Mover {
 		    && !this.a.passedTileCenter
 		    && !this.a.collidesWithWall(this.#nextDir)
 	}
-	#adjustSpeedOnTileArrival() {
+	#setSpeed() {
 		const spd = Maze.hasDot(this.a.tileIdx)
 			? (Ghosts.isFrightened? Spd.EneEating : Spd.Eating)
 			: (Ghosts.isFrightened? Spd.Energized : Spd.Base)
@@ -41,15 +41,15 @@ export class Mover {
 	update(step) {
 		this.#turnCorner(step)
 		this.a.setNextPosition(step)
-		this.#setMoveSpeed(step)
+		this.#adjustSpeedOnTileArrival(step)
 		this.#finishCornering()
 		this.#turnAround()
 		return this.#stopAtWall()
 	}
 	/** @param {number} step */
-	#setMoveSpeed(step) {
+	#adjustSpeedOnTileArrival(step) {
 		if (this.a.justArrivedAtTile(step))
-			this.#adjustSpeedOnTileArrival()
+			this.#setSpeed()
 	}
 	/** @param {number} step */
 	#turnCorner(step) {
@@ -70,7 +70,7 @@ export class Mover {
 	#turnAround() {
 		if (this.a.dir == this.a.revOrient) {
 			this.a.alignDirection()
-			this.#adjustSpeedOnTileArrival()
+			this.#setSpeed()
 		}
 	}
 	#stopAtWall() {
