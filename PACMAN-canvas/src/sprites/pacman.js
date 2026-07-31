@@ -3,7 +3,7 @@ const OPEN_MID  = 30 * PI/180
 const OPEN_MAX  = 60 * PI/180
 const PHASE_MID = asin(OPEN_MID/OPEN_MAX)
 
-import {Dir}   from '../../_lib/direction.js';
+import {Dir}   from '../../_lib/direction.js'
 import {Dying} from './pacman_dying.js'
 export const SCALE_FACTOR = 0.9
 export const MOUTH_DEPTH_FACTOR = 0.3
