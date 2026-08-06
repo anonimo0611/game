@@ -4,21 +4,21 @@ import {State}     from '../state.js'
 import {PtsMgr}    from '../points.js'
 import {Message}   from '../message.js'
 import {Cutscene}  from '../demo/cutscene.js'
-export {Scene}
 
-const Scenes = [MainScene,DemoScene]
-const Scene  = {
+export const Scene = {
 	get shouldPlayCutscene() {
 		return Cutscene.num > 0
 	},
 	update() {
 		PtsMgr.update()
-		DemoScene.updateTimer()
-		Scenes[+State.isDemoMode].update()
+		DemoScene.update()
+		MainScene.update()
 	},
 	draw() {
 		Fg.clear()
-		Scenes[+State.isDemoMode].draw()
+		State.isDemoMode
+			? DemoScene.draw()
+			: MainScene.draw()
 		Message.draw()
 	},
 }
