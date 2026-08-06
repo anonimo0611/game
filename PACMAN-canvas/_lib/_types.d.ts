@@ -4,7 +4,7 @@ type GhostHitRadii = readonly [normal: number, frightened: number]
 
 //---- Dictionary ----
 
-type Scene  = {update():void, draw():void}
+type Scene  = {update():void, draw?():void}
 type SceneDict<T extends string> = {[K in T]?:Scene}
 type NumericDict<T> = {readonly [K:number]:T}
 
