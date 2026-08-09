@@ -12,20 +12,20 @@ import {Cutscene} from '../demo/cutscene.js'
 }
 
 /** @type {SceneDict<string>} */
-const DemoDict = {Attract,Cutscene}
+const SceneDict = {Attract,Cutscene}
 
 /** Attract mode will begin after a period of inactivity. */
 export const updateTimer = ()=> {
 	if (!State.isTitle) return
-	!Env.window.isActive || Env.isCaptured
+	(!Env.window.isActive || Env.isCaptured)
 		? Ticker.resetCount()
 		: Ticker.elapsedTime > 1e3*30 // 30secs
 			&& State.setAttract()
 }
 
 export const Scene = {
-	draw()   {DemoDict[State.current]?.draw()},
-	update() {DemoDict[State.current]?.update()},
+	draw()   {SceneDict[State.current]?.draw()},
+	update() {SceneDict[State.current]?.update()},
 }
 
 $('button.demo.at').on({click:State.setAttract})

@@ -7,7 +7,7 @@ import {Cutscene} from '../demo/cutscene.js'
 
 const Scenes = [
 	Main.Scene,
-	Demo.Scene
+	Demo.Scene,
 ]
 export const Scene  = {
 	get shouldPlayCutscene() {
