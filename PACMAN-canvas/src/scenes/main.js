@@ -3,7 +3,7 @@ import {Maze}   from '../maze.js'
 import {Score}  from '../score.js'
 import {Actors} from '../actors.js'
 
-export const MainScene = {
+export const Scene = {
 	update() {
 		Fruits.update()
 		Maze.PowDots.update()

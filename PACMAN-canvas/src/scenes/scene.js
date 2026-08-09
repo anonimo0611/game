@@ -1,18 +1,20 @@
-import {MainScene} from './main.js'
-import {DemoScene} from './demo.js'
-import {State}     from '../state.js'
-import {PtsMgr}    from '../points.js'
-import {Message}   from '../message.js'
-import {Cutscene}  from '../demo/cutscene.js'
-export {Scene}
+import * as Main  from './main.js'
+import * as Demo  from './demo.js'
+import {State}    from '../state.js'
+import {PtsMgr}   from '../points.js'
+import {Message}  from '../message.js'
+import {Cutscene} from '../demo/cutscene.js'
 
-const Scenes = [MainScene,DemoScene]
-const Scene  = {
+const Scenes = [
+	Main.Scene,
+	Demo.Scene
+]
+export const Scene  = {
 	get shouldPlayCutscene() {
 		return Cutscene.num > 0
 	},
 	update() {
-		DemoScene.updateTimer()
+		Demo.updateTimer()
 		PtsMgr.update()
 		Scenes[+State.isDemoMode].update()
 	},

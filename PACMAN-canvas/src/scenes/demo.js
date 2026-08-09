@@ -2,7 +2,6 @@ import {Env}      from '../env.js'
 import {State}    from '../state.js'
 import {Attract}  from '../demo/attract.js'
 import {Cutscene} from '../demo/cutscene.js'
-export {DemoScene}
 
 {// Reset counter on any title screen interaction
 	const EV = `blur focus resize scroll keydown pointerdown mousemove wheel`
@@ -13,16 +12,18 @@ export {DemoScene}
 }
 
 /** @type {SceneDict<string>} */
-const DemoDict  = {Attract,Cutscene}
-const DemoScene = {
-	/** Attract mode will begin after a period of inactivity. */
-	updateTimer() {
-		if (!State.isTitle) return
-		!Env.window.isActive || Env.isCaptured
-			? Ticker.resetCount()
-			: Ticker.elapsedTime > 1e3*30 // 30secs
-				&& State.setAttract()
-	},
+const DemoDict = {Attract,Cutscene}
+
+/** Attract mode will begin after a period of inactivity. */
+export const updateTimer = ()=> {
+	if (!State.isTitle) return
+	!Env.window.isActive || Env.isCaptured
+		? Ticker.resetCount()
+		: Ticker.elapsedTime > 1e3*30 // 30secs
+			&& State.setAttract()
+}
+
+export const Scene = {
 	draw()   {DemoDict[State.current]?.draw()},
 	update() {DemoDict[State.current]?.update()},
 }
