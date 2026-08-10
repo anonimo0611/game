@@ -40,9 +40,9 @@ export const Env = new class Environment {
 	/** @readonly */
 	window = function() {
 		let f = +document.hasFocus()
-		$win.on('blur', ()=> {f=0;Env.#pause(!f)})
-		$win.on('focus',()=> {f=1;Env.#pause(!f)})
-		return {get isActive(){return Boolean(f)}}
+		$win.on({blur (){f=0,Env.#pause(!f)}})
+		$win.on({focus(){f=1,Env.#pause(!f)}})
+		return {get isActive(){return !!f}}
 	}()
 
 	/** @param {boolean} [force] */
@@ -127,9 +127,8 @@ export const Env = new class Environment {
 	#syncHelpPanel() {
 		const {isStAboveLv1,isLowSpeed}= Env
 		const data = {...Cfg,isStAboveLv1,isLowSpeed}
-		entries(data).forEach(([id,v])=> {
+		for (const [id,v] of entries(data))
 			$(`#pm_${id}`).css('color', palette[+v])
-		})
 	}
 	#toggleGridLines() {
 		Grid.canvas.dataset.show = String(Cfg.showGridLines)
