@@ -110,7 +110,7 @@ export default class GhostSprite {
 	#drawEyes(orient, isRipped=false) {
 		this.ctx.fillStyle = '#FFF'
 		switch(orient) {
-		case 'Left':  return this.#drawEyesHoriz(orient)
+		case 'Left':
 		case 'Right': return this.#drawEyesHoriz(orient)
 		case 'Up':    return this.#drawEyesUp(isRipped)
 		case 'Down':  return this.#drawEyesDown()
