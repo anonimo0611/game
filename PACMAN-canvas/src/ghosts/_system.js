@@ -251,36 +251,36 @@ const CruiseElroy = function() {
 }()
 
 const Fright = function() {
-	let   session = /**@type {?Readonly<Session>}*/(null)
+	let   session = /**@type {?ReturnType<typeof on>}*/(null)
 	const PtsList = /**@type {const}*/([200,400,800,1600])
 	const DurList = /**@type {const}*/([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
-	class Session {
-		#et=0; #s=1; #f=0; #caught=0; iv; dur;
-		get points()    {return PtsList[this.#caught-1]}
-		get spriteIdx() {return this.#s ^ 1}
-		get caughtAll() {return this.#caught == GhostType.Max}
-		constructor(s=0) {
-			this.iv = ((this.dur = s) == 1 ? 12:14) / Game.speed
-			!s ? $(GhostList).trigger(Evt.FleeStart) : this.#set()
-		}
-		#set(isOn=true) {
-			session = (isOn? this : null)
+	function on(dur=0) {
+		let et=0, f=0, sprIdx=1, caught=0
+		const iv  = (dur == 1 ? 12:14) / Game.speed
+		const set = (isOn=true)=> {
+			!isOn && (session = null)
 			$(GhostList)
 				.trigger(Evt.Frighten, isOn)
-				.offon(StateType.Bitten, ()=> this.#caught++, isOn)
+				.offon(StateType.Bitten, ()=> caught++, isOn)
 			Sound.toggleFrightMode(isOn)
 		}
-		update() {
-			if (State.isInGame && !Timer.frozen) {
-				const et = (this.#et += Game.interval) / 1000
-				if (et >= this.dur-2) this.#s ^= +!(this.#f++ % this.iv)
-				if (et >= this.dur+0 || this.caughtAll) this.#set(false)
-			}
- 		}
+		dur? set(true) : $(GhostList).trigger(Evt.FleeStart)
+		return {
+			get points()    {return PtsList[caught-1]},
+			get spriteIdx() {return sprIdx ^ 1},
+			get caughtAll() {return caught == GhostType.Max},
+			update() {
+				if (State.isInGame && !Timer.frozen) {
+					et += Game.interval
+					if (et/1e3 >= dur-2) sprIdx ^= +!(f++ % iv)
+					if (et/1e3 >= dur+0 || this.caughtAll) set(false)
+				}
+			},
+		}
 	}
 	State.on({_Ready(){session = null}})
 	return {
-		frighten() {new Session(DurList[Game.clampedLv-1])},
+		frighten() {session = on(DurList[Game.clampedLv-1])},
 		get session()  {return session},
 		get ptsValue() {return session?.points ?? PtsList[0]},
 	}
