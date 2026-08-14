@@ -254,9 +254,9 @@ const Fright = function() {
 	let   session = /**@type {?ReturnType<typeof on>}*/(null)
 	const PtsList = /**@type {const}*/([200,400,800,1600])
 	const DurList = /**@type {const}*/([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
-	function on(dur=0) {
-		let et=0, f=0, sprIdx=1, caught=0
-		const iv  = (dur == 1 ? 12:14) / Game.speed
+	function on(tmr=0) {
+		let sprIdx=1, flash=0, caught=0
+		const iv  = (tmr == 1 ? 12:14) / Game.speed
 		const set = (isOn=true)=> {
 			!isOn && (session = null)
 			$(GhostList)
@@ -264,17 +264,16 @@ const Fright = function() {
 				.offon(StateType.Bitten, ()=> caught++, isOn)
 			Sound.toggleFrightMode(isOn)
 		}
-		dur? set(true) : $(GhostList).trigger(Evt.FleeStart)
+		tmr? set(true) : $(GhostList).trigger(Evt.FleeStart)
 		return {
 			get points()    {return PtsList[caught-1]},
 			get spriteIdx() {return sprIdx ^ 1},
 			get caughtAll() {return caught == GhostType.Max},
 			update() {
-				if (State.isInGame && !Timer.frozen) {
-					et += Game.interval
-					if (et/1e3 >= dur-2) sprIdx ^= +!(f++ % iv)
-					if (et/1e3 >= dur+0 || this.caughtAll) set(false)
-				}
+				if (!State.isInGame || Timer.frozen) return
+				tmr -= Game.interval/1e3
+				if (tmr <= 2) sprIdx ^= +!(flash++ % iv)
+				if (tmr <= 0 || this.caughtAll) set(false)
 			},
 		}
 	}
