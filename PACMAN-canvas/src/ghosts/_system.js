@@ -13,7 +13,7 @@ import {Ghost,player,onPlayerDotEaten} from '../actors.js'
 const GhostList = /**@type {Ghost[]}*/([])
 
 export {Paths,PtsMgr,GhsSpd as Spd}
-export const Evt = asEnum('Ready','RoundEnds','Reverse','Frighten','FleeStart')
+export const Events = asEnum('Ready','RoundEnds','Reverse','Frighten','FleeStart')
 
 /** The fleeing time(ms) from the player when Frightened Time is 0. */
 export const FLEE_TIME = 500
@@ -43,6 +43,89 @@ const StandbyDelays = /**@type {const}*/
 	[   0,  900,    0], // Lv.13+
 ])
 
+export const Points = {
+	get type()  {return PointType.Ghost},
+	get value() {return Fright.ptsValue},
+}
+
+export const Ghosts = new class GhostGroup {
+	static {$(this.setup)}
+	static setup() {
+		State.on({InGame:Ghosts.#onInGame})
+		State.onChange(Ghosts.#dispatchState)
+	}
+	#animIdx = 0
+	get animIndex()     {return Ghosts.#animIdx}
+	get CruiseElroy()   {return CruiseElroy}
+	get spriteIdx()     {return Fright.session?.spriteIdx ?? 0}
+	get caughtAll()     {return Fright.session?.caughtAll ?? false}
+	get isFrightened()  {return Fright.session != null}
+	get isChasing()     {return PhaseManager.mode == CHASING}
+	get isScattering()  {return PhaseManager.mode == SCATTER}
+	get isAnyEscaping() {return GhostList.some(g=> g.isEscaping)}
+
+	/** @param {Ghost[]} [ghostList] */
+	initialize(ghostList) {
+		Ghosts.#animIdx = GhostList.length = 0
+		ghostList?.forEach((g,i)=> GhostList[i] = g)
+	}
+	#onInGame() {
+		Sound.playSiren()
+		Cfg.alwaysChase && Ghosts.#setReleaseTimer()
+	}
+	#dispatchState() {
+		hasOwn(Events,State.current)
+			&& $(GhostList).trigger(State.current)
+	}
+	#setReleaseTimer() {
+		const lv = (Game.pacDied? 0 : Game.clampedLv)
+		Timer.sequence(...
+			GhostList.slice(1).map((g,i)=> /**@type {TimerSeq}*/
+				([StandbyDelays[lv][i]/Game.speed, g.leaveHouse])
+			)
+		)
+	}
+	frighten() {
+		signalDirectionReversal()
+		Fright.frighten()
+	}
+	update() {
+		Fright.session?.update()
+		PhaseManager.update()
+		Ghosts.#updateAnimation()
+		Ghosts.#updateGhosts()
+	}
+	#updateAnimation() {
+		if (Timer.frozen)
+			return
+		if (State.isInGame
+		 || State.isDemoMode)
+			Ghosts.#animIdx ^= +(Ticker.count % 6 == 0)
+	}
+	#updateGhosts() {
+		GhostList.forEach(g=> g.update())
+		Paths.update(GhostList)
+	}
+	drawBehind() {
+		Ghosts.#draw(false)
+	}
+	drawFront()  {
+		Targets.draw(GhostList)
+		Paths.draw(GhostList)
+		Ghosts.#draw(true)
+		PtsMgr.drawGhostPts()
+	}
+	#draw(onFront=true) {
+		GhostList
+			.toReversed()
+			.forEach(g=> {
+				g.isFrightened != onFront && g.draw()
+			})
+	}
+	/** @param {GhostType} idx */
+	of = idx=> GhostList[idx]
+}
+
 export const [StateType,createState] = function() {
 	const States = /**@type {const}*/
 		(['Idle','GoingOut','Walking','Bitten','Escaping','Entering'])
@@ -64,93 +147,10 @@ export const [StateType,createState] = function() {
 	]
 }()
 
-export const Points = {
-	get type()  {return PointType.Ghost},
-	get value() {return Fright.ptsValue},
-}
-
-export const Ghosts = new class GhostGroup {
-	static {$(this.setup)}
-	static setup() {
-		State.on({InGame:Ghosts.#onInGame})
-		State.onChange(Ghosts.#dispatchState)
-	}
-	#animIdx = 0
-	get animIndex()     {return this.#animIdx}
-	get CruiseElroy()   {return CruiseElroy}
-	get spriteIdx()     {return Fright.session?.spriteIdx ?? 0}
-	get caughtAll()     {return Fright.session?.caughtAll ?? false}
-	get isFrightened()  {return Fright.session != null}
-	get isChasing()     {return PhaseManager.mode == CHASING}
-	get isScattering()  {return PhaseManager.mode == SCATTER}
-	get isAnyEscaping() {return GhostList.some(g=> g.isEscaping)}
-
-	/** @param {Ghost[]} [ghostList] */
-	initialize(ghostList) {
-		this.#animIdx = GhostList.length = 0
-		ghostList?.forEach((g,i)=> GhostList[i] = g)
-	}
-	#onInGame = ()=> {
-		Sound.playSiren()
-		Cfg.alwaysChase && this.#setReleaseTimer()
-	}
-	#dispatchState = ()=> {
-		hasOwn(Evt,State.current)
-			&& $(GhostList).trigger(State.current)
-	}
-	#setReleaseTimer() {
-		const lv = (Game.pacDied? 0 : Game.clampedLv)
-		Timer.sequence(...
-			GhostList.slice(1).map((g,i)=> /**@type {TimerSeq}*/
-				([StandbyDelays[lv][i]/Game.speed, g.leaveHouse])
-			)
-		)
-	}
-	frighten() {
-		signalDirectionReversal()
-		Fright.frighten()
-	}
-	update() {
-		Fright.session?.update()
-		PhaseManager.update()
-		this.#updateAnimation()
-		this.#updateGhosts()
-	}
-	#updateAnimation() {
-		if (Timer.frozen)
-			return
-		if (State.isInGame
-		 || State.isDemoMode)
-			this.#animIdx ^= +(Ticker.count % 6 == 0)
-	}
-	#updateGhosts() {
-		GhostList.forEach(g=> g.update())
-		Paths.update(GhostList)
-	}
-	drawBehind() {
-		this.#draw(false)
-	}
-	drawFront()  {
-		Targets.draw(GhostList)
-		Paths.draw(GhostList)
-		this.#draw(true)
-		PtsMgr.drawGhostPts()
-	}
-	#draw(onFront=true) {
-		GhostList
-			.toReversed()
-			.forEach(g=> {
-				g.isFrightened != onFront && g.draw()
-			})
-	}
-	/** @param {GhostType} idx */
-	of = idx=> GhostList[idx]
-}
-
 const SCATTER = 0
 const CHASING = 1
 const signalDirectionReversal = ()=> {
-	$(GhostList).trigger(Evt.Reverse)
+	$(GhostList).trigger(Events.Reverse)
 }
 const PhaseManager = function() {
 	function create(lv=1) {
@@ -260,11 +260,11 @@ const Fright = function() {
 		const set = (isOn=true)=> {
 			!isOn && (session = null)
 			$(GhostList)
-				.trigger(Evt.Frighten, isOn)
+				.trigger(Events.Frighten, isOn)
 				.offon(StateType.Bitten, ()=> caught++, isOn)
 			Sound.toggleFrightMode(isOn)
 		}
-		tmr? set(true) : $(GhostList).trigger(Evt.FleeStart)
+		tmr? set(true) : $(GhostList).trigger(Events.FleeStart)
 		return {
 			get points()    {return PtsList[caught-1]},
 			get spriteIdx() {return sprIdx ^ 1},

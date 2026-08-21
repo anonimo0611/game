@@ -6,7 +6,7 @@ import {Cfg}    from '../env.js'
 import {Maze}   from '../maze.js'
 import  Sprite  from '../sprites/ghost.js'
 import * as Sys from './_system.js'
-import {Spd,Evt,PtsMgr} from './_system.js'
+import {Spd,Events,PtsMgr}   from './_system.js'
 import {Actor,player,Ghosts} from '../actors.js'
 
 /**@type {readonly Direction[]}*/
@@ -35,11 +35,11 @@ export class Ghost extends Actor {
 		this.init  = freeze({align,x:col*T})
 		this.state = Sys.createState(this)
 		$(this).on({
-		 [Evt.Ready]:    ()=> this.fadeSpr  = Fade.in(),
-		 [Evt.RoundEnds]:()=> this.fadeSpr  = Fade.out(),
-		 [Evt.Reverse]:  ()=> this.#revSig  = true,
-		 [Evt.FleeStart]:()=> this.#fleeTmr = Sys.FLEE_TIME,
-		 [Evt.Frighten]: (_, on=true)=> this.#frighten(on),
+		 [Events.Ready]:    ()=> this.fadeSpr  = Fade.in(),
+		 [Events.RoundEnds]:()=> this.fadeSpr  = Fade.out(),
+		 [Events.Reverse]:  ()=> this.#revSig  = true,
+		 [Events.FleeStart]:()=> this.#fleeTmr = Sys.FLEE_TIME,
+		 [Events.Frighten]: (_, on=true)=> this.#frighten(on),
 		})
 	}
 	get animIdx()      {return Ghosts.animIndex}
