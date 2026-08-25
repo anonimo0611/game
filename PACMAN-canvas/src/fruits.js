@@ -11,16 +11,16 @@ import {player,onPlayerDotEaten} from './actors.js'
 let showTgt = true
 let fadeTgt = /**@type {?Fade}*/(null)
 
-const FADE_DUR = 300
+const FADE_DUR   = 300
 const LEVEL_COLS = 7
-
-/** 0:Cherry, 1:Strwb, 2:Orange, 3:Apple, 4:Melon ,5:Gala, 6:Bell, 7:Key */
-const FruitTable = /**@type {const}*/([0,1,2,2,3,3,4,4,5,5,6,6,7])
-const PointTable = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
 const Cache      = Spr.cache(T*2)
 const AppearDots = new Set([70,170])
 const TargetPos  = new Vec2(BW/2, T*18.5).fixed
 const LevelsRect = new Rect(T*2*6, BH-T*2, LEVEL_COLS*T*2, T*2).freeze()
+
+/** 0:Cherry, 1:Strwb, 2:Orange, 3:Apple, 4:Melon ,5:Gala, 6:Bell, 7:Key */
+const FruitTable = /**@type {const}*/([0,1,2,2,3,3,4,4,5,5,6,6,7])
+const PointTable = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
 
 const Types = {
 	get current() {return this.get(Game.level-1)},
@@ -41,9 +41,21 @@ export const Fruits = new class FruitGroup {
 	get showTarget() {
 		return (State.isTitle || State.isInGame) && showTgt
 	}
+	get intersectsWithPlayer() {
+		return this.showTarget
+			&& circleCollision(player.center, TargetPos, T/2)
+	}
 	#resetTarget() {
 		fadeTgt = null
 		showTgt = State.isTitle
+	}
+	#onDotEaten() {
+		if (!AppearDots.has(Maze.MaxDot - Maze.dotsLeft)) return
+		showTgt = true
+		Timer.set(// Disappearing is between 9 and 10 seconds
+			randInt(9e3, 1e4-FADE_DUR) / Game.speed,
+			()=> fadeTgt=Fade.out(FADE_DUR/Game.speed), {key:this}
+		)
 	}
 	#onEaten() {
 		this.#resetTarget()
@@ -51,34 +63,15 @@ export const Fruits = new class FruitGroup {
 		Sound.playEatsFruit()
 		PtsMgr.set({pts:Points, dur:2e3, ...TargetPos})
 	}
-	#onDotEaten = ()=> {
-		if (AppearDots.has(Maze.MaxDot - Maze.dotsLeft)) {
-			showTgt = true
-			this.#setHideTimer()
-		}
-	}
-	#setHideTimer() {
-		// Disappearing is between 9 and 10 seconds
-		const delay = randInt(9e3, 1e4-FADE_DUR)/Game.speed
-		Timer.set(delay, this.#setFadeOut, {key:this})
-	}
-	#setFadeOut() {
-		fadeTgt = Fade.out(FADE_DUR/Game.speed)
-	}
-	#intersectsWithPlayer() {
-		return this.showTarget
-			&& circleCollision(player.center, TargetPos, T/2)
-	}
 	update() {
 		fadeTgt?.update() == false
 			? this.#resetTarget()
-			: this.#intersectsWithPlayer() && this.#onEaten()
+			: this.intersectsWithPlayer && this.#onEaten()
 	}
 	drawTarget() {
-		if (Ticker.paused)
-			return
-		if (this.showTarget)
-			Fg.put(Cache.canvas, TargetPos, fadeTgt?.alpha)
+		if (Ticker.paused) return
+		this.showTarget
+			&& Fg.put(Cache.canvas, TargetPos, fadeTgt?.alpha)
 		PtsMgr.drawFruitPts()
 	}
 	drawLevelCounter() {
@@ -95,8 +88,8 @@ export const Fruits = new class FruitGroup {
 			Spr.draw(HUD, Types.get(i), T*2, w-T-T*2*(i-startLevel))
 		HUD.restore()
 	}
-	#setImages = ()=> {
+	#setImages() {
 		Cache.update(Types.current)
-		this.#setLevelCounter()
+		Fruits.#setLevelCounter()
 	}
 }
