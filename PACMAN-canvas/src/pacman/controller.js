@@ -24,9 +24,9 @@ export class Mover {
 		return !this.#turning && this.a.collidesWithWall()
 	}
 	get canTurn() {
-		return this.#nextDir != null
-		    && !this.a.passedTileCenter
+		return (this.#nextDir && !this.a.passedTileCenter)
 		    && !this.a.collidesWithWall(this.#nextDir)
+			&& Vec2[this.a.dir].cross(Vec2[this.#nextDir]) != 0
 	}
 	#setSpeed() {
 		const spd = Maze.hasDot(this.a.tileIdx)
@@ -39,12 +39,18 @@ export class Mover {
 	 @returns {boolean} True if the actor stopped at a wall.
 	*/
 	update(step) {
+		this.#turnAround()
 		this.#turnCorner(step)
 		this.a.setNextPosition(step)
 		this.#adjustSpeedOnTileArrival(step)
 		this.#finishCornering()
-		this.#turnAround()
 		return this.#stopAtWall()
+	}
+	#turnAround() {
+		if (this.a.dir == this.a.revOrient) {
+			this.a.alignDirection()
+			this.#setSpeed()
+		}
 	}
 	/** @param {number} step */
 	#adjustSpeedOnTileArrival(step) {
@@ -65,12 +71,6 @@ export class Mover {
 			this.#turning  = false
 			this.#nextTurn = null
 			this.a.alignDirection()
-		}
-	}
-	#turnAround() {
-		if (this.a.dir == this.a.revOrient) {
-			this.a.alignDirection()
-			this.#setSpeed()
 		}
 	}
 	#stopAtWall() {
@@ -100,11 +100,9 @@ export class Mover {
 			if (actor.hasAdjacentWall(dir))
 				return void(mover.#nextDir = dir)
 
-			mover.#nextDir = dir
-			if (actor.passedTileCenter) {
-				actor.orient = dir
+			mover.#nextDir = actor.orient = dir
+			if (actor.passedTileCenter)
 				actor.alignDirection(actor.revDir)
-			}
 		})
 	}
 }
