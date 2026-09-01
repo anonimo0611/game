@@ -55,20 +55,20 @@ export function mover(actor) {
 
 	function stopAtWall() {
 		if (onWall()) {
-			actor.snapToTileCenter()
 			nextDir = null
+			actor.snapToTileCenter()
 			return true
 		}
 		return false
 	}
 
 	function setSpeed() {
-		const speed = Maze.hasDot(actor.tileIdx)
+		_speed = Game.moveSpeed * Spd.levelFactor * (
+			Maze.hasDot(actor.tileIdx)
 			? (Ghosts.isFrightened? Spd.EneEating : Spd.Eating)
 			: (Ghosts.isFrightened? Spd.Energized : Spd.Base)
-		_speed = Game.moveSpeed * Spd.levelFactor * speed
-	}
-	$(setSpeed)
+		)
+	} $(setSpeed)
 
 	$win.offon('keydown.PacSteer', e=> {
 		const dir = Dir.from(e, {wasd:true})
