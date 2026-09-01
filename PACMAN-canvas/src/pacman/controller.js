@@ -26,7 +26,6 @@ export class Mover {
 	get canTurn() {
 		return (this.#nextDir && !this.a.passedTileCenter)
 		    && !this.a.collidesWithWall(this.#nextDir)
-			&& Vec2[this.a.dir].cross(Vec2[this.#nextDir]) != 0
 	}
 	#setSpeed() {
 		const spd = Maze.hasDot(this.a.tileIdx)
@@ -82,27 +81,31 @@ export class Mover {
 		return false
 	}
 	/**
-	 @param {Mover} mover
-	 @param {Actor} actor
+	 @param {Mover} m
+	 @param {Actor} a
 	*/
-	static #setSteerEvent(mover,actor) {
+	static #setSteerEvent(m, a) {
 		$win.offon('keydown.PacSteer', e=> {
-			const dir = Dir.from(e,{wasd:true})
-			if (!dir || keyRepeated(e) || Env.isCaptured)
+			const dir = Dir.from(e, {wasd:true})
+
+			if (!dir || dir == a.dir)
+				return
+
+			if (Env.isCaptured || keyRepeated(e))
 				return
 
 			if (!State.isInGame && Vec2[dir].x)
-				return void(actor.dir = dir)
+				return void(a.dir = dir)
 
-			if (mover.#turning)
-				return void(mover.#nextTurn = dir)
+			if (m.#turning)
+				return void(m.#nextTurn = dir)
 
-			if (actor.hasAdjacentWall(dir))
-				return void(mover.#nextDir = dir)
+			if (a.hasAdjacentWall(dir))
+				return void(m.#nextDir = dir)
 
-			mover.#nextDir = actor.orient = dir
-			if (actor.passedTileCenter)
-				actor.alignDirection(actor.revDir)
+			a.orient   = dir
+			m.#nextDir = dir == a.revDir ? null : dir
+			a.passedTileCenter && a.alignDirection(a.revDir)
 		})
 	}
 }
