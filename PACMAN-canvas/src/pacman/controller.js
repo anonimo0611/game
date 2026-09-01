@@ -6,106 +6,105 @@ import {Maze}  from '../maze.js'
 import {Actor,Ghosts}  from '../actors.js'
 import {PacSpd as Spd} from '../speed.js'
 
-export class Mover {
-	#turning  = false
-	#nextDir  = /**@type {?Direction}*/(null)
-	#nextTurn = /**@type {?Direction}*/(null)
+/** @param {Actor} actor */
+export function mover(actor) {
+	let _speed   = 0
+	let turning  = false
+	let nextDir  = /**@type {?Direction}*/(null)
+	let nextTurn = /**@type {?Direction}*/(null)
 
-	/** @private @readonly */a
-	/** @param {Actor} actor */
-	constructor(actor) {
-		Mover.#setSteerEvent(this, this.a=actor)
+	function onWall() {
+		return !turning && actor.collidesWithWall()
 	}
-	#spd = /**@type {?number}*/(null)
-	get speed() {
-		return this.#spd ??= this.#setSpeed()
+
+	function canTurn() {
+		return (nextDir && !actor.passedTileCenter)
+		    && !actor.collidesWithWall(nextDir)
 	}
-	get onWall() {
-		return !this.#turning && this.a.collidesWithWall()
-	}
-	get canTurn() {
-		return (this.#nextDir && !this.a.passedTileCenter)
-		    && !this.a.collidesWithWall(this.#nextDir)
-	}
-	#setSpeed() {
-		const spd = Maze.hasDot(this.a.tileIdx)
-			? (Ghosts.isFrightened? Spd.EneEating : Spd.Eating)
-			: (Ghosts.isFrightened? Spd.Energized : Spd.Base)
-		return(this.#spd = Game.moveSpeed * Spd.levelFactor * spd)
-	}
-	/**
-	 @param {number} step
-	 @returns {boolean} True if the actor stopped at a wall.
-	*/
-	update(step) {
-		this.#turnAround()
-		this.#turnCorner(step)
-		this.a.setNextPosition(step)
-		this.#adjustSpeedOnTileArrival(step)
-		this.#finishCornering()
-		return this.#stopAtWall()
-	}
-	#turnAround() {
-		if (this.a.dir == this.a.revOrient) {
-			this.a.alignDirection()
-			this.#setSpeed()
+
+	function turnAround() {
+		if (actor.dir == actor.revOrient) {
+			actor.alignDirection()
+			setSpeed()
 		}
 	}
+
 	/** @param {number} step */
-	#adjustSpeedOnTileArrival(step) {
-		if (this.a.justArrivedAtTile(step))
-			this.#setSpeed()
+	function adjustSpeedOnTileArrival(step) {
+		if (actor.justArrivedAtTile(step))
+			setSpeed()
 	}
+
 	/** @param {number} step */
-	#turnCorner(step) {
-		if (this.canTurn && this.#nextDir) {
-			this.#turning ||= true
-			this.a.orient = this.#nextDir
-			this.a.setNextPosition(step, this.#nextDir)
+	function turnCorner(step) {
+		if (canTurn() && nextDir) {
+			turning ||= true
+			actor.orient = nextDir
+			actor.setNextPosition(step, nextDir)
 		}
 	}
-	#finishCornering() {
-		if (this.#turning && this.a.passedTileCenter) {
-			this.#nextDir  = this.#nextTurn
-			this.#turning  = false
-			this.#nextTurn = null
-			this.a.alignDirection()
+
+	function finishCornering() {
+		if (turning && actor.passedTileCenter) {
+			turning  = false
+			nextDir  = nextTurn
+			nextTurn = null
+			actor.alignDirection()
 		}
 	}
-	#stopAtWall() {
-		if (this.onWall) {
-			this.a.snapToTileCenter()
-			this.#nextDir = null
+
+	function stopAtWall() {
+		if (onWall()) {
+			actor.snapToTileCenter()
+			nextDir = null
 			return true
 		}
 		return false
 	}
-	/**
-	 @param {Mover} m
-	 @param {Actor} a
-	*/
-	static #setSteerEvent(m, a) {
-		$win.offon('keydown.PacSteer', e=> {
-			const dir = Dir.from(e, {wasd:true})
 
-			if (!dir || dir == a.dir)
-				return
+	function setSpeed() {
+		const speed = Maze.hasDot(actor.tileIdx)
+			? (Ghosts.isFrightened? Spd.EneEating : Spd.Eating)
+			: (Ghosts.isFrightened? Spd.Energized : Spd.Base)
+		_speed = Game.moveSpeed * Spd.levelFactor * speed
+	}
+	$(setSpeed)
 
-			if (Env.isCaptured || keyRepeated(e))
-				return
+	$win.offon('keydown.PacSteer', e=> {
+		const dir = Dir.from(e, {wasd:true})
+		if (dir == null || dir == actor.dir)  return
+		if (keyRepeated(e) || Env.isCaptured) return
 
-			if (!State.isInGame && Vec2[dir].x)
-				return void(a.dir = dir)
+		if (!State.isInGame && Vec2[dir].x)
+			return void(actor.dir = dir)
 
-			if (m.#turning)
-				return void(m.#nextTurn = dir)
+		if (turning)
+			return void(nextTurn = dir)
 
-			if (a.hasAdjacentWall(dir))
-				return void(m.#nextDir = dir)
+		if (actor.hasAdjacentWall(dir))
+			return void(nextDir = dir)
 
-			a.orient   = dir
-			m.#nextDir = dir == a.revDir ? null : dir
-			a.passedTileCenter && a.alignDirection(a.revDir)
-		})
+		actor.orient = dir
+		nextDir = (dir == actor.revDir)? null : dir
+
+		if (actor.passedTileCenter)
+			actor.alignDirection(actor.revDir)
+	})
+
+	return {
+		/**
+		 @param   {number}  step
+		 @returns {boolean} True if the actor stopped at a wall.
+		*/
+		update(step) {
+			turnAround()
+			turnCorner(step)
+			actor.setNextPosition(step)
+			adjustSpeedOnTileArrival(step)
+			finishCornering()
+			return stopAtWall()
+		},
+		get speed()  {return _speed},
+		get onWall() {return onWall()},
 	}
 }
