@@ -1,4 +1,5 @@
 //---- Ghosts ----
+
 type GhostType = (typeof GhostType)[Exclude<keyof typeof GhostType,'Max'>]
 type GhostHitRadii = readonly [normal: number, frightened: number]
 
@@ -16,7 +17,7 @@ type TimerData = {
 	ignoreFrozen: boolean;
 	callback: ()=> void;
 }
-type TimerSeq = [durationMS:number, callback:()=> void, key?:unknown]
+type TimerSeq = readonly [durationMS:number, callback:()=> void, key?:unknown]
 
 //---- Tile & Coords ----
 

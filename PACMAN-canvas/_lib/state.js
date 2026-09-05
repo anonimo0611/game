@@ -23,7 +23,7 @@ export class AState {
 		this.owner   = owner
 		this.default = states[0]
 		this.immediately = immediately
-		states?.forEach((/**@type {S}*/s,i)=> {
+		states?.forEach((/**@type {S}*/s)=> {
 			const self = /**@type {any}*/(this)
 			self[`set${s}`] = (/**@type {StateDef.Opts<S>}*/opt)=> {this.set(s,opt)}
 			defineProperty(this,`is${s}`, {get(){return this.#curr === s}})

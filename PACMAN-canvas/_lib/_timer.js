@@ -27,15 +27,12 @@ const Ticker = {
 	set(s) {new TickerCore(s?.update, s?.draw)},
 
 	/** @param {boolean} [force] */
-	pause(force) {
-		return _paused = !!(force? force : !_paused)
-	},
-	stop()  {
-		_ticker?.stop()
-	},
-	resetCount() {
-		_fCount = 0
-	},
+	pause(force) {return _paused = !!(force? force : !_paused)},
+
+	stop() {_ticker?.stop()},
+
+	resetCount() {_fCount = 0},
+
 	reset() {
 		_fCount  = 0
 		_pCount  = 0
@@ -91,10 +88,11 @@ class TickerCore {
 		_pCount = 0
 		_fCount++
 	}
-	timer(
-	 /**@type {TimerData}*/t,
-	 /**@type {unknown}*/key
-	) {
+	/**
+	 @param {TimerData} t
+	 @param {unknown} key
+	*/
+	timer(t, key) {
 		if (Timer.frozen && !t.ignoreFrozen) return
 		if (TICK_MS*t.amount++ < t.timeout)  return
 		TimerMap.delete(key), t.callback()
@@ -110,6 +108,7 @@ const Timer = {
 	get frozen() {return _tFrozen},
 	freeze()   {_tFrozen = true; return this},
 	unfreeze() {_tFrozen = false;return this},
+
 	/**
 	 @param {number}    timeout
 	 @param {()=> void} callback
@@ -119,19 +118,20 @@ const Timer = {
 		if (!Ticker.running) Ticker.set()
 		TimerMap.set(key ?? Symbol(), {amount:0,timeout,ignoreFrozen,callback})
 	},
+
 	cancelAll() {
 		TimerMap.clear()
 		return this
 	},
-	cancel(
-	 /**@type {unknown}*/key
-	) {
+
+	/** @param {unknown} key */
+	cancel(key) {
 		TimerMap.delete(key)
 		return this
 	},
-	sequence(
-	 /**@type {TimerSeq[]}*/...seq
-	) {
+
+	/** @param {TimerSeq[]} seq */
+	sequence(...seq) {
 		if (seq.length == 0) return
 		let idx = 0
 		;(function processNext() {
@@ -144,7 +144,7 @@ const Timer = {
 		})()
 	},
 }
-return {Ticker,Timer}
 
+return {Ticker,Timer}
 //-- end --
 }()
