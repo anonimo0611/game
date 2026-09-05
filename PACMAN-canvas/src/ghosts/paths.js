@@ -9,25 +9,29 @@ const LINE_WIDTH  = T/5
 const PathOffsets = freeze([-2,-1,+1,+2])
 
 export class Paths {
+	#nodeList = /**@type {PathNode[]}*/([])
+
 	static get isActive() {
 		return Cfg.showPaths && State.isInGame
 	}
+
 	/** @param {readonly Ghost[]} ghostList */
 	static update(ghostList) {
 		if (!this.isActive) return
 		ghostList.forEach(g=> g.path.#update(g))
 	}
+
 	/** @param {readonly Ghost[]} ghostList */
 	static draw(ghostList) {
 		if (!this.isActive) return
 		ghostList.toReversed().forEach(g=> g.path.#draw(g))
 	}
-	#nodeList = /**@type {PathNode[]}*/([])
 
 	/** @param {Ghost} g */
 	#hasFixedTarget(g) {
 		return g.isScattering || g.state.isEscaping
 	}
+
 	/** @param {Ghost} g */
 	#update(g) {
 		const {dir,orient}= g
@@ -47,6 +51,7 @@ export class Paths {
 			if (path[i].stopped) break
 		} this.#nodeList = path
 	}
+
 	/** @param {Ghost} g */
 	#draw(g) {
 		if (!this.#nodeList.length)

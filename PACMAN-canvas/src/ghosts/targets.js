@@ -42,6 +42,7 @@ export const Targets = new class TargetVisualizer {
 			? this.#guzutaCircle(g)
 			: this.#auxLines(g, g.chaseOffset)
 	}
+
 	/** @param {Ghost} g */
 	#drawMarker(g) {
 		if (this.#markerDisabled(g))
@@ -53,6 +54,7 @@ export const Targets = new class TargetVisualizer {
 		Fg.fillRect  (x,y, size,size)
 		Fg.strokeRect(x,y, size,size)
 	}
+
 	/** @param {Pinky|Aosuke}  g */
 	#auxLines(g, ofst=T*2) {
 		const {center:{x,y},dir,inTunSide}= player
@@ -72,6 +74,7 @@ export const Targets = new class TargetVisualizer {
 			Fg.fillCircle(...ofsXY, T*0.26|0)
 		}
 	}
+
 	/** @param {Guzuta} g */
 	#guzutaCircle(g) {
 		Fg.save()
