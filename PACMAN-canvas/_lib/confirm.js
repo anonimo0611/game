@@ -40,17 +40,17 @@ export const Confirm = new class ConfirmCore {
 			btn.classList.add(i == cancelIdx? 'cancel':'ok')
 			btn.textContent = [lTxt,rTxt][i]
 			btn.onclick = ()=> {
-				$dialog.fadeOut(300, function() {
-					this.close()
-					this.remove()
+				$dialog[0].close()
+				setTimeout(()=> {
+					$dialog.remove()
 					;[lCb,rCb][i]?.()
 					Confirm.#opened = false
-				})
+				}, +$dialog.css('--delay') || 0)
 			}
 		})
 		$dialog.on({
 			keydown:this.#onKeydown,
 			pointerdown:e=> e.preventDefault()
-		}).fadeIn(300)[0].showModal()
+		})[0].showModal()
 	}
 }
