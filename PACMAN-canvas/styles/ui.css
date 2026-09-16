@@ -1,13 +1,11 @@
 html{
 	-webkit-user-select:none;user-select:none;
-	&[data-cursor=hidden] {
-		body:not([data-state=Title]) #container{cursor:none}
-	}
+	&[data-cursor=hidden] {body:not([data-state=Title]) #container{cursor:none}}
 }
 ::selection{color:inherit;background:transparent}
 
 dialog{
-	--delay:500;
+	--delay:500;--delay-ms:calc(var(--delay)*1ms);
 	color:#FFF;background:rgba(0 0 38/.6);font:2vmin sans-serif;margin:0;padding:.2rem;border:solid .2em #444;border-radius:.4em;position:fixed;top:50%;left:50%;translate:-50% -50%;
 	&::backdrop{background-color:#0006}
 	.content{border-bottom:solid .1em var(--color-border);padding:.5em 1em 1em}
@@ -19,7 +17,6 @@ dialog{
 	}
 }
 dialog,dialog::backdrop{
-	--delay-ms:calc(var(--delay)*1ms);
 	will-change:opacity;opacity:0;
 	transition:
    opacity var(--delay-ms) ease,
@@ -33,6 +30,7 @@ dialog[open],dialog::backdrop{opacity:1}
 	white-space:nowrap;color:#FFF;background:rgba(0 0 38/.85);font-size:80%;margin:0;padding:0 .2em .3em;border:solid .15em #444;border-radius:.3rem;position:absolute;z-index:100;
 	&.opened{display:block}
 }
+
 form,dialog{--color-label:#6FD;--color-label-hover:#FBE;--color-border:#888;--color-focus-border:#09C;--color-active-border:#3CF;--bgcolor:#333B;--bgcolor-hilight:#369B}
 button,input,[type=dropdown]>output,[type=slidemenu]{color:#EEE;font-size:.9em;border:solid .1em var(--color-border);border-radius:.2em;outline:0}
 button,[type=dropdown]>output,cm-btn[data-disabled=false]{
@@ -47,6 +45,7 @@ button,[type=dropdown]>output,cm-btn[data-disabled=false]{
 	&:disabled{color:#888;background:var(--bgcolor);border-color:#888}
 	&::-moz-focus-inner{border:0;padding:0}
 }
+
 [type=checkbox]{
 	--active:#C6F;appearance:none;box-sizing:border-box;border:solid .1em transparent;border-radius:.1em;width:.8em;height:.8em;position:relative;
 	&:focus{outline-offset:.1em;outline:solid .15em var(--active)}
@@ -57,11 +56,12 @@ button,[type=dropdown]>output,cm-btn[data-disabled=false]{
 	&:checked{
 	   display:grid;place-items:center;background:#9CF;
 		&:hover,&:focus{background:var(--active)}
-		&::before{content:'';border:solid #000;border-width:0 0 .1em .1em;width:calc(.55em);height:calc(.40em);box-sizing:border-box;translate:0 -0.1em;rotate:-45deg}
+		&::before{content:'';border:solid #000;border-width:0 0 .1em .1em;width:.55em;height:.40em;box-sizing:border-box;translate:0 -0.1em;rotate:-45deg}
 	}
 }
+
 [type=range]{
-	--thumb-size:0.55rem;--per:var(--ratio, 100%);--accent:#6CC;--active:#0EF;appearance:none;background:linear-gradient(90deg,var(--accent) var(--per),#777 var(--per));border:none;outline:none;height:.2em;accent-color:var(--accent);
+	--thumb-size:0.55rem;--per:var(--ratio,100%);--accent:#6CC;--active:#0EF;appearance:none;background:linear-gradient(90deg,var(--accent) var(--per),#777 var(--per));border:none;outline:none;height:.2em;accent-color:var(--accent);
 	&:focus{--accent:var(--active);border:none;accent-color:var(--active)}
 }
 ::-moz-range-thumb{appearance:none;background:#FFF;border:none;border-radius:50%;width:var(--thumb-size);height:var(--thumb-size)}
@@ -70,6 +70,7 @@ button,[type=dropdown]>output,cm-btn[data-disabled=false]{
 :focus::-moz-range-thumb{background:var(--active)}
 :hover::-webkit-slider-thumb{background:var(--accent)}
 :focus::-webkit-slider-thumb{background:var(--active)}
+
 custom-menu{white-space:nowrap;color:#FFF;position:relative;display:inline-block;cursor:default}
 [type=dropdown]{
 	--caret-size:1.1em;
@@ -103,5 +104,5 @@ custom-menu{white-space:nowrap;color:#FFF;position:relative;display:inline-block
 }
 label,th{color:var(--color-label)}
 label:hover{color:var(--color-label-hover)!important}
-tr:hover td,label:hover [tabindex="0"]{background:var(--bgcolor-hilight)}
+tr:hover td,label:hover[tabindex="0"]{background:var(--bgcolor-hilight)}
 tr:hover th,label:focus-within,chk-in:has(input:focus)+label{color:var(--color-label-hover)!important}
