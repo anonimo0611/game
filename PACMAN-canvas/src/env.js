@@ -145,6 +145,6 @@ export const Env = new class Environment {
 		$('input')   .on({input:Env.#output})
 		$(btns.reset).on({click:Env.#reset})
 		$(btns.start).on({click:State.setNewGame})
-		$root.addClass('controller-settled')
+		$root.addClass('ctrl-settled')
 	}
 }
