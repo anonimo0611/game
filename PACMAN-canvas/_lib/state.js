@@ -46,7 +46,7 @@ export class AState {
 	/** @param {{[key in S]?:JQTriggerHandler}} o */
 	onBefore(o) {
 		for (const [state,cb] of entries(o))
-			$(this.#eventBus).on('before'+state, cb)
+			this.#eventBus.on('before'+state, cb)
 		return this
 	}
 
