@@ -5,7 +5,7 @@ import {State}    from '../state.js'
 import {Score}    from '../score.js'
 import {Maze}     from '../maze.js'
 import  PacSpr    from '../sprites/pacman.js'
-import {Mover}    from './controller.js'
+import {mover}    from './controller.js'
 import {TunEntry} from './tunnel.js'
 import {Actor,Ghosts} from '../actors.js'
 
@@ -30,11 +30,13 @@ class Player extends PacMan {
 	#eatingSEToggle  = 1
 	#sinceLastEating = 0
 
-	/** @type {Mover} */
-	#mov      = new Mover(this)
-	#tunEntry = new TunEntry()
-	constructor() {super(13.5, 24)}
+	/** @readonly */
+	#mov = mover(this)
 
+	/** @readonly */
+	#tunEntry = new TunEntry()
+
+	constructor()  {super(13.5, 24)}
 	get speed()    {return this.#mov.speed}
 	get onWall()   {return this.#mov.onWall}
 	get tunEntry() {return this.#tunEntry}
@@ -46,7 +48,7 @@ class Player extends PacMan {
 		this.#sinceLastEating = 0
 	}
 	offsetTarget(dist=T*2) {
-		const  ofstX = (this.dir == U ? -dist : 0)
+		const ofstX = (this.dir == U ? -dist : 0)
 		return this.forward(this.dir, dist).addX(ofstX)
 	}
 	draw() {
