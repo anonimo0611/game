@@ -7,7 +7,7 @@ import {Actor,Ghosts}  from '../actors.js'
 import {PacSpd as Spd} from '../speed.js'
 
 /** @param {Actor} actor */
-export function mover(actor) {
+export function createMover(actor) {
 	let _speed   = 0
 	let turning  = false
 	let nextDir  = /**@type {?Direction}*/(null)

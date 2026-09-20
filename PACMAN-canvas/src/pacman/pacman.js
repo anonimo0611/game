@@ -1,12 +1,12 @@
-import {Sound}    from '../../_snd/sound.js'
-import {Game}     from '../_main.js'
-import {Env,Cfg}  from '../env.js'
-import {State}    from '../state.js'
-import {Score}    from '../score.js'
-import {Maze}     from '../maze.js'
-import  PacSpr    from '../sprites/pacman.js'
-import {mover}    from './controller.js'
-import {TunEntry} from './tunnel.js'
+import {Sound}   from '../../_snd/sound.js'
+import {Game}    from '../_main.js'
+import {Env,Cfg} from '../env.js'
+import {State}   from '../state.js'
+import {Score}   from '../score.js'
+import {Maze}    from '../maze.js'
+import  PacSpr   from '../sprites/pacman.js'
+import {TunnelEntry}  from './tunnel.js'
+import {createMover}  from './controller.js'
 import {Actor,Ghosts} from '../actors.js'
 
 const EventBus = $({})
@@ -30,16 +30,15 @@ class Player extends PacMan {
 	#eatingSEToggle  = 1
 	#sinceLastEating = 0
 
-	/** @readonly */
-	#mov = mover(this)
+	/** @readonly @private */
+	mover = createMover(this)
 
 	/** @readonly */
-	#tunEntry = new TunEntry()
+	tunEntry = new TunnelEntry()
 
 	constructor()  {super(13.5, 24)}
-	get speed()    {return this.#mov.speed}
-	get onWall()   {return this.#mov.onWall}
-	get tunEntry() {return this.#tunEntry}
+	get speed()    {return this.mover.speed}
+	get onWall()   {return this.mover.onWall}
 	get maxAlpha() {return Env.semiTransPac? Actor.CHEAT_ALPHA:1}
 	get closed()   {return State.isInGame == false}
 	get timeSinceLastEating() {return this.#sinceLastEating}
@@ -69,7 +68,7 @@ class Player extends PacMan {
 	}
 	#updateMovement() {
 		if (this.hidden) return
-		this.#tunEntry.update()
+		this.tunEntry.update()
 		this.#sinceLastEating += Game.interval
 		this.#moveSteps(this.speed+.5|0)
 	}
@@ -77,7 +76,7 @@ class Player extends PacMan {
 		const {tileIdx:tIdx,speed}= this
 		for (let i=0; i<steps; i++) {
 			Maze.hasDot(tIdx) && this.#eatDot(tIdx)
-			if (this.#mov.update(speed/steps)) break
+			if (this.mover.update(speed/steps)) break
 		}
 	}
 	#eatDot(/**@type {TileIdx}*/i) {
