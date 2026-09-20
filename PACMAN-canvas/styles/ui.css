@@ -87,13 +87,17 @@ input[type=range]{
 	--active:#0EF;
 	appearance:none;accent-color:var(--accent);border:none;outline:none;height:.2em;
 	background:linear-gradient(90deg,var(--accent) var(--per),#777 var(--per));
-	&:focus{--accent:var(--active);border:none;accent-color:var(--active)}
 	&::-moz-range-thumb{appearance:none;background:#FFF;border:none;border-radius:50%;width:var(--thumb-size);height:var(--thumb-size)}
 	&::-webkit-slider-thumb{appearance:none;background:#FFF;border-radius:50%;width:var(--thumb-size);height:var(--thumb-size)}
-	&:hover::-moz-range-thumb{background:var(--accent)}
-	&:focus::-moz-range-thumb{background:var(--active)}
-	&:hover::-webkit-slider-thumb{background:var(--accent)}
-	&:focus::-webkit-slider-thumb{background:var(--active)}
+	&:hover {
+		&::-moz-range-thumb{background:var(--accent)}
+		&::-webkit-slider-thumb{background:var(--accent)}
+	}
+	&:focus {
+		--accent:var(--active);accent-color:var(--active);border:none;
+		&::-moz-range-thumb{background:var(--active)}
+		&::-webkit-slider-thumb{background:var(--active)}
+	}
 }
 
 custom-menu{
