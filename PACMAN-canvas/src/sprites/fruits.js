@@ -1,11 +1,12 @@
-const Fns = /**@type {((ctx:Ctx2D)=> void)[]}*/([
-function cherry(ctx) {
+const drawFns = /**@type {((ctx:Ctx2D)=> void)[]}*/([
+//---- Cherries ----
+ctx=> {
 	// both fruits
 	[[-6,-1],[-1,1]].forEach(([x,y])=> {
 		ctx.save()
 		ctx.translate(x,y)
 
-		// red fruit
+		// fruit
 		ctx.fillCircle(2.5, 2.5, 3, '#F00')
 		ctx.save()
 		ctx.globalCompositeOperation = 'destination-out'
@@ -18,6 +19,7 @@ function cherry(ctx) {
 		ctx.lineWidth = 1.05
 		ctx.strokeStyle = '#FFF'
 		ctx.stroke()
+
 		ctx.restore()
 	})
 	// stems
@@ -29,8 +31,9 @@ function cherry(ctx) {
 	ctx.strokeStyle = '#F90'
 	ctx.stroke()
 },
-function strawb(ctx) {
-	// red body
+//---- Strawberry ----
+ctx=> {
+	// body
 	ctx.beginPath()
 	ctx.moveTo(-1,-4)
 	ctx.bezierCurveTo(-3,-4,-5,-3,-5, -1)
@@ -57,8 +60,9 @@ function strawb(ctx) {
 	ctx.strokeStyle = '#FFF'
 	ctx.strokeLine(0,-4, 0,-5)
 },
-function orange(ctx) {
-	// orange body
+//---- Orange ----
+ctx=> {
+	// body
 	ctx.beginPath()
 	ctx.moveTo(-2,-2)
 	ctx.bezierCurveTo(-3, -2,-5, -1,-5, 1)
@@ -91,8 +95,9 @@ function orange(ctx) {
 	ctx.stroke()
 	ctx.fill()
 },
-function apple(ctx) {
-	// red fruit
+//---- Apple ----
+ctx=> {
+	// fruit
 	ctx.beginPath()
 	ctx.moveTo(-2, -3)
 	ctx.bezierCurveTo(-2,-4,-3,-4,-4,-4)
@@ -121,18 +126,19 @@ function apple(ctx) {
 	ctx.strokeStyle = '#FFF'
 	ctx.stroke()
 },
-function melon(ctx) {
-	// draw body
+//---- Melon ----
+ctx=> {
+	// body
 	ctx.fillCircle(0, 1.7, 5.2, '#7BF331')
 
-	// draw stem
+	// stem
 	ctx.newLinePath([0,-3],[0,-5])
 	ctx.moveTo(2, -5)
 	ctx.quadraticCurveTo(-3,-5,-3,-6)
 	ctx.strokeStyle = '#69B4AF'
 	ctx.stroke()
 
-	// dark lines
+	// lines
 	ctx.translate(0, -0.5)
 	ctx.newLinePath([ 0.5,-2.0],[-4.0, 2.2],[0.5, 6.5])
 	ctx.setLinePath([-3.0,-1.0],[-1.0, 1.0])
@@ -145,26 +151,27 @@ function melon(ctx) {
 
 	;[//white spots
 		[ 0.0,-2.3],[-2,-1.2],[-4, 0.8],[-3.6, 3.2],[1, 0],
-	  	[-1.3, 2.0],[-1, 4.5],[ 3, 2.5],[ 1.0, 4.5]
+		[-1.3, 2.0],[-1, 4.5],[ 3, 2.5],[ 1.0, 4.5]
 	].forEach(([x,y])=> ctx.fillCircle(x,y, 0.5, '#FFF'))
 },
-function gala(ctx) {
+//---- Galaxian ----
+ctx=> {
 	const yellow = '#F8FF00'
 	for (const scaleX of [1,-1]) {
-		// yellow body
+		// body
 		ctx.save()
 		ctx.scale(scaleX, 1)
 		ctx.fillPolygon(yellow,[0,-3],[4.9,-1.5],[4.6,0.2],[1.6,2.3],[1.6,1.6],[0,1.6])
-		// blue wings
+		// wings
 		ctx.fillPolygon('#0AF',[4.6,-4.5],[6,-4.6],[6,0.9],[1.6,4.2],[1.6,2.2],[4.6,0.2])
 		ctx.restore()
 	}
-	// yellow tail
+	// tail
 	ctx.lineWidth   = 1.3
 	ctx.strokeStyle = yellow
 	ctx.strokeLine(0, 0.1, 0, 6.4)
 
-	// red arrow head
+	// arrow head
 	ctx.beginPath()
 	for (const scaleX of [1,-1]) {
 		ctx.scale(scaleX, 1)
@@ -175,8 +182,9 @@ function gala(ctx) {
 	ctx.fillStyle = '#FF3401'
 	ctx.fill()
 },
-function bell(ctx) {
-	// bell body
+//---- Bell ----
+ctx=> {
+	// body
 	ctx.beginPath()
 	for (const vx of [1,-1]) {
 		ctx.addLinePath([0,-5.8],[1.3*vx,-5.8],[1.5*vx,-5.3])
@@ -196,15 +204,16 @@ function bell(ctx) {
 	ctx.stroke()
 	ctx.strokeLine(-0.5,-4.3, 0.5,-4.3)
 
-	// bell bottom
+	// bottom
 	ctx.fillStyle = '#53A8FB'
 	ctx.beginPath()
 	ctx.ellipse(0, 4.9, 4.6, 1, 0, 0, PI*2)
 	ctx.fill()
 	ctx.fillCircle(1.2, 5.3, 1.4, '#FFF')
 },
-function key(ctx) {
-	// key metal
+//---- Key ----
+ctx=> {
+	// metal
 	ctx.newLinePath([-1,-1.5],[-1.0, 5.4],[0,6.4],[1,5.4],[1,2.8])
 	ctx.setLinePath([ 1, 1.8],[ 1.0,-1.5])
 	ctx.setLinePath([ 1, 0.6],[ 2.9, 0.6])
@@ -215,20 +224,23 @@ function key(ctx) {
 	ctx.stroke()
 	ctx.restore()
 
-	// key top
+	// top
 	ctx.beginPath()
 	ctx.moveTo(-3.6, -4.3)
 	ctx.bezierCurveTo(-3.5, -6.8, +3.5,-6.8, +3.6,-4.3)
 	ctx.arcTo(+3.6, -1.3, +2.5, -1.3, 0.8)
 	ctx.arcTo(-3.6, -1.3, -3.6, -2.5, 0.8)
+
 	// hole
 	ctx.roundRect(-1.7, -5, 1.7*2, 1, .5)
 	ctx.fillStyle = '#68B9FC'
 	ctx.fill('evenodd')
-}])
+}
+//---- End array ----
+])
 
 export const LOGIC_SIZE = 15.24
-export const MAX = Fns.length
+export const MAX = drawFns.length
 
 /**
  @param {Ctx2D}  ctx
@@ -241,7 +253,7 @@ export function draw(ctx, idx, size, x=size/2,y=size/2) {
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
 	ctx.scale(size/LOGIC_SIZE)
-	Fns[mathClamp(0, idx, MAX-1)](ctx)
+	drawFns[mathClamp(0, idx, MAX-1)](ctx)
 	ctx.restore()
 }
 
