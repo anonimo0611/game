@@ -14,14 +14,6 @@ $win.on('resize', ()=> {
 })
 .trigger('resize')
 
-//---- Grid lines ----
-
-Grid.beginPath()
-for(let x=1; x<COLS; x++) Grid.setLinePath([T*x, 0],[T*x, BH])
-for(let y=0; y<ROWS; y++) Grid.setLinePath([0, T*y],[BW, T*y])
-Grid.strokeStyle = Color.GridLine
-Grid.stroke()
-
 //---- Pop over ----
 
 $('body').on('keydown pointerdown', e=> {
@@ -35,6 +27,14 @@ $('button.popover').on('keydown pointerdown', e=> {
 	$('.popover.opened') .removeClass('opened')
 	$(btn).add(btn.value).toggleClass('opened',!opn)
 })
+
+//---- Grid lines ----
+
+Grid.beginPath()
+for(let x=1; x<COLS; x++) Grid.setLinePath([T*x, 0],[T*x, BH])
+for(let y=0; y<ROWS; y++) Grid.setLinePath([0, T*y],[BW, T*y])
+Grid.strokeStyle = Color.GridLine
+Grid.stroke()
 
 //---- Buttons ----
 
