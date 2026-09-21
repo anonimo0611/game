@@ -3,7 +3,7 @@ import {Confirm}  from '../_lib/confirm.js'
 import {Sound}    from '../_snd/sound.js'
 import {State}    from './state.js'
 import {drawText} from './message.js'
-import {Form,Menu,btns} from './ui.js'
+import {Form,Menu,Btns} from './ui.js'
 
 const {InfoTexts:palette}= Color
 const SETTINGS_KEY = 'anopacman'
@@ -96,7 +96,7 @@ export const Env = new class Environment {
 		default:
 			if (Env.#anyFocused || !Sound.settled) return
 			if (Dir.from(e,{wasd:true}) || e.key == '\x20') {
-				State.isTitle && btns.start.click()
+				State.isTitle && Btns.start.click()
 				Ticker.paused && Env.#pause()
 			}
 		}
@@ -136,15 +136,15 @@ export const Env = new class Environment {
 	#observeFocusChange() {
 		$(document.body).on('focusin focusout', e=> {
 			Env.#anyFocused = (e.type == 'focusin')
-				&& (e.target != btns.start)
+				&& (e.target != Btns.start)
 		})
 	}
 	#setupCtrls() {
 		Env.#observeFocusChange()
 		getVals(Menu).forEach(m=> m.onChange(Env.#output))
 		$('input')   .on({input:Env.#output})
-		$(btns.reset).on({click:Env.#reset})
-		$(btns.start).on({click:State.setNewGame})
+		$(Btns.reset).on({click:Env.#reset})
+		$(Btns.start).on({click:State.setNewGame})
 		$root.addClass('ctrl-settled')
 	}
 }

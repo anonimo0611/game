@@ -4,7 +4,7 @@ import {Game}     from './_main.js'
 import {State}    from './state.js'
 import {Env}      from './env.js'
 import {Lives}    from './lives.js'
-import {btns}     from './ui.js'
+import {Btns}     from './ui.js'
 import {drawText} from './message.js'
 
 const HISCORE_KEY = 'anopac_hiscore'
@@ -19,7 +19,7 @@ export const Score = new class ScoreManager {
 			GameOver: Score.#onGameOver,
 		})
 		Score.#reset()
-		$(btns.clear).on({click:Score.#clearConfirm})
+		$(Btns.clear).on({click:Score.#clearConfirm})
 	}
 	#clearConfirm() {
 		Confirm.open('Are you sure you want to clear high-score?',
