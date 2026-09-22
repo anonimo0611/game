@@ -147,4 +147,4 @@ custom-menu{
 label,th{color:var(--color-label)}
 label:hover{color:var(--color-label-hover)!important}
 tr:hover td,label:hover[tabindex="0"]{background:var(--bgcolor-hilight)}
-tr:hover th,label:focus-within,chk-in:has(input:focus)+label{color:var(--color-label-hover)!important}
+tr:hover th,label:focus-within,cb-wrap:has(input:focus)+label{color:var(--color-label-hover)!important}
