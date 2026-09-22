@@ -8,7 +8,7 @@ import {Btns}     from './ui.js'
 import {drawText} from './message.js'
 
 const HISCORE_KEY = 'anopac_hiscore'
-let [_score,_hiSco,savedScore,savedHiSco]= [0,0,0,0]
+let [_score,_hiSco,_savedScore,_savedHiSco]= [0,0,0,0]
 
 export const Score = new class ScoreManager {
 	static {$(this.setup)}
@@ -34,14 +34,14 @@ export const Score = new class ScoreManager {
 		_hiSco = localStorage[HISCORE_KEY]|0
 	}
 	#onNewGame() {
-		savedScore = _score
-		savedHiSco = _hiSco
+		_savedScore = _score
+		_savedHiSco = _hiSco
 		_score = 0
 	}
 	#onQuit() {
 		if (!Game.started) return
-		_score = savedScore
-		_hiSco = savedHiSco
+		_score = _savedScore
+		_hiSco = _savedHiSco
 	}
 	#onGameOver() {
 		const hi = localStorage[HISCORE_KEY]|0
