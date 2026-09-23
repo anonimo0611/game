@@ -49,7 +49,8 @@ custom-menu[type=slidemenu]{
 	color:#EEE;font-size:.9em;
 	border:solid .1em var(--color-border);border-radius:.2em;outline:0
 }
-button,cm-btn,custom-menu[type=dropdown]>output[data-disabled=false]{
+button,cm-btn[data-disabled=false],
+custom-menu[type=dropdown]>output{
 	background:var(--bgcolor);display:inline-block;padding:.4em .4em .3em;
 	&:hover,&:focus,
 	&.opened{border-color:var(--color-focus-border)}
