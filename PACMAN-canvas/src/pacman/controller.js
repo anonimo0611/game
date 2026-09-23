@@ -71,8 +71,8 @@ export function createMover(actor) {
 
 	$win.offon('keydown.PacSteer', e=> {
 		const dir = Dir.from(e, {wasd:true})
-		if (dir == null || dir == actor.dir)  return
-		if (keyRepeated(e) || Env.isCaptured) return
+		if (!dir || keyRepeated(e) || Env.isCaptured)
+			return
 
 		if (!State.isInGame && Vec2[dir].x)
 			return void(actor.dir = dir)
