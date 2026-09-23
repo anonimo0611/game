@@ -24,15 +24,15 @@ export function createMover(actor) {
 
 	function turnAround() {
 		if (actor.dir == actor.revOrient) {
-			actor.alignDirection()
-			setSpeed()
+			actor.alignDir()
+			_speed = getSpeed()
 		}
 	}
 
 	/** @param {number} step */
-	function adjustSpeedOnTileArrival(step) {
+	function setTileSpeed(step) {
 		if (actor.justArrivedAtTile(step))
-			setSpeed()
+			_speed = getSpeed()
 	}
 
 	/** @param {number} step */
@@ -40,7 +40,7 @@ export function createMover(actor) {
 		if (canTurn() && nextDir) {
 			turning ||= true
 			actor.orient = nextDir
-			actor.setNextPosition(step, nextDir)
+			actor.setNextPos(step, nextDir)
 		}
 	}
 
@@ -49,7 +49,7 @@ export function createMover(actor) {
 			turning  = false
 			nextDir  = nextTurn
 			nextTurn = null
-			actor.alignDirection()
+			actor.alignDir()
 		}
 	}
 
@@ -62,13 +62,12 @@ export function createMover(actor) {
 		return false
 	}
 
-	function setSpeed() {
-		_speed = Game.moveSpeed * Spd.levelFactor * (
+	const getSpeed = ()=>
+		Game.moveSpeed * Spd.levelFactor * (
 			Maze.hasDot(actor.tileIdx)
 			? (Ghosts.isFrightened? Spd.EneEating : Spd.Eating)
 			: (Ghosts.isFrightened? Spd.Energized : Spd.Base)
 		)
-	} $(setSpeed)
 
 	$win.offon('keydown.PacSteer', e=> {
 		const dir = Dir.from(e, {wasd:true})
@@ -87,8 +86,10 @@ export function createMover(actor) {
 		actor.orient = dir
 		nextDir = (dir == actor.revDir)? null : dir
 
-		if (actor.passedTileCenter)
-			actor.alignDirection(actor.revDir)
+		if (actor.passedTileCenter) {
+			actor.setMoveDir(actor.revDir)
+			actor.snapToAxis()
+		}
 	})
 
 	return {
@@ -99,12 +100,12 @@ export function createMover(actor) {
 		update(step) {
 			turnAround()
 			turnCorner(step)
-			actor.setNextPosition(step)
-			adjustSpeedOnTileArrival(step)
+			actor.setNextPos(step)
+			setTileSpeed(step)
 			finishCornering()
 			return stopAtWall()
 		},
-		get speed()  {return _speed},
+		get speed()  {return _speed ||= getSpeed()},
 		get onWall() {return onWall()},
 	}
 }

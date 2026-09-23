@@ -170,7 +170,7 @@ export class Ghost extends Actor {
 	}
 	#tickMove(spd=this.speed) {
 		!Maze.House.arrived(this, spd)
-			? this.setNextPosition(spd)
+			? this.setNextPos(spd)
 			: this.#enterHouse()
 	}
 	#setNextDir() {
@@ -178,7 +178,7 @@ export class Ghost extends Actor {
 			this.#revSig = false
 			this.orient  = this.revDir
 		}
-		if (this.aligned)
+		if (this.dirAligned)
 			this.orient = this.getNextDir()
 	}
 	getNextDir(
@@ -204,10 +204,10 @@ export class Ghost extends Actor {
 			? false : Maze.GhostNoEntryTiles.has(xy+dir)
 	}
 	#makeTurn() {
-		if (this.aligned == false
+		if (this.dirAligned == false
 		 && this.passedTileCenter
 		 && this.hasAdjacentWall(this.orient) == false) {
-			this.alignDirection()
+			this.alignDir()
 			return true
 		}
 		return false

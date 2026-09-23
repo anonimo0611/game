@@ -69,13 +69,13 @@ export const Ghosts = new class GhostGroup {
 		Ghosts.#animIdx = GhostList.length = 0
 		ghostList?.forEach((g,i)=> GhostList[i] = g)
 	}
-	#onInGame() {
-		Sound.playSiren()
-		Cfg.alwaysChase && Ghosts.#setReleaseTimer()
-	}
 	#dispatchState() {
 		hasOwn(Events,State.current)
 			&& $(GhostList).trigger(State.current)
+	}
+	#onInGame() {
+		Sound.playSiren()
+		Cfg.alwaysChase && Ghosts.#setReleaseTimer()
 	}
 	#setReleaseTimer() {
 		const lv = (Game.pacDied? 0 : Game.clampedLv)
