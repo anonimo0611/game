@@ -27,6 +27,10 @@ $('button.popover').on('keydown pointerdown', e=> {
 	$('.popover.opened') .removeClass('opened')
 	$(btn).add(btn.value).toggleClass('opened',!opn)
 })
+.on('focus', function() {
+	const p = $('.popover.opened').get(0)
+	p && p != this && $(this).trigger('pointerdown')
+})
 
 //---- Grid lines ----
 
