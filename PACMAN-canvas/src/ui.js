@@ -8,8 +8,8 @@ export const lives  = reqInput('#initialLives')
 //---- Buttons ----
 
 export const Btns = function() {
-	const ids = /**@type {const}*/(['clearBtn','resetBtn','startBtn'])
-	const ret = toObj( ids.map(id=> [id,reqButton(`#${id}`)]) )
+	const ids = /**@type {const}*/(['clear','reset','start'])
+	const ret = toObj( ids.map(id=> [id, reqButton(`#${id}Btn`)]) )
 	return /**@type {{[K in ids[number]]:HTMLButtonElement}}*/(ret)
 }()
 
