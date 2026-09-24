@@ -47,13 +47,10 @@ $win.on('resize', ()=> {
 
 //---- Pop over ----
 
-const closeAllPanel = ()=>
-	$('.popover').removeClass('opened')
-
 $('body').on('keydown pointerdown', e=> {
 	if (e.key == 'Escape'
 	|| !e.target.closest('.popover'))
-		closeAllPanel()
+		$('.popover').removeClass('opened')
 })
 $('button.popover').on('keydown pointerdown', e=> {
 	if (e.key && !isActionKey(e)) return
@@ -62,4 +59,3 @@ $('button.popover').on('keydown pointerdown', e=> {
 	$('.popover.opened') .removeClass('opened')
 	$(btn).add(btn.value).toggleClass('opened',!opn)
 })
-.on({blur:closeAllPanel})
