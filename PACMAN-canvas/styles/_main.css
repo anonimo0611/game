@@ -112,11 +112,11 @@ html.ctrl-settled.sound-settled{
 .popover.panel {
 	top:var(--height);left:unset;right:0;
 	table{border-collapse:collapse}
-	caption,dt,
-	&[data-caption]::before{
-		content:attr(data-caption);display:block;text-align:center;color:#FF3;
+	caption,dt,&[data-caption]::before{
+		text-align:center;color:#FF3;
 		font:small-caps bold .9rem/1 sans-serif;margin:.2em 0 .2em .4rem;padding:0
 	}
+	&[data-caption]::before{content:attr(data-caption);display:block}
 	> li,th,td,dd{font:.78rem/1 sans-serif;padding:.1rem 0}
 	th,td{text-align:center;vertical-align:middle;font-weight:normal;padding:.15em .2em}
 }
