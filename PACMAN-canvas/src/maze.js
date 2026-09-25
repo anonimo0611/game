@@ -145,7 +145,7 @@ export const Maze = freeze({
 	*/
 	getGhostExitTile: ({baseTargetTile:b}, tile)=>
 		!Cfg.unrestricted && b.y < 10 && HouseOuter.contains(tile)
-			? Vec2.new({x:(tile.x>COLS/2 && b.x>COLS/2 ? 21:6), y:15}) : b,
+			? Vec2.new({y:15,x:(tile.x>COLS/2 && b.x>COLS/2 ? 21:6)}) : b,
 
 	/**
 	 @param {TileIdx} i
