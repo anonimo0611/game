@@ -3,8 +3,8 @@ import {State} from './state.js'
 import  Sprite from './sprites/pacman.js'
 
 export const Lives = function() {
-	let   left = 0
-	const SIZE = T * 2
+	let   left   = 0
+	const SIZE   = T*2
 	const sprite = new Sprite(HUD, T*.8, .5)
 	State.on({
 		Title:   ()=> set(lives.valueAsNumber-1),
@@ -12,7 +12,7 @@ export const Lives = function() {
 		Ready:   ()=> set(left+(State.wasNewLevel? 0:-1)),
 	})
 	function set(/**@type {number}*/v) {
-		left = max(0, v)
+		left = Math.max(0,v)
 		draw()
 	}
 	function draw() {
@@ -24,7 +24,6 @@ export const Lives = function() {
 		HUD.restore()
 	}
 	$(lives).on({input:()=> set(lives.valueAsNumber-1)})
-
 	return {
 		extend()   {set(left+1)},
 		get left() {return left},
