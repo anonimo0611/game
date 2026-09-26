@@ -6,7 +6,7 @@ import * as Spr from './pacman.js'
 export class Dying {
 	/** @readonly */ctx
 	/** @readonly */r
-	#fadeOut = Fade.out(300)
+	#fadeOut = Fade.out(300);
 	#cnt; #cb; #innerR; #outerR; #arcAng;
 
 	/**

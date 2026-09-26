@@ -57,7 +57,6 @@ export default class GhostSubSprite {
 		ctx.fillStyle = Color.GhostSkin
 		ctx.fill()
 		ctx.restore()
-
 		// Clothes
 		ctx.beginPath()
 		ctx.setLinePath([-45,40],[-33,25])
@@ -83,7 +82,6 @@ export default class GhostSubSprite {
 		ctx.fillStyle = Color.GhostSkin
 		ctx.fill()
 		ctx.restore()
-
 		// Clothes
 		ctx.newLinePath([-45,40],[-36,30])
 		ctx.quadraticCurveTo(-26, 19, -21, 29)
