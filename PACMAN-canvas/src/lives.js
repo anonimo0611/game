@@ -12,8 +12,7 @@ export const Lives = function() {
 		Ready:   ()=> set(left+(State.wasNewLevel? 0:-1)),
 	})
 	function set(/**@type {number}*/v) {
-		left = Math.max(0,v)
-		draw()
+		left = mathClamp(v, 0, +lives.max);draw()
 	}
 	function draw() {
 		HUD.save()
