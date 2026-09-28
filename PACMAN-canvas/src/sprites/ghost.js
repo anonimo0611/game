@@ -7,6 +7,8 @@ export default class GhostSprite {
 	/**@readonly*/glow
 	#size
 	#fadeBody = /**@type {?Fade}*/(null)
+	get size()  {return this.#size}
+	get alpha() {return this.#fadeBody?.alpha}
 
 	/**
 	 @param {Ctx2D}  target
@@ -19,9 +21,6 @@ export default class GhostSprite {
 		this.sub  = new SubSprite(this.ctx)
 		this.resize(this.#size = size)
 	}
-	get size()  {return this.#size}
-	get alpha() {return this.#fadeBody?.alpha}
-	setResurrect() {this.#fadeBody ??= Fade.in(600)}
 	resize(/**@type {number}*/size) {
 		this.#size = size
 		this.ctx.resize(size*1.5, size)
@@ -67,6 +66,9 @@ export default class GhostSprite {
 		isExposed? this.sub.drawHadake(animIdx) : drawBody()
 		ctx.restore()
 		tgt.put(ctx.canvas, center, alpha, -size/2)
+	}
+	setResurrect() {
+		this.#fadeBody ??= Fade.in(600)
 	}
 	update() {
 		if (this.#fadeBody?.update() == false)
