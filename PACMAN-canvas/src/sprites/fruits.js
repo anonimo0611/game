@@ -40,7 +40,7 @@ ctx=> {
 	ctx.bezierCurveTo(-5, 3,-2, 5, 0,  6)
 	ctx.bezierCurveTo( 3, 5, 5, 2, 5,  0)
 	ctx.bezierCurveTo( 5,-3, 3,-4, 0, -4)
-	ctx.fillStyle = ctx.strokeStyle = '#F00'
+	ctx.setStyle('#F00')
 	ctx.fill()
 	ctx.stroke()
 
@@ -70,7 +70,7 @@ ctx=> {
 	ctx.bezierCurveTo( 3.5,6, 5,  4, 5, 1)
 	ctx.bezierCurveTo( 5, -1, 3, -2, 2,-2)
 	ctx.closePath()
-	ctx.fillStyle = ctx.strokeStyle = '#FCA95E'
+	ctx.setStyle('#FCA95E')
 	ctx.fill()
 	ctx.stroke()
 
@@ -91,7 +91,7 @@ ctx=> {
 	ctx.bezierCurveTo(3,-5, 4,-4, 5,-4)
 	ctx.bezierCurveTo(4,-4, 4,-3, 3,-3)
 	ctx.bezierCurveTo(2,-3, 2,-4,.5,-4)
-	ctx.strokeStyle = ctx.fillStyle = '#0F0'
+	ctx.setStyle('#0F0')
 	ctx.stroke()
 	ctx.fill()
 },
@@ -156,27 +156,30 @@ ctx=> {
 },
 //---- Galaxian ----
 ctx=> {
-	const yellow = '#F8FF00'
+	ctx.lineWidth = 1.4
+	ctx.setStyle('#F8FF00')
 	for (const scaleX of [1,-1]) {
 		// body
 		ctx.save()
 		ctx.scale(scaleX, 1)
-		ctx.fillPolygon(yellow,[0,-3],[4.9,-1.5],[4.6,0.2],[1.6,2.3],[1.6,1.6],[0,1.6])
+		ctx.fillPolygon(null,[0,-2.2],[4.9,-1.5],[4.6,0.2],[1.6,2.3],[1.6,1.6],[0,1.6])
 		// wings
-		ctx.fillPolygon('#0AF',[4.6,-4.5],[6,-4.6],[6,0.9],[1.6,4.2],[1.6,2.2],[4.6,0.2])
+		ctx.newLinePath([5.3,-3.8],[5.3,0.5],[1.6,3.2])
+		ctx.lineCap = 'square'
+		ctx.strokeStyle = '#0AF'
+		ctx.stroke()
 		ctx.restore()
 	}
 	// tail
-	ctx.lineWidth   = 1.3
-	ctx.strokeStyle = yellow
+	ctx.clearRect(-1.6, 1.6, 1.6*2, 3)
 	ctx.strokeLine(0, 0.1, 0, 6.4)
 
 	// arrow head
 	ctx.beginPath()
 	for (const scaleX of [1,-1]) {
 		ctx.scale(scaleX, 1)
-		ctx.setLinePath([0,-5.4],[4.6,-1.4],[1.3,-1.9])
-		ctx.quadraticCurveTo(1.2, -1.9, 1.2, -1.9)
+		ctx.setLinePath([0,-5.4],[4.4,-1.4],[1.3,-2])
+		ctx.quadraticCurveTo(1.2, -2, 1.2, -2)
 		ctx.quadraticCurveTo(0.4, 0.6, 0, 0.6)
 	}
 	ctx.fillStyle = '#FF3401'

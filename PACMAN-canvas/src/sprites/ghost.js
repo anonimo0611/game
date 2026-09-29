@@ -149,8 +149,7 @@ export default class GhostSprite {
 	}
 	#drawFrightFace(spriteIdx=0) {
 		const {ctx}= this
-		ctx.fillStyle   =
-		ctx.strokeStyle = Color.FrightFaces[spriteIdx]
+		ctx.setStyle(Color.FrightFaces[spriteIdx])
 		{// Eyes
 			const size = 11
 			ctx.fillRect(-15-size/2, -size*1.5, size, size)

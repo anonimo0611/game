@@ -47,8 +47,8 @@ export class Dying {
 		ctx.save()
 		ctx.translate(x,y)
 		ctx.scale(r/defaultR*Spr.SCALE_FACTOR)
+		ctx.setStyle(Color.Pacman)
 		ctx.lineWidth = defaultR*0.21
-		ctx.fillStyle = ctx.strokeStyle = Color.Pacman
 		this.isSplitting
  			? this.#drawSplittingBody()
 	 		: this.#drawRadialBurst()
