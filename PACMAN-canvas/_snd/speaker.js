@@ -2,8 +2,8 @@
 	/** @readonly*/ctx
 	/** @readonly*/color
 	/**
-	 @param {EnhancedCtx2D} ctx
-	 @param {Cvs2DStyle} color
+	 @param {Ctx2D}    ctx
+	 @param {CvsStyle} color
 	*/
 	constructor(ctx, color='#FFF') {
 		this.ctx   = ctx
@@ -14,7 +14,7 @@
 		const steps = this.#getSteps(vol)
 		ctx.clear()
 		ctx.save()
-		ctx.fillStyle = ctx.strokeStyle = this.color
+		ctx.setStyle(this.color)
 		ctx.translate(w/2)
 		ctx.scale(w/100, h/100)
 		ctx.fillPolygon(null,
