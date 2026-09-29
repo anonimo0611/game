@@ -11,7 +11,7 @@ export const Targets = new class TargetVisualizer {
 		if (!Cfg.showTargets) return
 		Fg.save()
 		Fg.setAlpha(0.7)
-		Fg.fillStyle = Fg.strokeStyle = '#FFF'
+		Fg.setStyle('#FFF')
 		for (const g of ghostList) this.#strokeLines(g)
 		for (const g of ghostList) this.#drawMarker(g)
 		Fg.restore()
