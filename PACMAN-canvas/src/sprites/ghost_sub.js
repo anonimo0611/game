@@ -90,11 +90,10 @@ export default class GhostSubSprite {
 		ctx.fill()
 		this.#hadakeEyes([50,71],[56,78])
 	}
-	/**
-	 @param {[L:number, R:number]} ballsLR
-	 @param {[L:number, R:number]} eyesLR
-	*/
-	#hadakeEyes(ballsLR, eyesLR) {
+	#hadakeEyes(
+	 /**@type {[L:number, R:number]}*/ballsLR,
+	 /**@type {[L:number, R:number]}*/eyesLR
+	) {
 		const {ctx}= this
 		for (const i of [1,0]) {
 			// Eyeballs

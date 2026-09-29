@@ -48,6 +48,7 @@ export const Wall = new class WallRenderer {
 		const y = (Maze.House.EntryTile.y+1.6)*T
 		Bg.fillRect(BW/2-T, y, T*2, T/4, Color.HouseDoor)
 	}
+
 	/** @param {Ctx2D} ctx */
 	#drawHouse(ctx) {
 		const [ix,iy,ox,oy]= [31,16,34,19].map(n=>n/10*T)
@@ -60,6 +61,7 @@ export const Wall = new class WallRenderer {
 		ctx.strokeLine(+T+LW/2, -oy, +T+LW/2, -iy)
 		ctx.restore()
 	}
+
 	/**
 	 @param {Ctx2D} ctx
 	 @param {{type:number, cIdx:number, pos:Position}} _
@@ -87,6 +89,7 @@ export const Wall = new class WallRenderer {
 		}
 		ctx.restore()
 	}
+
 	/**
 	 @param {Ctx2D}  ctx
 	 @param {string} s  Tile symbol

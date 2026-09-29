@@ -1,10 +1,10 @@
 import SubSprite from './ghost_sub.js'
 export const LOGIC_SIZE = 90
 export default class GhostSprite {
-	/**@readonly*/tgt
-	/**@readonly*/ctx
-	/**@readonly*/sub
-	/**@readonly*/glow
+	/** @readonly */tgt
+	/** @readonly */ctx
+	/** @readonly */sub
+	/** @readonly */glow
 	#size
 	#fadeBody = /**@type {?Fade}*/(null)
 	get size()  {return this.#size}
