@@ -10,6 +10,11 @@ import {Cutscene} from '../demo/cutscene.js'
 		$win.onNS('ResetDemoTimer', handlers, State.isTitle)
 	})
 }
+$('#cfgPanelBtns')
+.on('click','.at', State.setAttract)
+.on('click','.cs', function() {
+    State.setCutscene({data:+$(this).data('n')})
+})
 
 /** @type {SceneDict<string>} */
 const SceneDict = {Attract,Cutscene}
@@ -22,13 +27,7 @@ export const updateTimer = ()=> {
 		: Ticker.elapsedTime > 1e3*30 // 30secs
 			&& State.setAttract()
 }
-
 export const Scene = {
 	draw()   {SceneDict[State.current]?.draw()},
 	update() {SceneDict[State.current]?.update()},
 }
-
-$('button.demo.at').on({click:State.setAttract})
-$('button.demo.cs').each((i,btn)=> {
-	$(btn).on({click(){State.setCutscene({data:i+1})}})
-})
