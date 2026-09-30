@@ -90,7 +90,7 @@ export const Ghosts = new class GhostGroup {
 	}
 	frighten() {
 		signalDirectionReversal()
-		Fright.duratuon || State.isAttract
+		Fright.duration || State.isAttract
 			? Fright.frighten()
 			: Ghosts.#setFleeTimer()
 	}
@@ -255,10 +255,10 @@ const CruiseElroy = function() {
 }()
 
 const Fright = function() {
-	let   session  = /**@type {?ReturnType<typeof on>}*/(null)
+	let   session  = /**@type {?ReturnType<typeof frighten>}*/(null)
 	const PtsList  = /**@type {const}*/([200,400,800,1600])
 	const DurList  = /**@type {const}*/([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
-	function on(tmr=0) {
+	function frighten(tmr=0) {
 		let flash=0, caught=0, sprIdx=1
 		const interval = (tmr == 1 ? 12:14)/Game.speed
 		function trigger(isOn=true) {
@@ -283,8 +283,8 @@ const Fright = function() {
 	}
 	State.on({_Ready(){session = null}})
 	return {
-		frighten()     {session = on(this.duratuon)},
-		get duratuon() {return DurList[Game.clampedLv-1]},
+		frighten()     {session = frighten(this.duration)},
+		get duration() {return DurList[Game.clampedLv-1]},
 		get session()  {return session},
 		get ptsValue() {return session?.points ?? PtsList[0]},
 	}
