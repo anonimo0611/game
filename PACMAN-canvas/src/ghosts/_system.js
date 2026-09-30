@@ -82,12 +82,13 @@ export const Ghosts = new class GhostGroup {
 		Timer.sequence(...
 			GhostList.slice(1).map((g,i)=> /**@type {TimerSeq}*/
 				([StandbyDelays[lv][i]/Game.speed, g.leaveHouse])
-			)
-		)
+			))
 	}
 	frighten() {
 		signalDirectionReversal()
-		Fright.frighten()
+		Fright.duratuon || State.isDemoMode
+			? Fright.frighten()
+			: $(GhostList).trigger(Events.FleeStart)
 	}
 	update() {
 		Fright.session?.update()
@@ -251,20 +252,20 @@ const CruiseElroy = function() {
 }()
 
 const Fright = function() {
-	let   session = /**@type {?ReturnType<typeof on>}*/(null)
-	const PtsList = /**@type {const}*/([200,400,800,1600])
-	const DurList = /**@type {const}*/([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
+	let   session  = /**@type {?ReturnType<typeof on>}*/(null)
+	const PtsList  = /**@type {const}*/([200,400,800,1600])
+	const DurList  = /**@type {const}*/([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	function on(tmr=0) {
-		let sprIdx=1, flash=0, caught=0
-		const iv  = (tmr == 1 ? 12:14) / Game.speed
-		const set = (isOn=true)=> {
+		let flash=0, caught=0, sprIdx=1
+		const interval = (tmr == 1 ? 12:14)/Game.speed
+		function trigger(isOn=true) {
 			!isOn && (session = null)
 			$(GhostList)
 				.trigger(Events.Frighten, isOn)
 				.offon(StateType.Bitten, ()=> caught++, isOn)
 			Sound.toggleFrightMode(isOn)
 		}
-		tmr? set(true) : $(GhostList).trigger(Events.FleeStart)
+		trigger(true)
 		return {
 			get points()    {return PtsList[caught-1]},
 			get spriteIdx() {return sprIdx ^ 1},
@@ -272,14 +273,15 @@ const Fright = function() {
 			update() {
 				if (!State.isInGame || Timer.frozen) return
 				tmr -= Game.interval/1e3
-				if (tmr <= 2) sprIdx ^= +!(flash++ % iv)
-				if (tmr <= 0 || this.caughtAll) set(false)
+				if (tmr <= 2) sprIdx ^= +!(flash++ % interval)
+				if (tmr <= 0 || this.caughtAll) trigger(false)
 			},
 		}
 	}
 	State.on({_Ready(){session = null}})
 	return {
-		frighten() {session = on(DurList[Game.clampedLv-1])},
+		frighten()     {session = on(this.duratuon)},
+		get duratuon() {return DurList[Game.clampedLv-1]},
 		get session()  {return session},
 		get ptsValue() {return session?.points ?? PtsList[0]},
 	}
