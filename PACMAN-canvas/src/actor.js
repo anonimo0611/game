@@ -7,36 +7,34 @@ export class Actor {
 
 	pos = Vec2.Zero
 	orient  = /**@type {Direction}*/(L)
-	#movDir = this.orient
-
-	/** @protected */
 	fadeSpr = /**@type {?Fade}*/(null)
+	#movDir = this.orient
 
 	/** @protected */
 	constructor(col=0, row=0) {this.pos.set(col*T, row*T)}
 
 	// Override the actual speed in the subclasses.
-	get speed()     {return 0}
-	get maxAlpha()  {return 1}
-	get alpha()     {return this.fadeSpr?.alpha ?? this.maxAlpha}
-	get inHouse()   {return Maze.House.isIn(this.tile)}
-	get inTunSide() {return Maze.Tunnel.findSide(this.center)}
+	get speed()      {return 0}
+	get maxAlpha()   {return 1}
+	get alpha()      {return this.fadeSpr?.alpha ?? this.maxAlpha}
+	get inHouse()    {return Maze.House.isIn(this.tile)}
+	get inTunSide()  {return Maze.Tunnel.findSide(this.center)}
 
-	get x()         {return this.pos.x}
-	get y()         {return this.pos.y}
-	set x(num)      {this.pos.x = num}
-	set y(num)      {this.pos.y = num}
+	get x()          {return this.pos.x}
+	get y()          {return this.pos.y}
+	set x(num)       {this.pos.x = num}
+	set y(num)       {this.pos.y = num}
 
-	get center()    {return this.pos.clone.add(T/2)}
-	get tile()      {return this.center.divInt(T)}
-	get tileIdx()   {return this.tile.toIdx(COLS)}
+	get center()     {return this.pos.clone.add(T/2)}
+	get tile()       {return this.center.divInt(T)}
+	get tileIdx()    {return this.tile.toIdx(COLS)}
 
-	get dir()       {return this.#movDir}
-	set dir(dir)    {this.#movDir = this.orient = dir}
+	get dir()        {return this.#movDir}
+	set dir(dir)     {this.#movDir = this.orient = dir}
 
-	get aligned()   {return this.dir == this.orient}
-	get revDir()    {return Dir.Opposite[this.dir]}
-	get revOrient() {return Dir.Opposite[this.orient]}
+	get dirAligned() {return this.dir == this.orient}
+	get revDir()     {return Dir.Opposite[this.dir]}
+	get revOrient()  {return Dir.Opposite[this.orient]}
 
 	get tilePixel() {
 		const dot = this.center.dot(Vec2[this.dir])
@@ -45,6 +43,7 @@ export class Actor {
 	get passedTileCenter() {
 		return this.tilePixel > T/2
 	}
+
 	/** @protected */
 	drawCenterDot({r=3,color='red'}={}) {
 		Fg.fillCircle(...this.center.vals, r, color)
@@ -72,13 +71,13 @@ export class Actor {
 		}(this) - T/2
 	}
 	move(dir=this.dir) {
-		this.setNextPosition(this.speed, this.dir=dir)
+		this.setNextPos(this.speed, this.dir=dir)
 	}
-	alignDirection(dir=this.orient) {
-		this.#movDir = dir
+	alignDir() {
+		this.#movDir = this.orient
 		this.#snapToAxis()
 	}
-	setNextPosition(speed=this.speed, dir=this.dir) {
+	setNextPos(speed=this.speed, dir=this.dir) {
 		this.pos = Vec2[dir].mul(speed).add(this)
 		this.#wrapXAxis()
 	}
@@ -86,6 +85,9 @@ export class Actor {
 		return this.passedTileCenter == false
 			&& this.tilePixel <= speed
 	}
+	/** @param {Direction} dir */
+	setMoveDir(dir) {this.#movDir = dir}
+
 	/** @param {Direction} dir */
 	forward(dir, dist=0) {
     	return Vec2[dir].mul(dist).add(this.center)

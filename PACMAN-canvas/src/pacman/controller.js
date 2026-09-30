@@ -86,10 +86,8 @@ export function createMover(actor) {
 		actor.orient = dir
 		nextDir = (dir == actor.revDir)? null : dir
 
-		if (actor.passedTileCenter) {
+		if (actor.passedTileCenter)
 			actor.setMoveDir(actor.revDir)
-			actor.snapToAxis()
-		}
 	})
 
 	return {
