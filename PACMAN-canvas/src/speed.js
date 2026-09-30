@@ -1,22 +1,26 @@
-const BASE_P = TILE_SIZE / 4.5
-const BASE_G = BASE_P * 1.07
+const P_SPD = TILE_SIZE / 4.5
+const G_SPD = P_SPD * 1.07
 
 import {Game} from './_main.js'
 export const Speed = /**@type {const}*/({
-	StepPerLevel: 0.01,
+	get stepPerLv() {
+		return 1-(13-Game.clampedLv) * 0.01
+	},
 	Pacman: {
-		Base:      BASE_P,
-		Eating:    BASE_P * 0.88,
-		Energized: BASE_P * 1.10,
-		EneEating: BASE_P * 0.95, // Energized+Eating
-		get levelFactor() {return (Game.level < 13 ? 1 : 0.98)},
+		Base:      P_SPD,
+		Eating:    P_SPD * 0.88,
+		Energized: P_SPD * 1.10,
+		EneEating: P_SPD * 0.95, // Energized+Eating
+		get levelFactor() {
+			return (Game.level < 13 ? 1 : 0.98)
+		},
 	},
 	Ghost: {
-		Base:     BASE_G,
-		Idle:     BASE_G * 0.50,
-		GoOut:    BASE_G * 0.50,
-		Fright:   BASE_G * 0.60,
-		InTunnel: BASE_G * 0.60,
-		Escape:   BASE_G * 1.40,
+		Base:     G_SPD,
+		Idle:     G_SPD * 0.50,
+		GoOut:    G_SPD * 0.50,
+		Fright:   G_SPD * 0.60,
+		InTunnel: G_SPD * 0.60,
+		Escape:   G_SPD * 1.40,
 	},
 }), {Ghost:GhsSpd, Pacman:PacSpd}= Speed
