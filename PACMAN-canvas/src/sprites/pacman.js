@@ -36,7 +36,7 @@ export default class PacmanSprite {
 				this.#mPhase = PHASE_MID
 			} return
 		}
-		const phase = this.#mPhase += PI/(DURATION/speed)
+		const phase  = this.#mPhase += PI/(DURATION/speed)
 		this.#mAngle = OPEN_MAX * abs(sin(phase))
 	}
 	draw({

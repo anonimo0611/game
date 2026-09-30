@@ -162,7 +162,7 @@ ctx=> {
 		// body
 		ctx.save()
 		ctx.scale(scaleX, 1)
-		ctx.fillPolygon(null,[0,-2.2],[4.9,-1.5],[4.6,0.2],[1.6,2.3],[0,2.2])
+		ctx.fillPolygon(null,[0,-2.2],[4.9,-1.5],[4.6,0.2],[1.6,2.3],[0,2.3])
 		// wings
 		ctx.newLinePath([5.3,-3.8],[5.3,0.5],[1.6,3.2])
 		ctx.lineCap = 'square'
