@@ -9,12 +9,12 @@ import {Cutscene} from '../demo/cutscene.js'
 		const handlers = {[EV]:Ticker.resetCount}
 		$win.onNS('ResetDemoTimer', handlers, State.isTitle)
 	})
+	$('#cfgPanelBtns')
+	.on('click','.at', State.setAttract)
+	.on('click','.cs', function() {
+		State.setCutscene({data:+$(this).data('n')})
+	})
 }
-$('#cfgPanelBtns')
-.on('click','.at', State.setAttract)
-.on('click','.cs', function() {
-    State.setCutscene({data:+$(this).data('n')})
-})
 
 /** @type {SceneDict<string>} */
 const SceneDict = {Attract,Cutscene}
