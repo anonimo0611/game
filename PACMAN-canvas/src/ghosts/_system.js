@@ -84,11 +84,15 @@ export const Ghosts = new class GhostGroup {
 				([StandbyDelays[lv][i]/Game.speed, g.leaveHouse])
 			))
 	}
+	#setFleeTimer() {
+		if (!State.isInGame) return
+		$(GhostList).trigger(Events.FleeStart)
+	}
 	frighten() {
 		signalDirectionReversal()
-		Fright.duratuon || State.isDemoMode
+		Fright.duratuon || State.isAttract
 			? Fright.frighten()
-			: $(GhostList).trigger(Events.FleeStart)
+			: Ghosts.#setFleeTimer()
 	}
 	update() {
 		Fright.session?.update()
@@ -97,8 +101,7 @@ export const Ghosts = new class GhostGroup {
 		Ghosts.#updateGhosts()
 	}
 	#updateAnimation() {
-		if (Timer.frozen)
-			return
+		if (Timer.frozen) return
 		if (State.isInGame
 		 || State.isDemoMode)
 			Ghosts.#animIdx ^= +(Ticker.count % 6 == 0)
