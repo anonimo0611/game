@@ -151,8 +151,8 @@ export const [StateType,createState] = function() {
 	]
 }()
 
-const SCATTER = 0
-const CHASING = 1
+const SCATTER = Symbol('SCATTER')
+const CHASING = Symbol('CHASING')
 const signalDirectionReversal = ()=> {
 	$(GhostList).trigger(Events.Reverse)
 }
