@@ -12,7 +12,7 @@ export class SnagSprite {
 	/** Renders the stake bottom-aligned to the given y-coord. */
 	drawSnaggedStake({x=STAKE_X,y=0,isRipped=false,scale=1}={}) {
 		const {ctx}= this, [sw,sh]= StakeSize.vals
-		/** Adjust for the gap between the sprite bottom and the ground */
+		/** Adjust for the gap between the sprite bottom and the ground. */
 		const offsetY = -T*0.1
 		ctx.save()
 		ctx.translate(x, y)
@@ -34,8 +34,8 @@ export class SnagSprite {
 	*/
 	drawSnaggedClothing(animIdx, ratio, {x=0,y=0,scale=1}={}) {
 		const {ctx}= this
-		const v1 = mathLerp(+4, 22, ratio)
-		const v2 = mathLerp(+4, 50, ratio)
+		const v1 = lerp(+4, 22, ratio)
+		const v2 = lerp(+4, 50, ratio)
 		const ls = (animIdx? -25 : -36) // Left side
 		ctx.save()
 		ctx.translate(x, y)

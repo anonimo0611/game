@@ -18,13 +18,13 @@ const AppearDots = new Set([70,170])
 const TargetPos  = new Vec2(BW/2, T*18.5).fixed
 const LevelsRect = new Rect(T*2*6, BH-T*2, LEVEL_COLS*T*2, T*2).freeze()
 
-/** 0:Cherry, 1:Strwb, 2:Orange, 3:Apple, 4:Melon ,5:Gala, 6:Bell, 7:Key */
+/** 0:Cherry, 1:Strwb, 2:Orange, 3:Apple, 4:Melon, 5:Gala, 6:Bell, 7:Key */
 const FruitTable = /**@type {const}*/([0,1,2,2,3,3,4,4,5,5,6,6,7])
 const PointTable = /**@type {const}*/([100,300,500,700,1e3,2e3,3e3,5e3])
 
 const Types = {
 	get current() {return this.get(Game.level-1)},
-	get:(i=0)=> FruitTable[mathClamp(i, 0, FruitTable.length-1)],
+	get:(i=0)=> FruitTable[clamp(i, 0, FruitTable.length-1)],
 }
 const Points = {
 	get type()  {return PointType.Fruit},

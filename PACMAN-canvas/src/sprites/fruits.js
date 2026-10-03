@@ -256,7 +256,7 @@ export function draw(ctx, idx, size, x=size/2,y=size/2) {
 	ctx.lineWidth = 1
 	ctx.lineCap = ctx.lineJoin = 'round'
 	ctx.scale(size/LOGIC_SIZE)
-	drawFns[mathClamp(0, idx, MAX-1)](ctx)
+	drawFns[clamp(0, idx, MAX-1)](ctx)
 	ctx.restore()
 }
 

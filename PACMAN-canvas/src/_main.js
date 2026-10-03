@@ -37,7 +37,7 @@ export const Game = new class GameCore {
 	get pacDied()   {return Game.#pacDied}
 
 	/** Lv.1-13 scale in difficulty, with Lv.13+ being the highest */
-	get clampedLv() {return mathClamp(Game.level, 1, 13)}
+	get clampedLv() {return clamp(Game.level, 1, 13)}
 	get speed()     {return State.isInGame ? Cfg.speed:1}
 	get interval()  {return Game.speed * Ticker.Interval}
 	get moveSpeed() {return Game.speed * Speed.stepPerLv}

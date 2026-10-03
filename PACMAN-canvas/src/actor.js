@@ -53,7 +53,7 @@ export class Actor {
 	}
 	keepInsideBoard() {
 		const {center:{x}}= this
-		this.x = mathClamp(x, T, BW-T) - T/2
+		this.x = clamp(x, T, BW-T) - T/2
 	}
 	#snapToAxis() {
 		Vec2[this.dir].y
