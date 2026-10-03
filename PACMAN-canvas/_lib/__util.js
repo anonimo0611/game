@@ -88,20 +88,20 @@ const getNativeKeyEvent = e=>
  @param {number} start
  @param {number} end
  @param {number} ratio 0.0-1.0
-*/const mathLerp = (start,end,ratio)=> start + (end-start) * mathClamp(ratio,0,1)
+*/const lerp = (start,end,ratio)=> start + (end-start) * clamp(ratio,0,1)
 
 /**
  @param {number} min
  @param {number} max
  @param {number} val
  @returns {number} 0.0-1.0
-*/const mathNorm = (min,max,val)=> (max === min)? 0 : (val-min)/(max-min)
+*/const norm = (min,max,val)=> (max === min)? 0 : (val-min)/(max-min)
 
 /**
  @param {number} n
  @param {number} min
  @param {number} max
-*/const mathClamp = (n,min,max)=> Math.min(Math.max(n,min), max)
+*/const clamp = (n,min,max)=> Math.min(Math.max(n,min), max)
 
 /**
  @param {number} min

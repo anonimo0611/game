@@ -45,7 +45,7 @@ function setupCtrl(ctrl) {
 		const {value,min,max}= ctrl
 		$(targets)
 			.val(value)
-			.css('--ratio',`${mathNorm(+min,+max,+value)*100}%`)
+			.css('--ratio',`${norm(+min,+max,+value)*100}%`)
 	})
 	.trigger('input')
 }
