@@ -13,7 +13,7 @@ let fadeTgt = /**@type {?Fade}*/(null)
 
 const LEVEL_COLS = 7
 const FADE_TIME  = 300
-const Cache      = Spr.cache(T*2)
+const SprCache   = Spr.cache(T*2)
 const AppearDots = new Set([70,170])
 const TargetPos  = new Vec2(BW/2, T*18.5).fixed
 const LevelsRect = new Rect(T*2*6, BH-T*2, LEVEL_COLS*T*2, T*2).freeze()
@@ -71,7 +71,7 @@ export const Fruits = new class FruitGroup {
 	drawTarget() {
 		if (Ticker.paused) return
 		this.showTarget
-			&& Fg.put(Cache.canvas, TargetPos, fadeTgt?.alpha)
+			&& Fg.put(SprCache.canvas, TargetPos, fadeTgt?.alpha)
 		PtsMgr.drawFruitPts()
 	}
 	drawLevelCounter() {
@@ -89,7 +89,7 @@ export const Fruits = new class FruitGroup {
 		HUD.restore()
 	}
 	#setImages() {
-		Cache.update(Types.current)
+		SprCache.update(Types.current)
 		Fruits.#setLevelCounter()
 	}
 }
