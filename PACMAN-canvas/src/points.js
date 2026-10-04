@@ -3,16 +3,16 @@ import {State} from './state.js'
 import {Score} from './score.js'
 import {cache} from './sprites/points.js'
 
-const FADE_DUR = 300
-const PopupMap = /**@type {Map<PointType,FloatingPts>}*/(new Map)
-State.on({_RoundEnds:()=> PopupMap.clear()})
+const FADE_TIME = 300
+const PointsMap = /**@type {Map<PointType,FloatingPts>}*/(new Map)
+State.on({_RoundEnds:()=> PointsMap.clear()})
 
 export const PtsMgr = new class PointsManager {
 	/** @param {FloatingPtsData} data */
 	set(data) {new FloatingPts(data)}
-	update()       {PopupMap.forEach(v=> v.update())}
-	drawFruitPts() {PopupMap.get(PointType.Fruit)?.draw()}
-	drawGhostPts() {PopupMap.get(PointType.Ghost)?.draw()}
+	update()       {PointsMap.forEach(v=> v.update())}
+	drawFruitPts() {PointsMap.get(PointType.Fruit)?.draw()}
+	drawGhostPts() {PointsMap.get(PointType.Ghost)?.draw()}
 }
 class FloatingPts {
 	pos; cache; fade;
@@ -22,14 +22,14 @@ class FloatingPts {
 		const {speed:spd}= Game
 		this.pos   = {x,y}
 		this.cache = cache(pts, T*2)
-		this.fade  = Fade.out(FADE_DUR/spd, (dur-FADE_DUR)/spd)
+		this.fade  = Fade.out(FADE_TIME/spd, (dur-FADE_TIME)/spd)
 
-		PopupMap.set(pts.type, this)
+		PointsMap.set(pts.type, this)
 		Score.add(pts.value)
 		frozen && Timer.freeze()
 
 		Timer.set(dur/spd, ()=> {
-			PopupMap.delete(pts.type)
+			PointsMap.delete(pts.type)
 			frozen && Timer.unfreeze()
 			cb?.()
 		}, {ignoreFrozen:true})

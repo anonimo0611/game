@@ -11,8 +11,8 @@ import {player,onPlayerDotEaten} from './actors.js'
 let showTgt = true
 let fadeTgt = /**@type {?Fade}*/(null)
 
-const FADE_DUR   = 300
 const LEVEL_COLS = 7
+const FADE_TIME  = 300
 const Cache      = Spr.cache(T*2)
 const AppearDots = new Set([70,170])
 const TargetPos  = new Vec2(BW/2, T*18.5).fixed
@@ -53,8 +53,8 @@ export const Fruits = new class FruitGroup {
 		if (!AppearDots.has(Maze.MaxDot - Maze.dotsLeft)) return
 		showTgt = true
 		Timer.set(// Disappearing is between 9 and 10 seconds
-			randInt(9e3, 1e4-FADE_DUR) / Game.speed,
-			()=> fadeTgt=Fade.out(FADE_DUR/Game.speed), {key:this}
+			randInt(9e3, 1e4-FADE_TIME) / Game.speed,
+			()=> fadeTgt=Fade.out(FADE_TIME/Game.speed), {key:this}
 		)
 	}
 	#onEaten() {
