@@ -51,6 +51,14 @@ export class SoundMgr {
 		return {...this.#playOpts[id], ...opts}
 	}
 
+	get paused() {
+		return getVals(this.#instance).every(i=> i.paused)
+	}
+	/** @param {boolean} enable */
+	set paused(enable) {
+		this.pause(enable)
+	}
+
 	/**
 	 @param {boolean} enable
 	 @param {S[]} ids
@@ -73,9 +81,7 @@ export class SoundMgr {
 		this.#instance[id].play(this.#mergeOpts(id,opts))
 	}
 
-	/**
-	 @param {S[]} ids
-	*/
+	/** @param {S[]} ids */
 	stop(...ids) {
 		if (this.disabled) return this
 		ids.length == 0 && SoundJS.stop()
