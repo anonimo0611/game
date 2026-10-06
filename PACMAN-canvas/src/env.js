@@ -49,7 +49,7 @@ export const Env = new class Environment {
 	#pause(force) {
 		if (State.isTitle || State.isAttract) return
 		if (State.isInGame && force == false) return
-		Sound.pause( Ticker.pause(force) )
+		Sound.paused = Ticker.pause(force)
 	}
 	#save() {
 		const data = /**@type {Record<string,any>}*/(Cfg)
