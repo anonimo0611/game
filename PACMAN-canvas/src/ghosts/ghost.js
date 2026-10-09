@@ -224,7 +224,7 @@ export class Ghost extends Actor {
 			return false
 		this.isFrightened
 			? this.#onBitten(this.center, release)
-			: Maze.dotsLeft > 0 && this.#onPacCaught()
+			: Maze.dotsLeft > 0 && State.setRoundEnds()
 		return true
 	}
 	#onBitten(pos=Vec2.Zero, cb=()=>{}) {
@@ -232,10 +232,6 @@ export class Ghost extends Actor {
 		this.state.setBitten()
 		Sound.playBitesGhost()
 		PtsMgr.set({pts:Sys.Points, frozen:true, ...pos, cb})
-	}
-	#onPacCaught() {
-		Sound.stopLoops()
-		State.setRoundEnds()
 	}
 	#frighten(on=true) {
 		!this.isEscaping && (this.#frightened=on)
