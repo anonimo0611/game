@@ -35,6 +35,17 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 */const readOnly = obj=>
 	/**@type {Readonly<O>}*/(obj)
 
+/**
+ @template {object}  T
+ @template {keyof T} K
+ @param {T} obj
+ @param {K} name
+*/const bindMethod = (obj,name)=> {
+	const method = obj[name]
+	if (typeof method == 'function')
+		obj[name] = method.bind(obj)
+}
+
 /** @param {KeyboardEventLike} e */
 const keyRepeated = e=>
 	getNativeKeyEvent(e)?.repeat || false
