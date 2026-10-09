@@ -34,6 +34,7 @@ export class Ghost extends Actor {
 		this.type  = type
 		this.init  = freeze({align,x:col*T})
 		this.state = Sys.createState(this)
+		bindMethod(this,'leaveHouse')
 		$(this).on({
 		 [Events.Ready]:    ()=> this.fadeSpr  = Fade.in(),
 		 [Events.RoundEnds]:()=> this.fadeSpr  = Fade.out(),
@@ -111,7 +112,7 @@ export class Ghost extends Actor {
 			(cy < Maze.House.MID_Y+T/2 ? D:U)
 		)
 	}
-	leaveHouse = (deactivateGlobalDotCnt=false)=> {
+	leaveHouse(deactivateGlobalDotCnt=false) {
 		player.resetTimer()
 		this.#started ||= true
 		this.state.isIdle &&
