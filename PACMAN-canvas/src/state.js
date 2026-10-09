@@ -2,8 +2,8 @@ import {AState} from '../_lib/state.js'
 
 /** @typedef {typeof States[number]} StateType */
 const States = /**@type {const}*/([
-	'Title','Attract','NewGame','NewLevel','Ready','InGame','RoundEnds',
-	'Cleared','PacDying','Flashing','Cutscene','GameOver','Quit'
+	'Title','Attract','NewGame','NewLevel','Ready','InGame',
+	'RoundEnds','PacDying','Flashing','Cutscene','GameOver','Quit'
 ])
 
 /**

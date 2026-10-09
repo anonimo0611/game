@@ -21,7 +21,6 @@ export const Game = new class GameCore {
 			NewLevel:  Game.#onNewLevel,
 			Ready:     Game.#onReady,
 			RoundEnds: Game.#onRoundEnd,
-			Cleared:   Game.#onCleared,
 			PacDying:  Game.#onPacDying,
 			Flashing:  Game.#onFlashing,
 			GameOver:  Game.#onGameOver,
@@ -73,12 +72,8 @@ export const Game = new class GameCore {
 	#onRoundEnd() {
 		Sound.stopLoops()
 		Maze.dotsLeft <= Maze.CLEAR_DOTS
-			? State.setCleared()
+			? State.setFlashing({delay:1000})
 			: State.setPacDying({delay:600})
-	}
-	#onCleared() {
-		Sound.stopLoops()
-		State.setFlashing({delay:1000})
 	}
 	#onFlashing() {
 		Wall.setFlashing(Game.#onLevelEnd)
