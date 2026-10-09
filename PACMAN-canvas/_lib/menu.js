@@ -25,10 +25,9 @@ class Menu {
 		this.size   = items.length
 		this.menu   = menu
 		this.items  = items
-		this.reset  = this.reset.bind(this)
 		this.$label = $(root).closest('label')
 		this.defaultIndex = this.index
-
+		bindMethod(this,'reset')
 		items.forEach(i=> $(i).css('--val', i.val))
 		$(this.root).closest('form').on({reset:this.reset})
 	}
