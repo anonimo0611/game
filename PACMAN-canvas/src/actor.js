@@ -45,23 +45,22 @@ export class Actor {
 	}
 
 	/** @protected */
-	drawCenterDot({r=3,color='red'}={}) {
+	drawCenterDot({r=3, color='red'}={}) {
 		Fg.fillCircle(...this.center.vals, r, color)
 	}
 	centering() {
 		this.x = (BW-T)/2
 	}
 	keepInsideBoard() {
-		const {center:{x}}= this
-		this.x = clamp(x, T, BW-T) - T/2
+		this.x = clamp(this.center.x, T, BW-T) - T/2
+	}
+	snapToTileCenter() {
+		this.pos = this.tile.mul(T)
 	}
 	#snapToAxis() {
 		Vec2[this.dir].y
 			? (this.x = this.tile.x * T)
 			: (this.y = this.tile.y * T)
-	}
-	snapToTileCenter() {
-		this.pos = this.tile.mul(T)
 	}
 	#wrapXAxis() {
 		this.x = function({center:{x}}) {
@@ -102,7 +101,7 @@ export class Actor {
 	}
 	/** @param {Direction} [dir] */
 	collidesWithWall(dir=this.dir) {
-		const  tile = this.forward(dir,T/2+1e-6).divInt(T)
+		const  tile = this.forward(dir, T/2+1e-6).divInt(T)
 		return Maze.hasWall( tile.wrapX(COLS) )
 	}
 }
