@@ -100,8 +100,8 @@ html.ctrl-settled.sound-settled{
 			input{font-size:inherit}
 		}
 		#helpBtn{cursor:help}
-		chk-label{display:inline-block;white-space:nowrap}
-		label:has(#alwaysChase) chk-label{width:0;scale:.92 1;transform-origin:0 0}
+		cb-label{display:inline-block;white-space:nowrap}
+		label:has(#alwaysChase) cb-label{width:0;scale:.92 1;transform-origin:0 0}
 	}
 	.buttons button{font-size:.65rem}
 	> label:first-of-type{
