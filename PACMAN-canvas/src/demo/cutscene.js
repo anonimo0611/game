@@ -13,12 +13,12 @@ const sceneNum = (lv=0)=>
 export class Cutscene {
 	static {State.on({Cutscene:this.#begin})}
 	static #scene = /**@type {?Scene1|Scene2|Scene3}*/(null)
-	static #begin(_={}, n=Cutscene.num) {
+	static #begin(_={}, n=Cutscene.getNum()) {
 		Cutscene.#scene = new [Scene1,Scene2,Scene3][clamp(n,1,3)-1]
 	}
-	static get num() {return sceneNum(Game.level)}
-	static draw()    {Cutscene.#scene?.draw()}
-	static update()  {Cutscene.#scene?.update()}
+	static getNum = ()=> sceneNum(Game.level)
+	static draw()   {Cutscene.#scene?.draw()}
+	static update() {Cutscene.#scene?.update()}
 
 	pacvx  = -BW/180
 	akavx  = -BW/180
