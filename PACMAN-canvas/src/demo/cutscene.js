@@ -14,6 +14,7 @@ export class Cutscene {
 	static {State.on({Cutscene:this.#begin})}
 	static #scene = /**@type {?Scene1|Scene2|Scene3}*/(null)
 	static #begin(_={}, n=Cutscene.getNum()) {
+		assertOf('number',n)
 		Cutscene.#scene = new [Scene1,Scene2,Scene3][clamp(n,1,3)-1]
 	}
 	static getNum = ()=> sceneNum(Game.level)
