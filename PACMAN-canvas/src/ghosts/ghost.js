@@ -234,6 +234,7 @@ export class Ghost extends Actor {
 		PtsMgr.set({pts:Sys.Points, frozen:true, ...pos, cb})
 	}
 	#frighten(on=true) {
+		assertOf('boolean',on)
 		!this.isEscaping && (this.#frightened=on)
 	}
 	#startEscaping() {
