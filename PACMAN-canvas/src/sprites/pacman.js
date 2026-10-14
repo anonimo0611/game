@@ -7,6 +7,7 @@ import {Dir}   from '../../_lib/direction.js'
 import {Dying} from './pacman_dying.js'
 export const SCALE_FACTOR = 0.9
 export const MOUTH_DEPTH_FACTOR = 0.3
+
 export default class PacmanSprite {
 	/** @readonly */ctx
 	/** @readonly */r

@@ -5,19 +5,19 @@ const AKA_COLOR = Color.GhostBodies[GhostType.Akabei]
 import {LOGIC_SIZE} from './ghost.js'
 export const SNAG_X = BW/2 + T/2
 export const STOP_X = SNAG_X - T
+
 export class SnagSprite {
 	/** @readonly */ctx
 	constructor(/**@type {Ctx2D}*/ctx) {this.ctx = ctx}
 
 	/** Renders the stake bottom-aligned to the given y-coord. */
-	drawSnaggedStake({x=STAKE_X,y=0,isRipped=false,scale=1}={}) {
-		const {ctx}= this, [sw,sh]= StakeSize.vals
+	drawSnaggedStake({scale=1,x=STAKE_X,y=0,isRipped=false}={}) {
 		/** Adjust for the gap between the sprite bottom and the ground. */
-		const offsetY = -T*0.1
+		const ofstY = -T*0.1, {ctx}= this, [sw,sh]= StakeSize.vals
 		ctx.save()
 		ctx.translate(x, y)
 		ctx.scale(scale)
-		ctx.translate(0, offsetY)
+		ctx.translate(0, ofstY)
 		ctx.fillRect(0,-sh, sw,sh, 'white') // Stake
 		if (isRipped) { // Scrap of cloth
 			const s = sw*0.8
