@@ -2,8 +2,8 @@ import * as Menus  from '../_lib/menu.js'
 import * as Fruits from './sprites/fruits.js'
 
 export const Form   = document.forms[0]
-export const powChk = reqInput('#powEnabled')
 export const lives  = reqInput('#initialLives')
+export const powChk = reqInput('#powEnabled')
 
 //---- Buttons ----
 
@@ -31,8 +31,8 @@ export const Menu = freeze({
 //---- Grid lines ----
 
 Grid.beginPath()
-for(let x=1; x<COLS; x++) Grid.setLinePath([T*x, 0],[T*x, BH])
-for(let y=0; y<ROWS; y++) Grid.setLinePath([0, T*y],[BW, T*y])
+for(let x=T; x<BW; x+=T) Grid.setLinePath([x,0],[x,BH])
+for(let y=0; y<BH; y+=T) Grid.setLinePath([0,y],[BW,y])
 Grid.strokeStyle = Color.GridLine
 Grid.stroke()
 
