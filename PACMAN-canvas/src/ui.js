@@ -7,11 +7,11 @@ export const powChk = reqInput('#powEnabled')
 
 //---- Buttons ----
 
-export const Btns = function() {
-	const ids = /**@type {const}*/(['clear','reset','start'])
-	const ret = toObj( ids.map(id=> [id, reqButton(`#${id}Btn`)]) )
-	return /**@type {{[K in ids[number]]:HTMLButtonElement}}*/(ret)
-}()
+export const Btns = freeze({
+	clear: reqButton('#clearBtn'),
+	reset: reqButton('#resetBtn'),
+	start: reqButton('#startBtn'),
+})
 
 //---- Custom Menus ----
 
@@ -20,12 +20,12 @@ export const Menu = freeze({
 	Extend: new Menus.Slide('ExtendMenu'),
 })
 {// Create a SpriteSheet for Level menu icons
-	const menu = Menu.Level.root
-	const size = menu.offsetHeight
+	const menu = $(Menu.Level.root)
+	const size = menu[0].offsetHeight
 	const {ctx}= canvas2D(null, size*Fruits.MAX, size)
 	for (let i=0; i<Fruits.MAX; i++)
 		Fruits.draw(ctx, i, size, i*size + size/2)
-	$(menu).css('--url',`url("${ctx.canvas.toDataURL()}")`)
+	menu.css('--url',`url("${ctx.canvas.toDataURL()}")`)
 }
 
 //---- Grid lines ----
