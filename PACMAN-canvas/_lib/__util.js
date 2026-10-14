@@ -3,6 +3,15 @@ const {fromEntries:toObj,defineProperty,freeze,hasOwn}= Object
 const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 
 /**
+ @param {'string'|'boolean'|'number'} type
+ @param {unknown} v
+*/const assertOf = (type, v)=> {
+	if (typeof(v) == type && !Number.isNaN(v)) return
+	throw TypeError(`Expected to be a ${type},`
+		+` but got ${Number.isNaN(v) ? 'NaN' : typeof(v)}`)
+}
+
+/**
  @template {object} T
  @param {T} o
 */const getKeys = o=>
