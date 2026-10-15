@@ -190,9 +190,9 @@ const PhaseManager = function() {
 }()
 
 export const DotCounter = function() {
-	let   gCounter   = -1
-	const pCounters  = new Uint8Array(GhostType.Max)
-	const LimitTable = /**@type {const}*/
+	let   gCounter  = -1
+	const pCounters = new Uint8Array(GhostType.Max)
+	const LimitTbl  = /**@type {const}*/
 		(// global,lv1,lv2,lv3+
 			[[ 7,  0,  0, 0], // Pinky
 			 [17, 30,  0, 0], // Aosuke
@@ -204,16 +204,13 @@ export const DotCounter = function() {
 	}
 	/** @param {Ghost} ghost */
 	function releaseIfReady({type,leaveHouse}) {
-		const index   = min(Game.level,3)
-		const timeout = (Game.level<=4 ? 4e3:3e3)
-		const gLimit  = LimitTable[type-1][0]
-		const pLimit  = LimitTable[type-1][index]
-		;(player.timeSinceLastEating >= timeout)
+		const idx = min(Game.level, 3)
+		player.timeSinceLastEating >= (Game.level<=4 ? 4e3:3e3)
 			? leaveHouse()
 			: (!Game.pacDied || gCounter < 0)
-				? (pCounters[type] >= pLimit)
+				? pCounters[type] >= LimitTbl[type-1][idx]
 					&& leaveHouse()
-				: (gCounter == gLimit)
+				: gCounter == LimitTbl[type-1][0]
 					&& leaveHouse(type == GhostType.Guzuta)
 					&& (gCounter = -1)
 	}
