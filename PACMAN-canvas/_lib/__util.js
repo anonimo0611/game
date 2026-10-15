@@ -2,6 +2,27 @@
 const {fromEntries:toObj,defineProperty,freeze,hasOwn}= Object
 const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}= Math
 
+//---- Typing / Biding ------
+
+/**
+ @template {object} O
+ @param {O} obj
+*/const readOnly = obj=>
+	/**@type {Readonly<O>}*/(obj)
+
+/**
+ @template {object}  T
+ @template {keyof T} K
+ @param {T} obj
+ @param {K} name
+*/const bindMethod = (obj,name)=> {
+	const method = obj[name]
+	if (typeof method == 'function')
+		obj[name] = method.bind(obj)
+}
+
+//---- Object ------
+
 /**
  @template {object} T
  @param {T} o
@@ -29,40 +50,31 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 	/**@type {{readonly [K in T]:K}}*/
 	(toObj(array.map(k=> [k,k])))
 
-/**
- @template {object} O
- @param {O} obj
-*/const readOnly = obj=>
-	/**@type {Readonly<O>}*/(obj)
+//---- Event ------
 
 /**
- @template {object}  T
- @template {keyof T} K
- @param {T} obj
- @param {K} name
-*/const bindMethod = (obj,name)=> {
-	const method = obj[name]
-	if (typeof method == 'function')
-		obj[name] = method.bind(obj)
-}
-
-/** @param {KeyboardEventLike} e */
-const keyRepeated = e=>
+ @param {KeyboardEventLike} e
+*/const keyRepeated = e=>
 	getNativeKeyEvent(e)?.repeat || false
 
-/** @param {KeyboardEventLike|JQTriggeredEvent} e */
-const isActionKey = e=>
+/**
+ @param {KeyboardEventLike|JQTriggeredEvent} e
+*/const isActionKey = e=>
 	(e.key == '\x20' || e.key == 'Enter')
 
-/** @param {KeyboardEventLike} e */
-const hasModifierKeys = e=>
+/**
+ @param {KeyboardEventLike} e
+*/const hasModifierKeys = e=>
 	(e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
 
-/** @param {KeyboardEventLike} e */
-const getNativeKeyEvent = e=>
+/**
+ @param {KeyboardEventLike} e
+*/const getNativeKeyEvent = e=>
 	(e instanceof KeyboardEvent)
 		? e :(e.originalEvent instanceof KeyboardEvent)
 			? e.originalEvent : null
+
+//---- Assertion ------
 
 /**
  @param {'string'|'boolean'|'number'} type
@@ -71,19 +83,11 @@ const getNativeKeyEvent = e=>
 	if (typeof(v) == type && !Number.isNaN(v)) return
 	throw TypeError(
 		 `Expected to be a ${type}, but got `
-		+`${Number.isNaN(v) ? 'NaN' : typeof(v)}`
+		+`${Number.isNaN(v) ? 'NaN' : typeof(v)} ${v}`
 	)
 }
-/**
- @template {new ()=> HTMLElement} T
- @param {string|HTMLElement} src
- @param {T} [type]
-*/const reqElem = (src, type=/**@type {any}*/(HTMLElement))=> {
-	const e = (typeof src == 'string')? qSel(src) : src
-	if (!e) throw ReferenceError(`No ${type.name} with that selector ${src} exists.`)
-	if (e instanceof type) return /**@type {InstanceType<T>}*/(e)
-	throw TypeError(`Expected ${type.name}, but got ${e}.`)
-}
+
+//---- Manipulation ------
 
 /**
  @param {string|HTMLElement} src
@@ -99,11 +103,25 @@ const getNativeKeyEvent = e=>
 */const qSel = selector=> document.querySelector(selector)
 
 /**
+ @template {new ()=> HTMLElement} T
+ @param {string|HTMLElement} src
+ @param {T} [type]
+*/const reqElem = (src, type=/**@type {any}*/(HTMLElement))=> {
+	const e = (typeof src == 'string')? qSel(src) : src
+	if (!e) throw ReferenceError(`No ${type.name} with that selector ${src} exists.`)
+	if (e instanceof type) return /**@type {InstanceType<T>}*/(e)
+	throw TypeError(`Expected ${type.name}, but got ${e}.`)
+}
+
+//---- String ------
+
+/**
  @param {string} str
 */const underscoreToSp = (str,prefix='')=>
 	str.indexOf('_') != -1
-		? `${prefix} ${str}`.replace(/[_\s]+/g,'\x20').trim()
-		: str.trim()
+		? `${prefix} ${str}`.replace(/[_\s]+/g,'\x20').trim() : str.trim()
+
+//---- Math ------
 
 /**
  @param {number} start
@@ -164,10 +182,10 @@ const getNativeKeyEvent = e=>
 	return {pos:Vec2.new(x,y),vals:[x,y]}
 }
 
-//---- jQuery utilities ------
+//---- jQuery ------
 
 const $win  = $(window)
-const $root = $(document.documentElement)
+const $root = $(':root')
 
 /**
  @param {string} ns
