@@ -13,12 +13,10 @@ export class Actor {
 	/** @protected */
 	constructor(col=0, row=0) {this.pos.set(col*T, row*T)}
 
-	// Override the actual speed in the subclasses.
+	// Override the actual speed and maxAlpha in the subclasses.
 	get speed()      {return 0}
 	get maxAlpha()   {return 1}
 	get alpha()      {return this.fadeSpr?.alpha ?? this.maxAlpha}
-	get inHouse()    {return Maze.House.isIn(this.tile)}
-	get inTunSide()  {return Maze.Tunnel.findSide(this.center)}
 
 	get x()          {return this.pos.x}
 	get y()          {return this.pos.y}
@@ -35,6 +33,8 @@ export class Actor {
 	get dirAligned() {return this.dir == this.orient}
 	get revDir()     {return Dir.Opposite[this.dir]}
 	get revOrient()  {return Dir.Opposite[this.orient]}
+	get inHouse()    {return Maze.House.isIn(this.tile)}
+	get inTunSide()  {return Maze.Tunnel.findSide(this.center)}
 
 	get tilePixel() {
 		const dot = this.center.dot(Vec2[this.dir])
