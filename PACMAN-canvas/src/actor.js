@@ -84,6 +84,10 @@ export class Actor {
 		return this.passedTileCenter == false
 			&& this.tilePixel <= speed
 	}
+	collidesWithWall(dir=this.dir) {
+		const  tile = this.forward(dir, T/2+1e-6).divInt(T)
+		return Maze.hasWall( tile.wrapX(COLS) )
+	}
 	/** @param {Direction} dir */
 	setMoveDir(dir) {this.#movDir = dir}
 
@@ -91,17 +95,14 @@ export class Actor {
 	forward(dir, dist=0) {
     	return Vec2[dir].mul(dist).add(this.center)
 	}
+
 	/** @param {Direction} dir */
 	getAdjacentTile(dir, tile=this.tile) {
 		return Vec2[dir].add(tile).wrapX(COLS)
 	}
+
 	/** @param {Direction} dir */
 	hasAdjacentWall(dir) {
 		return Maze.hasWall( this.getAdjacentTile(dir) )
-	}
-	/** @param {Direction} [dir] */
-	collidesWithWall(dir=this.dir) {
-		const  tile = this.forward(dir, T/2+1e-6).divInt(T)
-		return Maze.hasWall( tile.wrapX(COLS) )
 	}
 }
