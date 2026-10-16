@@ -1,3 +1,5 @@
+type MaybeNumber = number | undefined
+
 //---- Ghosts ----
 
 type GhostType = (typeof GhostType)[Exclude<keyof typeof GhostType,'Max'>]
