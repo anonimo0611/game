@@ -60,9 +60,9 @@ const HouseOuter = new Rect(14-5, 15-3, 10, 7).freeze()
 		e.target != powChk && Wall.draw()
 		MapArr.forEach((s,i)=> {
 			if (!DotSymbols.has(s)) return
-			const [x,y]=[i%COLS,i/COLS|0]
+			const [x,y]= [i%COLS,i/COLS|0]
 			clearDot(i), DotSet.add(i)
-			&& (!powChk.checked || s=='.')
+			&& (!powChk.checked || s == '.')
 				? drawDot(Bg,x,y)
 				: PowMap.set(i,{x,y})
 		})
