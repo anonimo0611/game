@@ -41,15 +41,15 @@ D__________________________C\
 ////////////////////////////\
 ////////////////////////////`])
 
+const WallSet = /**@type {Set<TileIdx>}*/(new Set)
+const DotSet  = /**@type {Set<TileIdx>}*/(new Set)
+const PowMap  = /**@type {Map<TileIdx,Position>}*/(new Map)
+
 const DOT_RADIUS = T/9
 const POW_RADIUS = T/2
 const DotSymbols = new Set([...'.O'])
 const HouseInner = new Rect(14-4, 15-2,  8, 5).freeze()
 const HouseOuter = new Rect(14-5, 15-3, 10, 7).freeze()
-
-const WallSet = /**@type {Set<TileIdx>}*/(new Set)
-const DotSet  = /**@type {Set<TileIdx>}*/(new Set)
-const PowMap  = /**@type {Map<TileIdx,Position>}*/(new Map)
 
 ;{//Map and dot initialization block
 	MapArr.forEach((s,i)=> {
@@ -60,11 +60,11 @@ const PowMap  = /**@type {Map<TileIdx,Position>}*/(new Map)
 		e.target != powChk && Wall.draw()
 		MapArr.forEach((s,i)=> {
 			if (!DotSymbols.has(s)) return
-			const t = Vec2.new(i%COLS, i/COLS|0)
+			const [x,y]=[i%COLS,i/COLS|0]
 			clearDot(i), DotSet.add(i)
-			!powChk.checked || s == '.'
-				? drawDot(Bg, ...t.vals)
-				: PowMap.set(i, t)
+			&& (!powChk.checked || s=='.')
+				? drawDot(Bg,x,y)
+				: PowMap.set(i,{x,y})
 		})
 	}
 	State.on({_NewLevel: reset})
