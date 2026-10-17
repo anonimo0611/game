@@ -8,13 +8,11 @@ import {PtsMgr} from './points.js'
 import * as Spr from './sprites/fruits.js'
 import {player,onPlayerDotEaten} from './actors.js'
 
-const LEVEL_COLS = 7
-const FADE_TIME  = 300
-
-const SprCache   = Spr.cache(T*2)
+const LEVEL_COLS = 7, SIZE = T*2, FADE_TIME = 300
+const SprCache   = Spr.cache(SIZE)
 const AppearDots = new Set([70,170])
 const TargetPos  = new Vec2(BW/2, T*18.5).fixed
-const LevelsRect = new Rect(T*2*6, BH-T*2, LEVEL_COLS*T*2, T*2).freeze()
+const LevelsRect = new Rect(SIZE*6, BH-SIZE, LEVEL_COLS*SIZE, SIZE).freeze()
 
 /** 0:Cherry, 1:Strwb, 2:Orange, 3:Apple, 4:Melon, 5:Gala, 6:Bell, 7:Key */
 const FruitTable = /**@type {const}*/([0,1,2,2,3,3,4,4,5,5,6,6,7])
@@ -84,7 +82,7 @@ export const Fruits = new class FruitGroup {
 		HUD.clearRect(x,y,w,h)
 		HUD.translate(x,y)
 		for (let i=startLevel; i<Game.level; i++)
-			Spr.draw(HUD, Types.get(i), T*2, w-T-T*2*(i-startLevel))
+			Spr.draw(HUD, Types.get(i), SIZE, w-T-SIZE*(i-startLevel))
 		HUD.restore()
 	}
 	#setImages() {
