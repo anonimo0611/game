@@ -88,6 +88,7 @@ export class Actor {
 		const  tile = this.forward(dir, T/2+1e-6).divInt(T)
 		return Maze.hasWall( tile.wrapX(COLS) )
 	}
+
 	/** @param {Direction} dir */
 	setMoveDir(dir) {this.#movDir = dir}
 
