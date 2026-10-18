@@ -255,9 +255,9 @@ const Fright = function() {
 	let   session  = /**@type {?ReturnType<typeof frighten>}*/(null)
 	const PtsList  = /**@type {const}*/([200,400,800,1600])
 	const DurList  = /**@type {const}*/([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
-	function frighten(tmr=0) {
-		let flash=0, caught=0, sprIdx=1
-		const interval = (tmr == 1 ? 12:14)/Game.speed
+	function frighten(dur=0) {
+		let flash=0, caught=0, sprIdx=1, tmr=dur
+		const interval = (dur == 1 ? 12:14)/Game.speed
 		function trigger(isOn=true) {
 			!isOn && (session = null)
 			$(GhostList)
