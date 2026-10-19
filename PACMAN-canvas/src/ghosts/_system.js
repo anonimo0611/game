@@ -217,7 +217,7 @@ export const DotCounter = function() {
 	onPlayerDotEaten(()=> {
 		(Game.pacDied && gCounter >= 0)
 			? gCounter++
-			: (idx=> idx != -1 && pCounters[idx]++)
+			: (i=> {i != -1 && pCounters[i]++})
 				(GhostList.findIndex(g=> g.state.isIdle))
 	})
 	State.on({_Ready:reset})
