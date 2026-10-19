@@ -1,19 +1,18 @@
 import * as Menus  from '../_lib/menu.js'
 import * as Fruits from './sprites/fruits.js'
 
+//---- Form controls ----
+
 export const Form   = document.forms[0]
 export const lives  = reqInput('#initialLives')
 export const powChk = reqInput('#powEnabled')
-
-//---- Buttons ----
-
-export const Btns = freeze({
+export const Btns   = freeze({
 	clear: reqButton('#clearBtn'),
 	reset: reqButton('#resetBtn'),
 	start: reqButton('#startBtn'),
 })
 
-//---- Custom Menus ----
+//---- Custom menus ----
 
 export const Menu = freeze({
 	Level:  new Menus.DorpDown('LevelMenu'),
