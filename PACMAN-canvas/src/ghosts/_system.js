@@ -214,15 +214,11 @@ export const DotCounter = function() {
 					&& leaveHouse(type == GhostType.Guzuta)
 					&& (gCounter = -1)
 	}
-	function incPreferredGhostCounter() {
-		const
-		idx = GhostList.findIndex(g=> g.state.isIdle)
-		idx != -1 && pCounters[idx]++
-	}
 	onPlayerDotEaten(()=> {
 		(Game.pacDied && gCounter >= 0)
 			? gCounter++
-			: incPreferredGhostCounter()
+			: (idx=> idx != -1 && pCounters[idx]++)
+				(GhostList.findIndex(g=> g.state.isIdle))
 	})
 	State.on({_Ready:reset})
 	return {releaseIfReady}
