@@ -11,6 +11,7 @@ export function createMover(actor) {
 	let _speed   = 0
 	let turning  = false
 	let nextDir  = /**@type {?Direction}*/(null)
+	let nextTurn = /**@type {?Direction}*/(null)
 
 	function onWall() {
 		return !turning && actor.collidesWithWall()
@@ -45,8 +46,9 @@ export function createMover(actor) {
 
 	function finishCornering() {
 		if (turning && actor.passedTileCenter) {
-			turning = false
-			nextDir = null
+			turning  = false
+			nextDir  = nextTurn
+			nextTurn = null
 			actor.alignDir()
 		}
 	}
@@ -74,6 +76,9 @@ export function createMover(actor) {
 
 		if (!State.isInGame && Vec2[dir].x)
 			return void(actor.dir = dir)
+
+		if (turning)
+			return void(nextTurn = dir)
 
 		if (actor.hasAdjacentWall(dir))
 			return void(nextDir = dir)
