@@ -49,8 +49,9 @@ export default class GhostSprite {
 		ctx.fillStyle = !isFrightened
 			? Color.GhostBodies[type]
 			: Color.GhostBodies[GhostType.Max+spriteIdx]
-
-		const drawBody = ()=> {
+		;(()=> {
+			if (isExposed)
+				return this.sub.drawHadake(animIdx)
 			if (!isEscaping) {
 				ctx.save()
 				ctx.setAlpha(this.alpha)
@@ -62,8 +63,7 @@ export default class GhostSprite {
 			!isFrightened
 				? this.#drawEyes(orient,isRipped)
 				: this.#drawFrightFace(spriteIdx)
-		}
-		isExposed? this.sub.drawHadake(animIdx) : drawBody()
+		})()
 		ctx.restore()
 		tgt.put(ctx.canvas, center, alpha, -size/2)
 	}
