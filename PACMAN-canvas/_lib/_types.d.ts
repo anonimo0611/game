@@ -1,9 +1,8 @@
-type MaybeNumber = number | undefined
+type Maybe<T> = T | undefined
 
 //---- Ghosts ----
 
 type GhostType = (typeof GhostType)[Exclude<keyof typeof GhostType,'Max'>]
-type GhostHitRadii = readonly [normal: number, frightened: number]
 
 //---- Dictionary ----
 
