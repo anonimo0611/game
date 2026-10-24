@@ -9,17 +9,24 @@ import {PtsMgr}  from '../points.js'
 import {Paths}   from './paths.js'
 import {Targets} from './targets.js'
 import {Ghost,player,onPlayerDotEaten} from '../actors.js'
+export {Paths,PtsMgr,GhsSpd as Spd}
 
 const GhostList = /**@type {Ghost[]}*/([])
 
-export {Paths,PtsMgr,GhsSpd as Spd}
-export const Events = asEnum('Ready','RoundEnds','Reverse','Frighten','FleeStart')
+export const Events = asEnum(
+	'Ready','RoundEnds','Reverse','Frighten','StartFlee')
 
 /** The fleeing time(ms) from the player when Frightened Time is 0. */
 export const FLEE_TIME = 500
 
-/** Ghost collision radii by state. */
-export const HitRadii = /**@type {GhostHitRadii}*/([T*.40, T*.55])
+/** Ghost collision radii by state.
+@type {readonly [normal:number, frightened:number]} */
+export const HitRadii = [T*.40, T*.55]
+
+export const Points = {
+	get type()  {return PointType.Ghost},
+	get value() {return Fright.ptsValue},
+}
 
 /**
  When always chase mode,
@@ -42,11 +49,6 @@ const StandbyDelays = /**@type {const}*/
 	[ 100,  700,  200], // Lv.12
 	[   0,  900,    0], // Lv.13+
 ])
-
-export const Points = {
-	get type()  {return PointType.Ghost},
-	get value() {return Fright.ptsValue},
-}
 
 export const Ghosts = new class GhostGroup {
 	static {$(this.setup)}
@@ -84,15 +86,15 @@ export const Ghosts = new class GhostGroup {
 				([StandbyDelays[lv][i]/Game.speed, g.leaveHouse])
 			))
 	}
-	#setFleeTimer() {
+	#startFlee() {
 		if (!State.isInGame) return
-		$(GhostList).trigger(Events.FleeStart)
+		$(GhostList).trigger(Events.StartFlee)
 	}
 	frighten() {
 		signalDirectionReversal()
 		Fright.duration || State.isAttract
 			? Fright.frighten()
-			: Ghosts.#setFleeTimer()
+			: Ghosts.#startFlee()
 	}
 	update() {
 		Fright.session?.update()
