@@ -66,6 +66,9 @@ export const Ghosts = new class GhostGroup {
 	get isScattering()  {return PhaseManager.mode == SCATTER}
 	get isAnyEscaping() {return GhostList.some(g=> g.isEscaping)}
 
+	/** @param {GhostType} idx */
+	of = idx=> GhostList[idx]
+
 	/** @param {Ghost[]} [ghostList] */
 	initialize(ghostList) {
 		Ghosts.#animIdx = GhostList.length = 0
@@ -96,6 +99,7 @@ export const Ghosts = new class GhostGroup {
 			? Fright.frighten()
 			: Ghosts.#startFlee()
 	}
+
 	update() {
 		Fright.session?.update()
 		PhaseManager.update()
@@ -112,6 +116,7 @@ export const Ghosts = new class GhostGroup {
 		GhostList.forEach(g=> g.update())
 		Paths.update(GhostList)
 	}
+
 	drawBehind() {
 		Ghosts.#draw(false)
 	}
@@ -122,14 +127,11 @@ export const Ghosts = new class GhostGroup {
 		PtsMgr.drawGhostPts()
 	}
 	#draw(onFront=true) {
-		GhostList
-			.toReversed()
-			.forEach(g=> {
-				g.isFrightened != onFront && g.draw()
-			})
+		for (let i=GhostType.Max-1; i>=0; i--) {
+			const g = GhostList[i]
+			g.isFrightened != onFront && g.draw()
+		}
 	}
-	/** @param {GhostType} idx */
-	of = idx=> GhostList[idx]
 }
 
 export const [StateType,createState] = function() {
