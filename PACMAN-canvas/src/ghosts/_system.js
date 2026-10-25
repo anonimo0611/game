@@ -13,9 +13,6 @@ export {Paths,PtsMgr,GhsSpd as Spd}
 
 const GhostList = /**@type {Ghost[]}*/([])
 
-export const Events = asEnum(
-	'Ready','RoundEnds','Reverse','Frighten','StartFlee')
-
 /** The fleeing time(ms) from the player when Frightened Time is 0. */
 export const FLEE_TIME = 500
 
@@ -27,6 +24,9 @@ export const Points = {
 	get type()  {return PointType.Ghost},
 	get value() {return Fright.ptsValue},
 }
+export const Events = asEnum(
+	'Ready','RoundEnds','Reverse','Frighten','StartFlee'
+)
 
 /**
  When always chase mode,
