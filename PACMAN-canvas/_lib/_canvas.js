@@ -43,7 +43,7 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 		this.globalAlpha = alpha
 		return this
 	}
-	/**  @param {CvsStyle} color */
+	/** @param {CvsStyle} color */
 	setStyle(color) {
 		this.strokeStyle = this.fillStyle = color
 		return this
@@ -148,14 +148,14 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 		return this
 	}
 
-	/** @param {(readonly [x:number, y:number])[]} path */
+	/** @param {xyTuple[]} path */
 	newLinePath(...path) {
 		this.beginPath()
 		this.setLinePath(...path)
 		return this
 	}
 
-	/** @param {(readonly [x:number, y:number])[]} path */
+	/** @param {xyTuple[]} path */
 	setLinePath(...path) {
 		path.forEach(([x,y], i)=> {
 			!i ? this.moveTo(x,y)
@@ -164,7 +164,7 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 		return this
 	}
 
-	/** @param {(readonly [x:number, y:number])[]} path */
+	/** @param {xyTuple[]} path */
 	addLinePath(...path) {
 		path.forEach(([x,y])=> this.lineTo(x,y))
 		return this
@@ -172,7 +172,7 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 
 	/**
 	 @param {?CvsStyle} style
-	 @param {(readonly [x:number, y:number])[]} path
+	 @param {xyTuple[]} path
 	*/
 	fillPolygon(style, ...path) {
 		this.save()
