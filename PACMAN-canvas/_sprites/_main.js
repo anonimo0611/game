@@ -62,11 +62,11 @@ const [Cols,Rows]= GridSize
 	}
 	#drawPoints() {
 		/**
-		 @param {PointType} ptsType
-		 @param {PointVal}  ptsValue
-		 @param {number} x
-		 @param {number} y
-		*/
+		 * @param {PointType} ptsType
+		 * @param {PointVal}  ptsValue
+		 * @param {number} x
+		 * @param {number} y
+		 */
 		function draw(ptsType, ptsValue, x,y) {
 			const {ctx:cache,w,h}= Pts.cache({type: ptsType,value: ptsValue},S)
 			ctx.save()
