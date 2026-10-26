@@ -98,12 +98,12 @@ export class Actor {
 	}
 
 	/** @param {Direction} dir */
-	getAdjacentTile(dir, tile=this.tile) {
+	getAdjTile(dir, tile=this.tile) {
 		return Vec2[dir].add(tile).wrapX(COLS)
 	}
 
 	/** @param {Direction} dir */
-	hasAdjacentWall(dir) {
-		return Maze.hasWall( this.getAdjacentTile(dir) )
+	hasAdjWall(dir) {
+		return Maze.hasWall( this.getAdjTile(dir) )
 	}
 }

@@ -37,13 +37,13 @@ export class Paths {
 		const {dir,orient}= g
 		if (dir != orient || Maze.House.arrived(g, T*2))
 			return
-		const tile = g.getAdjacentTile(dir,g.tile)
+		const tile = g.getAdjTile(dir,g.tile)
 		const path = [{dir,tile,stopped:false}]
 		for (let i=1; i<PATH_STEPS-1; i++) {
 			const {dir:lstDir,tile:t}= path[i-1]
 			const tgt  = g.getTargetTile(t)
 			const dir  = g.getNextDir(lstDir,t,tgt)
-			const tile = g.getAdjacentTile(dir,t)
+			const tile = g.getAdjTile(dir,t)
 			path.push({tile,dir,stopped:
 				g.isChasingPac && tile.eq(p.tile) ||
 				this.#hasFixedTarget(g) && tile.eq(tgt)

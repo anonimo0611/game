@@ -184,11 +184,11 @@ export class Ghost extends Actor {
 	}
 	getNextDir(
 		currDir = this.dir,
-		srcTile = this.getAdjacentTile(currDir),
+		srcTile = this.getAdjTile(currDir),
 		tgtTile = this.getTargetTile()
 	) {
 		const dirs = TurnPriority.flatMap((dir,i)=> {
-			const testTile = this.getAdjacentTile(dir,srcTile)
+			const testTile = this.getAdjTile(dir,srcTile)
 			return Dir.Opposite[currDir] != dir
 				&& !Maze.hasWall(testTile)
 				&& !this.#isRestrictedTile({dir,testTile})
@@ -207,7 +207,7 @@ export class Ghost extends Actor {
 	#makeTurn() {
 		if (this.dirAligned == false
 		 && this.passedTileCenter
-		 && this.hasAdjacentWall(this.orient) == false) {
+		 && this.hasAdjWall(this.orient) == false) {
 			this.alignDir()
 			return true
 		}

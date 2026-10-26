@@ -75,13 +75,13 @@ export function createMover(actor) {
 			return
 
 		if (!State.isInGame && Vec2[dir].x)
-			return void(actor.dir = dir)
+			return void (actor.dir = dir)
 
 		if (turning)
-			return void(nextTurn = dir)
+			return void (nextTurn = dir)
 
-		if (actor.hasAdjacentWall(dir))
-			return void(nextDir = dir)
+		if (actor.hasAdjWall(dir))
+			return void (nextDir = dir)
 
 		actor.orient = dir
 		nextDir = (dir == actor.revDir)? null : dir
