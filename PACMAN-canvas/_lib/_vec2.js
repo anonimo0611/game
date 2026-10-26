@@ -12,37 +12,40 @@ class Vec2 {
 	}
 
 	/**
-	 @overload
-	 @param   {number}  x
-	 @param   {number} [y]
-	 @returns {Vec2}
+	 * @overload
+	 * @param   {number}  x
+	 * @param   {number} [y]
+	 * @returns {Vec2}
 
-	 @overload
-	 @param   {Position} pos
-	 @returns {Vec2}
+	 * @overload
+	 * @param   {Position} pos
+	 * @returns {Vec2}
 
-	 @overload
-	 @param   {xyTuple} xyTuple
-	 @returns {Vec2}
+	 * @overload
+	 * @param   {xyTuple} xyTuple
+	 * @returns {Vec2}
 
-	 @param {void|number|xyTuple|Position} [v1]
-	 @param {number} [v2]
-	*/static new(v1,v2) {
+	 * @param {void|number|xyTuple|Position} [v1]
+	 * @param {number} [v2]
+	 */
+	static new(v1,v2) {
 		return new Vec2(...this.#parseXY(v1,v2))
 	}
 
 	/**
-	 @param {number}  x
-	 @param {number} [y]
-	*/static fixed(x, y=x) {
+	 * @param {number}  x
+	 * @param {number} [y]
+	 */
+	static fixed(x, y=x) {
 		return Vec2.new(x,y).fixed
 	}
 
 	/**
-	 @param {void|number|xyTuple|Position} [v1]
-	 @param {number} [v2]
-	 @returns {[x:number, y:number]}
-	*/static #parseXY(v1=0, v2) {
+	 * @param {void|number|xyTuple|Position} [v1]
+	 * @param {number} [v2]
+	 * @returns {[x:number, y:number]}
+	 */
+	static #parseXY(v1=0, v2) {
 		if (v1 instanceof Array) return [v1[0], v1[1]]
 		if (typeof v1 == 'number'
 		 && typeof v2 == 'number') return [v1, v2]
@@ -51,9 +54,10 @@ class Vec2 {
 	}
 
 	/**
-	 @param {Position} pos1
-	 @param {Position} pos2
-	*/static eq(pos1, pos2) {
+	 * @param {Position} pos1
+	 * @param {Position} pos2
+	 */
+	static eq(pos1, pos2) {
 		return(
 			abs(pos1.x-pos2.x) < 1e-6 &&
 			abs(pos1.y-pos2.y) < 1e-6
@@ -61,60 +65,66 @@ class Vec2 {
 	}
 
 	/**
-	 @param {Position} pos
-	 @param {number} cols
-	*/static idx(pos, cols) {
+	 * @param {Position} pos
+	 * @param {number} cols
+	 */
+	static idx(pos, cols) {
 		if (cols <= 0)
 			throw RangeError('Column count must be greater than zero')
 		return pos.y * cols + pos.x
 	}
 
 	/**
-	 @param {Position} pos
-	 @param {Position|number} val
-	*/static add(pos, val) {
+	 * @param {Position} pos
+	 * @param {Position|number} val
+	 */
+	static add(pos, val) {
 		return Vec2.new(pos).add(val)
 	}
 
 	/**
-	 @param {Position} pos
-	 @param {Position|number} val
-	*/static sub(pos, val) {
+	 * @param {Position} pos
+	 * @param {Position|number} val
+	 */
+	static sub(pos, val) {
 		return Vec2.new(pos).sub(val)
 	}
 
 	/**
-	 @param {Position} pos
-	 @param {number} scalar
-	*/static mul(pos, scalar) {
+	 * @param {Position} pos
+	 * @param {number} scalar
+	 */
+	static mul(pos, scalar) {
 		return Vec2.new(pos).mul(scalar)
 	}
 
 	/**
-	 @param {Position} pos
-	 @param {number} divisor
-	*/static div(pos, divisor) {
+	 * @param {Position} pos
+	 * @param {number} divisor
+	 */
+	static div(pos, divisor) {
 		return Vec2.new(pos).div(divisor)
 	}
 
 	/**
-	 @param {Position} pos
-	 @param {number} scalar
-	*/static divInt(pos, scalar) {
+	 * @param {Position} pos
+	 * @param {number} scalar
+	 */
+	static divInt(pos, scalar) {
 		return Vec2.new(pos).divInt(scalar)
 	}
 
 	/**
-	 @param {Position} pos1
-	 @param {Position} pos2
-	*/static sqrMag(pos1, pos2) {
+	 * @param {Position} pos1
+	 * @param {Position} pos2
+	 */static sqrMag(pos1, pos2) {
 		return Vec2.sub(pos1, pos2).sqrMag
 	}
 
 	/**
-	 @param {Position} pos1
-	 @param {Position} pos2
-	*/static distance(pos1, pos2) {
+	 * @param {Position} pos1
+	 * @param {Position} pos2
+	 */static distance(pos1, pos2) {
 		return Vec2.sub(pos1, pos2).magnitude
 	}
 
@@ -133,44 +143,44 @@ class Vec2 {
 	get normalized() {return Vec2.new(this.x/this.magnitude||0 , this.y/this.magnitude||0)}
 
 	/**
-	 @overload
-	 @param   {number} x
-	 @param   {number} y
-	 @returns {boolean}
+	 * @overload
+	 * @param   {number} x
+	 * @param   {number} y
+	 * @returns {boolean}
 
-	 @overload
-	 @param   {Position} pos
-	 @returns {boolean}
+	 * @overload
+	 * @param   {Position} pos
+	 * @returns {boolean}
 
-	 @overload
-	 @param   {xyTuple} xyTuple
-	 @returns {boolean}
+	 * @overload
+	 * @param   {xyTuple} xyTuple
+	 * @returns {boolean}
 
-	 @param {number|xyTuple|Position} v1
-	 @param {number} [v2]
-	*/
+	 * @param {number|xyTuple|Position} v1
+	 * @param {number} [v2]
+	 */
 	eq(v1, v2) {
 		const [x,y]= Vec2.#parseXY(v1, v2)
 		return Vec2.eq(this, {x,y})
 	}
 
 	/**
-	 @overload
-	 @param   {number}  x
-	 @param   {number} [y]
-	 @returns {Vec2}
+	 * @overload
+	 * @param   {number}  x
+	 * @param   {number} [y]
+	 * @returns {Vec2}
 
-	 @overload
-	 @param   {Position} pos
-	 @returns {Vec2}
+	 * @overload
+	 * @param   {Position} pos
+	 * @returns {Vec2}
 
-	 @overload
-	 @param   {xyTuple} xyTuple
-	 @returns {Vec2}
+	 * @overload
+	 * @param   {xyTuple} xyTuple
+	 * @returns {Vec2}
 
-	 @param {number|xyTuple|Position} v1
-	 @param {number} [v2]
-	*/
+	 * @param {number|xyTuple|Position} v1
+	 * @param {number} [v2]
+	 */
 	set(v1, v2) {
 		const [x,y]= Vec2.#parseXY(v1, v2)
 		this.x = x
@@ -183,26 +193,26 @@ class Vec2 {
 	addY(/**@type {number}*/y) {this.y += y;return this}
 
 	/**
-	 @overload
-	 @param   {number}  x
-	 @param   {number} [y]
-	 @returns {Vec2}
+	 * @overload
+	 * @param   {number}  x
+	 * @param   {number} [y]
+	 * @returns {Vec2}
 
-	 @overload
-	 @param   {Position} pos
-	 @returns {Vec2}
+	 * @overload
+	 * @param   {Position} pos
+	 * @returns {Vec2}
 
-	 @overload
-	 @param   {Position|number} numOrPos
-	 @returns {Vec2}
+	 * @overload
+	 * @param   {Position|number} numOrPos
+	 * @returns {Vec2}
 
-	 @overload
-	 @param   {xyTuple} xyTuple
-	 @returns {Vec2}
+	 * @overload
+	 * @param   {xyTuple} xyTuple
+	 * @returns {Vec2}
 
-	 @param {number|xyTuple|Position} v1
-	 @param {number} [v2]
-	*/
+	 * @param {number|xyTuple|Position} v1
+	 * @param {number} [v2]
+	 */
 	add(v1, v2) {
 		const [x,y]= Vec2.#parseXY(v1, v2)
 		this.x += x
@@ -211,26 +221,26 @@ class Vec2 {
 	}
 
 	/**
-	 @overload
-	 @param   {number}  x
-	 @param   {number} [y]
-	 @returns {Vec2}
+	 * @overload
+	 * @param   {number}  x
+	 * @param   {number} [y]
+	 * @returns {Vec2}
 
-	 @overload
-	 @param   {Position} pos
-	 @returns {Vec2}
+	 * @overload
+	 * @param   {Position} pos
+	 * @returns {Vec2}
 
-	 @overload
-	 @param   {Position|number} numOrPos
-	 @returns {Vec2}
+	 * @overload
+	 * @param   {Position|number} numOrPos
+	 * @returns {Vec2}
 
-	 @overload
-	 @param   {xyTuple} xyTuple
-	 @returns {Vec2}
+	 * @overload
+	 * @param   {xyTuple} xyTuple
+	 * @returns {Vec2}
 
-	 @param {number|xyTuple|Position} v1
-	 @param {number} [v2]
-	*/
+	 * @param {number|xyTuple|Position} v1
+	 * @param {number} [v2]
+	 */
 	sub(v1, v2) {
 		const [x,y]= Vec2.#parseXY(v1, v2)
 		this.x -= x

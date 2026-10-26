@@ -1,10 +1,10 @@
 export class Rect {
 	/**
-	 @param {number} x
-	 @param {number} y
-	 @param {number} width
-	 @param {number} height
-	*/
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {number} width
+	 * @param {number} height
+	 */
 	constructor(x,y,width,height) {
 		this.x = x
 		this.y = y

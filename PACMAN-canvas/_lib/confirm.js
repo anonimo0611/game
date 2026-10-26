@@ -22,13 +22,13 @@ export const Confirm = new class ConfirmCore {
 	}
 
 	/**
-	 @typedef {[txt:string, cb?:()=> void]} Button
-	 @param {string} content  - Dialog description
-	 @param {Button} leftBtn  - [txt: string, cb?: ()=> void]
-	 @param {Button} rightBtn - [txt: string, cb?: ()=> void]
-	 @param {0|1} [cancelIdx] - Button to assign when canceling; 0=left(default), 1=right
-	 @param {0|1} [autoFocus] - 0=left, 1=right; The default is the same as `cancelIdx`
-	*/
+	 * @typedef {[txt:string, cb?:()=> void]} Button
+	 * @param {string} content  - Dialog description
+	 * @param {Button} leftBtn  - [txt: string, cb?: ()=> void]
+	 * @param {Button} rightBtn - [txt: string, cb?: ()=> void]
+	 * @param {0|1} [cancelIdx] - Button to assign when canceling; 0=left(default), 1=right
+	 * @param {0|1} [autoFocus] - 0=left, 1=right; The default is the same as `cancelIdx`
+	 */
 	open(content, [lTxt,lCb], [rTxt,rCb], cancelIdx=0, autoFocus=cancelIdx) {
 		if (this.opened) return
 		this.#opened = true

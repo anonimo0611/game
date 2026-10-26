@@ -44,9 +44,9 @@ const Ticker = {
 
 class TickerCore {
 	/**
-	 @param {()=> void} [update]
-	 @param {()=> void} [draw]
-	*/
+	 * @param {()=> void} [update]
+	 * @param {()=> void} [draw]
+	 */
 	constructor(update,draw) {
 		_ticker?.stop()
 		_ticker     = this
@@ -89,9 +89,9 @@ class TickerCore {
 		_fCount++
 	}
 	/**
-	 @param {TimerData} t
-	 @param {unknown} key
-	*/
+	 * @param {TimerData} t
+	 * @param {unknown} key
+	 */
 	timer(t, key) {
 		if (Timer.frozen && !t.ignoreFrozen) return
 		if (TICK_MS*t.amount++ < t.timeout)  return
@@ -110,10 +110,10 @@ const Timer = {
 	unfreeze() {_tFrozen = false;return this},
 
 	/**
-	 @param {number}    timeout
-	 @param {()=> void} callback
-	 @param {{key?:unknown,ignoreFrozen?:boolean}} otps
-	*/
+	 * @param {number}    timeout
+	 * @param {()=> void} callback
+	 * @param {{key?:unknown,ignoreFrozen?:boolean}} otps
+	 */
 	set(timeout, callback, {key,ignoreFrozen=false}={}) {
 		if (!Ticker.running) Ticker.set()
 		TimerMap.set(key ?? Symbol(), {amount:0,timeout,ignoreFrozen,callback})

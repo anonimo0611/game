@@ -11,12 +11,12 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	void() {}
 
 	/**
-	 @param {HTMLImageElement|HTMLCanvasElement} img
-	 @param {Position} centerPos
-	 @param {number}   [alpha]
-	 @param {?number}  [ox] Default: -img.width  / 2
-	 @param {?number}  [oy] Default: -img.height / 2
-	*/
+	 * @param {HTMLImageElement|HTMLCanvasElement} img
+	 * @param {Position} centerPos
+	 * @param {number}   [alpha]
+	 * @param {?number}  [ox] Default: -img.width  / 2
+	 * @param {?number}  [oy] Default: -img.height / 2
+	 */
 	put(img, centerPos, alpha, ox,oy, scaleX=1,scaleY=1, rotate=0) {
 		const {width:w,height:h}= img
 		this.save()
@@ -29,9 +29,9 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	}
 
 	/**
-	 @param {number} [w]
-	 @param {number} [h]
-	*/
+	 * @param {number} [w]
+	 * @param {number} [h]
+	 */
 	resize(w, h=w) {
 		const cvs = this.canvas
 		typeof(w) == 'number' && w>=0 && (cvs.width =w|0)
@@ -50,18 +50,18 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	}
 
 	/**
-	 @overload
-	 @param   {number}  x
-	 @param   {number} [y]
-	 @returns {this}
+	 * @overload
+	 * @param   {number}  x
+	 * @param   {number} [y]
+	 * @returns {this}
 
-	 @overload
-	 @param   {Position} pos
-	 @returns {this}
+	 * @overload
+	 * @param   {Position} pos
+	 * @returns {this}
 
-	 @param {number|Position} v1
-	 @param {number} [v2]
-	*/
+	 * @param {number|Position} v1
+	 * @param {number} [v2]
+	 */
 	translate(v1, v2) {
 		if (typeof v1 == 'object') super.translate(v1.x, v1.y)
 		if (typeof v1 == 'number') super.translate(v1, v2 ?? v1)
@@ -69,9 +69,9 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	}
 
 	/**
-	 @param {number}  x
-	 @param {number} [y]
-	*/
+	 * @param {number}  x
+	 * @param {number} [y]
+	 */
 	scale(x, y=x) {
 		super.scale(x, y)
 		return this
@@ -84,12 +84,12 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	}
 
 	/**
-	 @param {number} x
-	 @param {number} y
-	 @param {number} w
-	 @param {number} h
-	 @param {?CvsStyle} style
-	*/
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {number} w
+	 * @param {number} h
+	 * @param {?CvsStyle} style
+	 */
 	fillRect(x,y, w,h, style=this.fillStyle) {
 		this.save()
 		style && (this.fillStyle = style)
@@ -101,11 +101,11 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	}
 
 	/**
-	 @param {number} x
-	 @param {number} y
-	 @param {number} r
-	 @param {CvsStyle} [style]
-	*/
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {number} r
+	 * @param {CvsStyle} [style]
+	 */
 	fillCircle(x,y, r, style=this.fillStyle) {
 		this.save()
 		this.beginPath()
@@ -117,12 +117,12 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	}
 
 	/**
-	 @param {number} x
-	 @param {number} y
-	 @param {number} r
-	 @param {CvsStyle} style
-	 @param {number} lineWidth
-	*/
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {number} r
+	 * @param {CvsStyle} style
+	 * @param {number} lineWidth
+	 */
 	strokeCircle(x,y, r, style=this.strokeStyle, lineWidth=this.lineWidth) {
 		this.save()
 		this.beginPath()
@@ -135,11 +135,11 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	}
 
 	/**
-	 @param {number} x1
-	 @param {number} y1
-	 @param {number} x2
-	 @param {number} y2
-	*/
+	 * @param {number} x1
+	 * @param {number} y1
+	 * @param {number} x2
+	 * @param {number} y2
+	 */
 	strokeLine(x1, y1, x2, y2) {
 		this.beginPath()
 		this.moveTo(x1, y1)
@@ -171,9 +171,9 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	}
 
 	/**
-	 @param {?CvsStyle} style
-	 @param {xyTuple[]} path
-	*/
+	 * @param {?CvsStyle} style
+	 * @param {xyTuple[]} path
+	 */
 	fillPolygon(style, ...path) {
 		this.save()
 		this.newLinePath(...path)
@@ -193,11 +193,11 @@ class Fade {
 
 	#et=0; #type; #dur; #delay; #alpha;
 	/**
-	 @private
-	 @param {number} duration
-	 @param {number} delay
-	 @param {0|1} type
-	*/
+	 * @private
+	 * @param {number} duration
+	 * @param {number} delay
+	 * @param {0|1} type
+	 */
 	constructor(duration, delay, type=Fade.IN) {
 		this.#type	= type
 		this.#dur	= duration
@@ -211,10 +211,10 @@ class Fade {
 	get running() {return this.#et < (this.#delay+this.#dur)}
 
 	/**
-	 @param   {number} maxAlpha  maximum opacity
-	 @param   {number} deltaTime elapsed time since last update(in ms)
-	 @returns {boolean} Whether the fade animation is currently active
-	*/
+	 * @param   {number} maxAlpha  maximum opacity
+	 * @param   {number} deltaTime elapsed time since last update(in ms)
+	 * @returns {boolean} Whether the fade animation is currently active
+	 */
 	update(maxAlpha=1, deltaTime=1000/60) {
 		this.#et += deltaTime
 		if (this.#et < this.#delay) {
@@ -236,10 +236,10 @@ class Fade {
 const path2D = path=> new Path2D(path)
 
 /**
- @param {?string} id      The ID of an existing canvas element. If null or not found, a new canvas is created.
- @param {number} [width]  The desired width. Defaults to the element's attribute if omitted.
- @param {number} [height] The desired height. Defaults to `width` if provided; otherwise, defaults to the element's attribute.
-*/
+ * @param {?string} id      The ID of an existing canvas element. If null or not found, a new canvas is created.
+ * @param {number} [width]  The desired width. Defaults to the element's attribute if omitted.
+ * @param {number} [height] The desired height. Defaults to `width` if provided; otherwise, defaults to the element's attribute.
+ */
 const canvas2D = (id, width, height=width)=> {
 	const elm  = id? document.getElementById(id) : null
 	const cvs  = (elm instanceof HTMLCanvasElement)? elm : document.createElement('canvas')

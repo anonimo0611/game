@@ -9,10 +9,10 @@ class Menu {
 	/** @protected */$label
 
 	/**
-	 @protected
-	 @param {string} id
-	 @param {string} type
-	*/
+	 * @protected
+	 * @param {string} id
+	 * @param {string} type
+	 */
 	constructor(id, type) {
 		const
 		root  = /**@type {CustomMenu} */($('#'+id).attr({type}) .get(0)),

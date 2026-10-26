@@ -13,12 +13,12 @@ export class AState {
 	/** @readonly */default = /**@type {States[0]}*/('')
 
 	/**
-	 @protected
-	 @typedef {`_${Exclude<S,States[0]>}`} Underscored
-	 @param {Owner}  owner
-	 @param {States} states
-	 @param {{immediately?:boolean}} opts
-	*/
+	 * @protected
+	 * @typedef {`_${Exclude<S,States[0]>}`} Underscored
+	 * @param {Owner}  owner
+	 * @param {States} states
+	 * @param {{immediately?:boolean}} opts
+	 */
 	constructor(owner, states, {immediately=false}={}) {
 		this.owner   = owner
 		this.default = states[0]
@@ -66,18 +66,18 @@ export class AState {
 	}
 
 	/**
-	 @protected
-	 @param {S} state
-	 @param {JQData} [data]
-	*/
+	 * @protected
+	 * @param {S} state
+	 * @param {JQData} [data]
+	 */
 	callback(state, data) {
 		$(this.owner).trigger(state, data)
 	}
 
 	/**
-	 @param {S} state
-	 @param {StateDef.Opts<S>} opts
-	*/
+	 * @param {S} state
+	 * @param {StateDef.Opts<S>} opts
+	 */
 	set(state, {data,delay=0,cb=this.callback}={}) {
 		if (this.immediately) {
 			delay ||= -1
