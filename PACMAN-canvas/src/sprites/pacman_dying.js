@@ -10,9 +10,9 @@ export class Dying {
 	#cnt; #cb; #innerR; #outerR; #arcAng;
 
 	/**
-	 @param {{ctx:Ctx2D,r:number}} _
-	 @param {()=> void} [cb]
-	*/
+	 * @param {{ctx:Ctx2D,r:number}} _
+	 * @param {()=> void} [cb]
+	 */
 	constructor({ctx,r}, cb) {
 		this.ctx     = ctx
 		this.#cb     = cb

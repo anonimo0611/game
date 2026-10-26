@@ -63,9 +63,9 @@ export const Wall = new class WallRenderer {
 	}
 
 	/**
-	 @param {Ctx2D} ctx
-	 @param {{type:number, cIdx:number, pos:Position}} _
-	*/
+	 * @param {Ctx2D} ctx
+	 * @param {{type:number, cIdx:number, pos:Position}} _
+	 */
 	#drawCorner(ctx, {type,cIdx,pos:{x,y}}) {
 		const {Type}= Corner, radii = []
 		ctx.save()
@@ -91,11 +91,11 @@ export const Wall = new class WallRenderer {
 	}
 
 	/**
-	 @param {Ctx2D}  ctx
-	 @param {string} s  Tile symbol
-	 @param {number} tx Tile col
-	 @param {number} ty Tile row
-	*/
+	 * @param {Ctx2D}  ctx
+	 * @param {string} s  Tile symbol
+	 * @param {number} tx Tile col
+	 * @param {number} ty Tile row
+	 */
 	#drawTile(ctx, s, tx, ty) {
 		const ofst = /[#VH=]/.test(s) ? -LO : +LO
 		const cIdx = Corner.toIndex.get(s) ?? -1

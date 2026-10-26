@@ -11,9 +11,9 @@ export default class GhostSprite {
 	get alpha() {return this.#fadeBody?.alpha}
 
 	/**
-	 @param {Ctx2D}  target
-	 @param {number} size
-	*/
+	 * @param {Ctx2D}  target
+	 * @param {number} size
+	 */
 	constructor(target, size) {
 		this.tgt  = target
 		this.glow = glowImg(size)
@@ -21,7 +21,8 @@ export default class GhostSprite {
 		this.sub  = new SubSprite(this.ctx)
 		this.resize(this.#size = size)
 	}
-	resize(/**@type {number}*/size) {
+	/** @param {number} size */
+	resize(size) {
 		this.#size = size
 		this.ctx.resize(size*1.5, size)
 	}
@@ -161,7 +162,9 @@ export default class GhostSprite {
 		ctx.stroke()
 	}
 }
-function glowImg(/**@type {number}*/size) {
+
+/** @param {number} size */
+function glowImg(size) {
 	const {ctx,w,h}= canvas2D(null, size*3)
 	ctx.filter = `blur(${T*.8}px)`
 	ctx.fillCircle(w/2, h/2, size*.55, '#F00')

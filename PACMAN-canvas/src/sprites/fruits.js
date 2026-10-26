@@ -246,10 +246,10 @@ export const LOGIC_SIZE = 15.24
 export const MAX = drawFns.length
 
 /**
- @param {Ctx2D}  ctx
- @param {number} idx
- @param {number} size
-*/
+ * @param {Ctx2D}  ctx
+ * @param {number} idx
+ * @param {number} size
+ */
 export function draw(ctx, idx, size, x=size/2,y=size/2) {
 	ctx.save()
 	ctx.translate(x, y-(size*0.05))

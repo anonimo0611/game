@@ -138,10 +138,10 @@ export const [StateType,createState] = function() {
 	const States = /**@type {const}*/
 		(['Idle','GoingOut','Walking','Bitten','Escaping','Entering'])
 	/**
-	 @typedef {typeof States[number]} StateType
-	 @typedef {StateDef.Fluent<State,StateType>} IState
-	 @extends {AState<StateType,States,Ghost>}
-	*/
+	 * @typedef {typeof States[number]} StateType
+	 * @typedef {StateDef.Fluent<State,StateType>} IState
+	 * @extends {AState<StateType,States,Ghost>}
+	 */
 	class State extends AState {
 		constructor(/**@type {Ghost}*/g) {
 			super(g, States, {immediately:true})

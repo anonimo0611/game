@@ -92,9 +92,9 @@ export function createMover(actor) {
 
 	return {
 		/**
-		 @param   {number}  step
-		 @returns {boolean} True if the actor stopped at a wall.
-		*/
+		 * @param   {number}  step
+		 * @returns {boolean} True if the actor stopped at a wall.
+		 */
 		update(step) {
 			turnAround()
 			turnCorner(step)

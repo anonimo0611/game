@@ -72,7 +72,7 @@ export const Game = new class GameCore {
 	#onRoundEnd() {
 		Sound.stopLoops()
 		Maze.dotsLeft <= Maze.CLEAR_DOTS
-			? State.setFlashing({delay:1000})
+			? State.setFlashing({delay:1e3})
 			: State.setPacDying({delay:600})
 	}
 	#onFlashing() {

@@ -9,9 +9,9 @@ const Scenes = [
 	Main.Scene,
 	Demo.Scene,
 ]
-export const Scene  = {
+export const Scene = {
 	get shouldPlayCutscene() {
-		return Cutscene.num > 0
+		return Cutscene.getNum() > 0
 	},
 	update() {
 		Demo.updateTimer()

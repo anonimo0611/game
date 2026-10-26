@@ -3,12 +3,12 @@ import {State}   from './state.js'
 
 export const Message = new class MessageView {
 	/**
-	 @param {Ctx2D}  ctx
-	 @param {number} col
-	 @param {number} row
-	 @param {?CvsStyle} color
-	 @param {string|number} content
-	*/
+	 * @param {Ctx2D}  ctx
+	 * @param {number} col
+	 * @param {number} row
+	 * @param {?CvsStyle} color
+	 * @param {string|number} content
+	 */
 	drawText(ctx, col, row, color, content,
 		{scaleX=1, face='Atari', size=T, style=''}={}
 	) {

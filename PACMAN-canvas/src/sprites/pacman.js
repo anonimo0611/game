@@ -16,10 +16,10 @@ export default class PacmanSprite {
 	#dyingSpr = /**@type {?Dying}*/(null)
 
 	/**
-	 @param {Ctx2D}  ctx
-	 @param {number} radius
-	 @param {number} initOpening 0 to 1
-	*/
+	 * @param {Ctx2D}  ctx
+	 * @param {number} radius
+	 * @param {number} initOpening 0 to 1
+	 */
 	constructor(ctx, radius, initOpening=0) {
 		this.ctx = ctx
 		this.r = radius

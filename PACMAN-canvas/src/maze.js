@@ -125,32 +125,32 @@ export const Maze = freeze({
 	get dotsLeft() {return DotSet.size},
 
 	/**
-	 Tiles where the specified direction is disallowed for ghost navigation \
-	 Format ex: `${x}-${y}${Direction}`
-	 @type {ReadonlySet<string>}
-	*/
+	 * Tiles where the specified direction is disallowed for ghost navigation \
+	 * Format ex: `${x}-${y}${Direction}`
+	 * @type {ReadonlySet<string>}
+	 */
 	GhostNoEntryTiles: new Set(['12-11Up','12-23Up','15-11Up','15-23Up']),
 
 	/**
-	 Whether tile `row` coord is the top/bottom of the maze excluding dead space
-	 @param {number} row
-	*/
+	 * Whether tile `row` coord is the top/bottom of the maze excluding dead space
+	 * @param {number} row
+	 */
 	isTopOrBottom: row=> (row == 1) || (row == ROWS-3),
 
 	/**
-	 If the target tile is on the upper side of the maze \
-	 and the ghost is around the house, guide them outside of the area
-	 @param {Ghost} ghost
-	 @param {Vec2}  tile
-	*/
+	 * If the target tile is on the upper side of the maze \
+	 * and the ghost is around the house, guide them outside of the area
+	 * @param {Ghost} ghost
+	 * @param {Vec2}  tile
+	 */
 	getGhostExitTile: ({baseTargetTile:b}, tile)=>
 		!Cfg.unrestricted && b.y < 10 && HouseOuter.contains(tile)
 			? Vec2.new({y:15,x:(tile.x>COLS/2 && b.x>COLS/2 ? 21:6)}) : b,
 
 	/**
-	 @param {TileIdx} i
-	 @returns {number} Number of remaining dots
-	*/
+	 * @param {TileIdx} i
+	 * @returns {number} Number of remaining dots
+	 */
 	clearDot(i) {
 		DotSet.delete(i)
 		PowMap.delete(i)
@@ -159,10 +159,10 @@ export const Maze = freeze({
 	},
 
 	/**
-	 @param {Ctx2D}  ctx
-	 @param {number} col
-	 @param {number} row
-	*/
+	 * @param {Ctx2D}  ctx
+	 * @param {number} col
+	 * @param {number} row
+	 */
 	drawDot(ctx, col,row, isPow=false, isVisible=true) {
 		if (!isVisible) return
 		const radius = [DOT_RADIUS,POW_RADIUS][+isPow]

@@ -7,20 +7,20 @@ const States = /**@type {const}*/([
 ])
 
 /**
- @extends {AState<StateType,States,globalThis>}
- @typedef {StateDef.Fluent<GameState,StateType>} IGameState
-*/
+ * @extends {AState<StateType,States,globalThis>}
+ * @typedef {StateDef.Fluent<GameState,StateType>} IGameState
+ */
 class GameState extends AState {
 	constructor() {super(globalThis, States)}
 	get isStarting() {return State.isNewGame || State.isReady}
 	get isDemoMode() {return State.isAttract || State.isCutscene}
 
 	/**
-	 @override
-	 @protected
-	 @param {StateType} s
-	 @param {JQData} [data]
-	*/
+	 * @override
+	 * @protected
+	 * @param {StateType} s
+	 * @param {JQData} [data]
+	 */
 	callback(s, data) {
 		Ticker.resetCount()
 		Timer.cancelAll()
@@ -28,9 +28,9 @@ class GameState extends AState {
 	}
 
 	/**
-	 @param {StateType} s
-	 @param {StateDef.Opts<StateType>} options
-	*/
+	 * @param {StateType} s
+	 * @param {StateDef.Opts<StateType>} options
+	 */
 	set(s, {data,delay=(/Title|Quit/.test(s) ? -1 : 0)}={}) {
 		return super.set(s, {data,delay})
 	}

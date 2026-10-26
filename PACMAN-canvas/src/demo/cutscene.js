@@ -16,7 +16,7 @@ export class Cutscene {
 	static update() {this.#scene?.update()}
 	static getNum() {return sceneNum(Game.level)}
 	static {
-		State.on({Cutscene:(_,/**@type {MaybeNumber}*/n)=> {
+		State.on({Cutscene:(_,/**@type {Maybe<number>}*/n)=> {
 			assertOf('number', n ??= Cutscene.getNum())
 			this.#scene = new [Scene1,Scene2,Scene3][clamp(n,1,3)-1]
 		}})

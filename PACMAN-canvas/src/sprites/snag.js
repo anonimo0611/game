@@ -28,10 +28,10 @@ export class SnagSprite {
 	}
 
 	/**
-	 @param {number} animIdx
-	 @param {number} ratio
-	 @param {{x?:number, y?:number, scale?:number}} options
-	*/
+	 * @param {number} animIdx
+	 * @param {number} ratio
+	 * @param {{x?:number, y?:number, scale?:number}} options
+	 */
 	drawSnaggedClothing(animIdx, ratio, {x=0,y=0,scale=1}={}) {
 		const {ctx}= this
 		const v1 = lerp(+4, 22, ratio)
