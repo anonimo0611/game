@@ -31,6 +31,7 @@ const Ctrl = {
 	setVolume(/**@type {number}*/val) {
 		Sound.vol = val
 		$volRngs.val(val)
+		$volRngs.attr('title',val)
 		speaker.draw(val)
 	},
 	mute() {
@@ -39,11 +40,9 @@ const Ctrl = {
 	},
 	keydown(/**@type {JQKeyboardEvent}*/e) {
 		if (keyRepeated(e) || hasModifierKeys(e)) return
-		const isMKey = e.key.toUpperCase() == 'M'
-		const isEnterOnRng = $(e.target).hasClass('volRng') && isActionKey(e)
-		if (isMKey || isEnterOnRng) {
-			e.preventDefault()
-			Ctrl.mute()
+		const isRng = $(e.target).hasClass('volRng')
+		if (/^M$/i.test(e.key) || isRng && isActionKey(e)) {
+			e.preventDefault(), Ctrl.mute()
 		}
 	}
 }

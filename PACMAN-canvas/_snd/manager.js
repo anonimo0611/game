@@ -7,9 +7,9 @@ export class SoundMgr {
 	#playOpts = /**@type {Sound.PlayOpts<S>}*/({})
 	#instance = /**@type {Sound.Instance<S>}*/({})
 	/**
-	 @param {Sound.Manifest<S>} m
-	 @param {Sound.onSettled} [onSettled]
-	*/
+	 * @param {Sound.Manifest<S>} m
+	 * @param {Sound.onSettled} [onSettled]
+	 */
 	constructor(m, onSettled) {
 		new Promise((resolve,reject)=> {
 			let amount = 0
@@ -44,9 +44,9 @@ export class SoundMgr {
 	isFinished(id) {return this.#instance[id]?.playState === SoundJS.PLAY_FINISHED}
 
 	/**
-	 @param {S} id
-	 @param {Readonly<Sound.Opts>} opts
-	*/
+	 * @param {S} id
+	 * @param {Readonly<Sound.Opts>} opts
+	 */
 	#mergeOpts(id, opts) {
 		return {...this.#playOpts[id], ...opts}
 	}
@@ -60,9 +60,9 @@ export class SoundMgr {
 	}
 
 	/**
-	 @param {boolean} enable
-	 @param {S[]} ids
-	*/
+	 * @param {boolean} enable
+	 * @param {S[]} ids
+	 */
 	pause(enable, ...ids) {
 		if (this.disabled) return
 		ids.length
@@ -71,9 +71,9 @@ export class SoundMgr {
 	}
 
 	/**
-	 @param {S} id
-	 @param {Readonly<Sound.Opts>} opts
-	*/
+	 * @param {S} id
+	 * @param {Readonly<Sound.Opts>} opts
+	 */
 	play(id, opts={}) {
 		if (this.disabled) return
 		if (typeof(opts.duration) == 'number' && opts.duration > 0)

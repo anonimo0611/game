@@ -2,9 +2,9 @@
 	/** @readonly*/ctx
 	/** @readonly*/color
 	/**
-	 @param {Ctx2D}    ctx
-	 @param {CvsStyle} color
-	*/
+	 * @param {Ctx2D}    ctx
+	 * @param {CvsStyle} color
+	 */
 	constructor(ctx, color='#FFF') {
 		this.ctx   = ctx
 		this.color = color

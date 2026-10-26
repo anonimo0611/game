@@ -6,10 +6,10 @@ import {SirenIds}  from './_manifest.js'
 import {Manifest}  from './_manifest.js'
 
 /**
- @typedef {import('./_manifest').SoundType} T
- @typedef {Sound.Fluent<SoundCore,T>} ISound
- @extends {SoundMgr<T>}
-*/
+ * @typedef {import('./_manifest').SoundType} T
+ * @typedef {Sound.Fluent<SoundCore,T>} ISound
+ * @extends {SoundMgr<T>}
+ */
 class SoundCore extends SoundMgr {
 	constructor()  {super(Manifest, onSettled)}
 	get sirenId()  {return SirenIds[Ghosts.CruiseElroy.part]}
@@ -21,7 +21,7 @@ class SoundCore extends SoundMgr {
 	}
 	set vol(vol) {
 		if (this.disabled) return
-		super.vol = mathClamp(+vol, 0, 10)
+		super.vol = clamp(+vol, 0, 10)
 	}
 	playSiren() {
 		if (Ghosts.isFrightened
