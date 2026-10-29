@@ -38,9 +38,10 @@ Grid.stroke()
 //---- Fit to viewport ----
 
 $win.on('resize', ()=> {
-	const {offsetWidth:w,offsetHeight:h}= Form
-	const s = min(innerWidth/w*.98, innerHeight/h)
-	Form.style.scale = `${min(1,s)}`
+	const scale = min(
+		window.innerWidth /Form.offsetWidth*.98,
+		window.innerHeight/Form.offsetHeight)
+	Form.style.scale = `${min(1,scale)}`
 })
 .trigger('resize')
 
