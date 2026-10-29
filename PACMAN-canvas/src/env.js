@@ -66,7 +66,7 @@ export const Env = new class Environment {
 		const data = JSON.parse(localStorage[SETTINGS_KEY])
 		getKeys(Menu).forEach(id=> Menu[id].index = data[id])
 		document.querySelectorAll('input').forEach(i=> {
-			if (data[i.id] == undefined) return
+			if (data[i.id] === undefined) return
 			switch(i.type) {
 			case 'range':   i.value   = data[i.id];break
 			case 'checkbox':i.checked = data[i.id];break
@@ -131,7 +131,7 @@ export const Env = new class Environment {
 			$(`#pm_${id}`).css('color', palette[+v])
 	}
 	#toggleGridLines() {
-		Grid.canvas.dataset.show = String(Cfg.showGridLines)
+		Grid.canvas.dataset.show = `${Cfg.showGridLines}`
 	}
 	#observeFocusChange() {
 		$(document.body).on('focusin focusout', e=> {

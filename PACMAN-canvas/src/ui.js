@@ -40,7 +40,7 @@ Grid.stroke()
 $win.on('resize', ()=> {
 	const {offsetWidth:w,offsetHeight:h}= Form
 	const s = min(innerWidth/w*.98, innerHeight/h)
-	Form.style.scale = min(1,s).toFixed(2)
+	Form.style.scale = `${min(1,s)}`
 })
 .trigger('resize')
 
