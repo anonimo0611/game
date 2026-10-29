@@ -24,7 +24,6 @@ svg{fill:#FFF;pointer-events:none}
 #debug{
 	white-space:pre;position:fixed;top:.5em;left:.5em
 }
-
 #board{
 	pointer-events:none;margin-top:0.5em;
 	width: calc(var(--t)*var(--cols));
@@ -36,6 +35,11 @@ svg{fill:#FFF;pointer-events:none}
 		&#board_main{z-index:3}
 		&#board_hud {z-index:4}
 	}
+}
+#container,canvas{
+	image-rendering:auto;
+	transform-style:preserve-3d;
+	backface-visibility:hidden;
 }
 
 header{
