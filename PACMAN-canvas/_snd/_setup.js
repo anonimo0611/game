@@ -1,16 +1,8 @@
 import {Sound} from './sound.js'
 import {SpeakerRenderer} from './speaker.js'
 
-const MAX_VOL  = 10
-const SETTLED  = 'sound-settled'
-const $speaker = $('#speaker')
-const $volRngs = $('.volRng')
-
-const speaker = function() {
-	const size = $('#volume').height()
-	const ctx  = canvas2D('speaker',size).ctx
-	return new SpeakerRenderer(ctx,'#FFF')
-}()
+const MAX_VOL = 10
+const SETTLED = 'sound-settled'
 
 /** @returns {void} */
 export function onSettled(succeeded=false) {
@@ -18,6 +10,12 @@ export function onSettled(succeeded=false) {
 		return
 	if (!succeeded)
 		return void $('.volCtrl').hide()
+
+	const $speaker = $('#speaker')
+	const $volRngs = $('.volRng')
+	const speaker  = new SpeakerRenderer(
+		canvas2D('speaker', $('#volume').height()).ctx, '#FFF'
+	)
 
 	let lstVol = NaN
 	function mute() {
@@ -41,7 +39,8 @@ export function onSettled(succeeded=false) {
 
 	/** @param {JQKeyboardEvent} e  */
 	function keydown(e) {
-		if (keyRepeated(e) || hasModifierKeys(e)) return
+		if (keyRepeated(e) || hasModifierKeys(e))
+			return
 		const isMKey  = e.key.toUpperCase() == 'M'
 		const isRange = $(e.target).hasClass('volRng')
 		if (isMKey || isRange && isActionKey(e)) {
