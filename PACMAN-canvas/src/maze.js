@@ -41,15 +41,17 @@ D__________________________C\
 ////////////////////////////\
 ////////////////////////////`])
 
-const WallSet = /**@type {Set<TileIdx>}*/(new Set)
-const DotSet  = /**@type {Set<TileIdx>}*/(new Set)
-const PowMap  = /**@type {Map<TileIdx,Position>}*/(new Map)
+const
+WallSet = /**@type {Set<TileIdx>}*/(new Set),
+DotSet  = /**@type {Set<TileIdx>}*/(new Set),
+PowMap  = /**@type {Map<TileIdx,Position>}*/(new Map)
 
-const DOT_RADIUS = T/9
-const POW_RADIUS = T/2
-const DotSymbols = new Set([...'.O'])
-const HouseInner = new Rect(14-4, 15-2,  8, 5).freeze()
-const HouseOuter = new Rect(14-5, 15-3, 10, 7).freeze()
+const
+DOT_RADIUS = T/9,
+POW_RADIUS = T/2,
+DotSymbols = new Set([...'.O']),
+HouseInner = new Rect(14-4, 15-2,  8, 5).freeze(),
+HouseOuter = new Rect(14-5, 15-3, 10, 7).freeze()
 
 ;{//Map and dot initialization block
 	MapArr.forEach((s,i)=> {

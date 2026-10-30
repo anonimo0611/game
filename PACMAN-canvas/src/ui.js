@@ -3,10 +3,11 @@ import * as Fruits from './sprites/fruits.js'
 
 //---- Form controls ----
 
-export const Form   = document.forms[0]
-export const lives  = reqInput('#initialLives')
-export const powChk = reqInput('#powEnabled')
-export const Btns   = freeze({
+export const
+Form   = document.forms[0],
+lives  = reqInput('#initialLives'),
+powChk = reqInput('#powEnabled'),
+Btns   = freeze({
 	clear: reqButton('#clearBtn'),
 	reset: reqButton('#resetBtn'),
 	start: reqButton('#startBtn'),
