@@ -1,10 +1,10 @@
 import {Sound} from './sound.js'
 import {SpeakerRenderer} from './speaker.js'
 
-const MAX_VOL   = 10
-const $speaker  = $('#speaker')
-const $volRngs  = $('.volRng')
-const $volCtrls = $('.volCtrl')
+const MAX_VOL  = 10
+const SETTLED  = 'sound-settled'
+const $speaker = $('#speaker')
+const $volRngs = $('.volRng')
 
 const speaker = function() {
 	const size = $('#volume').height()
@@ -12,11 +12,12 @@ const speaker = function() {
 	return new SpeakerRenderer(ctx,'#FFF')
 }()
 
+/** @returns {void} */
 export function onSettled(succeeded=false) {
-	if (!succeeded) {
-		$volCtrls.hide()
+	if ($root.hasClass(SETTLED))
 		return
-	}
+	if (!succeeded)
+		return void $('.volCtrl').hide()
 
 	let lstVol = NaN
 	function mute() {
@@ -50,5 +51,5 @@ export function onSettled(succeeded=false) {
 	$win.on({keydown})
 	$volRngs.on({input}).trigger('input')
 	$speaker.on({click:mute})
-	$root.addClass('sound-settled')
+	$root.addClass(SETTLED)
 }
