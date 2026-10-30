@@ -75,8 +75,8 @@ export class Paths {
 			const last = nodes[i-1]?.tile.clone.mul(T) ?? g.pos
 			if (tile == endTile) {
 				stopped && g.isChasingPac
-					? curr.set(p.pos)
-					: curr.add( Vec2[dir].mul(stopped? 0 : T/2-distance) )
+				? curr.set(p.pos)
+				: curr.add( Vec2[dir].mul(stopped? 0 : T/2-distance) )
 			}
 			if (abs(curr.x - last.x) > T*3) {
 				Fg.lineTo((curr.x < last.x ? BW+T : -T), curr.y)

@@ -80,7 +80,7 @@ export const Targets = new class TargetVisualizer {
 		const th = T*Guzuta.THRESHOLD
 		Fg.save()
 		Fg.translate(player.center)
-		Fg.setAlpha(Vec2.sqrMag(player,g) < th**2 ? 0.8 : 0.4)
+		Fg.setAlpha(Vec2.sqrMag(g,player) < th**2 ? 0.8 : 0.4)
 		Fg.strokeCircle(0,0, th, undefined, T*0.15)
 		Fg.restore()
 	}

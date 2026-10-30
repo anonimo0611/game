@@ -53,7 +53,7 @@ export class Guzuta extends Ghost {
 	get scatterTile() {return Vec2.new(0, ROWS-1)}
 	get chasePos() {
 		const {center,pos}= player
-		return Vec2.sqrMag(this, pos) < (T*Guzuta.THRESHOLD)**2
+		return Vec2.sqrMag(this,pos) < (T*Guzuta.THRESHOLD)**2
 			? this.scatterTile.add(.5).mul(T) : center
 	}
 }
