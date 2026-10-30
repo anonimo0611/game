@@ -1,8 +1,6 @@
 import {Sound} from './sound.js'
 import {SpeakerRenderer} from './speaker.js'
 
-let lstVol = NaN
-
 const MAX_VOL   = 10
 const $speaker  = $('#speaker')
 const $volRngs  = $('.volRng')
@@ -14,43 +12,43 @@ const speaker = function() {
 	return new SpeakerRenderer(ctx,'#FFF')
 }()
 
-const Ctrl = {
-	loaded() {
-  		const {input,keydown,mute}= this
-		$win.on({keydown})
-		$volRngs.on({input}).trigger('input')
-		$speaker.on({click:mute})
-	},
-	failed() {
+export function onSettled(succeeded=false) {
+	if (!succeeded) {
 		$volCtrls.hide()
-	},
-	input(/**@type {JQTriggeredEvent}*/e) {
-		if (e.target instanceof HTMLInputElement)
-			Ctrl.setVolume(e.target.valueAsNumber)
-	},
-	setVolume(/**@type {number}*/val) {
+		return
+	}
+
+	let lstVol = NaN
+	function mute() {
+		lstVol = Sound.vol || (lstVol || MAX_VOL/2)
+		$volRngs.val(Sound.vol? 0 : lstVol).trigger('input')
+	}
+
+	/** @param {number} val */
+	function setVolume(val) {
 		Sound.vol = val
 		$volRngs.val(val)
 		$volRngs.attr('title',val)
 		speaker.draw(val)
-	},
-	mute() {
- 		lstVol = Sound.vol || (lstVol || MAX_VOL/2)
-  		$volRngs.val(Sound.vol? 0 : lstVol).trigger('input')
-	},
-	keydown(/**@type {JQKeyboardEvent}*/e) {
+	}
+
+	/** @param {JQTriggeredEvent} e  */
+	function input(e) {
+		if (e.target instanceof HTMLInputElement)
+			setVolume(e.target.valueAsNumber)
+	}
+
+	/** @param {JQKeyboardEvent} e  */
+	function keydown(e) {
 		if (keyRepeated(e) || hasModifierKeys(e)) return
-		const isRng = $(e.target).hasClass('volRng')
-		if (/^M$/i.test(e.key) || isRng && isActionKey(e)) {
-			e.preventDefault(), Ctrl.mute()
+		const isMKey  = e.key.toUpperCase() == 'M'
+		const isRange = $(e.target).hasClass('volRng')
+		if (isMKey || isRange && isActionKey(e)) {
+			e.preventDefault(), mute()
 		}
 	}
-}
-
-/** @param {boolean} succeeded */
-export function onSettled(succeeded) {
-	succeeded
-		? Ctrl.loaded()
-		: Ctrl.failed()
+	$win.on({keydown})
+	$volRngs.on({input}).trigger('input')
+	$speaker.on({click:mute})
 	$root.addClass('sound-settled')
 }
