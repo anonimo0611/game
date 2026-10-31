@@ -1,8 +1,8 @@
 /**
- @template {string} S
- @template {readonly [S,...S[]]} States
- @template {object} Owner
-*/
+ * @template {string} S
+ * @template {readonly [S,...S[]]} States
+ * @template {object} Owner
+ */
 export class AState {
 	#last = /**@type {S}*/('')
 	#curr = /**@type {S}*/('')
