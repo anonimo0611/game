@@ -1,12 +1,8 @@
 type Maybe<T> = T | undefined
 
-//---- Ghosts ----
-
-type GhostType = (typeof GhostType)[Exclude<keyof typeof GhostType,'Max'>]
-
 //---- Dictionary ----
 
-type Scene  = {update():void, draw():void}
+type Scene = {update():void, draw():void}
 type SceneDict<T extends string> = {readonly [K in T]?:Scene}
 type NumericDict<T> = {readonly [K:number]:T}
 
@@ -48,6 +44,10 @@ type Horizontal   = 'Left'|'Right'
 type Direction    = 'Up'|'Right'|'Down'|'Left'
 type DirectionMap = {readonly [key:string]: Direction}
 
+//---- Ghosts ----
+
+type GhostType = (typeof GhostType)[Exclude<keyof typeof GhostType,'Max'>]
+
 /** Represents Akabei's dazed eyes in intermissions scene part 2. */
 type Dazed = 'Dazed'
 type VisualOrient = Direction|Dazed
@@ -66,24 +66,25 @@ type KeyboardEventLike = KeyboardEvent|JQuery.KeyboardEventBase
 type Global = Window & typeof globalThis
 type JQData = any[]|JQuery.PlainObject|string|number|boolean
 
-type JQKeyboardEvent    = JQuery.KeyboardEventBase
-type JQTriggeredEvent   = JQuery.TriggeredEvent
-type JQWindowHandler    = (ev:JQuery.TriggeredEvent<Global,undefined,Global,Global>, data?:any)=> void
-type JQTriggerHandler   = (ev:JQTriggeredEvent, data?:any)=> void
-type JQKeyboardHandler  = (ev:JQKeyboardEvent,  data?:any)=> void
-type JQKeyboardHandlers = {keyup?:JQKeyboardHandler, keydown?:JQKeyboardHandler}
-type JQTriggerHandlers  = {[ev:string]:JQTriggerHandler}|JQKeyboardHandlers
+type JQKeyboardEvent   = JQuery.KeyboardEventBase
+type JQTriggeredEvent  = JQuery.TriggeredEvent
+type JQTriggerHandler  = (ev:JQTriggeredEvent, data?:any)=> void
+type JQKeyboardHandler = (ev:JQKeyboardEvent,  data?:any)=> void
+type JQTriggerHandlers = {[ev:string]: JQTriggerHandler} |
+	{keyup?: JQKeyboardHandler, keydown?: JQKeyboardHandler}
 
 interface JQuery {
+	onWheel(handler: (ev:WheelEvent)=> void): this
+
 	offon<TType extends string>(
 		events: TType,
 		handler: JQuery.TypeEventHandler<TElement,undefined,TElement,TElement,TType>,
 		force?: boolean,
 	): this
+
 	onNS<TType extends string>(
 		namespace: TType,
 		handlers: JQTriggerHandlers,
 		force?: boolean,
 	): this
-	onWheel(handler: (ev:WheelEvent)=> void): this
 }
