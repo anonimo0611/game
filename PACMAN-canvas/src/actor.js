@@ -6,9 +6,9 @@ export class Actor {
 	static CHEAT_ALPHA = 0.75
 
 	pos = Vec2.Zero
+	#fader  = /**@type {?Fade}*/(null)
+	#movDir = /**@type {Direction}*/(L)
 	orient  = /**@type {Direction}*/(L)
-	fadeSpr = /**@type {?Fade}*/(null)
-	#movDir = this.orient
 
 	/** @protected */
 	constructor(col=0, row=0) {this.pos.set(col*T, row*T)}
@@ -16,7 +16,7 @@ export class Actor {
 	// Override the actual speed and maxAlpha in the subclasses.
 	get speed()      {return 0}
 	get maxAlpha()   {return 1}
-	get alpha()      {return this.fadeSpr?.alpha ?? this.maxAlpha}
+	get alpha()      {return this.#fader?.alpha ?? this.maxAlpha}
 
 	get x()          {return this.pos.x}
 	get y()          {return this.pos.y}
@@ -44,15 +44,19 @@ export class Actor {
 		return this.tilePixel > T/2
 	}
 
-	/** @protected */
-	drawCenterDot({r=3, color='red'}={}) {
-		Fg.fillCircle(...this.center.vals, r, color)
-	}
+	fadeIn (ms=500) {this.#fader = Fade.in (ms)}
+	fadeOut(ms=500) {this.#fader = Fade.out(ms)}
+	updateFade() {this.#fader?.update(this.maxAlpha)}
+
 	centering() {
 		this.x = (BW-T)/2
 	}
 	keepInsideBoard() {
 		this.x = clamp(this.center.x, T, BW-T) - T/2
+	}
+	/** @protected */
+	drawCenterDot({r=3, color='red'}={}) {
+		Fg.fillCircle(...this.center.vals, r, color)
 	}
 	snapToTileCenter() {
 		this.pos = this.tile.mul(T)
@@ -69,12 +73,12 @@ export class Actor {
 			return x
 		}(this) - T/2
 	}
-	move(dir=this.dir) {
-		this.setNextPos(this.speed, this.dir=dir)
-	}
 	alignDir() {
 		this.#movDir = this.orient
 		this.#snapToAxis()
+	}
+	move(dir=this.dir) {
+		this.setNextPos(this.speed, this.dir=dir)
 	}
 	setNextPos(speed=this.speed, dir=this.dir) {
 		this.pos = Vec2[dir].mul(speed).add(this)

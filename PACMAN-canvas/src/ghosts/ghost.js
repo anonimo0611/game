@@ -36,8 +36,8 @@ export class Ghost extends Actor {
 		this.state = Sys.createState(this)
 		bindMethod(this,'leaveHouse')
 		$(this).on({
-		 [Events.Ready]:    ()=> this.fadeSpr  = Fade.in(),
-		 [Events.RoundEnds]:()=> this.fadeSpr  = Fade.out(),
+		 [Events.Ready]:    ()=> this.fadeIn(),
+		 [Events.RoundEnds]:()=> this.fadeOut(),
 		 [Events.Reverse]:  ()=> this.#revSig  = true,
 		 [Events.StartFlee]:()=> this.#fleeTmr = Sys.FLEE_TIME,
 		 [Events.Frighten]: (_, on=true)=> this.#frighten(on),
@@ -89,7 +89,7 @@ export class Ghost extends Actor {
 	}
 	update() {
 		this.sprite.update()
-		this.fadeSpr?.update(this.maxAlpha)
+		this.updateFade()
 		State.isInGame && this.#updateMovement()
 	}
 	#updateMovement() {

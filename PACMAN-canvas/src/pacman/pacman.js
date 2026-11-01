@@ -25,7 +25,7 @@ class Player extends PacMan {
 	static {State.on({_Ready:this.instantiate})}
 	static instantiate() {
 		!State.wasNewGame && (player = new Player)
-		!State.isTitle && (player.fadeSpr = Fade.in())
+		!State.isTitle && player.fadeIn()
 	}
 	#eatingSEToggle  = 1
 	#sinceLastEating = 0
@@ -61,7 +61,7 @@ class Player extends PacMan {
 	}
 	update() {
 		this.sprite.update(this, Game.speed)
-		this.fadeSpr?.update(this.maxAlpha)
+		this.updateFade()
 		this.closed
 			? this.keepInsideBoard()
 			: this.#updateMovement()
