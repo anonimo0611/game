@@ -60,8 +60,8 @@ class Player extends PacMan {
 			super.drawCenterDot()
 	}
 	update() {
-		this.sprite.update(this, Game.speed)
 		this.updateFade()
+		this.sprite.update(this, Game.speed)
 		this.closed
 			? this.keepInsideBoard()
 			: this.#updateMovement()

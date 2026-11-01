@@ -66,8 +66,8 @@ export const Ghosts = new class GhostGroup {
 	get isScattering()  {return PhaseManager.mode == SCATTER}
 	get isAnyEscaping() {return GhostList.some(g=> g.isEscaping)}
 
-	/** @param {GhostType} idx */
-	of = idx=> GhostList[idx]
+	/** @param {GhostType} type */
+	of = type=> GhostList[type]
 
 	/** @param {Ghost[]} [ghostList] */
 	initialize(ghostList) {

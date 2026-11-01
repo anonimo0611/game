@@ -44,19 +44,25 @@ export class Actor {
 		return this.tilePixel > T/2
 	}
 
-	fadeIn (ms=500) {this.#fader = Fade.in (ms)}
-	fadeOut(ms=500) {this.#fader = Fade.out(ms)}
-	updateFade() {this.#fader?.update(this.maxAlpha)}
+	fadeIn(ms=500) {
+		this.#fader = Fade.in(ms)
+	}
+	fadeOut(ms=500) {
+		this.#fader = Fade.out(ms)
+	}
+	updateFade() {
+		this.#fader?.update(this.maxAlpha)
+	}
 
+	/** @protected */
+	drawCenterDot({r=3, color='red'}={}) {
+		Fg.fillCircle(...this.center.vals, r, color)
+	}
 	centering() {
 		this.x = (BW-T)/2
 	}
 	keepInsideBoard() {
 		this.x = clamp(this.center.x, T, BW-T) - T/2
-	}
-	/** @protected */
-	drawCenterDot({r=3, color='red'}={}) {
-		Fg.fillCircle(...this.center.vals, r, color)
 	}
 	snapToTileCenter() {
 		this.pos = this.tile.mul(T)
