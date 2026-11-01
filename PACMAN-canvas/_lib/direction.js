@@ -5,9 +5,11 @@ export const Dir = freeze({
 	Opposite: freeze({Up:D, Right:L, Down:U, Left:R}),
 	from(/**@type {KeyboardEventLike}*/e, {wasd=false}={}) {
 		if (hasModifierKeys(e)) return null
-		const k = e.code.replace(/^(Arrow|Key)/,'')
-		return (DirEnum[k] ?? (wasd && WasdMap[k])) || null
+		const pri = e.code.replace(/^(Arrow|Key)/,'')
+		const sec = wasd && WasdMap.get(pri) || null
+		const dir = DirSet.has(pri)? pri:sec
+		return /**@type {Direction}*/(dir) ?? null
 	},
 })
-const DirEnum = /**@type {DirectionMap}*/(asEnum(U,R,D,L))
-const WasdMap = /**@type {DirectionMap}*/({W:U, A:L, S:D, D:R})
+const DirSet  = new Set([U,R,D,L])
+const WasdMap = new Map([['W',U],['A',L],['S',D],['D',R]])
