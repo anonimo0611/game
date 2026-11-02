@@ -42,6 +42,7 @@ type FloatingPtsData = {
 type Vertical   = 'Up'|'Down'
 type Horizontal = 'Left'|'Right'
 type Direction  = 'Up'|'Right'|'Down'|'Left'
+type DirMap = {readonly [key:string]: Direction}
 
 //---- Ghosts ----
 
