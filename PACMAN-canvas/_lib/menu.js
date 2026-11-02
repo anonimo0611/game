@@ -1,4 +1,4 @@
-import {Dir,L,R} from './direction.js'
+import {Dir,U,L,R} from './direction.js'
 
 class Menu {
 	/** @readonly  */root
@@ -146,8 +146,8 @@ export class Slide extends Menu {
 		this.isInRange(idx) && this.select(idx)
 	}
 	#setWidth(btnW=0) {
-		const width = max(...[...this.items].map(li=> li.offsetWidth))+btnW
-		$([this.root,...this.items]).css('width',`${width}px`)
+		const width = max(...Array.from(this.items, li=> li.offsetWidth))+btnW
+		$(this.root).add(this.items).css('width',`${width}px`)
 		this.#width = width
 	}
 	select(idx=this.index) {
