@@ -14,7 +14,11 @@ type TimerData = {
 	ignoreFrozen: boolean;
 	callback: ()=> void;
 }
-type TimerSeq = readonly [durationMS:number, callback:()=> void, key?:unknown]
+type TimerSeq = readonly [
+	durationMS: number,
+	callback: ()=> void,
+	key?: unknown,
+]
 
 //---- Tile & Coords ----
 
@@ -55,11 +59,11 @@ type VisualOrient = Direction|Dazed
 //---- Canvas API ----
 
 type Ctx2D = EnhancedCtx2D
-type CvsStyle = string|CanvasGradient|CanvasPattern
+type CvsStyle = string | CanvasGradient | CanvasPattern
 
 //---- Key events ----
 
-type KeyboardEventLike = KeyboardEvent|JQuery.KeyboardEventBase
+type KeyboardEventLike = KeyboardEvent | JQuery.KeyboardEventBase
 
 //---- jQuery ----
 
@@ -68,10 +72,10 @@ type JQData = any[]|JQuery.PlainObject|string|number|boolean
 
 type JQKeyboardEvent   = JQuery.KeyboardEventBase
 type JQTriggeredEvent  = JQuery.TriggeredEvent
+type JQKeyupKeydownObj = {keyup?:JQKeyboardHandler, keydown?:JQKeyboardHandler}
 type JQTriggerHandler  = (ev:JQTriggeredEvent, data?:any)=> void
 type JQKeyboardHandler = (ev:JQKeyboardEvent,  data?:any)=> void
-type JQTriggerHandlers = {[ev:string]: JQTriggerHandler} |
-	{keyup?: JQKeyboardHandler, keydown?: JQKeyboardHandler}
+type JQTriggerHandlers = {[ev:string]:JQTriggerHandler} | JQKeyupKeydownObj
 
 interface JQuery {
 	onWheel(handler: (ev:WheelEvent)=> void): this
