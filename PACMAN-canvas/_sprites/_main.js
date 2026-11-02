@@ -54,7 +54,6 @@ function drawGhosts() {
 		}
 	}
 }
-
 /**
  * @param {number} col
  * @param {number} row
@@ -82,24 +81,24 @@ function drawGhost(col=0, row=0, dir1, dir2) {
 	})
 }
 
-function drawPoints() {
-	/**
-	 * @param {PointType} ptsType
-	 * @param {PointVal}  ptsValue
-	 * @param {number} x
-	 * @param {number} y
-	 */
-	function draw(ptsType, ptsValue, x,y) {
-		const {ctx:cache,w,h}= Pts.cache({type: ptsType,value: ptsValue},S)
-		Fg.save()
-		Fg.translate(x,y)
-		Fg.drawImage(cache.canvas, -w/2, -h/2)
-		Fg.restore()
-	}
+function drawPtsTable() {
 	const {PtsTable:tbl}= Data
-	tbl[0].forEach((pts,i)=> draw(PointType.Ghost, pts, ofst(i+0)+T, S*6+T))
-	tbl[1].forEach((pts,i)=> draw(PointType.Fruit, pts, ofst(i+4)+T, S*6+T))
-	tbl[2].forEach((pts,i)=> draw(PointType.Fruit, pts, (S+GAP/2)+S*(2+GAP/T)*i, S*7+S/2))
+	tbl[0].forEach((pts,i)=> drawPts(PointType.Ghost, pts, ofst(i+0)+T, S*6+T))
+	tbl[1].forEach((pts,i)=> drawPts(PointType.Fruit, pts, ofst(i+4)+T, S*6+T))
+	tbl[2].forEach((pts,i)=> drawPts(PointType.Fruit, pts, (S+GAP/2)+S*(2+GAP/T)*i, S*7+S/2))
+}
+/**
+ * @param {PointType} ptsType
+ * @param {PointVal}  ptsValue
+ * @param {number} x
+ * @param {number} y
+ */
+function drawPts(ptsType, ptsValue, x,y) {
+	const {ctx:cache,w,h}= Pts.cache({type: ptsType,value: ptsValue},S)
+	Fg.save()
+	Fg.translate(x,y)
+	Fg.drawImage(cache.canvas, -w/2, -h/2)
+	Fg.restore()
 }
 
 function drawPacman() {
@@ -144,15 +143,16 @@ function drawAkabei() {
 	draw(ofst(4.25), S, {isExposed:true,animIdx:1})
 }
 
-$(sizeRng).on('resize', ()=> {
+function draw() {
 	Fg.save()
 	Fg.clear()
 	Fg.translate(GAP, GAP/2)
 	drawGridLines()
 	drawFruits()
 	drawGhosts()
-	drawPoints()
+	drawPtsTable()
 	drawPacman()
 	drawAkabei()
 	Fg.restore()
-})
+}
+$(sizeRng).on('resize', draw)
