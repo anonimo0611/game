@@ -116,7 +116,6 @@ class ActorPreview {
 		Pv.restore()
 	}
 	update = ()=> {
-		resize()
 		const {subj}= this
 		if (subj) {
 			subj.animIdx  ^= +(Ticker.count %  6 == 0)
