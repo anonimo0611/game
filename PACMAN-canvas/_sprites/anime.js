@@ -1,7 +1,7 @@
 import PacSprite from '../src/sprites/pacman.js'
 import {Dir}     from '../_lib/direction.js'
 import {ghostPv} from './_constants.js'
-import {T,S,Pv,Menu,Btns,resize} from './_constants.js'
+import {T,S,Pv,Menu,Btns} from './_constants.js'
 
 const Schema = /**@type {const}*/
 ({

@@ -17,7 +17,7 @@ export const GridSize = new Vec2(10,11).vals
 export const ghostPv  = new GhostSprite(Pv,T*2)
 export const ghostGr  = new GhostSprite(Fg,T*2)
 
-export function resize() {
+export function onResize() {
 	T = sizeRng.valueAsNumber/2
 	;[S,GAP] = [T*2,T*.25]
 	ghostPv.resize(S)
