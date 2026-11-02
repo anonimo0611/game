@@ -5,10 +5,9 @@ export const Dir = freeze({
 	Opposite: freeze({Up:D, Right:L, Down:U, Left:R}),
 	from(/**@type {KeyboardEventLike}*/e, {wasd=false}={}) {
 		if (hasModifierKeys(e)) return null
-		const k = e.code.replace(/^(Arrow|Key)/,'')
-		const d = DirSet.has(k)? k : wasd && WasdMap.get(k) || null
-		return /**@type {Direction}*/(d) ?? null
-	},
+		const  map = /**@type {DirMap}*/(wasd? Keys:Dirs)
+		return map[e.code.replace(/^(Arrow|Key)/,'')] ?? null
+	}
 })
-const DirSet  = new Set([U,R,D,L])
-const WasdMap = new Map([['W',U],['A',L],['S',D],['D',R]])
+const Dirs = asEnum(U,R,D,L)
+const Keys = freeze({...Dirs,W:U,A:L,S:D,D:R})
