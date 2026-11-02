@@ -10,7 +10,7 @@ export class SoundMgr {
 	 * @param {Sound.Manifest<S>} m
 	 * @param {Sound.onSettled} [onSettled]
 	 */
-	constructor(m, onSettled) {
+	constructor(m, onSettled=()=>{}) {
 		new Promise((resolve,reject)=> {
 			let amount = 0
 			m.flat().forEach(s=> s.data.audioSprite.forEach(d=> this.#playOpts[d.id]=d))
@@ -29,8 +29,8 @@ export class SoundMgr {
 				this.#disabled = false
 			})
 		})
-		.then (()=> {this.#settled=!!1;onSettled?.(true)})
-		.catch(()=> {this.#settled=!!0;onSettled?.(false)})
+		.then (()=> {onSettled(this.#settled=true)})
+		.catch(()=> {onSettled(this.#settled=false)})
 	}
 	get settled()  {return this.#settled}
 	get disabled() {return this.#disabled}
