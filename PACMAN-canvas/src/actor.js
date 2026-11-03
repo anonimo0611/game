@@ -6,12 +6,12 @@ export class Actor {
 	static CHEAT_ALPHA = 0.75
 
 	pos = Vec2.Zero
-	orient  = L
-	#movDir = L
 	#fader  = /**@type {?Fade}*/(null)
+	#movDir = L
+	orient  = L
 
 	/** @protected */
-	constructor(col=0, row=0, dir=L) {
+	constructor(col=0, row=0, dir=this.dir) {
 		this.dir = dir
 		this.pos.set(col*T, row*T)
 	}
