@@ -68,7 +68,7 @@ export default class GhostSubSprite {
 		ctx.quadraticCurveTo(42, 30, 47, 33)
 		ctx.addLinePath([39,33],[35,40],[-41,40])
 		ctx.fill()
-		this.#hadakeEyes([55,76],[61,83])
+		this.#hadakeEyes(55,76,61,83)
 	}
 	#drawHadake1() {
 		const {ctx}= this
@@ -88,22 +88,20 @@ export default class GhostSubSprite {
 		ctx.quadraticCurveTo(-26, 19, -21, 29)
 		ctx.addLinePath([18,29],[18,23],[44,22],[50,30],[46,33],[40,40])
 		ctx.fill()
-		this.#hadakeEyes([50,71],[56,78])
+		this.#hadakeEyes(50,71,56,78)
 	}
-	#hadakeEyes(
-	 /**@type {[L:number, R:number]}*/ballsLR,
-	 /**@type {[L:number, R:number]}*/eyesLR
-	) {
-		const {ctx}= this
+	/** @param {number[]} coords */
+	#hadakeEyes(...coords) {
+		const {ctx}= this, [bL,bR,eL,eR]= coords
 		for (const i of [1,0]) {
 			// Eyeballs
 			ctx.beginPath()
-			ctx.ellipse(ballsLR[i], -15, 11, 16, 0,0, PI*2)
+			ctx.ellipse([bL,bR][i], -15, 11, 16, 0,0, PI*2)
 			ctx.fillStyle = 'white'
 			ctx.fill()
 			// Eyes
 			ctx.beginPath()
-			ctx.ellipse(eyesLR[i], -15, 5, 9, 0,0, PI*2)
+			ctx.ellipse([eL,eR][i], -15, 5, 9, 0,0, PI*2)
 			ctx.fillStyle = Color.GhostEye
 			ctx.fill()
 		}
