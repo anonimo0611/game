@@ -31,7 +31,7 @@ Points = {
 }
 
 let showTgt = true
-let fadeTgt = /**@type {?Fade}*/(null)
+let fadeTgt = Fade.NULL
 
 export const Fruits = new class FruitGroup {
 	static {$(this.setup)}

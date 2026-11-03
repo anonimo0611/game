@@ -1,4 +1,4 @@
-import {L,R}    from '../../_lib/direction.js'
+import {Dir}    from '../../_lib/direction.js'
 import {player} from './pacman.js'
 
 /** Save which side of the tunnel the player entered from */
@@ -8,7 +8,7 @@ export class TunnelEntry {
 	update() {
 		const {inTunSide,dir}= player
 		inTunSide == null && (this.#side = null)
-		inTunSide == R && dir == R && (this.#side ??= R)
-		inTunSide == L && dir == L && (this.#side ??= L)
+		inTunSide == R && dir == R && (this.#side ??= Dir.R)
+		inTunSide == L && dir == L && (this.#side ??= Dir.L)
 	}
 }

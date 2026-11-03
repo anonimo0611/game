@@ -6,9 +6,9 @@ export class Actor {
 	static CHEAT_ALPHA = 0.75
 
 	pos = Vec2.Zero
-	#fader  = /**@type {?Fade}*/(null)
-	#movDir = L
 	orient  = L
+	#movDir = L
+	#fader  = Fade.NULL
 
 	/** @protected */
 	constructor(col=0, row=0, dir=this.dir) {

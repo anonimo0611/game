@@ -10,8 +10,8 @@ import {PacSpd as Spd} from '../speed.js'
 export function createMover(actor) {
 	let _speed   = 0
 	let turning  = false
-	let nextDir  = DIR_NULL
-	let nextTurn = DIR_NULL
+	let nextDir  = Dir.NULL
+	let nextTurn = Dir.NULL
 
 	function onWall() {
 		return !turning && actor.collidesWithWall()
