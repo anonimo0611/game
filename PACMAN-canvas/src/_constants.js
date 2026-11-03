@@ -15,6 +15,7 @@ BW = COLS*TILE_SIZE,
 BH = ROWS*TILE_SIZE,
 
 Dazed = 'Dazed',
+DirNull  = /**@type {?Direction}*/(null),
 [U,R,D,L]= /**@type {Direction[]}*/
 (['Up','Right','Down','Left']),
 
