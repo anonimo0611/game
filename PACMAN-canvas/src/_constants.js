@@ -14,12 +14,10 @@ BW = COLS*TILE_SIZE,
 /** Board height */
 BH = ROWS*TILE_SIZE,
 
-
 Dazed = 'Dazed',
 
-/** @type {Record<string,Direction>} */
-DirEnum = freeze({U:'Up',R:'Right',D:'Down',L:'Left'}),
-{U,R,D,L}= DirEnum,
+DirEnum = asEnum('Up','Right','Down','Left'),
+{Up:U,Right:R,Down:D,Left:L}= DirEnum,
 
 Bg   = canvas2D('board_bg'  , BW,BH).ctx,
 Fg   = canvas2D('board_main', BW,BH).ctx,
