@@ -70,7 +70,7 @@ class Scene1 extends Cutscene {
 	update() {
 		if (Ticker.elapsedTime > 400)
 			this.updateAka()
-		this.pacman.dir == L
+		this.pacman.dir == DirL
 			? this.moveLeft()
 			: this.moveRight()
 	}
@@ -81,7 +81,7 @@ class Scene1 extends Cutscene {
 	turnBack() {
 		this.pacvx *= -1.1
 		this.akavx *= -0.6
-		this.pacman.dir = this.akabei.dir = R
+		this.pacman.dir = this.akabei.dir = DirR
 	}
 	moveRight() {
 		this.akabei.x > T*7.5  && this.updatePac()
@@ -91,7 +91,7 @@ class Scene1 extends Cutscene {
 		const isFrightened = (this.akavx > 0)
 		const {pacman:{dir,sprite:{r}}}= this
 		this.drawAka({isFrightened})
-		this.drawPac((dir == L ? 1:4)*r)
+		this.drawPac((dir == DirL ? 1:4)*r)
 		super.draw()
 	}
 }
@@ -100,7 +100,7 @@ class Scene2 extends Cutscene {
 	counter  = 0
 	isRipped = false
 	snag     = new Snag.SnagSprite(Fg)
-	akaEyes  = /**@type {VisualOrient}*/(L)
+	akaEyes  = /**@type {GhostGaze}*/(DirL)
 	constructor() {
 		super(2)
 		this.pacman.x = BW + T*3
@@ -113,7 +113,7 @@ class Scene2 extends Cutscene {
 		switch(this.counter++) {
 		case 90:
 			this.akabei.x -= T/4
-			this.akaEyes  = U
+			this.akaEyes  = DirU
 			this.isRipped = true
 			break
 		case 150:
@@ -158,13 +158,13 @@ class Scene3 extends Cutscene {
 	updateAka() {
 		const {akabei:aka}= this
 		super.updateAka()
-		aka.dir == L
-			? aka.x < -T*10 && (aka.dir = R) && (this.akavx *= -1)
+		aka.dir == DirL
+			? aka.x < -T*10 && (aka.dir = DirR) && (this.akavx *= -1)
 			: aka.x > (T*13+BW) && this.end()
 	}
 	draw() {
 		this.drawPac()
-		this.akabei.dir == L
+		this.akabei.dir == DirL
 			? this.drawAka({isMended: true})
 			: this.drawAka({isExposed:true})
 		super.draw()

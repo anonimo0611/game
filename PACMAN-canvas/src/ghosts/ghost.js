@@ -9,8 +9,8 @@ import * as Sys from './_system.js'
 import {Spd,Events,PtsMgr}   from './_system.js'
 import {Actor,player,Ghosts} from '../actors.js'
 
-/**@type {readonly Direction[]}*/
-const TurnPriority = [U,L,D,R]
+const {U,R,D,L}= Dir
+const TurnPriority = freeze([U,L,D,R])
 
 export class Ghost extends Actor {
 	/** @readonly */type
@@ -104,7 +104,7 @@ export class Ghost extends Actor {
 		if (!Cfg.alwaysChase)
 			Sys.DotCounter.releaseIfReady(this)
 		!this.state.isGoingOut && this.move(
-			(cy > Maze.House.MID_Y-T/2 && orient != D)? U:
+			(cy > Maze.House.MID_Y-T/2 && orient != U)? U:
 			(cy < Maze.House.MID_Y+T/2 ? D:U)
 		)
 	}

@@ -63,7 +63,7 @@ export const Targets = new class TargetVisualizer {
 		Fg.lineWidth = T*0.2
 		if (g instanceof Pinky && !inTunSide
 		 || g instanceof Aosuke) {
-			dir != U
+			dir != DirU
 				? Fg.newLinePath([x,y], fwdXY)
 				: Fg.newLinePath([x,y], fwdXY, ofsXY)
 			Fg.stroke()

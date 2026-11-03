@@ -60,7 +60,7 @@ export class Attract {
 	}
 	drawGhostOnTable(type=0, row=0) {
 		const center = {x:T*5+T/2, y:T*row+T/2}
-		this.ghsSpr.draw({type,orient:R,center})
+		this.ghsSpr.draw({type,orient:DirR,center})
 	}
 	quit() {
 		$win.off('.Attract')
@@ -82,11 +82,11 @@ class EnergizerAct {
 		Ghosts.initialize(this.#ghosts)
 	}
 	get started() {return Ticker.elapsedTime > 1e4+500}
-	get outward() {return this.#pacman.dir == L}
+	get outward() {return this.#pacman.dir == DirL}
 
 	#setActor(type=0) {
 		const g = new Ghost({
-			dir:  L,
+			dir:  DirL,
 			type: /**@type {GhostType}*/(type),
 			tile: [COLS+6+(type*2),19]
 		})
@@ -97,7 +97,7 @@ class EnergizerAct {
 		if (!this.started) return
 		this.pow.update()
 		this.#updateActors()
-		if (this.#pacman.dir == L
+		if (this.#pacman.dir == DirL
 		 && this.#pacman.x <= T*4)
 			this.#turnBack()
 	}
@@ -113,7 +113,7 @@ class EnergizerAct {
 	#turnBack() {
 		this.#pacvx *= -1
 		this.#ghsvx /= -2
-		this.#pacman.dir = R
+		this.#pacman.dir = DirR
 		Ghosts.frighten()
 	}
 	draw() {

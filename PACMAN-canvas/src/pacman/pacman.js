@@ -47,7 +47,7 @@ class Player extends PacMan {
 		this.#sinceLastEating = 0
 	}
 	offsetTarget(dist=T*2) {
-		const ofstX = (this.dir == U ? -dist : 0)
+		const ofstX = (this.dir == DirU ? -dist : 0)
 		return this.forward(this.dir, dist).addX(ofstX)
 	}
 	draw() {

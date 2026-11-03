@@ -42,7 +42,7 @@ export default class PacmanSprite {
 	}
 	draw({
 		center:{x=0,y=0}={x:0,y:0},
-		orient = /**@type {Direction}*/(L),
+		orient = DirL,
 		alpha  = 1,
 		hidden = false,
 		closed = false,

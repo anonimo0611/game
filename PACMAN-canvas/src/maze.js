@@ -93,8 +93,8 @@ class Tunnel {
 	EntryCol = freeze({L:5.5, R:22.5})
 	findSide({x=0,y=0}) {
 		if (int(y/T) == this.ROW) {
-			if (x/T <= this.EntryCol.L) return L
-			if (x/T >= this.EntryCol.R) return R
+			if (x/T <= this.EntryCol.L) return DirL
+			if (x/T >= this.EntryCol.R) return DirR
 		} return null
 	}
 }

@@ -6,8 +6,8 @@ export class Actor {
 	static CHEAT_ALPHA = 0.75
 
 	pos = Vec2.Zero
-	orient  = L
-	#movDir = L
+	orient  = DirL
+	#movDir = DirL
 	#fader  = Fade.NULL
 
 	/** @protected */
@@ -94,7 +94,7 @@ export class Actor {
 		this.#wrapXAxis()
 	}
 	justArrivedAtTile(speed=this.speed) {
-		return this.passedTileCenter == false
+		return !this.passedTileCenter
 			&& this.tilePixel <= speed
 	}
 	collidesWithWall(dir=this.dir) {

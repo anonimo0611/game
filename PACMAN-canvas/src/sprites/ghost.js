@@ -31,7 +31,7 @@ export default class GhostSprite {
 		animIdx      = 0,
 		spriteIdx    = 0,
 		alpha        = 1,
-		orient       = /**@type {VisualOrient}*/(L),
+		orient       = /**@type {GhostGaze}*/(DirL),
 		isAngry      = false,
 		isFrightened = false,
 		isEscaping   = false,
@@ -108,12 +108,12 @@ export default class GhostSprite {
 		ctx.bezierCurveTo(+13, 28, +22, 28, +26, 38)
 		ctx.bezierCurveTo(+29, 42, +41, 42, +42, 26)
 	}
-	/** @param {VisualOrient} orient */
-	#drawEyes(orient, isRipped=false) {
+	/** @param {GhostGaze} gaze */
+	#drawEyes(gaze, isRipped=false) {
 		this.ctx.fillStyle = '#FFF'
-		switch(orient) {
+		switch(gaze) {
 		case 'Left':
-		case 'Right': return this.#drawEyesHoriz(orient)
+		case 'Right': return this.#drawEyesHoriz(gaze)
 		case 'Up':    return this.#drawEyesUp(isRipped)
 		case 'Down':  return this.#drawEyesDown()
 		case 'Dazed': return this.sub.drawDazedEyes()
