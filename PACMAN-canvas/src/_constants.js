@@ -15,8 +15,8 @@ BW = COLS*TILE_SIZE,
 BH = ROWS*TILE_SIZE,
 
 Dazed = 'Dazed',
-DirEnum = asEnum('Up','Right','Down','Left'),
-{Up:U,Right:R,Down:D,Left:L}= DirEnum,
+[U,R,D,L]= /**@type {Direction[]}*/
+(['Up','Right','Down','Left']),
 
 Bg   = canvas2D('board_bg'  , BW,BH).ctx,
 Fg   = canvas2D('board_main', BW,BH).ctx,
