@@ -1,0 +1,76 @@
+const DURATION  = 200/Ticker.Interval
+const OPEN_MID  = 30 * PI/180
+const OPEN_MAX  = 60 * PI/180
+const PHASE_MID = asin(OPEN_MID/OPEN_MAX)
+
+import {Dir}   from '../../_lib/direction.js'
+import {Dying} from './pacman_dying.js'
+export const SCALE_FACTOR = 0.9
+export const MOUTH_DEPTH_FACTOR = 0.3
+
+export default class PacmanSprite {
+	/** @readonly */ctx
+	/** @readonly */r
+	#mPhase = 0
+	#mAngle = 0
+	#dyingSpr = /**@type {?Dying}*/(null)
+
+	/**
+	 * @param {Ctx2D}  ctx
+	 * @param {number} radius
+	 * @param {number} initOpening 0 to 1
+	 */
+	constructor(ctx, radius, initOpening=0) {
+		this.ctx = ctx
+		this.r = radius
+		this.#mAngle = lerp(0, OPEN_MAX, initOpening)
+	}
+	update({closed=false,hidden=false,onWall=false}={}, speed=1) {
+		this.#dyingSpr
+			? this.#dyingSpr.update()
+			: !closed && !hidden && this.#chew(onWall, speed)
+	}
+	#chew(onWall=false, speed=1) {
+		if (onWall) {
+			if (this.#mAngle <= OPEN_MID) {
+				this.#mAngle = OPEN_MID
+				this.#mPhase = PHASE_MID
+			} return
+		}
+		const phase  = this.#mPhase += PI/(DURATION/speed)
+		this.#mAngle = OPEN_MAX * abs(sin(phase))
+	}
+	draw({
+		center:{x=0,y=0}={x:0,y:0},
+		orient = L,
+		alpha  = 1,
+		hidden = false,
+		closed = false,
+		radius = this.r}={}
+	) {
+		if (hidden) {
+			return
+		}
+		if (this.#dyingSpr) {
+			this.#dyingSpr.draw({x,y,radius})
+			return
+		}
+		const {ctx} = this
+		const angle = (closed? 0:this.#mAngle)
+		ctx.save()
+		ctx.setAlpha(alpha)
+		ctx.translate(x,y)
+		ctx.scale(SCALE_FACTOR)
+		ctx.rotate(Dir.Rotation[orient])
+		ctx.beginPath()
+		ctx.moveTo(-radius*MOUTH_DEPTH_FACTOR, 0)
+		ctx.arc(0, 0, radius, angle, PI*2-angle)
+		ctx.fillStyle = Color.Pacman
+		ctx.fill()
+		ctx.restore()
+	}
+	/** @param {()=> void} [cb] */
+	startDying(cb) {
+		this.#dyingSpr = new Dying(this, cb)
+	}
+}
