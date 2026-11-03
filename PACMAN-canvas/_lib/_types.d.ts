@@ -55,7 +55,7 @@ type GhostData = {dir?:Direction, type?:GhostType, tile?:xyTuple, align?:-1|0|1}
 
 /** Represents Akabei's dazed eyes in intermissions scene part 2. */
 type Dazed = 'Dazed'
-type VisualOrient = Direction|Dazed
+type GhostGaze = Direction|Dazed
 
 //---- Canvas API ----
 
