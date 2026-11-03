@@ -40,10 +40,11 @@
 		ctx.strokeLine(+18, -18, -18, +18)
 		ctx.restore()
 	}
-	#drawWaves(
-	 /**@type {number}*/vol,
-	 /**@type {number}*/step
-	) {
+	/**
+	 * @param {number} vol
+	 * @param {number} step
+	 */
+	#drawWaves(vol, step) {
 		const {ctx}= this
 		ctx.save()
 		ctx.lineCap = 'round'
