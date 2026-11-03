@@ -51,6 +51,7 @@ type DirMap = {readonly [key:string]: Direction}
 //---- Ghosts ----
 
 type GhostType = (typeof GhostType)[Exclude<keyof typeof GhostType,'Max'>]
+type GhostData = {dir?:Direction, type?:GhostType, tile?:xyTuple, align?:-1|0|1}
 
 /** Represents Akabei's dazed eyes in intermissions scene part 2. */
 type Dazed = 'Dazed'
