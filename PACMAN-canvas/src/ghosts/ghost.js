@@ -24,13 +24,9 @@ export class Ghost extends Actor {
 	#started    = false
 	#frightened = false
 
-	/**
-	 * @param {Direction} dir
-	 * @param {{type?:GhostType, tile?:xyTuple, align?:-1|0|1}} options
-	 */
-	constructor(dir=L, {type=0,tile:[col,row]=[0,0],align=0}={}) {
-		super(col,row)
-		this.dir   = dir
+	/** @param {GhostData} options */
+	constructor({dir=L,type=0,tile:[col,row]=[0,0],align=0}={}) {
+		super(col,row,dir)
 		this.type  = type
 		this.init  = freeze({align,x:col*T})
 		this.state = Sys.createState(this)

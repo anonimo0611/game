@@ -6,12 +6,15 @@ export class Actor {
 	static CHEAT_ALPHA = 0.75
 
 	pos = Vec2.Zero
+	orient  = L
+	#movDir = L
 	#fader  = /**@type {?Fade}*/(null)
-	#movDir = /**@type {Direction}*/(L)
-	orient  = /**@type {Direction}*/(L)
 
 	/** @protected */
-	constructor(col=0, row=0) {this.pos.set(col*T, row*T)}
+	constructor(col=0, row=0, dir=L) {
+		this.dir = dir
+		this.pos.set(col*T, row*T)
+	}
 
 	// Override the actual speed and maxAlpha in the subclasses.
 	get speed()      {return 0}
