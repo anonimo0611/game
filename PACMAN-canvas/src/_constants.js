@@ -15,7 +15,6 @@ BW = COLS*TILE_SIZE,
 BH = ROWS*TILE_SIZE,
 
 Dazed = 'Dazed',
-
 DirEnum = asEnum('Up','Right','Down','Left'),
 {Up:U,Right:R,Down:D,Left:L}= DirEnum,
 
