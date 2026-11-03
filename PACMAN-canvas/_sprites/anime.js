@@ -18,7 +18,7 @@ class ActorPreview {
 		this.subType  = subType
 		this.ghost    = ghostPv
 		this.pacman   = new PacSprite(Pv, T)
-		this.orient   = /**@type {Direction}*/(L)
+		this.orient   = DirL
 	}
 }
 

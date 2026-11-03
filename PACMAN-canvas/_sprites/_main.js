@@ -1,6 +1,7 @@
 import '../_lib/mouse.js'
 import './anime.js'
 import './setup.js'
+import {U,R,D,L}  from '../_lib/direction.js'
 import * as Pts   from '../src/sprites/points.js'
 import * as Fruit from '../src/sprites/fruits.js'
 import * as Snag  from '../src/sprites/snag.js'
