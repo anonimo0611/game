@@ -17,8 +17,8 @@ export class Cutscene {
 	static getNum() {return sceneNum(Game.level)}
 	static {
 		State.on({Cutscene:(_,/**@type {Maybe<number>}*/n)=> {
-			assertOf('number', n ??= Cutscene.getNum())
-			this.#scene = new [Scene1,Scene2,Scene3][clamp(n,1,3)-1]
+			const sn = assertOf('number', n ?? Cutscene.getNum())
+			this.#scene = new [Scene1,Scene2,Scene3][clamp(sn,1,3)-1]
 		}})
 	}
 	pacvx  = -BW/180
