@@ -1,4 +1,11 @@
+//---- Typing ----
+
 type Maybe<T> = T | undefined
+interface PrimitiveMap {
+    string: string;
+    number: number;
+    boolean: boolean;
+}
 
 //---- Dictionary ----
 

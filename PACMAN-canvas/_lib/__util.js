@@ -77,13 +77,15 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 //---- Assertion ------
 
 /**
- @param {'string'|'boolean'|'number'} type
+ @template {keyof PrimitiveMap} T
+ @param {T} type
  @param {unknown} v
 */const assertOf = (type, v)=> {
-	if (typeof(v) == type && !Number.isNaN(v)) return
+	if (typeof(v) == type && !Number.isNaN(v))
+		return /**@type {PrimitiveMap[T]}*/(v)
 	throw TypeError(
 		 `Expected to be a ${type}, but got `
-		+`${Number.isNaN(v) ? 'NaN' : typeof(v)} ${v}`
+		+`${Number.isNaN(v) ? 'NaN' : typeof(v)}: ${v}`
 	)
 }
 
