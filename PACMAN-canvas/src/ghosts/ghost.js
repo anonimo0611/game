@@ -36,7 +36,7 @@ export class Ghost extends Actor {
 		 [Events.RoundEnds]:()=> this.fadeOut(),
 		 [Events.Reverse]:  ()=> this.#revSig  = true,
 		 [Events.StartFlee]:()=> this.#fleeTmr = Sys.FLEE_TIME,
-		 [Events.Frighten]: (_, on=true)=> this.#frighten(on),
+		 [Events.Frighten]: (_,isOn)=> this.#frighten(isOn),
 		})
 	}
 	get animIdx()      {return Ghosts.animIndex}
@@ -229,9 +229,9 @@ export class Ghost extends Actor {
 		Sound.playBitesGhost()
 		PtsMgr.set({pts:Sys.Points, frozen:true, ...pos, cb})
 	}
-	#frighten(on=true) {
-		assertOf('boolean',on)
-		!this.isEscaping && (this.#frightened=on)
+	#frighten(isOn=true) {
+		assertOf('boolean',isOn)
+		!this.isEscaping && (this.#frightened=isOn)
 	}
 	#startEscaping() {
 		Sound.switchToEyesEscaping()
