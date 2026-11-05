@@ -24,9 +24,9 @@ export const Env = new class Environment {
 	static setup() {
 		Env.#restore()
 		Env.#setupCtrls()
+		Env.#observeFocusChange()
 		$win.on({keydown:Env.#onKeydown})
 	}
-	#anyFocused = false
 	get extendScore()  {return +Menu.Extend.value}
 	get isStAboveLv1() {return  Menu.Level.index > 0}
 	get isLowSpeed()   {return  Cfg.speed < 0.7}
@@ -45,11 +45,34 @@ export const Env = new class Environment {
 		return {get isActive(){return !!f}}
 	}()
 
+	#anyFocused = false
+	#observeFocusChange() {
+		$(document.body).on('focusin focusout', e=> {
+			const fIn = (e.type == 'focusin')
+			Env.#anyFocused = fIn && (e.target != Btns.start)
+		})
+	}
+
 	/** @param {boolean} [force] */
 	#pause(force) {
 		if (State.isTitle || State.isAttract) return
 		if (State.isInGame && force == false) return
 		Sound.paused = Ticker.pause(force)
+	}
+	#reset() {
+		Form.reset()
+		$('input').trigger('input')
+	}
+	#quit(noConfirm=false) {
+		if (State.isTitle) return
+		noConfirm
+			? State.setQuit()
+			: State.isInGame && Env.#quitConfirm()
+	}
+	#quitConfirm() {
+		!Ticker.paused && Env.#pause()
+		Confirm.open('Are you sure you want to quit the game?',
+			['Resume',Env.#pause], ['Quit',State.setQuit])
 	}
 	#save() {
 		const data = /**@type {Record<string,any>}*/(Cfg)
@@ -73,21 +96,6 @@ export const Env = new class Environment {
 			}
 		})
 	}
-	#reset() {
-		Form.reset()
-		$('input').trigger('input')
-	}
-	#quit(noConfirm=false) {
-		if (State.isTitle) return
-		noConfirm
-			? State.setQuit()
-			: State.isInGame && Env.#quitConfirm()
-	}
-	#quitConfirm() {
-		!Ticker.paused && Env.#pause()
-		Confirm.open('Are you sure you want to quit the game?',
-			['Resume',Env.#pause], ['Quit',State.setQuit])
-	}
 	#onKeydown(/**@type {JQKeyboardEvent}*/e) {
 		if (keyRepeated(e) || Confirm.opened) return
 		switch(e.key) {
@@ -106,6 +114,9 @@ export const Env = new class Environment {
 		Env.#save()
 		Env.#syncHelpPanel()
 		Env.#toggleGridLines()
+		Env.#outputInfo()
+	}
+	#outputInfo() {
 		const
 		spd = 'x'+Cfg.speed.toFixed(1), lh = 0.9,
 		opt = {size:T*0.68, scaleX:0.7, style:'bold'}
@@ -124,23 +135,16 @@ export const Env = new class Environment {
 		}
 		HUD.restore()
 	}
+	#toggleGridLines() {
+		Grid.canvas.dataset.show = `${Cfg.showGridLines}`
+	}
 	#syncHelpPanel() {
 		const {isStAboveLv1,isLowSpeed}= Env
 		const data = {...Cfg,isStAboveLv1,isLowSpeed}
 		for (const [id,v] of entries(data))
 			$(`#pm_${id}`).css('color', palette[+v])
 	}
-	#toggleGridLines() {
-		Grid.canvas.dataset.show = `${Cfg.showGridLines}`
-	}
-	#observeFocusChange() {
-		$(document.body).on('focusin focusout', e=> {
-			Env.#anyFocused = (e.type == 'focusin')
-				&& (e.target != Btns.start)
-		})
-	}
 	#setupCtrls() {
-		Env.#observeFocusChange()
 		getVals(Menu).forEach(m=> m.onChange(Env.#output))
 		$('input')   .on({input:Env.#output})
 		$(Btns.reset).on({click:Env.#reset})
