@@ -23,10 +23,11 @@ export class AState {
 		this.owner   = owner
 		this.default = states[0]
 		this.immediately = immediately
-		states?.forEach((/**@type {S}*/s)=> {
-			const set = (/**@type {StateDef.Opts<S>}*/opt)=> {this.set(s,opt)}
+		states?.forEach(s=> {
+			/** @type {StateDef.SetFn} */
+			const setFn = opts=> {this.set(s,opts)}
 			Object.defineProperties(this, {
-			 [`set${s}`]:{value:set},
+			 [`set${s}`]:{value:setFn},
 			 [`is${s}`] :{get(){return this.#curr === s}},
 			 [`was${s}`]:{get(){return this.#last === s}},
 			})
