@@ -117,9 +117,8 @@ export const Env = new class Environment {
 		Env.#outputInfo()
 	}
 	#outputInfo() {
-		const
-		spd = 'x'+Cfg.speed.toFixed(1), lh = 0.9,
-		opt = {size:T*0.68, scaleX:0.7, style:'bold'}
+		const spd = 'x'+Cfg.speed.toFixed(1), lh = 0.9
+		const opt = {size:T*0.68, scaleX:0.7, style:'bold'}
 		HUD.save()
 		HUD.translate(T*0.1, T*17.25)
 		HUD.clearRect(0, 0, BW, T*3)
