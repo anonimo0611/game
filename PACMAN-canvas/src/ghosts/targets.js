@@ -1,8 +1,8 @@
 import {State} from '../state.js'
 import {Cfg}   from '../env.js'
 import {Maze}  from '../maze.js'
+import {GUZUTA_THRESHOLD}    from './ghost_sub.js'
 import {Ghosts,Ghost,player} from '../actors.js'
-import {Akabei,Pinky,Aosuke,Guzuta} from './ghost_sub.js'
 
 export const Targets = new class TargetVisualizer {
 	/** @param {readonly Ghost[]} ghostList */
@@ -35,10 +35,10 @@ export const Targets = new class TargetVisualizer {
 	/** @param {Ghost} g */
 	#strokeLines(g) {
 		if (Timer.frozen
-		 || g instanceof Akabei
+		 || g.type == GhostType.Akabei
 		 || g.isChasing == false)
 			return
-		g instanceof Guzuta
+		g.type == GhostType.Guzuta
 			? this.#guzutaCircle(g)
 			: this.#auxLines(g, g.chaseOffset)
 	}
@@ -55,29 +55,29 @@ export const Targets = new class TargetVisualizer {
 		Fg.strokeRect(x,y, size,size)
 	}
 
-	/** @param {Pinky|Aosuke}  g */
+	/** @param {Ghost}  g */
 	#auxLines(g, ofst=T*2) {
 		const {center:{x,y},dir,inTunSide}= player
 		const fwdXY  = player.forward(dir, ofst).vals
 		const ofsXY  = player.offsetTarget(ofst).vals
 		Fg.lineWidth = T*0.2
-		if (g instanceof Pinky && !inTunSide
-		 || g instanceof Aosuke) {
+		if (g.type == GhostType.Pinky && !inTunSide
+		 || g.type == GhostType.Aosuke) {
 			dir != DirU
 				? Fg.newLinePath([x,y], fwdXY)
 				: Fg.newLinePath([x,y], fwdXY, ofsXY)
 			Fg.stroke()
 		}
-		if (g instanceof Aosuke) {
+		if (g.type == GhostType.Aosuke) {
 			const akaXY = Ghosts.of(GhostType.Akabei).center.vals
 			Fg.newLinePath(akaXY, ofsXY, g.chasePos.vals).stroke()
 			Fg.fillCircle(...ofsXY, T*0.26|0)
 		}
 	}
 
-	/** @param {Guzuta} g */
+	/** @param {Ghost} g */
 	#guzutaCircle(g) {
-		const th = T*Guzuta.THRESHOLD
+		const th = T*GUZUTA_THRESHOLD
 		Fg.save()
 		Fg.translate(player.center)
 		Fg.setAlpha(Vec2.sqrMag(g,player) < th**2 ? 0.8 : 0.4)

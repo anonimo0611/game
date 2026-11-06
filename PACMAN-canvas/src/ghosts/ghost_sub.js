@@ -2,7 +2,7 @@ import {Maze}  from '../maze.js'
 import {State} from '../state.js'
 import {player,Ghosts,Ghost} from '../actors.js'
 
-export class Akabei extends Ghost {
+class Akabei extends Ghost {
 	constructor() {
 		super({dir:DirL, type:0, tile:[13.5, 12]})
 	}
@@ -13,7 +13,7 @@ export class Akabei extends Ghost {
 	get isScattering() {return super.isScattering && !this.isAngry}
 }
 
-export class Pinky extends Ghost {
+class Pinky extends Ghost {
 	constructor() {
 		super({dir:DirD, type:1, tile:[13.5, 15]})
 	}
@@ -31,7 +31,7 @@ export class Pinky extends Ghost {
 	}
 }
 
-export class Aosuke extends Ghost {
+class Aosuke extends Ghost {
 	constructor() {
 		super({dir:DirU, type:2, tile:[11.5, 15], align:-1})
 	}
@@ -44,19 +44,17 @@ export class Aosuke extends Ghost {
 	}
 }
 
-export class Guzuta extends Ghost {
-	/** @readonly */
-	static THRESHOLD = 8
+class Guzuta extends Ghost {
 	constructor() {
 		super({dir:DirU, type:3, tile:[15.5, 15], align:+1})
 	}
 	get scatterTile() {return Vec2.new(0, ROWS-1)}
 	get chasePos() {
 		const {center,pos}= player
-		return Vec2.sqrMag(this,pos) < (T*Guzuta.THRESHOLD)**2
+		return Vec2.sqrMag(this,pos) < (T*GUZUTA_THRESHOLD)**2
 			? this.scatterTile.add(.5).mul(T) : center
 	}
-}
+} export const GUZUTA_THRESHOLD = 8
 
 {// Event-driven instantiation
 	const ghosts = [Akabei,Pinky,Aosuke,Guzuta]
