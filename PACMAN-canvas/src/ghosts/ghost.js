@@ -104,7 +104,7 @@ export class Ghost extends Actor {
 		if (!Cfg.alwaysChase)
 			Sys.DotCounter.releaseIfReady(this)
 		!this.state.isGoingOut && this.move(
-			(cy > Maze.House.MID_Y-T/2 && orient != U)? U:
+			(cy > Maze.House.MID_Y-T/2 && orient != D)? U:
 			(cy < Maze.House.MID_Y+T/2 ? D:U)
 		)
 	}
