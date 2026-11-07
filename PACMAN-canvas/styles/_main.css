@@ -19,6 +19,8 @@ svg{fill:#FFF;pointer-events:none}
 
 #container{
 	background:#000;position:relative;
+	transform-style:preserve-3d;
+	backface-visibility:hidden;
 	transform-origin:center;visibility:hidden;opacity:0;will-change:scale opacity;
 }
 #debug{
@@ -29,17 +31,13 @@ svg{fill:#FFF;pointer-events:none}
 	width: calc(var(--t)*var(--cols));
 	height:calc(var(--t)*var(--rows));
 	canvas{
+		backface-visibility:hidden;
 		position:absolute;
 		&#board_bg  {z-index:1}
 		&#board_grid{z-index:2;&[data-show=false]{visibility:hidden}}
 		&#board_main{z-index:3}
 		&#board_hud {z-index:4}
 	}
-}
-#container,canvas{
-	image-rendering:auto;
-	transform-style:preserve-3d;
-	backface-visibility:hidden;
 }
 
 header{
