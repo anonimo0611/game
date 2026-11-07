@@ -161,6 +161,14 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 */const randInt = (min,max)=> int(random() * (max-min+1) + min)
 
 /**
+ @param {number} val
+ @param {number} decimals
+*/const roundTo = (val, decimals=2)=> {
+    const factor = 10 ** decimals
+    return round(val*factor) / factor
+}
+
+/**
  @template T
  @param {readonly T[]} array
  @returns {T}
@@ -187,6 +195,10 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 
 const $win  = $(window)
 const $root = $(':root')
+
+/**
+ @param {()=> void} fn
+*/const $load = fn=> $win.on('load',fn)
 
 /**
  @param {string} ns
