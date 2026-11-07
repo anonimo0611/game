@@ -25,7 +25,8 @@ export const Game = new class GameCore {
 			Flashing:  Game.#onFlashing,
 			GameOver:  Game.#onGameOver,
 		})
-		.onBefore({Title:Game.#reset}).setTitle()
+		.onBefore({Title:Game.#reset})
+		.setTitle()
 	}
 	#level   = 1
 	#started = false
@@ -71,6 +72,7 @@ export const Game = new class GameCore {
 	}
 	#onRoundEnd() {
 		Sound.stopLoops()
+		player.keepInsideBoard()
 		Maze.dotsLeft <= Maze.CLEAR_DOTS
 			? State.setFlashing({delay:1e3})
 			: State.setPacDying({delay:600})

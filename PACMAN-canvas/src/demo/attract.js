@@ -41,8 +41,8 @@ export class Attract {
 		if (et > 85) {
 			/**@type {const}*/([
 			 [23, DOT_PTS, false, true],
-			 [25, POW_PTS, true,  this.subAct.pow.show]]
-			).forEach(([row,pts,isPow,showDot])=> {
+			 [25, POW_PTS, true,  this.subAct.pow.show]
+			]).forEach(([row,pts,isPow,showDot])=> {
 				drawDot (Fg, 10.0, row+.00, isPow, showDot)
 				drawText(Fg, 12.0, row+.00, null,  pts)
 				drawText(Fg, 14.3, row+.25, null, 'PTS', {size:T*.7})

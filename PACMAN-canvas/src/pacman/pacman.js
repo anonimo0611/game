@@ -62,9 +62,7 @@ class Player extends PacMan {
 	update() {
 		this.updateFade()
 		this.sprite.update(this, Game.speed)
-		this.closed
-			? this.keepInsideBoard()
-			: this.#updateMovement()
+		!this.closed && this.#updateMovement()
 	}
 	#updateMovement() {
 		if (this.hidden) return
@@ -73,10 +71,11 @@ class Player extends PacMan {
 		this.#moveSteps(this.speed+.5|0)
 	}
 	#moveSteps(steps=1) {
-		const {tileIdx:tIdx,speed}= this
+		const {tileIdx:tIdx}= this
 		for (let i=0; i<steps; i++) {
+			const step = roundTo(this.speed/steps)
 			Maze.hasDot(tIdx) && this.#eatDot(tIdx)
-			if (this.mover.update(speed/steps)) break
+			if (this.mover.update(step)) break
 		}
 	}
 	#eatDot(/**@type {TileIdx}*/i) {
