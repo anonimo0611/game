@@ -13,18 +13,18 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	/**
 	 * @param {HTMLImageElement|HTMLCanvasElement} img
 	 * @param {Position} centerPos
-	 * @param {number}   [alpha]
-	 * @param {?number}  [ox] Default: -img.width  / 2
-	 * @param {?number}  [oy] Default: -img.height / 2
+	 * @param {number} [alpha]
+	 * @param {number} [ofstX] Default: -img.width  / 2
+	 * @param {number} [ofstY] Default: -img.height / 2
 	 */
-	put(img, centerPos, alpha, ox,oy, scaleX=1,scaleY=1, rotate=0) {
+	put(img, centerPos, alpha, rotate=0, scaleX=1,scaleY=1, ofstX,ofstY) {
 		const {width:w,height:h}= img
 		this.save()
 		this.setAlpha(alpha)
 		this.translate(centerPos)
 		this.rotate(rotate)
 		this.scale(scaleX, scaleY)
-		this.drawImage(img, (ox ?? -w/2), (oy ?? -h/2))
+		this.drawImage(img, (ofstX ?? -w/2), (ofstY ?? -h/2))
 		this.restore()
 	}
 
