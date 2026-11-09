@@ -65,7 +65,7 @@ export default class GhostSprite {
 				: this.#drawFrightFace(spriteIdx)
 		})()
 		ctx.restore()
-		tgt.put(ctx.canvas, center, alpha, -size/2)
+		tgt.put(ctx.canvas, center, alpha, 0, 1,1, -size/2)
 	}
 	setResurrect() {
 		this.#fadeBody ??= Fade.in(600)
