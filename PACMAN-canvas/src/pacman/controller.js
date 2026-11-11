@@ -91,6 +91,8 @@ export function createMover(actor) {
 	})
 
 	return {
+		get speed()  {return _speed ||= getSpeed()},
+		get onWall() {return onWall()},
 		/**
 		 * @param   {number}  step
 		 * @returns {boolean} True if the actor stopped at a wall.
@@ -103,7 +105,5 @@ export function createMover(actor) {
 			finishCornering()
 			return stopAtWall()
 		},
-		get speed()  {return _speed ||= getSpeed()},
-		get onWall() {return onWall()},
 	}
 }
