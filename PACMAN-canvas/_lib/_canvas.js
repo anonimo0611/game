@@ -43,9 +43,9 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 		this.globalAlpha = alpha
 		return this
 	}
-	/** @param {CvsStyle} color */
-	setStyle(color) {
-		this.strokeStyle = this.fillStyle = color
+	/** @param {CvsStyle} style */
+	setStyle(style) {
+		this.strokeStyle = this.fillStyle = style
 		return this
 	}
 
