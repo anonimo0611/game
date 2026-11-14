@@ -11,7 +11,7 @@ import {Targets} from './targets.js'
 import {Ghost,player,onPlayerDotEaten} from '../actors.js'
 export {Paths,PtsMgr,GhsSpd as Spd}
 
-const GhostList = /**@type {Ghost[]}*/([])
+const ghosts = /**@type {Ghost[]}*/([])
 
 /** The fleeing time(ms) from the player when Frightened Time is 0. */
 export const FLEE_TIME = 500
@@ -64,19 +64,19 @@ export const Ghosts = new class GhostGroup {
 	get isFrightened()  {return Fright.session != null}
 	get isChasing()     {return PhaseManager.mode == CHASING}
 	get isScattering()  {return PhaseManager.mode == SCATTER}
-	get isAnyEscaping() {return GhostList.some(g=> g.isEscaping)}
+	get isAnyEscaping() {return ghosts.some(g=> g.isEscaping)}
 
 	/** @param {GhostType} type */
-	of = type=> GhostList[type]
+	of = type=> ghosts[type]
 
-	/** @param {Ghost[]} [ghostList] */
-	initialize(ghostList) {
-		Ghosts.#animIdx = GhostList.length = 0
-		ghostList?.forEach((g,i)=> GhostList[i] = g)
+	/** @param {Ghost[]} [list] */
+	initialize(list) {
+		Ghosts.#animIdx = ghosts.length = 0
+		list?.forEach((g,i)=> ghosts[i] = g)
 	}
 	#dispatchState() {
 		hasOwn(Events,State.current)
-			&& $(GhostList).trigger(State.current)
+			&& $(ghosts).trigger(State.current)
 	}
 	#onInGame() {
 		Sound.playSiren()
@@ -85,13 +85,13 @@ export const Ghosts = new class GhostGroup {
 	#setReleaseTimer() {
 		const lv = (Game.pacDied? 0 : Game.clampedLv)
 		Timer.sequence(...
-			GhostList.slice(1).map((g,i)=> /**@type {TimerSeq}*/
+			ghosts.slice(1).map((g,i)=> /**@type {TimerSeq}*/
 				([StandbyDelays[lv][i]/Game.speed, g.leaveHouse])
 			))
 	}
 	#startFlee() {
 		if (!State.isInGame) return
-		$(GhostList).trigger(Events.StartFlee)
+		$(ghosts).trigger(Events.StartFlee)
 	}
 	frighten() {
 		signalDirectionReversal()
@@ -113,24 +113,23 @@ export const Ghosts = new class GhostGroup {
 			Ghosts.#animIdx ^= +(Ticker.count % 6 == 0)
 	}
 	#updateGhosts() {
-		GhostList.forEach(g=> g.update())
-		Paths.update(GhostList)
+		ghosts.toReversed().forEach(g=> g.update())
+		Paths.update(ghosts)
 	}
 
 	drawBehind() {
 		Ghosts.#draw(false)
 	}
 	drawFront()  {
-		Targets.draw(GhostList)
-		Paths.draw(GhostList)
+		Targets.draw(ghosts)
+		Paths.draw(ghosts)
 		Ghosts.#draw(true)
 		PtsMgr.drawGhostPts()
 	}
 	#draw(onFront=true) {
-		for (let i=GhostType.Max-1; i>=0; i--) {
-			const g = GhostList[i]
-			g.isFrightened != onFront && g.draw()
-		}
+		ghosts.toReversed().forEach(
+			g=> g.isFrightened != onFront && g.draw()
+		)
 	}
 }
 
@@ -158,7 +157,7 @@ export const [StateType,createState] = function() {
 const SCATTER = Symbol()
 const CHASING = Symbol()
 const signalDirectionReversal = ()=> {
-	$(GhostList).trigger(Events.Reverse)
+	$(ghosts).trigger(Events.Reverse)
 }
 const PhaseManager = function() {
 	function create(lv=1) {
@@ -196,6 +195,7 @@ const PhaseManager = function() {
 export const DotCounter = function() {
 	let   gCounter  = -1
 	const pCounters = new Uint8Array(GhostType.Max)
+	const preferred = ()=> ghosts.find(g=> g.state.isIdle)
 	const LimitTbl  = /**@type {const}*/
 		(// global,lv1,lv2,lv3+
 			[[ 7,  0,  0, 0], // Pinky
@@ -210,7 +210,7 @@ export const DotCounter = function() {
 	function releaseIfReady({type,leaveHouse}) {
 		const idx = min(Game.level, 3)
 		player.timeSinceLastEating >= (Game.level<=4 ? 4e3:3e3)
-			? leaveHouse()
+			? preferred()?.leaveHouse()
 			: (!Game.pacDied || gCounter < 0)
 				? pCounters[type] >= LimitTbl[type-1][idx]
 					&& leaveHouse()
@@ -219,10 +219,9 @@ export const DotCounter = function() {
 					&& (gCounter = -1)
 	}
 	onPlayerDotEaten(()=> {
-		(Game.pacDied && gCounter >= 0)
+		Game.pacDied && gCounter >= 0
 			? gCounter++
-			: (i=> {i != -1 && pCounters[i]++})
-				(GhostList.findIndex(g=> g.state.isIdle))
+			: (g=> g && pCounters[g.type]++)(preferred())
 	})
 	State.on({_Ready:reset})
 	return {releaseIfReady}
@@ -235,8 +234,8 @@ const CruiseElroy = function() {
 	function angry() {
 		return State.isInGame
 			&& currentPart > 1
-			&& GhostList[GhostType.Akabei]?.isFrightened == false
-			&& GhostList[GhostType.Guzuta]?.isStarted == true
+			&& ghosts[GhostType.Akabei]?.isFrightened == false
+			&& ghosts[GhostType.Guzuta]?.isStarted == true
 	}
 	onPlayerDotEaten(()=> {
 		const rate = [1.5, 1.0, 0.5][currentPart]
@@ -260,7 +259,7 @@ const Fright = function() {
 		const interval = (sec == 1 ? 12:14)/Game.speed
 		function trigger(isOn=true) {
 			!isOn && (session = null)
-			$(GhostList)
+			$(ghosts)
 				.trigger(Events.Frighten, isOn)
 				.offon(StateType.Bitten, ()=> caught++, isOn)
 			Sound.toggleFrightMode(isOn)
