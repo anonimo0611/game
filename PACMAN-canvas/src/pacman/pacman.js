@@ -50,21 +50,22 @@ class Player extends PacMan {
 		const ofstX = (this.dir == DirU ? -dist : 0)
 		return this.forward(this.dir, dist).addX(ofstX)
 	}
+	drawCenterDot() {
+		if (!this.hidden && Cfg.showGridLines)
+			super.drawCenterDot()
+	}
 	draw() {
 		if (State.isNewGame) return
 		this.sprite.draw(this)
 		this.drawCenterDot()
 	}
-	drawCenterDot() {
-		if (!this.hidden && Cfg.showGridLines)
-			super.drawCenterDot()
-	}
 	update() {
 		this.updateFade()
 		this.sprite.update(this, Game.speed)
-		!this.closed && this.#updateMovement()
+		this.#updateMovement()
 	}
 	#updateMovement() {
+		if (this.closed) return
 		if (this.hidden) return
 		this.tunEntry.update()
 		this.#sinceLastEating += Game.interval
