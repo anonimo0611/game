@@ -7,7 +7,8 @@ export const Speed = /**@type {const}*/({
 		Eating:    P_SPD * 0.88,
 		Energized: P_SPD * 1.10,
 		EneEating: P_SPD * 0.95, // Energized+Eating
-		levelFactor:(lv=1)=> (lv < 13 ? 1 : 0.98),
+		/** @param {number} lv */
+		levelFactor: lv=> (lv < 13 ? 1 : 0.98),
 	},
 	Ghost: {
 		Base:     G_SPD,
