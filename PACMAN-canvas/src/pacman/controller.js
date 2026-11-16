@@ -90,20 +90,20 @@ export function createMover(actor) {
 			actor.setMoveDir(actor.revDir)
 	})
 
+	/**
+	 * @param   {number}  step
+	 * @returns {boolean} True if the actor stopped at a wall.
+	 */
+	function update(step) {
+		turnAround()
+		turnCorner(step)
+		actor.setNextPos(step)
+		setTileSpeed(step)
+		finishCornering()
+		return stopAtWall()
+	}
 	return {
 		get speed()  {return _speed ||= getSpeed()},
-		get onWall() {return onWall()},
-		/**
-		 * @param   {number}  step
-		 * @returns {boolean} True if the actor stopped at a wall.
-		 */
-		update(step) {
-			turnAround()
-			turnCorner(step)
-			actor.setNextPos(step)
-			setTileSpeed(step)
-			finishCornering()
-			return stopAtWall()
-		},
+		get onWall() {return onWall()}, update,
 	}
 }
