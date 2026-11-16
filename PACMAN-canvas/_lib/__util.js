@@ -17,8 +17,9 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
  @param {K} name
 */const bindMethod = (obj,name)=> {
 	const method = obj[name]
-	if (typeof method == 'function')
-		obj[name] = method.bind(obj)
+	if (typeof method != 'function')
+		throw TypeError(`The specified name '${String(name)}' is not a method.`)
+	obj[name] = method.bind(obj)
 }
 
 //---- Object ------
@@ -165,7 +166,7 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
  @param {number} decimals
 */const roundTo = (val, decimals=2)=> {
     const factor = 10 ** decimals
-    return round(val*factor) / factor
+   	return round(val*factor) / factor
 }
 
 /**
