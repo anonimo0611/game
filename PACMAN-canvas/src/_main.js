@@ -38,9 +38,10 @@ export const Game = new class GameCore {
 
 	/** Lv.1-13 scale in difficulty, with Lv.13+ being the highest */
 	get clampedLv() {return clamp(Game.level, 1, 13)}
+	get stepPerLv() {return 1-(13-Game.clampedLv) * 0.01}
 	get speed()     {return State.isInGame ? Cfg.speed:1}
 	get interval()  {return Game.speed * Ticker.Interval}
-	get moveSpeed() {return Game.speed * Speed.stepPerLv}
+	get moveSpeed() {return Game.speed * this.stepPerLv}
 
 	#setLevel(n=1) {
 		const lv = (Game.#level = isBetween(n, 1, 0xFF) && n || 1)
