@@ -16,10 +16,8 @@ export const PtsMgr = new class PointsManager {
 }
 class FloatingPts {
 	pos; cache; fade;
-	constructor(
-		/** @type {FloatingPtsData} */
-		{pts,x,y,dur=1e3,frozen=false,cb}
-	) {
+	/** @param {FloatingPtsData} data */
+	constructor({pts,x,y,dur=1e3,frozen=false,cb}) {
 		const {speed:spd}= Game
 		this.pos   = {x,y}
 		this.cache = cache(pts, T*2)
