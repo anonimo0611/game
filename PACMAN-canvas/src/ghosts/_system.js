@@ -11,7 +11,7 @@ import {Targets} from './targets.js'
 import {Ghost,player,onPlayerDotEaten} from '../actors.js'
 export {Paths,PtsMgr,GhsSpd as Spd}
 
-const ghosts    = /**@type {Ghost[]}*/([])
+const ghosts = /**@type {Ghost[]}*/([])
 
 /** The fleeing time(ms) from the player when Frightened Time is 0. */
 export const FLEE_TIME = 500
@@ -99,6 +99,7 @@ export const Ghosts = new class GhostGroup {
 			? Fright.frighten()
 			: Ghosts.#startFlee()
 	}
+
 	update() {
 		Fright.session?.update()
 		PhaseManager.update()
@@ -115,6 +116,7 @@ export const Ghosts = new class GhostGroup {
 		ghosts.toReversed().forEach(g=> g.update())
 		Paths.update(ghosts)
 	}
+
 	drawBehind() {
 		Ghosts.#draw(false)
 	}
