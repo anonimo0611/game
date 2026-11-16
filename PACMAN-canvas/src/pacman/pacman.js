@@ -27,8 +27,8 @@ class Player extends PacMan {
 		!State.wasNewGame && (player = new Player)
 		!State.isTitle && player.fadeIn()
 	}
-	#eatingSEToggle  = 1
-	#sinceLastEating = 0
+	#eatingSoundToggle   = 1
+	#timeSinceLastEating = 0
 
 	/** @readonly @private */
 	mover = createMover(this)
@@ -41,10 +41,12 @@ class Player extends PacMan {
 	get onWall()   {return this.mover.onWall}
 	get maxAlpha() {return Env.semiTransPac? Actor.CHEAT_ALPHA:1}
 	get closed()   {return State.isInGame == false}
-	get timeSinceLastEating() {return this.#sinceLastEating}
 
+	get timeSinceLastEating() {
+		return this.#timeSinceLastEating
+	}
 	resetTimer() {
-		this.#sinceLastEating = 0
+		this.#timeSinceLastEating = 0
 	}
 	offsetTarget(dist=T*2) {
 		const ofstX = (this.dir == DirU ? -dist : 0)
@@ -68,7 +70,7 @@ class Player extends PacMan {
 		if (this.closed) return
 		if (this.hidden) return
 		this.tunEntry.update()
-		this.#sinceLastEating += Game.interval
+		this.#timeSinceLastEating += Game.interval
 		this.#moveSteps(this.speed+.5|0)
 	}
 	#moveSteps(steps=1) {
@@ -91,7 +93,7 @@ class Player extends PacMan {
 	}
 	#playEatingSE() {
 		const duration = (T/this.speed)*Ticker.Interval*.5
-		;(this.#eatingSEToggle ^= 1)
+		;(this.#eatingSoundToggle ^= 1)
 			? Sound.playEatsDot0({duration})
 			: Sound.playEatsDot1({duration})
 	}
