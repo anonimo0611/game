@@ -47,6 +47,7 @@ export function onSettled(succeeded=false) {
 			e.preventDefault(), mute()
 		}
 	}
+
 	$win.on({keydown})
 	$volRngs.on({input}).trigger('input')
 	$speaker.on({click:mute})
