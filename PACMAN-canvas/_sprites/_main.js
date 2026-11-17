@@ -1,11 +1,11 @@
-import '../_lib/mouse.js'
+import '@lib/mouse.js'
 import './anime.js'
 import './setup.js'
-import {U,R,D,L}  from '../_lib/direction.js'
-import * as Pts   from '../src/sprites/points.js'
-import * as Fruit from '../src/sprites/fruits.js'
-import * as Snag  from '../src/sprites/snag.js'
-import PacSprite  from '../src/sprites/pacman.js'
+import {U,R,D,L}  from '@lib/direction.js'
+import * as Pts   from '@src/sprites/points.js'
+import * as Fruit from '@src/sprites/fruits.js'
+import * as Snag  from '@src/sprites/snag.js'
+import PacSprite  from '@src/sprites/pacman.js'
 import {sizeRng,GridSize,T,S,GAP,ghostGr} from './_constants.js'
 
 const [Cols,Rows]= GridSize

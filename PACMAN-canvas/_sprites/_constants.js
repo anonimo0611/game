@@ -1,5 +1,5 @@
-import {DorpDown}  from '../_lib/menu.js'
-import GhostSprite from '../src/sprites/ghost.js'
+import {DorpDown}  from '@lib/menu.js'
+import GhostSprite from '@src/sprites/ghost.js'
 
 let lastTileSize = -1
 
