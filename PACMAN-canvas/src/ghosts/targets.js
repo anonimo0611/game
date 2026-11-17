@@ -5,15 +5,15 @@ import {GUZUTA_THRESHOLD}    from './ghost_sub.js'
 import {Ghosts,Ghost,player} from '@actors'
 
 export const Targets = new class TargetVisualizer {
-	/** @param {readonly Ghost[]} ghostList */
-	draw(ghostList) {
+	/** @param {readonly Ghost[]} ghosts */
+	draw(ghosts) {
 		if (!State.isInGame)  return
 		if (!Cfg.showTargets) return
 		Fg.save()
 		Fg.setAlpha(0.7)
 		Fg.setStyle('#FFF')
-		for (const g of ghostList) this.#strokeLines(g)
-		for (const g of ghostList) this.#drawMarker(g)
+		for (const g of ghosts) this.#strokeLines(g)
+		for (const g of ghosts) this.#drawMarker(g)
 		Fg.restore()
 	}
 

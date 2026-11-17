@@ -15,16 +15,16 @@ export class Paths {
 		return Cfg.showPaths && State.isInGame
 	}
 
-	/** @param {readonly Ghost[]} ghostList */
-	static update(ghostList) {
+	/** @param {readonly Ghost[]} ghosts */
+	static update(ghosts) {
 		if (!this.isActive) return
-		ghostList.forEach(g=> g.path.#update(g))
+		ghosts.forEach(g=> g.path.#update(g))
 	}
 
-	/** @param {readonly Ghost[]} ghostList */
-	static draw(ghostList) {
+	/** @param {readonly Ghost[]} ghosts */
+	static draw(ghosts) {
 		if (!this.isActive) return
-		ghostList.toReversed().forEach(g=> g.path.#draw(g))
+		ghosts.toReversed().forEach(g=> g.path.#draw(g))
 	}
 
 	/** @param {Ghost} g */
