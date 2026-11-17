@@ -3,7 +3,7 @@ import * as Demo  from './demo.js'
 import {State}    from '../state.js'
 import {PtsMgr}   from '../points.js'
 import {Message}  from '../message.js'
-import {Cutscene} from '../demo/cutscene.js'
+import {Cutscene} from './cutscene.js'
 
 const Scenes = [
 	Main.Scene,

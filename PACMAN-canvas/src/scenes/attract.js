@@ -1,0 +1,124 @@
+﻿import {State}    from '../state.js'
+import {Env}      from '../env.js'
+import {Fruits}   from '../fruits.js'
+import {Score}    from '../score.js'
+import  GhostSpr  from '../sprites/ghost.js'
+import {drawText} from '../message.js'
+import {drawDot,PowBlinker} from '../maze.js'
+import {Actors,PacMan,Ghosts,Ghost} from '../actors.js'
+
+export class Attract {
+	static {State.on({Attract:this.#begin})}
+	static #instance = /**@type {?Attract}*/(null)
+	static #begin() {Attract.#instance = new Attract}
+	static draw()   {Attract.#instance?.draw()}
+	static update() {Attract.#instance?.update()}
+
+	ghsSpr = new GhostSpr(Fg,T*2)
+	subAct = new EnergizerAct
+
+	/** @private */
+	constructor() {
+		$win.onNS('Attract', {click_keydown_blur:this.quit})
+		this.update = ()=> this.subAct.update()
+	}
+	GhostEntries = /**@type {const}*/([
+		// time, col1, col2, row, txt1, txt2
+		[10, 8, 18,  6, 'OIKAKE----', '"AKABEI"'],
+		[30, 8, 19,  9, 'MACHIBUSE--','"PINKY"' ],
+		[50, 8, 18, 12, 'KIMAGURE--', '"AOSUKE"'],
+		[70, 8, 18, 15, 'OTOBOKE---', '"GUZUTA"']
+	])
+	draw() {
+		const et = (Ticker.elapsedTime/100)
+		Score.draw()
+		drawText(Fg, 7, 4, null, 'CHARACTOR　/　NICKNAME')
+		this.GhostEntries.forEach(([t,col1,col2,row,txt1,txt2],i)=> {
+			et > t    && this.drawGhostOnTable(i,row)
+			et > t+ 5 && drawText(Fg, col1, row, Color.GhostBodies[i], txt1)
+			et > t+10 && drawText(Fg, col2, row, Color.GhostBodies[i], txt2)
+		})
+		if (et > 85) {
+			/**@type {const}*/([
+			 [23, DOT_PTS, false, true],
+			 [25, POW_PTS, true,  this.subAct.pow.show]
+			]).forEach(([row,pts,isPow,showDot])=> {
+				drawDot (Fg, 10.0, row+.00, isPow, showDot)
+				drawText(Fg, 12.0, row+.00, null,  pts)
+				drawText(Fg, 14.3, row+.25, null, 'PTS', {size:T*.7})
+			})
+		}
+		if (et > 90) {
+			this.subAct.draw()
+			if (Env.extendScore > 0) {
+				const text = `BONUS　PACMAN　FOR　${Env.extendScore}`
+				drawText(Fg,  2.0, 29.00, Color.NoticeTxt, text)
+				drawText(Fg, 24.3, 29.25, Color.NoticeTxt,'PTS', {size:T*.7})
+			}
+		}
+		Fruits.drawLevelCounter()
+	}
+	drawGhostOnTable(type=0, row=0) {
+		const center = {x:T*5+T/2, y:T*row+T/2}
+		this.ghsSpr.draw({type,orient:DirR,center})
+	}
+	quit() {
+		$win.off('.Attract')
+		Attract.#instance = null
+		State.setQuit()
+	}
+}
+
+class EnergizerAct {
+	/** @readonly */
+	pow = new PowBlinker
+	#pacman = new PacMan
+	#ghosts = /**@type {Ghost[]}*/([])
+	#pacvx  = -BW/180
+	#ghsvx  = -BW/169
+	constructor() {
+		for (let i=0; i<GhostType.Max; i++)
+			this.#setActor(i)
+		Ghosts.initialize(this.#ghosts)
+	}
+	get started() {return Ticker.elapsedTime > 1e4+500}
+	get outward() {return this.#pacman.dir == DirL}
+
+	#setActor(type=0) {
+		const g = new Ghost({
+			dir:  DirL,
+			tile: [COLS+6+(type*2),19],
+			type: /**@type {GhostType}*/(type),
+		})
+		!g.type && this.#pacman.pos.set(g.x-(T*3.5), g.y)
+		this.#ghosts.push(g)
+	}
+	update() {
+		if (!this.started) return
+		this.pow.update()
+		this.#updateActors()
+		if (this.#pacman.dir == DirL
+		 && this.#pacman.x <= T*4)
+			this.#turnBack()
+	}
+	#updateActors() {
+		if (Timer.frozen) return
+		Actors.update(this.#pacman)
+		this.#pacman.x += this.#pacvx
+		this.#ghosts.forEach(g=> {
+			g.x += this.#ghsvx
+			g.collidesWith(this.#pacman.pos, T/4, this.#end)
+		})
+	}
+	#turnBack() {
+		this.#pacvx *= -1
+		this.#ghsvx /= -2
+		this.#pacman.dir = DirR
+		Ghosts.frighten()
+	}
+	draw() {
+		this.outward && drawDot(Fg, 4, 19, true, this.pow.show)
+		this.started && Actors.draw(this.#pacman)
+	}
+	#end() {Ghosts.caughtAll && State.setAttract()}
+}
