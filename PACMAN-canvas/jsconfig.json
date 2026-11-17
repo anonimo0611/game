@@ -1,10 +1,11 @@
 {
 	"compilerOptions": {
 		"paths": {
+			"@/*":    ["./src/*"],
+			"@src/*": ["./src/*"],
 			"@lib/*": ["./_lib/*"],
 			"@snd/*": ["./_snd/*"],
-			"@src/*": ["./src/*"],
-			"@actors": ["./src/actors.js"],
+			"@actors":["./src/actors.js"],
 		},
 		"module": "es2022",
 		"target": "esnext",

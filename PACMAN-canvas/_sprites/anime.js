@@ -1,4 +1,4 @@
-import PacSprite from '@src/sprites/pacman.js'
+import PacSprite from '@/sprites/pacman.js'
 import {Dir}     from '@lib/direction.js'
 import {ghostPv} from './_constants.js'
 import {T,S,Pv,Menu,Btns} from './_constants.js'
