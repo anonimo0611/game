@@ -1,11 +1,11 @@
-﻿import {State}    from '../state.js'
-import {Env}      from '../env.js'
-import {Fruits}   from '../fruits.js'
-import {Score}    from '../score.js'
-import  GhostSpr  from '../sprites/ghost.js'
-import {drawText} from '../message.js'
-import {drawDot,PowBlinker} from '../maze.js'
-import {Actors,PacMan,Ghosts,Ghost} from '../actors.js'
+﻿import {State}    from '@src/state.js'
+import {Env}      from '@src/env.js'
+import {Fruits}   from '@src/fruits.js'
+import {Score}    from '@src/score.js'
+import  GhostSpr  from '@src/sprites/ghost.js'
+import {drawText} from '@src/message.js'
+import {drawDot,PowBlinker} from '@src/maze.js'
+import {Actors,PacMan,Ghosts,Ghost} from '@actors'
 
 export class Attract {
 	static {State.on({Attract:this.#begin})}

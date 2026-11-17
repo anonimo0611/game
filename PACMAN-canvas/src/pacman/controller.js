@@ -1,10 +1,10 @@
-import {Dir}   from '../../_lib/direction.js'
-import {Game}  from '../_main.js'
-import {State} from '../state.js'
-import {Env}   from '../env.js'
-import {Maze}  from '../maze.js'
-import {Actor,Ghosts}  from '../actors.js'
-import {PacSpd as Spd} from '../speed.js'
+import {Dir}   from '@lib/direction.js'
+import {Game}  from '@src/_main.js'
+import {State} from '@src/state.js'
+import {Env}   from '@src/env.js'
+import {Maze}  from '@src/maze.js'
+import {Actor,Ghosts}  from '@actors'
+import {PacSpd as Spd} from '@src/speed.js'
 
 /** @param {Actor} actor */
 export function createMover(actor) {

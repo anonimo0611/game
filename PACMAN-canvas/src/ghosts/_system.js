@@ -1,14 +1,14 @@
-import {Sound}   from '../../_snd/sound.js'
-import {AState}  from '../../_lib/state.js'
-import {Game}    from '../_main.js'
-import {GhsSpd}  from '../speed.js'
-import {State}   from '../state.js'
-import {Cfg}     from '../env.js'
-import {Maze}    from '../maze.js'
-import {PtsMgr}  from '../points.js'
+import {Sound}   from '@snd/sound.js'
+import {AState}  from '@lib/state.js'
+import {Game}    from '@src/_main.js'
+import {GhsSpd}  from '@src/speed.js'
+import {State}   from '@src/state.js'
+import {Cfg}     from '@src/env.js'
+import {Maze}    from '@src/maze.js'
+import {PtsMgr}  from '@src/points.js'
 import {Paths}   from './paths.js'
 import {Targets} from './targets.js'
-import {Ghost,player,onPlayerDotEaten} from '../actors.js'
+import {Ghost,player,onPlayerDotEaten} from '@actors'
 export {Paths,PtsMgr,GhsSpd as Spd}
 
 const ghosts = /**@type {Ghost[]}*/([])

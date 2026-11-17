@@ -1,9 +1,9 @@
+import {State}    from '@src/state.js'
+import {PtsMgr}   from '@src/points.js'
+import {Message}  from '@src/message.js'
+import {Cutscene} from './cutscene.js'
 import * as Main  from './main.js'
 import * as Demo  from './demo.js'
-import {State}    from '../state.js'
-import {PtsMgr}   from '../points.js'
-import {Message}  from '../message.js'
-import {Cutscene} from './cutscene.js'
 
 const Scenes = [
 	Main.Scene,

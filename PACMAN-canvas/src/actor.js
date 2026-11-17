@@ -1,4 +1,4 @@
-import {Dir}  from '../_lib/direction.js'
+import {Dir}  from '@lib/direction.js'
 import {Maze} from './maze.js'
 
 export class Actor {

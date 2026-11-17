@@ -1,4 +1,4 @@
-import {AState} from '../_lib/state.js'
+import {AState} from '@lib/state.js'
 
 /** @typedef {typeof States[number]} StateType */
 const States = /**@type {const}*/([

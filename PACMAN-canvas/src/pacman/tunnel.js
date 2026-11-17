@@ -1,4 +1,4 @@
-import {L,R}    from '../../_lib/direction.js'
+import {L,R}    from '@lib/direction.js'
 import {player} from './pacman.js'
 
 /** Save which side of the tunnel the player entered from */

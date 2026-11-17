@@ -1,8 +1,8 @@
-import {State} from '../state.js'
-import {Cfg}   from '../env.js'
-import {Maze}  from '../maze.js'
+import {State} from '@src/state.js'
+import {Cfg}   from '@src/env.js'
+import {Maze}  from '@src/maze.js'
 import {GUZUTA_THRESHOLD}    from './ghost_sub.js'
-import {Ghosts,Ghost,player} from '../actors.js'
+import {Ghosts,Ghost,player} from '@actors'
 
 export const Targets = new class TargetVisualizer {
 	/** @param {readonly Ghost[]} ghostList */

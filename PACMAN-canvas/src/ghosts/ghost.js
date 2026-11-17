@@ -1,13 +1,14 @@
-import {Sound}  from '../../_snd/sound.js'
-import {Dir}    from '../../_lib/direction.js'
-import {Game}   from '../_main.js'
-import {State}  from '../state.js'
-import {Cfg}    from '../env.js'
-import {Maze}   from '../maze.js'
-import  Sprite  from '../sprites/ghost.js'
+import {Sound} from '@snd/sound.js'
+import {Dir}   from '@lib/direction.js'
+import {Game}  from '@src/_main.js'
+import {State} from '@src/state.js'
+import {Cfg}   from '@src/env.js'
+import {Maze}  from '@src/maze.js'
+import  Sprite from '@src/sprites/ghost.js'
+import {Actor,player,Ghosts} from '@actors'
+
 import * as Sys from './_system.js'
-import {Spd,Events,PtsMgr}   from './_system.js'
-import {Actor,player,Ghosts} from '../actors.js'
+import {Spd,Events,PtsMgr} from './_system.js'
 
 const {U,R,D,L}= Dir
 const TurnPriority = freeze([U,L,D,R])
@@ -24,7 +25,7 @@ export class Ghost extends Actor {
 	#started    = false
 	#frightened = false
 
-	/** @param {GhostData} options */
+	/** @param {GhostData} data */
 	constructor({dir=L,type=0,tile:[col,row]=[0,0],align=0}={}) {
 		super(col,row,dir)
 		this.type  = type

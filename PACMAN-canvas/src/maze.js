@@ -1,4 +1,4 @@
-import {Rect}   from '../_lib/rect.js'
+import {Rect}   from '@lib/rect.js'
 import {State}  from './state.js'
 import {Cfg}    from './env.js'
 import {powChk} from './ui.js'

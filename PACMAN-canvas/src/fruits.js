@@ -1,12 +1,12 @@
-import {Sound}  from '../_snd/sound.js'
-import {Rect}   from '../_lib/rect.js'
+import {Sound}  from '@snd/sound.js'
+import {Rect}   from '@lib/rect.js'
 import {Game}   from './_main.js'
 import {Level}  from './_main.js'
 import {State}  from './state.js'
 import {Maze}   from './maze.js'
 import {PtsMgr} from './points.js'
 import * as Spr from './sprites/fruits.js'
-import {player,onPlayerDotEaten} from './actors.js'
+import {player,onPlayerDotEaten} from '@actors'
 
 const
 LEVEL_COLS = 7,

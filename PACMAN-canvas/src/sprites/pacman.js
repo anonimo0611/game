@@ -3,7 +3,7 @@ const OPEN_MID  = 30 * PI/180
 const OPEN_MAX  = 60 * PI/180
 const PHASE_MID = asin(OPEN_MID/OPEN_MAX)
 
-import {Dir}   from '../../_lib/direction.js'
+import {Dir}   from '@lib/direction.js'
 import {Dying} from './pacman_dying.js'
 export const SCALE_FACTOR = 0.9
 export const MOUTH_DEPTH_FACTOR = 0.3
@@ -59,7 +59,7 @@ export default class PacmanSprite {
 		const angle = (closed? 0:this.#mAngle)
 		ctx.save()
 		ctx.setAlpha(alpha)
-		ctx.translate(x,y)
+		ctx.translate(x, y)
 		ctx.scale(SCALE_FACTOR)
 		ctx.rotate(Dir.Rotation[orient])
 		ctx.beginPath()
@@ -71,6 +71,6 @@ export default class PacmanSprite {
 	}
 	/** @param {()=> void} [cb] */
 	startDying(cb) {
-		this.#dyingSpr = new Dying(this, cb)
+		this.#dyingSpr ||= new Dying(this, cb)
 	}
 }

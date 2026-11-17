@@ -1,4 +1,4 @@
-import * as Menus  from '../_lib/menu.js'
+import * as Menus  from '@lib/menu.js'
 import * as Fruits from './sprites/fruits.js'
 
 //---- Form controls ----

@@ -1,5 +1,5 @@
-import {Sound}    from '../_snd/sound.js'
-import {Confirm}  from '../_lib/confirm.js'
+import {Sound}    from '@snd/sound.js'
+import {Confirm}  from '@lib/confirm.js'
 import {Game}     from './_main.js'
 import {State}    from './state.js'
 import {Env}      from './env.js'
@@ -72,7 +72,7 @@ export const Score = new class ScoreManager {
 		if (!Env.isPractice && _score > _hiSco) {
 			_hiSco = _score
 		}
-		if (isBetween(Env.extendScore, oldScore+1, _score)) {
+		if (inRange(Env.extendScore, oldScore+1, _score)) {
 			Lives.extend()
 			Sound.playGetsHiScore()
 		}

@@ -1,4 +1,4 @@
-import {Confirm} from '../_lib/confirm.js'
+import {Confirm} from '@lib/confirm.js'
 import {State}   from './state.js'
 
 export const Message = new class MessageView {

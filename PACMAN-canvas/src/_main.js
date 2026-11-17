@@ -1,5 +1,6 @@
-import {Cursor} from '../_lib/mouse.js'
-import {Sound}  from '../_snd/sound.js'
+import {Cursor} from '@lib/mouse.js'
+import {Sound}  from '@snd/sound.js'
+import {player} from '@actors'
 import {Menu}   from './ui.js'
 import {Scene}  from './scenes/scene.js'
 import {State}  from './state.js'
@@ -7,7 +8,6 @@ import {Lives}  from './lives.js'
 import {Cfg}    from './env.js'
 import {Wall}   from './sprites/wall.js'
 import {Maze}   from './maze.js'
-import {player} from './actors.js'
 
 export const Game = new class GameCore {
 	static {$(this.setup)}
@@ -43,7 +43,7 @@ export const Game = new class GameCore {
 	get interval()  {return Game.speed * Ticker.Interval}
 
 	#setLevel(n=1) {
-		const lv = (Game.#level = isBetween(n, 1, 0xFF) && n || 1)
+		const lv = (Game.#level = inRange(n, 1, 0xFF) && n || 1)
 		Level.val( String(lv).padStart(2,'0') ).trigger('change')
 	}
 	#reset() {
