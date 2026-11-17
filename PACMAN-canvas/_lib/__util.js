@@ -46,7 +46,7 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 
 /**
  @template {string} T
- @param {T[]} array
+ @param {...T} array
 */const asEnum = (...array)=>
 	/**@type {{readonly [K in T]:K}}*/
 	(toObj(array.map(k=> [k,k])))
@@ -135,7 +135,7 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
  @param {number} n
  @param {number} min
  @param {number} max
-*/const isBetween = (n,min,max)=> (n >= min && n <= max)
+*/const inRange = (n,min,max)=> (n >= min && n <= max)
 
 /**
  @param {number} start

@@ -40,9 +40,9 @@ class Menu {
 		return this.menu.querySelector('.selected') || this.items[0]
 	}
 
-	/** @protected @param {number} idx */
-	isInRange(idx) {
-		return isBetween(idx, 0, this.size-1)
+	/** @protected */
+	isInRange(/**@type {number}*/idx) {
+		return inRange(idx, 0, this.size-1)
 	}
 
 	select(idx=0) {
