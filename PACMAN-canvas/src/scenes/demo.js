@@ -1,5 +1,5 @@
-import {Env}      from '@src/env.js'
-import {State}    from '@src/state.js'
+import {Env}      from '@/env.js'
+import {State}    from '@/state.js'
 import {Attract}  from './attract.js'
 import {Cutscene} from './cutscene.js'
 

@@ -1,9 +1,9 @@
 import {Sound}   from '@snd/sound.js'
-import {Game}    from '@src/_main.js'
-import {State}   from '@src/state.js'
-import {Env}     from '@src/env.js'
-import {Fruits}  from '@src/fruits.js'
-import * as Snag from '@src/sprites/snag.js'
+import {Game}    from '@/_main.js'
+import {State}   from '@/state.js'
+import {Env}     from '@/env.js'
+import {Fruits}  from '@/fruits.js'
+import * as Snag from '@/sprites/snag.js'
 import {PacMan,Ghosts,Ghost} from '@actors'
 
 const ACTORS_Y = BH/2

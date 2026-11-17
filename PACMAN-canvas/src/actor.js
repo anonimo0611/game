@@ -1,5 +1,5 @@
 import {Dir}  from '@lib/direction.js'
-import {Maze} from './maze.js'
+import {Maze} from '@/maze.js'
 
 export class Actor {
 	/** @readonly */

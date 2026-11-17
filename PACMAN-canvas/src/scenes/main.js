@@ -1,7 +1,7 @@
-import {Fruits} from '@src/fruits.js'
-import {Maze}   from '@src/maze.js'
-import {Score}  from '@src/score.js'
-import {Actors} from '@src/actors.js'
+import {Fruits} from '@/fruits.js'
+import {Maze}   from '@/maze.js'
+import {Score}  from '@/score.js'
+import {Actors} from '@/actors.js'
 
 export const Scene = {
 	update() {

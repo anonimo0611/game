@@ -1,6 +1,6 @@
-import {lives} from './ui.js'
-import {State} from './state.js'
-import  Sprite from './sprites/pacman.js'
+import {lives} from '@/ui.js'
+import {State} from '@/state.js'
+import  Sprite from '@/sprites/pacman.js'
 
 export const Lives = function() {
 	let   left   = 0

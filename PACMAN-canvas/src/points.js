@@ -1,7 +1,7 @@
-import {Game}  from './_main.js'
-import {State} from './state.js'
-import {Score} from './score.js'
-import {cache} from './sprites/points.js'
+import {Game}  from '@/_main.js'
+import {State} from '@/state.js'
+import {Score} from '@/score.js'
+import {cache} from '@/sprites/points.js'
 
 const FADE_TIME = 300
 const PointsMap = /**@type {Map<PointType,FloatingPts>}*/(new Map)

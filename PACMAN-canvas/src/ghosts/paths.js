@@ -1,7 +1,7 @@
 import {Dir}   from '@lib/direction.js'
-import {Cfg}   from '@src/env.js'
-import {State} from '@src/state.js'
-import {Maze}  from '@src/maze.js'
+import {Cfg}   from '@/env.js'
+import {State} from '@/state.js'
+import {Maze}  from '@/maze.js'
 import {Ghost,player as p} from '@actors'
 
 const PATH_STEPS  = 18

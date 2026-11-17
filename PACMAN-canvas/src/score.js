@@ -1,11 +1,11 @@
 import {Sound}    from '@snd/sound.js'
 import {Confirm}  from '@lib/confirm.js'
-import {Game}     from './_main.js'
-import {State}    from './state.js'
-import {Env}      from './env.js'
-import {Lives}    from './lives.js'
-import {Btns}     from './ui.js'
-import {drawText} from './message.js'
+import {Game}     from '@/_main.js'
+import {State}    from '@/state.js'
+import {Env}      from '@/env.js'
+import {Lives}    from '@/lives.js'
+import {Btns}     from '@/ui.js'
+import {drawText} from '@/message.js'
 
 const HISCORE_KEY = 'anopac_hiscore'
 let [_score,_hiSco,_savedScore,_savedHiSco]= [0,0,0,0]

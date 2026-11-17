@@ -1,5 +1,5 @@
-import {Maze}  from '@src/maze.js'
-import {State} from '@src/state.js'
+import {Maze}  from '@/maze.js'
+import {State} from '@/state.js'
 import {player,Ghosts,Ghost} from '@actors'
 
 class Akabei extends Ghost {
