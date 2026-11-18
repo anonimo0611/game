@@ -3,9 +3,8 @@ import {Env}      from '@/env.js'
 import {Fruits}   from '@/fruits.js'
 import {Score}    from '@/score.js'
 import  GhostSpr  from '@/sprites/ghost.js'
-import {drawText} from '@/message.js'
-import {drawDot,PowBlinker} from '@/maze.js'
-import {Actors,PacMan,Ghosts,Ghost} from '@actors'
+import {Actors,PacMan,Ghosts,Ghost}  from '@actors'
+import {drawText,drawDot,PowBlinker} from '@/maze.js'
 
 export class Attract {
 	static {State.on({Attract:this.#begin})}

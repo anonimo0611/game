@@ -2,7 +2,7 @@ import {Dir}      from '@lib/direction.js'
 import {Confirm}  from '@lib/confirm.js'
 import {Sound}    from '@snd/sound.js'
 import {State}    from '@/state.js'
-import {drawText} from '@/message.js'
+import {drawText} from '@/maze.js'
 import {Form,Menu,Btns} from '@/ui.js'
 
 const {InfoTexts:palette}= Color

@@ -5,7 +5,7 @@ import {State}    from '@/state.js'
 import {Env}      from '@/env.js'
 import {Lives}    from '@/lives.js'
 import {Btns}     from '@/ui.js'
-import {drawText} from '@/message.js'
+import {drawText} from '@/maze.js'
 
 const HISCORE_KEY = 'anopac_hiscore'
 let [_score,_hiSco,_savedScore,_savedHiSco]= [0,0,0,0]
