@@ -82,10 +82,6 @@ export class Actor {
 			return x
 		}(this) - T/2
 	}
-	alignDir() {
-		this.#movDir = this.orient
-		this.#snapToAxis()
-	}
 	move(dir=this.dir) {
 		this.setNextPos(this.speed, this.dir=dir)
 	}
@@ -93,30 +89,30 @@ export class Actor {
 		this.pos = Vec2[dir].mul(speed).add(this)
 		this.#wrapXAxis()
 	}
-	justArrivedAtTile(speed=this.speed) {
-		return !this.passedTileCenter
-			&& this.tilePixel <= speed
+	alignDir() {
+		this.#movDir = this.orient
+		this.#snapToAxis()
 	}
-	collidesWithWall(dir=this.dir) {
-		const  tile = this.forward(dir, T/2+1e-6).divInt(T)
-		return Maze.hasWall( tile.wrapX(COLS) )
-	}
-
 	/** @param {Direction} dir */
-	setMoveDir(dir) {this.#movDir = dir}
-
+	setMoveDir(dir) {
+		this.#movDir = dir
+	}
 	/** @param {Direction} dir */
 	forward(dir, dist=0) {
     	return Vec2[dir].mul(dist).add(this.center)
 	}
-
 	/** @param {Direction} dir */
 	getAdjTile(dir, tile=this.tile) {
 		return Vec2[dir].add(tile).wrapX(COLS)
 	}
-
 	/** @param {Direction} dir */
 	hasAdjWall(dir) {
 		return Maze.hasWall( this.getAdjTile(dir) )
+	}
+	collidesWithWall(dir=this.dir) {
+		return Maze.hasWall( this.forward(dir,T/2+1e-6).divInt(T).wrapX(COLS) )
+	}
+	justArrivedAtTile(speed=this.speed) {
+		return !this.passedTileCenter && this.tilePixel <= speed
 	}
 }
