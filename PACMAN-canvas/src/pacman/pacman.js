@@ -98,8 +98,8 @@ class Player extends PacMan {
 			: Sound.playEatsDot1({duration})
 	}
 }
-export let player = new Player()
+export let player = new Player
 export const onPlayerDotEaten =
-(/**@type {JQTriggerHandler}*/cb)=> {
-	EventBus.on(EATEN_EV,cb)
+	(/**@type {()=>void}*/cb)=> {
+	EventBus.on(EATEN_EV, cb)
 }
