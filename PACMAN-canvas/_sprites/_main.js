@@ -62,7 +62,7 @@ function drawGhosts() {
  * @param {Direction} dir2
  */
 function drawGhost(col=0, row=0, dir1, dir2) {
-	const center = Vec2.new(ofst(col), row*S)
+	const center = vec2(ofst(col), row*S)
 	if (row < 5) {
 		ghostGr.draw({
 			center,
@@ -104,7 +104,7 @@ function drawPts(ptsType, ptsValue, x,y) {
 
 function drawPacman() {
 	for (let i=-1; i<9; i++) {
-		const center = Vec2.new(T+ofst(i), S*8.5)
+		const center = vec2(T+ofst(i), S*8.5)
 		const params = {center, orient:Data.PacDirs[i-1], radius:T}
 		new PacSprite(Fg, T, i>0 ? (i%2 ? 0.5:1) : 0).draw(params)
 	}
@@ -119,7 +119,7 @@ function drawAkabei() {
 
 	/** @type {(x:number, y:number, params:object)=> void} */
 	const draw = (x,y, params)=> {
-		const center = Vec2.new(x+T/2, y+T/2)
+		const center = vec2(x+T/2, y+T/2)
 		aka.draw({center, ...params})
 	}
 
@@ -127,13 +127,13 @@ function drawAkabei() {
 		const pos = Vec2.Zero, ratios = [0.3, 0.5 ,1]
 		for (let i=0; i<3; i++) {
 			draw(...pos.vals, {animIdx:+(i == 2)})
-			const nPos = Vec2.new(pos).add(S*0.75, S/4)
+			const nPos = (pos).add(S*0.75, S/4)
 			spr.drawSnaggedClothing(+(i == 2), ratios[i], {...nPos,scale})
 			pos.x += S*1.2 + ((i+1)*GAP)
 		}
 	}
 	{// Stake and Scrap
-		const pos = Vec2.new(S*6.9, S-T/2)
+		const pos = vec2(S*6.9, S-T/2)
 		spr.drawSnaggedStake({scale,...pos,isRipped:true})
 	}
 	draw(ofst(4.00), 0, {isRipped: true,orient:U})
