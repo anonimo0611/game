@@ -1,10 +1,10 @@
 'use strict'
 class Vec2 {
-	static get Zero()  {return Vec2.new( 0, 0)}
-	static get Up()    {return Vec2.new( 0,-1)}
-	static get Right() {return Vec2.new( 1, 0)}
-	static get Down()  {return Vec2.new( 0, 1)}
-	static get Left()  {return Vec2.new(-1, 0)}
+	static get Zero()  {return vec2( 0, 0)}
+	static get Up()    {return vec2( 0,-1)}
+	static get Right() {return vec2( 1, 0)}
+	static get Down()  {return vec2( 0, 1)}
+	static get Left()  {return vec2(-1, 0)}
 
 	void() {}
 	toString() {
@@ -29,7 +29,7 @@ class Vec2 {
 	 * @param {number} [v2]
 	 */
 	static new(v1,v2) {
-		return new Vec2(...this.#parseXY(v1,v2))
+		return new Vec2(...Vec2.#parseXY(v1,v2))
 	}
 
 	/**
@@ -37,7 +37,7 @@ class Vec2 {
 	 * @param {number} [y]
 	 */
 	static fixed(x, y=x) {
-		return Vec2.new(x,y).fixed
+		return vec2(x,y).fixed
 	}
 
 	/**
@@ -79,7 +79,7 @@ class Vec2 {
 	 * @param {Position|number} val
 	 */
 	static add(pos, val) {
-		return Vec2.new(pos).add(val)
+		return vec2(pos).add(val)
 	}
 
 	/**
@@ -87,7 +87,7 @@ class Vec2 {
 	 * @param {Position|number} val
 	 */
 	static sub(pos, val) {
-		return Vec2.new(pos).sub(val)
+		return vec2(pos).sub(val)
 	}
 
 	/**
@@ -95,7 +95,7 @@ class Vec2 {
 	 * @param {number} scalar
 	 */
 	static mul(pos, scalar) {
-		return Vec2.new(pos).mul(scalar)
+		return vec2(pos).mul(scalar)
 	}
 
 	/**
@@ -103,7 +103,7 @@ class Vec2 {
 	 * @param {number} divisor
 	 */
 	static div(pos, divisor) {
-		return Vec2.new(pos).div(divisor)
+		return vec2(pos).div(divisor)
 	}
 
 	/**
@@ -111,7 +111,7 @@ class Vec2 {
 	 * @param {number} scalar
 	 */
 	static divInt(pos, scalar) {
-		return Vec2.new(pos).divInt(scalar)
+		return vec2(pos).divInt(scalar)
 	}
 
 	/**
@@ -138,9 +138,9 @@ class Vec2 {
 	get inverse()    {return this.clone.mul(-1)}
 	get sqrMag()     {return this.x**2 + this.y**2}
 	get magnitude()  {return sqrt(this.sqrMag)}
-	get clone()      {return Vec2.new(this.x,  this.y)}
-	get asInt()      {return Vec2.new(floor(this.x),floor(this.y))}
-	get normalized() {return Vec2.new(this.x/this.magnitude||0 , this.y/this.magnitude||0)}
+	get clone()      {return vec2(this.x,  this.y)}
+	get asInt()      {return vec2(floor(this.x),floor(this.y))}
+	get normalized() {return vec2(this.x/this.magnitude||0 , this.y/this.magnitude||0)}
 
 	/**
 	 * @overload
@@ -287,3 +287,4 @@ class Vec2 {
 		return this.setX(((this.x % cols) + cols) % cols)
 	}
 }
+const {new:vec2}= Vec2

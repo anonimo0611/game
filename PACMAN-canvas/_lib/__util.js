@@ -189,7 +189,7 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
  @returns {{pos:Vec2,vals:[x:number, y:number]}}
 */const getPointOnCircle = (rad, r, cx=0, cy=0)=> {
 	const  [x,y] = [cos(rad)*r+cx, sin(rad)*r+cy]
-	return {pos:Vec2.new(x,y),vals:[x,y]}
+	return {pos:vec2(x,y),vals:[x,y]}
 }
 
 //---- jQuery ------
