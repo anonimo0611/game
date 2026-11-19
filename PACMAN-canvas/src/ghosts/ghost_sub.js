@@ -6,7 +6,7 @@ class Akabei extends Ghost {
 	constructor() {
 		super({dir:DirL, type:0, tile:[13.5, 12]})
 	}
-	get scatterTile()  {return Vec2.new(COLS-4, 0)}
+	get scatterTile()  {return vec2(COLS-4, 0)}
 	get chaseSpeed()   {return Ghosts.CruiseElroy.speed}
 	get isAngry()      {return Ghosts.CruiseElroy.angry}
 	get isChasing()    {return this.isNormal && !this.isScattering}
@@ -18,7 +18,7 @@ class Pinky extends Ghost {
 		super({dir:DirD, type:1, tile:[13.5, 15]})
 	}
 	get chaseOffset() {return 4*T}
-	get scatterTile() {return Vec2.new(3, 0)}
+	get scatterTile() {return vec2(3, 0)}
 	get chasePos() {
 		const pos = player.offsetTarget(this.chaseOffset)
 		// Modified Pinky's targeting scheme:
@@ -26,7 +26,7 @@ class Pinky extends Ghost {
 		switch(player.tunEntry.side) {
 		case DirL: return pos.setX(Maze.Tunnel.EntryCol.R*T)
 		case DirR: return pos.setX(Maze.Tunnel.EntryCol.L*T)
-		default:return pos
+		default: return pos
 		}
 	}
 }
@@ -36,7 +36,7 @@ class Aosuke extends Ghost {
 		super({dir:DirU, type:2, tile:[11.5, 15], align:-1})
 	}
 	get chaseOffset() {return 2*T}
-	get scatterTile() {return Vec2.new(COLS-1, ROWS-1)}
+	get scatterTile() {return vec2(COLS-1, ROWS-1)}
 	get chasePos() {
 		const  Aka = Ghosts.of(GhostType.Akabei)
 		const  pos = player.offsetTarget(this.chaseOffset)
@@ -48,7 +48,7 @@ class Guzuta extends Ghost {
 	constructor() {
 		super({dir:DirU, type:3, tile:[15.5, 15], align:+1})
 	}
-	get scatterTile() {return Vec2.new(0, ROWS-1)}
+	get scatterTile() {return vec2(0, ROWS-1)}
 	get chasePos() {
 		const {center,pos}= player
 		return Vec2.sqrMag(this,pos) < (T*GUZUTA_THRESHOLD)**2

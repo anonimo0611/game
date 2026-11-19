@@ -63,11 +63,11 @@ HouseOuter = new Rect(14-5, 15-3, 10, 7).freeze()
 		e.target != powChk && Wall.draw()
 		MapArr.forEach((s,i)=> {
 			if (!DotSymbols.has(s)) return
-			const [x,y]= [i%COLS,i/COLS|0]
-			clearDot(i), DotSet.add(i)
+			const {x,y} = {x:i%COLS,y:i/COLS|0}
+			clearDot(x,y), DotSet.add(i)
 			&& (!powChk.checked || s == '.')
-				? drawDot(Bg,x,y)
-				: PowMap.set(i,{x,y})
+				? drawDot(Bg, x,y)
+				: PowMap.set(i, {x,y})
 		})
 	}
 	State.on({_NewLevel: reset})
@@ -76,7 +76,7 @@ HouseOuter = new Rect(14-5, 15-3, 10, 7).freeze()
 
 class House {
 	MID_Y = (this.EntryTile.y+3.5)*T
-	get EntryTile() {return Vec2.new(13, 12)}
+	get EntryTile() {return vec2(13, 12)}
 
 	/** @param {Position} tilePos */
 	isIn = tilePos=> HouseInner.contains(tilePos)
@@ -107,9 +107,9 @@ export class PowBlinker {
 }
 class PowDots extends PowBlinker {
 	draw() {
-		PowMap.forEach(({x,y})=> {
+		PowMap.forEach(t=> {
 			if (!State.isInGame || Ticker.paused || this.show)
-				drawDot(Fg, x,y, true)
+				drawDot(Fg, t.x, t.y, true)
 		})
 	}
 }
@@ -120,9 +120,9 @@ export const Maze = freeze({
 	House:   freeze(new House),
 	Tunnel:  freeze(new Tunnel),
 	PowDots: freeze(new PowDots),
-	hasDot:  (/**@type {TileIdx} */i)=> DotSet.has(i),
-	hasPow:  (/**@type {TileIdx} */i)=> PowMap.has(i),
-	hasWall: (/**@type {Position}*/p)=> WallSet.has(p.y*COLS+p.x),
+	hasDot:  (/**@type {Position}*/t)=> DotSet .has(t.y*COLS+t.x),
+	hasPow:  (/**@type {Position}*/t)=> PowMap .has(t.y*COLS+t.x),
+	hasWall: (/**@type {Position}*/t)=> WallSet.has(t.y*COLS+t.x),
 
 	CLEAR_DOTS: 0, // for debug
 	get dotsLeft() {return DotSet.size},
@@ -148,16 +148,17 @@ export const Maze = freeze({
 	 */
 	getGhostExitTile: ({baseTargetTile:b}, tile)=>
 		!Cfg.unrestricted && b.y < 10 && HouseOuter.contains(tile)
-			? Vec2.new({y:15,x:(tile.x>COLS/2 && b.x>COLS/2)? 21:6}) : b,
+			? vec2(tile.x>COLS/2 && b.x>COLS/2? 21:6, 15) : b,
 
 	/**
-	 * @param {TileIdx} i
+	 * @param {number} col
+	 * @param {number} row
 	 * @returns {number} Number of remaining dots
 	 */
-	clearDot(i) {
-		DotSet.delete(i)
-		PowMap.delete(i)
-		Bg.clearRect((i%COLS)*T, (i/COLS|0)*T, T,T)
+	clearDot(col, row) {
+		DotSet.delete(row*COLS+col)
+		PowMap.delete(row*COLS+col)
+		Bg.clearRect(col*T, row*T, T,T)
 		return DotSet.size
 	},
 
@@ -166,7 +167,7 @@ export const Maze = freeze({
 	 * @param {number} col
 	 * @param {number} row
 	 */
-	drawDot(ctx, col,row, isPow=false, isVisible=true) {
+	drawDot(ctx, col, row, isPow=false, isVisible=true) {
 		if (!isVisible) return
 		const radius = [DOT_RADIUS,POW_RADIUS][+isPow]
 		ctx.fillCircle(col*T+T/2, row*T+T/2, radius, Color.Cookie)

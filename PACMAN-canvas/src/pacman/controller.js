@@ -64,7 +64,7 @@ export function createMover(actor) {
 
 	const getSpeed = ()=>
 		Game.moveSpeed * Spd.levelFactor(Game.level) * (
-			Maze.hasDot(actor.tileIdx)
+			Maze.hasDot(actor.tile)
 			? (Ghosts.isFrightened? Spd.EneEating : Spd.Eating)
 			: (Ghosts.isFrightened? Spd.Energized : Spd.Base)
 		)
