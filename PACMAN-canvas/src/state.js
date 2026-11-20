@@ -1,15 +1,13 @@
 import {AState} from '@lib/state.js'
 
 /** @typedef {typeof States[number]} StateType */
+/** @typedef {StateDef.Fluent<GameState,StateType>} IGameState */
 const States = /**@type {const}*/([
 	'Title','Attract','NewGame','NewLevel','Ready','InGame',
 	'RoundEnds','PacDying','Flashing','Cutscene','GameOver','Quit'
 ])
 
-/**
- * @extends {AState<StateType,States,globalThis>}
- * @typedef {StateDef.Fluent<GameState,StateType>} IGameState
- */
+/** @extends {AState<StateType,States,globalThis>} */
 class GameState extends AState {
 	constructor() {super(globalThis, States)}
 	get isStarting() {return State.isNewGame || State.isReady}
