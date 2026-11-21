@@ -40,14 +40,11 @@ A====c.43 4HH65HH3 43.d====B\
 #..........................#\
 D__________________________C\
 ////////////////////////////\
-////////////////////////////`])
+////////////////////////////`]),
 
-const
-WallSet = /**@type {Set<TileIdx>}*/(new Set),
-DotSet  = /**@type {Set<TileIdx>}*/(new Set),
-PowMap  = /**@type {Map<TileIdx,Position>}*/(new Map)
+[WallSet,DotSet,PowSet]= range(0,3)
+	.map(_=> /**@type {Set<TileIdx>}*/(new Set)),
 
-const
 DOT_RADIUS = T/9,
 POW_RADIUS = T/2,
 DotSymbols = new Set([...'.O']),
@@ -63,11 +60,11 @@ HouseOuter = new Rect(14-5, 15-3, 10, 7).freeze()
 		e.target != powChk && Wall.draw()
 		MapArr.forEach((s,i)=> {
 			if (!DotSymbols.has(s)) return
-			const {x,y} = {x:i%COLS,y:i/COLS|0}
+			const [x,y]= [i%COLS,i/COLS|0]
 			clearDot(x,y), DotSet.add(i)
 			&& (!powChk.checked || s == '.')
 				? drawDot(Bg, x,y)
-				: PowMap.set(i, {x,y})
+				: PowSet.add(i)
 		})
 	}
 	State.on({_NewLevel: reset})
@@ -107,9 +104,9 @@ export class PowBlinker {
 }
 class PowDots extends PowBlinker {
 	draw() {
-		PowMap.forEach(t=> {
+		PowSet.forEach(i=> {
 			if (!State.isInGame || Ticker.paused || this.show)
-				drawDot(Fg, t.x, t.y, true)
+				drawDot(Fg, i%COLS, i/COLS|0, true)
 		})
 	}
 }
@@ -121,7 +118,7 @@ export const Maze = freeze({
 	Tunnel:  freeze(new Tunnel),
 	PowDots: freeze(new PowDots),
 	hasDot:  (/**@type {Position}*/t)=> DotSet .has(t.y*COLS+t.x),
-	hasPow:  (/**@type {Position}*/t)=> PowMap .has(t.y*COLS+t.x),
+	hasPow:  (/**@type {Position}*/t)=> PowSet .has(t.y*COLS+t.x),
 	hasWall: (/**@type {Position}*/t)=> WallSet.has(t.y*COLS+t.x),
 
 	CLEAR_DOTS: 0, // for debug
@@ -157,7 +154,7 @@ export const Maze = freeze({
 	 */
 	clearDot(col, row) {
 		DotSet.delete(row*COLS+col)
-		PowMap.delete(row*COLS+col)
+		PowSet.delete(row*COLS+col)
 		Bg.clearRect(col*T, row*T, T,T)
 		return DotSet.size
 	},
