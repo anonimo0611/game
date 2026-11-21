@@ -81,7 +81,7 @@ class Player extends PacMan {
 			if (this.mover.update(step)) break
 		}
 	}
-	#eatDot(/**@type {Pos}*/t) {
+	#eatDot(/**@type {Tile}*/t) {
 		this.#playEatingSE()
 		this.resetTimer()
 		Maze.hasPow(t)
