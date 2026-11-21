@@ -23,7 +23,7 @@ export const Menu = freeze({
 	const menu = $(Menu.Level.root)
 	const size = menu[0].offsetHeight
 	const {ctx}= canvas2D(null, size*Fruits.MAX, size)
-	for (let i=0; i<Fruits.MAX; i++)
+	for (const i of range(0,Fruits.MAX))
 		Fruits.draw(ctx, i, size, i*size + size/2)
 	menu.css('--url',`url("${ctx.canvas.toDataURL()}")`)
 }

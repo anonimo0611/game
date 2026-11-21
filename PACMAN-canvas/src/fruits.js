@@ -84,7 +84,7 @@ export const Fruits = new class FruitGroup {
 		HUD.save()
 		HUD.clearRect(x,y,w,h)
 		HUD.translate(x,y)
-		for (let i=startLevel; i<Game.level; i++)
+		for (const i of range(startLevel, Game.level))
 			Spr.draw(HUD, Types.get(i), SIZE, w-T-SIZE*(i-startLevel))
 		HUD.restore()
 	}

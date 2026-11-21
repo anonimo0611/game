@@ -18,7 +18,7 @@ export const Lives = function() {
 		HUD.save()
 		HUD.translate(SIZE+T, BH-T)
 		HUD.clearRect(-T,-T, SIZE*(+lives.max), SIZE)
-		for (let i=0; i<left; i++)
+		for (const i of range(0,left))
 			sprite.draw({center:{x:SIZE*i}})
 		HUD.restore()
 	}

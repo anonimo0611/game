@@ -76,7 +76,7 @@ class EnergizerAct {
 	#pacvx  = -BW/180
 	#ghsvx  = -BW/169
 	constructor() {
-		for (let i=0; i<GhostType.Max; i++)
+		for (const i of range(0,GhostType.Max))
 			this.#setActor(i)
 		Ghosts.initialize(this.#ghosts)
 	}

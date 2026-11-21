@@ -76,8 +76,9 @@ class Player extends PacMan {
 	#moveSteps(steps=1) {
 		const {tile}= this
 		for (let i=0; i<steps; i++) {
+			const step = roundTo(this.speed/steps)
 			Maze.hasDot(tile) && this.#eatDot(tile)
-			if (this.mover.update(this.speed/steps)) break
+			if (this.mover.update(step)) break
 		}
 	}
 	#eatDot(/**@type {Vec2}*/{x,y}) {
