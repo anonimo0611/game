@@ -22,7 +22,7 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 	obj[name] = method.bind(obj)
 }
 
-//---- Object ------
+//---- Iteration ------
 
 /**
  @template {object} T
@@ -50,6 +50,14 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 */const asEnum = (...array)=>
 	/**@type {{readonly [K in T]:K}}*/
 	(toObj(array.map(k=> [k,k])))
+
+/**
+ @param {number} st
+ @param {number} ed
+*/const range = function*(st, ed, step=1) {
+	if (!step) throw RangeError('step must not be 0')
+	for(let i=st; (step>0 ? i<ed : i>ed); i+=step) yield i
+}
 
 //---- Event ------
 
