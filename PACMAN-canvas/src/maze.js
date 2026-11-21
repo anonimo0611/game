@@ -141,11 +141,11 @@ export const Maze = freeze({
 	 * If the target tile is on the upper side of the maze \
 	 * and the ghost is around the house, guide them outside of the area
 	 * @param {Ghost} ghost
-	 * @param {Vec2}  tile
+	 * @param {Tile}  t
 	 */
-	getGhostExitTile: ({baseTargetTile:b}, tile)=>
-		!Cfg.unrestricted && b.y < 10 && HouseOuter.contains(tile)
-			? vec2(tile.x>COLS/2 && b.x>COLS/2? 21:6, 15) : b,
+	getGhostExitTile: ({baseTargetTile:b}, t)=>
+		!Cfg.unrestricted && b.y < 10 && HouseOuter.contains(t)
+			? vec2(t.x>COLS/2 && b.x>COLS/2? 21:6, 15) : b,
 
 	/**
 	 * @param {number} col
