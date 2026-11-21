@@ -7,9 +7,7 @@ class Vec2 {
 	static get Left()  {return vec2(-1, 0)}
 
 	void() {}
-	toString() {
-		return /**@type {const}*/(`{x:${this.x}, y:${this.y}}`)
-	}
+	toString() {return /**@type {const}*/(`{x:${this.x}, y:${this.y}}`)}
 
 	/**
 	 * @overload
@@ -18,34 +16,27 @@ class Vec2 {
 	 * @returns {Vec2}
 
 	 * @overload
-	 * @param   {Position} pos
+	 * @param   {Pos} pos
 	 * @returns {Vec2}
 
 	 * @overload
 	 * @param   {xyTuple} xyTuple
 	 * @returns {Vec2}
 
-	 * @param {void|number|xyTuple|Position} [v1]
+	 * @param {void|number|xyTuple|Pos} [v1]
 	 * @param {number} [v2]
-	 */
-	static new(v1,v2) {
-		return new Vec2(...Vec2.#parseXY(v1,v2))
-	}
+	 */static new = (v1,v2)=> new Vec2(...Vec2.#parseXY(v1,v2))
 
 	/**
 	 * @param {number}  x
 	 * @param {number} [y]
-	 */
-	static fixed(x, y=x) {
-		return vec2(x,y).fixed
-	}
+	 */static fixed = (x, y=x)=> vec2(x,y).fixed
 
 	/**
-	 * @param {void|number|xyTuple|Position} [v1]
+	 * @param {void|number|xyTuple|Pos} [v1]
 	 * @param {number} [v2]
 	 * @returns {[x:number, y:number]}
-	 */
-	static #parseXY(v1=0, v2) {
+	 */static #parseXY(v1=0, v2) {
 		if (v1 instanceof Array) return [v1[0], v1[1]]
 		if (typeof v1 == 'number'
 		 && typeof v2 == 'number') return [v1, v2]
@@ -54,78 +45,53 @@ class Vec2 {
 	}
 
 	/**
-	 * @param {Position} pos1
-	 * @param {Position} pos2
-	 */
-	static eq(pos1, pos2) {
-		return(
-			abs(pos1.x-pos2.x) < 1e-6 &&
-			abs(pos1.y-pos2.y) < 1e-6
-		)
-	}
+	 * @param {Pos} pos1
+	 * @param {Pos} pos2
+	 */static eq = (pos1, pos2)=>
+		(abs(pos1.x-pos2.x) < 1e-6 &&
+		 abs(pos1.y-pos2.y) < 1e-6)
 
 	/**
-	 * @param {Position} pos
-	 * @param {number} cols
-	 */
-	static idx(pos, cols) {
-		if (cols <= 0)
-			throw RangeError('Column count must be greater than zero')
-		return pos.y * cols + pos.x
-	}
+	 * @param {Pos} pos
+	 * @param {Pos|number} val
+	 */static add = (pos, val)=> vec2(pos).add(val)
 
 	/**
-	 * @param {Position} pos
-	 * @param {Position|number} val
-	 */
-	static add(pos, val) {
-		return vec2(pos).add(val)
-	}
+	 * @param {Pos} pos
+	 * @param {Pos|number} val
+	 */static sub = (pos, val)=> vec2(pos).sub(val)
 
 	/**
-	 * @param {Position} pos
-	 * @param {Position|number} val
-	 */
-	static sub(pos, val) {
-		return vec2(pos).sub(val)
-	}
-
-	/**
-	 * @param {Position} pos
+	 * @param {Pos} pos
 	 * @param {number} scalar
-	 */
-	static mul(pos, scalar) {
-		return vec2(pos).mul(scalar)
-	}
+	 */static mul = (pos, scalar)=> vec2(pos).mul(scalar)
 
 	/**
-	 * @param {Position} pos
+	 * @param {Pos} pos
 	 * @param {number} divisor
-	 */
-	static div(pos, divisor) {
-		return vec2(pos).div(divisor)
-	}
+	 */static div = (pos, divisor)=> vec2(pos).div(divisor)
 
 	/**
-	 * @param {Position} pos
+	 * @param {Pos} pos
 	 * @param {number} scalar
-	 */
-	static divInt(pos, scalar) {
-		return vec2(pos).divInt(scalar)
-	}
+	 */static divInt = (pos, scalar)=> vec2(pos).divInt(scalar)
 
 	/**
-	 * @param {Position} pos1
-	 * @param {Position} pos2
-	 */static sqrMag(pos1, pos2) {
-		return Vec2.sub(pos1, pos2).sqrMag
-	}
+	 * @param {Pos} pos1
+	 * @param {Pos} pos2
+	 */static sqrMag = (pos1, pos2)=> Vec2.sub(pos1, pos2).sqrMag
 
 	/**
-	 * @param {Position} pos1
-	 * @param {Position} pos2
-	 */static distance(pos1, pos2) {
-		return Vec2.sub(pos1, pos2).magnitude
+	 * @param {Pos} pos1
+	 * @param {Pos} pos2
+	 */static distance = (pos1, pos2)=> Vec2.sub(pos1, pos2).magnitude
+
+	/**
+	 * @param {Pos} pos
+	 * @param {number} cols
+	 */static idx(pos, cols) {
+		if (cols <= 0) throw RangeError('Column count must be greater than zero')
+		return pos.y * cols + pos.x
 	}
 
 	constructor(x=0, y=0) {
@@ -149,14 +115,14 @@ class Vec2 {
 	 * @returns {boolean}
 
 	 * @overload
-	 * @param   {Position} pos
+	 * @param   {Pos} pos
 	 * @returns {boolean}
 
 	 * @overload
 	 * @param   {xyTuple} xyTuple
 	 * @returns {boolean}
 
-	 * @param {number|xyTuple|Position} v1
+	 * @param {number|xyTuple|Pos} v1
 	 * @param {number} [v2]
 	 */
 	eq(v1, v2) {
@@ -171,14 +137,14 @@ class Vec2 {
 	 * @returns {Vec2}
 
 	 * @overload
-	 * @param   {Position} pos
+	 * @param   {Pos} pos
 	 * @returns {Vec2}
 
 	 * @overload
 	 * @param   {xyTuple} xyTuple
 	 * @returns {Vec2}
 
-	 * @param {number|xyTuple|Position} v1
+	 * @param {number|xyTuple|Pos} v1
 	 * @param {number} [v2]
 	 */
 	set(v1, v2) {
@@ -199,18 +165,18 @@ class Vec2 {
 	 * @returns {Vec2}
 
 	 * @overload
-	 * @param   {Position} pos
+	 * @param   {Pos} pos
 	 * @returns {Vec2}
 
 	 * @overload
-	 * @param   {Position|number} numOrPos
+	 * @param   {Pos|number} numOrPos
 	 * @returns {Vec2}
 
 	 * @overload
 	 * @param   {xyTuple} xyTuple
 	 * @returns {Vec2}
 
-	 * @param {number|xyTuple|Position} v1
+	 * @param {number|xyTuple|Pos} v1
 	 * @param {number} [v2]
 	 */
 	add(v1, v2) {
@@ -227,18 +193,18 @@ class Vec2 {
 	 * @returns {Vec2}
 
 	 * @overload
-	 * @param   {Position} pos
+	 * @param   {Pos} pos
 	 * @returns {Vec2}
 
 	 * @overload
-	 * @param   {Position|number} numOrPos
+	 * @param   {Pos|number} numOrPos
 	 * @returns {Vec2}
 
 	 * @overload
 	 * @param   {xyTuple} xyTuple
 	 * @returns {Vec2}
 
-	 * @param {number|xyTuple|Position} v1
+	 * @param {number|xyTuple|Pos} v1
 	 * @param {number} [v2]
 	 */
 	sub(v1, v2) {
@@ -269,13 +235,13 @@ class Vec2 {
 		return this
 	}
 
-	/** @param {Position} pos */
+	/** @param {Pos} pos */
 	dot(pos)   {return this.x * pos.x + this.y * pos.y}
 
-	/** @param {Position} pos */
+	/** @param {Pos} pos */
 	cross(pos) {return this.x * pos.y - this.y * pos.x}
 
-	/** @param {Position} pos */
+	/** @param {Pos} pos */
 	distance(pos) {return Vec2.sub(this,pos).magnitude}
 
 	/** @param {number} cols */

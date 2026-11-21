@@ -1,9 +1,9 @@
-//---- Typing ----
+//---- Dictionary ----
 
 type Maybe<T> = T | undefined
 interface PrimitiveMap {
-    string: string;
-    number: number;
+    string:  string;
+    number:  number;
     boolean: boolean;
 }
 
@@ -31,8 +31,8 @@ type TimerSeq = readonly [
 
 /** Must be a positive value */
 type TileIdx  = number
+type Pos      = Readonly<{x:number, y:number}>
 type xyTuple  = Readonly<[x:number, y:number]>
-type Position = Readonly<{x:number, y:number}>
 type PathNode = {tile:Vec2, dir:Direction, stopped:boolean}
 
 //---- Points ----

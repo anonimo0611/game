@@ -12,7 +12,7 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 
 	/**
 	 * @param {HTMLImageElement|HTMLCanvasElement} img
-	 * @param {Position} centerPos
+	 * @param {Pos} centerPos
 	 * @param {number} [alpha]
 	 * @param {number} [ofstX] Default: -img.width  / 2
 	 * @param {number} [ofstY] Default: -img.height / 2
@@ -56,10 +56,10 @@ class EnhancedCtx2D extends CanvasRenderingContext2D {
 	 * @returns {this}
 
 	 * @overload
-	 * @param   {Position} pos
+	 * @param   {Pos} pos
 	 * @returns {this}
 
-	 * @param {number|Position} v1
+	 * @param {number|Pos} v1
 	 * @param {number} [v2]
 	 */
 	translate(v1, v2) {

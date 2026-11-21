@@ -15,7 +15,7 @@ export class Rect {
 		return freeze(this)
 	}
 
-	/** @param {Position} pos */
+	/** @param {Pos} pos */
 	contains(pos) {
 		const {x,y,w,h}= this
 		return (

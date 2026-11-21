@@ -184,8 +184,8 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 */const randChoice = array=> array[randInt(0, array.length-1)]
 
 /**
- @param {Position} pos1
- @param {Position} pos2
+ @param {Pos} pos1
+ @param {Pos} pos2
  @param {number}  r1  radius1
  @param {number} [r2] radius2
 */const circleCollision = (pos1, pos2, r1, r2=r1)=>
