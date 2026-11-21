@@ -81,13 +81,13 @@ class Player extends PacMan {
 			if (this.mover.update(step)) break
 		}
 	}
-	#eatDot(/**@type {Vec2}*/{x,y}) {
+	#eatDot(/**@type {Pos}*/t) {
 		this.#playEatingSE()
 		this.resetTimer()
-		Maze.hasPow({x,y})
+		Maze.hasPow(t)
 			? Score.add(POW_PTS) && Ghosts.frighten()
 			: Score.add(DOT_PTS)
-		Maze.clearDot(x,y) <= Maze.CLEAR_DOTS
+		Maze.clearDot(t.x, t.y) <= Maze.CLEAR_DOTS
 			? State.setRoundEnds()
 			: EventBus.trigger(EATEN_EV)
 	}

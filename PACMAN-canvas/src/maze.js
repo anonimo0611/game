@@ -75,7 +75,7 @@ class House {
 	MID_Y = (this.EntryTile.y+3.5)*T
 	get EntryTile() {return vec2(13, 12)}
 
-	/** @param {Position} tilePos */
+	/** @param {Pos} tilePos */
 	isIn = tilePos=> HouseInner.contains(tilePos)
 
 	/** @param {Ghost} g */
@@ -117,9 +117,9 @@ export const Maze = freeze({
 	House:   freeze(new House),
 	Tunnel:  freeze(new Tunnel),
 	PowDots: freeze(new PowDots),
-	hasDot:  (/**@type {Position}*/t)=> DotSet .has(t.y*COLS+t.x),
-	hasPow:  (/**@type {Position}*/t)=> PowSet .has(t.y*COLS+t.x),
-	hasWall: (/**@type {Position}*/t)=> WallSet.has(t.y*COLS+t.x),
+	hasDot:  (/**@type {Pos}*/t)=> DotSet .has(t.y*COLS+t.x),
+	hasPow:  (/**@type {Pos}*/t)=> PowSet .has(t.y*COLS+t.x),
+	hasWall: (/**@type {Pos}*/t)=> WallSet.has(t.y*COLS+t.x),
 
 	CLEAR_DOTS: 0, // for debug
 	get dotsLeft() {return DotSet.size},

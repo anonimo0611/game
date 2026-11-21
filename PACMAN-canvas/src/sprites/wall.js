@@ -64,7 +64,7 @@ export const Wall = new class WallRenderer {
 
 	/**
 	 * @param {Ctx2D} ctx
-	 * @param {{type:number, cIdx:number, pos:Position}} _
+	 * @param {{type:number, cIdx:number, pos:Pos}} _
 	 */
 	#drawCorner(ctx, {type,cIdx,pos:{x,y}}) {
 		const {Type}= Corner, radii = []
