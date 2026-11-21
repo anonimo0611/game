@@ -15,7 +15,7 @@ type NumericDict<T> = {readonly [K:number]:T}
 
 //---- Timer ----
 
-type TimerData = {
+interface TimerData {
 	amount:  number;
 	timeout: number;
 	ignoreFrozen: boolean;
@@ -29,9 +29,9 @@ type TimerSeq = readonly [
 
 //---- Tile & Coords ----
 
-/** Must be a positive value */
+interface Pos  {readonly x:number, readonly y:number}
+interface Tile {readonly x:number, readonly y:number}
 type TileIdx  = number
-type Pos      = Readonly<{x:number, y:number}>
 type xyTuple  = Readonly<[x:number, y:number]>
 type PathNode = {tile:Vec2, dir:Direction, stopped:boolean}
 
