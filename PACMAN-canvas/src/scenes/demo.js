@@ -14,9 +14,9 @@ import {Cutscene} from './cutscene.js'
 /** @type {SceneDict<string>} */
 const SceneDict = {Attract,Cutscene}
 
-/** @param {JQTriggeredEvent} e */
+/** @param {JQEvent<HTMLButtonElement>} e */
 const onCutsceneBtnClick =
-	e=> State.setCutscene({data:$(e.target).index()})
+	e=> State.setCutscene({data:+e.target.value})
 
 $('button.at').on({click:State.setAttract})
 $('button.cs').on({click:onCutsceneBtnClick})

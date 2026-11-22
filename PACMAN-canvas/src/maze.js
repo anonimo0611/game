@@ -55,7 +55,7 @@ HouseOuter = new Rect(14-5, 15-3, 10, 7).freeze()
 	MapArr.forEach((s,i)=> {
 		!DotSymbols.has(s) && s.trim() && WallSet.add(i)
 	})
-	/** @param {JQTriggeredEvent} e */
+	/** @param {JQEvent} e */
 	function reset(e) {
 		e.target != powChk && Wall.draw()
 		MapArr.forEach((s,i)=> {
