@@ -31,10 +31,9 @@ export function onSettled(succeeded=false) {
 		speaker.draw(val)
 	}
 
-	/** @param {JQTriggeredEvent} e  */
+	/** @param {JQEvent<HTMLInputElement>} e  */
 	function input(e) {
-		if (e.target instanceof HTMLInputElement)
-			setVolume(e.target.valueAsNumber)
+		setVolume(e.target.valueAsNumber)
 	}
 
 	/** @param {JQKeyboardEvent} e  */
