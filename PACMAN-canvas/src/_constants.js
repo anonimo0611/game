@@ -15,8 +15,8 @@ BW = COLS*TILE_SIZE,
 BH = ROWS*TILE_SIZE,
 
 Dazed = 'Dazed',
-[DirU,DirR,DirD,DirL]= /**@type {Direction[]}*/
-(['Up','Right','Down','Left']),
+[Up,Right,Down,Left] = /**@type {const}*/(['Up','Right','Down','Left']),
+[DirU,DirR,DirD,DirL]= /**@type {Directions}*/([Up,Right,Down,Left]),
 
 Bg   = canvas2D('board_bg'  , BW,BH).ctx,
 Fg   = canvas2D('board_main', BW,BH).ctx,
