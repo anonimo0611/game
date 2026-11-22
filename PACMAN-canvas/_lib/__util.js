@@ -67,7 +67,7 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 	getNativeKeyEvent(e)?.repeat || false
 
 /**
- @param {KeyboardEventLike|JQTriggeredEvent} e
+ @param {KeyboardEventLike|JQEvent} e
 */const isActionKey = e=>
 	(e.key == '\x20' || e.key == 'Enter')
 
