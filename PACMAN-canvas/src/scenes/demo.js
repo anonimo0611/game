@@ -11,22 +11,22 @@ import {Cutscene} from './cutscene.js'
 	})
 }
 
-$('#cfgPanelBtns')
-.on('click', '.at', State.setAttract)
-.on('click', '.cs', function() {
-	State.setCutscene({data:+$(this).data('n')})
-})
-
 /** @type {SceneDict<string>} */
 const SceneDict = {Attract,Cutscene}
+
+/** @param {JQTriggeredEvent} e */
+const onCutsceneBtnClick =
+	e=> State.setCutscene({data:+$(e.target).index()})
+
+$('button.at').on({click:State.setAttract})
+$('button.cs').on({click:onCutsceneBtnClick})
 
 /** Attract mode will begin after a period of inactivity. */
 export const updateTimer = ()=> {
 	if (!State.isTitle) return
 	(!Env.window.isActive || Env.isCaptured)
 		? Ticker.resetCount()
-		: Ticker.elapsedTime > 1e3*30 // 30secs
-			&& State.setAttract()
+		: Ticker.elapsedTime > 1e3*30 && State.setAttract()
 }
 export const Scene = {
 	draw()   {SceneDict[State.current]?.draw()},
