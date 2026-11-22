@@ -16,7 +16,7 @@ const SceneDict = {Attract,Cutscene}
 
 /** @param {JQTriggeredEvent} e */
 const onCutsceneBtnClick =
-	e=> State.setCutscene({data:+$(e.target).index()})
+	e=> State.setCutscene({data:$(e.target).index()})
 
 $('button.at').on({click:State.setAttract})
 $('button.cs').on({click:onCutsceneBtnClick})
