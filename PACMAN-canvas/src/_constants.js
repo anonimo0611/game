@@ -14,11 +14,11 @@ BW = COLS*TILE_SIZE,
 /** Board height */
 BH = ROWS*TILE_SIZE,
 
-Dazed = 'Dazed',
 Up    = 'Up',
 Right = 'Right',
 Down  = 'Down',
 Left  = 'Left',
+Dazed = 'Dazed',
 [DirU,DirR,DirD,DirL]= /**@type {Directions}*/
 ([Up,Right,Down,Left]),
 
