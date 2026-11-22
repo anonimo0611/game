@@ -50,9 +50,13 @@ type FloatingPtsData = {
 
 //---- Direction ----
 
-type Vertical   = 'Up'|'Down'
-type Horizontal = 'Left'|'Right'
-type Direction  = 'Up'|'Right'|'Down'|'Left'
+type Up    = 'Up'
+type Right = 'Right'
+type Down  = 'Down'
+type Left  = 'Left'
+type Vertical   = Up|Down
+type Horizontal = Left|Right
+type Direction  = Up|Right|Down|Left
 type Directions = Direction[]
 type DirMap = {readonly [key:string]: Direction}
 
