@@ -112,11 +112,11 @@ export default class GhostSprite {
 	#drawEyes(gaze, isRipped=false) {
 		this.ctx.fillStyle = '#FFF'
 		switch(gaze) {
-		case 'Left':
-		case 'Right': return this.#drawEyesHoriz(gaze)
-		case 'Up':    return this.#drawEyesUp(isRipped)
-		case 'Down':  return this.#drawEyesDown()
-		case 'Dazed': return this.sub.drawDazedEyes()
+		case Left:
+		case Right: return this.#drawEyesHoriz(gaze)
+		case Up:    return this.#drawEyesUp(isRipped)
+		case Down:  return this.#drawEyesDown()
+		case Dazed: return this.sub.drawDazedEyes()
 		}
 	}
 	/** @param {Horizontal} LorR */
