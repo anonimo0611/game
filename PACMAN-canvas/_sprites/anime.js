@@ -58,7 +58,7 @@ class ActorPreview {
 			break
 		}
 	}
-	onChangeBtn = (/**@type {JQTriggeredEvent}*/e)=> {
+	onChangeBtn = (/**@type {JQEvent}*/e)=> {
 		const {subj}= this
 		if (subj) {
 			subj.orient = /**@type {Direction}*/(
