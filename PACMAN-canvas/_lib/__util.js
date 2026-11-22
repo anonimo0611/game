@@ -22,7 +22,7 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 	obj[name] = method.bind(obj)
 }
 
-//---- Iteration ------
+//---- Object ------
 
 /**
  @template {object} T
@@ -50,14 +50,6 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 */const asEnum = (...array)=>
 	/**@type {{readonly [K in T]:K}}*/
 	(toObj(array.map(k=> [k,k])))
-
-/**
- @param {number} st
- @param {number} ed
-*/const range = function*(st, ed, step=1) {
-	if (!step) throw RangeError('step must not be 0')
-	for(let i=st; (step>0 ? i<ed : i>ed); i+=step) yield i
-}
 
 //---- Event ------
 
@@ -137,13 +129,23 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 */const cyclicIndexMap = (str,size)=>
 	new Map(Array.from(str, (v,i)=> [v,i % size]))
 
-//---- Number / Math ------
+//---- Range ------
+
+/**
+ @param {number} st
+ @param {number} ed
+*/const range = function*(st, ed, step=1) {
+	if (!step) throw RangeError('step must not be 0')
+	for(let i=st; (step>0 ? i<ed : i>ed); i+=step) yield i
+}
 
 /**
  @param {number} n
  @param {number} min
  @param {number} max
 */const inRange = (n,min,max)=> (n >= min && n <= max)
+
+//---- Number / Math ------
 
 /**
  @param {number} start
@@ -167,7 +169,7 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 /**
  @param {number} min
  @param {number} max
-*/const randInt = (min,max)=> int(random() * (max-min+1) + min)
+*/const randInt = (min,max)=> floor(random() * (max-min+1) + min)
 
 /**
  @param {number} val
