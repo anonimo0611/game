@@ -1,6 +1,6 @@
 ﻿export class SpeakerRenderer {
-	/** @readonly*/ctx
-	/** @readonly*/color
+	/** @readonly */ctx
+	/** @readonly */color
 	/**
 	 * @param {Ctx2D}    ctx
 	 * @param {CvsStyle} color

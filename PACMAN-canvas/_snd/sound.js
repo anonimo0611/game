@@ -6,7 +6,7 @@ import {SirenIds}  from './_manifest.js'
 import {Manifest}  from './_manifest.js'
 
 /**
- * @typedef {import('./_manifest').SoundType} T
+ * @typedef {Sound.Type<Manifest>} T
  * @typedef {Sound.Fluent<SoundCore,T>} ISound
  * @extends {SoundMgr<T>}
  */

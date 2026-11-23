@@ -1,4 +1,3 @@
-/** @typedef {(typeof Manifest)[number]['data']['audioSprite'][number]['id']} SoundType */
 export const Manifest = /**@type {const}*/([
 	{src:'./res/looped.ogg', data:{channels:3, audioSprite:[
 		{id:'Siren0',      startTime:    0, duration: 402, volume:0.80, loop:-1},

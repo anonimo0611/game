@@ -6,6 +6,7 @@ namespace Sound {
 			readonly audioSprite: ReadonlyArray<Data<S>>
 		}
 	}>
+	type Type<Manifest> = (Manifest)[number]['data']['audioSprite'][number]['id']
 	type Opts = {delay?:number, duration?:number, offset?:number, loop?:number, volume?:number}
 	type Data<S extends string> = {id:S, startTime:number, duration:number, volume?:number, loop?:number}
 	type onSettled = (succeeded:boolean)=> void

@@ -14,7 +14,8 @@ export function onSettled(succeeded=false) {
 	const $speaker = $('#speaker')
 	const $volRngs = $('.volRng')
 	const speaker  = new SpeakerRenderer(
-		canvas2D('speaker', $('#volume').height()).ctx, '#FFF'
+		canvas2D('speaker', $('#volume').height()).ctx,
+		'#FFFFFF'
 	)
 
 	let lstVol = NaN
@@ -26,9 +27,8 @@ export function onSettled(succeeded=false) {
 	/** @param {number} val */
 	function setVolume(val) {
 		Sound.vol = val
-		$volRngs.val(val)
-		$volRngs.attr('title',val)
 		speaker.draw(val)
+		$volRngs.val(val).attr('title',val)
 	}
 
 	/** @param {JQEvent<HTMLInputElement>} e  */
