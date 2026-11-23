@@ -55,6 +55,7 @@ function drawGhosts() {
 		}
 	}
 }
+
 /**
  * @param {number} col
  * @param {number} row
@@ -83,22 +84,23 @@ function drawGhost(col=0, row=0, dir1, dir2) {
 }
 
 function drawPtsTable() {
-	const {PtsTable:tbl}= Data
-	tbl[0].forEach((pts,i)=> drawPts(PointType.Ghost, pts, ofst(i+0)+TS, AS*6+TS))
-	tbl[1].forEach((pts,i)=> drawPts(PointType.Fruit, pts, ofst(i+4)+TS, AS*6+TS))
-	tbl[2].forEach((pts,i)=> drawPts(PointType.Fruit, pts, (AS+GAP/2)+AS*(2+GAP/TS)*i, AS*7+AS/2))
+	const {PtsTable:[t0,t1,t2]}= Data
+	t0.forEach((p,i)=> drawPts(PointType.Ghost, p, ofst(i+0)+TS, AS*6+TS))
+	t1.forEach((p,i)=> drawPts(PointType.Fruit, p, ofst(i+4)+TS, AS*6+TS))
+	t2.forEach((p,i)=> drawPts(PointType.Fruit, p, (AS+GAP/2)+AS*(2+GAP/TS)*i, AS*7+AS/2))
 }
+
 /**
- * @param {PointType} ptsType
- * @param {PointVal}  ptsValue
+ * @param {PointType} type
+ * @param {PointVal}  value
  * @param {number} x
  * @param {number} y
  */
-function drawPts(ptsType, ptsValue, x,y) {
-	const {ctx:cache,w,h}= Pts.cache({type: ptsType,value: ptsValue},AS)
+function drawPts(type, value, x,y) {
+	const {ctx,w,h}= Pts.cache({type,value}, AS)
 	Fg.save()
 	Fg.translate(x,y)
-	Fg.drawImage(cache.canvas, -w/2, -h/2)
+	Fg.drawImage(ctx.canvas, -w/2, -h/2)
 	Fg.restore()
 }
 

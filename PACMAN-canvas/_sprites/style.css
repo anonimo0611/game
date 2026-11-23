@@ -98,7 +98,7 @@ main > fieldset:first-child .ctrls {
 	height: 3px;
 }
 
-.radioButtons {
+.dirButtons {
 	position: relative;
 	font-size: 86%;
 	margin: .5em 0 0;

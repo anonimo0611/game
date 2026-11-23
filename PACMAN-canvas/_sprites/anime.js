@@ -1,7 +1,7 @@
 import PacSprite from '@/sprites/pacman.js'
 import {Dir}     from '@lib/direction.js'
 import {ghostPv} from './_constants.js'
-import {T,S,Pv,Menu,Btns} from './_constants.js'
+import {TS,AS,Pv,AnimMenu,$dirBtns} from './_constants.js'
 
 const Schema = /**@type {const}*/
 ({
@@ -17,7 +17,7 @@ class ActorPreview {
 		this.type     = type
 		this.subType  = subType
 		this.ghost    = ghostPv
-		this.pacman   = new PacSprite(Pv, T)
+		this.pacman   = new PacSprite(Pv, TS)
 		this.orient   = DirL
 	}
 }
@@ -26,13 +26,13 @@ class ActorPreview {
 	subj = /**@type {?ActorPreview}*/(null)
 	constructor() {
 		Ticker.set(this)
-		Btns.on('change', this.onChangeBtn)
-		$(Menu.root)
+		$dirBtns.on('change', this.onChangeBtn)
+		$(AnimMenu.root)
 			.on('change', this.onChangeMenu)
 			.on('keydown',this.onKeydown)
 	}
 	onChangeMenu = ()=> {
-		const [type,subType]= Menu.value.split(':').map(Number)
+		const [type,subType]= AnimMenu.value.split(':').map(Number)
 		switch(type) {
 		case Schema.Actor.None:
 			this.subj = null
@@ -70,12 +70,12 @@ class ActorPreview {
 		const dir = Dir.from(e)
 		if (dir) {
 			const vx  = Vec2[dir].x
-			const len = +Btns.length
-			const idx = +Btns.filter(':enabled:checked').data('idx')
-			Menu.closed
+			const len = +$dirBtns.length
+			const idx = +$dirBtns.filter(':enabled:checked').data('idx')
+			AnimMenu.closed
 				&& vx
 				&& isFinite(idx)
-				&& Btns
+				&& $dirBtns
 					.eq((vx+idx+len) % len)
 					.prop({checked:true})
 					.trigger('change')
@@ -83,7 +83,7 @@ class ActorPreview {
 	}
 	btnDisabled = (disabled=false)=> {
 		const {subj}= this
-		Btns.prop({disabled})
+		$dirBtns.prop({disabled})
 		if (!disabled && subj)
 			subj.orient = /**@type {Direction}*/
 				($('input[name=orient]:checked').attr('value'))
@@ -92,8 +92,8 @@ class ActorPreview {
 	drawPacman = ()=> {
 		const {subj}= this
 		Pv.save()
-		Pv.translate(Pv.canvas.width/2, S/2)
-		subj?.pacman.draw({orient:subj.orient, radius:T})
+		Pv.translate(Pv.canvas.width/2, AS/2)
+		subj?.pacman.draw({orient:subj.orient, radius:TS})
 		Pv.restore()
 	}
 	drawGhost = ()=> {
@@ -101,7 +101,7 @@ class ActorPreview {
 		const {width:PvW,height:PvH}= Pv.canvas
 		Pv.save()
 		subj?.subType == Schema.Ghost.Exposed
-			? Pv.translate(PvW/2-T/2, PvH/2)
+			? Pv.translate(PvW/2-TS/2, PvH/2)
 			: Pv.translate(PvW/2, PvH/2)
 
 		subj?.ghost.draw({
