@@ -24,10 +24,10 @@ export class AState {
 		this.default = states[0]
 		this.immediately = immediately
 		states?.forEach(s=> {
-			/** @type {StateDef.SetFn} */
-			const setFn = opts=> {this.set(s,opts)}
+			/** @param {StateDef.Opts<S>} opts */
+			const setMethod = opts=> this.set(s,opts)
 			Object.defineProperties(this, {
-			 [`set${s}`]:{value:setFn},
+			 [`set${s}`]:{value:setMethod},
 			 [`is${s}`] :{get(){return this.#curr === s}},
 			 [`was${s}`]:{get(){return this.#last === s}},
 			})

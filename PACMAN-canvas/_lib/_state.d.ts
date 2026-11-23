@@ -4,5 +4,5 @@ namespace StateDef {
 	type Fluent<State extends object,S extends string> = State
 		& {readonly [K in S as `is${K}`]:boolean}
 		& {readonly [K in S as `was${K}`]:boolean}
-		& {readonly [K in S as `set${K}`]:(opt?:Opts<S>)=> void}
+		& {readonly [K in S as `set${K}`]:(opt?:Opts<S>)=> Fluent<State,S>}
 }
