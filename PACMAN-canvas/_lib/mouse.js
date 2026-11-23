@@ -31,7 +31,7 @@ function setupCtrl(ctrl) {
 	const label   = ctrl.closest('label') || qSel(`label[for="${ctrl.id}"]`)
 	const linkIds = ctrl.dataset.links?.trim().split(/\s+/)  ?? []
 	const inputs  = linkIds.flatMap(id=> qSel(`input#${id}`) ?? [])
-	const targets = $.uniqueSort([ctrl,...outputs,...inputs])
+	const targets = $.uniqueSort([ctrl, ...outputs, ...inputs])
 
 	$(label || ctrl).onWheel(e=> {
 		e.preventDefault()
