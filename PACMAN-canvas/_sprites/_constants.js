@@ -12,18 +12,26 @@ export const sizeRng   = reqInput ('#sizeRng')
 export const brightRng = reqInput ('#brightRng')
 export const resetBtn  = reqButton('#resetBtn')
 
-export let  [T,S,GAP] = [0,0,0]
+/** Tile Gap */
+export let GAP = 0
+
+/** Tile Size  */
+export let TS = 0
+
+/** Actor Size */
+export let AS = 0
+
 export const GridSize = vec2(10,11).vals
-export const ghostPv  = new GhostSprite(Pv,T*2)
-export const ghostGr  = new GhostSprite(Fg,T*2)
+export const ghostPv  = new GhostSprite(Pv,TS*2)
+export const ghostGr  = new GhostSprite(Fg,TS*2)
 
 export function onResize() {
-	T = sizeRng.valueAsNumber/2
-	;[S,GAP] = [T*2,T*.25]
-	ghostPv.resize(S)
-	ghostGr.resize(S)
-	Pv.resize(T*3.2, T*2.1)
-	Fg.resize(...vec2(GridSize).mul(S).add(GAP*2).vals)
-	lastTileSize = T
+	TS = sizeRng.valueAsNumber/2
+	;[AS,GAP] = [TS*2,TS*.25]
+	ghostPv.resize(AS)
+	ghostGr.resize(AS)
+	Pv.resize(TS*3.2, TS*2.1)
+	Fg.resize(...vec2(GridSize).mul(AS).add(GAP*2).vals)
+	lastTileSize = TS
 	$(sizeRng).trigger('resize')
 }
