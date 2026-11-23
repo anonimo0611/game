@@ -165,7 +165,7 @@ export default class GhostSprite {
 /** @param {number} size */
 function glowImg(size) {
 	const {ctx,w,h}= canvas2D(null, size*3)
-	ctx.filter = `blur(${T*.8}px)`
+	ctx.filter = `blur(${TS*.8}px)`
 	ctx.fillCircle(w/2, h/2, size*.55, '#F00')
 	return ctx.canvas
 }

@@ -1,4 +1,4 @@
-const HT = T/2
+const HT = TS/2
 const SF = screen.height/1080 // Scale Factor
 const LW = max(1, int(3*SF))  // Line  Width
 const LO = max(2, int(4*SF))  // Line  Offset
@@ -45,20 +45,20 @@ export const Wall = new class WallRenderer {
 	}
 	#drawDoor() {
 		if (State.isFlashing) return
-		const y = (Maze.House.EntryTile.y+1.6)*T
-		Bg.fillRect(BW/2-T, y, T*2, T/4, Color.HouseDoor)
+		const y = (Maze.House.EntryTile.y+1.6)*TS
+		Bg.fillRect(BW/2-TS, y, TS*2, TS/4, Color.HouseDoor)
 	}
 
 	/** @param {Ctx2D} ctx */
 	#drawHouse(ctx) {
-		const [ix,iy,ox,oy]= [31,16,34,19].map(n=>n/10*T)
+		const [ix,iy,ox,oy]= [31,16,34,19].map(n=>n/10*TS)
 		ctx.save()
 		ctx.translate(BW/2, Maze.House.MID_Y)
 		ctx.strokeRect(-ox, -oy, ox*2, oy*2)
 		ctx.strokeRect(-ix, -iy, ix*2, iy*2)
-		ctx.clearRect (-T, -oy-LW, T*2, HT)
-		ctx.strokeLine(-T-LW/2, -oy, -T-LW/2, -iy)
-		ctx.strokeLine(+T+LW/2, -oy, +T+LW/2, -iy)
+		ctx.clearRect (-TS, -oy-LW, TS*2, HT)
+		ctx.strokeLine(-TS-LW/2, -oy, -TS-LW/2, -iy)
+		ctx.strokeLine(+TS+LW/2, -oy, +TS+LW/2, -iy)
 		ctx.restore()
 	}
 
@@ -72,13 +72,13 @@ export const Wall = new class WallRenderer {
 		ctx.translate(x+HT, y+HT)
 		ctx.rotate(cIdx*PI/2)
 		switch(type) {
-		case Type.Outer:  radii.push(HT+LO,T-OO);break
+		case Type.Outer:  radii.push(HT+LO,TS-OO);break
 		case Type.Convex: radii.push(HT-LO);     break
 		case Type.Pocket: radii.push(HT-LO,OO);  break
 		case Type.Concave:
 			ctx.beginPath()
 			ctx.moveTo(-LO,  HT)
-			ctx.arcTo (-LO, -LO, T/3, -LO, T/3)
+			ctx.arcTo (-LO, -LO, TS/3, -LO, TS/3)
 			ctx.lineTo( HT, -LO)
 			ctx.stroke()
 		}
@@ -99,25 +99,25 @@ export const Wall = new class WallRenderer {
 	#drawTile(ctx, s, tx, ty) {
 		const ofst = /[#VH=]/.test(s) ? -LO : +LO
 		const cIdx = Corner.toIndex.get(s) ?? -1
-		const [x,y]= [tx*T,ty*T]
+		const [x,y]= [tx*TS,ty*TS]
 
 		switch(s.toUpperCase()) {
 		case '#':
-		case 'V': ctx.strokeLine(x+HT+ofst, y, x+HT+ofst, y+T);break
-		case 'H': ctx.strokeLine(x, y+HT+ofst, x+T, y+HT+ofst);break
+		case 'V': ctx.strokeLine(x+HT+ofst, y, x+HT+ofst, y+TS);break
+		case 'H': ctx.strokeLine(x, y+HT+ofst, x+TS, y+HT+ofst);break
 		}
 		if (cIdx >= 0) {
 			const type = Corner.RegExps.findIndex(c=> c.test(s))
 			Wall.#drawCorner(ctx,{type,cIdx,pos:{x,y}})
 		}
 		if (s == '#' || tx == 0 && +s) {
-			ctx.strokeLine(x+OO, y, x+OO, y+T)
+			ctx.strokeLine(x+OO, y, x+OO, y+TS)
 			return
 		}
 		if (/[_=]/.test(s) || Maze.isTopOrBottom(ty) && +s) {
-			const oY = /[=56]/.test(s) ? OO : T-OO
-			ctx.strokeLine(x, y+oY, x+T, y+oY)
-			!+s && ctx.strokeLine(x, y+HT+ofst, x+T, y+HT+ofst)
+			const oY = /[=56]/.test(s) ? OO : TS-OO
+			ctx.strokeLine(x, y+oY, x+TS, y+oY)
+			!+s && ctx.strokeLine(x, y+HT+ofst, x+TS, y+HT+ofst)
 		}
 	}
 }

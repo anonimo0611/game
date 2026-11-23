@@ -10,11 +10,11 @@ import {player,onPlayerDotEaten} from '@actors'
 
 const
 LEVEL_COLS = 7,
-SIZE       = T*2,
+SIZE       = TS*2,
 FADE_TIME  = 300,
 SprCache   = Spr.cache(SIZE),
 AppearDots = new Set([70,170]),
-TargetPos  = new Vec2(BW/2, T*18.5).fixed,
+TargetPos  = new Vec2(BW/2, TS*18.5).fixed,
 LevelsRect = new Rect(SIZE*6, BH-SIZE, LEVEL_COLS*SIZE, SIZE).freeze(),
 
 /** 0:Cherry, 1:Strwb, 2:Orange, 3:Apple, 4:Melon, 5:Gala, 6:Bell, 7:Key */
@@ -44,7 +44,7 @@ export const Fruits = new class FruitGroup {
 		return (State.isTitle || State.isInGame) && showTgt
 	}
 	get intersectsWithPlayer() {
-		return this.showTarget && circleCollision(player.center, TargetPos, T/2)
+		return this.showTarget && circleCollision(player.center, TargetPos, TS/2)
 	}
 	#resetTarget() {
 		fadeTgt = null
@@ -85,7 +85,7 @@ export const Fruits = new class FruitGroup {
 		HUD.clearRect(x,y,w,h)
 		HUD.translate(x,y)
 		for (const i of range(startLevel, Game.level))
-			Spr.draw(HUD, Types.get(i), SIZE, w-T-SIZE*(i-startLevel))
+			Spr.draw(HUD, Types.get(i), SIZE, w-TS-SIZE*(i-startLevel))
 		HUD.restore()
 	}
 	#setImages() {

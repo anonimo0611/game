@@ -27,9 +27,9 @@ export const Targets = new class TargetVisualizer {
 	/** @param {Ghost} g */
 	#getTargetPos = g=>
 		(g.state.isGoingOut || g.isEscaping)
-			? Maze.House.EntryTile.add(.5).mul(T)
+			? Maze.House.EntryTile.add(.5).mul(TS)
 			: g.isScattering
-				? g.baseTargetTile.add(.5).mul(T)
+				? g.baseTargetTile.add(.5).mul(TS)
 				: g.chasePos
 
 	/** @param {Ghost} g */
@@ -47,20 +47,20 @@ export const Targets = new class TargetVisualizer {
 	#drawMarker(g) {
 		if (this.#markerDisabled(g))
 			return
-		const size = T*0.6
+		const size = TS*0.6
 		const {x,y}= this.#getTargetPos(g).sub(size/2)
-		Fg.lineWidth = T*0.1
+		Fg.lineWidth = TS*0.1
 		Fg.fillStyle = Color.GhostBodies[g.type]
 		Fg.fillRect  (x,y, size,size)
 		Fg.strokeRect(x,y, size,size)
 	}
 
 	/** @param {Ghost}  g */
-	#auxLines(g, ofst=T*2) {
+	#auxLines(g, ofst=TS*2) {
 		const {center:{x,y},dir,inTunSide}= player
 		const fwdXY  = player.forward(dir, ofst).vals
 		const ofsXY  = player.offsetTarget(ofst).vals
-		Fg.lineWidth = T*0.2
+		Fg.lineWidth = TS*0.2
 		if (g.type == GhostType.Pinky && !inTunSide
 		 || g.type == GhostType.Aosuke) {
 			dir != DirU
@@ -71,17 +71,17 @@ export const Targets = new class TargetVisualizer {
 		if (g.type == GhostType.Aosuke) {
 			const akaXY = Ghosts.of(GhostType.Akabei).center.vals
 			Fg.newLinePath(akaXY, ofsXY, g.chasePos.vals).stroke()
-			Fg.fillCircle(...ofsXY, T*0.26|0)
+			Fg.fillCircle(...ofsXY, TS*0.26|0)
 		}
 	}
 
 	/** @param {Ghost} g */
 	#guzutaCircle(g) {
-		const th = T*GUZUTA_THRESHOLD
+		const th = TS*GUZUTA_THRESHOLD
 		Fg.save()
 		Fg.translate(player.center)
 		Fg.setAlpha(Vec2.sqrMag(g,player) < th**2 ? 0.8 : 0.4)
-		Fg.strokeCircle(0,0, th, undefined, T*0.15)
+		Fg.strokeCircle(0,0, th, undefined, TS*0.15)
 		Fg.restore()
 	}
 }

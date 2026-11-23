@@ -20,7 +20,7 @@ class FloatingPts {
 	constructor({pts,x,y,dur=1e3,frozen=false,cb}) {
 		const {speed:spd}= Game
 		this.pos   = {x,y}
-		this.cache = cache(pts, T*2)
+		this.cache = cache(pts, TS*2)
 		this.fade  = Fade.out(FADE_TIME/spd, (dur-FADE_TIME)/spd)
 
 		PointsMap.set(pts.type, this)
@@ -37,7 +37,7 @@ class FloatingPts {
 		this.fade.update()
 	}
 	draw() {
-		const sideOfst = T*1.25
+		const sideOfst = TS*1.25
 		const {pos:{x:sx,y},cache:{ctx}}= this
 		const x = clamp(sx, sideOfst, BW-sideOfst)
 		Fg.put(ctx.canvas, {x,y}, this.fade.alpha)

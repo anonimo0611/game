@@ -13,7 +13,7 @@ export class Attract {
 	static draw()   {Attract.#instance?.draw()}
 	static update() {Attract.#instance?.update()}
 
-	ghsSpr = new GhostSpr(Fg,T*2)
+	ghsSpr = new GhostSpr(Fg,TS*2)
 	subAct = new EnergizerAct
 
 	/** @private */
@@ -44,7 +44,7 @@ export class Attract {
 			]).forEach(([row,pts,isPow,showDot])=> {
 				drawDot (Fg, 10.0, row+.00, isPow, showDot)
 				drawText(Fg, 12.0, row+.00, null,  pts)
-				drawText(Fg, 14.3, row+.25, null, 'PTS', {size:T*.7})
+				drawText(Fg, 14.3, row+.25, null, 'PTS', {size:TS*.7})
 			})
 		}
 		if (et > 90) {
@@ -52,13 +52,13 @@ export class Attract {
 			if (Env.extendScore > 0) {
 				const text = `BONUS　PACMAN　FOR　${Env.extendScore}`
 				drawText(Fg,  2.0, 29.00, Color.NoticeTxt, text)
-				drawText(Fg, 24.3, 29.25, Color.NoticeTxt,'PTS', {size:T*.7})
+				drawText(Fg, 24.3, 29.25, Color.NoticeTxt,'PTS', {size:TS*.7})
 			}
 		}
 		Fruits.drawLevelCounter()
 	}
 	drawGhostOnTable(type=0, row=0) {
-		const center = {x:T*5+T/2, y:T*row+T/2}
+		const center = {x:TS*5+TS/2, y:TS*row+TS/2}
 		this.ghsSpr.draw({type,orient:DirR,center})
 	}
 	quit() {
@@ -89,7 +89,7 @@ class EnergizerAct {
 			tile: [COLS+6+(type*2),19],
 			type: /**@type {GhostType}*/(type),
 		})
-		!g.type && this.#pacman.pos.set(g.x-(T*3.5), g.y)
+		!g.type && this.#pacman.pos.set(g.x-(TS*3.5), g.y)
 		this.#ghosts.push(g)
 	}
 	update() {
@@ -97,7 +97,7 @@ class EnergizerAct {
 		this.pow.update()
 		this.#updateActors()
 		if (this.#pacman.dir == DirL
-		 && this.#pacman.x <= T*4)
+		 && this.#pacman.x <= TS*4)
 			this.#turnBack()
 	}
 	#updateActors() {
@@ -106,7 +106,7 @@ class EnergizerAct {
 		this.#pacman.x += this.#pacvx
 		this.#ghosts.forEach(g=> {
 			g.x += this.#ghsvx
-			g.collidesWith(this.#pacman.pos, T/4, this.#end)
+			g.collidesWith(this.#pacman.pos, TS/4, this.#end)
 		})
 	}
 	#turnBack() {

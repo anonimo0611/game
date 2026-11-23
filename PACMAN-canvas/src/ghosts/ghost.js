@@ -18,7 +18,7 @@ export class Ghost extends Actor {
 	/** @readonly */init
 	/** @readonly */state
 	/** @readonly */path   = new Sys.Paths()
-	/** @readonly */sprite = new Sprite(Fg,T*2)
+	/** @readonly */sprite = new Sprite(Fg,TS*2)
 
 	#fleeTmr    = -1
 	#revSig     = false
@@ -29,7 +29,7 @@ export class Ghost extends Actor {
 	constructor({dir=L,type=0,tile:[col,row]=[0,0],align=0}={}) {
 		super(col,row,dir)
 		this.type  = type
-		this.init  = freeze({align,x:col*T})
+		this.init  = freeze({align,x:col*TS})
 		this.state = Sys.createState(this)
 		bindMethod(this,'leaveHouse')
 		$(this).on({
@@ -52,7 +52,7 @@ export class Ghost extends Actor {
 	get chaseOffset()  {return 0}
 	get chaseSpeed()   {return Spd.Base}
 	get chasePos()     {return player.center}
-	get chasingTile()  {return this.chasePos.divInt(T)}
+	get chasingTile()  {return this.chasePos.divInt(TS)}
 	get scatterTile()  {return Vec2.Zero}
 	get isAngry()      {return false}
 	get isNormal()     {return !this.isFrightened  && this.state.isWalking}
@@ -67,7 +67,7 @@ export class Ghost extends Actor {
 				: this.chasingTile
 	}
 	get speed() {
-		return function(g,{state:s}=g) {
+		return function(g, {state:s}=g) {
 			if (s.isIdle)       return Spd.Idle
 			if (s.isGoingOut)   return Spd.GoOut
 			if (g.isEscaping)   return Spd.Escape
@@ -105,8 +105,8 @@ export class Ghost extends Actor {
 		if (!Cfg.alwaysChase)
 			Sys.DotCounter.releaseIfReady(this)
 		!this.state.isGoingOut && this.move(
-			(cy > Maze.House.MID_Y-T/2 && orient != D)? U:
-			(cy < Maze.House.MID_Y+T/2 ? D:U)
+			(cy > Maze.House.MID_Y-TS/2 && orient != D)? U:
+			(cy < Maze.House.MID_Y+TS/2 ? D:U)
 		)
 	}
 	leaveHouse(deactivateGlobalDotCnt=false) {
@@ -124,7 +124,7 @@ export class Ghost extends Actor {
 		if (cx != BW/2)
 			return this.centering()
 
-		if (y > Maze.House.EntryTile.y*T)
+		if (y > Maze.House.EntryTile.y*TS)
 			return this.move(U)
 
 		this.dir = L

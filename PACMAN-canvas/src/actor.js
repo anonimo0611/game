@@ -13,7 +13,7 @@ export class Actor {
 	/** @protected */
 	constructor(col=0, row=0, dir=this.dir) {
 		this.dir = dir
-		this.pos.set(col*T, row*T)
+		this.pos.set(col*TS, row*TS)
 	}
 
 	// Override the actual speed and maxAlpha in the subclasses.
@@ -26,8 +26,8 @@ export class Actor {
 	set x(num)       {this.pos.x = num}
 	set y(num)       {this.pos.y = num}
 
-	get center()     {return this.pos.clone.add(T/2)}
-	get tile()       {return this.center.divInt(T)}
+	get center()     {return this.pos.clone.add(TS/2)}
+	get tile()       {return this.center.divInt(TS)}
 
 	get dir()        {return this.#movDir}
 	set dir(dir)     {this.#movDir = this.orient = dir}
@@ -40,10 +40,10 @@ export class Actor {
 
 	get tilePixel() {
 		const dot = this.center.dot(Vec2[this.dir])
-		return (dot % T + T) % T
+		return (dot % TS + TS) % TS
 	}
 	get passedTileCenter() {
-		return this.tilePixel > T/2
+		return this.tilePixel > TS/2
 	}
 
 	fadeIn (ms=500) {this.#fader = Fade.in (ms)}
@@ -56,26 +56,26 @@ export class Actor {
 	}
 
 	centering() {
-		this.x = (BW-T)/2
+		this.x = (BW-TS)/2
 	}
 	keepInsideBoard() {
-		this.x = clamp(this.center.x, T, BW-T) - T/2
+		this.x = clamp(this.center.x, TS, BW-TS) - TS/2
 	}
 	snapToTileCenter() {
-		this.pos = this.tile.mul(T)
+		this.pos = this.tile.mul(TS)
 	}
 
 	#snapToAxis() {
 		Vec2[this.dir].y
-			? (this.x = this.tile.x * T)
-			: (this.y = this.tile.y * T)
+			? (this.x = this.tile.x * TS)
+			: (this.y = this.tile.y * TS)
 	}
 	#wrapXAxis() {
 		this.x = function({center:{x}}) {
-			if (x <   -T) return BW+T
-			if (x > BW+T) return -T
+			if (x <   -TS) return BW+TS
+			if (x > BW+TS) return -TS
 			return x
-		}(this) - T/2
+		}(this) - TS/2
 	}
 
 	move(dir=this.dir) {
@@ -111,7 +111,7 @@ export class Actor {
 	}
 
 	collidesWithWall(dir=this.dir) {
-		return Maze.hasWall( this.forward(dir,T/2+1e-6).divInt(T).wrapX(COLS) )
+		return Maze.hasWall( this.forward(dir,TS/2+1e-6).divInt(TS).wrapX(COLS) )
 	}
 
 	justArrivedAtTile(speed=this.speed) {

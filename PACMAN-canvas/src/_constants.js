@@ -6,7 +6,7 @@ POW_PTS   = 50,
 TILE_SIZE = int(screen.height/ROWS),
 
 /** Shorthand of TILE_SIZE */
-T = TILE_SIZE,
+TS = TILE_SIZE,
 
 /** Board width */
 BW = COLS*TILE_SIZE,

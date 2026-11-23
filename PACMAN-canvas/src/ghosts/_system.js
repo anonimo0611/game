@@ -18,7 +18,7 @@ export const FLEE_TIME = 500
 
 /** Ghost collision radii by state.
 @type {readonly [normal:number, frightened:number]} */
-export const HitRadii = [T*.40, T*.55]
+export const HitRadii = [TS*.40, TS*.55]
 
 export const Points = {
 	get type()  {return PointType.Ghost},

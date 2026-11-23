@@ -14,7 +14,7 @@ const EATEN_EV = 'DotEaten'
 
 export class PacMan extends Actor {
 	/** @readonly */
-	sprite = new PacSpr(Fg,T,0)
+	sprite = new PacSpr(Fg,TS,0)
 	constructor(col=0,row=0) {super(col,row)}
 	get hidden() {return Timer.frozen}
 	draw()   {this.sprite.draw(this)}
@@ -48,7 +48,7 @@ class Player extends PacMan {
 	resetTimer() {
 		this.#timeSinceLastEating = 0
 	}
-	offsetTarget(dist=T*2) {
+	offsetTarget(dist=TS*2) {
 		const ofstX = (this.dir == DirU ? -dist : 0)
 		return this.forward(this.dir, dist).addX(ofstX)
 	}
@@ -92,7 +92,7 @@ class Player extends PacMan {
 			: EventBus.trigger(EATEN_EV)
 	}
 	#playEatingSE() {
-		const duration = (T/this.speed)*Ticker.Interval*.5
+		const duration = (TS/this.speed)*Ticker.Interval*.5
 		;(this.#eatingSoundToggle ^= 1)
 			? Sound.playEatsDot0({duration})
 			: Sound.playEatsDot1({duration})

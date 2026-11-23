@@ -1,10 +1,10 @@
-const StakeSize = Vec2.fixed(T*.18, T*.7)
-const STAKE_X   = BW/2 + T*2 - StakeSize.x/2
+const StakeSize = Vec2.fixed(TS*.18, TS*.7)
+const STAKE_X   = BW/2 + TS*2 - StakeSize.x/2
 const AKA_COLOR = Color.GhostBodies[GhostType.Akabei]
 
 import {LOGIC_SIZE} from './ghost.js'
-export const SNAG_X = BW/2 + T/2
-export const STOP_X = SNAG_X - T
+export const SNAG_X = BW/2 + TS/2
+export const STOP_X = SNAG_X - TS
 
 export class SnagSprite {
 	/** @readonly */ctx
@@ -13,7 +13,7 @@ export class SnagSprite {
 	/** Renders the stake bottom-aligned to the given y-coord. */
 	drawSnaggedStake({scale=1,x=STAKE_X,y=0,isRipped=false}={}) {
 		/** Adjust for the gap between the sprite bottom and the ground. */
-		const ofstY = -T*0.1, {ctx}= this, [sw,sh]= StakeSize.vals
+		const ofstY = -TS*0.1, {ctx}= this, [sw,sh]= StakeSize.vals
 		ctx.save()
 		ctx.translate(x, y)
 		ctx.scale(scale)
@@ -22,7 +22,7 @@ export class SnagSprite {
 		if (isRipped) { // Scrap of cloth
 			const s = sw*0.8
 			ctx.translate(sw, 0)
-			ctx.fillPolygon(AKA_COLOR, [0,-s],[0,-sh],[-T,0],[-s,0],[-s,-s])
+			ctx.fillPolygon(AKA_COLOR, [0,-s],[0,-sh],[-TS,0],[-s,0],[-s,-s])
 		}
 		ctx.restore()
 	}
@@ -39,7 +39,7 @@ export class SnagSprite {
 		const ls = (animIdx? -25 : -36) // Left side
 		ctx.save()
 		ctx.translate(x, y)
-		ctx.scale(T*2*scale/LOGIC_SIZE)
+		ctx.scale(TS*2*scale/LOGIC_SIZE)
 		ctx.beginPath()
 		ctx.moveTo(-11, -20)
 		ctx.quadraticCurveTo(v1, 9, v2, 9)

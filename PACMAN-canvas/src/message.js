@@ -10,10 +10,10 @@ export const Message = new class MessageView {
 	 * @param {string|number} content
 	 */
 	drawText(ctx, col, row, color, content,
-		{scaleX=1, face='Atari', size=T, style=''}={}
+		{scaleX=1, face='Atari', size=TS, style=''}={}
 	) {
 		ctx.save()
-		ctx.translate(col*T+2, row*T+2)
+		ctx.translate(col*TS+2, row*TS+2)
 		ctx.scale(scaleX, 1)
 		ctx.textBaseline = 'top'
 		ctx.font = `${style} ${size}px "${face}"`

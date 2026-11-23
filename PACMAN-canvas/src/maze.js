@@ -45,8 +45,8 @@ D__________________________C\
 [WallSet,DotSet,PowSet]= range(0,3)
 	.map(_=> /**@type {Set<TileIdx>}*/(new Set)),
 
-DOT_RADIUS = T/9,
-POW_RADIUS = T/2,
+DOT_RADIUS = TS/9,
+POW_RADIUS = TS/2,
 DotSymbols = new Set([...'.O']),
 HouseInner = new Rect(14-4, 15-2,  8, 5).freeze(),
 HouseOuter = new Rect(14-5, 15-3, 10, 7).freeze()
@@ -72,7 +72,7 @@ HouseOuter = new Rect(14-5, 15-3, 10, 7).freeze()
 }
 
 class House {
-	MID_Y = (this.EntryTile.y+3.5)*T
+	MID_Y = (this.EntryTile.y+3.5)*TS
 	get EntryTile() {return vec2(13, 12)}
 
 	/** @param {Tile} t */
@@ -90,9 +90,9 @@ class Tunnel {
 	ROW = 15
 	EntryCol = freeze({L:5.5, R:22.5})
 	findSide({x=0,y=0}) {
-		if (int(y/T) == this.ROW) {
-			if (x/T <= this.EntryCol.L) return DirL
-			if (x/T >= this.EntryCol.R) return DirR
+		if (int(y/TS) == this.ROW) {
+			if (x/TS <= this.EntryCol.L) return DirL
+			if (x/TS >= this.EntryCol.R) return DirR
 		} return null
 	}
 }
@@ -155,7 +155,7 @@ export const Maze = freeze({
 	clearDot(col, row) {
 		DotSet.delete(row*COLS+col)
 		PowSet.delete(row*COLS+col)
-		Bg.clearRect(col*T, row*T, T,T)
+		Bg.clearRect(col*TS, row*TS, TS,TS)
 		return DotSet.size
 	},
 
@@ -167,7 +167,7 @@ export const Maze = freeze({
 	drawDot(ctx, col, row, isPow=false, isVisible=true) {
 		if (!isVisible) return
 		const radius = [DOT_RADIUS,POW_RADIUS][+isPow]
-		ctx.fillCircle(col*T+T/2, row*T+T/2, radius, Color.Cookie)
+		ctx.fillCircle(col*TS+TS/2, row*TS+TS/2, radius, Color.Cookie)
 	},
 })
 export const {drawDot,clearDot}= Maze
