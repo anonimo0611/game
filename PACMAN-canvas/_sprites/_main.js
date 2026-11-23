@@ -15,11 +15,11 @@ const Data = /**@type {const}*/({
 	PacDirs:  [U,U,L,L,D,D,R,R],
 	GhsDirs1: [U,U,L,L,D,D,R,R],
 	GhsDirs2: [R,R,R,R,U,L,D,R],
-	PtsTable: [
-		[ 200, 400, 800,1600],// Ghost pts
-		[ 100, 300, 500, 700],// Fruit pts
-		[1000,2000,3000,5000],// Fruit pts
-	]
+	PtsTable: {
+		Ghost:  [ 200, 400, 800,1600],
+		Fruit0: [ 100, 300, 500, 700],
+		Fruit1: [1000,2000,3000,5000],
+	}
 })
 
 function drawGridLines() {
@@ -84,10 +84,10 @@ function drawGhost(col=0, row=0, dir1, dir2) {
 }
 
 function drawPtsTable() {
-	const {PtsTable:[t0,t1,t2]}= Data
-	t0.forEach((p,i)=> drawPts(PointType.Ghost, p, ofst(i+0)+TS, AS*6+TS))
-	t1.forEach((p,i)=> drawPts(PointType.Fruit, p, ofst(i+4)+TS, AS*6+TS))
-	t2.forEach((p,i)=> drawPts(PointType.Fruit, p, (AS+GAP/2)+AS*(2+GAP/TS)*i, AS*7+AS/2))
+	const {PtsTable:t}= Data
+	t.Ghost .forEach((p,i)=> drawPts(PointType.Ghost, p, ofst(i+0)+TS, AS*6+TS))
+	t.Fruit0.forEach((p,i)=> drawPts(PointType.Fruit, p, ofst(i+4)+TS, AS*6+TS))
+	t.Fruit1.forEach((p,i)=> drawPts(PointType.Fruit, p, (AS+GAP/2)+AS*(2+GAP/TS)*i, AS*7+AS/2))
 }
 
 /**
