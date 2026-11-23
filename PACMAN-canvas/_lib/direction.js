@@ -7,7 +7,7 @@ export const Dir = freeze({
 	/** @param {KeyboardEventLike} e */
 	from(e, {wasd=false}={}) {
 		if (hasModifierKeys(e)) return null
-		const  map = /**@type {DirMap}*/(wasd? Keys:Dirs)
+		const  map = /**@type {Dict<Direction>}*/(wasd? Keys:Dirs)
 		return map[e.code.replace(/^(Arrow|Key)/,'')] ?? null
 	}
 })

@@ -9,9 +9,10 @@ interface PrimitiveMap {
 
 //---- Dictionary ----
 
+type Dict<T>        = Readonly<Record<string, T>>
+type NumericDict<T> = Readonly<Record<number, T>>
 type Scene = {update():void, draw():void}
 type SceneDict<T extends string> = {readonly [K in T]?:Scene}
-type NumericDict<T> = {readonly [K:number]:T}
 
 //---- Timer ----
 
@@ -42,7 +43,7 @@ type PointVal  = 100|200|300|400|500|700|800|1000|1600|2000|3000|5000
 type FloatingPtsData = {
 	pts: {type:PointType, value:PointVal};
 	x: number,
-	y: nunber,
+	y: number,
 	dur?: number;
 	frozen?: boolean;
 	cb?: ()=> void;
@@ -58,7 +59,6 @@ type Vertical   = Up|Down
 type Horizontal = Left|Right
 type Direction  = Up|Right|Down|Left
 type Directions = Direction[]
-type DirMap = {readonly [key:string]: Direction}
 
 //---- Ghosts ----
 
