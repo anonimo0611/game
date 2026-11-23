@@ -47,7 +47,7 @@ Color = /**@type {const}*/({
 	Pacman:     '#FF0',
 	GhostEye:   '#33F',
 	GhostSkin:  '#F4BEB0',
-	GhostBodies: [
+	Ghosts: [
 		'#E00', // Akabei
 		'#F9B', // Pinky
 		'#0CF', // Aosuke

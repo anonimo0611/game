@@ -93,7 +93,7 @@ export class Paths {
 		}
 		Fg.lineWidth   = LINE_WIDTH
 		Fg.lineJoin    = Fg.lineCap = 'round'
-		Fg.strokeStyle = Color.GhostBodies[g.type]
+		Fg.strokeStyle = Color.Ghosts[g.type]
 		Fg.stroke()
 		Fg.restore()
 	}

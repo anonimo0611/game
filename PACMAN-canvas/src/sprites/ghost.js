@@ -47,8 +47,8 @@ export default class GhostSprite {
 		ctx.lineWidth = 5
 		ctx.lineJoin  = ctx.lineCap = 'round'
 		ctx.fillStyle = !isFrightened
-			? Color.GhostBodies[type]
-			: Color.GhostBodies[GhostType.Max+spriteIdx]
+			? Color.Ghosts[type]
+			: Color.Ghosts[GhostType.Max+spriteIdx]
 		;(()=> {
 			if (isExposed)
 				return this.sub.drawHadake(animIdx)

@@ -1,6 +1,6 @@
 const StakeSize = Vec2.fixed(TS*.18, TS*.7)
 const STAKE_X   = BW/2 + TS*2 - StakeSize.x/2
-const AKA_COLOR = Color.GhostBodies[GhostType.Akabei]
+const AKA_COLOR = Color.Ghosts[GhostType.Akabei]
 
 import {LOGIC_SIZE} from './ghost.js'
 export const SNAG_X = BW/2 + TS/2

@@ -250,7 +250,7 @@ export const MAX = drawFns.length
  * @param {number} idx
  * @param {number} size
  */
-export function draw(ctx, idx, size, x=size/2,y=size/2) {
+export function draw(ctx, idx, size, x=size/2, y=size/2) {
 	ctx.save()
 	ctx.translate(x, y-(size*0.05))
 	ctx.lineWidth = 1

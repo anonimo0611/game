@@ -50,7 +50,7 @@ export const Targets = new class TargetVisualizer {
 		const size = TS*0.6
 		const {x,y}= this.#getTargetPos(g).sub(size/2)
 		Fg.lineWidth = TS*0.1
-		Fg.fillStyle = Color.GhostBodies[g.type]
+		Fg.fillStyle = Color.Ghosts[g.type]
 		Fg.fillRect  (x,y, size,size)
 		Fg.strokeRect(x,y, size,size)
 	}
