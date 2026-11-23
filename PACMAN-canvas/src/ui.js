@@ -32,7 +32,7 @@ export const Menu = freeze({
 
 Grid.beginPath()
 for(let x=TS; x<BW; x+=TS) Grid.setLinePath([x,0],[x,BH])
-for(let y=0; y<BH; y+=TS) Grid.setLinePath([0,y],[BW,y])
+for(let y= 0; y<BH; y+=TS) Grid.setLinePath([0,y],[BW,y])
 Grid.strokeStyle = Color.GridLine
 Grid.stroke()
 
