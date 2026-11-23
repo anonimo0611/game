@@ -15,7 +15,7 @@ export default class GhostSprite {
 	 */
 	constructor(target, size) {
 		this.tgt  = target
-		this.glow = glowImg(size)
+		this.glow = glowImage(size)
 		this.ctx  = canvas2D(null).ctx
 		this.sub  = new SubSprite(this.ctx)
 		this.resize(this.#size = size)
@@ -162,10 +162,10 @@ export default class GhostSprite {
 	}
 }
 
-/** @param {number} size */
-function glowImg(size) {
+/**@param {number} size*/
+function glowImage(size) {
 	const {ctx,w,h}= canvas2D(null, size*3)
-	ctx.filter = `blur(${TS*.8}px)`
+	ctx.filter = `blur(${size/2*.8}px)`
 	ctx.fillCircle(w/2, h/2, size*.55, '#F00')
 	return ctx.canvas
 }
