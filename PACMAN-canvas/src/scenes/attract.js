@@ -34,8 +34,8 @@ export class Attract {
 		drawText(Fg, 7, 4, null, 'CHARACTOR　/　NICKNAME')
 		this.GhostEntries.forEach(([t,col1,col2,row,txt1,txt2],i)=> {
 			et > t    && this.drawGhostOnTable(i,row)
-			et > t+ 5 && drawText(Fg, col1, row, Color.GhostBodies[i], txt1)
-			et > t+10 && drawText(Fg, col2, row, Color.GhostBodies[i], txt2)
+			et > t+ 5 && drawText(Fg, col1, row, Color.Ghosts[i], txt1)
+			et > t+10 && drawText(Fg, col2, row, Color.Ghosts[i], txt2)
 		})
 		if (et > 85) {
 			/**@type {const}*/([
