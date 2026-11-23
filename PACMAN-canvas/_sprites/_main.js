@@ -127,7 +127,7 @@ function drawAkabei() {
 		const pos = Vec2.Zero, ratios = [0.3, 0.5 ,1]
 		for (let i=0; i<3; i++) {
 			draw(...pos.vals, {animIdx:+(i == 2)})
-			const nPos = (pos).add(S*0.75, S/4)
+			const nPos = pos.clone.add(S*0.75, S/4)
 			spr.drawSnaggedClothing(+(i == 2), ratios[i], {...nPos,scale})
 			pos.x += S*1.2 + ((i+1)*GAP)
 		}
