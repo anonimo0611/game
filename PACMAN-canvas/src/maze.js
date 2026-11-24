@@ -67,8 +67,8 @@ HouseOuter = new Rect(14-5, 15-3, 10, 7).freeze()
 				: PowSet.add(i)
 		})
 	}
-	State.on({_NewLevel: reset})
-	$(powChk).on({change:reset})
+	State.on({_NewLevel:reset})
+	$(powChk).on({input:reset})
 }
 
 class House {
