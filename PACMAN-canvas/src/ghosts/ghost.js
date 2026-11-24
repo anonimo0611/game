@@ -55,7 +55,7 @@ export class Ghost extends Actor {
 	get chasingTile()  {return this.chasePos.divInt(TS)}
 	get scatterTile()  {return Vec2.Zero}
 	get isAngry()      {return false}
-	get isNormal()     {return !this.isFrightened  && this.state.isWalking}
+	get isNormal()     {return !this.isFrightened  && this.state.isRoaming}
 	get isChasing()    {return Ghosts.isChasing    && this.isNormal}
 	get isScattering() {return Ghosts.isScattering && this.isNormal}
 
@@ -109,12 +109,13 @@ export class Ghost extends Actor {
 			(cy < Maze.House.MID_Y+TS/2 ? D:U)
 		)
 	}
-	leaveHouse(deactivateGlobalDotCnt=false) {
+	/** @return {boolean} Deactivate global dot counter */
+	leaveHouse(isGlobal=false) {
 		player.resetTimer()
 		this.#started ||= true
-		this.state.isIdle &&
-		this.state.setGoingOut()
-		return deactivateGlobalDotCnt
+		if (this.state.isIdle)
+			this.state.setGoingOut()
+		return (isGlobal && this.type == GhostType.Guzuta)
 	}
 	#goingOut({init,speed,y,center:{x:cx}}=this) {
 		if (cx > BW/2+speed
@@ -128,7 +129,7 @@ export class Ghost extends Actor {
 			return this.move(U)
 
 		this.dir = L
-		this.state.setWalking()
+		this.state.setRoaming()
 	}
 	#enterHouse() {
 		this.dir = D
@@ -215,7 +216,7 @@ export class Ghost extends Actor {
 		radius  = Sys.HitRadii[+this.isFrightened],
 		release = ()=> this.#startEscaping(),
 	) {
-		if (!this.state.isWalking
+		if (!this.state.isRoaming
 		 || !this.isFrightened && Cfg.invincible
 		 || !circleCollision(this, pos, radius))
 			return false

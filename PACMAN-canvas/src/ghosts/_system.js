@@ -135,7 +135,7 @@ export const Ghosts = new class GhostGroup {
 
 export const [StateType,createState] = function() {
 	const States = /**@type {const}*/
-		(['Idle','GoingOut','Walking','Bitten','Escaping','Entering'])
+		(['Idle','GoingOut','Roaming','Bitten','Escaping','Entering'])
 	/**
 	 * @typedef {typeof States[number]} StateType
 	 * @typedef {StateDef.Fluent<State,StateType>} IState
@@ -144,7 +144,7 @@ export const [StateType,createState] = function() {
 	class State extends AState {
 		constructor(/**@type {Ghost}*/g) {
 			super(g, States, {immediately:true})
-			this.set(g.inHouse? 'Idle':'Walking')
+			this.set(g.inHouse? 'Idle':'Roaming')
 		}
 		get isEyes() {return this.is('Escaping','Entering')}
 	}
@@ -215,8 +215,7 @@ export const DotCounter = function() {
 				? pCounters[type] >= LimitTbl[type-1][idx]
 					&& leaveHouse()
 				: gCounter == LimitTbl[type-1][0]
-					&& leaveHouse(type == GhostType.Guzuta)
-					&& (gCounter = -1)
+					&& leaveHouse(true) && (gCounter = -1)
 	}
 	onPlayerDotEaten(()=> {
 		Game.pacDied && gCounter >= 0
