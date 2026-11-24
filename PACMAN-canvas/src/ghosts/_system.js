@@ -256,7 +256,7 @@ const Fright = function() {
 	const DurList = /**@type {const}*/([6,5,4,3,2,5,2,2,1,5,2,1,0]) // secs
 	function frighten(sec=0) {
 		let   flash=0, caught=0, sprIdx=1, tmr=sec
-		const interval = (sec == 1 ? 12:14)/Game.speed
+		const interval = (sec == 1 ? 12:14)/Game.speed|0
 		function trigger(isOn=true) {
 			!isOn && (session = null)
 			$(ghosts)
