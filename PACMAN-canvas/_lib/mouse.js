@@ -24,9 +24,10 @@ export const Cursor = function() {
 
 /**
  Enables wheel control and synchronizes values across linked inputs and output elements.
+ @param {number} _
  @param {HTMLInputElement} ctrl
 */
-function setupCtrl(ctrl) {
+function setupCtrl(_, ctrl) {
 	const outputs = $(`output[for~="${ctrl.id}"]`).text(ctrl.value).get()
 	const label   = ctrl.closest('label') || qSel(`label[for="${ctrl.id}"]`)
 	const linkIds = ctrl.dataset.links?.trim().split(/\s+/)  ?? []
@@ -50,6 +51,6 @@ function setupCtrl(ctrl) {
 	.trigger('input')
 }
 $win.on('load', ()=> {
-	/**@type {HTMLInputElement[]}*/
-	($('input[type=range]').get()).forEach(setupCtrl)
+	/** @type {JQuery<HTMLInputElement>} */
+	($('input[type=range]')).each(setupCtrl)
 })

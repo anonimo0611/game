@@ -83,11 +83,11 @@ type KeyboardEventLike = KeyboardEvent | JQuery.KeyboardEventBase
 type Global = Window & typeof globalThis
 type JQData = any[]|JQuery.PlainObject|string|number|boolean
 
-type JQEvent<T=HTMLElement> = JQuery.TriggeredEvent<T,undefined,T,T>
+type JQEvent<T extends HTMLElement = HTMLElement> = JQuery.TriggeredEvent<T,undefined,T,T>
 type JQKeyboardEvent   = JQuery.KeyboardEventBase
 type JQKeyupKeydownObj = {keyup?:JQKeyboardHandler, keydown?:JQKeyboardHandler}
 type JQTriggerHandler  = (ev:JQuery.TriggeredEvent, data?:any)=> void
-type JQKeyboardHandler = (ev:JQKeyboardEvent,  data?:any)=> void
+type JQKeyboardHandler = (ev:JQKeyboardEvent, data?:any)=> void
 type JQTriggerHandlers = {[ev:string]:JQTriggerHandler} | JQKeyupKeydownObj
 
 interface JQuery {
