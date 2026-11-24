@@ -11,7 +11,7 @@ import {Cutscene} from './cutscene.js'
 	})
 }
 
-/** @type {SceneDict<string>} */
+/** @type {SceneDict} */
 const SceneDict = {Attract,Cutscene}
 
 /** @param {JQEvent<HTMLButtonElement>} e */
