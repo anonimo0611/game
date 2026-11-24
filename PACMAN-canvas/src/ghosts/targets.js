@@ -35,10 +35,10 @@ export const Targets = new class TargetVisualizer {
 	/** @param {Ghost} g */
 	#strokeLines(g) {
 		if (Timer.frozen
-		 || g.type == GhostType.Akabei
+		 || g.is(GhostType.Akabei)
 		 || g.isChasing == false)
 			return
-		g.type == GhostType.Guzuta
+		g.is(GhostType.Guzuta)
 			? this.#guzutaCircle(g)
 			: this.#auxLines(g, g.chaseOffset)
 	}
@@ -61,14 +61,14 @@ export const Targets = new class TargetVisualizer {
 		const fwdXY  = player.forward(dir, ofst).vals
 		const ofsXY  = player.offsetTarget(ofst).vals
 		Fg.lineWidth = TS*0.2
-		if (g.type == GhostType.Pinky && !inTunSide
-		 || g.type == GhostType.Aosuke) {
+		if (g.is(GhostType.Pinky) && !inTunSide
+		 || g.is(GhostType.Aosuke)) {
 			dir != DirU
 				? Fg.newLinePath([x,y], fwdXY)
 				: Fg.newLinePath([x,y], fwdXY, ofsXY)
 			Fg.stroke()
 		}
-		if (g.type == GhostType.Aosuke) {
+		if (g.is(GhostType.Aosuke)) {
 			const akaXY = Ghosts.of(GhostType.Akabei).center.vals
 			Fg.newLinePath(akaXY, ofsXY, g.chasePos.vals).stroke()
 			Fg.fillCircle(...ofsXY, TS*0.26|0)

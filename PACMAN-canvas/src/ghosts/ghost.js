@@ -25,6 +25,9 @@ export class Ghost extends Actor {
 	#started    = false
 	#frightened = false
 
+	/** @param {GhostType} type */
+	is(type) {return this.type == type}
+
 	/** @param {GhostData} data */
 	constructor({dir=L,type=0,tile:[col,row]=[0,0],align=0}={}) {
 		super(col,row,dir)
@@ -115,7 +118,7 @@ export class Ghost extends Actor {
 		this.#started ||= true
 		if (this.state.isIdle)
 			this.state.setGoingOut()
-		return (isGlobal && this.type == GhostType.Guzuta)
+		return isGlobal && this.is(GhostType.Guzuta)
 	}
 	#goingOut({init,speed,y,center:{x:cx}}=this) {
 		if (cx > BW/2+speed
@@ -154,7 +157,7 @@ export class Ghost extends Actor {
 	}
 	#arrivedAtHome() {
 		this.sprite.setResurrect()
-		this.type == GhostType.Akabei || Cfg.alwaysChase
+		this.is(GhostType.Akabei) || Cfg.alwaysChase
 			? this.state.setGoingOut()
 			: this.state.setIdle()
 		!Timer.frozen && Sound.onGhostReturned()
