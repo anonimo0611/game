@@ -9,8 +9,8 @@ interface PrimitiveMap {
 
 //---- Dictionary ----
 
-type Dict<T>        = Readonly<Record<string, T>>
-type NumericDict<T> = Readonly<Record<number, T>>
+type Dict<T>    = Readonly<Record<string,T>>
+type NumDict<T> = Readonly<Record<number,T>>
 type Scene = {update():void, draw():void}
 type SceneDict<T extends string> = {readonly [K in T]?:Scene}
 
