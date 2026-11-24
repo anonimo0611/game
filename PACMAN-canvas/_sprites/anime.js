@@ -26,7 +26,12 @@ class ActorPreview {
 	subj = /**@type {?ActorPreview}*/(null)
 	constructor() {
 		Ticker.set(this)
-		$dirBtns.on('change', this.onChangeBtn)
+		$dirBtns.on('change', ({target:btn})=> {
+			if (this.subj)
+				this.subj.orient = /**@type {Direction}*/(
+					btn.getAttribute('value')
+				)
+		})
 		$(AnimMenu.root)
 			.on('change', this.onChangeMenu)
 			.on('keydown',this.onKeydown)
@@ -56,14 +61,6 @@ class ActorPreview {
 				Schema.Ghost.Normal != subType
 			)
 			break
-		}
-	}
-	onChangeBtn = (/**@type {JQEvent}*/e)=> {
-		const {subj}= this
-		if (subj) {
-			subj.orient = /**@type {Direction}*/(
-				e.target.getAttribute('value')
-			)
 		}
 	}
 	onKeydown = (/**@type {JQKeyboardEvent}*/e)=> {
