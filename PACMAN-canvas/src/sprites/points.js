@@ -5,7 +5,7 @@ const FruitGhostCtxs = freeze([
 ])
 
 const NarrowOnePath = path2D('M0,0 L0,6')
-const DigitPath0to8 = /**@type {NumericDict<Path2D>}*/({
+const DigitPath0to8 = /**@type {NumDict<Path2D>}*/({
 	0: path2D('M1,0 L2,0 L3,1 L3,5 L2,6 L1,6 L0,5 L0,1 Z'),
 	1: path2D('M0,1 L1,0 L1,6 L0,6 L2,6'),
 	2: path2D('M0,2 L0,1 L1,0 L3,0 L4,1 L4,2 L0,6 L4,6'),
