@@ -78,6 +78,15 @@ export class Actor {
 		}(this) - TS/2
 	}
 
+	/** @param {Direction} dir */
+	setMoveDir(dir) {
+		this.#movDir = dir
+	}
+	alignDir() {
+		this.#movDir = this.orient
+		this.#snapToAxis()
+	}
+
 	move(dir=this.dir) {
 		this.setNextPos(this.speed, this.dir=dir)
 	}
@@ -85,14 +94,9 @@ export class Actor {
 		this.pos = Vec2[dir].mul(speed).add(this)
 		this.#wrapXAxis()
 	}
-	alignDir() {
-		this.#movDir = this.orient
-		this.#snapToAxis()
-	}
 
-	/** @param {Direction} dir */
-	setMoveDir(dir) {
-		this.#movDir = dir
+	justArrivedAtTile(speed=this.speed) {
+		return !this.passedTileCenter && this.tilePixel <= speed
 	}
 
 	/** @param {Direction} dir */
@@ -108,10 +112,6 @@ export class Actor {
 	/** @param {Direction} dir */
 	hasAdjWall(dir) {
 		return Maze.hasWall( this.getAdjTile(dir) )
-	}
-
-	justArrivedAtTile(speed=this.speed) {
-		return !this.passedTileCenter && this.tilePixel <= speed
 	}
 
 	collidesWithWall(dir=this.dir) {
