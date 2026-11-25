@@ -110,11 +110,12 @@ export class Actor {
 		return Maze.hasWall( this.getAdjTile(dir) )
 	}
 
-	collidesWithWall(dir=this.dir) {
-		return Maze.hasWall( this.forward(dir,TS/2+1e-6).divInt(TS).wrapX(COLS) )
-	}
-
 	justArrivedAtTile(speed=this.speed) {
 		return !this.passedTileCenter && this.tilePixel <= speed
+	}
+
+	collidesWithWall(dir=this.dir) {
+		const  fwdTile = this.forward(dir,TS/2+1e-6).divInt(TS)
+		return Maze.hasWall( fwdTile.wrapX(COLS) )
 	}
 }
