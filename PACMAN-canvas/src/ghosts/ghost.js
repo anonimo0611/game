@@ -128,10 +128,10 @@ export class Ghost extends Actor {
 		if (cx != BW/2)
 			return this.centering()
 
-		if (y > Maze.House.EntryTile.y*TS)
+		if (y-speed > Maze.House.EntryTile.y*TS)
 			return this.move(U)
 
-		this.dir = L
+		this.snapToAxis(this.dir = L)
 		this.state.setRoaming()
 	}
 	#enterHouse() {
@@ -139,15 +139,15 @@ export class Ghost extends Actor {
 		this.centering()
 		this.state.setEntering()
 	}
-	#enteringToHome({init,speed:spd,x,y}=this) {
+	#enteringToHome({init,speed,x,y}=this) {
 		const {House}= Maze
-		if (y+spd < House.MID_Y)
+		if (y+speed < House.MID_Y)
 			return this.move()
 
 		if (y != House.MID_Y)
 			return this.pos.setY(House.MID_Y).void()
 
-		if (!init.align || abs(x-init.x) <= spd) {
+		if (!init.align || abs(x-init.x) <= speed) {
 			this.x   = init.x
 			this.dir = init.align? (init.align<0 ? R:L) : U
 			this.#arrivedAtHome()

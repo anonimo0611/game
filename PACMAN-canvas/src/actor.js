@@ -61,14 +61,15 @@ export class Actor {
 	keepInsideBoard() {
 		this.x = clamp(this.center.x, TS, BW-TS) - TS/2
 	}
+
 	snapToTileCenter() {
 		this.pos = this.tile.mul(TS)
 	}
-
-	#snapToAxis() {
-		Vec2[this.dir].y
+	snapToAxis(dir=this.dir) {
+		Vec2[dir].y
 			? (this.x = this.tile.x * TS)
 			: (this.y = this.tile.y * TS)
+		return this
 	}
 	#wrapXAxis() {
 		this.x = function({center:{x}}) {
@@ -84,7 +85,7 @@ export class Actor {
 	}
 	alignDir() {
 		this.#movDir = this.orient
-		this.#snapToAxis()
+		this.snapToAxis()
 	}
 
 	move(dir=this.dir) {
