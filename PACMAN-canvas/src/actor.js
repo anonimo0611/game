@@ -69,7 +69,6 @@ export class Actor {
 		Vec2[dir].y
 			? (this.x = this.tile.x * TS)
 			: (this.y = this.tile.y * TS)
-		return this
 	}
 	#wrapXAxis() {
 		this.x = function({center:{x}}) {
