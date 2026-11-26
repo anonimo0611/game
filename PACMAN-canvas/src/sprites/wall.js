@@ -9,8 +9,8 @@ const Ctxs = freeze({
 	White: canvas2D(null, BW,BH).ctx,
 })
 const Corner = /**@type {const}*/({
-	Chars:   '12345678ABCDabcd',
-	Type:    {Convex:0, Concave:1, Outer:2, Pocket:3},
+	Chars:   '12345678abcdABCD',
+	Type:    {Convex:0, Concave:1, Pocket:2, Outer:3, Max:4},
 	RegExps: [/[1-4]/,/[5-8]/,/[A-D]/,/[a-d]/],
 })
 
@@ -73,8 +73,8 @@ export const Wall = new class WallRenderer {
 		ctx.rotate(cIdx*PI/2)
 		switch(type) {
 		case Type.Outer:  radii.push(HT+LO,TS-OO);break
-		case Type.Convex: radii.push(HT-LO);     break
-		case Type.Pocket: radii.push(HT-LO,OO);  break
+		case Type.Convex: radii.push(HT-LO);      break
+		case Type.Pocket: radii.push(HT-LO,OO);   break
 		case Type.Concave:
 			ctx.beginPath()
 			ctx.moveTo(-LO,  HT)
@@ -97,9 +97,9 @@ export const Wall = new class WallRenderer {
 	 * @param {number} ty Tile row
 	 */
 	#drawTile(ctx, s, tx, ty) {
+		const [x,y]= [tx*TS,ty*TS]
 		const ofst = /[#VH=]/.test(s) ? -LO : +LO
 		const rIdx = Corner.Chars.indexOf(s)
-		const [x,y]= [tx*TS,ty*TS]
 
 		switch(s.toUpperCase()) {
 		case '#':
@@ -107,7 +107,8 @@ export const Wall = new class WallRenderer {
 		case 'H': ctx.strokeLine(x, y+HT+ofst, x+TS, y+HT+ofst);break
 		}
 		if (rIdx >= 0) {
-			Wall.#drawCorner(ctx,{type:(rIdx>>2),cIdx:(rIdx&3),pos:{x,y}})
+			const i = rIdx, {Max:m}= Corner.Type
+			Wall.#drawCorner(ctx, {cIdx:i%m,type:i/m|0,pos:{x,y}})
 		}
 		if (s == '#' || tx == 0 && +s) {
 			ctx.strokeLine(x+OO, y, x+OO, y+TS)
