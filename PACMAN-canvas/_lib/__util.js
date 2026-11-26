@@ -123,11 +123,6 @@ const {abs,asin,atan2,ceil,cos,floor,max,min,PI,random,round,sin,sqrt,trunc:int}
 */const underscoreToSp = (str,prefix='')=>
 	str.indexOf('_') != -1
 		? `${prefix} ${str}`.replace(/[_\s]+/g,'\x20').trim() : str.trim()
-/**
- @param {string} str
- @param {number} size
-*/const cyclicIndexMap = (str,size)=>
-	new Map(Array.from(str, (v,i)=> [v,i % size]))
 
 //---- Range ------
 
@@ -215,6 +210,7 @@ const $root = $(':root')
  @param {string} ns
  @param {Record<string,()=> void>} handlers
  @param {boolean} [force]
+ @memberof jQuery.fn
 */jQuery.fn.onNS = function(ns, handlers, force) {
 	const NS = ns[0] != '.' ? `.${ns}` : ns
 	if (force === false) return this.off(NS)
