@@ -9,9 +9,8 @@ const Ctxs = freeze({
 	White: canvas2D(null, BW,BH).ctx,
 })
 const Corner = /**@type {const}*/({
-	Chars:   '12345678abcdABCD',
-	Type:    {Convex:0, Concave:1, Pocket:2, Outer:3, Max:4},
-	RegExps: [/[1-4]/,/[5-8]/,/[A-D]/,/[a-d]/],
+	Chars: '12345678abcdABCD',
+	Type: {Convex:0, Concave:1, Pocket:2, Outer:3, Max:4},
 })
 
 import {State} from '../state.js'
