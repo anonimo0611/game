@@ -1,8 +1,9 @@
-const HT = TS/2
+const HC = COLS/2|0
+const HT = TILE_SIZE/2
 const SF = screen.height/1080 // Scale Factor
-const LW = max(1, int(3*SF))  // Line  Width
-const LO = max(2, int(4*SF))  // Line  Offset
-const OO = max(1, int(2*SF))  // Outer Offset
+const LW = max(1, 3*SF|0)  // Line  Width
+const LO = max(2, 4*SF|0)  // Line  Offset
+const OO = max(1, 2*SF|0)  // Outer Offset
 
 const Ctxs = freeze({
 	Blue:  canvas2D(null, BW,BH).ctx,
@@ -21,10 +22,8 @@ export const Wall = new class WallRenderer {
 		getVals(Ctxs).forEach((ctx,i)=> {
 			ctx.lineWidth   = LW
 			ctx.strokeStyle = Color.MazeWalls[i]
-			Maze.Map.forEach((s,i)=> {
-				if (i%COLS >= COLS/2) return
-				Wall.#drawTile(ctx, s, i%COLS, i/COLS|0)
-			})
+			for (let i=0; i<HC*ROWS; i++)
+				Wall.#drawTile(ctx, i%HC, i/HC|0)
 			ctx.put(ctx.canvas, Vec2.Zero, 1, 0, -1,1, -BW,0)
 			Wall.#drawHouse(ctx)
 		})
@@ -91,16 +90,16 @@ export const Wall = new class WallRenderer {
 
 	/**
 	 * @param {Ctx2D}  ctx
-	 * @param {string} s  Tile symbol
-	 * @param {number} tx Tile col
-	 * @param {number} ty Tile row
+	 * @param {number} col
+	 * @param {number} row
 	 */
-	#drawTile(ctx, s, tx, ty) {
-		const [x,y]= [tx*TS,ty*TS]
-		const ofst = /[#VH=]/.test(s) ? -LO : +LO
-		const rIdx = Corner.Chars.indexOf(s)
+	#drawTile(ctx, col, row) {
+		const [x,y]= [col*TS, row*TS]
+		const char = Maze.Map[row*COLS+col]
+		const ofst = /[#VH=]/.test(char) ? -LO : +LO
+		const rIdx = Corner.Chars.indexOf(char)
 
-		switch(s.toUpperCase()) {
+		switch(char.toUpperCase()) {
 		case '#':
 		case 'V': ctx.strokeLine(x+HT+ofst, y, x+HT+ofst, y+TS);break
 		case 'H': ctx.strokeLine(x, y+HT+ofst, x+TS, y+HT+ofst);break
@@ -109,14 +108,14 @@ export const Wall = new class WallRenderer {
 			const i = rIdx, {Max:m}= Corner.Type
 			Wall.#drawCorner(ctx, {cIdx:i%m,type:i/m|0,pos:{x,y}})
 		}
-		if (s == '#' || tx == 0 && +s) {
+		if (char == '#' || col == 0 && +char) {
 			ctx.strokeLine(x+OO, y, x+OO, y+TS)
 			return
 		}
-		if (/[_=]/.test(s) || Maze.isTopOrBottom(ty) && +s) {
-			const oY = /[=56]/.test(s) ? OO : TS-OO
+		if (/[_=]/.test(char) || Maze.isTopOrBottom(row) && +char) {
+			const oY = /[=56]/.test(char) ? OO : TS-OO
 			ctx.strokeLine(x, y+oY, x+TS, y+oY)
-			!+s && ctx.strokeLine(x, y+HT+ofst, x+TS, y+HT+ofst)
+			!+char && ctx.strokeLine(x, y+HT+ofst, x+TS, y+HT+ofst)
 		}
 	}
 }
