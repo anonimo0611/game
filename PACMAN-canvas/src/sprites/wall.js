@@ -9,7 +9,7 @@ const Ctxs = freeze({
 	White: canvas2D(null, BW,BH).ctx,
 })
 const Corner = /**@type {const}*/({
-	toIndex: cyclicIndexMap('12345678abcdABCD', 4),
+	Chars:   '12345678ABCDabcd',
 	Type:    {Convex:0, Concave:1, Outer:2, Pocket:3},
 	RegExps: [/[1-4]/,/[5-8]/,/[A-D]/,/[a-d]/],
 })
@@ -98,7 +98,7 @@ export const Wall = new class WallRenderer {
 	 */
 	#drawTile(ctx, s, tx, ty) {
 		const ofst = /[#VH=]/.test(s) ? -LO : +LO
-		const cIdx = Corner.toIndex.get(s) ?? -1
+		const rIdx = Corner.Chars.indexOf(s)
 		const [x,y]= [tx*TS,ty*TS]
 
 		switch(s.toUpperCase()) {
@@ -106,9 +106,8 @@ export const Wall = new class WallRenderer {
 		case 'V': ctx.strokeLine(x+HT+ofst, y, x+HT+ofst, y+TS);break
 		case 'H': ctx.strokeLine(x, y+HT+ofst, x+TS, y+HT+ofst);break
 		}
-		if (cIdx >= 0) {
-			const type = Corner.RegExps.findIndex(c=> c.test(s))
-			Wall.#drawCorner(ctx,{type,cIdx,pos:{x,y}})
+		if (rIdx >= 0) {
+			Wall.#drawCorner(ctx,{type:(rIdx>>2),cIdx:(rIdx&3),pos:{x,y}})
 		}
 		if (s == '#' || tx == 0 && +s) {
 			ctx.strokeLine(x+OO, y, x+OO, y+TS)
