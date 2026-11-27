@@ -97,8 +97,12 @@ class EnergizerAct {
 		this.pow.update()
 		this.#updateActors()
 		if (this.#pacman.dir == DirL
-		 && this.#pacman.x <= TS*4)
-			this.#turnBack()
+		 && this.#pacman.x <= TS*4) { // turn back
+			this.#pacvx *= -1
+			this.#ghsvx /= -2
+			this.#pacman.dir = DirR
+			Ghosts.frighten()
+		}
 	}
 	#updateActors() {
 		if (Timer.frozen) return
@@ -108,12 +112,6 @@ class EnergizerAct {
 			g.x += this.#ghsvx
 			g.collidesWith(this.#pacman.pos, TS/4, this.#end)
 		})
-	}
-	#turnBack() {
-		this.#pacvx *= -1
-		this.#ghsvx /= -2
-		this.#pacman.dir = DirR
-		Ghosts.frighten()
 	}
 	draw() {
 		this.outward && drawDot(Fg, 4, 19, true, this.pow.show)

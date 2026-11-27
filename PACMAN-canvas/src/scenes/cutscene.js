@@ -76,12 +76,11 @@ class Scene1 extends Cutscene {
 	}
 	moveLeft() {
 		this.updatePac()
-		this.pacman.x < -TS*9 && this.turnBack()
-	}
-	turnBack() {
-		this.pacvx *= -1.1
-		this.akavx *= -0.6
-		this.pacman.dir = this.akabei.dir = DirR
+		if (this.pacman.x < -TS*9) { // turn back
+			this.pacvx *= -1.1
+			this.akavx *= -0.6
+			this.pacman.dir = this.akabei.dir = DirR
+		}
 	}
 	moveRight() {
 		this.akabei.x > TS*7.5  && this.updatePac()
