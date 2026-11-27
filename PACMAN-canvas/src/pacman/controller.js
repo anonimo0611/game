@@ -16,52 +16,10 @@ export function createMover(actor) {
 	function onWall() {
 		return !turning && actor.collidesWithWall()
 	}
-
 	function canTurn() {
 		return (nextDir && !actor.passedTileCenter)
 		    && !actor.collidesWithWall(nextDir)
 	}
-
-	function turnAround() {
-		if (actor.dir == actor.revOrient) {
-			actor.alignDir()
-			_speed = getSpeed()
-		}
-	}
-
-	/** @param {number} step */
-	function setTileSpeed(step) {
-		if (actor.justArrivedAtTile(step))
-			_speed = getSpeed()
-	}
-
-	/** @param {number} step */
-	function turnCorner(step) {
-		if (canTurn() && nextDir) {
-			turning ||= true
-			actor.orient = nextDir
-			actor.setNextPos(step, nextDir)
-		}
-	}
-
-	function finishCornering() {
-		if (turning && actor.passedTileCenter) {
-			turning  = false
-			nextDir  = nextTurn
-			nextTurn = null
-			actor.alignDir()
-		}
-	}
-
-	function stopAtWall() {
-		if (onWall()) {
-			nextDir = null
-			actor.snapToTileCenter()
-			return true
-		}
-		return false
-	}
-
 	const getSpeed = ()=>
 		Game.moveSpeed * Spd.levelFactor(Game.level) * (
 			Maze.hasDot(actor.tile)
@@ -95,12 +53,40 @@ export function createMover(actor) {
 	 * @returns {boolean} True if the actor stopped at a wall.
 	 */
 	function update(step) {
-		turnAround()
-		turnCorner(step)
+		// turn around
+		if (actor.dir == actor.revOrient) {
+			actor.alignDir()
+			_speed = getSpeed()
+		}
+
+		// turn corner
+		if (canTurn() && nextDir) {
+			turning ||= true
+			actor.orient = nextDir
+			actor.setNextPos(step, nextDir)
+		}
 		actor.setNextPos(step)
-		setTileSpeed(step)
-		finishCornering()
-		return stopAtWall()
+
+		// set tile speed
+		if (actor.justArrivedAtTile(step)) {
+			_speed = getSpeed()
+		}
+
+		// finish cornering
+		if (turning && actor.passedTileCenter) {
+			turning  = false
+			nextDir  = nextTurn
+			nextTurn = null
+			actor.alignDir()
+		}
+
+		// stop at the wall
+		if (onWall()) {
+			nextDir = null
+			actor.snapToTileCenter()
+			return true
+		}
+		return false
 	}
 	return {
 		get speed()  {return _speed ||= getSpeed()},
