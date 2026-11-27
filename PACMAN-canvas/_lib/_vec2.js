@@ -86,14 +86,6 @@ class Vec2 {
 	 * @param {Pos} pos2
 	 */static distance = (pos1, pos2)=> Vec2.sub(pos1, pos2).magnitude
 
-	/**
-	 * @param {Pos} pos
-	 * @param {number} cols
-	 */static idx(pos, cols) {
-		if (cols <= 0) throw RangeError('Column count must be greater than zero')
-		return pos.y * cols + pos.x
-	}
-
 	constructor(x=0, y=0) {
 		this.x = x
 		this.y = y
@@ -106,7 +98,7 @@ class Vec2 {
 	get magnitude()  {return sqrt(this.sqrMag)}
 	get clone()      {return vec2(this.x,  this.y)}
 	get asInt()      {return vec2(floor(this.x),floor(this.y))}
-	get normalized() {return vec2(this.x/this.magnitude||0 , this.y/this.magnitude||0)}
+	get normalized() {return (m=> vec2(this.x/m||0, this.y/m||0))(this.magnitude)}
 
 	/**
 	 * @overload
@@ -243,9 +235,6 @@ class Vec2 {
 
 	/** @param {Pos} pos */
 	distance(pos) {return Vec2.sub(this,pos).magnitude}
-
-	/** @param {number} cols */
-	toIdx(cols) {return Vec2.idx(this,cols)}
 
 	/** @param {number} cols */
 	wrapX(cols) {
